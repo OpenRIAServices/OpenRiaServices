@@ -14,20 +14,21 @@ namespace OpenRiaServices.EntityFrameworkCore
     /// <summary>
     /// CustomTypeDescriptor for LINQ To Entities
     /// </summary>
-    internal class LinqToEntitiesEFCoreTypeDescriptor : TypeDescriptorBase
+    internal class EFCoreTypeDescriptor : TypeDescriptorBase
     {
         private readonly LinqToEntitiesEFCoreTypeDescriptionContext _typeDescriptionContext;
         private readonly IEntityType _entityType;
         private readonly IProperty _timestampProperty;
         private readonly bool _keyIsEditable;
+        private Dictionary<string, IProperty> _foreignKeyMembers; // TODO: change to List<string> / HashSet<string>
 
-        public LinqToEntitiesEFCoreTypeDescriptor(LinqToEntitiesEFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
+        public EFCoreTypeDescriptor(LinqToEntitiesEFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
         : base(parent)
         {
             this._typeDescriptionContext = typeDescriptionContext;
             this._entityType = entityType;
 
-            var timestampMembers = entityType.GetProperties().Where(p => p.IsConcurrencyToken && p.ValueGenerated == ValueGenerated.OnAddOrUpdate).ToArray();
+            var timestampMembers = entityType.GetProperties().Where(p => IsTimestampProperty(p)).ToArray();
             if (timestampMembers.Length == 1)
             {
                 this._timestampProperty = timestampMembers[0];
@@ -37,17 +38,34 @@ namespace OpenRiaServices.EntityFrameworkCore
             {
                 // if any FK member of any association is also part of the primary key, then the key cannot be marked
                 // Editable(false)
-                var fk = entityType.GetNavigations().SelectMany(n => n.ForeignKey.Properties).ToHashSet();
+                _foreignKeyMembers = entityType.GetNavigations()
+                    .Where(n => n.IsDependentToPrincipal())
+                    .SelectMany(n => n.ForeignKey.Properties)
+                    .ToDictionary(x => x.Name);
                 //this._foreignKeyMembers
-                //foreach (EdmProperty foreignKeyMember in this._foreignKeyMembers)
-                //{
-                //    if (entityType.KeyMembers.Contains(foreignKeyMember))
-                //    {
-                //        this._keyIsEditable = true;
-                //        break;
-                //    }
-                //}
+
+                foreach(var key in entityType.GetKeys())
+                {
+                    foreach (var keyMember in key.Properties)
+                    {
+                        if (_foreignKeyMembers.ContainsKey(keyMember.Name))
+                        {
+                            this._keyIsEditable = true;
+                            break;
+                        }
+                    }
+                }
             }
+        }
+
+        /// <summary>
+        /// Check if a property is a "Timestamp" property (rowversion or similar)
+        /// </summary>
+        /// <param name="p"></param>
+        /// <returns></returns>
+        private static bool IsTimestampProperty(IProperty p)
+        {
+            return p.IsConcurrencyToken && p.ValueGenerated == ValueGenerated.OnAddOrUpdate;
         }
 
         /// <summary>
@@ -171,16 +189,16 @@ namespace OpenRiaServices.EntityFrameworkCore
                 // Add RTO to this member if required. If this type has a timestamp
                 // member that member should be the ONLY member we apply RTO to.
                 // Dont apply RTO if it is an association member.
-                //bool isForeignKeyMember = this._foreignKeyMembers != null && this._foreignKeyMembers.Contains(member);
-                //if ((this._timestampProperty == null || this._timestampProperty == property) &&
-                //    (inferRoundtripOriginalAttribute || isForeignKeyMember) &&
-                //    pd.Attributes[typeof(AssociationAttribute)] == null)
-                //{
-                //    if (pd.Attributes[typeof(RoundtripOriginalAttribute)] == null)
-                //    {
-                //        attributes.Add(new RoundtripOriginalAttribute());
-                //    }
-                //}
+                bool isForeignKeyMember = this._foreignKeyMembers != null  && this._foreignKeyMembers.ContainsKey(property.Name);
+                if ((this._timestampProperty == null || this._timestampProperty == property) &&
+                    (inferRoundtripOriginalAttribute || isForeignKeyMember) &&
+                    pd.Attributes[typeof(AssociationAttribute)] == null)
+                {
+                    if (pd.Attributes[typeof(RoundtripOriginalAttribute)] == null)
+                    {
+                        attributes.Add(new RoundtripOriginalAttribute());
+                    }
+                }
             }
 
             // Add the Editable attribute if required
@@ -224,7 +242,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 return true;
             }
 
-         
+
             return false;
         }
     }

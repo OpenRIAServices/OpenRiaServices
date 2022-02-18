@@ -38,6 +38,12 @@
     <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Baselines\Default\Scenarios\EFCoreContextScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EFCoreContextScenarios.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -579,6 +585,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Baselines\**\*.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Baselines\Default\Scenarios\EFCoreContextScenarios.g.vb" />
   </ItemGroup>
   <ItemGroup>
     <None Update="DataModels\AdventureWorks - Copy.tt">

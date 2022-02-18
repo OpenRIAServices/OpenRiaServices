@@ -360,7 +360,7 @@ namespace OpenRiaServices.Server.Test
         {
             // TODO: Not applicable to EF CORE so might be removed
             PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCorePocoEntity_IEntityChangeTracker))["EntityState"];
-            Assert.IsTrue(LinqToEntitiesEFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
+            Assert.IsTrue(EFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
 
         }
 

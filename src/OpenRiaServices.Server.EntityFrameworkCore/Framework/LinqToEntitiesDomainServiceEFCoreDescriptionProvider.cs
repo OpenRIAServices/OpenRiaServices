@@ -50,7 +50,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 {
                     // TODO: ...
                     // only add an LTE TypeDescriptor if the type is an EF Entity or ComplexType
-                    td = new LinqToEntitiesEFCoreTypeDescriptor(this._typeDescriptionContext, entityType, parent);
+                    td = new EFCoreTypeDescriptor(this._typeDescriptionContext, entityType, parent);
                 }
                 else
                 {
