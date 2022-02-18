@@ -1939,7 +1939,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => so2);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error.Message);
+                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error?.Message);
                 Entity[] entitiesInConflict = so2.EntitiesInError.ToArray();
                 Assert.AreEqual(1, so2.ChangeSet.RemovedEntities.Count, "Unexpected amount of removed entities.");
                 Assert.AreEqual(1, entitiesInConflict.Length, "Unexpected amount of entities in conflict.");

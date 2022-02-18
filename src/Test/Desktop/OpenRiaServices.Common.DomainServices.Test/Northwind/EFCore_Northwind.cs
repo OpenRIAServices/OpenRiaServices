@@ -122,6 +122,7 @@ namespace TestDomainServices.EFCore
                 case "KeepCurrent":
                     // Client Wins
                     //objectContext.Refresh(RefreshMode.ClientWins, product); // TODO
+                    ResolveProductWithMerge(entryInConflict); // TODO: Is this correcy???
                     break;
                 case "RefreshCurrent":
                     // Store wins
@@ -138,6 +139,7 @@ namespace TestDomainServices.EFCore
                     // objectContext.Refresh(RefreshMode.StoreWins, product); // TODO
                     return false;
                 case "":
+                    ResolveProductWithMerge(entryInConflict); // TODO: Is this correcy???
                     // objectContext.Refresh(RefreshMode.ClientWins, product); // TODO
                     break;
                 default:
@@ -147,6 +149,31 @@ namespace TestDomainServices.EFCore
             }
 
             return true;
+        }
+
+        private void RefreshClientWins(EntityEntry entry)
+        {
+            // Keep a collection of all modified properties and their values.
+            PropertyValues currentValues = entry.CurrentValues;
+            PropertyValues originalValues = entry.OriginalValues;
+            PropertyValues dbValues = entry.GetDatabaseValues();
+            if (dbValues == null) 
+                return;
+
+            // Reset all properties to database values, except modified values which are keept
+            List<Tuple<string, object>> modifiedMembers = new List<Tuple<string, object>>();
+            foreach (var property in currentValues.Properties)
+            {
+                object currValue = currentValues[property.Name];
+                object origValue = originalValues[property.Name];
+                object dbValue = dbValues[property.Name];
+
+                originalValues[property.Name] = dbValue;
+                if (object.Equals(currValue, origValue))
+                {
+                    currentValues[property.Name] = dbValue;
+                }
+            }
         }
 
         private bool ResolveProductWithMerge(EntityEntry entry)

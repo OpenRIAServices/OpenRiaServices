@@ -225,7 +225,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 // TODO: make async loading of tate
                 var dbValues = stateEntry.GetDatabaseValues();
                 operationInConflict.StoreEntity = dbValues?.ToObject();
-                operationInConflict.IsDeleteConflict = operationInConflict.StoreEntity == null;
+                operationInConflict.IsDeleteConflict = dbValues == null;
 
             //    PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
                 List<string> membersInConflict = new List<string>();
