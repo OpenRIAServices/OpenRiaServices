@@ -21,16 +21,13 @@ namespace OpenRiaServices.EntityFrameworkCore
 
         internal static async ValueTask<IReadOnlyCollection<T>> EnumerateAsyncEnumerable<T>(IAsyncEnumerable<T> asyncEnumerable, int estimatedResultCount, CancellationToken cancellationToken)
         {
-            await using (var enumerator = asyncEnumerable.GetAsyncEnumerator(cancellationToken))
+            List<T> result = new List<T>(capacity: estimatedResultCount);
+            await foreach (var item in asyncEnumerable.ConfigureAwait(false).WithCancellation(cancellationToken))
             {
-                List<T> result = new List<T>(capacity: estimatedResultCount);
-                while (await enumerator.MoveNextAsync().ConfigureAwait(false))
-                {
-                    result.Add(enumerator.Current);
-                }
-
-                return result;
+                result.Add(item);
             }
+
+            return result;
         }
     }
 }

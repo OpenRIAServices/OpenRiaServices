@@ -121,13 +121,11 @@ namespace TestDomainServices.EFCore
                     return this.ResolveProductWithMerge(entryInConflict);
                 case "KeepCurrent":
                     // Client Wins
-                    //objectContext.Refresh(RefreshMode.ClientWins, product); // TODO
-                    RefreshClientWins(entryInConflict); // TODO: Is this correcy???
+                    RefreshClientWins(entryInConflict);
                     break;
                 case "RefreshCurrent":
                     // Store wins
                     DbContext.Entry(product).Reload();
-                    // objectContext.Refresh(RefreshMode.StoreWins, product); // TODO
                     break;
                 case "ReturnTrueNoResolve":
                     return true;
@@ -136,11 +134,9 @@ namespace TestDomainServices.EFCore
                 case "ReturnFalseWithResolve":
                     // Store Wins
                     DbContext.Entry(product).Reload();
-                    // objectContext.Refresh(RefreshMode.StoreWins, product); // TODO
                     return false;
                 case "":
-                    ResolveProductWithMerge(entryInConflict); // TODO: Is this correcy???
-                    // objectContext.Refresh(RefreshMode.ClientWins, product); // TODO
+                    RefreshClientWins(entryInConflict);
                     break;
                 default:
                     {
@@ -151,26 +147,21 @@ namespace TestDomainServices.EFCore
             return true;
         }
 
+        // Reset all properties to database values, except modified values which are keept
         private void RefreshClientWins(EntityEntry entry)
         {
-            // Keep a collection of all modified properties and their values.
-            PropertyValues currentValues = entry.CurrentValues;
-            PropertyValues originalValues = entry.OriginalValues;
             PropertyValues dbValues = entry.GetDatabaseValues();
             if (dbValues == null) 
                 return;
 
-            // Reset all properties to database values, except modified values which are keept
-            foreach (var property in currentValues.Properties)
+            foreach (var prop in entry.Properties)
             {
-                object currValue = currentValues[property.Name];
-                object origValue = originalValues[property.Name];
-                object dbValue = dbValues[property.Name];
+                object dbValue = dbValues[prop.Metadata.Name];
 
-                originalValues[property.Name] = dbValue;
-                if (object.Equals(currValue, origValue))
+                prop.OriginalValue = dbValue;
+                if (object.Equals(prop.CurrentValue, prop.OriginalValue))
                 {
-                    currentValues[property.Name] = dbValue;
+                    prop.CurrentValue = dbValue;
                 }
             }
         }

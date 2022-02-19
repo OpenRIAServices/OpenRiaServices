@@ -42,7 +42,7 @@ namespace OpenRiaServices.Silverlight.Testing
         /// </summary>
         [SecuritySafeCritical]
         [DebuggerStepThrough]
-        public static class Assert
+        private static class OldAssert
         {
             // --- IsTrue ---
             public static void IsTrue(bool condition)
