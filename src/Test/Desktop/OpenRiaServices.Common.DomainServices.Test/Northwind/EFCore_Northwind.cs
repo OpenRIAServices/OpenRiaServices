@@ -122,7 +122,7 @@ namespace TestDomainServices.EFCore
                 case "KeepCurrent":
                     // Client Wins
                     //objectContext.Refresh(RefreshMode.ClientWins, product); // TODO
-                    ResolveProductWithMerge(entryInConflict); // TODO: Is this correcy???
+                    RefreshClientWins(entryInConflict); // TODO: Is this correcy???
                     break;
                 case "RefreshCurrent":
                     // Store wins
@@ -161,7 +161,6 @@ namespace TestDomainServices.EFCore
                 return;
 
             // Reset all properties to database values, except modified values which are keept
-            List<Tuple<string, object>> modifiedMembers = new List<Tuple<string, object>>();
             foreach (var property in currentValues.Properties)
             {
                 object currValue = currentValues[property.Name];

@@ -3149,7 +3149,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Product[] products = nw2.Products.ToArray();
-                if (this.ProviderType == ProviderType.EF)
+                if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                 {
                     // Verify Product0 changes was not synced back to the client since resubmit still fails with conflict
                     Assert.IsNull(products[0].EntityConflict);
@@ -3201,7 +3201,7 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     Product[] products = nw1.Products.ToArray();
-                    if (this.ProviderType == ProviderType.EF)
+                    if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                     {
                         // verify nw2 changes are not persisted
                         Assert.AreEqual(nw1NewUnitPrice[0], products[0].UnitPrice);
@@ -3284,7 +3284,7 @@ namespace OpenRiaServices.Client.Test
 
                 Product[] products = nw2.Products.ToArray();
                 EntityConflict conflict = null;
-                if (this.ProviderType == ProviderType.EF)
+                if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                 {
                     // EF only supports getting the first conflict so only Product0's conflicts will be generated and only
                     // its resolve method is called. Hence the conflict is resolved successfully the first round. When resubmit
@@ -3388,7 +3388,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Product[] products = nw2.Products.ToArray();
-                if (this.ProviderType == ProviderType.EF)
+                if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                 {
                     // EF only supports getting the first conflict so only Product0's conflicts will be generated and only
                     // its resolve method is called. Hence the conflict is resolved successfully the first round. When resubmit
@@ -3434,7 +3434,7 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     Product[] products = nw1.Products.ToArray();
-                    if (ProviderType == ProviderType.EF)
+                    if (ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                     {
                         // verify store values are not changed since submit failed
                         Assert.AreEqual(nw1NewUnitPrice[0], products[0].UnitPrice);
@@ -3585,7 +3585,7 @@ namespace OpenRiaServices.Client.Test
                 DomainOperationException ex = so.Error as DomainOperationException;
 
                 Product[] products = nw2.Products.ToArray();
-                if (this.ProviderType == ProviderType.EF)
+                if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                 {
                     // EF only supports getting the first conflict, so Product0's conflicts will be generated during first submit,
                     // then they are resolved server side and resubmit is called. Product1's conflicts will then be generated. Since

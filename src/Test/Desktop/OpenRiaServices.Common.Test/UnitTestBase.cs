@@ -41,6 +41,7 @@ namespace OpenRiaServices.Silverlight.Testing
         /// and cannot be used from partial trust unit tests
         /// </summary>
         [SecuritySafeCritical]
+        [DebuggerStepThrough]
         public static class Assert
         {
             // --- IsTrue ---
