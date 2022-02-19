@@ -31,6 +31,7 @@ public static class TestURIs
     // EF Core
     public static readonly Uri EFCore_Northwind = new Uri(RootURI, "TestDomainServices-EFCore-Northwind.svc");
     public static readonly Uri EFCore_Northwind_CUD = new Uri(RootURI, "TestDomainServices-EFCore-Northwind_CUD.svc");
+    public static readonly Uri EFCore_Catalog = new Uri(RootURI, "TestDomainServices-EFCore-Catalog.svc");
 
     // LTS
     public static readonly Uri LTS_Catalog = new Uri(RootURI, "TestDomainServices-LTS-Catalog.svc");

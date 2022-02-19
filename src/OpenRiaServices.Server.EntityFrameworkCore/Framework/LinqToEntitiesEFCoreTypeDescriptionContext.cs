@@ -32,7 +32,6 @@ namespace OpenRiaServices.EntityFrameworkCore
             this._contextType = contextType;
         }
 
-        // TODO: Add model property _context.Model
         public IModel Model
         {
             get

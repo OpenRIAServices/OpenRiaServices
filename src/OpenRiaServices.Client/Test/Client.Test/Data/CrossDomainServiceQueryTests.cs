@@ -585,12 +585,12 @@ namespace OpenRiaServices.Client.Test
         }
     }
     /** TODO: 
-     * copy EFQueryTests, do we want the added test from that one
+     * copy EFQueryTests, do we want the added test from that one */
     [TestClass]
     public class EFCoreQueryTests : CrossDomainServiceQueryTests
     {
         public EFCoreQueryTests()
-            : base(TestURIs.EFCore_Catalog, ProviderType.EFCore)
+            : base(TestURIs.EFCore_Catalog, /* TODO: remove? EFCore and only have a single provider type */ProviderType.EF)
         {
         }
 
@@ -599,5 +599,4 @@ namespace OpenRiaServices.Client.Test
             return new Northwind(TestURIs.EFCore_Northwind);
         }
     }
-    **/
 }

@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using OpenRiaServices.Server;
 
-namespace EFCoreModels.AdventureWorks.AdventureWorks
+namespace EFCoreModels.AdventureWorks
 {
     [Table("PurchaseOrderDetail", Schema = "Purchasing")]
     public partial class PurchaseOrderDetail
@@ -27,5 +28,10 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
         public decimal StockedQty { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime ModifiedDate { get; set; }
+
+        [Include]
+        public Product Product { get; set; }
+
+        public PurchaseOrder PurchaseOrder { get; set; }
     }
 }

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EFCoreModels.AdventureWorks.AdventureWorks
+namespace EFCoreModels.AdventureWorks
 {
     [Table("SalesPerson", Schema = "Sales")]
     public partial class SalesPerson
@@ -24,5 +24,8 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
         public Guid rowguid { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime ModifiedDate { get; set; }
+
+        public Employee Employee { get; set; }
+        public SalesTerritory SalesTerritory { get; set; }
     }
 }

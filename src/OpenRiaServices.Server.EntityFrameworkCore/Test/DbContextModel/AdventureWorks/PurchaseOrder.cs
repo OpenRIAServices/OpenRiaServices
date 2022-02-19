@@ -3,11 +3,12 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using OpenRiaServices.Server;
 
-namespace EFCoreModels.AdventureWorks.AdventureWorks
+namespace EFCoreModels.AdventureWorks
 {
     [Table("PurchaseOrderHeader", Schema = "Purchasing")]
-    public partial class PurchaseOrderHeader
+    public partial class PurchaseOrder
     {
         public int PurchaseOrderID { get; set; }
         public byte RevisionNumber { get; set; }
@@ -29,5 +30,8 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
         public decimal TotalDue { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime ModifiedDate { get; set; }
+
+        [Include]
+        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new HashSet<PurchaseOrderDetail>();
     }
 }

@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using OpenRiaServices.Server;
 
-namespace EFCoreModels.AdventureWorks.AdventureWorks
+namespace EFCoreModels.AdventureWorks
 {
     [Table("Product", Schema = "Production")]
     public partial class Product
@@ -20,6 +21,7 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
         public bool FinishedGoodsFlag { get; set; }
         [StringLength(15)]
         public string Color { get; set; }
+        [Exclude]
         public short SafetyStockLevel { get; set; }
         public short ReorderPoint { get; set; }
         [Column(TypeName = "money")]
@@ -32,6 +34,7 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
         public string SizeUnitMeasureCode { get; set; }
         [StringLength(3)]
         public string WeightUnitMeasureCode { get; set; }
+        [RoundtripOriginal]
         [Column(TypeName = "decimal(8, 2)")]
         public decimal? Weight { get; set; }
         public int DaysToManufacture { get; set; }
@@ -52,5 +55,7 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
         public Guid rowguid { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime ModifiedDate { get; set; }
+
+        public ProductSubcategory ProductSubcategory { get; set; }
     }
 }

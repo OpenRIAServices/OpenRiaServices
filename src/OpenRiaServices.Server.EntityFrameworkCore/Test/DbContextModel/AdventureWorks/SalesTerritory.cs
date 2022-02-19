@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace EFCoreModels.AdventureWorks.AdventureWorks
+namespace EFCoreModels.AdventureWorks
 {
     [Table("SalesTerritory", Schema = "Sales")]
     public partial class SalesTerritory

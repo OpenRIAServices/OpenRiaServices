@@ -3,8 +3,9 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using OpenRiaServices.Server;
 
-namespace EFCoreModels.AdventureWorks.AdventureWorks
+namespace EFCoreModels.AdventureWorks
 {
     [Table("Employee", Schema = "HumanResources")]
     public partial class Employee
@@ -38,5 +39,10 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
         public Guid rowguid { get; set; }
         [Column(TypeName = "smalldatetime")]
         public DateTime ModifiedDate { get; set; }
+
+        [Include]
+        public virtual Employee Manager { get; set; }
+        public virtual Contact Contact { get; set; }
+        public virtual SalesPerson SalesPerson { get; set; }
     }
 }

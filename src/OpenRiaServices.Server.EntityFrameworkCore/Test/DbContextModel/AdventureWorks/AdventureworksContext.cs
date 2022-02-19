@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace EFCoreModels.AdventureWorks.AdventureWorks
+namespace EFCoreModels.AdventureWorks
 {
     public partial class AdventureworksContext : DbContext
     {
@@ -16,73 +16,18 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
         {
         }
 
-        public virtual DbSet<Address> Address { get; set; }
-        public virtual DbSet<AddressType> AddressType { get; set; }
-        public virtual DbSet<BillOfMaterials> BillOfMaterials { get; set; }
-        public virtual DbSet<Contact> Contact { get; set; }
-        public virtual DbSet<ContactCreditCard> ContactCreditCard { get; set; }
-        public virtual DbSet<ContactType> ContactType { get; set; }
-        public virtual DbSet<CountryRegion> CountryRegion { get; set; }
-        public virtual DbSet<CountryRegionCurrency> CountryRegionCurrency { get; set; }
-        public virtual DbSet<CreditCard> CreditCard { get; set; }
-        public virtual DbSet<Culture> Culture { get; set; }
-        public virtual DbSet<Currency> Currency { get; set; }
-        public virtual DbSet<CurrencyRate> CurrencyRate { get; set; }
-        public virtual DbSet<Customer> Customer { get; set; }
-        public virtual DbSet<CustomerAddress> CustomerAddress { get; set; }
-        public virtual DbSet<Department> Department { get; set; }
-        public virtual DbSet<Document> Document { get; set; }
-        public virtual DbSet<Employee> Employee { get; set; }
-        public virtual DbSet<EmployeeAddress> EmployeeAddress { get; set; }
-        public virtual DbSet<EmployeeDepartmentHistory> EmployeeDepartmentHistory { get; set; }
-        public virtual DbSet<EmployeePayHistory> EmployeePayHistory { get; set; }
-        public virtual DbSet<Illustration> Illustration { get; set; }
-        public virtual DbSet<Individual> Individual { get; set; }
-        public virtual DbSet<JobCandidate> JobCandidate { get; set; }
-        public virtual DbSet<Location> Location { get; set; }
-        public virtual DbSet<Product> Product { get; set; }
-        public virtual DbSet<ProductCategory> ProductCategory { get; set; }
-        public virtual DbSet<ProductCostHistory> ProductCostHistory { get; set; }
-        public virtual DbSet<ProductDescription> ProductDescription { get; set; }
-        public virtual DbSet<ProductDocument> ProductDocument { get; set; }
-        public virtual DbSet<ProductInventory> ProductInventory { get; set; }
-        public virtual DbSet<ProductListPriceHistory> ProductListPriceHistory { get; set; }
-        public virtual DbSet<ProductModel> ProductModel { get; set; }
-        public virtual DbSet<ProductModelIllustration> ProductModelIllustration { get; set; }
-        public virtual DbSet<ProductModelProductDescriptionCulture> ProductModelProductDescriptionCulture { get; set; }
-        public virtual DbSet<ProductPhoto> ProductPhoto { get; set; }
-        public virtual DbSet<ProductProductPhoto> ProductProductPhoto { get; set; }
-        public virtual DbSet<ProductReview> ProductReview { get; set; }
-        public virtual DbSet<ProductSubcategory> ProductSubcategory { get; set; }
-        public virtual DbSet<ProductVendor> ProductVendor { get; set; }
-        public virtual DbSet<PurchaseOrderDetail> PurchaseOrderDetail { get; set; }
-        public virtual DbSet<PurchaseOrderHeader> PurchaseOrderHeader { get; set; }
-        public virtual DbSet<SalesOrderDetail> SalesOrderDetail { get; set; }
-        public virtual DbSet<SalesOrderHeader> SalesOrderHeader { get; set; }
-        public virtual DbSet<SalesOrderHeaderSalesReason> SalesOrderHeaderSalesReason { get; set; }
-        public virtual DbSet<SalesPerson> SalesPerson { get; set; }
-        public virtual DbSet<SalesPersonQuotaHistory> SalesPersonQuotaHistory { get; set; }
-        public virtual DbSet<SalesReason> SalesReason { get; set; }
-        public virtual DbSet<SalesTaxRate> SalesTaxRate { get; set; }
-        public virtual DbSet<SalesTerritory> SalesTerritory { get; set; }
-        public virtual DbSet<SalesTerritoryHistory> SalesTerritoryHistory { get; set; }
-        public virtual DbSet<ScrapReason> ScrapReason { get; set; }
-        public virtual DbSet<Shift> Shift { get; set; }
-        public virtual DbSet<ShipMethod> ShipMethod { get; set; }
-        public virtual DbSet<ShoppingCartItem> ShoppingCartItem { get; set; }
-        public virtual DbSet<SpecialOffer> SpecialOffer { get; set; }
-        public virtual DbSet<SpecialOfferProduct> SpecialOfferProduct { get; set; }
-        public virtual DbSet<StateProvince> StateProvince { get; set; }
-        public virtual DbSet<Store> Store { get; set; }
-        public virtual DbSet<StoreContact> StoreContact { get; set; }
-        public virtual DbSet<TransactionHistory> TransactionHistory { get; set; }
-        public virtual DbSet<TransactionHistoryArchive> TransactionHistoryArchive { get; set; }
-        public virtual DbSet<UnitMeasure> UnitMeasure { get; set; }
-        public virtual DbSet<Vendor> Vendor { get; set; }
-        public virtual DbSet<VendorAddress> VendorAddress { get; set; }
-        public virtual DbSet<VendorContact> VendorContact { get; set; }
-        public virtual DbSet<WorkOrder> WorkOrder { get; set; }
-        public virtual DbSet<WorkOrderRouting> WorkOrderRouting { get; set; }
+
+        public virtual DbSet<Contact> Contacts { get; set; }
+        public virtual DbSet<Employee> Employees { get; set; }
+        public virtual DbSet<Product> Products { get; set; }
+        public virtual DbSet<ProductSubcategory> ProductSubcategories { get; set; }
+
+        public virtual DbSet<PurchaseOrderDetail> PurchaseOrderDetails { get; set; }
+        public virtual DbSet<PurchaseOrder> PurchaseOrders { get; set; }
+
+        public virtual DbSet<SalesPerson> SalesPersons { get; set; }
+        public virtual DbSet<SalesTerritory> SalesTerritories { get; set; }
+
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -94,156 +39,25 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Address>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<AddressType>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<BillOfMaterials>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.UnitMeasureCode).IsFixedLength();
-            });
-
-            modelBuilder.Entity<Contact>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.PasswordHash).IsUnicode(false);
-
-                entity.Property(e => e.PasswordSalt).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<ContactCreditCard>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ContactType>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<CountryRegion>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<CountryRegionCurrency>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.CurrencyCode).IsFixedLength();
-            });
-
-            modelBuilder.Entity<CreditCard>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<Culture>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.CultureID).IsFixedLength();
-            });
-
-            modelBuilder.Entity<Currency>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.CurrencyCode).IsFixedLength();
-            });
-
-            modelBuilder.Entity<CurrencyRate>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.FromCurrencyCode).IsFixedLength();
-
-                entity.Property(e => e.ToCurrencyCode).IsFixedLength();
-            });
-
-            modelBuilder.Entity<Customer>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.AccountNumber).IsUnicode(false);
-
-                entity.Property(e => e.CustomerType).IsFixedLength();
-            });
-
-            modelBuilder.Entity<CustomerAddress>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<Department>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<Document>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.Revision).IsFixedLength();
-            });
 
             modelBuilder.Entity<Employee>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.Property(e => e.Gender).IsFixedLength();
 
                 entity.Property(e => e.MaritalStatus).IsFixedLength();
-            });
 
-            modelBuilder.Entity<EmployeeAddress>(entity =>
-            {
-                entity.HasNoKey();
-            });
+                entity.HasOne(e => e.Contact)
+                    .WithMany()
+                    .HasForeignKey(e => e.ContactID)
+                    .HasConstraintName("FK_Employee_Contact_ContactID");
 
-            modelBuilder.Entity<EmployeeDepartmentHistory>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<EmployeePayHistory>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<Illustration>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<Individual>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<JobCandidate>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<Location>(entity =>
-            {
-                entity.HasNoKey();
+                entity.HasOne(e => e.Manager)
+                    .WithMany()
+                    .HasForeignKey(e => e.ManagerID);
             });
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.HasNoKey();
-
                 entity.Property(e => e.Class).IsFixedLength();
 
                 entity.Property(e => e.ProductLine).IsFixedLength();
@@ -253,230 +67,52 @@ namespace EFCoreModels.AdventureWorks.AdventureWorks
                 entity.Property(e => e.Style).IsFixedLength();
 
                 entity.Property(e => e.WeightUnitMeasureCode).IsFixedLength();
-            });
 
-            modelBuilder.Entity<ProductCategory>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductCostHistory>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductDescription>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductDocument>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductInventory>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductListPriceHistory>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductModel>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductModelIllustration>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductModelProductDescriptionCulture>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.CultureID).IsFixedLength();
-            });
-
-            modelBuilder.Entity<ProductPhoto>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductProductPhoto>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductReview>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductSubcategory>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ProductVendor>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.UnitMeasureCode).IsFixedLength();
+                entity.HasOne(e => e.ProductSubcategory)
+                    .WithMany()
+                    .HasForeignKey(e => e.ProductSubcategoryID)
+//                    .HasConstraintName()
+;
             });
 
             modelBuilder.Entity<PurchaseOrderDetail>(entity =>
             {
-                entity.HasNoKey();
+                entity.HasKey(e => e.PurchaseOrderDetailID);
+
+                entity.HasOne(e => e.PurchaseOrder)
+                    .WithMany(e => e.PurchaseOrderDetails)
+                    .HasForeignKey(e => e.PurchaseOrderDetailID)
+                    .HasConstraintName("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID");
+
+                entity.HasOne(e => e.Product)
+                    .WithMany()
+                    .HasForeignKey(e => e.ProductID)
+                    .HasConstraintName("FK_PurchaseOrderDetail_Product_ProductID");
             });
 
-            modelBuilder.Entity<PurchaseOrderHeader>(entity =>
+            modelBuilder.Entity<PurchaseOrder>(entity =>
             {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<SalesOrderDetail>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<SalesOrderHeader>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.CreditCardApprovalCode).IsUnicode(false);
-            });
-
-            modelBuilder.Entity<SalesOrderHeaderSalesReason>(entity =>
-            {
-                entity.HasNoKey();
+                entity.HasKey(e => e.PurchaseOrderID);
             });
 
             modelBuilder.Entity<SalesPerson>(entity =>
             {
-                entity.HasNoKey();
-            });
+                entity.HasKey(e => e.SalesPersonID);
 
-            modelBuilder.Entity<SalesPersonQuotaHistory>(entity =>
-            {
-                entity.HasNoKey();
-            });
+                entity.HasOne(e => e.Employee)
+                    .WithOne(e => e.SalesPerson)
+                    .HasForeignKey<SalesPerson>(e => e.SalesPersonID)
+                    .HasConstraintName("FK_SalesPerson_Employee_SalesPersonID")
+                    .IsRequired();
 
-            modelBuilder.Entity<SalesReason>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<SalesTaxRate>(entity =>
-            {
-                entity.HasNoKey();
+                entity.HasOne(e => e.SalesTerritory)
+                   .WithMany()
+                   .HasForeignKey(e => e.TerritoryID);
             });
 
             modelBuilder.Entity<SalesTerritory>(entity =>
             {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<SalesTerritoryHistory>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ScrapReason>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<Shift>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ShipMethod>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<ShoppingCartItem>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<SpecialOffer>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<SpecialOfferProduct>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<StateProvince>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.StateProvinceCode).IsFixedLength();
-            });
-
-            modelBuilder.Entity<Store>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<StoreContact>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<TransactionHistory>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.TransactionType).IsFixedLength();
-            });
-
-            modelBuilder.Entity<TransactionHistoryArchive>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.TransactionType).IsFixedLength();
-            });
-
-            modelBuilder.Entity<UnitMeasure>(entity =>
-            {
-                entity.HasNoKey();
-
-                entity.Property(e => e.UnitMeasureCode).IsFixedLength();
-            });
-
-            modelBuilder.Entity<Vendor>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<VendorAddress>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<VendorContact>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<WorkOrder>(entity =>
-            {
-                entity.HasNoKey();
-            });
-
-            modelBuilder.Entity<WorkOrderRouting>(entity =>
-            {
-                entity.HasNoKey();
+                entity.HasKey(e => e.TerritoryID);
             });
 
             OnModelCreatingPartial(modelBuilder);
