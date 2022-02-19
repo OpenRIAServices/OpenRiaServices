@@ -131,7 +131,6 @@ namespace EFCoreModels.Northwind
                     .HasName("Region");
 
                 entity.Property(e => e.CustomerID)
-                    .HasColumnName("CustomerID")
                     .HasMaxLength(5)
                     .IsFixedLength()
                     .IsConcurrencyToken();
@@ -145,26 +144,20 @@ namespace EFCoreModels.Northwind
                     .HasMaxLength(40)
                     .IsConcurrencyToken();
 
-                entity.Property(e => e.ContactName).HasMaxLength(30)
-                    .IsConcurrencyToken();
+                entity.Property(e => e.ContactName).HasMaxLength(30).IsConcurrencyToken();
 
-                entity.Property(e => e.ContactTitle).HasMaxLength(30)
-                    .IsConcurrencyToken();
+                entity.Property(e => e.ContactTitle).HasMaxLength(30).IsConcurrencyToken();
 
-                entity.Property(e => e.Country).HasMaxLength(15)
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Country).HasMaxLength(15).IsConcurrencyToken();
 
-                entity.Property(e => e.Fax).HasMaxLength(24)
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Fax).HasMaxLength(24).IsConcurrencyToken();
 
-                entity.Property(e => e.Phone).HasMaxLength(24)
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Phone).HasMaxLength(24).IsConcurrencyToken();
 
-                entity.Property(e => e.PostalCode).HasMaxLength(10)
-                    .IsConcurrencyToken();
+                entity.Property(e => e.PostalCode).HasMaxLength(10).IsConcurrencyToken();
 
-                entity.Property(e => e.Region).HasMaxLength(15)
-                    .IsConcurrencyToken();
+                entity.Property(e => e.Region).HasMaxLength(15).IsConcurrencyToken();
+
             });
 
             modelBuilder.Entity<EmployeeTerritories>(entity =>
@@ -371,30 +364,33 @@ namespace EFCoreModels.Northwind
                 entity.HasIndex(e => e.SupplierID)
                     .HasName("SuppliersProducts");
 
-                entity.Property(e => e.ProductID).HasColumnName("ProductID");
+                entity.Property(e => e.ProductID).IsConcurrencyToken();
 
-                entity.Property(e => e.CategoryID).HasColumnName("CategoryID");
+                entity.Property(e => e.CategoryID).IsConcurrencyToken();
 
                 entity.Property(e => e.Discontinued)
-                    .IsRequired();
+                    .IsRequired()
+                    .IsConcurrencyToken();
 
                 entity.Property(e => e.ProductName)
                     .IsRequired()
-                    .HasMaxLength(40);
+                    .HasMaxLength(40)
+                    .IsConcurrencyToken();
 
-                entity.Property(e => e.QuantityPerUnit).HasMaxLength(20);
+                entity.Property(e => e.QuantityPerUnit).HasMaxLength(20).IsConcurrencyToken();
 
-                entity.Property(e => e.ReorderLevel).HasDefaultValueSql("(0)");
+                entity.Property(e => e.ReorderLevel).HasDefaultValueSql("(0)").IsConcurrencyToken();
 
-                entity.Property(e => e.SupplierID).HasColumnName("SupplierID");
+                entity.Property(e => e.SupplierID).HasColumnName("SupplierID").IsConcurrencyToken();
 
                 entity.Property(e => e.UnitPrice)
                     .HasColumnType("money")
-                    .HasDefaultValueSql("(0)");
+                    .HasDefaultValueSql("(0)")
+                    .IsConcurrencyToken();
 
-                entity.Property(e => e.UnitsInStock).HasDefaultValueSql("(0)");
+                entity.Property(e => e.UnitsInStock).HasDefaultValueSql("(0)").IsConcurrencyToken();
 
-                entity.Property(e => e.UnitsOnOrder).HasDefaultValueSql("(0)");
+                entity.Property(e => e.UnitsOnOrder).HasDefaultValueSql("(0)").IsConcurrencyToken();
 
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
