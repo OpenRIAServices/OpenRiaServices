@@ -33,7 +33,7 @@ namespace EFCoreModels.AdventureWorks
         {
             if (!optionsBuilder.IsConfigured)
             {
-                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AdventureWorks;Integrated Security=True;Multiple Active Result Sets=True");
+                optionsBuilder.UseSqlServer("Data Source=(localdb)\\MSSQLLocalDB;Initial Catalog=AdventureWorks;Integrated Security=True;MultipleActiveResultSets=True");
             }
         }
 
@@ -48,8 +48,7 @@ namespace EFCoreModels.AdventureWorks
 
                 entity.HasOne(e => e.Contact)
                     .WithMany()
-                    .HasForeignKey(e => e.ContactID)
-                    .HasConstraintName("FK_Employee_Contact_ContactID");
+                    .HasForeignKey(e => e.ContactID);
 
                 entity.HasOne(e => e.Manager)
                     .WithMany()
@@ -70,9 +69,7 @@ namespace EFCoreModels.AdventureWorks
 
                 entity.HasOne(e => e.ProductSubcategory)
                     .WithMany()
-                    .HasForeignKey(e => e.ProductSubcategoryID)
-//                    .HasConstraintName()
-;
+                    .HasForeignKey(e => e.ProductSubcategoryID);
             });
 
             modelBuilder.Entity<PurchaseOrderDetail>(entity =>
@@ -81,13 +78,11 @@ namespace EFCoreModels.AdventureWorks
 
                 entity.HasOne(e => e.PurchaseOrder)
                     .WithMany(e => e.PurchaseOrderDetails)
-                    .HasForeignKey(e => e.PurchaseOrderDetailID)
-                    .HasConstraintName("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID");
+                    .HasForeignKey(e => e.PurchaseOrderID);
 
                 entity.HasOne(e => e.Product)
                     .WithMany()
-                    .HasForeignKey(e => e.ProductID)
-                    .HasConstraintName("FK_PurchaseOrderDetail_Product_ProductID");
+                    .HasForeignKey(e => e.ProductID);
             });
 
             modelBuilder.Entity<PurchaseOrder>(entity =>
@@ -102,7 +97,7 @@ namespace EFCoreModels.AdventureWorks
                 entity.HasOne(e => e.Employee)
                     .WithOne(e => e.SalesPerson)
                     .HasForeignKey<SalesPerson>(e => e.SalesPersonID)
-                    .HasConstraintName("FK_SalesPerson_Employee_SalesPersonID")
+//                    .HasPrincipalKey<Employee>(e => e.EmployeeID)
                     .IsRequired();
 
                 entity.HasOne(e => e.SalesTerritory)

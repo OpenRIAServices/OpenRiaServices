@@ -511,7 +511,7 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(catalog.Products.Count == 8);
+                Assert.AreEqual(8, catalog.Products.Count);
             });
             EnqueueTestComplete();
         }

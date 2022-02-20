@@ -112,8 +112,8 @@ namespace OpenRiaServices.EntityFrameworkCore
             {
                 Debug.Assert(fk.PrincipalEntityType == navigationProperty.DeclaringEntityType);
 
-                otherKey = FormatMemberList(fk.PrincipalKey.Properties);
-                thisKey = FormatMemberList(fk.Properties);
+                thisKey = FormatMemberList(fk.PrincipalKey.Properties);
+                otherKey = FormatMemberList(fk.Properties);
             }
 
             AssociationAttribute assocAttrib = new AssociationAttribute(fk.GetConstraintName(), thisKey, otherKey);
