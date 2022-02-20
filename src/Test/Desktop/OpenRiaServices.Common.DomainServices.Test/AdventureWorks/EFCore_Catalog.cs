@@ -45,8 +45,8 @@ namespace TestDomainServices.EFCore
         public IQueryable<Product> GetProductsByCategory(int subCategoryID)
         {
             return from p in this.DbContext.Products
-                   where p.ProductSubcategory.ProductSubcategoryID == subCategoryID
-                   select p;
+                    where p.ProductSubcategoryID == subCategoryID
+                    select p;
         }
 
         [Insert]
