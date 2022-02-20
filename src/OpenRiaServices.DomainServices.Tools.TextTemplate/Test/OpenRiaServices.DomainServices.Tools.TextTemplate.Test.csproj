@@ -1,0 +1,62 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <TargetFramework>net472</TargetFramework>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\AssemblyGenerator.cs" Link="AssemblyGenerator.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\CompilerHelper.cs" Link="CompilerHelper.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\MockBuildEngine.cs" Link="MockBuildEngine.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\MockCodeGenerationHost.cs" Link="MockCodeGenerationHost.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\MockDomainServices.cs" Link="MockDomainServices.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\MockSharedCodeService.cs" Link="MockSharedCodeService.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\MsBuildHelper.cs" Link="MsBuildHelper.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\Utilities\ConsoleLogger.cs" Link="ConsoleLogger.cs" />
+    <Compile Include="..\..\OpenRiaServices.DomainServices.Tools\Test\Utilities\TestInitializer.cs" Link="Utilities\TestInitializer.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.EntityFramework\Framework\OpenRiaServices.DomainServices.EntityFramework.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Framework\OpenRiaServices.DomainServices.Tools.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Hosting\Framework\OpenRiaServices.DomainServices.Hosting.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.LinqToSql\Framework\OpenRiaServices.DomainServices.LinqToSql.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Server\Framework\OpenRiaServices.DomainServices.Server.csproj">
+      <Aliases>global,SystemWebDomainServices</Aliases>
+    </ProjectReference>
+    <!-- Ensure Tools Test project is built first so we can reference projectpath -->
+    <ProjectReference Include="..\..\OpenRiaServices.DomainServices.Tools\Test\OpenRiaServices.DomainServices.Tools.Test.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
+    <ProjectReference Include="..\Framework\OpenRiaServices.DomainServices.Tools.TextTemplate.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="..\..\OpenRiaServices.DomainServices.Tools\Test\ProjectPath.txt">
+      <Link>ProjectPath.txt</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.2.6" />
+    <PackageReference Include="Microsoft.Build" Version="16.0.461" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.0.461" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.0.461" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="16.0.461" ExcludeAssets="runtime" />
+    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="2.9.3">
+      <PrivateAssets>all</PrivateAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.1.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="3.1.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+  </ItemGroup>
+</Project>
