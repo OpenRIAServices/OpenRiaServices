@@ -1,6 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
+using OpenRiaServices.Server;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
@@ -47,11 +50,10 @@ namespace OpenRiaServices.EntityFrameworkCore
                 entityEntry.State = EntityState.Modified;
             }
 
-            // TODO: Look into this
             var changeTracker = dbContext.ChangeTracker;
-            var stateEntry = ObjectContextUtilitiesEFCore.AttachAsModifiedInternal(current, original, changeTracker);
+            AttachAsModifiedInternal(entityEntry, original, changeTracker);
 
-            if (stateEntry.State != EntityState.Modified)
+            if (entityEntry.State != EntityState.Modified)
             {
                 // Ensure that when we leave this method, the entity is in a
                 // Modified state. For example, if current and original are the
@@ -92,6 +94,34 @@ namespace OpenRiaServices.EntityFrameworkCore
 
             // transition the entity to the modified state
             entityEntry.State = EntityState.Modified;
+        }
+
+        private static void AttachAsModifiedInternal<T>(EntityEntry<T> stateEntry, T original, ChangeTracker objectContext)
+            where T : class
+        {
+            // Apply original vaules
+            var originalValues = objectContext.Context.Entry(original).CurrentValues;
+
+            Type entityType = stateEntry.Entity.GetType();
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(entityType);
+            AttributeCollection attributes = TypeDescriptor.GetAttributes(entityType);
+            bool isRoundtripType = attributes[typeof(RoundtripOriginalAttribute)] != null;
+
+            foreach (var member in stateEntry.CurrentValues.Properties)
+            {
+                stateEntry.OriginalValues[member] = originalValues[member];
+
+                // For any members that don't have RoundtripOriginal applied, EF can't determine modification
+                // state by doing value comparisons. To avoid losing updates in these cases, we must explicitly
+                // mark such members as modified.
+                PropertyDescriptor property = properties[member.Name];
+                if (property != null &&
+                    (!isRoundtripType && property.Attributes[typeof(RoundtripOriginalAttribute)] == null) &&
+                    property.Attributes[typeof(ExcludeAttribute)] == null)
+                {
+                    stateEntry.Property(member.Name).IsModified = true;
+                }
+            }
         }
     }
 }
