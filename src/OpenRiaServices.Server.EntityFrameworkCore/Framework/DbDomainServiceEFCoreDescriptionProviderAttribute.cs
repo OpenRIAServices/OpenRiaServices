@@ -22,7 +22,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// attribute is applied to.
         /// </summary>
         public DbDomainServiceEFCoreDescriptionProviderAttribute()
-            : base(typeof(LinqToEntitiesDomainServiceEFCoreDescriptionProvider))
+            : base(typeof(EFCoreDescriptionProvider))
         {
         }
 
@@ -32,7 +32,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// </summary>
         /// <param name="dbContextType">The LINQ To Entities ObjectContext Type.</param>
         public DbDomainServiceEFCoreDescriptionProviderAttribute(Type dbContextType)
-            : base(typeof(LinqToEntitiesDomainServiceEFCoreDescriptionProvider))
+            : base(typeof(EFCoreDescriptionProvider))
         {
             this._dbContextType = dbContextType;
         }
@@ -73,7 +73,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                     this._dbContextType));
             }
 
-            return new LinqToEntitiesDomainServiceEFCoreDescriptionProvider(domainServiceType, this._dbContextType, parent);
+            return new EFCoreDescriptionProvider(domainServiceType, this._dbContextType, parent);
         }
 
         /// <summary>

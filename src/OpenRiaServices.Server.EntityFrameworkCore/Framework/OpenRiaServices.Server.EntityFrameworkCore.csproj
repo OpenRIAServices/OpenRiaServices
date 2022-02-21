@@ -12,6 +12,8 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
+        <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs" Link="MetadataPropertyDescriptorWrapper.cs" />
+        <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\TypeDescriptorBase.cs" Link="TypeDescriptorBase.cs" />
         <Compile Update="DbResource.Designer.cs">
             <AutoGen>True</AutoGen>
             <DesignTime>True</DesignTime>

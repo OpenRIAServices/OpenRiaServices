@@ -6,15 +6,13 @@ using OpenRiaServices.Server;
 
 namespace OpenRiaServices.EntityFrameworkCore
 {
-    // TODO: Remove and move code to DB context
-
-    internal class LinqToEntitiesDomainServiceEFCoreDescriptionProvider : DomainServiceDescriptionProvider
+    internal class EFCoreDescriptionProvider : DomainServiceDescriptionProvider
     {
-        private static Dictionary<Type, LinqToEntitiesEFCoreTypeDescriptionContext> tdpContextMap = new Dictionary<Type, LinqToEntitiesEFCoreTypeDescriptionContext>();
-        private readonly LinqToEntitiesEFCoreTypeDescriptionContext _typeDescriptionContext;
+        private static Dictionary<Type, EFCoreTypeDescriptionContext> tdpContextMap = new Dictionary<Type, EFCoreTypeDescriptionContext>();
+        private readonly EFCoreTypeDescriptionContext _typeDescriptionContext;
         private readonly Dictionary<Type, ICustomTypeDescriptor> _descriptors = new Dictionary<Type, ICustomTypeDescriptor>();
 
-        public LinqToEntitiesDomainServiceEFCoreDescriptionProvider(Type domainServiceType, Type contextType, DomainServiceDescriptionProvider parent)
+        public EFCoreDescriptionProvider(Type domainServiceType, Type contextType, DomainServiceDescriptionProvider parent)
             : base(domainServiceType, parent)
         {
             lock (tdpContextMap)
@@ -22,7 +20,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 if (!tdpContextMap.TryGetValue(contextType, out this._typeDescriptionContext))
                 {
                     // create and cache a context for this provider type
-                    this._typeDescriptionContext = new LinqToEntitiesEFCoreTypeDescriptionContext(contextType);
+                    this._typeDescriptionContext = new EFCoreTypeDescriptionContext(contextType);
                     tdpContextMap.Add(contextType, this._typeDescriptionContext);
                 }
             }

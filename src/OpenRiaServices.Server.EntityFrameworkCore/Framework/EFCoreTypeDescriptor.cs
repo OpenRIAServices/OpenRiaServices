@@ -15,13 +15,13 @@ namespace OpenRiaServices.EntityFrameworkCore
     /// </summary>
     internal class EFCoreTypeDescriptor : TypeDescriptorBase
     {
-        private readonly LinqToEntitiesEFCoreTypeDescriptionContext _typeDescriptionContext;
+        private readonly EFCoreTypeDescriptionContext _typeDescriptionContext;
         private readonly IEntityType _entityType;
         private readonly IProperty _timestampProperty;
         private readonly bool _keyIsEditable;
         private Dictionary<string, IProperty> _foreignKeyMembers; // TODO: change to List<string> / HashSet<string>
 
-        public EFCoreTypeDescriptor(LinqToEntitiesEFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
+        public EFCoreTypeDescriptor(EFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
         : base(parent)
         {
             this._typeDescriptionContext = typeDescriptionContext;
@@ -75,7 +75,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <summary>
         /// Gets the metadata context
         /// </summary>
-        public LinqToEntitiesEFCoreTypeDescriptionContext TypeDescriptionContext
+        public EFCoreTypeDescriptionContext TypeDescriptionContext
         {
             get
             {

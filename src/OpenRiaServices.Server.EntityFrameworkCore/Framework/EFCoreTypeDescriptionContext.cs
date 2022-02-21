@@ -13,7 +13,7 @@ namespace OpenRiaServices.EntityFrameworkCore
     /// <summary>
     /// Metadata context for LINQ To Entities domain services
     /// </summary>
-    internal class LinqToEntitiesEFCoreTypeDescriptionContext : TypeDescriptionContextBase
+    internal class EFCoreTypeDescriptionContext : TypeDescriptionContextBase
     {
   //      private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
         private readonly Type _contextType;
@@ -23,7 +23,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// Constructor that accepts a LINQ To Entities context type
         /// </summary>
         /// <param name="contextType">The ObjectContext Type</param>
-        public LinqToEntitiesEFCoreTypeDescriptionContext(Type contextType)
+        public EFCoreTypeDescriptionContext(Type contextType)
         {
             if (contextType == null)
             {
