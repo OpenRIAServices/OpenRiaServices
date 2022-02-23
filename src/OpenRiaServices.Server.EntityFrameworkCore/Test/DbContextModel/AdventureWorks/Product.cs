@@ -57,5 +57,7 @@ namespace EFCoreModels.AdventureWorks
         public DateTime ModifiedDate { get; set; }
 
         public ProductSubcategory ProductSubcategory { get; set; }
+
+        public ICollection<PurchaseOrderDetail> PurchaseOrderDetails { get; set; } = new HashSet<PurchaseOrderDetail>();
     }
 }

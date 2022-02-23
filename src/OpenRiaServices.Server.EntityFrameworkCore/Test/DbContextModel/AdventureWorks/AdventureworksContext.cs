@@ -74,14 +74,14 @@ namespace EFCoreModels.AdventureWorks
 
             modelBuilder.Entity<PurchaseOrderDetail>(entity =>
             {
-                entity.HasKey(e => e.PurchaseOrderDetailID);
+                entity.HasKey(e => new { e.PurchaseOrderID, e.PurchaseOrderDetailID });
 
                 entity.HasOne(e => e.PurchaseOrder)
                     .WithMany(e => e.PurchaseOrderDetails)
                     .HasForeignKey(e => e.PurchaseOrderID);
 
                 entity.HasOne(e => e.Product)
-                    .WithMany()
+                    .WithMany(e => e.PurchaseOrderDetails)
                     .HasForeignKey(e => e.ProductID);
             });
 
