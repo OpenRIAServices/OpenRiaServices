@@ -169,7 +169,7 @@ namespace OpenRiaServices.Tools.Test
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFCoreContext")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFCoreContext")]
         [TestMethod]
-        public void TestClientCodegen_EFCoreEFDbCtxDomainServices()
+        public void TestClientCodegen_EFCoreDomainServices()
         {
             string[] sharedFiles = Array.Empty<string>();
 
@@ -566,6 +566,16 @@ namespace OpenRiaServices.Tools.Test
         {
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEFDbCtx", "Catalog_EFDbCtx.g", typeof(TestDomainServices.DbCtx.Catalog), Array.Empty<string>(), false));
+        }
+
+        [DeploymentItem(@"Baselines\Default\EF", "CG_CATEFDbCtx")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_CATEFDbCtx")]
+        [TestMethod]
+        [Description("Create client proxies for Linq to Entities domain service and compare to known good copy")]
+        public void TestCatalogEFCoreClientProxies()
+        {
+            // Default
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEFDbCtx", "Catalog_EFCore.g", typeof(TestDomainServices.EFCore.Catalog), Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_CONFLICT_RESOLUTION")]
