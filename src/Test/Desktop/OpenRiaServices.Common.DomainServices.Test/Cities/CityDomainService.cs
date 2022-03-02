@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices;
 using OpenRiaServices.Server;
@@ -292,8 +293,11 @@ namespace Cities
         }
 
         [Invoke]
-        public async Task<string> EchoWithDelay(string msg, TimeSpan delay)
+        public async Task<string> EchoWithDelay(string msg, TimeSpan delay, CancellationToken cancellationToken)
         {
+            if (!cancellationToken.Equals(ServiceContext.CancellationToken))
+                throw new DomainException("CancellationToken parameter does not work");
+
             // This method is used to test cancellation of invoke operations
             // Since the method might return to soon otherwise we add a delay
             await Task.Delay(delay, ServiceContext.CancellationToken);

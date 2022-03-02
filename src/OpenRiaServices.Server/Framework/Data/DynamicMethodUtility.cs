@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
+using System.Threading;
 
 namespace OpenRiaServices.Server
 {
@@ -179,12 +180,29 @@ namespace OpenRiaServices.Server
                 }
 
                 // Push the parameters on the stack.
+                int paramindex = 0;
                 for (int i = 0; i < conceptualParameterLength; i++)
                 {
-                    generator.Emit(parameterReference);
-                    generator.Emit(OpCodes.Ldc_I4, i);
-                    generator.Emit(OpCodes.Ldelem_Ref);
-                    EmitFromObjectConversion(generator, parameters[i].ParameterType);
+                    var parameter = parameters[i];
+
+                    if (parameter.ParameterType == typeof(CancellationToken) && !method.IsStatic)
+                    {
+                        // TODO: Cache static methods ?
+                        var serviceContextGetter = typeof(DomainService).GetProperty(nameof(DomainService.ServiceContext)).GetGetMethod();
+                        var cancellationTokenGetter = typeof(DomainServiceContext).GetProperty(nameof(DomainServiceContext.CancellationToken)).GetGetMethod();
+                        //var serviceProvider = typeof(DomainServiceContext).GetProperty(nameof(DomainServiceContext.ServiceContainer)).GetGetMethod();
+
+                        generator.Emit(OpCodes.Ldarg_0);
+                        generator.EmitCall(OpCodes.Call, serviceContextGetter, null);
+                        generator.EmitCall(OpCodes.Call, cancellationTokenGetter, null);
+                    }
+                    else
+                    {
+                        generator.Emit(parameterReference);
+                        generator.Emit(OpCodes.Ldc_I4, paramindex++);
+                        generator.Emit(OpCodes.Ldelem_Ref);
+                        EmitFromObjectConversion(generator, parameter.ParameterType);
+                    }
                 }
 
                 // Load an address on the stack that points to a location 

@@ -452,6 +452,11 @@ namespace OpenRiaServices.Server
                 List<DomainOperationParameter> parameters = new List<DomainOperationParameter>();
                 foreach (ParameterInfo parameterInfo in actualParameters)
                 {
+                    // Skip cancellationtoken (it is passed dynamically)
+                    // TODO: only do for last parameter ??
+                    if (parameterInfo.ParameterType == typeof(CancellationToken))
+                        continue;
+
                     bool isOut = parameterInfo.IsOut && parameterInfo.ParameterType.HasElementType;
                     DomainOperationParameter parameter = new DomainOperationParameter(
                         parameterInfo.Name,

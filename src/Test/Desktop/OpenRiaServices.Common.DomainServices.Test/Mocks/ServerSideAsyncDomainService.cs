@@ -60,8 +60,11 @@ namespace TestDomainServices
         /// Query returing a queryable range in a task
         /// </summary>
         /// <returns></returns>
-        public Task<IQueryable<RangeItem>> GetQueryableRangeAsync()
+        public Task<IQueryable<RangeItem>> GetQueryableRangeAsync(CancellationToken cancellationToken)
         {
+            if (!cancellationToken.Equals(ServiceContext.CancellationToken))
+                throw new DomainException("CancellationToken parameter does not work");
+
             return Delay(1)
                .ContinueWith(_ =>
                    _items.AsQueryable()
