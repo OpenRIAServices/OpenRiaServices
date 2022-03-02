@@ -155,7 +155,13 @@ namespace OpenRiaServices.Server
                 parameterTypes = new Type[] { typeof(DomainService), typeof(object[]) };
             }
 
-            DynamicMethod proxyMethod = new DynamicMethod(method.Name, typeof(object), parameterTypes, restrictedSkipVisibility: true);
+            // Ideally restrictedSkipVisibility should be true for all operations to improve perfomance
+            // downside is that the method is then jitted before validation
+            // so some problems with domainservice methods such as byref paramerters will throw InvalidProgramException
+            // before the validation occurs. Possible workarounds
+            // * move creation of methods to after validation
+            // * initially set method to a simple delegate which creates the method "lazily", update _method and then call its
+            DynamicMethod proxyMethod = new DynamicMethod(method.Name, typeof(object), parameterTypes, restrictedSkipVisibility: method.IsPrivate);
             ILGenerator generator = proxyMethod.GetILGenerator();
 
             // Cast the target object to its actual type.
@@ -184,6 +190,7 @@ namespace OpenRiaServices.Server
                 for (int i = 0; i < conceptualParameterLength; i++)
                 {
                     var parameter = parameters[i];
+
 
                     if (parameter.ParameterType == typeof(CancellationToken) && !method.IsStatic)
                     {
