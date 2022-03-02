@@ -155,7 +155,7 @@ namespace OpenRiaServices.Server
                 parameterTypes = new Type[] { typeof(DomainService), typeof(object[]) };
             }
 
-            DynamicMethod proxyMethod = new DynamicMethod(method.Name, typeof(object), parameterTypes, /* restrictedSkipVisibility */ !method.IsPublic);
+            DynamicMethod proxyMethod = new DynamicMethod(method.Name, typeof(object), parameterTypes, restrictedSkipVisibility: true);
             ILGenerator generator = proxyMethod.GetILGenerator();
 
             // Cast the target object to its actual type.
