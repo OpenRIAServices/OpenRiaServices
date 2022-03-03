@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client
 {
@@ -22,6 +23,7 @@ namespace OpenRiaServices.Client
         private bool _isErrorHandled;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
+        internal TaskScheduler CurrrentSynchronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OperationBase"/> class.
@@ -35,6 +37,17 @@ namespace OpenRiaServices.Client
             {
                 _cancellationTokenSource = new CancellationTokenSource();
             }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OperationBase"/> class.
+        /// </summary>
+        /// <param name="userState">Optional user state.</param>
+        /// <param name="cancellationTokenSource">cancellationTokenSource to use for cancellation</param>
+        protected OperationBase(object userState, CancellationTokenSource cancellationTokenSource)
+        {
+            this._userState = userState;
+            this._cancellationTokenSource = new CancellationTokenSource();
         }
 
         /// <summary>
