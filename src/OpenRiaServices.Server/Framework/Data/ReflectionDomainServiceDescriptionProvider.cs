@@ -393,7 +393,7 @@ namespace OpenRiaServices.Server
         internal class ReflectionDomainOperationEntry : DomainOperationEntry
         {
             private bool _isInferred;
-            private readonly Func<DomainService, object[], object> _method;
+            private readonly Func<DomainService, object[], ValueTask<object>> _method;
 
             /// <summary>
             /// Creates an instance of a <see cref="ReflectionDomainOperationEntry"/>.
@@ -443,7 +443,7 @@ namespace OpenRiaServices.Server
             /// <returns>The return value of the invoked method.</returns>
             public override ValueTask<object> InvokeAsync(DomainService domainService, object[] parameters, CancellationToken cancellationToken)
             {
-                return UnwrapTaskResult(this._method(domainService, parameters));
+                return this._method(domainService, parameters);
             }
 
             private static IEnumerable<DomainOperationParameter> GetMethodParameters(MethodInfo methodInfo)
