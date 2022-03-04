@@ -8,6 +8,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.Configuration;
 using OpenRiaServices.Server;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
@@ -74,11 +75,17 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             var operationContext = OperationContext.Current;
             try
             {
-                WcfDomainServiceContext context = new WcfDomainServiceContext((IServiceProvider)operationContext.Host, this.operationType);
+                var host = (DomainServiceHost)operationContext.Host;
+                var serviceScopeFactory = host.ServiceScopeFactory;
+                var scope = serviceScopeFactory.CreateScope();
+                await using (new AsyncServiceScope(scope).ConfigureAwait(false));
+
+                WcfDomainServiceContext context = new WcfDomainServiceContext(scope.ServiceProvider, this.operationType);
                 disableStackTraces = context.DisableStackTraces;
 
                 DiagnosticUtility.OperationInvoked(this.Name, operationContext);
-                DomainService domainService = this.GetDomainService(instance, context);
+
+                DomainService domainService = this.GetDomainService(scope.ServiceProvider, instance, context);
 
                 // invoke the operation and process the result
                 this.ConvertInputs(inputs);
@@ -112,11 +119,18 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             }
         }
 
-        private DomainService GetDomainService(object instance, WcfDomainServiceContext context)
+        private DomainService GetDomainService(IServiceProvider serviceProvider, object instance, WcfDomainServiceContext context)
         {
             // create and initialize the DomainService for this request
             DomainServiceBehavior.DomainServiceInstanceInfo instanceInfo =
                 (DomainServiceBehavior.DomainServiceInstanceInfo)instance;
+
+            if (serviceProvider.GetService(instanceInfo.DomainServiceType) is DomainService service)
+            {
+                // Do NOT instancce in instanceInfo.DomainServiceInstance since container will dispose instance
+                service.Initialize(context);
+                return service;
+            }
 
             try
             {
@@ -132,14 +146,6 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                 }
 
                 throw ServiceUtility.CreateFaultException(tie, context.DisableStackTraces);
-            }
-            catch (Exception ex)
-            {
-                if (ex.IsFatal())
-                {
-                    throw;
-                }
-                throw ServiceUtility.CreateFaultException(ex, context.DisableStackTraces);
             }
         }
 

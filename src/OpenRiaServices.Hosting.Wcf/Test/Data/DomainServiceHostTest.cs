@@ -21,29 +21,6 @@ namespace OpenRiaServices.Hosting.UnitTests
     public class DomainServiceHostTest
     {
         [TestMethod]
-        [Description("Tests that the built-in DomainServiceHost.GetService supports the right set of services.")]
-        public void DomainServiceHost_GetService()
-        {
-            DomainServiceHost host = this.CreateHost<DomainServiceHost>();
-
-            using (StringWriter writer = new StringWriter())
-            {
-                HttpRequest request = new HttpRequest("c:\\temp\\test.txt", "http://localhost/test.txt", "");
-                HttpResponse response = new HttpResponse(writer);
-                HttpContext.Current = new HttpContext(request, response);
-                Assert.AreSame(HttpContext.Current, host.GetService(typeof(HttpContext)));
-
-                HttpContextBase wrapper = (HttpContextBase)host.GetService(typeof(HttpContextBase));
-                Assert.IsNotNull(wrapper);
-            }
-
-            ExceptionHelper.ExpectArgumentNullException(delegate
-            {
-                host.GetService(null);
-            }, "serviceType");
-        }
-
-        [TestMethod]
         [Description("Tests that the built-in DomainServiceHost exposes 3 endpoints by default.")]
         public void DomainServiceHost_DefaultBehaviors()
         {
