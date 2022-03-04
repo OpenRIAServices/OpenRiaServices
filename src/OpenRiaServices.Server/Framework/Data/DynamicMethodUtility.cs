@@ -11,7 +11,8 @@ namespace OpenRiaServices.Server
     {
         private static readonly MethodInfo s_serviceContextGetter = typeof(DomainService).GetProperty(nameof(DomainService.ServiceContext)).GetGetMethod();
         private static readonly MethodInfo s_cancellationTokenGetter = typeof(DomainServiceContext).GetProperty(nameof(DomainServiceContext.CancellationToken)).GetGetMethod();
-        private static readonly MethodInfo s_serviceProviderGetter = typeof(DomainServiceContext).GetProperty(nameof(DomainServiceContext.ServiceContainer), BindingFlags.Instance | BindingFlags.NonPublic).GetGetMethod();
+        private static readonly MethodInfo s_getService = typeof(IServiceProvider).GetMethod(nameof(IServiceProvider.GetService));
+        private static readonly MethodInfo s_typeGetTypeFromHandle = typeof(Type).GetMethod(nameof(Type.GetTypeFromHandle));
         private static readonly MethodInfo s_unwrapVoidTask = typeof(DynamicMethodUtility).GetMethod(nameof(UnwrapVoidTask), BindingFlags.Static | BindingFlags.NonPublic);
         private static readonly MethodInfo s_unwrapVoidValueTask = typeof(DynamicMethodUtility).GetMethod(nameof(UnwrapVoidValueTask), BindingFlags.Static | BindingFlags.NonPublic);
         private static readonly MethodInfo s_unwrapTask = typeof(DynamicMethodUtility).GetMethod(nameof(UnwrapTask), BindingFlags.Static | BindingFlags.NonPublic);
@@ -213,12 +214,26 @@ namespace OpenRiaServices.Server
                     if (parameter.ParameterType.IsByRef || parameter.ParameterType.IsPointer)
                         throw new InvalidOperationException(string.Format(Resource.InvalidDomainOperationEntry_ParamMustBeByVal, method.Name, parameter.Name));
 
-                    if (parameter.ParameterType == typeof(CancellationToken) && !method.IsStatic)
+                    if (parameter.ParameterType == typeof(CancellationToken))
                     {
-
+                        // domainService.ServiceContext.CancellationToken
                         generator.Emit(OpCodes.Ldarg_0);
                         generator.EmitCall(OpCodes.Call, s_serviceContextGetter, null);
                         generator.EmitCall(OpCodes.Call, s_cancellationTokenGetter, null);
+                    }
+                    else if (parameter.GetCustomAttribute(typeof(InjectParameterAttribute)) != null)
+                    {
+                        // generate ((IServiceProvider)ServiceContext).GetService( typeof(parameterType) )
+                        generator.Emit(OpCodes.Ldarg_0);
+                        generator.EmitCall(OpCodes.Call, s_serviceContextGetter, null);
+                        // emit type
+                        generator.Emit(OpCodes.Ldtoken, parameter.ParameterType);
+                        generator.EmitCall(OpCodes.Call, s_typeGetTypeFromHandle, null);
+
+                        // ((IServiceProvider)ServiceContext).GetService( ... )
+                        generator.EmitCall(OpCodes.Callvirt, s_getService, null);
+
+                        EmitFromObjectConversion(generator, parameter.ParameterType);
                     }
                     else
                     {
@@ -291,9 +306,9 @@ namespace OpenRiaServices.Server
                 else
                     generator.Emit(OpCodes.Newobj, s_valueTaskCtorTask);
             }
-            else // any reference type
+            else // any reference type, 
             {
-                generator.EmitCall(OpCodes.Call, objToValueTask, null);
+                generator.Emit(OpCodes.Newobj, s_valueTaskCtorObject);
             }
 
             generator.Emit(OpCodes.Ret);

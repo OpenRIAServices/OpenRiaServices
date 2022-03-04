@@ -99,8 +99,13 @@ namespace Cities
         }
 
         [Query]
-        public IQueryable<State> GetStatesInShippingZone(ShippingZone shippingZone)
+        public IQueryable<State> GetStatesInShippingZone(ShippingZone shippingZone, [InjectParameter] System.Web.HttpContext httpContext, [InjectParameter] System.Security.Principal.IPrincipal principal)
         {
+            if (!object.ReferenceEquals(httpContext, System.Web.HttpContext.Current))
+                throw new DomainException("DomainService parameter injection does not work");
+            if (!object.ReferenceEquals(principal, ServiceContext.User))
+                throw new DomainException("DomainService parameter injection does not work");
+
             return this._cityData.States.Where(s => s.ShippingZone == shippingZone).AsQueryable<State>();
         }
 

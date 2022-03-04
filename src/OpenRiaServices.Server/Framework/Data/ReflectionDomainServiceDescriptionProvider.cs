@@ -452,22 +452,27 @@ namespace OpenRiaServices.Server
                 List<DomainOperationParameter> parameters = new List<DomainOperationParameter>();
                 foreach (ParameterInfo parameterInfo in actualParameters)
                 {
-                    // Skip cancellationtoken (it is passed dynamically)
-                    // TODO: only do for last parameter ??
-                    if (parameterInfo.ParameterType == typeof(CancellationToken))
+                    var attributes = parameterInfo.GetCustomAttributes(true).Cast<Attribute>().ToArray();
+                    if (IsInjectedParameter(parameterInfo, attributes))
                         continue;
 
                     bool isOut = parameterInfo.IsOut && parameterInfo.ParameterType.HasElementType;
                     DomainOperationParameter parameter = new DomainOperationParameter(
                         parameterInfo.Name,
                         parameterInfo.ParameterType,
-                        new AttributeCollection(parameterInfo.GetCustomAttributes(true).Cast<Attribute>().ToArray()),
+                        new AttributeCollection(attributes),
                         isOut);
 
                     parameters.Add(parameter);
                 }
 
                 return parameters;
+            }
+
+            internal static bool IsInjectedParameter(ParameterInfo parameterInfo, Attribute [] attributes)
+            {
+                return parameterInfo.ParameterType == typeof(CancellationToken)
+                    || attributes.Any(a => a is InjectParameterAttribute);
             }
 
             /// <summary>
