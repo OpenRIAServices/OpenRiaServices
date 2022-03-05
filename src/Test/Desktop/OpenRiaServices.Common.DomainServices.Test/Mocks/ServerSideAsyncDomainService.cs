@@ -98,12 +98,10 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public Task<RangeItem> GetRangeByIdAsync(int id)
+        public async ValueTask<RangeItem> GetRangeByIdAsync(int id)
         {
-            return Delay(1)
-                .ContinueWith(_ =>
-                    _items.FirstOrDefault(a => a.Id == id)
-                );
+            await Delay(1);
+            return _items.FirstOrDefault(a => a.Id == id);
         }
 
         /// <summary>
@@ -125,7 +123,7 @@ namespace TestDomainServices
         /// <param name="rangeItem">Item to update</param>
         /// <returns></returns>
         [Update]
-        public async Task UpdateRangeAsync(RangeItem rangeItem)
+        public async ValueTask UpdateRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
             rangeItem.Text = "updated";

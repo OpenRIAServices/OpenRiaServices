@@ -337,10 +337,5 @@ namespace OpenRiaServices.Server
         {
             return await valueTask.ConfigureAwait(false);
         }
-
-        private static ValueTask<object> ToValueTask(object obj)
-        {
-            return new ValueTask<object>(obj);
-        }
     }
 }
