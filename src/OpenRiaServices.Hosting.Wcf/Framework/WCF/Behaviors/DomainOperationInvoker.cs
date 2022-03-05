@@ -78,9 +78,10 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                 var host = (DomainServiceHost)operationContext.Host;
                 var serviceScopeFactory = host.ServiceScopeFactory;
                 var scope = serviceScopeFactory.CreateScope();
-                await using (new AsyncServiceScope(scope).ConfigureAwait(false));
+                await using var _ = new AsyncServiceScope(scope).ConfigureAwait(false);
 
-                WcfDomainServiceContext context = new WcfDomainServiceContext(scope.ServiceProvider, this.operationType);
+                var user = HttpContext.Current?.User ?? OperationContext.Current.ClaimsPrincipal;
+                WcfDomainServiceContext context = new WcfDomainServiceContext(scope.ServiceProvider, user, this.operationType);
                 disableStackTraces = context.DisableStackTraces;
 
                 DiagnosticUtility.OperationInvoked(this.Name, operationContext);

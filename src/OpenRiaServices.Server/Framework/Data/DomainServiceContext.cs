@@ -19,7 +19,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         /// <param name="serviceProvider">A service provider.</param>
         /// <param name="operationType">The type of operation that is being executed.</param>
-        public DomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
+        public DomainServiceContext(IServiceProvider serviceProvider, IPrincipal user, DomainOperationType operationType)
         {
             if (serviceProvider == null)
             {
@@ -27,7 +27,12 @@ namespace OpenRiaServices.Server
             }
             this._serviceProvider = serviceProvider;
             this.OperationType = operationType;
-            this.User = (IPrincipal)serviceProvider.GetService(typeof(IPrincipal));
+            this.User = user;
+        }
+
+        public DomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
+            : this(serviceProvider, (IPrincipal)serviceProvider.GetService(typeof(IPrincipal)), operationType)
+        {
         }
         /// <summary>
         /// Copy constructor that creates a new context of the specified type copying

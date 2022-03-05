@@ -19,7 +19,15 @@ namespace OpenRiaServices.Hosting.Wcf
         /// <param name="serviceProvider">A service provider.</param>
         /// <param name="operationType">The type of operation that is being executed.</param>
         public WcfDomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
-            : base(serviceProvider, operationType)
+            : base(serviceProvider, serviceProvider.GetService<IPrincipal>(), operationType)
+        { }
+        /// <summary>
+        /// Initializes a new instance of the DomainServiceContext class
+        /// </summary>
+        /// <param name="serviceProvider">A service provider.</param>
+        /// <param name="operationType">The type of operation that is being executed.</param>
+        public WcfDomainServiceContext(IServiceProvider serviceProvider, IPrincipal user, DomainOperationType operationType)
+            : base(serviceProvider, user, operationType)
         {
             _httpContext = HttpContext.Current;
 
