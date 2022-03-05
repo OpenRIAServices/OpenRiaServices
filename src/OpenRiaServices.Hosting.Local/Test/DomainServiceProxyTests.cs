@@ -696,7 +696,7 @@ namespace OpenRiaServices.Hosting.Local.Test
         {
             return new MockDomainServiceProxy()
             {
-                Context = new DomainServiceContext(new MockServiceProvider(), DomainOperationType.Query),
+                Context = new DomainServiceContext(new MockServiceProvider(), Thread.CurrentPrincipal, DomainOperationType.Query),
                 CurrentOriginalEntityMap = new Dictionary<object, object>(),
                 DomainServiceType = typeof(object)
             };
@@ -1015,7 +1015,7 @@ namespace OpenRiaServices.Hosting.Local.Test
         public class MockDomainServiceContext : DomainServiceContext
         {
             public MockDomainServiceContext(DomainOperationType operationType)
-                : base(new MockServiceProvider(), operationType)
+                : base(new MockServiceProvider(), Thread.CurrentPrincipal, operationType)
             {
             }
         }
