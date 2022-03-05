@@ -34,6 +34,7 @@ namespace OpenRiaServices.Server
         /// <summary>
         /// OBSOLETE: Use other constructor
         /// </summary>
+        [Obsolete("Use other constructor accepting a User, this will be removed in a future version")]
         public DomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
             : this(serviceProvider, (IPrincipal)serviceProvider.GetService(typeof(IPrincipal)), operationType)
         {
@@ -53,7 +54,7 @@ namespace OpenRiaServices.Server
             }
             this._serviceProvider = serviceContext._serviceProvider;
             this.OperationType = operationType;
-            this.User = (IPrincipal)_serviceProvider.GetService(typeof(IPrincipal));
+            this.User = serviceContext.User;
         }
 
         /// <summary>
