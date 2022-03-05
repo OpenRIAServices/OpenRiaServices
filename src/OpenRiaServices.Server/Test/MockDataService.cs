@@ -7,7 +7,7 @@ namespace OpenRiaServices.Server.Test
     {
         private readonly IPrincipal user;
 
-        public MockDataService(IPrincipal user)
+        public MockDataService(IPrincipal user = null)
         {
             this.user = user;
         }
