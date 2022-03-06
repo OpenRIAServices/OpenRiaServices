@@ -10,11 +10,10 @@ namespace OpenRiaServices.Hosting.Wcf
 {
     internal class DomainServiceAssemblyScanner
     {
-        public static IEnumerable<Type> DiscoverDomainServices()
-            => DiscoverDomainServices(BuildManager.GetReferencedAssemblies().Cast<Assembly>());
-
-        public static IEnumerable<Type> DiscoverDomainServices(IEnumerable<Assembly> assemblies)
+        public static IEnumerable<Type> DiscoverDomainServices(IEnumerable<Assembly> assemblies = null)
         {
+            assemblies ??= BuildManager.GetReferencedAssemblies().Cast<Assembly>();
+
             Type domainServiceBaseType = typeof(DomainService);
             List<Type> types = new List<Type>();
 
