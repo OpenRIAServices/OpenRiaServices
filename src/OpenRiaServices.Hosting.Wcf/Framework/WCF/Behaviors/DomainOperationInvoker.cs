@@ -8,7 +8,6 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.Configuration;
 using OpenRiaServices.Server;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace OpenRiaServices.Hosting.Wcf.Behaviors
 {
@@ -75,16 +74,15 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             var operationContext = OperationContext.Current;
             try
             {
-                var scope = ((DomainServiceHost)operationContext.Host).ServiceScopeFactory.CreateScope();
-                await using var _ = new AsyncServiceScope(scope).ConfigureAwait(false);
-
+                // create and initialize the DomainService for this request
+                var instanceInfo = (DomainServiceBehavior.DomainServiceInstanceInfo)instance;
                 var user = HttpContext.Current?.User ?? operationContext.ClaimsPrincipal;
-                WcfDomainServiceContext context = new WcfDomainServiceContext(scope.ServiceProvider, user, this.operationType);
+                WcfDomainServiceContext context = new WcfDomainServiceContext(instanceInfo.ServiceScope.ServiceProvider, user, this.operationType);
                 disableStackTraces = context.DisableStackTraces;
 
                 DiagnosticUtility.OperationInvoked(this.Name, operationContext);
 
-                DomainService domainService = this.GetDomainService(scope.ServiceProvider, instance, context);
+                DomainService domainService = this.GetDomainService(instanceInfo, context);
 
                 // invoke the operation and process the result
                 this.ConvertInputs(inputs);
@@ -118,15 +116,12 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             }
         }
 
-        private DomainService GetDomainService(IServiceProvider serviceProvider, object instance, WcfDomainServiceContext context)
+        private DomainService GetDomainService(DomainServiceBehavior.DomainServiceInstanceInfo instanceInfo, WcfDomainServiceContext context)
         {
             // create and initialize the DomainService for this request
-            DomainServiceBehavior.DomainServiceInstanceInfo instanceInfo =
-                (DomainServiceBehavior.DomainServiceInstanceInfo)instance;
-
-            if (serviceProvider.GetService(instanceInfo.DomainServiceType) is DomainService service)
+            if (instanceInfo.ServiceScope.ServiceProvider.GetService(instanceInfo.DomainServiceType) is DomainService service)
             {
-                // Do NOT instancce in instanceInfo.DomainServiceInstance since container will dispose instance
+                // Do NOT save instance in instanceInfo.DomainServiceInstance since container will dispose instance
                 service.Initialize(context);
                 return service;
             }

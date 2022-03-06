@@ -12,6 +12,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
     public class DomainServiceHostingConfiguration
     {
         private static readonly Lazy<DomainServiceHostingConfiguration> s_domainServiceConfiguration = new Lazy<DomainServiceHostingConfiguration>(CreateConfiguration, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
+        private IServiceProvider _serviceProvider = new DefaultServiceProvider();
 
         private DomainServiceHostingConfiguration()
         {
@@ -27,7 +28,24 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
         /// List of all endpoints, name must be unique
         /// </summary>
         public ISet<DomainServiceEndpointFactory> EndpointFactories { get; }
-        public IServiceProvider ServiceProvider { get; set; } = new DefaultServiceProvider();
+
+        /// <summary>
+        /// Global service provider to use for creating domain services and method injection.
+        /// <para>Must be set at startup before first request</para>
+        /// </summary>
+        /// <exception cref="ArgumentException">If provider does not support Scopes</exception>
+        public IServiceProvider ServiceProvider
+        {
+            get => _serviceProvider;
+            set
+            {
+                // Vak
+                if (value?.GetServices(typeof(IServiceScopeFactory)) == null)
+                    throw new ArgumentException("Service provider must support scopes", nameof(value));
+
+                _serviceProvider = value;
+            }
+        }
 
         /// <summary>
         /// Initialize the singleton instance
@@ -73,7 +91,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
 
         private class DefaultServiceProvider : IServiceProvider, IServiceScopeFactory
         {
-            IServiceScope IServiceScopeFactory.CreateScope() 
+            IServiceScope IServiceScopeFactory.CreateScope()
                 => new ServiceScope(DomainService.IsDefaultFactory ? new ActivatorServiceProvider() : this);
 
             public object GetService(Type serviceType)
@@ -133,7 +151,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
                 }
             }
         }
-    
+
     }
 }
 
