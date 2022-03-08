@@ -12,10 +12,10 @@ namespace Microsoft.Extensions.DependencyInjection
     /// <summary>
     /// Extension methods for Microsoft.Extensions.DependencyInjection interop
     /// </summary>
-    public static class OpenRiaServiceCollectionExtensions
+    public static class OpenRiaServicesServiceCollectionExtensions
     {
         /// <summary>
-        /// Registers DomainServices in the specified service collection.
+        /// Registers DomainServices found in the specified assemblies to the <see cref="IServiceCollection"/>.
         /// </summary>
         /// <param name="serviceCollection"><see cref="IServiceCollection"/> where services are registered</param>
         /// <param name="serviceLifetime">Lifetime of services</param>

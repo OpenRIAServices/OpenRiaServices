@@ -8,7 +8,7 @@ using System.Web.Compilation;
 
 namespace OpenRiaServices.Hosting.Wcf
 {
-    internal class DomainServiceAssemblyScanner
+    static class DomainServiceAssemblyScanner
     {
         public static IEnumerable<Type> DiscoverDomainServices(IEnumerable<Assembly> assemblies = null)
         {
