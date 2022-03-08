@@ -31,7 +31,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration
         {
             IServiceProvider IServiceScope.ServiceProvider => this;
 
-            void IDisposable.Dispose() { }
+            void IDisposable.Dispose() { /* noop */ }
 
             object IServiceProvider.GetService(Type serviceType) => null;
         }
@@ -39,7 +39,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration
         /// <summary>
         /// Service provider, capable of resolving a single DomainService (once)
         /// </summary>
-        sealed class ActivatorServiceProvider : IServiceScope, IServiceProvider, IDisposable
+        sealed class ActivatorServiceProvider : IServiceScope, IServiceProvider
         {
             private DomainService _domainService;
 
