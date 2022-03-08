@@ -19,7 +19,8 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
         {
             EndpointFactories = new HashSet<DomainServiceEndpointFactory>(new EndpointNameComparer());
 
-            // This might seem strange, s_serviceScopeProvider cannot be changed until a s_serviceScopeProvider
+            // This might seem strange, s_serviceScopeProvider cannot be changed until after ctor is run
+            // and since ctor is private only a single instance will ever be created
             _serviceProvider = (DefaultDomainServicesServiceProvider)s_serviceScopeFactory;
         }
 

@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.Wcf
+namespace OpenRiaServices.Hosting.Wcf.Configuration
 {
     /// <summary>
     /// Default implementation for <see cref="Configuration.Internal.DomainServiceHostingConfiguration.ServiceProvider"/>

@@ -9,7 +9,6 @@ using System.ServiceModel;
 using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
 using System.Web;
-using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Hosting.Wcf.Behaviors;
 using OpenRiaServices.Hosting.Wcf.Configuration.Internal;
 using OpenRiaServices.Server;
