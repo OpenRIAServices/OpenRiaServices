@@ -10,16 +10,16 @@ using OpenRiaServices.Server;
 namespace Microsoft.Extensions.DependencyInjection
 {
     /// <summary>
-    /// Experimental SUBJECT TO CHANGE: 
+    /// Extension methods for Microsoft.Extensions.DependencyInjection interop
     /// </summary>
     public static class OpenRiaServiceCollectionExtensions
     {
         /// <summary>
-        /// PREVIEW and Subject to change: Registers DomainServices in the specified service collection with provided
+        /// Registers DomainServices in the specified service collection.
         /// </summary>
-        /// <param name="serviceCollection"></param>
-        /// <param name="serviceLifetime"></param>
-        /// <param name="assemblies">assemblies to scan, or null to scan all referenced assemblies</param>
+        /// <param name="serviceCollection"><see cref="IServiceCollection"/> where services are registered</param>
+        /// <param name="serviceLifetime">Lifetime of services</param>
+        /// <param name="assemblies">assemblies to scan, or <c>null</c> to scan all referenced assemblies</param>
         /// <returns></returns>
         public static IServiceCollection AddDomainServices(this IServiceCollection serviceCollection, ServiceLifetime serviceLifetime, Assembly[] assemblies = null)
         {

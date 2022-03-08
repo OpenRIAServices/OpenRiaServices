@@ -18,7 +18,7 @@ namespace OpenRiaServices.Server
         /// Initializes a new instance of the DomainServiceContext class
         /// </summary>
         /// <param name="serviceProvider">A service provider.</param>
-        /// <param name="user">the current user</param>
+        /// <param name="user">The user calling the operation.</param>
         /// <param name="operationType">The type of operation that is being executed.</param>
         public DomainServiceContext(IServiceProvider serviceProvider, IPrincipal user, DomainOperationType operationType)
         {
@@ -38,23 +38,6 @@ namespace OpenRiaServices.Server
         public DomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
             : this(serviceProvider, (IPrincipal)serviceProvider.GetService(typeof(IPrincipal)), operationType)
         {
-        }
-
-        /// <summary>
-        /// Copy constructor that creates a new context of the specified type copying
-        /// the rest of the context from the provided instance.
-        /// </summary>
-        /// <param name="serviceContext">The service context to copy from.</param>
-        /// <param name="operationType">The type of operation that is being executed.</param>
-        internal DomainServiceContext(DomainServiceContext serviceContext, DomainOperationType operationType)
-        {
-            if (serviceContext == null)
-            {
-                throw new ArgumentNullException(nameof(serviceContext));
-            }
-            this._serviceProvider = serviceContext._serviceProvider;
-            this.OperationType = operationType;
-            this.User = serviceContext.User;
         }
 
         /// <summary>

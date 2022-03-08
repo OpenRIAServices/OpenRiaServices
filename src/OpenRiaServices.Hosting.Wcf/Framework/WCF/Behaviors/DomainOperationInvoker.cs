@@ -81,7 +81,6 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                 disableStackTraces = context.DisableStackTraces;
 
                 DiagnosticUtility.OperationInvoked(this.Name, operationContext);
-
                 DomainService domainService = this.GetDomainService(instanceInfo, context);
 
                 // invoke the operation and process the result

@@ -89,7 +89,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
             }
         }
 
-        private class DefaultServiceProvider : IServiceProvider, IServiceScopeFactory
+        private sealed class DefaultServiceProvider : IServiceProvider, IServiceScopeFactory
         {
             IServiceScope IServiceScopeFactory.CreateScope()
                 => new ServiceScope(DomainService.IsDefaultFactory ? new ActivatorServiceProvider() : this);
@@ -104,9 +104,9 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
             }
         }
 
-        private class ServiceScope : IServiceScope
+        private sealed class ServiceScope : IServiceScope
         {
-            IServiceProvider _serviceProvider;
+            private readonly IServiceProvider _serviceProvider;
 
             public ServiceScope(IServiceProvider serviceProvider)
             {
@@ -118,7 +118,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
             public void Dispose() => (_serviceProvider as IDisposable)?.Dispose();
         }
 
-        private class ActivatorServiceProvider : IServiceProvider, IDisposable
+        private sealed class ActivatorServiceProvider : IServiceProvider, IDisposable
         {
             private List<IDisposable> _disposables = new List<IDisposable>();
 
