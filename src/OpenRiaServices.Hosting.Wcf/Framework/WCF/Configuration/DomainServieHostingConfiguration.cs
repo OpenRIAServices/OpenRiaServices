@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
 {
@@ -12,12 +11,22 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
     public class DomainServiceHostingConfiguration
     {
         private static readonly Lazy<DomainServiceHostingConfiguration> s_domainServiceConfiguration = new Lazy<DomainServiceHostingConfiguration>(CreateConfiguration, System.Threading.LazyThreadSafetyMode.ExecutionAndPublication);
-        private IServiceProvider _serviceProvider = new DefaultServiceProvider();
+        private static IServiceScopeFactory s_serviceScopeFactory = new DefaultDomainServicesServiceProvider();
+        
+        private IServiceProvider _serviceProvider;
 
         private DomainServiceHostingConfiguration()
         {
             EndpointFactories = new HashSet<DomainServiceEndpointFactory>(new EndpointNameComparer());
+
+            // This might seem strange, s_serviceScopeProvider cannot be changed until a s_serviceScopeProvider
+            _serviceProvider = (DefaultDomainServicesServiceProvider)s_serviceScopeFactory;
         }
+
+        /// <summary>
+        /// Allow internal access to creating scope
+        /// </summary>
+        internal static IServiceScopeFactory ServiceScopeProvider => s_serviceScopeFactory;
 
         /// <summary>
         /// Get the current global configuration
@@ -39,11 +48,12 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
             get => _serviceProvider;
             set
             {
-                // Vak
-                if (value?.GetServices(typeof(IServiceScopeFactory)) == null)
+                var scopeFactory = value?.GetService<IServiceScopeFactory>();
+                if (scopeFactory == null)
                     throw new ArgumentException("Service provider must support scopes", nameof(value));
 
                 _serviceProvider = value;
+                s_serviceScopeFactory = scopeFactory;
             }
         }
 
@@ -76,7 +86,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
             return endpointFactory;
         }
 
-        private class EndpointNameComparer : IEqualityComparer<DomainServiceEndpointFactory>
+        private sealed class EndpointNameComparer : IEqualityComparer<DomainServiceEndpointFactory>
         {
             public bool Equals(DomainServiceEndpointFactory x, DomainServiceEndpointFactory y)
             {
@@ -88,70 +98,6 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
                 return obj.Name.GetHashCode();
             }
         }
-
-        private sealed class DefaultServiceProvider : IServiceProvider, IServiceScopeFactory
-        {
-            IServiceScope IServiceScopeFactory.CreateScope()
-                => new ServiceScope(DomainService.IsDefaultFactory ? new ActivatorServiceProvider() : this);
-
-            public object GetService(Type serviceType)
-            {
-                // Create service scope
-                if (serviceType == typeof(IServiceScopeFactory))
-                    return this;
-
-                return null;
-            }
-        }
-
-        private sealed class ServiceScope : IServiceScope
-        {
-            private readonly IServiceProvider _serviceProvider;
-
-            public ServiceScope(IServiceProvider serviceProvider)
-            {
-                _serviceProvider = serviceProvider;
-            }
-
-            public IServiceProvider ServiceProvider => _serviceProvider;
-
-            public void Dispose() => (_serviceProvider as IDisposable)?.Dispose();
-        }
-
-        private sealed class ActivatorServiceProvider : IServiceProvider, IDisposable
-        {
-            private List<IDisposable> _disposables = new List<IDisposable>();
-
-            public void Dispose()
-            {
-                foreach (var instance in _disposables)
-                    instance.Dispose();
-                _disposables.Clear();
-            }
-
-            public object GetService(Type serviceType)
-            {
-                try
-                {
-                    if (typeof(DomainService).IsAssignableFrom(serviceType))
-                    {
-                        var instance = (DomainService)Activator.CreateInstance(serviceType);
-                        _disposables.Add(instance);
-                        return instance;
-                    }
-                    return null;
-                }
-                catch (System.Reflection.TargetInvocationException tie)
-                {
-                    if (tie.InnerException is Exception inner)
-                    {
-                        throw inner;
-                    }
-                    throw;
-                }
-            }
-        }
-
     }
 }
 

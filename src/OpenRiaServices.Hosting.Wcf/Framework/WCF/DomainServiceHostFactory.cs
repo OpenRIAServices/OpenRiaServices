@@ -25,7 +25,7 @@ namespace OpenRiaServices.Hosting.Wcf
         /// </returns>
         protected override ServiceHost CreateServiceHost(Type serviceType, Uri[] baseAddresses)
         {
-            return new DomainServiceHost(serviceType, baseAddresses, Configuration.Internal.DomainServiceHostingConfiguration.Current.ServiceProvider);
+            return new DomainServiceHost(serviceType, baseAddresses);
         }
     }
 }

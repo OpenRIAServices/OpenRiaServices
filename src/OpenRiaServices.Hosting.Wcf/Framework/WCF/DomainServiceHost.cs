@@ -24,9 +24,6 @@ namespace OpenRiaServices.Hosting.Wcf
         private static readonly HashSet<string> _allowedSchemes = new HashSet<string>() { Uri.UriSchemeHttp, Uri.UriSchemeHttps };
         private static readonly HashSet<string> _allowedSecureSchemes = new HashSet<string>() { Uri.UriSchemeHttps };
         private readonly DomainServiceDescription _domainServiceDescription;
-        private IServiceProvider _serviceProvider;
-
-        internal IServiceScopeFactory ServiceScopeFactory { get; }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceHost"/> class with
@@ -38,11 +35,6 @@ namespace OpenRiaServices.Hosting.Wcf
         /// the hosted service.
         /// </param>
         public DomainServiceHost(Type domainServiceType, params Uri[] baseAddresses)
-            : this(domainServiceType, baseAddresses, serviceProvider: Configuration.Internal.DomainServiceHostingConfiguration.Current.ServiceProvider)
-        {
-        }
-
-        public DomainServiceHost(Type domainServiceType, Uri[] baseAddresses, IServiceProvider serviceProvider)
         {
             if (domainServiceType == null)
             {
@@ -53,9 +45,6 @@ namespace OpenRiaServices.Hosting.Wcf
             {
                 throw new ArgumentNullException(nameof(baseAddresses));
             }
-
-            _serviceProvider = serviceProvider;
-            this.ServiceScopeFactory = _serviceProvider?.GetService<IServiceScopeFactory>();
 
             EnableClientAccessAttribute att = (EnableClientAccessAttribute)TypeDescriptor.GetAttributes(domainServiceType)[typeof(EnableClientAccessAttribute)];
 
@@ -74,7 +63,6 @@ namespace OpenRiaServices.Hosting.Wcf
             this._domainServiceDescription = DomainServiceDescription.GetDescription(domainServiceType);
             this.InitializeDescription(domainServiceType, new UriSchemeKeyedCollection(baseAddresses));
         }
-
 
         /// <summary>
         /// Gets a service.
