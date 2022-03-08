@@ -27,7 +27,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
         /// <summary>
         /// Allow internal access to creating scope
         /// </summary>
-        internal static IServiceScopeFactory ServiceScopeProvider => s_serviceScopeFactory;
+        internal static IServiceScopeFactory ServiceScopeFactory => s_serviceScopeFactory;
 
         /// <summary>
         /// Get the current global configuration
@@ -51,7 +51,7 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration.Internal
             {
                 var scopeFactory = value?.GetService<IServiceScopeFactory>();
                 if (scopeFactory == null)
-                    throw new ArgumentException("Service provider must support scopes", nameof(value));
+                    throw new ArgumentException(Resource.DomainServiceHostingConfiguration_ServiceProvider_MustSupportScope, nameof(value));
 
                 _serviceProvider = value;
                 s_serviceScopeFactory = scopeFactory;

@@ -48,7 +48,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
 
                 DomainServiceInstanceInfo instanceInfo = new DomainServiceInstanceInfo();
                 instanceInfo.DomainServiceType = instanceContext.Host.Description.ServiceType;
-                instanceInfo.ServiceScope = Configuration.Internal.DomainServiceHostingConfiguration.ServiceScopeProvider.CreateScope();
+                instanceInfo.ServiceScope = Configuration.Internal.DomainServiceHostingConfiguration.ServiceScopeFactory.CreateScope();
 
                 // since we require more contextual information at the point in
                 // time when a DomainService is created, we return an info object and

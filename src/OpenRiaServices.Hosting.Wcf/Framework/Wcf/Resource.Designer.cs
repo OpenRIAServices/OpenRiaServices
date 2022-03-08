@@ -19,7 +19,7 @@ namespace OpenRiaServices.Hosting.Wcf {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource {
@@ -102,6 +102,15 @@ namespace OpenRiaServices.Hosting.Wcf {
         internal static string DomainServiceHost_DuplicateContractName {
             get {
                 return ResourceManager.GetString("DomainServiceHost_DuplicateContractName", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Service provider must be non null and support scopes.
+        /// </summary>
+        internal static string DomainServiceHostingConfiguration_ServiceProvider_MustSupportScope {
+            get {
+                return ResourceManager.GetString("DomainServiceHostingConfiguration_ServiceProvider_MustSupportScope", resourceCulture);
             }
         }
         
