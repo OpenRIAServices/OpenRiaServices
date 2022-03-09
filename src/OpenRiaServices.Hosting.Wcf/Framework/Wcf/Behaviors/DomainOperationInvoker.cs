@@ -74,11 +74,14 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             var operationContext = OperationContext.Current;
             try
             {
-                WcfDomainServiceContext context = new WcfDomainServiceContext((IServiceProvider)operationContext.Host, this.operationType);
+                // create and initialize the DomainService for this request
+                var instanceInfo = (DomainServiceBehavior.DomainServiceInstanceInfo)instance;
+                var user = HttpContext.Current?.User ?? operationContext.ClaimsPrincipal;
+                WcfDomainServiceContext context = new WcfDomainServiceContext(instanceInfo.ServiceScope.ServiceProvider, user, this.operationType);
                 disableStackTraces = context.DisableStackTraces;
 
                 DiagnosticUtility.OperationInvoked(this.Name, operationContext);
-                DomainService domainService = this.GetDomainService(instance, context);
+                DomainService domainService = this.GetDomainService(instanceInfo, context);
 
                 // invoke the operation and process the result
                 this.ConvertInputs(inputs);
@@ -112,11 +115,15 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             }
         }
 
-        private DomainService GetDomainService(object instance, WcfDomainServiceContext context)
+        private DomainService GetDomainService(DomainServiceBehavior.DomainServiceInstanceInfo instanceInfo, WcfDomainServiceContext context)
         {
             // create and initialize the DomainService for this request
-            DomainServiceBehavior.DomainServiceInstanceInfo instanceInfo =
-                (DomainServiceBehavior.DomainServiceInstanceInfo)instance;
+            if (instanceInfo.ServiceScope.ServiceProvider.GetService(instanceInfo.DomainServiceType) is DomainService service)
+            {
+                // Do NOT save instance in instanceInfo.DomainServiceInstance since container will dispose instance
+                service.Initialize(context);
+                return service;
+            }
 
             try
             {
@@ -132,14 +139,6 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                 }
 
                 throw ServiceUtility.CreateFaultException(tie, context.DisableStackTraces);
-            }
-            catch (Exception ex)
-            {
-                if (ex.IsFatal())
-                {
-                    throw;
-                }
-                throw ServiceUtility.CreateFaultException(ex, context.DisableStackTraces);
             }
         }
 

@@ -39,8 +39,8 @@ namespace OpenRiaServices.Server.Test
             mockUser.IsAuthenticated = true;
 
             var user = new GenericPrincipal(new GenericIdentity("test_user"), null);
-            MockDataService dataService = new MockDataService(user);
-            DomainServiceContext operationContext = new DomainServiceContext(dataService, operationType);
+            MockDataService dataService = new MockDataService();
+            DomainServiceContext operationContext = new DomainServiceContext(dataService, user, operationType);
 
             provider.Initialize(operationContext);
             return provider;

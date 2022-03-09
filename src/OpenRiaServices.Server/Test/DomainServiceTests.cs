@@ -66,7 +66,7 @@ namespace OpenRiaServices.Server.Test
         public void TestChangeSetValidation()
         {
             ErrorTestDomainService ds = new ErrorTestDomainService();
-            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Submit);
+            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
             ds.Initialize(ctxt);
 
             // null entity
@@ -159,7 +159,7 @@ namespace OpenRiaServices.Server.Test
         {
             CityDomainService ds = new CityDomainService();
 
-            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Query);
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Query);
             ds.Initialize(dsc);
 
             DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(CityDomainService));
@@ -180,7 +180,7 @@ namespace OpenRiaServices.Server.Test
         {
             CachedQueryResultsDomainService ds = new CachedQueryResultsDomainService();
 
-            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Query);
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Query);
             ds.Initialize(dsc);
 
             DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(CachedQueryResultsDomainService));
@@ -204,7 +204,7 @@ namespace OpenRiaServices.Server.Test
             Func<string, int, Task<QueryResult<Cities.City>>> executeQueryAsync = async (queryName, pageSize) =>
             {
                 ResultLimitDomainService ds = new ResultLimitDomainService();
-                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Query);
+                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Query);
                 ds.Initialize(dsc);
 
                 DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(ResultLimitDomainService));
@@ -260,7 +260,7 @@ namespace OpenRiaServices.Server.Test
         {
             OnErrorDomainService ds = new OnErrorDomainService();
 
-            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Query);
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Query);
             DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(OnErrorDomainService));
 
             DomainOperationEntry queryOperation = desc.GetQueryMethod("GetCities");
@@ -364,7 +364,7 @@ namespace OpenRiaServices.Server.Test
         {
             OnErrorDomainService ds = new OnErrorDomainService();
 
-            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Invoke);
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Invoke);
             ds.Initialize(dsc);
 
             DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(OnErrorDomainService));
@@ -465,7 +465,7 @@ namespace OpenRiaServices.Server.Test
             OnErrorDomainService ds = new OnErrorDomainService();
 
             // prepare a changeset for submit
-            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Submit);
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
             DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(OnErrorDomainService));
             DomainOperationEntry updateOperationEntry = desc.GetSubmitMethod(typeof(Cities.City), DomainOperation.Update);
             Exception expectedException = null;
@@ -561,7 +561,7 @@ namespace OpenRiaServices.Server.Test
         public void ObjectContextExtensions_AttachAsModified()
         {
             TestDomainServices.EF.Northwind nw = new TestDomainServices.EF.Northwind();
-            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Submit);
+            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
             nw.Initialize(ctxt);
 
             var current = new NorthwindModel.Category()
@@ -590,7 +590,7 @@ namespace OpenRiaServices.Server.Test
         public async Task Bug594068_PersistChangesErrorHandling()
         {
             ErrorTestDomainService ds = new ErrorTestDomainService();
-            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Submit);
+            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
             ds.Initialize(ctxt);
 
             ChangeSetEntry updateOp = new ChangeSetEntry();
@@ -626,7 +626,7 @@ namespace OpenRiaServices.Server.Test
         public void DomainService_MultipleInitialization()
         {
             CityDomainService cities = new CityDomainService();
-            DomainServiceContext operationContext = new DomainServiceContext(new MockDataService(new MockUser("mathew")), (DomainOperationType)0);
+            DomainServiceContext operationContext = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), (DomainOperationType)0);
             cities.Initialize(operationContext);
 
             InvalidOperationException expectedException = null;
@@ -1236,7 +1236,7 @@ namespace OpenRiaServices.Server.Test
         [Description("Verifies the behavior of ChangeSet.Associate() in end-to-end DomainService scenarios.")]
         public async Task DomainService_AssociatedEntities_ChangePropagationAsync()
         {
-            var context = new DomainServiceContext(new MockDataService(new MockUser("user")), DomainOperationType.Query);
+            var context = new DomainServiceContext(new MockDataService(), new MockUser("user"), DomainOperationType.Query);
             var service = new DomainService_AssociatedEntities();
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(typeof(DomainService_AssociatedEntities));
             var queryOp = serviceDescription.GetQueryMethod("GetCustomers");
@@ -1251,7 +1251,7 @@ namespace OpenRiaServices.Server.Test
 
             pmEntity1.Message = "Value1.1";
 
-            context = new DomainServiceContext(new MockDataService(new MockUser("user")), DomainOperationType.Submit);
+            context = new DomainServiceContext(new MockDataService(), new MockUser("user"), DomainOperationType.Submit);
             service = new DomainService_AssociatedEntities();
             service.Initialize(context);
             var updateOp = new ChangeSetEntry() { Entity = pmEntity1, Operation = DomainOperation.Update, HasMemberChanges = true };
@@ -1266,7 +1266,7 @@ namespace OpenRiaServices.Server.Test
         [Description("Verifies that the ChangeSet.Replace method works even if called from a Associate transformation.")]
         public async Task DomainService_AssociatedEntities_ReplaceInTransform()
         {
-            var context = new DomainServiceContext(new MockDataService(new MockUser("user")), DomainOperationType.Query);
+            var context = new DomainServiceContext(new MockDataService(), new MockUser("user"), DomainOperationType.Query);
             var service = new DomainService_AssociatedEntities();
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(typeof(DomainService_AssociatedEntities));
             var queryOp = serviceDescription.GetQueryMethod("GetCustomers");
@@ -1281,7 +1281,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("First1 Last1", pmEntity1.Name);
             Assert.AreEqual("Value1", pmEntity1.Message);
 
-            context = new DomainServiceContext(new MockDataService(new MockUser("user")), DomainOperationType.Submit);
+            context = new DomainServiceContext(new MockDataService(), new MockUser("user"), DomainOperationType.Submit);
             service = new DomainService_AssociatedEntities();
             service.Initialize(context);
             var customOp = new ChangeSetEntry()
@@ -1307,7 +1307,7 @@ namespace OpenRiaServices.Server.Test
         [Description("Verifies that the expected exception is raised when a change conflict occurs and the entity in conflict is not contained in the changeset.")]
         public async Task DomainService_ChangeConflict_EntityNotInChangeSet()
         {
-            var context = new DomainServiceContext(new MockDataService(new MockUser("user")), DomainOperationType.Query);
+            var context = new DomainServiceContext(new MockDataService(), new MockUser("user"), DomainOperationType.Query);
             var service = new DomainService_AssociatedEntities();
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(typeof(DomainService_AssociatedEntities));
             var queryOp = serviceDescription.GetQueryMethod("GetCustomers");
@@ -1321,7 +1321,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("First1 Last1", pmEntity1.Name);
             Assert.AreEqual("Value1", pmEntity1.Message);
 
-            context = new DomainServiceContext(new MockDataService(new MockUser("user")), DomainOperationType.Submit);
+            context = new DomainServiceContext(new MockDataService(), new MockUser("user"), DomainOperationType.Submit);
             service = new DomainService_AssociatedEntities();
             service.Initialize(context);
             var customOp = new ChangeSetEntry()
@@ -2016,10 +2016,9 @@ namespace OpenRiaServices.Server.Test
         public TestDomainService_OverloadTests()
         {
             // initialize with a test user
-            Initialize(new DomainServiceContext(new MockDataService(new MockUser("mathew")
-            {
+            Initialize(new DomainServiceContext(new MockDataService(), new MockUser("mathew") {
                 IsAuthenticated = true
-            }), DomainOperationType.Submit));
+            }, DomainOperationType.Submit));
         }
 
         // verify that we can override base initialization

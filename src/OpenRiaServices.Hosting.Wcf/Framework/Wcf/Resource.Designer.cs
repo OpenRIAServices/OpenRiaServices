@@ -19,7 +19,7 @@ namespace OpenRiaServices.Hosting.Wcf {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource {
@@ -106,6 +106,15 @@ namespace OpenRiaServices.Hosting.Wcf {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Service provider must be non null and support scopes.
+        /// </summary>
+        internal static string DomainServiceHostingConfiguration_ServiceProvider_MustSupportScope {
+            get {
+                return ResourceManager.GetString("DomainServiceHostingConfiguration_ServiceProvider_MustSupportScope", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to DomainServices &apos;{0}&apos; and &apos;{1}&apos; have the same Type name and cannot be exposed from the same application..
         /// </summary>
         internal static string DomainServiceVirtualPathProvider_DuplicateDomainServiceName {
@@ -129,6 +138,15 @@ namespace OpenRiaServices.Hosting.Wcf {
         internal static string NoDefaultAuthScheme {
             get {
                 return ResourceManager.GetString("NoDefaultAuthScheme", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Singleton is not supported since DomainServices are not thread safe.
+        /// </summary>
+        internal static string OpenRiaServicesServiceCollectionExtensions_SingletonNotAllowed {
+            get {
+                return ResourceManager.GetString("OpenRiaServicesServiceCollectionExtensions_SingletonNotAllowed", resourceCulture);
             }
         }
         

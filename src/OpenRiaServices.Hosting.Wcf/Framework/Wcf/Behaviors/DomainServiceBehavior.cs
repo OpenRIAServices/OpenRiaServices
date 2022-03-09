@@ -5,6 +5,7 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
+using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.Wcf.Behaviors
@@ -47,6 +48,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
 
                 DomainServiceInstanceInfo instanceInfo = new DomainServiceInstanceInfo();
                 instanceInfo.DomainServiceType = instanceContext.Host.Description.ServiceType;
+                instanceInfo.ServiceScope = Configuration.Internal.DomainServiceHostingConfiguration.ServiceScopeFactory.CreateScope();
 
                 // since we require more contextual information at the point in
                 // time when a DomainService is created, we return an info object and
@@ -58,6 +60,8 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             public void ReleaseInstance(InstanceContext instanceContext, object instance)
             {
                 DomainServiceInstanceInfo instanceInfo = (DomainServiceInstanceInfo)instance;
+
+                instanceInfo.ServiceScope?.Dispose();
                 if (instanceInfo.DomainServiceInstance != null)
                 {
                     DomainService.Factory.ReleaseDomainService(instanceInfo.DomainServiceInstance);
@@ -75,11 +79,14 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                 set;
             }
 
+            // Set by DomainServiceFactory type
             public DomainService DomainServiceInstance
             {
                 get;
                 set;
             }
+
+            public IServiceScope ServiceScope { get; set; }
         }
     }
 }

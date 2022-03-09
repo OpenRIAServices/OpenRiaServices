@@ -80,7 +80,7 @@ namespace OpenRiaServices.Server.Test
             // Instantiate a new DomainService to use for an Invoke
             using (AuthorizationTestDomainService testDomainService = new AuthorizationTestDomainService())
             {
-                testDomainService.Initialize(new DomainServiceContext(new MockDataService(user), DomainOperationType.Invoke));
+                testDomainService.Initialize(new DomainServiceContext(new MockDataService(), user, DomainOperationType.Invoke));
 
                 // Get a DomainServiceDescription for that same domain service
                 DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(AuthorizationTestDomainService));
@@ -108,7 +108,7 @@ namespace OpenRiaServices.Server.Test
             // Instantiate a new DomainService to use for an Invoke
             using (AuthorizationTestDomainService testDomainService = new AuthorizationTestDomainService())
             {
-                testDomainService.Initialize(new DomainServiceContext(new MockDataService(user), DomainOperationType.Invoke));
+                testDomainService.Initialize(new DomainServiceContext(new MockDataService(), user, DomainOperationType.Invoke));
 
                 // Get a DomainServiceDescription for that same domain service
                 DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(AuthorizationTestDomainService));
@@ -139,7 +139,7 @@ namespace OpenRiaServices.Server.Test
             // Instantiate a new DomainService to use for a Query
             using (AuthorizationTestDomainService testDomainService = new AuthorizationTestDomainService())
             {
-                testDomainService.Initialize(new DomainServiceContext(new MockDataService(user), DomainOperationType.Query));
+                testDomainService.Initialize(new DomainServiceContext(new MockDataService(), user, DomainOperationType.Query));
 
                 // Get a DomainServiceDescription for that same domain service
                 DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(AuthorizationTestDomainService));
@@ -175,7 +175,7 @@ namespace OpenRiaServices.Server.Test
             // Instantiate a new DomainService to use for a custom method via a Submit
             using (AuthorizationTestDomainService testDomainService = new AuthorizationTestDomainService())
             {
-                testDomainService.Initialize(new DomainServiceContext(new MockDataService(user), DomainOperationType.Submit));
+                testDomainService.Initialize(new DomainServiceContext(new MockDataService(), user, DomainOperationType.Submit));
 
                 // Get a DomainServiceDescription for that same domain service
                 DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(AuthorizationTestDomainService));
@@ -212,7 +212,7 @@ namespace OpenRiaServices.Server.Test
             using (AuthorizationTestDomainService testDomainService = new AuthorizationTestDomainService())
             {
                 // Note: Metadata context
-                testDomainService.Initialize(new DomainServiceContext(new MockDataService(user), DomainOperationType.Metadata));
+                testDomainService.Initialize(new DomainServiceContext(new MockDataService(), user, DomainOperationType.Metadata));
                 DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(AuthorizationTestDomainService));
                 DomainOperationEntry entry = description.DomainOperationEntries.SingleOrDefault(p => p.Name == "CustomUpdate");
                 Assert.IsNotNull(entry, "Did not find CustomUpdate entry");
@@ -235,7 +235,7 @@ namespace OpenRiaServices.Server.Test
             using (AuthorizationTestDomainService testDomainService = new AuthorizationTestDomainService())
             {
                 // Note: Submit context enforces null entity test
-                testDomainService.Initialize(new DomainServiceContext(new MockDataService(user), DomainOperationType.Submit));
+                testDomainService.Initialize(new DomainServiceContext(new MockDataService(), user, DomainOperationType.Submit));
 
                 DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(AuthorizationTestDomainService));
                 DomainOperationEntry entry = description.DomainOperationEntries.SingleOrDefault(p => p.Name == "CustomUpdate");

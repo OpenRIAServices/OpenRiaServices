@@ -55,11 +55,14 @@ namespace OpenRiaServices.Server
 
                 return DomainService.s_domainServiceFactory;
             }
+            [Obsolete("Register all domain services and add them to OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.Current.ServiceProvider")]
             set
             {
                 DomainService.s_domainServiceFactory = value;
             }
         }
+
+        internal static bool IsDefaultFactory => s_domainServiceFactory is null or DefaultDomainServiceFactory;
 
         /// <summary>
         /// Gets the <see cref="DomainServiceDescription"/> for this <see cref="DomainService"/>.

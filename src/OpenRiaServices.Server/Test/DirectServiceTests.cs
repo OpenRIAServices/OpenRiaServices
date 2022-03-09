@@ -72,7 +72,7 @@ namespace OpenRiaServices.Server.Test
             for (int i = 0; i < 100; i++)
             {
                 CityDomainService ds = new CityDomainService();
-                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Submit);
+                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
                 ds.Initialize(dsc);
 
                 List<ChangeSetEntry> entries = new List<ChangeSetEntry>();
@@ -94,7 +94,7 @@ namespace OpenRiaServices.Server.Test
             for (int i = 0; i < 100; i++)
             {
                 TestDomainServices.TestProvider_Scenarios ds = new TestDomainServices.TestProvider_Scenarios();
-                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew")), DomainOperationType.Submit);
+                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
                 ds.Initialize(dsc);
 
                 List<ChangeSetEntry> entries = new List<ChangeSetEntry>();
@@ -140,7 +140,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Catalog));
 
             TestDomainServices.EF.Catalog service = new TestDomainServices.EF.Catalog();
-            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew") { IsAuthenticated = true }), DomainOperationType.Query);
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew") { IsAuthenticated = true }, DomainOperationType.Query);
             service.Initialize(dsc);
 
             DomainOperationEntry queryOperation = description.GetQueryMethod("GetPurchaseOrders");
@@ -165,7 +165,7 @@ namespace OpenRiaServices.Server.Test
         public async Task DomainService_InvalidOperationType()
         {
             TestDomainServices.EF.Northwind nw = new TestDomainServices.EF.Northwind();
-            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew") { IsAuthenticated = true }), DomainOperationType.Submit);
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew") { IsAuthenticated = true }, DomainOperationType.Submit);
             nw.Initialize(dsc);
 
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
@@ -183,7 +183,7 @@ namespace OpenRiaServices.Server.Test
             }, string.Format(Resource.DomainService_InvalidOperationType, DomainOperationType.Submit, DomainOperationType.Invoke));
 
             nw = new TestDomainServices.EF.Northwind();
-            dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew") { IsAuthenticated = true }), DomainOperationType.Query);
+            dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew") { IsAuthenticated = true }, DomainOperationType.Query);
             nw.Initialize(dsc);
 
             ChangeSet cs = new ChangeSet(new ChangeSetEntry[] {
@@ -217,7 +217,7 @@ namespace OpenRiaServices.Server.Test
             // create and initialize the service
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
             TestDomainServices.EF.Northwind nw = new TestDomainServices.EF.Northwind();
-            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(new MockUser("mathew") { IsAuthenticated = true }), DomainOperationType.Submit);
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew") { IsAuthenticated = true }, DomainOperationType.Submit);
             nw.Initialize(dsc);
 
             // call attach directly - this causes the detail to be attached as unmodified

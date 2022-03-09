@@ -68,6 +68,7 @@ namespace OpenRiaServices.Hosting.Wcf
         /// </summary>
         /// <param name="serviceType">The type of service to get.</param>
         /// <returns>The service.</returns>
+        [Obsolete("Resolve services from DomainService.ServiceContext instead")]
         public object GetService(Type serviceType)
         {
             if (serviceType == null)

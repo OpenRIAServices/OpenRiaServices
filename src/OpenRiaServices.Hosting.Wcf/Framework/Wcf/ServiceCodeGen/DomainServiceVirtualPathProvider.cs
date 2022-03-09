@@ -1,15 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Globalization;
 using System.IO;
-using System.Linq;
-using System.Reflection;
-using OpenRiaServices.Server;
 using System.Web;
 using System.Web.Caching;
-using System.Web.Compilation;
 using System.Web.Hosting;
 
 namespace OpenRiaServices.Hosting.Wcf
@@ -104,54 +99,14 @@ namespace OpenRiaServices.Hosting.Wcf
             }
 
             Dictionary<string, Type> types = new Dictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
-
-            Type domainServiceBaseType = typeof(DomainService);
-            IEnumerable<Assembly> assemblies = BuildManager.GetReferencedAssemblies().Cast<Assembly>();
-            foreach (Assembly assembly in assemblies)
+            foreach (var type in DomainServiceAssemblyScanner.DiscoverDomainServices())
             {
-                if (!TypeUtility.CanContainDomainServiceImplementations(assembly))
-                    continue;
-
-                Type[] exportedTypes = null;
-                try
+                string name = GetCanonicalFileName(type);
+                if (types.ContainsKey(name))
                 {
-                    exportedTypes = assembly.GetExportedTypes();
+                    throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resource.DomainServiceVirtualPathProvider_DuplicateDomainServiceName, type.AssemblyQualifiedName, types[name].AssemblyQualifiedName));
                 }
-                catch (ReflectionTypeLoadException ex)
-                {
-                    exportedTypes = ex.Types;
-                }
-                catch (Exception ex)
-                {
-                    if (ex.IsFatal())
-                    {
-                        throw;
-                    }
-                    // If we're unable to load the assembly, ignore it for now.
-                }
-
-                if (exportedTypes != null)
-                {
-                    foreach (Type exportedType in exportedTypes)
-                    {
-                        if (exportedType.IsAbstract || exportedType.IsInterface || exportedType.IsValueType || !domainServiceBaseType.IsAssignableFrom(exportedType))
-                        {
-                            continue;
-                        }
-
-                        if (TypeDescriptor.GetAttributes(exportedType)[typeof(EnableClientAccessAttribute)] == null)
-                        {
-                            continue;
-                        }
-
-                        string name = GetCanonicalFileName(exportedType);
-                        if (types.ContainsKey(name))
-                        {
-                            throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resource.DomainServiceVirtualPathProvider_DuplicateDomainServiceName, exportedType.AssemblyQualifiedName, types[name].AssemblyQualifiedName));
-                        }
-                        types.Add(name, exportedType);
-                    }
-                }
+                types.Add(name, type);
             }
 
             DomainServiceVirtualPathProvider.domainServiceTypes = types;

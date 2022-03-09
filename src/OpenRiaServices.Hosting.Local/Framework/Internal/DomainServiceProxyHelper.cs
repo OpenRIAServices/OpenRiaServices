@@ -35,7 +35,7 @@ namespace OpenRiaServices.Hosting.Local
         /// <exception cref="OperationException">if operation errors are thrown during execution of the query operation.</exception>
         public static IEnumerable Query(Type domainService, DomainServiceContext context, IList<DomainService> domainServiceInstances, string queryName, object[] parameters)
         {
-            context = new DomainServiceContext(context, DomainOperationType.Query);
+            context = new DomainServiceContext(context, context.User, DomainOperationType.Query);
             DomainService service = CreateDomainServiceInstance(domainService, context, domainServiceInstances);
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(service.GetType());
             DomainOperationEntry queryOperation = serviceDescription.GetQueryMethod(queryName);
@@ -102,7 +102,7 @@ namespace OpenRiaServices.Hosting.Local
         /// <exception cref="OperationException">if operation errors are thrown during execution of the submit operation.</exception>
         public static void Submit(Type domainService, DomainServiceContext context, IList<DomainService> domainServiceInstances, IDictionary<object, object> currentOriginalEntityMap, object entity, string operationName, object[] parameters, DomainOperation domainOperation)
         {
-            context = new DomainServiceContext(context, DomainOperationType.Submit);
+            context = new DomainServiceContext(context, context.User, DomainOperationType.Submit);
             DomainService service = CreateDomainServiceInstance(domainService, context, domainServiceInstances);
 
             object originalEntity = null;
@@ -154,7 +154,7 @@ namespace OpenRiaServices.Hosting.Local
         /// <exception cref="OperationException">if operation errors are thrown during execution of the invoke operation.</exception>
         public static object Invoke(Type domainService, DomainServiceContext context, IList<DomainService> domainServiceInstances, string name, object[] parameters)
         {
-            context = new DomainServiceContext(context, DomainOperationType.Invoke);
+            context = new DomainServiceContext(context,  context.User, DomainOperationType.Invoke);
             DomainService service = CreateDomainServiceInstance(domainService, context, domainServiceInstances);
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(service.GetType());
             DomainOperationEntry method = serviceDescription.GetInvokeOperation(name);

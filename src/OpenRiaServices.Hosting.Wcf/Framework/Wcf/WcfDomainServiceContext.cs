@@ -14,12 +14,21 @@ namespace OpenRiaServices.Hosting.Wcf
         private readonly HttpContext _httpContext;
 
         /// <summary>
+        /// OBSOLETE: Use other constructor
+        /// </summary>
+        [Obsolete("Use other constructor accepting a User, this will be removed in a future version")]
+        public WcfDomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
+            : this(serviceProvider, (IPrincipal)serviceProvider.GetService(typeof(IPrincipal)) , operationType)
+        { }
+
+        /// <summary>
         /// Initializes a new instance of the DomainServiceContext class
         /// </summary>
         /// <param name="serviceProvider">A service provider.</param>
+        /// <param name="user">the current user</param>
         /// <param name="operationType">The type of operation that is being executed.</param>
-        public WcfDomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
-            : base(serviceProvider, operationType)
+        public WcfDomainServiceContext(IServiceProvider serviceProvider, IPrincipal user, DomainOperationType operationType)
+            : base(serviceProvider, user, operationType)
         {
             _httpContext = HttpContext.Current;
 
