@@ -1,7 +1,12 @@
 # 5.1.0-preview5
 
-* Make it possible to Cache invokes
-   * Introduce caching for Invoke operations by refactoring and using the same logic as for Querys #332
+* Make it possible to Cache invokes #332
+   * Introduce caching for Invoke operations by refactoring and using the same logic as for Querys 
+ * Allow method (parameter) injection #339
+   * Allow parameters of type CancellationToken for all kinds of service methods
+   * Make the generated method return ValueTask so that the UnwrapTaskResult logic from ReflectionDomainServiceDescriptionProvider can be removed (and better performance)
+   * Allow injecting services to parameters using attribute InjectParametersAttribute 
+ * Add a new IServiceProvider setting to allow resolving services via Microsoft DI #340 
 
 # 5.1.0-preview4
 
