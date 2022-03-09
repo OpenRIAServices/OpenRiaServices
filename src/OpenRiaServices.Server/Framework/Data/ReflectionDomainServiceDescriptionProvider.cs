@@ -393,7 +393,7 @@ namespace OpenRiaServices.Server
         internal class ReflectionDomainOperationEntry : DomainOperationEntry
         {
             private bool _isInferred;
-            private readonly Func<DomainService, object[], object> _method;
+            private readonly Func<DomainService, object[], ValueTask<object>> _method;
 
             /// <summary>
             /// Creates an instance of a <see cref="ReflectionDomainOperationEntry"/>.
@@ -443,7 +443,7 @@ namespace OpenRiaServices.Server
             /// <returns>The return value of the invoked method.</returns>
             public override ValueTask<object> InvokeAsync(DomainService domainService, object[] parameters, CancellationToken cancellationToken)
             {
-                return UnwrapTaskResult(this._method(domainService, parameters));
+                return this._method(domainService, parameters);
             }
 
             private static IEnumerable<DomainOperationParameter> GetMethodParameters(MethodInfo methodInfo)
@@ -452,17 +452,27 @@ namespace OpenRiaServices.Server
                 List<DomainOperationParameter> parameters = new List<DomainOperationParameter>();
                 foreach (ParameterInfo parameterInfo in actualParameters)
                 {
+                    var attributes = parameterInfo.GetCustomAttributes(true).Cast<Attribute>().ToArray();
+                    if (IsInjectedParameter(parameterInfo, attributes))
+                        continue;
+
                     bool isOut = parameterInfo.IsOut && parameterInfo.ParameterType.HasElementType;
                     DomainOperationParameter parameter = new DomainOperationParameter(
                         parameterInfo.Name,
                         parameterInfo.ParameterType,
-                        new AttributeCollection(parameterInfo.GetCustomAttributes(true).Cast<Attribute>().ToArray()),
+                        new AttributeCollection(attributes),
                         isOut);
 
                     parameters.Add(parameter);
                 }
 
                 return parameters;
+            }
+
+            internal static bool IsInjectedParameter(ParameterInfo parameterInfo, Attribute [] attributes)
+            {
+                return parameterInfo.ParameterType == typeof(CancellationToken)
+                    || attributes.Any(a => a is InjectParameterAttribute);
             }
 
             /// <summary>

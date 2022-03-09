@@ -43,7 +43,7 @@ namespace OpenRiaServices.Common.Test
 
             _iisProcess = Process.Start(startInfo);
 
-            string str;
+            string str, last = string.Empty;
             while ((str = _iisProcess.StandardOutput.ReadLine()) != null)
             {
                 if (str.Contains("IIS Express is running")
@@ -54,10 +54,10 @@ namespace OpenRiaServices.Common.Test
 
                     return true;
                 }
-
+                last = str;
             }
 
-            throw new Exception("Failed to start IIS express");
+            throw new Exception("Failed to start IIS express: " + last);
         }
 
         // Read and discard output from the web server so that 
