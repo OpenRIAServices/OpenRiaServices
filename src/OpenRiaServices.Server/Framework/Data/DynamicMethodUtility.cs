@@ -18,7 +18,6 @@ namespace OpenRiaServices.Server
         private static readonly MethodInfo s_unwrapTask = typeof(DynamicMethodUtility).GetMethod(nameof(UnwrapTask), BindingFlags.Static | BindingFlags.NonPublic);
         private static readonly MethodInfo s_unwrapValueTask = typeof(DynamicMethodUtility).GetMethod(nameof(UnwrapValueTask), BindingFlags.Static | BindingFlags.NonPublic);
         private static readonly ConstructorInfo s_valueTaskCtorObject = typeof(ValueTask<object>).GetConstructor(new Type[] { typeof(object) });
-        private static readonly ConstructorInfo s_valueTaskCtorTask = typeof(ValueTask<object>).GetConstructor(new Type[] { typeof(Task<object>) });
 
         /// <summary>
         /// Gets a factory method for a late-bound type.
@@ -169,7 +168,6 @@ namespace OpenRiaServices.Server
 
             // We'll return null for void methods.
             Type returnType = method.ReturnType;
-            bool isVoid = (returnType == typeof(void));
 
             Type[] parameterTypes;
             if (method.IsStatic)
@@ -273,47 +271,49 @@ namespace OpenRiaServices.Server
             }
 
             // Convert the return value to ValueTask<object>.
-            if (isVoid)
+            EmitToObjectValueTaskConversion(returnType, generator);
+
+            generator.Emit(OpCodes.Ret);
+
+            return proxyMethod;
+        }
+
+        // Converts any value into ValueTask<object>
+        private static void EmitToObjectValueTaskConversion(Type fromType, ILGenerator generator)
+        {
+            if (fromType == typeof(void))
             {
                 generator.Emit(OpCodes.Ldnull);
                 generator.Emit(OpCodes.Newobj, s_valueTaskCtorObject);
             }
-            else if (returnType.IsValueType)
+            else if (fromType.IsValueType)
             {
-                if (returnType == typeof(ValueTask))
+                if (fromType == typeof(ValueTask))
                 {
                     generator.EmitCall(OpCodes.Call, s_unwrapVoidValueTask, null);
                 }
-                else if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(ValueTask<>))
+                else if (fromType.IsGenericType && fromType.GetGenericTypeDefinition() == typeof(ValueTask<>))
                 {
-                    if (returnType != typeof(ValueTask<object>))
-                        generator.EmitCall(OpCodes.Call, s_unwrapValueTask.MakeGenericMethod(returnType.GenericTypeArguments), null);
+                    generator.EmitCall(OpCodes.Call, s_unwrapValueTask.MakeGenericMethod(fromType.GenericTypeArguments), null);
                 }
                 else
                 {
-                    EmitToObjectConversion(generator, returnType);
+                    EmitToObjectConversion(generator, fromType);
                     generator.Emit(OpCodes.Newobj, s_valueTaskCtorObject);
                 }
             }
-            else if (returnType == typeof(Task))
+            else if (fromType == typeof(Task))
             {
                 generator.EmitCall(OpCodes.Call, s_unwrapVoidTask, null);
             }
-            else if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(Task<>))
+            else if (fromType.IsGenericType && fromType.GetGenericTypeDefinition() == typeof(Task<>))
             {
-                if (returnType != typeof(Task<object>))
-                    generator.EmitCall(OpCodes.Call, s_unwrapTask.MakeGenericMethod(returnType.GenericTypeArguments), null);
-                else
-                    generator.Emit(OpCodes.Newobj, s_valueTaskCtorTask);
+                generator.EmitCall(OpCodes.Call, s_unwrapTask.MakeGenericMethod(fromType.GenericTypeArguments), null);
             }
             else // any reference type, 
             {
                 generator.Emit(OpCodes.Newobj, s_valueTaskCtorObject);
             }
-
-            generator.Emit(OpCodes.Ret);
-
-            return proxyMethod;
         }
 
         private static async ValueTask<object> UnwrapVoidTask(Task t)
