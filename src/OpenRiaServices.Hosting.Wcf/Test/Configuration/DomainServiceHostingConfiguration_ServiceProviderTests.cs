@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.Hosting.Wcf.Configuration.Internal;
@@ -25,19 +20,35 @@ namespace OpenRiaServices.Hosting.Wcf.Configuration
             var previousScopeFactory = DomainServiceHostingConfiguration.ServiceScopeFactory;
             try
             {
-                ExceptionHelper.ExpectArgumentException(() => config.ServiceProvider = null, Resource.DomainServiceHostingConfiguration_ServiceProvider_MustSupportScope);
+                // Cannot set null provider
+                ExceptionHelper.ExpectArgumentException(() => config.ServiceProvider = null
+                    , Resource.DomainServiceHostingConfiguration_ServiceProvider_MustSupportScope, "value");
                 Assert.AreEqual(previous, config.ServiceProvider);
                 Assert.AreEqual(previousScopeFactory, DomainServiceHostingConfiguration.ServiceScopeFactory);
 
-                using var scope = DomainServiceHostingConfiguration.ServiceScopeFactory.CreateScope();
-
                 // Verify the default factory creates an instance as expected.
-                MockDomainService domainService = scope.ServiceProvider.GetRequiredService<MockDomainService>();
-                Assert.IsFalse(domainService.Initialized);
+                using (var scope = DomainServiceHostingConfiguration.ServiceScopeFactory.CreateScope())
+                {
+                    MockDomainService domainService = scope.ServiceProvider.GetRequiredService<MockDomainService>();
+                    Assert.IsFalse(domainService.Initialized);
 
-                // Verify the default factory disposed the instance as expected.
-                scope.Dispose();
-                Assert.IsTrue(domainService.Disposed);
+                    // Verify the default factory disposed the instance as expected.
+                    scope.Dispose();
+                    Assert.IsTrue(domainService.Disposed);
+                }
+
+                // Verify that the property works as expected for Microsoft DI Implementation
+                var serviceCollection = new ServiceCollection();
+                serviceCollection.AddDomainServices(ServiceLifetime.Transient, new[] { typeof(MockDomainService).Assembly });
+                config.ServiceProvider = serviceCollection.BuildServiceProvider();
+                using (var scope = DomainServiceHostingConfiguration.ServiceScopeFactory.CreateScope())
+                {
+                    var mock1 = scope.ServiceProvider.GetRequiredService<MockDomainService>();
+                    var mock2 = scope.ServiceProvider.GetRequiredService<MockDomainService>();
+                    Assert.AreNotSame(mock1, mock2, "Transient lifetime should be respected");
+
+                    Assert.IsNull(scope.ServiceProvider.GetService(typeof(TestDomainServices.ServerSideAsyncDomainService)), "Should only resolve types from registered assemblies");
+                }
             }
             finally
             {

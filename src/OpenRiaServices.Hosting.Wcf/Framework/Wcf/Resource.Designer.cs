@@ -142,6 +142,15 @@ namespace OpenRiaServices.Hosting.Wcf {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Singleton is not supported since DomainServices are not thread safe.
+        /// </summary>
+        internal static string OpenRiaServicesServiceCollectionExtensions_SingletonNotAllowed {
+            get {
+                return ResourceManager.GetString("OpenRiaServicesServiceCollectionExtensions_SingletonNotAllowed", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The PoxBinaryMessageEncoder only supports content type {0}..
         /// </summary>
         internal static string PoxBinaryMessageEncoder_InvalidContentType {

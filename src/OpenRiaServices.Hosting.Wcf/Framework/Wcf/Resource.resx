@@ -144,6 +144,9 @@
   <data name="NoDefaultAuthScheme" xml:space="preserve">
     <value>Unable to determine the authentication scheme to use with the default endpoint bindings.</value>
   </data>
+  <data name="OpenRiaServicesServiceCollectionExtensions_SingletonNotAllowed" xml:space="preserve">
+    <value>Singleton is not supported since DomainServices are not thread safe</value>
+  </data>
   <data name="PoxBinaryMessageEncoder_InvalidContentType" xml:space="preserve">
     <value>The PoxBinaryMessageEncoder only supports content type {0}.</value>
   </data>
