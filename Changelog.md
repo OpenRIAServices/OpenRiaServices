@@ -1,12 +1,24 @@
 # 5.1.0-preview5
 
-* Make it possible to Cache invokes #332
-   * Introduce caching for Invoke operations by refactoring and using the same logic as for Querys 
+* Make it possible to cache invoke operations #332
+   * Introduce caching for invoke operations by refactoring and using the same logic as for querys
  * Allow method (parameter) injection #339
    * Allow parameters of type CancellationToken for all kinds of service methods
-   * Make the generated method return ValueTask so that the UnwrapTaskResult logic from ReflectionDomainServiceDescriptionProvider can be removed (and better performance)
-   * Allow injecting services to parameters using attribute InjectParametersAttribute 
- * Add a new IServiceProvider setting to allow resolving services via Microsoft DI #340 
+   * Make the generated method return `ValueTask` so that the `UnwrapTaskResult` logic from `ReflectionDomainServiceDescriptionProvider` can be removed (and better performance)
+   * Allow injecting services to parameters using attribute `InjectParametersAttribute` 
+ * Add a new `IServiceProvider` setting to allow resolving services via Microsoft DI `#340`
+
+    * See example usage in Global Init/Statup below:
+     ```C#
+    // Setup DI
+    var serviceCollection = new ServiceCollection();
+    serviceCollection.AddDomainServices(ServiceLifetime.Transient);
+    var serviceProvider = serviceCollection.BuildServiceProvider();
+
+    // Setup OpenRiaServices to use container
+    var config = OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.Current;
+    config.ServiceProvider = serviceProvider;
+    ``` 
 
 # 5.1.0-preview4
 
