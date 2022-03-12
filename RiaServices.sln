@@ -143,6 +143,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServicesLibrary", "V
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessApplicationProjectTemplate", "VisualStudio\Templates\CSharp\BusinessApplication\BusinessApplicationProjectTemplate.csproj", "{C8814DD1-905D-41F8-B587-99FD85524F8B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Silverlight", "Silverlight", "{ABF04EF4-43D0-44AF-8A16-DD2BCB227E76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Silverlight.ComboBoxExtensions", "OpenRiaServices.Silverlight.ComboBoxExtensions\Framework\Silverlight\OpenRiaServices.Silverlight.ComboBoxExtensions.csproj", "{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -349,6 +353,10 @@ Global
 		{C8814DD1-905D-41F8-B587-99FD85524F8B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{C8814DD1-905D-41F8-B587-99FD85524F8B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{C8814DD1-905D-41F8-B587-99FD85524F8B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -415,6 +423,8 @@ Global
 		{546DB9D1-BA54-499A-854D-00D8A311B56A} = {2EDF0504-D588-4C91-A0B9-8209C5997405}
 		{B1D492E3-3283-43E3-8598-9892E3CD2F54} = {546DB9D1-BA54-499A-854D-00D8A311B56A}
 		{C8814DD1-905D-41F8-B587-99FD85524F8B} = {546DB9D1-BA54-499A-854D-00D8A311B56A}
+		{ABF04EF4-43D0-44AF-8A16-DD2BCB227E76} = {1CED8364-77AC-4254-869F-1E4EC5A33416}
+		{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E} = {ABF04EF4-43D0-44AF-8A16-DD2BCB227E76}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}

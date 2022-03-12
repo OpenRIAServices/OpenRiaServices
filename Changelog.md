@@ -1,3 +1,9 @@
+# 4.6.4
+
+## Client
+
+1. Explicitly load MSBuild task assemblies as x86 when generating Silverlight client proxy classes
+
 # 4.6.3
 
 ## Client

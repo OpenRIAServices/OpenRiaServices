@@ -12,10 +12,10 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.CreateOpenRiaClientFilesTask"
-             AssemblyFile="OpenRiaServices.DomainServices.Tools.dll" />
+             AssemblyFile="OpenRiaServices.DomainServices.Tools.dll" Architecture="x86" />
 
   <UsingTask TaskName="OpenRiaServices.DomainServices.Tools.CleanOpenRiaClientFilesTask"
-             AssemblyFile="OpenRiaServices.DomainServices.Tools.dll" />
+             AssemblyFile="OpenRiaServices.DomainServices.Tools.dll" Architecture="x86" />
 
 
   <PropertyGroup>

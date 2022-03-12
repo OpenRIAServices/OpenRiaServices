@@ -1,0 +1,29 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>OpenRiaServices.Silverlight.ComboBoxExtensions</id>
+    <version>4.4.0</version>
+    <title>Open RIA Services Silverlight ComboBoxExtensions</title>
+    <authors>Outercurve RIA Services</authors>
+    <owners>Outercurve</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <license type="expression">Apache-2.0</license>
+    <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
+    <description>OpenRiaServices.Silverlight.ComboBoxExensions are a direct port of OpenRiaServices.ComboBoxExtensions.</description>
+    <summary>Open RIA Services - Silverlight DomainDataSource control</summary>
+    <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
+    <copyright>2018 Outercurve Foundation</copyright>
+    <language>en-US</language>
+    <tags>WCF RIA Services RIAServices Silverlight DomainDataSource OpenRIAServices</tags>
+    <dependencies>
+      <group targetFramework="sl50">
+        <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
+      </group>
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\bin\Release\OpenRiaServices.Silverlight.ComboBoxExtensions.dll" target="lib\sl5\OpenRiaServices.Silverlight.ComboBoxExtensions.dll" />
+    <file src="..\..\bin\Release\OpenRiaServices.Silverlight.ComboBoxExtensions.pdb" target="lib\sl5\OpenRiaServices.Silverlight.ComboBoxExtensions.pdb" />
+    <file src="..\..\bin\Release\OpenRiaServices.Silverlight.ComboBoxExtensions.xml" target="lib\sl5\OpenRiaServices.Silverlight.ComboBoxExtensions.xml" />
+  </files>
+</package>
