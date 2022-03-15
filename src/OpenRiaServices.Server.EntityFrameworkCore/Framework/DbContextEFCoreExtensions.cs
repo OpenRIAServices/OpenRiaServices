@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.EntityFrameworkCore
+namespace OpenRiaServices.Server.EntityFrameworkCore
 {
     /// <summary>
     /// DbContext extension methods for DbDomainService authors.

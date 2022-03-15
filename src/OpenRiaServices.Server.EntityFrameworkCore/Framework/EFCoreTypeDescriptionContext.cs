@@ -1,21 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;using System.Globalization;
+using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
-using OpenRiaServices.Server;
 using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
-using OpenRiaServices.Server.EntityFrameworkCore;
 using System.Diagnostics;
 
-namespace OpenRiaServices.EntityFrameworkCore
+namespace OpenRiaServices.Server.EntityFrameworkCore
 {
     /// <summary>
     /// Metadata context for LINQ To Entities domain services
     /// </summary>
     internal class EFCoreTypeDescriptionContext : TypeDescriptionContextBase
     {
-  //      private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
+        //      private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
         private readonly Type _contextType;
         private IModel _model;
 
@@ -29,7 +28,7 @@ namespace OpenRiaServices.EntityFrameworkCore
             {
                 throw new ArgumentNullException(nameof(contextType));
             }
-            this._contextType = contextType;
+            _contextType = contextType;
         }
 
         public IModel Model
@@ -116,7 +115,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                 otherKey = FormatMemberList(fk.Properties);
             }
 
-            AssociationAttribute assocAttrib = new AssociationAttribute(fk.GetConstraintName(), thisKey, otherKey);
+            var assocAttrib = new AssociationAttribute(fk.GetConstraintName(), thisKey, otherKey);
             assocAttrib.IsForeignKey = navigationProperty.IsDependentToPrincipal(); // TODO:  isForeignKey;
             return assocAttrib;
         }

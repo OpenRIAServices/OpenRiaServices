@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netstandard2.0</TargetFramework>
-        <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;</DefineConstants>
+        <DefineConstants>$(DefineConstants);SERVERFX;EFCORE</DefineConstants>
         <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
         <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
         <PackageOutputPath>..\..\..\NuGet\bin\</PackageOutputPath>
@@ -12,6 +12,7 @@
     </ItemGroup>
     <ItemGroup>
         <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
+        <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\DbDomainService.cs" Link="DbDomainService.cs" />
         <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs" Link="MetadataPropertyDescriptorWrapper.cs" />
         <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\TypeDescriptorBase.cs" Link="TypeDescriptorBase.cs" />
         <Compile Update="DbResource.Designer.cs">

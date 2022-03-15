@@ -2,9 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore.Metadata;
-using OpenRiaServices.Server;
 
-namespace OpenRiaServices.EntityFrameworkCore
+namespace OpenRiaServices.Server.EntityFrameworkCore
 {
     internal class EFCoreDescriptionProvider : DomainServiceDescriptionProvider
     {
@@ -17,11 +16,11 @@ namespace OpenRiaServices.EntityFrameworkCore
         {
             lock (tdpContextMap)
             {
-                if (!tdpContextMap.TryGetValue(contextType, out this._typeDescriptionContext))
+                if (!tdpContextMap.TryGetValue(contextType, out _typeDescriptionContext))
                 {
                     // create and cache a context for this provider type
-                    this._typeDescriptionContext = new EFCoreTypeDescriptionContext(contextType);
-                    tdpContextMap.Add(contextType, this._typeDescriptionContext);
+                    _typeDescriptionContext = new EFCoreTypeDescriptionContext(contextType);
+                    tdpContextMap.Add(contextType, _typeDescriptionContext);
                 }
             }
         }
@@ -37,7 +36,7 @@ namespace OpenRiaServices.EntityFrameworkCore
             // No need to deal with concurrency... Worst case scenario we have multiple 
             // instances of this thing.
             ICustomTypeDescriptor td = null;
-            if (!this._descriptors.TryGetValue(objectType, out td))
+            if (!_descriptors.TryGetValue(objectType, out td))
             {
                 // call into base so the TDs are chained
                 parent = base.GetTypeDescriptor(objectType, parent);
@@ -48,14 +47,14 @@ namespace OpenRiaServices.EntityFrameworkCore
                 {
                     // TODO: ...
                     // only add an LTE TypeDescriptor if the type is an EF Entity or ComplexType
-                    td = new EFCoreTypeDescriptor(this._typeDescriptionContext, entityType, parent);
+                    td = new EFCoreTypeDescriptor(_typeDescriptionContext, entityType, parent);
                 }
                 else
                 {
                     td = parent;
                 }
 
-                this._descriptors[objectType] = td;
+                _descriptors[objectType] = td;
             }
 
             return td;

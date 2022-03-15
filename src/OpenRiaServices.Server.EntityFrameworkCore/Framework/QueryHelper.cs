@@ -4,11 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Collections.Generic;
-using System;
 
-namespace OpenRiaServices.EntityFrameworkCore
+namespace OpenRiaServices.Server.EntityFrameworkCore
 {
-    static class QueryHelperEFCore
+    static class QueryHelper
     {
         public static ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
@@ -21,7 +20,7 @@ namespace OpenRiaServices.EntityFrameworkCore
 
         internal static async ValueTask<IReadOnlyCollection<T>> EnumerateAsyncEnumerable<T>(IAsyncEnumerable<T> asyncEnumerable, int estimatedResultCount, CancellationToken cancellationToken)
         {
-            List<T> result = new List<T>(capacity: estimatedResultCount);
+            var result = new List<T>(capacity: estimatedResultCount);
             await foreach (var item in asyncEnumerable.ConfigureAwait(false).WithCancellation(cancellationToken))
             {
                 result.Add(item);

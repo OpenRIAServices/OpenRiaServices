@@ -6,7 +6,7 @@ using System.ServiceModel;
 using OpenRiaServices.Server;
 using TestDomainServices.Testing;
 using System.Configuration;
-using OpenRiaServices.EntityFrameworkCore;
+using OpenRiaServices.Server.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using EFCoreModels.Northwind;
@@ -14,7 +14,7 @@ using EFCoreModels.Northwind;
 namespace TestDomainServices.EFCore
 {
     [EnableClientAccess]
-    public class Northwind : DbDomainServiceEFCore<EFCoreDbCtxNorthwindEntities>
+    public class Northwind : DbDomainService<EFCoreDbCtxNorthwindEntities>
     {
         #region Product methods
         public Product GetProductById(int id)

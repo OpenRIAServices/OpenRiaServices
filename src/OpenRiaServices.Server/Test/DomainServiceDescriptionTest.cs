@@ -31,7 +31,7 @@ namespace OpenRiaServices.Server.Test
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
     using Microsoft.EntityFrameworkCore.Metadata;
-    using OpenRiaServices.EntityFrameworkCore;
+    using OpenRiaServices.Server.EntityFrameworkCore;
     using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
 
     // TODO Begin here to make it work with the new 

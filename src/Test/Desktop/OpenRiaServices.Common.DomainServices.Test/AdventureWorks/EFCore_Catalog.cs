@@ -2,7 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
-using OpenRiaServices.EntityFrameworkCore;
+using OpenRiaServices.Server.EntityFrameworkCore;
 using OpenRiaServices.Server;
 using EFCoreModels.AdventureWorks;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore;
 namespace TestDomainServices.EFCore
 {
     [EnableClientAccess]
-    public partial class Catalog : DbDomainServiceEFCore<AdventureworksContext>
+    public partial class Catalog : DbDomainService<AdventureworksContext>
     {
         protected override AdventureworksContext CreateDbContext()
         {

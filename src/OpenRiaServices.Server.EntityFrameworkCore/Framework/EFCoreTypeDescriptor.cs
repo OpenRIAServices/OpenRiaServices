@@ -5,10 +5,9 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
-using OpenRiaServices.Server;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace OpenRiaServices.EntityFrameworkCore
+namespace OpenRiaServices.Server.EntityFrameworkCore
 {
     /// <summary>
     /// CustomTypeDescriptor for LINQ To Entities
@@ -24,13 +23,13 @@ namespace OpenRiaServices.EntityFrameworkCore
         public EFCoreTypeDescriptor(EFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
         : base(parent)
         {
-            this._typeDescriptionContext = typeDescriptionContext;
-            this._entityType = entityType;
+            _typeDescriptionContext = typeDescriptionContext;
+            _entityType = entityType;
 
             var timestampMembers = entityType.GetProperties().Where(p => IsConcurrencyTimestamp(p)).ToArray();
             if (timestampMembers.Length == 1)
             {
-                this._timestampProperty = timestampMembers[0];
+                _timestampProperty = timestampMembers[0];
             }
 
             // if (edmType.BuiltInTypeKind == BuiltInTypeKind.EntityType)
@@ -43,13 +42,13 @@ namespace OpenRiaServices.EntityFrameworkCore
                     .ToDictionary(x => x.Name);
                 //this._foreignKeyMembers
 
-                foreach(var key in entityType.GetKeys())
+                foreach (var key in entityType.GetKeys())
                 {
                     foreach (var keyMember in key.Properties)
                     {
                         if (_foreignKeyMembers.ContainsKey(keyMember.Name))
                         {
-                            this._keyIsEditable = true;
+                            _keyIsEditable = true;
                             break;
                         }
                     }
@@ -79,7 +78,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         {
             get
             {
-                return this._typeDescriptionContext;
+                return _typeDescriptionContext;
             }
         }
 
@@ -91,13 +90,12 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// <returns>A collection of attributes inferred from the metadata in the given descriptor.</returns>
         protected override IEnumerable<Attribute> GetMemberAttributes(PropertyDescriptor pd)
         {
-            List<Attribute> attributes = new List<Attribute>();
+            var attributes = new List<Attribute>();
 
             EditableAttribute editableAttribute = null;
             bool inferRoundtripOriginalAttribute = false;
 
-            bool hasKeyAttribute = (pd.Attributes[typeof(KeyAttribute)] != null);
-            bool isEntity = true; //  this.EdmType.BuiltInTypeKind == BuiltInTypeKind.EntityType;
+            bool hasKeyAttribute = pd.Attributes[typeof(KeyAttribute)] != null;
             var property = _entityType.FindProperty(pd.Name);
 
             if (property != null)
@@ -114,7 +112,7 @@ namespace OpenRiaServices.EntityFrameworkCore
                     inferRoundtripOriginalAttribute = true;
 
                     // key members that aren't also FK members are non-editable (but allow an initial value)
-                    if (!this._keyIsEditable)
+                    if (!_keyIsEditable)
                     {
                         editableAttribute = new EditableAttribute(false) { AllowInitialValue = true };
                     }
@@ -171,8 +169,8 @@ namespace OpenRiaServices.EntityFrameworkCore
                     }
                 }
 
-                bool hasTimestampAttribute = (pd.Attributes[typeof(TimestampAttribute)] != null);
-                if (this._timestampProperty == property && !hasTimestampAttribute)
+                bool hasTimestampAttribute = pd.Attributes[typeof(TimestampAttribute)] != null;
+                if (_timestampProperty == property && !hasTimestampAttribute)
                 {
                     attributes.Add(new TimestampAttribute());
                     hasTimestampAttribute = true;
@@ -193,8 +191,8 @@ namespace OpenRiaServices.EntityFrameworkCore
                 // Add RTO to this member if required. If this type has a timestamp
                 // member that member should be the ONLY member we apply RTO to.
                 // Dont apply RTO if it is an association member.
-                bool isForeignKeyMember = this._foreignKeyMembers != null  && this._foreignKeyMembers.ContainsKey(property.Name);
-                if ((this._timestampProperty == null || this._timestampProperty == property) &&
+                bool isForeignKeyMember = _foreignKeyMembers != null && _foreignKeyMembers.ContainsKey(property.Name);
+                if ((_timestampProperty == null || _timestampProperty == property) &&
                     (inferRoundtripOriginalAttribute || isForeignKeyMember) &&
                     pd.Attributes[typeof(AssociationAttribute)] == null)
                 {
@@ -214,13 +212,13 @@ namespace OpenRiaServices.EntityFrameworkCore
             // Add AssociationAttribute if required for the specified property
             if (_entityType.FindNavigation(pd.Name) is INavigation navigation)
             {
-                bool isManyToMany = navigation.IsCollection() && (navigation.FindInverse()?.IsCollection() == true);
+                bool isManyToMany = navigation.IsCollection() && navigation.FindInverse()?.IsCollection() == true;
                 if (!isManyToMany)
                 {
-                    AssociationAttribute assocAttrib = (AssociationAttribute)pd.Attributes[typeof(System.ComponentModel.DataAnnotations.AssociationAttribute)];
+                    var assocAttrib = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];
                     if (assocAttrib == null)
                     {
-                        assocAttrib = this.TypeDescriptionContext.CreateAssociationAttribute(navigation);
+                        assocAttrib = TypeDescriptionContext.CreateAssociationAttribute(navigation);
                         attributes.Add(assocAttrib);
                     }
                 }

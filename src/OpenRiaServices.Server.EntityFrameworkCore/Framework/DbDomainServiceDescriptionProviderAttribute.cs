@@ -2,17 +2,15 @@
 using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using System.Globalization;
-using OpenRiaServices.Server;
-using OpenRiaServices.Server.EntityFrameworkCore;
 
-namespace OpenRiaServices.EntityFrameworkCore
+namespace OpenRiaServices.Server.EntityFrameworkCore
 {
     /// <summary>
-    /// Attribute applied to a <see cref="DbDomainServiceEFCore{DbContext}"/> that exposes LINQ to Entities mapped
+    /// Attribute applied to a <see cref="DbDomainService{DbContext}"/> that exposes LINQ to Entities mapped
     /// Types.
     /// </summary>
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = true, Inherited = false)]
-    public sealed class DbDomainServiceEFCoreDescriptionProviderAttribute : DomainServiceDescriptionProviderAttribute
+    public sealed class DbDomainServiceDescriptionProviderAttribute : DomainServiceDescriptionProviderAttribute
     {
         private Type _dbContextType;
 
@@ -21,7 +19,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// DbContext will be inferred from the <see cref="DomainService"/> the
         /// attribute is applied to.
         /// </summary>
-        public DbDomainServiceEFCoreDescriptionProviderAttribute()
+        public DbDomainServiceDescriptionProviderAttribute()
             : base(typeof(EFCoreDescriptionProvider))
         {
         }
@@ -31,10 +29,10 @@ namespace OpenRiaServices.EntityFrameworkCore
         /// DbContext Type.
         /// </summary>
         /// <param name="dbContextType">The LINQ To Entities ObjectContext Type.</param>
-        public DbDomainServiceEFCoreDescriptionProviderAttribute(Type dbContextType)
+        public DbDomainServiceDescriptionProviderAttribute(Type dbContextType)
             : base(typeof(EFCoreDescriptionProvider))
         {
-            this._dbContextType = dbContextType;
+            _dbContextType = dbContextType;
         }
 
         /// <summary>
@@ -44,7 +42,7 @@ namespace OpenRiaServices.EntityFrameworkCore
         {
             get
             {
-                return this._dbContextType;
+                return _dbContextType;
             }
         }
 
@@ -61,19 +59,19 @@ namespace OpenRiaServices.EntityFrameworkCore
                 throw new ArgumentNullException(nameof(domainServiceType));
             }
 
-            if (this._dbContextType == null)
+            if (_dbContextType == null)
             {
-                this._dbContextType = GetContextType(domainServiceType);
+                _dbContextType = GetContextType(domainServiceType);
             }
 
-            if (!typeof(DbContext).IsAssignableFrom(this._dbContextType))
+            if (!typeof(DbContext).IsAssignableFrom(_dbContextType))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
                     DbResource.InvalidDbDomainServiceDescriptionProviderSpecification,
-                    this._dbContextType));
+                    _dbContextType));
             }
 
-            return new EFCoreDescriptionProvider(domainServiceType, this._dbContextType, parent);
+            return new EFCoreDescriptionProvider(domainServiceType, _dbContextType, parent);
         }
 
         /// <summary>
@@ -84,13 +82,13 @@ namespace OpenRiaServices.EntityFrameworkCore
         private static Type GetContextType(Type domainServiceType)
         {
             Type efDomainServiceType = domainServiceType.BaseType;
-            while (!efDomainServiceType.IsGenericType || efDomainServiceType.GetGenericTypeDefinition() != typeof(DbDomainServiceEFCore<>))
+            while (!efDomainServiceType.IsGenericType || efDomainServiceType.GetGenericTypeDefinition() != typeof(DbDomainService<>))
             {
                 if (efDomainServiceType == typeof(object))
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
                     ResourceEFCore.InvalidMetadataProviderSpecification,
-                    typeof(DbDomainServiceEFCoreDescriptionProviderAttribute).Name, domainServiceType.Name, typeof(DbDomainServiceEFCore<>).Name));
+                    typeof(DbDomainServiceDescriptionProviderAttribute).Name, domainServiceType.Name, typeof(DbDomainService<>).Name));
                 }
                 efDomainServiceType = efDomainServiceType.BaseType;
             }
