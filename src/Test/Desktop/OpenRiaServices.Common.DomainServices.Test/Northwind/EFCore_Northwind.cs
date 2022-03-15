@@ -443,8 +443,8 @@ namespace TestDomainServices.EFCore
                 EntityEntry tEntityEntry = this.DbContext.Entry(territory);
                 CollectionEntry employeesCollection = tEntityEntry.Collection(nameof(territory.Employees));
                 employeesCollection.Load();
-                territory.Employees.Clear();
-
+                DbContext.EmployeeTerritories.RemoveRange(territory.Employees);
+                
                 this.DbContext.Territories.Remove(territory);
             }
         }
@@ -467,7 +467,7 @@ namespace TestDomainServices.EFCore
                 EntityEntry tEntityEntry = this.DbContext.Entry(territory);
                 CollectionEntry employeesCollection = tEntityEntry.Collection(nameof(territory.Employees));
                 employeesCollection.Load();
-                territory.Employees.Clear();
+                DbContext.EmployeeTerritories.RemoveRange(territory.Employees);
 
                 this.DbContext.Territories.Remove(territory);
             }
