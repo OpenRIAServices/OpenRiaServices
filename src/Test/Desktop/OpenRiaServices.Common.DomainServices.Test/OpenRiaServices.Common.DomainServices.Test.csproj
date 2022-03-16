@@ -38,6 +38,9 @@
     <Content Include="Baselines\Default\EF\Catalog_EFCore.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Baselines\Default\EF\Northwind_EFCore.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios_RootNs_FullTypeNames.g.vb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -594,7 +597,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Baselines\Default\EF\Catalog_EFCore.g.vb" />
+    <None Remove="Baselines\Default\EF\Northwind_EFCore.g.vb" />
     <None Remove="Baselines\Default\Scenarios\EFCoreContextScenarios.g.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Baselines\Default\EF\Northwind_EFCore.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <ItemGroup>
     <None Update="DataModels\AdventureWorks - Copy.tt">

@@ -545,6 +545,15 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_NWEF", "Northwind_EF.g", typeof(TestDomainServices.EF.Northwind), Array.Empty<string>(), false));
         }
 
+        [DeploymentItem(@"Baselines\Default\EF", "CG_NWEF")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_NWEF")]
+        [TestMethod]
+        public void TestNorthwindEFCoreClientProxies()
+        {
+            // Default
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_NWEF", "Northwind_EFCore.g", typeof(TestDomainServices.EFCore.Northwind), Array.Empty<string>(), false));
+        }
+
         [DeploymentItem(@"Baselines\Default\EF", "CG_CATEF")]
         [DeploymentItem(@"ProjectPath.txt", "CG_CATEF")]
         [TestMethod]
