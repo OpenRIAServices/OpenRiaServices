@@ -705,6 +705,13 @@ namespace OpenRiaServices.Hosting.Wcf
                         new object[] { SecurityRuleSet.Level2 })
                 },
                 SecurityContextSource.CurrentAppDomain);
+#elif NET5_0_OR_GREATER
+// Dev note: the SecurityContextSource.CurrentAppDomain is new in CLR 4.0
+            // and permits the assembly builder to inherit the security permissions of the
+            // app domain. - CDB Removed, Medium trust support removed
+            AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(
+                assemName,
+                AssemblyBuilderAccess.Run);
 #else
             // Dev note: the SecurityContextSource.CurrentAppDomain is new in CLR 4.0
             // and permits the assembly builder to inherit the security permissions of the

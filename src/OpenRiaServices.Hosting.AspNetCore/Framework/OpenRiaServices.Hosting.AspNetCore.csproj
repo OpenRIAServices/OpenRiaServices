@@ -1,0 +1,66 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <DefineConstants>$(DefineConstants);SERVERFX;ASPNET_CORE</DefineConstants>
+    <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
+    <!-- Ignore documentation varnings while experimental-->
+    <NoWarn>$(NoWarn);CS1574;CS1573;CS1591;CS1572</NoWarn>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix>experimental</VersionSuffix>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="DomainServiceFault.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="ServiceQueryPart.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\QueryResult.cs" Link="QueryResult.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DefaultQueryResolver.cs" Link="Linq\DefaultQueryResolver.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DynamicQueryable.cs" Link="Linq\DynamicQueryable.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DynamicQueryableMethodValidator.cs" Link="Linq\DynamicQueryableMethodValidator.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryDeserializer.cs" Link="Linq\QueryDeserializer.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryResolver.cs" Link="Linq\QueryResolver.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\ServiceQuery.cs" Link="ServiceQuery.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\Behaviors\WebHttpQueryStringConverter.cs" Link="Wcf\WebHttpQueryStringConverter.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\ChangeSetProcessor.cs" Link="Wcf\ChangeSetProcessor.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\DataContractSurrogateGenerator.cs" Link="Wcf\DataContractSurrogateGenerator.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\DomainServiceSerializationSurrogate.cs" Link="Wcf\DomainServiceSerializationSurrogate.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\QueryProcessor.cs" Link="Wcf\QueryProcessor.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\Resource.resx" Link="Linq\Resource.resx">
+      <CustomToolNamespace>System.Linq.Dynamic</CustomToolNamespace>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\Resource.resx" Link="Wcf\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.Hosting.Wcf</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="PooledStream" Version="0.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+
+
+</Project>
