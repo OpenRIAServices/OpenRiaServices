@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>disable</Nullable>
+    <ImplicitUsings>false</ImplicitUsings>
+    <NoWarn>$(NoWarn);CS0618</NoWarn>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\*.cs" LinkBase="Services\Cities\" />
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Mocks\*.cs" LinkBase="Services\Mocks\" />
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\*.cs" LinkBase="Shared\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\CityDomainServiceHost.cs" />
+    <Compile Remove="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\CityDomainServiceHostFactory.cs" />
+    <Compile Remove="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Mocks\AuthenticationServices.cs" />
+    <Compile Remove="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Mocks\ComplexTypeScenarios.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting.AspNetCore\Framework\OpenRiaServices.Hosting.AspNetCore.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+
+</Project>

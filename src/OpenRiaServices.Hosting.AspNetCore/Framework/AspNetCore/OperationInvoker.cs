@@ -191,9 +191,20 @@ abstract class OperationInvoker
                 }
                 else
                 {
-                    // TODO: consider knowtypes ?
                     var serializer = serializationHelper.GetSerializer(parameter.ParameterType);
+
+                    // XmlElemtnt returns the "ResultNode" unless we step into the contents
+                    bool isXElement = parameter.ParameterType == typeof(System.Xml.Linq.XElement);
+                    if (isXElement)
+                        reader.ReadStartElement();
+
                     values[i] = serializer.ReadObject(reader, verifyObjectName: false);
+
+                    if (isXElement)
+                    {
+                        reader.ReadEndElement();
+                        reader.ReadEndElement();
+                    }
                 }
             }
 

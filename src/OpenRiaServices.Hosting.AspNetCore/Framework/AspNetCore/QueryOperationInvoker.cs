@@ -139,7 +139,7 @@ class QueryOperationInvoker<TEntity> : OperationInvoker
         IEnumerable<ServiceQueryPart> serviceQueryParts =
             from p in orderedParts
             let idx = p.IndexOf('=')
-            select new ServiceQueryPart(p.Substring(1, idx - 1), p.Substring(idx + 1));
+            select new ServiceQueryPart(p.Substring(1, idx - 1), Uri.UnescapeDataString(p.Substring(idx + 1)));
 
         ServiceQuery serviceQuery = new ServiceQuery()
         {
