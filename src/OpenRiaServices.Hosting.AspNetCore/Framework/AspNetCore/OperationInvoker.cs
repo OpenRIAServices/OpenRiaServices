@@ -13,6 +13,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Xml;
 
 abstract class OperationInvoker
 {
@@ -21,7 +22,8 @@ abstract class OperationInvoker
     private readonly DomainOperationType operationType;
     protected readonly SerializationHelper serializationHelper;
     private readonly DataContractSerializer responseSerializer;
-
+    private readonly string _responseName;
+    private readonly string _resultName;
     private const string MessageRootElementName = "MessageRoot";
     private const string QueryOptionsListElementName = "QueryOptions";
     private const string QueryOptionElementName = "QueryOption";
@@ -39,6 +41,9 @@ abstract class OperationInvoker
         this.operationType = operationType;
         this.serializationHelper = serializationHelper;
         this.responseSerializer = responseSerializer;
+
+        this._responseName = this.Name + "Response";
+        this._resultName = this.Name + "Result";
     }
 
     public virtual string Name => operation.Name;
@@ -62,47 +67,55 @@ abstract class OperationInvoker
         return inputs;
     }
 
-    protected async Task<(ServiceQuery, object[])> ReadParametersFromBody(HttpContext context)
+    protected async Task<(ServiceQuery, object[])> ReadParametersFromBodyAsync(HttpContext context)
     {
         // TODO: determine if settings for max length etc (timings) for DOS protection is needed (or if it should be set on kestrel etc)
-
         // TODO: Use arraypool or similar instead ?
-        using var ms = new PooledStream.PooledMemoryStream();
         var contentLength = context.Request.ContentLength;
+        if (!contentLength.HasValue || contentLength < 0 || contentLength > int.MaxValue)
+            throw new InvalidOperationException();
 
-        if (contentLength > 0 && contentLength < int.MaxValue)
-            ms.Reserve((int)contentLength);
-        await context.Request.BodyReader.CopyToAsync(ms);
+        int length = (int)contentLength;
+        using var ms = new PooledStream.PooledMemoryStream();
+        ms.Reserve(length);
 
+        await context.Request.Body.CopyToAsync(ms);
+        // Verify all was read
+        if (ms.Length != length)
+            throw new InvalidOperationException();
+
+        ms.Seek(0, SeekOrigin.Begin);
+        using var reader = XmlDictionaryReader.CreateBinaryReader(ms, null, System.Xml.XmlDictionaryReaderQuotas.Max);
+        return ReadParametersFromBody(reader);
+    }
+
+    private (ServiceQuery, object[]) ReadParametersFromBody(System.Xml.XmlDictionaryReader reader)
+    {
         ServiceQuery serviceQuery = null;
         object[] values;
-        ms.Seek(0, SeekOrigin.Begin);
-        using (var reader = System.Xml.XmlDictionaryReader.CreateBinaryReader(ms, null, System.Xml.XmlDictionaryReaderQuotas.Max))
+        reader.MoveToContent();
+
+        bool hasMessageRoot = reader.IsStartElement("MessageRoot");
+        // Check for QueryOptions which is part of message root
+        if (hasMessageRoot)
         {
-            reader.MoveToContent();
-
-            bool hasMessageRoot = reader.IsStartElement("MessageRoot");
-            // Check for QueryOptions which is part of message root
-            if (hasMessageRoot)
-            {
-                // Go to the <QueryOptions> node.
-                reader.Read();                                               // <MessageRoot>
-                reader.ReadStartElement(QueryOptionsListElementName);        // <QueryOptions>
-                serviceQuery = ReadServiceQuery(reader);                     // <QueryOption></QueryOption>
-                                                                             // Go to the starting node of the original message.
-                reader.ReadEndElement();                                     // </QueryOptions>
-            }
-
-            values = ReadParameters(reader);
-
-            if (hasMessageRoot)
-                reader.ReadEndElement();
-
-            // Verify at end 
-            if (reader.ReadState != System.Xml.ReadState.EndOfFile)
-                throw new InvalidOperationException();
-            return (serviceQuery, values);
+            // Go to the <QueryOptions> node.
+            reader.Read();                                               // <MessageRoot>
+            reader.ReadStartElement(QueryOptionsListElementName);        // <QueryOptions>
+            serviceQuery = ReadServiceQuery(reader);                     // <QueryOption></QueryOption>
+                                                                         // Go to the starting node of the original message.
+            reader.ReadEndElement();                                     // </QueryOptions>
         }
+
+        values = ReadParameters(reader);
+
+        if (hasMessageRoot)
+            reader.ReadEndElement();
+
+        // Verify at end 
+        if (reader.ReadState != System.Xml.ReadState.EndOfFile)
+            throw new InvalidOperationException();
+        return (serviceQuery, values);
     }
 
     /// <summary>
@@ -179,7 +192,7 @@ abstract class OperationInvoker
                 else
                 {
                     // TODO: consider knowtypes ?
-                    var serializer = serializationHelper.GetSerializer(parameter.ParameterType, null);
+                    var serializer = serializationHelper.GetSerializer(parameter.ParameterType);
                     values[i] = serializer.ReadObject(reader, verifyObjectName: false);
                 }
             }
@@ -219,6 +232,7 @@ abstract class OperationInvoker
 
     protected Task WriteError(HttpContext context, IEnumerable<ValidationResult> validationErrors, bool hideStackTrace)
     {
+        hideStackTrace = false;
         var errors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames)).ToList();
 
         // if custom errors is turned on, clear out the stacktrace.
@@ -230,7 +244,7 @@ abstract class OperationInvoker
             }
         }
 
-        return WriteError(context, new DomainServiceFault { OperationErrors = errors });
+        return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = 422 });
     }
 
 
@@ -280,10 +294,9 @@ abstract class OperationInvoker
 
         var response = context.Response;
         response.Headers.ContentType = "application/msbin1";
-        response.StatusCode = fault.ErrorCode;
+        response.StatusCode = /*fault.ErrorCode*/ 500;
         response.ContentLength = ms.Length;
-
-        await response.Body.WriteAsync(ms.ToMemoryUnsafe(), ct);
+        await response.Body.WriteAsync(ms.ToMemoryUnsafe());
     }
 
     protected async Task WriteResponse(HttpContext context, object result)
@@ -291,22 +304,18 @@ abstract class OperationInvoker
         var ct = context.RequestAborted;
         ct.ThrowIfCancellationRequested();
 
-        var response = context.Response;
-        response.Headers.ContentType = "application/msbin1";
-        response.StatusCode = 200;
-
         // TODO: Allow setting XmlDictionaryWriter quotas for Read/write
         // TODO: Port BufferManagerStream and related code
         using var ms = new PooledStream.PooledMemoryStream();
         using (var writer = System.Xml.XmlDictionaryWriter.CreateBinaryWriter(ms, null, null, ownsStream: false))
         {
-            string operationName = operation.Name;
+            string operationName = this.Name;
             // <GetQueryableRangeTaskResponse xmlns="http://tempuri.org/">
-            writer.WriteStartElement(operationName + "Response", "http://tempuri.org/");
+            writer.WriteStartElement(_responseName, "http://tempuri.org/");
             // <GetQueryableRangeTaskResult xmlns:a="DomainServices" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            writer.WriteStartElement(operationName + "Result");
-            writer.WriteXmlnsAttribute("a", "DomainServices");
-            writer.WriteXmlnsAttribute("i", "http://www.w3.org/2001/XMLSchema-instance");
+            writer.WriteStartElement(_resultName);
+            //writer.WriteXmlnsAttribute("a", "DomainServices");
+            //writer.WriteXmlnsAttribute("i", "http://www.w3.org/2001/XMLSchema-instance");
 
             // TODO: XmlElemtnt  support
             //// XmlElemtnt returns the "ResultNode" unless we step into the contents
@@ -316,7 +325,6 @@ abstract class OperationInvoker
             this.responseSerializer.WriteObjectContent(writer, result);
 
             writer.WriteEndElement(); // ***Result
-
             writer.WriteEndElement(); // ***Response
 
             //      writer.WriteEndDocument();
@@ -324,11 +332,11 @@ abstract class OperationInvoker
             ms.Flush();
         }
 
-
-        context.Response.ContentLength = ms.Length;
-        //await context.Response.StartAsync(ct);
-        await context.Response.Body.WriteAsync(ms.ToMemoryUnsafe(), ct);
-        //await context.Response.CompleteAsync();
+        var response = context.Response;
+        response.Headers.ContentType = "application/msbin1";
+        response.StatusCode = 200;
+        response.ContentLength = ms.Length;
+        await response.Body.WriteAsync(ms.ToMemoryUnsafe());
     }
 
     protected DomainService CreateDomainService(HttpContext context)

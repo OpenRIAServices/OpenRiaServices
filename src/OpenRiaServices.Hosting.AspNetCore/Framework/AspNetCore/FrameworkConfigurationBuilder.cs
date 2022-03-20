@@ -19,11 +19,5 @@ public class FrameworkConfigurationBuilder
         DomainServiceDescription description = DomainServiceDescription.GetDescription(type);
 
         _dataSource.DomainServices.Add(longName + "/binary", description);
-        _dataSource.DomainServices.Add(type.Name , description);
-    }
-
-    internal void AddDomainService(string name, Type type)
-    {
-        throw new NotImplementedException();
     }
 }

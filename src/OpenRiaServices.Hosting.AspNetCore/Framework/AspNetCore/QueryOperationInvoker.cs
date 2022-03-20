@@ -20,7 +20,7 @@ class QueryOperationInvoker<TEntity> : OperationInvoker
     private static DataContractSerializer GetRespponseSerializer(DomainOperationEntry operation, SerializationHelper serializationHelper)
     {
         var knownTypes = DomainServiceDescription.GetDescription(operation.DomainServiceType).EntityKnownTypes;
-        return serializationHelper.GetSerializer(typeof(QueryResult<TEntity>), knownTypes.GetValueOrDefault(typeof(TEntity)));
+        return serializationHelper.GetSerializer(typeof(QueryResult<TEntity>));
     }
 
     public override async Task Invoke(HttpContext context)
@@ -45,7 +45,7 @@ class QueryOperationInvoker<TEntity> : OperationInvoker
                 return;
             }
 
-            (serviceQuery, inputs) = await ReadParametersFromBody(context);
+            (serviceQuery, inputs) = await ReadParametersFromBodyAsync(context);
         }
 
         QueryResult<TEntity> result;
@@ -57,7 +57,7 @@ class QueryOperationInvoker<TEntity> : OperationInvoker
         catch (Exception ex) when (!ex.IsFatal())
         {
             //ClearOutputCachingPolicy(httpContext);
-            await WriteError(context, ex, hideStackTrace: true);
+            await WriteError(context, ex, hideStackTrace: domainService.GetDisableStackTraces());
             return;
         }
 

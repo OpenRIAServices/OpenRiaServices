@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.Wcf
+namespace OpenRiaServices.Hosting
 {
     static class DomainServiceExtensions
     {
@@ -14,7 +14,8 @@ namespace OpenRiaServices.Hosting.Wcf
         /// </summary>
         public static bool GetDisableStackTraces(this DomainService domainService)
         {
-            return true;
+            // todo: true or based on "environment"
+            return false;
         }
     }
 }

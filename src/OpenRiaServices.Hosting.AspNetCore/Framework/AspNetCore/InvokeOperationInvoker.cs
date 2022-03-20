@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 using OpenRiaServices;
+using OpenRiaServices.Hosting;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 using System;
@@ -16,7 +17,7 @@ class InvokeOperationInvoker : OperationInvoker
     private static DataContractSerializer GetRespponseSerializer(DomainOperationEntry operation, SerializationHelper serializationHelper)
     {
         // var knownTypes = DomainServiceDescription.GetDescription(operation.DomainServiceType).EntityKnownTypes;
-        return serializationHelper.GetSerializer(operation.ReturnType, null);
+        return serializationHelper.GetSerializer(operation.ReturnType);
     }
 
     public override async Task Invoke(HttpContext context)
@@ -36,7 +37,7 @@ class InvokeOperationInvoker : OperationInvoker
                 context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
                 return;
             }
-            (_, inputs) = await ReadParametersFromBody(context);
+            (_, inputs) = await ReadParametersFromBodyAsync(context);
         }
 
         ServiceInvokeResult invokeResult;
@@ -50,7 +51,7 @@ class InvokeOperationInvoker : OperationInvoker
         catch (Exception ex) when (!ex.IsFatal())
         {
             //   ClearOutputCachingPolicy(httpContext);
-            await WriteError(context, ex, hideStackTrace: true);
+            await WriteError(context, ex, hideStackTrace: domainService.GetDisableStackTraces());
             return;
         }
 

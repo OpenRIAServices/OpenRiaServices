@@ -7,22 +7,25 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using OpenRiaServices;
-using OpenRiaServices.EntityFramework;
 using OpenRiaServices.Server;
 using System.Web;
 using System.Xml.Linq;
-using DataModels.ScenarioModels;
-using DataTests.AdventureWorks.LTS;
-using OpenRiaServices.LinqToSql;
 using TestDomainServices.Saleテ;
 using System.Threading.Tasks;
 using System.Threading;
+
+#if !NET6_0
+using OpenRiaServices.EntityFramework;
+using DataModels.ScenarioModels;
+using DataTests.AdventureWorks.LTS;
+using OpenRiaServices.LinqToSql;
+#endif
 
 [assembly: ContractNamespace("http://TestNamespace/ForNoClrNamespace")]
 
 namespace TestDomainServices
 {
-    #region Invalid DomainServices
+#region Invalid DomainServices
 
     public class OnErrorDomainService : DomainService
     {
@@ -157,9 +160,9 @@ namespace TestDomainServices
     public class InaccessibleProvider : DomainService
     {
         [Query]
-        public IQueryable<Product> GetProducts()
+        public IQueryable<Cities.City> GetProducts()
         {
-            return (Array.Empty<Product>()).AsQueryable();
+            return (Array.Empty<Cities.City>()).AsQueryable();
         }
     }
 
@@ -182,6 +185,7 @@ namespace TestDomainServices
         }
     }
 
+#if !NET6_0
     /// <summary>
     /// This mock provider doesn't derive from DomainService
     /// </summary>
@@ -236,10 +240,12 @@ namespace TestDomainServices
             return (Array.Empty<Product>()).AsQueryable();
         }
     }
+#endif
+#endregion // Invalid DomainServices
 
-    #endregion // Invalid DomainServices
 
-    #region DomainServices that throw exceptions
+#if !NET6_0
+#region DomainServices that throw exceptions
 
     /// <summary>
     /// This mock provider throws an exception in its constructor
@@ -388,9 +394,11 @@ namespace TestDomainServices
         }
     }
 
-    #endregion // DomainServices that throw exceptions
+#endregion // DomainServices that throw exceptions
 
-    #region Inheritance scenarios
+#endif //!NET6_0
+
+#region Inheritance scenarios
     public class InheritanceBase
     {
         [Key]
@@ -624,9 +632,9 @@ namespace TestDomainServices
             throw new NotImplementedException();
         }
     }
-    #endregion
+#endregion
 
-    #region Codegen scenario mock
+#region Codegen scenario mock
     /// <summary>
     /// DomainService and entities used to try out various corner cases
     /// for client codegen. Codegen is expected to succeed for this provider.
@@ -1082,6 +1090,7 @@ namespace TestDomainServices
             return null;
         }
 
+#if !NET6_0
         [Query(HasSideEffects = true)]
         public IQueryable<TestSideEffects> CreateAndGetSideEffectsObjects(string name)
         {
@@ -1107,6 +1116,7 @@ namespace TestDomainServices
                 }
             }.AsQueryable();
         }
+#endif
 
         [Query]
         public IQueryable<CityWithCacheData> GetCities()
@@ -1126,6 +1136,7 @@ namespace TestDomainServices
             }.AsQueryable();
         }
 
+#if !NET6_0
         [Query]
         [OutputCache(OutputCacheLocation.Client, 2)]
         public IQueryable<CityWithCacheData> GetCitiesWithCaching()
@@ -1208,6 +1219,7 @@ namespace TestDomainServices
         {
             return GetCities();
         }
+#endif
 
         [Query]
         public IQueryable<CityWithCacheData> GetCitiesInState(string state)
@@ -1301,7 +1313,7 @@ namespace TestDomainServices
             throw new NotImplementedException("Not implemented yet.", new Exception("InnerException1", new Exception("InnerException2")));
         }
 
-        #region Select methods testing exhaustive supported types
+#region Select methods testing exhaustive supported types
         [Query]
         public IQueryable<MixedType> GetMixedTypes_Primitive(string idToChange, Boolean b1, Byte b2, SByte sb, Int16 int16, UInt16 uint16, Int32 int32,
             UInt32 uint32, Int64 int64, UInt64 uint64, Char ch, Double d, Single s)
@@ -1384,7 +1396,7 @@ namespace TestDomainServices
             }
             return _data.Values.AsQueryable();
         }
-        #endregion
+#endregion
 
         [Query]
         public IEnumerable<EntityWithXElement> GetXElemEntities()
@@ -1567,7 +1579,7 @@ namespace TestDomainServices
             return null;
         }
 
-        #region Invoke operation tests
+#region Invoke operation tests
         [Invoke]
         [RequiresAuthentication]
         public void MethodRequiresAuthentication()
@@ -1655,9 +1667,9 @@ namespace TestDomainServices
             return list;
         }
 
-        #endregion
+#endregion
 
-        #region Domain methods testing exhaustive supported types
+#region Domain methods testing exhaustive supported types
         [EntityAction]
         public void TestPrimitive(MixedType entity, Boolean b1, Byte b2, SByte sb, Int16 int16, UInt16 uint16, Int32 int32,
             UInt32 uint32, Int64 int64, UInt64 uint64, Char ch, Double d, Single s)
@@ -1724,9 +1736,9 @@ namespace TestDomainServices
             entity.NullableDateTimeOffsetProp = dto;
         }
 
-        #endregion
+#endregion
 
-        #region Invoke operation testing exhaustive supported types
+#region Invoke operation testing exhaustive supported types
         [Invoke]
         public bool TestPrimitive_Online(MixedType entity, Boolean b1, Byte b2, SByte sb, Int16 int16, UInt16 uint16, Int32 int32,
             UInt32 uint32, Int64 int64, UInt64 uint64, Char ch, Double d, Single s)
@@ -2071,6 +2083,7 @@ namespace TestDomainServices
             return value;
         }
 
+#if !NET6_0
         [Invoke(HasSideEffects = true)]
         public string ReturnHttpMethodWithSideEffects_Online()
         {
@@ -2082,7 +2095,9 @@ namespace TestDomainServices
         {
             return System.Web.HttpContext.Current.Request.HttpMethod;
         }
-        #endregion
+#endif
+
+#endregion
 
         public IEnumerable<MultipartKeyTestEntity1> GetMultipartKeyTestEntity1s()
         {
@@ -2266,7 +2281,7 @@ namespace TestDomainServices
         public NullableFKParent Parent2 { get; set; }
     }
 
-    #region Attribute Throwing DomainService, Entity, Attributes, and Exceptions
+#region Attribute Throwing DomainService, Entity, Attributes, and Exceptions
 
     [ThrowingService]
     [EnableClientAccess]
@@ -2534,7 +2549,7 @@ namespace TestDomainServices
         public ThrowingInvokeMethodParameterAttributeException(string message) : base(message) { }
     }
 
-    #endregion Attribute Throwing DomainService, Entity, Attributes, and Exceptions
+#endregion Attribute Throwing DomainService, Entity, Attributes, and Exceptions
 
     public partial class Entity_TestEditableAttribute
     {
@@ -3377,9 +3392,9 @@ namespace TestDomainServices
             }
         }
     }
-    #endregion
+#endregion
 
-    #region Include scenarios
+#region Include scenarios
     public partial class IncludesA
     {
         [Key]
@@ -3559,9 +3574,9 @@ namespace TestDomainServices
             return testAs;
         }
     }
-    #endregion
+#endregion
 
-    #region Test classes using supported types as properties
+#region Test classes using supported types as properties
     [DataContract]
     public class MixedType
     {
@@ -3569,7 +3584,7 @@ namespace TestDomainServices
         [DataMember]
         public string ID { get; set; }
 
-        #region supported primitive types
+#region supported primitive types
         [DataMember]
         public bool BooleanProp { get; set; }
 
@@ -3605,9 +3620,9 @@ namespace TestDomainServices
 
         [DataMember]
         public Single SingleProp { get; set; }
-        #endregion
+#endregion
 
-        #region predefined types
+#region predefined types
         [DataMember]
         public string StringProp { get; set; }
 
@@ -3682,9 +3697,9 @@ namespace TestDomainServices
 
         [DataMember]
         public IDictionary<TestEnum, TestEnum> DictionaryTestEnumProp { get; set; }
-        #endregion
+#endregion
 
-        #region nullable primitive
+#region nullable primitive
         [DataMember]
         public bool? NullableBooleanProp { get; set; }
 
@@ -3720,9 +3735,9 @@ namespace TestDomainServices
 
         [DataMember]
         public Single? NullableSingleProp { get; set; }
-        #endregion
+#endregion
 
-        #region nullable predefined
+#region nullable predefined
         [DataMember]
         public decimal? NullableDecimalProp { get; set; }
 
@@ -3758,7 +3773,7 @@ namespace TestDomainServices
 
         [DataMember]
         public IDictionary<DateTimeOffset, DateTimeOffset?> NullableDictionaryDateTimeOffsetProp { get; set; }
-        #endregion
+#endregion
     }
 
     // helper class that fully instantiates a few MixedTypes
@@ -3768,7 +3783,7 @@ namespace TestDomainServices
 
         public MixedTypeData()
         {
-            #region instantiation of a few MixedType objects
+#region instantiation of a few MixedType objects
             _values = new MixedType[]
             {
                 new MixedType()
@@ -3961,7 +3976,7 @@ namespace TestDomainServices
                     DictionaryXElementProp = CreateDictionary(XElement.Parse("<someElement>min string</someElement>")),
                 }
             };
-            #endregion
+#endregion
         }
 
         public MixedTypeData(bool useSuperset)
@@ -3969,7 +3984,7 @@ namespace TestDomainServices
         {
             if (useSuperset)
             {
-                #region instantiation of a superset of MixedType objects
+#region instantiation of a superset of MixedType objects
                 _values = new MixedType[] { _values[0], _values[1], _values[2],
                     new MixedType()
                     {
@@ -4098,7 +4113,7 @@ namespace TestDomainServices
                         DictionaryXElementProp = CreateDictionary(XElement.Parse("<someElement>element text</someElement>"))
                     }
                 };
-                #endregion
+#endregion
             }
         }
 
@@ -4119,9 +4134,9 @@ namespace TestDomainServices
             return d;
         }
     }
-    #endregion
+#endregion
 
-    #region Test DomainService to test unsupported properties (like Indexer)
+#region Test DomainService to test unsupported properties (like Indexer)
     [EnableClientAccess]
     public class DomainServiceWithIndexerEntity : DomainService
     {
@@ -4130,9 +4145,9 @@ namespace TestDomainServices
             throw new NotImplementedException();
         }
     }
-    #endregion
+#endregion
 
-    #region Mock DomainServices with and without CUD operations
+#region Mock DomainServices with and without CUD operations
     [EnableClientAccess]
     public class DomainServiceWithoutCUD : DomainService
     {
@@ -4198,9 +4213,9 @@ namespace TestDomainServices
             throw new NotImplementedException();
         }
     }
-    #endregion
+#endregion
 
-    #region Test Entities and Providers used to verify Cross DomainContext functionality
+#region Test Entities and Providers used to verify Cross DomainContext functionality
 
     public partial class MockCustomer
     {
@@ -4508,9 +4523,9 @@ namespace TestDomainServices
         }
     }
 
-    #endregion
+#endregion
 
-    #region Domain Services used to verify nesting/sharing behavior
+#region Domain Services used to verify nesting/sharing behavior
 
     [EnableClientAccess]
     public class MockCustomerDomainService_SharedEntityTypes : DomainService
@@ -4532,9 +4547,9 @@ namespace TestDomainServices
         }
     }
 
-    #endregion // Domain Services used to verify nesting/sharing behavior
+#endregion // Domain Services used to verify nesting/sharing behavior
 
-    #region Test RequiresSecureEndpoint
+#region Test RequiresSecureEndpoint
 
     public class TestEntity_RequiresSecureEndpoint
     {
@@ -4552,9 +4567,9 @@ namespace TestDomainServices
         }
     }
 
-    #endregion
+#endregion
 
-    #region test provider and entity for Bug 626901
+#region test provider and entity for Bug 626901
     [EnableClientAccess]
     public class IncorrectAssicationProvider_Bug626901 : DomainService
     {
@@ -4590,9 +4605,9 @@ namespace TestDomainServices
         public A_Bug626901 A { get; set; }
 
     }
-    #endregion
+#endregion
 
-    #region test provider and entity for Bug 629280
+#region test provider and entity for Bug 629280
     [EnableClientAccess]
     public class Provider_RangeAttributeWithType_Bug629280 : DomainService
     {
@@ -4643,9 +4658,9 @@ namespace TestDomainServices
         public static string String { get { return "SharedResource.String"; } }
     }
 
-    #endregion
+#endregion
 
-    #region Domain Services with Interface Attributes
+#region Domain Services with Interface Attributes
 
     [EnableClientAccess]
     [MockAttributeAllowOnce("Class")]
@@ -4712,9 +4727,9 @@ namespace TestDomainServices
         void EntityWithXElement_Custom_AttributeAggregation(EntityWithXElement entity);
     }
 
-    #endregion // Domain Services with Interface Attributes
+#endregion // Domain Services with Interface Attributes
 
-    #region Named Update Methods
+#region Named Update Methods
 
     namespace NamedUpdates
     {
@@ -5012,7 +5027,7 @@ namespace TestDomainServices
         }
     }
 
-    #endregion // Named Update Methods
+#endregion // Named Update Methods
     
     [EnableClientAccess]
     public class MetadataTypeAttributeCycleTestDomainService1 : DomainService
@@ -5042,7 +5057,7 @@ namespace TestDomainServices
         }
     }
 
-    #region Test provider and entity for Bug 796616
+#region Test provider and entity for Bug 796616
 
     [EnableClientAccess]
     public class MockDomainService_ExcludedAssociation : DomainService
@@ -5077,9 +5092,9 @@ namespace TestDomainServices
         public MockOrder MockOrder { get; set; }
     }
 
-    #endregion //Test provider and entity for Bug 796616
+#endregion //Test provider and entity for Bug 796616
 
-    #region Excluded Properties Validation Scenarios
+#region Excluded Properties Validation Scenarios
     [CustomValidation(typeof(CustomExcludeValidator), "Validate")]
     public partial class ExcludeValidationEntity
     {
@@ -5133,7 +5148,7 @@ namespace TestDomainServices
         {
         }
     }
-    #endregion
+#endregion
 
 #region Entities for RoundtripOriginalScenarios
     [RoundtripOriginal]
@@ -5211,6 +5226,8 @@ namespace TestDomainServices
 #endregion
 }
 
+
+#if !NET6_0
 #region LTS Northwind Scenarios
 
 namespace DataTests.Scenarios.LTS.Northwind
@@ -5218,7 +5235,7 @@ namespace DataTests.Scenarios.LTS.Northwind
     [EnableClientAccess]
     public class LTS_NorthwindScenarios : LinqToSqlDomainService<NorthwindScenarios>
     {
-        #region Bug479436 - Uni-Directional association
+#region Bug479436 - Uni-Directional association
         [Query]
         public IQueryable<Customer_Bug479436> GetCustomer_Bug479436s()
         {
@@ -5230,7 +5247,7 @@ namespace DataTests.Scenarios.LTS.Northwind
         {
             return DataContext.Order_Bug479436s;
         }
-        #endregion
+#endregion
 
         [Query]
         public IEnumerable<RequiredAttributeTestEntity> GetRequiredAttributeTestEntities()
@@ -5299,6 +5316,8 @@ namespace DataTests.Scenarios.EF.Northwind
 }
 
 #endregion EF Northwind Scenarios
+
+#endif
 
 #region VB Root Namespace Scenarios
 namespace VBRootNamespaceTest

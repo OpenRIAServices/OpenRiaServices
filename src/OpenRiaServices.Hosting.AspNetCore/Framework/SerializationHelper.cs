@@ -3,6 +3,7 @@ using OpenRiaServices.Server;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Runtime.Serialization;
 
 namespace OpenRiaServices.Hosting.AspNetCore
@@ -24,15 +25,19 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// The serializers are cached for performance reasons.
         /// </summary>
         /// <param name="type">type which should be serializable.</param>
-        /// <param name="entityTypes">the collection of Entity Types that the method will operate on.</param>
+        /// 
         /// <returns>A <see cref="DataContractSerializer"/> which can be used to serialize the type</returns>
-        internal DataContractSerializer GetSerializer(Type type, IEnumerable<Type> entityTypes)
+        internal DataContractSerializer GetSerializer(Type type)
         {
             lock (_serializerCache)
             {
                 if (!_serializerCache.TryGetValue(type, out var serializer))
                 {
-                    if (type != typeof(IEnumerable<ChangeSetEntry>))
+                    if (type.IsPrimitive)
+                    {
+                        serializer = new DataContractSerializer(type);
+                    }
+                    else if (type != typeof(IEnumerable<ChangeSetEntry>))
                     {
                        // optionally we might consider only passing in EntityTypes as knowntypes for queries
                         serializer = new DataContractSerializer(type, _surrogateProvider.SurrogateTypes);
@@ -42,13 +47,39 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     {
                         // Submit need to be able to serialize all types that are part of entity actions as well
                         // since the parameters are passed in object arrays
-                        serializer = new DataContractSerializer(typeof(List<ChangeSetEntry>), _surrogateProvider.SurrogateTypes);
+                        var knownTypes = GetKnownTypesFromCustomMethods(this._domainServiceDescription);
+                        knownTypes.UnionWith(this._surrogateProvider.SurrogateTypes);
+
+                        serializer = new DataContractSerializer(typeof(List<ChangeSetEntry>), knownTypes);
                         serializer.SetSerializationSurrogateProvider(_surrogateProvider);
                     }
                     _serializerCache.Add(type, serializer);
                 }
                 return serializer;
             }
+        }
+
+        private HashSet<Type> GetKnownTypesFromCustomMethods(DomainServiceDescription domainServiceDescription)
+        {
+            var knownTypes = new HashSet<Type>();
+
+            // Register types used in custom methods. Custom methods show up as part of the changeset.
+            // KnownTypes are required for all non-primitive and non-string since these types will show up in the change set.
+            foreach (DomainOperationEntry customOp in domainServiceDescription.DomainOperationEntries.Where(op => op.Operation == DomainOperation.Custom))
+            {
+                // KnownTypes will be added during surrogate registration for all entity and
+                // complex types. We skip the first parameter because it is an entity type. We also
+                // skip all complex types. Note, we do not skip complex type collections because
+                // the act of registering surrogates only adds the type, and KnownTypes needs to
+                // know about any collections.
+                foreach (Type parameterType in customOp.Parameters.Skip(1).Select(p => p.ParameterType).Where(
+                    t => !t.IsPrimitive && t != typeof(string) && !domainServiceDescription.ComplexTypes.Contains(t)))
+                {
+                    knownTypes.Add(parameterType);
+                }
+            }
+
+            return knownTypes;
         }
     }
 }

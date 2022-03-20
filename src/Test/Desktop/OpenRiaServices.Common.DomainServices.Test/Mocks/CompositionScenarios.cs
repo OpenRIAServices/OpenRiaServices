@@ -348,7 +348,9 @@ namespace TestDomainServices
     /// This service only has operations for the parent type
     /// </summary>
     [EnableClientAccess]
+#if !NET6_0
     [ServiceContract(Name = "CompositionScenarios_Explicit")]
+#endif
     public partial class CompositionScenarios_Implicit : DomainService
     {
         public IQueryable<Parent> GetParents()
@@ -489,7 +491,7 @@ namespace TestDomainServices
         }
     }
 
-    #region Composition scenarios
+#region Composition scenarios
     /// <summary>
     /// Domain service used to reproduce various bug scenarios etc.
     /// </summary>
@@ -719,7 +721,7 @@ namespace TestDomainServices
         [Association("SelfReferencingComposition_OneToMany", "ID", "ParentID")]
         public List<SelfReferencingComposition_OneToMany> Children { get; set; }
     }
-    #endregion
+#endregion
 
     public static class CompositionHelper
     {
