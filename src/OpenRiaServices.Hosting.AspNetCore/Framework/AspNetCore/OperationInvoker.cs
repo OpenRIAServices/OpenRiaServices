@@ -183,11 +183,10 @@ abstract class OperationInvoker
                 if (!reader.IsStartElement(parameter.Name))
                     throw new InvalidOperationException();
 
-                if (reader.NodeType == System.Xml.XmlNodeType.EndElement 
-                    || reader.IsEmptyElement
-                    || (reader.HasAttributes && reader.GetAttribute("nil", "http://www.w3.org/2001/XMLSchema-instance") == "true"))
+                if (reader.HasAttributes && reader.GetAttribute("nil", "http://www.w3.org/2001/XMLSchema-instance") == "true")
                 {
                     values[i] = null;
+                    ReadElement(reader); // consume element
                 }
                 else
                 {
