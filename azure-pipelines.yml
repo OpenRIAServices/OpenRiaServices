@@ -1,16 +1,11 @@
-queue:
-
-  name: Hosted VS2017
-  demands:
-  - msbuild
-  - visualstudio
-  - vstest
-  - java
+pool:
+  vmImage: 'windows-2019'
 
 variables:
   BuildConfiguration: 'release'
   BuildPlatform: 'any cpu'
   Solution: 'RiaServices.sln'
+  DotNetVersion: '2.1.818'
 
 steps:
 
@@ -24,10 +19,16 @@ steps:
   inputs:
     preferBundledVersion: true
 
+- task: UseDotNet@2
+  inputs:
+    packageType: sdk
+    version: '$(DotNetVersion)'
+    installationPath: 'C:/Program Files/dotnet'
+
 - powershell: |
    [string]$RepositoryRoot = "$(Build.SourcesDirectory)"
    
-   $url = "https://download.microsoft.com/download/3/A/3/3A35179D-5C87-4D0A-91EB-BF5FEDC601A4/sdk/silverlight_sdk.exe"
+   $url = "https://web.archive.org/web/20190126163602if_/http://download.microsoft.com/download/3/A/3/3A35179D-5C87-4D0A-91EB-BF5FEDC601A4/sdk/silverlight_sdk.exe"
    $fileName = "silverlight_5_sdk.exe"
    $fullPath = (join-path $RepositoryRoot $fileName)
    
@@ -43,6 +44,15 @@ steps:
    }
    
    dir $fullPath
+
+   $hash = Get-FileHash $fullPath -Algorithm "SHA256"
+   If ($hash.Hash -ne "F52FE767C2290D04B21E8DA0ABABDF710B7933A976B2EB1C99EEA2F5529F6D10")
+   {
+     echo "Hash doesn't match the expected value. Actual value: $hash.Hash."
+     $host.SetShouldExit(1)
+     exit 1
+   }
+
    echo "Installing Silverlight 5 SDK"
    "executing $fullPath /q  /norestart"
    
@@ -115,6 +125,8 @@ steps:
     rerunFailedThreshold: 40
     diagnosticsEnabled: false
   timeoutInMinutes: 40
+  env:
+    MSBuildSDKsPath: C:\Program Files\dotnet\sdk\$(DotNetVersion)\Sdks\
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'

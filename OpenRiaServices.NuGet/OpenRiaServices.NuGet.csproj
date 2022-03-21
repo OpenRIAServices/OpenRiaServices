@@ -69,6 +69,7 @@
     <None Include="OpenRiaServices.Server\content\web.config.transform" />
     <None Include="OpenRiaServices.Server\tools\Install.ps1" />
     <None Include="OpenRiaServices.Server\tools\Uninstall.ps1" />
+    <None Include="OpenRiaServices.Silverlight.ComboBoxExtensions\OpenRiaServices.Silverlight.ComboBoxExtensions.nuspec" />
     <None Include="OpenRiaServices.Silverlight.Core\OpenRiaServices.Signed.Silverlight.Core.nuspec" />
     <None Include="OpenRiaServices.Silverlight.Core\OpenRiaServices.Silverlight.Core.nuspec" />
     <None Include="OpenRiaServices.Silverlight.DomainDataSource\OpenRiaServices.Signed.Silverlight.DomainDataSource.nuspec" />

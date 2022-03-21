@@ -11,7 +11,8 @@
     <ProjectGuid>{227B6165-3BC4-41F2-A8EE-FE1734ED0C8E}</ProjectGuid>
     <ProjectTypeGuids>{A1591282-1198-4647-A2B1-27E5FF5F6F3B};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <OutputPath>..\..\..\bin\$(Configuration)\Silverlight\</OutputPath>
+    <OutputPath>..\..\..\bin\$(Configuration)</OutputPath>
+    <DocumentationFile>..\..\..\bin\$(Configuration)\OpenRiaServices.Silverlight.ComboBoxExtensions.xml</DocumentationFile>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>OpenRiaServices.Silverlight.ComboBoxExtensions</RootNamespace>
     <AssemblyName>OpenRiaServices.Silverlight.ComboBoxExtensions</AssemblyName>
@@ -46,8 +47,6 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Signed|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,8 +56,6 @@
     <NoConfig>true</NoConfig>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>
-    </DocumentationFile>
   </PropertyGroup>
   <Import Project="$(FeaturePackageRoot)\FeaturePackage.targets" />
   <ItemGroup>

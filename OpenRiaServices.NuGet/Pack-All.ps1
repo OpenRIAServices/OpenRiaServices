@@ -1,5 +1,5 @@
 param(
-	[string[]]$Path = "OpenRiaServices.*",
+	[string[]]$Path = "OpenRiaServices.*\*.nuspec",
 	[string]$Version = $null,
 	[string]$NuGetPath
 )
@@ -12,7 +12,7 @@ if (-not (Test-Path $outputDir)) {
     mkdir $outputDir
 }
 
-# If NuGet path is not specified then chekc one folder above git repo, or hope for it to be in the path
+# If NuGet path is not specified then check one folder above git repo, or hope for it to be in the path
 if ([string]::IsNullOrEmpty($NuGetPath))
 {
 	if (Test-Path ..\..\NuGet.exe) { $NuGetPath = "..\..\NuGet.exe"}
@@ -21,14 +21,7 @@ if ([string]::IsNullOrEmpty($NuGetPath))
 [string[]]$NuGetParameters = @("-OutputDirectory", "$outputDir")
 if (-not [string]::IsNullOrEmpty($Version)) {$NuGetParameters = $NuGetParameters + @("-Version", $Version)}
 
-foreach($folder in (dir $Path | where {[System.IO.Directory]::Exists($_)}))
-{
-    $targets = (dir "$folder\*.nuspec")
-    foreach($nuspec in $targets)
-    {
-        echo "Building $nuspec"
-        & $NuGetPath pack ($nuspec) $NuGetParameters
-    }
-}
+
+Get-ChildItem -Path $Path -Recurse -Exclude *WebForms*,*WindowsAzure* | ForEach-Object { & $NuGetPath pack ($_.FullName) $NuGetParameters }
 
 Pop-Location
