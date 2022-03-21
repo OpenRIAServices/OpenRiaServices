@@ -17,7 +17,6 @@
     <Compile Remove="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\CityDomainServiceHost.cs" />
     <Compile Remove="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\CityDomainServiceHostFactory.cs" />
     <Compile Remove="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Mocks\AuthenticationServices.cs" />
-    <Compile Remove="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Mocks\ComplexTypeScenarios.cs" />
   </ItemGroup>
 
   <ItemGroup>

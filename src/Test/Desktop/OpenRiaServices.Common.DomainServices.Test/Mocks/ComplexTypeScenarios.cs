@@ -2,7 +2,9 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
+#if !NET6_0
 using OpenRiaServices.EntityFramework;
+#endif
 using OpenRiaServices.Server;
 using System;
 
@@ -53,9 +55,9 @@ namespace TestDomainServices
         {
             List<ComplexType_Parent> parents = new List<ComplexType_Parent>() {
 
-                new ComplexType_Parent { 
-                    ID = 1, 
-                    ContactInfo = 
+                new ComplexType_Parent {
+                    ID = 1,
+                    ContactInfo =
                         new ContactInfo
                         {
                             Name = "Mathew",
@@ -65,7 +67,7 @@ namespace TestDomainServices
                 },
                 new ComplexType_Parent {
                     ID = 2,
-                    ContactInfo = 
+                    ContactInfo =
                     new ContactInfo
                     {
                         Name = "Fred",
@@ -75,7 +77,7 @@ namespace TestDomainServices
                 },
                 new ComplexType_Parent {
                     ID = 3,
-                    ContactInfo = 
+                    ContactInfo =
                     new ContactInfo
                     {
                         Name = "Amy",
@@ -118,6 +120,7 @@ namespace TestDomainServices
         }
     }
 
+#if !NET6_0
     [EnableClientAccess]
     [LinqToEntitiesDomainServiceDescriptionProvider(typeof(NorthwindModel.NorthwindEntities))]
     public class ComplexTypes_TestService_Scenarios : DomainService
@@ -132,6 +135,7 @@ namespace TestDomainServices
             return null;
         }
     }
+#endif
 
     [EnableClientAccess]
     public class ComplexTypes_TestService_ComplexMethodSignatures : DomainService
@@ -209,7 +213,7 @@ namespace TestDomainServices
 
     public class ComplexType_Valid_Child : ComplexType_Invalid_Parent
     {
-        public int Prop { get; set;}
+        public int Prop { get; set; }
     }
 
     [EnableClientAccess]
