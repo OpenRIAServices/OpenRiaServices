@@ -348,9 +348,7 @@ namespace TestDomainServices
     /// This service only has operations for the parent type
     /// </summary>
     [EnableClientAccess]
-#if !NET6_0
     [ServiceContract(Name = "CompositionScenarios_Explicit")]
-#endif
     public partial class CompositionScenarios_Implicit : DomainService
     {
         public IQueryable<Parent> GetParents()

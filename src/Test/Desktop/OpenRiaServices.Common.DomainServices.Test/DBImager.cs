@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Web;
+#if !NET6_0
 using System.Web.Hosting;
+#endif
 
 namespace TestDomainServices.Testing
 {
@@ -37,11 +33,15 @@ namespace TestDomainServices.Testing
                 return Path.Combine(Directory.GetCurrentDirectory(), fileName);
 
             // If path is not relative to working directory then check if it is a virtual path
+#if NET6_0
+            throw new NotImplementedException();
+#else
             var mappedPath = HostingEnvironment.MapPath(fileName);
             if (File.Exists(mappedPath))
                 return mappedPath;
 
             return string.Empty;
+#endif
         }
 
         #endregion GetSettings
@@ -157,7 +157,7 @@ namespace TestDomainServices.Testing
         }
 
 
-        #endregion Database Methods
+#endregion Database Methods
 
     }
 

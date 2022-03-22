@@ -11,7 +11,7 @@ using OpenRiaServices.Server;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();
 
-var domainServices = typeof(Program).Assembly.ExportedTypes
+var domainServices = typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate).Assembly.ExportedTypes
     .Where(t => typeof(DomainService).IsAssignableFrom(t) && !t.IsAbstract && t.GetCustomAttribute(typeof(EnableClientAccessAttribute), inherit: true) != null)
     .ToArray();
 
@@ -35,7 +35,8 @@ app.MapOpenRiaServices(builder =>
                Console.WriteLine($"Ignnoreing {type} due to exception: {ex.Message}");
            }
        }
-   });
+   })
+    ;
 
 app.MapGet("/", httpContext =>
     {

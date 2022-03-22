@@ -59,7 +59,7 @@ abstract class OperationInvoker
         {
             if (query.TryGetValue(parameters[i].Name, out var values))
             {
-                var value = values.FirstOrDefault();
+                var value = Uri.UnescapeDataString(values.FirstOrDefault());
                 inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
             }
         }

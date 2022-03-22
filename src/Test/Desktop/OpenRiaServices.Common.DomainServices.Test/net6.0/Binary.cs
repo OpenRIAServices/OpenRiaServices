@@ -1,3 +1,5 @@
+using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -5,9 +7,8 @@ namespace System.Data.Linq
 {
     [DataContract]
     [Serializable]
-    public sealed class Binary : IEquatable<Binary>
+    public sealed class Binary : IEquatable<Binary>, ICollection<byte>
     {
-        [DataMember(Name = "Bytes")]
         byte[] bytes;
         int? hashCode;
 
@@ -36,6 +37,10 @@ namespace System.Data.Linq
         {
             get { return this.bytes.Length; }
         }
+
+        public int Count => ((ICollection<byte>)bytes).Count;
+
+        public bool IsReadOnly => ((ICollection<byte>)bytes).IsReadOnly;
 
         public static implicit operator Binary(byte[] value)
         {
@@ -126,6 +131,41 @@ namespace System.Data.Linq
                 hashCode = hashCode * s + bytes[i];
                 s = s * t;
             }
+        }
+
+        public void Add(byte item)
+        {
+            ((ICollection<byte>)bytes).Add(item);
+        }
+
+        public void Clear()
+        {
+            ((ICollection<byte>)bytes).Clear();
+        }
+
+        public bool Contains(byte item)
+        {
+            return ((ICollection<byte>)bytes).Contains(item);
+        }
+
+        public void CopyTo(byte[] array, int arrayIndex)
+        {
+            ((ICollection<byte>)bytes).CopyTo(array, arrayIndex);
+        }
+
+        public bool Remove(byte item)
+        {
+            return ((ICollection<byte>)bytes).Remove(item);
+        }
+
+        public IEnumerator<byte> GetEnumerator()
+        {
+            return ((IEnumerable<byte>)bytes).GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return bytes.GetEnumerator();
         }
     }
 }

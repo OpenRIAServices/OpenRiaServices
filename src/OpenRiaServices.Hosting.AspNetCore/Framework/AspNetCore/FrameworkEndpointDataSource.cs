@@ -43,6 +43,9 @@ internal class FrameworkEndpointDataSource : EndpointDataSource, IEndpointConven
         var getOrPost = new HttpMethodMetadata(new[] { "GET", "POST" });
         var postOnly = new HttpMethodMetadata(new[] { "POST" });
 
+        // TODO:
+        // - Limit HTTP methods (GET/POST)
+        // - Require https based on EnableClientAccess
         foreach (var (name, domainService) in DomainServices)
         {
             var serializationHelper = new SerializationHelper(domainService);
@@ -101,7 +104,6 @@ internal class FrameworkEndpointDataSource : EndpointDataSource, IEndpointConven
             DisplayName = $"{name}.{invoker.Name}"
         };
         //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(endpointGroupName));
-
         foreach (var convention in _conventions)
         {
             convention(endpointBuilder);

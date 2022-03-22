@@ -17,6 +17,7 @@ namespace DataModels.ScenarioModels
         }
     }
 
+#if !NET6_0
     /// <summary>
     /// This class is used to test instantiation errors at code gen
     /// </summary>
@@ -31,6 +32,7 @@ namespace DataModels.ScenarioModels
         {
         }
     }
+#endif
 
     /// <summary>
     /// This class is used to make sure one can inherit from ObjectContext and BO wizard still works.
@@ -42,6 +44,7 @@ namespace DataModels.ScenarioModels
         }
     }
 
+#if !NET6_0
     /// <summary>
     /// This class is used to make sure one can inherit from DataContext and BO wizard still works.
     /// </summary>
@@ -56,4 +59,5 @@ namespace DataModels.ScenarioModels
         {
         }
     }
+#endif
 }

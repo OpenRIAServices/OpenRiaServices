@@ -2,9 +2,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
-#if !NET6_0
 using OpenRiaServices.EntityFramework;
-#endif
 using OpenRiaServices.Server;
 using System;
 
@@ -120,7 +118,6 @@ namespace TestDomainServices
         }
     }
 
-#if !NET6_0
     [EnableClientAccess]
     [LinqToEntitiesDomainServiceDescriptionProvider(typeof(NorthwindModel.NorthwindEntities))]
     public class ComplexTypes_TestService_Scenarios : DomainService
@@ -135,7 +132,6 @@ namespace TestDomainServices
             return null;
         }
     }
-#endif
 
     [EnableClientAccess]
     public class ComplexTypes_TestService_ComplexMethodSignatures : DomainService

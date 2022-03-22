@@ -7,8 +7,10 @@ using OpenRiaServices.Server;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
+using System.Web;
 
 class QueryOperationInvoker<TEntity> : OperationInvoker
 {
@@ -109,7 +111,7 @@ class QueryOperationInvoker<TEntity> : OperationInvoker
             }
         }
 
-        string decodedQueryString = /*HttpUtility.UrlDecode*/ Uri.UnescapeDataString(fullRequestUrl);
+        string decodedQueryString = HttpUtility.UrlDecode(fullRequestUrl);
 
         // For each query part, find all occurrences of it in the Url (could be duplicates)
         List<KeyValuePair<string, int>> keyPairIndicies = new List<KeyValuePair<string, int>>();
@@ -139,7 +141,7 @@ class QueryOperationInvoker<TEntity> : OperationInvoker
         IEnumerable<ServiceQueryPart> serviceQueryParts =
             from p in orderedParts
             let idx = p.IndexOf('=')
-            select new ServiceQueryPart(p.Substring(1, idx - 1), Uri.UnescapeDataString(p.Substring(idx + 1)));
+            select new ServiceQueryPart(p.Substring(1, idx - 1), HttpUtility.UrlDecode(p.Substring(idx + 1)));
 
         ServiceQuery serviceQuery = new ServiceQuery()
         {

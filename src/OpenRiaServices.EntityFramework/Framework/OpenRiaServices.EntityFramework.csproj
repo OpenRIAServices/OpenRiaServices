@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
-    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;net472;</DefineConstants>
+    <TargetFrameworks>net472;netstandard2.1</TargetFrameworks>
+    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

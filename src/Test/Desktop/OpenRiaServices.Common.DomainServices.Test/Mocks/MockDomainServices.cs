@@ -7,25 +7,27 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.ServiceModel;
 using OpenRiaServices;
+using OpenRiaServices.EntityFramework;
 using OpenRiaServices.Server;
-using System.Web;
 using System.Xml.Linq;
 using TestDomainServices.Saleテ;
 using System.Threading.Tasks;
 using System.Threading;
+using DataModels.ScenarioModels;
 
 #if !NET6_0
-using OpenRiaServices.EntityFramework;
-using DataModels.ScenarioModels;
 using DataTests.AdventureWorks.LTS;
 using OpenRiaServices.LinqToSql;
+using System.Web;
+#else
+using Microsoft.AspNetCore.Http;
 #endif
 
 [assembly: ContractNamespace("http://TestNamespace/ForNoClrNamespace")]
 
 namespace TestDomainServices
 {
-#region Invalid DomainServices
+    #region Invalid DomainServices
 
     public class OnErrorDomainService : DomainService
     {
@@ -64,7 +66,7 @@ namespace TestDomainServices
             // exception info, etc.
         }
 
-        public IEnumerable<Cities.City> GetCities([Range(0, 5)]int a)
+        public IEnumerable<Cities.City> GetCities([Range(0, 5)] int a)
         {
             // example of a query method throwing an exception
             this.ThrowException();
@@ -78,7 +80,7 @@ namespace TestDomainServices
         }
 
         [Invoke]
-        public void CityOperation([Range(0, 5)]int a)
+        public void CityOperation([Range(0, 5)] int a)
         {
             ThrowException();
         }
@@ -185,7 +187,6 @@ namespace TestDomainServices
         }
     }
 
-#if !NET6_0
     /// <summary>
     /// This mock provider doesn't derive from DomainService
     /// </summary>
@@ -193,12 +194,13 @@ namespace TestDomainServices
     public class NonDomainService
     {
         [Query]
-        public IQueryable<Product> GetProducts()
+        public IQueryable<AdventureWorksModel.Product> GetProducts()
         {
-            return (Array.Empty<Product>()).AsQueryable();
+            return (Array.Empty<AdventureWorksModel.Product>()).AsQueryable();
         }
     }
 
+#if !NET6_0
     /// <summary>
     /// This domain service attempts to declare L2S description provider with EF context
     /// </summary>
@@ -212,6 +214,7 @@ namespace TestDomainServices
             return (Array.Empty<Product>()).AsQueryable();
         }
     }
+
 
     /// <summary>
     /// This domain service attempts to declare L2E description provider with L2S context
@@ -227,6 +230,7 @@ namespace TestDomainServices
         }
     }
 
+
     /// <summary>
     /// This domain service attempts to declare L2S description provider with a throwing L2S context
     /// </summary>
@@ -241,11 +245,9 @@ namespace TestDomainServices
         }
     }
 #endif
-#endregion // Invalid DomainServices
+    #endregion // Invalid DomainServices
 
-
-#if !NET6_0
-#region DomainServices that throw exceptions
+    #region DomainServices that throw exceptions
 
     /// <summary>
     /// This mock provider throws an exception in its constructor
@@ -266,6 +268,7 @@ namespace TestDomainServices
         }
     }
 
+#if !NET6_0
     /// <summary>
     /// This mock LINQ to SQL DomainService throws an exception in its constructor
     /// </summary>
@@ -296,6 +299,7 @@ namespace TestDomainServices
             return (Array.Empty<PurchaseOrderDetail>()).AsQueryable();
         }
     }
+#endif
 
     /// <summary>
     /// This mock LINQ to Entities DomainService throws an exception in its constructor
@@ -331,6 +335,8 @@ namespace TestDomainServices
     // TODO : Test cases
     // - a provider with no query methods (verify missing method exception)
 
+
+#if !NET6_0
     /// <summary>
     /// This provider doesn't have associated generated proxies - it's tested directly.
     /// </summary>
@@ -393,12 +399,11 @@ namespace TestDomainServices
             throw new DomainException("Athewmay Arelschay", 777);
         }
     }
+#endif
 
-#endregion // DomainServices that throw exceptions
+    #endregion // DomainServices that throw exceptions
 
-#endif //!NET6_0
-
-#region Inheritance scenarios
+    #region Inheritance scenarios
     public class InheritanceBase
     {
         [Key]
@@ -632,9 +637,9 @@ namespace TestDomainServices
             throw new NotImplementedException();
         }
     }
-#endregion
+    #endregion
 
-#region Codegen scenario mock
+    #region Codegen scenario mock
     /// <summary>
     /// DomainService and entities used to try out various corner cases
     /// for client codegen. Codegen is expected to succeed for this provider.
@@ -956,7 +961,7 @@ namespace TestDomainServices
 
         public IQueryable<RoundtripQueryEntity> GetRoundtripQueryEntities()
         {
-            return new RoundtripQueryEntity[] { 
+            return new RoundtripQueryEntity[] {
                 new RoundtripQueryEntity { ID = 1, PropB = "Foo", PropC = "Bar", Query = this.query } }.AsQueryable();
         }
 
@@ -1090,33 +1095,39 @@ namespace TestDomainServices
             return null;
         }
 
-#if !NET6_0
         [Query(HasSideEffects = true)]
-        public IQueryable<TestSideEffects> CreateAndGetSideEffectsObjects(string name)
+        public IQueryable<TestSideEffects> CreateAndGetSideEffectsObjects(string name, [InjectParameter] HttpContext httpContext)
         {
-            HttpRequest request = System.Web.HttpContext.Current.Request;
-            return new TestSideEffects[] { 
-                new TestSideEffects() 
-                { 
-                    Name = name, 
-                    Verb = request.HttpMethod,
-                    URL = request.Url,
+            HttpRequest request = httpContext.Request;
+#if NET6_0
+            string verb = request.Method;
+            var url = new Uri ("http://" + request.Host.ToString() + request.Path.ToString() + request.QueryString.ToString());
+#else
+            string verb = request.HttpMethod;
+            var url = request.Url;
+#endif
+
+            return new TestSideEffects[] {
+                new TestSideEffects()
+                {
+                    Name = name,
+                    Verb = verb,
+                    URL = url,
                 },
                 new TestSideEffects()
                 {
-                    Name = "TestName", 
-                    Verb = request.HttpMethod,
-                    URL = request.Url,
+                    Name = "TestName",
+                    Verb = verb,
+                    URL = url,
                 },
                 new TestSideEffects()
                 {
-                    Name = "Foo", 
-                    Verb = request.HttpMethod,
-                    URL = request.Url,
+                    Name = "Foo",
+                    Verb = verb,
+                    URL = url,
                 }
             }.AsQueryable();
         }
-#endif
 
         [Query]
         public IQueryable<CityWithCacheData> GetCities()
@@ -1136,7 +1147,7 @@ namespace TestDomainServices
             }.AsQueryable();
         }
 
-#if !NET6_0
+
         [Query]
         [OutputCache(OutputCacheLocation.Client, 2)]
         public IQueryable<CityWithCacheData> GetCitiesWithCaching()
@@ -1144,10 +1155,11 @@ namespace TestDomainServices
             return GetCities();
         }
 
+#if !NET6_0
         private IQueryable<CityWithCacheData> GetCitiesWithCacheLocation()
         {
             HttpCachePolicy policy = HttpContext.Current.Response.Cache;
-            
+
             HttpCacheability cacheability = (HttpCacheability)policy
                 .GetType()
                 .GetField("_cacheability", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
@@ -1196,7 +1208,7 @@ namespace TestDomainServices
         {
             return GetCities();
         }
-
+#endif
         // Cache on server because that's the only deterministic scenario.
         [Query]
         [OutputCache(OutputCacheLocation.Server, 5, VaryByHeaders = "foo")]
@@ -1219,7 +1231,6 @@ namespace TestDomainServices
         {
             return GetCities();
         }
-#endif
 
         [Query]
         public IQueryable<CityWithCacheData> GetCitiesInState(string state)
@@ -1661,7 +1672,7 @@ namespace TestDomainServices
             return list;
         }
 
-        [Invoke(HasSideEffects=false)]
+        [Invoke(HasSideEffects = false)]
         public IEnumerable<TestEntityForInvokeOperations> InvokeOpWithIEnumerableParamAndNoSideEffects(IEnumerable<TestEntityForInvokeOperations> list)
         {
             return list;
@@ -2083,19 +2094,25 @@ namespace TestDomainServices
             return value;
         }
 
-#if !NET6_0
         [Invoke(HasSideEffects = true)]
-        public string ReturnHttpMethodWithSideEffects_Online()
+        public string ReturnHttpMethodWithSideEffects_Online([InjectParameter] HttpContext httpContext)
         {
-            return System.Web.HttpContext.Current.Request.HttpMethod;
+#if NET6_0
+            return httpContext.Request.Method;
+#else
+            return httpContext.Request.HttpMethod;
+#endif
         }
 
         [Invoke(HasSideEffects = false)]
-        public string ReturnHttpMethodWithoutSideEffects_Online()
+        public string ReturnHttpMethodWithoutSideEffects_Online([InjectParameter] HttpContext httpContext)
         {
-            return System.Web.HttpContext.Current.Request.HttpMethod;
-        }
+#if NET6_0
+            return httpContext.Request.Method;
+#else
+            return httpContext.Request.HttpMethod;
 #endif
+        }
 
 #endregion
 
@@ -3904,11 +3921,11 @@ namespace TestDomainServices
                     NullableTimeSpanListProp = new List<TimeSpan?>() { new TimeSpan(123), null },
                     NullableGuidProp = new Guid("ffffffff-ffff-ffff-ffff-ffffffffffff"),
                     NullableEnumProp = TestEnum.Value3,
-                    
+
                     DictionaryDateTimeProp = CreateDictionary(DateTime.MaxValue),
                     DictionaryDateTimeOffsetProp = CreateDictionary(DateTimeOffset.MaxValue),
                     DictionaryGuidProp = CreateDictionary(new Guid("ffffffff-ffff-ffff-ffff-ffffffffffff")),
-                    DictionaryStringProp = CreateDictionary("max string"), 
+                    DictionaryStringProp = CreateDictionary("max string"),
                     DictionaryTestEnumProp = CreateDictionary(TestEnum.Value2),
                     DictionaryXElementProp = CreateDictionary(XElement.Parse("<someElement>max string</someElement>")),
                 },
@@ -3971,7 +3988,7 @@ namespace TestDomainServices
                     DictionaryDateTimeProp = CreateDictionary(DateTime.MinValue),
                     DictionaryDateTimeOffsetProp = CreateDictionary(DateTimeOffset.MinValue),
                     DictionaryGuidProp = CreateDictionary(new Guid("00000000-0000-0000-0000-000000000000")),
-                    DictionaryStringProp = CreateDictionary("min string"), 
+                    DictionaryStringProp = CreateDictionary("min string"),
                     DictionaryTestEnumProp = CreateDictionary(TestEnum.Value1),
                     DictionaryXElementProp = CreateDictionary(XElement.Parse("<someElement>min string</someElement>")),
                 }
@@ -4184,7 +4201,7 @@ namespace TestDomainServices
             throw new NotImplementedException();
         }
     }
-    
+
     [EnableClientAccess]
     public class DomainServiceWithDelete : DomainService
     {
@@ -4282,7 +4299,7 @@ namespace TestDomainServices
             MockCustomer c1 = new MockCustomer() { CustomerId = 1, CityName = "Redmond", StateName = "WA" };
             MockCustomer c2 = new MockCustomer() { CustomerId = 2, CityName = "Orange", StateName = "CA" };
             MockCustomer c3 = new MockCustomer() { CustomerId = 3, CityName = "Bellevue", StateName = "WA" };
-            customers = new List<MockCustomer>(new MockCustomer[] {c1, c2, c3});
+            customers = new List<MockCustomer>(new MockCustomer[] { c1, c2, c3 });
 
             MockReportBody body = new MockReportBody() { TimeEntered = new DateTime(1970, 3, 15), Report = "Old report" };
             reports.Add(new MockReport() { ReportElementFieldId = 1, Customer = c1, CustomerId = c1.CustomerId, ReportTitle = "Book Favorites", ReportBody = body });
@@ -4382,7 +4399,7 @@ namespace TestDomainServices
             // verify client changes were reflected properly
             appendIf(current.ReportTitle == null, "ReportTitle", localCopy.ReportTitle, original.ReportTitle);
             appendIf(current.ReportBody.Report == null, "ReportBody.Report", localCopy.ReportBody.Report, original.ReportBody.Report);
-            appendIf(current.ReportBody.TimeEntered <= localCopy.ReportBody.TimeEntered , "ReportBody.TimeEntered", localCopy.ReportBody.TimeEntered, original.ReportBody.TimeEntered);
+            appendIf(current.ReportBody.TimeEntered <= localCopy.ReportBody.TimeEntered, "ReportBody.TimeEntered", localCopy.ReportBody.TimeEntered, original.ReportBody.TimeEntered);
 
             if (errors.Count() > 0)
             {
@@ -4459,7 +4476,7 @@ namespace TestDomainServices
                         this._source = source;
                         this._target = target;
                     }
-                    
+
                     public override Type ComponentType
                     {
                         get { return this._source.ComponentType; }
@@ -4997,7 +5014,7 @@ namespace TestDomainServices
             [EntityAction]
             public void AddTwice(CalculatorValueOldCodeGen value, decimal rhs)
             {
-                value.Value += 2*rhs;
+                value.Value += 2 * rhs;
             }
 #pragma warning restore 618
         }
@@ -5028,7 +5045,7 @@ namespace TestDomainServices
     }
 
 #endregion // Named Update Methods
-    
+
     [EnableClientAccess]
     public class MetadataTypeAttributeCycleTestDomainService1 : DomainService
     {
@@ -5051,7 +5068,7 @@ namespace TestDomainServices
     [EnableClientAccess]
     public class MetadataTypeAttributeCycleTestDomainService2 : DomainService
     {
-         public IQueryable<EntityWithSelfReferencingcMetadataTypeAttribute> GetEntities()
+        public IQueryable<EntityWithSelfReferencingcMetadataTypeAttribute> GetEntities()
         {
             return null;
         }
@@ -5130,7 +5147,7 @@ namespace TestDomainServices
 
     [EnableClientAccess]
     public class ExcludeValidationEntityDomainService : DomainService
-    {        
+    {
         public IEnumerable<ExcludeValidationEntity> GetExcludeValidationEntity()
         {
             return null;
@@ -5139,7 +5156,7 @@ namespace TestDomainServices
         public void InsertExcludeValidationEntity(ExcludeValidationEntity entity)
         {
         }
-        
+
         public void UpdateExcludeValidationEntity(ExcludeValidationEntity entity)
         {
         }
@@ -5183,7 +5200,7 @@ namespace TestDomainServices
     {
         public int PropD { get; set; }
     }
-    
+
     [EnableClientAccessAttribute]
     public class RTO_EntityWithRoundtripOriginalOnAssociationPropType
     {
@@ -5220,7 +5237,7 @@ namespace TestDomainServices
     {
         [Key]
         public int ID { get; set; }
-        [RoundtripOriginal]      
+        [RoundtripOriginal]
         public string PropWithPropLevelRTO { get; set; }
     }
 #endregion
