@@ -85,10 +85,12 @@ class QueryOperationInvoker<TEntity> : OperationInvoker
     internal static ServiceQuery GetServiceQuery(HttpRequest httpRequest)
     {
         var queryPartCollection = httpRequest.Query;
-        string fullRequestUrl = httpRequest.QueryString.Value;
-        bool includeTotalCount = false;
+        if (queryPartCollection.Keys.Count == 0)
+            return null;
 
         // Reconstruct a list of all key/value pairs
+        string fullRequestUrl = httpRequest.QueryString.Value;
+        bool includeTotalCount = false;
         List<string> queryParts = new List<string>();
         foreach (string queryPart in queryPartCollection.Keys)
         {
@@ -110,6 +112,9 @@ class QueryOperationInvoker<TEntity> : OperationInvoker
                 queryParts.Add(queryPart + "=" + value);
             }
         }
+
+        if (queryParts.Count == 0 && includeTotalCount == false)
+            return null;
 
         string decodedQueryString = HttpUtility.UrlDecode(fullRequestUrl);
 

@@ -71,6 +71,9 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             NameValueCollection queryPartCollection = HttpUtility.ParseQueryString(queryString);
             bool includeTotalCount = false;
 
+            if (queryPartCollection.Count == 0)
+                return null;
+
             // Reconstruct a list of all key/value pairs
             List<string> queryParts = new List<string>();
             foreach (string queryPart in queryPartCollection)
@@ -93,6 +96,10 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                     queryParts.Add(queryPart + "=" + value);
                 }
             }
+
+            if (queryParts.Count == 0 && includeTotalCount == false)
+                return null;
+
 
             string decodedQueryString = HttpUtility.UrlDecode(fullRequestUrl);
 
