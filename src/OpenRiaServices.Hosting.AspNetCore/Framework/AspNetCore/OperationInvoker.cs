@@ -69,8 +69,6 @@ abstract class OperationInvoker
 
     protected async Task<(ServiceQuery, object[])> ReadParametersFromBodyAsync(HttpContext context)
     {
-        // TODO: determine if settings for max length etc (timings) for DOS protection is needed (or if it should be set on kestrel etc)
-        // TODO: Use arraypool or similar instead ?
         var contentLength = context.Request.ContentLength;
         if (!contentLength.HasValue || contentLength < 0 || contentLength > int.MaxValue)
             throw new InvalidOperationException();
@@ -95,7 +93,7 @@ abstract class OperationInvoker
         object[] values;
         reader.MoveToContent();
 
-        bool hasMessageRoot = reader.IsStartElement("MessageRoot");
+        bool hasMessageRoot = reader.IsStartElement(MessageRootElementName);
         // Check for QueryOptions which is part of message root
         if (hasMessageRoot)
         {
@@ -304,8 +302,10 @@ abstract class OperationInvoker
 
         var response = context.Response;
         response.Headers.ContentType = "application/msbin1";
-        response.StatusCode = /*fault.ErrorCode*/ 500;
+        // We should be able to use fault.ErrorCode as long as it is not Bad request (400, which result in special WCF client throwing another exception) and not a domainOperation
+        response.StatusCode = 500; //  fault.IsDomainException || fault.ErrorCode == 400 ? 500 : fault.ErrorCode;
         response.ContentLength = ms.Length;
+        response.Headers.CacheControl = "private, no-store";
         await response.Body.WriteAsync(ms.ToMemoryUnsafe());
     }
 
@@ -314,8 +314,6 @@ abstract class OperationInvoker
         var ct = context.RequestAborted;
         ct.ThrowIfCancellationRequested();
 
-        // TODO: Allow setting XmlDictionaryWriter quotas for Read/write
-        // TODO: Port BufferManagerStream and related code
         using var ms = new PooledStream.PooledMemoryStream();
         using (var writer = System.Xml.XmlDictionaryWriter.CreateBinaryWriter(ms, null, null, ownsStream: false))
         {
@@ -327,17 +325,11 @@ abstract class OperationInvoker
             //writer.WriteXmlnsAttribute("a", "DomainServices");
             //writer.WriteXmlnsAttribute("i", "http://www.w3.org/2001/XMLSchema-instance");
 
-            // TODO: XmlElemtnt  support
-            //// XmlElemtnt returns the "ResultNode" unless we step into the contents
-            //if (returnType == typeof(System.Xml.Linq.XElement))
-            //    reader.ReadStartElement();a
-
             this.responseSerializer.WriteObjectContent(writer, result);
 
             writer.WriteEndElement(); // ***Result
             writer.WriteEndElement(); // ***Response
 
-            //      writer.WriteEndDocument();
             writer.Flush();
             ms.Flush();
         }
@@ -346,6 +338,7 @@ abstract class OperationInvoker
         response.Headers.ContentType = "application/msbin1";
         response.StatusCode = 200;
         response.ContentLength = ms.Length;
+        response.Headers.CacheControl = "private, no-store";
         await response.Body.WriteAsync(ms.ToMemoryUnsafe());
     }
 

@@ -68,11 +68,12 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
         /// <returns>The corresponding ServiceQuery</returns>
         internal static ServiceQuery GetServiceQuery(string queryString, string fullRequestUrl)
         {
+            // If query cannot possible contain any special query parameter, return null early
+            if (queryString == null || !queryString.Contains("$"))
+                return null;
+
             NameValueCollection queryPartCollection = HttpUtility.ParseQueryString(queryString);
             bool includeTotalCount = false;
-
-            if (queryPartCollection.Count == 0)
-                return null;
 
             // Reconstruct a list of all key/value pairs
             List<string> queryParts = new List<string>();

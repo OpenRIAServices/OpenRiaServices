@@ -11,6 +11,12 @@ using OpenRiaServices.Server;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();
 
+// Allow injection of HttpContext
+
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<HttpContext>(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext);
+
 var domainServices = typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate).Assembly.ExportedTypes
     .Where(t => typeof(DomainService).IsAssignableFrom(t) && !t.IsAbstract && t.GetCustomAttribute(typeof(EnableClientAccessAttribute), inherit: true) != null)
     .ToArray();

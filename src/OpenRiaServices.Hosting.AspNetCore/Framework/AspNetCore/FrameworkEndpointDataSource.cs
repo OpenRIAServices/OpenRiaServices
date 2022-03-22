@@ -87,7 +87,6 @@ internal class FrameworkEndpointDataSource : EndpointDataSource, IEndpointConven
     private void NewMethod(List<Endpoint> endpoints, HttpMethodMetadata getOrPost, HttpMethodMetadata postOnly, string name, bool hasSideEffects, OperationInvoker invoker)
     {
         var route = RoutePatternFactory.Parse($"/{name}/{invoker.Name}");
-        var metadata = new EndpointMetadataCollection(hasSideEffects ? postOnly : getOrPost);
 
         //.RequireAuthorization("AtLeast21")
         // TODO: looka at adding authorization and authentication metadata to endpoiunt
@@ -103,6 +102,7 @@ internal class FrameworkEndpointDataSource : EndpointDataSource, IEndpointConven
         {
             DisplayName = $"{name}.{invoker.Name}"
         };
+        endpointBuilder.Metadata.Add(hasSideEffects ? postOnly : getOrPost);
         //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(endpointGroupName));
         foreach (var convention in _conventions)
         {

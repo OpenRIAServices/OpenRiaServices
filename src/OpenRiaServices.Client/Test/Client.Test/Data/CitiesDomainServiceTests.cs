@@ -24,6 +24,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Description("Verifies that a custom host is used to host CityDomainService")]
+        [TestCategory("WCF")]
         public void Cities_VerifyCustomHost()
         {
             CityDomainContext dp = new CityDomainContext(TestURIs.Cities);    // Abs URI so runs on desktop too

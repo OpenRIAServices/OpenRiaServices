@@ -63,7 +63,4 @@ class SubmitOperationInvoker : OperationInvoker
         reader.ReadEndElement();
         return new object[] { changeSet };
     }
-
-  
-    
 }
