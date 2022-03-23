@@ -1269,6 +1269,24 @@ namespace OpenRiaServices.Server
                 }
             }
 
+#if NET6_0_OR_GREATER
+            if (enumerable is IAsyncEnumerable<T> asyncEnumerable)
+            {
+                return EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);
+            }
+
+            static async ValueTask<IReadOnlyCollection<T>> EnumerateAsyncEnumerable(IAsyncEnumerable<T> asyncEnumerable, int estimatedResultCount, CancellationToken cancellationToken)
+            {
+                List<T> result = new List<T>(capacity: estimatedResultCount);
+                await foreach (var item in asyncEnumerable.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    result.Add(item);
+                }
+
+                return result;
+            }
+#endif
+
             var list = new List<T>(estimatedResultCount);
             foreach (T item in enumerable)
             {
