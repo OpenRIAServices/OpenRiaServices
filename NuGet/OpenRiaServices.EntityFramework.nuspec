@@ -28,5 +28,9 @@
     <file src="..\src\bin\Release\net472\OpenRiaServices.EntityFramework.dll" target="lib\net472\OpenRiaServices.EntityFramework.dll" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.EntityFramework.pdb" target="lib\net472\OpenRiaServices.EntityFramework.pdb" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.EntityFramework.xml" target="lib\net472\OpenRiaServices.EntityFramework.xml" />
+	
+	<file src="..\src\bin\Release\net6.0\OpenRiaServices.EntityFramework.dll" target="lib\net6.0\OpenRiaServices.EntityFramework.dll" />
+    <file src="..\src\bin\Release\net6.0\OpenRiaServices.EntityFramework.pdb" target="lib\net6.0\OpenRiaServices.EntityFramework.pdb" />
+    <file src="..\src\bin\Release\net6.0\OpenRiaServices.EntityFramework.xml" target="lib\net6.0\OpenRiaServices.EntityFramework.xml" />
   </files>
 </package>
