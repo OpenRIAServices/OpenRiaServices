@@ -14,8 +14,8 @@ namespace OpenRiaServices.Hosting
         /// </summary>
         public static bool GetDisableStackTraces(this DomainService domainService)
         {
-            // todo: true or based on "environment"
-            return false;
+            // todo: allow configuring via options, or maybe tweak based on "environment"
+            return true;
         }
     }
 }

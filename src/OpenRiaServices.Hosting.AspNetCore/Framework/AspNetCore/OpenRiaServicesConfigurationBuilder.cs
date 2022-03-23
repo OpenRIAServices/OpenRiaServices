@@ -4,11 +4,11 @@
 using System;
 using OpenRiaServices.Server;
 
-public class FrameworkConfigurationBuilder
+public class OpenRiaServicesConfigurationBuilder
 {
-    private readonly FrameworkEndpointDataSource _dataSource;
+    private readonly OpenRiaServicesEndpointDataSource _dataSource;
 
-    internal FrameworkConfigurationBuilder(FrameworkEndpointDataSource dataSource)
+    internal OpenRiaServicesConfigurationBuilder(OpenRiaServicesEndpointDataSource dataSource)
     {
         _dataSource = dataSource;
     }

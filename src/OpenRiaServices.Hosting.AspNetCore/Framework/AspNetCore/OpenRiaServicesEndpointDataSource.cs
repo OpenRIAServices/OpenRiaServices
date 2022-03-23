@@ -12,14 +12,14 @@ using Microsoft.Extensions.Primitives;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
-internal class FrameworkEndpointDataSource : EndpointDataSource, IEndpointConventionBuilder
+internal class OpenRiaServicesEndpointDataSource : EndpointDataSource, IEndpointConventionBuilder
 {
     private readonly List<Action<EndpointBuilder>> _conventions;
 
     public Dictionary<string, DomainServiceDescription> DomainServices { get; } = new ();
     private List<Endpoint> _endpoints;
 
-    public FrameworkEndpointDataSource(RoutePatternTransformer routePatternTransformer)
+    public OpenRiaServicesEndpointDataSource(RoutePatternTransformer routePatternTransformer)
     {
         _conventions = new List<Action<EndpointBuilder>>();
     }
@@ -36,6 +36,8 @@ internal class FrameworkEndpointDataSource : EndpointDataSource, IEndpointConven
             return _endpoints;
         }
     }
+
+    public string Prefix { get; internal set; }
 
     private List<Endpoint> BuildEndpoints()
     {
@@ -86,7 +88,7 @@ internal class FrameworkEndpointDataSource : EndpointDataSource, IEndpointConven
 
     private void NewMethod(List<Endpoint> endpoints, HttpMethodMetadata getOrPost, HttpMethodMetadata postOnly, string name, bool hasSideEffects, OperationInvoker invoker)
     {
-        var route = RoutePatternFactory.Parse($"/{name}/{invoker.Name}");
+        var route = RoutePatternFactory.Parse($"{Prefix}/{name}/{invoker.Name}");
 
         //.RequireAuthorization("AtLeast21")
         // TODO: looka at adding authorization and authentication metadata to endpoiunt

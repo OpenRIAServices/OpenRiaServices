@@ -41,6 +41,7 @@ app.MapDomainServices/MapOpenRiaServices("/Services", x =>
 ## Features 
 * Add https checked based on "RequresSecureEndpoint"
 * Add caching support - based on WCF implementation's OutputCache
+* Add logging support for exceptions returned
 
 * look at adding authorization and authentication metadata to endpoiunt
  - this is handled inside DomainServer at the moment
@@ -48,12 +49,13 @@ app.MapDomainServices/MapOpenRiaServices("/Services", x =>
 
 ## Reliability / "production" ready
 
+* Setting to show / hide stack traces
+   - A good defatul might be to look at IHostEnvironment.EnvironmentName and enable it for development
 
-* Better handling of invalid request
+* Better handling of invalid request (invalid format)
    - should probably be http 400
    - avoid exceptions ? (can return null, or specific object[])
-   - Ensure better controls 
-
+   - Ensure more/better checks in order to validate format received
 
 * Allow setting XmlDictionaryWriter quotas for Read/write
 * --max size for requests-- ? (maybe just rely on kestrel)
