@@ -4,20 +4,23 @@
 using System;
 using OpenRiaServices.Server;
 
-public class OpenRiaServicesConfigurationBuilder
+namespace OpenRiaServices.Hosting.AspNetCore
 {
-    private readonly OpenRiaServicesEndpointDataSource _dataSource;
-
-    internal OpenRiaServicesConfigurationBuilder(OpenRiaServicesEndpointDataSource dataSource)
+    public class OpenRiaServicesConfigurationBuilder
     {
-        _dataSource = dataSource;
-    }
+        private readonly OpenRiaServicesEndpointDataSource _dataSource;
 
-    public void AddDomainService(Type type)
-    {
-        var longName = type.FullName.Replace('.', '-') + ".svc";
-        DomainServiceDescription description = DomainServiceDescription.GetDescription(type);
+        internal OpenRiaServicesConfigurationBuilder(OpenRiaServicesEndpointDataSource dataSource)
+        {
+            _dataSource = dataSource;
+        }
 
-        _dataSource.DomainServices.Add(longName + "/binary", description);
+        public void AddDomainService(Type type)
+        {
+            var longName = type.FullName.Replace('.', '-') + ".svc";
+            var description = DomainServiceDescription.GetDescription(type);
+
+            _dataSource.DomainServices.Add(longName + "/binary", description);
+        }
     }
 }

@@ -4,11 +4,14 @@ using System;
 using Microsoft.AspNetCore.Http;
 using OpenRiaServices.Server;
 
-class AspNetDomainServiceContext : DomainServiceContext, IServiceProvider
+namespace OpenRiaServices.Hosting.AspNetCore
 {
-    public AspNetDomainServiceContext(HttpContext httpContext, DomainOperationType operationType)
-        : base(httpContext.RequestServices, httpContext.User, operationType)
+    class AspNetDomainServiceContext : DomainServiceContext, IServiceProvider
     {
-        CancellationToken = httpContext.RequestAborted;
+        public AspNetDomainServiceContext(HttpContext httpContext, DomainOperationType operationType)
+            : base(httpContext.RequestServices, httpContext.User, operationType)
+        {
+            CancellationToken = httpContext.RequestAborted;
+        }
     }
 }

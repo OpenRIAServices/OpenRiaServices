@@ -9,117 +9,119 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
-using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
-internal class OpenRiaServicesEndpointDataSource : EndpointDataSource, IEndpointConventionBuilder
+namespace OpenRiaServices.Hosting.AspNetCore
 {
-    private readonly List<Action<EndpointBuilder>> _conventions;
-
-    public Dictionary<string, DomainServiceDescription> DomainServices { get; } = new ();
-    private List<Endpoint> _endpoints;
-
-    public OpenRiaServicesEndpointDataSource(RoutePatternTransformer routePatternTransformer)
+    internal class OpenRiaServicesEndpointDataSource : EndpointDataSource, IEndpointConventionBuilder
     {
-        _conventions = new List<Action<EndpointBuilder>>();
-    }
+        private readonly List<Action<EndpointBuilder>> _conventions;
 
-    public override IReadOnlyList<Endpoint> Endpoints
-    {
-        get
+        public Dictionary<string, DomainServiceDescription> DomainServices { get; } = new();
+        private List<Endpoint> _endpoints;
+
+        public OpenRiaServicesEndpointDataSource(RoutePatternTransformer routePatternTransformer)
         {
-            if (_endpoints == null)
+            _conventions = new List<Action<EndpointBuilder>>();
+        }
+
+        public override IReadOnlyList<Endpoint> Endpoints
+        {
+            get
             {
-                _endpoints = BuildEndpoints();
+                if (_endpoints == null)
+                {
+                    _endpoints = BuildEndpoints();
+                }
+
+                return _endpoints;
+            }
+        }
+
+        public string Prefix { get; internal set; }
+
+        private List<Endpoint> BuildEndpoints()
+        {
+            var endpoints = new List<Endpoint>();
+            var getOrPost = new HttpMethodMetadata(new[] { "GET", "POST" });
+            var postOnly = new HttpMethodMetadata(new[] { "POST" });
+
+            // TODO:
+            // - Limit HTTP methods (GET/POST)
+            // - Require https based on EnableClientAccess
+            foreach (var (name, domainService) in DomainServices)
+            {
+                var serializationHelper = new SerializationHelper(domainService);
+
+                foreach (var operation in domainService.DomainOperationEntries)
+                {
+                    bool hasSideEffects;
+                    OperationInvoker invoker;
+
+                    if (operation.Operation == DomainOperation.Query)
+                    {
+                        invoker = (OperationInvoker)Activator.CreateInstance(typeof(QueryOperationInvoker<>).MakeGenericType(operation.AssociatedType),
+                            new object[] { operation, serializationHelper });
+                        hasSideEffects = ((QueryAttribute)operation.OperationAttribute).HasSideEffects;
+                    }
+                    else if (operation.Operation == DomainOperation.Invoke)
+                    {
+                        invoker = new InvokeOperationInvoker(operation, serializationHelper);
+                        hasSideEffects = ((InvokeAttribute)operation.OperationAttribute).HasSideEffects;
+                    }
+                    else
+                        continue;
+
+                    NewMethod(endpoints, getOrPost, postOnly, name, hasSideEffects, invoker);
+                }
+
+                var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
+                    typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
+
+                var submitOperationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
+                NewMethod(endpoints, getOrPost, postOnly, name, true, submitOperationInvoker);
+
+
             }
 
-            return _endpoints;
+            return endpoints;
         }
-    }
 
-    public string Prefix { get; internal set; }
-
-    private List<Endpoint> BuildEndpoints()
-    {
-        List<Endpoint> endpoints = new List<Endpoint>();
-        var getOrPost = new HttpMethodMetadata(new[] { "GET", "POST" });
-        var postOnly = new HttpMethodMetadata(new[] { "POST" });
-
-        // TODO:
-        // - Limit HTTP methods (GET/POST)
-        // - Require https based on EnableClientAccess
-        foreach (var (name, domainService) in DomainServices)
+        private void NewMethod(List<Endpoint> endpoints, HttpMethodMetadata getOrPost, HttpMethodMetadata postOnly, string name, bool hasSideEffects, OperationInvoker invoker)
         {
-            var serializationHelper = new SerializationHelper(domainService);
+            var route = RoutePatternFactory.Parse($"{Prefix}/{name}/{invoker.Name}");
 
-            foreach(var operation in domainService.DomainOperationEntries)
+            //.RequireAuthorization("AtLeast21")
+            // TODO: looka at adding authorization and authentication metadata to endpoiunt
+            // authorization - look for any attribute implementing microsoft.aspnetcore.authorization.iauthorizedata 
+            // https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authorization.iauthorizedata?view=aspnetcore-6.0
+
+            //var aut = operation.Attributes.Cast<Attribute>().OfType<Microsoft.spNetCore.Authorization.IAuthorizeData>().ToList();
+
+            var endpointBuilder = new RouteEndpointBuilder(
+                invoker.Invoke,
+                route,
+                1)
             {
-                bool hasSideEffects;
-                OperationInvoker invoker;
-
-                if (operation.Operation == DomainOperation.Query)
-                {
-                    invoker = (OperationInvoker)Activator.CreateInstance(typeof(QueryOperationInvoker<>).MakeGenericType(operation.AssociatedType),
-                        new object[] { operation, serializationHelper });
-                    hasSideEffects = ((QueryAttribute)operation.OperationAttribute).HasSideEffects;
-                }
-                else if (operation.Operation == DomainOperation.Invoke)
-                {
-                    invoker = new InvokeOperationInvoker(operation, serializationHelper);
-                    hasSideEffects = ((InvokeAttribute)operation.OperationAttribute).HasSideEffects;
-                }
-                else
-                    continue;
-
-                NewMethod(endpoints, getOrPost, postOnly, name, hasSideEffects, invoker);
+                DisplayName = $"{name}.{invoker.Name}"
+            };
+            endpointBuilder.Metadata.Add(hasSideEffects ? postOnly : getOrPost);
+            //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(endpointGroupName));
+            foreach (var convention in _conventions)
+            {
+                convention(endpointBuilder);
             }
-
-            var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
-                typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
-            
-            var submitOperationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
-            NewMethod(endpoints, getOrPost, postOnly, name, true, submitOperationInvoker);
-
-            
+            endpoints.Add(endpointBuilder.Build());
         }
 
-        return endpoints;
-    }
-
-    private void NewMethod(List<Endpoint> endpoints, HttpMethodMetadata getOrPost, HttpMethodMetadata postOnly, string name, bool hasSideEffects, OperationInvoker invoker)
-    {
-        var route = RoutePatternFactory.Parse($"{Prefix}/{name}/{invoker.Name}");
-
-        //.RequireAuthorization("AtLeast21")
-        // TODO: looka at adding authorization and authentication metadata to endpoiunt
-        // authorization - look for any attribute implementing microsoft.aspnetcore.authorization.iauthorizedata 
-        // https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authorization.iauthorizedata?view=aspnetcore-6.0
-
-        //var aut = operation.Attributes.Cast<Attribute>().OfType<Microsoft.spNetCore.Authorization.IAuthorizeData>().ToList();
-
-        var endpointBuilder = new RouteEndpointBuilder(
-            invoker.Invoke,
-            route,
-            1)
+        public override IChangeToken GetChangeToken()
         {
-            DisplayName = $"{name}.{invoker.Name}"
-        };
-        endpointBuilder.Metadata.Add(hasSideEffects ? postOnly : getOrPost);
-        //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(endpointGroupName));
-        foreach (var convention in _conventions)
-        {
-            convention(endpointBuilder);
+            return NullChangeToken.Singleton;
         }
-        endpoints.Add(endpointBuilder.Build());
-    }
 
-    public override IChangeToken GetChangeToken()
-    {
-        return NullChangeToken.Singleton;
-    }
-
-    void IEndpointConventionBuilder.Add(Action<EndpointBuilder> convention)
-    {
-        _conventions.Add(convention);
+        void IEndpointConventionBuilder.Add(Action<EndpointBuilder> convention)
+        {
+            _conventions.Add(convention);
+        }
     }
 }
