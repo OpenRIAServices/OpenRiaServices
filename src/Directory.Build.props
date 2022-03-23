@@ -26,6 +26,12 @@
     <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\Nuget\bin</PackageOutputPath>
+    <PackageOutputPath Condition="'$(Configuration)'!='Release'">$(MSBuildThisFileDirectory)..\Nuget\bin\$(Configuration)</PackageOutputPath>
+    <PackageReleaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</PackageReleaseNotes>
+    <Authors>Outercurve RIA Services</Authors>
+
     <!-- Setup signing-->
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
