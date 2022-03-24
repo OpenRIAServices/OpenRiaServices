@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Hosting;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Hosting.Wcf.Behaviors;
+using OpenRiaServices.Hosting.Wcf.MessageEncoders;
 using OpenRiaServices.Server;
 using System;
 using System.Collections.Generic;
@@ -314,7 +315,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
             var ct = context.RequestAborted;
             ct.ThrowIfCancellationRequested();
 
-            using var ms = new PooledStream.PooledMemoryStream();
+
+            using var ms = new ArrayPoolStream(System.Buffers.ArrayPool<byte>.Shared, 0, 64 * 1024, 1024 * 1024);
             using (var writer = XmlDictionaryWriter.CreateBinaryWriter(ms, null, null, ownsStream: false))
             {
                 string operationName = Name;
@@ -334,12 +336,17 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 ms.Flush();
             }
 
+
+            using var mem = ms.GetBufferMemoryAndClear();
+
             var response = context.Response;
             response.Headers.ContentType = "application/msbin1";
             response.StatusCode = 200;
             response.ContentLength = ms.Length;
             response.Headers.CacheControl = "private, no-store";
-            await response.Body.WriteAsync(ms.ToMemoryUnsafe());
+
+            await mem.WriteAsync(response.Body, ct);
+            //await response.Body.WriteAsync(ms.ToMemoryUnsafe());
         }
 
         protected DomainService CreateDomainService(HttpContext context)

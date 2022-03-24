@@ -18,6 +18,7 @@
     
     There is no documentation yet, please see AspNetCoreWebsite project in repository for usage.
     </Description>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
   <ItemGroup>
