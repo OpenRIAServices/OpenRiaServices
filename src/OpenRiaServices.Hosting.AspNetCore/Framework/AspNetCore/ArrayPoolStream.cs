@@ -180,14 +180,19 @@ namespace OpenRiaServices.Client.Web
             ArrayPool<byte> _arrayPool;
             byte[] _buffer;
             int _bufferWritten;
+            private readonly int _length;
             System.Collections.Generic.List<byte[]> _bufferList;
 
-            public BufferMemory(ArrayPool<byte> arrayPool, byte[] buffer, List<byte[]> bufferList, int bufferWritten)
+
+            public int Length => _length;
+
+            public BufferMemory(ArrayPool<byte> arrayPool, byte[] buffer, List<byte[]> bufferList, int bufferWritten, int length)
             {
                 _arrayPool = arrayPool;
                 _buffer = buffer;
                 _bufferList = bufferList;
                 _bufferWritten = bufferWritten;
+                _length = length;
             }
 
             public async Task WriteAsync(Stream stream, CancellationToken ct)
@@ -232,7 +237,7 @@ namespace OpenRiaServices.Client.Web
 
         public BufferMemory GetBufferMemoryAndClear()
         {
-            var res = new BufferMemory(_bufferManager, _buffer, _bufferList, _bufferWritten);
+            var res = new BufferMemory(_bufferManager, _buffer, _bufferList, _bufferWritten, _position);
             _buffer = null;
             _bufferList = null;
             _bufferWritten = 0;

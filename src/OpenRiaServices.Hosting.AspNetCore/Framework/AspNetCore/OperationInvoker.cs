@@ -315,10 +315,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
             var ct = context.RequestAborted;
             ct.ThrowIfCancellationRequested();
 
-
-            using var ms = new ArrayPoolStream(System.Buffers.ArrayPool<byte>.Shared, 0, 64 * 1024, 1024 * 1024);
-            using (var writer = XmlDictionaryWriter.CreateBinaryWriter(ms, null, null, ownsStream: false))
+            var messageWriter = BinaryMessageWriter.Rent();
+            try
             {
+                var writer = messageWriter.GetXmlWriter();
+
                 string operationName = Name;
                 // <GetQueryableRangeTaskResponse xmlns="http://tempuri.org/">
                 writer.WriteStartElement(_responseName, "http://tempuri.org/");
@@ -333,20 +334,22 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 writer.WriteEndElement(); // ***Response
 
                 writer.Flush();
-                ms.Flush();
+
+                using var bufferMemory = BinaryMessageWriter.Return(messageWriter);
+
+                var response = context.Response;
+                response.Headers.ContentType = "application/msbin1";
+                response.StatusCode = 200;
+                response.ContentLength = bufferMemory.Length;
+                response.Headers.CacheControl = "private, no-store";
+
+                await bufferMemory.WriteAsync(response.Body, ct);
+            }
+            catch
+            {
+                messageWriter.Clear();
             }
 
-
-            using var mem = ms.GetBufferMemoryAndClear();
-
-            var response = context.Response;
-            response.Headers.ContentType = "application/msbin1";
-            response.StatusCode = 200;
-            response.ContentLength = ms.Length;
-            response.Headers.CacheControl = "private, no-store";
-
-            await mem.WriteAsync(response.Body, ct);
-            //await response.Body.WriteAsync(ms.ToMemoryUnsafe());
         }
 
         protected DomainService CreateDomainService(HttpContext context)
