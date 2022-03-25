@@ -27,7 +27,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <param name="type">type which should be serializable.</param>
         /// 
         /// <returns>A <see cref="DataContractSerializer"/> which can be used to serialize the type</returns>
-        internal DataContractSerializer GetSerializer(Type type)
+        public DataContractSerializer GetSerializer(Type type)
         {
             lock (_serializerCache)
             {
@@ -59,7 +59,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             }
         }
 
-        private HashSet<Type> GetKnownTypesFromCustomMethods(DomainServiceDescription domainServiceDescription)
+        private static HashSet<Type> GetKnownTypesFromCustomMethods(DomainServiceDescription domainServiceDescription)
         {
             var knownTypes = new HashSet<Type>();
 

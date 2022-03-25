@@ -15,21 +15,14 @@ namespace OpenRiaServices.Hosting.AspNetCore
     class QueryOperationInvoker<TEntity> : OperationInvoker
     {
         public QueryOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper)
-                : base(operation, DomainOperationType.Query, serializationHelper, GetRespponseSerializer(operation, serializationHelper))
+                : base(operation, DomainOperationType.Query, serializationHelper, serializationHelper.GetSerializer(typeof(QueryResult<TEntity>)))
         {
-        }
-
-        private static DataContractSerializer GetRespponseSerializer(DomainOperationEntry operation, SerializationHelper serializationHelper)
-        {
-            var knownTypes = DomainServiceDescription.GetDescription(operation.DomainServiceType).EntityKnownTypes;
-            return serializationHelper.GetSerializer(typeof(QueryResult<TEntity>));
         }
 
         public override async Task Invoke(HttpContext context)
         {
             DomainService domainService = CreateDomainService(context);
 
-            // TODO: consider using ArrayPool<object>.Shared in future
             object[] inputs;
             ServiceQuery serviceQuery;
             if (context.Request.Method == "GET")
@@ -53,12 +46,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
             QueryResult<TEntity> result;
             try
             {
-                //SetOutputCachingPolicy(httpContext, this.operation);
                 result = await QueryProcessor.ProcessAsync<TEntity>(domainService, operation, inputs, serviceQuery);
             }
             catch (Exception ex) when (!ex.IsFatal())
             {
-                //ClearOutputCachingPolicy(httpContext);
                 await WriteError(context, ex, hideStackTrace: domainService.GetDisableStackTraces());
                 return;
             }

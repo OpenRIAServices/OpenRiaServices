@@ -9,13 +9,15 @@ namespace OpenRiaServices.Hosting
 {
     static class DomainServiceExtensions
     {
+        static readonly bool disableStackTraces = Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") != "Development";
+
         /// <summary>
         /// <c>true</c> means that stack traces should not be sent to clients (secure).
         /// </summary>
         public static bool GetDisableStackTraces(this DomainService domainService)
         {
             // todo: allow configuring via options, or maybe tweak based on "environment"
-            return true;
+            return disableStackTraces;
         }
     }
 }

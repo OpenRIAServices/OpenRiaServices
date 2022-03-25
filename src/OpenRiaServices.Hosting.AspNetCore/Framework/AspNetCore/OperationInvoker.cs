@@ -34,7 +34,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         private const string InvalidContentMessage = "invalid content";
         private static readonly DataContractSerializer s_faultSerialiser = new DataContractSerializer(typeof(DomainServiceFault));
 
-        public OperationInvoker(DomainOperationEntry operation, DomainOperationType operationType,
+        protected OperationInvoker(DomainOperationEntry operation, DomainOperationType operationType,
             SerializationHelper serializationHelper,
             DataContractSerializer responseSerializer)
         {
@@ -43,11 +43,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
             this.serializationHelper = serializationHelper;
             this.responseSerializer = responseSerializer;
 
-            _responseName = Name + "Response";
-            _resultName = Name + "Result";
+            _responseName = OperationName + "Response";
+            _resultName = OperationName + "Result";
         }
 
-        public virtual string Name => operation.Name;
+        public virtual string OperationName => operation.Name;
 
         public abstract Task Invoke(HttpContext context);
 
@@ -317,7 +317,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
             using var ms = new PooledStream.PooledMemoryStream();
             using (var writer = XmlDictionaryWriter.CreateBinaryWriter(ms, null, null, ownsStream: false))
             {
-                string operationName = Name;
                 // <GetQueryableRangeTaskResponse xmlns="http://tempuri.org/">
                 writer.WriteStartElement(_responseName, "http://tempuri.org/");
                 // <GetQueryableRangeTaskResult xmlns:a="DomainServices" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">

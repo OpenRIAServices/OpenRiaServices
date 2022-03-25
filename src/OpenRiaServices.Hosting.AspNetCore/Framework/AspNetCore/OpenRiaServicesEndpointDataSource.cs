@@ -46,9 +46,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
             var getOrPost = new HttpMethodMetadata(new[] { "GET", "POST" });
             var postOnly = new HttpMethodMetadata(new[] { "POST" });
 
-            // TODO:
-            // - Limit HTTP methods (GET/POST)
-            // - Require https based on EnableClientAccess
             foreach (var (name, domainService) in DomainServices)
             {
                 var serializationHelper = new SerializationHelper(domainService);
@@ -72,14 +69,14 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     else
                         continue;
 
-                    NewMethod(endpoints, getOrPost, postOnly, name, hasSideEffects, invoker);
+                    AddEndpoint(endpoints, name, invoker, hasSideEffects ? postOnly : getOrPost);
                 }
 
                 var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
                     typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
                 var submitOperationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
-                NewMethod(endpoints, getOrPost, postOnly, name, true, submitOperationInvoker);
+                AddEndpoint(endpoints, name, submitOperationInvoker, postOnly);
 
 
             }
@@ -87,11 +84,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return endpoints;
         }
 
-        private void NewMethod(List<Endpoint> endpoints, HttpMethodMetadata getOrPost, HttpMethodMetadata postOnly, string name, bool hasSideEffects, OperationInvoker invoker)
+        private void AddEndpoint(List<Endpoint> endpoints, string domainService, OperationInvoker invoker, HttpMethodMetadata httpMethod)
         {
-            var route = RoutePatternFactory.Parse($"{Prefix}/{name}/{invoker.Name}");
+            var route = RoutePatternFactory.Parse($"{Prefix}/{domainService}/{invoker.OperationName}");
 
-            //.RequireAuthorization("AtLeast21")
             // TODO: looka at adding authorization and authentication metadata to endpoiunt
             // authorization - look for any attribute implementing microsoft.aspnetcore.authorization.iauthorizedata 
             // https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authorization.iauthorizedata?view=aspnetcore-6.0
@@ -103,10 +99,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 route,
                 1)
             {
-                DisplayName = $"{name}.{invoker.Name}"
+                DisplayName = $"{domainService}.{invoker.OperationName}"
             };
-            endpointBuilder.Metadata.Add(hasSideEffects ? postOnly : getOrPost);
-            //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(endpointGroupName));
+            endpointBuilder.Metadata.Add(httpMethod);
+            //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(domainService));
             foreach (var convention in _conventions)
             {
                 convention(endpointBuilder);

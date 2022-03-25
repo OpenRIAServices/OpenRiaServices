@@ -10,14 +10,14 @@ namespace OpenRiaServices.Hosting.AspNetCore
 {
     class SubmitOperationInvoker : OperationInvoker
     {
-        private DataContractSerializer parameterSerializer;
+        private readonly DataContractSerializer _parameterSerializer;
 
-        public override string Name => "SubmitChanges";
+        public override string OperationName => "SubmitChanges";
 
         public SubmitOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper)
                 : base(operation, DomainOperationType.Submit, serializationHelper, serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>)))
         {
-            parameterSerializer = serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>));
+            _parameterSerializer = serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>));
         }
 
         public override async Task Invoke(HttpContext context)
@@ -53,11 +53,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
             reader.ReadStartElement("SubmitChanges");
             if (!reader.IsStartElement("changeSet"))
             {
-                // TODO: return BADREQUEST_data;
                 throw new BadHttpRequestException("missing changeSet");
             }
 
-            var changeSet = parameterSerializer.ReadObject(reader, verifyObjectName: false);
+            var changeSet = _parameterSerializer.ReadObject(reader, verifyObjectName: false);
             reader.ReadEndElement();
             return new object[] { changeSet };
         }
