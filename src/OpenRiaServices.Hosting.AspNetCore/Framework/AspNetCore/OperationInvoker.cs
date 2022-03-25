@@ -333,8 +333,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 writer.WriteEndElement(); // ***Result
                 writer.WriteEndElement(); // ***Response
 
-                writer.Flush();
-
                 using var bufferMemory = BinaryMessageWriter.Return(messageWriter);
 
                 var response = context.Response;
@@ -343,7 +341,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 response.ContentLength = bufferMemory.Length;
                 response.Headers.CacheControl = "private, no-store";
 
-                await bufferMemory.WriteAsync(response.Body, ct);
+                await response.StartAsync(ct);
+                bufferMemory.WriteTo(response.BodyWriter);
+                await response.BodyWriter.FlushAsync(ct);
+                //await response.CompleteAsync(); //? needed ?? 
             }
             catch
             {

@@ -2,6 +2,7 @@
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipelines;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,7 +24,6 @@ namespace OpenRiaServices.Client.Web
         private static readonly bool Is64BitProcess = Environment.Is64BitProcess;
         private ArrayPool<byte> _bufferManager;
         private readonly int _maxSize;
-        private int _readOffset;
         // The offset into the final byte array where our content should start
         private int _offset;
         // number of bytes written to _buffer, used as offset into _buffer where we write next time
@@ -48,7 +48,7 @@ namespace OpenRiaServices.Client.Web
             _offset = offset;
             _bufferWritten = offset;
             _position = 0;
-            _buffer = bufferManager.Rent(minAllocationSize + offset);
+            _buffer = bufferManager.Rent(Math.Min(minAllocationSize + offset, _maxSize));
         }
 
         public override bool CanRead => false;
@@ -181,8 +181,7 @@ namespace OpenRiaServices.Client.Web
             byte[] _buffer;
             int _bufferWritten;
             private readonly int _length;
-            System.Collections.Generic.List<byte[]> _bufferList;
-
+            List<byte[]> _bufferList;
 
             public int Length => _length;
 
@@ -195,25 +194,27 @@ namespace OpenRiaServices.Client.Web
                 _length = length;
             }
 
-            public async Task WriteAsync(Stream stream, CancellationToken ct)
+            public void WriteTo(PipeWriter bodyWriter)
             {
+                // It might make sense to call FlushAsync after each buffer is writter
+                // to reduce memory usage
                 var list = _bufferList;
                 if (list != null)
                 {
-                    for (int i=0; i < list.Count; ++i)
+                    for (int i = 0; i < list.Count; ++i)
                     {
-                        await stream.WriteAsync(list[i], ct).ConfigureAwait(false);
-                        _arrayPool.Return(list[i]);
-                        list[i] = null;
+                        var buffer = list[i];
+                        int len = buffer.Length;
+
+                        buffer.CopyTo(bodyWriter.GetSpan(len));
+                        bodyWriter.Advance(len);
                     }
-                    _bufferList = null;
                 }
 
                 if (_buffer != null)
                 {
-                    await stream.WriteAsync(_buffer, 0, _bufferWritten, ct).ConfigureAwait(false);
-                    _arrayPool.Return(_buffer);
-                    _buffer = null;
+                    _buffer.AsSpan(0, _bufferWritten).CopyTo(bodyWriter.GetSpan(_bufferWritten));
+                    bodyWriter.Advance(_bufferWritten);
                 }
             }
 

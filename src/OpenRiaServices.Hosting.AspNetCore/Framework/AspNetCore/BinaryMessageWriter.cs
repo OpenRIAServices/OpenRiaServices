@@ -17,11 +17,12 @@ namespace OpenRiaServices.Client.Web
     {
         private ArrayPoolStream _stream;
         private XmlDictionaryWriter _writer;
+        private IXmlBinaryWriterInitializer _writerInitializer;
 
         private const int MaxStreamAllocationSize = 1024 * 1024;
         // IMPORTANT: If this is changed then EstimateMessageSize should be changed as well
         private const int MessageLengthHistorySize = 4;
-        private const int InitialBufferSize = 2048;
+        private const int InitialBufferSize = 16 * 1024;
         private readonly int[] _lastMessageLengths = new int[MessageLengthHistorySize] { InitialBufferSize, InitialBufferSize, InitialBufferSize, InitialBufferSize };
         private int _messageLengthIndex = 0;
 
@@ -49,6 +50,7 @@ namespace OpenRiaServices.Client.Web
 
         public static MessageEncoders.ArrayPoolStream.BufferMemory Return(BinaryMessageWriter binaryMessageWriter)
         {
+            binaryMessageWriter._writer.Flush();
             binaryMessageWriter.RecordMessageSize((int)binaryMessageWriter._stream.Length);
             var res = binaryMessageWriter._stream.GetBufferMemoryAndClear();
 
