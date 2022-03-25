@@ -1,3 +1,5 @@
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
 # OpenRiaServiecs
 
 Azure Pipelines: [![Build Status](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_apis/build/status/OpenRIAServices.OpenRiaServices?branchName=main)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=main)
