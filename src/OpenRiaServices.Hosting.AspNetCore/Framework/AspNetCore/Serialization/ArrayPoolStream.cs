@@ -1,16 +1,14 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.IO.Pipelines;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 
-#if SERVERFX
-namespace OpenRiaServices.Hosting.Wcf.MessageEncoders
-#else
-namespace OpenRiaServices.Client.Web
-#endif
+namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     /// <summary>
     /// Stream optimized for usage by <see cref="System.Xml.XmlDictionaryWriter"/> without unneccessary 
@@ -24,31 +22,29 @@ namespace OpenRiaServices.Client.Web
         private static readonly bool Is64BitProcess = Environment.Is64BitProcess;
         private ArrayPool<byte> _bufferManager;
         private readonly int _maxSize;
-        // The offset into the final byte array where our content should start
-        private int _offset;
         // number of bytes written to _buffer, used as offset into _buffer where we write next time
         private int _bufferWritten;
         // "Current" buffer where the next write should go
         private byte[] _buffer;
         // Any "previous" buffers already filled
-        private System.Collections.Generic.List<byte[]> _bufferList;
+        private List<byte[]> _bufferList;
         // String "position" (total size so far)
         private int _position;
 
 
         public ArrayPoolStream(ArrayPool<byte> bufferManager, int offset, int minAllocationSize, int maxAllocationSize)
         {
+            _bufferManager = bufferManager;
             _maxSize = maxAllocationSize;
-            Reset(bufferManager, offset, minAllocationSize);
         }
 
-        public void Reset(ArrayPool<byte> bufferManager, int offset, int minAllocationSize)
+        public void Reset(int size)
         {
-            _bufferManager = bufferManager;
-            _offset = offset;
-            _bufferWritten = offset;
+            Debug.Assert(_buffer is null);
+
+            _bufferWritten = 0;
             _position = 0;
-            _buffer = bufferManager.Rent(Math.Min(minAllocationSize + offset, _maxSize));
+            _buffer = _bufferManager.Rent(Math.Min(size, _maxSize));
         }
 
         public override bool CanRead => false;
@@ -137,7 +133,7 @@ namespace OpenRiaServices.Client.Web
 
             // Save current buffer in list before allocating a new buffer
             if (_bufferList == null)
-                _bufferList = new System.Collections.Generic.List<byte[]>(capacity: 16);
+                _bufferList = new List<byte[]>(capacity: 16);
             _bufferList.Add(_buffer);
             // Ensure we never return buffer twice in case TakeBuffer below throws
             _buffer = null;
@@ -175,9 +171,20 @@ namespace OpenRiaServices.Client.Web
             }
         }
 
+
+        public BufferMemory GetBufferMemoryAndReset()
+        {
+            var res = new BufferMemory(_bufferManager, _buffer, _bufferList, _bufferWritten, _position);
+            _buffer = null;
+            _bufferList = null;
+            _bufferWritten = 0;
+            _position = 0;
+            return res;
+        }
+
         public struct BufferMemory : IDisposable
         {
-            ArrayPool<byte> _arrayPool;
+            readonly ArrayPool<byte> _arrayPool;
             byte[] _buffer;
             int _bufferWritten;
             private readonly int _length;
@@ -192,6 +199,14 @@ namespace OpenRiaServices.Client.Web
                 _bufferList = bufferList;
                 _bufferWritten = bufferWritten;
                 _length = length;
+            }
+
+            public async Task WriteTo(HttpResponse response, CancellationToken ct)
+            {
+                await response.StartAsync(ct);
+                WriteTo(response.BodyWriter);
+                //await response.BodyWriter.FlushAsync(ct);
+                //await response.CompleteAsync(); //? needed ?? 
             }
 
             public void WriteTo(PipeWriter bodyWriter)
@@ -232,75 +247,6 @@ namespace OpenRiaServices.Client.Web
                         if (buffer != null)
                             _arrayPool.Return(buffer);
                     _bufferList = null;
-                }
-            }
-        }
-
-        public BufferMemory GetBufferMemoryAndClear()
-        {
-            var res = new BufferMemory(_bufferManager, _buffer, _bufferList, _bufferWritten, _position);
-            _buffer = null;
-            _bufferList = null;
-            _bufferWritten = 0;
-            return res;
-        }
-
-        public ArraySegment<byte> GetArrayAndClear()
-        {
-            // We only have a single segment, return it directly with no copying
-            if (_bufferList == null)
-            {
-                var buffer = _buffer;
-                _buffer = null;
-
-                System.Diagnostics.Debug.Assert(_bufferWritten == _position + _offset);
-                Clear();
-                return new ArraySegment<byte>(buffer, _offset, _position);
-            }
-            else
-            {
-                // Copy in reverse order from filled to utilize CPU caches better
-                // _buffer might only be partially filled
-                int totalSize = _offset + _position;
-                int destOffset = totalSize - _bufferWritten;
-                byte[] buffer = null;
-
-                try
-                {
-                    // Reuse the "current" buffer if it is large enough
-                    if (_position <= _buffer.Length)
-                    {
-                        buffer = _buffer;
-                        FastCopy(_buffer, 0, buffer, destOffset, _bufferWritten);
-                        _buffer = null;
-                    }
-                    else
-                    {
-                        buffer = _bufferManager.Rent(totalSize);
-                        FastCopy(_buffer, 0, buffer, destOffset, _bufferWritten);
-                    }
-
-                    // Buffers in list are all full
-                    for (int i = _bufferList.Count - 1; i > 0; --i)
-                    {
-                        destOffset -= _bufferList[i].Length;
-                        FastCopy(_bufferList[i], 0, buffer, destOffset, _bufferList[i].Length);
-                    }
-
-                    // First buffer might have offset
-                    FastCopy(_bufferList[0], _offset, buffer, _offset, _bufferList[0].Length - _offset);
-                    System.Diagnostics.Debug.Assert(destOffset - (_bufferList[0].Length - _offset) == _offset);
-
-                    Clear();
-
-                    return new ArraySegment<byte>(buffer, _offset, _position);
-
-                }
-                catch
-                {
-                    if (buffer != null)
-                        _bufferManager.Return(buffer);
-                    throw;
                 }
             }
         }

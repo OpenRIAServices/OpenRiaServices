@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Http;
-using OpenRiaServices;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 using System;
@@ -10,7 +8,7 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web;
 
-namespace OpenRiaServices.Hosting.AspNetCore
+namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class QueryOperationInvoker<TEntity> : OperationInvoker
     {
@@ -36,7 +34,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             {
                 inputs = GetParametersFromUri(context);
 
-                var queryAttribute = (QueryAttribute)operation.OperationAttribute;
+                var queryAttribute = (QueryAttribute)_operation.OperationAttribute;
                 serviceQuery = queryAttribute.IsComposable ? GetServiceQuery(context.Request) : null;
             }
             else // POST
@@ -54,7 +52,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             try
             {
                 //SetOutputCachingPolicy(httpContext, this.operation);
-                result = await QueryProcessor.ProcessAsync<TEntity>(domainService, operation, inputs, serviceQuery);
+                result = await QueryProcessor.ProcessAsync<TEntity>(domainService, _operation, inputs, serviceQuery);
             }
             catch (Exception ex) when (!ex.IsFatal())
             {

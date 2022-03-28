@@ -1,11 +1,11 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
-using OpenRiaServices.Hosting;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Hosting.Wcf.Behaviors;
-using OpenRiaServices.Hosting.Wcf.MessageEncoders;
 using OpenRiaServices.Server;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
@@ -15,15 +15,17 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
 
-namespace OpenRiaServices.Hosting.AspNetCore
+namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     abstract class OperationInvoker
     {
         private static readonly WebHttpQueryStringConverter s_queryStringConverter = new();
-        protected readonly DomainOperationEntry operation;
-        private readonly DomainOperationType operationType;
-        protected readonly SerializationHelper serializationHelper;
-        private readonly DataContractSerializer responseSerializer;
+        private static readonly DataContractSerializer s_faultSerialiser = new DataContractSerializer(typeof(DomainServiceFault));
+
+        protected readonly DomainOperationEntry _operation;
+        private readonly DomainOperationType _operationType;
+        protected readonly SerializationHelper _serializationHelper;
+        private readonly DataContractSerializer _responseSerializer;
         private readonly string _responseName;
         private readonly string _resultName;
         private const string MessageRootElementName = "MessageRoot";
@@ -33,29 +35,28 @@ namespace OpenRiaServices.Hosting.AspNetCore
         private const string QueryValueAttribute = "Value";
         private const string QueryIncludeTotalCountOption = "includeTotalCount";
         private const string InvalidContentMessage = "invalid content";
-        private static readonly DataContractSerializer s_faultSerialiser = new DataContractSerializer(typeof(DomainServiceFault));
 
         public OperationInvoker(DomainOperationEntry operation, DomainOperationType operationType,
             SerializationHelper serializationHelper,
             DataContractSerializer responseSerializer)
         {
-            this.operation = operation;
-            this.operationType = operationType;
-            this.serializationHelper = serializationHelper;
-            this.responseSerializer = responseSerializer;
+            this._operation = operation;
+            this._operationType = operationType;
+            this._serializationHelper = serializationHelper;
+            this._responseSerializer = responseSerializer;
 
             _responseName = Name + "Response";
             _resultName = Name + "Result";
         }
 
-        public virtual string Name => operation.Name;
+        public virtual string Name => _operation.Name;
 
         public abstract Task Invoke(HttpContext context);
 
         protected object[] GetParametersFromUri(HttpContext context)
         {
             var query = context.Request.Query;
-            var parameters = operation.Parameters;
+            var parameters = _operation.Parameters;
             var inputs = new object[parameters.Count];
             for (int i = 0; i < parameters.Count; ++i)
             {
@@ -71,22 +72,24 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
         protected async Task<(ServiceQuery, object[])> ReadParametersFromBodyAsync(HttpContext context)
         {
-            var contentLength = context.Request.ContentLength;
+            var request = context.Request;
+            var contentLength = request.ContentLength;
             if (!contentLength.HasValue || contentLength < 0 || contentLength > int.MaxValue)
                 throw new BadHttpRequestException("invalid lenght", (int)System.Net.HttpStatusCode.LengthRequired);
 
-            int length = (int)contentLength;
-            using var ms = new PooledStream.PooledMemoryStream();
-            ms.Reserve(length);
+            var length = (int)contentLength;
+            var buffer = ArrayPool<byte>.Shared.Rent(length);
+            try
+            {
+                await CopyToBufferAsync(request, buffer, length).ConfigureAwait(false);
 
-            await context.Request.Body.CopyToAsync(ms);
-            // Verify all was read
-            if (ms.Length != length)
-                throw new BadHttpRequestException(InvalidContentMessage);
-
-            ms.Seek(0, SeekOrigin.Begin);
-            using var reader = XmlDictionaryReader.CreateBinaryReader(ms, null, XmlDictionaryReaderQuotas.Max);
-            return ReadParametersFromBody(reader);
+                using var reader = XmlDictionaryReader.CreateBinaryReader(buffer, 0, length, null, XmlDictionaryReaderQuotas.Max);
+                return ReadParametersFromBody(reader);
+            }
+            finally
+            {
+                ArrayPool<byte>.Shared.Return(buffer);
+            }
         }
 
         private (ServiceQuery, object[]) ReadParametersFromBody(XmlDictionaryReader reader)
@@ -172,11 +175,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
         protected virtual object[] ReadParameters(XmlDictionaryReader reader)
         {
-            if (reader.IsStartElement(operation.Name))
+            if (reader.IsStartElement(_operation.Name))
             {
                 reader.Read();
 
-                var parameters = operation.Parameters;
+                var parameters = _operation.Parameters;
                 object[] values = new object[parameters.Count];
                 for (int i = 0; i < parameters.Count; ++i)
                 {
@@ -191,7 +194,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     }
                     else
                     {
-                        var serializer = serializationHelper.GetSerializer(parameter.ParameterType);
+                        var serializer = _serializationHelper.GetSerializer(parameter.ParameterType);
 
                         // XmlElemtnt returns the "ResultNode" unless we step into the contents
                         bool isXElement = parameter.ParameterType == typeof(System.Xml.Linq.XElement);
@@ -213,7 +216,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             }
             else
             {
-                if (operation.Parameters.Count == 0)
+                if (_operation.Parameters.Count == 0)
                     return Array.Empty<object>();
                 else
                     throw new InvalidOperationException();
@@ -270,47 +273,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return WriteError(context, fault);
         }
 
-        protected async Task WriteError(HttpContext context, DomainServiceFault fault)
-        {
-            var ct = context.RequestAborted;
-            ct.ThrowIfCancellationRequested();
-
-            using var ms = new PooledStream.PooledMemoryStream();
-            using (var writer = XmlDictionaryWriter.CreateBinaryWriter(ms, null, null, ownsStream: false))
-            {
-                //<Fault xmlns="http://schemas.microsoft.com/ws/2005/05/envelope/none">
-                writer.WriteStartElement("Fault", "http://schemas.microsoft.com/ws/2005/05/envelope/none");
-                //<Code><Value>Sender</Value></Code>
-                writer.WriteStartElement("Code");
-                writer.WriteStartElement("Value");
-                writer.WriteString("Sender");
-                writer.WriteEndElement();
-                writer.WriteEndElement();
-                //<Reason ><Text xml:lang="en-US">Access to operation 'GetRangeWithNotAuthorized' was denied.</Text></Reason>
-                writer.WriteStartElement("Reason");
-                writer.WriteStartElement("Text");
-                writer.WriteAttributeString("xml", "lang", null, CultureInfo.CurrentCulture.Name);
-                writer.WriteString(fault.ErrorMessage);
-                writer.WriteEndElement();
-                writer.WriteEndElement();
-
-                writer.WriteStartElement("Detail");
-                s_faultSerialiser.WriteObject(writer, fault);
-                writer.WriteEndElement();
-                writer.WriteEndElement();
-                writer.WriteEndDocument();
-            }
-
-            var response = context.Response;
-            response.Headers.ContentType = "application/msbin1";
-            // We should be able to use fault.ErrorCode as long as it is not Bad request (400, which result in special WCF client throwing another exception) and not a domainOperation
-            response.StatusCode = 500; //  fault.IsDomainException || fault.ErrorCode == 400 ? 500 : fault.ErrorCode;
-            response.ContentLength = ms.Length;
-            response.Headers.CacheControl = "private, no-store";
-            await response.Body.WriteAsync(ms.ToMemoryUnsafe());
-        }
-
-        protected async Task WriteResponse(HttpContext context, object result)
+        protected Task WriteError(HttpContext context, DomainServiceFault fault)
         {
             var ct = context.RequestAborted;
             ct.ThrowIfCancellationRequested();
@@ -318,22 +281,67 @@ namespace OpenRiaServices.Hosting.AspNetCore
             var messageWriter = BinaryMessageWriter.Rent();
             try
             {
-                var writer = messageWriter.GetXmlWriter();
-
-                string operationName = Name;
-                // <GetQueryableRangeTaskResponse xmlns="http://tempuri.org/">
-                writer.WriteStartElement(_responseName, "http://tempuri.org/");
-                // <GetQueryableRangeTaskResult xmlns:a="DomainServices" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-                writer.WriteStartElement(_resultName);
-                //writer.WriteXmlnsAttribute("a", "DomainServices");
-                //writer.WriteXmlnsAttribute("i", "http://www.w3.org/2001/XMLSchema-instance");
-
-                responseSerializer.WriteObjectContent(writer, result);
-
-                writer.WriteEndElement(); // ***Result
-                writer.WriteEndElement(); // ***Response
+                WriteFault(fault, messageWriter.XmlWriter);
 
                 using var bufferMemory = BinaryMessageWriter.Return(messageWriter);
+                messageWriter = null;
+
+                var response = context.Response;
+
+                response.Headers.ContentType = "application/msbin1";
+                // We should be able to use fault.ErrorCode as long as it is not Bad request (400, which result in special WCF client throwing another exception) and not a domainOperation
+                response.StatusCode = 500; //  fault.IsDomainException || fault.ErrorCode == 400 ? 500 : fault.ErrorCode;
+                response.ContentLength = bufferMemory.Length;
+                response.Headers.CacheControl = "private, no-store";
+
+                return bufferMemory.WriteTo(response, ct);
+            }
+            catch (Exception)
+            {
+                messageWriter?.Clear();
+                throw;
+            }
+        }
+
+        private static void WriteFault(DomainServiceFault fault, XmlDictionaryWriter writer)
+        {
+            //<Fault xmlns="http://schemas.microsoft.com/ws/2005/05/envelope/none">
+            writer.WriteStartElement("Fault", "http://schemas.microsoft.com/ws/2005/05/envelope/none");
+            //<Code><Value>Sender</Value></Code>
+            writer.WriteStartElement("Code");
+            writer.WriteStartElement("Value");
+            writer.WriteString("Sender");
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+            //<Reason ><Text xml:lang="en-US">Access to operation 'GetRangeWithNotAuthorized' was denied.</Text></Reason>
+            writer.WriteStartElement("Reason");
+            writer.WriteStartElement("Text");
+            writer.WriteAttributeString("xml", "lang", null, CultureInfo.CurrentCulture.Name);
+            writer.WriteString(fault.ErrorMessage);
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+
+            writer.WriteStartElement("Detail");
+            s_faultSerialiser.WriteObject(writer, fault);
+            writer.WriteEndElement();
+            writer.WriteEndElement();
+            writer.WriteEndDocument();
+        }
+
+        protected Task WriteResponse(HttpContext context, object result)
+        {
+            var ct = context.RequestAborted;
+            ct.ThrowIfCancellationRequested();
+
+            var messageWriter = BinaryMessageWriter.Rent();
+            try
+            {
+                var writer = messageWriter.XmlWriter;
+
+                WriteResponse(writer, result);
+
+                using var bufferMemory = BinaryMessageWriter.Return(messageWriter);
+                messageWriter = null;
 
                 var response = context.Response;
                 response.Headers.ContentType = "application/msbin1";
@@ -341,24 +349,52 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 response.ContentLength = bufferMemory.Length;
                 response.Headers.CacheControl = "private, no-store";
 
-                await response.StartAsync(ct);
-                bufferMemory.WriteTo(response.BodyWriter);
-                await response.BodyWriter.FlushAsync(ct);
-                //await response.CompleteAsync(); //? needed ?? 
+                return bufferMemory.WriteTo(response, ct);
             }
-            catch
+            catch (Exception)
             {
-                messageWriter.Clear();
+                messageWriter?.Clear();
+                throw;
             }
+        }
 
+        private void WriteResponse(XmlDictionaryWriter writer, object result)
+        {
+            // <GetQueryableRangeTaskResponse xmlns="http://tempuri.org/">
+            writer.WriteStartElement(_responseName, "http://tempuri.org/");
+            // <GetQueryableRangeTaskResult xmlns:a="DomainServices" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
+            writer.WriteStartElement(_resultName);
+            //writer.WriteXmlnsAttribute("a", "DomainServices");
+            //writer.WriteXmlnsAttribute("i", "http://www.w3.org/2001/XMLSchema-instance");
+
+            _responseSerializer.WriteObjectContent(writer, result);
+
+            writer.WriteEndElement(); // ***Result
+            writer.WriteEndElement(); // ***Response
         }
 
         protected DomainService CreateDomainService(HttpContext context)
         {
-            var domainService = (DomainService)context.RequestServices.GetRequiredService(operation.DomainServiceType);
-            var serviceContext = new AspNetDomainServiceContext(context, operationType);
+            var domainService = (DomainService)context.RequestServices.GetRequiredService(_operation.DomainServiceType);
+            var serviceContext = new AspNetDomainServiceContext(context, _operationType);
             domainService.Initialize(serviceContext);
             return domainService;
         }
+
+
+        private static async Task CopyToBufferAsync(HttpRequest request, byte[] buffer, int length)
+        {
+            int offset = 0;
+            var body = request.Body;
+            do
+            {
+                int read = await body.ReadAsync(buffer, offset, length - offset).ConfigureAwait(false);
+                offset += read;
+
+                if (read == 0)
+                    throw new BadHttpRequestException(InvalidContentMessage);
+            } while (offset < length);
+        }
+
     }
 }

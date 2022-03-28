@@ -2,11 +2,7 @@
 using System.Buffers;
 using System.Xml;
 
-#if SERVERFX
-namespace OpenRiaServices.Hosting.Wcf.MessageEncoders
-#else
-namespace OpenRiaServices.Client.Web
-#endif
+namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     /// <summary>
     /// Helper class to cache <see cref="XmlDictionaryWriter"/> and stream in order
@@ -17,7 +13,6 @@ namespace OpenRiaServices.Client.Web
     {
         private ArrayPoolStream _stream;
         private XmlDictionaryWriter _writer;
-        private IXmlBinaryWriterInitializer _writerInitializer;
 
         private const int MaxStreamAllocationSize = 1024 * 1024;
         // IMPORTANT: If this is changed then EstimateMessageSize should be changed as well
@@ -35,28 +30,45 @@ namespace OpenRiaServices.Client.Web
         /// </summary>
         private BinaryMessageWriter()
         {
+            _stream = new ArrayPoolStream(ArrayPool<byte>.Shared, 0, InitialBufferSize, MaxStreamAllocationSize);
+            _writer = XmlDictionaryWriter.CreateBinaryWriter(_stream);
         }
 
         public static BinaryMessageWriter Rent()
         {
             var messageWriter = s_threadInstance ?? new BinaryMessageWriter();
+
             // Reentrancy is not expected, but if the operation throws we dont
             // want to reuse the current messageWriter since XmlWriter might not be in starting state
             s_threadInstance = null;
+
+            // Allocate first buffer
+            messageWriter._stream.Reset(messageWriter.EstimateMessageSize());
+
             return messageWriter;
         }
 
-        public void Clear() => _stream.Clear();
-
-        public static MessageEncoders.ArrayPoolStream.BufferMemory Return(BinaryMessageWriter binaryMessageWriter)
+        public static ArrayPoolStream.BufferMemory Return(BinaryMessageWriter binaryMessageWriter, bool reset = false)
         {
             binaryMessageWriter._writer.Flush();
             binaryMessageWriter.RecordMessageSize((int)binaryMessageWriter._stream.Length);
-            var res = binaryMessageWriter._stream.GetBufferMemoryAndClear();
+            var res = binaryMessageWriter._stream.GetBufferMemoryAndReset();
+
+            if (reset)
+            {
+                ((IXmlBinaryWriterInitializer)binaryMessageWriter.XmlWriter)
+                    .SetOutput(binaryMessageWriter._stream, null, null, false);
+            }
 
             s_threadInstance = binaryMessageWriter;
 
             return res;
+        }
+
+        public void Clear()
+        {
+            //reset writer ?
+            _stream.Clear();
         }
 
         private void RecordMessageSize(int count)
@@ -76,21 +88,6 @@ namespace OpenRiaServices.Client.Web
             return Math.Max(max2, max1) + 256;
         }
 
-        public XmlDictionaryWriter GetXmlWriter()
-        {
-            int startSize = EstimateMessageSize();
-            // Reuse created writer and stream if possible, they are created on first call 
-            if (_writer != null)
-            {
-                _stream.Reset(ArrayPool<byte>.Shared, 0, startSize);
-            }
-            else
-            {
-                _stream = new ArrayPoolStream(ArrayPool<byte>.Shared, 0 , startSize, MaxStreamAllocationSize);
-                _writer = XmlDictionaryWriter.CreateBinaryWriter(_stream);
-            }
-
-            return _writer;
-        }
+        public XmlDictionaryWriter XmlWriter => _writer;
     }
 }

@@ -66,10 +66,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="PooledStream" Version="0.3.0" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
 

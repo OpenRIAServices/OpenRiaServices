@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Http;
-using OpenRiaServices;
-using OpenRiaServices.Hosting;
 using OpenRiaServices.Server;
 using System;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Hosting.AspNetCore
+namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class InvokeOperationInvoker : OperationInvoker
     {
@@ -45,7 +43,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             try
             {
                 //            SetOutputCachingPolicy(httpContext, operation);
-                var invokeDescription = new InvokeDescription(operation, inputs);
+                var invokeDescription = new InvokeDescription(_operation, inputs);
                 invokeResult = await domainService.InvokeAsync(invokeDescription, domainService.ServiceContext.CancellationToken).ConfigureAwait(false);
 
             }
