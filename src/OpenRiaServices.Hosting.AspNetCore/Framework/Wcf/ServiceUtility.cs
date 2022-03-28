@@ -21,9 +21,6 @@ namespace OpenRiaServices.Hosting.Wcf
         internal const string SubmitOperationName = "SubmitChanges";
         internal const string ServiceFileExtension = ".svc";
 
-        internal static readonly object[] EmptyObjectArray = Array.Empty<object>();
-
-
         /// <summary>
         /// Transforms the specified exception as appropriate into a fault message that can be sent
         /// back to the client.

@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Hosting.AspNetCore
+namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class SubmitOperationInvoker : OperationInvoker
     {

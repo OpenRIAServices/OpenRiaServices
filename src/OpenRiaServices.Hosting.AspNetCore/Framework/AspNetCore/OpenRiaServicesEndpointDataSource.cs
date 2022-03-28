@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Primitives;
+using OpenRiaServices.Hosting.AspNetCore.Operations;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore
