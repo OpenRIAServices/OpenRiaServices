@@ -13,7 +13,7 @@
 
 Maybe something similar to 
 
-```
+```csharp
 services.AddOpenRiaServices/AddDomainServices(x => 
 {
     x.AddDomainServices(.... type[]), lifetime;
@@ -69,9 +69,7 @@ app.MapDomainServices/MapOpenRiaServices("/Services", x =>
 
 ### Perf:
 
-* Reuse XmlDictionaryReader/XmlDictionaryWriter and stream as WCF version does
-   * Port BufferManagerStream to use ArrayPool (keep max buffer size limited by ArrayPool.Shared's max size)
-* Pool more resources
+* Pool more resources or use stackalloc
    * object[] for parameters
 
 Extensibility / refactoring:

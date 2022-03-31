@@ -9,6 +9,7 @@
     <Version>0.1.0</Version>
     <PackageVersion>0.1.0</PackageVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Daniel-Svensson</Authors>
     <PackageTags>OpenRiaServices AspNetCore Hosting DomainServices AspNet WCF RIA Services Server</PackageTags>
     <Description>PREVIEW: Asp.Net Core Hosting for OpenRiaservices
     The package is currently in preview, please look at TODO file in reposotiry.
@@ -19,8 +20,25 @@
     There is no documentation yet, please see AspNetCoreWebsite project in repository for usage.
     </Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="LICENSE.md" Pack="true" PackagePath="\" />
+    <None Update="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="DomainServiceFault.cs" />
     <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="ServiceQueryPart.cs" />
@@ -60,14 +78,5 @@
       <CustomToolNamespace>OpenRiaServices.Hosting.Wcf</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
-
-  <ItemGroup>
-    <FrameworkReference Include="Microsoft.AspNetCore.App" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
-  </ItemGroup>
-
 
 </Project>
