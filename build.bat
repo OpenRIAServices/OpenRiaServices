@@ -14,13 +14,3 @@ IF %ERRORLEVEL% NEQ 0 (
  exit /B 2
 )
 echo Release Build succeeded
-
-echo Building Signed  version
-msbuild RiaServices.sln /t:Rebuild /p:Configuration=Signed /verbosity:minimal /m
-
-IF %ERRORLEVEL% NEQ 0 (
- echo Signed Build failed ERRORLEVEL = %ERRORLEVEL%
- exit /B 3
-)
-
-echo Signed Build succeeded

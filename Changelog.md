@@ -1,3 +1,9 @@
+# 4.6.4
+
+## Client
+
+1. Publishing updated NuGet package OpenRiaServices.Silverlight.ComboBoxExtensions
+
 # 4.6.3
 
 ## Client
