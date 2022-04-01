@@ -41,6 +41,16 @@ namespace OpenRiaServices.EntityFramework
         {
         }
 
+
+        /// <summary>
+        /// Initialize the domainservice with a specific context.
+        /// </summary>
+        /// <param name="dbContext">initial value for <see cref="DbContext"/></param>
+        protected DbDomainService(TContext dbContext)
+        {
+            _dbContext = dbContext;
+        }
+
         /// <summary>
         /// Initializes the <see cref="DomainService"/>. <see cref="DomainService.Initialize"/> must be called 
         /// prior to invoking any operations on the <see cref="DomainService"/> instance.
