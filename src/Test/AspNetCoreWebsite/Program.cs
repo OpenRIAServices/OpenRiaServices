@@ -2,12 +2,14 @@ using System;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
+using TestDomainServices.Testing;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();
@@ -42,8 +44,22 @@ app.MapOpenRiaServices(builder =>
                Console.WriteLine($"Ignnoreing {type} due to exception: {ex.Message}");
            }
        }
-   })
-    ;
+   });
+
+// TestDatabase
+app.MapPost("/Services/TestServices.svc/CreateDatabase", context =>
+{
+    DBImager.CreateNewDatabase(context.Request.Query["name"]);
+    context.Response.StatusCode = 200;    
+    return Task.CompletedTask;
+});
+app.MapPost("/Services/TestServices.svc/DropDatabase", context =>
+{
+    DBImager.CleanDB(context.Request.Query["name"]);
+    context.Response.StatusCode = 200;
+    return Task.CompletedTask;
+});
+
 
 app.MapGet("/", httpContext =>
     {

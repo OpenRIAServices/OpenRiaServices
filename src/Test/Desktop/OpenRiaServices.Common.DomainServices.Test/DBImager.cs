@@ -34,14 +34,16 @@ namespace TestDomainServices.Testing
 
             // If path is not relative to working directory then check if it is a virtual path
 #if NET6_0
-            throw new NotImplementedException();
+            string mappedPath = fileName.Replace("~/", "../WebsiteFullTrust/");
+
 #else
             var mappedPath = HostingEnvironment.MapPath(fileName);
+#endif
             if (File.Exists(mappedPath))
                 return mappedPath;
 
             return string.Empty;
-#endif
+
         }
 
         #endregion GetSettings
@@ -109,7 +111,7 @@ namespace TestDomainServices.Testing
         private static string GetConnectionStringForDatabaseFile(string path)
         {
             string catalogName = GetDbCatalogName(Path.GetFileNameWithoutExtension(path));
-            return  $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={path};Integrated Security=True;Connect Timeout=5";
+            return $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={path};Integrated Security=True;Connect Timeout=5";
         }
 
         private static string GetDbCatalogName(string dbName)
@@ -157,7 +159,7 @@ namespace TestDomainServices.Testing
         }
 
 
-#endregion Database Methods
+        #endregion Database Methods
 
     }
 

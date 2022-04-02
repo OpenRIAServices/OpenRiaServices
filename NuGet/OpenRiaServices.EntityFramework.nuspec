@@ -16,12 +16,18 @@
     </description>
     <summary>Open RIA Services - Entity Framework 6 support with DbDomainService and LinqToEntitiesDomainService</summary>
     <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
-    <copyright>2018 Outercurve Foundation</copyright>
+    <copyright>2022 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices</tags>
     <dependencies>
-      <dependency id="EntityFramework" version="6.4.4" />
-      <dependency id="OpenRiaServices.Server" version="$version$"/>
+      <group targetFramework="net6.0">
+        <dependency id="EntityFramework" version="6.4.4" />
+        <dependency id="OpenRiaServices.Server" version="$version$"/>
+      </group>
+      <group targetFramework="net472">
+        <dependency id="EntityFramework" version="6.4.4" />
+        <dependency id="OpenRiaServices.Server" version="$version$"/>
+      </group>
     </dependencies>
   </metadata>
   <files>
