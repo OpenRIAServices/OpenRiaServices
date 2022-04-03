@@ -21,8 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 		..\appveyor.yml = ..\appveyor.yml
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
+		..\Changelog.md = ..\Changelog.md
 		Directory.Build.props = Directory.Build.props
 		global.json = global.json
+		..\README.md = ..\README.md
 		test.runsettings = test.runsettings
 	EndProjectSection
 EndProject
