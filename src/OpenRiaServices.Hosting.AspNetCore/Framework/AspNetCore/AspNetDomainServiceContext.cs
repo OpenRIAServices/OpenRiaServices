@@ -9,9 +9,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
     class AspNetDomainServiceContext : DomainServiceContext
     {
         public AspNetDomainServiceContext(HttpContext httpContext, DomainOperationType operationType)
-            : base(httpContext.RequestServices, httpContext.User, operationType)
+            : base(httpContext.RequestServices, httpContext.User, operationType, httpContext.RequestAborted)
         {
-            CancellationToken = httpContext.RequestAborted;
         }
     }
 }

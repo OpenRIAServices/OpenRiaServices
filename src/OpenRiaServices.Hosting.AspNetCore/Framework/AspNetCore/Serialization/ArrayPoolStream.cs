@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.IO.Pipelines;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
@@ -19,8 +20,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// </summary>
     internal class ArrayPoolStream : Stream
     {
-        private static readonly bool Is64BitProcess = Environment.Is64BitProcess;
-        private ArrayPool<byte> _bufferManager;
+        private ArrayPool<byte> _arrayPool;
         private readonly int _maxSize;
         // number of bytes written to _buffer, used as offset into _buffer where we write next time
         private int _bufferWritten;
@@ -31,10 +31,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         // String "position" (total size so far)
         private int _position;
 
-
-        public ArrayPoolStream(ArrayPool<byte> bufferManager, int offset, int minAllocationSize, int maxAllocationSize)
+        public ArrayPoolStream(ArrayPool<byte> arrayPool, int maxAllocationSize)
         {
-            _bufferManager = bufferManager;
+            _arrayPool = arrayPool;
             _maxSize = maxAllocationSize;
         }
 
@@ -44,7 +43,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             _bufferWritten = 0;
             _position = 0;
-            _buffer = _bufferManager.Rent(Math.Min(size, _maxSize));
+            _buffer = _arrayPool.Rent(Math.Min(size, _maxSize));
         }
 
         public override bool CanRead => false;
@@ -62,20 +61,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             // Nothing to do
         }
 
-        public override int Read(byte[] buffer, int offset, int count)
-        {
-            throw new NotImplementedException();
-        }
+        public override int Read(byte[] buffer, int offset, int count) => throw new NotImplementedException();
 
-        public override long Seek(long offset, SeekOrigin origin)
-        {
-            throw new NotImplementedException();
-        }
+        public override long Seek(long offset, SeekOrigin origin) => throw new NotImplementedException();
 
-        public override void SetLength(long value)
-        {
-            throw new NotImplementedException();
-        }
+        public override void SetLength(long value) => throw new NotImplementedException();
 
         public override void Write(byte[] buffer, int offset, int count)
         {
@@ -107,18 +97,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             if (count == 0)
                 return;
 
-            if (Is64BitProcess && count <= 1024)
-            {
-                fixed (byte* s = &src[srcOffset], d = &dest[destOffset])
-                    Buffer.MemoryCopy(s, d, dest.Length - destOffset, count);
-            }
-            else
-            {
-                // For x86 it is significantly faster to do copying of int's and longs
-                // or similar in managed code for smaller counts (below 100-200)
-                // But we expect most copies to be larger since xml writer buffer around 500 bytes
-                Buffer.BlockCopy(src, srcOffset, dest, destOffset, count);
-            }
+            Unsafe.CopyBlockUnaligned(destination: ref dest[destOffset], source: ref src[srcOffset], (uint)count);
         }
 
         /// <summary>
@@ -139,7 +118,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             _buffer = null;
 
             int nextSize = Math.Min(_position * 2, _maxSize);
-            _buffer = _bufferManager.Rent(nextSize);
+            _buffer = _arrayPool.Rent(nextSize);
             _bufferWritten = 0;
         }
 
@@ -159,14 +138,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         {
             if (_buffer != null)
             {
-                _bufferManager.Return(_buffer);
+                _arrayPool.Return(_buffer);
                 _buffer = null;
             }
 
             if (_bufferList != null)
             {
                 foreach (var buffer in _bufferList)
-                    _bufferManager.Return(buffer);
+                    _arrayPool.Return(buffer);
                 _bufferList = null;
             }
         }
@@ -174,7 +153,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
         public BufferMemory GetBufferMemoryAndReset()
         {
-            var res = new BufferMemory(_bufferManager, _buffer, _bufferList, _bufferWritten, _position);
+            var res = new BufferMemory(_arrayPool, _buffer, _bufferList, _bufferWritten, _position);
             _buffer = null;
             _bufferList = null;
             _bufferWritten = 0;
@@ -186,7 +165,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         {
             readonly ArrayPool<byte> _arrayPool;
             byte[] _buffer;
-            int _bufferWritten;
+            readonly int _bufferWritten;
             private readonly int _length;
             List<byte[]> _bufferList;
 
@@ -209,7 +188,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 //await response.CompleteAsync(); //? needed ?? 
             }
 
-            public void WriteTo(PipeWriter bodyWriter)
+            private void WriteTo(PipeWriter bodyWriter)
             {
                 // It might make sense to call FlushAsync after each buffer is writter
                 // to reduce memory usage
@@ -220,15 +199,16 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     {
                         var buffer = list[i];
                         int len = buffer.Length;
-
-                        buffer.CopyTo(bodyWriter.GetSpan(len));
+                        var dest = bodyWriter.GetSpan(len);
+                        Unsafe.CopyBlockUnaligned(ref dest[0], source: ref buffer[0], (uint)len);
                         bodyWriter.Advance(len);
                     }
                 }
 
                 if (_buffer != null)
                 {
-                    _buffer.AsSpan(0, _bufferWritten).CopyTo(bodyWriter.GetSpan(_bufferWritten));
+                    var dest = bodyWriter.GetSpan(_bufferWritten);
+                    Unsafe.CopyBlockUnaligned(ref dest[0], source: ref _buffer[0], (uint)_bufferWritten);
                     bodyWriter.Advance(_bufferWritten);
                 }
             }

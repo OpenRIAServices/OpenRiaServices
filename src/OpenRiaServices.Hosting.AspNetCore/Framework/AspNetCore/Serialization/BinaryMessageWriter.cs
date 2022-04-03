@@ -14,7 +14,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private ArrayPoolStream _stream;
         private XmlDictionaryWriter _writer;
 
-        private const int MaxStreamAllocationSize = 1024 * 1024;
+        private const int MaxStreamAllocationSize = 4 * 1024 * 1024;
         // IMPORTANT: If this is changed then EstimateMessageSize should be changed as well
         private const int MessageLengthHistorySize = 4;
         private const int InitialBufferSize = 16 * 1024;
@@ -30,7 +30,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// </summary>
         private BinaryMessageWriter()
         {
-            _stream = new ArrayPoolStream(ArrayPool<byte>.Shared, 0, InitialBufferSize, MaxStreamAllocationSize);
+            _stream = new ArrayPoolStream(ArrayPool<byte>.Shared, MaxStreamAllocationSize);
             _writer = XmlDictionaryWriter.CreateBinaryWriter(_stream);
         }
 
@@ -61,7 +61,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
 
             s_threadInstance = binaryMessageWriter;
-
             return res;
         }
 
