@@ -97,7 +97,6 @@ namespace EFCoreModels.AdventureWorks
                 entity.HasOne(e => e.Employee)
                     .WithOne(e => e.SalesPerson)
                     .HasForeignKey<SalesPerson>(e => e.SalesPersonID)
-//                    .HasPrincipalKey<Employee>(e => e.EmployeeID)
                     .IsRequired();
 
                 entity.HasOne(e => e.SalesTerritory)

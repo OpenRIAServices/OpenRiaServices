@@ -12,7 +12,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
     /// <summary>
     /// Metadata context for LINQ To Entities domain services
     /// </summary>
-    internal class EFCoreTypeDescriptionContext : TypeDescriptionContextBase
+    internal class EFCoreTypeDescriptionContext
     {
         //      private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
         private readonly Type _contextType;
@@ -74,6 +74,25 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             var assocAttrib = new AssociationAttribute(fk.GetConstraintName(), thisKey, otherKey);
             assocAttrib.IsForeignKey = navigationProperty.IsDependentToPrincipal(); // TODO:  isForeignKey;
             return assocAttrib;
+        }
+
+        /// <summary>
+        /// Comma delimits the specified member name collection
+        /// </summary>
+        /// <param name="members">A collection of members.</param>
+        /// <returns>A comma delimited list of member names.</returns>
+        protected static string FormatMemberList(IEnumerable<IProperty> members)
+        {
+            string memberList = string.Empty;
+            foreach (var prop in members)
+            {
+                if (memberList.Length > 0)
+                {
+                    memberList += ",";
+                }
+                memberList += prop.Name;
+            }
+            return memberList;
         }
     }
 }

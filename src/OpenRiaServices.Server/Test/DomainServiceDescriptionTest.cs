@@ -34,7 +34,6 @@ namespace OpenRiaServices.Server.Test
     using OpenRiaServices.Server.EntityFrameworkCore;
     using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
 
-    // TODO Begin here to make it work with the new 
     /// <summary>
     /// DomainServiceDescription tests
     /// </summary>
@@ -358,10 +357,8 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void EFCoreTypeDescriptor_ExcludedEntityMembers()
         {
-            // TODO: Not applicable to EF CORE so might be removed
             PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCorePocoEntity_IEntityChangeTracker))["EntityState"];
             Assert.IsTrue(EFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
-
         }
 
         /// <summary>
@@ -396,13 +393,10 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void DomainServiceDescription_EFCoreTestFindEntityType()
         {
-            // TODO: Use code such as this to 
-
             // First create a context manually and verify that POCO metadata is configured correctly
             var ctxt = new EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities();
             IEntityType entityType = ctxt.Model.FindEntityType(typeof(EFCoreModels.Northwind.Product).FullName);
             Assert.IsNotNull(entityType);
-
         }
 
 
