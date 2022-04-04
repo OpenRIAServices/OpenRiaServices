@@ -267,6 +267,8 @@ namespace OpenRiaServices.EntityFramework
 
                 // Determine which members are in conflict by comparing original values to the current DB values
                 var dbValues = await stateEntry.GetDatabaseValuesAsync(cancellationToken);
+                
+                PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
 
                 // dbValues will be null if the entity has been deleted in the store (i.e. Delete/Delete conflict)
                 if (dbValues == null)
@@ -286,7 +288,6 @@ namespace OpenRiaServices.EntityFramework
                             string propertyName = NameOf(property);
 
                             // TÒDO: Determine if Excluded properties should be skipped
-                            PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
                             if (propDescriptors[propertyName] is not null)
                                 membersInConflict.Add(propertyName);
                         }
