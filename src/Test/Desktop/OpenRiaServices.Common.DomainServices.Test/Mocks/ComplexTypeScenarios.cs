@@ -53,9 +53,9 @@ namespace TestDomainServices
         {
             List<ComplexType_Parent> parents = new List<ComplexType_Parent>() {
 
-                new ComplexType_Parent { 
-                    ID = 1, 
-                    ContactInfo = 
+                new ComplexType_Parent {
+                    ID = 1,
+                    ContactInfo =
                         new ContactInfo
                         {
                             Name = "Mathew",
@@ -65,7 +65,7 @@ namespace TestDomainServices
                 },
                 new ComplexType_Parent {
                     ID = 2,
-                    ContactInfo = 
+                    ContactInfo =
                     new ContactInfo
                     {
                         Name = "Fred",
@@ -75,7 +75,7 @@ namespace TestDomainServices
                 },
                 new ComplexType_Parent {
                     ID = 3,
-                    ContactInfo = 
+                    ContactInfo =
                     new ContactInfo
                     {
                         Name = "Amy",
@@ -209,7 +209,7 @@ namespace TestDomainServices
 
     public class ComplexType_Valid_Child : ComplexType_Invalid_Parent
     {
-        public int Prop { get; set;}
+        public int Prop { get; set; }
     }
 
     [EnableClientAccess]

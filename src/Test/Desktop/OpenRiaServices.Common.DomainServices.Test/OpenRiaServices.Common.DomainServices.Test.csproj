@@ -1,14 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <DebugType>pdbonly</DebugType>
+
+    <NoWarn Condition="'$(TargetFramework)'=='net6.0'">$(NoWarn);CS0618</NoWarn>
+    <DefineConstants Condition="'$(TargetFramework)'=='net472'">$(DefineConstants);WCF;LTS</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'!='net472'">$(DefineConstants);ASPNET_CORE</DefineConstants>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Data.Linq" />
@@ -18,16 +22,23 @@
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
   </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'!='net472'">
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Framework\OpenRiaServices.EntityFramework.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" PrivateAssets="All" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.Server.Authentication.AspNetMembership.csproj" />
     <ProjectReference Include="..\EFPOCOModels\EFPOCOModels.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <ProjectReference Include="..\..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.Server.Authentication.AspNetMembership.csproj" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios_RootNs_FullTypeNames.g.vb">
@@ -78,11 +89,6 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind.tt</DependentUpon>
-    </Compile>
-    <Compile Update="DataModels\Northwind2008.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind2008.tt</DependentUpon>
     </Compile>
     <Compile Update="DataModels\ScenarioModels\Model1.cs">
       <AutoGen>True</AutoGen>
@@ -294,11 +300,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind.edmx</DependentUpon>
     </Compile>
-    <Compile Update="DataModels\Northwind2008.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind2008.edmx</DependentUpon>
-    </Compile>
     <Compile Update="DataModels\ScenarioModels\LTS_InheritanceScenarios.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -498,10 +499,6 @@
       <LastGenOutput>Northwind_NoFks.Designer.cs</LastGenOutput>
       <CustomToolNamespace>NorthwindNoFks</CustomToolNamespace>
     </EntityDeploy>
-    <EntityDeploy Include="DataModels\Northwind2008.edmx">
-      <Generator>EntityModelCodeGenerator</Generator>
-      <LastGenOutput>Northwind2008.Designer.cs</LastGenOutput>
-    </EntityDeploy>
     <EntityDeploy Include="DataModels\ScenarioModels\EF_InheritanceScenarios.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>EF_InheritanceScenarios.Designer.cs</LastGenOutput>
@@ -511,11 +508,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Northwind.cs</LastGenOutput>
       <DependentUpon>Northwind.edmx</DependentUpon>
-    </None>
-    <None Include="DataModels\Northwind2008.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Northwind2008.cs</LastGenOutput>
-      <DependentUpon>Northwind2008.edmx</DependentUpon>
     </None>
     <None Include="DataModels\ScenarioModels\LTS_InheritanceScenarios.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
@@ -572,5 +564,25 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Baselines\**\*.cs" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
+    <Compile Remove="net6.0\*" />
+    <None Include="net6.0\*" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='net472'">
+    <!-- Remove Linq To Sql (LTS) related -->
+    <Compile Remove="**\LTS_*.cs" />
+    <Compile Remove="DataModels\AdventureWorks.designer.cs" />
+    <Compile Remove="DataModels\Northwind.designer.cs" />
+    <Compile Remove="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
+    <!-- WCF related -->
+    <Compile Remove="Cities\CityDomainServiceHost.cs" />
+    <Compile Remove="Cities\CityDomainServiceHostFactory.cs" />
+
+
+    <Compile Remove="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
+    <!--<Compile Remove="DBImager.cs" />-->
+    <Compile Remove="Mocks\AuthenticationServices.cs" />
   </ItemGroup>
 </Project>

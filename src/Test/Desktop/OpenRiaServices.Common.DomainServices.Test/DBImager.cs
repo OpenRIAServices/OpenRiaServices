@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.SqlClient;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Web;
+#if !NET6_0
 using System.Web.Hosting;
+#endif
 
 namespace TestDomainServices.Testing
 {
@@ -37,11 +33,17 @@ namespace TestDomainServices.Testing
                 return Path.Combine(Directory.GetCurrentDirectory(), fileName);
 
             // If path is not relative to working directory then check if it is a virtual path
+#if NET6_0
+            string mappedPath = fileName.Replace("~/", "../WebsiteFullTrust/");
+
+#else
             var mappedPath = HostingEnvironment.MapPath(fileName);
+#endif
             if (File.Exists(mappedPath))
                 return mappedPath;
 
             return string.Empty;
+
         }
 
         #endregion GetSettings
@@ -109,7 +111,7 @@ namespace TestDomainServices.Testing
         private static string GetConnectionStringForDatabaseFile(string path)
         {
             string catalogName = GetDbCatalogName(Path.GetFileNameWithoutExtension(path));
-            return  $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={path};Integrated Security=True;Connect Timeout=5";
+            return $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={path};Integrated Security=True;Connect Timeout=5";
         }
 
         private static string GetDbCatalogName(string dbName)

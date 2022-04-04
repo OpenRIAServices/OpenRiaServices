@@ -83,11 +83,6 @@
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs" Link="Data\DomainClients\Test.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Service References\Services\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
   </ItemGroup>
 
   <ItemGroup>
@@ -121,19 +116,6 @@
       <Aliases>DomainServicesTests</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\VbExpressions\VbExpressions.vbproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Service References\Services\TestServices.wsdl" />
-    <None Include="Service References\Services\TestServices.xsd" />
-    <None Include="Service References\Services\TestServices1.wsdl" />
-    <None Include="Service References\Services\TestServices1.xsd" />
-    <None Include="Service References\Services\TestServices.disco" />
-    <None Include="Service References\Services\configuration91.svcinfo" />
-    <None Include="Service References\Services\configuration.svcinfo" />
-    <None Include="Service References\Services\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
 
   <ItemGroup>

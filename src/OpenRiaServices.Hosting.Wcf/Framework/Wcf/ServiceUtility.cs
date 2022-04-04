@@ -108,31 +108,7 @@ namespace OpenRiaServices.Hosting.Wcf
         // take care of representing entities in the right shape based on TypeDescriptor extensions.
         private static void RegisterSurrogates(ContractDescription contractDesc, DomainServiceDescription domainServiceDescription)
         {
-            // Cache the list of entity types and surrogate types.
-            HashSet<Type> exposedTypes = new HashSet<Type>();
-            Dictionary<Type, Tuple<Type, Func<object, object>>> exposedTypeToSurrogateMap = new Dictionary<Type, Tuple<Type, Func<object, object>>>();
-            HashSet<Type> surrogateTypes = new HashSet<Type>();
-            foreach (Type entityType in domainServiceDescription.EntityTypes)
-            {
-                exposedTypes.Add(entityType);
-            }
-
-            // Because complex types and entities cannot share an inheritance relationship, we can add them to the same surrogate set.
-            foreach (Type complexType in domainServiceDescription.ComplexTypes)
-            {
-                exposedTypes.Add(complexType);
-            }
-
-            foreach (Type exposedType in exposedTypes)
-            {
-                Type surrogateType = DataContractSurrogateGenerator.GetSurrogateType(exposedTypes, exposedType);
-                Func<object, object> surrogateFactory = (Func<object, object>)DynamicMethodUtility.GetFactoryMethod(surrogateType.GetConstructor(new Type[] { exposedType }), typeof(Func<object, object>));
-                Tuple<Type, Func<object, object>> surrogateInfo = new Tuple<Type, Func<object, object>>(surrogateType, surrogateFactory);
-                exposedTypeToSurrogateMap.Add(exposedType, surrogateInfo);
-                surrogateTypes.Add(surrogateType);
-            }
-
-            DomainServiceSerializationSurrogate surrogate = new DomainServiceSerializationSurrogate(domainServiceDescription, exposedTypeToSurrogateMap, surrogateTypes);
+            DomainServiceSerializationSurrogate surrogate = new DomainServiceSerializationSurrogate(domainServiceDescription);
 
             // Register our serialization surrogate with the WSDL exporter.
             DomainServiceWsdlExportExtension wsdlExportExtension = contractDesc.Behaviors.Find<DomainServiceWsdlExportExtension>();
@@ -145,7 +121,7 @@ namespace OpenRiaServices.Hosting.Wcf
             // Register our serialization surrogate with the actual invoke operations.
             foreach (OperationDescription op in contractDesc.Operations)
             {
-                foreach (Type surrogateType in surrogateTypes)
+                foreach (Type surrogateType in surrogate.SurrogateTypes)
                 {
                     op.KnownTypes.Add(surrogateType);
                 }

@@ -20,7 +20,8 @@ namespace OpenRiaServices.Server
         /// <param name="serviceProvider">A service provider.</param>
         /// <param name="user">The user calling the operation.</param>
         /// <param name="operationType">The type of operation that is being executed.</param>
-        public DomainServiceContext(IServiceProvider serviceProvider, IPrincipal user, DomainOperationType operationType)
+        /// <param name="cancellationToken"></param>
+        public DomainServiceContext(IServiceProvider serviceProvider, IPrincipal user, DomainOperationType operationType, CancellationToken cancellationToken = default)
         {
             if (serviceProvider == null)
             {
@@ -29,6 +30,7 @@ namespace OpenRiaServices.Server
             this._serviceProvider = serviceProvider;
             this.OperationType = operationType;
             this.User = user;
+            this.CancellationToken = cancellationToken;
         }
 
         /// <summary>

@@ -68,6 +68,10 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
         /// <returns>The corresponding ServiceQuery</returns>
         internal static ServiceQuery GetServiceQuery(string queryString, string fullRequestUrl)
         {
+            // If query cannot possible contain any special query parameter, return null early
+            if (queryString == null || !queryString.Contains("$"))
+                return null;
+
             NameValueCollection queryPartCollection = HttpUtility.ParseQueryString(queryString);
             bool includeTotalCount = false;
 
@@ -93,6 +97,10 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                     queryParts.Add(queryPart + "=" + value);
                 }
             }
+
+            if (queryParts.Count == 0 && includeTotalCount == false)
+                return null;
+
 
             string decodedQueryString = HttpUtility.UrlDecode(fullRequestUrl);
 

@@ -26,6 +26,12 @@
     <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageOutputPath>$(MSBuildThisFileDirectory)..\Nuget\bin</PackageOutputPath>
+    <PackageOutputPath Condition="'$(Configuration)'!='Release'">$(MSBuildThisFileDirectory)..\Nuget\bin\$(Configuration)</PackageOutputPath>
+    <PackageReleaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</PackageReleaseNotes>
+    <Authors>Outercurve RIA Services</Authors>
+
     <!-- Setup signing-->
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
@@ -36,15 +42,15 @@
     This is required for several test related projects since code generation's 
     pdb reader cannot read the portable ones
     -->
-    <DebugType>pdbonly</DebugType>
-    <DebugType Condition=" $(TargetFramework.StartsWith('netstandard')) ">portable</DebugType>
+    <DebugType>portable</DebugType>
+    <DebugType Condition="$(TargetFramework.StartsWith('net4')) OR '$(IsTestProject)'=='true'">pdbonly</DebugType>
 
   </PropertyGroup>
 
   <!-- Enable source link, we really only want this for framework assemblies and CI builds
   -->
   <ItemGroup Condition="'$(IsFrameworkProject)' == 'true'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
 
   </ItemGroup>
 

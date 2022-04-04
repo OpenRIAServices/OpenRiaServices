@@ -489,7 +489,7 @@ namespace TestDomainServices
         }
     }
 
-    #region Composition scenarios
+#region Composition scenarios
     /// <summary>
     /// Domain service used to reproduce various bug scenarios etc.
     /// </summary>
@@ -719,7 +719,7 @@ namespace TestDomainServices
         [Association("SelfReferencingComposition_OneToMany", "ID", "ParentID")]
         public List<SelfReferencingComposition_OneToMany> Children { get; set; }
     }
-    #endregion
+#endregion
 
     public static class CompositionHelper
     {
