@@ -20,11 +20,6 @@
             <DesignTime>True</DesignTime>
             <DependentUpon>DbResource.resx</DependentUpon>
         </Compile>
-        <Compile Update="MetadataResource.Designer.cs">
-            <DependentUpon>MetadataResource.resx</DependentUpon>
-            <AutoGen>True</AutoGen>
-            <DesignTime>True</DesignTime>
-        </Compile>
         <Compile Update="ResourceEFCore.Designer.cs">
             <DependentUpon>ResourceEFCore.resx</DependentUpon>
             <AutoGen>True</AutoGen>
@@ -39,11 +34,6 @@
             <Generator>ResXFileCodeGenerator</Generator>
             <LastGenOutput>DbResource.Designer.cs</LastGenOutput>
             <SubType>Designer</SubType>
-        </EmbeddedResource>
-        <EmbeddedResource Update="MetadataResource.resx">
-            <Generator>ResXFileCodeGenerator</Generator>
-            <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
-            <CustomToolNamespace>System.Data.Mapping</CustomToolNamespace>
         </EmbeddedResource>
         <EmbeddedResource Update="ResourceEFCore.resx">
             <Generator>ResXFileCodeGenerator</Generator>
