@@ -19,10 +19,10 @@ namespace OpenRiaServices.EntityFramework {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    internal class Resource {
+    public class Resource {
         
         private static global::System.Resources.ResourceManager resourceMan;
         
@@ -36,7 +36,7 @@ namespace OpenRiaServices.EntityFramework {
         ///   Returns the cached ResourceManager instance used by this class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Resources.ResourceManager ResourceManager {
+        public static global::System.Resources.ResourceManager ResourceManager {
             get {
                 if (object.ReferenceEquals(resourceMan, null)) {
                     global::System.Resources.ResourceManager temp = new global::System.Resources.ResourceManager("OpenRiaServices.EntityFramework.Resource", typeof(Resource).Assembly);
@@ -51,7 +51,7 @@ namespace OpenRiaServices.EntityFramework {
         ///   resource lookups using this strongly typed resource class.
         /// </summary>
         [global::System.ComponentModel.EditorBrowsableAttribute(global::System.ComponentModel.EditorBrowsableState.Advanced)]
-        internal static global::System.Globalization.CultureInfo Culture {
+        public static global::System.Globalization.CultureInfo Culture {
             get {
                 return resourceCulture;
             }
@@ -63,7 +63,7 @@ namespace OpenRiaServices.EntityFramework {
         /// <summary>
         ///   Looks up a localized string similar to DatabaseGeneratedOption value &apos;{0}&apos; is not defined..
         /// </summary>
-        internal static string DatabaseGeneratedOptionNotDefined {
+        public static string DatabaseGeneratedOptionNotDefined {
             get {
                 return ResourceManager.GetString("DatabaseGeneratedOptionNotDefined", resourceCulture);
             }
@@ -72,7 +72,7 @@ namespace OpenRiaServices.EntityFramework {
         /// <summary>
         ///   Looks up a localized string similar to Type &apos;{0}&apos; is not a valid LinqToEntitiesDomainServiceDescriptionProviderAttribute parameter because it does not derive from ObjectContext..
         /// </summary>
-        internal static string InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification {
+        public static string InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification {
             get {
                 return ResourceManager.GetString("InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification", resourceCulture);
             }
@@ -81,7 +81,7 @@ namespace OpenRiaServices.EntityFramework {
         /// <summary>
         ///   Looks up a localized string similar to &apos;{0}&apos; cannot be applied to DomainService Type &apos;{1}&apos; because &apos;{1}&apos; does not derive from &apos;{2}&apos;..
         /// </summary>
-        internal static string InvalidMetadataProviderSpecification {
+        public static string InvalidMetadataProviderSpecification {
             get {
                 return ResourceManager.GetString("InvalidMetadataProviderSpecification", resourceCulture);
             }
@@ -90,7 +90,7 @@ namespace OpenRiaServices.EntityFramework {
         /// <summary>
         ///   Looks up a localized string similar to Unable to retrieve association information for association &apos;{0}&apos;. Only models that include foreign key information are supported. See Entity Framework documentation for details on creating models that include foreign key information..
         /// </summary>
-        internal static string LinqToEntitiesProvider_UnableToRetrieveAssociationInfo {
+        public static string LinqToEntitiesProvider_UnableToRetrieveAssociationInfo {
             get {
                 return ResourceManager.GetString("LinqToEntitiesProvider_UnableToRetrieveAssociationInfo", resourceCulture);
             }
