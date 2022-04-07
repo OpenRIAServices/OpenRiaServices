@@ -31,7 +31,6 @@ namespace OpenRiaServices.Server.Test
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
     using Microsoft.EntityFrameworkCore.Metadata;
-    using OpenRiaServices.Server.EntityFrameworkCore;
     using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
 
     /// <summary>
@@ -358,7 +357,7 @@ namespace OpenRiaServices.Server.Test
         public void EFCoreTypeDescriptor_ExcludedEntityMembers()
         {
             PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCorePocoEntity_IEntityChangeTracker))["EntityState"];
-            Assert.IsTrue(EFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
+            Assert.IsTrue(EntityFrameworkCore.EFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
         }
 
         /// <summary>
