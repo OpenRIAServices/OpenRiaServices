@@ -302,6 +302,10 @@ namespace EFCoreModels.Northwind
                 entity.Property(e => e.OrderID).HasColumnName("OrderID")
                     .IsConcurrencyToken();
 
+                entity.Property(e => e.ShipVia)
+                    .HasColumnName("ShipVia")
+                    .IsConcurrencyToken();
+
                 entity.Property(e => e.CustomerID)
                     .HasColumnName("CustomerID")
                     .HasMaxLength(5)

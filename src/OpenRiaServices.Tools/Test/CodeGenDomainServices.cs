@@ -166,15 +166,15 @@ namespace OpenRiaServices.Tools.Test
                 typeof(TestDomainServices.DbCtx.Northwind), sharedFiles, true));
         }
 
-        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFCoreContext")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFCoreContext")]
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFContext")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFContext")]
         [TestMethod]
         public void TestClientCodegen_EFCoreDomainServices()
         {
             string[] sharedFiles = Array.Empty<string>();
 
             // Default codegen
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_EFCoreContext", "EFCoreContextScenarios.g",
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_EFContext", "EFCoreContextScenarios.g",
                 typeof(TestDomainServices.EFCore.Northwind), sharedFiles, false));
         }
 
