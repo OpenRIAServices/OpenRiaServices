@@ -57,12 +57,15 @@ namespace EFCoreModels.Northwind
         {
             modelBuilder.Entity<Category>(entity =>
             {
-                entity.HasKey(e => e.CategoryID);
+                entity.HasKey(e => e.CategoryID)
+                    .HasName("CategoryID");
 
                 entity.HasIndex(e => e.CategoryName)
                     .HasName("CategoryName");
 
-                entity.Property(e => e.CategoryID).HasColumnName("CategoryID");
+                entity.Property(e => e.CategoryID)
+                .HasColumnName("CategoryID")
+                .IsConcurrencyToken();
 
                 entity.Property(e => e.CategoryName)
                     .IsRequired()
@@ -131,7 +134,7 @@ namespace EFCoreModels.Northwind
                     .HasName("Region");
 
                 entity.Property(e => e.CustomerID)
-                    .HasMaxLength(5)
+                    .HasMaxLength(15)
                     .IsFixedLength()
                     .IsConcurrencyToken();
 
@@ -140,7 +143,6 @@ namespace EFCoreModels.Northwind
                 entity.Property(e => e.City).HasMaxLength(15).IsConcurrencyToken();
 
                 entity.Property(e => e.CompanyName)
-                    .IsRequired()
                     .HasMaxLength(40)
                     .IsConcurrencyToken();
 
@@ -268,13 +270,13 @@ namespace EFCoreModels.Northwind
                     .WithMany(p => p.Order_Details)
                     .HasForeignKey(d => d.OrderID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Details_Orders");
+                    .HasConstraintName("Order_Details_Orders");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Order_Details)
                     .HasForeignKey(d => d.ProductID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Order_Details_Products");
+                    .HasConstraintName("Order_Details_Products");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -340,7 +342,7 @@ namespace EFCoreModels.Northwind
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CustomerID)
-                    .HasConstraintName("FK_Orders_Customers");
+                    .HasConstraintName("Orders_Customers");
 
                 entity.HasOne(d => d.Employee)
                     .WithMany(p => p.Orders)
@@ -357,7 +359,8 @@ namespace EFCoreModels.Northwind
 
             modelBuilder.Entity<Product>(entity =>
             {
-                entity.HasKey(e => e.ProductID);
+                entity.HasKey(e => e.ProductID)
+                    .HasName("ProductID");
 
                 entity.HasIndex(e => e.CategoryID)
                     .HasName("CategoryID");
@@ -368,9 +371,10 @@ namespace EFCoreModels.Northwind
                 entity.HasIndex(e => e.SupplierID)
                     .HasName("SuppliersProducts");
 
-                entity.Property(e => e.ProductID).IsConcurrencyToken();
+                entity.Property(e => e.ProductID);
 
-                entity.Property(e => e.CategoryID).IsConcurrencyToken();
+                entity.Property(e => e.CategoryID)
+                    .IsConcurrencyToken();
 
                 entity.Property(e => e.Discontinued)
                     .IsRequired()
@@ -399,7 +403,7 @@ namespace EFCoreModels.Northwind
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryID)
-                    .HasConstraintName("FK_Products_Categories");
+                    .HasConstraintName("Products_Categories");
 
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.Products)
@@ -422,7 +426,6 @@ namespace EFCoreModels.Northwind
                     .ValueGeneratedNever();
 
                 entity.Property(e => e.RegionDescription)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsFixedLength();
             });
@@ -434,7 +437,6 @@ namespace EFCoreModels.Northwind
                 entity.Property(e => e.ShipperID).HasColumnName("ShipperID");
 
                 entity.Property(e => e.CompanyName)
-                    .IsRequired()
                     .HasMaxLength(40);
 
                 entity.Property(e => e.Phone).HasMaxLength(24);
@@ -489,7 +491,6 @@ namespace EFCoreModels.Northwind
                 entity.Property(e => e.RegionID).HasColumnName("RegionID");
 
                 entity.Property(e => e.TerritoryDescription)
-                    .IsRequired()
                     .HasMaxLength(50)
                     .IsFixedLength();
 
