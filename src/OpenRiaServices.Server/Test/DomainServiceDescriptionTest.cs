@@ -387,19 +387,6 @@ namespace OpenRiaServices.Server.Test
         }
 
         /// <summary>
-        /// Verify FindEntityType for EF Core
-        /// </summary>
-        [TestMethod]
-        public void DomainServiceDescription_EFCoreTestFindEntityType()
-        {
-            // First create a context manually and verify that POCO metadata is configured correctly
-            var ctxt = new EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities();
-            IEntityType entityType = ctxt.Model.FindEntityType(typeof(EFCoreModels.Northwind.Product).FullName);
-            Assert.IsNotNull(entityType);
-        }
-
-
-        /// <summary>
         /// Verify that after deriving from an EF type TypeDescriptor continues to work as expected.
         /// </summary>
         [TestMethod]
