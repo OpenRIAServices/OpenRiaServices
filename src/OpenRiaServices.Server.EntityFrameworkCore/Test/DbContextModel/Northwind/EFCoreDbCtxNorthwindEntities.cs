@@ -270,13 +270,13 @@ namespace EFCoreModels.Northwind
                     .WithMany(p => p.Order_Details)
                     .HasForeignKey(d => d.OrderID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Order_Details_Orders");
+                    .HasConstraintName("Order_Order_Detail");
 
                 entity.HasOne(d => d.Product)
                     .WithMany(p => p.Order_Details)
                     .HasForeignKey(d => d.ProductID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("Order_Details_Products");
+                    .HasConstraintName("Product_Order_Detail");
             });
 
             modelBuilder.Entity<Order>(entity =>
@@ -342,7 +342,7 @@ namespace EFCoreModels.Northwind
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Orders)
                     .HasForeignKey(d => d.CustomerID)
-                    .HasConstraintName("Orders_Customers");
+                    .HasConstraintName("Customer_Order");
 
                 entity.HasOne(d => d.Employee)
                     .WithMany(p => p.Orders)
@@ -403,7 +403,7 @@ namespace EFCoreModels.Northwind
                 entity.HasOne(d => d.Category)
                     .WithMany(p => p.Products)
                     .HasForeignKey(d => d.CategoryID)
-                    .HasConstraintName("Products_Categories");
+                    .HasConstraintName("Category_Product");
 
                 entity.HasOne(d => d.Supplier)
                     .WithMany(p => p.Products)
@@ -498,7 +498,7 @@ namespace EFCoreModels.Northwind
                     .WithMany(p => p.Territories)
                     .HasForeignKey(d => d.RegionID)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_Territories_Region");
+                    .HasConstraintName("Region_Territory");
             });
 
             OnModelCreatingPartial(modelBuilder);
