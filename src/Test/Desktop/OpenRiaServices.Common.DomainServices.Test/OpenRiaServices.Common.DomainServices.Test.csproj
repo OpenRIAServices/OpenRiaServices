@@ -62,6 +62,12 @@
     <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFCoreDbContextScenarios.g.cs">
+       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFCoreDbContextScenarios.g.vb">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

@@ -186,7 +186,7 @@ namespace OpenRiaServices.Tools.Test
             string[] sharedFiles = Array.Empty<string>();
 
             // Full type names
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes", "EFDbContextScenarios.g",
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes", "EFCoreDbContextScenarios.g",
                 typeof(TestDomainServices.EFCore.Northwind), sharedFiles, true));
         }
 
