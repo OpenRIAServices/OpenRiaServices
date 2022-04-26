@@ -8,14 +8,14 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace DbContextModels.Northwind
+namespace EFCoreModels.Northwind
 {
     
     
     /// <summary>
     /// The 'Category' entity class.
     /// </summary>
-    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DbContextModels.Northwind")]
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
     public sealed partial class Category : global::OpenRiaServices.Client.Entity
     {
         
@@ -27,7 +27,7 @@ namespace DbContextModels.Northwind
         
         private byte[] _picture;
         
-        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Product> _products;
+        private global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Product> _products;
         
         #region Extensibility Method Definitions
 
@@ -59,6 +59,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'CategoryID' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.EditableAttribute(false, AllowInitialValue=true)]
         [global::System.ComponentModel.DataAnnotations.KeyAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
@@ -159,30 +160,30 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Product"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Products_Categories", "CategoryID", "CategoryID")]
-        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Product> Products
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Category_Product", "CategoryID", "CategoryID")]
+        public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Product> Products
         {
             get
             {
                 if ((this._products == null))
                 {
-                    this._products = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Product>(this, "Products", this.FilterProducts, this.AttachProducts, this.DetachProducts);
+                    this._products = new global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Product>(this, "Products", this.FilterProducts, this.AttachProducts, this.DetachProducts);
                 }
                 return this._products;
             }
         }
         
-        private void AttachProducts(global::DbContextModels.Northwind.Product entity)
+        private void AttachProducts(global::EFCoreModels.Northwind.Product entity)
         {
             entity.Category = this;
         }
         
-        private void DetachProducts(global::DbContextModels.Northwind.Product entity)
+        private void DetachProducts(global::EFCoreModels.Northwind.Product entity)
         {
             entity.Category = null;
         }
         
-        private bool FilterProducts(global::DbContextModels.Northwind.Product entity)
+        private bool FilterProducts(global::EFCoreModels.Northwind.Product entity)
         {
             return (entity.CategoryID == this.CategoryID);
         }
@@ -200,7 +201,7 @@ namespace DbContextModels.Northwind
     /// <summary>
     /// The 'Customer' entity class.
     /// </summary>
-    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DbContextModels.Northwind")]
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
     public sealed partial class Customer : global::OpenRiaServices.Client.Entity
     {
         
@@ -220,7 +221,7 @@ namespace DbContextModels.Northwind
         
         private string _fax;
         
-        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order> _orders;
+        private global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order> _orders;
         
         private string _phone;
         
@@ -272,6 +273,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'Address' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(60)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Address
@@ -297,6 +300,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'City' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(15)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string City
@@ -322,7 +327,9 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'CompanyName' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.RequiredAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(40)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string CompanyName
@@ -348,6 +355,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ContactName' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(30)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ContactName
@@ -373,6 +382,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ContactTitle' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(30)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ContactTitle
@@ -398,6 +409,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'Country' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(15)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Country
@@ -423,11 +436,12 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'CustomerID' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.EditableAttribute(false, AllowInitialValue=true)]
         [global::System.ComponentModel.DataAnnotations.KeyAttribute()]
         [global::System.ComponentModel.DataAnnotations.RequiredAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
-        [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(5)]
+        [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(15)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string CustomerID
         {
@@ -451,6 +465,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'Fax' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(24)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Fax
@@ -476,14 +492,14 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Orders_Customers", "CustomerID", "CustomerID")]
-        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order> Orders
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Customer_Order", "CustomerID", "CustomerID")]
+        public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order> Orders
         {
             get
             {
                 if ((this._orders == null))
                 {
-                    this._orders = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order>(this, "Orders", this.FilterOrders, this.AttachOrders, this.DetachOrders);
+                    this._orders = new global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order>(this, "Orders", this.FilterOrders, this.AttachOrders, this.DetachOrders);
                 }
                 return this._orders;
             }
@@ -492,6 +508,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'Phone' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(24)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Phone
@@ -517,6 +535,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'PostalCode' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(10)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string PostalCode
@@ -542,6 +562,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'Region' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(15)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string Region
@@ -564,17 +586,17 @@ namespace DbContextModels.Northwind
             }
         }
         
-        private void AttachOrders(global::DbContextModels.Northwind.Order entity)
+        private void AttachOrders(global::EFCoreModels.Northwind.Order entity)
         {
             entity.Customer = this;
         }
         
-        private void DetachOrders(global::DbContextModels.Northwind.Order entity)
+        private void DetachOrders(global::EFCoreModels.Northwind.Order entity)
         {
             entity.Customer = null;
         }
         
-        private bool FilterOrders(global::DbContextModels.Northwind.Order entity)
+        private bool FilterOrders(global::EFCoreModels.Northwind.Order entity)
         {
             return (entity.CustomerID == this.CustomerID);
         }
@@ -592,11 +614,11 @@ namespace DbContextModels.Northwind
     /// <summary>
     /// The 'Order' entity class.
     /// </summary>
-    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DbContextModels.Northwind")]
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
     public sealed partial class Order : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Customer> _customer;
+        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Customer> _customer;
         
         private string _customerID;
         
@@ -606,7 +628,7 @@ namespace DbContextModels.Northwind
         
         private global::System.Nullable<decimal> _freight;
         
-        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> _order_Details;
+        private global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order_Detail> _order_Details;
         
         private global::System.Nullable<global::System.DateTime> _orderDate;
         
@@ -682,20 +704,20 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Customer"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Orders_Customers", "CustomerID", "CustomerID", IsForeignKey=true)]
-        public global::DbContextModels.Northwind.Customer Customer
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Customer_Order", "CustomerID", "CustomerID", IsForeignKey=true)]
+        public global::EFCoreModels.Northwind.Customer Customer
         {
             get
             {
                 if ((this._customer == null))
                 {
-                    this._customer = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Customer>(this, "Customer", this.FilterCustomer);
+                    this._customer = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Customer>(this, "Customer", this.FilterCustomer);
                 }
                 return this._customer.Entity;
             }
             set
             {
-                global::DbContextModels.Northwind.Customer previous = this.Customer;
+                global::EFCoreModels.Northwind.Customer previous = this.Customer;
                 if ((previous != value))
                 {
                     this.ValidateProperty("Customer", value);
@@ -725,6 +747,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'CustomerID' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(5)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -751,6 +774,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'EmployeeID' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<int> EmployeeID
@@ -801,6 +825,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'Freight' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<decimal> Freight
         {
@@ -825,14 +851,14 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Order_Details_Orders", "OrderID", "OrderID")]
-        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> Order_Details
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Order_Order_Detail", "OrderID", "OrderID")]
+        public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order_Detail> Order_Details
         {
             get
             {
                 if ((this._order_Details == null))
                 {
-                    this._order_Details = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail>(this, "Order_Details", this.FilterOrder_Details, this.AttachOrder_Details, this.DetachOrder_Details);
+                    this._order_Details = new global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order_Detail>(this, "Order_Details", this.FilterOrder_Details, this.AttachOrder_Details, this.DetachOrder_Details);
                 }
                 return this._order_Details;
             }
@@ -841,6 +867,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'OrderDate' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<global::System.DateTime> OrderDate
         {
@@ -865,6 +893,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'OrderID' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.EditableAttribute(false, AllowInitialValue=true)]
         [global::System.ComponentModel.DataAnnotations.KeyAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
@@ -891,6 +920,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'RequiredDate' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<global::System.DateTime> RequiredDate
         {
@@ -915,6 +946,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ShipAddress' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(60)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ShipAddress
@@ -940,6 +973,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ShipCity' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(15)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ShipCity
@@ -965,6 +1000,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ShipCountry' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(15)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ShipCountry
@@ -990,6 +1027,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ShipName' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(40)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ShipName
@@ -1015,6 +1054,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ShippedDate' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<global::System.DateTime> ShippedDate
         {
@@ -1039,6 +1080,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ShipPostalCode' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(10)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ShipPostalCode
@@ -1064,6 +1107,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ShipRegion' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(15)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ShipRegion
@@ -1089,6 +1134,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ShipVia' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<int> ShipVia
@@ -1111,22 +1157,22 @@ namespace DbContextModels.Northwind
             }
         }
         
-        private bool FilterCustomer(global::DbContextModels.Northwind.Customer entity)
+        private bool FilterCustomer(global::EFCoreModels.Northwind.Customer entity)
         {
             return (entity.CustomerID == this.CustomerID);
         }
         
-        private void AttachOrder_Details(global::DbContextModels.Northwind.Order_Detail entity)
+        private void AttachOrder_Details(global::EFCoreModels.Northwind.Order_Detail entity)
         {
             entity.Order = this;
         }
         
-        private void DetachOrder_Details(global::DbContextModels.Northwind.Order_Detail entity)
+        private void DetachOrder_Details(global::EFCoreModels.Northwind.Order_Detail entity)
         {
             entity.Order = null;
         }
         
-        private bool FilterOrder_Details(global::DbContextModels.Northwind.Order_Detail entity)
+        private bool FilterOrder_Details(global::EFCoreModels.Northwind.Order_Detail entity)
         {
             return (entity.OrderID == this.OrderID);
         }
@@ -1144,17 +1190,17 @@ namespace DbContextModels.Northwind
     /// <summary>
     /// The 'Order_Detail' entity class.
     /// </summary>
-    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DbContextModels.Northwind")]
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
     public sealed partial class Order_Detail : global::OpenRiaServices.Client.Entity
     {
         
         private float _discount;
         
-        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Order> _order;
+        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Order> _order;
         
         private int _orderID;
         
-        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Product> _product;
+        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Product> _product;
         
         private int _productID;
         
@@ -1194,6 +1240,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'Discount' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public float Discount
         {
@@ -1218,20 +1266,20 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Order"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Order_Details_Orders", "OrderID", "OrderID", IsForeignKey=true)]
-        public global::DbContextModels.Northwind.Order Order
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Order_Order_Detail", "OrderID", "OrderID", IsForeignKey=true)]
+        public global::EFCoreModels.Northwind.Order Order
         {
             get
             {
                 if ((this._order == null))
                 {
-                    this._order = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Order>(this, "Order", this.FilterOrder);
+                    this._order = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Order>(this, "Order", this.FilterOrder);
                 }
                 return this._order.Entity;
             }
             set
             {
-                global::DbContextModels.Northwind.Order previous = this.Order;
+                global::EFCoreModels.Northwind.Order previous = this.Order;
                 if ((previous != value))
                 {
                     this.ValidateProperty("Order", value);
@@ -1261,7 +1309,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'OrderID' value.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EditableAttribute(false, AllowInitialValue=true)]
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.KeyAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -1276,9 +1324,10 @@ namespace DbContextModels.Northwind
                 if ((this._orderID != value))
                 {
                     this.OnOrderIDChanging(value);
+                    this.RaiseDataMemberChanging("OrderID");
                     this.ValidateProperty("OrderID", value);
                     this._orderID = value;
-                    this.RaisePropertyChanged("OrderID");
+                    this.RaiseDataMemberChanged("OrderID");
                     this.OnOrderIDChanged();
                 }
             }
@@ -1287,20 +1336,20 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Order_Details_Products", "ProductID", "ProductID", IsForeignKey=true)]
-        public global::DbContextModels.Northwind.Product Product
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Product_Order_Detail", "ProductID", "ProductID", IsForeignKey=true)]
+        public global::EFCoreModels.Northwind.Product Product
         {
             get
             {
                 if ((this._product == null))
                 {
-                    this._product = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Product>(this, "Product", this.FilterProduct);
+                    this._product = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Product>(this, "Product", this.FilterProduct);
                 }
                 return this._product.Entity;
             }
             set
             {
-                global::DbContextModels.Northwind.Product previous = this.Product;
+                global::EFCoreModels.Northwind.Product previous = this.Product;
                 if ((previous != value))
                 {
                     this.ValidateProperty("Product", value);
@@ -1330,7 +1379,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ProductID' value.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EditableAttribute(false, AllowInitialValue=true)]
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.KeyAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
@@ -1345,9 +1394,10 @@ namespace DbContextModels.Northwind
                 if ((this._productID != value))
                 {
                     this.OnProductIDChanging(value);
+                    this.RaiseDataMemberChanging("ProductID");
                     this.ValidateProperty("ProductID", value);
                     this._productID = value;
-                    this.RaisePropertyChanged("ProductID");
+                    this.RaiseDataMemberChanged("ProductID");
                     this.OnProductIDChanged();
                 }
             }
@@ -1356,6 +1406,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'Quantity' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public short Quantity
         {
@@ -1380,6 +1432,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'UnitPrice' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public decimal UnitPrice
         {
@@ -1401,12 +1455,12 @@ namespace DbContextModels.Northwind
             }
         }
         
-        private bool FilterOrder(global::DbContextModels.Northwind.Order entity)
+        private bool FilterOrder(global::EFCoreModels.Northwind.Order entity)
         {
             return (entity.OrderID == this.OrderID);
         }
         
-        private bool FilterProduct(global::DbContextModels.Northwind.Product entity)
+        private bool FilterProduct(global::EFCoreModels.Northwind.Product entity)
         {
             return (entity.ProductID == this.ProductID);
         }
@@ -1424,11 +1478,11 @@ namespace DbContextModels.Northwind
     /// <summary>
     /// The 'Product' entity class.
     /// </summary>
-    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DbContextModels.Northwind")]
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
     public sealed partial class Product : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Category> _category;
+        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Category> _category;
         
         private global::System.Nullable<int> _categoryID;
         
@@ -1436,7 +1490,7 @@ namespace DbContextModels.Northwind
         
         private bool _discontinued;
         
-        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> _order_Details;
+        private global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order_Detail> _order_Details;
         
         private int _productID;
         
@@ -1508,20 +1562,20 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Category"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Products_Categories", "CategoryID", "CategoryID", IsForeignKey=true)]
-        public global::DbContextModels.Northwind.Category Category
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Category_Product", "CategoryID", "CategoryID", IsForeignKey=true)]
+        public global::EFCoreModels.Northwind.Category Category
         {
             get
             {
                 if ((this._category == null))
                 {
-                    this._category = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Category>(this, "Category", this.FilterCategory);
+                    this._category = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Category>(this, "Category", this.FilterCategory);
                 }
                 return this._category.Entity;
             }
             set
             {
-                global::DbContextModels.Northwind.Category previous = this.Category;
+                global::EFCoreModels.Northwind.Category previous = this.Category;
                 if ((previous != value))
                 {
                     this.ValidateProperty("Category", value);
@@ -1551,6 +1605,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'CategoryID' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<int> CategoryID
@@ -1601,6 +1656,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'Discontinued' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public bool Discontinued
         {
@@ -1625,14 +1682,14 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Order_Details_Products", "ProductID", "ProductID")]
-        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> Order_Details
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Product_Order_Detail", "ProductID", "ProductID")]
+        public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order_Detail> Order_Details
         {
             get
             {
                 if ((this._order_Details == null))
                 {
-                    this._order_Details = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail>(this, "Order_Details", this.FilterOrder_Details, this.AttachOrder_Details, this.DetachOrder_Details);
+                    this._order_Details = new global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order_Detail>(this, "Order_Details", this.FilterOrder_Details, this.AttachOrder_Details, this.DetachOrder_Details);
                 }
                 return this._order_Details;
             }
@@ -1667,7 +1724,9 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ProductName' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.RequiredAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(40)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string ProductName
@@ -1693,6 +1752,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'QuantityPerUnit' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.ComponentModel.DataAnnotations.StringLengthAttribute(20)]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public string QuantityPerUnit
@@ -1718,6 +1779,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'ReorderLevel' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<short> ReorderLevel
         {
@@ -1766,6 +1829,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'SupplierID' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
         [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<int> SupplierID
@@ -1815,6 +1879,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'UnitPrice' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<decimal> UnitPrice
         {
@@ -1839,6 +1905,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'UnitsInStock' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<short> UnitsInStock
         {
@@ -1863,6 +1931,8 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the 'UnitsOnOrder' value.
         /// </summary>
+        [global::System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute()]
+        [global::System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute()]
         [global::System.Runtime.Serialization.DataMemberAttribute()]
         public global::System.Nullable<short> UnitsOnOrder
         {
@@ -1908,22 +1978,22 @@ namespace DbContextModels.Northwind
             }
         }
         
-        private bool FilterCategory(global::DbContextModels.Northwind.Category entity)
+        private bool FilterCategory(global::EFCoreModels.Northwind.Category entity)
         {
             return (entity.CategoryID == this.CategoryID);
         }
         
-        private void AttachOrder_Details(global::DbContextModels.Northwind.Order_Detail entity)
+        private void AttachOrder_Details(global::EFCoreModels.Northwind.Order_Detail entity)
         {
             entity.Product = this;
         }
         
-        private void DetachOrder_Details(global::DbContextModels.Northwind.Order_Detail entity)
+        private void DetachOrder_Details(global::EFCoreModels.Northwind.Order_Detail entity)
         {
             entity.Product = null;
         }
         
-        private bool FilterOrder_Details(global::DbContextModels.Northwind.Order_Detail entity)
+        private bool FilterOrder_Details(global::EFCoreModels.Northwind.Order_Detail entity)
         {
             return (entity.ProductID == this.ProductID);
         }
@@ -1952,7 +2022,7 @@ namespace DbContextModels.Northwind
     /// <summary>
     /// The 'ProductInfo' entity class.
     /// </summary>
-    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DbContextModels.Northwind")]
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
     public sealed partial class ProductInfo : global::OpenRiaServices.Client.Entity
     {
         
@@ -2102,7 +2172,7 @@ namespace DbContextModels.Northwind
     /// <summary>
     /// The 'Region' entity class.
     /// </summary>
-    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DbContextModels.Northwind")]
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
     public sealed partial class Region : global::OpenRiaServices.Client.Entity
     {
         
@@ -2110,7 +2180,7 @@ namespace DbContextModels.Northwind
         
         private int _regionID;
         
-        private global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory> _territories;
+        private global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Territory> _territories;
         
         #region Extensibility Method Definitions
 
@@ -2190,31 +2260,31 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Territory"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Territories_Region", "RegionID", "RegionID")]
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Region_Territory", "RegionID", "RegionID")]
         [global::System.ComponentModel.DataAnnotations.CompositionAttribute()]
-        public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory> Territories
+        public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Territory> Territories
         {
             get
             {
                 if ((this._territories == null))
                 {
-                    this._territories = new global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory>(this, "Territories", this.FilterTerritories, this.AttachTerritories, this.DetachTerritories);
+                    this._territories = new global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Territory>(this, "Territories", this.FilterTerritories, this.AttachTerritories, this.DetachTerritories);
                 }
                 return this._territories;
             }
         }
         
-        private void AttachTerritories(global::DbContextModels.Northwind.Territory entity)
+        private void AttachTerritories(global::EFCoreModels.Northwind.Territory entity)
         {
             entity.Region = this;
         }
         
-        private void DetachTerritories(global::DbContextModels.Northwind.Territory entity)
+        private void DetachTerritories(global::EFCoreModels.Northwind.Territory entity)
         {
             entity.Region = null;
         }
         
-        private bool FilterTerritories(global::DbContextModels.Northwind.Territory entity)
+        private bool FilterTerritories(global::EFCoreModels.Northwind.Territory entity)
         {
             return (entity.RegionID == this.RegionID);
         }
@@ -2232,11 +2302,11 @@ namespace DbContextModels.Northwind
     /// <summary>
     /// The 'Territory' entity class.
     /// </summary>
-    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DbContextModels.Northwind")]
+    [global::System.Runtime.Serialization.DataContractAttribute(Namespace="http://schemas.datacontract.org/2004/07/DataTests.Northwind")]
     public sealed partial class Territory : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Region> _region;
+        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Region> _region;
         
         private int _regionID;
         
@@ -2272,20 +2342,20 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Region"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("FK_Territories_Region", "RegionID", "RegionID", IsForeignKey=true)]
-        public global::DbContextModels.Northwind.Region Region
+        [global::System.ComponentModel.DataAnnotations.AssociationAttribute("Region_Territory", "RegionID", "RegionID", IsForeignKey=true)]
+        public global::EFCoreModels.Northwind.Region Region
         {
             get
             {
                 if ((this._region == null))
                 {
-                    this._region = new global::OpenRiaServices.Client.EntityRef<global::DbContextModels.Northwind.Region>(this, "Region", this.FilterRegion);
+                    this._region = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Region>(this, "Region", this.FilterRegion);
                 }
                 return this._region.Entity;
             }
             set
             {
-                global::DbContextModels.Northwind.Region previous = this.Region;
+                global::EFCoreModels.Northwind.Region previous = this.Region;
                 if ((previous != value))
                 {
                     this.ValidateProperty("Region", value);
@@ -2391,7 +2461,7 @@ namespace DbContextModels.Northwind
             }
         }
         
-        private bool FilterRegion(global::DbContextModels.Northwind.Region entity)
+        private bool FilterRegion(global::EFCoreModels.Northwind.Region entity)
         {
             return (entity.RegionID == this.RegionID);
         }
@@ -2457,77 +2527,77 @@ namespace TestDomainServices.EFCore
         /// <summary>
         /// Gets the set of <see cref="Category"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Category> Categories
+        public global::OpenRiaServices.Client.EntitySet<global::EFCoreModels.Northwind.Category> Categories
         {
             get
             {
-                return base.EntityContainer.GetEntitySet<global::DbContextModels.Northwind.Category>();
+                return base.EntityContainer.GetEntitySet<global::EFCoreModels.Northwind.Category>();
             }
         }
         
         /// <summary>
         /// Gets the set of <see cref="Customer"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Customer> Customers
+        public global::OpenRiaServices.Client.EntitySet<global::EFCoreModels.Northwind.Customer> Customers
         {
             get
             {
-                return base.EntityContainer.GetEntitySet<global::DbContextModels.Northwind.Customer>();
+                return base.EntityContainer.GetEntitySet<global::EFCoreModels.Northwind.Customer>();
             }
         }
         
         /// <summary>
         /// Gets the set of <see cref="Order_Detail"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Order_Detail> Order_Details
+        public global::OpenRiaServices.Client.EntitySet<global::EFCoreModels.Northwind.Order_Detail> Order_Details
         {
             get
             {
-                return base.EntityContainer.GetEntitySet<global::DbContextModels.Northwind.Order_Detail>();
+                return base.EntityContainer.GetEntitySet<global::EFCoreModels.Northwind.Order_Detail>();
             }
         }
         
         /// <summary>
         /// Gets the set of <see cref="Order"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Order> Orders
+        public global::OpenRiaServices.Client.EntitySet<global::EFCoreModels.Northwind.Order> Orders
         {
             get
             {
-                return base.EntityContainer.GetEntitySet<global::DbContextModels.Northwind.Order>();
+                return base.EntityContainer.GetEntitySet<global::EFCoreModels.Northwind.Order>();
             }
         }
         
         /// <summary>
         /// Gets the set of <see cref="Product"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Product> Products
+        public global::OpenRiaServices.Client.EntitySet<global::EFCoreModels.Northwind.Product> Products
         {
             get
             {
-                return base.EntityContainer.GetEntitySet<global::DbContextModels.Northwind.Product>();
+                return base.EntityContainer.GetEntitySet<global::EFCoreModels.Northwind.Product>();
             }
         }
         
         /// <summary>
         /// Gets the set of <see cref="ProductInfo"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.ProductInfo> ProductInfos
+        public global::OpenRiaServices.Client.EntitySet<global::EFCoreModels.Northwind.ProductInfo> ProductInfos
         {
             get
             {
-                return base.EntityContainer.GetEntitySet<global::DbContextModels.Northwind.ProductInfo>();
+                return base.EntityContainer.GetEntitySet<global::EFCoreModels.Northwind.ProductInfo>();
             }
         }
         
         /// <summary>
         /// Gets the set of <see cref="Region"/> entity instances that have been loaded into this <see cref="Northwind"/> instance.
         /// </summary>
-        public global::OpenRiaServices.Client.EntitySet<global::DbContextModels.Northwind.Region> Regions
+        public global::OpenRiaServices.Client.EntitySet<global::EFCoreModels.Northwind.Region> Regions
         {
             get
             {
-                return base.EntityContainer.GetEntitySet<global::DbContextModels.Northwind.Region>();
+                return base.EntityContainer.GetEntitySet<global::EFCoreModels.Northwind.Region>();
             }
         }
         
@@ -2535,40 +2605,40 @@ namespace TestDomainServices.EFCore
         /// Gets an EntityQuery instance that can be used to load <see cref="Category"/> entity instances using the 'GetCategories' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Category"/> entity instances.</returns>
-        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Category> GetCategoriesQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::EFCoreModels.Northwind.Category> GetCategoriesQuery()
         {
             this.ValidateMethod("GetCategoriesQuery", null);
-            return base.CreateQuery<global::DbContextModels.Northwind.Category>("GetCategories", null, false, true);
+            return base.CreateQuery<global::EFCoreModels.Northwind.Category>("GetCategories", null, false, true);
         }
         
         /// <summary>
         /// Gets an EntityQuery instance that can be used to load <see cref="Customer"/> entity instances using the 'GetCustomers' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Customer"/> entity instances.</returns>
-        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Customer> GetCustomersQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::EFCoreModels.Northwind.Customer> GetCustomersQuery()
         {
             this.ValidateMethod("GetCustomersQuery", null);
-            return base.CreateQuery<global::DbContextModels.Northwind.Customer>("GetCustomers", null, false, true);
+            return base.CreateQuery<global::EFCoreModels.Northwind.Customer>("GetCustomers", null, false, true);
         }
         
         /// <summary>
         /// Gets an EntityQuery instance that can be used to load <see cref="Order_Detail"/> entity instances using the 'GetOrderDetails' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Order_Detail"/> entity instances.</returns>
-        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Order_Detail> GetOrderDetailsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::EFCoreModels.Northwind.Order_Detail> GetOrderDetailsQuery()
         {
             this.ValidateMethod("GetOrderDetailsQuery", null);
-            return base.CreateQuery<global::DbContextModels.Northwind.Order_Detail>("GetOrderDetails", null, false, true);
+            return base.CreateQuery<global::EFCoreModels.Northwind.Order_Detail>("GetOrderDetails", null, false, true);
         }
         
         /// <summary>
         /// Gets an EntityQuery instance that can be used to load <see cref="Order"/> entity instances using the 'GetOrders' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Order"/> entity instances.</returns>
-        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Order> GetOrdersQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::EFCoreModels.Northwind.Order> GetOrdersQuery()
         {
             this.ValidateMethod("GetOrdersQuery", null);
-            return base.CreateQuery<global::DbContextModels.Northwind.Order>("GetOrders", null, false, true);
+            return base.CreateQuery<global::EFCoreModels.Northwind.Order>("GetOrders", null, false, true);
         }
         
         /// <summary>
@@ -2576,32 +2646,32 @@ namespace TestDomainServices.EFCore
         /// </summary>
         /// <param name="id">The value for the 'id' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Product"/> entity instances.</returns>
-        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Product> GetProductByIdQuery(int id)
+        public global::OpenRiaServices.Client.EntityQuery<global::EFCoreModels.Northwind.Product> GetProductByIdQuery(int id)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("id", id);
             this.ValidateMethod("GetProductByIdQuery", parameters);
-            return base.CreateQuery<global::DbContextModels.Northwind.Product>("GetProductById", parameters, false, false);
+            return base.CreateQuery<global::EFCoreModels.Northwind.Product>("GetProductById", parameters, false, false);
         }
         
         /// <summary>
         /// Gets an EntityQuery instance that can be used to load <see cref="ProductInfo"/> entity instances using the 'GetProductInfos' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="ProductInfo"/> entity instances.</returns>
-        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.ProductInfo> GetProductInfosQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::EFCoreModels.Northwind.ProductInfo> GetProductInfosQuery()
         {
             this.ValidateMethod("GetProductInfosQuery", null);
-            return base.CreateQuery<global::DbContextModels.Northwind.ProductInfo>("GetProductInfos", null, false, true);
+            return base.CreateQuery<global::EFCoreModels.Northwind.ProductInfo>("GetProductInfos", null, false, true);
         }
         
         /// <summary>
         /// Gets an EntityQuery instance that can be used to load <see cref="Product"/> entity instances using the 'GetProducts' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Product"/> entity instances.</returns>
-        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Product> GetProductsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::EFCoreModels.Northwind.Product> GetProductsQuery()
         {
             this.ValidateMethod("GetProductsQuery", null);
-            return base.CreateQuery<global::DbContextModels.Northwind.Product>("GetProducts", null, false, true);
+            return base.CreateQuery<global::EFCoreModels.Northwind.Product>("GetProducts", null, false, true);
         }
         
         /// <summary>
@@ -2609,29 +2679,29 @@ namespace TestDomainServices.EFCore
         /// </summary>
         /// <param name="id">The value for the 'id' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Region"/> entity instances.</returns>
-        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Region> GetRegionByIdQuery(int id)
+        public global::OpenRiaServices.Client.EntityQuery<global::EFCoreModels.Northwind.Region> GetRegionByIdQuery(int id)
         {
             global::System.Collections.Generic.Dictionary<string, object> parameters = new global::System.Collections.Generic.Dictionary<string, object>();
             parameters.Add("id", id);
             this.ValidateMethod("GetRegionByIdQuery", parameters);
-            return base.CreateQuery<global::DbContextModels.Northwind.Region>("GetRegionById", parameters, false, false);
+            return base.CreateQuery<global::EFCoreModels.Northwind.Region>("GetRegionById", parameters, false, false);
         }
         
         /// <summary>
         /// Gets an EntityQuery instance that can be used to load <see cref="Region"/> entity instances using the 'GetRegions' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Region"/> entity instances.</returns>
-        public global::OpenRiaServices.Client.EntityQuery<global::DbContextModels.Northwind.Region> GetRegionsQuery()
+        public global::OpenRiaServices.Client.EntityQuery<global::EFCoreModels.Northwind.Region> GetRegionsQuery()
         {
             this.ValidateMethod("GetRegionsQuery", null);
-            return base.CreateQuery<global::DbContextModels.Northwind.Region>("GetRegions", null, false, true);
+            return base.CreateQuery<global::EFCoreModels.Northwind.Region>("GetRegions", null, false, true);
         }
         
         /// <summary>
         /// Invokes the 'DiscontinueProduct' method of the specified <see cref="Product"/> entity.
         /// </summary>
         /// <param name="product">The <see cref="Product"/> entity instance.</param>
-        public void DiscontinueProduct(global::DbContextModels.Northwind.Product product)
+        public void DiscontinueProduct(global::EFCoreModels.Northwind.Product product)
         {
             product.DiscontinueProduct();
         }
@@ -2667,7 +2737,7 @@ namespace TestDomainServices.EFCore
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCategories'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCategories' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Category> EndGetCategories(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Category> EndGetCategories(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetCustomers' operation.
@@ -2684,7 +2754,7 @@ namespace TestDomainServices.EFCore
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetCustomers'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCustomers' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Customer> EndGetCustomers(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Customer> EndGetCustomers(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetOrderDetails' operation.
@@ -2701,7 +2771,7 @@ namespace TestDomainServices.EFCore
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetOrderDetails'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetOrderDetails' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Order_Detail> EndGetOrderDetails(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Order_Detail> EndGetOrderDetails(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetOrders' operation.
@@ -2718,7 +2788,7 @@ namespace TestDomainServices.EFCore
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetOrders'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetOrders' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Order> EndGetOrders(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Order> EndGetOrders(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductById' operation.
@@ -2736,7 +2806,7 @@ namespace TestDomainServices.EFCore
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetProductById'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductById' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Product> EndGetProductById(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Product> EndGetProductById(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductInfos' operation.
@@ -2753,7 +2823,7 @@ namespace TestDomainServices.EFCore
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetProductInfos'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductInfos' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.ProductInfo> EndGetProductInfos(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.ProductInfo> EndGetProductInfos(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetProducts' operation.
@@ -2770,7 +2840,7 @@ namespace TestDomainServices.EFCore
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetProducts'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProducts' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Product> EndGetProducts(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Product> EndGetProducts(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetRegionById' operation.
@@ -2788,7 +2858,7 @@ namespace TestDomainServices.EFCore
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetRegionById'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRegionById' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Region> EndGetRegionById(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Region> EndGetRegionById(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetRegions' operation.
@@ -2805,7 +2875,7 @@ namespace TestDomainServices.EFCore
             /// </summary>
             /// <param name="result">The IAsyncResult returned from 'BeginGetRegions'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRegions' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::DbContextModels.Northwind.Region> EndGetRegions(global::System.IAsyncResult result);
+            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Region> EndGetRegions(global::System.IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
@@ -2830,14 +2900,14 @@ namespace TestDomainServices.EFCore
             
             public NorthwindEntityContainer()
             {
-                this.CreateEntitySet<global::DbContextModels.Northwind.Category>(global::OpenRiaServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Customer>(global::OpenRiaServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Order>(global::OpenRiaServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Order_Detail>(global::OpenRiaServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Product>(global::OpenRiaServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.ProductInfo>(global::OpenRiaServices.Client.EntitySetOperations.Edit);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Region>(global::OpenRiaServices.Client.EntitySetOperations.All);
-                this.CreateEntitySet<global::DbContextModels.Northwind.Territory>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::EFCoreModels.Northwind.Category>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::EFCoreModels.Northwind.Customer>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::EFCoreModels.Northwind.Order>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::EFCoreModels.Northwind.Order_Detail>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::EFCoreModels.Northwind.Product>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::EFCoreModels.Northwind.ProductInfo>(global::OpenRiaServices.Client.EntitySetOperations.Edit);
+                this.CreateEntitySet<global::EFCoreModels.Northwind.Region>(global::OpenRiaServices.Client.EntitySetOperations.All);
+                this.CreateEntitySet<global::EFCoreModels.Northwind.Territory>(global::OpenRiaServices.Client.EntitySetOperations.All);
             }
         }
     }

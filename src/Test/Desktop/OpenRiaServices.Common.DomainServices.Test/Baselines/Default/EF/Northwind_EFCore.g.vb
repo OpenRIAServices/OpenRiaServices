@@ -84,7 +84,8 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the 'CategoryID' value.
         ''' </summary>
-        <DataMember(),  _
+        <ConcurrencyCheck(),  _
+         DataMember(),  _
          Editable(false, AllowInitialValue:=true),  _
          Key(),  _
          RoundtripOriginal()>  _
@@ -169,7 +170,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Product"/> entity instances.
         ''' </summary>
-        <Association("FK_Products_Categories", "CategoryID", "CategoryID")>  _
+        <Association("Category_Product", "CategoryID", "CategoryID")>  _
         Public ReadOnly Property Products() As EntityCollection(Of Product)
             Get
                 If (Me._products Is Nothing) Then
@@ -443,7 +444,7 @@ Namespace EFCoreModels.Northwind
          Key(),  _
          Required(),  _
          RoundtripOriginal(),  _
-         StringLength(5)>  _
+         StringLength(15)>  _
         Public Property CustomerID() As String
             Get
                 Return Me._customerID
@@ -485,7 +486,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Order"/> entity instances.
         ''' </summary>
-        <Association("FK_Orders_Customers", "CustomerID", "CustomerID")>  _
+        <Association("Customer_Order", "CustomerID", "CustomerID")>  _
         Public ReadOnly Property Orders() As EntityCollection(Of Order)
             Get
                 If (Me._orders Is Nothing) Then
@@ -709,7 +710,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Customer"/> entity.
         ''' </summary>
-        <Association("FK_Orders_Customers", "CustomerID", "CustomerID", IsForeignKey:=true)>  _
+        <Association("Customer_Order", "CustomerID", "CustomerID", IsForeignKey:=true)>  _
         Public Property Customer() As Customer
             Get
                 If (Me._customer Is Nothing) Then
@@ -830,7 +831,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         ''' </summary>
-        <Association("FK_Order_Details_Orders", "OrderID", "OrderID")>  _
+        <Association("Order_Order_Detail", "OrderID", "OrderID")>  _
         Public ReadOnly Property Order_Details() As EntityCollection(Of Order_Detail)
             Get
                 If (Me._order_Details Is Nothing) Then
@@ -1071,7 +1072,8 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the 'ShipVia' value.
         ''' </summary>
-        <DataMember(),  _
+        <ConcurrencyCheck(),  _
+         DataMember(),  _
          RoundtripOriginal()>  _
         Public Property ShipVia() As Nullable(Of Integer)
             Get
@@ -1201,7 +1203,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Order"/> entity.
         ''' </summary>
-        <Association("FK_Order_Details_Orders", "OrderID", "OrderID", IsForeignKey:=true)>  _
+        <Association("Order_Order_Detail", "OrderID", "OrderID", IsForeignKey:=true)>  _
         Public Property Order() As Order
             Get
                 If (Me._order Is Nothing) Then
@@ -1258,7 +1260,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Product"/> entity.
         ''' </summary>
-        <Association("FK_Order_Details_Products", "ProductID", "ProductID", IsForeignKey:=true)>  _
+        <Association("Product_Order_Detail", "ProductID", "ProductID", IsForeignKey:=true)>  _
         Public Property Product() As Product
             Get
                 If (Me._product Is Nothing) Then
@@ -1491,7 +1493,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Category"/> entity.
         ''' </summary>
-        <Association("FK_Products_Categories", "CategoryID", "CategoryID", IsForeignKey:=true)>  _
+        <Association("Category_Product", "CategoryID", "CategoryID", IsForeignKey:=true)>  _
         Public Property Category() As Category
             Get
                 If (Me._category Is Nothing) Then
@@ -1590,7 +1592,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         ''' </summary>
-        <Association("FK_Order_Details_Products", "ProductID", "ProductID")>  _
+        <Association("Product_Order_Detail", "ProductID", "ProductID")>  _
         Public ReadOnly Property Order_Details() As EntityCollection(Of Order_Detail)
             Get
                 If (Me._order_Details Is Nothing) Then
@@ -1603,8 +1605,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the 'ProductID' value.
         ''' </summary>
-        <ConcurrencyCheck(),  _
-         DataMember(),  _
+        <DataMember(),  _
          Editable(false, AllowInitialValue:=true),  _
          Key(),  _
          RoundtripOriginal()>  _
@@ -2108,7 +2109,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Territory"/> entity instances.
         ''' </summary>
-        <Association("FK_Territories_Region", "RegionID", "RegionID"),  _
+        <Association("Region_Territory", "RegionID", "RegionID"),  _
          Composition()>  _
         Public ReadOnly Property Territories() As EntityCollection(Of Territory)
             Get
@@ -2190,7 +2191,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Region"/> entity.
         ''' </summary>
-        <Association("FK_Territories_Region", "RegionID", "RegionID", IsForeignKey:=true)>  _
+        <Association("Region_Territory", "RegionID", "RegionID", IsForeignKey:=true)>  _
         Public Property Region() As Region
             Get
                 If (Me._region Is Nothing) Then

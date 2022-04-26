@@ -144,7 +144,8 @@ namespace EFCoreModels.Northwind
 
                 entity.Property(e => e.CompanyName)
                     .HasMaxLength(40)
-                    .IsConcurrencyToken();
+                    .IsConcurrencyToken()
+                    .IsRequired();
 
                 entity.Property(e => e.ContactName).HasMaxLength(30).IsConcurrencyToken();
 
@@ -427,6 +428,7 @@ namespace EFCoreModels.Northwind
 
                 entity.Property(e => e.RegionDescription)
                     .HasMaxLength(50)
+                    .IsRequired()
                     .IsFixedLength();
             });
 
@@ -492,6 +494,7 @@ namespace EFCoreModels.Northwind
 
                 entity.Property(e => e.TerritoryDescription)
                     .HasMaxLength(50)
+                    .IsRequired()
                     .IsFixedLength();
 
                 entity.HasOne(d => d.Region)

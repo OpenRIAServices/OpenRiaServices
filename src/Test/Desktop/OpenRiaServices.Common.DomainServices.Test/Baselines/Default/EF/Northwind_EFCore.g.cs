@@ -69,6 +69,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the 'CategoryID' value.
         /// </summary>
+        [ConcurrencyCheck()]
         [DataMember()]
         [Editable(false, AllowInitialValue=true)]
         [Key()]
@@ -169,7 +170,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Product"/> entity instances.
         /// </summary>
-        [Association("FK_Products_Categories", "CategoryID", "CategoryID")]
+        [Association("Category_Product", "CategoryID", "CategoryID")]
         public EntityCollection<Product> Products
         {
             get
@@ -451,7 +452,7 @@ namespace EFCoreModels.Northwind
         [Key()]
         [Required()]
         [RoundtripOriginal()]
-        [StringLength(5)]
+        [StringLength(15)]
         public string CustomerID
         {
             get
@@ -501,7 +502,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order"/> entity instances.
         /// </summary>
-        [Association("FK_Orders_Customers", "CustomerID", "CustomerID")]
+        [Association("Customer_Order", "CustomerID", "CustomerID")]
         public EntityCollection<Order> Orders
         {
             get
@@ -713,7 +714,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Customer"/> entity.
         /// </summary>
-        [Association("FK_Orders_Customers", "CustomerID", "CustomerID", IsForeignKey=true)]
+        [Association("Customer_Order", "CustomerID", "CustomerID", IsForeignKey=true)]
         public Customer Customer
         {
             get
@@ -860,7 +861,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [Association("FK_Order_Details_Orders", "OrderID", "OrderID")]
+        [Association("Order_Order_Detail", "OrderID", "OrderID")]
         public EntityCollection<Order_Detail> Order_Details
         {
             get
@@ -1143,6 +1144,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the 'ShipVia' value.
         /// </summary>
+        [ConcurrencyCheck()]
         [DataMember()]
         [RoundtripOriginal()]
         public Nullable<int> ShipVia
@@ -1274,7 +1276,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Order"/> entity.
         /// </summary>
-        [Association("FK_Order_Details_Orders", "OrderID", "OrderID", IsForeignKey=true)]
+        [Association("Order_Order_Detail", "OrderID", "OrderID", IsForeignKey=true)]
         public Order Order
         {
             get
@@ -1344,7 +1346,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [Association("FK_Order_Details_Products", "ProductID", "ProductID", IsForeignKey=true)]
+        [Association("Product_Order_Detail", "ProductID", "ProductID", IsForeignKey=true)]
         public Product Product
         {
             get
@@ -1570,7 +1572,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Category"/> entity.
         /// </summary>
-        [Association("FK_Products_Categories", "CategoryID", "CategoryID", IsForeignKey=true)]
+        [Association("Category_Product", "CategoryID", "CategoryID", IsForeignKey=true)]
         public Category Category
         {
             get
@@ -1690,7 +1692,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [Association("FK_Order_Details_Products", "ProductID", "ProductID")]
+        [Association("Product_Order_Detail", "ProductID", "ProductID")]
         public EntityCollection<Order_Detail> Order_Details
         {
             get
@@ -1706,7 +1708,6 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the 'ProductID' value.
         /// </summary>
-        [ConcurrencyCheck()]
         [DataMember()]
         [Editable(false, AllowInitialValue=true)]
         [Key()]
@@ -2269,7 +2270,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Territory"/> entity instances.
         /// </summary>
-        [Association("FK_Territories_Region", "RegionID", "RegionID")]
+        [Association("Region_Territory", "RegionID", "RegionID")]
         [Composition()]
         public EntityCollection<Territory> Territories
         {
@@ -2351,7 +2352,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Region"/> entity.
         /// </summary>
-        [Association("FK_Territories_Region", "RegionID", "RegionID", IsForeignKey=true)]
+        [Association("Region_Territory", "RegionID", "RegionID", IsForeignKey=true)]
         public Region Region
         {
             get
