@@ -95,7 +95,7 @@ namespace OpenRiaServices.Tools.Test
 
                 // Generate CMD strings to diff and to copy
                 string tfDiffCommand = "tf diff \"" + referenceFileName + "\" \"" + generatedFileName + "\"\r\n";
-                string codeDiffCommand = "code --diff \"" + referenceFileName + "\" \"" + generatedFileName + "\"\r\n";
+                string codeDiffCommand = "git diff \"" + referenceFileName + "\" \"" + generatedFileName + "\"\r\n";
                 string tfEditCommand = "tf edit \"" + realFileInProject + "\"\r\n";
                 string copyCommand = "copy \"" + generatedFileName + "\" \"" + realFileInProject + "\"";
 
@@ -115,7 +115,7 @@ namespace OpenRiaServices.Tools.Test
                     "    Newly generated file: " + generatedFileName + "\r\n" +
                     "\r\n ------------------- To diff these files, execute this ------------------\r\n\r\n    " +
                     tfDiffCommand +
-                    "\r\n or using vscode \r\n\r\n    " +
+                    "\r\n or using git diff \r\n\r\n    " +
                     codeDiffCommand +
                     "\r\n ---------------- To make this the new reference file, execute this ------------------\r\n\r\n    " +
                     tfEditCommand + "    " +
