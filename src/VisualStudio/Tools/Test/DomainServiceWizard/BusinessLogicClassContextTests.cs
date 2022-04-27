@@ -117,17 +117,17 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             Assert.IsTrue(dbContext.NeedToGenerateMetadataClasses);
         }
 
-        [TestMethod]
-        [Description("Tests if LinqToEntitiesDbContext works properly for EFCore entities")]
-        public void BusinessLogicClass_Context_EFCoreDbContextTest()
-        {
-            // TODO: This won't work since LinqToEntitiesDbContext uses EF6 metadata model
-            // Something similar to LinqToEntitiesDbContext but using EF Core's IModel must be built
-            //LinqToEntitiesDbContext dbContext = new LinqToEntitiesDbContext(typeof(EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities));
-            //Assert.AreEqual(11, dbContext.Entities.Count());
-            //Assert.IsTrue(dbContext.NeedToGenerateMetadataClasses);
-            throw new NotImplementedException();
-        }
+        //[TestMethod]
+        //[Description("Tests if LinqToEntitiesDbContext works properly for EFCore entities")]
+        //public void BusinessLogicClass_Context_EFCoreDbContextTest()
+        //{
+        //    // TODO: This won't work since LinqToEntitiesDbContext uses EF6 metadata model
+        //    // Something similar to LinqToEntitiesDbContext but using EF Core's IModel must be built
+        //    //LinqToEntitiesDbContext dbContext = new LinqToEntitiesDbContext(typeof(EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities));
+        //    //Assert.AreEqual(11, dbContext.Entities.Count());
+        //    //Assert.IsTrue(dbContext.NeedToGenerateMetadataClasses);
+        //    throw new NotImplementedException();
+        //}
 
         [TestMethod]
         [Description("Tests if LinqToEntitiesDbContext works properly for EF CodeFirst entities")]
