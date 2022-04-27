@@ -16,7 +16,6 @@ namespace OpenRiaServices.Client.Test
     using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 
     /// <summary>
-    /// TODO: Make it work with EF Core. Maybe copy whole file and work with DBContext for EFCore
     /// End to end update scenario tests. These tests do a one time TestClass level test database
     /// initialization, creating the isolation database that will be used for all the tests. After
     /// all tests have run, and assembly level clean-up method disposes the test database.
