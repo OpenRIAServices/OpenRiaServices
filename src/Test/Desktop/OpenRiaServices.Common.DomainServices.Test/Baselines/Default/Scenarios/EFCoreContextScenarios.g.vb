@@ -347,6 +347,7 @@ Namespace EFCoreModels.Northwind
         ''' </summary>
         <ConcurrencyCheck(),  _
          DataMember(),  _
+         Required(),  _
          RoundtripOriginal(),  _
          StringLength(40)>  _
         Public Property CompanyName() As String
@@ -2064,6 +2065,7 @@ Namespace EFCoreModels.Northwind
         ''' Gets or sets the 'RegionDescription' value.
         ''' </summary>
         <DataMember(),  _
+         Required(),  _
          StringLength(50)>  _
         Public Property RegionDescription() As String
             Get
@@ -2245,6 +2247,7 @@ Namespace EFCoreModels.Northwind
         ''' Gets or sets the 'TerritoryDescription' value.
         ''' </summary>
         <DataMember(),  _
+         Required(),  _
          StringLength(50)>  _
         Public Property TerritoryDescription() As String
             Get

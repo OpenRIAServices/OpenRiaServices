@@ -339,6 +339,7 @@ namespace EFCoreModels.Northwind
         /// </summary>
         [ConcurrencyCheck()]
         [DataMember()]
+        [Required()]
         [RoundtripOriginal()]
         [StringLength(40)]
         public string CompanyName
@@ -2218,6 +2219,7 @@ namespace EFCoreModels.Northwind
         /// Gets or sets the 'RegionDescription' value.
         /// </summary>
         [DataMember()]
+        [Required()]
         [StringLength(50)]
         public string RegionDescription
         {
@@ -2419,6 +2421,7 @@ namespace EFCoreModels.Northwind
         /// Gets or sets the 'TerritoryDescription' value.
         /// </summary>
         [DataMember()]
+        [Required()]
         [StringLength(50)]
         public string TerritoryDescription
         {
