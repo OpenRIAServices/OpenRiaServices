@@ -287,7 +287,7 @@ namespace OpenRiaServices.EntityFramework
                         {
                             string propertyName = NameOf(property);
 
-                            // TÒDO: Determine if Excluded properties should be skipped
+                            // Excluded properties should be skipped
                             if (propDescriptors[propertyName] is not null)
                                 membersInConflict.Add(propertyName);
                         }
