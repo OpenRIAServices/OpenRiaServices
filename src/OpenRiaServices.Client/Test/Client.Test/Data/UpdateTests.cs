@@ -3736,8 +3736,8 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueCallback(delegate
             {
-                nw1Load = nw1.Load(nw1.GetProductsQuery().Take(3), false);
-                nw2Load = nw2.Load(nw2.GetProductsQuery().Take(3), false);
+                nw1Load = nw1.Load(nw1.GetProductsQuery().OrderBy(p => p.ProductID).Take(3), false);
+                nw2Load = nw2.Load(nw2.GetProductsQuery().OrderBy(p => p.ProductID).Take(3), false);
             });
             EnqueueConditional(() => nw1Load.IsComplete && nw2Load.IsComplete);
             EnqueueCallback(delegate

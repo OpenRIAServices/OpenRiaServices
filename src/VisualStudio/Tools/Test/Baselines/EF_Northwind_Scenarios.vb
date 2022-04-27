@@ -6,7 +6,6 @@ Option Explicit On
 
 Imports DataTests.Scenarios.EF.Northwind
 Imports OpenRiaServices.EntityFramework
-Imports OpenRiaServices.Hosting
 Imports OpenRiaServices.Server
 Imports System
 Imports System.Collections.Generic

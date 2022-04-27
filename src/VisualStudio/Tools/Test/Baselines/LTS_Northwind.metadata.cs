@@ -8,7 +8,6 @@ namespace DataTests.Northwind.LTSBuddy
     using System.Data.Linq;
     using System.Linq;
     using DataTests.Northwind.LTS;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     

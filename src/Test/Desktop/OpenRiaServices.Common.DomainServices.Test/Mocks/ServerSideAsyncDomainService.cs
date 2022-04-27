@@ -60,8 +60,11 @@ namespace TestDomainServices
         /// Query returing a queryable range in a task
         /// </summary>
         /// <returns></returns>
-        public Task<IQueryable<RangeItem>> GetQueryableRangeAsync()
+        public Task<IQueryable<RangeItem>> GetQueryableRangeAsync(CancellationToken cancellationToken)
         {
+            if (!cancellationToken.Equals(ServiceContext.CancellationToken))
+                throw new DomainException("CancellationToken parameter does not work");
+
             return Delay(1)
                .ContinueWith(_ =>
                    _items.AsQueryable()
@@ -95,12 +98,10 @@ namespace TestDomainServices
         /// </summary>
         /// <param name="id">The identifier.</param>
         /// <returns></returns>
-        public Task<RangeItem> GetRangeByIdAsync(int id)
+        public async ValueTask<RangeItem> GetRangeByIdAsync(int id)
         {
-            return Delay(1)
-                .ContinueWith(_ =>
-                    _items.FirstOrDefault(a => a.Id == id)
-                );
+            await Delay(1);
+            return _items.FirstOrDefault(a => a.Id == id);
         }
 
         /// <summary>
@@ -122,7 +123,7 @@ namespace TestDomainServices
         /// <param name="rangeItem">Item to update</param>
         /// <returns></returns>
         [Update]
-        public async Task UpdateRangeAsync(RangeItem rangeItem)
+        public async ValueTask UpdateRangeAsync(RangeItem rangeItem)
         {
             await Delay(5);
             rangeItem.Text = "updated";

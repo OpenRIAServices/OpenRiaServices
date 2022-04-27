@@ -104,7 +104,7 @@ namespace OpenRiaServices.Hosting.Local
         {
             // Create a DomainServiceContext (with access to the provided HttpContextBase) and use that as our context
             HttpContextBaseServiceProvider serviceProvider = new HttpContextBaseServiceProvider(httpContext);
-            DomainServiceContext context = new DomainServiceContext(serviceProvider, DomainOperationType.Query);
+            DomainServiceContext context = new DomainServiceContext(serviceProvider, httpContext.User, DomainOperationType.Query);
 
             return DomainServiceProxy.Create<TDomainServiceContract, TDomainService>(context);
         }

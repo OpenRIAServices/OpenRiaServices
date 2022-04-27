@@ -10,7 +10,6 @@ namespace BizLogic.Test
     using System.Linq;
     using NorthwindPOCOModel;
     using OpenRiaServices.EntityFramework;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     

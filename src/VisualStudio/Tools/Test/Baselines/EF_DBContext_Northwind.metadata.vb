@@ -5,7 +5,6 @@ Option Strict On
 Option Explicit On
 
 Imports DbContextModels.Northwind
-Imports OpenRiaServices.Hosting
 Imports OpenRiaServices.Server
 Imports System
 Imports System.Collections.Generic

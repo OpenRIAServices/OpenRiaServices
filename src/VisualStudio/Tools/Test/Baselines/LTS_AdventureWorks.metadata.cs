@@ -9,7 +9,6 @@ namespace DataTests.AdventureWorks.LTSBuddy
     using System.Linq;
     using System.Xml.Linq;
     using DataTests.AdventureWorks.LTS;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     

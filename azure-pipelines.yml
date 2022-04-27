@@ -10,9 +10,14 @@ variables:
 
 steps:
 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '6.x'
+
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: 5.11.0
+    versionSpec: 6.0.0
     
 - task: gitversion/setup@0
   displayName: Install GitVersion
@@ -63,8 +68,8 @@ steps:
   inputs:
     testAssemblyVer2: |
      **\bin\$(BuildConfiguration)\**\OpenRiaServices.*Test.dll
-     src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.VisualStudio.*Test.dll
      !src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.*Test.dll
+     src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.VisualStudio.*.Test.dll
      !**\obj\**
 
     runOnlyImpactedTests: false

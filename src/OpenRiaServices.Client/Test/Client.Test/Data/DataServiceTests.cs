@@ -326,6 +326,64 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueTestComplete();
         }
+
+
+        [TestMethod]
+        [Asynchronous]
+        public void TestCacheForInvokeWithNoSideEffects()
+        {
+            ExecuteRequest(new Uri(TestURIs.TestProvider_Scenarios + "/binary/VoidInvokeWithSideEffectsAndCaching"), null, response =>
+            {
+                Assert.AreEqual("no-cache", response.Headers["Cache-Control"], "Incorrect cache header");
+            },
+            "POST");
+            EnqueueTestComplete();
+        }
+
+        [TestMethod]
+        [Asynchronous]
+        public void TestCacheForInvoke()
+        {
+            ExecuteRequest(new Uri(TestURIs.TestProvider_Scenarios + "/binary/VoidInvokeNoSideEffectsAndNoCaching"), null, response =>
+            {
+                Assert.AreEqual("no-cache", response.Headers["Cache-Control"], "Incorrect cache header");
+            },
+            "GET");
+
+            EnqueueTestComplete();
+        }
+
+        [TestMethod]
+        [Asynchronous]
+        [FullTrustTest] // Because OutputCache profiles require full trust.
+        public void TestCacheAbsoluteExpirationInvoke()
+        {
+            ExecuteRequest(new Uri(TestURIs.TestProvider_Scenarios + "/binary/GetCitiesWithCachingInvoke"), null, response =>
+            {
+                Assert.AreEqual("private, max-age=2", response.Headers["Cache-Control"], "Incorrect cache header");
+
+                DateTime date = Convert.ToDateTime(response.Headers["Date"]);
+                DateTime expires = Convert.ToDateTime(response.Headers["Expires"]);
+                Assert.AreEqual(2.0, expires.Subtract(date).TotalSeconds, OutputCacheMaxDelta, "Incorrect cache duration");
+            },
+            "GET");
+
+            EnqueueTestComplete();
+        }
+
+
+        [TestMethod]
+        [Asynchronous]
+        public void TestInvokeCacheAndThrow()
+        {
+            ExecuteRequest(new Uri(TestURIs.TestProvider_Scenarios + "/binary/GetCitiesWithCachingAndThrowInvoke"), null, response =>
+            {
+                Assert.AreEqual("no-cache", response.Headers["Cache-Control"], "Incorrect cache header");
+            },
+            "GET");
+
+            EnqueueTestComplete();
+        }
 #endif
 
         /// <summary>
@@ -492,7 +550,7 @@ namespace OpenRiaServices.Client.Test
             ExecuteRequest(uri, /* buildRequest */ null, responseCallback);
         }
 
-        private void ExecuteRequest(Uri uri, Action<HttpWebRequest> buildRequest, Action<HttpWebResponse> responseCallback)
+        private void ExecuteRequest(Uri uri, Action<HttpWebRequest> buildRequest, Action<HttpWebResponse> responseCallback, string method = "GET")
         {
             bool hasResponse = false;
             HttpWebResponse response = null;
@@ -500,6 +558,11 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 HttpWebRequest request = (HttpWebRequest)HttpWebRequest.Create(uri);
+                request.Method = method;
+
+                if (request.Method == "POST")
+                    request.ContentLength = 0;
+
                 buildRequest?.Invoke(request);
                 request.BeginGetResponse(delegate (IAsyncResult asyncResult)
                 {

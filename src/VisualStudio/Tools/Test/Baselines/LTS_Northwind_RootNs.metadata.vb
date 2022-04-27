@@ -5,7 +5,6 @@ Option Strict On
 Option Explicit On
 
 Imports DataTests.Northwind.LTS
-Imports OpenRiaServices.Hosting
 Imports OpenRiaServices.Server
 Imports System
 Imports System.Collections.Generic

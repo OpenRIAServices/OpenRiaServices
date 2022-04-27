@@ -5,7 +5,6 @@ Option Strict On
 Option Explicit On
 
 Imports DataModels.ScenarioModels
-Imports OpenRiaServices.Hosting
 Imports OpenRiaServices.LinqToSql
 Imports OpenRiaServices.Server
 Imports System

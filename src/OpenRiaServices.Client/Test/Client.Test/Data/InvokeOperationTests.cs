@@ -217,7 +217,7 @@ namespace OpenRiaServices.Client.Test
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
-            InvokeOperation invoke = provider.VoidMethod(TestHelperMethods.DefaultOperationAction, null);
+            InvokeOperation invoke = provider.VoidInvokeNoSideEffectsAndNoCaching(TestHelperMethods.DefaultOperationAction, null);
 
             this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate

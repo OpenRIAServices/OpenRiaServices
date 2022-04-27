@@ -329,7 +329,7 @@ namespace OpenRiaServices.Silverlight.Testing
             }
         }
         #endregion // Assert nested class
-
+          
         private Queue<Action> AsyncQueue
         {
             get

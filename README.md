@@ -1,3 +1,9 @@
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
+The software is provided free of charge, but **I urge you to use some of the money saved by using this software to support Ukraine**
+The civilian suffering due to the Russian invasion are enourmous, the attacks on hospitals and other war crimes performed by the Russian invaders are horrifying.
+You can find links for donating to various projects at https://standforukraine.com/ and https://stand-with-ukraine.pp.ua/
+
 # OpenRiaServiecs
 
 Azure Pipelines: [![Build Status](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_apis/build/status/OpenRIAServices.OpenRiaServices?branchName=main)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=main)

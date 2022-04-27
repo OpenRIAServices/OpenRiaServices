@@ -7,7 +7,6 @@ namespace DataTests.Scenarios.LTS.NorthwindBuddy
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using DataTests.Scenarios.LTS.Northwind;
-    using OpenRiaServices.Hosting;
     using OpenRiaServices.Server;
     
     
