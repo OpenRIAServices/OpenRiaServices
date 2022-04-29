@@ -560,10 +560,6 @@ namespace OpenRiaServices.Tools.Test
         [Description("Create client proxies for Linq to Entities domain service and compare to known good copy")]
         public void TestCatalogEFClientProxies()
         {
-            // TODO: Test codegeneration (kodgenereringstester) (kopera denna mapp med filer ?)
-            // Om samma databasmodell => kopiera genererade file (.g.cs) och skriv tester
-            // Validera både för vb och c#
-            // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEF", "Catalog_EF.g", typeof(TestDomainServices.EF.Catalog), Array.Empty<string>(), false));
         }
 
