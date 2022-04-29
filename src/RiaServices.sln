@@ -145,6 +145,7 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.EntityFrameworkCore", "OpenRiaServices.Server.EntityFrameworkCore\Framework\OpenRiaServices.Server.EntityFrameworkCore.csproj", "{B8D39090-3B76-41BB-A139-956E42619E91}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreModels", "OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreModels.csproj", "{6F468ADB-5799-4C24-93C5-765120AAAA4E}"
+EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.AspNetCore", "OpenRiaServices.Hosting.AspNetCore\Framework\OpenRiaServices.Hosting.AspNetCore.csproj", "{5A3B6E67-822E-44EA-8B68-A043555CC86F}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreWebsite", "Test\AspNetCoreWebsite\AspNetCoreWebsite.csproj", "{7F378F98-E1B2-411A-809E-B1894E768936}"
