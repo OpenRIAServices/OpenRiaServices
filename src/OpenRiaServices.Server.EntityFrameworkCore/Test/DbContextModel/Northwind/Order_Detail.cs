@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenRiaServices.Server;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -16,6 +17,8 @@ namespace EFCoreModels.Northwind
         public float Discount { get; set; }
 
         public virtual Order Order { get; set; }
+
+        [Include]
         public virtual Product Product { get; set; }
     }
 }

@@ -4,11 +4,10 @@
         <DefineConstants>$(DefineConstants);SERVERFX;EFCORE</DefineConstants>
         <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
         <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
-        <PackageOutputPath>..\..\..\NuGet\bin\</PackageOutputPath>
     </PropertyGroup>
     <ItemGroup>
-        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.20" />
-        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.20" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.*" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.*" />
     </ItemGroup>
     <ItemGroup>
         <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />

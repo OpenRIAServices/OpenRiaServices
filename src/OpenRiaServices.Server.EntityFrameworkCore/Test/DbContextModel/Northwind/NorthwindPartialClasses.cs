@@ -9,19 +9,6 @@ using OpenRiaServices.Server;
 
 namespace EFCoreModels.Northwind
 {
-     // TODO: Remove MetaDataType attributes and move attributes directly to classe so project can be netstandard2
-    [MetadataType(typeof(RegionMetadata))]
-    public partial class Region
-    {
-    }
-
-    public static class RegionMetadata
-    {
-        [Composition]
-        [Include]
-        public static object Territories;
-    }
-
     /// <summary>
     /// Non DAL projection type used to verify that such types can be returned
     /// from the provider
@@ -66,7 +53,6 @@ namespace EFCoreModels.Northwind
         }
     }
 
-    [MetadataType(typeof(OrderMetadata))]
     public partial class Order
     {
         // Calculated property. Used to test that user-defined properties work properly.
@@ -80,24 +66,6 @@ namespace EFCoreModels.Northwind
         }
     }
 
-    [MetadataType(typeof(OrderDetailMetadata))]
-    public partial class Order_Detail
-    {
-    }
-
-    public static class OrderMetadata
-    {
-        [Include]
-        public static object Order_Details;
-    }
-
-    public static class OrderDetailMetadata
-    {
-        [Include]
-        public static object Product;
-    }
-
-    [MetadataType(typeof(ProductMetadata))]
     public partial class Product
     {
         private string _resolveMethod = String.Empty;
@@ -115,14 +83,5 @@ namespace EFCoreModels.Northwind
                 _resolveMethod = value;
             }
         }
-    }
-
-    public static class ProductMetadata
-    {
-        [Include("CategoryName", "CategoryName")]
-        public static object Category;
-
-        [Include("CompanyName", "SupplierName")]
-        public static object Supplier;
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenRiaServices.Server;
 
 // Code scaffolded by EF Core assumes nullable reference types (NRTs) are not used or disabled.
 // If you have enabled NRTs for your project, then un-comment the following line:
@@ -25,7 +26,9 @@ namespace EFCoreModels.Northwind
         public short? ReorderLevel { get; set; }
         public bool Discontinued { get; set; }
 
+        [Include("CategoryName", "CategoryName")]
         public virtual Category Category { get; set; }
+        [Include("CompanyName", "SupplierName")]
         public virtual Supplier Supplier { get; set; }
         public virtual ICollection<Order_Detail> Order_Details { get; set; }
     }
