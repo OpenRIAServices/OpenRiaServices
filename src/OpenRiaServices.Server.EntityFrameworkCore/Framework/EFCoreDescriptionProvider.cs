@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
 namespace OpenRiaServices.Server.EntityFrameworkCore
@@ -35,18 +36,14 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         {
             // No need to deal with concurrency... Worst case scenario we have multiple 
             // instances of this thing.
-            ICustomTypeDescriptor td = null;
-            if (!_descriptors.TryGetValue(objectType, out td))
+            if (!_descriptors.TryGetValue(objectType, out ICustomTypeDescriptor td))
             {
                 // call into base so the TDs are chained
                 parent = base.GetTypeDescriptor(objectType, parent);
 
-                // TODO: Check if ef model
                 var model = _typeDescriptionContext.Model;
                 if (model != null && model.FindEntityType(objectType.FullName) is IEntityType entityType)
                 {
-                    // TODO: ...
-                    // only add an LTE TypeDescriptor if the type is an EF Entity or ComplexType
                     td = new EFCoreTypeDescriptor(_typeDescriptionContext, entityType, parent);
                 }
                 else
@@ -62,8 +59,9 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
         public override bool LookupIsEntityType(Type type)
         {
-            // TODO: Check if ef model, need to double check it fails for non- entity types
-            return _typeDescriptionContext.GetEntityType(type) != null;
+            // EF6 excludes "complex objects" here so we exclude owned entities
+            return _typeDescriptionContext.GetEntityType(type) is IEntityType entityType
+                && !entityType.IsOwned();
         }
     }
 }

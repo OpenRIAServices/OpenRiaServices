@@ -6,6 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 
 namespace OpenRiaServices.Server.EntityFrameworkCore
 {
@@ -32,7 +33,9 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 _timestampProperty = timestampMembers[0];
             }
 
-            // if (edmType.BuiltInTypeKind == BuiltInTypeKind.EntityType)
+            // TODO: determine if we should exclude owned entities just as EF6 excludes "complex objects" here
+            // Needs to add owned typ scenarios
+            if (!entityType.IsOwned())
             {
                 // if any FK member of any association is also part of the primary key, then the key cannot be marked
                 // Editable(false)
@@ -40,7 +43,6 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                     .Where(n => n.IsDependentToPrincipal())
                     .SelectMany(n => n.ForeignKey.Properties)
                     .ToDictionary(x => x.Name);
-                //this._foreignKeyMembers
 
                 foreach (var key in entityType.GetKeys())
                 {
@@ -64,10 +66,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         /// </remarks>
         private static bool IsConcurrencyTimestamp(IProperty p)
         {
-            //IsConcurrencyTimestamp
             return p.IsConcurrencyToken
-                // && p.GetMaxLength() == 8
-                // && p.IsFixedLength
                 && p.ValueGenerated == ValueGenerated.OnAddOrUpdate;
         }
 
@@ -97,10 +96,12 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
             bool hasKeyAttribute = pd.Attributes[typeof(KeyAttribute)] != null;
             var property = _entityType.FindProperty(pd.Name);
+            // TODO: Review all usage of isEntity to validate if we should really copy logic from EF6
+            bool isEntity = !_entityType.IsOwned();
 
             if (property != null)
             {
-                if (property.IsPrimaryKey())
+                if (isEntity && property.IsPrimaryKey() && !hasKeyAttribute)
                 {
                     attributes.Add(new KeyAttribute());
                     hasKeyAttribute = true;
@@ -210,7 +211,8 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             }
 
             // Add AssociationAttribute if required for the specified property
-            if (_entityType.FindNavigation(pd.Name) is INavigation navigation)
+            if (isEntity
+                && _entityType.FindNavigation(pd.Name) is INavigation navigation)
             {
                 bool isManyToMany = navigation.IsCollection() && navigation.FindInverse()?.IsCollection() == true;
                 if (!isManyToMany)
@@ -236,14 +238,11 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         /// <returns>True if the property should be excluded, false otherwise.</returns>
         internal static bool ShouldExcludeEntityMember(PropertyDescriptor pd)
         {
-            //TODO: remove this, EntityState is not part of entities 
-
-            // exclude EntityState members
-            if (pd.PropertyType == typeof(EntityState)) // TODO: Maybe also check pd.Component type
+            // exclude IChangeDetector.EntityState members
+            if (pd.PropertyType == typeof(EntityState) && typeof(IChangeDetector).IsAssignableFrom(pd.ComponentType))
             {
                 return true;
             }
-
 
             return false;
         }
