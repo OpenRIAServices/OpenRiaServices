@@ -19,7 +19,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         private readonly IEntityType _entityType;
         private readonly IProperty _timestampProperty;
         private readonly bool _keyIsEditable;
-        private Dictionary<string, IProperty> _foreignKeyMembers; // TODO: change to List<string> / HashSet<string>
+        private HashSet<string> _foreignKeyMembers;
 
         public EFCoreTypeDescriptor(EFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
         : base(parent)
@@ -39,16 +39,16 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             {
                 // if any FK member of any association is also part of the primary key, then the key cannot be marked
                 // Editable(false)
-                _foreignKeyMembers = entityType.GetNavigations()
-                    .Where(n => n.IsDependentToPrincipal())
-                    .SelectMany(n => n.ForeignKey.Properties)
-                    .ToDictionary(x => x.Name);
+                _foreignKeyMembers = new HashSet<string>(entityType.GetNavigations()
+                     .Where(n => n.IsDependentToPrincipal())
+                     .SelectMany(n => n.ForeignKey.Properties)
+                     .Select(x => x.Name));
 
                 foreach (var key in entityType.GetKeys())
                 {
                     foreach (var keyMember in key.Properties)
                     {
-                        if (_foreignKeyMembers.ContainsKey(keyMember.Name))
+                        if (IsForeignKeyMember(keyMember.Name))
                         {
                             _keyIsEditable = true;
                             break;
@@ -190,9 +190,8 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 // Add RTO to this member if required. If this type has a timestamp
                 // member that member should be the ONLY member we apply RTO to.
                 // Dont apply RTO if it is an association member.
-                bool isForeignKeyMember = _foreignKeyMembers != null && _foreignKeyMembers.ContainsKey(property.Name);
                 if ((_timestampProperty == null || _timestampProperty == property) &&
-                    (inferRoundtripOriginalAttribute || isForeignKeyMember) &&
+                    (inferRoundtripOriginalAttribute || IsForeignKeyMember(property.Name)) &&
                     pd.Attributes[typeof(AssociationAttribute)] == null)
                 {
                     if (pd.Attributes[typeof(RoundtripOriginalAttribute)] == null)
@@ -244,5 +243,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
             return false;
         }
+
+        private bool IsForeignKeyMember(string name) => _foreignKeyMembers != null && _foreignKeyMembers.Contains(name);
     }
 }
