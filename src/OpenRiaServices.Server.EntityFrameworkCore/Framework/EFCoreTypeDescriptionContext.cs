@@ -36,7 +36,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             {
                 if (_model == null)
                 {
-                    // TODO: Is there a smarter way ?? 
+                    // TODO: Investigate to use compiled models in future (compiled models are only availible in latest versions of ef core)
                     var dbContext = (DbContext)Activator.CreateInstance(_contextType);
                     _model = dbContext.Model;
                 }
