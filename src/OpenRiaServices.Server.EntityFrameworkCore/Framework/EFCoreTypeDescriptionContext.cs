@@ -14,7 +14,6 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
     /// </summary>
     internal class EFCoreTypeDescriptionContext
     {
-        //      private readonly Dictionary<string, AssociationInfo> _associationMap = new Dictionary<string, AssociationInfo>();
         private readonly Type _contextType;
         private IModel _model;
 
@@ -72,9 +71,11 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             }
 
             var assocAttrib = new AssociationAttribute(fk.GetConstraintName(), thisKey, otherKey);
-            assocAttrib.IsForeignKey = navigationProperty.IsDependentToPrincipal(); // TODO:  isForeignKey;
+            assocAttrib.IsForeignKey = IsForeignKey(navigationProperty);
             return assocAttrib;
         }
+
+        private static bool IsForeignKey(INavigation navigationProperty) => navigationProperty.IsDependentToPrincipal();
 
         /// <summary>
         /// Comma delimits the specified member name collection

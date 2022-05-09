@@ -214,7 +214,7 @@ namespace OpenRiaServices.EntityFramework
                     operationConflictMap.Add(conflict, entry);
                 }
 
-                await this.SetChangeSetConflictsAsync(operationConflictMap, cancellationToken);
+                await SetChangeSetConflictsAsync(operationConflictMap, cancellationToken);
 
                 // Call out to any user resolve code and resubmit if all conflicts
                 // were resolved
@@ -252,7 +252,7 @@ namespace OpenRiaServices.EntityFramework
         /// </summary>
         /// <param name="operationConflictMap">Map of conflicts to their corresponding operations entries.</param>
         /// <param name="cancellationToken"></param>
-        private async Task SetChangeSetConflictsAsync(Dictionary<DbEntityEntry, ChangeSetEntry> operationConflictMap, CancellationToken cancellationToken)
+        private static async Task SetChangeSetConflictsAsync(Dictionary<DbEntityEntry, ChangeSetEntry> operationConflictMap, CancellationToken cancellationToken)
         {
             foreach (var conflictEntry in operationConflictMap)
             {
