@@ -4,9 +4,6 @@
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
-    <PropertyGroup>
-        <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
-    </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
