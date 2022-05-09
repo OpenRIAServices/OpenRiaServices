@@ -162,12 +162,10 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
                 bool isStringType = pd.PropertyType == typeof(string) || pd.PropertyType == typeof(char[]);
                 if (isStringType &&
-                    pd.Attributes[typeof(StringLengthAttribute)] == null)
+                    pd.Attributes[typeof(StringLengthAttribute)] == null &&
+                    property.GetMaxLength() is int maxLength)                  
                 {
-                    if (property.GetMaxLength() is int maxLength)
-                    {
-                        attributes.Add(new StringLengthAttribute(maxLength));
-                    }
+                    attributes.Add(new StringLengthAttribute(maxLength));
                 }
 
                 bool hasTimestampAttribute = pd.Attributes[typeof(TimestampAttribute)] != null;

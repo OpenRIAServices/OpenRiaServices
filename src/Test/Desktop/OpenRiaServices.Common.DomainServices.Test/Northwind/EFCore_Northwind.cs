@@ -118,7 +118,7 @@ namespace TestDomainServices.EFCore
                 case "ThrowDomainServiceEx":
                     throw new DomainException("testing");
                 case "MergeIntoCurrent":
-                    return this.ResolveProductWithMerge(entryInConflict);
+                    return ResolveProductWithMerge(entryInConflict);
                 case "KeepCurrent":
                     // Client Wins
                     RefreshClientWins(entryInConflict);
@@ -148,7 +148,7 @@ namespace TestDomainServices.EFCore
         }
 
         // Reset all properties to database values, except modified values which are keept
-        private void RefreshClientWins(EntityEntry entry)
+        private static void RefreshClientWins(EntityEntry entry)
         {
             PropertyValues dbValues = entry.GetDatabaseValues();
             if (dbValues == null) 
@@ -166,7 +166,7 @@ namespace TestDomainServices.EFCore
             }
         }
 
-        private bool ResolveProductWithMerge(EntityEntry entry)
+        private static bool ResolveProductWithMerge(EntityEntry entry)
         {
             // Keep a collection of all modified properties and their values.
             PropertyValues currentValues = entry.CurrentValues;
