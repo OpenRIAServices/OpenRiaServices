@@ -43,9 +43,5 @@
       <LastGenOutput>MetadataResource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>System.Data.Mapping</CustomToolNamespace>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource.resx">
-      <Generator>PublicResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
   </ItemGroup>
  </Project>
