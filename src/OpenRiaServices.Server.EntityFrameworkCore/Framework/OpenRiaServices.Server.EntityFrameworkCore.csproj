@@ -1,0 +1,43 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <DefineConstants>$(DefineConstants);SERVERFX;EFCORE</DefineConstants>
+        <GenerateRuntimeConfigurationFiles>True</GenerateRuntimeConfigurationFiles>
+        <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
+    </PropertyGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.1.24" />
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.24" />
+    </ItemGroup>
+    <ItemGroup>
+        <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
+        <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\DbDomainService.cs" Link="DbDomainService.cs" />
+        <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\DbDomainServiceDescriptionProviderAttribute.cs" Link="DbDomainService.cs" />
+        <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs" Link="MetadataPropertyDescriptorWrapper.cs" />
+        <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\TypeDescriptorBase.cs" Link="TypeDescriptorBase.cs" />
+        <Compile Update="DbResource.Designer.cs">
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+            <DependentUpon>DbResource.resx</DependentUpon>
+        </Compile>
+        <Compile Update="Resource.Designer.cs">
+            <DependentUpon>Resource.resx</DependentUpon>
+            <AutoGen>True</AutoGen>
+            <DesignTime>True</DesignTime>
+        </Compile>
+    </ItemGroup>
+    <ItemGroup>
+        <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+    </ItemGroup>
+    <ItemGroup>
+        <EmbeddedResource Update="DbResource.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>DbResource.Designer.cs</LastGenOutput>
+            <SubType>Designer</SubType>
+        </EmbeddedResource>
+        <EmbeddedResource Update="Resource.resx">
+            <Generator>ResXFileCodeGenerator</Generator>
+            <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+        </EmbeddedResource>
+    </ItemGroup>
+</Project>

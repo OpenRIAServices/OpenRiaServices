@@ -31,6 +31,8 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Framework\OpenRiaServices.EntityFramework.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" PrivateAssets="All" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server.EntityFrameworkCore\Framework\OpenRiaServices.Server.EntityFrameworkCore.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreModels.csproj" />
     <ProjectReference Include="..\EFPOCOModels\EFPOCOModels.csproj" PrivateAssets="All" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
@@ -41,10 +43,25 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.Server.Authentication.AspNetMembership.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Baselines\Default\EF\Catalog_EFCore.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\EF\Catalog_EFCore.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\EF\Northwind_EFCore.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios_RootNs_FullTypeNames.g.vb">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EFCoreContextScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EFCoreContextScenarios.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Scenarios\EFCFDbContextScenarios.g.vb">
@@ -55,6 +72,12 @@
     </Content>
     <Content Include="Baselines\Default\Scenarios\EFDbContextScenarios.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFCoreDbContextScenarios.g.cs">
+       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\FullTypeNames\Scenarios\EFCoreDbContextScenarios.g.vb">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\FullTypeNames\Scenarios\EFCFDbContextScenarios.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -75,6 +98,11 @@
       <SubType>Code</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Compile Update="DataModels\AdventureWorks - Copy.cs">
+      <DependentUpon>AdventureWorks - Copy.tt</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="DataModels\AdventureWorks.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -84,6 +112,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorks.dbml</DependentUpon>
+    </Compile>
+    <Compile Update="DataModels\AdventureWorks1 - Copy.Designer.cs">
+      <DependentUpon>AdventureWorks.edmx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
     </Compile>
     <Compile Update="DataModels\Northwind.cs">
       <AutoGen>True</AutoGen>
@@ -284,11 +317,6 @@
     </Compile>
     <Compile Update="Cities\RequiresUserForStateAttribute.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="DataModels\AdventureWorks1.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventureWorks.edmx</DependentUpon>
     </Compile>
     <Compile Update="DataModels\Northwind.designer.cs">
       <AutoGen>True</AutoGen>
@@ -565,7 +593,25 @@
   <ItemGroup>
     <Compile Remove="Baselines\**\*.cs" />
   </ItemGroup>
-
+  <ItemGroup>
+    <None Remove="Baselines\Default\EF\Catalog_EFCore.g.vb" />
+    <None Remove="Baselines\Default\EF\Northwind_EFCore.g.vb" />
+    <None Remove="Baselines\Default\Scenarios\EFCoreContextScenarios.g.vb" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Baselines\Default\EF\Northwind_EFCore.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="DataModels\AdventureWorks - Copy.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>AdventureWorks - Copy.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <Compile Remove="net6.0\*" />
     <None Include="net6.0\*" />

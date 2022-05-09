@@ -511,7 +511,7 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(catalog.Products.Count == 8);
+                Assert.AreEqual(8, catalog.Products.Count);
             });
             EnqueueTestComplete();
         }
@@ -582,6 +582,46 @@ namespace OpenRiaServices.Client.Test
         protected override Northwind CreateNorthwind()
         {
             return new Northwind(TestURIs.DbCtx_Northwind);
+        }
+    }
+
+    [TestClass]
+    public class EFCoreQueryTests : CrossDomainServiceQueryTests
+    {
+        public EFCoreQueryTests()
+            : base(TestURIs.EFCore_Catalog, ProviderType.EFCore)
+        {
+        }
+
+        protected override Northwind CreateNorthwind()
+        {
+            return new Northwind(TestURIs.EFCore_Northwind);
+        }
+
+        /// <summary>
+        /// Test queries on projected FK members to make sure they work
+        /// </summary>
+        [TestMethod]
+        [Asynchronous]
+        public void TestFKProjectionQuery()
+        {
+            Catalog catalog = new Catalog(TestURIs.EFCore_Catalog);
+            LoadOperation lo1 = catalog.Load(catalog.GetEmployeesQuery(), false);
+
+            // test both Where and OrderBy expressions involving projected members
+            LoadOperation lo2 = catalog.Load(catalog.GetPurchaseOrdersQuery().Where(p => p.EmployeeID > 5).OrderBy(p => p.EmployeeID).Take(1), false);
+
+            EnqueueConditional(delegate
+            {
+                return !catalog.IsLoading;
+            });
+            EnqueueCallback(delegate
+            {
+                Assert.IsFalse(lo1.HasError || lo2.HasError);
+                Assert.IsTrue(catalog.Employees.Count > 0, "catalog.Employees.Count should be greater than 0");
+                Assert.IsTrue(catalog.PurchaseOrders.Count > 0, "catalog.PurchaseOrders.Count should be greater than 0");
+            });
+            EnqueueTestComplete();
         }
     }
 }

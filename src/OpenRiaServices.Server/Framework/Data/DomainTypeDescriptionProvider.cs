@@ -27,27 +27,27 @@ namespace OpenRiaServices.Server
             this._descriptionProvider = descriptionProvider;
         }
 
-        public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
+        public override ICustomTypeDescriptor GetTypeDescriptor(Type type, object instance)
         {
-            if (objectType == null && instance != null)
+            if (type == null && instance != null)
             {
-                objectType = instance.GetType();
+                type = instance.GetType();
             }
 
-            if (this._type != objectType)
+            if (this._type != type)
             {
                 // In inheritance scenarios, we might be called to provide a descriptor
                 // for a derived Type. In that case, we just return base.
-                return base.GetTypeDescriptor(objectType, instance);
+                return base.GetTypeDescriptor(type, instance);
             }
 
             if (this._customTypeDescriptor == null)
             {
                 // CLR, buddy class type descriptors
-                this._customTypeDescriptor = base.GetTypeDescriptor(objectType, instance);
+                this._customTypeDescriptor = base.GetTypeDescriptor(type, instance);
  
                 // EF, any other custom type descriptors provided through DomainServiceDescriptionProviders.
-                this._customTypeDescriptor = this._descriptionProvider.GetTypeDescriptor(objectType, this._customTypeDescriptor);
+                this._customTypeDescriptor = this._descriptionProvider.GetTypeDescriptor(type, this._customTypeDescriptor);
                 
                 // initialize FK members AFTER our type descriptors have chained
                 HashSet<string> foreignKeyMembers = this.GetForeignKeyMembers();
@@ -68,7 +68,7 @@ namespace OpenRiaServices.Server
                 if (DomainTypeDescriptor.ShouldRegister(this._customTypeDescriptor, keyIsEditable, foreignKeyMembers))
                 {
                     // Extend the chain with one more descriptor.
-                    this._customTypeDescriptor = new DomainTypeDescriptor(objectType, this._customTypeDescriptor, keyIsEditable, foreignKeyMembers);
+                    this._customTypeDescriptor = new DomainTypeDescriptor(type, this._customTypeDescriptor, keyIsEditable, foreignKeyMembers);
                 }
             }
 

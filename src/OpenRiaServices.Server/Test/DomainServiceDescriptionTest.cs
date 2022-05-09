@@ -29,8 +29,9 @@ using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.Ser
 namespace OpenRiaServices.Server.Test
 {
     using System.Threading.Tasks;
+    using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+    using Microsoft.EntityFrameworkCore.Metadata;
     using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
-
 
     /// <summary>
     /// DomainServiceDescription tests
@@ -350,6 +351,13 @@ namespace OpenRiaServices.Server.Test
 
             pd = TypeDescriptor.GetProperties(typeof(AdventureWorksModel.Customer))["SalesTerritoryReference"];
             Assert.IsTrue(LinqToEntitiesTypeDescriptor.ShouldExcludeEntityMember(pd));
+        }
+
+        [TestMethod]
+        public void EFCoreTypeDescriptor_ExcludedEntityMembers()
+        {
+            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCorePocoEntity_IEntityChangeTracker))["EntityState"];
+            Assert.IsTrue(EntityFrameworkCore.EFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
         }
 
         /// <summary>
@@ -1425,7 +1433,7 @@ namespace OpenRiaServices.Server.Test
             LinqToEntitiesTypeDescriptionContext ctxt = new LinqToEntitiesTypeDescriptionContext(contextType);
             EntityType edmType = (EntityType)ctxt.GetEdmType(typeof(NorthwindModel.Product));
             NavigationProperty navProp = edmType.NavigationProperties.Single(p => p.Name == "Category");
-            AssociationInfo assocInfo = ctxt.GetAssociationInfo(navProp);
+            OpenRiaServices.EntityFramework.AssociationInfo assocInfo = ctxt.GetAssociationInfo(navProp);
             Assert.IsNotNull(assocInfo);
 
             contextType = typeof(NorthwindNoFks.Northwind_NoFks_Entities);
@@ -3093,11 +3101,50 @@ namespace OpenRiaServices.Server.Test
             throw new NotImplementedException();
         }
 
-        public EntityState EntityState
+        public System.Data.Entity.EntityState EntityState
         {
             get { throw new NotImplementedException(); }
         }
     }
+
+    public class EFCorePocoEntity_IEntityChangeTracker : IChangeDetector
+    {
+        void IChangeDetector.DetectChanges(IStateManager stateManager)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.DetectChanges(InternalEntityEntry entry)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.PropertyChanged(InternalEntityEntry entry, IPropertyBase propertyBase, bool setModified)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.PropertyChanging(InternalEntityEntry entry, IPropertyBase propertyBase)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.Resume()
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.Suspend()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Microsoft.EntityFrameworkCore.EntityState EntityState
+        {
+            get { throw new NotImplementedException(); }
+        }
+    }
+
 
     #region DomainServiceDescriptionProvider samples
     /// <summary>
