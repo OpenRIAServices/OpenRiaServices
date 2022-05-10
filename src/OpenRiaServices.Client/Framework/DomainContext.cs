@@ -1107,13 +1107,16 @@ namespace OpenRiaServices.Client
         /// <returns>True if the method requires validation, false otherwise.</returns>
         private bool MethodRequiresValidation(string methodName, object[] paramValues)
         {
-            if (!this._requiresValidationMap.TryGetValue(methodName, out bool requiresValidation))
+            lock(this._syncRoot)
             {
-                MethodInfo method = ValidationUtilities.GetMethod(this, methodName, paramValues);
-                requiresValidation = ValidationUtilities.MethodRequiresValidation(method);
-                this._requiresValidationMap[methodName] = requiresValidation;
+                if (!this._requiresValidationMap.TryGetValue(methodName, out bool requiresValidation))
+                {
+                    MethodInfo method = ValidationUtilities.GetMethod(this, methodName, paramValues);
+                    requiresValidation = ValidationUtilities.MethodRequiresValidation(method);
+                    this._requiresValidationMap[methodName] = requiresValidation;
+                }
+                return requiresValidation;
             }
-            return requiresValidation;
         }
     }
 }
