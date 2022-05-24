@@ -44,7 +44,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             }
         }
 
-        public IEntityType GetEntityType(Type type) => Model.FindEntityType(type);
+        public IEntityType GetEntityType(Type type) => type?.FullName != null ? Model.FindEntityType(type) : null;
 
         /// <summary>
         /// Creates an AssociationAttribute for the specified navigation property
