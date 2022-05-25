@@ -44,6 +44,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             }
         }
 
+        // Verify that full name is not null since Model.FindEntityType throws argument exception if full name is null
         public IEntityType GetEntityType(Type type) => type?.FullName != null ? Model.FindEntityType(type) : null;
 
         /// <summary>
