@@ -13,6 +13,9 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.Relational" Version="3.1.24" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\DbDomainService.cs" Link="DbDomainService.cs" />
     <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\DbDomainServiceDescriptionProviderAttribute.cs" Link="DbDomainService.cs" />
@@ -30,7 +33,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+    <None Update="LICENSE.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="DbResource.resx">
