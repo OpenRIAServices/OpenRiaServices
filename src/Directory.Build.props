@@ -33,16 +33,17 @@
         <PackageOutputPath>$(MSBuildThisFileDirectory)..\Nuget\bin</PackageOutputPath>
         <PackageOutputPath Condition="'$(Configuration)'!='Release'">$(MSBuildThisFileDirectory)..\Nuget\bin\$(Configuration)</PackageOutputPath>
         <PackageOutputPath Condition="'$(BUILD_ARTIFACTSTAGINGDIRECTORY)'!=''">$(BUILD_ARTIFACTSTAGINGDIRECTORY)</PackageOutputPath>
-
+        <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+        
         <PackageReleaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</PackageReleaseNotes>
         <Authors>Outercurve RIA Services</Authors>
-
+        
         <!-- Setup signing-->
         <SignAssembly>true</SignAssembly>
         <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
         <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' == 'true'">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
         <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
-
+        
         <!-- opt out from portable pdbs, for better compability with older net framework releases
     This is required for several test related projects since code generation's 
     pdb reader cannot read the portable ones
