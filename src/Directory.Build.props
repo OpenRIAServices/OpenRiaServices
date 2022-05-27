@@ -1,57 +1,73 @@
 <Project>
 
-  <!-- This PropertyGroup defines the location and version of Silverlight and SDK for .Net projects (Metadata projects) -->
-  <PropertyGroup>
-    <IsTestProject Condition="'$(IsTestProject)' == '' And ($(MSBuildProjectFile.Contains('.Test.')) Or $(MSBuildProjectDirectory.Contains('\Test\')))">true</IsTestProject>
-    <IsFrameworkProject Condition="'$(IsTestProject)' != 'true' and !$(MSBuildProjectFile.Contains('.VisualStudio.')) ">true</IsFrameworkProject>
+    <!-- This PropertyGroup defines the location and version of Silverlight and SDK for .Net projects (Metadata projects) -->
+    <PropertyGroup>
+        <IsTestProject Condition="'$(IsTestProject)' == '' And ($(MSBuildProjectFile.Contains('.Test.')) Or $(MSBuildProjectDirectory.Contains('\Test\')))">true</IsTestProject>
+        <IsFrameworkProject Condition="'$(IsTestProject)' != 'true' and !$(MSBuildProjectFile.Contains('.VisualStudio.')) ">true</IsFrameworkProject>
 
-    <DeterministicSourcePaths Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</DeterministicSourcePaths>
+        <DeterministicSourcePaths Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</DeterministicSourcePaths>
 
-    <!-- Use csharp 9.0 for all projects -->
-    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">9.0</LangVersion>
+        <!-- Use csharp 9.0 for all projects -->
+        <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">10.0</LangVersion>
 
-    <SonarQubeTestProject Condition="'$(IsTestProject)' == 'true'">True</SonarQubeTestProject>
+        <SonarQubeTestProject Condition="'$(IsTestProject)' == 'true'">True</SonarQubeTestProject>
 
-    <OutputPath Condition="'$(IsFrameworkProject)' == 'true'">$(MSBuildThisFileDirectory)bin\$(Configuration)\</OutputPath>
-    <GenerateDocumentationFile  Condition="'$(IsFrameworkProject)' == 'true'">true</GenerateDocumentationFile>
-    <CopyLocalLockFileAssemblies Condition="'$(IsFrameworkProject)' == 'true'">false</CopyLocalLockFileAssemblies>
+        <OutputPath Condition="'$(IsFrameworkProject)' == 'true'">$(MSBuildThisFileDirectory)bin\$(Configuration)\</OutputPath>
+        <GenerateDocumentationFile  Condition="'$(IsFrameworkProject)' == 'true'">true</GenerateDocumentationFile>
+        <CopyLocalLockFileAssemblies Condition="'$(IsFrameworkProject)' == 'true'">false</CopyLocalLockFileAssemblies>
 
-    <Version>5.0.0</Version>
-    <AssemblyVersion>5.0.0.0</AssemblyVersion>
-    <Company>Outercurve Foundation</Company>
-    <Product>Open RIA Services</Product>
-    <Copyright>Outercurve Foundation.  All rights reserved.</Copyright>
-    <Title>$(MSBuildProjectName)</Title>
-    <PackageProjectUrl>https://github.com/OpenRIAServices/OpenRiaServices/</PackageProjectUrl>
-    <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
-    <RepositoryType>git</RepositoryType>
+        <VersionPrefix>5.0.0</VersionPrefix>
+        <!-- Set correct version suffix below if manually building 
+        <VersionSuffix>preview.5</VersionSuffix>
+        -->
+        <AssemblyVersion>5.0.0.0</AssemblyVersion>
+        <Company>Outercurve Foundation</Company>
+        <Product>Open RIA Services</Product>
+        <Copyright>Outercurve Foundation.  All rights reserved.</Copyright>
+        <Title>$(MSBuildProjectName)</Title>
+        <PackageProjectUrl>https://github.com/OpenRIAServices/OpenRiaServices/</PackageProjectUrl>
+        <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
+        <RepositoryType>git</RepositoryType>
 
-    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageOutputPath>$(MSBuildThisFileDirectory)..\Nuget\bin</PackageOutputPath>
-    <PackageOutputPath Condition="'$(Configuration)'!='Release'">$(MSBuildThisFileDirectory)..\Nuget\bin\$(Configuration)</PackageOutputPath>
-    <PackageReleaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</PackageReleaseNotes>
-    <Authors>Outercurve RIA Services</Authors>
+        <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+        <PackageOutputPath>$(MSBuildThisFileDirectory)..\Nuget\bin</PackageOutputPath>
+        <PackageOutputPath Condition="'$(Configuration)'!='Release'">$(MSBuildThisFileDirectory)..\Nuget\bin\$(Configuration)</PackageOutputPath>
+        <PackageOutputPath Condition="'$(BUILD_ARTIFACTSTAGINGDIRECTORY)'!=''">$(BUILD_ARTIFACTSTAGINGDIRECTORY)</PackageOutputPath>
 
-    <!-- Setup signing-->
-    <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
-    <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' == 'true'">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
-    <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+        <PackageReleaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</PackageReleaseNotes>
+        <Authors>Outercurve RIA Services</Authors>
 
-    <!-- opt out from portable pdbs, for better compability with older net framework releases
+        <!-- Setup signing-->
+        <SignAssembly>true</SignAssembly>
+        <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' != 'true'">$(MSBuildThisFileDirectory)\snk\OpenRiaServices.snk</AssemblyOriginatorKeyFile>
+        <AssemblyOriginatorKeyFile Condition="'$(AssemblyOriginatorKeyFile)' == '' And '$(IsTestProject)' == 'true'">$(MSBuildThisFileDirectory)\snk\Tests.snk</AssemblyOriginatorKeyFile>
+        <PublicSign Condition=" '$(OS)' != 'Windows_NT' ">true</PublicSign>
+
+        <!-- opt out from portable pdbs, for better compability with older net framework releases
     This is required for several test related projects since code generation's 
     pdb reader cannot read the portable ones
     -->
-    <DebugType>portable</DebugType>
-    <DebugType Condition="$(TargetFramework.StartsWith('net4')) OR '$(IsTestProject)'=='true'">pdbonly</DebugType>
+        <DebugType>portable</DebugType>
+        <DebugType Condition="$(TargetFramework.StartsWith('net4')) OR '$(IsTestProject)'=='true'">pdbonly</DebugType>
 
-  </PropertyGroup>
+    </PropertyGroup>
 
-  <!-- Enable source link, we really only want this for framework assemblies and CI builds
+    <PropertyGroup Condition="'$(GitVersion_AssemblySemVer)' != ''">
+        <VersionPrefix>$(GitVersion_MajorMinorPatch)</VersionPrefix>
+        <VersionSuffix>$(GitVersion_PreReleaseTag)</VersionSuffix>
+        <!-- Set by source link
+        <InformationalVersion>$(GitVersion_InformationalVersion)</InformationalVersion>
+        -->
+        <AssemblyVersion>$(GitVersion_AssemblySemVer)</AssemblyVersion>
+        <FileVersion>$(GitVersion_MajorMinorPatch).$(GitVersion_PreReleaseNumber)</FileVersion>
+    </PropertyGroup>
+
+
+    <!-- Enable source link, we really only want this for framework assemblies and CI builds
   -->
-  <ItemGroup Condition="'$(IsFrameworkProject)' == 'true'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    <ItemGroup Condition="'$(IsFrameworkProject)' == 'true'">
+        <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
 
-  </ItemGroup>
+    </ItemGroup>
 
 </Project>

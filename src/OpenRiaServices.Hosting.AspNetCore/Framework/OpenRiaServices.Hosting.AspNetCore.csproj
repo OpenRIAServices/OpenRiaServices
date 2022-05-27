@@ -6,8 +6,9 @@
     <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
     <!-- Ignore documentation varnings while experimental-->
     <NoWarn>$(NoWarn);CS1574;CS1573;CS1591;CS1572</NoWarn>
+    <VersionPrefix>0.1.0</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
     <Version>0.1.0</Version>
-    <PackageVersion>0.1.0</PackageVersion>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Daniel-Svensson</Authors>
     <PackageTags>OpenRiaServices AspNetCore Hosting DomainServices AspNet WCF RIA Services Server</PackageTags>
