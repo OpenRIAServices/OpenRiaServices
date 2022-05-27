@@ -6,9 +6,10 @@
     <IsFrameworkProject Condition="'$(IsTestProject)' != 'true' and !$(MSBuildProjectFile.Contains('.VisualStudio.')) ">true</IsFrameworkProject>
 
     <DeterministicSourcePaths Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</DeterministicSourcePaths>
+    <ContinuousIntegrationBuild Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</ContinuousIntegrationBuild>
 
-    <!-- Use csharp 9.0 for all projects -->
-    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">9.0</LangVersion>
+    <!-- Use csharp 10.0 for all projects -->
+    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">10.0</LangVersion>
 
     <SonarQubeTestProject Condition="'$(IsTestProject)' == 'true'">True</SonarQubeTestProject>
 
@@ -16,7 +17,10 @@
     <GenerateDocumentationFile  Condition="'$(IsFrameworkProject)' == 'true'">true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies Condition="'$(IsFrameworkProject)' == 'true'">false</CopyLocalLockFileAssemblies>
 
-    <Version>5.0.0</Version>
+    <VersionPrefix>5.1.0</VersionPrefix>
+    <!-- Set correct version suffix below if manually building 
+        <VersionSuffix>preview.5</VersionSuffix>
+        -->
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <Company>Outercurve Foundation</Company>
     <Product>Open RIA Services</Product>
@@ -24,11 +28,18 @@
     <Title>$(MSBuildProjectName)</Title>
     <PackageProjectUrl>https://github.com/OpenRIAServices/OpenRiaServices/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/OpenRIAServices/OpenRiaServices.git</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <RepositoryType>git</RepositoryType>
 
     <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageOutputPath>$(MSBuildThisFileDirectory)..\Nuget\bin</PackageOutputPath>
     <PackageOutputPath Condition="'$(Configuration)'!='Release'">$(MSBuildThisFileDirectory)..\Nuget\bin\$(Configuration)</PackageOutputPath>
+    <PackageOutputPath Condition="'$(BUILD_ARTIFACTSTAGINGDIRECTORY)'!=''">$(BUILD_ARTIFACTSTAGINGDIRECTORY)</PackageOutputPath>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+    <!-- Embed source files that are not tracked by the source control manager in the PDB -->
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+
     <PackageReleaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</PackageReleaseNotes>
     <Authors>Outercurve RIA Services</Authors>
 
@@ -46,6 +57,17 @@
     <DebugType Condition="$(TargetFramework.StartsWith('net4')) OR '$(IsTestProject)'=='true'">pdbonly</DebugType>
 
   </PropertyGroup>
+
+  <PropertyGroup Condition="'$(GitVersion_AssemblySemVer)' != ''">
+    <VersionPrefix>$(GitVersion_MajorMinorPatch)</VersionPrefix>
+    <VersionSuffix>$(GitVersion_PreReleaseTag)</VersionSuffix>
+    <!-- Set by source link
+        <InformationalVersion>$(GitVersion_InformationalVersion)</InformationalVersion>
+        -->
+    <AssemblyVersion>$(GitVersion_AssemblySemVer)</AssemblyVersion>
+    <FileVersion>$(GitVersion_MajorMinorPatch).$(GitVersion_PreReleaseNumber)</FileVersion>
+  </PropertyGroup>
+
 
   <!-- Enable source link, we really only want this for framework assemblies and CI builds
   -->
