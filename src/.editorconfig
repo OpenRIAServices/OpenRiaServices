@@ -16,7 +16,7 @@ indent_size = 4
 insert_final_newline = true
 
 # Project files
-[*.{csproj,vbproj}] 
+[*.{csproj,vbproj,targets,props}] 
 indent_size = 2
 
 ############################### 
