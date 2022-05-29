@@ -650,4 +650,7 @@ Gets a user representing the authenticated identity.
   <data name="ClientCodeGen_SignedTools_UnsignedServer" xml:space="preserve">
     <value>You are usigned the signed code generation but the server assemblies are unsigned, consider using the unsigned code generation package instead since code generation might fail.</value>
   </data>
+  <data name="Project_Is_MultiTarget_Using_TargetFramework" xml:space="preserve">
+    <value>Project '{0}' has multiple TargetFrameworks. Choosing first framework: '{1}'</value>
+  </data>
 </root>
