@@ -119,7 +119,7 @@ namespace OpenRiaServices.Tools
                             // if only a single target without ";" then that will be the the single result of split
                             var firstFramework = targetFrameworks.Split(';')[0].Trim();
                             project.SetGlobalProperty("TargetFramework", firstFramework);
-                            this._logger.LogMessage($"Project {projectPath} has targets multiple frameworks. Choosing first target '{firstFramework}'");
+                            this._logger.LogMessage($"Project '{projectPath}' has multiple TargetFrameworks. Choosing first framework: '{firstFramework}'");
                         }
 
                         project.ReevaluateIfNecessary();
