@@ -107,6 +107,23 @@ namespace OpenRiaServices.Tools
                 if (project == null)
                 {
                     project = this._projectCollection.LoadProject(projectPath);
+
+                    // Check if 'IsCrossTargetingBuild' is true
+                    // * this means 'TargetFramework' is missing, but 'TargetFrameworks' are not
+                    if (project.GetProperty("IsCrossTargetingBuild")?.EvaluatedValue == "true")
+                    {
+                        var targetFrameworks = project.GetProperty("TargetFrameworks")?.EvaluatedValue;
+                        if (targetFrameworks != null)
+                        {
+                            // fallback to first item (ideally we should loop all or take based on referenced project)
+                            // if only a single target without ";" then that will be the the single result of split
+                            var firstFramework = targetFrameworks.Split(';')[0].Trim();
+                            project.SetGlobalProperty("TargetFramework", firstFramework);
+                            this._logger.LogMessage(string.Format(Resource.Project_Is_MultiTarget_Using_TargetFramework, projectPath, firstFramework));
+                        }
+
+                        project.ReevaluateIfNecessary();
+                    }
                 }
 #else
                 project = null;
@@ -216,7 +233,8 @@ namespace OpenRiaServices.Tools
             this._logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Analyzing_Project_Files, Path.GetFileName(projectPath)));
 
 #if NET40
-            sources = project.GetItems("Compile").Select(i => ConvertToFullPath(i.EvaluatedInclude, projectPath));
+            sources = project.GetItems("Compile").Select(i => ConvertToFullPath(i.EvaluatedInclude, projectPath))
+                .ToArray();
 #else
             BuildItemGroup buildItemGroup = project.GetEvaluatedItemsByName("Compile");
             if (buildItemGroup != null)
@@ -244,6 +262,6 @@ namespace OpenRiaServices.Tools
                 this._projectCollection = null;
             }
         }
-#endregion
+        #endregion
     }
 }
