@@ -98,7 +98,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             var endpointBuilder = new RouteEndpointBuilder(
                 invoker.Invoke,
                 route,
-                1)
+                0)
             {
                 DisplayName = $"{domainService}.{invoker.OperationName}"
             };
