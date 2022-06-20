@@ -82,8 +82,8 @@ namespace OpenRiaServices.Tools.Test
             {
                 s2 = t2.ReadToEnd();
             }
-            s1 = StripAutoGenPrefix(s1, lineCommentStart);
-            s2 = StripAutoGenPrefix(s2, lineCommentStart);
+            s1 = StripAutoGenPrefix(NormalizeLineBreak(s1), lineCommentStart);
+            s2 = StripAutoGenPrefix(NormalizeLineBreak(s2), lineCommentStart);
 
             if (!s1.Equals(s2))
             {
@@ -130,7 +130,6 @@ namespace OpenRiaServices.Tools.Test
             diffMessage = string.Empty;
             return true;
         }
-
 
         // The generated code has a prefix from the code generator.
         // Unfortunately, it embeds the version number under which
@@ -253,6 +252,16 @@ namespace OpenRiaServices.Tools.Test
                 }
             }
             return sb.ToString();
+        }
+
+        /// <summary>
+        /// Replace \n\r & \r(Mac OS version of line break) & \n(Linix & Mac os Line break) & \r\n (Windows version of line break) with \r\n
+        /// </summary>
+        /// <param name="s">String to convert</param>
+        /// <returns>Collapsed version of string</returns>
+        public static string NormalizeLineBreak(string s)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(s, @"\r\n?|\n|\r", "\r\n");
         }
 
         /// <summary>

@@ -43,7 +43,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
             {
                 s2 = t2.ReadToEnd();
             }
-
+            s1 = NormalizeLineBreak(s1);
+            s2 = NormalizeLineBreak(s2);
             if (!s1.Equals(s2))
             {
                 if (updateBaselines)
@@ -73,6 +74,16 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
                     copyCommand + "\r\n\r\n-------------------------"
                     );
             }
+        }
+
+        /// <summary>
+        /// Replace \n\r & \r(Mac OS version of line break) & \n(Linix & Mac os Line break) & \r\n (Windows version of line break) with \r\n
+        /// </summary>
+        /// <param name="s">String to convert</param>
+        /// <returns>Collapsed version of string</returns>
+        public static string NormalizeLineBreak(string s)
+        {
+            return System.Text.RegularExpressions.Regex.Replace(s, @"\r\n?|\n|\r", "\r\n");
         }
 
         // Returns the folder under which this test is currently running.

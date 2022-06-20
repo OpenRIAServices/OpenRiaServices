@@ -253,7 +253,7 @@ namespace OpenRiaServices.Server.Authentication
             {
                 throw new ArgumentNullException(nameof(resourceComment));
             }
-
+            resourceComment = System.Text.RegularExpressions.Regex.Replace(resourceComment, @"\r\n?|\n|\r", "\r\n");
             var commentCollection = new CodeCommentStatementCollection();
             foreach (string comment in resourceComment.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
             {

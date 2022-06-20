@@ -111,7 +111,7 @@ namespace OpenRiaServices.Client.Test
   </GetCustomers>
 </MessageRoot>";
 
-            Assert.AreEqual(expectedMessageBody, xDoc.ToString());
+            Assert.AreEqual(TestHelperMethods.NormalizeLineBreak(expectedMessageBody), xDoc.ToString());
         }
     }
 }

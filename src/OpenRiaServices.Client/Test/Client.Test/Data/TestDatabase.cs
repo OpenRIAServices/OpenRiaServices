@@ -32,8 +32,9 @@ namespace OpenRiaServices.Client.Test
             {
                 // call the TestServices web service method to create the database 
                 _initializeTask = _httpClient.PostAsync($"CreateDatabase?name={databaseName}", new StringContent(""))
-                    .ContinueWith(res =>
+                    .ContinueWith(async res =>
                     {
+                        var content = await res.Result.Content.ReadAsStringAsync();
                         // Force throw exception
                         res.Result.EnsureSuccessStatusCode();
                     });

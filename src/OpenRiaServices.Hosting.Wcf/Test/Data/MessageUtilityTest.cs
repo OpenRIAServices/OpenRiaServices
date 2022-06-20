@@ -118,7 +118,7 @@ namespace OpenRiaServices.Hosting.Test.Data
   <name>TestName</name>
 </GetCustomers>";
 
-            Assert.AreEqual(xDoc.ToString(), expectedMessageBody);
+            Assert.AreEqual(xDoc.ToString().Replace("\r", ""), expectedMessageBody);
         }
     }
 }
