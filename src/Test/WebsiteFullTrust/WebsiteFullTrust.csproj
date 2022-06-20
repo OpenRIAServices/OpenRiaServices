@@ -78,6 +78,10 @@
     <Reference Include="System.Web.Mobile" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="App_Data\Templates\Northwind.ldf">
+      <DependentUpon>Northwind.mdf</DependentUpon>
+    </Content>
+    <Content Include="App_Data\Templates\Northwind.mdf" />
     <Content Include="Cities-CityDomainService.svc" />
     <Content Include="Global.asax" />
     <Content Include="Services\Cities-CityDomainService.svc" />
