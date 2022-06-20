@@ -23,7 +23,7 @@ namespace OpenRiaServices.Tools.Test
         {
             // Create a shared type service that says the entity's attribute is "shared" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
-                    new Type[] {typeof(Mock_CG_Attr_Gen_Type), typeof(Mock_CG_Attr_Gen_TestAttribute)},
+                    new Type[] { typeof(Mock_CG_Attr_Gen_Type), typeof(Mock_CG_Attr_Gen_TestAttribute) },
                     Array.Empty<MethodBase>(),
                     Array.Empty<string>());
 
@@ -45,7 +45,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.AssertGeneratedCodeContains(generatedCode, "[Bindable(true, BindingDirection.TwoWay)]");
 
             generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] { typeof(Mock_CG_Attr_Entity_Bindable_DomainService) }, new ConsoleLogger(), mockSts, true);
-            TestHelper.AssertGeneratedCodeContains(generatedCode, "[global::System.ComponentModel.BindableAttribute(true, global::System.ComponentModel.BindingDirection.TwoWay)]"); 
+            TestHelper.AssertGeneratedCodeContains(generatedCode, "[global::System.ComponentModel.BindableAttribute(true, global::System.ComponentModel.BindingDirection.TwoWay)]");
         }
 
         [TestMethod]
@@ -56,7 +56,7 @@ namespace OpenRiaServices.Tools.Test
 
             // Create a shared type service that says the entity's attribute is "unshared" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
-                    new Type[] {typeof(Mock_CG_Attr_Gen_Type)},
+                    new Type[] { typeof(Mock_CG_Attr_Gen_Type) },
                     Array.Empty<MethodBase>(),
                     Array.Empty<string>());
             mockSts.AddUnsharedType(typeof(Mock_CG_Attr_Gen_TestAttribute));
@@ -87,7 +87,7 @@ namespace OpenRiaServices.Tools.Test
 
             // Create a shared type service that says the entity's attribute is "unknowable" when asked whether it is shared
             MockSharedCodeService mockSts = new MockSharedCodeService(
-                    new Type[] {typeof(Mock_CG_Attr_Gen_Type)},
+                    new Type[] { typeof(Mock_CG_Attr_Gen_Type) },
                     Array.Empty<MethodBase>(),
                     Array.Empty<string>());
             mockSts.AddUnknowableType(typeof(Mock_CG_Attr_Gen_TestAttribute));
@@ -103,7 +103,7 @@ namespace OpenRiaServices.Tools.Test
                     "MockProject");
 
             // CodeDom injects comments after line breaks
-            warningComment = warningComment.Replace("\r\n ", "\r\n        // ");
+            warningComment = System.Text.RegularExpressions.Regex.Replace(warningComment, @"\r\n?|\n|\r", "\r\n        // ");
 
             TestHelper.AssertGeneratedCodeContains(generatedCode, warningComment);
         }
@@ -498,13 +498,13 @@ namespace OpenRiaServices.Tools.Test
                 Assert.AreEqual(ctr4args.Count, 1);
                 Assert.AreEqual(ctr4args[0].ArgumentType, typeof(int));
                 Assert.AreEqual(ctr4args[0].Value, 0);
-            }            
+            }
         }
 
         [TestMethod]
         [Description("CustomAttributeGenerator generates full names correctly for attributes in VB.")]
         public void CodeGen_ServiceKnownTypeAttrGen_VB_FullNames()
-        {            
+        {
             string generatedCode = TestHelper.GenerateCodeAssertSuccess("VB", new Type[] { typeof(DomainServiceWithCustomMethod) }, null, null, /* generateFullNames */ true);
             TestHelper.AssertGeneratedCodeContains(generatedCode, "Global.System.ServiceModel.ServiceKnownTypeAttribute(GetType(Global.TestDomainServices.Address))");
         }
