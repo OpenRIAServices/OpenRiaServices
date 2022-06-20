@@ -23,7 +23,6 @@ namespace Microsoft.Extensions.DependencyInjection
 
             foreach (var type in DomainServiceAssemblyScanner.DiscoverDomainServices(assemblies))
             {
-                var typeName = type.Name;
                 serviceCollection.Add(new ServiceDescriptor(type, type, serviceLifetime));
             }
                 

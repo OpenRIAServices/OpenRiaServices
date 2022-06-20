@@ -13,8 +13,8 @@
     <WriteLinesToFile File="DomainServiceToolsPath.txt" Lines="$(MSBuildProjectFullPath)" Overwrite="true" WriteOnlyWhenDifferent="true" />
   </Target>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageReference Include="EntityFramework" Version="6.4.4" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
     <PackageReference Include="System.Threading.Tasks.Dataflow" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>

@@ -3,7 +3,6 @@
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
     <TargetFramework>net472</TargetFramework>
     <NoWarn>1591</NoWarn>
-    <ProduceReferenceAssembly>False</ProduceReferenceAssembly>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.Composition" />
