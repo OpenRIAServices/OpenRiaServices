@@ -18,6 +18,7 @@ namespace OpenRiaServices.Client.Test
     public sealed class Main
     {
         private static IISExpressWebserver s_webServer = null;
+        private static DotNetCoreHost _coreHost = null;
 
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
@@ -57,6 +58,7 @@ namespace OpenRiaServices.Client.Test
             ((IDisposable)UpdateTests.TestDatabase).Dispose();
 #endif
             s_webServer?.Stop();
+            _coreHost.Stop();
         }
 
         private static void StartWebServer()
@@ -73,6 +75,8 @@ namespace OpenRiaServices.Client.Test
 #else
             s_webServer.Start(webSitePath, 60002);
 #endif
+            _coreHost = new DotNetCoreHost();
+            _coreHost.Start(@"E:\OpenSource\OpenRiaServices\5.1\src\Test\AspNetCoreWebsite");
         }
     }
 }

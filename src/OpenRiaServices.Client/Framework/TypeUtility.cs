@@ -30,7 +30,7 @@ namespace OpenRiaServices
             "b77a5c561934e089", // mscorlib, System, System.ComponentModel.Composition, and System.Core
             "31bf3856ad364e35", // System.ComponentModel.DataAnnotations
             "b03f5f7f11d50a3a", // Microsoft.VisualBasic, Microsoft.CSharp, System.Configuration
-            "7cec85d7bea7798e",  // Silverlight system assemblies
+            "7cec85d7bea7798e", // Silverlight system assemblies
             OpenRiaServicesPublicKeyToken, // OpenRiaServices.
         };
 

@@ -401,7 +401,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         [Description("Tests that exceptions thrown from BeginXx are thrown from Xx.")]
         public void BeginExceptionsThrown()
         {
-            using ThrowingAuthentication mock = new ThrowingAuthentication();
+             using ThrowingAuthentication mock = new ThrowingAuthentication();
             mock.BeginError = new Exception(AuthenticationServiceTest.ErrorMessage);
 
             ExceptionHelper.ExpectException<Exception>(

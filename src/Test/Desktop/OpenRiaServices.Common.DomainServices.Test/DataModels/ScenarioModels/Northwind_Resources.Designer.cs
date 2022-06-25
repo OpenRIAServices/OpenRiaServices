@@ -67,7 +67,7 @@ namespace DataTests.Scenarios.LTS.Northwind_ExternalMapping {
         ///  &lt;Table Name=&quot;Alphabetical list of products&quot; Member=&quot;AlphabeticalListOfProducts&quot;&gt;
         ///    &lt;Type Name=&quot;DataTests.Scenarios.LTS.Northwind_ExternalMapping.AlphabeticalListOfProduct&quot;&gt;
         ///      &lt;Column Name=&quot;ProductID&quot; Member=&quot;ProductID&quot; Storage=&quot;_ProductID&quot; DbType=&quot;Int NOT NULL&quot; /&gt;
-        ///      &lt;Column Name=&quot;ProductName&quot; Member=&quot;ProductName&quot; Storage=&quot;_ProductName&quot; DbType=&quot;NVarChar(40) NOT NULL&quot; [rest of string was truncated]&quot;;.
+        ///      &lt;Column Name=&quot;ProductName&quot; Member=&quot;ProductName&quot; Storage=&quot;_ProductName&quot; DbType=&quot;NVarChar(40) NOT NULL&quot; CanB [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string NorthwindMapFile {
             get {

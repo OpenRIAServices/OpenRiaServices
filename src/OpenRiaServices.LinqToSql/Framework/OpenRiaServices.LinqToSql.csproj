@@ -4,9 +4,11 @@
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="system" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.Linq" />
   </ItemGroup>
   <ItemGroup>

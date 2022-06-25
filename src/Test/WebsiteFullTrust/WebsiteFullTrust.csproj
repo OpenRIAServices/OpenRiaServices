@@ -110,10 +110,6 @@
       <Project>{b2183838-a948-47fd-8ab4-e8e7c5cd4477}</Project>
       <Name>OpenRiaServices.Server.Authentication.AspNetMembership</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.Server.EntityFrameworkCore\Framework\OpenRiaServices.Server.EntityFrameworkCore.csproj">
-      <Project>{b8d39090-3b76-41bb-a139-956e42619e91}</Project>
-      <Name>OpenRiaServices.Server.EntityFrameworkCore</Name>
-    </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj">
       <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
       <Name>OpenRiaServices.Tools</Name>

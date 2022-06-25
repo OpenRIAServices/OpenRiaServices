@@ -3,8 +3,10 @@
     <DefineConstants>SERVERFX;$(DefineConstants)</DefineConstants>
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
+   <ItemGroup>
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Web" />
     <Reference Include="mscorlib" />

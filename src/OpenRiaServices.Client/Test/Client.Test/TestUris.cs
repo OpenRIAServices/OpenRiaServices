@@ -9,6 +9,7 @@ public static class TestURIs
 #else
     public static readonly Uri RootURI = new Uri("http://localhost:60002/");
 #endif
+    public static readonly Uri CoreRootURI = new Uri("http://localhost:60003/");
 
     // Cities
     public static readonly Uri Cities = new Uri(RootURI, "Cities-CityDomainService.svc");
@@ -29,9 +30,9 @@ public static class TestURIs
     public static readonly Uri EFCodeFirst = new Uri(RootURI, "EFCodeFirst-EFCodeFirstTestDomainService.svc");
 
     // EF Core
-    public static readonly Uri EFCore_Northwind = new Uri(RootURI, "TestDomainServices-EFCore-Northwind.svc");
-    public static readonly Uri EFCore_Northwind_CUD = new Uri(RootURI, "TestDomainServices-EFCore-Northwind_CUD.svc");
-    public static readonly Uri EFCore_Catalog = new Uri(RootURI, "TestDomainServices-EFCore-Catalog.svc");
+    public static readonly Uri EFCore_Northwind = new Uri(CoreRootURI, "TestDomainServices-EFCore-Northwind.svc");
+    public static readonly Uri EFCore_Northwind_CUD = new Uri(CoreRootURI, "TestDomainServices-EFCore-Northwind_CUD.svc");
+    public static readonly Uri EFCore_Catalog = new Uri(CoreRootURI, "TestDomainServices-EFCore-Catalog.svc");
 
     // LTS
     public static readonly Uri LTS_Catalog = new Uri(RootURI, "TestDomainServices-LTS-Catalog.svc");

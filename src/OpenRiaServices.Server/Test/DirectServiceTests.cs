@@ -11,7 +11,11 @@ using System.Reflection;
 using System.Runtime.Serialization.Json;
 using System.Security.Principal;
 using OpenRiaServices.Client.Test;
+#if NET472
 using OpenRiaServices.EntityFramework;
+#else
+using OpenRiaServices.Server.EntityFrameworkCore;
+#endif
 using OpenRiaServices.Hosting;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Hosting.Wcf.Behaviors;
@@ -32,8 +36,11 @@ namespace OpenRiaServices.Server.Test
     /// the client stack.
     /// </summary>
     [TestClass]
-    public class DirectServiceTests
+    public partial class DirectServiceTests
     {
+
+#if NET472
+
         [TestMethod]
         [WorkItem(877241)]
         public void TestDomainService_UpdateMemberToDefaultValue()
@@ -66,71 +73,7 @@ namespace OpenRiaServices.Server.Test
             Assert.IsFalse(modifiedProperties.Contains("ProductID"));  // key members shouldn't be marked modified
         }
 
-        [TestMethod]
-        public async Task TestDirectChangeset_Cities()
-        {
-            for (int i = 0; i < 100; i++)
-            {
-                CityDomainService ds = new CityDomainService();
-                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
-                ds.Initialize(dsc);
-
-                List<ChangeSetEntry> entries = new List<ChangeSetEntry>();
-                for (int j = 0; j < 500; j++)
-                {
-                    City newCity = new City() { Name = "Toledo", CountyName = "Lucas", StateName = "OH" };
-                    entries.Add(new ChangeSetEntry(j, newCity, null, DomainOperation.Insert));
-                }
-
-                await ChangeSetProcessor.ProcessAsync(ds, entries);
-
-                Assert.IsFalse(entries.Any(p => p.HasError));
-            }
-        }
-
-        [TestMethod]
-        public async Task TestDirectChangeset_Simple()
-        {
-            for (int i = 0; i < 100; i++)
-            {
-                TestDomainServices.TestProvider_Scenarios ds = new TestDomainServices.TestProvider_Scenarios();
-                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
-                ds.Initialize(dsc);
-
-                List<ChangeSetEntry> entries = new List<ChangeSetEntry>();
-                for (int j = 0; j < 500; j++)
-                {
-                    TestDomainServices.POCONoValidation e = new TestDomainServices.POCONoValidation()
-                    {
-                        ID = i,
-                        A = "A" + i,
-                        B = "B" + i,
-                        C = "C" + i,
-                        D = "D" + i,
-                        E = "E" + i
-                    };
-                    entries.Add(new ChangeSetEntry(j, e, null, DomainOperation.Insert));
-                }
-
-                await ChangeSetProcessor.ProcessAsync(ds, entries);
-
-                Assert.IsFalse(entries.Any(p => p.HasError));
-            }
-        }
-
-        /// <summary>
-        /// This test ensures that our DomainService test assembly uses the default security 
-        /// mode (i.e. no SecurityTransparent/APTCA attributes).
-        /// </summary>
-        [TestMethod]
-        public void VerifyDomainServiceTestAssemblyUsesDefaultSecurityMode()
-        {
-            var a = typeof(TestDomainServices.EF.Northwind).Assembly;
-            Assert.IsFalse(a.GetCustomAttributes(typeof(SecurityTransparentAttribute), true).Any(), "SecurityTransparentAttribute not expected.");
-            Assert.IsFalse(a.GetCustomAttributes(typeof(AllowPartiallyTrustedCallersAttribute), true).Any(), "AllowPartiallyTrustedCallersAttribute not expected.");
-        }
-
-        /// <summary>
+         /// <summary>
         /// Direct test of the query pipeline
         /// </summary>
         [TestMethod]
@@ -235,6 +178,126 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(System.Data.Entity.EntityState.Added, detail2.EntityState);
         }
 
+        
+        [TestMethod]
+        [TestCategory("DatabaseTest")]
+        public async Task TestDomainService_QueryDirect()
+        {
+            TestDomainServices.LTS.Catalog provider = ServerTestHelper.CreateInitializedDomainService<TestDomainServices.LTS.Catalog>(DomainOperationType.Query);
+
+            DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(provider.GetType());
+            DomainOperationEntry method = serviceDescription.DomainOperationEntries.Where(p => p.Operation == DomainOperation.Query).First(p => p.Name == "GetProductsByCategory");
+            QueryDescription qd = new QueryDescription(method, new object[] { 1 });
+
+            var queryResult = await provider.QueryAsync<DataTests.AdventureWorks.LTS.Product>(qd, CancellationToken.None);
+            int count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
+            Assert.AreEqual(32, count);
+
+            // verify that we can use the same provider to execute another query
+            qd = new QueryDescription(method, new object[] { 2 });
+            queryResult = await provider.QueryAsync<DataTests.AdventureWorks.LTS.Product>(qd, CancellationToken.None);
+            count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
+            Assert.AreEqual(43, count);
+        }
+
+        [TestMethod]
+        public void TestQuery_QueryOperatorOrderPreservation()
+        {
+            // test no encoding
+            StringBuilder sb = new StringBuilder();
+            sb.Append("$skip=1");
+            sb.Append("&$where=").Append("Color==\"Yel$l&ow\"");
+            sb.Append("&$orderby=ListPrice");
+            sb.Append("&$where=").Append("Weight>10");
+            sb.Append("&$orderby=Style");
+            sb.Append("&$skip=2");
+            sb.Append("&$take=3");
+            sb.Append("&$where=").Append("Color!=\"Purple\"");
+            string queryString = sb.ToString();
+            List<ServiceQueryPart> queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
+            Assert.AreEqual("skip", queryParts[0].QueryOperator);
+            Assert.AreEqual("where", queryParts[1].QueryOperator);
+            Assert.AreEqual("orderby", queryParts[2].QueryOperator);
+            Assert.AreEqual("where", queryParts[3].QueryOperator);
+            Assert.AreEqual("orderby", queryParts[4].QueryOperator);
+            Assert.AreEqual("skip", queryParts[5].QueryOperator);
+            Assert.AreEqual("take", queryParts[6].QueryOperator);
+            Assert.AreEqual("where", queryParts[7].QueryOperator);
+
+            // test a single where clause with a comma
+            sb = new StringBuilder();
+            sb.Append("$where=1,2");
+            queryString = sb.ToString();
+            queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
+            Assert.AreEqual("where", queryParts[0].QueryOperator);
+            Assert.AreEqual("1,2", queryParts[0].Expression);
+        }
+#endif
+
+        [TestMethod]
+        public async Task TestDirectChangeset_Cities()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                CityDomainService ds = new CityDomainService();
+                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+                ds.Initialize(dsc);
+
+                List<ChangeSetEntry> entries = new List<ChangeSetEntry>();
+                for (int j = 0; j < 500; j++)
+                {
+                    City newCity = new City() { Name = "Toledo", CountyName = "Lucas", StateName = "OH" };
+                    entries.Add(new ChangeSetEntry(j, newCity, null, DomainOperation.Insert));
+                }
+
+                await ChangeSetProcessor.ProcessAsync(ds, entries);
+
+                Assert.IsFalse(entries.Any(p => p.HasError));
+            }
+        }
+
+        [TestMethod]
+        public async Task TestDirectChangeset_Simple()
+        {
+            for (int i = 0; i < 100; i++)
+            {
+                TestDomainServices.TestProvider_Scenarios ds = new TestDomainServices.TestProvider_Scenarios();
+                DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+                ds.Initialize(dsc);
+
+                List<ChangeSetEntry> entries = new List<ChangeSetEntry>();
+                for (int j = 0; j < 500; j++)
+                {
+                    TestDomainServices.POCONoValidation e = new TestDomainServices.POCONoValidation()
+                    {
+                        ID = i,
+                        A = "A" + i,
+                        B = "B" + i,
+                        C = "C" + i,
+                        D = "D" + i,
+                        E = "E" + i
+                    };
+                    entries.Add(new ChangeSetEntry(j, e, null, DomainOperation.Insert));
+                }
+
+                await ChangeSetProcessor.ProcessAsync(ds, entries);
+
+                Assert.IsFalse(entries.Any(p => p.HasError));
+            }
+        }
+
+        /// <summary>
+        /// This test ensures that our DomainService test assembly uses the default security 
+        /// mode (i.e. no SecurityTransparent/APTCA attributes).
+        /// </summary>
+        [TestMethod]
+        public void VerifyDomainServiceTestAssemblyUsesDefaultSecurityMode()
+        {
+            var a = typeof(TestDomainServices.EF.Northwind).Assembly;
+            Assert.IsFalse(a.GetCustomAttributes(typeof(SecurityTransparentAttribute), true).Any(), "SecurityTransparentAttribute not expected.");
+            Assert.IsFalse(a.GetCustomAttributes(typeof(AllowPartiallyTrustedCallersAttribute), true).Any(), "AllowPartiallyTrustedCallersAttribute not expected.");
+        }
+
         /// <summary>
         /// Verify DomainServiceContext.Operation represents the currently executing operation.
         /// </summary>
@@ -325,27 +388,6 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
-        [TestCategory("DatabaseTest")]
-        public async Task TestDomainService_QueryDirect()
-        {
-            TestDomainServices.LTS.Catalog provider = ServerTestHelper.CreateInitializedDomainService<TestDomainServices.LTS.Catalog>(DomainOperationType.Query);
-
-            DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(provider.GetType());
-            DomainOperationEntry method = serviceDescription.DomainOperationEntries.Where(p => p.Operation == DomainOperation.Query).First(p => p.Name == "GetProductsByCategory");
-            QueryDescription qd = new QueryDescription(method, new object[] { 1 });
-
-            var queryResult = await provider.QueryAsync<DataTests.AdventureWorks.LTS.Product>(qd, CancellationToken.None);
-            int count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
-            Assert.AreEqual(32, count);
-
-            // verify that we can use the same provider to execute another query
-            qd = new QueryDescription(method, new object[] { 2 });
-            queryResult = await provider.QueryAsync<DataTests.AdventureWorks.LTS.Product>(qd, CancellationToken.None);
-            count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
-            Assert.AreEqual(43, count);
-        }
-
-        [TestMethod]
         public async Task TestDomainService_QueryDirect_Throws()
         {
             MockDomainService_SelectThrows provider = ServerTestHelper.CreateInitializedDomainService<MockDomainService_SelectThrows>(DomainOperationType.Query);
@@ -364,72 +406,6 @@ namespace OpenRiaServices.Server.Test
                     throw ex.InnerException;
                 }
             }, "Test");
-        }
-
-        // TODO: Remove the [Ignore] on the following two tests once we've updated our test runner such that it 
-        //       starts a webserver before running these tests. Or consider moving these tests, or consider 
-        //       writing true direct tests that don't require a webserver.
-
-        /// <summary>
-        /// Verify that when a member is marked Exclude, it doesn't show up in the serialized response
-        /// </summary>
-        [TestMethod]
-        [Ignore]
-        public void TestDomainOperationEntry_VerifyDataMemberExclusion()
-        {
-            string soap = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
-
-            // verify that the server entity type has the SafetyStockLevel property and that
-            // it is marked [Exclude]
-            DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Catalog));
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(DataTests.AdventureWorks.LTS.Product)).Cast<PropertyDescriptor>().Single(p => p.Name == "SafetyStockLevel");
-            Assert.IsTrue(pd.Attributes.OfType<ExcludeAttribute>().Count() == 1);
-
-            // verify that the serialized response doesn't contain excluded data
-            Assert.IsTrue(soap.Contains("ProductID"));  // make sure we got at least one product
-            Assert.IsFalse(soap.Contains("SafetyStockLevel"));
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestDataService_LTS_Query_MultipleThreads()
-        {
-            const int numberOfThreads = 10;
-            Semaphore s = new Semaphore(0, numberOfThreads);
-            Exception lastError = null;
-
-            string soap = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
-            Assert.IsTrue(soap.Contains("ProductID"));  // make sure we got at least one product
-
-            for (int i = 0; i < numberOfThreads; i++)
-            {
-                ThreadPool.QueueUserWorkItem(delegate
-                {
-                    try
-                    {
-                        string soap2 = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
-                        Assert.IsTrue(soap2.Contains("ProductID"));  // make sure we got at least one product
-                    }
-                    catch (Exception ex)
-                    {
-                        lastError = ex;
-                    }
-                    finally
-                    {
-                        s.Release();
-                    }
-                });
-            }
-
-            for (int i = 0; i < numberOfThreads; i++)
-            {
-                s.WaitOne(TimeSpan.FromSeconds(5));
-            }
-
-            if (lastError != null)
-            {
-                Assert.Fail(lastError.ToString());
-            }
         }
 
         // TODO: get this test working again and remove [Ignore]
@@ -481,38 +457,7 @@ namespace OpenRiaServices.Server.Test
             }
         }
 
-        [TestMethod]
-        public void TestQuery_QueryOperatorOrderPreservation()
-        {
-            // test no encoding
-            StringBuilder sb = new StringBuilder();
-            sb.Append("$skip=1");
-            sb.Append("&$where=").Append("Color==\"Yel$l&ow\"");
-            sb.Append("&$orderby=ListPrice");
-            sb.Append("&$where=").Append("Weight>10");
-            sb.Append("&$orderby=Style");
-            sb.Append("&$skip=2");
-            sb.Append("&$take=3");
-            sb.Append("&$where=").Append("Color!=\"Purple\"");
-            string queryString = sb.ToString();
-            List<ServiceQueryPart> queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
-            Assert.AreEqual("skip", queryParts[0].QueryOperator);
-            Assert.AreEqual("where", queryParts[1].QueryOperator);
-            Assert.AreEqual("orderby", queryParts[2].QueryOperator);
-            Assert.AreEqual("where", queryParts[3].QueryOperator);
-            Assert.AreEqual("orderby", queryParts[4].QueryOperator);
-            Assert.AreEqual("skip", queryParts[5].QueryOperator);
-            Assert.AreEqual("take", queryParts[6].QueryOperator);
-            Assert.AreEqual("where", queryParts[7].QueryOperator);
-
-            // test a single where clause with a comma
-            sb = new StringBuilder();
-            sb.Append("$where=1,2");
-            queryString = sb.ToString();
-            queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
-            Assert.AreEqual("where", queryParts[0].QueryOperator);
-            Assert.AreEqual("1,2", queryParts[0].Expression);
-        }
+        
 
         /// <summary>
         /// Scenario test that can be used for perf tuning. The test loads 500 orders with OrderDetails
@@ -548,16 +493,16 @@ namespace OpenRiaServices.Server.Test
             Console.WriteLine("Average time for Perf_MeasureScenario1 : {0} seconds", avgTime);
         }
 
-        private QueryResult DeserializeResult(HttpResponse response, IEnumerable<Type> knownTypes)
-        {
-            string responseText = response.Output.ToString();
+        //private QueryResult DeserializeResult(HttpResponse response, IEnumerable<Type> knownTypes)
+        //{
+        //    string responseText = response.Output.ToString();
 
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(QueryResult), knownTypes);
-            MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(responseText));
-            QueryResult serviceResult = (QueryResult)ser.ReadObject(ms);
+        //    DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(QueryResult), knownTypes);
+        //    MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(responseText));
+        //    QueryResult serviceResult = (QueryResult)ser.ReadObject(ms);
 
-            return serviceResult;
-        }
+        //    return serviceResult;
+        //}
 
         private string RequestDirect(Type providerType, string dataMethodName, IDictionary<string, object> queryParameters)
         {
@@ -641,7 +586,7 @@ namespace OpenRiaServices.Server.Test
             return "echo";
         }
 
-        #region IServiceProvider Members
+#region IServiceProvider Members
         object IServiceProvider.GetService(Type serviceType)
         {
             if (serviceType == typeof(IPrincipal))
@@ -651,7 +596,7 @@ namespace OpenRiaServices.Server.Test
 
             return null;
         }
-        #endregion
+#endregion
     }
 
     public class ServiceContext_CurrentOperation_Entity

@@ -2,16 +2,26 @@
   <PropertyGroup>
     <NoWarn>618</NoWarn>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.4.4" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
+    <None Remove="C:\Users\ehsan\.nuget\packages\mstest.testadapter\2.2.10\build\net46\..\_common\Microsoft.VisualStudio.TestPlatform.MSTest.TestAdapter.dll" />
+    <None Remove="C:\Users\ehsan\.nuget\packages\mstest.testadapter\2.2.10\build\net46\..\_common\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.Interface.dll" />
+    <None Remove="C:\Users\ehsan\.nuget\packages\mstest.testadapter\2.2.10\build\net46\Microsoft.VisualStudio.TestPlatform.MSTestAdapter.PlatformServices.dll" />
+    <None Remove="C:\Users\ehsan\.nuget\packages\mstest.testadapter\2.2.10\build\net46\\Microsoft.TestPlatform.AdapterUtilities.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+    <PackageReference Include="EntityFramework" Version="6.4.4" Condition="'$(TargetFramework)'=='net472'" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.6" Condition="'$(TargetFramework)'=='net6.0'" />
+    <PackageReference Include="MSTest" Version="2.2.10" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
+    <PackageReference Include="System.Runtime.CompilerServices.Unsafe" Version="6.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
+    <!--<Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>$(MSBuildExtensionsPath)\..\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
-    </Reference>
+    </Reference>-->
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.configuration" />
     <Reference Include="System.Data.Linq" />
@@ -25,20 +35,32 @@
     <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\Data\DomainIdentifierAttributeTests.cs" Link="DomainIdentifierAttributeTests.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting.AspNetCore\Framework\OpenRiaServices.Hosting.AspNetCore.csproj" Condition="'$(TargetFramework)'=='net6.0'">
+      <Aliases>global,OpenRiaServicesAspCoreHosting</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.Server.EntityFrameworkCore\Framework\OpenRiaServices.Server.EntityFrameworkCore.csproj" Condition="'$(TargetFramework)'=='net6.0'"/>
+    <ProjectReference Include="..\..\OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreModels.csproj" Condition="'$(TargetFramework)'=='net6.0'"/>
     <ProjectReference Include="..\..\OpenRiaServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreModels.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Server.UnitTesting\Framework\OpenRiaServices.Server.UnitTesting.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
+    
     <ProjectReference Include="..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\EFPOCOModels\EFPOCOModels.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.EntityFramework\Framework\OpenRiaServices.EntityFramework.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.EntityFramework\Framework\OpenRiaServices.EntityFramework.csproj" Condition="'$(TargetFramework)'=='net472'" />
+    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" Condition="'$(TargetFramework)'=='net472'">
       <Aliases>global,OpenRiaServicesDomainServicesHosting</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\Framework\OpenRiaServices.Server.csproj">
       <Aliases>global,SystemWebDomainServices</Aliases>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='net472'">
+    <Compile Remove="AuthorizationTests.cs" />
+    <Compile Remove="*.Lts.cs" />
+    <Compile Remove="*.Ef.cs" />
+  </ItemGroup>
+ <ItemGroup Condition="'$(TargetFramework)'!='net6.0'">
+    <Compile Remove="*.EfCore.cs" />
   </ItemGroup>
 </Project>

@@ -17,24 +17,7 @@ namespace OpenRiaServices.Server.Test
     [TestClass]
     public class InvokeOperationServerTest
     {
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
+       
         [TestMethod]
         [Description("Verify getting description for domain service with valid invoke operation signatures does not throw")]
         public void DomainServiceWithMultipleValidOnlineMethods()
@@ -51,7 +34,11 @@ namespace OpenRiaServices.Server.Test
             // verify GetOnlineMethods return all the invoke operations on this provider
             IEnumerable<DomainOperationEntry> returnedMethods = description.DomainOperationEntries.Where(p => p.Operation == DomainOperation.Invoke);
             Assert.IsNotNull(returnedMethods);
+#if NETCOREAPP
+            Assert.AreEqual(9, returnedMethods.Count());
+#else
             Assert.AreEqual(10, returnedMethods.Count());
+#endif
             Assert.IsTrue(returnedMethods.Any(p => p.Name == "Process_EntitiesAndSimpleParams"));
 
             Assert.IsTrue(returnedMethods.Any(p => p.Name == "Process_Return_EntityListParam"));

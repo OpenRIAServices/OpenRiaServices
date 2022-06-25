@@ -2,7 +2,9 @@
 using System.Linq;
 using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+#if NET472
 using RootNamespace.TestNamespace;
+#endif
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.Tools.Test

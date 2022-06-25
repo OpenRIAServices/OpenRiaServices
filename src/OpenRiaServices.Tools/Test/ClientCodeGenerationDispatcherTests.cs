@@ -1,7 +1,6 @@
 ﻿extern alias TextTemplate;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;

@@ -8,7 +8,11 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Client.Test;
+#if NET472
 using OpenRiaServices.EntityFramework;
+#else
+using OpenRiaServices.Server.EntityFrameworkCore;
+#endif
 using OpenRiaServices.Hosting.Wcf;
 using System.Xml.Linq;
 using Cities;
@@ -27,7 +31,7 @@ namespace OpenRiaServices.Server.Test
     /// Summary description for DomainServiceTests
     /// </summary>
     [TestClass]
-    public class DomainServiceTests
+    public partial class DomainServiceTests
     {
         private readonly DomainServiceDescription _domainServiceDescription;
         private readonly DomainService _domainService;
@@ -45,20 +49,6 @@ namespace OpenRiaServices.Server.Test
         {
             System.Threading.Thread.CurrentThread.CurrentCulture = CultureInfo.InvariantCulture;
             System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
-        }
-
-        /// <summary>
-        /// Verify that both DAL providers support accessing their respective
-        /// contexts in the constructor.
-        /// </summary>
-        [TestMethod]
-        [WorkItem(827125)]
-        public void DomainServiceConstructor_ContextAccess()
-        {
-            LTSService_ConstructorInit lts = new LTSService_ConstructorInit();
-            Assert.IsNotNull(lts.DataContext.LoadOptions);
-
-            EFService_ConstructorInit ef = new EFService_ConstructorInit();
         }
 
         [TestMethod]
@@ -554,36 +544,6 @@ namespace OpenRiaServices.Server.Test
             Assert.IsTrue(cs.HasError);
             Assert.AreEqual(1, cs.ChangeSetEntries.Count(p => p.HasError));
             Assert.IsNull(ds.LastError);
-        }
-
-        // Verify that AttachAsModified works correctly when no original values are provided for non-concurrency properties.
-        [TestMethod]
-        public void ObjectContextExtensions_AttachAsModified()
-        {
-            TestDomainServices.EF.Northwind nw = new TestDomainServices.EF.Northwind();
-            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
-            nw.Initialize(ctxt);
-
-            var current = new NorthwindModel.Category()
-            {
-                EntityKey = new System.Data.Entity.Core.EntityKey("NorthwindEntities.Categories", "CategoryID", 1),
-                CategoryID = 1,
-                CategoryName = "Category",
-                Description = "My category"
-            };
-            var original = new NorthwindModel.Category()
-            {
-                EntityKey = new System.Data.Entity.Core.EntityKey("NorthwindEntities.Categories", "CategoryID", 1),
-                CategoryID = 1,
-                CategoryName = "Category"
-            };
-
-            ObjectContextExtensions.AttachAsModified(nw.ObjectContext.Categories, current, original);
-
-            var currentEntry = nw.ObjectContext.ObjectStateManager.GetObjectStateEntry(current);
-
-            string[] changedProperties = currentEntry.GetModifiedProperties().ToArray();
-            Assert.IsTrue(changedProperties.Contains("Description"));
         }
 
         [TestMethod]
@@ -1947,27 +1907,6 @@ namespace OpenRiaServices.Server.Test
     }
 
     #endregion
-
-    [EnableClientAccess]
-    public class LTSService_ConstructorInit : LinqToSqlDomainService<DataTests.Northwind.LTS.NorthwindDataContext>
-    {
-        public LTSService_ConstructorInit()
-        {
-            DataLoadOptions loadOpts = new DataLoadOptions();
-            loadOpts.LoadWith<DataTests.Northwind.LTS.Order>(p => p.Order_Details);
-
-            this.DataContext.LoadOptions = loadOpts;
-        }
-    }
-
-    [EnableClientAccess]
-    public class EFService_ConstructorInit : LinqToEntitiesDomainService<NorthwindModel.NorthwindEntities>
-    {
-        public EFService_ConstructorInit()
-        {
-            string conn = this.ObjectContext.Connection.ConnectionString;
-        }
-    }
 
     [EnableClientAccess]
     public class ErrorTestDomainService : DomainService

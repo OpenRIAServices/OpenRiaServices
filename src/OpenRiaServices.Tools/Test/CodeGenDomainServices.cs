@@ -16,7 +16,7 @@ namespace OpenRiaServices.Tools.Test
     /// Summary description for domain service code gen
     /// </summary>
     [TestClass]
-    public class CodeGenDomainServices
+    public partial class CodeGenDomainServices
     {
         private readonly ConsoleLogger _logger;
         public CodeGenDomainServices()
@@ -166,6 +166,8 @@ namespace OpenRiaServices.Tools.Test
                 typeof(TestDomainServices.DbCtx.Northwind), sharedFiles, true));
         }
 
+#if NETCOREAPP
+
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFContext")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFContext")]
         [TestMethod]
@@ -189,6 +191,8 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes", "EFCoreDbContextScenarios.g",
                 typeof(TestDomainServices.EFCore.Northwind), sharedFiles, true));
         }
+
+#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFCFDbContext")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFCFDbContext")]
@@ -545,6 +549,8 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_NWEF", "Northwind_EF.g", typeof(TestDomainServices.EF.Northwind), Array.Empty<string>(), false));
         }
 
+#if NETCOREAPP
+
         [DeploymentItem(@"Baselines\Default\EF", "CG_NWEF")]
         [DeploymentItem(@"ProjectPath.txt", "CG_NWEF")]
         [TestMethod]
@@ -553,6 +559,8 @@ namespace OpenRiaServices.Tools.Test
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_NWEF", "Northwind_EFCore.g", typeof(TestDomainServices.EFCore.Northwind), Array.Empty<string>(), false));
         }
+
+#endif
 
         [DeploymentItem(@"Baselines\Default\EF", "CG_CATEF")]
         [DeploymentItem(@"ProjectPath.txt", "CG_CATEF")]
@@ -573,6 +581,8 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEFDbCtx", "Catalog_EFDbCtx.g", typeof(TestDomainServices.DbCtx.Catalog), Array.Empty<string>(), false));
         }
 
+#if NETCOREAPP
+
         [DeploymentItem(@"Baselines\Default\EF", "CG_CATEFDbCtx")]
         [DeploymentItem(@"ProjectPath.txt", "CG_CATEFDbCtx")]
         [TestMethod]
@@ -582,6 +592,8 @@ namespace OpenRiaServices.Tools.Test
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEFDbCtx", "Catalog_EFCore.g", typeof(TestDomainServices.EFCore.Catalog), Array.Empty<string>(), false));
         }
+
+#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_CONFLICT_RESOLUTION")]
         [DeploymentItem(@"ProjectPath.txt", "CG_CONFLICT_RESOLUTION")]

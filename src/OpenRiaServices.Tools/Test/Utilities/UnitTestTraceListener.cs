@@ -37,16 +37,16 @@ namespace OpenRiaServices.Server.Test.Utilities
                 Context = context;
                 FailOnDebugAssert = failOnDebugAssert;
                 Listener = new UnitTestTraceListener();
-                if (Debug.Listeners.Count > 0)
+                if (Trace.Listeners.Count > 0)
                 {
-                    DefaultTraceListener defaultListener = Debug.Listeners[0] as DefaultTraceListener;
+                    DefaultTraceListener defaultListener = Trace.Listeners[0] as DefaultTraceListener;
                     if (defaultListener != null)
                     {
                         OriginalAssertUiEnabled = defaultListener.AssertUiEnabled;
                         defaultListener.AssertUiEnabled = false;
                     }
                 }
-                Debug.Listeners.Add(Listener);
+                Trace.Listeners.Add(Listener);
             }
         }
 
@@ -57,10 +57,10 @@ namespace OpenRiaServices.Server.Test.Utilities
         {
             if (Listener != null)
             {
-                Debug.Listeners.Remove(Listener);
-                if (Debug.Listeners.Count > 0)
+                Trace.Listeners.Remove(Listener);
+                if (Trace.Listeners.Count > 0)
                 {
-                    DefaultTraceListener defaultListener = Debug.Listeners[0] as DefaultTraceListener;
+                    DefaultTraceListener defaultListener = Trace.Listeners[0] as DefaultTraceListener;
                     if (defaultListener != null)
                     {
                         defaultListener.AssertUiEnabled = OriginalAssertUiEnabled;

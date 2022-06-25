@@ -18,24 +18,7 @@ namespace OpenRiaServices.Server.Test
     [TestClass]
     public class DomainMethodServerTest
     {
-        private TestContext testContextInstance;
-
-        /// <summary>
-        ///Gets or sets the test context which provides
-        ///information about and functionality for the current test run.
-        ///</summary>
-        public TestContext TestContext
-        {
-            get
-            {
-                return testContextInstance;
-            }
-            set
-            {
-                testContextInstance = value;
-            }
-        }
-
+       
         [TestMethod]
         [Description("Verify getting description for domain service with valid domain method signatures does not throw")]
         public void DomainServiceWithMultipleDomainMethods()
