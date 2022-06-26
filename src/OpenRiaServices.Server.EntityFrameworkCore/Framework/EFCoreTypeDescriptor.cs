@@ -211,11 +211,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             if (isEntity
                 && _entityType.FindNavigation(pd.Name) is INavigation navigation)
             {
-#if NETSTANDARD
-                bool isManyToMany = navigation.IsCollection() && navigation.FindInverse()?.IsCollection() == true;
-#else
                 bool isManyToMany = navigation.IsCollection && navigation.Inverse?.IsCollection == true;
-#endif
                 if (!isManyToMany)
                 {
                     var assocAttrib = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];

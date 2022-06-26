@@ -31,7 +31,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 namespace OpenRiaServices.Server.Test
 {
 
-    public partial class DomainServiceDescriptionTest 
+    public partial class DomainServiceDescriptionTest
     {
 
         [TestMethod]
