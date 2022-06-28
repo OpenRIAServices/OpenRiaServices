@@ -25,7 +25,7 @@ var domainServices = typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAn
     .ToArray();
 
 foreach (var type in domainServices)
-        builder.Services.Add(new ServiceDescriptor(type, type, ServiceLifetime.Transient));
+    builder.Services.Add(new ServiceDescriptor(type, type, ServiceLifetime.Transient));
 
 var app = builder.Build();
 
