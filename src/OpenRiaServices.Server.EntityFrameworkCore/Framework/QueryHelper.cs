@@ -3,11 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-#if NETSTANDARD
-using Microsoft.EntityFrameworkCore.Query.Internal;
-#else
 using Microsoft.EntityFrameworkCore.Query;
-#endif
 
 namespace OpenRiaServices.Server.EntityFrameworkCore
 {
