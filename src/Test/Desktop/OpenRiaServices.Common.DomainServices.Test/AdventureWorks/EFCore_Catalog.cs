@@ -17,7 +17,7 @@ namespace TestDomainServices.EFCore
             return new AdventureworksContext();
         }
 
-#region Product methods
+        #region Product methods
         [Query]
         public IQueryable<Product> GetProducts()
         {
@@ -45,8 +45,8 @@ namespace TestDomainServices.EFCore
         public IQueryable<Product> GetProductsByCategory(int subCategoryID)
         {
             return from p in this.DbContext.Products
-                    where p.ProductSubcategoryID == subCategoryID
-                    select p;
+                   where p.ProductSubcategoryID == subCategoryID
+                   select p;
         }
 
         [Insert]
@@ -67,9 +67,9 @@ namespace TestDomainServices.EFCore
             this.DbContext.Products.Attach(current);
             this.DbContext.Products.Remove(current);
         }
-#endregion
+        #endregion
 
-#region PurchaseOrder methods
+        #region PurchaseOrder methods
         [Query]
         public IQueryable<PurchaseOrder> GetPurchaseOrders()
         {
@@ -94,9 +94,9 @@ namespace TestDomainServices.EFCore
             this.DbContext.PurchaseOrders.Attach(current);
             this.DbContext.PurchaseOrders.Remove(current);
         }
-#endregion
+        #endregion
 
-#region PurchaseOrderDetail methods
+        #region PurchaseOrderDetail methods
         [Insert]
         public void InsertPurchaseOrderDetail(PurchaseOrderDetail purchaseOrderDetail)
         {
@@ -115,9 +115,9 @@ namespace TestDomainServices.EFCore
             this.DbContext.PurchaseOrderDetails.Attach(current);
             this.DbContext.PurchaseOrderDetails.Remove(current);
         }
-#endregion
+        #endregion
 
-#region Employee methods
+        #region Employee methods
         [Query]
         public IQueryable<Employee> GetEmployees()
         {
@@ -137,6 +137,6 @@ namespace TestDomainServices.EFCore
                           };
             return results as IEnumerable<EmployeeInfo>;
         }
-#endregion
+        #endregion
     }
 }
