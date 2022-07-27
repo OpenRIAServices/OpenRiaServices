@@ -992,13 +992,14 @@ namespace OpenRiaServices.Server.UnitTesting
         {
             // TODO: consider whether this implementation should call dispose
             //  Maybe OperationContext would implement IDisposable...
+            
+            IPrincipal user = (IPrincipal)ServiceProvider.GetService(typeof(IPrincipal));
             DomainServiceContext domainServiceContext =
-                new DomainServiceContext(this.ServiceProvider, operationType);
+                new DomainServiceContext(this.ServiceProvider, user, operationType);
             DomainService domainService =
                 this.Factory.CreateDomainService(typeof(TDomainService), domainServiceContext);
             DomainServiceDescription domainServiceDescription =
                 DomainServiceDescription.GetDescription(typeof(TDomainService));
-
             return new OperationContext(domainServiceContext, domainService, domainServiceDescription);
         }
 
