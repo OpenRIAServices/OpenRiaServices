@@ -10,7 +10,7 @@
     <PackageReference Include="Microsoft.AspNet.WebApi.Client" Version="5.1.2" />
     <PackageReference Include="Microsoft.AspNet.WebApi.Core" Version="5.1.2" />
     <PackageReference Include="Microsoft.Net.Http" Version="2.2.19" />
-    <PackageReference Include="Newtonsoft.Json" Version="6.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
