@@ -81,6 +81,22 @@ steps:
     diagnosticsEnabled: false
   timeoutInMinutes: 25
 
+- task: VSTest@2
+  displayName: 'Run net6 tests'
+  inputs:
+    testAssemblyVer2: |
+     **\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.*Test.dll
+     !**\obj\**
+
+    runOnlyImpactedTests: false
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+    diagnosticsEnabled: false
+  timeoutInMinutes: 25
+
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
   continueOnError: true
