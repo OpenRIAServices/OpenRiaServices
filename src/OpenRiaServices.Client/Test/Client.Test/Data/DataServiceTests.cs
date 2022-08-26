@@ -70,6 +70,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [WorkItem(880862)]
+        [TestCategory("WCF")]
         public void JsonEndpointWithQuery()
         {
             // Verify that we can send a query to the JSON endpoint.
