@@ -83,7 +83,7 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: 'Run net6.0 tests'
-  enabled: true
+  enabled: false
   inputs:
     command: 'test'
     projects: '**\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.*Test.dll;!**\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.Common.*Test.dll'
