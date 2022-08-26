@@ -83,9 +83,11 @@ steps:
 
 - task: DotNetCoreCLI@2
   displayName: 'Run net6.0 tests'
+  enabled: true
   inputs:
     command: 'test'
-    projects: '**\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.*Test.dll'
+    projects: '**\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.*Test.dll;!**\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.Common.*Test.dll'
+    arguments: '-f net6.0 --configuration $(BuildConfiguration) --no-build'
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
