@@ -7,9 +7,9 @@
     <RootNamespace>OpenRiaServices.Client.Test</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="2.2.8" />
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.8" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.VisualBasic" />
@@ -44,26 +44,10 @@
     <Compile Include="..\Client.Test\OperationAwaiter.cs" Link="Client.Test\OperationAwaiter.cs" />
     <Compile Include="..\Client.Test\Main.cs" Link="Main.cs" />
     <Compile Include="..\Client.Test\TestUris.cs" Link="TestUris.cs" />
-    <Compile Update="Service References\Services\Reference.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Reference.svcmap</DependentUpon>
-    </Compile>
   </ItemGroup>
   
   <ItemGroup>
     <None Include="Properties\AppManifest.xml" />
-    <None Include="Service References\Services\TestServices.wsdl" />
-    <None Include="Service References\Services\TestServices.xsd" />
-    <None Include="Service References\Services\TestServices.disco" />
-    <None Include="Service References\Services\TestServices1.wsdl" />
-    <None Include="Service References\Services\TestServices1.xsd" />
-    <None Include="Service References\Services\configuration91.svcinfo" />
-    <None Include="Service References\Services\configuration.svcinfo" />
-    <None Include="Service References\Services\Reference.svcmap">
-      <Generator>WCF Proxy Generator</Generator>
-      <LastGenOutput>Reference.cs</LastGenOutput>
-    </None>
   </ItemGroup>
   
   <ItemGroup>

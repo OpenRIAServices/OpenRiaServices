@@ -1,5 +1,6 @@
 ﻿using System.ServiceModel;
 using System.ServiceModel.Activation;
+using System.ServiceModel.Web;
 using System.Web;
 using TestDomainServices.Testing;
 
@@ -16,6 +17,7 @@ namespace Website.Services
         /// </summary>
         /// <param name="databaseName">The database name</param>
         [OperationContract]
+        [WebInvoke(UriTemplate = "CreateDatabase?name={databaseName}")]
         public void CreateNewDatabase(string databaseName)
         {
             DBImager.CreateNewDatabase(databaseName);
@@ -27,12 +29,15 @@ namespace Website.Services
         /// </summary>
         /// <param name="databaseName">The database name</param>
         [OperationContract]
+
+        [WebInvoke(UriTemplate = "DropDatabase?name={databaseName}")]
         public void ReleaseNewDatabase(string databaseName)
         {
             DBImager.CleanDB(databaseName);
         }
 
         [OperationContract]
+        [WebInvoke(UriTemplate = "Restart")]
         public void RestartApp()
         {
             HttpRuntime.UnloadAppDomain();

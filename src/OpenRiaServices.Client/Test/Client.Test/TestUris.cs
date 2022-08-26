@@ -26,7 +26,12 @@ public static class TestURIs
     public static readonly Uri DbCtx_Northwind_CUD = new Uri(RootURI, "TestDomainServices-DbCtx-Northwind_CUD.svc");
     public static readonly Uri DbCtx_Northwind = new Uri(RootURI, "TestDomainServices-DbCtx-Northwind.svc");
     public static readonly Uri DbCtx_Catalog = new Uri(RootURI, "TestDomainServices-DbCtx-Catalog.svc");
-    public static readonly Uri EFCodeFirst = new Uri(RootURI, "EFCodeFirst-EFCodeFirstTestDomainService.svc");    
+    public static readonly Uri EFCodeFirst = new Uri(RootURI, "EFCodeFirst-EFCodeFirstTestDomainService.svc");
+
+    // EF Core
+    public static readonly Uri EFCore_Northwind = new Uri(RootURI, "TestDomainServices-EFCore-Northwind.svc");
+    public static readonly Uri EFCore_Northwind_CUD = new Uri(RootURI, "TestDomainServices-EFCore-Northwind_CUD.svc");
+    public static readonly Uri EFCore_Catalog = new Uri(RootURI, "TestDomainServices-EFCore-Catalog.svc");
 
     // LTS
     public static readonly Uri LTS_Catalog = new Uri(RootURI, "TestDomainServices-LTS-Catalog.svc");

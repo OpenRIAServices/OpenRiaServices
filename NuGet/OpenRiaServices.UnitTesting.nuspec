@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.UnitTesting</id>
-    <version>4.5.1</version>
+    <version>4.5.2</version>
     <title>Open RIA Services Unit Testing</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>
@@ -23,5 +23,9 @@
     <file src="..\src\bin\Release\net472\OpenRiaServices.Server.UnitTesting.dll" target="lib\net472\OpenRiaServices.Server.UnitTesting.dll" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.Server.UnitTesting.pdb" target="lib\net472\OpenRiaServices.Server.UnitTesting.pdb" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.Server.UnitTesting.xml" target="lib\net472\OpenRiaServices.Server.UnitTesting.xml" />
+
+    <file src="..\src\bin\Release\net6.0\OpenRiaServices.Server.UnitTesting.dll" target="lib\net6.0\OpenRiaServices.Server.UnitTesting.dll" />
+    <file src="..\src\bin\Release\net6.0\OpenRiaServices.Server.UnitTesting.pdb" target="lib\net6.0\OpenRiaServices.Server.UnitTesting.pdb" />
+    <file src="..\src\bin\Release\net6.0\OpenRiaServices.Server.UnitTesting.xml" target="lib\net6.0\OpenRiaServices.Server.UnitTesting.xml" />
   </files>
 </package>

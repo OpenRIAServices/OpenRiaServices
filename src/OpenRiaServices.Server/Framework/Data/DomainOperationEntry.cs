@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,7 +24,6 @@ namespace OpenRiaServices.Server
         private readonly Type _domainServiceType;
         private LazyBool _requiresValidation;
         private LazyBool _requiresAuthorization;
-        private Func<object, ValueTask<object>> _unwrapTaskResultFunc;
 
         /// <summary>
         /// Initializes a new instance of the DomainOperationEntry class
@@ -429,50 +427,6 @@ namespace OpenRiaServices.Server
                 totalCount = DomainService.TotalCountUndefined;
                 return this.InvokeAsync(domainService, parameters, cancellationToken);
             }
-        }
-
-        private protected ValueTask<object> UnwrapTaskResult(object result)
-        {
-            if (!IsTaskAsync)
-                return new ValueTask<object>(result);
-
-            if (_unwrapTaskResultFunc == null)
-            {
-                if (ReturnType == typeof(void))
-                    _unwrapTaskResultFunc = UnwrapVoidResult;
-                else
-                {
-                    _unwrapTaskResultFunc = (Func<object, ValueTask<object>>)Delegate.CreateDelegate(typeof(Func<object, ValueTask<object>>),
-                                                    typeof(DomainOperationEntry).GetMethod(nameof(UnwrapGenericResult), BindingFlags.Static | BindingFlags.NonPublic)
-                                                    .MakeGenericMethod(this.ReturnType));
-                }
-            }
-            return _unwrapTaskResultFunc(result);
-        }
-
-        private static async ValueTask<object> UnwrapVoidResult(object result)
-        {
-            if (result == null)
-                throw new InvalidOperationException("Task method returned null");
-
-            if (result is Task t)
-                await t.ConfigureAwait(false);
-
-            if (result is ValueTask vt)
-                await vt.ConfigureAwait(false);
-
-            return null;
-        }
-
-        private static async ValueTask<object> UnwrapGenericResult<T>(object result)
-        {
-            if (result == null)
-                throw new InvalidOperationException("Task method returned null");
-
-            if (result is Task<T> t)
-                return await t.ConfigureAwait(false);
-            else
-                return await ((ValueTask<T>)result).ConfigureAwait(false);
         }
 
         /// <summary>

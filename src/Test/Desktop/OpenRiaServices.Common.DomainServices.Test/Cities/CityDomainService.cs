@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.ServiceModel;
+using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices;
 using OpenRiaServices.Server;
@@ -98,8 +99,17 @@ namespace Cities
         }
 
         [Query]
+#if !NET6_0
+        public IQueryable<State> GetStatesInShippingZone(ShippingZone shippingZone, [InjectParameter] System.Web.HttpContext httpContext, [InjectParameter] System.Security.Principal.IPrincipal principal)
+        {
+            if (!object.ReferenceEquals(httpContext, System.Web.HttpContext.Current))
+                throw new DomainException("DomainService parameter injection does not work");
+            if (!object.ReferenceEquals(principal, ServiceContext.User))
+                throw new DomainException("DomainService parameter injection does not work");
+#else
         public IQueryable<State> GetStatesInShippingZone(ShippingZone shippingZone)
         {
+#endif
             return this._cityData.States.Where(s => s.ShippingZone == shippingZone).AsQueryable<State>();
         }
 
@@ -292,8 +302,11 @@ namespace Cities
         }
 
         [Invoke]
-        public async Task<string> EchoWithDelay(string msg, TimeSpan delay)
+        public async Task<string> EchoWithDelay(string msg, TimeSpan delay, CancellationToken cancellationToken)
         {
+            if (!cancellationToken.Equals(ServiceContext.CancellationToken))
+                throw new DomainException("CancellationToken parameter does not work");
+
             // This method is used to test cancellation of invoke operations
             // Since the method might return to soon otherwise we add a delay
             await Task.Delay(delay, ServiceContext.CancellationToken);
@@ -308,11 +321,13 @@ namespace Cities
             _deletedCities.Clear();
         }
 
+#if !NET6_0
         [Invoke]
         public bool UsesCustomHost()
         {
             return (OperationContext.Current.Host.GetType() == typeof(CityDomainServiceHost));
         }
+#endif
 
         // Invoke that has a custom authorization attribute.  Permission denied for any City
         // whose state is Ohio unless the user is Mathew.
@@ -323,9 +338,9 @@ namespace Cities
             return city.StateName;
         }
 
-        #endregion
+#endregion
 
-        #region Derived CUD/Custom/Service methods
+#region Derived CUD/Custom/Service methods
 
         // Note: explicitly missing are CUD methods on CityWithInfo
         // so that we verify CUD operations execute against their
@@ -360,7 +375,7 @@ namespace Cities
         {
             city.EditHistory = "touch=" + touchString;
         }
-        #endregion //Derived CUD/Custom/Service methods
+#endregion //Derived CUD/Custom/Service methods
     }
 
     /// <summary>

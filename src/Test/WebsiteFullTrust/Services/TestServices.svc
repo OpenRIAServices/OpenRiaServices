@@ -1,1 +1,1 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Website.Services.TestServices" CodeBehind="TestServices.svc.cs" %>
+﻿<%@ ServiceHost Language="C#" Debug="true" Service="Website.Services.TestServices" CodeBehind="TestServices.svc.cs"  Factory="System.ServiceModel.Activation.WebServiceHostFactory" %>

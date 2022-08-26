@@ -6,6 +6,10 @@ using System.ComponentModel.DataAnnotations;
 
 namespace CodeFirstModels
 {
+    /// <summary>
+    /// Non DAL projection type used to verify that such types can be returned
+    /// from the provider
+    /// </summary>
     public class ProductInfo
     {
         public static ProductInfo CreateProductInfo(int productID, string productName, string categoryName, string supplierName)

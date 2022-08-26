@@ -161,8 +161,9 @@ namespace OpenRiaServices.Hosting.Wcf.OData
             DomainDataServiceContractBehavior.DomainDataServiceInstanceInfo instanceInfo =
                 (DomainDataServiceContractBehavior.DomainDataServiceInstanceInfo)instance;
 
-            IServiceProvider serviceProvider = (IServiceProvider)OperationContext.Current.Host;
-            DomainServiceContext context = new WcfDomainServiceContext(serviceProvider, this.operationType);
+            var operationContext = OperationContext.Current;
+            IServiceProvider serviceProvider = (IServiceProvider)operationContext.Host;
+            DomainServiceContext context = new WcfDomainServiceContext(serviceProvider, operationContext.ClaimsPrincipal, this.operationType);
 
             try
             {

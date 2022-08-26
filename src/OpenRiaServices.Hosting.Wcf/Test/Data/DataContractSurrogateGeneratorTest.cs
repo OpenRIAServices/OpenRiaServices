@@ -591,10 +591,10 @@ namespace OpenRiaServices.Hosting.UnitTests
             this._parent = parent;
         }
 
-        public override ICustomTypeDescriptor GetTypeDescriptor(Type objectType, object instance)
+        public override ICustomTypeDescriptor GetTypeDescriptor(Type type, object instance)
         {
-            ICustomTypeDescriptor parent = this._parent ?? base.GetTypeDescriptor(objectType, instance);
-            return new MockTypeDescriptor(objectType, parent, this._createProperty);
+            ICustomTypeDescriptor parent = this._parent ?? base.GetTypeDescriptor(type, instance);
+            return new MockTypeDescriptor(type, parent, this._createProperty);
         }
 
         private class MockTypeDescriptor : CustomTypeDescriptor

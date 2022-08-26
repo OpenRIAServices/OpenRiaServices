@@ -1,10 +1,19 @@
-﻿using System;
+﻿#if EFCORE
+using System;
+using System.ComponentModel;
+using Microsoft.EntityFrameworkCore;
+using System.Globalization;
+
+namespace OpenRiaServices.Server.EntityFrameworkCore
+#else
+using System;
 using System.ComponentModel;
 using System.Data.Entity;
 using System.Globalization;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.EntityFramework
+#endif
 {
     /// <summary>
     /// Attribute applied to a <see cref="DbDomainService{DbContext}"/> that exposes LINQ to Entities mapped
@@ -21,7 +30,11 @@ namespace OpenRiaServices.EntityFramework
         /// attribute is applied to.
         /// </summary>
         public DbDomainServiceDescriptionProviderAttribute()
+#if EFCORE
+            : base(typeof(EFCoreDescriptionProvider))
+#else
             : base(typeof(LinqToEntitiesDomainServiceDescriptionProvider))
+#endif
         {
         }
 
@@ -31,9 +44,13 @@ namespace OpenRiaServices.EntityFramework
         /// </summary>
         /// <param name="dbContextType">The LINQ To Entities ObjectContext Type.</param>
         public DbDomainServiceDescriptionProviderAttribute(Type dbContextType)
+#if EFCORE
+            : base(typeof(EFCoreDescriptionProvider))
+#else
             : base(typeof(LinqToEntitiesDomainServiceDescriptionProvider))
+#endif
         {
-            this._dbContextType = dbContextType;
+            _dbContextType = dbContextType;
         }
 
         /// <summary>
@@ -43,7 +60,7 @@ namespace OpenRiaServices.EntityFramework
         {
             get
             {
-                return this._dbContextType;
+                return _dbContextType;
             }
         }
 
@@ -60,19 +77,22 @@ namespace OpenRiaServices.EntityFramework
                 throw new ArgumentNullException(nameof(domainServiceType));
             }
 
-            if (this._dbContextType == null)
+            if (_dbContextType == null)
             {
-                this._dbContextType = GetContextType(domainServiceType);
+                _dbContextType = GetContextType(domainServiceType);
             }
 
-            if (!typeof(DbContext).IsAssignableFrom(this._dbContextType))
+            if (!typeof(DbContext).IsAssignableFrom(_dbContextType))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
                     DbResource.InvalidDbDomainServiceDescriptionProviderSpecification,
-                    this._dbContextType));
+                    _dbContextType));
             }
-
-            return new LinqToEntitiesDomainServiceDescriptionProvider(domainServiceType, this._dbContextType, parent);
+#if EFCORE
+            return new EFCoreDescriptionProvider(domainServiceType, _dbContextType, parent);
+#else
+            return new LinqToEntitiesDomainServiceDescriptionProvider(domainServiceType, _dbContextType, parent);
+#endif
         }
 
         /// <summary>

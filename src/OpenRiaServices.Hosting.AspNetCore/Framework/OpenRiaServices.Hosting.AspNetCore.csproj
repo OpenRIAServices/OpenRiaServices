@@ -1,0 +1,82 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <DefineConstants>$(DefineConstants);SERVERFX;ASPNET_CORE</DefineConstants>
+    <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
+    <!-- Ignore documentation varnings while experimental-->
+    <NoWarn>$(NoWarn);CS1574;CS1573;CS1591;CS1572</NoWarn>
+    <VersionPrefix>0.1.1</VersionPrefix>
+    <VersionSuffix></VersionSuffix>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Authors>Daniel-Svensson</Authors>
+    <PackageTags>OpenRiaServices AspNetCore Hosting DomainServices AspNet WCF RIA Services Server</PackageTags>
+    <Description>PREVIEW: Asp.Net Core Hosting for OpenRiaservices
+    The package is currently in preview, please look at TODO file in reposotiry.
+    Only use if you feel competent to debug and troubleshoot any issues yourself.
+    
+    Public API will change before 1.0.0 release
+    
+    There is no documentation yet, please see AspNetCoreWebsite project in repository for usage.
+    </Description>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="LICENSE.md" Pack="true" PackagePath="\" />
+    <None Update="README.md" Pack="true" PackagePath="\" />
+  </ItemGroup>
+  
+  <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="DomainServiceFault.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="ServiceQueryPart.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\QueryResult.cs" Link="QueryResult.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DefaultQueryResolver.cs" Link="Linq\DefaultQueryResolver.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DynamicQueryable.cs" Link="Linq\DynamicQueryable.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DynamicQueryableMethodValidator.cs" Link="Linq\DynamicQueryableMethodValidator.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryDeserializer.cs" Link="Linq\QueryDeserializer.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryResolver.cs" Link="Linq\QueryResolver.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\ServiceQuery.cs" Link="ServiceQuery.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\Behaviors\WebHttpQueryStringConverter.cs" Link="Wcf\WebHttpQueryStringConverter.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\ChangeSetProcessor.cs" Link="Wcf\ChangeSetProcessor.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\DataContractSurrogateGenerator.cs" Link="Wcf\DataContractSurrogateGenerator.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\DomainServiceSerializationSurrogate.cs" Link="Wcf\DomainServiceSerializationSurrogate.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\QueryProcessor.cs" Link="Wcf\QueryProcessor.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\Resource.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\Resource.resx" Link="Linq\Resource.resx">
+      <CustomToolNamespace>System.Linq.Dynamic</CustomToolNamespace>
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\Resource.resx" Link="Wcf\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <CustomToolNamespace>OpenRiaServices.Hosting.Wcf</CustomToolNamespace>
+    </EmbeddedResource>
+  </ItemGroup>
+
+</Project>

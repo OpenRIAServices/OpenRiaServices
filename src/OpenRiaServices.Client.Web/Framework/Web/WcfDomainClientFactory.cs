@@ -203,7 +203,9 @@ namespace OpenRiaServices.Client.Web
                 {
                     // in debug mode set the timeout to a higher number to
                     // facilitate debugging
-                    factory.Endpoint.Binding.OpenTimeout = TimeSpan.FromMinutes(5);
+                    factory.Endpoint.Binding.OpenTimeout = TimeSpan.FromMinutes(10);
+                    factory.Endpoint.Binding.ReceiveTimeout = TimeSpan.FromMinutes(10);
+                    factory.Endpoint.Binding.SendTimeout = TimeSpan.FromMinutes(10);
                 }
 #endif
             }

@@ -1,7 +1,71 @@
+# 5.1.0 
+
+## Overview / Major features
+
+* Support for **NET 6**
+    * **AspNetCore** based hosting via `OpenRiaServices.Hosting.AspNetCore` #346
+        *  See [Readme.md](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.md) and [TODO.md](src/OpenRiaServices.Hosting.AspNetCore/Framework/TODO.md) for usage details and more details about what works.
+    * Packages such as `OpenRiaServices.Server` and `OpenRiaServices.EntityFramework` are now compiled against net6.0 as well
+* Support for **EntityFrameworkCore** via `OpenRiaServices.Server.EntityFrameworkCore`
+    * Se #323 for more details (PR #351, #335)
+* New `BinaryHttpDomainClientFactory` which is a `HttpClient` based transport on client (without WCF dependency) which works with **Blazor** (With sample in samples directory).
+```C#
+DomainContext.DomainClientFactory = new OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory(....)
+{
+    ServerBaseUri = "https://YOUR_SERVER_URI"
+};
+```
+* Server **Dependency Injection** support
+   * Allow injecting services to parameters using attribute `InjectParametersAttribute`
+   * ValidationContext And AuthorizationContext will also be able to resolve services using `GetService(Type)` from the configured `IServiceProvider`
+   * Add a new `IServiceProvider` setting to allow resolving services via Microsoft DI #340 when using WCF Hosting
+ ```C#
+// Setup DI
+var serviceCollection = new ServiceCollection();
+serviceCollection.AddDomainServices(ServiceLifetime.Transient);
+var serviceProvider = serviceCollection.BuildServiceProvider();
+
+// Setup OpenRiaServices to use container
+var config = OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.Current;
+config.ServiceProvider = serviceProvider;
+``` 
+  
+
+## What's new since 5.1.0-preview5
+
+* NEW: Package OpenRiaServices.Hosting.AspNetCore, OpenRiaServices.Server.EntityFrameworkCore
+* Fix bug #348 System.IndexOutOfRangeException when domain query is executed which can happen if invoking methods concurrently on DomainClient
+* *DbDomainService* now has a constructor which takes a DbContext in order to support Dependency Injection
+* *DbDomainService* will no longer create a separate DbContext to resolve conflicts (if the method to create DbContext was overridden and returned a fixed instance it could lead to problems with incorrect conflict detection)
+
+**Infreastructure**
+* Allow C# 10 #354 
+* Support for VS 2022
+* Improve Tooling support for projects targeting multiple TargetFrameworks #352 
+     * This fix ensures that sdk style implicit included code files are detected for server projects targeting multiple target frameworks.
+
+
 # 5.1.0-preview5
 
-* Make it possible to Cache invokes
-   * Introduce caching for Invoke operations by refactoring and using the same logic as for Querys #332
+* Make it possible to cache invoke operations #332
+   * Introduce caching for invoke operations by refactoring and using the same logic as for querys
+ * Allow method (parameter) injection #339
+   * Allow parameters of type CancellationToken for all kinds of service methods
+   * Make the generated method return `ValueTask` so that the `UnwrapTaskResult` logic from `ReflectionDomainServiceDescriptionProvider` can be removed (and better performance)
+   * Allow injecting services to parameters using attribute `InjectParametersAttribute` 
+ * Add a new `IServiceProvider` setting to allow resolving services via Microsoft DI `#340`
+
+    * See example usage in Global Init/Statup below:
+     ```C#
+    // Setup DI
+    var serviceCollection = new ServiceCollection();
+    serviceCollection.AddDomainServices(ServiceLifetime.Transient);
+    var serviceProvider = serviceCollection.BuildServiceProvider();
+
+    // Setup OpenRiaServices to use container
+    var config = OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.Current;
+    config.ServiceProvider = serviceProvider;
+    ``` 
 
 # 5.1.0-preview4
 

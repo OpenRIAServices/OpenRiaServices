@@ -16,17 +16,27 @@
     </description>
     <summary>Open RIA Services - Entity Framework 6 support with DbDomainService and LinqToEntitiesDomainService</summary>
     <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
-    <copyright>2018 Outercurve Foundation</copyright>
+    <copyright>2022 Outercurve Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices</tags>
     <dependencies>
-      <dependency id="EntityFramework" version="6.4.4" />
-      <dependency id="OpenRiaServices.Server" version="$version$"/>
+      <group targetFramework="net6.0">
+        <dependency id="EntityFramework" version="6.4.4" />
+        <dependency id="OpenRiaServices.Server" version="$version$"/>
+      </group>
+      <group targetFramework="net472">
+        <dependency id="EntityFramework" version="6.4.4" />
+        <dependency id="OpenRiaServices.Server" version="$version$"/>
+      </group>
     </dependencies>
   </metadata>
   <files>
     <file src="..\src\bin\Release\net472\OpenRiaServices.EntityFramework.dll" target="lib\net472\OpenRiaServices.EntityFramework.dll" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.EntityFramework.pdb" target="lib\net472\OpenRiaServices.EntityFramework.pdb" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.EntityFramework.xml" target="lib\net472\OpenRiaServices.EntityFramework.xml" />
+	
+	<file src="..\src\bin\Release\net6.0\OpenRiaServices.EntityFramework.dll" target="lib\net6.0\OpenRiaServices.EntityFramework.dll" />
+    <file src="..\src\bin\Release\net6.0\OpenRiaServices.EntityFramework.pdb" target="lib\net6.0\OpenRiaServices.EntityFramework.pdb" />
+    <file src="..\src\bin\Release\net6.0\OpenRiaServices.EntityFramework.xml" target="lib\net6.0\OpenRiaServices.EntityFramework.xml" />
   </files>
 </package>
