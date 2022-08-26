@@ -16,8 +16,17 @@
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Testing OpenRiaServices</tags>
     <dependencies>
-      <dependency id="OpenRiaServices.Server" version="$version$"/>
+      <group targetFramework="net6.0">
+        <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
+        <dependency id="OpenRiaServices.Server" version="$version$"/>
+      </group>
+      <group targetFramework="net472">
+        <dependency id="OpenRiaServices.Server" version="$version$"/>
+      </group>
     </dependencies>
+    <frameworkAssemblies>
+      <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net472" />
+    </frameworkAssemblies>
   </metadata>
   <files>
     <file src="..\src\bin\Release\net472\OpenRiaServices.Server.UnitTesting.dll" target="lib\net472\OpenRiaServices.Server.UnitTesting.dll" />

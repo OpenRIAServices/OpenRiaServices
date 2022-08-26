@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.ServiceModel.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
-using TestDomainServices.TypeNameConflictResolution;
 
 namespace OpenRiaServices.Server.UnitTesting.Test
 {
