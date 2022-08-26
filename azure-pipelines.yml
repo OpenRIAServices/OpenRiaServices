@@ -17,7 +17,7 @@ steps:
 
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: 6.2.0
+    versionSpec: 6.3.0
     
 - task: gitversion/setup@0
   displayName: Install GitVersion
@@ -64,12 +64,12 @@ steps:
   displayName: 'Setup database'
 
 - task: VSTest@2
-  displayName: 'Run tests'
+  displayName: 'Run net4x tests'
   inputs:
     testAssemblyVer2: |
-     **\bin\$(BuildConfiguration)\**\OpenRiaServices.*Test.dll
-     !src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.*Test.dll
-     src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.VisualStudio.*.Test.dll
+     **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
      !**\obj\**
 
     runOnlyImpactedTests: false
