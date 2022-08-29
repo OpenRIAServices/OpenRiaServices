@@ -5,9 +5,7 @@ using System.Xml;
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     /// <summary>
-    /// Helper class to cache <see cref="XmlDictionaryWriter"/> and stream in order
-    /// to not have to allocated all memory used for the writer.
-    /// It also adds some estimates of the buffer size needde
+    /// Helper class to cache <see cref="XmlDictionaryReader"/>
     /// </summary>
     internal class BinaryMessageReader : IDisposable
     {
