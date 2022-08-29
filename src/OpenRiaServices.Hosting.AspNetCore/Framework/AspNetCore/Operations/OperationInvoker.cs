@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
@@ -77,17 +78,23 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 throw new BadHttpRequestException("invalid lenght", (int)System.Net.HttpStatusCode.LengthRequired);
 
             var length = (int)contentLength;
-            var buffer = ArrayPool<byte>.Shared.Rent(length);
+
+            // To prevent DOS attacks where an attacker can allocate arbitary large memory by setting content-length to a large value
+            // We only allocate a maximum of 4K directly
+            using var ms = new ArrayPoolStream(ArrayPool<byte>.Shared, maxBlockSize: 4 * 1024 * 1024);
+            ms.Reset(Math.Min(4096, length)); // Initial capacity up to 4K
+
+            await request.BodyReader.CopyToAsync(ms).ConfigureAwait(false);
+            ArraySegment<byte> memory = ms.GetRentedArrayAndClear();
+
             try
             {
-                await CopyToBufferAsync(request, buffer, length).ConfigureAwait(false);
-
-                using var reader = XmlDictionaryReader.CreateBinaryReader(buffer, 0, length, null, XmlDictionaryReaderQuotas.Max);
-                return ReadParametersFromBody(reader);
+                using var reader = BinaryMessageReader.Rent(memory);
+                return ReadParametersFromBody(reader.XmlDictionaryReader);
             }
             finally
             {
-                ArrayPool<byte>.Shared.Return(buffer);
+                ArrayPool<byte>.Shared.Return(memory.Array);
             }
         }
 
