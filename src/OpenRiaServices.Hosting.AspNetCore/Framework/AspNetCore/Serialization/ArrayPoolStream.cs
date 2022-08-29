@@ -18,7 +18,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// avoid allocations and be able to return memory directly without additional copies 
     /// (for small messages).
     /// </summary>
-    internal class ArrayPoolStream : Stream
+    internal sealed class ArrayPoolStream : Stream
     {
         private ArrayPool<byte> _arrayPool;
         private readonly int _maxSize;
@@ -89,15 +89,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         }
 
         /// <summary>
-        /// Copies bytes from <paramref name="src"/> to <paramref name="dest"/> using fastes 
-        /// copy based on process bitness (x86 / x64) tested on .Net Framework 4.8
+        /// Copies bytes from <paramref name="src"/> to <paramref name="dest"/>
         /// </summary>
         private static unsafe void FastCopy(byte[] src, int srcOffset, byte[] dest, int destOffset, int count)
         {
             if (count == 0)
                 return;
 
-            // Buffer.BlockCopy(src, srcOffset, dest, destOffset, count);
             Unsafe.CopyBlockUnaligned(destination: ref dest[destOffset], source: ref src[srcOffset], (uint)count);
         }
 

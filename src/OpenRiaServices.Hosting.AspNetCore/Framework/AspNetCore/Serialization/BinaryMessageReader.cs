@@ -7,7 +7,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// <summary>
     /// Helper class to cache <see cref="XmlDictionaryReader"/>
     /// </summary>
-    internal class BinaryMessageReader : IDisposable
+    internal sealed class BinaryMessageReader : IDisposable
     {
         private readonly XmlDictionaryReader _reader;
 

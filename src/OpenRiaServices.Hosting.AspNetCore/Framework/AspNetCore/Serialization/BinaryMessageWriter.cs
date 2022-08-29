@@ -9,7 +9,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// to not have to allocated all memory used for the writer.
     /// It also adds some estimates of the buffer size needde
     /// </summary>
-    internal class BinaryMessageWriter
+    internal sealed class BinaryMessageWriter
     {
         private ArrayPoolStream _stream;
         private XmlDictionaryWriter _writer;

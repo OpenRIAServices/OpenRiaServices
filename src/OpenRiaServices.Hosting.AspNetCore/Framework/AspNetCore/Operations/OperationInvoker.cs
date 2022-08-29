@@ -10,7 +10,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
-using System.Runtime.InteropServices;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
@@ -386,21 +385,5 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             domainService.Initialize(serviceContext);
             return domainService;
         }
-
-
-        private static async Task CopyToBufferAsync(HttpRequest request, byte[] buffer, int length)
-        {
-            int offset = 0;
-            var body = request.Body;
-            do
-            {
-                int read = await body.ReadAsync(buffer, offset, length - offset).ConfigureAwait(false);
-                offset += read;
-
-                if (read == 0)
-                    throw new BadHttpRequestException(InvalidContentMessage);
-            } while (offset < length);
-        }
-
     }
 }
