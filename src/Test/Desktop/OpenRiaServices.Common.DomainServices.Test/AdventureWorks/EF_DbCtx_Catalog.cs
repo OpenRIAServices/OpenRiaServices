@@ -23,6 +23,7 @@ namespace TestDomainServices.DbCtx
         public IQueryable<Product> GetProducts()
         {
             return from p in this.DbContext.Products
+                   orderby p.ProductID
                    select p;
         }
 
