@@ -72,16 +72,18 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         protected async Task<(ServiceQuery, object[])> ReadParametersFromBodyAsync(HttpContext context)
         {
             var request = context.Request;
-            var contentLength = request.ContentLength;
-            if (!contentLength.HasValue || contentLength < 0 || contentLength > int.MaxValue)
-                throw new BadHttpRequestException("invalid lenght", (int)System.Net.HttpStatusCode.LengthRequired);
 
-            var length = (int)contentLength;
+            int initialCapacity = request.ContentLength switch
+            {
+                long contentLength and >= 0 and <= int.MaxValue => Math.Min((int)contentLength, 4096),
+                null => 4096,
+                _ => throw new BadHttpRequestException("invalid lenght", (int)System.Net.HttpStatusCode.BadRequest)
+            };
 
             // To prevent DOS attacks where an attacker can allocate arbitary large memory by setting content-length to a large value
             // We only allocate a maximum of 4K directly
             using var ms = new ArrayPoolStream(ArrayPool<byte>.Shared, maxBlockSize: 4 * 1024 * 1024);
-            ms.Reset(Math.Min(4096, length)); // Initial capacity up to 4K
+            ms.Reset(initialCapacity); // Initial capacity up to 4K
 
             await request.BodyReader.CopyToAsync(ms).ConfigureAwait(false);
             ArraySegment<byte> memory = ms.GetRentedArrayAndClear();
