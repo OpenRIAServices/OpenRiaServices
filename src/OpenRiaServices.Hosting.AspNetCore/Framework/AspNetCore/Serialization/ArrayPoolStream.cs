@@ -18,7 +18,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// avoid allocations and be able to return memory directly without additional copies 
     /// (for small messages).
     /// </summary>
-    internal class ArrayPoolStream : Stream
+    internal sealed class ArrayPoolStream : Stream
     {
         private ArrayPool<byte> _arrayPool;
         private readonly int _maxSize;
@@ -31,10 +31,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         // String "position" (total size so far)
         private int _position;
 
-        public ArrayPoolStream(ArrayPool<byte> arrayPool, int maxAllocationSize)
+        public ArrayPoolStream(ArrayPool<byte> arrayPool, int maxBlockSize)
         {
             _arrayPool = arrayPool;
-            _maxSize = maxAllocationSize;
+            _maxSize = maxBlockSize;
         }
 
         public void Reset(int size)
@@ -89,8 +89,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         }
 
         /// <summary>
-        /// Copies bytes from <paramref name="src"/> to <paramref name="dest"/> using fastes 
-        /// copy based on process bitness (x86 / x64) tested on .Net Framework 4.8
+        /// Copies bytes from <paramref name="src"/> to <paramref name="dest"/>
         /// </summary>
         private static unsafe void FastCopy(byte[] src, int srcOffset, byte[] dest, int destOffset, int count)
         {
@@ -159,6 +158,60 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             _bufferWritten = 0;
             _position = 0;
             return res;
+        }
+
+        public ArraySegment<byte> GetRentedArrayAndClear()
+        {
+            ArraySegment<byte> result;
+
+            // We only have a single segment, return it directly with no copying
+            if (_bufferList is null)
+            {
+                result = new ArraySegment<byte>(_buffer, 0, _position);
+                System.Diagnostics.Debug.Assert(_bufferWritten == _position);
+                _buffer = null; // prevent buffer from beeing returned twice
+            }
+            else
+            {
+                // Copy in reverse order from filled to utilize CPU caches better
+                // _buffer might only be partially filled
+                int totalSize = _position;
+                int destOffset = totalSize - _bufferWritten;
+                result = default;
+
+                try
+                {
+                    // Reuse the "current" buffer if it is large enough
+                    if (_position <= _buffer.Length)
+                    {
+                        result = new ArraySegment<byte>(_buffer, 0, _position);
+                        FastCopy(_buffer, 0, result.Array, destOffset, _bufferWritten);
+                        _buffer = null; // prevent buffer from beeing returned twice
+                    }
+                    else
+                    {
+                        result = new ArraySegment<byte>(_arrayPool.Rent(totalSize), 0, _position);
+                        FastCopy(_buffer, 0, result.Array, destOffset, _bufferWritten);
+                    }
+
+                    // Buffers in list are all full
+                    for (int i = _bufferList.Count - 1; i >= 0; --i)
+                    {
+                        destOffset -= _bufferList[i].Length;
+                        FastCopy(_bufferList[i], 0, result.Array, destOffset, _bufferList[i].Length);
+                    }
+                }
+                catch
+                {
+                    if (result.Array != default)
+                        _arrayPool.Return(result.Array);
+                    throw;
+                }
+            }
+            Clear();
+            _bufferWritten = 0;
+            _position = 0;
+            return result;
         }
 
         public struct BufferMemory : IDisposable
