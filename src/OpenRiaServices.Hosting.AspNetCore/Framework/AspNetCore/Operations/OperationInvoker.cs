@@ -339,7 +339,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         {
             var ct = context.RequestAborted;
             ct.ThrowIfCancellationRequested();
-            // TODO: Handle cancelled
 
             var messageWriter = BinaryMessageWriter.Rent();
             try

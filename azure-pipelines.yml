@@ -64,14 +64,13 @@ steps:
   displayName: 'Setup database'
 
 - task: VSTest@2
-  displayName: 'Run net4x tests'
+  displayName: 'Run tests'
   inputs:
     testAssemblyVer2: |
-     **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
      !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
      src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
      !**\obj\**
-
     runOnlyImpactedTests: false
     runInParallel: true
     runSettingsFile: 'src\test.runsettings'
@@ -80,14 +79,6 @@ steps:
     configuration: '$(BuildConfiguration)'
     diagnosticsEnabled: false
   timeoutInMinutes: 25
-
-- task: DotNetCoreCLI@2
-  displayName: 'Run net6.0 tests'
-  enabled: false
-  inputs:
-    command: 'test'
-    projects: '**\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.*Test.dll;!**\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.Common.*Test.dll'
-    arguments: '-f net6.0 --configuration $(BuildConfiguration) --no-build'
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
