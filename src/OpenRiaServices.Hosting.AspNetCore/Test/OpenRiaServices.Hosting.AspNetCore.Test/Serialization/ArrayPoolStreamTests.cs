@@ -167,7 +167,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 stream.Write(otherInput, 0, otherInput.Length);
 
                 var array = stream.GetRentedArrayAndClear();
-                VerifyBufferContents(array,  new ArraySegment<byte>(otherInput));
+                VerifyBufferContents(array, new ArraySegment<byte>(otherInput));
                 manager.Return(array.Array);
                 manager.AssertEverythingIsReturned();
             }
@@ -186,27 +186,28 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             return buffer;
         }
 
-        private void VerifyBufferContents(ArraySegment<byte> buffer, ArraySegment<byte> expectedContents)
+        private void VerifyBufferContents(ReadOnlySpan<byte> buffer, ReadOnlySpan<byte> expectedContents)
         {
-            Assert.AreEqual(buffer.Offset, 0, "Wrong offset");
-            Assert.AreEqual(buffer.Count, expectedContents.Count, "Wrong count");
+            Assert.AreEqual(buffer.Length, expectedContents.Length, "Wrong count");
+            if (buffer.SequenceEqual(expectedContents))
+                return;
 
-            for (int i = 0; i < expectedContents.Count; ++i)
+            for (int i = 0; i < expectedContents.Length; ++i)
             {
-                byte expected = expectedContents.Array[expectedContents.Offset + i];
-                byte actual = buffer.Array[buffer.Offset + i];
+                byte expected = expectedContents[i];
+                byte actual = buffer[i];
                 if (expected != actual)
                 {
-                    Dump(buffer.Array, expectedContents.Count);
+                    Dump(buffer);
 
-                    Assert.Fail($"Buffer contents is wrong, expected {expected} but buffer[{buffer.Offset} + {i}] = {actual}");
+                    Assert.Fail($"Buffer contents is wrong, expected {expected} but buffer[{i}] = {actual}");
                 }
             }
         }
 
-        private static void Dump(byte[] buf, int count)
+        private static void Dump(ReadOnlySpan<byte> buf)
         {
-            for (int j = 0; j < count; ++j)
+            for (int j = 0; j < buf.Length; ++j)
             {
                 Console.Write("{0} ", (int)buf[j]);
             }
