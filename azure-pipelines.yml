@@ -64,10 +64,28 @@ steps:
   displayName: 'Setup database'
 
 - task: VSTest@2
-  displayName: 'Run tests'
+  displayName: 'Run tests - net48'
   inputs:
     testAssemblyVer2: |
-     **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
+     **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
+     !**\obj\**
+    runOnlyImpactedTests: false
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+    diagnosticsEnabled: false
+  timeoutInMinutes: 25
+
+- task: VSTest@2
+  displayName: 'Run tests - net6'
+  inputs:
+    testAssemblyVer2: |
+    **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
+     !**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
      !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
      src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
      !**\obj\**
