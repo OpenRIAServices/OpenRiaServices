@@ -98,7 +98,7 @@ steps:
     diagnosticsEnabled: false
   timeoutInMinutes: 25
 
- - task: SonarCloudAnalyze@1
+- task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
   continueOnError: true
   condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
