@@ -263,7 +263,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
             }
 
-            return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = 422 });
+            return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity });
         }
 
 

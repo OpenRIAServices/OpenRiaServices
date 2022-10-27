@@ -185,7 +185,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     if (_position <= _buffer.Length)
                     {
                         result = new ArraySegment<byte>(_buffer, 0, _position);
-                        FastCopy(_buffer, 0, result.Array, destOffset, _bufferWritten);
+
+                        // Src and destination can overlapp so Unsafe cannot be used
+                        // Using unsafe gives invalid result, but on x86 (not x64) so it is difficult to troubleshoot
+                        Buffer.BlockCopy(src: _buffer, srcOffset: 0, _buffer, destOffset, _bufferWritten);
                         _buffer = null; // prevent buffer from beeing returned twice
                     }
                     else

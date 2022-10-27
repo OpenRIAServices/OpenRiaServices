@@ -64,11 +64,12 @@ steps:
   displayName: 'Setup database'
 
 - task: VSTest@2
-  displayName: 'Run net4x tests'
+  displayName: 'Run tests - net48'
   inputs:
     testAssemblyVer2: |
      **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
      !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
      src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
      !**\obj\**
 
@@ -81,13 +82,25 @@ steps:
     diagnosticsEnabled: false
   timeoutInMinutes: 25
 
-- task: DotNetCoreCLI@2
-  displayName: 'Run net6.0 tests'
-  enabled: false
+- task: VSTest@2
+  displayName: 'Run tests - net6'
   inputs:
-    command: 'test'
-    projects: '**\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.*Test.dll;!**\bin\$(BuildConfiguration)\net6.0\OpenRiaServices.Common.*Test.dll'
-    arguments: '-f net6.0 --configuration $(BuildConfiguration) --no-build'
+    testAssemblyVer2: |
+     **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
+     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+     !**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !**\obj\**
+
+    runOnlyImpactedTests: false
+    # Needed to hardcode path to test adapters for NET48 tests
+    pathtoCustomTestAdapters: '$(Build.SourcesDirectory)\src\OpenRiaServices.Server.UnitTesting\Test\bin\$(BuildConfiguration)\net6.0\'
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+    diagnosticsEnabled: false
+  timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
