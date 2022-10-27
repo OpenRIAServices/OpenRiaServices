@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
@@ -97,6 +98,40 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 Assert.AreEqual((int)stream.Position, manager.Allocated[2].Length, "This test assumes allocation size is enough");
 
                 var buffer = VerifyStreamContents(stream, streamOffsetLastBuffer * 2, manager);
+                Assert.AreSame(manager.Allocated[2], buffer.Array);
+            }
+        }
+
+        /// <summary>
+        /// Handles a very specific case where the reused buffer scenario results in overwritten buffer.
+        /// It did only trigger on x86 (not x64) and only when copying large buffers of certain sizes
+        /// https://github.com/OpenRIAServices/OpenRiaServices/issues/378
+        /// </summary>
+        /// <remarks>
+        /// We mimic the behaviour as observed under IIS x68 with 4K writes up to a size which reproduces the issue
+        /// </remarks>
+        [TestMethod]
+        [WorkItem(738)]
+        public void ReuseLastBufferIfPossible2()
+        {
+            const int expectedLength = 24676;
+            const int BlockSize = 4096; // IIS write size
+            const int numFullWrites = expectedLength / BlockSize;
+            byte[] data = new byte[expectedLength];
+            System.Random.Shared.NextBytes(data);
+
+            // Use same behaviour as built in ArrayPool with round up power of 2
+            var manager = new ArrayPoolMock(x => (int)BitOperations.RoundUpToPowerOf2((uint)x));
+            using (var stream = new ArrayPoolStream(manager, int.MaxValue))
+            {
+                stream.Reset(4096);
+
+                // We mimic the behaviour as observed under IIS x68 with 4K writes up to a size which reproduces the issue
+                for (int i = 0; i < numFullWrites; ++i)
+                    stream.Write(data, i * BlockSize, BlockSize);
+                stream.Write(data, numFullWrites * BlockSize, (expectedLength - numFullWrites * BlockSize));
+
+                var buffer = VerifyStreamContents(stream, expectedLength, manager, data);
                 Assert.AreSame(manager.Allocated[2], buffer.Array);
             }
         }
