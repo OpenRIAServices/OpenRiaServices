@@ -71,6 +71,7 @@ steps:
      !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
      src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
      !**\obj\**
+
     runOnlyImpactedTests: false
     runInParallel: true
     runSettingsFile: 'src\test.runsettings'
@@ -84,9 +85,10 @@ steps:
   displayName: 'Run tests - net6'
   inputs:
     testAssemblyVer2: |
-    **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
+     **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
      !**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
      !**\obj\**
+
     runOnlyImpactedTests: false
     # Needed to hardcode path to test adapters for NET48 tests
     pathtoCustomTestAdapters: '$(Build.SourcesDirectory)\src\OpenRiaServices.Server.UnitTesting\Test\bin\$(BuildConfiguration)\net6.0\'
