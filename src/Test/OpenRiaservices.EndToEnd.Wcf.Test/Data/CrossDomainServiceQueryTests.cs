@@ -517,6 +517,7 @@ namespace OpenRiaServices.Client.Test
         }
     }
 
+#if !ASPNETCORE
     [TestClass]
     public class LTSQueryTests : CrossDomainServiceQueryTests
     {
@@ -530,6 +531,7 @@ namespace OpenRiaServices.Client.Test
             return new Northwind(TestURIs.LTS_Northwind);
         }
     }
+#endif
 
     [TestClass]
     public class EFQueryTests : CrossDomainServiceQueryTests
