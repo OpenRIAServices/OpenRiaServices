@@ -6,6 +6,8 @@ public static class TestURIs
     public static readonly Uri RootURI = System.Windows.Browser.HtmlPage.Document.DocumentUri;
 #elif VBTests
     public static readonly Uri RootURI = new Uri("http://localhost:60000/");
+#elif ASPNETCORE
+    public static readonly Uri RootURI = new Uri("http://localhost:5246/");
 #else
     public static readonly Uri RootURI = new Uri("http://localhost:60002/");
 #endif
