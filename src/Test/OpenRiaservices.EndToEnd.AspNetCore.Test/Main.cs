@@ -78,9 +78,8 @@ namespace OpenRiaServices.Client.Test
             else
             {
                 ProcessStartInfo startInfo = new(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"");
-                //startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
-                // startInfo.UseShellExecute = false;
-                startInfo.CreateNoWindow = false;
+                startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
+                startInfo.UseShellExecute = false;
                 s_aspNetCoreSite = Process.Start(startInfo);
 
                 // TODO: Wait for standard output or similar instead (GET "/"))
