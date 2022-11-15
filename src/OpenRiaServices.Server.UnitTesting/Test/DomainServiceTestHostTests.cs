@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using Cities;
@@ -12,7 +14,25 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 	[TestClass]
 	public class DomainServiceTestHostTests
     {
-		[TestMethod]
+        [TestMethod]
+        public void ContstructorWithUser()
+        {
+            var userA = new ClaimsPrincipal();
+            var userB = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity("B")));
+            //var userC = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity("C")));
+            var serviceProvider = new ServiceProviderStub(new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity("D"))));
+
+            var testHost1 = new DomainServiceTestHost<CityDomainService>(userA);
+            Assert.AreSame(userA, testHost1.User);
+
+            testHost1.ServiceProvider = serviceProvider;
+            Assert.AreSame(userA, testHost1.User, "User should not be changed when serviceprovider is changed");
+
+            testHost1.User = userB;
+            Assert.AreSame(userB, testHost1.User, "Property should update user");
+        }
+
+        [TestMethod]
 		public async Task AssertInvokeAsyncReturnsCorrectType()
 		{
             var testHost = new DomainServiceTestHost<CityDomainService>();
