@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,111 +13,225 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Hosting.AspNetCore.Operations;
 using OpenRiaServices.Server;
 
-namespace OpenRiaServices.Hosting.AspNetCore
+namespace OpenRiaServices.Hosting.AspNetCore;
+
+[TestClass]
+public class OperationInvokerTests
 {
-    [TestClass]
-    public class OperationInvokerTests
+    private static CancellationTokenSource cts;
+    private static string submitType;
+    private static readonly DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(typeof(OperationCanceledDomainService));
+    private static readonly SerializationHelper serializationHelper = new(domainServiceDescription);
+
+    [TestMethod]
+    public async Task TestCancelInMethodInvokeOperationInvoker()
     {
-        private static DomainServiceDescription DomainServiceDescription = DomainServiceDescription.GetDescription(typeof(CityDomainService));
+        cts = new CancellationTokenSource();
+        var operation = domainServiceDescription.GetInvokeOperation("CancelInvoke");
 
-        [TestMethod]
-        public async Task TestCancelInvokeOperationInvoker()
+        var operationInvoker = new InvokeOperationInvoker(operation, serializationHelper);
+        await TestCancelOperationInvoker(operationInvoker);
+    }
+
+    [TestMethod]
+    public async Task TestCancelAndThrowInMethodInvokeOperationInvoker()
+    {
+        cts = new CancellationTokenSource();
+        var operation = domainServiceDescription.GetInvokeOperation("CancelAndThrowExceptionInvoke");
+
+        var operationInvoker = new InvokeOperationInvoker(operation, serializationHelper);
+        await TestCancelOperationInvoker(operationInvoker);
+    }
+
+    [TestMethod]
+    public async Task TestCancelBeforeMethodInvokeOperationInvoker()
+    {
+        cts = new CancellationTokenSource();
+        var operation = domainServiceDescription.GetInvokeOperation("CheckCancellationRequestedInvoke");
+
+        var operationInvoker = new InvokeOperationInvoker(operation, serializationHelper);
+        cts.Cancel();
+        await TestCancelOperationInvoker(operationInvoker);
+    }
+
+    [TestMethod]
+    public async Task TestCancelInMethodQueryOperationInvoker()
+    {
+        cts = new CancellationTokenSource();
+        var operation = domainServiceDescription.GetQueryMethod("CancelQuery");
+        var operationInvoker = new QueryOperationInvoker<City>(operation, serializationHelper);
+        await TestCancelOperationInvoker(operationInvoker);
+    }
+
+    [TestMethod]
+    public async Task TestCancelAndThrowInMethodQueryOperationInvoker()
+    {
+        cts = new CancellationTokenSource();
+        var operation = domainServiceDescription.GetQueryMethod("CancelAndThrowExceptionQuery");
+        var operationInvoker = new QueryOperationInvoker<City>(operation, serializationHelper);
+        await TestCancelOperationInvoker(operationInvoker);
+    }
+
+    [TestMethod]
+    public async Task TestCancelBeforeMethodQueryOperationInvoker()
+    {
+        cts = new CancellationTokenSource();
+        var operation = domainServiceDescription.GetQueryMethod("CheckCancellationRequestedQuery");
+        var operationInvoker = new QueryOperationInvoker<City>(operation, serializationHelper);
+        cts.Cancel();
+        await TestCancelOperationInvoker(operationInvoker);
+    }
+
+    [TestMethod]
+    public async Task TestCancelInMethodSubmitOperationInvoker()
+    {
+        cts = new CancellationTokenSource();
+        submitType = "Cancel";
+        var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainServiceDescription.DomainServiceType,
+            typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
+
+        var operationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
+
+        cts.Cancel();
+        await TestCancelSubmitOperationInvoker(operationInvoker);
+    }
+
+    [TestMethod]
+    public async Task TestCancelAndThrowInMethodSubmitOperationInvoker()
+    {
+        cts = new CancellationTokenSource();
+        submitType = "CancelAndThrow";
+        var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainServiceDescription.DomainServiceType,
+            typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
+
+        var operationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
+
+        cts.Cancel();
+        await TestCancelSubmitOperationInvoker(operationInvoker);
+    }
+
+    [TestMethod]
+    public async Task TestCancelBeforeMethodSubmitOperationInvoker()
+    {
+        cts = new CancellationTokenSource();
+        submitType = "Throw";
+        var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainServiceDescription.DomainServiceType,
+            typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
+
+        var operationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
+
+        cts.Cancel();
+        await TestCancelSubmitOperationInvoker(operationInvoker);
+    }
+
+    private static async Task TestCancelOperationInvoker(OperationInvoker operationInvoker)
+    {
+        var context = GetHttpContext();
+        context.RequestAborted = cts.Token;
+        await operationInvoker.Invoke(context);
+        Assert.IsTrue(context.Response.ContentLength is null, "A response should not have been written");
+    }
+
+    private static async Task TestCancelSubmitOperationInvoker(SubmitOperationInvoker operationInvoker)
+    {
+        var bytes = GetEmptyChangeSet(Array.Empty<ChangeSetEntry>());
+        var context = GetHttpContext();
+        context.Request.Method = "POST";
+        context.Request.Body = bytes;
+        context.RequestAborted = cts.Token;
+        await operationInvoker.Invoke(context);
+        Assert.IsTrue(context.Response.ContentLength is null, "A response should not have been written");
+    }
+
+    private static HttpContext GetHttpContext()
+    {
+        var httpContext = new DefaultHttpContext();
+        httpContext.Response.Body = new MemoryStream();
+
+        var services = new ServiceCollection();
+        services.AddScoped(typeof(OperationCanceledDomainService));
+        httpContext.RequestServices = services.BuildServiceProvider();
+        httpContext.Request.ContentType = "application/msbin1";
+
+        return httpContext;
+    }
+
+    private static MemoryStream GetEmptyChangeSet(IEnumerable<ChangeSetEntry> changeSet)
+    {
+        var requestBody = new MemoryStream();
+        var dataContract = new DataContractSerializer(typeof(ChangeSetEntry[]), domainServiceDescription.EntityTypes);
+        using (var serializer = XmlDictionaryWriter.CreateBinaryWriter(requestBody, null, null, ownsStream: false))
         {
-            var operation = DomainServiceDescription.GetInvokeOperation("TODO");
-
-            var serializationHelper = GetSerializationHelper();
-            var operationInvoker = new InvokeOperationInvoker(operation, serializationHelper);
-            await TestCancelOperationInvoker(operationInvoker);
+            serializer.WriteStartElement("SubmitChanges");
+            serializer.WriteStartElement("changeSet");
+            dataContract.WriteObject(serializer, changeSet);
+            serializer.WriteEndElement();
+            serializer.WriteEndElement();
         }
 
-        [TestMethod]
-        public async Task TestCancelQueryOperationInvoker()
+        requestBody.Seek(0, SeekOrigin.Begin);
+
+        return requestBody;
+    }
+
+    public class OperationCanceledDomainService : DomainService
+    {
+        [Invoke]
+        public async Task CancelInvokeAsync(CancellationToken ct)
         {
-            var operation = DomainServiceDescription.GetQueryMethod("GetCities");
-            var serializationHelper = GetSerializationHelper();
-            var operationInvoker = new QueryOperationInvoker<City>(operation, serializationHelper);
-            await TestCancelOperationInvoker(operationInvoker);
-        }
-
-        [TestMethod]
-        public async Task SubmitOperationInvoker()
-        {
-            var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(DomainServiceDescription.DomainServiceType,
-                typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
-
-            var serializationHelper = GetSerializationHelper();
-            var operationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
-
-            var bytes = GetEmptyChangeSet(Array.Empty<ChangeSetEntry>());
-
-            var context = GetHttpContext();
-            context.Request.Method = "POST";
-            context.Request.Body = bytes;
-
-            var cts = new CancellationTokenSource();
-            context.RequestAborted = cts.Token;
-
             cts.Cancel();
-            await operationInvoker.Invoke(context);
-
-            Assert.IsTrue(context.Response.ContentLength is not null, "A response should have been written");
-
-            await TestCancelOperationInvoker(operationInvoker);
+            await Task.Yield();
         }
 
-        private MemoryStream GetEmptyChangeSet(IEnumerable<ChangeSetEntry> changeSet)
+        [Invoke]
+        public async Task CancelAndThrowExceptionInvokeAsync(CancellationToken ct)
         {
-            var domainServiceDescription = OpenRiaServices.Server.DomainServiceDescription.GetDescription(typeof(Cities.CityDomainService));
-
-            var requestBody = new MemoryStream();
-            var dataContract = new DataContractSerializer(typeof(ChangeSetEntry[]), domainServiceDescription.EntityTypes);
-            using (var serializer = XmlDictionaryWriter.CreateBinaryWriter(requestBody, null, null, ownsStream: false))
-            {
-                serializer.WriteStartElement("SubmitChanges");
-                serializer.WriteStartElement("changeSet");
-                dataContract.WriteObject(serializer, changeSet);
-                serializer.WriteEndElement();
-                serializer.WriteEndElement();
-            }
-                
-            requestBody.Seek(0, SeekOrigin.Begin);
-
-            return requestBody;
+            cts.Cancel();
+            await Task.Yield();
+            ct.ThrowIfCancellationRequested();
         }
 
-
-        private static async Task TestCancelOperationInvoker(OperationInvoker operationInvoker)
+        [Invoke]
+        public async Task CheckCancellationRequestedInvokeAsync(CancellationToken ct)
         {
-            var context = GetHttpContext();
-            var cts = new CancellationTokenSource();
-            context.RequestAborted = cts.Token;
-            var context2 = GetHttpContext();
-            var cts2 = new CancellationTokenSource();
-            context2.RequestAborted = cts2.Token;
-
-            cts2.Cancel();
-            await operationInvoker.Invoke(context);
-            await operationInvoker.Invoke(context2);
-            Assert.IsTrue(context.Response.ContentLength is not null, "A response should have been written");
-            Assert.IsTrue(context2.Response.ContentLength is null, "A response should not have been written");
+            await Task.Yield();
+            ct.ThrowIfCancellationRequested();
         }
 
-        private static SerializationHelper GetSerializationHelper()
+        [Query]
+        public async Task<IQueryable<City>> CancelQueryAsync(CancellationToken ct)
         {
-            return new SerializationHelper(DomainServiceDescription.GetDescription(typeof(CityDomainService)));
+            cts.Cancel();
+            await Task.Yield();
+            return Array.Empty<City>().AsQueryable();
         }
 
-        private static HttpContext GetHttpContext()
+        [Query]
+        public async Task<IQueryable<City>> CancelAndThrowExceptionQueryAsync(CancellationToken ct)
         {
-            var httpContext = new DefaultHttpContext();
-            httpContext.Response.Body = new MemoryStream();
+            cts.Cancel();
+            await Task.Yield();
+            ct.ThrowIfCancellationRequested();
+            return Array.Empty<City>().AsQueryable();
+        }
 
-            var services = new ServiceCollection();
-            services.AddScoped(typeof(CityDomainService));
-            httpContext.RequestServices = services.BuildServiceProvider();
-            httpContext.Request.ContentType = "application/msbin1";
+        [Query]
+        public async Task<IQueryable<City>> CheckCancellationRequestedQueryAsync(CancellationToken ct)
+        {
+            await Task.Yield();
+            ct.ThrowIfCancellationRequested();
+            return Array.Empty<City>().AsQueryable();
+        }
 
-            return httpContext;
+        public override ValueTask<bool> SubmitAsync(ChangeSet changeSet, CancellationToken cancellationToken)
+        {
+            if (submitType.Contains("Cancel"))
+                cts.Cancel();
+
+            if (submitType.Contains("Throw"))
+                cancellationToken.ThrowIfCancellationRequested();
+
+            return base.SubmitAsync(changeSet, cancellationToken);
         }
     }
 }
