@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'windows-2019'
+  vmImage: 'windows-2022'
 
 variables:
   BuildConfiguration: 'release'
@@ -10,9 +10,14 @@ variables:
 
 steps:
 
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: 5.11.0
+    versionSpec: 6.3.0
     
 - task: gitversion/setup@0
   displayName: Install GitVersion
@@ -59,12 +64,13 @@ steps:
   displayName: 'Setup database'
 
 - task: VSTest@2
-  displayName: 'Run tests'
+  displayName: 'Run tests - net48'
   inputs:
     testAssemblyVer2: |
-     **\bin\$(BuildConfiguration)\**\OpenRiaServices.*Test.dll
-     !src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.*Test.dll
-     src\VisualStudio\**\bin\$(BuildConfiguration)\**\OpenRiaServices.VisualStudio.*.Test.dll
+     **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+     src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
      !**\obj\**
 
     runOnlyImpactedTests: false
@@ -76,10 +82,30 @@ steps:
     diagnosticsEnabled: false
   timeoutInMinutes: 25
 
+- task: VSTest@2
+  displayName: 'Run tests - net6'
+  inputs:
+    testAssemblyVer2: |
+     **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
+     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+     !**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !**\obj\**
+
+    runOnlyImpactedTests: false
+    # Needed to hardcode path to test adapters for NET48 tests
+    pathtoCustomTestAdapters: '$(Build.SourcesDirectory)\src\OpenRiaServices.Server.UnitTesting\Test\bin\$(BuildConfiguration)\net6.0\'
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+    diagnosticsEnabled: false
+  timeoutInMinutes: 25
+
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
   continueOnError: true
-  condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
+  condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))))
 
 - task: NuGetCommand@2
   displayName: 'NuGet pack'
@@ -122,4 +148,4 @@ steps:
 - task: SonarCloudPublish@1
   displayName: 'Publish Quality Gate Result'
   continueOnError: true  
-  condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/master'))))
+  condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))))

@@ -1938,7 +1938,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => so2);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error.Message);
+                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error?.Message);
                 Entity[] entitiesInConflict = so2.EntitiesInError.ToArray();
                 Assert.AreEqual(1, so2.ChangeSet.RemovedEntities.Count, "Unexpected amount of removed entities.");
                 Assert.AreEqual(1, entitiesInConflict.Length, "Unexpected amount of entities in conflict.");
@@ -3077,7 +3077,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
                 DomainOperationException ex = so.Error as DomainOperationException;
 
-                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error.Message);
+                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error?.Message);
                 Assert.AreEqual(1, so.EntitiesInError.Count());
                 EntityConflict conflict = so.EntitiesInError.Single().EntityConflict;
                 Assert.IsTrue(conflict.IsDeleted);
@@ -3148,7 +3148,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Product[] products = nw2.Products.ToArray();
-                if (this.ProviderType == ProviderType.EF)
+                if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                 {
                     // Verify Product0 changes was not synced back to the client since resubmit still fails with conflict
                     Assert.IsNull(products[0].EntityConflict);
@@ -3200,7 +3200,7 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     Product[] products = nw1.Products.ToArray();
-                    if (this.ProviderType == ProviderType.EF)
+                    if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                     {
                         // verify nw2 changes are not persisted
                         Assert.AreEqual(nw1NewUnitPrice[0], products[0].UnitPrice);
@@ -3283,7 +3283,7 @@ namespace OpenRiaServices.Client.Test
 
                 Product[] products = nw2.Products.ToArray();
                 EntityConflict conflict = null;
-                if (this.ProviderType == ProviderType.EF)
+                if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                 {
                     // EF only supports getting the first conflict so only Product0's conflicts will be generated and only
                     // its resolve method is called. Hence the conflict is resolved successfully the first round. When resubmit
@@ -3387,7 +3387,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Product[] products = nw2.Products.ToArray();
-                if (this.ProviderType == ProviderType.EF)
+                if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                 {
                     // EF only supports getting the first conflict so only Product0's conflicts will be generated and only
                     // its resolve method is called. Hence the conflict is resolved successfully the first round. When resubmit
@@ -3433,7 +3433,7 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     Product[] products = nw1.Products.ToArray();
-                    if (ProviderType == ProviderType.EF)
+                    if (ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                     {
                         // verify store values are not changed since submit failed
                         Assert.AreEqual(nw1NewUnitPrice[0], products[0].UnitPrice);
@@ -3584,7 +3584,7 @@ namespace OpenRiaServices.Client.Test
                 DomainOperationException ex = so.Error as DomainOperationException;
 
                 Product[] products = nw2.Products.ToArray();
-                if (this.ProviderType == ProviderType.EF)
+                if (this.ProviderType == ProviderType.EF || ProviderType == ProviderType.EFCore)
                 {
                     // EF only supports getting the first conflict, so Product0's conflicts will be generated during first submit,
                     // then they are resolved server side and resubmit is called. Product1's conflicts will then be generated. Since
@@ -3736,8 +3736,8 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueCallback(delegate
             {
-                nw1Load = nw1.Load(nw1.GetProductsQuery().Take(3), false);
-                nw2Load = nw2.Load(nw2.GetProductsQuery().Take(3), false);
+                nw1Load = nw1.Load(nw1.GetProductsQuery().OrderBy(p => p.ProductID).Take(3), false);
+                nw2Load = nw2.Load(nw2.GetProductsQuery().OrderBy(p => p.ProductID).Take(3), false);
             });
             EnqueueConditional(() => nw1Load.IsComplete && nw2Load.IsComplete);
             EnqueueCallback(delegate
@@ -4453,6 +4453,31 @@ TestContext testContext
     {
         public EFCFUpdateTests()
             : base(TestURIs.EFCF_Northwind_CUD, ProviderType.EF)
+        {
+        }
+
+        /// <summary>
+        /// Silverlight version of class initializer doesn't take TestContext
+        /// </summary>
+        [ClassInitialize]
+        public static void ClassSetup(
+#if !SILVERLIGHT
+            TestContext testContext
+#endif
+)
+        {
+            // ensure that our isolation DB has been created once and only once
+            // at the test fixture level
+            TestDatabase.Initialize();
+        }
+
+    }
+
+    [TestClass]
+    public class EFCoreUpdateTests : UpdateTests
+    {
+        public EFCoreUpdateTests()
+            : base(TestURIs.EFCore_Northwind_CUD, ProviderType.EFCore)
         {
         }
 

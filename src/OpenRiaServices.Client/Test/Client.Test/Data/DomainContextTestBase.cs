@@ -17,7 +17,12 @@ namespace OpenRiaServices.Client.Test
         /// <summary>
         /// Unspecified, non-DAL provider
         /// </summary>
-        Unspecified
+        Unspecified,
+
+        /// <summary>
+        /// EF Core Linq to SQL provider
+        /// </summary>
+        EFCore
     }
 
     /// <summary>

@@ -80,7 +80,7 @@ namespace OpenRiaServices.Server.Test
             // Instantiate a new DomainService to use for an Invoke
             using (RequiresRoleTestService testDomainService = new RequiresRoleTestService())
             {
-                testDomainService.Initialize(new DomainServiceContext(new MockDataService(user), DomainOperationType.Invoke));
+                testDomainService.Initialize(new DomainServiceContext(new MockDataService(), user, DomainOperationType.Invoke));
 
                 // Get a DomainServiceDescription for that same domain service
                 DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(RequiresRoleTestService));
@@ -110,7 +110,7 @@ namespace OpenRiaServices.Server.Test
             // Instantiate a new DomainService to use for an Invoke
             using (RequiresRoleTestService testDomainService = new RequiresRoleTestService())
             {
-                testDomainService.Initialize(new DomainServiceContext(new MockDataService(user), DomainOperationType.Invoke));
+                testDomainService.Initialize(new DomainServiceContext(new MockDataService(), user, DomainOperationType.Invoke));
 
                 // Get a DomainServiceDescription for that same domain service
                 DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(RequiresRoleTestService));

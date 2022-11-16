@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.0.31717.71
+VisualStudioVersion = 17.0.32014.148
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{1CED8364-77AC-4254-869F-1E4EC5A33416}"
 EndProject
@@ -21,8 +21,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 		..\appveyor.yml = ..\appveyor.yml
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
+		..\Changelog.md = ..\Changelog.md
 		Directory.Build.props = Directory.Build.props
 		global.json = global.json
+		..\README.md = ..\README.md
 		test.runsettings = test.runsettings
 	EndProjectSection
 EndProject
@@ -69,8 +71,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WebsiteFullTrust", "Test\WebsiteFullTrust\WebsiteFullTrust.csproj", "{FB928CDD-D223-4921-B97D-EB16EEE7D2AA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Wcf.OData", "OpenRiaServices.Hosting.Wcf.OData\Framework\OpenRiaServices.Hosting.Wcf.OData.csproj", "{82539B51-6BB5-4C04-B37D-4FA850E397CF}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Wcf.OData.Test", "OpenRiaServices.Hosting.Wcf.OData\Test\OpenRiaServices.Hosting.Wcf.OData.Test.csproj", "{F572B235-A989-47F5-A36F-51091E976743}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4ClientCodeGenerator", "OpenRiaServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj", "{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}"
 EndProject
@@ -139,6 +139,16 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.UnitTesting.Test", "OpenRiaServices.Server.UnitTesting\Test\OpenRiaServices.Server.UnitTesting.Test.csproj", "{7026BE35-4A31-4C10-B9C8-98BA36D333C5}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Client.DomainClients.Http", "OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj", "{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server.EntityFrameworkCore", "OpenRiaServices.Server.EntityFrameworkCore\Framework\OpenRiaServices.Server.EntityFrameworkCore.csproj", "{B8D39090-3B76-41BB-A139-956E42619E91}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFCoreModels", "OpenRiaServices.Server.EntityFrameworkCore\Test\DbContextModel\EFCoreModels.csproj", "{6F468ADB-5799-4C24-93C5-765120AAAA4E}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.AspNetCore", "OpenRiaServices.Hosting.AspNetCore\Framework\OpenRiaServices.Hosting.AspNetCore.csproj", "{5A3B6E67-822E-44EA-8B68-A043555CC86F}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreWebsite", "Test\AspNetCoreWebsite\AspNetCoreWebsite.csproj", "{7F378F98-E1B2-411A-809E-B1894E768936}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Hosting.AspNetCore.Test", "OpenRiaServices.Hosting.AspNetCore\Test\OpenRiaServices.Hosting.AspNetCore.Test\OpenRiaServices.Hosting.AspNetCore.Test.csproj", "{A9C063D1-4451-47C9-AACE-908FFC8C9F35}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -234,10 +244,6 @@ Global
 		{82539B51-6BB5-4C04-B37D-4FA850E397CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{82539B51-6BB5-4C04-B37D-4FA850E397CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{82539B51-6BB5-4C04-B37D-4FA850E397CF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{F572B235-A989-47F5-A36F-51091E976743}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{F572B235-A989-47F5-A36F-51091E976743}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{F572B235-A989-47F5-A36F-51091E976743}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{F572B235-A989-47F5-A36F-51091E976743}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -338,6 +344,26 @@ Global
 		{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B8D39090-3B76-41BB-A139-956E42619E91}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B8D39090-3B76-41BB-A139-956E42619E91}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B8D39090-3B76-41BB-A139-956E42619E91}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B8D39090-3B76-41BB-A139-956E42619E91}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6F468ADB-5799-4C24-93C5-765120AAAA4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6F468ADB-5799-4C24-93C5-765120AAAA4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6F468ADB-5799-4C24-93C5-765120AAAA4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6F468ADB-5799-4C24-93C5-765120AAAA4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A3B6E67-822E-44EA-8B68-A043555CC86F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A3B6E67-822E-44EA-8B68-A043555CC86F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A3B6E67-822E-44EA-8B68-A043555CC86F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A3B6E67-822E-44EA-8B68-A043555CC86F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7F378F98-E1B2-411A-809E-B1894E768936}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7F378F98-E1B2-411A-809E-B1894E768936}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7F378F98-E1B2-411A-809E-B1894E768936}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7F378F98-E1B2-411A-809E-B1894E768936}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A9C063D1-4451-47C9-AACE-908FFC8C9F35}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A9C063D1-4451-47C9-AACE-908FFC8C9F35}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A9C063D1-4451-47C9-AACE-908FFC8C9F35}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A9C063D1-4451-47C9-AACE-908FFC8C9F35}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -369,7 +395,6 @@ Global
 		{1A2B04D0-1A09-414E-BC3F-C0C159AD668B} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{FB928CDD-D223-4921-B97D-EB16EEE7D2AA} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
 		{82539B51-6BB5-4C04-B37D-4FA850E397CF} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
-		{F572B235-A989-47F5-A36F-51091E976743} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88} = {6B0A9D52-33D8-4E62-A3E3-3AF7C26EFA30}
 		{2265A098-F256-418D-9D11-9FD6561E8D42} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{1D3AE529-961A-47FD-834B-7893FE6FF479} = {96D29745-0D96-4959-AB96-8FBEDC8AB485}
@@ -403,6 +428,11 @@ Global
 		{91239B86-30A2-42A8-AA8D-E6F0D2BB2F00} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{7026BE35-4A31-4C10-B9C8-98BA36D333C5} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{92A7B751-DF5E-40AA-8846-C9ABAD8DA6AA} = {5612B0C3-4314-4795-ACA9-DDC5F25AE04D}
+		{B8D39090-3B76-41BB-A139-956E42619E91} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
+		{6F468ADB-5799-4C24-93C5-765120AAAA4E} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
+		{5A3B6E67-822E-44EA-8B68-A043555CC86F} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
+		{7F378F98-E1B2-411A-809E-B1894E768936} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
+		{A9C063D1-4451-47C9-AACE-908FFC8C9F35} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}

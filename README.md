@@ -1,3 +1,9 @@
+[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
+
+The software is provided free of charge, but **I urge you to use some of the money saved by using this software to support Ukraine**
+The civilian suffering due to the Russian invasion are enourmous, the attacks on hospitals and other war crimes performed by the Russian invaders are horrifying.
+You can find links for donating to various projects at https://standforukraine.com/ and https://stand-with-ukraine.pp.ua/
+
 # OpenRiaServiecs
 
 Azure Pipelines: [![Build Status](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_apis/build/status/OpenRIAServices.OpenRiaServices?branchName=main)](https://dev.azure.com/OpenRiaServices/OpenRiaServices/_build/latest?definitionId=1&branchName=main)
@@ -57,8 +63,10 @@ Here are the most common nuget packages and their current versions.
 | OpenRiaServices.Client.Core | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Client.Core.svg)](https://www.nuget.org/packages/OpenRiaServices.Client.Core) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Client.Core.svg)](https://www.nuget.org/packages/OpenRiaServices.Client.Core) |
 | OpenRiaServices.Client.CodeGen | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Client.CodeGen.svg)](https://www.nuget.org/packages/OpenRiaServices.Client.CodeGen) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Client.CodeGen.svg)](https://www.nuget.org/packages/OpenRiaServices.Client.CodeGen) |
 | OpenRiaServices.Hosting.Wcf | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Hosting.Wcf.svg)](https://www.nuget.org/packages/OpenRiaServices.Hosting.Wcf) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Hosting.Wcf.svg)](https://www.nuget.org/packages/OpenRiaServices.Hosting.Wcf) |
+| OpenRiaServices.Hosting.AspNetCore | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Hosting.AspNetCore.svg)](https://www.nuget.org/packages/OpenRiaServices.Hosting.AspNetCore) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Hosting.AspNetCore.svg)](https://www.nuget.org/packages/OpenRiaServices.Hosting.AspNetCore) |
 | OpenRiaServices.Server | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Server.svg)](https://www.nuget.org/packages/OpenRiaServices.Server) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Server.svg)](https://www.nuget.org/packages/OpenRiaServices.Server) |
 | OpenRiaServices.Server.Authentication.AspNetMembership | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Server.Authentication.AspNetMembership.svg)](https://www.nuget.org/packages/OpenRiaServices.Server.Authentication.AspNetMembership) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Server.Authentication.AspNetMembership.svg)](https://www.nuget.org/packages/OpenRiaServices.Server.Authentication.AspNetMembership) |
+| OpenRiaServices.Server.EntityFrameworkCore | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Server.EntityFrameworkCore.svg)](https://www.nuget.org/packages/OpenRiaServices.Server.EntityFrameworkCore) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Server.EntityFrameworkCore.svg)](https://www.nuget.org/packages/OpenRiaServices.Server.EntityFrameworkCore) |
 | OpenRiaServices.EntityFramework | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.EntityFramework.svg)](https://www.nuget.org/packages/OpenRiaServices.EntityFramework) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.EntityFramework.svg)](https://www.nuget.org/packages/OpenRiaServices.EntityFramework) |
 | OpenRiaServices.EntityFramework.EF4 | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.EntityFramework.EF4.svg)](https://www.nuget.org/packages/OpenRiaServices.EntityFramework.EF4) | *depreciated* use EF6 instead|
 | OpenRiaServices.T4 | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.T4.svg)](https://www.nuget.org/packages/OpenRiaServices.T4) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.T4.svg)]() |

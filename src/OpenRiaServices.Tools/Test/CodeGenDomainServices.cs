@@ -166,6 +166,30 @@ namespace OpenRiaServices.Tools.Test
                 typeof(TestDomainServices.DbCtx.Northwind), sharedFiles, true));
         }
 
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFContext")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFContext")]
+        [TestMethod]
+        public void TestClientCodegen_EFCoreDomainServices()
+        {
+            string[] sharedFiles = Array.Empty<string>();
+
+            // Default codegen
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_EFContext", "EFCoreContextScenarios.g",
+                typeof(TestDomainServices.EFCore.Northwind), sharedFiles, false));
+        }
+
+        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFDbContext_FullTypes")]
+        [TestMethod]
+        public void TestClientCodegen_EFCoreEFDbCtxDomainServices_FullTypes()
+        {
+            string[] sharedFiles = Array.Empty<string>();
+
+            // Full type names
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_EFDbContext_FullTypes", "EFCoreDbContextScenarios.g",
+                typeof(TestDomainServices.EFCore.Northwind), sharedFiles, true));
+        }
+
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFCFDbContext")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFCFDbContext")]
         [TestMethod]
@@ -521,13 +545,21 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_NWEF", "Northwind_EF.g", typeof(TestDomainServices.EF.Northwind), Array.Empty<string>(), false));
         }
 
+        [DeploymentItem(@"Baselines\Default\EF", "CG_NWEF")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_NWEF")]
+        [TestMethod]
+        public void TestNorthwindEFCoreClientProxies()
+        {
+            // Default
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_NWEF", "Northwind_EFCore.g", typeof(TestDomainServices.EFCore.Northwind), Array.Empty<string>(), false));
+        }
+
         [DeploymentItem(@"Baselines\Default\EF", "CG_CATEF")]
         [DeploymentItem(@"ProjectPath.txt", "CG_CATEF")]
         [TestMethod]
         [Description("Create client proxies for Linq to Entities domain service and compare to known good copy")]
         public void TestCatalogEFClientProxies()
         {
-            // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEF", "Catalog_EF.g", typeof(TestDomainServices.EF.Catalog), Array.Empty<string>(), false));
         }
 
@@ -539,6 +571,16 @@ namespace OpenRiaServices.Tools.Test
         {
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEFDbCtx", "Catalog_EFDbCtx.g", typeof(TestDomainServices.DbCtx.Catalog), Array.Empty<string>(), false));
+        }
+
+        [DeploymentItem(@"Baselines\Default\EF", "CG_CATEFDbCtx")]
+        [DeploymentItem(@"ProjectPath.txt", "CG_CATEFDbCtx")]
+        [TestMethod]
+        [Description("Create client proxies for Linq to Entities domain service and compare to known good copy")]
+        public void TestCatalogEFCoreClientProxies()
+        {
+            // Default
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\EF", "CG_CATEFDbCtx", "Catalog_EFCore.g", typeof(TestDomainServices.EFCore.Catalog), Array.Empty<string>(), false));
         }
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_CONFLICT_RESOLUTION")]

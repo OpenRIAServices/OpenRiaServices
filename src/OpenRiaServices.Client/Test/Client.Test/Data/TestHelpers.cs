@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using OpenRiaServices.Client.Test.Services;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
@@ -10,82 +9,6 @@ using System.Diagnostics;
 
 namespace OpenRiaServices.Client.Test
 {
-    /// <summary>
-    /// Wrapper class for creating new isolated test database instances.
-    /// </summary>
-    public class TestDatabase : IDisposable
-    {
-        private readonly string databaseName;
-        private bool isInitialized;
-        private bool isInitializing;
-
-        public TestDatabase(string databaseName)
-        {
-            this.databaseName = databaseName;
-        }
-
-        /// <summary>
-        /// Idempotent initialization method. Once the database has been initialized
-        /// subsequent calls are ignored
-        /// </summary>
-        public void Initialize()
-        {
-            if (!isInitializing && !IsInitialized)
-            {
-                // call the TestServices web service method to create the database 
-                TestServicesClient ts = new TestServicesClient();
-                SetAddress(ts);
-                ts.CreateNewDatabaseCompleted += delegate (object sender, AsyncCompletedEventArgs e)
-                {
-                    if (e.Error != null)
-                    {
-                        throw e.Error;
-                    }
-                    isInitialized = true;
-                    isInitializing = false;
-                };
-                ts.CreateNewDatabaseAsync(databaseName);
-                isInitializing = true;
-            }
-        }
-
-        internal static void SetAddress(TestServicesClient ts)
-        {
-#if SILVERLIGHT
-            ts.Endpoint.Address = new System.ServiceModel.EndpointAddress(
-                new Uri(
-                    new Uri(
-                        System.Windows.Browser.HtmlPage.Document.DocumentUri.GetComponents(UriComponents.SchemeAndServer, UriFormat.Unescaped),
-                        UriKind.Absolute),
-                    ts.Endpoint.Address.Uri.GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped)));
-#endif
-        }
-
-        /// <summary>
-        /// Returns true once the async initialization has completed
-        /// </summary>
-        public bool IsInitialized
-        {
-            get
-            {
-                return isInitialized;
-            }
-        }
-
-        #region IDisposable Members
-
-        public void Dispose()
-        {
-            if (isInitialized)
-            {
-                TestServicesClient ts = new TestServicesClient();
-                SetAddress(ts);
-                isInitialized = false;
-                ts.ReleaseNewDatabase(databaseName);
-            }
-        }
-        #endregion
-    }
 
     public static class TestHelperMethods
     {

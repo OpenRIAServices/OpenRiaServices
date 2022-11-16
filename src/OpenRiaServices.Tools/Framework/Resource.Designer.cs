@@ -19,7 +19,7 @@ namespace OpenRiaServices.Tools {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource {
@@ -1359,6 +1359,15 @@ namespace OpenRiaServices.Tools {
         internal static string Project_Does_Not_Exist {
             get {
                 return ResourceManager.GetString("Project_Does_Not_Exist", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Project &apos;{0}&apos; has multiple TargetFrameworks. Choosing first framework: &apos;{1}&apos;.
+        /// </summary>
+        internal static string Project_Is_MultiTarget_Using_TargetFramework {
+            get {
+                return ResourceManager.GetString("Project_Is_MultiTarget_Using_TargetFramework", resourceCulture);
             }
         }
         

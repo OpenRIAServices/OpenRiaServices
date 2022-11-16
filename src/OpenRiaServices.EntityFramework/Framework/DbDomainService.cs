@@ -1,19 +1,28 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 using System.ComponentModel;
-using System.Data;
+
+#if EFCORE
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using DbEntityEntry = Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry;
+
+namespace OpenRiaServices.Server.EntityFrameworkCore
+#else
 using System.Data.Entity;
 using System.Data.Entity.Core;
 using System.Data.Entity.Core.Objects;
 using System.Data.Entity.Infrastructure;
-using System.Globalization;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
 using OpenRiaServices.Server;
 
+using EntityEntry = System.Data.Entity.Infrastructure.DbEntityEntry;
+
 namespace OpenRiaServices.EntityFramework
+#endif
 {
     /// <summary>
     /// Base class for DomainServices operating on LINQ To Entities DbContext based data models
@@ -24,13 +33,22 @@ namespace OpenRiaServices.EntityFramework
         where TContext : DbContext, new()
     {
         private TContext _dbContext;
-        private ObjectContext _refreshContext;
 
         /// <summary>
         /// Protected constructor for the abstract class.
         /// </summary>
         protected DbDomainService()
         {
+        }
+
+
+        /// <summary>
+        /// Initialize the domainservice with a specific context.
+        /// </summary>
+        /// <param name="dbContext">initial value for <see cref="DbContext"/></param>
+        protected DbDomainService(TContext dbContext)
+        {
+            _dbContext = dbContext;
         }
 
         /// <summary>
@@ -43,6 +61,12 @@ namespace OpenRiaServices.EntityFramework
         {
             base.Initialize(context);
 
+#if EFCORE
+            // Turn off AutoDetectChanges.
+            this.DbContext.ChangeTracker.AutoDetectChangesEnabled = false;
+
+            this.DbContext.ChangeTracker.LazyLoadingEnabled = false;
+#else
             ObjectContext objectContext = ((IObjectContextAdapter)this.DbContext).ObjectContext;
             // We turn this off, since our deserializer isn't going to create
             // the EF proxy types anyways. Proxies only really work if the entities
@@ -56,6 +80,7 @@ namespace OpenRiaServices.EntityFramework
             this.DbContext.Configuration.AutoDetectChangesEnabled = false;
 
             this.DbContext.Configuration.LazyLoadingEnabled = false;
+#endif
         }
 
         /// <summary>
@@ -65,22 +90,6 @@ namespace OpenRiaServices.EntityFramework
         protected virtual TContext CreateDbContext()
         {
             return new TContext();
-        }
-
-        /// <summary>
-        /// Gets the <see cref="ObjectContext"/> used for retrieving store values
-        /// </summary>
-        private ObjectContext RefreshContext
-        {
-            get
-            {
-                if (this._refreshContext == null)
-                {
-                    DbContext dbContext = this.CreateDbContext();
-                    this._refreshContext = (dbContext as IObjectContextAdapter).ObjectContext;
-                }
-                return this._refreshContext;
-            }
         }
 
         /// <summary>
@@ -121,8 +130,11 @@ namespace OpenRiaServices.EntityFramework
         /// <returns>A new enumerable with the results of the enumerated enumerable.</returns>
         protected override ValueTask<IReadOnlyCollection<T>> EnumerateAsync<T>(IEnumerable enumerable, int estimatedResultCount, CancellationToken cancellationToken)
         {
-            // EF will throw if provider is not a IDbAsyncEnumerable
+#if EFCORE
+            if (enumerable is IAsyncEnumerable<T> asyncEnumerable)
+#else
             if (enumerable is IDbAsyncEnumerable<T> asyncEnumerable)
+#endif
             {
                 return QueryHelper.EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);
             }
@@ -170,10 +182,6 @@ namespace OpenRiaServices.EntityFramework
                 {
                     this.DbContext.Dispose();
                 }
-                if (this._refreshContext != null)
-                {
-                    this._refreshContext.Dispose();
-                }
             }
             base.Dispose(disposing);
         }
@@ -206,7 +214,7 @@ namespace OpenRiaServices.EntityFramework
                     operationConflictMap.Add(conflict, entry);
                 }
 
-                this.SetChangeSetConflicts(operationConflictMap);
+                await SetChangeSetConflictsAsync(operationConflictMap, cancellationToken);
 
                 // Call out to any user resolve code and resubmit if all conflicts
                 // were resolved
@@ -243,70 +251,56 @@ namespace OpenRiaServices.EntityFramework
         /// Updates each entry in the ChangeSet with its corresponding conflict info.
         /// </summary>
         /// <param name="operationConflictMap">Map of conflicts to their corresponding operations entries.</param>
-        private void SetChangeSetConflicts(Dictionary<DbEntityEntry, ChangeSetEntry> operationConflictMap)
+        /// <param name="cancellationToken"></param>
+        private static async Task SetChangeSetConflictsAsync(Dictionary<DbEntityEntry, ChangeSetEntry> operationConflictMap, CancellationToken cancellationToken)
         {
-            object storeValue;
-            EntityKey refreshEntityKey;
-
-            ObjectContext objectContext = ((IObjectContextAdapter)this.DbContext).ObjectContext;
-            ObjectStateManager objectStateManager = objectContext.ObjectStateManager;
-            if (objectStateManager == null)
-            {
-                throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, DbResource.ObjectStateManagerNotFoundException, this.DbContext.GetType().Name));
-            }
-
             foreach (var conflictEntry in operationConflictMap)
             {
-                DbEntityEntry entityEntry = conflictEntry.Key;                                
-                ObjectStateEntry stateEntry = objectStateManager.GetObjectStateEntry(entityEntry.Entity);
+                DbEntityEntry stateEntry = conflictEntry.Key;
 
                 if (stateEntry.State == EntityState.Unchanged)
                 {
                     continue;
                 }
 
-                // Note: we cannot call Refresh StoreWins since this will overwrite Current entity and remove the optimistic concurrency ex.
                 ChangeSetEntry operationInConflict = conflictEntry.Value;
-                refreshEntityKey = this.RefreshContext.CreateEntityKey(stateEntry.EntitySet.Name, stateEntry.Entity);
-                this.RefreshContext.TryGetObjectByKey(refreshEntityKey, out storeValue);
-                operationInConflict.StoreEntity = storeValue;
 
-                // StoreEntity will be null if the entity has been deleted in the store (i.e. Delete/Delete conflict)
-                bool isDeleted = (operationInConflict.StoreEntity == null);
-                if (isDeleted)
+                // Determine which members are in conflict by comparing original values to the current DB values
+                var dbValues = await stateEntry.GetDatabaseValuesAsync(cancellationToken);
+                
+                PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
+
+                // dbValues will be null if the entity has been deleted in the store (i.e. Delete/Delete conflict)
+                if (dbValues == null)
                 {
                     operationInConflict.IsDeleteConflict = true;
                 }
                 else
                 {
+                    operationInConflict.StoreEntity = dbValues.ToObject();
+
                     // Determine which members are in conflict by comparing original values to the current DB values
-                    PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
                     List<string> membersInConflict = new List<string>();
-                    object originalValue;
-                    PropertyDescriptor pd;
-                    for (int i = 0; i < stateEntry.OriginalValues.FieldCount; i++)
+                    foreach (var property in PropertiesOf(stateEntry.OriginalValues))
                     {
-                        originalValue = stateEntry.OriginalValues.GetValue(i);
-                        if (originalValue is DBNull)
+                        if (!object.Equals(stateEntry.OriginalValues[property], dbValues[property]))
                         {
-                            originalValue = null;
-                        }
+                            string propertyName = NameOf(property);
 
-                        string propertyName = stateEntry.OriginalValues.GetName(i);
-                        pd = propDescriptors[propertyName];
-                        if (pd == null)
-                        {
-                            // This might happen in the case of a private model
-                            // member that isn't mapped
-                            continue;
-                        }
-
-                        if (!object.Equals(originalValue, pd.GetValue(operationInConflict.StoreEntity)))
-                        {
-                            membersInConflict.Add(pd.Name);
+                            // Excluded properties should be skipped
+                            if (propDescriptors[propertyName] is not null)
+                                membersInConflict.Add(propertyName);
                         }
                     }
                     operationInConflict.ConflictMembers = membersInConflict;
+
+#if EFCORE
+                    static IReadOnlyList<Microsoft.EntityFrameworkCore.Metadata.IProperty> PropertiesOf(PropertyValues pv) => pv.Properties;
+                    static string NameOf(Microsoft.EntityFrameworkCore.Metadata.IProperty p) => p.Name;
+#else
+                    static IEnumerable<string> PropertiesOf(DbPropertyValues pv) => pv.PropertyNames;
+                    static string NameOf(string s) => s;
+#endif
                 }
             }
         }

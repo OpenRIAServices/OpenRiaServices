@@ -1,14 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Linq.Expressions;
-using System.ServiceModel.Security;
 using System.Threading;
 using System.Threading.Tasks;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
-using TestDomainServices.TypeNameConflictResolution;
 
 namespace OpenRiaServices.Server.UnitTesting.Test
 {
@@ -22,7 +19,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 
             var expectedResult = "Echo: Hello";
 
-            var result = await testHost.InvokeAsync(s => s.EchoWithDelay("Hello", TimeSpan.FromMilliseconds(1)), CancellationToken.None);
+            var result = await testHost.InvokeAsync(s => s.EchoWithDelay("Hello", TimeSpan.FromMilliseconds(1), CancellationToken.None), CancellationToken.None);
             
             Assert.AreEqual(expectedResult, result);
         }
@@ -34,7 +31,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 
             var expectedResult = "Echo: Hello";
 
-            var result = testHost.Invoke(s => s.EchoWithDelay("Hello", TimeSpan.FromMilliseconds(1)));
+            var result = testHost.Invoke(s => s.EchoWithDelay("Hello", TimeSpan.FromMilliseconds(1), CancellationToken.None));
 
             Assert.AreEqual(expectedResult, result);
         }

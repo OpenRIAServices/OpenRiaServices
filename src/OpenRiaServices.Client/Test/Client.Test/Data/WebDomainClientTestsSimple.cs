@@ -56,7 +56,7 @@ namespace OpenRiaServices.Client.Web.Test
         [Asynchronous]
         public void TestQuery()
         {
-            WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract> dc = new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.LTS_Catalog)
+            WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract> dc = new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.EF_Catalog)
             {
                 EntityTypes = new Type[] { typeof(Product) }
             };
@@ -89,7 +89,7 @@ namespace OpenRiaServices.Client.Web.Test
         [TestMethod]
         public async Task TestQueryEvents()
         {
-            WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract> dc = new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.LTS_Catalog)
+            WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract> dc = new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.EF_Catalog)
             {
                 EntityTypes = new Type[] { typeof(Product) }
             };
