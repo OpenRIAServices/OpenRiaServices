@@ -39,6 +39,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceTestHost{TDomainService}"/>
         /// </summary>
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
         public DomainServiceTestHost(IPrincipal user)
             : this(DomainService.Factory, new ServiceProviderStub(user), user)
         {
@@ -63,6 +64,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="createDomainService">The function to create <see cref="DomainService"/>s with</param>
         /// <param name="user">The <see cref="IPrincipal"/> to use for authorization</param>
         /// <exception cref="ArgumentNullException">is thrown when <paramref name="createDomainService"/> is <c>null</c></exception>
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
         public DomainServiceTestHost(Func<TDomainService> createDomainService, IPrincipal user)
             : this(new DomainServiceFactory(createDomainService), new ServiceProviderStub(user), user)
         {
@@ -75,7 +77,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// </summary>
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> used to create <see cref="DomainService"/> instances</param>
         /// <exception cref="ArgumentNullException">is thrown when <paramref name="serviceProvider"/> is <c>null</c></exception>
-        public DomainServiceTestHost(IServiceProvider serviceProvider)
+        private DomainServiceTestHost(IServiceProvider serviceProvider)
             : this(null, serviceProvider, DefaultUser)
         {
         }
@@ -88,7 +90,8 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> used to create <see cref="DomainService"/> instances</param>
         /// <param name="user">The <see cref="IPrincipal"/> to use for authorization</param>
         /// <exception cref="ArgumentNullException">is thrown when <paramref name="serviceProvider"/> is <c>null</c></exception>
-        public DomainServiceTestHost(IServiceProvider serviceProvider, IPrincipal user)
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
+        private DomainServiceTestHost(IServiceProvider serviceProvider, IPrincipal user)
             : this(null, serviceProvider, user)
         {
         }
@@ -100,13 +103,17 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="factory">The <see cref="IDomainServiceFactory"/> used to create <see cref="DomainService"/> instances</param>
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> used in the creation of <see cref="DomainServiceContext"/> instances</param>
         /// <param name="user">The <see cref="IPrincipal"/> used in the creation of <see cref="DomainServiceContext"/> instances</param>
-        /// <exception cref="ArgumentNullException">is thrown when <paramref name="factory"/> is <c>null</c></exception>
         /// <exception cref="ArgumentNullException">is thrown when <paramref name="serviceProvider"/> is <c>null</c></exception>
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
         private DomainServiceTestHost(IDomainServiceFactory factory, IServiceProvider serviceProvider, IPrincipal user)
         {
             if (serviceProvider == null)
             {
                 throw new ArgumentNullException(nameof(serviceProvider));
+            }
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
             }
 
             this._factory = factory;

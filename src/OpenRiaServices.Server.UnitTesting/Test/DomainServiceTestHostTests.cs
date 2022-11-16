@@ -11,36 +11,61 @@ using TestDomainServices;
 
 namespace OpenRiaServices.Server.UnitTesting.Test
 {
-	[TestClass]
-	public class DomainServiceTestHostTests
+    [TestClass]
+    public class DomainServiceTestHostTests
     {
         [TestMethod]
         public void ContstructorWithUser()
         {
-            var userA = new ClaimsPrincipal();
+            var userA = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity("A")));
             var userB = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity("B")));
             //var userC = new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity("C")));
             var serviceProvider = new ServiceProviderStub(new ClaimsPrincipal(new ClaimsIdentity(new GenericIdentity("D"))));
 
-            var testHost1 = new DomainServiceTestHost<CityDomainService>(userA);
+            var testHost1 = new DomainServiceTestHost<UserTestDomainService>(userA);
             Assert.AreSame(userA, testHost1.User);
+            Assert.AreEqual("A", testHost1.Invoke(x => x.GetUsername()));
 
             testHost1.ServiceProvider = serviceProvider;
             Assert.AreSame(userA, testHost1.User, "User should not be changed when serviceprovider is changed");
+            Assert.AreEqual("A", testHost1.Invoke(x => x.GetUsername()));
 
             testHost1.User = userB;
             Assert.AreSame(userB, testHost1.User, "Property should update user");
+            Assert.AreEqual("B", testHost1.Invoke(x => x.GetUsername()));
+
+
+            var testHostFunc = new DomainServiceTestHost<UserTestDomainService>(() => new UserTestDomainService(), userA);
+            Assert.AreSame(userA, testHostFunc.User);
+            Assert.AreEqual("A", testHostFunc.Invoke(x => x.GetUsername()));
         }
 
         [TestMethod]
-		public async Task AssertInvokeAsyncReturnsCorrectType()
-		{
+        public void DefaultUserIsAuthenticated()
+        {
+            var defaultUser = (IPrincipal)(new ServiceProviderStub()).GetService(typeof(IPrincipal));
+            bool expectedAuthenticated = defaultUser.Identity.IsAuthenticated;
+
+            CheckIsAuthenticated("Default ctor()", new DomainServiceTestHost<UserTestDomainService>());
+            CheckIsAuthenticated("Func ctor(Func<TDomainService>)", new DomainServiceTestHost<UserTestDomainService>(() => new UserTestDomainService()));
+
+            void CheckIsAuthenticated(string scenario, DomainServiceTestHost<UserTestDomainService> testHost)
+            {
+                Assert.AreEqual(defaultUser.Identity.Name, testHost.User.Identity.Name);
+                Assert.AreEqual(expectedAuthenticated, testHost.User.Identity.IsAuthenticated, "testHost.User.Identity.IsAuthenticated was false for scenario: {0}", scenario);
+                Assert.AreEqual(expectedAuthenticated, testHost.Invoke(x => x.IsAuthenticated()), "ServiceContext.User.Identity.IsAuthenticated was false for scenario: {0}", scenario);
+            };
+        }
+
+        [TestMethod]
+        public async Task AssertInvokeAsyncReturnsCorrectType()
+        {
             var testHost = new DomainServiceTestHost<CityDomainService>();
 
             var expectedResult = "Echo: Hello";
 
             var result = await testHost.InvokeAsync(s => s.EchoWithDelay("Hello", TimeSpan.FromMilliseconds(1), CancellationToken.None), CancellationToken.None);
-            
+
             Assert.AreEqual(expectedResult, result);
         }
 
@@ -115,7 +140,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         {
             var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>();
 
-            var changeSetEntries = new HashSet<ChangeSetEntry> 
+            var changeSetEntries = new HashSet<ChangeSetEntry>
             {
                 new ChangeSetEntry { Operation = DomainOperation.Insert, Entity = new RangeItem() }
             };
@@ -172,5 +197,13 @@ namespace OpenRiaServices.Server.UnitTesting.Test
             }
         }
 
+        public class UserTestDomainService : DomainService
+        {
+            [Invoke]
+            public string GetUsername() => ServiceContext.User.Identity.Name;
+
+            [Invoke]
+            public bool IsAuthenticated() => ServiceContext.User.Identity.IsAuthenticated;
+        }
     }
 }
