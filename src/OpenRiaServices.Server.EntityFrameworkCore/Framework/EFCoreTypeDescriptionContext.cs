@@ -58,7 +58,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
             string thisKey;
             string otherKey;
-            if (navigationProperty.IsDependentToPrincipal())
+            if (navigationProperty.IsOnDependent)
             {
                 thisKey = FormatMemberList(fk.Properties);
                 otherKey = FormatMemberList(fk.PrincipalKey.Properties);
@@ -76,7 +76,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             return assocAttrib;
         }
 
-        private static bool IsForeignKey(INavigation navigationProperty) => navigationProperty.IsDependentToPrincipal();
+        private static bool IsForeignKey(INavigation navigationProperty) => navigationProperty.IsOnDependent;
 
         /// <summary>
         /// Comma delimits the specified member name collection
