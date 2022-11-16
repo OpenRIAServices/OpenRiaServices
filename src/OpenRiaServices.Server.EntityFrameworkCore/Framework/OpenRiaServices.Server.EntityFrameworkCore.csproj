@@ -39,7 +39,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <None Update="LICENSE.md" Pack="true" PackagePath="\" />
+    <None Include="LICENSE.md" Pack="true" PackagePath="\" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="DbResource.resx">
