@@ -58,7 +58,11 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
             string thisKey;
             string otherKey;
+#if NETSTANDARD2_0
+            if (navigationProperty.IsDependentToPrincipal())
+#else
             if (navigationProperty.IsOnDependent)
+#endif
             {
                 thisKey = FormatMemberList(fk.Properties);
                 otherKey = FormatMemberList(fk.PrincipalKey.Properties);
@@ -76,7 +80,12 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             return assocAttrib;
         }
 
+#if NETSTANDARD2_0
+        private static bool IsForeignKey(INavigation navigationProperty) => navigationProperty.IsDependentToPrincipal();
+#else
         private static bool IsForeignKey(INavigation navigationProperty) => navigationProperty.IsOnDependent;
+#endif
+
 
         /// <summary>
         /// Comma delimits the specified member name collection
