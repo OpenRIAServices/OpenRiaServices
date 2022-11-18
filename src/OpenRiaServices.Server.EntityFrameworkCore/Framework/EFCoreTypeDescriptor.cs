@@ -148,6 +148,14 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                     {
                         case ValueGenerated.Never:
                             break;
+#if !NETSTANDARD2_0
+                        case ValueGenerated.OnUpdateSometimes:
+                            break;
+#endif
+                        case ValueGenerated.OnUpdate:
+                            attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
+                            databaseGenerated = true;
+                            break;
                         case ValueGenerated.OnAddOrUpdate:
                             attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
                             databaseGenerated = true;
