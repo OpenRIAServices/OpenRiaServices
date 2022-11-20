@@ -504,32 +504,10 @@ namespace OpenRiaServices.Client
         /// <returns>The load operation.</returns>
         public virtual LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, Action<LoadOperation<TEntity>> callback, object userState) where TEntity : Entity
         {
-            var loadOperation = new LoadOperation<TEntity>(query, loadBehavior, callback, userState, DomainClient.SupportsCancellation);
+            CancellationTokenSource tcs = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
 
-            LoadAsync(query, loadBehavior, loadOperation.CancellationToken)
-                .ContinueWith((loadTask, state) =>
-               {
-                   var operation = (LoadOperation<TEntity>)state;
-
-                   if (loadTask.IsCanceled)
-                   {
-                       operation.SetCancelled();
-                   }
-                   else if (loadTask.Exception != null)
-                   {
-                       operation.SetError(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
-                   }
-                   else
-                   {
-                       operation.Complete(loadTask.Result);
-                   }
-               }
-                , (object)loadOperation
-                , CancellationToken.None
-                , TaskContinuationOptions.HideScheduler
-                , CurrrentSynchronizationContextTaskScheduler);
-
-            return loadOperation;
+            var loadResult = LoadAsync(query, loadBehavior, tcs?.Token ?? CancellationToken.None);
+            return new LoadOperation<TEntity>(loadResult, tcs, query, loadBehavior, callback, userState);
         }
 
         /// <summary>

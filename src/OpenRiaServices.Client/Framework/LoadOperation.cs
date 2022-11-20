@@ -119,7 +119,7 @@ namespace OpenRiaServices.Client
         /// Completes the load operation with the specified error.
         /// </summary>
         /// <param name="error">The error.</param>
-        internal new void SetError(Exception error)
+        protected new void SetError(Exception error)
         {
             if (error is DomainOperationException doe
                 && doe.ValidationErrors.Any())
@@ -178,7 +178,7 @@ namespace OpenRiaServices.Client
         internal LoadOperation(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
             Action<LoadOperation<TEntity>> completeAction, object userState,
             bool supportCancellation)
-            : base(query, loadBehavior, userState, null)
+            : base(query, loadBehavior, userState, supportCancellation ? new CancellationTokenSource() : null)
         {
             this._completeAction = completeAction;
         }
@@ -186,14 +186,17 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadOperation"/> class.
         /// </summary>
-        /// <param name="query">The query to load.</param>
-        /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
+        /// <param name="loadTask"></param>
+        /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
+        /// <param name="query">The query to load, will set <see cref="LoadOperation.EntityQuery"/>.</param>
+        /// <param name="loadBehavior"><see cref="LoadBehavior"/> used for the load operation, will set <see cref="LoadOperation.LoadBehavior"/>.</param>
         /// <param name="completeAction">Action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
-        internal LoadOperation(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
-            Action<LoadOperation<TEntity>> completeAction, object userState,
-            Task<LoadResult<TEntity>> loadTask, CancellationTokenSource cancellationTokenSource)
+        // TODO: Determine which constructor to make public, if it is the Old above then the Complete method must be made public as well
+        public LoadOperation(Task<LoadResult<TEntity>> loadTask, CancellationTokenSource cancellationTokenSource, 
+            EntityQuery<TEntity> query, 
+            LoadBehavior loadBehavior,
+            Action<LoadOperation<TEntity>> completeAction, object userState)
             : base(query, loadBehavior, userState, cancellationTokenSource)
         {
             this._completeAction = completeAction;
@@ -202,7 +205,7 @@ namespace OpenRiaServices.Client
                 Complete(loadTask);
             else
             {
-                loadTask.ContinueWith((loadTask, state) =>
+                loadTask.ContinueWith(static (loadTask, state) => 
                 {
                     ((LoadOperation<TEntity>)state).Complete(loadTask);
                 }
@@ -267,7 +270,7 @@ namespace OpenRiaServices.Client
         /// Successfully completes the load operation with the specified result.
         /// </summary>
         /// <param name="result">The result.</param>
-        internal void Complete(LoadResult<TEntity> result)
+        private void Complete(LoadResult<TEntity> result)
         {
             if (result == null)
             {
@@ -297,7 +300,7 @@ namespace OpenRiaServices.Client
             if (loadTask?.IsCompleted != true)
                 throw new ArgumentException("Task must be completed", nameof(loadTask));
 
-            if (IsCanceled)
+            if (loadTask.IsCanceled)
             {
                 SetCancelled();
             }

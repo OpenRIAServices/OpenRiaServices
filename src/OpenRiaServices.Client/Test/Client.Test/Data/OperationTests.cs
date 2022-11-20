@@ -9,6 +9,8 @@ using DataTests.Northwind.LTS;
 using System.ComponentModel.DataAnnotations;
 using OpenRiaServices.Silverlight.Testing;
 using System.Collections;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -60,12 +62,28 @@ namespace OpenRiaServices.Client.Test
     public class OperationTests : UnitTestBase
     {
         [TestMethod]
-        public void Operation_MarkAsHandled()
+        public void Operation_DirectException()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
-            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
+
+            Exception ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
+
+            LoadOperation lo = new LoadOperation<Product>(Task.FromException<LoadResult<Product>>(ex), null, query, LoadBehavior.KeepCurrent, MarkExceptionAsHandled, null);
+
+            Assert.AreSame(ex, lo.Error);
+        }
+
+        [TestMethod]
+        public async Task Operation_MarkAsHandled()
+        {
+            TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
+
+            var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
+
+            var loadTask = new TaskCompletionSource<LoadResult<Product>>();
+            LoadOperation lo = new LoadOperation<Product>(loadTask.Task, null, query, LoadBehavior.KeepCurrent, null, null);
 
             EventHandler action = (o, e) =>
             {
@@ -77,8 +95,8 @@ namespace OpenRiaServices.Client.Test
             };
             lo.Completed += action;
 
-            DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
-            lo.SetError(ex);
+            loadTask.SetException(new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace"));
+            await lo;
 
             // verify that calling MarkAsHandled again is a noop
             lo.MarkErrorAsHandled();
@@ -104,13 +122,13 @@ namespace OpenRiaServices.Client.Test
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
-            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
+            LoadOperation<Product> lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
 
             DomainOperationException expectedException = null;
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                lo.SetError(ex);
+                lo.Complete(Task.FromException<LoadResult<Product>>(ex));
             }
             catch (DomainOperationException e)
             {
@@ -130,7 +148,7 @@ namespace OpenRiaServices.Client.Test
 
             try
             {
-                lo.SetError(ex);
+                lo.Complete(Task.FromException<LoadResult<Product>>(ex));
             }
             catch (DomainOperationException e)
             {
@@ -317,7 +335,7 @@ namespace OpenRiaServices.Client.Test
                 try
                 {
                     var load = new LoadOperation<City>(query, loadBehaviour, loCallback, null, false);
-                    load.Complete(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0));
+                    load.Complete(Task.FromResult(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0)));
                 }
                 catch (Exception ex)
                 {
@@ -343,7 +361,9 @@ namespace OpenRiaServices.Client.Test
             }, Message);
 
             // verify cancellation callbacks for all fx operation types
-            var lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null, true);
+            var citiesTask = new TaskCompletionSource<LoadResult<City>>();
+            var cts = new CancellationTokenSource();
+            var lo = new LoadOperation<City>(citiesTask.Task, cts, cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null);
             lo.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
@@ -409,6 +429,15 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(Resources.AsyncOperation_AlreadyCompleted, expectedException.Message);
             });
             EnqueueTestComplete();
+        }
+
+        private void MarkExceptionAsHandled<TEntity>(LoadOperation<TEntity> loadOperation)
+            where TEntity : Entity
+        {
+            if (loadOperation.HasError)
+            {
+                loadOperation.MarkErrorAsHandled();
+            }
         }
     }
 }

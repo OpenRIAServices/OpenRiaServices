@@ -352,7 +352,7 @@ namespace OpenRiaServices.Client.Test
 
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                lo.Complete(new LoadResult<City>(query, default(LoadBehavior), Array.Empty<City>(), Array.Empty<City>(), 0));
+                lo.Complete(Task.FromResult(new LoadResult<City>(query, default(LoadBehavior), Array.Empty<City>(), Array.Empty<City>(), 0)));
             }, Resources.AsyncOperation_AlreadyCompleted);
 
             lo = cities.Load(query, false);
@@ -360,7 +360,7 @@ namespace OpenRiaServices.Client.Test
             await lo;
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                lo.SetError(new Exception("FAIL!"));
+                lo.Complete(Task.FromException<LoadResult<City>>(new Exception("FAIL!")));
             }, Resources.AsyncOperation_AlreadyCompleted);
         }
 
