@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using System.ServiceModel;
 using OpenRiaServices.Server;
-using System.ServiceModel.Web;
 using OpenRiaServices.Tools.SharedTypes;
 
 namespace OpenRiaServices.Tools

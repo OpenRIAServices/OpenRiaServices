@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web.Compilation;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using OpenRiaServices.Tools.Validation;
@@ -131,23 +130,22 @@ namespace OpenRiaServices.Tools
 
             this.WarnIfAssembliesDontExist(assemblies);
 
-            using (ClientBuildManager cbm = new ClientBuildManager(/* appVirtualDir */ "/", this.ProjectDirectory))
-            {
+            
                 // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
                 // This can occur when the build environment is configured incorrectly
-                if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-                {
-                    throw new InvalidOperationException(
-                        Resource.HttpRuntimeInitializationError,
-                        System.Web.Hosting.HostingEnvironment.InitializationException);
-                }
+                //if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+                //{
+                //    throw new InvalidOperationException(
+                //        Resource.HttpRuntimeInitializationError,
+                //        System.Web.Hosting.HostingEnvironment.InitializationException);
+                //}
 
-                using (DomainServiceValidator validator = (DomainServiceValidator)cbm.CreateObject(typeof(DomainServiceValidator), false))
+                using (DomainServiceValidator validator = (DomainServiceValidator)Activator.CreateInstance(typeof(DomainServiceValidator)))
                 {
                     // Transfer control to Web Application AppDomain to invoke the validator
                     validator.Validate(assemblies.ToArray(), this.LoggingService);
                 }
-            }
+            
         }
 
         /// <summary>

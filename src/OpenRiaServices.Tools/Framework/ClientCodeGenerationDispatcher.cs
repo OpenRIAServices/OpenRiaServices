@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
@@ -10,7 +9,6 @@ using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Server;
 using System.Text;
-using System.Web.Hosting;
 using OpenRiaServices.Tools.SharedTypes;
 
 namespace OpenRiaServices.Tools
@@ -22,7 +20,7 @@ namespace OpenRiaServices.Tools
     /// <remarks>
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
     /// AppDomain boundaries.</remarks>
-    internal class ClientCodeGenerationDispatcher : MarshalByRefObject, IRegisteredObject, IDisposable
+    internal class ClientCodeGenerationDispatcher : MarshalByRefObject, IDisposable
     {
         // MEF composition container and part catalog, computed lazily and only once
         private CompositionContainer _compositionContainer;
@@ -468,11 +466,6 @@ namespace OpenRiaServices.Tools
             return assemblies;
         }
 
-        #region IRegisteredObject Members
-        void IRegisteredObject.Stop(bool immediate)
-        {
-        }
-        #endregion   
 
 
         #region IDisposable members

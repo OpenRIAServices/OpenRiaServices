@@ -6,7 +6,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using System.Web.Compilation;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using OpenRiaServices.Tools.SharedTypes;
@@ -695,59 +694,54 @@ namespace OpenRiaServices.Tools
 
                 string generatedFileContent = string.Empty;
 
-                // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
-                ClientBuildManagerParameter cbmParameter = new ClientBuildManagerParameter()
-                {
-                    PrecompilationFlags = PrecompilationFlags.ForceDebug,
-                };
-
                 string sourceDir = this.ServerProjectDirectory;
                 string targetDir = null;
 
-                using (ClientBuildManager cbm = new ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
+                // Capture the list of assemblies to load into an array to marshal across AppDomains
+                string[] assembliesToLoadArray = assembliesToLoad.ToArray();
+
+                // Create the list of options we will pass to the generator.
+                // This instance is serializable and can cross AppDomains
+                ClientCodeGenerationOptions options = new ClientCodeGenerationOptions()
                 {
-                    // Capture the list of assemblies to load into an array to marshal across AppDomains
-                    string[] assembliesToLoadArray = assembliesToLoad.ToArray();
+                    Language = this.Language,
+                    ClientFrameworkPath = this.ClientFrameworkPath,
+                    ClientRootNamespace = this.ClientProjectRootNamespace,
+                    ServerRootNamespace = this.ServerProjectRootNameSpace,
+                    ClientProjectPath = this.ClientProjectPath,
+                    ServerProjectPath = this.ServerProjectPath,
+                    IsApplicationContextGenerationEnabled = this.IsClientApplicationAsBool,
+                    UseFullTypeNames = this.UseFullTypeNamesAsBool,
+                    ClientProjectTargetPlatform = this.ClientTargetPlatform,
+                };
 
-                    // Create the list of options we will pass to the generator.
-                    // This instance is serializable and can cross AppDomains
-                    ClientCodeGenerationOptions options = new ClientCodeGenerationOptions()
-                    {
-                        Language = this.Language,
-                        ClientFrameworkPath = this.ClientFrameworkPath,
-                        ClientRootNamespace = this.ClientProjectRootNamespace,
-                        ServerRootNamespace = this.ServerProjectRootNameSpace,
-                        ClientProjectPath = this.ClientProjectPath,
-                        ServerProjectPath = this.ServerProjectPath,
-                        IsApplicationContextGenerationEnabled = this.IsClientApplicationAsBool,
-                        UseFullTypeNames = this.UseFullTypeNamesAsBool,
-                        ClientProjectTargetPlatform = this.ClientTargetPlatform,
-                    };
+                // The other AppDomain gets a logger that will log back to this AppDomain
+                CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
 
-                    // The other AppDomain gets a logger that will log back to this AppDomain
-                    CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
+                // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
+                SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
 
-                    // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
-                    SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
+                // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
+                // This can occur when the build environment is configured incorrectly
+                //if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+                //{
+                //    throw new InvalidOperationException(
+                //        Resource.HttpRuntimeInitializationError,
+                //        System.Web.Hosting.HostingEnvironment.InitializationException);
+                //}
 
-                    // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
-                    // This can occur when the build environment is configured incorrectly
-                    if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-                    {
-                        throw new InvalidOperationException(
-                            Resource.HttpRuntimeInitializationError,
-                            System.Web.Hosting.HostingEnvironment.InitializationException);
-                    }
+                // Create the "dispatcher" in the 2nd AppDomain.
+                // This object will find and invoke the appropriate code generator
+                var dispatcher = (ClientCodeGenerationDispatcher)Activator.CreateInstance(typeof(ClientCodeGenerationDispatcher)); ;
+                generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
 
-                    // Create the "dispatcher" in the 2nd AppDomain.
-                    // This object will find and invoke the appropriate code generator
-                    using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
-                    {
-                        // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
-                        // the appropriate code generator.
-                        generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
-                    }
-                }
+                //using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
+                //{
+                //    // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
+                //    // the appropriate code generator.
+                //    generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
+                //}
+
 
                 // Tell the user where we are writing the generated code
                 if (!string.IsNullOrEmpty(generatedFileContent))

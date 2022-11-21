@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web.Hosting;
 
 namespace OpenRiaServices.Tools.Validation
 {
@@ -11,7 +10,7 @@ namespace OpenRiaServices.Tools.Validation
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
     /// AppDomain boundaries.
     /// </remarks>
-    internal class DomainServiceValidator : MarshalByRefObject, IRegisteredObject, IDisposable
+    internal class DomainServiceValidator : MarshalByRefObject, IDisposable
     {
         public void Validate(string[] assemblies, ILoggingService logger)
         {
@@ -30,10 +29,6 @@ namespace OpenRiaServices.Tools.Validation
             new DomainServiceCatalog(assemblies, logger);
         }
 
-        void IRegisteredObject.Stop(bool immediate)
-        {
-            // Do nothing
-        }
 
         void IDisposable.Dispose()
         {

@@ -23,7 +23,9 @@ namespace OpenRiaServices.Tools
             {
                 typeof(MetadataTypeAttribute),
                 typeof(ScaffoldColumnAttribute),
+#if NET472
                 typeof(ScaffoldTableAttribute),
+#endif
                 typeof(SerializableAttribute),
                 typeof(System.Diagnostics.CodeAnalysis.SuppressMessageAttribute),
                 typeof(System.Diagnostics.DebuggerStepThroughAttribute),

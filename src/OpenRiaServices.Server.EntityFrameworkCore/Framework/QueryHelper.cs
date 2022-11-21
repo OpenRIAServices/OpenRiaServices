@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using System.Collections.Generic;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace OpenRiaServices.Server.EntityFrameworkCore
 {
@@ -12,8 +13,13 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         public static ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
             // EF will throw if provider is not a IDbAsyncQueryProvider
+#if NET6_0
             if (query.Provider is IAsyncQueryProvider)
                 return new ValueTask<int>(query.CountAsync(cancellationToken));
+#else
+            if (query.Provider is IAsyncQueryProvider)
+                return new ValueTask<int>(query.CountAsync(cancellationToken));
+#endif
             else
                 return new ValueTask<int>(query.Count());
         }
