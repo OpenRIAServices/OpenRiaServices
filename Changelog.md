@@ -1,3 +1,13 @@
+# Unreleased
+
+
+* UnitTests
+   * DomainServiceTestHost 
+      * Add constructor which accept a single user (IPrincipal)
+      * **BREAKING CHANGE**: Constructor taking in Func<> and user does no longer accept null "user"
+         * use constructor without user in order to use the "default" user
+         * pass in an "unauthenticated" user to use an "unauthenticated" user
+
 # 5.1.1
 
 * Add net 6.0 as target framework for OpenRiaServices.Server.UnitTesting (#364, #371)
