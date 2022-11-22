@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -12,7 +13,7 @@ namespace OpenRiaServices.Tools
     /// <summary>
     /// Common base class shared by <see cref="CreateOpenRiaClientFilesTask"/> and <see cref="CleanOpenRiaClientFilesTask"/>
     /// </summary>
-    public abstract class RiaClientFilesTask : Task, ILogger, ILoggingService
+    public abstract class RiaClientFilesTask : Microsoft.Build.Utilities.Task, ILogger, ILoggingService
     {
         // Name of the folder where generated code will be written
         internal const string GeneratedCodeFolderName = "Generated_Code";
@@ -267,38 +268,42 @@ namespace OpenRiaServices.Tools
         /// <param name="message">Message to log</param>
         public void LogError(string message)
         {
-            this.HasLoggedErrors = true;
-            this.Log.LogError(message);
+            //this.HasLoggedErrors = true;
+            Debug.WriteLine(message);
+            //this.Log.LogError(message);
         }
 
         /// <summary>
-        /// Logs the given exception to the logger associated with this task
+        /// Logs the given exception to the logger associated with //this task
         /// </summary>
         /// <param name="ex">MessageException to log</param>
         public void LogException(Exception ex)
         {
-            this.HasLoggedErrors = true;
-            this.Log.LogError("Exception :" + ex.Message);
-            if (ex.InnerException != null)
-                LogException(ex.InnerException);
+            //this.HasLoggedErrors = true;
+            Debug.WriteLine(ex.Message);
+            //this.Log.LogError("Exception :" + ex.Message);
+            //if (ex.InnerException != null)
+            //    LogException(ex.InnerException);
         }
 
         /// <summary>
-        /// Logs the given warning message to the logger associated with this task
+        /// Logs the given warning message to the logger associated with //this task
         /// </summary>
         /// <param name="message">Message to log</param>
         public void LogWarning(string message)
         {
-            this.Log.LogWarning(message);
+            //this.Log.LogWarning(message);
+            Debug.WriteLine(message);
         }
 
         /// <summary>
-        /// Logs the given informational message to the logger associated with this task
+        /// Logs the given informational message to the logger associated with //this task
         /// </summary>
         /// <param name="message">Message to log</param>
         public void LogMessage(string message)
         {
-            this.Log.LogMessage(message);
+            //this.Log.LogMessage(message);
+            Debug.WriteLine(message);
         }
 
         /// <summary>

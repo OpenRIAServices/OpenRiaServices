@@ -1,24 +1,20 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;NET40</DefineConstants>
-    <TargetFrameworks>net472</TargetFrameworks>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <!-- Copy Mono.Cecil to output directory -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
-      <Reference Include="Microsoft.Build" />
-      <Reference Include="Microsoft.Build.Framework" />
-      <Reference Include="Microsoft.Build.Utilities.v4.0" />
       <Reference Include="mscorlib" />
       <Reference Include="system" />
-      <Reference Include="System.ComponentModel.Composition" />
       <Reference Include="System.ComponentModel.DataAnnotations" />
       <Reference Include="System.Configuration" />
       <Reference Include="System.ServiceModel" />
       <Reference Include="System.ServiceModel.Web" />
       <Reference Include="System.Web" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
+  <ItemGroup>
     <PackageReference Include="Microsoft.Build" Version="17.2.0" />
     <PackageReference Include="Microsoft.Build.Framework" Version="17.2.0" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.2.0" />

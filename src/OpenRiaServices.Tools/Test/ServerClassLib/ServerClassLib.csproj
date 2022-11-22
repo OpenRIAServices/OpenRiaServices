@@ -10,10 +10,10 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
   </PropertyGroup>
-  <ItemGroup>
+  <!--<ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
-  </ItemGroup>
+  </ItemGroup>-->
   <ItemGroup>
     <Compile Include="..\ClientClassLib\TestEntity.reverse.linked.cs" Link="TestEntity.reverse.linked.cs" />
   </ItemGroup>

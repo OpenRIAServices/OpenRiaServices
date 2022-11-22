@@ -37,6 +37,7 @@ namespace OpenRiaServices.Server.Test.Utilities
                 Context = context;
                 FailOnDebugAssert = failOnDebugAssert;
                 Listener = new UnitTestTraceListener();
+#if NET48
                 if (Debug.Listeners.Count > 0)
                 {
                     DefaultTraceListener defaultListener = Debug.Listeners[0] as DefaultTraceListener;
@@ -47,6 +48,7 @@ namespace OpenRiaServices.Server.Test.Utilities
                     }
                 }
                 Debug.Listeners.Add(Listener);
+#endif
             }
         }
 
@@ -57,6 +59,7 @@ namespace OpenRiaServices.Server.Test.Utilities
         {
             if (Listener != null)
             {
+#if NET48
                 Debug.Listeners.Remove(Listener);
                 if (Debug.Listeners.Count > 0)
                 {
@@ -67,6 +70,7 @@ namespace OpenRiaServices.Server.Test.Utilities
                     }
                 }
                 Listener = null;
+#endif
             }
         }
 

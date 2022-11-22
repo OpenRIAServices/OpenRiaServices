@@ -36,28 +36,28 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.GenerateCodeAssertFailure("C#", typeof(MockOrderWithoutAssociations_DomainService), error);
         }
 
-        /// <summary>
-        /// Verifies that Entity Framework entities that properly reference POCO entities generate code as expected.
-        /// </summary>
-        [TestMethod]
-        [TestDescription("Verifies that Entity Framework entities that properly reference POCO entities generate code as expected.")]
-        public void CodeGen_External_Entity_EFtoPOCO()
-        {
-            ConsoleLogger logger = new ConsoleLogger();
-            Type[] domainServices = 
-                {
-                     typeof(PersonalDetails_DomainService),
-                     typeof(EF_NorthwindScenarios_EmployeeWithExternalProperty)
-                };
-            string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", domainServices, logger, null);
+        ///// <summary>
+        ///// Verifies that Entity Framework entities that properly reference POCO entities generate code as expected.
+        ///// </summary>
+        //[TestMethod]
+        //[TestDescription("Verifies that Entity Framework entities that properly reference POCO entities generate code as expected.")]
+        //public void CodeGen_External_Entity_EFtoPOCO()
+        //{
+        //    ConsoleLogger logger = new ConsoleLogger();
+        //    Type[] domainServices = 
+        //        {
+        //             typeof(PersonalDetails_DomainService),
+        //             typeof(EF_NorthwindScenarios_EmployeeWithExternalProperty)
+        //        };
+        //    string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", domainServices, logger, null);
 
-            TestHelper.AssertGeneratedCodeContains(
-                generatedCode,
-                "private EntityRef<global::DataTests.Scenarios.EF.Northwind.PersonalDetails> _personalDetails_MarkedAsExternal;",
-                "[Association(\"Employee_PersonalDetails\", \"EmployeeID\", \"UniqueID\", IsForeignKey=true)] [ExternalReference()]",
-                "public global::DataTests.Scenarios.EF.Northwind.PersonalDetails PersonalDetails_MarkedAsExternal",
-                "private bool FilterPersonalDetails_MarkedAsExternal(global::DataTests.Scenarios.EF.Northwind.PersonalDetails entity)");
-        }
+        //    TestHelper.AssertGeneratedCodeContains(
+        //        generatedCode,
+        //        "private EntityRef<global::DataTests.Scenarios.EF.Northwind.PersonalDetails> _personalDetails_MarkedAsExternal;",
+        //        "[Association(\"Employee_PersonalDetails\", \"EmployeeID\", \"UniqueID\", IsForeignKey=true)] [ExternalReference()]",
+        //        "public global::DataTests.Scenarios.EF.Northwind.PersonalDetails PersonalDetails_MarkedAsExternal",
+        //        "private bool FilterPersonalDetails_MarkedAsExternal(global::DataTests.Scenarios.EF.Northwind.PersonalDetails entity)");
+        //}
     }
 
     #region Mock Entities
