@@ -1,3 +1,13 @@
+# 5.1.1
+
+* Add net 6.0 as target framework for OpenRiaServices.Server.UnitTesting (#364, #371)
+* HttpDomainClient: Buffer requests så HTTP header `content-length` is set #370
+
+# AspNetCore 0.1.1
+
+* AspNetCore: Use route order 0 instead of 1 (#357)
+* AspNetCore: Prevention for DOS attacks where attacker specify large content-length #373
+
 # 5.1.0 
 
 ## Overview / Major features

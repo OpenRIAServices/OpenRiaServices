@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -13,7 +14,6 @@ using System.Threading.Tasks;
 namespace OpenRiaServices.Client.DomainClients.Http
 {
     // Pass in HttpDomainClientFactory to ctor,
-    // pass in HttpClient ?
     internal partial class BinaryHttpDomainClient : DomainClient
     {
         /// ResponseContentRead seems to give better results on .Net framework for local network with low latency and high bandwidth
@@ -22,6 +22,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// - response headers read should teoretically give lower latency since result can be 
         /// deserialized as content is received
         private const HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
+        private const string ContentTypeMsBinary = "application/msbin1";
         private static readonly DataContractSerializer s_faultSerializer = new DataContractSerializer(typeof(DomainServiceFault));
         private static readonly Task<HttpResponseMessage> s_skipGetUsePostInstead = Task.FromResult<HttpResponseMessage>(null);
         private static readonly Dictionary<Type, BinaryHttpDomainClientSerializationHelper> s_globalCacheHelpers = new Dictionary<Type, BinaryHttpDomainClientSerializationHelper>();
@@ -193,11 +194,60 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="cancellationToken"></param>
         private Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, operationName)
-            {
-                Content = new BinaryXmlContent(this, operationName, parameters, queryOptions),
-            };
+            var request = new HttpRequestMessage(HttpMethod.Post, operationName);
 
+            using (var ms = new MemoryStream())
+            using (var writer = System.Xml.XmlDictionaryWriter.CreateBinaryWriter(ms, null, null, ownsStream: false))
+            {
+                // Write message
+                var rootNamespace = "http://tempuri.org/";
+                bool hasQueryOptions = queryOptions != null && queryOptions.Count > 0;
+
+                if (hasQueryOptions)
+                {
+                    writer.WriteStartElement("MessageRoot");
+                    writer.WriteStartElement("QueryOptions");
+                    foreach (var queryOption in queryOptions)
+                    {
+                        writer.WriteStartElement("QueryOption");
+                        writer.WriteAttributeString("Name", queryOption.QueryOperator);
+                        writer.WriteAttributeString("Value", queryOption.Expression);
+                        writer.WriteEndElement();
+                    }
+                    writer.WriteEndElement();
+                }
+                writer.WriteStartElement(operationName, rootNamespace); // <OperationName>
+
+                // Write all parameters
+                if (parameters != null && parameters.Count > 0)
+                {
+                    MethodParameters methodParameter = GetMethodParameters(operationName);
+                    foreach (var param in parameters)
+                    {
+                        writer.WriteStartElement(param.Key);  // <ParameterName>
+                        if (param.Value != null)
+                        {
+                            var parameterType = methodParameter.GetTypeForMethodParameter(param.Key);
+                            var serializer = GetSerializer(parameterType);
+                            serializer.WriteObjectContent(writer, param.Value);
+                        }
+                        else
+                        {
+                            // Null input
+                            writer.WriteAttributeString("i", "nil", "http://www.w3.org/2001/XMLSchema-instance", "true");
+                        }
+                        writer.WriteEndElement();            // </ParameterName>
+                    }
+                }
+
+                writer.WriteEndDocument(); // </OperationName> and </MessageRoot> if present
+                writer.Flush();
+
+                ms.TryGetBuffer(out ArraySegment<byte> buffer);
+                request.Content = new ByteArrayContent(buffer.Array, buffer.Offset, buffer.Count);
+                request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(ContentTypeMsBinary);
+            }
+            
             return HttpClient.SendAsync(request, DefaultHttpCompletionOption, cancellationToken);
         }
 
@@ -281,7 +331,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 // TODO: OpenRia 5.0 returns different status codes
                 // Need to read content and parse it even if status code is not 200
                 // It would make sens to one  check content type and only pase on msbin
-                if (!response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType != "application/msbin1")
+                if (!response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType != ContentTypeMsBinary)
                 {
                     var message = string.Format(Resources.DomainClient_UnexpectedHttpStatusCode, (int)response.StatusCode, response.StatusCode);
 

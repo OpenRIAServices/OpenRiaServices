@@ -38,7 +38,7 @@ namespace OpenRiaServices.Client.Test
         private const int PurchaseOrderCountInDatabase = 16;
 
         public QueryTests()
-            : base(TestURIs.LTS_Catalog, ProviderType.LTS)
+            : base(TestURIs.EFCore_Catalog, ProviderType.EF)
         {
         }
 
@@ -81,7 +81,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task Bug830468_MultipleWhereClauses()
         {
-            Northwind nw = new Northwind(TestURIs.LTS_Northwind);
+            Northwind nw = new Northwind(TestURIs.EFCore_Northwind);
 
             var query = nw.GetOrdersQuery().Where(p => p.Freight < 1000).Where(p => p.ShipAddress.ToLower() != "").Take(1);
             LoadOperation lo = nw.Load(query, false);
@@ -226,7 +226,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task LoadOperation_SingletonQueryMethod()
         {
-            Northwind nw = new Northwind(TestURIs.LTS_Northwind);
+            Northwind nw = new Northwind(TestURIs.EFCore_Northwind);
 
             // first test a query that returns an instance
             LoadOperation lo = nw.Load(nw.GetProductByIdQuery(5), false);
@@ -839,7 +839,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task Bug479449_Requery_RefreshCurrent()
         {
-            Northwind nw = new Northwind(TestURIs.LTS_Northwind);
+            Northwind nw = new Northwind(TestURIs.EFCore_Northwind);
 
             var query = nw.GetOrderDetailsQuery().Take(5);
             Action<LoadOperation<DataTests.Northwind.LTS.Order_Detail>> action = delegate (LoadOperation<DataTests.Northwind.LTS.Order_Detail> o)
