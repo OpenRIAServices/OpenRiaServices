@@ -5,14 +5,12 @@
     <!-- Copy Mono.Cecil to output directory -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.IdentityModel" />
     <Reference Include="System.Web" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
