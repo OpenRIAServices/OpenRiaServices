@@ -122,7 +122,6 @@ public class OperationInvokerTests
         var domainService = new OperationCanceledDomainService(cts, submitType);
 
         var services = new ServiceCollection();
-        services.AddScoped(typeof(OperationCanceledDomainService));
         services.AddSingleton(domainService);
         httpContext.RequestServices = services.BuildServiceProvider();
         httpContext.Request.ContentType = "application/msbin1";
