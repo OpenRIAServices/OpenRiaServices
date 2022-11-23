@@ -5,6 +5,7 @@
 
 * Support for EF Core 6.0 (#385)
     * Added support for EF Core 6.0 (requires net 6.0)
+    * Added support for new EF Core attributes `ValueGenerated.OnUpdate` and `ValueGenerated.OnUpdateSometimes` (only EF Core 6)
     
 * Improved handling of operation cancelled exceptions
     * Swallow or return completed task instead of throwing OperationCanceledExceptions
