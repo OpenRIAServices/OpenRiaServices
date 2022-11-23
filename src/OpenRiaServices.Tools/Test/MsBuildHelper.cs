@@ -150,8 +150,7 @@ namespace OpenRiaServices.Tools.Test
                     }
                     else
                     {
-                        // fallback to net472
-                        project.SetGlobalProperty("TargetFramework", "net472");
+                        project.SetGlobalProperty("TargetFramework", targetFrameworks.Split(';').First());
                     }
                 }
             }
