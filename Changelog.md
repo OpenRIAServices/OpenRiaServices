@@ -1,12 +1,22 @@
-# Unreleased
+# 5.2.0
 
+* Fix data corruption bug for large requests (#379)
+    * Prevent problem where output buffer becomes incorrect when parsing large requests from the client on x86 systems.
 
-* UnitTests
+* Support for EF Core 6.0 (#385)
+    * Added support for EF Core 6.0 (requires net 6.0)
+    
+* Improved handling of operation cancelled exceptions
+    * Swallow or return completed task instead of throwing OperationCanceledExceptions
+
+* Unit test improvements
    * DomainServiceTestHost 
-      * Add constructor which accept a single user (IPrincipal)
+      * Add constructor which accept a single user (IPrincipal) (#386)
       * **BREAKING CHANGE**: Constructor taking in Func<> and user does no longer accept null "user"
          * use constructor without user in order to use the "default" user
          * pass in an "unauthenticated" user to use an "unauthenticated" user
+         
+    * Updated nuget packages used in tests (#382)
 
 # 5.1.1
 
