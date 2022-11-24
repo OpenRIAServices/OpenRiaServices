@@ -13,7 +13,7 @@
 
 # EFCore 2.0.0
 
-* Support for EF Core 6.0 (#385)
+* Support for EF Core 6.0 (#385) - by @lindellhugo with help from @ehsangfls code
     * Added support for EF Core 6.0 (requires net 6.0)
     * Added support for new EF Core attributes `ValueGenerated.OnUpdate` and `ValueGenerated.OnUpdateSometimes` (only EF Core 6)
 
@@ -21,7 +21,7 @@
 # AspNetCore 0.2.0
 * Fix data corruption bug in 0.1.2 for large requests (#379)
     * Prevent problem where output buffer becomes incorrect when parsing large requests from the client on x86 systems.
-* Improved handling of operation cancelled exceptions
+* Improved handling of operation cancelled exceptions (#381) by @SandstromErik 
     * Swallow or return completed task instead of throwing OperationCanceledExceptions
 
 # 5.1.1
