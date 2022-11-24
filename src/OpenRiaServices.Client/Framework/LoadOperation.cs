@@ -29,7 +29,7 @@ namespace OpenRiaServices.Client
         /// <param name="query">The query to load.</param>
         /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
+        /// <param name="cancellationTokenSource"><c>non null</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
         private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState, CancellationTokenSource cancellationTokenSource)
             : base(userState, cancellationTokenSource)
         {
@@ -192,7 +192,6 @@ namespace OpenRiaServices.Client
         /// <param name="loadBehavior"><see cref="LoadBehavior"/> used for the load operation, will set <see cref="LoadOperation.LoadBehavior"/>.</param>
         /// <param name="completeAction">Action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        // TODO: Determine which constructor to make public, if it is the Old above then the Complete method must be made public as well
         public LoadOperation(Task<LoadResult<TEntity>> loadTask, CancellationTokenSource cancellationTokenSource, 
             EntityQuery<TEntity> query, 
             LoadBehavior loadBehavior,
@@ -212,7 +211,7 @@ namespace OpenRiaServices.Client
                 , (object)this
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
-                , CurrrentSynchronizationContextTaskScheduler);
+                , CurrentSynchronizationContextTaskScheduler);
             }
         }
 

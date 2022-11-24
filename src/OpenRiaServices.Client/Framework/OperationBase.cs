@@ -23,7 +23,7 @@ namespace OpenRiaServices.Client
         private bool _isErrorHandled;
         private readonly CancellationTokenSource _cancellationTokenSource;
 
-        private protected static TaskScheduler CurrrentSynchronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
+        private protected static TaskScheduler CurrentSynchronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="OperationBase"/> class.
