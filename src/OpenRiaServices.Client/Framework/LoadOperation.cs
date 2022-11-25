@@ -208,12 +208,12 @@ namespace OpenRiaServices.Client
             this._completeAction = completeAction;
 
             if (loadResultTask.IsCompleted)
-                Complete(loadResultTask);
+                CompleteTask(loadResultTask);
             else
             {
-                loadResultTask.ContinueWith(static (loadTask, state) =>
+                loadResultTask.ContinueWith(static (task, state) =>
                 {
-                    ((LoadOperation<TEntity>)state).Complete(loadTask);
+                    ((LoadOperation<TEntity>)state).CompleteTask(task);
                 }
                 , (object)this
                 , CancellationToken.None
@@ -276,7 +276,7 @@ namespace OpenRiaServices.Client
         /// Successfully completes the load operation with the specified result.
         /// </summary>
         /// <param name="result">The result.</param>
-        private void Complete(LoadResult<TEntity> result)
+        private void SetResult(LoadResult<TEntity> result)
         {
             if (result == null)
             {
@@ -301,7 +301,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-        internal void Complete(Task<LoadResult<TEntity>> loadTask)
+        internal void CompleteTask(Task<LoadResult<TEntity>> loadTask)
         {
             if (loadTask?.IsCompleted != true)
                 throw new ArgumentException("Task must be completed", nameof(loadTask));
@@ -316,7 +316,7 @@ namespace OpenRiaServices.Client
             }
             else
             {
-                Complete(loadTask.Result);
+                SetResult(loadTask.Result);
             }
         }
     }

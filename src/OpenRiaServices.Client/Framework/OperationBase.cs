@@ -31,12 +31,8 @@ namespace OpenRiaServices.Client
         /// <param name="userState">Optional user state.</param>
         /// <param name="supportCancellation"><c>true</c> to setup cancellationTokenSource and use that to handle cancellation</param>
         protected OperationBase(object userState, bool supportCancellation)
+            : this(userState, supportCancellation ? new CancellationTokenSource() : null)
         {
-            this._userState = userState;
-            if (supportCancellation)
-            {
-                _cancellationTokenSource = new CancellationTokenSource();
-            }
         }
 
         /// <summary>
