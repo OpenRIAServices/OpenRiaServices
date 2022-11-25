@@ -119,7 +119,7 @@ namespace OpenRiaServices.Client
         /// Completes the load operation with the specified error.
         /// </summary>
         /// <param name="error">The error.</param>
-        protected new void SetError(Exception error)
+        private protected new void SetError(Exception error)
         {
             if (error is DomainOperationException doe
                 && doe.ValidationErrors.Any())
