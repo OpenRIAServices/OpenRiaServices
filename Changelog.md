@@ -1,3 +1,29 @@
+# 5.2.0
+
+* DomainServiceTestHost improvements (#386):
+  * Add constructor which accept a single user (IPrincipal) 
+  * **BREAKING CHANGE**: Constructor taking in Func<> and user does no longer accept null "user"
+    * use constructor without user in order to use the "default" user
+    * pass in an "unauthenticated" user to use an "unauthenticated" user
+* Remove WCF Depdendency from tooling (#377)
+
+*Other*
+
+* Updated nuget packages used in tests (#382)
+
+# EFCore 2.0.0
+
+* Support for EF Core 6.0 (#385) - by @lindellhugo with help from @ehsangfls code
+    * Added support for EF Core 6.0 (requires net 6.0)
+    * Added support for new EF Core attributes `ValueGenerated.OnUpdate` and `ValueGenerated.OnUpdateSometimes` (only EF Core 6)
+
+
+# AspNetCore 0.2.0
+* Fix data corruption bug in 0.1.2 for large requests (#379)
+    * Prevent problem where output buffer becomes incorrect when parsing large requests from the client on x86 systems.
+* Improved handling of operation cancelled exceptions (#381) by @SandstromErik 
+    * Swallow or return completed task instead of throwing OperationCanceledExceptions
+
 # 5.1.1
 
 * Add net 6.0 as target framework for OpenRiaServices.Server.UnitTesting (#364, #371)

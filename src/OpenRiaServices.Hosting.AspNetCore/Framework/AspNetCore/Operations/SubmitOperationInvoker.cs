@@ -22,30 +22,37 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         public override async Task Invoke(HttpContext context)
         {
-            DomainService domainService = CreateDomainService(context);
-            // Assert post ?
-
-            if (context.Request.ContentType != "application/msbin1")
-            {
-                context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
-                return;
-            }
-
-            var (_, inputs) = await ReadParametersFromBodyAsync(context);
-            var changeSetEntries = (IEnumerable<ChangeSetEntry>)inputs[0];
-
-            IEnumerable<ChangeSetEntry> result;
             try
             {
-                result = await ChangeSetProcessor.ProcessAsync(domainService, changeSetEntries);
-            }
-            catch (Exception ex) when (!ex.IsFatal())
-            {
-                await WriteError(context, ex, domainService.GetDisableStackTraces());
-                return;
-            }
+                DomainService domainService = CreateDomainService(context);
+                // Assert post ?
 
-            await WriteResponse(context, result);
+                if (context.Request.ContentType != "application/msbin1")
+                {
+                    context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
+                    return;
+                }
+
+                var (_, inputs) = await ReadParametersFromBodyAsync(context);
+                var changeSetEntries = (IEnumerable<ChangeSetEntry>)inputs[0];
+
+                IEnumerable<ChangeSetEntry> result;
+                try
+                {
+                    result = await ChangeSetProcessor.ProcessAsync(domainService, changeSetEntries);
+                }
+                catch (Exception ex) when (!ex.IsFatal())
+                {
+                    await WriteError(context, ex, domainService.GetDisableStackTraces());
+                    return;
+                }
+
+                await WriteResponse(context, result);
+            }
+            catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
+            {
+                //Swallow OperationCanceledException and do nothing
+            }
         }
 
         protected override object[] ReadParameters(System.Xml.XmlDictionaryReader reader)

@@ -16,12 +16,18 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
     internal class EFCoreTypeDescriptor : TypeDescriptorBase
     {
         private readonly EFCoreTypeDescriptionContext _typeDescriptionContext;
-        private readonly IEntityType _entityType;
-        private readonly IProperty _timestampProperty;
         private readonly bool _keyIsEditable;
         private HashSet<string> _foreignKeyMembers;
 
+#if NETSTANDARD2_0
+        private readonly IProperty _timestampProperty;
+        private readonly IEntityType _entityType;
         public EFCoreTypeDescriptor(EFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
+#else
+        private readonly IReadOnlyProperty _timestampProperty;
+        private readonly IReadOnlyEntityType _entityType;
+        public EFCoreTypeDescriptor(EFCoreTypeDescriptionContext typeDescriptionContext, IReadOnlyEntityType entityType, ICustomTypeDescriptor parent)
+#endif
         : base(parent)
         {
             _typeDescriptionContext = typeDescriptionContext;
@@ -40,7 +46,13 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 // if any FK member of any association is also part of the primary key, then the key cannot be marked
                 // Editable(false)
                 _foreignKeyMembers = new HashSet<string>(entityType.GetNavigations()
-                     .Where(n => n.IsDependentToPrincipal())
+                     .Where(n =>
+#if NETSTANDARD2_0
+                     n.IsDependentToPrincipal()
+#else
+                     n.IsOnDependent
+#endif
+                     )
                      .SelectMany(n => n.ForeignKey.Properties)
                      .Select(x => x.Name));
 
@@ -64,11 +76,20 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         ///  /// <remarks>Since EF doesn't expose "timestamp" as a first class
         /// concept, we use the below criteria to infer this for ourselves.
         /// </remarks>
+#if NETSTANDARD2_0
         private static bool IsConcurrencyTimestamp(IProperty p)
         {
             return p.IsConcurrencyToken
                 && p.ValueGenerated == ValueGenerated.OnAddOrUpdate;
         }
+#else
+        private static bool IsConcurrencyTimestamp(IReadOnlyProperty p)
+        {
+            return p.IsConcurrencyToken
+                && p.ValueGenerated == ValueGenerated.OnAddOrUpdate;
+        }
+#endif
+
 
         /// <summary>
         /// Gets the metadata context
@@ -126,6 +147,14 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                     switch (property.ValueGenerated)
                     {
                         case ValueGenerated.Never:
+                            break;
+#if !NETSTANDARD2_0
+                        case ValueGenerated.OnUpdateSometimes:
+                            break;
+#endif
+                        case ValueGenerated.OnUpdate:
+                            attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
+                            databaseGenerated = true;
                             break;
                         case ValueGenerated.OnAddOrUpdate:
                             attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
@@ -211,7 +240,11 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             if (isEntity
                 && _entityType.FindNavigation(pd.Name) is INavigation navigation)
             {
+#if NETSTANDARD2_0
                 bool isManyToMany = navigation.IsCollection() && navigation.FindInverse()?.IsCollection() == true;
+#else
+                bool isManyToMany = navigation.IsCollection && navigation.Inverse?.IsCollection == true;
+#endif
                 if (!isManyToMany)
                 {
                     var assocAttrib = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];
