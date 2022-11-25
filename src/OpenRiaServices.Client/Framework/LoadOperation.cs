@@ -186,25 +186,32 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadOperation"/> class.
         /// </summary>
-        /// <param name="loadTask"></param>
-        /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
         /// <param name="query">The query to load, will set <see cref="LoadOperation.EntityQuery"/>.</param>
         /// <param name="loadBehavior"><see cref="LoadBehavior"/> used for the load operation, will set <see cref="LoadOperation.LoadBehavior"/>.</param>
         /// <param name="completeAction">Action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        public LoadOperation(Task<LoadResult<TEntity>> loadTask, CancellationTokenSource cancellationTokenSource, 
-            EntityQuery<TEntity> query, 
-            LoadBehavior loadBehavior,
-            Action<LoadOperation<TEntity>> completeAction, object userState)
+        /// <param name="loadResultTask">Task which, when completed, will Complete the operation and set either <see cref="Entities"/>, cancelled or error</param>
+        /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
+        public LoadOperation(EntityQuery<TEntity> query,
+        LoadBehavior loadBehavior,
+            Action<LoadOperation<TEntity>> completeAction,
+            object userState,
+            Task<LoadResult<TEntity>> loadResultTask,
+            CancellationTokenSource cancellationTokenSource)
             : base(query, loadBehavior, userState, cancellationTokenSource)
         {
+            if (loadResultTask == null)
+            {
+                throw new ArgumentNullException(nameof(loadResultTask));
+            }
+
             this._completeAction = completeAction;
 
-            if (loadTask.IsCompleted)
-                Complete(loadTask);
+            if (loadResultTask.IsCompleted)
+                Complete(loadResultTask);
             else
             {
-                loadTask.ContinueWith(static (loadTask, state) => 
+                loadResultTask.ContinueWith(static (loadTask, state) =>
                 {
                     ((LoadOperation<TEntity>)state).Complete(loadTask);
                 }
