@@ -1,5 +1,7 @@
 # 5.2.0
 
+* Client: Make construktors for Operation classes public to make them more testable (#387)
+  * Add new public constructors to LoadOperation, InvokeOperation and SubmitOperation
 * DomainServiceTestHost improvements (#386):
   * Add constructor which accept a single user (IPrincipal) 
   * **BREAKING CHANGE**: Constructor taking in Func<> and user does no longer accept null "user"
