@@ -109,17 +109,20 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
             foreach (var member in stateEntry.CurrentValues.Properties)
             {
-                stateEntry.OriginalValues[member] = originalValues[member];
-
-                // For any members that don't have RoundtripOriginal applied, EF can't determine modification
-                // state by doing value comparisons. To avoid losing updates in these cases, we must explicitly
-                // mark such members as modified.
                 PropertyDescriptor property = properties[member.Name];
-                if (property != null &&
-                    (!isRoundtripType && property.Attributes[typeof(RoundtripOriginalAttribute)] == null) &&
-                    property.Attributes[typeof(ExcludeAttribute)] == null)
+
+                if (property != null)
                 {
-                    stateEntry.Property(member.Name).IsModified = true;
+                    stateEntry.OriginalValues[member] = originalValues[member];
+
+                    // For any members that don't have RoundtripOriginal applied, EF can't determine modification
+                    // state by doing value comparisons. To avoid losing updates in these cases, we must explicitly
+                    // mark such members as modified.
+                    if ((!isRoundtripType && property.Attributes[typeof(RoundtripOriginalAttribute)] == null) &&
+                         property.Attributes[typeof(ExcludeAttribute)] == null)
+                    {
+                        stateEntry.Property(member.Name).IsModified = true;
+                    }
                 }
             }
         }
