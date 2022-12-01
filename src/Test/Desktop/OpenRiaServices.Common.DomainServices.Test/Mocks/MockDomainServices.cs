@@ -335,32 +335,30 @@ namespace TestDomainServices
     // TODO : Test cases
     // - a provider with no query methods (verify missing method exception)
 
-
-#if !NET6_0
     /// <summary>
     /// This provider doesn't have associated generated proxies - it's tested directly.
     /// </summary>
     [EnableClientAccess]
     [ServiceContract(Name = "TestDomainService")]
-    public partial class TestCatalog1 : LinqToSqlDomainService<AdventureWorks>
+    public partial class TestCatalog1 : DbDomainService<DbContextModels.AdventureWorks.DbCtxAdventureWorksEntities>
     {
-        private List<Product> products;
+        private List<DbContextModels.AdventureWorks.Product> products;
 
-        public List<Product> Products
+        public List<DbContextModels.AdventureWorks.Product> Products
         {
             get
             {
                 if (products == null)
                 {
                     // for this mock provider, query all products once and cache so tests are performant
-                    products = DataContext.Products.ToList();
+                    products = DbContext.Products.ToList();
                 }
                 return products;
             }
         }
 
         [Query]
-        public IQueryable<Product> GetProductsMultipleParams(int subCategoryID, decimal minListPrice, string color)
+        public IQueryable<DbContextModels.AdventureWorks.Product> GetProductsMultipleParams(int subCategoryID, decimal minListPrice, string color)
         {
             return from p in Products.AsQueryable()
                    where p.ProductSubcategoryID == subCategoryID &&
@@ -370,36 +368,35 @@ namespace TestDomainServices
         }
 
         [Query]
-        public IEnumerable<Product> GetProducts_Enumerable_Composable()
+        public IEnumerable<DbContextModels.AdventureWorks.Product> GetProducts_Enumerable_Composable()
         {
             return Products;
         }
 
         [Query(IsComposable = false)]
-        public IEnumerable<Product> GetProducts_Enumerable_NotComposable()
+        public IEnumerable<DbContextModels.AdventureWorks.Product> GetProducts_Enumerable_NotComposable()
         {
             return Products;
         }
 
         [Query]
-        public IQueryable<Product> GetProducts_ReturnNull()
+        public IQueryable<DbContextModels.AdventureWorks.Product> GetProducts_ReturnNull()
         {
             return null;
         }
 
         [Query]
-        public IQueryable<Product> ThrowGeneralException()
+        public IQueryable<DbContextModels.AdventureWorks.Product> ThrowGeneralException()
         {
             throw new Exception("Athewmay Arelschay");
         }
 
         [Query]
-        public IQueryable<Product> ThrowDataOperationException()
+        public IQueryable<DbContextModels.AdventureWorks.Product> ThrowDataOperationException()
         {
             throw new DomainException("Athewmay Arelschay", 777);
         }
     }
-#endif
 
     #endregion // DomainServices that throw exceptions
 

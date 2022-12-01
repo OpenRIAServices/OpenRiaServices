@@ -14,44 +14,50 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         public override async Task Invoke(HttpContext context)
         {
-            DomainService domainService = CreateDomainService(context);
-
-            // consider using ArrayPool<object>.Shared in future for allocating parameters
-            object[] inputs;
-            if (context.Request.Method == "GET")
-            {
-                inputs = GetParametersFromUri(context);
-            }
-            else // POST
-            {
-                if (context.Request.ContentType != "application/msbin1")
-                {
-                    context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
-                    return;
-                }
-                (_, inputs) = await ReadParametersFromBodyAsync(context);
-            }
-
-            ServiceInvokeResult invokeResult;
             try
             {
-                var invokeDescription = new InvokeDescription(_operation, inputs);
-                invokeResult = await domainService.InvokeAsync(invokeDescription, domainService.ServiceContext.CancellationToken).ConfigureAwait(false);
+                DomainService domainService = CreateDomainService(context);
 
-            }
-            catch (Exception ex) when (!ex.IsFatal())
-            {
-                await WriteError(context, ex, hideStackTrace: domainService.GetDisableStackTraces());
-                return;
-            }
+                // consider using ArrayPool<object>.Shared in future for allocating parameters
+                object[] inputs;
+                if (context.Request.Method == "GET")
+                {
+                    inputs = GetParametersFromUri(context);
+                }
+                else // POST
+                {
+                    if (context.Request.ContentType != "application/msbin1")
+                    {
+                        context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
+                        return;
+                    }
+                    (_, inputs) = await ReadParametersFromBodyAsync(context);
+                }
 
-            if (invokeResult.HasValidationErrors)
-            {
-                await WriteError(context, invokeResult.ValidationErrors, hideStackTrace: true);
+                ServiceInvokeResult invokeResult;
+                try
+                {
+                    var invokeDescription = new InvokeDescription(_operation, inputs);
+                    invokeResult = await domainService.InvokeAsync(invokeDescription, domainService.ServiceContext.CancellationToken).ConfigureAwait(false);
+                }
+                catch (Exception ex) when (!ex.IsFatal())
+                {
+                    await WriteError(context, ex, hideStackTrace: domainService.GetDisableStackTraces());
+                    return;
+                }
+
+                if (invokeResult.HasValidationErrors)
+                {
+                    await WriteError(context, invokeResult.ValidationErrors, hideStackTrace: true);
+                }
+                else
+                {
+                    await WriteResponse(context, invokeResult.Result);
+                }
             }
-            else
+            catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
             {
-                await WriteResponse(context, invokeResult.Result);
+                //Swallow OperationCanceledException and do nothing
             }
         }
     }

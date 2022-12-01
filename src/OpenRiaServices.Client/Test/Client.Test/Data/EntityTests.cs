@@ -899,7 +899,7 @@ namespace OpenRiaServices.Client.Test
             List<Employee> employeeList = new List<Employee>();
             ConfigurableEntityContainer container = new ConfigurableEntityContainer();
             container.CreateSet<Employee>(EntitySetOperations.All);
-            ConfigurableDomainContext catalog = new ConfigurableDomainContext(new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.LTS_Catalog), container);
+            ConfigurableDomainContext catalog = new ConfigurableDomainContext(new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.EFCore_Catalog), container);
 
             var load = catalog.Load(catalog.GetEntityQuery<Employee>("GetEmployees"), throwOnError:false);
             this.EnqueueCompletion(() => load);

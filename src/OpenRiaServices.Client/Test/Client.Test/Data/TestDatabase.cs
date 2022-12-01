@@ -47,7 +47,10 @@ namespace OpenRiaServices.Client.Test
         public bool IsInitialized
         {
             get
-            { 
+            {
+                if (_initializeTask is null)
+                    return false;
+
                 // Fail early if there is an error
                 if (_initializeTask.IsFaulted || _initializeTask.IsCanceled)
                     _initializeTask.GetAwaiter().GetResult();
@@ -62,7 +65,7 @@ namespace OpenRiaServices.Client.Test
 
         public void Dispose()
         {
-            if (IsInitialized)
+            if (_initializeTask is not null)
             {
                 _initializeTask = null;
                 // call the TestServices web service method to create the database 
