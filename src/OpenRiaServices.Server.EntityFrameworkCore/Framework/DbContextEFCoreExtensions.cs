@@ -113,6 +113,10 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
                 if (property != null)
                 {
+                    // If the prop is the same as before, don't mark it as modified
+                    if (stateEntry.OriginalValues[member].Equals(originalValues[member]))
+                        return;
+
                     stateEntry.OriginalValues[member] = originalValues[member];
 
                     // For any members that don't have RoundtripOriginal applied, EF can't determine modification
