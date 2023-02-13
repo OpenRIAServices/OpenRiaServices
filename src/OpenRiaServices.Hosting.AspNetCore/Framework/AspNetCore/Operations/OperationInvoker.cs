@@ -98,7 +98,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
             try
             {
-                using var reader = BinaryMessageReader.Rent(memory);
+                using var reader = BinaryMessageReader.Rent(memory, isBinary: context.Request.ContentType != "application/xml");
                 return ReadParametersFromBody(reader.XmlDictionaryReader);
             }
             finally
@@ -308,7 +308,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             if (ct.IsCancellationRequested)
                 return Task.CompletedTask;
 
-            var messageWriter = BinaryMessageWriter.Rent();
+            var messageWriter = BinaryMessageWriter.Rent(isBinary: context.Request.ContentType != "application/xml");
             try
             {
                 WriteFault(fault, messageWriter.XmlWriter);
@@ -318,7 +318,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
                 var response = context.Response;
                 response.Headers.CacheControl = "private, no-store";
-                response.Headers.ContentType = "application/msbin1";
+                response.Headers.ContentType = context.Request.ContentType ?? "application/msbin1";
                 response.ContentLength = bufferMemory.Length;
 
                 return bufferMemory.WriteTo(response, ct);
@@ -361,18 +361,16 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             if (ct.IsCancellationRequested)
                 return Task.CompletedTask;
 
-            var messageWriter = BinaryMessageWriter.Rent();
+            var messageWriter = BinaryMessageWriter.Rent(isBinary: context.Request.ContentType != "application/xml");
             try
             {
-                var writer = messageWriter.XmlWriter;
-
-                WriteResponse(writer, result);
+                WriteResponse(messageWriter.XmlWriter, result);
 
                 using var bufferMemory = BinaryMessageWriter.Return(messageWriter);
                 messageWriter = null;
 
                 var response = context.Response;
-                response.Headers.ContentType = "application/msbin1";
+                response.Headers.ContentType = context.Request.ContentType ?? "application/msbin1";
                 response.ContentLength = bufferMemory.Length;
                 response.Headers.CacheControl = "private, no-store";
 

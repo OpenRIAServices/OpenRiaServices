@@ -38,7 +38,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 else // POST
                 {
-                    if (context.Request.ContentType != "application/msbin1")
+                    if (context.Request.ContentType != "application/msbin1"
+                        && context.Request.ContentType != "application/xml")
                     {
                         context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
                         return;
