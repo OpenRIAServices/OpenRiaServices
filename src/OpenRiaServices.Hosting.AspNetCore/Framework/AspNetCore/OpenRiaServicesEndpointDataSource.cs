@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -103,6 +104,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 DisplayName = $"{domainService}.{invoker.OperationName}"
             };
             endpointBuilder.Metadata.Add(httpMethod);
+            
             //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(domainService));
             foreach (var convention in _conventions)
             {

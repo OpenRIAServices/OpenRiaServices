@@ -27,7 +27,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 DomainService domainService = CreateDomainService(context);
                 // Assert post ?
 
-                if (context.Request.ContentType != "application/msbin1")
+                if (context.Request.ContentType != "application/msbin1"
+                    && context.Request.ContentType != "application/xml")
                 {
                     context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
                     return;
