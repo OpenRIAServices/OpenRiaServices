@@ -3,6 +3,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -103,6 +104,21 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 DisplayName = $"{domainService}.{invoker.OperationName}"
             };
             endpointBuilder.Metadata.Add(httpMethod);
+            endpointBuilder.Metadata.Add(invoker.DomainOperation);
+
+            // Try to add MethodInfo
+            MethodInfo method = invoker.DomainOperation.DomainServiceType.GetMethod(invoker.DomainOperation.Name);
+            if (method == null && invoker.DomainOperation.IsTaskAsync)
+            {
+                method = invoker.DomainOperation.DomainServiceType.GetMethod(invoker.DomainOperation.Name + "Async");
+            }
+            if (method is not null)
+            {
+                endpointBuilder.Metadata.Add(method);
+            }
+
+            //endpointBuilder.Metadata.Add(GenerateOpenApi(invoker));
+
             //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(domainService));
             foreach (var convention in _conventions)
             {
@@ -110,6 +126,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
             }
             endpoints.Add(endpointBuilder.Build());
         }
+
+        //private OpenApiOperation GenerateOpenApi(OperationInvoker invoker)
+        //{
+        //    throw new NotImplementedException();
+        //}
 
         public override IChangeToken GetChangeToken()
         {
