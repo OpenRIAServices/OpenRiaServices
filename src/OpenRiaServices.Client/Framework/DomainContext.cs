@@ -261,32 +261,10 @@ namespace OpenRiaServices.Client
         public virtual SubmitOperation SubmitChanges(Action<SubmitOperation> callback, object userState)
         {
             EntityChangeSet changeSet = this.EntityContainer.GetChanges();
-            var submitOperation = new SubmitOperation(changeSet, callback, userState, DomainClient.SupportsCancellation);
+            CancellationTokenSource cts = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
 
-            this.SubmitChangesAsync(changeSet, submitOperation.CancellationToken)
-                .ContinueWith((submitTask, state) =>
-                {
-                    var operation = (SubmitOperation)state;
-
-                    if (submitTask.IsCanceled)
-                    {
-                        operation.SetCancelled();
-                    }
-                    else if (submitTask.Exception != null)
-                    {
-                        operation.SetError(ExceptionHandlingUtility.GetUnwrappedException(submitTask.Exception));
-                    }
-                    else
-                    {
-                        operation.Complete();
-                    }
-                }
-                , submitOperation
-                , CancellationToken.None
-                , TaskContinuationOptions.HideScheduler
-                , CurrrentSynchronizationContextTaskScheduler);
-
-            return submitOperation;
+            var submitTask = SubmitChangesAsync(cts?.Token ?? CancellationToken.None);
+            return new SubmitOperation(changeSet, callback, userState, submitTask, cts);
         }
 
         /// <summary>
@@ -504,32 +482,10 @@ namespace OpenRiaServices.Client
         /// <returns>The load operation.</returns>
         public virtual LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, Action<LoadOperation<TEntity>> callback, object userState) where TEntity : Entity
         {
-            var loadOperation = new LoadOperation<TEntity>(query, loadBehavior, callback, userState, DomainClient.SupportsCancellation);
+            CancellationTokenSource cts = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
 
-            LoadAsync(query, loadBehavior, loadOperation.CancellationToken)
-                .ContinueWith((loadTask, state) =>
-               {
-                   var operation = (LoadOperation<TEntity>)state;
-
-                   if (loadTask.IsCanceled)
-                   {
-                       operation.SetCancelled();
-                   }
-                   else if (loadTask.Exception != null)
-                   {
-                       operation.SetError(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
-                   }
-                   else
-                   {
-                       operation.Complete(loadTask.Result);
-                   }
-               }
-                , (object)loadOperation
-                , CancellationToken.None
-                , TaskContinuationOptions.HideScheduler
-                , CurrrentSynchronizationContextTaskScheduler);
-
-            return loadOperation;
+            var loadResult = LoadAsync(query, loadBehavior, cts?.Token ?? CancellationToken.None);
+            return new LoadOperation<TEntity>(query, loadBehavior, callback, userState, loadResult, cts);
         }
 
         /// <summary>
@@ -811,40 +767,11 @@ namespace OpenRiaServices.Client
         [EditorBrowsable(EditorBrowsableState.Never)]
         public virtual InvokeOperation<TValue> InvokeOperation<TValue>(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation<TValue>> callback, object userState)
         {
-            if (string.IsNullOrEmpty(operationName))
-            {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "operationName"));
-            }
-            if (returnType == null)
-            {
-                throw new ArgumentNullException(nameof(returnType));
-            }
+            CancellationTokenSource cts = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
 
-            InvokeOperation<TValue> invokeOperation = new InvokeOperation<TValue>(operationName, parameters, callback, userState, this.DomainClient.SupportsCancellation);
-            InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, returnType, invokeOperation.CancellationToken)
-                 .ContinueWith((loadTask, state) =>
-                 {
-                     var operation = (InvokeOperation<TValue>)state;
+            var invokeResult = InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, returnType, cts?.Token ?? CancellationToken.None);
 
-                     if (loadTask.IsCanceled)
-                     {
-                         operation.SetCancelled();
-                     }
-                     else if (loadTask.Exception != null)
-                     {
-                         operation.SetError(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
-                     }
-                     else
-                     {
-                         operation.Complete(loadTask.Result);
-                     }
-                 }
-                , (object)invokeOperation
-                , CancellationToken.None
-                , TaskContinuationOptions.HideScheduler
-                , CurrrentSynchronizationContextTaskScheduler);
-
-            return invokeOperation;
+            return new InvokeOperation<TValue>(operationName, parameters, callback, userState, invokeResult, cts);
         }
 
         /// <summary>

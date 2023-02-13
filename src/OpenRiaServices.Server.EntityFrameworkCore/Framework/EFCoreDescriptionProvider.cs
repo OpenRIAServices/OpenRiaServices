@@ -42,10 +42,18 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 parent = base.GetTypeDescriptor(objectType, parent);
 
                 var model = _typeDescriptionContext.Model;
+#if NETSTANDARD2_0
+                
                 if (model != null && model.FindEntityType(objectType.FullName) is IEntityType entityType)
                 {
                     td = new EFCoreTypeDescriptor(_typeDescriptionContext, entityType, parent);
                 }
+#else
+                if (model != null && model.FindEntityType(objectType.FullName) is IReadOnlyEntityType entityType)
+                {
+                    td = new EFCoreTypeDescriptor(_typeDescriptionContext, entityType, parent);
+                }
+#endif
                 else
                 {
                     td = parent;
@@ -57,11 +65,16 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             return td;
         }
 
-        public override bool LookupIsEntityType(Type type)
-        {
+        public override bool LookupIsEntityType(Type type) =>
+#if NETSTANDARD2_0
             // EF6 excludes "complex objects" here so we exclude owned entities
-            return _typeDescriptionContext.GetEntityType(type) is IEntityType entityType
+            _typeDescriptionContext.GetEntityType(type) is IEntityType entityType
                 && !entityType.IsOwned();
-        }
+#else
+            // EF6 excludes "complex objects" here so we exclude owned entities
+            _typeDescriptionContext.GetEntityType(type) is IReadOnlyEntityType entityType
+                && !entityType.IsOwned();
+#endif
+
     }
 }
