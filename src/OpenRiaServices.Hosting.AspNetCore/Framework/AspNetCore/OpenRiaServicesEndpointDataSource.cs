@@ -17,14 +17,15 @@ namespace OpenRiaServices.Hosting.AspNetCore
 {
     internal class OpenRiaServicesEndpointDataSource : EndpointDataSource, IEndpointConventionBuilder
     {
-        private readonly List<Action<EndpointBuilder>> _conventions;
+        private readonly List<Action<EndpointBuilder>> _conventions = new();
+        private readonly List<Action<EndpointBuilder>> _finallyConventions = new();
 
         public Dictionary<string, DomainServiceDescription> DomainServices { get; } = new();
         private List<Endpoint> _endpoints;
 
-        public OpenRiaServicesEndpointDataSource(RoutePatternTransformer routePatternTransformer)
+        public OpenRiaServicesEndpointDataSource()
         {
-            _conventions = new List<Action<EndpointBuilder>>();
+
         }
 
         public override IReadOnlyList<Endpoint> Endpoints
@@ -105,32 +106,35 @@ namespace OpenRiaServices.Hosting.AspNetCore
             };
             endpointBuilder.Metadata.Add(httpMethod);
             endpointBuilder.Metadata.Add(invoker.DomainOperation);
-
             // Try to add MethodInfo
+            if (TryGetMethodInfo(invoker) is MethodInfo method)
+            {
+                endpointBuilder.Metadata.Add(method);
+            }
+
+            //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(domainService));
+
+            foreach (var convention in _conventions)
+            {
+                convention(endpointBuilder);
+            }
+
+            foreach (var finallyConvention in _finallyConventions)
+                finallyConvention(endpointBuilder);
+
+            endpoints.Add(endpointBuilder.Build());
+        }
+
+        private static MethodInfo TryGetMethodInfo(OperationInvoker invoker)
+        {
             MethodInfo method = invoker.DomainOperation.DomainServiceType.GetMethod(invoker.DomainOperation.Name);
             if (method == null && invoker.DomainOperation.IsTaskAsync)
             {
                 method = invoker.DomainOperation.DomainServiceType.GetMethod(invoker.DomainOperation.Name + "Async");
             }
-            if (method is not null)
-            {
-                endpointBuilder.Metadata.Add(method);
-            }
 
-            //endpointBuilder.Metadata.Add(GenerateOpenApi(invoker));
-
-            //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(domainService));
-            foreach (var convention in _conventions)
-            {
-                convention(endpointBuilder);
-            }
-            endpoints.Add(endpointBuilder.Build());
+            return method;
         }
-
-        //private OpenApiOperation GenerateOpenApi(OperationInvoker invoker)
-        //{
-        //    throw new NotImplementedException();
-        //}
 
         public override IChangeToken GetChangeToken()
         {
@@ -141,5 +145,12 @@ namespace OpenRiaServices.Hosting.AspNetCore
         {
             _conventions.Add(convention);
         }
+
+#if NET7_0_OR_GREATER
+        void IEndpointConventionBuilder.Finally(System.Action<Microsoft.AspNetCore.Builder.EndpointBuilder> finallyConvention)
+        {
+            _finallyConventions.Add(finallyConvention);
+        }
+#endif
     }
 }
