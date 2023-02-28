@@ -136,7 +136,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         }
 
         [TestMethod]
-        public async Task SumbitAsync()
+        public async Task SubmitAsync()
         {
             var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>();
 
