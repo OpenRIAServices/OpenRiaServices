@@ -130,6 +130,12 @@ namespace Cities
         }
 
         [Query]
+        public async Task<IEnumerable<Zip>> GetZipsAsEnumerable()
+        {
+            return await Task.FromResult(GetZips());
+        }
+
+        [Query]
         public async Task<IQueryable<Zip>> GetZipsWithDelay(TimeSpan delay)
         {
             // This method is used to test cancellation of query operations
