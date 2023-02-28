@@ -90,7 +90,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         /// <param name="name">A name.</param>
         /// <returns>name, but without "Async" at the end</returns>
-        private static string RemoveAsyncFromName(string name)
+        public static string RemoveAsyncFromName(string name)
         {
             const string asyncPostfix = "Async";
             if (name.EndsWith(asyncPostfix) && name.Length > asyncPostfix.Length)

@@ -86,20 +86,12 @@ namespace OpenRiaServices.Server.UnitTesting
 
         private static string GetNameFromLambda(Expression expression)
         {
-            LambdaExpression lambdaExpression = expression as LambdaExpression;
-            if (lambdaExpression != null)
+            if (expression is LambdaExpression lambdaExpression)
             {
-                MethodCallExpression methodCallExpression = lambdaExpression.Body as MethodCallExpression;
-                if (methodCallExpression != null)
-                {
-                    return methodCallExpression.Method.Name;
-                }
-
-                MemberExpression memberExpression = lambdaExpression.Body as MemberExpression;
-                if (memberExpression != null)
-                {
-                    return "Get" + memberExpression.Member.Name;
-                }
+                if (lambdaExpression.Body is MethodCallExpression callExpression)
+                    return DomainOperationEntry.RemoveAsyncFromName(callExpression.Method.Name);
+                if (lambdaExpression.Body is MemberExpression memberExpression)
+                    return DomainOperationEntry.RemoveAsyncFromName("Get" + memberExpression.Member.Name);
             }
             throw new InvalidOperationException(string.Format(
                 CultureInfo.CurrentCulture,
