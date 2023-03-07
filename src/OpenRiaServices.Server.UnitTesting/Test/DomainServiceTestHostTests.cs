@@ -106,12 +106,11 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         [TestMethod]
         public async Task AssertInvokeThatEndsWithAsyncDoesNotThrowError()
         {
-            var domainService = new DummyDomainService();
-            var testHost = new DomainServiceTestHost<DummyDomainService>(() => domainService);
+            var domainService = new ServerSideAsyncDomainService();
+            var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>(() => domainService);
 
-            await testHost.InvokeAsync(s => s.InvokeThatEndsWithAsync());
+            await testHost.InvokeAsync(s => s.SleepAndSetLastDelayAsync(TimeSpan.Zero));
 
-            Assert.IsTrue(domainService.IsInvoked, "The method should be invoked");
         }
 
         [TestMethod]
@@ -202,13 +201,6 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 
             [Invoke]
             public async Task DummyInvoke()
-            {
-                await Task.Delay(10);
-                IsInvoked = true;
-            }
-
-            [Invoke]
-            public async Task InvokeThatEndsWithAsync()
             {
                 await Task.Delay(10);
                 IsInvoked = true;
