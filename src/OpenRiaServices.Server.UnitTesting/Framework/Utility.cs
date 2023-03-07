@@ -89,15 +89,17 @@ namespace OpenRiaServices.Server.UnitTesting
             if (expression is LambdaExpression lambdaExpression)
             {
                 if (lambdaExpression.Body is MethodCallExpression callExpression)
-                    return DomainOperationEntry.RemoveAsyncFromName(callExpression.Method.Name);
+                    return RemoveAsyncFromName(callExpression.Method.Name);
                 if (lambdaExpression.Body is MemberExpression memberExpression)
-                    return DomainOperationEntry.RemoveAsyncFromName("Get" + memberExpression.Member.Name);
+                    return RemoveAsyncFromName("Get" + memberExpression.Member.Name);
             }
             throw new InvalidOperationException(string.Format(
                 CultureInfo.CurrentCulture,
                 Resources.NoOperationName,
                 expression));
         }
+
+        private static string RemoveAsyncFromName(string name) => name.EndsWith("Async") ? name.Substring(0, name.Length - "Async".Length) : name;
 
         private static IEnumerable<object> GetParametersFromLambda(Expression expression)
         {
