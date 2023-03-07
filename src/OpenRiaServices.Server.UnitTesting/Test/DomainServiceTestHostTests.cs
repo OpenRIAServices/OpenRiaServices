@@ -110,7 +110,6 @@ namespace OpenRiaServices.Server.UnitTesting.Test
             var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>(() => domainService);
 
             await testHost.InvokeAsync(s => s.SleepAndSetLastDelayAsync(TimeSpan.Zero));
-
         }
 
         [TestMethod]
