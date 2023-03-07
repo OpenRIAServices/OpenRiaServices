@@ -591,6 +591,15 @@ Namespace Cities
         End Function
         
         ''' <summary>
+        ''' Gets an EntityQuery instance that can be used to load <see cref="Zip"/> entity instances using the 'GetZipsAsEnumerable' query.
+        ''' </summary>
+        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Zip"/> entity instances.</returns>
+        Public Function GetZipsAsEnumerableQuery() As EntityQuery(Of Zip)
+            Me.ValidateMethod("GetZipsAsEnumerableQuery", Nothing)
+            Return MyBase.CreateQuery(Of Zip)("GetZipsAsEnumerable", Nothing, false, true)
+        End Function
+        
+        ''' <summary>
         ''' Gets an EntityQuery instance that can be used to load <see cref="Zip"/> entity instances using the 'GetZipsIfAuthenticated' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Zip"/> entity instances.</returns>
@@ -1098,6 +1107,23 @@ Namespace Cities
             ''' <param name="result">The IAsyncResult returned from 'BeginGetZips'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZips' operation.</returns>
             Function EndGetZips(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetZipsAsEnumerable' operation.
+            ''' </summary>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(false),  _
+             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/CityDomainService/GetZipsAsEnumerable", ReplyAction:="http://tempuri.org/CityDomainService/GetZipsAsEnumerableResponse")>  _
+            Function BeginGetZipsAsEnumerable(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetZipsAsEnumerable'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetZipsAsEnumerable'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetZipsAsEnumerable' operation.</returns>
+            Function EndGetZipsAsEnumerable(ByVal result As IAsyncResult) As QueryResult(Of Zip)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetZipsIfAuthenticated' operation.
