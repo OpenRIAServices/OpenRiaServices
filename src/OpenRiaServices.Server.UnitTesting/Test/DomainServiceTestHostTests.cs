@@ -104,6 +104,15 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         }
 
         [TestMethod]
+        public async Task AssertInvokeThatEndsWithAsyncDoesNotThrowError()
+        {
+            var domainService = new ServerSideAsyncDomainService();
+            var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>(() => domainService);
+
+            await testHost.InvokeAsync(s => s.SleepAndSetLastDelayAsync(TimeSpan.Zero));
+        }
+
+        [TestMethod]
         public async Task AssertInvokeAsyncWithoutTaskReturnsTResult()
         {
             var testHost = new DomainServiceTestHost<CityDomainService>();
