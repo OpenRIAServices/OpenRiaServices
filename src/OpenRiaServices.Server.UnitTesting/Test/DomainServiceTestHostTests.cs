@@ -136,7 +136,17 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         }
 
         [TestMethod]
-        public async Task SumbitAsync()
+        public async Task IEnumerableQueryAsync()
+        {
+            var testHost = new DomainServiceTestHost<CityDomainService>();
+
+            var result = await testHost.QueryAsync(s => s.GetZipsAsEnumerable(), CancellationToken.None);
+
+            Assert.AreEqual(3, result.Count());
+        }
+
+        [TestMethod]
+        public async Task SubmitAsync()
         {
             var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>();
 
