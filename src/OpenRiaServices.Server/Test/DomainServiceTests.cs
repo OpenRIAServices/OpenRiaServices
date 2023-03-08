@@ -18,6 +18,7 @@ using TestDomainServices;
 using System.Threading.Tasks;
 using System.Threading;
 using OpenRiaServices.Server.UnitTesting;
+using OpenRiaServices.Server.EntityFrameworkCore;
 
 namespace OpenRiaServices.Server.Test
 {
@@ -560,6 +561,13 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void ObjectContextExtensions_AttachAsModified()
         {
+            var expectedChangedProperties = new []
+            {
+                "CategoryID",
+                "CategoryName",
+                "Description",
+                "Picture"
+            };
             TestDomainServices.EF.Northwind nw = new TestDomainServices.EF.Northwind();
             DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
             nw.Initialize(ctxt);
@@ -582,8 +590,40 @@ namespace OpenRiaServices.Server.Test
 
             var currentEntry = nw.ObjectContext.ObjectStateManager.GetObjectStateEntry(current);
 
-            string[] changedProperties = currentEntry.GetModifiedProperties().ToArray();
-            Assert.IsTrue(changedProperties.Contains("Description"));
+            string[] actualChangedProperties = currentEntry.GetModifiedProperties().ToArray();
+            
+            CollectionAssert.AreEquivalent(expectedChangedProperties, actualChangedProperties);
+        }
+
+        // Verify that AttachAsModified works correctly when no original values are provided for non-concurrency properties.
+        [TestMethod]
+        public void DbContextEFCoreExtensions_AttachAsModifiedCore()
+        {
+            var expectedChangedProperties = new[]
+            {
+                "Description"
+            };
+            var nw = new TestDomainServices.EFCore.Northwind();
+            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+            nw.Initialize(ctxt);
+
+            var current = new EFCoreModels.Northwind.Category()
+            {
+                CategoryID = 1,
+                CategoryName = "Category",
+                Description = "My category"
+            };
+            var original = new EFCoreModels.Northwind.Category()
+            {
+                CategoryID = 1,
+                CategoryName = "Category"
+            };
+
+            DbContextEFCoreExtensions.AttachAsModified(nw.DbContext.Categories, current, original, nw.DbContext);
+
+            string[] actualChangedProperties = nw.DbContext.Entry(current).Properties.Where(p => p.IsModified).Select(p => p.Metadata.Name).ToArray();
+
+            CollectionAssert.AreEquivalent(expectedChangedProperties, actualChangedProperties);
         }
 
         [TestMethod]

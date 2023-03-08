@@ -510,7 +510,7 @@ namespace TestDomainServices.EFCore
         {
             // TODO: May not be possible to use connection strings
             //var builder = new EntityConnectionStringBuilder("metadata=res://*/Northwind.NorthwindDbCtx.csdl|res://*/Northwind.NorthwindDbCtx.ssdl|res://*/Northwind.NorthwindDbCtx.msl;provider=System.Data.SqlClient;");
-            var configuration = ConfigurationManager.ConnectionStrings["Northwind"].ConnectionString;
+            var configuration = ConfigurationManager.ConnectionStrings["NorthwindEntities"].ConnectionString;
             return new EFCoreDbCtxNorthwindEntities(configuration);
         }
     }
