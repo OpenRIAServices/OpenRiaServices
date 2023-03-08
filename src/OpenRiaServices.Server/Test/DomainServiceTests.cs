@@ -601,7 +601,9 @@ namespace OpenRiaServices.Server.Test
         {
             var expectedChangedProperties = new[]
             {
-                "Description"
+                "CategoryName",
+                "Description",
+                "Picture"
             };
             var nw = new TestDomainServices.EFCore.Northwind();
             DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
