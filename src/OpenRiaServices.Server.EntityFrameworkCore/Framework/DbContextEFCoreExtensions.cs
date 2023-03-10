@@ -118,18 +118,15 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                     // For any members that don't have RoundtripOriginal applied, EF can't determine modification
                     // state by doing value comparisons. To avoid losing updates in these cases, we must explicitly
                     // mark such members as modified.
-                    if (member.IsPrimaryKey())
+                    if (member.IsPrimaryKey() ||
+                        isRoundtripType || property.Attributes[typeof(RoundtripOriginalAttribute)] != null ||
+                         property.Attributes[typeof(ExcludeAttribute)] != null)
                     {
                         stateEntry.Property(member.Name).IsModified = !object.Equals(stateEntry.OriginalValues[member], originalValues[member]);
                     }
-                    else if ((!isRoundtripType && property.Attributes[typeof(RoundtripOriginalAttribute)] == null) &&
-                         property.Attributes[typeof(ExcludeAttribute)] == null)
-                    {
-                        stateEntry.Property(member.Name).IsModified = true;
-                    }
                     else
                     {
-                        stateEntry.Property(member.Name).IsModified = !object.Equals(stateEntry.OriginalValues[member],originalValues[member]);
+                        stateEntry.Property(member.Name).IsModified = true;
                     }
                 }
             }
