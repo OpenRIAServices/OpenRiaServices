@@ -629,6 +629,73 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
+        public void DbContextExtensions_RoundtripAttribute_AttachAsModified()
+        {
+            var expectedNotChangedProperties = new[]
+            {
+                nameof(DbContextModels.AdventureWorks.Product.ProductID), // Primary key
+                nameof(DbContextModels.AdventureWorks.Product.SafetyStockLevel), // Exclude attribute
+                nameof(DbContextModels.AdventureWorks.Product.Weight), // Roundtrip original
+                nameof(DbContextModels.AdventureWorks.Product.SizeUnitMeasureCode), // Association
+                nameof(DbContextModels.AdventureWorks.Product.WeightUnitMeasureCode), // Association
+                nameof(DbContextModels.AdventureWorks.Product.ProductSubcategoryID), // Association
+                nameof(DbContextModels.AdventureWorks.Product.ProductModelID), // Association
+            };
+
+            var catalog = new TestDomainServices.DbCtx.Catalog();
+            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+            OpenRiaServices.Server.DomainServiceDescription.GetDescription(typeof(TestDomainServices.DbCtx.Catalog));
+            catalog.Initialize(ctxt);
+
+            var current = new DbContextModels.AdventureWorks.Product()
+            {
+                ProductID = 1,
+            };
+            var original = new DbContextModels.AdventureWorks.Product()
+            {
+                ProductID = 1,
+            };
+
+            DbContextExtensions.AttachAsModified(catalog.DbContext.Products, current, original, catalog.DbContext);
+
+            var currentEntry = catalog.DbContext.Entry(current);
+            
+            string[] actualNotChangedProperties = currentEntry.CurrentValues.PropertyNames.Where(p => !currentEntry.Property(p).IsModified).ToArray();
+
+            CollectionAssert.AreEquivalent(expectedNotChangedProperties, actualNotChangedProperties);
+        }
+
+        [TestMethod]
+        public void DbContextEFCoreExtensions_RoundTripAttribute_AttachAsModifiedCore()
+        {
+            var expectedNotChangedProperties = new[]
+            {
+                nameof(EFCoreModels.AdventureWorks.Product.ProductID), // Primary key
+                nameof(EFCoreModels.AdventureWorks.Product.SafetyStockLevel), // Exclude attribute
+                nameof(EFCoreModels.AdventureWorks.Product.Weight), // Roundtrip original
+            };
+            var catalog = new TestDomainServices.EFCore.Catalog();
+
+            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+            catalog.Initialize(ctxt);
+
+            var current = new EFCoreModels.AdventureWorks.Product()
+            {
+                ProductID = 1,
+            };
+            var original = new EFCoreModels.AdventureWorks.Product()
+            {
+                ProductID = 1,
+            };
+
+            DbContextEFCoreExtensions.AttachAsModified(catalog.DbContext.Products, current, original, catalog.DbContext);
+
+            string[] actualNotChangedProperties = catalog.DbContext.Entry(current).Properties.Where(p => !p.IsModified).Select(p => p.Metadata.Name).ToArray();
+
+            CollectionAssert.AreEquivalent(expectedNotChangedProperties, actualNotChangedProperties);
+        }
+
+        [TestMethod]
         public async Task Bug594068_PersistChangesErrorHandling()
         {
             ErrorTestDomainService ds = new ErrorTestDomainService();
