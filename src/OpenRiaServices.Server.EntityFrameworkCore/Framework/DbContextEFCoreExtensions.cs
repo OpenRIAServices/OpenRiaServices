@@ -113,19 +113,23 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
                 if (property != null)
                 {
-                    // If the prop is the same as before, don't mark it as modified
-                    if (stateEntry.OriginalValues[member].Equals(originalValues[member]))
-                        return;
-
                     stateEntry.OriginalValues[member] = originalValues[member];
 
                     // For any members that don't have RoundtripOriginal applied, EF can't determine modification
                     // state by doing value comparisons. To avoid losing updates in these cases, we must explicitly
                     // mark such members as modified.
-                    if ((!isRoundtripType && property.Attributes[typeof(RoundtripOriginalAttribute)] == null) &&
+                    if (member.IsPrimaryKey())
+                    {
+                        stateEntry.Property(member.Name).IsModified = !object.Equals(stateEntry.OriginalValues[member], originalValues[member]);
+                    }
+                    else if ((!isRoundtripType && property.Attributes[typeof(RoundtripOriginalAttribute)] == null) &&
                          property.Attributes[typeof(ExcludeAttribute)] == null)
                     {
                         stateEntry.Property(member.Name).IsModified = true;
+                    }
+                    else
+                    {
+                        stateEntry.Property(member.Name).IsModified = !object.Equals(stateEntry.OriginalValues[member],originalValues[member]);
                     }
                 }
             }
