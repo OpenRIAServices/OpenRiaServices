@@ -111,7 +111,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             {
                 PropertyDescriptor property = properties[member.Name];
 
-                if (property != null)
+                if (property != null) // Exclude shadow properties
                 {
                     stateEntry.OriginalValues[member] = originalValues[member];
 
