@@ -2,7 +2,7 @@
 
 * Fix shadow property issue in EF Core DB Context extensions (#397):
     * Based on Allianz PR #393
-    * Fix bug with shadowproperties being marked as modified when performing AttachAsModified in DbContext
+    * Fix bug with shadowproperties being marked as modified when performing AttachAsModified in DbContextEFCoreExtensions
 
 * DomainServiceTestHost improvements 1 (#395):
     * Allow usage of CRUD-methods ending with Async in testhost.
