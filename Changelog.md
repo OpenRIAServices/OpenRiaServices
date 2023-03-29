@@ -1,14 +1,18 @@
-# 5.2.1
+# EFCore 2.0.1
 
 * Fix shadow property issue in EF Core DB Context extensions (#397):
     * Based on Allianz PR #393
     * Fix bug with shadowproperties being marked as modified when performing AttachAsModified in DbContextEFCoreExtensions
 
+# 5.2.1
+
 * DomainServiceTestHost improvements 1 (#395):
     * Allow usage of CRUD-methods ending with Async in testhost.
-
 * DomainServiceTestHost improvements 2 (#396):
     * Add support for async IEnumerable queries in test host, i.e. querys returning `async Task<IEnumerable<` 
+
+*Other*
+- Fixed github Code QL validation of builds
 
 # 5.2.0
 
