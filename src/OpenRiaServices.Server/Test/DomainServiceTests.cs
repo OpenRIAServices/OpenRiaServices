@@ -568,9 +568,8 @@ namespace OpenRiaServices.Server.Test
                 "Description",
                 "Picture"
             };
-            TestDomainServices.EF.Northwind nw = new TestDomainServices.EF.Northwind();
-            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
-            nw.Initialize(ctxt);
+
+            NorthwindModel.NorthwindEntities ctx = new NorthwindModel.NorthwindEntities();
 
             var current = new NorthwindModel.Category()
             {
@@ -586,10 +585,9 @@ namespace OpenRiaServices.Server.Test
                 CategoryName = "Category"
             };
 
-            ObjectContextExtensions.AttachAsModified(nw.ObjectContext.Categories, current, original);
+            ObjectContextExtensions.AttachAsModified(ctx.Categories, current, original);
 
-            var currentEntry = nw.ObjectContext.ObjectStateManager.GetObjectStateEntry(current);
-
+            var currentEntry = ctx.ObjectStateManager.GetObjectStateEntry(current);
             string[] actualChangedProperties = currentEntry.GetModifiedProperties().ToArray();
             
             CollectionAssert.AreEquivalent(expectedChangedProperties, actualChangedProperties);
@@ -605,9 +603,7 @@ namespace OpenRiaServices.Server.Test
                 "Description",
                 "Picture"
             };
-            var nw = new TestDomainServices.EFCore.Northwind();
-            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
-            nw.Initialize(ctxt);
+            var dbContexct = new EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities();
 
             var current = new EFCoreModels.Northwind.Category()
             {
@@ -621,9 +617,9 @@ namespace OpenRiaServices.Server.Test
                 CategoryName = "Category"
             };
 
-            DbContextEFCoreExtensions.AttachAsModified(nw.DbContext.Categories, current, original, nw.DbContext);
+            DbContextEFCoreExtensions.AttachAsModified(dbContexct.Categories, current, original, dbContexct);
 
-            string[] actualChangedProperties = nw.DbContext.Entry(current).Properties.Where(p => p.IsModified).Select(p => p.Metadata.Name).ToArray();
+            string[] actualChangedProperties = dbContexct.Entry(current).Properties.Where(p => p.IsModified).Select(p => p.Metadata.Name).ToArray();
 
             CollectionAssert.AreEquivalent(expectedChangedProperties, actualChangedProperties);
         }
