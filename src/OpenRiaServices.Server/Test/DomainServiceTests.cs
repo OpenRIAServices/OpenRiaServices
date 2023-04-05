@@ -561,9 +561,11 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void ObjectContextExtensions_AttachAsModified()
         {
+            // Ensure metadata (TypeDescriptors) are initialised
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
+
             var expectedChangedProperties = new []
             {
-                "CategoryID",
                 "CategoryName",
                 "Description",
                 "Picture"
@@ -597,6 +599,9 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void DbContextEFCoreExtensions_AttachAsModifiedCore()
         {
+            // Ensure metadata (TypeDescriptors) are initialised
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Northwind));
+
             var expectedChangedProperties = new[]
             {
                 "CategoryName",
@@ -604,6 +609,7 @@ namespace OpenRiaServices.Server.Test
                 "Picture"
             };
             var dbContexct = new EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities();
+            dbContexct.ChangeTracker.AutoDetectChangesEnabled = false;
 
             var current = new EFCoreModels.Northwind.Category()
             {
