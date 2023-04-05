@@ -74,7 +74,7 @@ steps:
      !**\obj\**
 
     runOnlyImpactedTests: false
-    runInParallel: true
+    runInParallel: false
     runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
@@ -94,7 +94,7 @@ steps:
     runOnlyImpactedTests: false
     # Needed to hardcode path to test adapters for NET48 tests
     pathtoCustomTestAdapters: '$(Build.SourcesDirectory)\src\OpenRiaServices.Server.UnitTesting\Test\bin\$(BuildConfiguration)\net6.0\'
-    runInParallel: true
+    runInParallel: false
     runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
