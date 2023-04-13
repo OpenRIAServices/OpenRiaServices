@@ -113,8 +113,6 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
                 if (property != null) // Exclude shadow properties
                 {
-                    stateEntry.OriginalValues[member] = originalValues[member];
-
                     // For any members that don't have RoundtripOriginal applied, EF can't determine modification
                     // state by doing value comparisons. To avoid losing updates in these cases, we must explicitly
                     // mark such members as modified.
@@ -122,7 +120,9 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                         isRoundtripType || property.Attributes[typeof(RoundtripOriginalAttribute)] != null ||
                          property.Attributes[typeof(ExcludeAttribute)] != null)
                     {
-                        stateEntry.Property(member.Name).IsModified = !object.Equals(stateEntry.OriginalValues[member], originalValues[member]);
+                        object originalValue = originalValues[member];
+                        stateEntry.OriginalValues[member] = originalValue;
+                        stateEntry.Property(member.Name).IsModified = !object.Equals(stateEntry.CurrentValues[member], originalValue);
                     }
                     else
                     {
