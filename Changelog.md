@@ -1,4 +1,4 @@
-# EFCore 2.0.1
+# 5.3.0 with EFCore 2.0.1
 
 * Fix shadow property issue in EF Core DB Context extensions (#397):
     * Based on Allianz PR #393
