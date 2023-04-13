@@ -66,7 +66,7 @@
     <PackageReference Include="Microsoft.VisualStudio.Threading" Version="14.0.50702" />
     <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="14.0.23205" />
     <PackageReference Include="Microsoft.VSSDK.BuildTools">
-      <Version>16.10.1055</Version>
+      <Version>17.5.4072</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
