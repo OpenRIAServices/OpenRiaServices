@@ -254,7 +254,7 @@ namespace OpenRiaServices.Client.Test
             WebException e = ExpectExceptionHelper<WebException>(del);
             Assert.AreEqual(message, e.Message);
 
-            HttpWebResponse response = e.Response as HttpWebResponse;
+            HttpWebResponse response = (HttpWebResponse)e.Response;
             Assert.AreEqual(errorCode, (int)response.StatusCode);
             return e;
         }
