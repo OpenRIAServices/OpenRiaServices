@@ -10,6 +10,7 @@
 
 *Other*
 - Fixed github Code QL validation of builds
+- Updated nuget packages
 
 # 5.2.0
 
