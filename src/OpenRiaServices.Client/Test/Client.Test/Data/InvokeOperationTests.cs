@@ -897,13 +897,13 @@ namespace OpenRiaServices.Client.Test
                     {
                         DateTime returnedDate = (DateTime)invoke.Value;
                         Assert.AreEqual(((DateTime)(object)inputValue).Kind, returnedDate.Kind);
-                        Assert.AreEqual(inputValue, returnedDate);
+                        Assert.AreEqual((DateTime)(object)inputValue, returnedDate);
                     }
                     else if (TypeUtility.GetNonNullableType(typeof(T)) == typeof(DateTimeOffset))
                     {
                         DateTimeOffset returnedDate = (DateTimeOffset)invoke.Value;
                         Assert.AreEqual(((DateTimeOffset)(object)inputValue).Offset.Ticks, returnedDate.Offset.Ticks);
-                        Assert.AreEqual(inputValue, returnedDate);
+                        Assert.AreEqual((DateTimeOffset)(object)inputValue, returnedDate);
                     }
                     else if (typeof(T) == typeof(byte[]))
                     {
