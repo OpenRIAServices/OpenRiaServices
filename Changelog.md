@@ -1,5 +1,21 @@
+# 5.3.0 with EFCore 2.0.1
+
+* Fix shadow property issue in EF Core DB Context extensions (#397):
+    * Based on Allianz PR #393
+    * Fix bug with shadowproperties being marked as modified when performing AttachAsModified in DbContextEFCoreExtensions
+* DomainServiceTestHost improvements 1 (#395):
+    * Allow usage of CRUD-methods ending with Async in testhost.
+* DomainServiceTestHost improvements 2 (#396):
+    * Add support for async IEnumerable queries in test host, i.e. querys returning `async Task<IEnumerable<` 
+
+*Other*
+- Fixed github Code QL validation of builds
+- Updated nuget packages
+
 # 5.2.0
 
+* Client: Make construktors for Operation classes public to make them more testable (#387)
+  * Add new public constructors to LoadOperation, InvokeOperation and SubmitOperation
 * DomainServiceTestHost improvements (#386):
   * Add constructor which accept a single user (IPrincipal) 
   * **BREAKING CHANGE**: Constructor taking in Func<> and user does no longer accept null "user"

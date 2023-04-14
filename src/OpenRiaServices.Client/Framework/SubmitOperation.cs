@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client
 {
@@ -18,11 +20,12 @@ namespace OpenRiaServices.Client
         /// <param name="changeSet">The changeset being submitted.</param>
         /// <param name="completeAction">Optional action to invoke when the operation completes.</param>
         /// <param name="userState">Optional user state to associate with the operation.</param>
-        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
-        internal SubmitOperation(EntityChangeSet changeSet,
+        /// <param name="sumitResultTask">Task which, when completed, will Complete the operation and set result, cancelled or error</param>
+        /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
+        public SubmitOperation(EntityChangeSet changeSet,
             Action<SubmitOperation> completeAction, object userState,
-            bool supportCancellation)
-            : base(userState, supportCancellation)
+            Task<SubmitResult> sumitResultTask, CancellationTokenSource cancellationTokenSource)
+            : base(userState, cancellationTokenSource)
         {
             if (changeSet == null)
             {
@@ -30,6 +33,31 @@ namespace OpenRiaServices.Client
             }
             this._completeAction = completeAction;
             this._changeSet = changeSet;
+
+            if (sumitResultTask.IsCompleted)
+                CompleteTask(sumitResultTask);
+            else
+            {
+                sumitResultTask.ContinueWith(static (task, state) =>
+                {
+                    var operation = (SubmitOperation)state;
+                    operation.CompleteTask(task);
+                }
+                , (object)this
+                , CancellationToken.None
+                , TaskContinuationOptions.HideScheduler
+                , CurrentSynchronizationContextTaskScheduler);
+            }
+        }
+
+        internal void CompleteTask(Task<SubmitResult> task)
+        {
+            if (task.IsCanceled)
+                base.SetCancelled();
+            else if (task.Exception != null)
+                base.SetError(ExceptionHandlingUtility.GetUnwrappedException(task.Exception));
+            else
+                base.Complete(null);
         }
 
         /// <summary>
@@ -52,25 +80,6 @@ namespace OpenRiaServices.Client
             {
                 return this._changeSet.Where(p => p.EntityConflict != null || p.HasValidationErrors);
             }
-        }
-
-        /// <summary>
-        /// Successfully complete the submit operation.
-        /// </summary>
-        internal void Complete()
-        {
-            // SubmitOperation doesn't have a result - all results
-            // are specified on Entities in the changeset.
-            base.Complete((object)null);
-        }
-
-        /// <summary>
-        /// Complete the submit operation with the specified error.
-        /// </summary>
-        /// <param name="error">The error.</param>
-        internal new void SetError(Exception error)
-        {
-            base.SetError(error);
         }
 
         /// <summary>

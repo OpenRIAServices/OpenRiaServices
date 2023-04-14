@@ -9,6 +9,9 @@ using DataTests.Northwind.LTS;
 using System.ComponentModel.DataAnnotations;
 using OpenRiaServices.Silverlight.Testing;
 using System.Collections;
+using System.Threading.Tasks;
+using System.Threading;
+using System.Runtime.InteropServices;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -21,7 +24,7 @@ namespace OpenRiaServices.Client.Test
         private readonly Action<TestOperation> _completeAction;
 
         public TestOperation(Action<TestOperation> completeAction, object userState)
-            : base(userState, true)
+            : base(userState, new CancellationTokenSource())
         {
             this._completeAction = completeAction;
         }
@@ -60,12 +63,28 @@ namespace OpenRiaServices.Client.Test
     public class OperationTests : UnitTestBase
     {
         [TestMethod]
-        public void Operation_MarkAsHandled()
+        public void Operation_DirectException()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
-            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
+
+            Exception ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
+
+            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, MarkExceptionAsHandled, null, Task.FromException<LoadResult<Product>>(ex), null);
+
+            Assert.AreSame(ex, lo.Error);
+        }
+
+        [TestMethod]
+        public async Task Operation_MarkAsHandled()
+        {
+            TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
+
+            var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
+
+            var loadTask = new TaskCompletionSource<LoadResult<Product>>();
+            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, loadTask.Task, null);
 
             EventHandler action = (o, e) =>
             {
@@ -77,8 +96,8 @@ namespace OpenRiaServices.Client.Test
             };
             lo.Completed += action;
 
-            DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
-            lo.SetError(ex);
+            loadTask.SetException(new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace"));
+            await lo;
 
             // verify that calling MarkAsHandled again is a noop
             lo.MarkErrorAsHandled();
@@ -104,13 +123,14 @@ namespace OpenRiaServices.Client.Test
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
 
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
-            LoadOperation lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
+            var tcs = new TaskCompletionSource<LoadResult<Product>>();
+            LoadOperation<Product> lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, tcs.Task, null);
 
             DomainOperationException expectedException = null;
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                lo.SetError(ex);
+                lo.CompleteTask(Task.FromException<LoadResult<Product>>(ex));
             }
             catch (DomainOperationException e)
             {
@@ -130,7 +150,7 @@ namespace OpenRiaServices.Client.Test
 
             try
             {
-                lo.SetError(ex);
+                lo.CompleteTask(Task.FromException<LoadResult<Product>>(ex));
             }
             catch (DomainOperationException e)
             {
@@ -151,13 +171,14 @@ namespace OpenRiaServices.Client.Test
         {
             CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
 
-            InvokeOperation invoke = new InvokeOperation("Echo", null, null, null, false);
+            TaskCompletionSource<InvokeResult<string>> tcs = new TaskCompletionSource<InvokeResult<string>>();
+            InvokeOperation<string> invoke = new InvokeOperation<string>("Echo", null, null, null, tcs.Task, null);
 
             DomainOperationException expectedException = null;
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                invoke.SetError(ex);
+                invoke.CompleteTask(Task.FromException<InvokeResult<string>>(ex));
             }
             catch (DomainOperationException e)
             {
@@ -171,12 +192,13 @@ namespace OpenRiaServices.Client.Test
             // now test again with validation errors
             expectedException = null;
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
-            invoke = new InvokeOperation("Echo", null, null, null, false);
+            tcs = new TaskCompletionSource<InvokeResult<string>>();
+            invoke = new InvokeOperation<string>("Echo", null, null, null, tcs.Task, null);
             var validationException = new DomainOperationException("validation", validationErrors);
 
             try
             {
-                invoke.SetError(validationException);
+                invoke.CompleteTask(Task.FromException<InvokeResult<string>>(validationException));
             }
             catch (DomainOperationException e)
             {
@@ -203,13 +225,14 @@ namespace OpenRiaServices.Client.Test
             city.ZoneID = 1;
             Assert.IsTrue(cities.EntityContainer.HasChanges);
 
-            SubmitOperation submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, false);
+            TaskCompletionSource<SubmitResult> tcs = new TaskCompletionSource<SubmitResult>();
+            SubmitOperation submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, tcs.Task, null);
 
             DomainOperationException expectedException = null;
             DomainOperationException ex = new DomainOperationException("Submit Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
             try
             {
-                submit.SetError(ex);
+                submit.CompleteTask(Task.FromException<SubmitResult>(ex));
             }
             catch (DomainOperationException e)
             {
@@ -317,7 +340,7 @@ namespace OpenRiaServices.Client.Test
                 try
                 {
                     var load = new LoadOperation<City>(query, loadBehaviour, loCallback, null, false);
-                    load.Complete(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0));
+                    load.CompleteTask(Task.FromResult(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0)));
                 }
                 catch (Exception ex)
                 {
@@ -331,8 +354,7 @@ namespace OpenRiaServices.Client.Test
             {
                 try
                 {
-                    var submit = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, true);
-                    submit.Complete();
+                    var submit = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, Task.FromResult(new SubmitResult(null)), null);
                 }
                 catch (Exception ex)
                 {
@@ -343,21 +365,27 @@ namespace OpenRiaServices.Client.Test
             }, Message);
 
             // verify cancellation callbacks for all fx operation types
-            var lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null, true);
+            var noCompleteLoad = new TaskCompletionSource<LoadResult<City>>();
+            var cts = new CancellationTokenSource();
+            var lo = new LoadOperation<City>(cities.GetCitiesQuery(), LoadBehavior.MergeIntoCurrent, null, null, noCompleteLoad.Task, cts);
             lo.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 lo.Cancel();
             }, Message);
 
-            SubmitOperation so = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, true);
+            cts = new CancellationTokenSource();
+            var noCompleteSubmit = new TaskCompletionSource<SubmitResult>();
+            SubmitOperation so = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, noCompleteSubmit.Task, cts);
             so.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 so.Cancel();
             }, Message);
 
-            InvokeOperation io = new InvokeOperation("Fnord", null, null, null, true);
+            cts = new CancellationTokenSource();
+            var noCompleteInvoke = new TaskCompletionSource<InvokeResult<object>>();
+            InvokeOperation io = new InvokeOperation<object>("Fnord", null, null, null, noCompleteInvoke.Task, cts);
             io.CancellationToken.Register(() => throw new InvalidOperationException(Message));
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
@@ -409,6 +437,15 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(Resources.AsyncOperation_AlreadyCompleted, expectedException.Message);
             });
             EnqueueTestComplete();
+        }
+
+        private void MarkExceptionAsHandled<TEntity>(LoadOperation<TEntity> loadOperation)
+            where TEntity : Entity
+        {
+            if (loadOperation.HasError)
+            {
+                loadOperation.MarkErrorAsHandled();
+            }
         }
     }
 }

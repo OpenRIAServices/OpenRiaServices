@@ -95,7 +95,7 @@ namespace OpenRiaServices.EntityFramework
         /// <summary>
         /// Gets the <see cref="DbContext"/>
         /// </summary>
-        protected TContext DbContext
+        protected internal TContext DbContext
         {
             get
             {

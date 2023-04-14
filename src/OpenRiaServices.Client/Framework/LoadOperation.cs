@@ -6,6 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using System.Threading.Tasks;
 using OpenRiaServices.Client.Data;
 
 namespace OpenRiaServices.Client
@@ -28,9 +29,9 @@ namespace OpenRiaServices.Client
         /// <param name="query">The query to load.</param>
         /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
-        private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState, bool supportCancellation)
-            : base(userState, supportCancellation)
+        /// <param name="cancellationTokenSource"><c>non null</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
+        private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState, CancellationTokenSource cancellationTokenSource)
+            : base(userState, cancellationTokenSource)
         {
             if (query == null)
             {
@@ -118,7 +119,7 @@ namespace OpenRiaServices.Client
         /// Completes the load operation with the specified error.
         /// </summary>
         /// <param name="error">The error.</param>
-        internal new void SetError(Exception error)
+        private protected new void SetError(Exception error)
         {
             if (error is DomainOperationException doe
                 && doe.ValidationErrors.Any())
@@ -177,9 +178,48 @@ namespace OpenRiaServices.Client
         internal LoadOperation(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
             Action<LoadOperation<TEntity>> completeAction, object userState,
             bool supportCancellation)
-            : base(query, loadBehavior, userState, supportCancellation)
+            : base(query, loadBehavior, userState, supportCancellation ? new CancellationTokenSource() : null)
         {
             this._completeAction = completeAction;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LoadOperation"/> class.
+        /// </summary>
+        /// <param name="query">The query to load, will set <see cref="LoadOperation.EntityQuery"/>.</param>
+        /// <param name="loadBehavior"><see cref="LoadBehavior"/> used for the load operation, will set <see cref="LoadOperation.LoadBehavior"/>.</param>
+        /// <param name="completeAction">Action to execute when the operation completes.</param>
+        /// <param name="userState">Optional user state for the operation.</param>
+        /// <param name="loadResultTask">Task which, when completed, will Complete the operation and set either <see cref="Entities"/>, cancelled or error</param>
+        /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
+        public LoadOperation(EntityQuery<TEntity> query,
+        LoadBehavior loadBehavior,
+            Action<LoadOperation<TEntity>> completeAction,
+            object userState,
+            Task<LoadResult<TEntity>> loadResultTask,
+            CancellationTokenSource cancellationTokenSource)
+            : base(query, loadBehavior, userState, cancellationTokenSource)
+        {
+            if (loadResultTask == null)
+            {
+                throw new ArgumentNullException(nameof(loadResultTask));
+            }
+
+            this._completeAction = completeAction;
+
+            if (loadResultTask.IsCompleted)
+                CompleteTask(loadResultTask);
+            else
+            {
+                loadResultTask.ContinueWith(static (task, state) =>
+                {
+                    ((LoadOperation<TEntity>)state).CompleteTask(task);
+                }
+                , (object)this
+                , CancellationToken.None
+                , TaskContinuationOptions.HideScheduler
+                , CurrentSynchronizationContextTaskScheduler);
+            }
         }
 
         /// <summary>
@@ -236,7 +276,7 @@ namespace OpenRiaServices.Client
         /// Successfully completes the load operation with the specified result.
         /// </summary>
         /// <param name="result">The result.</param>
-        internal void Complete(LoadResult<TEntity> result)
+        private void SetResult(LoadResult<TEntity> result)
         {
             if (result == null)
             {
@@ -258,6 +298,25 @@ namespace OpenRiaServices.Client
             if (result.Entities.Any())
             {
                 this.RaisePropertyChanged(nameof(TotalEntityCount));
+            }
+        }
+
+        internal void CompleteTask(Task<LoadResult<TEntity>> loadTask)
+        {
+            if (loadTask?.IsCompleted != true)
+                throw new ArgumentException("Task must be completed", nameof(loadTask));
+
+            if (loadTask.IsCanceled)
+            {
+                SetCancelled();
+            }
+            else if (loadTask.Exception != null)
+            {
+                SetError(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
+            }
+            else
+            {
+                SetResult(loadTask.Result);
             }
         }
     }
