@@ -258,6 +258,7 @@ namespace OpenRiaServices.Tools.Test
                      {
                          {"Configuration", "Debug" },
                      },
+                    DisableInProcNode = true,
                     Loggers = loggers,
 
                 };
