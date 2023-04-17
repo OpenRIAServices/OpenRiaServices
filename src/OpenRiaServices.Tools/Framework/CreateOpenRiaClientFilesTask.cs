@@ -729,6 +729,7 @@ namespace OpenRiaServices.Tools
 
                 // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
                 SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
+                // Must contain 
 
                 // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
                 // This can occur when the build environment is configured incorrectly

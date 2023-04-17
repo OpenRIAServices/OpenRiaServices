@@ -54,7 +54,7 @@ namespace OpenRiaServices.Tools
 
             try
             {
-                AppDomainUtilities.ConfigureAppDomain(options);
+                //AppDomainUtilities.ConfigureAppDomain(options);
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 // Try to load mono.cecil from same folder as tools
                 var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
