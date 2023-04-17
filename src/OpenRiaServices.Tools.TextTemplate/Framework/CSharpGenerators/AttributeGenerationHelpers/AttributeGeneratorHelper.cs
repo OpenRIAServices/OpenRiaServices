@@ -15,7 +15,7 @@ namespace OpenRiaServices.Tools.TextTemplate
             {
                 typeof(MetadataTypeAttribute),
                 typeof(ScaffoldColumnAttribute),
-                typeof(ScaffoldTableAttribute),
+              //  typeof(ScaffoldTableAttribute),
                 typeof(SerializableAttribute),
                 typeof(System.Diagnostics.CodeAnalysis.SuppressMessageAttribute)
             };

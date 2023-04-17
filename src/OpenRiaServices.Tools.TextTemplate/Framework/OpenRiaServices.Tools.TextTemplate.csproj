@@ -1,17 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeBuilderException.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeBuilderException.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeDeclaration.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeDeclaration.cs" />
