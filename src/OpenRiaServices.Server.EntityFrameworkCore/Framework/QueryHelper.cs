@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.Query.Internal;
 using Microsoft.EntityFrameworkCore.Query;
 using System.Collections.Generic;
-using Microsoft.EntityFrameworkCore.Query;
 
 namespace OpenRiaServices.Server.EntityFrameworkCore
 {
