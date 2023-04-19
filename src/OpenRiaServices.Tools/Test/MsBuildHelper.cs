@@ -260,6 +260,7 @@ namespace OpenRiaServices.Tools.Test
                      },
                     DisableInProcNode = true,
                     Loggers = loggers,
+                    
 
                 };
 

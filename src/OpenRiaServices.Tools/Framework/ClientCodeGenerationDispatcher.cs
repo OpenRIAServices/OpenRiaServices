@@ -58,7 +58,21 @@ namespace OpenRiaServices.Tools
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 // Try to load mono.cecil from same folder as tools
                 var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
-                var cecilPath = toolingAssembly.Location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
+                var location = toolingAssembly.Location;
+#if NET6_0_OR_GREATER
+                string ReplaceLastOccurrence(string source, string find, string replace)
+                {
+                    int place = source.LastIndexOf(find);
+
+                    if (place == -1)
+                        return source;
+
+                    return source.Remove(place, find.Length).Insert(place, replace);
+                }
+                var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
+#else
+                var cecilPath = location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
+#endif
                 AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
 
 
