@@ -427,8 +427,8 @@ namespace OpenRiaServices.Tools
         /// <returns><c>true</c> if the assembly is mscorlib</returns>
         internal static bool IsAssemblyMsCorlib(AssemblyName assemblyName)
         {
-            return (String.Compare(assemblyName.Name, "mscorlib", StringComparison.OrdinalIgnoreCase) == 0 ||
-                assemblyName.Name.StartsWith("System"))
+            return (String.Compare(assemblyName.Name, "mscorlib", StringComparison.OrdinalIgnoreCase) == 0 
+                || String.Compare(assemblyName.Name, "System.Private.CoreLib", StringComparison.OrdinalIgnoreCase) == 0)
                 && TypeUtility.IsSystemAssembly(assemblyName.FullName);
         }
     }
