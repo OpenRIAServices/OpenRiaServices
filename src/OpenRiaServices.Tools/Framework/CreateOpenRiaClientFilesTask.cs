@@ -696,7 +696,7 @@ namespace OpenRiaServices.Tools
                 string generatedFileContent = string.Empty;
 
                 // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
-                //ClientBuildManagerParameter cbmParameter = new ClientBuildManagerParameter()
+                //ClientBuildManagerParameter cbmParameter = new ClientBuildManagerParameter() Not in Net 6
                 //{
                 //    PrecompilationFlags = PrecompilationFlags.ForceDebug,
                 //};
@@ -704,7 +704,7 @@ namespace OpenRiaServices.Tools
                 string sourceDir = this.ServerProjectDirectory;
                 string targetDir = null;
 
-                //using (ClientBuildManager cbm = new ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
+                //using (ClientBuildManager cbm = new ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter)) Not in Net 6
 
                     // Capture the list of assemblies to load into an array to marshal across AppDomains
                 string[] assembliesToLoadArray = assembliesToLoad.ToArray();
@@ -729,7 +729,6 @@ namespace OpenRiaServices.Tools
 
                 // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
                 SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
-                // Must contain 
 
                 // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
                 // This can occur when the build environment is configured incorrectly
