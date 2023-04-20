@@ -129,6 +129,7 @@ namespace OpenRiaServices.Tools.Test
         {
             CleanOpenRiaClientFilesTask task = new CleanOpenRiaClientFilesTask();
             MockBuildEngine mockBuildEngine = new MockBuildEngine();
+            task.BuildEngine = mockBuildEngine;
 
             string tempFolder = CodeGenHelper.GenerateTempFolder();
             try
