@@ -369,7 +369,10 @@ namespace OpenRiaServices.Tools.Test
         public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstance(string serverProjectPath, string clientProjectPath, bool includeClientOutputAssembly)
         {
             CreateOpenRiaClientFilesTask task = new CreateOpenRiaClientFilesTask();
-                      
+
+            MockBuildEngine mockBuildEngine = new MockBuildEngine();
+            task.BuildEngine = mockBuildEngine;
+
             task.Language = "C#";
 
             task.ServerProjectPath = serverProjectPath;
@@ -480,6 +483,9 @@ namespace OpenRiaServices.Tools.Test
             string serverProjectPath = CodeGenHelper.ServerClassLibProjectPath(projectPath);
 
             ValidateDomainServicesTask task = new ValidateDomainServicesTask();
+
+            MockBuildEngine mockBuildEngine = new MockBuildEngine();
+            task.BuildEngine = mockBuildEngine;
 
             task.ProjectPath = serverProjectPath;
             task.Assembly = new TaskItem(CodeGenHelper.ServerClassLibOutputAssembly(task.ProjectPath));

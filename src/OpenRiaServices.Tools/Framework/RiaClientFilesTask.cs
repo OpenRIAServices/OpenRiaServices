@@ -112,6 +112,14 @@ namespace OpenRiaServices.Tools
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        public RiaClientFilesTask()
+        : base()
+        {
+        }
+
+        /// <summary>
         /// Gets the path of the file where to write the list of generated files
         /// </summary>
         /// <returns>The full path to where to write the list of generated files.</returns>
@@ -268,9 +276,9 @@ namespace OpenRiaServices.Tools
         /// <param name="message">Message to log</param>
         public void LogError(string message)
         {
-            //this.HasLoggedErrors = true;
+            this.HasLoggedErrors = true;
             Debug.WriteLine(message);
-            //this.Log.LogError(message);
+            this.Log.LogError(message);
         }
 
         /// <summary>
@@ -279,11 +287,11 @@ namespace OpenRiaServices.Tools
         /// <param name="ex">MessageException to log</param>
         public void LogException(Exception ex)
         {
-            //this.HasLoggedErrors = true;
+            this.HasLoggedErrors = true;
             Debug.WriteLine(ex.Message);
-            //this.Log.LogError("Exception :" + ex.Message);
-            //if (ex.InnerException != null)
-            //    LogException(ex.InnerException);
+            this.Log.LogError("Exception :" + ex.Message);
+            if (ex.InnerException != null)
+                LogException(ex.InnerException);
         }
 
         /// <summary>
@@ -292,8 +300,7 @@ namespace OpenRiaServices.Tools
         /// <param name="message">Message to log</param>
         public void LogWarning(string message)
         {
-            //this.Log.LogWarning(message);
-            Debug.WriteLine(message);
+            this.Log.LogWarning(message);
         }
 
         /// <summary>
@@ -302,8 +309,7 @@ namespace OpenRiaServices.Tools
         /// <param name="message">Message to log</param>
         public void LogMessage(string message)
         {
-            //this.Log.LogMessage(message);
-            Debug.WriteLine(message);
+            this.Log.LogMessage(message);
         }
 
         /// <summary>

@@ -144,6 +144,7 @@ namespace OpenRiaServices.Tools.Test
         {
             CleanOpenRiaClientFilesTask task = new CleanOpenRiaClientFilesTask();
             MockBuildEngine mockBuildEngine = new MockBuildEngine();
+            task.BuildEngine = mockBuildEngine;
 
             string fakeFolder = @"FAKE:\notAFolder";
             string realMessage = null;

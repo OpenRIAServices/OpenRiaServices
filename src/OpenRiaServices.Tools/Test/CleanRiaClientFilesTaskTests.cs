@@ -142,7 +142,8 @@ namespace OpenRiaServices.Tools.Test
         {
             CleanOpenRiaClientFilesTask task = new CleanOpenRiaClientFilesTask();
             MockBuildEngine mockBuildEngine = new MockBuildEngine();
-            
+            task.BuildEngine = mockBuildEngine;
+
             // Test 1 -- null and empty deletes do nothing
             task.SafeFileDelete(null);
             TestHelper.AssertNoErrorsOrWarnings(mockBuildEngine.ConsoleLogger);
