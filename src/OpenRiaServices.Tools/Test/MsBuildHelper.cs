@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Versioning;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
@@ -150,7 +152,11 @@ namespace OpenRiaServices.Tools.Test
                     }
                     else
                     {
-                        project.SetGlobalProperty("TargetFramework", targetFrameworks.Split(';').First());
+                        var frameworks = targetFrameworks.Split(';');
+                        var version = (TargetFrameworkAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Runtime.Versioning.TargetFrameworkAttribute), false).SingleOrDefault();
+                        var isNet472 = version.FrameworkName == ".NETFramework,Version=v4.7.2";
+                        var framework = isNet472 ? "net472" : frameworks.First(f => f != "net472");
+                        project.SetGlobalProperty("TargetFramework", framework);
                     }
                 }
             }
