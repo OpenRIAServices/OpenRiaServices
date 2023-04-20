@@ -315,14 +315,14 @@ namespace OpenRiaServices.Tools
 
             // Write the entire "file" to a single string to permit us to redirect it
             // to a file, a TextBuffer, etc
-            if (!this.CodeGenerationHost.HasLoggedErrors)
-            {
+            //if (!this.CodeGenerationHost.HasLoggedErrors)
+            //{
                 using (TextWriter t = new StringWriter(CultureInfo.InvariantCulture))
                 {
                     this.Provider.GenerateCodeFromCompileUnit(this.CompileUnit, t, this._options);
                     generatedCode = this.FixupVBOptionStatements(t.ToString());
                 }
-            }
+            //}
 
             return generatedCode;
         }

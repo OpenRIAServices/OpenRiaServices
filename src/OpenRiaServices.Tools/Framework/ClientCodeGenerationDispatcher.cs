@@ -21,7 +21,11 @@ namespace OpenRiaServices.Tools
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
     /// AppDomain boundaries.</remarks>
     internal class ClientCodeGenerationDispatcher : MarshalByRefObject, IDisposable
+#if !NET6_0_OR_GREATER
+        , System.Web.Hosting.IRegisteredObject
+#endif
     {
+
         // MEF composition container and part catalog, computed lazily and only once
         private CompositionContainer _compositionContainer;
         private ComposablePartCatalog _partCatalog;
@@ -54,7 +58,7 @@ namespace OpenRiaServices.Tools
 
             try
             {
-                //AppDomainUtilities.ConfigureAppDomain(options);
+                AppDomainUtilities.ConfigureAppDomain(options);
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 // Try to load mono.cecil from same folder as tools
                 var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
@@ -480,7 +484,11 @@ namespace OpenRiaServices.Tools
             return assemblies;
         }
 
-
+        #if !NET6_0_OR_GREATER 
+        void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
+        {
+        }
+        #endif
 
         #region IDisposable members
 

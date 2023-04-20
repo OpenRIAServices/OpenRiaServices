@@ -667,6 +667,7 @@ namespace OpenRiaServices.Tools
             // Therefore, its absence always triggers a code-gen pass, even though this has the
             // negative perf impact of causing a full code gen pass everytime until errors have been
             // resolved.
+            
             if (!needToGenerate)
             {
                 FileInfo fileInfo = new FileInfo(generatedFileName);
@@ -696,15 +697,12 @@ namespace OpenRiaServices.Tools
                 string generatedFileContent = string.Empty;
 
                 // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
-                //ClientBuildManagerParameter cbmParameter = new ClientBuildManagerParameter() Not in Net 6
-                //{
-                //    PrecompilationFlags = PrecompilationFlags.ForceDebug,
-                //};
+                
 
                 string sourceDir = this.ServerProjectDirectory;
                 string targetDir = null;
 
-                //using (ClientBuildManager cbm = new ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter)) Not in Net 6
+                
 
                     // Capture the list of assemblies to load into an array to marshal across AppDomains
                 string[] assembliesToLoadArray = assembliesToLoad.ToArray();
@@ -739,18 +737,28 @@ namespace OpenRiaServices.Tools
                 //        System.Web.Hosting.HostingEnvironment.InitializationException);
                 //}
 
-                //using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
-                //{
-                //    // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
-                //    // the appropriate code generator.
-                //    generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
-                //}
-
-
+#if !NET6_0_OR_GREATER
+                System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter() 
+                {
+                    PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,
+                };
+                using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
+                using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
+                {
+                    // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
+                    // the appropriate code generator.
+                    generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
+                }
+#else
                 // Create the "dispatcher" in the 2nd AppDomain.
                 // This object will find and invoke the appropriate code generator
-                var dispatcher = (ClientCodeGenerationDispatcher)Activator.CreateInstance(typeof(ClientCodeGenerationDispatcher)); ;
-                generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
+                using (var dispatcher = (ClientCodeGenerationDispatcher)Activator.CreateInstance(typeof(ClientCodeGenerationDispatcher)))
+                {
+                    generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
+                }
+#endif
+
+
 
 
                 // Tell the user where we are writing the generated code
