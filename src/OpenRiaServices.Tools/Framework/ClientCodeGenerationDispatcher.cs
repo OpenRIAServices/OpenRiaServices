@@ -88,12 +88,13 @@ namespace OpenRiaServices.Tools
                 }
                 var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
+                LoadAssembly(cecilPath);
 #else
                 AppDomainUtilities.ConfigureAppDomain(options);
                 var cecilPath = location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
-#endif
                 AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
+#endif
 
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
@@ -137,8 +138,7 @@ namespace OpenRiaServices.Tools
             if (serverAssemblyPath != null)
             {
 #if NET6_0_OR_GREATER
-                var serverAssemblyName = AssemblyName.GetAssemblyName(serverAssemblyPath);
-                var serverAssembly = LoadFromAssemblyName(serverAssemblyName);
+                Assembly serverAssembly = LoadAssembly(serverAssemblyPath);
 #else
                 var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
 #endif
@@ -164,8 +164,17 @@ namespace OpenRiaServices.Tools
             else
             {
                 loggingService.LogError(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Missing_OpenRiaServices_Reference, filename));
-            }
+            }            
         }
+
+#if NET6_0_OR_GREATER
+        private Assembly LoadAssembly(string assemblyPath)
+        {
+            var assemblyName = AssemblyName.GetAssemblyName(assemblyPath);
+            var assembly = LoadFromAssemblyName(assemblyName);
+            return assembly;
+        }
+#endif
 
         private static (string FileName, string serverAsmPath) GetServerAssembly(SharedCodeServiceParameters parameters)
         {
