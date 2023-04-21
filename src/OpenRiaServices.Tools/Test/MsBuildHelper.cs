@@ -68,7 +68,7 @@ namespace OpenRiaServices.Tools.Test
                     if (!assemblies.Contains(assemblyPath))
                         assemblies.Add(assemblyPath);
                 }
-                
+
                 foreach (var reference in project.ProjectInstance.GetItems("_ResolvedProjectReferencePaths"))
                 {
                     string outputAssembly = GetFullPath(projectPath, reference);

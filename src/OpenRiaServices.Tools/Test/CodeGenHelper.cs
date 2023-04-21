@@ -122,6 +122,9 @@ namespace OpenRiaServices.Tools.Test
             // with multiple assemblies with the same types
             string deploymentDir = Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
             List<string> assemblies = MsBuildHelper.GetReferenceAssemblies(serverProjectPath);
+#if NET6_0_OR_GREATER
+            assemblies.Add("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\bin\\Debug\\net6.0\\OpenRiaServices.Server.dll");
+#endif
             MapAssemblyReferencesToDeployment(deploymentDir, assemblies);
             return assemblies;
         }
