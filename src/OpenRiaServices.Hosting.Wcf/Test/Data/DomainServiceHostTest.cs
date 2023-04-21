@@ -123,16 +123,16 @@ namespace OpenRiaServices.Hosting.UnitTests
             return (THost)Activator.CreateInstance(typeof(THost), typeof(TService), baseAddresses);
         }
 
-#if !MEDIUM_TRUST
+#if !MEDIUM_TRUST && NET472
 
         [Ignore]
-#endif
         [TestMethod]
         [Description("Verifies the DomainServicesSection can be created in partial trust")]
         public void DomainServiceHost_MediumTrust_DomainServicesSection()
         {
             SandBoxer.ExecuteInMediumTrust(Callback_MediumTrust_DomainServicesSection);
         }
+#endif
 
         public static void Callback_MediumTrust_DomainServicesSection()
         {

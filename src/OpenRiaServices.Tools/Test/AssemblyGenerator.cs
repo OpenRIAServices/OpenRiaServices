@@ -24,6 +24,10 @@ namespace OpenRiaServices.Tools.Test
         private string _userCode;
         private readonly bool _useFullTypeNames;
 
+#if NET6_0_OR_GREATER
+        private MetadataLoadContext _metadataLoadContext;
+#endif
+
 
         public AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
             this(isCSharp, false, domainServiceTypes)
@@ -32,6 +36,10 @@ namespace OpenRiaServices.Tools.Test
 
         public AssemblyGenerator(bool isCSharp, bool useFullTypeNames, IEnumerable<Type> domainServiceTypes)
         {
+#if NET6_0_OR_GREATER
+            var resolver = new PathAssemblyResolver();
+            _metadataLoadContext = new MetadataLoadContext(
+#endif
             this._isCSharp = isCSharp;
             this._useFullTypeNames = useFullTypeNames;
             this._domainServiceTypes = domainServiceTypes;
@@ -372,7 +380,11 @@ namespace OpenRiaServices.Tools.Test
                     }
                     try
                     {
+#if NET472
                         Assembly refAssy = Assembly.ReflectionOnlyLoadFrom(refAssyName);
+#else
+                        
+#endif
                         loadedAssemblies[refAssy.GetName()] = refAssy;
                     }
                     catch (Exception ex)
