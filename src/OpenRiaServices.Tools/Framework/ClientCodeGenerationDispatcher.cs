@@ -20,10 +20,13 @@ namespace OpenRiaServices.Tools
     /// <remarks>
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
     /// AppDomain boundaries.</remarks>
-    internal class ClientCodeGenerationDispatcher : MarshalByRefObject, IDisposable
+    internal class ClientCodeGenerationDispatcher :
 #if !NET6_0_OR_GREATER
-        , System.Web.Hosting.IRegisteredObject
+        MarshalByRefObject, System.Web.Hosting.IRegisteredObject,
+#else
+         System.Runtime.Loader.AssemblyLoadContext,
 #endif
+        IDisposable
     {
 
         // MEF composition container and part catalog, computed lazily and only once
@@ -31,12 +34,23 @@ namespace OpenRiaServices.Tools
         private ComposablePartCatalog _partCatalog;
         private const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.Server.dll";
 
+#if NET6_0_OR_GREATER
+        private System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
+
+        public ClientCodeGenerationDispatcher()
+        {
+            var path = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\bin\\Debug\\net6.0\\OpenRiaServices.Server.dll";
+            _assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(path);
+        }
+
+#else
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
         /// </summary>
         public ClientCodeGenerationDispatcher()
         {
         }
+#endif
 
         // MEF import of all code generators
         [ImportMany(typeof(IDomainServiceClientCodeGenerator))]
@@ -114,16 +128,20 @@ namespace OpenRiaServices.Tools
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="loggingService">The logging service.</param>
-        private static void LoadOpenRiaServicesServerAssembly(SharedCodeServiceParameters parameters, ILoggingService loggingService)
+        private void LoadOpenRiaServicesServerAssembly(SharedCodeServiceParameters parameters, ILoggingService loggingService)
         {
             // Try to load the OpenRiaServices.DomainServies.Server assembly using the one used by the server project
             // This way we can be sure that codegen works with both signed and unsigned server assembly while
             // making sure that only a single version is loaded
-            var filename = OpenRiaServices_DomainServices_Server_Assembly;
-            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(filename));
+            var (filename, serverAssemblyPath) = GetServerAssembly(parameters);
             if (serverAssemblyPath != null)
             {
+#if NET6_0_OR_GREATER
+                var serverAssemblyName = AssemblyName.GetAssemblyName(serverAssemblyPath);
+                var serverAssembly = LoadFromAssemblyName(serverAssemblyName);
+#else
                 var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
+#endif
                 if (serverAssembly != null)
                 {
                     // Since this assembly (OpenRiaServices.Tools) requires the Server assembly to be loaded
@@ -147,6 +165,13 @@ namespace OpenRiaServices.Tools
             {
                 loggingService.LogError(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Missing_OpenRiaServices_Reference, filename));
             }
+        }
+
+        private static (string FileName, string serverAsmPath) GetServerAssembly(SharedCodeServiceParameters parameters)
+        {
+            var filename = OpenRiaServices_DomainServices_Server_Assembly;
+            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(filename));
+            return (filename, serverAssemblyPath);
         }
 
         /// <summary>
@@ -486,11 +511,34 @@ namespace OpenRiaServices.Tools
             return assemblies;
         }
 
-        #if !NET6_0_OR_GREATER 
+#if !NET6_0_OR_GREATER
         void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
         {
         }
-        #endif
+#else
+        protected override Assembly Load(AssemblyName assemblyName)
+        {
+            string assemblyPath = _assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
+            if (assemblyPath != null)
+            {
+                return LoadFromAssemblyPath(assemblyPath);
+            }
+
+            return null;
+        }
+
+        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
+        {
+            string libraryPath = _assemblyDependencyResolver.ResolveUnmanagedDllToPath(unmanagedDllName);
+
+            if (libraryPath != null)
+            {
+                return LoadUnmanagedDllFromPath(libraryPath);
+            }
+
+            return IntPtr.Zero;
+        }
+#endif
 
         #region IDisposable members
 

@@ -752,7 +752,7 @@ namespace OpenRiaServices.Tools
 #else
                 // Create the "dispatcher" in the 2nd AppDomain.
                 // This object will find and invoke the appropriate code generator
-                using (var dispatcher = (ClientCodeGenerationDispatcher)Activator.CreateInstance(typeof(ClientCodeGenerationDispatcher)))
+                using (var dispatcher = new ClientCodeGenerationDispatcher())
                 {
                     generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
                 }
