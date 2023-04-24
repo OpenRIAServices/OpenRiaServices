@@ -7,6 +7,7 @@ using OpenRiaServices.Server.Test.Utilities;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.CodeAnalysis.Text;
+using System.Runtime.InteropServices;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -37,8 +38,9 @@ namespace OpenRiaServices.Tools.Test
         public AssemblyGenerator(bool isCSharp, bool useFullTypeNames, IEnumerable<Type> domainServiceTypes)
         {
 #if NET6_0_OR_GREATER
-            var paths = domainServiceTypes.Select(t => t.Assembly.Location);
-
+            var paths = domainServiceTypes.Select(t => t.Assembly.Location).ToHashSet();
+            string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
+            paths.UnionWith(runtimeAssemblies);
             var resolver = new PathAssemblyResolver(paths);
             _metadataLoadContext = new MetadataLoadContext(resolver);
 #endif
@@ -397,7 +399,7 @@ namespace OpenRiaServices.Tools.Test
 #if NET472
                 assy = Assembly.ReflectionOnlyLoad(generatedAssembly.ToArray());
 #else
-                assy = _metadataLoadContext.LoadFromAssemblyPath(generatedAssembly.ToString());
+                assy = _metadataLoadContext.LoadFromByteArray(generatedAssembly.ToArray());
 #endif
                 Assert.IsNotNull(assy);
 
