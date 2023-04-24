@@ -37,8 +37,10 @@ namespace OpenRiaServices.Tools.Test
         public AssemblyGenerator(bool isCSharp, bool useFullTypeNames, IEnumerable<Type> domainServiceTypes)
         {
 #if NET6_0_OR_GREATER
-            var resolver = new PathAssemblyResolver();
-            _metadataLoadContext = new MetadataLoadContext(
+            var paths = domainServiceTypes.Select(t => t.Assembly.Location);
+
+            var resolver = new PathAssemblyResolver(paths);
+            _metadataLoadContext = new MetadataLoadContext(resolver);
 #endif
             this._isCSharp = isCSharp;
             this._useFullTypeNames = useFullTypeNames;
@@ -383,7 +385,7 @@ namespace OpenRiaServices.Tools.Test
 #if NET472
                         Assembly refAssy = Assembly.ReflectionOnlyLoadFrom(refAssyName);
 #else
-                        
+                        Assembly refAssy = _metadataLoadContext.LoadFromAssemblyPath(refAssyName);
 #endif
                         loadedAssemblies[refAssy.GetName()] = refAssy;
                     }
@@ -392,8 +394,11 @@ namespace OpenRiaServices.Tools.Test
                         System.Diagnostics.Debug.WriteLine(" failed to load " + refAssyName + ":\r\n" + ex.Message);
                     }
                 }
-
+#if NET472
                 assy = Assembly.ReflectionOnlyLoad(generatedAssembly.ToArray());
+#else
+                assy = _metadataLoadContext.LoadFromAssemblyPath(generatedAssembly.ToString());
+#endif
                 Assert.IsNotNull(assy);
 
                 AssemblyName[] refNames = assy.GetReferencedAssemblies();
@@ -407,7 +412,11 @@ namespace OpenRiaServices.Tools.Test
                     {
                         try
                         {
+#if NET472
                             Assembly refAssy = Assembly.ReflectionOnlyLoad(refName.FullName);
+#else
+                            Assembly refAssy = _metadataLoadContext.LoadFromAssemblyPath(refName.FullName);
+#endif
                             loadedAssemblies[refName] = refAssy;
                         }
                         catch (Exception ex)
@@ -451,6 +460,9 @@ namespace OpenRiaServices.Tools.Test
         {
             this._generatedTypes = null;
             this._generatedAssembly = null;
+#if NET6_0_OR_GREATER
+            _metadataLoadContext?.Dispose();
+#endif
         }
 
         #endregion

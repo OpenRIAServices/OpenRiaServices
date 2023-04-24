@@ -21,6 +21,12 @@ using System.Web;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
+#if NET472
+
+#else
+using Microsoft.AspNetCore.Http;
+#endif
+
 namespace OpenRiaServices.Server.Test
 {
     using System.Security;

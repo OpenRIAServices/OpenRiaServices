@@ -3,7 +3,6 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.ServiceModel;
-using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
 using System.Web;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -20,6 +19,7 @@ namespace OpenRiaServices.Hosting.UnitTests
     [TestClass]
     public class DomainServiceHostTest
     {
+#if NET472
         [TestMethod]
         [Description("Tests that the built-in DomainServiceHost exposes 3 endpoints by default.")]
         public void DomainServiceHost_DefaultBehaviors()
@@ -27,9 +27,9 @@ namespace OpenRiaServices.Hosting.UnitTests
             DomainServiceHost host = this.CreateHost<DomainServiceHost>();
 
             // Verify we require ASP.NET compat mode.
-            var aspNetCompatModeAtt = host.Description.Behaviors.Find<AspNetCompatibilityRequirementsAttribute>();
+            var aspNetCompatModeAtt = host.Description.Behaviors.Find<System.ServiceModel.Activation.AspNetCompatibilityRequirementsAttribute>();
             Assert.IsNotNull(aspNetCompatModeAtt, "ASP.NET compat mode behavior not found.");
-            Assert.AreEqual(AspNetCompatibilityRequirementsMode.Required, aspNetCompatModeAtt.RequirementsMode);
+            Assert.AreEqual(System.ServiceModel.Activation.AspNetCompatibilityRequirementsMode.Required, aspNetCompatModeAtt.RequirementsMode);
 
             // Verify service behavior defaults.
             var serviceBehaviorAtt = host.Description.Behaviors.Find<ServiceBehaviorAttribute>();
@@ -58,7 +58,7 @@ namespace OpenRiaServices.Hosting.UnitTests
             DomainServiceHost host = this.CreateHost<DomainServiceHost>();
             var eps = host.Description.Endpoints;
 
-            Assert.AreEqual(1, eps.Count, "Unexpected amount of endpoints.");
+            Assert.AreEqual(1, eps.Count(), "Unexpected amount of endpoints.");
 
             // REST w/ binary endpoint.
             Assert.IsTrue(eps.Any(ep => ep.Address.Uri.OriginalString.EndsWith("/binary")));
@@ -75,6 +75,7 @@ namespace OpenRiaServices.Hosting.UnitTests
             Assert.AreEqual(1, host.BaseAddresses.Count);
             Assert.AreEqual(Uri.UriSchemeHttps, host.BaseAddresses[0].Scheme);
         }
+#endif
 
         [TestMethod]
         [Description("Tests that EndpointFactory.Name returns a string by default and does not accept nulls.")]
@@ -123,7 +124,8 @@ namespace OpenRiaServices.Hosting.UnitTests
             return (THost)Activator.CreateInstance(typeof(THost), typeof(TService), baseAddresses);
         }
 
-#if !MEDIUM_TRUST && NET472
+#if NET472
+#if MEDIUM_TRUST
 
         [Ignore]
         [TestMethod]
@@ -132,6 +134,7 @@ namespace OpenRiaServices.Hosting.UnitTests
         {
             SandBoxer.ExecuteInMediumTrust(Callback_MediumTrust_DomainServicesSection);
         }
+#endif
 #endif
 
         public static void Callback_MediumTrust_DomainServicesSection()

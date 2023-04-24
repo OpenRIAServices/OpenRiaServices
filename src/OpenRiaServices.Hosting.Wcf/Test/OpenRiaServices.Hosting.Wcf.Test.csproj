@@ -21,6 +21,9 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.XML" />
   </ItemGroup>
+  <ItemGroup  Condition="'$(TargetFramework)' != 'net472' ">
+    <PackageReference Include="System.ServiceModel.Http" Version="4.10.2" />
+  </ItemGroup>
   <ItemGroup>
     
   </ItemGroup>

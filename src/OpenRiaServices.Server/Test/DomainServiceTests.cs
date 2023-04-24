@@ -47,19 +47,6 @@ namespace OpenRiaServices.Server.Test
             System.Threading.Thread.CurrentThread.CurrentUICulture = CultureInfo.InvariantCulture;
         }
 
-        /// <summary>
-        /// Verify that both DAL providers support accessing their respective
-        /// contexts in the constructor.
-        /// </summary>
-        [TestMethod]
-        [WorkItem(827125)]
-        public void DomainServiceConstructor_ContextAccess()
-        {
-            LTSService_ConstructorInit lts = new LTSService_ConstructorInit();
-            Assert.IsNotNull(lts.DataContext.LoadOptions);
-
-            EFService_ConstructorInit ef = new EFService_ConstructorInit();
-        }
 
         [TestMethod]
         [WorkItem(801321)]
@@ -1948,17 +1935,6 @@ namespace OpenRiaServices.Server.Test
 
     #endregion
 
-    [EnableClientAccess]
-    public class LTSService_ConstructorInit : LinqToSqlDomainService<DataTests.Northwind.LTS.NorthwindDataContext>
-    {
-        public LTSService_ConstructorInit()
-        {
-            DataLoadOptions loadOpts = new DataLoadOptions();
-            loadOpts.LoadWith<DataTests.Northwind.LTS.Order>(p => p.Order_Details);
-
-            this.DataContext.LoadOptions = loadOpts;
-        }
-    }
 
     [EnableClientAccess]
     public class EFService_ConstructorInit : LinqToEntitiesDomainService<NorthwindModel.NorthwindEntities>
@@ -2146,7 +2122,7 @@ namespace OpenRiaServices.Server.Test
         }
 
         [Editable(false)]
-        public List<Binary> ListBinaryReadOnlyProperty
+        public List<System.Data.Linq.Binary> ListBinaryReadOnlyProperty
         {
             get;
             set;

@@ -4,7 +4,6 @@ using System.ComponentModel.DataAnnotations;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.ServiceModel.Activation;
 using System.ServiceModel.Description;
 using OpenRiaServices.Server;
 using System.Web;
