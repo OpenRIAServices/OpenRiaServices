@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
 
 namespace OpenRiaServices.Tools
 {
@@ -104,7 +105,14 @@ namespace OpenRiaServices.Tools
             string propertyName = propertyInfo.Name;
 
             // We strip "TypeId" from all Attributes.  It is a property we cannot set via setters or ctor
-            return propertyName.Equals("TypeId", StringComparison.Ordinal) ? null : propertyName;
+            if (propertyName.Equals("TypeId", StringComparison.Ordinal))
+                return null;
+#if NET6_0_OR_GREATER
+            // We strip "TypeId" from all CustomValidationAttribute for NET 6.0 since we cannot set it, it is calculated indirectly
+            else if (attribute is CustomValidationAttribute && propertyInfo.Name == nameof(CustomValidationAttribute.RequiresValidationContext))
+                return null;
+#endif
+            return propertyName;
         }
 
         /// <summary>

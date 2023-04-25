@@ -195,7 +195,7 @@ namespace OpenRiaServices.Tools
 
                 bool attributePropagated = false;
                 bool isDataAnnotationsAttribute = string.Equals(attributeType.Namespace, typeof(ValidationAttribute).Namespace, StringComparison.Ordinal);
-
+                var name = attributeType.Name;
                 ICustomAttributeBuilder cab = GetCustomAttributeBuilder(attributeType);
 
                 if (cab != null)
