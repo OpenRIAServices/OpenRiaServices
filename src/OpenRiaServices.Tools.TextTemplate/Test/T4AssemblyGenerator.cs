@@ -32,10 +32,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
         private string _userCode;
         private string _userCodeFile;
         private readonly bool _useFullTypeNames;
-
-#if NET6_0_OR_GREATER
         private MetadataLoadContext _metadataLoadContext;
-#endif
 
         public T4AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
             this(isCSharp, false, domainServiceTypes)
@@ -44,13 +41,11 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
 
         public T4AssemblyGenerator(bool isCSharp, bool useFullTypeNames, IEnumerable<Type> domainServiceTypes)
         {
-#if NET6_0_OR_GREATER
             var paths = domainServiceTypes.Select(t => t.Assembly.Location).ToHashSet();
             string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             paths.UnionWith(runtimeAssemblies);
             var resolver = new PathAssemblyResolver(paths);
             _metadataLoadContext = new MetadataLoadContext(resolver);
-#endif
             this._isCSharp = isCSharp;
             this._useFullTypeNames = useFullTypeNames;
             this._domainServiceTypes = domainServiceTypes;
@@ -313,11 +308,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                     }
                     try
                     {
-#if NET472
-                        Assembly refAssy = Assembly.ReflectionOnlyLoadFrom(refAssyName);
-#else
                         Assembly refAssy = _metadataLoadContext.LoadFromAssemblyPath(refAssyName);
-#endif
                         loadedAssemblies[refAssy.GetName()] = refAssy;
                     }
                     catch (Exception ex)
@@ -325,11 +316,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                         System.Diagnostics.Debug.WriteLine(" failed to load " + refAssyName + ":\r\n" + ex.Message);
                     }
                 }
-#if NET472
-                assy = Assembly.ReflectionOnlyLoad(generatedAssembly.ToArray());
-#else
                 assy = _metadataLoadContext.LoadFromByteArray(generatedAssembly.ToArray());
-#endif
                 Assert.IsNotNull(assy);
 
                 AssemblyName[] refNames = assy.GetReferencedAssemblies();
@@ -343,11 +330,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                     {
                         try
                         {
-#if NET472
-                            Assembly refAssy = Assembly.ReflectionOnlyLoad(refName.FullName);
-#else
                             Assembly refAssy = _metadataLoadContext.LoadFromAssemblyPath(refName.FullName);
-#endif
                             loadedAssemblies[refName] = refAssy;
                         }
                         catch (Exception ex)
@@ -392,9 +375,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             this._generatedAssembly = null;
             this.SafeDelete(this._generatedCodeFile);
             this.SafeDelete(this._userCodeFile);
-#if NET6_0_OR_GREATER
             _metadataLoadContext?.Dispose();
-#endif
             if (this._generatedAssembly != null)
             {
                 this.SafeDelete(this._generatedAssembly.Location);

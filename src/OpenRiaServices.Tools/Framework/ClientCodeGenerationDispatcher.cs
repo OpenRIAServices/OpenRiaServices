@@ -10,6 +10,8 @@ using System.Reflection;
 using OpenRiaServices.Server;
 using System.Text;
 using OpenRiaServices.Tools.SharedTypes;
+using System.Runtime.InteropServices;
+using System.IO;
 
 namespace OpenRiaServices.Tools
 {
@@ -20,37 +22,21 @@ namespace OpenRiaServices.Tools
     /// <remarks>
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
     /// AppDomain boundaries.</remarks>
-    internal class ClientCodeGenerationDispatcher :
-#if !NET6_0_OR_GREATER
-        MarshalByRefObject, System.Web.Hosting.IRegisteredObject,
-#else
-         System.Runtime.Loader.AssemblyLoadContext,
-#endif
-        IDisposable
+    internal class ClientCodeGenerationDispatcher : IDisposable
     {
 
         // MEF composition container and part catalog, computed lazily and only once
         private CompositionContainer _compositionContainer;
         private ComposablePartCatalog _partCatalog;
         private const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.Server.dll";
-
-#if NET6_0_OR_GREATER
-        private System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
+        private MetadataLoadContext _metadataLoadContext;
 
         public ClientCodeGenerationDispatcher()
         {
-            var path = typeof(DomainService).Assembly.Location;
-            _assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(path);
+            string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
+            var resolver = new PathAssemblyResolver(runtimeAssemblies);
+            _metadataLoadContext = new MetadataLoadContext(resolver);
         }
-
-#else
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
-        /// </summary>
-        public ClientCodeGenerationDispatcher()
-        {
-        }
-#endif
 
         // MEF import of all code generators
         [ImportMany(typeof(IDomainServiceClientCodeGenerator))]
@@ -76,7 +62,6 @@ namespace OpenRiaServices.Tools
                 // Try to load mono.cecil from same folder as tools
                 var location = toolingAssembly.Location;
                 
-#if NET6_0_OR_GREATER
                 string ReplaceLastOccurrence(string source, string find, string replace)
                 {
                     int place = source.LastIndexOf(find);
@@ -89,12 +74,6 @@ namespace OpenRiaServices.Tools
                 var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 LoadAssembly(cecilPath);
-#else
-                AppDomainUtilities.ConfigureAppDomain(options);
-                var cecilPath = location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
-                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
-                AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
-#endif
 
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
@@ -137,11 +116,7 @@ namespace OpenRiaServices.Tools
             var (filename, serverAssemblyPath) = GetServerAssembly(parameters);
             if (serverAssemblyPath != null)
             {
-#if NET6_0_OR_GREATER
                 Assembly serverAssembly = LoadAssembly(serverAssemblyPath);
-#else
-                var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
-#endif
                 if (serverAssembly != null)
                 {
                     // Since this assembly (OpenRiaServices.Tools) requires the Server assembly to be loaded
@@ -166,15 +141,12 @@ namespace OpenRiaServices.Tools
                 loggingService.LogError(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Missing_OpenRiaServices_Reference, filename));
             }            
         }
-
-#if NET6_0_OR_GREATER
+        
         private Assembly LoadAssembly(string assemblyPath)
         {
-            var assemblyName = AssemblyName.GetAssemblyName(assemblyPath);
-            var assembly = LoadFromAssemblyName(assemblyName);
+            var assembly = _metadataLoadContext.LoadFromAssemblyPath(assemblyPath);
             return assembly;
         }
-#endif
 
         private static (string FileName, string serverAsmPath) GetServerAssembly(SharedCodeServiceParameters parameters)
         {
@@ -519,35 +491,6 @@ namespace OpenRiaServices.Tools
 
             return assemblies;
         }
-
-#if !NET6_0_OR_GREATER
-        void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
-        {
-        }
-#else
-        protected override Assembly Load(AssemblyName assemblyName)
-        {
-            string assemblyPath = _assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
-            if (assemblyPath != null)
-            {
-                return LoadFromAssemblyPath(assemblyPath);
-            }
-
-            return null;
-        }
-
-        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
-        {
-            string libraryPath = _assemblyDependencyResolver.ResolveUnmanagedDllToPath(unmanagedDllName);
-
-            if (libraryPath != null)
-            {
-                return LoadUnmanagedDllFromPath(libraryPath);
-            }
-
-            return IntPtr.Zero;
-        }
-#endif
 
         #region IDisposable members
 
