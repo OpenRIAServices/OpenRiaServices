@@ -62,8 +62,8 @@ namespace OpenRiaServices.Tools.Test
 
         internal static void GenerateAndVerifyCodeGenerators(Type[] domainServiceTypes, Type[] sharedTypes, string[] refAssemblies)
         {
-            Assembly codeDomCodeGenAssembly = null;
-            Assembly t4CodeGenAssembly = null;
+            Type[] codeDomCodeGenAssemblyTypes = null;
+            Type[] t4CodeGenAssemblyTypes = null;
             using (AssemblyGenerator asmGen = new AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
             {
                 foreach (Type t in sharedTypes)
@@ -79,36 +79,34 @@ namespace OpenRiaServices.Tools.Test
                 string generatedCode = asmGen.GeneratedCode;
                 Assert.IsFalse(string.IsNullOrEmpty(generatedCode), "Failed to generate code:\r\n" + asmGen.ConsoleLogger.Errors);
 
-                codeDomCodeGenAssembly = asmGen.GeneratedAssembly;
+                Assembly codeDomCodeGenAssembly = asmGen.GeneratedAssembly;
                 Assert.IsNotNull(codeDomCodeGenAssembly, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
+                codeDomCodeGenAssemblyTypes = codeDomCodeGenAssembly.GetTypes();
 
-            }
 
-            using (T4AssemblyGenerator asmGen = new T4AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
+            using (T4AssemblyGenerator asmGenT4 = new T4AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
             {
                 foreach (Type t in sharedTypes)
                 {
-                    asmGen.MockSharedCodeService.AddSharedType(t);
+                    asmGenT4.MockSharedCodeService.AddSharedType(t);
                 }
 
                 foreach (string refAssembly in refAssemblies)
                 {
-                    asmGen.ReferenceAssemblies.Add(refAssembly);
+                    asmGenT4.ReferenceAssemblies.Add(refAssembly);
                 }
 
-                string generatedCode = asmGen.GeneratedCode;
-                Assert.IsFalse(string.IsNullOrEmpty(generatedCode), "Failed to generate code:\r\n" + asmGen.ConsoleLogger.Errors);
+                string generatedCodeT4 = asmGenT4.GeneratedCode;
+                Assert.IsFalse(string.IsNullOrEmpty(generatedCodeT4), "Failed to generate code:\r\n" + asmGenT4.ConsoleLogger.Errors);
 
-                t4CodeGenAssembly = asmGen.GeneratedAssembly;
-                Assert.IsNotNull(t4CodeGenAssembly, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
+                var t4CodeGenAssembly = asmGenT4.GeneratedAssembly;
+                Assert.IsNotNull(t4CodeGenAssembly, "Assembly failed to build: " + asmGenT4.ConsoleLogger.Errors);
+                t4CodeGenAssemblyTypes = t4CodeGenAssembly.GetTypes();
+                
+                    TestHelper.VerifyTypeEquality(codeDomCodeGenAssemblyTypes, t4CodeGenAssemblyTypes);
+                }
             }
 
-            TestHelper.VerifyAssembliesEquality(codeDomCodeGenAssembly, t4CodeGenAssembly);
-        }
-
-        internal static void VerifyAssembliesEquality(Assembly a, Assembly b)
-        {
-            TestHelper.VerifyTypeEquality(a.GetTypes(), b.GetTypes());
         }
 
         private static void VerifyTypeEquality(Type[] t1, Type[] t2)

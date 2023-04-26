@@ -151,7 +151,7 @@ namespace OpenRiaServices.Tools.Test
             };
 
             MethodBase[] sharedMethods = new MethodBase[] {
-                typeof(string).GetMethod("CopyTo"),
+                typeof(string).GetMethod("CopyTo", new []{typeof(Int32), typeof(Char[]), typeof(Int32), typeof(Int32) }),
             };
 
             string projectPath = null;
