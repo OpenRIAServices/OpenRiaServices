@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client
 {
@@ -22,11 +24,11 @@ namespace OpenRiaServices.Client
         /// if the operation takes no parameters.</param>
         /// <param name="completeAction">Optional action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
+        /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
         internal InvokeOperation(string operationName, IDictionary<string, object> parameters,
             Action<InvokeOperation> completeAction, object userState,
-            bool supportCancellation)
-            : base(userState, supportCancellation)
+            CancellationTokenSource cancellationTokenSource)
+            : base(userState, cancellationTokenSource)
         {
             if (string.IsNullOrEmpty(operationName))
             {
@@ -88,7 +90,7 @@ namespace OpenRiaServices.Client
         /// Completes the load operation with the specified error.
         /// </summary>
         /// <param name="error">The error.</param>
-        internal new void SetError(Exception error)
+        private protected new void SetError(Exception error)
         {
             if (error is DomainOperationException doe
                 && doe.ValidationErrors.Any())
@@ -104,12 +106,12 @@ namespace OpenRiaServices.Client
         /// Completes the invoke operation with the specified result.
         /// </summary>
         /// <param name="result">The result.</param>
-        internal void Complete(InvokeResult result)
+        private protected void SetResult(InvokeResult result)
         {
             System.Diagnostics.Debug.Assert(this.Value is null);
             base.Complete(result);
 
-            if (this.Value is object)
+            if (this.Value is not null)
             {
                 this.RaisePropertyChanged(nameof(Value));
             }
@@ -139,13 +141,29 @@ namespace OpenRiaServices.Client
         /// <param name="parameters">The parameters to the operation.</param>
         /// <param name="completeAction">Action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
-        /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
-        internal InvokeOperation(string operationName, IDictionary<string, object> parameters,
+        /// <param name="invokeResultTask">Task which, when completed, will Complete the operation and set either <see cref="Value"/>, cancelled or error</param>
+        /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
+        public InvokeOperation(string operationName, IDictionary<string, object> parameters,
             Action<InvokeOperation<TValue>> completeAction, object userState,
-            bool supportCancellation)
-            : base(operationName, parameters, /* completeAction */ null, /* userState */ userState, /* supportCancellation */ supportCancellation)
+            Task<InvokeResult<TValue>> invokeResultTask,
+            CancellationTokenSource cancellationTokenSource)
+            : base(operationName, parameters, /* completeAction */ null, /* userState */ userState, /* supportCancellation */ cancellationTokenSource)
         {
             this._completeAction = completeAction;
+
+            if (invokeResultTask.IsCompleted)
+                CompleteTask(invokeResultTask);
+            else
+            {
+                invokeResultTask.ContinueWith(static (loadTask, state) =>
+                {
+                    ((InvokeOperation<TValue>)state).CompleteTask(loadTask);
+                }
+                , (object)this
+                , CancellationToken.None
+                , TaskContinuationOptions.HideScheduler
+                , CurrentSynchronizationContextTaskScheduler);
+            }
         }
 
         /// <summary>
@@ -163,7 +181,6 @@ namespace OpenRiaServices.Client
             }
         }
 
-
         /// <summary>
         /// The <see cref="IInvokeResult"/> for this operation.
         /// </summary>
@@ -175,6 +192,22 @@ namespace OpenRiaServices.Client
         protected override void InvokeCompleteAction()
         {
             this._completeAction?.Invoke(this);
+        }
+
+        internal void CompleteTask(Task<InvokeResult<TValue>> task)
+        {
+            if (task.IsCanceled)
+            {
+                SetCancelled();
+            }
+            else if (task.Exception != null)
+            {
+                SetError(ExceptionHandlingUtility.GetUnwrappedException(task.Exception));
+            }
+            else
+            {
+                SetResult(task.Result);
+            }
         }
     }
 }

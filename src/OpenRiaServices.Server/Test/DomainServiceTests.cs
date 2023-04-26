@@ -18,6 +18,7 @@ using TestDomainServices;
 using System.Threading.Tasks;
 using System.Threading;
 using OpenRiaServices.Server.UnitTesting;
+using OpenRiaServices.Server.EntityFrameworkCore;
 
 namespace OpenRiaServices.Server.Test
 {
@@ -547,9 +548,17 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void ObjectContextExtensions_AttachAsModified()
         {
-            TestDomainServices.EF.Northwind nw = new TestDomainServices.EF.Northwind();
-            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
-            nw.Initialize(ctxt);
+            // Ensure metadata (TypeDescriptors) are initialised
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
+
+            var expectedChangedProperties = new []
+            {
+                "CategoryName",
+                "Description",
+                "Picture"
+            };
+
+            NorthwindModel.NorthwindEntities ctx = new NorthwindModel.NorthwindEntities();
 
             var current = new NorthwindModel.Category()
             {
@@ -565,12 +574,114 @@ namespace OpenRiaServices.Server.Test
                 CategoryName = "Category"
             };
 
-            ObjectContextExtensions.AttachAsModified(nw.ObjectContext.Categories, current, original);
+            ObjectContextExtensions.AttachAsModified(ctx.Categories, current, original);
 
-            var currentEntry = nw.ObjectContext.ObjectStateManager.GetObjectStateEntry(current);
+            var currentEntry = ctx.ObjectStateManager.GetObjectStateEntry(current);
+            string[] actualChangedProperties = currentEntry.GetModifiedProperties().ToArray();
+            
+            CollectionAssert.AreEquivalent(expectedChangedProperties, actualChangedProperties);
+        }
 
-            string[] changedProperties = currentEntry.GetModifiedProperties().ToArray();
-            Assert.IsTrue(changedProperties.Contains("Description"));
+        // Verify that AttachAsModified works correctly when no original values are provided for non-concurrency properties.
+        [TestMethod]
+        public void DbContextEFCoreExtensions_AttachAsModifiedCore()
+        {
+            // Ensure metadata (TypeDescriptors) are initialised
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Northwind));
+
+            var expectedChangedProperties = new[]
+            {
+                "CategoryName",
+                "Description",
+                "Picture"
+            };
+            var dbContexct = new EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities();
+            dbContexct.ChangeTracker.AutoDetectChangesEnabled = false;
+
+            var current = new EFCoreModels.Northwind.Category()
+            {
+                CategoryID = 1,
+                CategoryName = "Category",
+                Description = "My category"
+            };
+            var original = new EFCoreModels.Northwind.Category()
+            {
+                CategoryID = 1,
+                CategoryName = "Category"
+            };
+
+            DbContextEFCoreExtensions.AttachAsModified(dbContexct.Categories, current, original, dbContexct);
+
+            string[] actualChangedProperties = dbContexct.Entry(current).Properties.Where(p => p.IsModified).Select(p => p.Metadata.Name).ToArray();
+
+            CollectionAssert.AreEquivalent(expectedChangedProperties, actualChangedProperties);
+        }
+
+        [TestMethod]
+        public void DbContextExtensions_RoundtripAttribute_AttachAsModified()
+        {
+            var expectedNotChangedProperties = new[]
+            {
+                nameof(DbContextModels.AdventureWorks.Product.ProductID), // Primary key
+                nameof(DbContextModels.AdventureWorks.Product.SafetyStockLevel), // Exclude attribute
+                nameof(DbContextModels.AdventureWorks.Product.Weight), // Roundtrip original
+                nameof(DbContextModels.AdventureWorks.Product.SizeUnitMeasureCode), // Association
+                nameof(DbContextModels.AdventureWorks.Product.WeightUnitMeasureCode), // Association
+                nameof(DbContextModels.AdventureWorks.Product.ProductSubcategoryID), // Association
+                nameof(DbContextModels.AdventureWorks.Product.ProductModelID), // Association
+            };
+
+            var catalog = new TestDomainServices.DbCtx.Catalog();
+            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+            OpenRiaServices.Server.DomainServiceDescription.GetDescription(typeof(TestDomainServices.DbCtx.Catalog));
+            catalog.Initialize(ctxt);
+
+            var current = new DbContextModels.AdventureWorks.Product()
+            {
+                ProductID = 1,
+            };
+            var original = new DbContextModels.AdventureWorks.Product()
+            {
+                ProductID = 1,
+            };
+
+            DbContextExtensions.AttachAsModified(catalog.DbContext.Products, current, original, catalog.DbContext);
+
+            var currentEntry = catalog.DbContext.Entry(current);
+            
+            string[] actualNotChangedProperties = currentEntry.CurrentValues.PropertyNames.Where(p => !currentEntry.Property(p).IsModified).ToArray();
+
+            CollectionAssert.AreEquivalent(expectedNotChangedProperties, actualNotChangedProperties);
+        }
+
+        [TestMethod]
+        public void DbContextEFCoreExtensions_RoundTripAttribute_AttachAsModifiedCore()
+        {
+            var expectedNotChangedProperties = new[]
+            {
+                nameof(EFCoreModels.AdventureWorks.Product.ProductID), // Primary key
+                nameof(EFCoreModels.AdventureWorks.Product.SafetyStockLevel), // Exclude attribute
+                nameof(EFCoreModels.AdventureWorks.Product.Weight), // Roundtrip original
+            };
+            var catalog = new TestDomainServices.EFCore.Catalog();
+
+            DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+            catalog.Initialize(ctxt);
+
+            var current = new EFCoreModels.AdventureWorks.Product()
+            {
+                ProductID = 1,
+            };
+            var original = new EFCoreModels.AdventureWorks.Product()
+            {
+                ProductID = 1,
+            };
+
+            DbContextEFCoreExtensions.AttachAsModified(catalog.DbContext.Products, current, original, catalog.DbContext);
+
+            string[] actualNotChangedProperties = catalog.DbContext.Entry(current).Properties.Where(p => !p.IsModified).Select(p => p.Metadata.Name).ToArray();
+
+            CollectionAssert.AreEquivalent(expectedNotChangedProperties, actualNotChangedProperties);
         }
 
         [TestMethod]

@@ -16,10 +16,13 @@ namespace OpenRiaServices.Server.UnitTesting
     /// <typeparam name="TDomainService">The type of <see cref="DomainService"/> to test</typeparam>
     public class DomainServiceTestHost<TDomainService> where TDomainService : DomainService
     {
+        internal static IPrincipal DefaultUser = new GenericPrincipal(new GenericIdentity(string.Empty), Array.Empty<string>());
+
         #region Member Fields
 
         private IDomainServiceFactory _factory;
         private IServiceProvider _serviceProvider;
+        private IPrincipal _user;
 
         #endregion
 
@@ -29,7 +32,16 @@ namespace OpenRiaServices.Server.UnitTesting
         /// Initializes a new instance of the <see cref="DomainServiceTestHost{TDomainService}"/>
         /// </summary>
         public DomainServiceTestHost()
-            : this(DomainService.Factory, new ServiceProviderStub())
+            : this(DomainService.Factory, new ServiceProviderStub(), DefaultUser)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DomainServiceTestHost{TDomainService}"/>
+        /// </summary>
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
+        public DomainServiceTestHost(IPrincipal user)
+            : this(DomainService.Factory, new ServiceProviderStub(user), user)
         {
         }
 
@@ -40,7 +52,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="createDomainService">The function to create <see cref="DomainService"/>s with</param>
         /// <exception cref="ArgumentNullException">is thrown when <paramref name="createDomainService"/> is <c>null</c></exception>
         public DomainServiceTestHost(Func<TDomainService> createDomainService)
-            : this(new DomainServiceFactory(createDomainService), new ServiceProviderStub())
+            : this(new DomainServiceFactory(createDomainService), new ServiceProviderStub(), DefaultUser)
         {
         }
 
@@ -52,8 +64,35 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="createDomainService">The function to create <see cref="DomainService"/>s with</param>
         /// <param name="user">The <see cref="IPrincipal"/> to use for authorization</param>
         /// <exception cref="ArgumentNullException">is thrown when <paramref name="createDomainService"/> is <c>null</c></exception>
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
         public DomainServiceTestHost(Func<TDomainService> createDomainService, IPrincipal user)
-            : this(new DomainServiceFactory(createDomainService), new ServiceProviderStub(user))
+            : this(new DomainServiceFactory(createDomainService), new ServiceProviderStub(user), user)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DomainServiceTestHost{TDomainService}"/> that creates
+        /// <see cref="DomainService"/> instances using the specified function and uses the
+        /// provided <see cref="IPrincipal"/> for authorization.
+        /// </summary>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> used to create <see cref="DomainService"/> instances</param>
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="serviceProvider"/> is <c>null</c></exception>
+        private DomainServiceTestHost(IServiceProvider serviceProvider)
+            : this(null, serviceProvider, DefaultUser)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DomainServiceTestHost{TDomainService}"/> that creates
+        /// <see cref="DomainService"/> instances using the specified function and uses the
+        /// provided <see cref="IPrincipal"/> for authorization.
+        /// </summary>
+        /// <param name="serviceProvider">The <see cref="IServiceProvider"/> used to create <see cref="DomainService"/> instances</param>
+        /// <param name="user">The <see cref="IPrincipal"/> to use for authorization</param>
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="serviceProvider"/> is <c>null</c></exception>
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
+        private DomainServiceTestHost(IServiceProvider serviceProvider, IPrincipal user)
+            : this(null, serviceProvider, user)
         {
         }
 
@@ -63,21 +102,23 @@ namespace OpenRiaServices.Server.UnitTesting
         /// </summary>
         /// <param name="factory">The <see cref="IDomainServiceFactory"/> used to create <see cref="DomainService"/> instances</param>
         /// <param name="serviceProvider">The <see cref="IServiceProvider"/> used in the creation of <see cref="DomainServiceContext"/> instances</param>
-        /// <exception cref="ArgumentNullException">is thrown when <paramref name="factory"/> is <c>null</c></exception>
+        /// <param name="user">The <see cref="IPrincipal"/> used in the creation of <see cref="DomainServiceContext"/> instances</param>
         /// <exception cref="ArgumentNullException">is thrown when <paramref name="serviceProvider"/> is <c>null</c></exception>
-        private DomainServiceTestHost(IDomainServiceFactory factory, IServiceProvider serviceProvider)
+        /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
+        private DomainServiceTestHost(IDomainServiceFactory factory, IServiceProvider serviceProvider, IPrincipal user)
         {
-            if (factory == null)
-            {
-                throw new ArgumentNullException(nameof(factory));
-            }
             if (serviceProvider == null)
             {
                 throw new ArgumentNullException(nameof(serviceProvider));
             }
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
 
             this._factory = factory;
             this._serviceProvider = serviceProvider;
+            this._user = user;
         }
 
         #endregion
@@ -132,6 +173,23 @@ namespace OpenRiaServices.Server.UnitTesting
             }
         }
 
+        /// <summary>
+        /// Gets or sets the <see cref="IPrincipal"/> used in the creation of a new <see cref="DomainServiceContext"/>
+        /// instance for each operation
+        /// </summary>
+        public IPrincipal User
+        {
+            get => _user;
+            set
+            {
+                if (value == null)
+                {
+                    throw new ArgumentNullException(nameof(value));
+                }
+                this._user = value;
+            }
+        }
+
         #endregion
 
         #region Methods
@@ -146,7 +204,21 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="ct">The <see cref="CancellationToken"/></param>
         /// <returns>The entities returned from the specified operation</returns>
         /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
-        public Task<IEnumerable<TEntity>> QueryAsync<TEntity>(Expression<Func<TDomainService, Task<IQueryable<TEntity>>>> queryOperation, CancellationToken ct = default) 
+        public Task<IEnumerable<TEntity>> QueryAsync<TEntity>(Expression<Func<TDomainService, Task<IEnumerable<TEntity>>>> queryOperation, CancellationToken ct = default)
+            where TEntity : class
+        {
+            return this.QueryCoreAsync<TEntity>(queryOperation, ct);
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="queryOperation"/> asynchronously and returns the results
+        /// </summary>
+        /// <typeparam name="TEntity">The type of entity to return</typeparam>
+        /// <param name="queryOperation">The <see cref="Expression"/> identifying the query operation to invoke</param>
+        /// <param name="ct">The <see cref="CancellationToken"/></param>
+        /// <returns>The entities returned from the specified operation</returns>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public Task<IEnumerable<TEntity>> QueryAsync<TEntity>(Expression<Func<TDomainService, Task<IQueryable<TEntity>>>> queryOperation, CancellationToken ct = default)
             where TEntity : class
         {
             return this.QueryCoreAsync<TEntity>(queryOperation, ct);
@@ -740,7 +812,7 @@ namespace OpenRiaServices.Server.UnitTesting
             QueryDescription queryDescription = Utility.GetQueryDescription(context, queryOperation);
 
             var queryResult = await context.DomainService.QueryAsync<TEntity>(queryDescription, ct);
-    
+
             ErrorUtility.AssertNoValidationErrors(context, queryResult.ValidationErrors);
 
             IEnumerable entities = queryResult.Result;
@@ -992,14 +1064,24 @@ namespace OpenRiaServices.Server.UnitTesting
         {
             // TODO: consider whether this implementation should call dispose
             //  Maybe OperationContext would implement IDisposable...
-            
-            IPrincipal user = (IPrincipal)ServiceProvider.GetService(typeof(IPrincipal));
-            DomainServiceContext domainServiceContext =
-                new DomainServiceContext(this.ServiceProvider, user, operationType);
-            DomainService domainService =
-                this.Factory.CreateDomainService(typeof(TDomainService), domainServiceContext);
+
+            DomainServiceContext domainServiceContext = new DomainServiceContext(this.ServiceProvider, User, operationType);
+
+            DomainService domainService;
+            if (_factory != null)
+            {
+                domainService = _factory.CreateDomainService(typeof(TDomainService), domainServiceContext);
+            }
+            else
+            {
+                domainService = (DomainService)ServiceProvider.GetService(typeof(TDomainService));
+                if (domainService == null) { throw new InvalidOperationException($"Could not resolve type ${typeof(TDomainService).FullName}"); }
+
+                domainService.Initialize(domainServiceContext);
+            }
+
             DomainServiceDescription domainServiceDescription =
-                DomainServiceDescription.GetDescription(typeof(TDomainService));
+                        DomainServiceDescription.GetDescription(typeof(TDomainService));
             return new OperationContext(domainServiceContext, domainService, domainServiceDescription);
         }
 

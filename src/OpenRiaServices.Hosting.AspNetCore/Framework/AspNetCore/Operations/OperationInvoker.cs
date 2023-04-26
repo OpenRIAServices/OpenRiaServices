@@ -283,7 +283,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         protected Task WriteError(HttpContext context, DomainServiceFault fault)
         {
             var ct = context.RequestAborted;
-            ct.ThrowIfCancellationRequested();
+            if (ct.IsCancellationRequested)
+                return Task.CompletedTask;
 
             var messageWriter = BinaryMessageWriter.Rent();
             try
@@ -338,7 +339,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         protected Task WriteResponse(HttpContext context, object result)
         {
             var ct = context.RequestAborted;
-            ct.ThrowIfCancellationRequested();
+            if (ct.IsCancellationRequested)
+                return Task.CompletedTask;
 
             var messageWriter = BinaryMessageWriter.Rent();
             try
