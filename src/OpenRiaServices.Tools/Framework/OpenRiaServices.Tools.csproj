@@ -13,7 +13,6 @@
       <Reference Include="System.ServiceModel" />
       <Reference Include="System.ServiceModel.Web" />
       <Reference Include="System.Web" />
-      <PackageReference Include="System.Runtime.Loader" Version="4.3.0" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Build" Version="17.2.0" />
