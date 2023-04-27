@@ -220,7 +220,7 @@ namespace OpenRiaServices.Tools.Test
             string errorMessage = null;
             try
             {
-                Assembly.ReflectionOnlyLoadFrom(assemblyFileName);
+                AssemblyUtilities.LoadAssembly(assemblyFileName, logger);
             }
             catch (BadImageFormatException bife)
             {
