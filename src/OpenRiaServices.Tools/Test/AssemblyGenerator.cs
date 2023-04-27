@@ -24,10 +24,7 @@ namespace OpenRiaServices.Tools.Test
         private Type[] _generatedTypes;
         private string _userCode;
         private readonly bool _useFullTypeNames;
-
-#if NET6_0_OR_GREATER
         private MetadataLoadContext _metadataLoadContext;
-#endif
 
 
         public AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
@@ -37,13 +34,12 @@ namespace OpenRiaServices.Tools.Test
 
         public AssemblyGenerator(bool isCSharp, bool useFullTypeNames, IEnumerable<Type> domainServiceTypes)
         {
-#if NET6_0_OR_GREATER
             var paths = domainServiceTypes.Select(t => t.Assembly.Location).ToHashSet();
             string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             paths.UnionWith(runtimeAssemblies);
+            paths.Add("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools.TextTemplate\\Test\\bin\\Debug\\net472\\OpenRiaServices.Client.dll");
             var resolver = new PathAssemblyResolver(paths);
             _metadataLoadContext = new MetadataLoadContext(resolver);
-#endif
             this._isCSharp = isCSharp;
             this._useFullTypeNames = useFullTypeNames;
             this._domainServiceTypes = domainServiceTypes;
@@ -232,7 +228,7 @@ namespace OpenRiaServices.Tools.Test
         /// <returns><c>true</c> if the given type is a nullable type</returns>
         public static bool IsNullableType(Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return type.IsGenericType && type.GetGenericTypeDefinition().FullName == typeof(Nullable<>).FullName;
         }
 
         /// <summary>
@@ -258,7 +254,7 @@ namespace OpenRiaServices.Tools.Test
         {
             List<CustomAttributeData> result = new List<CustomAttributeData>(); ;
 
-            IList<CustomAttributeData> attrs = CustomAttributeData.GetCustomAttributes(memberInfo);
+            IList<CustomAttributeData> attrs = memberInfo.GetCustomAttributesData();
             foreach (CustomAttributeData cad in attrs)
             {
                 Type attrType = cad.Constructor.DeclaringType;
@@ -384,11 +380,7 @@ namespace OpenRiaServices.Tools.Test
                     }
                     try
                     {
-#if NET472
-                        Assembly refAssy = Assembly.ReflectionOnlyLoadFrom(refAssyName);
-#else
                         Assembly refAssy = _metadataLoadContext.LoadFromAssemblyPath(refAssyName);
-#endif
                         loadedAssemblies[refAssy.GetName()] = refAssy;
                     }
                     catch (Exception ex)
@@ -396,11 +388,7 @@ namespace OpenRiaServices.Tools.Test
                         System.Diagnostics.Debug.WriteLine(" failed to load " + refAssyName + ":\r\n" + ex.Message);
                     }
                 }
-#if NET472
-                assy = Assembly.ReflectionOnlyLoad(generatedAssembly.ToArray());
-#else
                 assy = _metadataLoadContext.LoadFromByteArray(generatedAssembly.ToArray());
-#endif
                 Assert.IsNotNull(assy);
 
                 AssemblyName[] refNames = assy.GetReferencedAssemblies();
@@ -414,11 +402,11 @@ namespace OpenRiaServices.Tools.Test
                     {
                         try
                         {
-#if NET472
-                            Assembly refAssy = Assembly.ReflectionOnlyLoad(refName.FullName);
-#else
-                            Assembly refAssy = _metadataLoadContext.LoadFromAssemblyPath(refName.FullName);
-#endif
+                            Assembly refAssy;
+                            if (refName.Name.Contains("Client"))
+                                refAssy = _metadataLoadContext.LoadFromAssemblyPath("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools.TextTemplate\\Test\\bin\\Debug\\net472\\OpenRiaServices.Client.dll");
+                            else
+                                refAssy = _metadataLoadContext.LoadFromAssemblyName(refName);
                             loadedAssemblies[refName] = refAssy;
                         }
                         catch (Exception ex)

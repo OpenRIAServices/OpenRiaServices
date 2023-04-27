@@ -1775,7 +1775,7 @@ namespace OpenRiaServices.Tools.Test
             MethodInfo mInfo = entityType.GetMethod(methodName);
             Assert.IsNotNull(mInfo, "Expected to find method " + methodName + " on entity " + entityType.Name);
             Assert.IsTrue(mInfo.IsPublic, "Expected method " + methodName + " to be public");
-            Assert.AreEqual(typeof(void), mInfo.ReturnType, "Expected " + methodName + " to return void");
+            Assert.AreEqual(typeof(void).FullName, mInfo.ReturnType.FullName, "Expected " + methodName + " to return void");
             ParameterInfo[] pInfos = mInfo.GetParameters();
             Assert.AreEqual(parameters.Length, pInfos.Length, "Expected " + parameters.Length + " parameters for " + methodName);
             for (int i = 0; i < parameters.Length; ++i)

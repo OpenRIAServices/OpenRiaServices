@@ -426,8 +426,8 @@ namespace OpenRiaServices.Tools.Test
                 Assert.AreEqual(serverAttrNamespace, clientAttrNamespace, "Expected DC.Namespace to be the same on " + clientEnumType);
             }
 
-            string[] serverMemberNames = Enum.GetNames(serverEnumType);
-            string[] clientMemberNames = Enum.GetNames(clientEnumType);
+            var serverMemberNames = Enum.GetNames(serverEnumType).OrderBy(s => s).ToArray();
+            var clientMemberNames = Enum.GetNames(clientEnumType).OrderBy(s => s).ToArray();
             Assert.AreEqual(serverMemberNames.Length, clientMemberNames.Length, "Different number of fields generated");
 
             for (int i = 0; i < serverMemberNames.Length; ++i)

@@ -13,6 +13,7 @@ using OpenRiaServices.Tools.TextTemplate.CSharpGenerators;
 using OpenRiaServices.Tools.Test;
 using Microsoft.CodeAnalysis.Text;
 using System.Runtime.InteropServices;
+using Microsoft.Extensions.Logging;
 
 namespace OpenRiaServices.Tools.TextTemplate.Test
 {
@@ -296,7 +297,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             Assert.IsNotNull(generatedAssembly, "Expected compile to succeed");
 
             Assembly assy = null;
-            Dictionary<AssemblyName, Assembly> loadedAssemblies = new Dictionary<AssemblyName, Assembly>();
+            Dictionary<string, Assembly> loadedAssemblies = new Dictionary<string, Assembly>();
 
             try
             {
@@ -309,7 +310,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                     try
                     {
                         Assembly refAssy = _metadataLoadContext.LoadFromAssemblyPath(refAssyName);
-                        loadedAssemblies[refAssy.GetName()] = refAssy;
+                        loadedAssemblies[refAssy.FullName] = refAssy;
                     }
                     catch (Exception ex)
                     {
@@ -326,12 +327,16 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                     {
                         continue;
                     }
-                    if (!loadedAssemblies.ContainsKey(refName))
+                    if (!loadedAssemblies.ContainsKey(refName.FullName))
                     {
                         try
                         {
-                            Assembly refAssy = _metadataLoadContext.LoadFromAssemblyPath(refName.FullName);
-                            loadedAssemblies[refName] = refAssy;
+                            Assembly refAssy;
+                            if (refName.Name.Contains("Client"))
+                                refAssy = _metadataLoadContext.LoadFromAssemblyPath("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools.TextTemplate\\Test\\bin\\Debug\\net472\\OpenRiaServices.Client.dll");
+                            else
+                                refAssy = _metadataLoadContext.LoadFromAssemblyName(refName);
+                            loadedAssemblies[refName.FullName] = refAssy;
                         }
                         catch (Exception ex)
                         {
