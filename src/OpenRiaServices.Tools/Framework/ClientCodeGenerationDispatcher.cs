@@ -474,6 +474,7 @@ namespace OpenRiaServices.Tools
             {
                 foreach (string assemblyPath in compositionAssemblyPaths)
                 {
+                    // TODO Might have to be replaced
                     Assembly a = AssemblyUtilities.LoadAssembly(assemblyPath, logger);
                     if (a != null)
                     {
