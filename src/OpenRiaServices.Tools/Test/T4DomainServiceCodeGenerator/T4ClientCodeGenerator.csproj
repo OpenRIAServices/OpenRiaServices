@@ -5,11 +5,10 @@
     <AssemblyName>OpenRiaServices.Tools.Test.T4Generator</AssemblyName>
     <TargetFrameworks>net472;net6.0</TargetFrameworks>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
+  <ItemGroup >
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="T4DomainServiceClientCodeGenerator.cs">

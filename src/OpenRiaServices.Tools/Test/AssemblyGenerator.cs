@@ -26,6 +26,25 @@ namespace OpenRiaServices.Tools.Test
         private readonly bool _useFullTypeNames;
         private MetadataLoadContext _metadataLoadContext;
 
+        class Resolver : PathAssemblyResolver
+        {
+            public Resolver(IEnumerable<string> assemblyPaths) : base(assemblyPaths)
+            {
+
+            }
+
+            public override Assembly Resolve(MetadataLoadContext context, AssemblyName assemblyName)
+            {
+                if(assemblyName.Name == "OpenRiaServices.Client")
+                {
+                    var asm = context.GetAssemblies().First(a => a.FullName.StartsWith("OpenRiaServices.Client"));
+                    return asm;
+                    //var _asm = typeof(MetadataLoadContext).GetField("_loadedAssemblies", BindingFlags.NonPublic | BindingFlags.Instance).GetValue(context));
+                }
+                return base.Resolve(context, assemblyName);
+            }
+        }
+
 
         public AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
             this(isCSharp, false, domainServiceTypes)
@@ -38,7 +57,7 @@ namespace OpenRiaServices.Tools.Test
             string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             paths.UnionWith(runtimeAssemblies);
             paths.Add("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools.TextTemplate\\Test\\bin\\Debug\\net472\\OpenRiaServices.Client.dll");
-            var resolver = new PathAssemblyResolver(paths);
+            var resolver = new Resolver(paths);
             _metadataLoadContext = new MetadataLoadContext(resolver);
             this._isCSharp = isCSharp;
             this._useFullTypeNames = useFullTypeNames;
