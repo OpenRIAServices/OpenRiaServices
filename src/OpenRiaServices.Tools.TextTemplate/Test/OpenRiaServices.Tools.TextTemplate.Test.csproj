@@ -12,6 +12,7 @@
     <Compile Include="..\..\OpenRiaServices.Tools\Test\MockDomainServices.cs" Link="MockDomainServices.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Test\MockSharedCodeService.cs" Link="MockSharedCodeService.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Test\MsBuildHelper.cs" Link="MsBuildHelper.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Test\Resolver.cs" Link="Resolver.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Test\Utilities\ConsoleLogger.cs" Link="ConsoleLogger.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Test\Utilities\TestInitializer.cs" Link="Utilities\TestInitializer.cs" />
   </ItemGroup>

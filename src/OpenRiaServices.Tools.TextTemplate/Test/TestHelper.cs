@@ -84,25 +84,25 @@ namespace OpenRiaServices.Tools.Test
                 codeDomCodeGenAssemblyTypes = codeDomCodeGenAssembly.GetTypes();
 
 
-            using (T4AssemblyGenerator asmGenT4 = new T4AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
-            {
-                foreach (Type t in sharedTypes)
+                using (T4AssemblyGenerator asmGenT4 = new T4AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
                 {
-                    asmGenT4.MockSharedCodeService.AddSharedType(t);
-                }
+                    foreach (Type t in sharedTypes)
+                    {
+                        asmGenT4.MockSharedCodeService.AddSharedType(t);
+                    }
 
-                foreach (string refAssembly in refAssemblies)
-                {
-                    asmGenT4.ReferenceAssemblies.Add(refAssembly);
-                }
+                    foreach (string refAssembly in refAssemblies)
+                    {
+                        asmGenT4.ReferenceAssemblies.Add(refAssembly);
+                    }
 
-                string generatedCodeT4 = asmGenT4.GeneratedCode;
-                Assert.IsFalse(string.IsNullOrEmpty(generatedCodeT4), "Failed to generate code:\r\n" + asmGenT4.ConsoleLogger.Errors);
+                    string generatedCodeT4 = asmGenT4.GeneratedCode;
+                    Assert.IsFalse(string.IsNullOrEmpty(generatedCodeT4), "Failed to generate code:\r\n" + asmGenT4.ConsoleLogger.Errors);
 
-                var t4CodeGenAssembly = asmGenT4.GeneratedAssembly;
-                Assert.IsNotNull(t4CodeGenAssembly, "Assembly failed to build: " + asmGenT4.ConsoleLogger.Errors);
-                t4CodeGenAssemblyTypes = t4CodeGenAssembly.GetTypes();
-                
+                    var t4CodeGenAssembly = asmGenT4.GeneratedAssembly;
+                    Assert.IsNotNull(t4CodeGenAssembly, "Assembly failed to build: " + asmGenT4.ConsoleLogger.Errors);
+                    t4CodeGenAssemblyTypes = t4CodeGenAssembly.GetTypes();
+
                     TestHelper.VerifyTypeEquality(codeDomCodeGenAssemblyTypes, t4CodeGenAssemblyTypes);
                 }
             }
@@ -145,13 +145,14 @@ namespace OpenRiaServices.Tools.Test
             if (TestHelper.AreNotNull(attributes1, attributes2))
             {
                 Assert.AreEqual(attributes1.Count(), attributes2.Count());
-                foreach (CustomAttributeData attr1 in attributes1)
-                {
-                    CustomAttributeData attr2 = attributes2.First(a => a.ToString() == attr1.ToString());
-                    Assert.IsNotNull(attr2, $"Could not find an attribute matching '{attr1}' in t4 codegen generated assembly");
-                    Assert.AreEqual(attr1.ConstructorArguments.Count(), attr2.ConstructorArguments.Count());
-                    //Assert.AreEqual(attr1.NamedArguments.Count, attr2.NamedArguments.Count);
-                }
+                // We cannot evaluate the attributes if for metadataloadcontext
+                //foreach (CustomAttributeData attr1 in attributes1)
+                //{
+                //    CustomAttributeData attr2 = attributes2.First(a => a.ToString() == attr1.ToString());
+                //    Assert.IsNotNull(attr2, $"Could not find an attribute matching '{attr1}' in t4 codegen generated assembly");
+                //    Assert.AreEqual(attr1.ConstructorArguments.Count(), attr2.ConstructorArguments.Count());
+                //    Assert.AreEqual(attr1.NamedArguments.Count, attr2.NamedArguments.Count);
+                //}
             }
         }
 

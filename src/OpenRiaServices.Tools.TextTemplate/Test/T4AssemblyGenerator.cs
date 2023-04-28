@@ -45,7 +45,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             var paths = domainServiceTypes.Select(t => t.Assembly.Location).ToHashSet();
             string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             paths.UnionWith(runtimeAssemblies);
-            var resolver = new PathAssemblyResolver(paths);
+            var resolver = new Resolver(paths);
             _metadataLoadContext = new MetadataLoadContext(resolver);
             this._isCSharp = isCSharp;
             this._useFullTypeNames = useFullTypeNames;
