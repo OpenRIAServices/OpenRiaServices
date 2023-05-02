@@ -29,7 +29,7 @@ namespace OpenRiaServices.Tools.Test
             string outputPath = null;
             TestHelper.GetProjectPaths("PDB", out projectPath, out outputPath);
 
-            using (ISourceFileProvider pdbReader = new CecilSourceFileProviderFactory(/*symbolSearchPath*/ null, /*logger*/ null).CreateProvider())
+            using (ISourceFileProvider pdbReader = new PdbSourceFileProviderFactory(/*symbolSearchPath*/ null, /*logger*/ null).CreateProvider())
             {
                 string serverProjectPath = CodeGenHelper.ServerClassLibProjectPath(projectPath);
 
@@ -71,7 +71,7 @@ namespace OpenRiaServices.Tools.Test
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
             ConsoleLogger logger = new ConsoleLogger();
             FilenameMap filenameMap = new FilenameMap();
-            using (SourceFileLocationService locationService = new SourceFileLocationService(new[] { new PdbSourceFileProviderFactory(/*symbolSearchPath*/ null,logger) }, filenameMap))
+            using (SourceFileLocationService locationService = new SourceFileLocationService(new[] { new PdbSourceFileProviderFactory(/*symbolSearchPath*/ null, logger) }, filenameMap))
             {
                 List<string> files = new List<string>(locationService.GetFilesForType(typeof(TestEntity)));
                 Assert.AreEqual(4, files.Count);
@@ -81,26 +81,5 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "PDB")]
-        [Description("PdbReader finds all files for a type")]
-        [TestMethod]
-        public void PdbReader_Finds_Types_Files_Cecil()
-        {
-            string projectPath = null;
-            string outputPath = null;
-            TestHelper.GetProjectPaths("PDB", out projectPath, out outputPath);
-            string serverProjectPath = CodeGenHelper.ServerClassLibProjectPath(projectPath);
-            string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
-            ConsoleLogger logger = new ConsoleLogger();
-            FilenameMap filenameMap = new FilenameMap();
-            using (SourceFileLocationService locationService = new SourceFileLocationService(new[] { new CecilSourceFileProviderFactory(/*symbolSearchPath*/ null, logger) }, filenameMap))
-            {
-                List<string> files = new List<string>(locationService.GetFilesForType(typeof(TestEntity)));
-                Assert.AreEqual(4, files.Count);
-
-                CodeGenHelper.AssertContainsFiles(files, serverProjectPath, new string[] { "TestEntity.cs", "TestEntity.shared.cs", "TestEntity.linked.cs" });
-                CodeGenHelper.AssertContainsFiles(files, clientProjectPath, new string[] { "TestEntity.reverse.linked.cs" });
-            }
-        }
     }
 }

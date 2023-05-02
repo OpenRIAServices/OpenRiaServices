@@ -43,7 +43,7 @@ namespace OpenRiaServices.Tools.SharedTypes
             ISourceFileProviderFactory[] factories = new ISourceFileProviderFactory[] 
             {
                 new SourceInfoSourceFileProviderFactory(),
-                new PdbSourceFileProviderFactory(symbolSearchPath, loggingService)
+                new PdbSourceFileProviderFactory(parameters.SymbolSearchPaths, loggingService)
             };
 
             this._locationService = new SourceFileLocationService(factories, this._filenameMap);

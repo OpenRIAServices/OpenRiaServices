@@ -5,9 +5,7 @@
     using System.Diagnostics;
     using System.Diagnostics.SymbolStore;
     using System.Globalization;
-    using System.Linq;
     using System.Reflection;
-    using Mono.Cecil;
     using OpenRiaServices;
     using OpenRiaServices.Tools.Pdb.SymStore;
     using OpenRiaServices.Tools.SharedTypes;
@@ -15,7 +13,7 @@
     /// <summary>
     /// PDB-based implementation of <see cref="ISourceFileProvider"/> to locate source files for types or methods.
     /// </summary>
-    internal class CecilSourceFileProviderFactory : ISourceFileProviderFactory
+    internal class COMPdbSourceFileProviderFactory : ISourceFileProviderFactory
     {
         private readonly ILogger _logger;
         private readonly string _symbolSearchPath;
@@ -25,10 +23,9 @@
         /// </summary>
         /// <param name="symbolSearchPath">Optional list of semicolon separated paths to search for PDB files.</param>
         /// <param name="logger">Optional logger to use to report errors or warnings.</param>
-        public CecilSourceFileProviderFactory(string symbolSearchPath, ILogger logger)
+        public COMPdbSourceFileProviderFactory(string symbolSearchPath, ILogger logger)
             : base()
         {
-
             this._logger = logger;
             this._symbolSearchPath = symbolSearchPath;
         }
@@ -36,7 +33,7 @@
         #region ISourceFileProviderFactory
         public ISourceFileProvider CreateProvider()
         {
-            return new CecilSourceFileProvider(this._symbolSearchPath, this._logger);
+            return new PdbSourceFileProvider(this._symbolSearchPath, this._logger);
         }
         #endregion // ISourceFileProviderFactory
 
@@ -46,13 +43,13 @@
         /// of a type.  This class is instantiated when the base class asks
         /// for a location context, and then it is disposed by the base.
         /// </summary>
-        internal class CecilSourceFileProvider : ISourceFileProvider, IDisposable
+        internal class PdbSourceFileProvider : ISourceFileProvider, IDisposable
         {
             private readonly ILogger _logger;
             private readonly string _symbolSearchPath;
-            private readonly Dictionary<string, AssemblyDefinition> _assembliesByLocation = new();
+            private readonly Dictionary<Assembly, ISymbolReader> _symbolReadersByType = new Dictionary<Assembly, ISymbolReader>();
 
-            internal CecilSourceFileProvider(string symbolSearchPath, ILogger logger)
+            internal PdbSourceFileProvider(string symbolSearchPath, ILogger logger)
             {
                 this._symbolSearchPath = symbolSearchPath;
                 this._logger = logger;
@@ -64,44 +61,29 @@
             /// </summary>
             /// <param name="type">The type we will analyze.</param>
             /// <returns>A <see cref="ISymbolReader"/> or <c>null</c> if one is not available.</returns>
-            internal AssemblyDefinition this[Type type]
+            internal ISymbolReader this[Type type]
             {
                 get
                 {
                     Debug.Assert(type != null, "The type is required");
                     Assembly assembly = type.Assembly;
-                    string location = assembly.Location;
+                    ISymbolReader reader = null;
 
                     // Lazily create the readers for assemblies we have not yet encountered.
-                    if (!this._assembliesByLocation.TryGetValue(location, out AssemblyDefinition assemblyDefinition))
+                    if (!this._symbolReadersByType.TryGetValue(assembly, out reader))
                     {
                         // We don't create symbol readers for System assemblies
                         if (!assembly.IsSystemAssembly())
                         {
                             // Lazy create.  Note that a null is a legal result and will
                             // be cached to avoid redundant failures
-                            try
-                            {
-                                var parameters = new ReaderParameters
-                                {
-                                    ReadSymbols = true,
-                                    ReadWrite = false,
-                                    SymbolReaderProvider = new Mono.Cecil.Pdb.PdbReaderProvider()
-                                    //ReadingMode = ReadingMode.
-                                };
-                                assemblyDefinition = AssemblyDefinition.ReadAssembly(location, parameters);
-                            }
-                            catch (Exception)
-                            {
-                                // Cache null
-                                assemblyDefinition = null;
-                            }
+                            reader = this.CreateSymbolReader(assembly);
                         }
 
-                        this._assembliesByLocation[location] = assemblyDefinition;
+                        this._symbolReadersByType[assembly] = reader;
                     }
 
-                    return assemblyDefinition;
+                    return reader;
                 }
             }
 
@@ -111,35 +93,72 @@
             /// <param name="reader">The reader to use</param>
             /// <param name="methodBase">The method to lookup</param>
             /// <returns>The file containing the method or null.</returns>
-            private static string GetFileForMethod(AssemblyDefinition reader, MethodBase methodBase)
+            private static string GetFileForMethod(ISymbolReader reader, MethodBase methodBase)
             {
                 int token = methodBase.MetadataToken;
-                var type = reader.MainModule.Types
-                    .FirstOrDefault(t => t.FullName == methodBase.DeclaringType.FullName);
 
-                var method = type?.Methods.FirstOrDefault(md => md.Name == methodBase.Name || md.MetadataToken.ToUInt32() == methodBase.MetadataToken);
-                if (method != null)
+                ISymbolMethod methodSymbol = reader == null ? null : reader.GetMethod(new SymbolToken(token));
+                if (methodSymbol != null)
                 {
-                    if (!method.DebugInformation.HasSequencePoints)
+                    int count = methodSymbol.SequencePointCount;
+                    if (count == 0)
                         return null;
 
-                    return method.DebugInformation.SequencePoints.FirstOrDefault().Document.Url;
+                    // Get the sequence points from the symbol store. 
+                    // We could cache these arrays and reuse them.
+                    int[] offsets = new int[count];
+                    ISymbolDocument[] docs = new ISymbolDocument[count];
+                    int[] startColumn = new int[count];
+                    int[] endColumn = new int[count];
+                    int[] startRow = new int[count];
+                    int[] endRow = new int[count];
+                    methodSymbol.GetSequencePoints(offsets, docs, startRow, startColumn, endRow, endColumn);
+
+                    return docs[0].URL.ToString();
                 }
                 return null;
             }
 
+            /// <summary>
+            /// Creates a <see cref="ISymbolReader"/> for the given <paramref name="assembly"/>.
+            /// </summary>
+            /// <param name="assembly">The assembly whose reader is needed.</param>
+            /// <returns>The <see cref="ISymbolReader"/> instance or <c>null</c> if one cannot be created (e.g. no PDB).</returns>
+            private ISymbolReader CreateSymbolReader(Assembly assembly)
+            {
+                Debug.Assert(assembly != null, "The assembly is required");
+                ISymbolReader reader = null;
+                string assemblyFile = assembly.Location;
+
+                try
+                {
+                    reader = SymbolAccess.GetReaderForFile(assemblyFile, this._symbolSearchPath);
+                }
+                catch (System.Runtime.InteropServices.COMException cex)
+                {
+                    // Experience has shown some large PDB's can exhaust memory and cause COM failures.
+                    // When this occurs, we log a warning and continue as if the PDB was not there.
+                    if (this._logger != null)
+                    {
+                        this._logger.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Open_PDB, assemblyFile, cex.Message));
+                    }
+                }
+
+                return reader;
+            }
 
             #region IDisposable members
             public void Dispose()
             {
-                foreach (var assemblyDefinition in this._assembliesByLocation.Values)
+                foreach (ISymbolReader reader in this._symbolReadersByType.Values)
                 {
-                    if (assemblyDefinition != null)
+                    IDisposable disposable = reader as IDisposable;
+                    if (disposable != null)
                     {
-                        assemblyDefinition.Dispose();
+                        disposable.Dispose();
                     }
                 }
-                this._assembliesByLocation.Clear();
+                this._symbolReadersByType.Clear();
             }
             #endregion // IDisposable member
 
@@ -151,7 +170,7 @@
 
                 // Note: we allow checking for members declared anywhere in the hierarchy
                 // and so must open a PDB for the assembly containing the declaring type.
-                AssemblyDefinition reader = this[declaringType];
+                ISymbolReader reader = this[declaringType];
 
                 // Failure to find PDB short-circuits all lookups
                 if (reader != null)
@@ -160,7 +179,7 @@
                     MethodBase methodBase = memberInfo as MethodBase;
                     if (methodBase != null)
                     {
-                        fileName = CecilSourceFileProvider.GetFileForMethod(reader, methodBase);
+                        fileName = PdbSourceFileProvider.GetFileForMethod(reader, methodBase);
                     }
                     else
                     {
