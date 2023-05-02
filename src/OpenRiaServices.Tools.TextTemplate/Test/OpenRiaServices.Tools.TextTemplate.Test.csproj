@@ -12,6 +12,7 @@
     <Compile Include="..\..\OpenRiaServices.Tools\Test\MockDomainServices.cs" Link="MockDomainServices.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Test\MockSharedCodeService.cs" Link="MockSharedCodeService.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Test\MsBuildHelper.cs" Link="MsBuildHelper.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Test\Resolver.cs" Link="Resolver.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Test\Utilities\ConsoleLogger.cs" Link="ConsoleLogger.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Test\Utilities\TestInitializer.cs" Link="Utilities\TestInitializer.cs" />
   </ItemGroup>
@@ -45,16 +46,13 @@
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.5.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.5.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>$(MSBuildExtensionsPath)\..\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Web" />
-    <Reference Include="System.XML" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' != 'net472'">

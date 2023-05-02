@@ -737,29 +737,12 @@ namespace OpenRiaServices.Tools
                 //        System.Web.Hosting.HostingEnvironment.InitializationException);
                 //}
 
-#if !NET6_0_OR_GREATER
-                System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter() 
-                {
-                    PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,
-                };
-                using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
-                using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
-                {
-                    // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
-                    // the appropriate code generator.
-                    generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
-                }
-#else
                 // Create the "dispatcher" in the 2nd AppDomain.
                 // This object will find and invoke the appropriate code generator
                 using (var dispatcher = new ClientCodeGenerationDispatcher())
                 {
                     generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
                 }
-#endif
-
-
-
 
                 // Tell the user where we are writing the generated code
                 if (!string.IsNullOrEmpty(generatedFileContent))
