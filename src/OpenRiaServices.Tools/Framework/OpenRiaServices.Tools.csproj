@@ -49,7 +49,7 @@
     <None Include="..\..\..\NuGet\OpenRiaServices.Client.CodeGen\build\OpenRiaServices.CodeGen.targets" Link="build\OpenRiaServices.CodeGen.targets" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="0.11.4" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.5" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="build\" />
