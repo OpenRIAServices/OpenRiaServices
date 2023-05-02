@@ -313,7 +313,7 @@ namespace OpenRiaServices.Tools.Test
                 if (ctorArgIndex >= 0)
                 {
                     var ctorArg = ctorArgs[ctorArgIndex];
-                    if (typeof(T).IsAssignableFrom(ctorArg.ArgumentType))
+                    if (typeof(T).FullName == ctorArg.ArgumentType.FullName)
                     {
                         value = (T)ctorArg.Value;
                         return true;
@@ -325,7 +325,7 @@ namespace OpenRiaServices.Tools.Test
             {
                 if (string.Equals(valueName, namedArg.MemberInfo.Name, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (typeof(T).IsAssignableFrom(namedArg.TypedValue.ArgumentType))
+                    if (typeof(T).FullName == namedArg.TypedValue.ArgumentType.FullName)
                     {
                         value = (T)namedArg.TypedValue.Value;
                         return true;
