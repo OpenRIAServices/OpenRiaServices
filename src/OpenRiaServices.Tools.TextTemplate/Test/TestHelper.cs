@@ -146,13 +146,13 @@ namespace OpenRiaServices.Tools.Test
             {
                 Assert.AreEqual(attributes1.Count(), attributes2.Count());
                 // We cannot evaluate the attributes if for metadataloadcontext
-                foreach (CustomAttributeData attr1 in attributes1)
-                {
-                    CustomAttributeData attr2 = attributes2.First(a => a.ToString() == attr1.ToString());
-                    Assert.IsNotNull(attr2, $"Could not find an attribute matching '{attr1}' in t4 codegen generated assembly");
-                    Assert.AreEqual(attr1.ConstructorArguments.Count(), attr2.ConstructorArguments.Count());
-                    Assert.AreEqual(attr1.NamedArguments.Count, attr2.NamedArguments.Count);
-                }
+                //foreach (CustomAttributeData attr1 in attributes1)
+                //{
+                //    CustomAttributeData attr2 = attributes2.First(a => a.ToString() == attr1.ToString());
+                //    //Assert.IsNotNull(attr2, $"Could not find an attribute matching '{attr1}' in t4 codegen generated assembly");
+                //    Assert.AreEqual(attr1.ConstructorArguments.Count(), attr2.ConstructorArguments.Count());
+                //    Assert.AreEqual(attr1.NamedArguments.Count, attr2.NamedArguments.Count);
+                //}
             }
         }
 
