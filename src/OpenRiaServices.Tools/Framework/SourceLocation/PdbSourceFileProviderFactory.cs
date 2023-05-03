@@ -94,7 +94,9 @@ namespace OpenRiaServices.Tools.SourceLocation
                             }
                             catch (Exception ex)
                             {
-                                _logger.LogWarning($"Failed to load metadata for {assembly.FullName}: {ex}");
+                                // Log informational message but continue without symbols
+                                _logger.LogMessage($"Failed to load metadata for {assembly.FullName}: {ex}");
+
                                 // Cache null
                                 assemblyDefinition = null;
                             }
@@ -110,7 +112,7 @@ namespace OpenRiaServices.Tools.SourceLocation
             /// <summary>
             /// Returns the name of the file for the given method using the given symbol reader
             /// </summary>
-            /// <param name="typeDefinition">The type tos search in</param>
+            /// <param name="typeDefinition">The type to search in</param>
             /// <param name="methodBase">The method to lookup</param>
             /// <returns>The file containing the method or null.</returns>
             private static string GetFileForMethod(TypeDefinition typeDefinition, MethodBase methodBase)
