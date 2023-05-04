@@ -282,13 +282,13 @@ Please ensure that the attribute type follows recommended .NET Framework guideli
     <value>Creates a new EntityContainer for this DomainContext's EntitySets.</value>
   </data>
   <data name="CodeGen_Default_Constructor_Summary_Comments" xml:space="preserve">
-    <value>Initializes a new instance of the &lt;see cref="{0}"/&gt; class.</value>
+    <value>Initializes a new instance of the &lt;see cref="{0}"/&gt; class (ver 1.0).</value>
   </data>
   <data name="CodeGen_DomainClient_Custom_Method_Summary_Comment" xml:space="preserve">
     <value>Invokes the '{0}' method of the specified &lt;see cref="{1}"/&gt; entity.</value>
   </data>
   <data name="CodeGen_DomainContext_Class_Summary_Comment" xml:space="preserve">
-    <value>The DomainContext corresponding to the '{0}' DomainService.</value>
+    <value>The DomainContext corresponding to the '{0}' DomainService (ver 1.0).</value>
   </data>
   <data name="CodeGen_DomainContext_Custom_Method_Entity_Parameter_Comment" xml:space="preserve">
     <value>The &lt;see cref="{0}"/&gt; entity instance.</value>

@@ -46,7 +46,8 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 	private void GenerateUsings()
 	{
 
-this.Write(@"using System;
+this.Write(@"// Default usings:
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;

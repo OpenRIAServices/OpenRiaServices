@@ -58,6 +58,8 @@ namespace OpenRiaServices.Tools
 
             try
             {
+                AppDomainUtilities.ConfigureAppDomain(options);
+                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
                 // Try to load mono.cecil from same folder as tools
                 var location = toolingAssembly.Location;
@@ -72,7 +74,6 @@ namespace OpenRiaServices.Tools
                     return source.Remove(place, find.Length).Insert(place, replace);
                 }
                 var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
-                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 LoadAssembly(cecilPath);
 
 

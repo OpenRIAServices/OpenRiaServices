@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.T4</id>
-    <version>5.0.1</version>
+    <version>6.0.0-p1</version>
     <title>Open RIA Services T4 Code Generation</title>
     <authors>Outercurve RIA Services</authors>
     <owners>Outercurve</owners>

@@ -717,7 +717,7 @@ namespace OpenRiaServices.Tools
             {
                 return false;
             }
-
+            
             this.SafeFileWrite(destinationFile, content);
 
             // Set ReadOnly attribute to prevent casual edits.

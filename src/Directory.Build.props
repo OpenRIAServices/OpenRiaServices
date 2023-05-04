@@ -17,10 +17,10 @@
     <GenerateDocumentationFile  Condition="'$(IsFrameworkProject)' == 'true'">true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies Condition="'$(IsFrameworkProject)' == 'true'">false</CopyLocalLockFileAssemblies>
 
-    <VersionPrefix>5.2.0</VersionPrefix>
+    <VersionPrefix>5.3.0</VersionPrefix>
     <!-- Set correct version suffix below if manually building 
-        <VersionSuffix>preview.5</VersionSuffix>
         -->
+     <VersionSuffix>codeGen1</VersionSuffix>
     <AssemblyVersion>5.0.0.0</AssemblyVersion>
     <Company>Outercurve Foundation</Company>
     <Product>Open RIA Services</Product>

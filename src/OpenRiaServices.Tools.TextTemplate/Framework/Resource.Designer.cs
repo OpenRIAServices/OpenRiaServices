@@ -604,7 +604,7 @@ namespace OpenRiaServices.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Initializes a new instance of the &lt;see cref=&quot;{0}&quot;/&gt; class..
+        ///   Looks up a localized string similar to Initializes a new instance of the &lt;see cref=&quot;{0}&quot;/&gt; class (ver 1.0)..
         /// </summary>
         internal static string CodeGen_Default_Constructor_Summary_Comments {
             get {
@@ -622,7 +622,7 @@ namespace OpenRiaServices.Tools {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to The DomainContext corresponding to the &apos;{0}&apos; DomainService..
+        ///   Looks up a localized string similar to The DomainContext corresponding to the &apos;{0}&apos; DomainService (ver 1.0)..
         /// </summary>
         internal static string CodeGen_DomainContext_Class_Summary_Comment {
             get {

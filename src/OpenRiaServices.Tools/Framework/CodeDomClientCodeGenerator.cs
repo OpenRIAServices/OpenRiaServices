@@ -25,7 +25,7 @@ namespace OpenRiaServices.Tools
         // by a customer.  Do not change this value because customers will be told to use this string when they
         // want to name the default code generator.
         internal const string GeneratorName = "OpenRiaServices.Tools.CodeDomClientCodeGenerator";
-
+        internal const string codeGenVersion = "1.0.0.1 beta";
         /// <summary>
         /// These imports will be added to all namespaces generated in the client proxy file
         /// </summary>
@@ -320,7 +320,9 @@ namespace OpenRiaServices.Tools
                 using (TextWriter t = new StringWriter(CultureInfo.InvariantCulture))
                 {
                     this.Provider.GenerateCodeFromCompileUnit(this.CompileUnit, t, this._options);
-                    generatedCode = this.FixupVBOptionStatements(t.ToString());
+                    var str = t.ToString();
+                    str.Insert(0, $"// Created using version {codeGenVersion}{Environment.NewLine}");
+                    generatedCode = this.FixupVBOptionStatements(str);
                 }
             }
 
