@@ -2,8 +2,24 @@
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;NET40</DefineConstants>
     <TargetFramework>net472</TargetFramework>
+    <PackageId>OpenRiaServices.Client.CodeGen</PackageId>
+    <Description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. </Description>
+    <PackageTags>WCF RIA Services RIAServices OpenRiaServices CodeGen</PackageTags>
+
     <!-- Copy Mono.Cecil to output directory -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <!-- This target will run when MSBuild is collecting the files to be packaged, and we'll implement it below. This property controls the dependency list for this packaging process, so by adding our custom property we hook ourselves into the process in a supported way. -->
+    <TargetsForTfmSpecificBuildOutput>
+      $(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage
+    </TargetsForTfmSpecificBuildOutput>
+    <!-- This property tells MSBuild where the root folder of the package's build assets should be. Because we are not a library package, we should not pack to 'lib'. Instead, we choose 'tasks' by convention. -->
+    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+    <!-- NuGet does validation that libraries in a package are exposed as dependencies, but we _explicitly_ do not want that behavior for MSBuild tasks. They are isolated by design. Therefore we ignore this specific warning. -->
+    <NoWarn>NU5100,NU5128</NoWarn>
+
+    <!-- Tell the SDK to generate a deps.json file : https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022#generate-and-embed-a-depsjson-file -->
+    <GenerateDependencyFile>true</GenerateDependencyFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
@@ -17,6 +33,14 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <!-- Use PrivateAssets="all" to prevent nuget packages to become nuget dependencies -->
+    <!-- IMPORTANT: Also use ExcludeAssets="Runtime" if referencing msbuild packages https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022#dont-bundle-the-microsoftbuildutilitiescore-assembly -->
+    <PackageReference Include="Mono.Cecil" Version="0.11.5" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" ExcludeAssets="Runtime" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="BinaryTypeUtility.cs" />
@@ -42,16 +66,16 @@
       <CustomToolNamespace>OpenRiaServices.Tools</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+    <Content Include="build\OpenRiaServices.Client.CodeGen.targets" PackagePath="build" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\NuGet\OpenRiaServices.Client.CodeGen\build\OpenRiaServices.CodeGen.targets" Link="build\OpenRiaServices.CodeGen.targets" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="0.11.5" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="build\" />
-  </ItemGroup>
+
+  <!-- This is the target we defined above. It's purpose is to add all of our PackageReference and ProjectReference's runtime assets to our package output.  -->
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <!-- The TargetPath is the path inside the package that the source file will be placed. This is already precomputed in the ReferenceCopyLocalPaths items' DestinationSubPath, so reuse it here. -->
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
+    </ItemGroup>
+  </Target>
 </Project>
