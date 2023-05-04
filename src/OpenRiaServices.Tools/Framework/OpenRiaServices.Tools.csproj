@@ -40,7 +40,7 @@
     <PackageReference Include="Mono.Cecil" Version="0.11.5" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" ExcludeAssets="Runtime" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" ExcludeAssets="Runtime" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="BinaryTypeUtility.cs" />
