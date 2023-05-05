@@ -130,21 +130,22 @@ namespace OpenRiaServices.Tools
 
             this.WarnIfAssembliesDontExist(assemblies);
 
-            
-                // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
-                // This can occur when the build environment is configured incorrectly
-                //if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-                //{
-                //    throw new InvalidOperationException(
-                //        Resource.HttpRuntimeInitializationError,
-                //        System.Web.Hosting.HostingEnvironment.InitializationException);
-                //}
 
-                using (DomainServiceValidator validator = (DomainServiceValidator)Activator.CreateInstance(typeof(DomainServiceValidator)))
-                {
-                    // Transfer control to Web Application AppDomain to invoke the validator
-                    validator.Validate(assemblies.ToArray(), this.LoggingService);
-                }
+            // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
+            // This can occur when the build environment is configured incorrectly
+            //if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+            //{
+            //    throw new InvalidOperationException(
+            //        Resource.HttpRuntimeInitializationError,
+            //        System.Web.Hosting.HostingEnvironment.InitializationException);
+            //}
+
+                  // TODO Take in metadata loadcontext to validate 
+                //using (DomainServiceValidator validator = (DomainServiceValidator)Activator.CreateInstance(typeof(DomainServiceValidator)))
+                //{
+                //    // Transfer control to Web Application AppDomain to invoke the validator
+                //    validator.Validate(assemblies.ToArray(), this.LoggingService);
+                //}
             
         }
 

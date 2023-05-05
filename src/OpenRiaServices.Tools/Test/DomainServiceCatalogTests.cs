@@ -31,8 +31,8 @@ namespace OpenRiaServices.Tools.Test
             ConsoleLogger logger = new ConsoleLogger();
 
             // Ctor taking assemblies -- null arg tests
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((IEnumerable<string>)null, logger), "assembliesToLoad");
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(empty, null), "logger");
+            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((IEnumerable<string>)null, null, logger), "assembliesToLoad");
+            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(empty, null, null), "logger");
 
             // Ctor taking one type -- null arg tests
             ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((Type) null, logger), "domainServiceType");

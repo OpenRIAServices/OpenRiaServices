@@ -17,6 +17,7 @@ namespace OpenRiaServices.Tools
         private readonly HashSet<string> _assembliesToLoad;
         private Dictionary<Assembly, bool> _loadedAssemblies;
         private readonly List<DomainServiceDescription> _domainServiceDescriptions = new List<DomainServiceDescription>();
+        private readonly MetadataLoadContext _metadataLoadContext;
         private readonly ILogger _logger;
 
         /// <summary>
@@ -25,7 +26,7 @@ namespace OpenRiaServices.Tools
         /// <param name="assembliesToLoad">The set of assemblies to load (includes all known assemblies and references).</param>
         /// <param name="logger">logger for logging messages while processing</param>
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="assembliesToLoad"/> or <paramref name="logger"/> is null.</exception>
-        public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, ILogger logger)
+        public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, MetadataLoadContext metadataLoadContext, ILogger logger)
         {
             if (assembliesToLoad == null)
             {
@@ -36,7 +37,7 @@ namespace OpenRiaServices.Tools
             {
                 throw new ArgumentNullException(nameof(logger));
             }
-
+            _metadataLoadContext = metadataLoadContext;
             this._logger = logger;
 
             this._assembliesToLoad = new HashSet<string>(assembliesToLoad, StringComparer.OrdinalIgnoreCase);
@@ -253,7 +254,7 @@ namespace OpenRiaServices.Tools
 
             foreach (string assemblyName in this._assembliesToLoad)
             {
-                Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyName, this._logger);
+                Assembly assembly = _metadataLoadContext.LoadFromAssemblyName(assemblyName);
                 if (assembly != null)
                 {
                     // The bool value indicates whether this assembly should be searched for a DomainService

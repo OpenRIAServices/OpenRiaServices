@@ -181,7 +181,7 @@ namespace OpenRiaServices.Tools
             Debug.Assert(assembliesToLoad != null, "assembliesToLoad cannot be null");
 
             ILogger logger = host as ILogger;
-            DomainServiceCatalog catalog = new DomainServiceCatalog(assembliesToLoad, logger);
+            DomainServiceCatalog catalog = new DomainServiceCatalog(assembliesToLoad, _metadataLoadContext, logger);
             return this.GenerateCode(host, options, catalog, assembliesToLoad, codeGeneratorName);
         }
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 
 namespace OpenRiaServices.Tools.Validation
 {
@@ -26,7 +27,8 @@ namespace OpenRiaServices.Tools.Validation
             // Just creating an instance of the DomainServiceCatalog will locate all the DomainServices in the specified
             // assemblies and use their corresponding DomainServiceDescriptions to identify and report errors. These
             // errors will be reported using the logger we provide.
-            new DomainServiceCatalog(assemblies, logger);
+            // TODO Waybe remove validator.
+            //new DomainServiceCatalog(assemblies, new System.Reflection.MetadataLoadContext(new PathAssemblyResolver(Array)), logger);
         }
 
 
