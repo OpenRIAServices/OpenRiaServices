@@ -60,12 +60,11 @@ namespace OpenRiaServices.Tools
             {
                 _metadataLoadContext = new MetadataLoadContext(new PathAssemblyResolver(parameters.ServerAssemblies));
                 AppDomainUtilities.ConfigureAppDomain(options);
-                AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
                 // Try to load mono.cecil from same folder as tools
                 var location = toolingAssembly.Location;
-                
+
                 string ReplaceLastOccurrence(string source, string find, string replace)
                 {
                     int place = source.LastIndexOf(find);
@@ -78,6 +77,32 @@ namespace OpenRiaServices.Tools
                 var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
                 foreach (var file in Directory.GetFiles(Path.GetDirectoryName(location), "*.dll"))
                     AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
+
+
+                // Setup fallback assembly loading
+                // 1. Look for assembly in list of loaded assemblies (with possible other version)
+                // 2. Look in same folder as Tools.dll
+                string currentAssemblyFolder = Path.GetDirectoryName(location);
+                ResolveEventHandler resolveAssembly = (object sender, ResolveEventArgs args) =>
+                {
+                    var name = new AssemblyName(args.Name);
+
+                    // Search for an assembly with same name (ignore version missmatch)
+                    var existing = AppDomain.CurrentDomain.GetAssemblies().FirstOrDefault(a => a.GetName().Name == name.Name);
+                    if (existing is not null)
+                        return existing;
+
+                    string filePath = System.IO.Path.Combine(currentAssemblyFolder, name.Name + ".dll");
+                    if (File.Exists(filePath))
+                    {
+                        return AssemblyUtilities.LoadAssembly(filePath, loggingService);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                };
+                AppDomain.CurrentDomain.AssemblyResolve += resolveAssembly;
 
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
@@ -105,6 +130,11 @@ namespace OpenRiaServices.Tools
                 loggingService.LogException(ex);
                 return null;
             }
+        }
+
+        private Assembly CurrentDomain_AssemblyResolve1(object sender, ResolveEventArgs args)
+        {
+            throw new NotImplementedException();
         }
 
         private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
@@ -149,9 +179,9 @@ namespace OpenRiaServices.Tools
             else
             {
                 loggingService.LogError(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Missing_OpenRiaServices_Reference, filename));
-            }            
+            }
         }
-        
+
         private Assembly LoadAssembly(string assemblyPath)
         {
             var assembly = _metadataLoadContext.LoadFromAssemblyPath(assemblyPath);
