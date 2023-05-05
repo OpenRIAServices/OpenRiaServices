@@ -23,7 +23,7 @@ namespace OpenRiaServices.Tools
             {
                 typeof(MetadataTypeAttribute),
                 typeof(ScaffoldColumnAttribute),
-#if NET472
+#if !NET6_0_OR_GREATER
                 typeof(ScaffoldTableAttribute),
 #endif
                 typeof(SerializableAttribute),
