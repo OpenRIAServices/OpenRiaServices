@@ -60,6 +60,7 @@ namespace OpenRiaServices.Tools
             {
                 _metadataLoadContext = new MetadataLoadContext(new PathAssemblyResolver(parameters.ServerAssemblies));
                 AppDomainUtilities.ConfigureAppDomain(options);
+                AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
                 // Try to load mono.cecil from same folder as tools
@@ -104,6 +105,12 @@ namespace OpenRiaServices.Tools
                 loggingService.LogException(ex);
                 return null;
             }
+        }
+
+        private Assembly CurrentDomain_AssemblyResolve(object sender, ResolveEventArgs args)
+        {
+            // Is called when assembly is not loaded
+            return null;
         }
 
         /// <summary>

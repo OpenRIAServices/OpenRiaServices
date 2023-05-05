@@ -39,6 +39,7 @@ namespace OpenRiaServices.Tools
             else
                 frameworkManifest = GetFrameworkManifest(options.ClientFrameworkPath);
 
+            // TODO -> Should be deleted since ReflectionOnly not supported
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomainUtilities.ResolveFrameworkAssemblyVersioning;
             AppDomain.CurrentDomain.SetData(FrameworkManifestKey, frameworkManifest);
         }
