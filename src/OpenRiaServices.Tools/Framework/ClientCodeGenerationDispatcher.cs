@@ -33,9 +33,9 @@ namespace OpenRiaServices.Tools
 
         public ClientCodeGenerationDispatcher()
         {
-            string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
-            var resolver = new PathAssemblyResolver(runtimeAssemblies);
-            _metadataLoadContext = new MetadataLoadContext(resolver);
+            //string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
+            //var resolver = new PathAssemblyResolver(runtimeAssemblies);
+            //_metadataLoadContext = new MetadataLoadContext(resolver);
         }
 
         // MEF import of all code generators
@@ -58,6 +58,7 @@ namespace OpenRiaServices.Tools
 
             try
             {
+                _metadataLoadContext = new MetadataLoadContext(new PathAssemblyResolver(parameters.ServerAssemblies));
                 AppDomainUtilities.ConfigureAppDomain(options);
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
@@ -74,7 +75,8 @@ namespace OpenRiaServices.Tools
                     return source.Remove(place, find.Length).Insert(place, replace);
                 }
                 var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
-                LoadAssembly(cecilPath);
+                foreach (var file in Directory.GetFiles(Path.GetDirectoryName(location), "*.dll"))
+                    AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
 
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
@@ -117,7 +119,7 @@ namespace OpenRiaServices.Tools
             var (filename, serverAssemblyPath) = GetServerAssembly(parameters);
             if (serverAssemblyPath != null)
             {
-                Assembly serverAssembly = LoadAssembly(serverAssemblyPath);
+                Assembly serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
                 if (serverAssembly != null)
                 {
                     // Since this assembly (OpenRiaServices.Tools) requires the Server assembly to be loaded
