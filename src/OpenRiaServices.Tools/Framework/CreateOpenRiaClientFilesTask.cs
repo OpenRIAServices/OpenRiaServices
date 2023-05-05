@@ -659,7 +659,7 @@ namespace OpenRiaServices.Tools
 
             // Any change in the assembly references for either client or server are grounds to re-gen code.
             // Developer note -- we use the fact that the inputs have changed to trigger the full code-gen pass.
-            bool needToGenerate = serverReferencesChanged || clientReferencesChanged;
+            bool needToGenerate = true; // serverReferencesChanged || clientReferencesChanged;
 
             // Also trigger code-gen if the generated file is absent or empty.
             // Technically, the reference-change test is enough, but experience has shown users
