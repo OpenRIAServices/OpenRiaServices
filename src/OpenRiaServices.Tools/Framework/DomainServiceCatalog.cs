@@ -24,6 +24,7 @@ namespace OpenRiaServices.Tools
         /// Initializes a new instance of the <see cref="DomainServiceCatalog"/> class with the specified input and reference assemblies
         /// </summary>
         /// <param name="assembliesToLoad">The set of assemblies to load (includes all known assemblies and references).</param>
+        /// <param name="metadataLoadContext"></param>
         /// <param name="logger">logger for logging messages while processing</param>
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="assembliesToLoad"/> or <paramref name="logger"/> is null.</exception>
         public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, MetadataLoadContext metadataLoadContext, ILogger logger)
@@ -254,7 +255,7 @@ namespace OpenRiaServices.Tools
 
             foreach (string assemblyName in this._assembliesToLoad)
             {
-                Assembly assembly = _metadataLoadContext.LoadFromAssemblyName(assemblyName);
+                Assembly assembly = _metadataLoadContext.LoadFromAssemblyPath(assemblyName);
                 if (assembly != null)
                 {
                     // The bool value indicates whether this assembly should be searched for a DomainService
@@ -262,7 +263,7 @@ namespace OpenRiaServices.Tools
                 }
             }
 
-            AssemblyUtilities.SetAssemblyResolver(this._loadedAssemblies.Keys);
+            //AssemblyUtilities.SetAssemblyResolver(this._loadedAssemblies.Keys);
         }
 
         /// <summary>

@@ -94,7 +94,7 @@ namespace OpenRiaServices.Tools.Test
                 }
             }
 
-            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
+            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, null, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             Assert.IsTrue(descriptions.Count >= expectedDomainServices);
@@ -106,7 +106,7 @@ namespace OpenRiaServices.Tools.Test
         {
             string assemblyFileName = @"c:\Nowhere\DontExist.dll";
             ConsoleLogger logger = new ConsoleLogger();
-            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
+            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, null, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             Assert.AreEqual(0, descriptions.Count);
@@ -135,7 +135,7 @@ namespace OpenRiaServices.Tools.Test
 
             ConsoleLogger logger = new ConsoleLogger();
             IEnumerable<string> assemblies = new string[] { assemblyFileName, this.GetType().Assembly.Location };
-            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
+            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, null, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             
@@ -164,7 +164,7 @@ namespace OpenRiaServices.Tools.Test
             File.WriteAllText(assemblyFileName, "neener neener neener");
 
             ConsoleLogger logger = new ConsoleLogger();
-            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
+            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, null, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             Assert.AreEqual(0, descriptions.Count);

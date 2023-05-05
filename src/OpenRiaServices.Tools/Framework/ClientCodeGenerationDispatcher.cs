@@ -157,6 +157,7 @@ namespace OpenRiaServices.Tools
             if (serverAssemblyPath != null)
             {
                 Assembly serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
+                _metadataLoadContext.LoadFromAssemblyPath(serverAssemblyPath);
                 if (serverAssembly != null)
                 {
                     // Since this assembly (OpenRiaServices.Tools) requires the Server assembly to be loaded
