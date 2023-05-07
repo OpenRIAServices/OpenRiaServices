@@ -5,14 +5,12 @@
     This should make it possible to use portable and embedded pdb's on the server
 * Asp Core
     * New extension method to add OpenRiaServices to services.
-       - usage : 
         ```C#
-            services.AddOpenRiaServices<T>()
+        services.AddOpenRiaServices<T>()
         ```
     * New extension method to add OpenRiaServices to pipline.
-       - usage :
         ```C#
-             endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
+        endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
         ```
         
 # 5.3.0 with EFCore 2.0.1
