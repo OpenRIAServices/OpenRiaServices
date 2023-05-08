@@ -19,43 +19,50 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         public override async Task Invoke(HttpContext context)
         {
-            DomainService domainService = CreateDomainService(context);
-
-            object[] inputs;
-            ServiceQuery serviceQuery;
-            if (context.Request.Method == "GET")
+            try
             {
-                inputs = GetParametersFromUri(context);
+                DomainService domainService = CreateDomainService(context);
 
-                var queryAttribute = (QueryAttribute)_operation.OperationAttribute;
-                serviceQuery = queryAttribute.IsComposable ? GetServiceQuery(context.Request) : null;
-            }
-            else // POST
-            {
-                if (context.Request.ContentType != "application/msbin1")
+                object[] inputs;
+                ServiceQuery serviceQuery;
+                if (context.Request.Method == "GET")
                 {
-                    context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
+                    inputs = GetParametersFromUri(context);
+
+                    var queryAttribute = (QueryAttribute)_operation.OperationAttribute;
+                    serviceQuery = queryAttribute.IsComposable ? GetServiceQuery(context.Request) : null;
+                }
+                else // POST
+                {
+                    if (context.Request.ContentType != "application/msbin1")
+                    {
+                        context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
+                        return;
+                    }
+
+                    (serviceQuery, inputs) = await ReadParametersFromBodyAsync(context);
+                }
+
+                QueryResult<TEntity> result;
+                try
+                {
+                    result = await QueryProcessor.ProcessAsync<TEntity>(domainService, _operation, inputs, serviceQuery);
+                }
+                catch (Exception ex) when (!ex.IsFatal())
+                {
+                    await WriteError(context, ex, hideStackTrace: domainService.GetDisableStackTraces());
                     return;
                 }
 
-                (serviceQuery, inputs) = await ReadParametersFromBodyAsync(context);
+                if (result.ValidationErrors != null && result.ValidationErrors.Any())
+                    await WriteError(context, result.ValidationErrors, hideStackTrace: true);
+                else
+                    await WriteResponse(context, result);
             }
-
-            QueryResult<TEntity> result;
-            try
+            catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
             {
-                result = await QueryProcessor.ProcessAsync<TEntity>(domainService, _operation, inputs, serviceQuery);
+                //Swallow OperationCanceledException and do nothing
             }
-            catch (Exception ex) when (!ex.IsFatal())
-            {
-                await WriteError(context, ex, hideStackTrace: domainService.GetDisableStackTraces());
-                return;
-            }
-
-            if (result.ValidationErrors != null && result.ValidationErrors.Any())
-                await WriteError(context, result.ValidationErrors, hideStackTrace: true);
-            else
-                await WriteResponse(context, result);
         }
 
         // FROM DomainServiceWebHttpBehavior

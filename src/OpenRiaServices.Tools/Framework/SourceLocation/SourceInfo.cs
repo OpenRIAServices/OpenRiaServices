@@ -157,7 +157,7 @@
             foreach (object attribute in attributes)
             {
                 Type attributeType = attribute.GetType();
-                if (((SourceInfo.sourceInfoAttributeType != null && attributeType == SourceInfo.sourceInfoAttributeType)) ||
+                if ((SourceInfo.sourceInfoAttributeType != null && attributeType == SourceInfo.sourceInfoAttributeType) ||
                     attributeType.FullName.EndsWith(SourceInfo.SourceInfoAttributeTypeName, StringComparison.Ordinal))
                 {
                     return SourceInfo.GetSourceInfoFromAttribute(attribute);   

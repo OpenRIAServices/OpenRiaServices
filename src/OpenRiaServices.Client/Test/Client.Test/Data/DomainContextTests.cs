@@ -232,10 +232,8 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCallback(() =>
             {
                 // Required fields will be reported as in error
-                this.SubmitOperation = domainContext.SubmitChanges();
-
                 // The submission will fail because of the validation error.  Mark it as handled.
-                this.SubmitOperation.Completed += (s, e) => this.SubmitOperation.MarkErrorAsHandled();
+                this.SubmitOperation = domainContext.SubmitChanges(s => s.MarkErrorAsHandled(), null);
 
                 Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames.Contains("Name")), "Name is required");
                 Assert.IsTrue(actualErrors.OrderBy(s => s).SequenceEqual(new string[] { "Name" }), "We should have received errors for Name");
@@ -258,10 +256,8 @@ namespace OpenRiaServices.Client.Test
                 actualErrors.Clear();
 
                 // Property errors will be reported
-                this.SubmitOperation = domainContext.SubmitChanges();
-
                 // The submission will fail because of the validation error.  Mark it as handled.
-                this.SubmitOperation.Completed += (s, e) => this.SubmitOperation.MarkErrorAsHandled();
+                this.SubmitOperation = domainContext.SubmitChanges(s => s.MarkErrorAsHandled(), null);
 
                 Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames.Contains("ZoneID")), "ZoneID is out of range");
                 Assert.IsTrue(actualErrors.SequenceEqual(new string[] { "ZoneID" }), "We should have received an error for ZoneID only - errors were cleared and replaced");
@@ -277,10 +273,7 @@ namespace OpenRiaServices.Client.Test
                 actualErrors.Clear();
 
                 // Property errors will be reported
-                this.SubmitOperation = domainContext.SubmitChanges();
-
-                // The submission will fail because of the validation error.  Mark it as handled.
-                this.SubmitOperation.Completed += (s, e) => this.SubmitOperation.MarkErrorAsHandled();
+                this.SubmitOperation = domainContext.SubmitChanges(s => s.MarkErrorAsHandled(), null);
 
                 Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames.Contains("ZoneID")), "ZoneID is invalid");
                 Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames.Contains("StateName")), "StateName is too long");
@@ -301,10 +294,7 @@ namespace OpenRiaServices.Client.Test
                 newCity.MakeEntityValidationFail = true;
 
                 // The entity-level error will be reported
-                this.SubmitOperation = domainContext.SubmitChanges();
-
-                // The submission will fail because of the validation error.  Mark it as handled.
-                this.SubmitOperation.Completed += (s, e) => this.SubmitOperation.MarkErrorAsHandled();
+                this.SubmitOperation = domainContext.SubmitChanges(s => s.MarkErrorAsHandled(), null);
 
                 Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames == null || !r.MemberNames.Any(m => !string.IsNullOrEmpty(m))), "We should only have entity-level errors (no members or null or empty members only)");
                 Assert.IsTrue(actualErrors.SequenceEqual(new string[] { null }), "We should have received an error for the entity-level error");

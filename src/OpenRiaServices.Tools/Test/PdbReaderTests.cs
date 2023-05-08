@@ -71,7 +71,7 @@ namespace OpenRiaServices.Tools.Test
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
             ConsoleLogger logger = new ConsoleLogger();
             FilenameMap filenameMap = new FilenameMap();
-            using (SourceFileLocationService locationService = new SourceFileLocationService(new[] { new PdbSourceFileProviderFactory(/*symbolSearchPath*/ null,logger) }, filenameMap))
+            using (SourceFileLocationService locationService = new SourceFileLocationService(new[] { new PdbSourceFileProviderFactory(/*symbolSearchPath*/ null, logger) }, filenameMap))
             {
                 List<string> files = new List<string>(locationService.GetFilesForType(typeof(TestEntity)));
                 Assert.AreEqual(4, files.Count);
@@ -80,5 +80,6 @@ namespace OpenRiaServices.Tools.Test
                 CodeGenHelper.AssertContainsFiles(files, clientProjectPath, new string[] { "TestEntity.reverse.linked.cs" });
             }
         }
+
     }
 }
