@@ -20,43 +20,6 @@ namespace OpenRiaServices.Tools.Test
         {
         }
 
-        [TestMethod]
-        public void MyTestMethod()
-        {
-            var resolver = new PathAssemblyResolver(AppDomain.CurrentDomain.GetAssemblies().Select(a => a.Location));
-            var metadataLoadContext = new MetadataLoadContext(resolver);
-
-            var serverAssembly = typeof(DomainService).Assembly;
-            var metadataAssembly = metadataLoadContext.LoadFromAssemblyName(typeof(DomainService).Assembly.GetName());
-
-            var domainService = typeof(CityDomainService);
-            var metadataService = metadataAssembly.GetType(domainService.FullName);
-
-
-            bool eq = metadataService == domainService;
-            bool inherit = domainService.IsAssignableFrom(metadataService);
-
-        }
-
-#if NET6_0
-        [TestMethod]
-        public void MyTestMethod2()
-        {
-            var metadataLoadContext = new System.Runtime.Loader.AssemblyLoadContext("code gen");
-
-            var serverAssembly = typeof(DomainService).Assembly;
-            var metadataAssembly = metadataLoadContext.LoadFromAssemblyPath(typeof(DomainService).Assembly.Location);
-
-            var domainService = typeof(DomainService);
-            var metadataService = metadataAssembly.GetType(domainService.FullName);
-
-
-            bool eq = metadataService == domainService;
-            bool inherit = domainService.IsAssignableFrom(metadataService);
-
-        }
-
-#endif
 
 #if NET6_0_OR_GREATER
         [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
