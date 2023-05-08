@@ -37,7 +37,7 @@ namespace OpenRiaServices.Tools.Test
             var paths = domainServiceTypes.Select(t => t.Assembly.Location).ToHashSet();
             string[] runtimeAssemblies = Directory.GetFiles(RuntimeEnvironment.GetRuntimeDirectory(), "*.dll");
             paths.UnionWith(runtimeAssemblies);
-            paths.Add("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools.TextTemplate\\Test\\bin\\Debug\\net472\\OpenRiaServices.Client.dll");
+            //paths.Add("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools.TextTemplate\\Test\\bin\\Debug\\net472\\OpenRiaServices.Client.dll");
             var resolver = new Resolver(paths);
             _metadataLoadContext = new MetadataLoadContext(resolver);
             this._isCSharp = isCSharp;
@@ -403,9 +403,9 @@ namespace OpenRiaServices.Tools.Test
                         try
                         {
                             Assembly refAssy;
-                            if (refName.Name.Contains("Client"))
-                                refAssy = _metadataLoadContext.LoadFromAssemblyPath("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools.TextTemplate\\Test\\bin\\Debug\\net472\\OpenRiaServices.Client.dll");
-                            else
+                            //if (refName.Name.Contains("Client"))
+                            //    refAssy = _metadataLoadContext.LoadFromAssemblyPath("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools.TextTemplate\\Test\\bin\\Debug\\net472\\OpenRiaServices.Client.dll");
+                            //else
                                 refAssy = _metadataLoadContext.LoadFromAssemblyName(refName);
                             loadedAssemblies[refName] = refAssy;
                         }
