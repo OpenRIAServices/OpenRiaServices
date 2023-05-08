@@ -1289,6 +1289,13 @@ namespace OpenRiaServices.Server.Test
 #endif
 
         [TestMethod]
+        public void DomainService_LoadContextDefinition()
+        {
+            Type t = typeof(GenericDomainService<>);
+            DomainServiceDescription.GetDescription(t);
+        }
+
+        [TestMethod]
         public void DomainService_GenericTypeDefinition()
         {
             Type t = typeof(GenericDomainService<>);

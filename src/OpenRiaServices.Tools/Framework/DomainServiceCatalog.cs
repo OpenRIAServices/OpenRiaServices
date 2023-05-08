@@ -208,8 +208,8 @@ namespace OpenRiaServices.Tools
                 if (pair.Value)
                 {
                     // Utility autorecovers and logs for common exceptions
-                    IEnumerable<Type> types = AssemblyUtilities.GetExportedTypes(pair.Key, this._logger);
-
+                    IEnumerable<Type> types = AssemblyUtilities.GetExportedTypes(pair.Key, _metadataLoadContext, this._logger);
+                    
                     foreach (Type t in types)
                     {
                         if (typeof(DomainService).IsAssignableFrom(t) &&

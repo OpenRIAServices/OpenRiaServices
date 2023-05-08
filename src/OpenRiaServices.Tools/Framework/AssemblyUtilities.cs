@@ -5,10 +5,185 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using System.Text;
+using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Tools
 {
+    /// <summary>
+    /// 
+    /// </summary>
+    public class RIAType : Type
+    {
+        private readonly Type _actualType;
+        private readonly Type _systemType;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="actualType"></param>
+        public RIAType(Type actualType, Type baseType)
+        {
+            _actualType = actualType;
+            _systemType = baseType;
+        }
+
+        public override Guid GUID => _actualType.GUID;
+
+        public override Module Module => _actualType.Module;
+
+        public override Assembly Assembly => _actualType.Assembly;
+
+        public override string FullName => _actualType.FullName;
+
+        public override string Namespace => _actualType.Namespace;
+
+        public override string AssemblyQualifiedName => _actualType.AssemblyQualifiedName;
+
+        public override Type BaseType => _actualType.BaseType;
+
+        public override Type UnderlyingSystemType => _systemType;
+
+        public override string Name => _actualType.Name;
+
+        public override ConstructorInfo[] GetConstructors(BindingFlags bindingAttr)
+        {
+            return _actualType.GetConstructors(bindingAttr);
+        }
+
+        public override object[] GetCustomAttributes(bool inherit)
+        {
+            return _actualType.GetCustomAttributes(inherit);
+        }
+
+        public override object[] GetCustomAttributes(Type attributeType, bool inherit)
+        {
+            // Vi sabbar här på att vi inte får med oss attributen.
+            return _actualType.GetCustomAttributes(attributeType, inherit);
+        }
+
+        public override Type GetElementType()
+        {
+            return _actualType.GetElementType();
+        }
+
+        public override EventInfo GetEvent(string name, BindingFlags bindingAttr)
+        {
+            return _actualType.GetEvent(name, bindingAttr);
+        }
+
+        public override EventInfo[] GetEvents(BindingFlags bindingAttr)
+        {
+            return _actualType.GetEvents(bindingAttr);
+        }
+
+        public override FieldInfo GetField(string name, BindingFlags bindingAttr)
+        {
+            return _actualType.GetField(name, bindingAttr);
+        }
+
+        public override FieldInfo[] GetFields(BindingFlags bindingAttr)
+        {
+            return _actualType.GetFields(bindingAttr);
+        }
+
+        public override Type GetInterface(string name, bool ignoreCase)
+        {
+            return _actualType.GetInterface(name, ignoreCase);
+        }
+
+        public override Type[] GetInterfaces()
+        {
+            return _actualType.GetInterfaces();
+        }
+
+        public override MemberInfo[] GetMembers(BindingFlags bindingAttr)
+        {
+            return _actualType.GetMembers(bindingAttr);
+        }
+
+        public override MethodInfo[] GetMethods(BindingFlags bindingAttr)
+        {
+            return _actualType.GetMethods(bindingAttr);
+        }
+
+        public override Type GetNestedType(string name, BindingFlags bindingAttr)
+        {
+            return _actualType.GetNestedType(name, bindingAttr);
+        }
+
+        public override Type[] GetNestedTypes(BindingFlags bindingAttr)
+        {
+            return _actualType.GetNestedTypes(bindingAttr);
+        }
+
+        public override PropertyInfo[] GetProperties(BindingFlags bindingAttr)
+        {
+            return _actualType.GetProperties(bindingAttr);
+        }
+
+        public override object InvokeMember(string name, BindingFlags invokeAttr, Binder binder, object target, object[] args, ParameterModifier[] modifiers, CultureInfo culture, string[] namedParameters)
+        {
+            return _actualType.InvokeMember(name, invokeAttr, binder, target, args, modifiers, culture, namedParameters);
+        }
+
+        public override bool IsDefined(Type attributeType, bool inherit)
+        {
+            return _actualType.IsDefined(attributeType, inherit);
+        }
+
+        protected override TypeAttributes GetAttributeFlagsImpl()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override ConstructorInfo GetConstructorImpl(BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override MethodInfo GetMethodImpl(string name, BindingFlags bindingAttr, Binder binder, CallingConventions callConvention, Type[] types, ParameterModifier[] modifiers)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override PropertyInfo GetPropertyImpl(string name, BindingFlags bindingAttr, Binder binder, Type returnType, Type[] types, ParameterModifier[] modifiers)
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool HasElementTypeImpl()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool IsArrayImpl()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool IsByRefImpl()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool IsCOMObjectImpl()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool IsPointerImpl()
+        {
+            throw new NotImplementedException();
+        }
+
+        protected override bool IsPrimitiveImpl()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
     /// <summary>
     /// Assembly level utilities.
     /// </summary>
@@ -164,6 +339,35 @@ namespace OpenRiaServices.Tools
         }
 
 
+
+        private class TreeItem
+        {
+            public Type Item { get; set; }
+            public IEnumerable<TreeItem> Children { get; set; }
+        }
+
+        private static IEnumerable<Type> GenerateTree(
+        IEnumerable<Type> types)
+        {
+            var filteredTypes = new List<Type>();
+            var notFilteredTypes = new List<Type>(types);
+            List<Type> inherits = new List<Type>();
+            do
+            {                
+                inherits = notFilteredTypes.Where(col => typeof(DomainService).FullName == col.BaseType.FullName || filteredTypes.Any(t => t.FullName == col.BaseType.FullName)).ToList();
+                foreach (var col in inherits)
+                {
+                    notFilteredTypes.Remove(col);
+                    var riaType = new RIAType(col, typeof(DomainService));
+                    filteredTypes.Add(riaType);
+                }
+
+            } while (inherits.Count > 0);
+            filteredTypes.AddRange(notFilteredTypes);
+            return filteredTypes;
+
+        }
+
         /// <summary>
         /// Standard implementation of <see cref="Assembly.GetExportedTypes()"/>
         /// with autorecovery and logging of common error conditions.
@@ -171,12 +375,16 @@ namespace OpenRiaServices.Tools
         /// <param name="assembly">The assembly whose exported types are needed</param>
         /// <param name="logger">Optional logger to use to report problems.</param>
         /// <returns>The collection of types.  It may be empty but it will not be null.</returns>
-        internal static IEnumerable<Type> GetExportedTypes(Assembly assembly, ILogger logger)
+        internal static IEnumerable<Type> GetExportedTypes(Assembly assembly, MetadataLoadContext metadataLoadContext, ILogger logger)
         {
             Type[] types = null;
             try
             {
-                types = assembly.GetExportedTypes();
+                var tempTypes = assembly.GetExportedTypes();
+                types = GenerateTree(tempTypes).ToArray();
+
+                return types;
+                
             }
             catch (Exception ex)
             {

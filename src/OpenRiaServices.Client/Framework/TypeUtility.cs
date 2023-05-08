@@ -549,8 +549,9 @@ namespace OpenRiaServices
         /// <returns></returns>
         internal static bool CanContainDomainServiceImplementations(Assembly assembly)
         {
+            var references = assembly.GetReferencedAssemblies();
             return !assembly.IsSystemAssembly()
-                    && assembly.GetReferencedAssemblies()
+                    && references
                         .Any(reference => string.Equals(reference.Name, "OpenRiaServices.Server", StringComparison.OrdinalIgnoreCase));
         }
 #endif

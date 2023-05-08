@@ -101,6 +101,47 @@ namespace OpenRiaServices.Tools.Test
         }
 
         [TestMethod]
+        public void DomainServiceCatalog_Finds_DomainServices()
+        {
+            ConsoleLogger logger = new ConsoleLogger();
+            List<string> assemblies = new List<string>();
+
+            // Add our current unit test assembly to those to load
+            assemblies.Add(this.GetType().Assembly.Location);
+
+            int expectedDomainServices = 0;
+            foreach (Type t in this.GetType().Assembly.GetExportedTypes())
+            {
+                if (IsDomainService(t))
+                {
+                    ++expectedDomainServices;
+                }
+            }
+
+            // Add all our assy references and also count any DomainServices there (don't expect any)
+            foreach (AssemblyName an in this.GetType().Assembly.GetReferencedAssemblies())
+            {
+                Assembly a = Assembly.Load(an);
+                assemblies.Add(a.Location);
+                foreach (Type t in a.GetExportedTypes())
+                {
+                    if (IsDomainService(t))
+                    {
+                        ++expectedDomainServices;
+                    }
+                }
+            }
+
+            var resolver = new PathAssemblyResolver(assemblies);
+            var loadContext = new MetadataLoadContext(resolver);
+
+            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, loadContext, logger);
+            ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
+            Assert.IsNotNull(descriptions);
+            Assert.IsTrue(descriptions.Count >= expectedDomainServices);
+        }
+
+        [TestMethod]
         [Description("DomainServiceCatalog catches FileNotFoundException and emits an info message")]
         public void DomainServiceCatalog_Message_FileNotFound()
         {
