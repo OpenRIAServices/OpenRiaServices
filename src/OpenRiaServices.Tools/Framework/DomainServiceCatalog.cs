@@ -212,8 +212,10 @@ namespace OpenRiaServices.Tools
                     
                     foreach (Type t in types)
                     {
-                        if (typeof(DomainService).IsAssignableFrom(t) &&
-                            TypeDescriptor.GetAttributes(t)[typeof(EnableClientAccessAttribute)] != null)
+                        if (typeof(DomainService).IsAssignableFrom(t)
+                            //&& TypeDescriptor.GetAttributes(t)[typeof(EnableClientAccessAttribute)] != null
+                            )
+
                         {
                             this.AddDomainServiceType(t);
                         }
