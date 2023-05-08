@@ -153,6 +153,7 @@ namespace OpenRiaServices.Server.Test
             result = results.Single(p => p.MemberNames.Single() == "ComplexType_Recursive.P3().P3().P4");
             Assert.AreEqual("The field P4 must be between 0 and 5.", result.ErrorMessage);
         }
+#if !NET6_0_OR_GREATER
 
         [TestMethod]
         [Description("Tests the reflection-based Binary support in the TypeUtility.")]
@@ -180,5 +181,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(binary, SerializationUtility.GetServerValue(typeof(Binary), bytes),
                 "Server byte[] values should be equal.");
         }
+
+#endif
     }
 }

@@ -324,6 +324,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("b", error.MemberNames.Single());
         }
 
+#if !NET6_0_OR_GREATER
         [TestMethod]
         [TestCategory("DatabaseTest")]
         public async Task TestDomainService_QueryDirect()
@@ -345,6 +346,10 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(43, count);
         }
 
+
+
+#endif
+
         [TestMethod]
         public async Task TestDomainService_QueryDirect_Throws()
         {
@@ -365,6 +370,8 @@ namespace OpenRiaServices.Server.Test
                 }
             }, "Test");
         }
+
+#if !NET6_0_OR_GREATER
 
         // TODO: Remove the [Ignore] on the following two tests once we've updated our test runner such that it 
         //       starts a webserver before running these tests. Or consider moving these tests, or consider 
@@ -432,6 +439,40 @@ namespace OpenRiaServices.Server.Test
             }
         }
 
+         [TestMethod]
+        public void TestQuery_QueryOperatorOrderPreservation()
+        {
+            // test no encoding
+            StringBuilder sb = new StringBuilder();
+            sb.Append("$skip=1");
+            sb.Append("&$where=").Append("Color==\"Yel$l&ow\"");
+            sb.Append("&$orderby=ListPrice");
+            sb.Append("&$where=").Append("Weight>10");
+            sb.Append("&$orderby=Style");
+            sb.Append("&$skip=2");
+            sb.Append("&$take=3");
+            sb.Append("&$where=").Append("Color!=\"Purple\"");
+            string queryString = sb.ToString();
+            List<ServiceQueryPart> queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
+            Assert.AreEqual("skip", queryParts[0].QueryOperator);
+            Assert.AreEqual("where", queryParts[1].QueryOperator);
+            Assert.AreEqual("orderby", queryParts[2].QueryOperator);
+            Assert.AreEqual("where", queryParts[3].QueryOperator);
+            Assert.AreEqual("orderby", queryParts[4].QueryOperator);
+            Assert.AreEqual("skip", queryParts[5].QueryOperator);
+            Assert.AreEqual("take", queryParts[6].QueryOperator);
+            Assert.AreEqual("where", queryParts[7].QueryOperator);
+
+            // test a single where clause with a comma
+            sb = new StringBuilder();
+            sb.Append("$where=1,2");
+            queryString = sb.ToString();
+            queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
+            Assert.AreEqual("where", queryParts[0].QueryOperator);
+            Assert.AreEqual("1,2", queryParts[0].Expression);
+        }
+#endif
+
         // TODO: get this test working again and remove [Ignore]
         // This test fails intermittently on the json.Contains line below.
         // It also appears it will "pass" if everything times out.
@@ -481,38 +522,7 @@ namespace OpenRiaServices.Server.Test
             }
         }
 
-        [TestMethod]
-        public void TestQuery_QueryOperatorOrderPreservation()
-        {
-            // test no encoding
-            StringBuilder sb = new StringBuilder();
-            sb.Append("$skip=1");
-            sb.Append("&$where=").Append("Color==\"Yel$l&ow\"");
-            sb.Append("&$orderby=ListPrice");
-            sb.Append("&$where=").Append("Weight>10");
-            sb.Append("&$orderby=Style");
-            sb.Append("&$skip=2");
-            sb.Append("&$take=3");
-            sb.Append("&$where=").Append("Color!=\"Purple\"");
-            string queryString = sb.ToString();
-            List<ServiceQueryPart> queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
-            Assert.AreEqual("skip", queryParts[0].QueryOperator);
-            Assert.AreEqual("where", queryParts[1].QueryOperator);
-            Assert.AreEqual("orderby", queryParts[2].QueryOperator);
-            Assert.AreEqual("where", queryParts[3].QueryOperator);
-            Assert.AreEqual("orderby", queryParts[4].QueryOperator);
-            Assert.AreEqual("skip", queryParts[5].QueryOperator);
-            Assert.AreEqual("take", queryParts[6].QueryOperator);
-            Assert.AreEqual("where", queryParts[7].QueryOperator);
-
-            // test a single where clause with a comma
-            sb = new StringBuilder();
-            sb.Append("$where=1,2");
-            queryString = sb.ToString();
-            queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
-            Assert.AreEqual("where", queryParts[0].QueryOperator);
-            Assert.AreEqual("1,2", queryParts[0].Expression);
-        }
+       
 
         /// <summary>
         /// Scenario test that can be used for perf tuning. The test loads 500 orders with OrderDetails
@@ -546,17 +556,6 @@ namespace OpenRiaServices.Server.Test
 
             double avgTime = times.Average();
             Console.WriteLine("Average time for Perf_MeasureScenario1 : {0} seconds", avgTime);
-        }
-
-        private QueryResult DeserializeResult(HttpResponse response, IEnumerable<Type> knownTypes)
-        {
-            string responseText = response.Output.ToString();
-
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(QueryResult), knownTypes);
-            MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(responseText));
-            QueryResult serviceResult = (QueryResult)ser.ReadObject(ms);
-
-            return serviceResult;
         }
 
         private string RequestDirect(Type providerType, string dataMethodName, IDictionary<string, object> queryParameters)

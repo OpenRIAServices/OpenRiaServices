@@ -461,6 +461,7 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNull(dbAttr);
 
         }
+#if !NET6_0_OR_GREATER
 
         [TestMethod]
         [Description("Verify that our DAL providers correctly infer and apply DatabaseGeneratedAttribute")]
@@ -503,6 +504,49 @@ namespace OpenRiaServices.Server.Test
             Assert.IsTrue(CompareDatabaseGeneratedOption(dbAttr, "Computed"));
         }
 
+        
+        [TestMethod]
+        [Description("Ensure that our TDPs cache properties")]
+        public void DomainService_TdpCachesProperties()
+        {
+            // First make sure the TDPs are registered for all the entities.
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
+
+            Type categoryType = typeof(NorthwindModel.Category);
+
+            PropertyDescriptorCollection p1 = TypeDescriptor.GetProperties(categoryType);
+            PropertyDescriptorCollection p2 = TypeDescriptor.GetProperties(categoryType);
+
+            Assert.AreSame(p1, p2, "TDP didn't cache the properties.");
+
+            // First make sure the TDPs are registered for all the entities.
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+
+            categoryType = typeof(DataTests.Northwind.LTS.Category);
+
+            p1 = TypeDescriptor.GetProperties(categoryType);
+            p2 = TypeDescriptor.GetProperties(categoryType);
+
+            Assert.AreSame(p1, p2, "TDP didn't cache the properties.");
+        }
+
+          [TestMethod]
+        public void DomainServiceDescription_ConcurrencyCheckAttribute()
+        {
+            // verify that the LTS provider flows OCC metadata
+            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+            PropertyDescriptor prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductName"];
+            Assert.IsNotNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
+            prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryName"];
+            Assert.IsNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
+
+            // verify that the EF provider flows OCC metadata
+            desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
+            prop = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["ProductName"];
+            Assert.IsNotNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
+            prop = TypeDescriptor.GetProperties(typeof(NorthwindModel.Category))["CategoryName"];
+            Assert.IsNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
+        }
         [TestMethod]
         [Description("Asserts that underdefined EF properties with null facet values are successfully handled during timestamp comparison.")]
         [WorkItem(857020)]
@@ -541,6 +585,124 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(property.Attributes[typeof(TimestampAttribute)],
                 "ConcurrencyTimestamp property is a timestamp.");
         }
+
+         /// <summary>
+        /// Direct tests against our custom TD for member projections
+        /// </summary>
+        [TestMethod]
+        public void ProjectionInclude_TestPropertyDescriptor()
+        {
+            DataTests.Northwind.LTS.Product product = new DataTests.Northwind.LTS.Product
+            {
+                ProductID = 1
+            };
+            DataTests.Northwind.LTS.Category category = new DataTests.Northwind.LTS.Category
+            {
+                CategoryID = 1,
+                CategoryName = "Frozen Treats"
+            };
+            DataTests.Northwind.LTS.Supplier supplier = new DataTests.Northwind.LTS.Supplier
+            {
+                SupplierID = 1,
+                CompanyName = "The Treat Factory"
+            };
+            product.Category = category;
+            product.Supplier = supplier;
+
+            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+            desc.Initialize();
+
+            PropertyDescriptor supplierName = TypeDescriptor.GetProperties(product)["SupplierName"];
+            Assert.IsNotNull(supplierName);
+            Assert.AreEqual(supplier.CompanyName, supplierName.GetValue(product));
+            Assert.AreEqual(typeof(string), supplierName.PropertyType);
+            Assert.AreEqual(typeof(DataTests.Northwind.LTS.Product), supplierName.ComponentType);
+            Assert.AreEqual(false, supplierName.CanResetValue(product));
+            Assert.IsTrue(supplierName.IsReadOnly);
+            Assert.IsTrue(supplierName.ShouldSerializeValue(product));
+
+            PropertyDescriptor categoryName = TypeDescriptor.GetProperties(product)["CategoryName"];
+            Assert.IsNotNull(categoryName);
+            Assert.AreEqual(category.CategoryName, categoryName.GetValue(product));
+        }
+
+          [TestMethod]
+        public void TestLinqToSqlDomainServiceDescription()
+        {
+            ValidateMetadata(typeof(TestDomainServices.LTS.Catalog), CatalogEntities);
+        }
+
+        [TestMethod]
+        public void TestLinqToEntitiesDomainServiceDescription()
+        {
+            ValidateMetadata(typeof(TestDomainServices.EF.Catalog), CatalogEntities);
+        }
+
+        [TestMethod]
+        [Description("This test makes sure we can obtain an error message for invalid LinqToSqlDomainServiceDescriptionProviderAttribute")]
+        public void TestLinqToSqlInvalidDescriptionProvider()
+        {
+            ExceptionHelper.ExpectInvalidOperationException(() =>
+                {
+                    ValidateMetadata(typeof(InvalidLinqToSqlDomainServiceDescriptionProviderDS), CatalogEntities);
+                },
+                string.Format(OpenRiaServices.LinqToSql.Resource.InvalidLinqToSqlDomainServiceDescriptionProviderSpecification,
+                    typeof(AdventureWorksModel.AdventureWorksEntities))
+                );
+
+            ExceptionHelper.ExpectInvalidOperationException(() =>
+            {
+                ValidateMetadata(typeof(LinqToSqlThrowingDataContextDS), CatalogEntities);
+            }, "error");
+        }
+
+        [TestMethod]
+        [Description("This test makes sure we can obtain an error message for invalid LinqToEntitiesDomainServiceDescriptionProviderAttribute")]
+        public void TestLinqToEntitiesInvalidDescriptionProvider()
+        {
+            ExceptionHelper.ExpectInvalidOperationException(() =>
+            {
+                ValidateMetadata(typeof(InvalidLinqToEntitiesDomainServiceDescriptionProviderDS), CatalogEntities);
+            },
+                                                           string.Format(OpenRiaServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
+                                                               typeof(DataTests.AdventureWorks.LTS.AdventureWorks))
+                );
+        }
+
+        [TestMethod]
+        [Description("This test makes sure we can obtain a description without instantiating L2S DomainService")]
+        public void TestLinqToSqlDomainServiceNotInstantiated()
+        {
+            ValidateMetadata(typeof(ThrowingDomainServiceL2S), CatalogEntities);
+        }
+
+        
+        /// <summary>
+        /// Verify that DSDPs are chained from those applied to the most derived DomainService
+        /// base class, up the hierarchy to base. This means that the innermost parent is the
+        /// DSDP applied to the most derived class (TDPs chain calling their parents first).
+        /// </summary>
+        [TestMethod]
+        public void DomainDescriptionProvider_ChainOrdering()
+        {
+            DomainServiceDescriptionProvider dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(DSDTestServiceB));
+            Assert.AreEqual(typeof(DescriptionProviderA), dsdp.GetType());
+            Assert.AreEqual(typeof(DescriptionProviderB), dsdp.ParentProvider.GetType());
+            Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.ParentProvider.GetType());
+
+            dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(TestDomainServices.LTS.Northwind));
+            Assert.AreEqual(typeof(LinqToSqlDomainServiceDescriptionProvider), dsdp.GetType());
+            Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.GetType());
+        }
+
+        
+        [TestMethod]
+        public void TestAssociationExtensionAttributes_LTS()
+        {
+            VerifyAdventureWorksAssociations(typeof(TestDomainServices.LTS.Catalog));
+        }
+
+#endif
 
         /// <summary>
         /// Can't have a child Update w/o a parent Update
@@ -721,30 +883,6 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(0, parentAssociations.Count());
         }
 
-        [TestMethod]
-        [Description("Ensure that our TDPs cache properties")]
-        public void DomainService_TdpCachesProperties()
-        {
-            // First make sure the TDPs are registered for all the entities.
-            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
-
-            Type categoryType = typeof(NorthwindModel.Category);
-
-            PropertyDescriptorCollection p1 = TypeDescriptor.GetProperties(categoryType);
-            PropertyDescriptorCollection p2 = TypeDescriptor.GetProperties(categoryType);
-
-            Assert.AreSame(p1, p2, "TDP didn't cache the properties.");
-
-            // First make sure the TDPs are registered for all the entities.
-            DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-
-            categoryType = typeof(DataTests.Northwind.LTS.Category);
-
-            p1 = TypeDescriptor.GetProperties(categoryType);
-            p2 = TypeDescriptor.GetProperties(categoryType);
-
-            Assert.AreSame(p1, p2, "TDP didn't cache the properties.");
-        }
 
         [TestMethod]
         [Description("Ensure that overrides of base DomainService methods aren't inferred as operations")]
@@ -933,24 +1071,6 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(description.GetQueryMethod("B1"));
             Assert.IsNotNull(description.GetQueryMethod("GetCities"));
             Assert.IsNotNull(description.GetQueryMethod("GetZips"));
-        }
-
-        /// <summary>
-        /// Verify that DSDPs are chained from those applied to the most derived DomainService
-        /// base class, up the hierarchy to base. This means that the innermost parent is the
-        /// DSDP applied to the most derived class (TDPs chain calling their parents first).
-        /// </summary>
-        [TestMethod]
-        public void DomainDescriptionProvider_ChainOrdering()
-        {
-            DomainServiceDescriptionProvider dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(DSDTestServiceB));
-            Assert.AreEqual(typeof(DescriptionProviderA), dsdp.GetType());
-            Assert.AreEqual(typeof(DescriptionProviderB), dsdp.ParentProvider.GetType());
-            Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.ParentProvider.GetType());
-
-            dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(TestDomainServices.LTS.Northwind));
-            Assert.AreEqual(typeof(LinqToSqlDomainServiceDescriptionProvider), dsdp.GetType());
-            Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.GetType());
         }
 
         [TestMethod]
@@ -1198,6 +1318,7 @@ namespace OpenRiaServices.Server.Test
             }, string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
+#if !NET6_0_OR_GREATER
         [TestMethod]
         public void DomainService_InterfaceType()
         {
@@ -1207,6 +1328,7 @@ namespace OpenRiaServices.Server.Test
                 DomainServiceDescription.GetDescription(t);
             }, string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
+#endif
 
         [TestMethod]
         public void DomainService_GenericTypeDefinition()
@@ -1259,23 +1381,7 @@ namespace OpenRiaServices.Server.Test
             }
         }
 
-        [TestMethod]
-        public void DomainServiceDescription_ConcurrencyCheckAttribute()
-        {
-            // verify that the LTS provider flows OCC metadata
-            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            PropertyDescriptor prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductName"];
-            Assert.IsNotNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryName"];
-            Assert.IsNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
-
-            // verify that the EF provider flows OCC metadata
-            desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
-            prop = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["ProductName"];
-            Assert.IsNotNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            prop = TypeDescriptor.GetProperties(typeof(NorthwindModel.Category))["CategoryName"];
-            Assert.IsNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
-        }
+      
 
         [TestMethod]
         public void DomainServiceDescription_VirtualMethods()
@@ -1771,45 +1877,7 @@ namespace OpenRiaServices.Server.Test
             }, string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_ParamMustBeByVal, "InsertCounty3", "county1"));
         }
 
-        /// <summary>
-        /// Direct tests against our custom TD for member projections
-        /// </summary>
-        [TestMethod]
-        public void ProjectionInclude_TestPropertyDescriptor()
-        {
-            DataTests.Northwind.LTS.Product product = new DataTests.Northwind.LTS.Product
-            {
-                ProductID = 1
-            };
-            DataTests.Northwind.LTS.Category category = new DataTests.Northwind.LTS.Category
-            {
-                CategoryID = 1,
-                CategoryName = "Frozen Treats"
-            };
-            DataTests.Northwind.LTS.Supplier supplier = new DataTests.Northwind.LTS.Supplier
-            {
-                SupplierID = 1,
-                CompanyName = "The Treat Factory"
-            };
-            product.Category = category;
-            product.Supplier = supplier;
-
-            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            desc.Initialize();
-
-            PropertyDescriptor supplierName = TypeDescriptor.GetProperties(product)["SupplierName"];
-            Assert.IsNotNull(supplierName);
-            Assert.AreEqual(supplier.CompanyName, supplierName.GetValue(product));
-            Assert.AreEqual(typeof(string), supplierName.PropertyType);
-            Assert.AreEqual(typeof(DataTests.Northwind.LTS.Product), supplierName.ComponentType);
-            Assert.AreEqual(false, supplierName.CanResetValue(product));
-            Assert.IsTrue(supplierName.IsReadOnly);
-            Assert.IsTrue(supplierName.ShouldSerializeValue(product));
-
-            PropertyDescriptor categoryName = TypeDescriptor.GetProperties(product)["CategoryName"];
-            Assert.IsNotNull(categoryName);
-            Assert.AreEqual(category.CategoryName, categoryName.GetValue(product));
-        }
+       
 
         [TestMethod]
         public void ProjectionInclude_InvalidProjections()
@@ -1926,56 +1994,7 @@ namespace OpenRiaServices.Server.Test
 
         }
 
-        [TestMethod]
-        public void TestLinqToSqlDomainServiceDescription()
-        {
-            ValidateMetadata(typeof(TestDomainServices.LTS.Catalog), CatalogEntities);
-        }
-
-        [TestMethod]
-        public void TestLinqToEntitiesDomainServiceDescription()
-        {
-            ValidateMetadata(typeof(TestDomainServices.EF.Catalog), CatalogEntities);
-        }
-
-        [TestMethod]
-        [Description("This test makes sure we can obtain an error message for invalid LinqToSqlDomainServiceDescriptionProviderAttribute")]
-        public void TestLinqToSqlInvalidDescriptionProvider()
-        {
-            ExceptionHelper.ExpectInvalidOperationException(() =>
-                {
-                    ValidateMetadata(typeof(InvalidLinqToSqlDomainServiceDescriptionProviderDS), CatalogEntities);
-                },
-                string.Format(OpenRiaServices.LinqToSql.Resource.InvalidLinqToSqlDomainServiceDescriptionProviderSpecification,
-                    typeof(AdventureWorksModel.AdventureWorksEntities))
-                );
-
-            ExceptionHelper.ExpectInvalidOperationException(() =>
-            {
-                ValidateMetadata(typeof(LinqToSqlThrowingDataContextDS), CatalogEntities);
-            }, "error");
-        }
-
-        [TestMethod]
-        [Description("This test makes sure we can obtain an error message for invalid LinqToEntitiesDomainServiceDescriptionProviderAttribute")]
-        public void TestLinqToEntitiesInvalidDescriptionProvider()
-        {
-            ExceptionHelper.ExpectInvalidOperationException(() =>
-            {
-                ValidateMetadata(typeof(InvalidLinqToEntitiesDomainServiceDescriptionProviderDS), CatalogEntities);
-            },
-                                                           string.Format(OpenRiaServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
-                                                               typeof(DataTests.AdventureWorks.LTS.AdventureWorks))
-                );
-        }
-
-        [TestMethod]
-        [Description("This test makes sure we can obtain a description without instantiating L2S DomainService")]
-        public void TestLinqToSqlDomainServiceNotInstantiated()
-        {
-            ValidateMetadata(typeof(ThrowingDomainServiceL2S), CatalogEntities);
-        }
-
+      
         [TestMethod]
         [Description("This test makes sure we can obtain a description without instantiating L2E DomainService or its ObjectContext")]
         public void TestLinqToEntitiesContextNotInstantiated()
@@ -1983,11 +2002,6 @@ namespace OpenRiaServices.Server.Test
             ValidateMetadata(typeof(ThrowingDomainServiceL2E), CatalogEntities);
         }
 
-        [TestMethod]
-        public void TestAssociationExtensionAttributes_LTS()
-        {
-            VerifyAdventureWorksAssociations(typeof(TestDomainServices.LTS.Catalog));
-        }
 
         [TestMethod]
         public void TestAssociationExtensionAttributes_EF()
