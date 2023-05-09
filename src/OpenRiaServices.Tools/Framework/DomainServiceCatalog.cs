@@ -19,14 +19,25 @@ namespace OpenRiaServices.Tools
         private readonly List<DomainServiceDescription> _domainServiceDescriptions = new List<DomainServiceDescription>();
         private readonly ILogger _logger;
 
+#if NET6_0_OR_GREATER
+        System.Runtime.Loader.AssemblyLoadContext _assemblyLoadContext;
+#endif
+
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceCatalog"/> class with the specified input and reference assemblies
         /// </summary>
         /// <param name="assembliesToLoad">The set of assemblies to load (includes all known assemblies and references).</param>
         /// <param name="logger">logger for logging messages while processing</param>
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="assembliesToLoad"/> or <paramref name="logger"/> is null.</exception>
-        public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, ILogger logger)
+        public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, ILogger logger
+#if NET6_0_OR_GREATER
+            , System.Runtime.Loader.AssemblyLoadContext context = null)
+        { 
+            _assemblyLoadContext = context;
+#else
+            )
         {
+#endif
             if (assembliesToLoad == null)
             {
                 throw new ArgumentNullException(nameof(assembliesToLoad));
@@ -208,7 +219,7 @@ namespace OpenRiaServices.Tools
                     // Utility autorecovers and logs for common exceptions
                     IEnumerable<Type> types = AssemblyUtilities.GetExportedTypes(pair.Key, this._logger);
                     
-                    foreach (Type t in types)
+                     foreach (Type t in types)
                     {
                         if (typeof(DomainService).IsAssignableFrom(t) &&
                             TypeDescriptor.GetAttributes(t)[typeof(EnableClientAccessAttribute)] != null)
@@ -253,7 +264,15 @@ namespace OpenRiaServices.Tools
 
             foreach (string assemblyName in this._assembliesToLoad)
             {
+#if !NET6_0_OR_GREATER
                 Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyName, this._logger);
+#else
+                Assembly assembly = null;
+
+                // We can not load the server assembly since it will break IsAssignableFrom
+                if (!assemblyName.EndsWith(ClientCodeGenerationDispatcher.OpenRiaServices_DomainServices_Server_Assembly))
+                 assembly = _assemblyLoadContext.LoadFromAssemblyPath(assemblyName);
+#endif
                 if (assembly != null)
                 {
                     // The bool value indicates whether this assembly should be searched for a DomainService

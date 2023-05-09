@@ -33,7 +33,7 @@ namespace OpenRiaServices.Tools
         // MEF composition container and part catalog, computed lazily and only once
         private CompositionContainer _compositionContainer;
         private ComposablePartCatalog _partCatalog;
-        private const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.Server.dll";
+        public const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.Server.dll";
 
 #if NET6_0_OR_GREATER
         public const string AssemblyLoadContextName = "ClientCodeGenContext";
@@ -193,7 +193,12 @@ namespace OpenRiaServices.Tools
             Debug.Assert(assembliesToLoad != null, "assembliesToLoad cannot be null");
 
             ILogger logger = host as ILogger;
-            DomainServiceCatalog catalog = new DomainServiceCatalog(assembliesToLoad, logger);
+            DomainServiceCatalog catalog = new DomainServiceCatalog(assembliesToLoad, logger
+#if NET6_0_OR_GREATER
+                ,this);
+#else
+);
+#endif
             return this.GenerateCode(host, options, catalog, assembliesToLoad, codeGeneratorName);
         }
 
