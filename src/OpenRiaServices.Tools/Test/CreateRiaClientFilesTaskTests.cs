@@ -293,6 +293,7 @@ namespace OpenRiaServices.Tools.Test
 
             var task = code.Execute();
             Assert.IsTrue(task);
+            Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }
 
         [TestMethod]

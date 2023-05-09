@@ -207,7 +207,7 @@ namespace OpenRiaServices.Tools
                 {
                     // Utility autorecovers and logs for common exceptions
                     IEnumerable<Type> types = AssemblyUtilities.GetExportedTypes(pair.Key, this._logger);
-
+                    
                     foreach (Type t in types)
                     {
                         if (typeof(DomainService).IsAssignableFrom(t) &&
@@ -260,8 +260,7 @@ namespace OpenRiaServices.Tools
                     this._loadedAssemblies[assembly] = TypeUtility.CanContainDomainServiceImplementations(assembly);
                 }
             }
-
-            AssemblyUtilities.SetAssemblyResolver(this._loadedAssemblies.Keys);
+            //AssemblyUtilities.SetAssemblyResolver(this._loadedAssemblies.Keys);
         }
 
         /// <summary>

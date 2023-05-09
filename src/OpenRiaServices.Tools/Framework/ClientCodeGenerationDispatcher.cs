@@ -522,7 +522,9 @@ namespace OpenRiaServices.Tools
         protected override Assembly Load(AssemblyName assemblyName)
         {
             string assemblyPath = _assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
-            if (assemblyPath != null)
+            if (assemblyPath != null
+                // SEE: https://github.com/dotnet/core/issues/2547
+                && assemblyName.FullName != typeof(DomainService).Assembly.FullName)
             {
                 return LoadFromAssemblyPath(assemblyPath);
             }

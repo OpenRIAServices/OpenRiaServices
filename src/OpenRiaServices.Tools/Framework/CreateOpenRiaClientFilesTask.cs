@@ -754,7 +754,10 @@ namespace OpenRiaServices.Tools
                 // This object will find and invoke the appropriate code generator
                 using (var dispatcher = new ClientCodeGenerationDispatcher())
                 {
-                    generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
+                    using (var context = dispatcher.EnterContextualReflection())
+                    {
+                        generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
+                    }
                 }
 #endif
 
