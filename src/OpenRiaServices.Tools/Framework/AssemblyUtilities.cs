@@ -163,6 +163,8 @@ namespace OpenRiaServices.Tools
             return assembly;
         }
 
+#if !NET6_0_OR_GREATER
+
         /// <summary>
         /// Does a "reflection only load" of all the reference assemblies for the given <paramref name="assembly"/>
         /// </summary>
@@ -351,6 +353,8 @@ namespace OpenRiaServices.Tools
             }
             return null;
         }
+
+#endif
 
         /// <summary>
         /// Standard implementation of <see cref="Assembly.GetExportedTypes()"/>

@@ -11,6 +11,7 @@ using OpenRiaServices.Server;
 using System.Text;
 using OpenRiaServices.Tools.SharedTypes;
 
+
 namespace OpenRiaServices.Tools
 {
     /// <summary>
@@ -35,9 +36,11 @@ namespace OpenRiaServices.Tools
         private const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.Server.dll";
 
 #if NET6_0_OR_GREATER
+        public const string AssemblyLoadContextName = "ClientCodeGenContext";
         private System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
 
         public ClientCodeGenerationDispatcher()
+            : base(AssemblyLoadContextName)
         {
             var path = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\bin\\Debug\\net6.0\\OpenRiaServices.Server.dll";
             _assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(path);
