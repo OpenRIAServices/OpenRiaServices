@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -281,6 +282,30 @@ namespace OpenRiaServices.Tools.Test
             {
                 CodeGenHelper.DeleteTempFolder(task);
             }
+        }
+
+        [TestMethod]
+        public void CreateRIA60()
+        {
+            var serverProjectPath = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\ServerClassLib\\ServerClassLib.csproj";
+            var clientProjectPath = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\ClientClassLib\\ClientClassLib.csproj";
+            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false);
+
+            var task = code.Execute();
+            Assert.IsTrue(task);
+        }
+
+        [TestMethod]
+        public void CreateRIA60_TS()
+        {
+            var clientProjectPath = "C:\\Dev2\\production\\Finance\\Client\\CRM.Finance.Client.Model\\CRM.Finance.Client.Model.csproj";
+            var serverProjectPath = "C:\\Dev2\\production\\Finance\\Web\\CRM.Finance.Web.Hosting\\CRM.Finance.Web.Hosting.csproj";
+            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false);
+
+            var task = code.Execute();
+            var path = Path.GetFullPath(code.GeneratedCodePath);
+            Assert.IsTrue(task);
+            Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }
 
         [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
