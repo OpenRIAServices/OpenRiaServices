@@ -3,7 +3,16 @@
 * Code Generation
   * Switch to using Mono.Cecil to parse pdb files during code generation (#410)
     This should make it possible to use portable and embedded pdb's on the server
-
+* Asp Core
+    * New extension method to add OpenRiaServices to services.
+        ```C#
+        services.AddOpenRiaServices<T>()
+        ```
+    * New extension method to add OpenRiaServices to pipeline.
+        ```C#
+        endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
+        ```
+        
 # 5.3.0 with EFCore 2.0.1
 
 * Fix shadow property issue in EF Core DB Context extensions (#397):
