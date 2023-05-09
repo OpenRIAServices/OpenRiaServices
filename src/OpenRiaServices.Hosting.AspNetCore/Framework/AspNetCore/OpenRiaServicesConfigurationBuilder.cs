@@ -22,5 +22,14 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
             _dataSource.DomainServices.Add(longName + "/binary", description);
         }
+
+        public void AddDomainService<T>()
+        {
+            var type = typeof(T);
+            var longName = type.FullName.Replace('.', '-') + ".svc";
+            var description = DomainServiceDescription.GetDescription(type);
+
+            _dataSource.DomainServices.Add(longName + "/binary", description);
+        }
     }
 }
