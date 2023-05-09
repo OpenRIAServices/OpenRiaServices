@@ -8,7 +8,7 @@
         ```C#
         services.AddOpenRiaServices<T>()
         ```
-    * New extension method to add OpenRiaServices to pipline.
+    * New extension method to add OpenRiaServices to pipeline.
         ```C#
         endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
         ```
