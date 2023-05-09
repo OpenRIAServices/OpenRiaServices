@@ -10,7 +10,7 @@ using System.Reflection;
 using OpenRiaServices.Server;
 using System.Text;
 using OpenRiaServices.Tools.SharedTypes;
-
+using System.IO;
 
 namespace OpenRiaServices.Tools
 {
@@ -466,7 +466,7 @@ namespace OpenRiaServices.Tools
             try
             {
                 // This code creates a MEF composition container from all the assemblies of this solution
-                IEnumerable<AssemblyCatalog> catalogs = ClientCodeGenerationDispatcher.GetCompositionAssemblies(compositionAssemblyPaths, logger).Select<Assembly, AssemblyCatalog>(a => new AssemblyCatalog(a));
+                IEnumerable<AssemblyCatalog> catalogs = GetCompositionAssemblies(compositionAssemblyPaths, logger).Select<Assembly, AssemblyCatalog>(a => new AssemblyCatalog(a));
                 this._partCatalog = new AggregateCatalog(catalogs);
                 this._compositionContainer = new CompositionContainer(this._partCatalog);
 
@@ -494,20 +494,24 @@ namespace OpenRiaServices.Tools
         /// <param name="compositionAssemblyPaths">Optional set of assembly locations to include.</param>
         /// <param name="logger"><see cref="ILogger"/> instance to report issues.</param>
         /// <returns>The set of <see cref="Assembly"/> instances to use.</returns>
-        private static IEnumerable<Assembly> GetCompositionAssemblies(IEnumerable<string> compositionAssemblyPaths, ILogger logger)
+        private IEnumerable<Assembly> GetCompositionAssemblies(IEnumerable<string> compositionAssemblyPaths, ILogger logger)
         {
             HashSet<Assembly> assemblies = new HashSet<Assembly>();
             if (compositionAssemblyPaths != null)
             {
                 foreach (string assemblyPath in compositionAssemblyPaths)
                 {
-                    Assembly a = AssemblyUtilities.LoadAssembly(assemblyPath, logger);
-                    if (a != null)
+#if NET6_0_OR_GREATER
+                    Assembly assembly = CustomLoadAssembly(assemblyPath);
+#else
+                    Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyPath, logger);
+#endif
+                    if (assembly != null)
                     {
                         // Don't put System assemblies into container
-                        if (!a.IsSystemAssembly())
+                        if (!assembly.IsSystemAssembly())
                         {
-                            assemblies.Add(a);
+                            assemblies.Add(assembly);
                         }
                     }
                 }
@@ -518,6 +522,20 @@ namespace OpenRiaServices.Tools
 
             return assemblies;
         }
+
+#if NET6_0_OR_GREATER
+        public Assembly CustomLoadAssembly(string assemblyPath)
+        {
+            Assembly assembly = null;
+
+            // We can not load the server assembly since it will break IsAssignableFrom
+            if (!assemblyPath.EndsWith(ClientCodeGenerationDispatcher.OpenRiaServices_DomainServices_Server_Assembly))
+            {
+                assembly = this.LoadFromAssemblyPath(assemblyPath);// Path.ChangeExtension(assemblyPath, ".dll"));
+            }
+            return assembly;
+        }
+#endif
 
 #if !NET6_0_OR_GREATER
         void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)

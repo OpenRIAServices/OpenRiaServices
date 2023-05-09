@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Server;
@@ -20,7 +21,7 @@ namespace OpenRiaServices.Tools
         private readonly ILogger _logger;
 
 #if NET6_0_OR_GREATER
-        System.Runtime.Loader.AssemblyLoadContext _assemblyLoadContext;
+        ClientCodeGenerationDispatcher _assemblyLoadContext;
 #endif
 
         /// <summary>
@@ -31,7 +32,7 @@ namespace OpenRiaServices.Tools
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="assembliesToLoad"/> or <paramref name="logger"/> is null.</exception>
         public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, ILogger logger
 #if NET6_0_OR_GREATER
-            , System.Runtime.Loader.AssemblyLoadContext context = null)
+            , ClientCodeGenerationDispatcher context = null)
         { 
             _assemblyLoadContext = context;
 #else
@@ -264,14 +265,10 @@ namespace OpenRiaServices.Tools
 
             foreach (string assemblyName in this._assembliesToLoad)
             {
-#if !NET6_0_OR_GREATER
-                Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyName, this._logger);
+#if NET6_0_OR_GREATER
+                    Assembly assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName);
 #else
-                Assembly assembly = null;
-
-                // We can not load the server assembly since it will break IsAssignableFrom
-                if (!assemblyName.EndsWith(ClientCodeGenerationDispatcher.OpenRiaServices_DomainServices_Server_Assembly))
-                 assembly = _assemblyLoadContext.LoadFromAssemblyPath(assemblyName);
+                    Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyName, _logger);
 #endif
                 if (assembly != null)
                 {
