@@ -53,8 +53,6 @@ namespace OpenRiaServices.Tools.Test
 
             using (var project = LoadProject(projectPath))
             {
-
-
                 // Ask to be told of generated outputs
                 var log = new ErrorLogger();
                 var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new[] { log });
@@ -158,6 +156,10 @@ namespace OpenRiaServices.Tools.Test
                         var framework = isNet472 ? "net472" : frameworks.First(f => f != "net472");
                         project.SetGlobalProperty("TargetFramework", framework);
                     }
+#if NET6_0_OR_GREATER
+                    var actualFramework = project.GetProperty("TargetFramework");
+                    Assert.IsTrue(actualFramework.EvaluatedValue == "net6.0");
+#endif
                 }
             }
 
