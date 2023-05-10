@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
+using Microsoft.Build.Locator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.Tools.Test.Utilities
@@ -39,8 +40,12 @@ namespace OpenRiaServices.Tools.Test.Utilities
 
         private static void RegisterMSBuildAssemblyResolve()
         {
+#if NETFRAMEWORK
             var vsInstance =
-            Microsoft.Build.Locator.MSBuildLocator.QueryVisualStudioInstances()
+            Microsoft.Build.Locator.MSBuildLocator.QueryVisualStudioInstances(new Microsoft.Build.Locator.VisualStudioInstanceQueryOptions()
+            {
+                DiscoveryTypes = Microsoft.Build.Locator.DiscoveryType.DotNetSdk | Microsoft.Build.Locator.DiscoveryType.VisualStudioSetup
+            })
             .First();
 
             s_msbuildPath = vsInstance.MSBuildPath;
@@ -49,7 +54,34 @@ namespace OpenRiaServices.Tools.Test.Utilities
                 .Where(a => IsMsBuildAssembly(a.FullName))
                 .ToDictionary(x => x.GetName().Name);
 
+            // Load msbuild assemblt
+            var msbuildAssemblies = Directory.GetFiles(s_msbuildPath, "MSBuild*.dll");
+            s_loadedAssemblies.Clear();
+            foreach (var msbuildAssembly in msbuildAssemblies)
+            {
+                var assembly = Assembly.LoadFrom(msbuildAssembly);
+                s_loadedAssemblies.Add(assembly.GetName().Name, assembly);
+            }
+
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
+            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(vsInstance);
+#else
+            // Register the most recent version of MSBuild
+            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(MSBuildLocator.QueryVisualStudioInstances().OrderByDescending(
+               instance => instance.Version).First());
+
+            //s_msbuildPath = Path.GetDirectoryName(typeof(TestInitializer).Assembly.Location);
+            //var msbuildAssemblies = Directory.GetFiles(s_msbuildPath, "Microsoft.Build*.dll");
+            //s_loadedAssemblies = new();
+            //foreach (var msbuildAssembly in msbuildAssemblies)
+            //{
+            //    var assembly = Assembly.LoadFrom(msbuildAssembly);
+            //    s_loadedAssemblies.Add(assembly.GetName().Name, assembly);
+            //}
+
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+#endif
         }
 
         private static void UnregisterMSBuildAssemblies()
