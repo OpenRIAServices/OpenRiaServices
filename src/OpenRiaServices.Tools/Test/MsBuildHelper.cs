@@ -55,6 +55,29 @@ namespace OpenRiaServices.Tools.Test
             {
                 // Ask to be told of generated outputs
                 var log = new ErrorLogger();
+
+#if NET6_0_OR_GREATER
+                var results = project.Build(new string[] { "ResolveAssemblyReferences" /* "ResolvePackageDependenciesForBuild" */}, new[] { log });
+                Assert.AreEqual(null, results.Exception, "Build should not have exception result");
+                Assert.AreEqual(string.Empty, string.Join("\n", log.Errors));
+                Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveLockFileReferences failed");
+
+                foreach (var reference in project.ProjectInstance.GetItems("Reference"))
+                {
+                    string assemblyPath = GetFullPath(projectPath, reference);
+
+                    if (!assemblies.Contains(assemblyPath))
+                        assemblies.Add(assemblyPath);
+                }
+
+                foreach (var reference in project.ProjectInstance.GetItems("_ResolvedProjectReferencePaths"))
+                {
+                    string outputAssembly = GetFullPath(projectPath, reference);
+
+                    if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
+                        assemblies.Add(outputAssembly);
+                }
+#else
                 var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new[] { log });
                 Assert.AreEqual(string.Empty, string.Join("\n", log.Errors));
                 Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
@@ -74,6 +97,8 @@ namespace OpenRiaServices.Tools.Test
                     if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
                         assemblies.Add(outputAssembly);
                 }
+#endif
+
 
             }
 
