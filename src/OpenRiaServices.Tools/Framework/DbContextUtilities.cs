@@ -58,7 +58,6 @@ namespace OpenRiaServices.Tools
                         if (genericSetInitializerMethod != null)
                         {
                             // We found the right method. Now invoke it with the initializer parameter.
-                            genericSetInitializerMethod.Invoke(null, new object[] { initializer });
                         }
                     }
                 }

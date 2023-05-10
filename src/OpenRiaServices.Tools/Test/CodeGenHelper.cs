@@ -115,7 +115,7 @@ namespace OpenRiaServices.Tools.Test
         /// </summary>
         /// <param name="serverProjectPath"></param>
         /// <returns></returns>
-        public static List<string> ServerClassLibReferences(string serverProjectPath)
+        public static List<string> ServerClassLibReferences(string serverProjectPath, params string[] additional)
         {
             // We need to map any server side assembly references back to our deployment directory
             // if we have the same assembly there, otherwise the assembly load from calls end up
@@ -124,6 +124,8 @@ namespace OpenRiaServices.Tools.Test
             List<string> assemblies = MsBuildHelper.GetReferenceAssemblies(serverProjectPath);
 #if NET6_0_OR_GREATER
             assemblies.Add("C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\bin\\Debug\\net6.0\\OpenRiaServices.Server.dll");
+            if(additional?.Length > 0)
+                assemblies.AddRange(additional);
 #endif
             MapAssemblyReferencesToDeployment(deploymentDir, assemblies);
             return assemblies;
@@ -369,7 +371,7 @@ namespace OpenRiaServices.Tools.Test
         /// <param name="clientProjectPath">The file path to the Silverlight client project</param>
         /// <param name="includeClientOutputAssembly">if <c>true</c> include client's own output assembly in analysis</param>
         /// <returns>A new task instance that can be invoked to do code gen</returns>
-        public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstance(string serverProjectPath, string clientProjectPath, bool includeClientOutputAssembly)
+        public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstance(string serverProjectPath, string clientProjectPath, bool includeClientOutputAssembly, params string[] additionalServerAsm)
         {
             CreateOpenRiaClientFilesTask task = new CreateOpenRiaClientFilesTask();
 
@@ -380,7 +382,7 @@ namespace OpenRiaServices.Tools.Test
 
             task.ServerProjectPath = serverProjectPath;
             task.ServerAssemblies = new TaskItem[] { new TaskItem(CodeGenHelper.ServerClassLibOutputAssembly(task.ServerProjectPath)) };
-            task.ServerReferenceAssemblies = MsBuildHelper.AsTaskItems(CodeGenHelper.ServerClassLibReferences(task.ServerProjectPath)).ToArray();
+            task.ServerReferenceAssemblies = MsBuildHelper.AsTaskItems(CodeGenHelper.ServerClassLibReferences(task.ServerProjectPath, additionalServerAsm)).ToArray();
 
             task.ClientProjectPath = clientProjectPath;
             task.ClientReferenceAssemblies = MsBuildHelper.AsTaskItems(CodeGenHelper.ClientClassLibReferences(clientProjectPath, includeClientOutputAssembly)).ToArray();

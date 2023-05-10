@@ -531,7 +531,7 @@ namespace OpenRiaServices.Tools
             // We can not load the server assembly since it will break IsAssignableFrom
             if (!assemblyPath.EndsWith(ClientCodeGenerationDispatcher.OpenRiaServices_DomainServices_Server_Assembly))
             {
-                assembly = this.LoadFromAssemblyPath(assemblyPath);// Path.ChangeExtension(assemblyPath, ".dll"));
+                assembly = this.LoadFromAssemblyPath(Path.ChangeExtension(assemblyPath, ".dll"));
             }
             return assembly;
         }
