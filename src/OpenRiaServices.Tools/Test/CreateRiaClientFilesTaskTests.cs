@@ -289,12 +289,21 @@ namespace OpenRiaServices.Tools.Test
         {
             var serverProjectPath = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\ServerClassLib\\ServerClassLib.csproj";
             var clientProjectPath = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\ClientClassLib\\ClientClassLib.csproj";
-            
-            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false);
+            var path = "bin\\Debug\\net6.0";
+            string[] serverAsm = GetAssemblies(serverProjectPath, path);
+            string[] clientAsm = GetAssemblies(clientProjectPath, path);
+            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, serverAsm, clientAsm);
 
             var task = code.Execute();
             Assert.IsTrue(task);
             Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
+        }
+
+        private static string[] GetAssemblies(string projectPath, string path)
+        {
+            var asmPath = Path.Combine(Path.GetDirectoryName(projectPath), path);
+            var asm = Directory.GetFiles(asmPath, "*.dll");
+            return asm;
         }
 
         [TestMethod]
@@ -302,13 +311,12 @@ namespace OpenRiaServices.Tools.Test
         {
             var clientProjectPath = "C:\\Dev2\\production\\Finance\\Client\\CRM.Finance.Client.Model\\CRM.Finance.Client.Model.csproj";
             var serverProjectPath = "C:\\Dev2\\production\\Finance\\Web\\CRM.Finance.Web.Hosting\\CRM.Finance.Web.Hosting.csproj";
-            var asmpath = "C:\\Dev2\\production\\Finance\\Web\\CRM.Finance.Common.Web\\bin\\Debug\\net7.0";
-            var asm = Directory.GetFiles(asmpath, "*.dll").ToArray();
-
-            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, true, asm);
+            //var coreProjectPath = "C:\\Dev2\\production\\Finance\\Web\\CRM.Finance.Web.Core\\CRM.Finance.Web.Core.csproj";
+            var serverAsm = GetAssemblies(serverProjectPath, "bin\\Debug\\net6.0").ToList();
+            string[] clientAsm = GetAssemblies(clientProjectPath, "bin\\Debug\\net6.0-windows");
+            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, true, serverAsm.ToArray(), clientAsm);
 
             var task = code.Execute();
-            var path = Path.GetFullPath(code.GeneratedCodePath);
             Assert.IsTrue(task);
             Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }

@@ -18,7 +18,7 @@
     <PackageReference Include="Microsoft.Build" Version="17.2.0" />
     <PackageReference Include="Microsoft.Build.Framework" Version="17.2.0" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.2.0" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="BinaryTypeUtility.cs" />
