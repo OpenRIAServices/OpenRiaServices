@@ -116,7 +116,12 @@ namespace OpenRiaServices.Tools.Test
             outputAssembly = Path.Combine(outputPath, assemblyName);
             outputAssembly = Path.GetFullPath(outputAssembly);
 
+#if NET6_0_OR_GREATER
+            // TODO: change here or not ?
+            string extension = ".dll";
+#else
             string extension = outputType.Equals("Exe", StringComparison.InvariantCultureIgnoreCase) ? ".exe" : ".dll";
+#endif
             outputAssembly += extension;
             var fullPath = MakeFullPath(outputAssembly, Path.GetDirectoryName(projectPath));
             if (!File.Exists(fullPath))
@@ -138,6 +143,7 @@ namespace OpenRiaServices.Tools.Test
 
             var project = projectCollection.LoadProject(projectPath, projectCollection.DefaultToolsVersion);
             project.SetProperty("BuildProjectReferences", "false");
+            project.SetProperty("MSBuildSDKsPath", @"C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Sdks");
 
             if (project.GetProperty("TargetFramework") == null)
             {
