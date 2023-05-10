@@ -50,6 +50,8 @@ namespace OpenRiaServices.Tools.Test.Utilities
                 .ToDictionary(x => x.GetName().Name);
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+
+            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(vsInstance);
         }
 
         private static void UnregisterMSBuildAssemblies()
