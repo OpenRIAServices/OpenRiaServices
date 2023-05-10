@@ -91,6 +91,22 @@ namespace OpenRiaServices.Tools
                 }
                 var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
+
+                // Note: we might want to fallback to also searching the paths of all references assemblies on any error
+                // Meybe can be removed if we create a AssemblyDependencyResolver for the output assembly of the server projekt ?
+                base.Resolving += (AssemblyLoadContext arg1, AssemblyName arg2) => 
+                {
+                    string dllName = arg2.Name + ".dll";
+                    var match = parameters.ServerAssemblies.FirstOrDefault(x => x.EndsWith(dllName));
+                    if (match != null)
+                    {
+                        return arg1.LoadFromAssemblyPath(match);
+                    }
+                    else
+                    {
+                        return null;
+                    }
+                };
 #else
                 AppDomainUtilities.ConfigureAppDomain(options);
                 var cecilPath = location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
