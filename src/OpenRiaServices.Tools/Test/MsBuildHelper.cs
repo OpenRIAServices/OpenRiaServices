@@ -168,7 +168,6 @@ namespace OpenRiaServices.Tools.Test
 
             var project = projectCollection.LoadProject(projectPath, projectCollection.DefaultToolsVersion);
             project.SetProperty("BuildProjectReferences", "false");
-            project.SetProperty("MSBuildSDKsPath", @"C:\Program Files\Microsoft Visual Studio\2022\Professional\MSBuild\Sdks");
 
             if (project.GetProperty("TargetFramework") == null)
             {
@@ -369,7 +368,9 @@ namespace OpenRiaServices.Tools.Test
 
             public void Initialize(IEventSource eventSource)
             {
-                eventSource.ErrorRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
+                //eventSource.ErrorRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
+                //eventSource.WarningRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
+                eventSource.AnyEventRaised += (s, a) => this._errors.Add(a.Message);
             }
 
             public void Shutdown() { }
