@@ -3,7 +3,7 @@
     <NoWarn>618</NoWarn>
     <RootNamespace>CodeFirstModels</RootNamespace>
     <AssemblyName>CodeFirstModels</AssemblyName>
-    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <TargetFrameworks>net472;net7.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);DBCONTEXT</DefineConstants>
     <Version>1.0.0.0</Version>
   </PropertyGroup>

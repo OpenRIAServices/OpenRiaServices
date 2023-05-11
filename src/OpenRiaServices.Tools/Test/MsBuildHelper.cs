@@ -188,7 +188,7 @@ namespace OpenRiaServices.Tools.Test
                     }
 #if NET6_0_OR_GREATER
                     var actualFramework = project.GetProperty("TargetFramework");
-                    Assert.IsTrue(actualFramework.EvaluatedValue == "net6.0");
+                    Assert.IsTrue(actualFramework.EvaluatedValue == "net7.0");
 #endif
                 }
             }

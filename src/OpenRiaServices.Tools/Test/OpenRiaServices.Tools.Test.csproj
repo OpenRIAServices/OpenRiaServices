@@ -2,7 +2,7 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
-    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <TargetFrameworks>net472;net7.0</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
   </PropertyGroup>
@@ -22,7 +22,7 @@
   <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
     <PackageReference Include="System.Runtime" Version="4.3.1" />
     <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
-    <PackageReference Include="System.ComponentModel.Composition" Version="6.0.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="2.2.1" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.1" />
   </ItemGroup>

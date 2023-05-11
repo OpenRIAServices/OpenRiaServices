@@ -42,7 +42,7 @@ namespace OpenRiaServices.Tools
         public ClientCodeGenerationDispatcher()
             : base(AssemblyLoadContextName)
         {
-            var path = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\bin\\Debug\\net6.0\\OpenRiaServices.Server.dll";
+            var path = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\bin\\Debug\\net7.0\\OpenRiaServices.Server.dll";
             _assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(path);
         }
 
