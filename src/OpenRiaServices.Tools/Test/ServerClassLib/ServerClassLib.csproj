@@ -7,7 +7,7 @@
          a debug build of the solution
     -->
     <DefineConstants>TRACE</DefineConstants>
-    <DebugType>portable</DebugType>
+    <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
   </PropertyGroup>
   <!--<ItemGroup>

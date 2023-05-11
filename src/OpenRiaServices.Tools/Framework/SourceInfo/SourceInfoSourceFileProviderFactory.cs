@@ -15,7 +15,7 @@
     /// Implementation of <see cref="ISourceFileProviderFactory"/> that returns
     /// an <see cref="IServiceProvider"/> that analyzes PDBs.
     /// </summary>
-    internal sealed class SourceInfoSourceFileProviderFactory : ISourceFileProviderFactory
+    internal class SourceInfoSourceFileProviderFactory : ISourceFileProviderFactory
     {
         public ISourceFileProvider CreateProvider()
         {
@@ -26,7 +26,7 @@
         /// Implementation of <see cref="ISourceFileProvider"/> that relies on
         /// the <c>SourceInfoAttribute</c> attached to type members.
         /// </summary>
-        internal sealed class SourceInfoSourceFileProvider : ISourceFileProvider
+        internal class SourceInfoSourceFileProvider : ISourceFileProvider, IDisposable
         {
             #region ISourceFileProvider methods
 
@@ -43,14 +43,15 @@
             public string GetFileForMember(MemberInfo memberInfo)
             {
                 SourceInfo sourceInfo = SourceInfo.GetSourceInfoFromAttributes(((ICustomAttributeProvider)memberInfo).GetCustomAttributes(false));
-                return sourceInfo?.FileName;
+                return (sourceInfo == null) ? null : sourceInfo.FileName;
             }
             #endregion // ISourceFileProvider methods
 
-            void IDisposable.Dispose()
+            #region IDisposable methods
+            public void Dispose()
             {
-                // Nothing to dispose
             }
+            #endregion IDisposable methods
         }
     }
 }
