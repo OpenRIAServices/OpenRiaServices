@@ -66,8 +66,6 @@ namespace OpenRiaServices.Tools.Test
                 Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
                 Assert.AreEqual(string.Empty, string.Join("\n", log.Errors), "Task was successful, but there were errors logged");
 
-#if NET6_0_OR_GREATER
-                // TODO: Does this code work on net472 ?
                 if (results.ResultsByTarget.TryGetValue("ResolveAssemblyReferences", out TargetResult resolveAssemblyReferences))
                 {
                     foreach (ITaskItem reference in resolveAssemblyReferences.Items)
@@ -78,25 +76,6 @@ namespace OpenRiaServices.Tools.Test
                             assemblies.Add(assemblyPath);
                     }
                 }
-#else
-                foreach (var reference in project.ProjectInstance.GetItems("_ResolveAssemblyReferenceResolvedFiles"))
-                {
-                    string assemblyPath = GetFullPath(projectPath, reference);
-
-                    if (!assemblies.Contains(assemblyPath))
-                        assemblies.Add(assemblyPath);
-                }
-
-                foreach (var reference in project.ProjectInstance.GetItems("_ResolvedProjectReferencePaths"))
-                {
-                    string outputAssembly = GetFullPath(projectPath, reference);
-
-                    if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
-                        assemblies.Add(outputAssembly);
-                }
-
-                MakeFullPaths(assemblies, Path.GetDirectoryName(projectPath));
-#endif
             }
         }
 
