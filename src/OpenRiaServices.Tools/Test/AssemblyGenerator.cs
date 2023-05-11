@@ -23,6 +23,7 @@ namespace OpenRiaServices.Tools.Test
         private Type[] _generatedTypes;
         private string _userCode;
         private readonly bool _useFullTypeNames;
+        private MetadataLoadContext _metadataLoadContext;
 
 
         public AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
@@ -220,7 +221,7 @@ namespace OpenRiaServices.Tools.Test
         /// <returns><c>true</c> if the given type is a nullable type</returns>
         public static bool IsNullableType(Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return type.IsGenericType && type.GetGenericTypeDefinition().FullName == typeof(Nullable<>).FullName;
         }
 
         /// <summary>
@@ -359,58 +360,17 @@ namespace OpenRiaServices.Tools.Test
             MemoryStream generatedAssembly = CompileSource();
             Assert.IsNotNull(generatedAssembly, "Expected compile to succeed");
 
-            Assembly assy = null;
-            Dictionary<AssemblyName, Assembly> loadedAssemblies = new Dictionary<AssemblyName, Assembly>(new AssemblyNameComparer());
+            var metadataLoadContext = (_metadataLoadContext ??= new MetadataLoadContext(new PathAssemblyResolver(this.ReferenceAssemblies)));
 
             try
             {
-                foreach (string refAssyName in this.ReferenceAssemblies)
-                {
-                    if (refAssyName.Contains("mscorlib"))
-                    {
-                        continue;
-                    }
-                    try
-                    {
-                        Assembly refAssy = Assembly.ReflectionOnlyLoadFrom(refAssyName);
-                        loadedAssemblies[refAssy.GetName()] = refAssy;
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine(" failed to load " + refAssyName + ":\r\n" + ex.Message);
-                    }
-                }
-
-                assy = Assembly.ReflectionOnlyLoad(generatedAssembly.ToArray());
-                Assert.IsNotNull(assy);
-
-                AssemblyName[] refNames = assy.GetReferencedAssemblies();
-                foreach (AssemblyName refName in refNames)
-                {
-                    if (refName.FullName.Contains("mscorlib"))
-                    {
-                        continue;
-                    }
-                    if (!loadedAssemblies.ContainsKey(refName))
-                    {
-                        try
-                        {
-                            Assembly refAssy = Assembly.ReflectionOnlyLoad(refName.FullName);
-                            loadedAssemblies[refName] = refAssy;
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine(" failed to load " + refName + ":\r\n" + ex.Message);
-                        }
-                    }
-                }
+                return metadataLoadContext.LoadFromStream(generatedAssembly);
             }
             catch (Exception ex)
             {
                 Assert.Fail("Encountered exception doing reflection only loads:\r\n" + ex.Message);
+                throw;
             }
-
-            return assy;
         }
 
         private MemoryStream CompileSource()
@@ -439,6 +399,8 @@ namespace OpenRiaServices.Tools.Test
         {
             this._generatedTypes = null;
             this._generatedAssembly = null;
+            this._metadataLoadContext?.Dispose();
+            this._metadataLoadContext = null;
         }
 
         #endregion
