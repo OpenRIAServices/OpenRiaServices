@@ -14,7 +14,6 @@ namespace OpenRiaServices.Server.Test.Utilities
         private static UnitTestTraceListener Listener;
         private static TestContext Context;
         private static bool FailOnDebugAssert;
-        private static bool OriginalAssertUiEnabled;
 
         /// <summary>
         /// Class constructor.

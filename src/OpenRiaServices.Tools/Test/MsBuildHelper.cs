@@ -57,7 +57,14 @@ namespace OpenRiaServices.Tools.Test
                 var log = new ErrorLogger();
 
 #if NET6_0_OR_GREATER
-                var results = project.Build(new string[] { "ResolveAssemblyReferences" /* "ResolvePackageDependenciesForBuild" */}, new[] { log });
+                // TODO: Remove
+                var binLog = new Microsoft.Build.Logging.BinaryLogger();
+                binLog.Verbosity = LoggerVerbosity.Diagnostic;
+                binLog.Parameters = "LogFile=msbuild.binlog";
+
+
+                //"AssignProjectConfiguration"
+                var results = project.Build(new string[] { "ResolveAssemblyReferences" /*"BuiltProjectOutputGroupDependencies"*/ }, new Microsoft.Build.Framework.ILogger[] { log , binLog });
                 Assert.AreEqual(null, results.Exception, "Build should not have exception result");
                 Assert.AreEqual(string.Empty, string.Join("\n", log.Errors));
                 Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveLockFileReferences failed");
@@ -70,7 +77,15 @@ namespace OpenRiaServices.Tools.Test
                         assemblies.Add(assemblyPath);
                 }
 
-                foreach (var reference in project.ProjectInstance.GetItems("_ResolvedProjectReferencePaths"))
+                foreach (var reference in project.ProjectInstance.GetItems("_ResolvedProjectReferencePath"))
+                {
+                    string outputAssembly = GetFullPath(projectPath, reference);
+
+                    if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
+                        assemblies.Add(outputAssembly);
+                }
+
+                foreach (var reference in project.ProjectInstance.GetItems("_ExplicitReference"))
                 {
                     string outputAssembly = GetFullPath(projectPath, reference);
 
@@ -297,7 +312,7 @@ namespace OpenRiaServices.Tools.Test
                          {"Configuration", "Debug" },
                      },
                     DisableInProcNode = true,
-                    Loggers = loggers,                    
+                    Loggers = loggers,
                 };
 
                 var projectInstance = BuildManager.GetProjectInstanceForBuild(Project);
@@ -368,9 +383,9 @@ namespace OpenRiaServices.Tools.Test
 
             public void Initialize(IEventSource eventSource)
             {
-                //eventSource.ErrorRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
+                eventSource.ErrorRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
                 //eventSource.WarningRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
-                eventSource.AnyEventRaised += (s, a) => this._errors.Add(a.Message);
+                //eventSource.AnyEventRaised += (s, a) => this._errors.Add(a.Message);
             }
 
             public void Shutdown() { }

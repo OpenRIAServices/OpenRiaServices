@@ -13,15 +13,22 @@ namespace OpenRiaServices.Tools.Test.Utilities
     [TestClass]
     public sealed class TestInitializer
     {
+#if NETFRAMEWORK
         // List for resolved assemblies
         // contains entries by both fullname and just by "short" name
         private static Dictionary<string, Assembly> s_loadedAssemblies;
         private static string s_msbuildPath;
-
+#endif
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext context)
         {
+#if NETFRAMEWORK
             RegisterMSBuildAssemblyResolve();
+#else
+            // Register the most recent version of MSBuild
+            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(MSBuildLocator.QueryVisualStudioInstances().OrderByDescending(
+               instance => instance.Version).First());
+#endif
 
             //Set currenct culture to en-US by default since there are hard coded
             //strings in some tests
@@ -38,9 +45,9 @@ namespace OpenRiaServices.Tools.Test.Utilities
         }
 
 
+#if NETFRAMEWORK
         private static void RegisterMSBuildAssemblyResolve()
         {
-#if NETFRAMEWORK
             var vsInstance =
             Microsoft.Build.Locator.MSBuildLocator.QueryVisualStudioInstances(new Microsoft.Build.Locator.VisualStudioInstanceQueryOptions()
             {
@@ -66,22 +73,6 @@ namespace OpenRiaServices.Tools.Test.Utilities
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
             Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(vsInstance);
-#else
-            // Register the most recent version of MSBuild
-            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(MSBuildLocator.QueryVisualStudioInstances().OrderByDescending(
-               instance => instance.Version).First());
-
-            //s_msbuildPath = Path.GetDirectoryName(typeof(TestInitializer).Assembly.Location);
-            //var msbuildAssemblies = Directory.GetFiles(s_msbuildPath, "Microsoft.Build*.dll");
-            //s_loadedAssemblies = new();
-            //foreach (var msbuildAssembly in msbuildAssemblies)
-            //{
-            //    var assembly = Assembly.LoadFrom(msbuildAssembly);
-            //    s_loadedAssemblies.Add(assembly.GetName().Name, assembly);
-            //}
-
-            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
-#endif
         }
 
         private static void UnregisterMSBuildAssemblies()
@@ -136,6 +127,7 @@ namespace OpenRiaServices.Tools.Test.Utilities
                 return assembly;
             }
         }
+#endif
 
     }
 }
