@@ -72,4 +72,11 @@ Here are the most common nuget packages and their current versions.
 | OpenRiaServices.T4 | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.T4.svg)](https://www.nuget.org/packages/OpenRiaServices.T4) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.T4.svg)]() |
 | OpenRiaServices.Endpoints | [![NuGet](https://img.shields.io/nuget/v/OpenRiaServices.Endpoints.svg)](https://www.nuget.org/packages/OpenRiaServices.Endpoints) | [![NuGet](https://img.shields.io/nuget/vpre/OpenRiaServices.Endpoints.svg)](https://www.nuget.org/packages/OpenRiaServices.Endpoints) |
 
+# Code of Conduct
 
+This project has adopted the code of conduct defined by the Contributor Covenant to clarify expected behavior in our community.
+For more information see the [.NET Foundation Code of Conduct](https://dotnetfoundation.org/code-of-conduct).
+
+# .NET Foundation
+
+This project is supported by the [.NET Foundation](https://dotnetfoundation.org).
