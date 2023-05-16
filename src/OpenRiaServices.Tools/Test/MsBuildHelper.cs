@@ -56,68 +56,27 @@ namespace OpenRiaServices.Tools.Test
                 // Ask to be told of generated outputs
                 var log = new ErrorLogger();
 
-#if NET6_0_OR_GREATER
-                // TODO: Remove
-                var binLog = new Microsoft.Build.Logging.BinaryLogger();
-                binLog.Verbosity = LoggerVerbosity.Diagnostic;
-                binLog.Parameters = "LogFile=msbuild.binlog";
-
-
                 //"AssignProjectConfiguration"
-                var results = project.Build(new string[] { "ResolveAssemblyReferences" /*"BuiltProjectOutputGroupDependencies"*/ }, new Microsoft.Build.Framework.ILogger[] { log , binLog });
+                var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new Microsoft.Build.Framework.ILogger[] { log });
+
                 Assert.AreEqual(null, results.Exception, "Build should not have exception result");
-                Assert.AreEqual(string.Empty, string.Join("\n", log.Errors));
-                Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveLockFileReferences failed");
-
-                foreach (var reference in project.ProjectInstance.GetItems("Reference"))
-                {
-                    string assemblyPath = GetFullPath(projectPath, reference);
-
-                    if (!assemblies.Contains(assemblyPath))
-                        assemblies.Add(assemblyPath);
-                }
-
-                foreach (var reference in project.ProjectInstance.GetItems("_ResolvedProjectReferencePath"))
-                {
-                    string outputAssembly = GetFullPath(projectPath, reference);
-
-                    if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
-                        assemblies.Add(outputAssembly);
-                }
-
-                foreach (var reference in project.ProjectInstance.GetItems("_ExplicitReference"))
-                {
-                    string outputAssembly = GetFullPath(projectPath, reference);
-
-                    if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
-                        assemblies.Add(outputAssembly);
-                }
-#else
-                var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new[] { log });
-                Assert.AreEqual(string.Empty, string.Join("\n", log.Errors));
+                // Do early assert on log in case there was a task failure
+                if(results.OverallResult != BuildResultCode.Success)
+                    Assert.AreEqual(string.Empty, string.Join("\n", log.Errors), "ResolveAssemblyReferences failed, se log");
                 Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
+                Assert.AreEqual(string.Empty, string.Join("\n", log.Errors), "Task was successful, but there were errors logged");
 
-                foreach (var reference in project.ProjectInstance.GetItems("_ResolveAssemblyReferenceResolvedFiles"))
+                if (results.ResultsByTarget.TryGetValue("ResolveAssemblyReferences", out TargetResult resolveAssemblyReferences))
                 {
-                    string assemblyPath = GetFullPath(projectPath, reference);
+                    foreach (ITaskItem reference in resolveAssemblyReferences.Items)
+                    {
+                        string assemblyPath = reference.ItemSpec;
 
-                    if (!assemblies.Contains(assemblyPath))
-                        assemblies.Add(assemblyPath);
+                        if (!assemblies.Contains(assemblyPath))
+                            assemblies.Add(assemblyPath);
+                    }
                 }
-
-                foreach (var reference in project.ProjectInstance.GetItems("_ResolvedProjectReferencePaths"))
-                {
-                    string outputAssembly = GetFullPath(projectPath, reference);
-                    
-                    if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
-                        assemblies.Add(outputAssembly);
-                }
-#endif
-
-
             }
-
-            MakeFullPaths(assemblies, Path.GetDirectoryName(projectPath));
         }
 
         private static string GetFullPath(string projectPath, ProjectItemInstance reference)
