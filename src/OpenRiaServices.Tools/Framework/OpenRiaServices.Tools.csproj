@@ -22,6 +22,9 @@
 
     <!-- Tell the SDK to generate a deps.json file : https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022#generate-and-embed-a-depsjson-file -->
     <GenerateDependencyFile>true</GenerateDependencyFile>
+
+    <!-- Dont add .xml file -->
+    <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Microsoft.Build" />
@@ -42,7 +45,9 @@
     <PackageReference Include="Mono.Cecil" Version="0.11.5" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" ExcludeAssets="Runtime" PrivateAssets="all" />
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" ExcludeAssets="Runtime" PrivateAssets="all">
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="BinaryTypeUtility.cs" />
