@@ -3,8 +3,10 @@
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;NET40</DefineConstants>
     <TargetFramework>net472</TargetFramework>
     <PackageId>OpenRiaServices.Client.CodeGen</PackageId>
+    <Title>OpenRiaServices Client Code Generator</Title>
     <Description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. </Description>
     <PackageTags>WCF RIA Services RIAServices OpenRiaServices CodeGen</PackageTags>
+    <DevelopmentDependency>true</DevelopmentDependency>
 
     <!-- Copy Mono.Cecil to output directory -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
