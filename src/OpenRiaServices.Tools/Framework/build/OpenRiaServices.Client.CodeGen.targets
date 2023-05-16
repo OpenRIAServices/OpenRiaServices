@@ -12,8 +12,8 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <OpenRia_TFM Condition=" '$(MSBuildRuntimeType)' != 'Core' ">net472</OpenRia_TFM>
-    <OpenRia_TFM Condition=" '$(MSBuildRuntimeType)' == 'Core' ">net6.0</OpenRia_TFM>
+    <_OpenRiaTaskFramework>net472</_OpenRiaTaskFramework>
+    <!--<_OpenRiaTaskFramework Condition=" '$(MSBuildRuntimeType)' == 'Core' ">net6.0</_OpenRiaTaskFramework>-->
     
     <!-- Use SilverlightApplication if present, otherwise check if we are building an exe -->
     <OpenRiaGenerateApplicationContext Condition="'$(OpenRiaGenerateApplicationContext)' == '' and '$(SilverlightApplication)' != '' ">$(SilverlightApplication)</OpenRiaGenerateApplicationContext>
@@ -22,10 +22,10 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
     <_OpenRiaDesignTimeBuild Condition="'$(DesignTimeBuild)' == 'true' OR '$(BuildingProject)' != 'true'">true</_OpenRiaDesignTimeBuild> 
   </PropertyGroup>
 
-  <UsingTask TaskName="$(MSBuildThisFileDirectory)../tasks/$(OpenRia_TFM)/OpenRiaServices.Tools.CreateOpenRiaClientFilesTask"
+  <UsingTask TaskName="$(MSBuildThisFileDirectory)../tasks/$(_OpenRiaTaskFramework)/OpenRiaServices.Tools.CreateOpenRiaClientFilesTask"
            AssemblyFile="OpenRiaServices.Tools.dll" />
 
-  <UsingTask TaskName="$(MSBuildThisFileDirectory)../tasks/$(OpenRia_TFM)/OpenRiaServices.Tools.CleanOpenRiaClientFilesTask"
+  <UsingTask TaskName="$(MSBuildThisFileDirectory)../tasks/$(_OpenRiaTaskFramework)/OpenRiaServices.Tools.CleanOpenRiaClientFilesTask"
              AssemblyFile="OpenRiaServices.Tools.dll" />
 
   <!--
