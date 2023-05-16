@@ -314,7 +314,7 @@ namespace OpenRiaServices.Tools.Test
             //var coreProjectPath = "C:\\Dev2\\production\\Finance\\Web\\CRM.Finance.Web.Core\\CRM.Finance.Web.Core.csproj";
             var serverAsm = GetAssemblies(serverProjectPath, "bin\\Debug\\net7.0").ToList();
             string[] clientAsm = GetAssemblies(clientProjectPath, "bin\\Debug\\net7.0-windows");
-            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, true);
+            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, hardCodedServerAsm: serverAsm.ToArray());
 
             var task = code.Execute();
             Assert.IsTrue(task);

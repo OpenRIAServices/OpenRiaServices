@@ -264,10 +264,18 @@ namespace OpenRiaServices.Tools
 
             foreach (string assemblyName in this._assembliesToLoad)
             {
+                Assembly assembly = null;
 #if NET6_0_OR_GREATER
-                    Assembly assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName);
+                try
+                {
+                     assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName);
+                }
+                catch (Exception ex)
+                {
+
+                }
 #else
-                    Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyName, _logger);
+                assembly = AssemblyUtilities.LoadAssembly(assemblyName, _logger);
 #endif
                 if (assembly != null)
                 {

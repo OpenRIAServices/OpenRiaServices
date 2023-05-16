@@ -348,7 +348,8 @@ namespace OpenRiaServices.Tools
                 if (rootEntityType.Attributes()[typeof(RoundtripOriginalAttribute)] == null)
                 {
                     // Base type does not have RTO but derived type does, so log an error.
-                    this.ClientProxyGenerator.LogError(string.Format(CultureInfo.CurrentCulture, Resource.EntityCodeGen_RoundtripOriginalOnBaseType, this.Type, rootEntityType));
+                    // TODO: This is should still be Warning
+                    this.ClientProxyGenerator.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.EntityCodeGen_RoundtripOriginalOnBaseType, this.Type, rootEntityType));
                 }
             }
         }
@@ -1193,7 +1194,7 @@ namespace OpenRiaServices.Tools
 
                     if (firstRootType != nextRootType)
                     {
-                        this.ClientProxyGenerator.LogError(string.Format(CultureInfo.CurrentCulture,
+                        this.ClientProxyGenerator.LogWarning(string.Format(CultureInfo.CurrentCulture,
                             Resource.EntityCodeGen_SharedEntityMustBeLeastDerived,
                             firstRootType, firstDescription.DomainServiceType,
                             nextRootType, nextDescription.DomainServiceType,

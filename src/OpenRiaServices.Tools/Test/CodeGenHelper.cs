@@ -126,7 +126,7 @@ namespace OpenRiaServices.Tools.Test
                 assemblies = MsBuildHelper.GetReferenceAssemblies(serverProjectPath);
             else
                 assemblies = hardCodedAsm.ToList();
-
+            assemblies.RemoveAll(asm => asm.Contains("Microsoft.AspNetCore.App.Ref"));
             MapAssemblyReferencesToDeployment(deploymentDir, assemblies);
             return assemblies;
         }
