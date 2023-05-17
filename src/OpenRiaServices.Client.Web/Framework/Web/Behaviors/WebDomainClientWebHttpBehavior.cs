@@ -1,4 +1,5 @@
-﻿using System;
+﻿#if !NET6_0_OR_GREATER
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -8,16 +9,14 @@ using System.ServiceModel;
 using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
-#if !NET6_0_OR_GREATER
 using System.ServiceModel.Web;
-#endif
+
 #if SILVERLIGHT
 using System.Windows.Browser;
 #endif
 
 namespace OpenRiaServices.Client.Web.Behaviors
 {
-#if !NET6_0_OR_GREATER
     internal class WebDomainClientWebHttpBehavior : WebHttpBehavior
     {
         /// <summary>
@@ -113,7 +112,7 @@ namespace OpenRiaServices.Client.Web.Behaviors
             return behavior;
         }
     }
-#endif
+
     /// <summary>
     /// A formatter for serializing query requests which requires query parameters present in the
     /// To uri or message body.
@@ -202,3 +201,4 @@ namespace OpenRiaServices.Client.Web.Behaviors
         }
     }
 }
+#endif
