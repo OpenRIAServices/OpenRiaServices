@@ -18,6 +18,15 @@ namespace OpenRiaServices.Hosting.AspNetCore
             services.AddSingleton<OpenRiaServicesEndpointDataSource>();
         }
 
+        public static void AddOpenRiaServices<T>(this IServiceCollection services) where T : OpenRiaServices.Server.DomainService
+        {
+            ArgumentNullException.ThrowIfNull(services);
+
+            services.AddSingleton<OpenRiaServicesEndpointDataSource>();
+
+            services.AddTransient<T>();
+        }
+
         public static IEndpointConventionBuilder MapOpenRiaServices(this IEndpointRouteBuilder endpoints, Action<OpenRiaServicesConfigurationBuilder> configure)
         {
             return endpoints.MapOpenRiaServices(string.Empty, configure);
