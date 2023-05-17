@@ -16,9 +16,7 @@ namespace OpenRiaServices.Client.Web.Behaviors
 #endif
 {
     internal class WebHttpQueryStringConverter
-#if !NET6_0_OR_GREATER
         : QueryStringConverter
-#endif
     {
         // Specify datetime format so that the DateTimeKind can roundtrip, otherwise unspecified values are treated incorrect by server
         // https://github.com/OpenRIAServices/OpenRiaServices/issues/75
@@ -28,14 +26,6 @@ namespace OpenRiaServices.Client.Web.Behaviors
             {
                 DateTimeFormat = new System.Runtime.Serialization.DateTimeFormat(DateTimeFormat, System.Globalization.CultureInfo.InvariantCulture)
             };
-
-#if NET6_0_OR_GREATER
-        internal object ConvertStringToValue(string value, Type parameterType)
-        {
-            throw new NotImplementedException();
-        }
-
-#else
         public override bool CanConvert(Type type)
         {
             // Allow everything.
@@ -134,6 +124,5 @@ namespace OpenRiaServices.Client.Web.Behaviors
                     return string.Empty;
             }
         }
-#endif
     }
 }
