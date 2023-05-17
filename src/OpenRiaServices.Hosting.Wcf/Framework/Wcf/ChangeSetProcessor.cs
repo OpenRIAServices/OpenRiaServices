@@ -40,7 +40,7 @@ namespace OpenRiaServices.Hosting.Wcf
 
         /// <summary>
         /// Examine the list of operations after the service has finished, and determine what needs to
-        /// be sent back to the client.
+        /// be sent back to the client.HRe
         /// </summary>
         /// <param name="changeSet">The change set processed.</param>
         /// <param name="disableStackTraces">true to omit sending stack traces to clients (the secure approach)</param>

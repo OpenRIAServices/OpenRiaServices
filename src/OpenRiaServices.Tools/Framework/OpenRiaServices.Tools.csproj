@@ -26,9 +26,6 @@
     <Compile Include="..\..\OpenRiaServices.Server\Framework\SerializationUtility.cs" Link="SerializationUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
-    <Compile Update="Pdb\SymStore\*.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
     <Compile Update="MetadataPipeline\RangeCustomAttributeBuilder.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -49,9 +46,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="Pdb\ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\NuGet\OpenRiaServices.Client.CodeGen\build\OpenRiaServices.CodeGen.targets" Link="build\OpenRiaServices.CodeGen.targets" />
