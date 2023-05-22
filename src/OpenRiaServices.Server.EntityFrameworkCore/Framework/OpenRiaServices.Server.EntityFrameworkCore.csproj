@@ -13,8 +13,8 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.24" />
 
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="7.0.5" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="7.0.5" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
