@@ -496,7 +496,8 @@ namespace OpenRiaServices.Tools
                 // An exception is possible in situations where the user has included
                 // reference assemblies that cause TypeLoadFailures.  If we encounter
                 // this situation, fallback to using only our current assembly as the
-                // catalog.   This allows MEF to still work for types in this assembly.
+                // catalog.   This allows MEF to still work for types in this assembly. 	mscorlib.dll!System.Reflection.Assembly.GetTypes()	Unknown
+
                 logger.LogWarning(string.Format(CultureInfo.CurrentCulture,
                                 Resource.Failed_To_Create_Composition_Container, ex.Message));
                 this._partCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
