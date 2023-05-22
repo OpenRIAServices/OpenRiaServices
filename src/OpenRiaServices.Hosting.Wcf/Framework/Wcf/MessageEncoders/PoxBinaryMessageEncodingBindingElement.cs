@@ -96,7 +96,7 @@ namespace OpenRiaServices.Client.Web
             return context.CanBuildInnerChannelFactory<TChannel>();
         }
 
-#if !SILVERLIGHT && !NET6_0_OR_GREATER
+#if !SILVERLIGHT && !NETSTANDARD2_0
         public override IChannelListener<TChannel> BuildChannelListener<TChannel>(BindingContext context)
         {
             if (context == null)
