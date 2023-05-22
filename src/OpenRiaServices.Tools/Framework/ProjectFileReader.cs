@@ -1,15 +1,11 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using System.Text;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Exceptions;
-using Microsoft.Build.Execution;
-using Microsoft.Build.Framework;
 
 namespace OpenRiaServices.Tools
 {
@@ -20,12 +16,8 @@ namespace OpenRiaServices.Tools
     internal class ProjectFileReader : IDisposable
     {
         private readonly ILogger _logger;
-
-#if NET40
         private ProjectCollection _projectCollection = new ProjectCollection();
-#else
-        Dictionary<string, Project> _loadedProjects = new Dictionary<string, Project>(StringComparer.OrdinalIgnoreCase);
-#endif
+
         /// <summary>
         /// Creates a new instance.
         /// </summary>
@@ -102,7 +94,6 @@ namespace OpenRiaServices.Tools
 
             try
             {
-#if NET40
                 project = this._projectCollection.LoadedProjects.Where(p => string.Equals(p.FullPath, projectPath, StringComparison.OrdinalIgnoreCase)).FirstOrDefault();
                 if (project == null)
                 {
@@ -125,16 +116,6 @@ namespace OpenRiaServices.Tools
                         project.ReevaluateIfNecessary();
                     }
                 }
-#else
-                project = null;
-                if (!this._loadedProjects.TryGetValue(projectPath, out project))
-                {
-                    Engine engine = new Engine();
-                    project = new Project(engine);
-                    project.Load(projectPath);
-                    this._loadedProjects[projectPath] = project;
-                }
-#endif
             }
             catch (InvalidOperationException ioe)
             {
@@ -161,11 +142,7 @@ namespace OpenRiaServices.Tools
             Project project = this.LoadProject(projectPath);
             if (project != null)
             {
-#if NET40
                 propertyValue = project.GetPropertyValue(propertyName);
-#else
-                propertyValue = project.GetEvaluatedProperty(propertyName);
-#endif
             }
             return propertyValue;
         }
@@ -191,15 +168,8 @@ namespace OpenRiaServices.Tools
 
             this._logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Analyzing_Project_References, Path.GetFileName(projectPath)));
 
-#if NET40
             projects = project.GetItems("ProjectReference").Select(i => ConvertToFullPath(i.EvaluatedInclude, projectPath));
-#else
-            BuildItemGroup buildItemGroup = project.GetEvaluatedItemsByName("ProjectReference");
-            if (buildItemGroup != null)
-            {
-                projects = buildItemGroup.OfType<BuildItem>().Select(b => ConvertToFullPath(b.FinalItemSpec, projectPath));
-            }
-#endif
+
             // Tell the user what project references we found
             if (projects.Any())
             {
@@ -232,16 +202,9 @@ namespace OpenRiaServices.Tools
             // Tell the user.  This helps us see when we use the cache and when we don't
             this._logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Analyzing_Project_Files, Path.GetFileName(projectPath)));
 
-#if NET40
             sources = project.GetItems("Compile").Select(i => ConvertToFullPath(i.EvaluatedInclude, projectPath))
                 .ToArray();
-#else
-            BuildItemGroup buildItemGroup = project.GetEvaluatedItemsByName("Compile");
-            if (buildItemGroup != null)
-            {
-                sources = buildItemGroup.OfType<BuildItem>().Select(b => ConvertToFullPath(b.FinalItemSpec, projectPath));
-            }
-#endif
+
             return sources;
         }
 
@@ -256,9 +219,7 @@ namespace OpenRiaServices.Tools
 
             if (this._projectCollection != null)
             {
-#if NET40
                 this._projectCollection.Dispose();
-#endif
                 this._projectCollection = null;
             }
         }
