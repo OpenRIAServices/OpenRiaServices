@@ -25,6 +25,7 @@ namespace OpenRiaServices.Client.Web.Behaviors
             {
                 DateTimeFormat = new System.Runtime.Serialization.DateTimeFormat(DateTimeFormat, System.Globalization.CultureInfo.InvariantCulture)
             };
+
         public override bool CanConvert(Type type)
         {
             // Allow everything.
