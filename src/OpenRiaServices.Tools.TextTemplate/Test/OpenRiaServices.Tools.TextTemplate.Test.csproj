@@ -18,7 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.EntityFramework\Framework\OpenRiaServices.EntityFramework.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj">
       <Aliases>global,SystemWebDomainServices</Aliases>
     </ProjectReference>

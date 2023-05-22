@@ -1,16 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>SERVERFX;LINQTOSQL;$(DefineConstants)</DefineConstants>
-    <TargetFrameworks>net472;net7.0</TargetFrameworks>
+    <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
+  <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.Linq" />
-  </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net472'">
-    <PackageReference Include="netstandard-System.Data.Linq" Version="1.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\MetadataPropertyDescriptorWrapper.cs" Link="MetadataPropertyDescriptorWrapper.cs" />
