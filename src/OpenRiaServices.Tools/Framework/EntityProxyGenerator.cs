@@ -1194,7 +1194,7 @@ namespace OpenRiaServices.Tools
 
                     if (firstRootType != nextRootType)
                     {
-                        this.ClientProxyGenerator.LogWarning(string.Format(CultureInfo.CurrentCulture,
+                        this.ClientProxyGenerator.LogError(string.Format(CultureInfo.CurrentCulture,
                             Resource.EntityCodeGen_SharedEntityMustBeLeastDerived,
                             firstRootType, firstDescription.DomainServiceType,
                             nextRootType, nextDescription.DomainServiceType,

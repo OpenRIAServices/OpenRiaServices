@@ -1775,12 +1775,12 @@ namespace OpenRiaServices.Tools.Test
             MethodInfo mInfo = entityType.GetMethod(methodName);
             Assert.IsNotNull(mInfo, "Expected to find method " + methodName + " on entity " + entityType.Name);
             Assert.IsTrue(mInfo.IsPublic, "Expected method " + methodName + " to be public");
-            Assert.AreEqual(typeof(void), mInfo.ReturnType, "Expected " + methodName + " to return void");
+            Assert.AreEqual(typeof(void).FullName, mInfo.ReturnType.FullName, "Expected " + methodName + " to return void");
             ParameterInfo[] pInfos = mInfo.GetParameters();
             Assert.AreEqual(parameters.Length, pInfos.Length, "Expected " + parameters.Length + " parameters for " + methodName);
             for (int i = 0; i < parameters.Length; ++i)
             {
-                Assert.AreEqual(parameters[i], pInfos[i].ParameterType, "Expected parameter " + i + " for " + methodName + " to be of type " + parameters[i].Name);
+                Assert.AreEqual(parameters[i].FullName, pInfos[i].ParameterType.FullName, "Expected parameter " + i + " for " + methodName + " to be of type " + parameters[i].Name);
             }
 
             // ------------------------------------------
@@ -1791,14 +1791,14 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsNotNull(pInfo, "Expected to find " + thePropertyName + " on entity type " + entityType.Name);
             Assert.IsNotNull(pInfo.GetGetMethod(), "Expected getter on " + thePropertyName + " on entity type " + entityType.Name);
             Assert.IsTrue(pInfo.GetGetMethod().IsPublic);
-            Assert.AreEqual(typeof(bool), pInfo.PropertyType);
+            Assert.AreEqual(typeof(bool).FullName, pInfo.PropertyType.FullName);
 
             thePropertyName = "Can" + methodName;
             pInfo = entityType.GetProperty(thePropertyName);
             Assert.IsNotNull(pInfo, "Expected to find " + thePropertyName + " on entity type " + entityType.Name);
             Assert.IsNotNull(pInfo.GetGetMethod(), "Expected getter on " + thePropertyName + " on entity type " + entityType.Name);
             Assert.IsTrue(pInfo.GetGetMethod().IsPublic);
-            Assert.AreEqual(typeof(bool), pInfo.PropertyType);
+            Assert.AreEqual(typeof(bool).FullName, pInfo.PropertyType.FullName);
 
             // ---------------------------------------
             // Validate partial methods on the entity
@@ -1824,13 +1824,13 @@ namespace OpenRiaServices.Tools.Test
             mInfo = domainContextType.GetMethod(methodName);
             Assert.IsNotNull(mInfo, "Expected to find method " + methodName + " on context " + domainContextType.Name);
             Assert.IsTrue(mInfo.IsPublic, "Expected method " + methodName + " to be public");
-            Assert.AreEqual(typeof(void), mInfo.ReturnType, "Expected " + methodName + " to return void");
+            Assert.AreEqual(typeof(void).FullName, mInfo.ReturnType.FullName, "Expected " + methodName + " to return void");
             pInfos = mInfo.GetParameters();
             Assert.AreEqual(parameters.Length + 1, pInfos.Length, "Expected " + (parameters.Length + 1) + " parameters for " + methodName);
-            Assert.AreEqual(entityType, pInfos[0].ParameterType, "Expected " + methodName + " on " + domainContextType.Name + " to have entity " + entityType + " as the first param");
+            Assert.AreEqual(entityType.FullName, pInfos[0].ParameterType.FullName, "Expected " + methodName + " on " + domainContextType.Name + " to have entity " + entityType + " as the first param");
             for (int i = 0; i < parameters.Length; ++i)
             {
-                Assert.AreEqual(parameters[i], pInfos[i + 1].ParameterType, "Expected parameter " + i + " for " + methodName + " to be of type " + parameters[i].Name);
+                Assert.AreEqual(parameters[i].FullName, pInfos[i + 1].ParameterType.FullName, "Expected parameter " + i + " for " + methodName + " to be of type " + parameters[i].Name);
             }
         }
     }

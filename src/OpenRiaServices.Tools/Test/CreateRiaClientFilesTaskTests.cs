@@ -284,6 +284,7 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if NET6_0_OR_GREATER
         [TestMethod]
         public void CreateRIA60()
         {
@@ -320,6 +321,7 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsTrue(task);
             Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }
+#endif
 
         [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]

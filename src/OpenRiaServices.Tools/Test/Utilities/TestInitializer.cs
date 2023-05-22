@@ -56,13 +56,14 @@ namespace OpenRiaServices.Tools.Test.Utilities
             .First();
 
             s_msbuildPath = vsInstance.MSBuildPath;
+            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(vsInstance);
 
             s_loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => IsMsBuildAssembly(a.FullName))
                 .ToDictionary(x => x.GetName().Name);
 
             // Load msbuild assemblt
-            var msbuildAssemblies = Directory.GetFiles(s_msbuildPath, "MSBuild*.dll");
+            var msbuildAssemblies = Directory.GetFiles(s_msbuildPath, "Microsoft.Build*.dll");
             s_loadedAssemblies.Clear();
             foreach (var msbuildAssembly in msbuildAssemblies)
             {
@@ -72,7 +73,6 @@ namespace OpenRiaServices.Tools.Test.Utilities
 
             AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
-            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(vsInstance);
         }
 
         private static void UnregisterMSBuildAssemblies()

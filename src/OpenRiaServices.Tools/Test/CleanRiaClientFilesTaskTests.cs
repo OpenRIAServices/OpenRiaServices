@@ -21,14 +21,13 @@ namespace OpenRiaServices.Tools.Test
         }
 
 
-#if NET6_0_OR_GREATER
         [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CleanRiaClientFiles_Deletes_Generated_Files_Copy()
         {
             CleanRiaClientFiles_Deletes_Generated_Files(OpenRiaSharedFilesMode.Copy);
         }
-#endif
+
         [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CleanRiaClientFiles_Deletes_Generated_Files_Link()
