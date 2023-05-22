@@ -19,6 +19,132 @@ namespace OpenRiaServices.Common.Test
     /// </summary>
     public class SandBoxer : MarshalByRefObject
     {
+#if NETFRAMEWORK
+        /// <summary>
+        /// Executes the given <paramref name="action"/>  in partial trust.
+        /// </summary>
+        /// <remarks>The given action must be static, because it will be called in the context
+        /// of a new AppDomain.
+        /// </remarks>
+        /// <param name="action">Action to invoke in partial trust.</param>
+        [SecuritySafeCritical]
+        public static void ExecuteInMediumTrust(Action action)
+        {
+#if !MEDIUM_TRUST
+            Assert.Inconclusive("Medium trust is obsolete");
+#endif
+
+            SandBoxer.ExecuteInMediumTrust(action.Method, null);
+        }
+
+        /// <summary>
+        /// Executes the given <paramref name="action"/>  in partial trust, passing it the given <paramref name="parameter"/>
+        /// </summary>
+        /// <remarks>The given action must be static, because it will be called in the context
+        /// of a new AppDomain.
+        /// </remarks>
+        /// <typeparam name="T">The type of <paramref name="parameter"/></typeparam>
+        /// <param name="action">Action to invoke in partial trust.</param>
+        /// <param name="parameter">The parameter value to pass to the action</param>
+        [SecuritySafeCritical]
+        public static void ExecuteInMediumTrust<T>(Action<T> action, T parameter)
+        {
+            SandBoxer.ExecuteInMediumTrust(action.Method, parameter);
+        }
+
+        /// <summary>
+        /// Executes the given <paramref name="methodInfo"/> in partial trust, giving it
+        /// the specified <paramref name="parameter"/> if its signature indicates it accepts a parameter.
+        /// </summary>
+        /// <remarks>The given delegate must be static, because it will be called in the context
+        /// of a new AppDomain.
+        /// </remarks>
+        /// <param name="methodInfo">Method to invoke in partial trust.</param>
+        /// <param name="parameter">Parameter to pass to the method.</param>
+        [SecuritySafeCritical]
+        public static void ExecuteInMediumTrust(MethodInfo methodInfo, object parameter)
+        {
+#if !MEDIUM_TRUST
+            Assert.Inconclusive("Medium trust is only valid for signed builds");
+#endif
+
+            Type type = methodInfo.DeclaringType;
+
+            // Instance methods are not supported because in common use, caller is in full trust
+            if (!methodInfo.IsStatic)
+            {
+                throw new ArgumentException("The method " + type.Name + "." + methodInfo.Name + " must be static");
+            }
+
+            if (methodInfo.GetParameters().Length > 1)
+            {
+                throw new ArgumentException("The method " + type.Name + "." + methodInfo.Name + " accepts an unexpected number of parameters");
+            }
+
+            string methodName = methodInfo.Name;
+            string typeName = methodInfo.DeclaringType.FullName;
+            string assemblyName = methodInfo.DeclaringType.Assembly.FullName;
+            string pathToAssembly = methodInfo.DeclaringType.Assembly.Location;
+
+            // TODO (wilcob, roncain): Parse web_mediumtrust.config for a 100% correct sandboxed appdomain.
+            // Use Intranet permission because that is how our framework is run in ASP.NET
+            Evidence evidence = new Evidence();
+            evidence.AddHostEvidence(new Zone(SecurityZone.Intranet));
+ 
+            PermissionSet permSet = SecurityManager.GetStandardSandbox(evidence);
+
+            // We want the sandboxer assembly's strong name, so that we can add it to the full trust list
+            StrongName sandBoxAssembly = typeof(SandBoxer).Assembly.Evidence.GetHostEvidence<StrongName>();
+
+            AppDomainSetup adSetup = new AppDomainSetup();
+            adSetup.ApplicationBase = Path.GetFullPath(pathToAssembly);
+
+            // We need the following to be fully trusted:
+            //  SandBoxer: does Reflection to invoke down to partial trust
+            StrongName[] fullTrustAssemblies = new StrongName[] {
+                sandBoxAssembly,
+            };
+
+            // DataAnnotations is in the GAC and will run full trust unless we ask otherwise
+            string[] partialTrustAssemblies = new string[] {
+                typeof(System.ComponentModel.DataAnnotations.ValidationAttribute).Assembly.FullName,
+            };
+
+            adSetup.PartialTrustVisibleAssemblies = partialTrustAssemblies;
+
+            AppDomain newDomain = AppDomain.CreateDomain("SandBox", null, adSetup, permSet, fullTrustAssemblies);
+
+            // Use CreateInstanceFrom to load an instance of the Sandboxer class into the new AppDomain. 
+            ObjectHandle handle = Activator.CreateInstanceFrom(
+                newDomain, typeof(SandBoxer).Assembly.ManifestModule.FullyQualifiedName,
+                typeof(SandBoxer).FullName
+                );
+
+            // Unwrap the new domain instance into an reference in this domain and use it to 
+            // execute the untrusted code
+            SandBoxer newDomainInstance = handle.Unwrap() as SandBoxer;
+            Exception exception = null;
+ 
+            try
+            {
+                newDomainInstance.ExecuteUntrustedCode(assemblyName, typeName, methodName, parameter);
+            }
+            catch (TargetInvocationException tie)
+            {
+                exception = tie.InnerException == null ? tie : tie.InnerException;
+            }
+            catch (Exception ex)
+            {
+                exception = ex;
+            }
+            if (exception != null)
+            {
+                throw (exception is AssertFailedException)
+                          ? exception
+                          : new AssertFailedException(exception.Message, exception);
+            }
+        }
+#endif
 
         /// <summary>
         /// Invokes the specified <paramref name="methodName"/> declared in the given <paramref name="typeName"/>
