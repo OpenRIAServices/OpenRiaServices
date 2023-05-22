@@ -13,13 +13,8 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         public static ValueTask<int> CountAsync<T>(IQueryable<T> query, CancellationToken cancellationToken)
         {
             // EF will throw if provider is not a IDbAsyncQueryProvider
-#if NET6_0_OR_GREATER
             if (query.Provider is IAsyncQueryProvider)
                 return new ValueTask<int>(query.CountAsync(cancellationToken));
-#else
-            if (query.Provider is IAsyncQueryProvider)
-                return new ValueTask<int>(query.CountAsync(cancellationToken));
-#endif
             else
                 return new ValueTask<int>(query.Count());
         }
