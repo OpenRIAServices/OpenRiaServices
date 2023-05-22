@@ -2256,16 +2256,12 @@ namespace OpenRiaServices.Server.Test
             set;
         }
 
-#if !NET6_0_OR_GREATER
         [Editable(false)]
-        public List<
-            Binary
-            > ListBinaryReadOnlyProperty
+        public List<Binary> ListBinaryReadOnlyProperty
         {
             get;
             set;
         }
-#endif
 
         [Exclude]
         [Editable(false)]
@@ -2483,5 +2479,5 @@ namespace OpenRiaServices.Server.Test
         [CustomValidation(typeof(AlwaysFailValidator), "Validate")]
         public int IntProp { get; set; }
     }
-#endregion // Mock DomainService Types
+    #endregion // Mock DomainService Types
 }

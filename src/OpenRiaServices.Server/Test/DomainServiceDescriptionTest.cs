@@ -31,14 +31,13 @@ namespace OpenRiaServices.Server.Test
     using System.Threading.Tasks;
     using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
     using Microsoft.EntityFrameworkCore.Metadata;
-    using OpenRiaServices.Server.Test;
     using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
 
     /// <summary>
     /// DomainServiceDescription tests
-    /// </summary>    
+    /// </summary>
     [TestClass]
-    public class DomainServiceDescriptionTest : DomainServiceDescriptionLSTest
+    public class DomainServiceDescriptionTest : UnitTestBase
     {
         [TestMethod]
         [WorkItem(193755)]
@@ -317,6 +316,22 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
+        [DeploymentItem(@"DatModels\ScenarioModels\Northwind.map")]
+        public void LTS_ExternalMapping()
+        {
+            // verify that our external mapping file exists
+            // Test pass if this is commented out
+            //Assert.IsTrue(File.Exists("Northwind.map"));
+            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(LTSExternalMappingService));
+
+            // verify that our TDP has inferred DAL metadata
+            Type entityType = typeof(DataTests.Scenarios.LTS.Northwind_ExternalMapping.Customer);
+            Assert.IsTrue(dsd.EntityTypes.Contains(entityType));
+            PropertyDescriptor pd = TypeDescriptor.GetProperties(entityType)["Orders"];
+            Assert.IsNotNull(pd.Attributes[typeof(AssociationAttribute)]);
+        }
+
+        [TestMethod]
         [WorkItem(858226)]
         public void EFInvokeOperationConvention()
         {
@@ -438,6 +453,188 @@ namespace OpenRiaServices.Server.Test
             ExceptionHelper.ExpectInvalidOperationException(() => DomainServiceDescription.GetDescription(typeof(Inherit_Polymorphic_New2_DomainService)), errorMessage);
         }
 
+        /// <summary>
+        /// Verify that our DAL providers correctly infer and apply Editable(false)
+        /// </summary>
+        [TestMethod]
+        public void EditableFalse_DALInference()
+        {
+            // Verify that key members get Editable(false, AllowInitialValue = true)
+            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
+            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["ProductID"];
+            EditableAttribute editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
+            Assert.IsNotNull(editable);
+            Assert.IsFalse(editable.AllowEdit);
+            Assert.IsTrue(editable.AllowInitialValue);
+
+            // Verify that key members that are also FK members do NOT get EditableAttribute
+            pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["OrderID"];
+            AssociationAttribute assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<AssociationAttribute>().Single();
+            Assert.IsTrue(assoc.ThisKeyMembers.Contains("OrderID"));
+            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
+            Assert.IsNull(editable);
+
+            // Do the same tests for LTS
+            // Verify that key members get Editable(false, AllowInitialValue = true)
+            dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductID"];
+            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
+            Assert.IsNotNull(editable);
+            Assert.IsFalse(editable.AllowEdit);
+            Assert.IsTrue(editable.AllowInitialValue);
+
+            // Verify that key members that are also FK members do NOT get EditableAttribute
+            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Order_Detail))["OrderID"];
+            assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<AssociationAttribute>().Single();
+            Assert.IsTrue(assoc.ThisKeyMembers.Contains("OrderID"));
+            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
+            Assert.IsNull(editable);
+
+            // if an entity has a Timestamp member, it should be marked Editable(false)
+            LinqToSqlTypeDescriptionContext ltsContext = new LinqToSqlTypeDescriptionContext(typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios));
+            System.Data.Linq.Mapping.MetaType metaType = ltsContext.MetaModel.GetMetaType(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
+            TypeDescriptionProvider tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
+            LinqToSqlTypeDescriptor ltsTypeDescriptor = new LinqToSqlTypeDescriptor(ltsContext, metaType, tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity)));
+            pd = ltsTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
+            Assert.AreEqual("Timestamp", pd.Name);
+            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
+            Assert.IsFalse(editable.AllowEdit);
+            Assert.IsFalse(editable.AllowInitialValue);
+
+            LinqToEntitiesTypeDescriptionContext efContext = new LinqToEntitiesTypeDescriptionContext(typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios));
+            tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
+            LinqToEntitiesTypeDescriptor efTypeDescriptor = new LinqToEntitiesTypeDescriptor(efContext, efContext.GetEdmType(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)), tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)));
+            pd = efTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
+            Assert.AreEqual("Timestamp", pd.Name);
+            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
+            Assert.IsFalse(editable.AllowEdit);
+            Assert.IsFalse(editable.AllowInitialValue);
+        }
+
+        /// <summary>
+        /// Verify that our DAL providers correctly infer and apply RoundtripOriginalAttribute
+        /// </summary>
+        [TestMethod]
+        public void RoundtripOriginalAttribute_DALInference()
+        {
+            // Verify that members that participate in concurrency checks
+            // have the attribute applied, and those that don't do not
+            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
+            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["ProductName"];
+            Assert.IsNotNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
+            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
+            pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Category))["CategoryName"];
+            Assert.IsNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
+            Assert.IsNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
+
+            // verify that FK members have the attribute applied
+            pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["CategoryID"];
+            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
+
+            // For LTS, Verify that all writeable members have RTO applied
+            dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductName"];
+            Assert.IsNotNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
+            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
+            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryName"];
+            Assert.IsNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
+            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
+
+            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["CategoryID"];
+            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
+
+            // if an entity has a Timestamp member, no other members should be marked RTO
+            LinqToSqlTypeDescriptionContext ltsContext = new LinqToSqlTypeDescriptionContext(typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios));
+            System.Data.Linq.Mapping.MetaType metaType = ltsContext.MetaModel.GetMetaType(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
+            TypeDescriptionProvider tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
+            LinqToSqlTypeDescriptor ltsTypeDescriptor = new LinqToSqlTypeDescriptor(ltsContext, metaType, tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity)));
+            pd = ltsTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
+            Assert.AreEqual("Timestamp", pd.Name);
+
+            LinqToEntitiesTypeDescriptionContext efContext = new LinqToEntitiesTypeDescriptionContext(typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios));
+            tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
+            LinqToEntitiesTypeDescriptor efTypeDescriptor = new LinqToEntitiesTypeDescriptor(efContext, efContext.GetEdmType(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)), tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)));
+            pd = efTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
+            Assert.AreEqual("Timestamp", pd.Name);
+        }
+
+        [TestMethod]
+        public void RequiredAttribute_DALInference()
+        {
+            // Verify that members of EF model marked non Nullable have RequiredAttribute
+            var dsd = DomainServiceDescription.GetDescription(typeof(DataTests.Scenarios.EF.Northwind.EF_NorthwindScenarios_RequiredAttribute));
+            var properties = TypeDescriptor.GetProperties(typeof(DataTests.Scenarios.EF.Northwind.RequiredAttributeTestEntity));
+            
+            var property = properties["RequiredString"];
+            Assert.IsNotNull(property);
+            var requiredAttribute = (RequiredAttribute) property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNotNull(requiredAttribute);
+            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
+
+            property = properties["RequiredStringOverride"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNotNull(requiredAttribute);
+            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, true);
+
+            property = properties["RequiredInt32"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNull(requiredAttribute);
+
+            property = properties["OptionalString"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNull(requiredAttribute);
+
+            property = properties["OptionalInt32"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNull(requiredAttribute);
+
+            // Verify that members of LTS model marked non Nullable have RequiredAttribute
+            dsd = DomainServiceDescription.GetDescription(typeof(DataTests.Scenarios.LTS.Northwind.LTS_NorthwindScenarios));
+            properties = TypeDescriptor.GetProperties(typeof(DataTests.Scenarios.LTS.Northwind.RequiredAttributeTestEntity));
+            
+            property = properties["RequiredString"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNotNull(requiredAttribute);
+            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
+
+            property = properties["RequiredStringOverride"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNotNull(requiredAttribute);
+            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, true);
+
+            property = properties["RequiredInt32"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNull(requiredAttribute);
+
+            property = properties["RequiredNullableInt32"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNotNull(requiredAttribute);
+            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
+
+            property = properties["OptionalString"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNull(requiredAttribute);
+
+            property = properties["OptionalInt32"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNull(requiredAttribute);
+
+            property = properties["OptionalNullableInt32"];
+            Assert.IsNotNull(property);
+            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
+            Assert.IsNull(requiredAttribute);
+        }
+
         [TestMethod]
         [Description("Verify that our DAL providers correctly infer and apply DatabaseGeneratedAttribute")]
         public void DatabaseGeneratedAttributeAttribute_DALInference_EFIdentity()
@@ -461,7 +658,6 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNull(dbAttr);
 
         }
-#if !NET6_0_OR_GREATER
 
         [TestMethod]
         [Description("Verify that our DAL providers correctly infer and apply DatabaseGeneratedAttribute")]
@@ -504,49 +700,6 @@ namespace OpenRiaServices.Server.Test
             Assert.IsTrue(CompareDatabaseGeneratedOption(dbAttr, "Computed"));
         }
 
-        
-        [TestMethod]
-        [Description("Ensure that our TDPs cache properties")]
-        public void DomainService_TdpCachesProperties()
-        {
-            // First make sure the TDPs are registered for all the entities.
-            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
-
-            Type categoryType = typeof(NorthwindModel.Category);
-
-            PropertyDescriptorCollection p1 = TypeDescriptor.GetProperties(categoryType);
-            PropertyDescriptorCollection p2 = TypeDescriptor.GetProperties(categoryType);
-
-            Assert.AreSame(p1, p2, "TDP didn't cache the properties.");
-
-            // First make sure the TDPs are registered for all the entities.
-            DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-
-            categoryType = typeof(DataTests.Northwind.LTS.Category);
-
-            p1 = TypeDescriptor.GetProperties(categoryType);
-            p2 = TypeDescriptor.GetProperties(categoryType);
-
-            Assert.AreSame(p1, p2, "TDP didn't cache the properties.");
-        }
-
-          [TestMethod]
-        public void DomainServiceDescription_ConcurrencyCheckAttribute()
-        {
-            // verify that the LTS provider flows OCC metadata
-            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            PropertyDescriptor prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductName"];
-            Assert.IsNotNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryName"];
-            Assert.IsNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
-
-            // verify that the EF provider flows OCC metadata
-            desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
-            prop = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["ProductName"];
-            Assert.IsNotNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            prop = TypeDescriptor.GetProperties(typeof(NorthwindModel.Category))["CategoryName"];
-            Assert.IsNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
-        }
         [TestMethod]
         [Description("Asserts that underdefined EF properties with null facet values are successfully handled during timestamp comparison.")]
         [WorkItem(857020)]
@@ -585,124 +738,6 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(property.Attributes[typeof(TimestampAttribute)],
                 "ConcurrencyTimestamp property is a timestamp.");
         }
-
-         /// <summary>
-        /// Direct tests against our custom TD for member projections
-        /// </summary>
-        [TestMethod]
-        public void ProjectionInclude_TestPropertyDescriptor()
-        {
-            DataTests.Northwind.LTS.Product product = new DataTests.Northwind.LTS.Product
-            {
-                ProductID = 1
-            };
-            DataTests.Northwind.LTS.Category category = new DataTests.Northwind.LTS.Category
-            {
-                CategoryID = 1,
-                CategoryName = "Frozen Treats"
-            };
-            DataTests.Northwind.LTS.Supplier supplier = new DataTests.Northwind.LTS.Supplier
-            {
-                SupplierID = 1,
-                CompanyName = "The Treat Factory"
-            };
-            product.Category = category;
-            product.Supplier = supplier;
-
-            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            desc.Initialize();
-
-            PropertyDescriptor supplierName = TypeDescriptor.GetProperties(product)["SupplierName"];
-            Assert.IsNotNull(supplierName);
-            Assert.AreEqual(supplier.CompanyName, supplierName.GetValue(product));
-            Assert.AreEqual(typeof(string), supplierName.PropertyType);
-            Assert.AreEqual(typeof(DataTests.Northwind.LTS.Product), supplierName.ComponentType);
-            Assert.AreEqual(false, supplierName.CanResetValue(product));
-            Assert.IsTrue(supplierName.IsReadOnly);
-            Assert.IsTrue(supplierName.ShouldSerializeValue(product));
-
-            PropertyDescriptor categoryName = TypeDescriptor.GetProperties(product)["CategoryName"];
-            Assert.IsNotNull(categoryName);
-            Assert.AreEqual(category.CategoryName, categoryName.GetValue(product));
-        }
-
-          [TestMethod]
-        public void TestLinqToSqlDomainServiceDescription()
-        {
-            ValidateMetadata(typeof(TestDomainServices.LTS.Catalog), CatalogEntities);
-        }
-
-        [TestMethod]
-        public void TestLinqToEntitiesDomainServiceDescription()
-        {
-            ValidateMetadata(typeof(TestDomainServices.EF.Catalog), CatalogEntities);
-        }
-
-        [TestMethod]
-        [Description("This test makes sure we can obtain an error message for invalid LinqToSqlDomainServiceDescriptionProviderAttribute")]
-        public void TestLinqToSqlInvalidDescriptionProvider()
-        {
-            ExceptionHelper.ExpectInvalidOperationException(() =>
-                {
-                    ValidateMetadata(typeof(InvalidLinqToSqlDomainServiceDescriptionProviderDS), CatalogEntities);
-                },
-                string.Format(OpenRiaServices.LinqToSql.Resource.InvalidLinqToSqlDomainServiceDescriptionProviderSpecification,
-                    typeof(AdventureWorksModel.AdventureWorksEntities))
-                );
-
-            ExceptionHelper.ExpectInvalidOperationException(() =>
-            {
-                ValidateMetadata(typeof(LinqToSqlThrowingDataContextDS), CatalogEntities);
-            }, "error");
-        }
-
-        [TestMethod]
-        [Description("This test makes sure we can obtain an error message for invalid LinqToEntitiesDomainServiceDescriptionProviderAttribute")]
-        public void TestLinqToEntitiesInvalidDescriptionProvider()
-        {
-            ExceptionHelper.ExpectInvalidOperationException(() =>
-            {
-                ValidateMetadata(typeof(InvalidLinqToEntitiesDomainServiceDescriptionProviderDS), CatalogEntities);
-            },
-                                                           string.Format(OpenRiaServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
-                                                               typeof(DataTests.AdventureWorks.LTS.AdventureWorks))
-                );
-        }
-
-        [TestMethod]
-        [Description("This test makes sure we can obtain a description without instantiating L2S DomainService")]
-        public void TestLinqToSqlDomainServiceNotInstantiated()
-        {
-            ValidateMetadata(typeof(ThrowingDomainServiceL2S), CatalogEntities);
-        }
-
-        
-        /// <summary>
-        /// Verify that DSDPs are chained from those applied to the most derived DomainService
-        /// base class, up the hierarchy to base. This means that the innermost parent is the
-        /// DSDP applied to the most derived class (TDPs chain calling their parents first).
-        /// </summary>
-        [TestMethod]
-        public void DomainDescriptionProvider_ChainOrdering()
-        {
-            DomainServiceDescriptionProvider dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(DSDTestServiceB));
-            Assert.AreEqual(typeof(DescriptionProviderA), dsdp.GetType());
-            Assert.AreEqual(typeof(DescriptionProviderB), dsdp.ParentProvider.GetType());
-            Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.ParentProvider.GetType());
-
-            dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(TestDomainServices.LTS.Northwind));
-            Assert.AreEqual(typeof(LinqToSqlDomainServiceDescriptionProvider), dsdp.GetType());
-            Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.GetType());
-        }
-
-        
-        [TestMethod]
-        public void TestAssociationExtensionAttributes_LTS()
-        {
-            VerifyAdventureWorksAssociations(typeof(TestDomainServices.LTS.Catalog));
-        }
-
-#endif
 
         /// <summary>
         /// Can't have a child Update w/o a parent Update
@@ -883,6 +918,30 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(0, parentAssociations.Count());
         }
 
+        [TestMethod]
+        [Description("Ensure that our TDPs cache properties")]
+        public void DomainService_TdpCachesProperties()
+        {
+            // First make sure the TDPs are registered for all the entities.
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
+
+            Type categoryType = typeof(NorthwindModel.Category);
+
+            PropertyDescriptorCollection p1 = TypeDescriptor.GetProperties(categoryType);
+            PropertyDescriptorCollection p2 = TypeDescriptor.GetProperties(categoryType);
+
+            Assert.AreSame(p1, p2, "TDP didn't cache the properties.");
+
+            // First make sure the TDPs are registered for all the entities.
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+
+            categoryType = typeof(DataTests.Northwind.LTS.Category);
+
+            p1 = TypeDescriptor.GetProperties(categoryType);
+            p2 = TypeDescriptor.GetProperties(categoryType);
+
+            Assert.AreSame(p1, p2, "TDP didn't cache the properties.");
+        }
 
         [TestMethod]
         [Description("Ensure that overrides of base DomainService methods aren't inferred as operations")]
@@ -1071,6 +1130,24 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(description.GetQueryMethod("B1"));
             Assert.IsNotNull(description.GetQueryMethod("GetCities"));
             Assert.IsNotNull(description.GetQueryMethod("GetZips"));
+        }
+
+        /// <summary>
+        /// Verify that DSDPs are chained from those applied to the most derived DomainService
+        /// base class, up the hierarchy to base. This means that the innermost parent is the
+        /// DSDP applied to the most derived class (TDPs chain calling their parents first).
+        /// </summary>
+        [TestMethod]
+        public void DomainDescriptionProvider_ChainOrdering()
+        {
+            DomainServiceDescriptionProvider dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(DSDTestServiceB));
+            Assert.AreEqual(typeof(DescriptionProviderA), dsdp.GetType());
+            Assert.AreEqual(typeof(DescriptionProviderB), dsdp.ParentProvider.GetType());
+            Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.ParentProvider.GetType());
+
+            dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(TestDomainServices.LTS.Northwind));
+            Assert.AreEqual(typeof(LinqToSqlDomainServiceDescriptionProvider), dsdp.GetType());
+            Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.GetType());
         }
 
         [TestMethod]
@@ -1318,7 +1395,6 @@ namespace OpenRiaServices.Server.Test
             }, string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
 
-#if !NET6_0_OR_GREATER
         [TestMethod]
         public void DomainService_InterfaceType()
         {
@@ -1328,7 +1404,6 @@ namespace OpenRiaServices.Server.Test
                 DomainServiceDescription.GetDescription(t);
             }, string.Format(OpenRiaServices.Server.Resource.DomainService_InvalidType, t.FullName));
         }
-#endif
 
         [TestMethod]
         public void DomainService_GenericTypeDefinition()
@@ -1381,7 +1456,23 @@ namespace OpenRiaServices.Server.Test
             }
         }
 
-      
+        [TestMethod]
+        public void DomainServiceDescription_ConcurrencyCheckAttribute()
+        {
+            // verify that the LTS provider flows OCC metadata
+            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+            PropertyDescriptor prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductName"];
+            Assert.IsNotNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
+            prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryName"];
+            Assert.IsNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
+
+            // verify that the EF provider flows OCC metadata
+            desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
+            prop = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["ProductName"];
+            Assert.IsNotNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
+            prop = TypeDescriptor.GetProperties(typeof(NorthwindModel.Category))["CategoryName"];
+            Assert.IsNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
+        }
 
         [TestMethod]
         public void DomainServiceDescription_VirtualMethods()
@@ -1877,7 +1968,45 @@ namespace OpenRiaServices.Server.Test
             }, string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_ParamMustBeByVal, "InsertCounty3", "county1"));
         }
 
-       
+        /// <summary>
+        /// Direct tests against our custom TD for member projections
+        /// </summary>
+        [TestMethod]
+        public void ProjectionInclude_TestPropertyDescriptor()
+        {
+            DataTests.Northwind.LTS.Product product = new DataTests.Northwind.LTS.Product
+            {
+                ProductID = 1
+            };
+            DataTests.Northwind.LTS.Category category = new DataTests.Northwind.LTS.Category
+            {
+                CategoryID = 1,
+                CategoryName = "Frozen Treats"
+            };
+            DataTests.Northwind.LTS.Supplier supplier = new DataTests.Northwind.LTS.Supplier
+            {
+                SupplierID = 1,
+                CompanyName = "The Treat Factory"
+            };
+            product.Category = category;
+            product.Supplier = supplier;
+
+            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+            desc.Initialize();
+
+            PropertyDescriptor supplierName = TypeDescriptor.GetProperties(product)["SupplierName"];
+            Assert.IsNotNull(supplierName);
+            Assert.AreEqual(supplier.CompanyName, supplierName.GetValue(product));
+            Assert.AreEqual(typeof(string), supplierName.PropertyType);
+            Assert.AreEqual(typeof(DataTests.Northwind.LTS.Product), supplierName.ComponentType);
+            Assert.AreEqual(false, supplierName.CanResetValue(product));
+            Assert.IsTrue(supplierName.IsReadOnly);
+            Assert.IsTrue(supplierName.ShouldSerializeValue(product));
+
+            PropertyDescriptor categoryName = TypeDescriptor.GetProperties(product)["CategoryName"];
+            Assert.IsNotNull(categoryName);
+            Assert.AreEqual(category.CategoryName, categoryName.GetValue(product));
+        }
 
         [TestMethod]
         public void ProjectionInclude_InvalidProjections()
@@ -1994,7 +2123,56 @@ namespace OpenRiaServices.Server.Test
 
         }
 
-      
+        [TestMethod]
+        public void TestLinqToSqlDomainServiceDescription()
+        {
+            ValidateMetadata(typeof(TestDomainServices.LTS.Catalog), CatalogEntities);
+        }
+
+        [TestMethod]
+        public void TestLinqToEntitiesDomainServiceDescription()
+        {
+            ValidateMetadata(typeof(TestDomainServices.EF.Catalog), CatalogEntities);
+        }
+
+        [TestMethod]
+        [Description("This test makes sure we can obtain an error message for invalid LinqToSqlDomainServiceDescriptionProviderAttribute")]
+        public void TestLinqToSqlInvalidDescriptionProvider()
+        {
+            ExceptionHelper.ExpectInvalidOperationException(() =>
+                {
+                    ValidateMetadata(typeof(InvalidLinqToSqlDomainServiceDescriptionProviderDS), CatalogEntities);
+                },
+                string.Format(OpenRiaServices.LinqToSql.Resource.InvalidLinqToSqlDomainServiceDescriptionProviderSpecification,
+                    typeof(AdventureWorksModel.AdventureWorksEntities))
+                );
+
+            ExceptionHelper.ExpectInvalidOperationException(() =>
+            {
+                ValidateMetadata(typeof(LinqToSqlThrowingDataContextDS), CatalogEntities);
+            }, "error");
+        }
+
+        [TestMethod]
+        [Description("This test makes sure we can obtain an error message for invalid LinqToEntitiesDomainServiceDescriptionProviderAttribute")]
+        public void TestLinqToEntitiesInvalidDescriptionProvider()
+        {
+            ExceptionHelper.ExpectInvalidOperationException(() =>
+            {
+                ValidateMetadata(typeof(InvalidLinqToEntitiesDomainServiceDescriptionProviderDS), CatalogEntities);
+            },
+                                                           string.Format(OpenRiaServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
+                                                               typeof(DataTests.AdventureWorks.LTS.AdventureWorks))
+                );
+        }
+
+        [TestMethod]
+        [Description("This test makes sure we can obtain a description without instantiating L2S DomainService")]
+        public void TestLinqToSqlDomainServiceNotInstantiated()
+        {
+            ValidateMetadata(typeof(ThrowingDomainServiceL2S), CatalogEntities);
+        }
+
         [TestMethod]
         [Description("This test makes sure we can obtain a description without instantiating L2E DomainService or its ObjectContext")]
         public void TestLinqToEntitiesContextNotInstantiated()
@@ -2002,6 +2180,11 @@ namespace OpenRiaServices.Server.Test
             ValidateMetadata(typeof(ThrowingDomainServiceL2E), CatalogEntities);
         }
 
+        [TestMethod]
+        public void TestAssociationExtensionAttributes_LTS()
+        {
+            VerifyAdventureWorksAssociations(typeof(TestDomainServices.LTS.Catalog));
+        }
 
         [TestMethod]
         public void TestAssociationExtensionAttributes_EF()
@@ -2840,214 +3023,18 @@ namespace OpenRiaServices.Server.Test
         #endregion
     }
 
-    [TestClass]
-    public class DomainServiceDescriptionLSTest : UnitTestBase
-    {
-
-        /// <summary>
-        /// Verify that our DAL providers correctly infer and apply Editable(false)
-        /// </summary>
-        [TestMethod]
-        public void EditableFalse_DALInference()
-        {
-            // Verify that key members get Editable(false, AllowInitialValue = true)
-            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["ProductID"];
-            EditableAttribute editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
-            Assert.IsNotNull(editable);
-            Assert.IsFalse(editable.AllowEdit);
-            Assert.IsTrue(editable.AllowInitialValue);
-
-            // Verify that key members that are also FK members do NOT get EditableAttribute
-            pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["OrderID"];
-            AssociationAttribute assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<AssociationAttribute>().Single();
-            Assert.IsTrue(assoc.ThisKeyMembers.Contains("OrderID"));
-            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
-            Assert.IsNull(editable);
-
-            // Do the same tests for LTS
-            // Verify that key members get Editable(false, AllowInitialValue = true)
-            dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductID"];
-            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
-            Assert.IsNotNull(editable);
-            Assert.IsFalse(editable.AllowEdit);
-            Assert.IsTrue(editable.AllowInitialValue);
-
-            // Verify that key members that are also FK members do NOT get EditableAttribute
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Order_Detail))["OrderID"];
-            assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<AssociationAttribute>().Single();
-            Assert.IsTrue(assoc.ThisKeyMembers.Contains("OrderID"));
-            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
-            Assert.IsNull(editable);
-
-            // if an entity has a Timestamp member, it should be marked Editable(false)
-            LinqToSqlTypeDescriptionContext ltsContext = new LinqToSqlTypeDescriptionContext(typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios));
-            System.Data.Linq.Mapping.MetaType metaType = ltsContext.MetaModel.GetMetaType(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            TypeDescriptionProvider tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            LinqToSqlTypeDescriptor ltsTypeDescriptor = new LinqToSqlTypeDescriptor(ltsContext, metaType, tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity)));
-            pd = ltsTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
-            Assert.AreEqual("Timestamp", pd.Name);
-            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
-            Assert.IsFalse(editable.AllowEdit);
-            Assert.IsFalse(editable.AllowInitialValue);
-
-            LinqToEntitiesTypeDescriptionContext efContext = new LinqToEntitiesTypeDescriptionContext(typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios));
-            tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            LinqToEntitiesTypeDescriptor efTypeDescriptor = new LinqToEntitiesTypeDescriptor(efContext, efContext.GetEdmType(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)), tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)));
-            pd = efTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
-            Assert.AreEqual("Timestamp", pd.Name);
-            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
-            Assert.IsFalse(editable.AllowEdit);
-            Assert.IsFalse(editable.AllowInitialValue);
-        }
-
-        [TestMethod]
-        [DeploymentItem(@"DatModels\ScenarioModels\Northwind.map")]
-        public void LTS_ExternalMapping()
-        {
-            // verify that our external mapping file exists
-            // Test pass if this is commented out
-            //Assert.IsTrue(File.Exists("Northwind.map"));
-            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(LTSExternalMappingService));
-
-            // verify that our TDP has inferred DAL metadata
-            Type entityType = typeof(DataTests.Scenarios.LTS.Northwind_ExternalMapping.Customer);
-            Assert.IsTrue(dsd.EntityTypes.Contains(entityType));
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(entityType)["Orders"];
-            Assert.IsNotNull(pd.Attributes[typeof(AssociationAttribute)]);
-        }
-
-        [TestMethod]
-        public void RequiredAttribute_DALInference()
-        {
-            // Verify that members of EF model marked non Nullable have RequiredAttribute
-            var dsd = DomainServiceDescription.GetDescription(typeof(DataTests.Scenarios.EF.Northwind.EF_NorthwindScenarios_RequiredAttribute));
-            var properties = TypeDescriptor.GetProperties(typeof(DataTests.Scenarios.EF.Northwind.RequiredAttributeTestEntity));
-            
-            var property = properties["RequiredString"];
-            Assert.IsNotNull(property);
-            var requiredAttribute = (RequiredAttribute) property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
-
-            property = properties["RequiredStringOverride"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, true);
-
-            property = properties["RequiredInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            property = properties["OptionalString"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            property = properties["OptionalInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            // Verify that members of LTS model marked non Nullable have RequiredAttribute
-            dsd = DomainServiceDescription.GetDescription(typeof(DataTests.Scenarios.LTS.Northwind.LTS_NorthwindScenarios));
-            properties = TypeDescriptor.GetProperties(typeof(DataTests.Scenarios.LTS.Northwind.RequiredAttributeTestEntity));
-            
-            property = properties["RequiredString"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
-
-            property = properties["RequiredStringOverride"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, true);
-
-            property = properties["RequiredInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            property = properties["RequiredNullableInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
-
-            property = properties["OptionalString"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            property = properties["OptionalInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            property = properties["OptionalNullableInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-        }
-
-        /// <summary>
-        /// Verify that our DAL providers correctly infer and apply RoundtripOriginalAttribute
-        /// </summary>
-        [TestMethod]
-        public void RoundtripOriginalAttribute_DALInference()
-        {
-            // Verify that members that participate in concurrency checks
-            // have the attribute applied, and those that don't do not
-            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["ProductName"];
-            Assert.IsNotNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
-            pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Category))["CategoryName"];
-            Assert.IsNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            Assert.IsNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
-
-            // verify that FK members have the attribute applied
-            pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["CategoryID"];
-            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
-
-            // For LTS, Verify that all writeable members have RTO applied
-            dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductName"];
-            Assert.IsNotNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryName"];
-            Assert.IsNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
-
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["CategoryID"];
-            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
-
-            // if an entity has a Timestamp member, no other members should be marked RTO
-            LinqToSqlTypeDescriptionContext ltsContext = new LinqToSqlTypeDescriptionContext(typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios));
-            System.Data.Linq.Mapping.MetaType metaType = ltsContext.MetaModel.GetMetaType(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            TypeDescriptionProvider tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            LinqToSqlTypeDescriptor ltsTypeDescriptor = new LinqToSqlTypeDescriptor(ltsContext, metaType, tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity)));
-            pd = ltsTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
-            Assert.AreEqual("Timestamp", pd.Name);
-
-            LinqToEntitiesTypeDescriptionContext efContext = new LinqToEntitiesTypeDescriptionContext(typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios));
-            tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            LinqToEntitiesTypeDescriptor efTypeDescriptor = new LinqToEntitiesTypeDescriptor(efContext, efContext.GetEdmType(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)), tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)));
-            pd = efTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
-            Assert.AreEqual("Timestamp", pd.Name);
-        }
-
-    }
-
     [EnableClientAccess]
     public class EFComplexTypesService : LinqToEntitiesDomainService<DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios>
     {
         public IQueryable<DataTests.Scenarios.EF.Northwind.EmployeeWithCT> GetCustomers()
+        {
+            return null;
+        }
+    }
+
+    public class LTSExternalMappingService : LinqToSqlDomainService<DataTests.Scenarios.LTS.Northwind_ExternalMapping.Northwind>
+    {
+        public IQueryable<DataTests.Scenarios.LTS.Northwind_ExternalMapping.Customer> GetCustomers()
         {
             return null;
         }
@@ -3062,14 +3049,6 @@ namespace OpenRiaServices.Server.Test
 
         // this should match the service operation convention
         public void RegisterUser(int id) { }
-    }
-
-    public class LTSExternalMappingService : LinqToSqlDomainService<DataTests.Scenarios.LTS.Northwind_ExternalMapping.Northwind>
-    {
-        public IQueryable<DataTests.Scenarios.LTS.Northwind_ExternalMapping.Customer> GetCustomers()
-        {
-            return null;
-        }
     }
 
     public class Bug843965_Service : LinqToSqlDomainService<DataTests.Scenarios.LTS.Northwind.NorthwindScenarios>
