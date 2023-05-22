@@ -44,6 +44,8 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext3.g", Type.EmptyTypes, "VB", Array.Empty<string>(), string.Empty, new ConsoleLogger(), true, true));
         }
 
+#if NETFRAMEWORK
+
         [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
         [DeploymentItem(@"ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
@@ -103,5 +105,7 @@ namespace OpenRiaServices.Tools.Test
             string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", typeof(RootNamespace.TestNamespace.AuthenticationService1));
             TestHelper.AssertGeneratedCodeDoesNotContain(generatedCode, "WebContext");
         }
+
+#endif
     }
 }
