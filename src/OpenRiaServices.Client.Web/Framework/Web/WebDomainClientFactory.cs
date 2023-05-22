@@ -39,13 +39,11 @@ namespace OpenRiaServices.Client.Web
             try
             {
                 factory = base.CreateChannelFactory<TContract>(endpoint, requiresSecureEndpoint);
-#if !NET6_0_OR_GREATER
                 factory.Endpoint.Behaviors.Add(new WebDomainClientWebHttpBehavior()
                 {
                     DefaultBodyStyle = System.ServiceModel.Web.WebMessageBodyStyle.Wrapped,
                     MessageInspector = SharedCookieMessageInspector,
                 });
-#endif
             }
             catch
             {

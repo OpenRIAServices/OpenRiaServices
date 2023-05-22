@@ -1,5 +1,4 @@
-﻿#if !NET6_0_OR_GREATER
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -10,7 +9,6 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using System.ServiceModel.Web;
-
 #if SILVERLIGHT
 using System.Windows.Browser;
 #endif
@@ -201,4 +199,3 @@ namespace OpenRiaServices.Client.Web.Behaviors
         }
     }
 }
-#endif
