@@ -15,8 +15,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
 namespace OpenRiaServices.Client.Web.Behaviors
 #endif
 {
-    internal class WebHttpQueryStringConverter
-        : QueryStringConverter
+    internal class WebHttpQueryStringConverter : QueryStringConverter
     {
         // Specify datetime format so that the DateTimeKind can roundtrip, otherwise unspecified values are treated incorrect by server
         // https://github.com/OpenRIAServices/OpenRiaServices/issues/75
