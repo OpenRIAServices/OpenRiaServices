@@ -36,7 +36,7 @@ namespace OpenRiaServices.Server.Test.Utilities
                 Context = context;
                 FailOnDebugAssert = failOnDebugAssert;
                 Listener = new UnitTestTraceListener();
-#if NET48
+#if NETFRAMEWORK
                 if (Debug.Listeners.Count > 0)
                 {
                     DefaultTraceListener defaultListener = Debug.Listeners[0] as DefaultTraceListener;
@@ -58,7 +58,7 @@ namespace OpenRiaServices.Server.Test.Utilities
         {
             if (Listener != null)
             {
-#if NET48
+#if NETFRAMEWORK
                 Debug.Listeners.Remove(Listener);
                 if (Debug.Listeners.Count > 0)
                 {
