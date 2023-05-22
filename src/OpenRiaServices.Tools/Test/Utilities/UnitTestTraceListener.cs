@@ -14,6 +14,7 @@ namespace OpenRiaServices.Server.Test.Utilities
         private static UnitTestTraceListener Listener;
         private static TestContext Context;
         private static bool FailOnDebugAssert;
+        private static bool OriginalAssertUiEnabled;
 
         /// <summary>
         /// Class constructor.
@@ -42,7 +43,7 @@ namespace OpenRiaServices.Server.Test.Utilities
                     DefaultTraceListener defaultListener = Debug.Listeners[0] as DefaultTraceListener;
                     if (defaultListener != null)
                     {
-                        //OriginalAssertUiEnabled = defaultListener.AssertUiEnabled;
+                        OriginalAssertUiEnabled = defaultListener.AssertUiEnabled;
                         defaultListener.AssertUiEnabled = false;
                     }
                 }
@@ -65,7 +66,7 @@ namespace OpenRiaServices.Server.Test.Utilities
                     DefaultTraceListener defaultListener = Debug.Listeners[0] as DefaultTraceListener;
                     if (defaultListener != null)
                     {
-                        //defaultListener.AssertUiEnabled = OriginalAssertUiEnabled;
+                        defaultListener.AssertUiEnabled = OriginalAssertUiEnabled;
                     }
                 }
                 Listener = null;
