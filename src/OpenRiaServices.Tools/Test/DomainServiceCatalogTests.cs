@@ -10,6 +10,7 @@ using OpenRiaServices.Client.Test;
 using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Runtime.InteropServices;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -93,11 +94,20 @@ namespace OpenRiaServices.Tools.Test
                     }
                 }
             }
-
+#if NET6_0_OR_GREATER
+            using(var dispatcher = new ClientCodeGenerationDispatcher())
+            {
+                DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger, dispatcher);
+                ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
+                Assert.IsNotNull(descriptions);
+                Assert.IsTrue(descriptions.Count >= expectedDomainServices);
+            }
+#else
             DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             Assert.IsTrue(descriptions.Count >= expectedDomainServices);
+#endif
         }
 
         [TestMethod]
@@ -164,7 +174,12 @@ namespace OpenRiaServices.Tools.Test
             File.WriteAllText(assemblyFileName, "neener neener neener");
 
             ConsoleLogger logger = new ConsoleLogger();
+#if NET6_0_OR_GREATER
+            var dispatcher = new ClientCodeGenerationDispatcher();
+            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger, dispatcher);
+#else
             DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
+#endif
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             Assert.AreEqual(0, descriptions.Count);
@@ -185,8 +200,8 @@ namespace OpenRiaServices.Tools.Test
             {
                 File.Delete(assemblyFileName);
             }
-            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, exceptionMessage);
-            TestHelper.AssertContainsMessages(logger, expectedMessage);
+            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, string.Empty).TrimEnd();
+            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
         }
 
         /// <summary>

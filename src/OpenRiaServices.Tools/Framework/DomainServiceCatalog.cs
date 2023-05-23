@@ -266,14 +266,8 @@ namespace OpenRiaServices.Tools
             {
                 Assembly assembly = null;
 #if NET6_0_OR_GREATER
-                try
-                {
-                     assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName);
-                }
-                catch (Exception ex)
-                {
 
-                }
+                assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName, _logger);
 #else
                 assembly = AssemblyUtilities.LoadAssembly(assemblyName, _logger);
 #endif
@@ -283,7 +277,7 @@ namespace OpenRiaServices.Tools
                     this._loadedAssemblies[assembly] = TypeUtility.CanContainDomainServiceImplementations(assembly);
                 }
             }
-            //AssemblyUtilities.SetAssemblyResolver(this._loadedAssemblies.Keys);
+            AssemblyUtilities.SetAssemblyResolver(this._loadedAssemblies.Keys);
         }
 
         /// <summary>

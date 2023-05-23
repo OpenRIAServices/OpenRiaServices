@@ -521,7 +521,7 @@ namespace OpenRiaServices.Tools
                 foreach (string assemblyPath in compositionAssemblyPaths)
                 {
 #if NET6_0_OR_GREATER
-                    Assembly assembly = CustomLoadAssembly(assemblyPath);
+                    Assembly assembly = CustomLoadAssembly(assemblyPath, logger);
 #else
                     Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyPath, logger);
 #endif
@@ -543,14 +543,37 @@ namespace OpenRiaServices.Tools
         }
 
 #if NET6_0_OR_GREATER
-        public Assembly CustomLoadAssembly(string assemblyPath)
+        public Assembly CustomLoadAssembly(string assemblyPath, ILogger logger)
         {
             Assembly assembly = null;
 
-            // We can not load the server assembly since it will break IsAssignableFrom
-            if (!assemblyPath.EndsWith(ClientCodeGenerationDispatcher.OpenRiaServices_DomainServices_Server_Assembly))
+            try
             {
-                assembly = this.LoadFromAssemblyPath(assemblyPath);// Path.ChangeExtension(assemblyPath, ".dll"));
+                // We can not load the server assembly since it will break IsAssignableFrom
+                if (!assemblyPath.EndsWith(ClientCodeGenerationDispatcher.OpenRiaServices_DomainServices_Server_Assembly))
+                {
+                    assembly = this.LoadFromAssemblyPath(assemblyPath);// Path.ChangeExtension(assemblyPath, ".dll"));
+                }
+                return assembly;
+            }
+            catch (Exception ex)
+            {
+                // Some common exceptions log a warning and keep running
+                if (ex is System.IO.FileNotFoundException ||
+                    ex is System.IO.FileLoadException ||
+                    ex is System.IO.PathTooLongException ||
+                    ex is BadImageFormatException ||
+                    ex is System.Security.SecurityException)
+                {
+                    if (logger != null)
+                    {
+                        logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyPath, ex.Message));
+                    }
+                }
+                else
+                {
+                    throw;
+                }
             }
             return assembly;
         }
