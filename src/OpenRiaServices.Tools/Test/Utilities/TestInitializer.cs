@@ -56,22 +56,22 @@ namespace OpenRiaServices.Tools.Test.Utilities
             .First();
 
             s_msbuildPath = vsInstance.MSBuildPath;
-            //Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(vsInstance);
+            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(vsInstance);
 
-            s_loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-                .Where(a => IsMsBuildAssembly(a.FullName))
-                .ToDictionary(x => x.GetName().Name);
+            //s_loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+            //    .Where(a => IsMsBuildAssembly(a.FullName))
+            //    .ToDictionary(x => x.GetName().Name);
 
-            // Load msbuild assemblt
-            var msbuildAssemblies = Directory.GetFiles(s_msbuildPath, "Microsoft.Build*.dll");
-            s_loadedAssemblies.Clear();
-            foreach (var msbuildAssembly in msbuildAssemblies)
-            {
-                var assembly = Assembly.LoadFrom(msbuildAssembly);
-                s_loadedAssemblies.Add(assembly.GetName().Name, assembly);
-            }
+            //// Load msbuild assemblt
+            //var msbuildAssemblies = Directory.GetFiles(s_msbuildPath, "Microsoft.Build*.dll");
+            //s_loadedAssemblies.Clear();
+            //foreach (var msbuildAssembly in msbuildAssemblies)
+            //{
+            //    var assembly = Assembly.LoadFrom(msbuildAssembly);
+            //    s_loadedAssemblies.Add(assembly.GetName().Name, assembly);
+            //}
 
-            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
+            //AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
 
         }
 

@@ -31,6 +31,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
         private string _userCode;
         private string _userCodeFile;
         private readonly bool _useFullTypeNames;
+        private MetadataLoadContext _metadataLoadContext;
 
 
         public T4AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
@@ -289,58 +290,17 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             MemoryStream generatedAssembly = CompileSource();
             Assert.IsNotNull(generatedAssembly, "Expected compile to succeed");
 
-            Assembly assy = null;
-            Dictionary<AssemblyName, Assembly> loadedAssemblies = new Dictionary<AssemblyName, Assembly>();
+            var metadataLoadContext = (_metadataLoadContext ??= new MetadataLoadContext(new PathAssemblyResolver(this.ReferenceAssemblies)));
 
             try
             {
-                foreach (string refAssyName in this.ReferenceAssemblies)
-                {
-                    if (refAssyName.Contains("mscorlib"))
-                    {
-                        continue;
-                    }
-                    try
-                    {
-                        Assembly refAssy = Assembly.ReflectionOnlyLoadFrom(refAssyName);
-                        loadedAssemblies[refAssy.GetName()] = refAssy;
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine(" failed to load " + refAssyName + ":\r\n" + ex.Message);
-                    }
-                }
-
-                assy = Assembly.ReflectionOnlyLoad(generatedAssembly.ToArray());
-                Assert.IsNotNull(assy);
-
-                AssemblyName[] refNames = assy.GetReferencedAssemblies();
-                foreach (AssemblyName refName in refNames)
-                {
-                    if (refName.FullName.Contains("mscorlib"))
-                    {
-                        continue;
-                    }
-                    if (!loadedAssemblies.ContainsKey(refName))
-                    {
-                        try
-                        {
-                            Assembly refAssy = Assembly.ReflectionOnlyLoad(refName.FullName);
-                            loadedAssemblies[refName] = refAssy;
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine(" failed to load " + refName + ":\r\n" + ex.Message);
-                        }
-                    }
-                }
+                return metadataLoadContext.LoadFromStream(generatedAssembly);
             }
             catch (Exception ex)
             {
                 Assert.Fail("Encountered exception doing reflection only loads:\r\n" + ex.Message);
+                throw;
             }
-
-            return assy;
         }
 
 
