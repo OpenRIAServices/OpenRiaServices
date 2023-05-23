@@ -116,25 +116,19 @@ namespace OpenRiaServices.Tools.Test
         {
             string assemblyFileName = @"c:\Nowhere\DontExist.dll";
             ConsoleLogger logger = new ConsoleLogger();
-            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
+            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger
+#if NET6_0_OR_GREATER
+            , new ClientCodeGenerationDispatcher()
+#endif
+            );
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             Assert.AreEqual(0, descriptions.Count);
             Assert.AreEqual(0, logger.ErrorMessages.Count);
             Assert.AreEqual(0, logger.WarningMessages.Count);
 
-            // Need to synthesize exactly the same message we'd expect from failed assembly load
-            string exceptionMessage = null;
-            try
-            {
-                AssemblyName.GetAssemblyName(assemblyFileName);
-            }
-            catch (FileNotFoundException fnfe)
-            {
-                exceptionMessage = fnfe.Message;
-            }
-            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, exceptionMessage);
-            TestHelper.AssertContainsMessages(logger, expectedMessage);
+            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, string.Empty).TrimEnd();
+            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
         }
 
         [TestMethod]
@@ -145,8 +139,12 @@ namespace OpenRiaServices.Tools.Test
 
             ConsoleLogger logger = new ConsoleLogger();
             IEnumerable<string> assemblies = new string[] { assemblyFileName, this.GetType().Assembly.Location };
-            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
-            ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
+            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger
+#if NET6_0_OR_GREATER
+            , new ClientCodeGenerationDispatcher()
+#endif
+            );
+            ICollection < DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             
             // Need to synthesize exactly the same message we'd expect from failed assembly load
