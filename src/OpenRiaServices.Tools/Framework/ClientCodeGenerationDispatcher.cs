@@ -488,7 +488,7 @@ namespace OpenRiaServices.Tools
                 this._partCatalog = new AggregateCatalog(catalogs);
                 this._compositionContainer = new CompositionContainer(this._partCatalog);
 
-                // Add this instance to the container to satisfy the [ImportMany]
+                // Add this instance to the container to satisfy the [ImportMany] 
                 this._compositionContainer.ComposeParts(this);
             }
             catch (Exception ex)
