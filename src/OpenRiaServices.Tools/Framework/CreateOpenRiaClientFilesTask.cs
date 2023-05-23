@@ -728,16 +728,16 @@ namespace OpenRiaServices.Tools
                 // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
                 SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
 
+#if !NET6_0_OR_GREATER
                 // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
                 // This can occur when the build environment is configured incorrectly
-                //if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-                //{
-                //    throw new InvalidOperationException(
-                //        Resource.HttpRuntimeInitializationError,
-                //        System.Web.Hosting.HostingEnvironment.InitializationException);
-                //}
+                if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+                {
+                    throw new InvalidOperationException(
+                        Resource.HttpRuntimeInitializationError,
+                        System.Web.Hosting.HostingEnvironment.InitializationException);
+                }
 
-#if !NET6_0_OR_GREATER
                 System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter() 
                 {
                     PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,

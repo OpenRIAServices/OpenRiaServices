@@ -552,7 +552,7 @@ namespace OpenRiaServices.Tools
                 // We can not load the server assembly since it will break IsAssignableFrom
                 if (!assemblyPath.EndsWith(ClientCodeGenerationDispatcher.OpenRiaServices_DomainServices_Server_Assembly))
                 {
-                    assembly = this.LoadFromAssemblyPath(assemblyPath);// Path.ChangeExtension(assemblyPath, ".dll"));
+                    assembly = this.LoadFromAssemblyPath(assemblyPath);
                 }
                 return assembly;
             }
@@ -586,12 +586,6 @@ namespace OpenRiaServices.Tools
 #else
         protected override Assembly Load(AssemblyName assemblyName)
         {
-
-            //var defaultLoadContext = System.Runtime.Loader.AssemblyLoadContext.Default;
-            //if(defaultLoadContext.Assemblies.Any(c => c.GetName() ==  assemblyName))
-            //{
-            //    return defaultLoadContext.LoadFromAssemblyName(assemblyName);
-            //}
             string assemblyPath = _assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
             if (assemblyPath != null
                 // SEE: https://github.com/dotnet/core/issues/2547
