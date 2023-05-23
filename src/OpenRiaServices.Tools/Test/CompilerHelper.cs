@@ -116,7 +116,9 @@ namespace OpenRiaServices.Tools.Test
             string documentationFile = null)
         {
             List<MetadataReference> references = LoadReferences(referenceAssemblies);
+#if NETFRAMEWORK // Not required for Net6
             references.Add(GetVisualBasicReference());
+#endif
 
             try
             {

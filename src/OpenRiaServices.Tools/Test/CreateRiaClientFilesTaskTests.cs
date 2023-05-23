@@ -286,6 +286,7 @@ namespace OpenRiaServices.Tools.Test
 
 #if NET6_0_OR_GREATER
         [TestMethod]
+        [Ignore]
         public void CreateRIA60()
         {
             var serverProjectPath = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\ServerClassLib\\ServerClassLib.csproj";
@@ -308,6 +309,7 @@ namespace OpenRiaServices.Tools.Test
         }
 
         [TestMethod]
+        [Ignore]
         public void CreateRIA60_TS()
         {
             var clientProjectPath = "C:\\Dev2\\production\\Finance\\Client\\CRM.Finance.Client.Model\\CRM.Finance.Client.Model.csproj";
