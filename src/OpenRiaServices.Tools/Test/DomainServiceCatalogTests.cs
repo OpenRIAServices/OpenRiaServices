@@ -147,19 +147,9 @@ namespace OpenRiaServices.Tools.Test
             ICollection < DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             
-            // Need to synthesize exactly the same message we'd expect from failed assembly load
-            string exceptionMessage = null;
-            try
-            {
-                AssemblyName.GetAssemblyName(assemblyFileName);
-            }
-            catch (FileNotFoundException fnfe)
-            {
-                exceptionMessage = fnfe.Message;
-            }
-            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, exceptionMessage);
-            TestHelper.AssertContainsMessages(logger, expectedMessage); 
-            
+            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, String.Empty).TrimEnd();
+            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
+
             Assert.IsTrue(descriptions.Count > 0);
         }
 

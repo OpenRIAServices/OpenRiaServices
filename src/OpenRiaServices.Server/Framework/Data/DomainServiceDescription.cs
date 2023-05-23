@@ -1187,7 +1187,16 @@ namespace OpenRiaServices.Server
                     {
                         if (pd.Attributes[typeof(ExcludeAttribute)] == null)
                         {
+#if NET6_0_OR_GREATER
+                            bool hasKey = false;
+                            for (int i = 0; i < pd.Attributes.Count; i++) 
+                            {
+                                if (pd.Attributes[i].TypeId.ToString() == typeof(KeyAttribute).FullName)
+                                    hasKey = true;
+                            }
+#else
                             bool hasKey = (pd.Attributes[typeof(KeyAttribute)] != null);
+#endif
 
                             // The presence of a [Key] property matters for the root type
                             // regardless if it is actually declared there or on some hidden
