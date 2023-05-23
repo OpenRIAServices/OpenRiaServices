@@ -56,7 +56,7 @@ namespace OpenRiaServices.Tools.Test.Utilities
             .First();
 
             s_msbuildPath = vsInstance.MSBuildPath;
-            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(vsInstance);
+            //Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(vsInstance);
 
             s_loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies()
                 .Where(a => IsMsBuildAssembly(a.FullName))

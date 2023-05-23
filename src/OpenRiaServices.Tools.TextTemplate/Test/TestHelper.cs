@@ -167,7 +167,7 @@ namespace OpenRiaServices.Tools.Test
                 {
                     PropertyInfo prop2 = properties2.First(p => p.Name == prop1.Name);
                     Assert.IsNotNull(prop2, $"Could not find a property matching '{prop1.Name}' in t4 codegen generated assembly");
-                    Assert.IsTrue(AreTypesEqual(prop1.PropertyType, prop2.PropertyType));
+                    Assert.AreEqual(prop1.PropertyType.FullName, prop2.PropertyType.FullName);
                     TestHelper.VerifyAttributesEquality(prop1.GetCustomAttributesData(), prop2.GetCustomAttributesData());
                 }
             }
@@ -192,7 +192,7 @@ namespace OpenRiaServices.Tools.Test
             ParameterInfo[] method1Params = method1.GetParameters();
             foreach (MethodInfo m in methods2.Where(m => m.Name == method1.Name))
             {
-                if (!AreTypesEqual(m.ReturnType, method1.ReturnType))
+                if (m.ReturnType.FullName != method1.ReturnType.FullName)
                 {
                     continue;
                 }
@@ -202,7 +202,7 @@ namespace OpenRiaServices.Tools.Test
                     bool found = true;
                     for (int i = 0; i < mParams.Count(); i++)
                     {
-                        if (!AreTypesEqual(method1Params[i].ParameterType, mParams[i].ParameterType))
+                        if (method1Params[i].ParameterType.FullName != mParams[i].ParameterType.FullName)
                         {
                             found = false;
                             break;
