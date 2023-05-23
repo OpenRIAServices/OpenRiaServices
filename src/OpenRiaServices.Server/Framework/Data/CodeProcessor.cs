@@ -10,7 +10,7 @@ namespace OpenRiaServices.Server
     /// with a <see cref="DomainService"/> Type via the <see cref="OpenRiaServices.DomainIdentifierAttribute"/>, codegen for the service
     /// Type can be customized.
     /// </summary>
-    public abstract class CodeProcessor
+    public class CodeProcessor
     {
         /// <summary>
         /// Private reference to the <see cref="CodeDomProvider"/> used during <see cref="DomainService"/> code generation.
@@ -48,6 +48,6 @@ namespace OpenRiaServices.Server
         /// <param name="domainServiceDescription">The <see cref="DomainServiceDescription"/> describing the <see cref="DomainService"/> currently being examined.</param>
         /// <param name="codeCompileUnit">The <see cref="CodeCompileUnit"/> that the <see cref="DomainService"/> client code is being generated into.</param>
         /// <param name="typeMapping">A dictionary mapping <see cref="DomainService"/> and related entity types to their corresponding <see cref="CodeTypeDeclaration"/>s.</param>
-        public abstract void ProcessGeneratedCode(DomainServiceDescription domainServiceDescription, CodeCompileUnit codeCompileUnit, IDictionary<Type, CodeTypeDeclaration> typeMapping);
+        public virtual void ProcessGeneratedCode(DomainServiceDescription domainServiceDescription, CodeCompileUnit codeCompileUnit, IDictionary<Type, CodeTypeDeclaration> typeMapping) { }
     }
 }
