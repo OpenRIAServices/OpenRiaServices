@@ -15,7 +15,9 @@ namespace OpenRiaServices.Tools.TextTemplate
             {
                 typeof(MetadataTypeAttribute),
                 typeof(ScaffoldColumnAttribute),
-              //  typeof(ScaffoldTableAttribute),
+#if !NET6_0_OR_GREATER
+                typeof(ScaffoldTableAttribute),
+#endif
                 typeof(SerializableAttribute),
                 typeof(System.Diagnostics.CodeAnalysis.SuppressMessageAttribute)
             };
