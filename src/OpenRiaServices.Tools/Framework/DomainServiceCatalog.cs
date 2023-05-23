@@ -32,7 +32,7 @@ namespace OpenRiaServices.Tools
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="assembliesToLoad"/> or <paramref name="logger"/> is null.</exception>
         public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, ILogger logger
 #if NET6_0_OR_GREATER
-            , ClientCodeGenerationDispatcher context = null)
+            , ClientCodeGenerationDispatcher context)
         { 
             _assemblyLoadContext = context;
 #else
