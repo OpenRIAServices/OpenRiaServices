@@ -286,14 +286,13 @@ namespace OpenRiaServices.Tools.Test
 
 #if NET6_0_OR_GREATER
         [TestMethod]
-        [Ignore]
         public void CreateRIA60()
         {
             var serverProjectPath = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\ServerClassLib\\ServerClassLib.csproj";
             var clientProjectPath = "C:\\Users\\crmhli\\source\\repos\\OpenRiaServices\\src\\OpenRiaServices.Tools\\Test\\ClientClassLib\\ClientClassLib.csproj";
             var path = "bin\\Debug\\net7.0";
             string[] serverAsm = GetAssemblies(serverProjectPath, path);
-            string[] clientAsm = GetAssemblies(clientProjectPath, path);
+            string[] clientAsm = GetAssemblies(clientProjectPath, path).Where(c => !c.Contains("Client")).ToArray(); // Exclude client asm since they should not being built yet
             var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, serverAsm, clientAsm);
 
             var task = code.Execute();
