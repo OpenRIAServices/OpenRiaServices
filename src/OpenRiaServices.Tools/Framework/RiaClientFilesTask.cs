@@ -277,25 +277,23 @@ namespace OpenRiaServices.Tools
         public void LogError(string message)
         {
             this.HasLoggedErrors = true;
-            Debug.WriteLine(message);
             this.Log.LogError(message);
         }
 
         /// <summary>
-        /// Logs the given exception to the logger associated with //this task
+        /// Logs the given exception to the logger associated with this task
         /// </summary>
         /// <param name="ex">MessageException to log</param>
         public void LogException(Exception ex)
         {
             this.HasLoggedErrors = true;
-            Debug.WriteLine(ex.Message);
             this.Log.LogError("Exception :" + ex.Message);
             if (ex.InnerException != null)
                 LogException(ex.InnerException);
         }
 
         /// <summary>
-        /// Logs the given warning message to the logger associated with //this task
+        /// Logs the given warning message to the logger associated with this task
         /// </summary>
         /// <param name="message">Message to log</param>
         public void LogWarning(string message)
@@ -304,7 +302,7 @@ namespace OpenRiaServices.Tools
         }
 
         /// <summary>
-        /// Logs the given informational message to the logger associated with //this task
+        /// Logs the given informational message to the logger associated with this task
         /// </summary>
         /// <param name="message">Message to log</param>
         public void LogMessage(string message)

@@ -130,17 +130,18 @@ namespace OpenRiaServices.Tools
 
             this.WarnIfAssembliesDontExist(assemblies);
 
-            
-                // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
-                // This can occur when the build environment is configured incorrectly
-                //if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-                //{
-                //    throw new InvalidOperationException(
-                //        Resource.HttpRuntimeInitializationError,
-                //        System.Web.Hosting.HostingEnvironment.InitializationException);
-                //}
+#if !NET6_0_OR_GREATER
+            // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
+            // This can occur when the build environment is configured incorrectly
+            if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+            {
+                throw new InvalidOperationException(
+                    Resource.HttpRuntimeInitializationError,
+                    System.Web.Hosting.HostingEnvironment.InitializationException);
+            }
+#endif
 
-                using (DomainServiceValidator validator = (DomainServiceValidator)Activator.CreateInstance(typeof(DomainServiceValidator)))
+            using (DomainServiceValidator validator = (DomainServiceValidator)Activator.CreateInstance(typeof(DomainServiceValidator)))
                 {
                     // Transfer control to Web Application AppDomain to invoke the validator
                     validator.Validate(assemblies.ToArray(), this.LoggingService);
