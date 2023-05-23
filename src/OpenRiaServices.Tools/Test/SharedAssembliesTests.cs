@@ -151,7 +151,8 @@ namespace OpenRiaServices.Tools.Test
             };
 
             MethodBase[] sharedMethods = new MethodBase[] {
-                typeof(string).GetMethod("CopyTo"),
+                // Must qualify argument since multiple CopyTo net 6
+                typeof(string).GetMethod("CopyTo", new []{typeof(Int32), typeof(Char[]), typeof(Int32), typeof(Int32) }),
             };
 
             string projectPath = null;
@@ -217,6 +218,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsNull(sharedType, "Should not have detected any shared type.");
             }
 
+#if NETFRAMEWORK // Reflection Only is only supported for net framework
             string errorMessage = null;
             try
             {
@@ -232,7 +234,7 @@ namespace OpenRiaServices.Tools.Test
             }
             string message = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, null);
             TestHelper.AssertHasInfoThatStartsWith(logger, message);
-
+#endif
         }
 
         private static string GetSharedTypeLocation(SharedAssemblies sa, Type type)
