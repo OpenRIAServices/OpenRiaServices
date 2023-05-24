@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <TargetFrameworks>net472;net7.0</TargetFrameworks>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -127,13 +127,13 @@
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <!-- Required for known type attributes -->
     <PackageReference Include="System.ServiceModel.Primitives" Version="6.0.0" />
     <!-- Required for validation attributes -->
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net7.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net6.0' ">
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.IdentityModel" />

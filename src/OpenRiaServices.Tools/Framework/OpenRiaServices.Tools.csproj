@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT</DefineConstants>
-    <TargetFrameworks>net472;net7.0</TargetFrameworks>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <PackageId>OpenRiaServices.Client.CodeGen</PackageId>
     <Title>OpenRiaServices Client Code Generator</Title>
     <Description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. </Description>
@@ -38,7 +38,7 @@
       <Reference Include="Microsoft.Build.Framework" />
       <Reference Include="Microsoft.Build.Utilities.v4.0" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net7.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
     <!-- Use Microsoft.Build 17.0.0 to make it work with Net6 -->
     <PackageReference Include="Microsoft.Build" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Framework" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />

@@ -292,7 +292,7 @@ namespace OpenRiaServices.Tools.Test
             var serverProjectPath = Path.Combine(rootPath,  "ServerClassLib\\ServerClassLib.csproj");
             var clientProjectPath = Path.Combine(rootPath, "ClientClassLib\\ClientClassLib.csproj");
             
-            var asmPath = "bin\\Debug\\net7.0";
+            var asmPath = "bin\\Debug\\net6.0";
             string[] serverAsm = GetAssemblies(serverProjectPath, asmPath);
             string[] clientAsm = GetAssemblies(clientProjectPath, asmPath).Where(c => !c.Contains("Client")).ToArray(); // Exclude client asm since they should not being built yet
             var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, serverAsm, clientAsm);
@@ -316,8 +316,8 @@ namespace OpenRiaServices.Tools.Test
             var clientProjectPath = "C:\\Dev2\\production\\Finance\\Client\\CRM.Finance.Client.Model\\CRM.Finance.Client.Model.csproj";
             var serverProjectPath = "C:\\Dev2\\production\\Finance\\Web\\CRM.Finance.Web.Hosting\\CRM.Finance.Web.Hosting.csproj";
             //var coreProjectPath = "C:\\Dev2\\production\\Finance\\Web\\CRM.Finance.Web.Core\\CRM.Finance.Web.Core.csproj";
-            var serverAsm = GetAssemblies(serverProjectPath, "bin\\Debug\\net7.0").ToList();
-            string[] clientAsm = GetAssemblies(clientProjectPath, "bin\\Debug\\net7.0-windows");
+            var serverAsm = GetAssemblies(serverProjectPath, "bin\\Debug\\net6.0").ToList();
+            string[] clientAsm = GetAssemblies(clientProjectPath, "bin\\Debug\\net6.0-windows");
             var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, hardCodedServerAsm: serverAsm.ToArray());
 
             var task = code.Execute();
