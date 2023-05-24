@@ -284,7 +284,7 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-#if NET6_0_OR_GREATER
+#if !NETFRAMEWORK
         [TestMethod]
         public void CreateRiaClientFiles_For_Net_70()
         {

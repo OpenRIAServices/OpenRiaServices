@@ -33,14 +33,14 @@ namespace OpenRiaServices.Tools.Test
 
             // Ctor taking assemblies -- null arg tests
             ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((IEnumerable<string>)null, logger
-#if NET6_0_OR_GREATER
+#if !NETFRAMEWORK
                 , null
 #endif
                 ), "assembliesToLoad");
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(empty, null 
-                #if NET6_0_OR_GREATER 
+            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(empty, null
+#if !NETFRAMEWORK
                 , null 
-                #endif
+#endif
                 ), "logger");
 
             // Ctor taking one type -- null arg tests
@@ -102,7 +102,12 @@ namespace OpenRiaServices.Tools.Test
                     }
                 }
             }
-#if NET6_0_OR_GREATER
+#if NETFRAMEWORK
+            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
+            ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
+            Assert.IsNotNull(descriptions);
+            Assert.IsTrue(descriptions.Count >= expectedDomainServices);
+#else
             using(var dispatcher = new ClientCodeGenerationDispatcher())
             {
                 DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger, dispatcher);
@@ -110,11 +115,6 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsNotNull(descriptions);
                 Assert.IsTrue(descriptions.Count >= expectedDomainServices);
             }
-#else
-            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
-            ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
-            Assert.IsNotNull(descriptions);
-            Assert.IsTrue(descriptions.Count >= expectedDomainServices);
 #endif
         }
 
@@ -125,7 +125,7 @@ namespace OpenRiaServices.Tools.Test
             string assemblyFileName = @"c:\Nowhere\DontExist.dll";
             ConsoleLogger logger = new ConsoleLogger();
             DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger
-#if NET6_0_OR_GREATER
+#if !NETFRAMEWORK
             , new ClientCodeGenerationDispatcher()
 #endif
             );
@@ -148,7 +148,7 @@ namespace OpenRiaServices.Tools.Test
             ConsoleLogger logger = new ConsoleLogger();
             IEnumerable<string> assemblies = new string[] { assemblyFileName, this.GetType().Assembly.Location };
             DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger
-#if NET6_0_OR_GREATER
+#if !NETFRAMEWORK
             , new ClientCodeGenerationDispatcher()
 #endif
             );
@@ -170,11 +170,11 @@ namespace OpenRiaServices.Tools.Test
             File.WriteAllText(assemblyFileName, "neener neener neener");
 
             ConsoleLogger logger = new ConsoleLogger();
-#if NET6_0_OR_GREATER
+#if NETFRAMEWORK
+            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
+#else
             var dispatcher = new ClientCodeGenerationDispatcher();
             DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger, dispatcher);
-#else
-            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
 #endif
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);

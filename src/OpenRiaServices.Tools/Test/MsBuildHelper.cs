@@ -115,11 +115,11 @@ namespace OpenRiaServices.Tools.Test
             outputAssembly = Path.Combine(outputPath, assemblyName);
             outputAssembly = Path.GetFullPath(outputAssembly);
 
-#if NET6_0_OR_GREATER
+#if NETFRAMEWORK
+            string extension = outputType.Equals("Exe", StringComparison.InvariantCultureIgnoreCase) ? ".exe" : ".dll";
+#else
             // TODO: change here or not ?
             string extension = ".dll";
-#else
-            string extension = outputType.Equals("Exe", StringComparison.InvariantCultureIgnoreCase) ? ".exe" : ".dll";
 #endif
             outputAssembly += extension;
             var fullPath = MakeFullPath(outputAssembly, Path.GetDirectoryName(projectPath));

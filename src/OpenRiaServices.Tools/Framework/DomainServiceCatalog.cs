@@ -20,7 +20,7 @@ namespace OpenRiaServices.Tools
         private readonly List<DomainServiceDescription> _domainServiceDescriptions = new List<DomainServiceDescription>();
         private readonly ILogger _logger;
 
-#if NET6_0_OR_GREATER
+#if !NETFRAMEWORK
         ClientCodeGenerationDispatcher _assemblyLoadContext;
 #endif
 
@@ -31,14 +31,14 @@ namespace OpenRiaServices.Tools
         /// <param name="logger">logger for logging messages while processing</param>
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="assembliesToLoad"/> or <paramref name="logger"/> is null.</exception>
         public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, ILogger logger
-#if NET6_0_OR_GREATER
+#if NETFRAMEWORK
+            )
+        {
+#else
             , ClientCodeGenerationDispatcher context)
         { 
             _assemblyLoadContext = context;
-#else
-            )
-        {
-#endif
+#endif 
             if (assembliesToLoad == null)
             {
                 throw new ArgumentNullException(nameof(assembliesToLoad));
@@ -265,11 +265,10 @@ namespace OpenRiaServices.Tools
             foreach (string assemblyName in this._assembliesToLoad)
             {
                 Assembly assembly = null;
-#if NET6_0_OR_GREATER
-
-                assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName, _logger);
-#else
+#if NETFRAMEWORK
                 assembly = AssemblyUtilities.LoadAssembly(assemblyName, _logger);
+#else
+                assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName, _logger);
 #endif
                 if (assembly != null)
                 {

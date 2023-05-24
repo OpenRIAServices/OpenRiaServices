@@ -35,23 +35,25 @@ namespace OpenRiaServices.Tools
         private ComposablePartCatalog _partCatalog;
         public const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.Server.dll";
 
-#if NET6_0_OR_GREATER
-        public const string AssemblyLoadContextName = "ClientCodeGenContext";
-        private System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
-
-        public ClientCodeGenerationDispatcher()
-            : base(AssemblyLoadContextName)
-        {            
-            var pathToOpenRiaServerDll = typeof(DomainService).Assembly.Location;
-            _assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(pathToOpenRiaServerDll);
-        }
-
-#else
+#if NETFRAMEWORK
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
         /// </summary>
         public ClientCodeGenerationDispatcher()
         {
+        }
+#else
+        public const string AssemblyLoadContextName = "ClientCodeGenContext";
+        private System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
+        /// </summary>
+        public ClientCodeGenerationDispatcher()
+            : base(AssemblyLoadContextName)
+        {
+            var pathToOpenRiaServerDll = typeof(DomainService).Assembly.Location;
+            _assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(pathToOpenRiaServerDll);
         }
 #endif
 
@@ -78,8 +80,16 @@ namespace OpenRiaServices.Tools
                 var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
                 // Try to load mono.cecil from same folder as tools
                 var location = toolingAssembly.Location;
-                
-#if NET6_0_OR_GREATER
+
+#if NETFRAMEWORK
+                AppDomainUtilities.ConfigureAppDomain(options);
+                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
+                // Try to load mono.cecil from same folder as tools
+                // This prevents problem if server project contains another version of mono Cecil
+                var cecilPath = toolingAssembly.Location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
+                AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
+                AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
+#else
                 string ReplaceLastOccurrence(string source, string find, string replace)
                 {
                     int place = source.LastIndexOf(find);
@@ -107,17 +117,9 @@ namespace OpenRiaServices.Tools
                         return null;
                     }
                 };
-#else
-                AppDomainUtilities.ConfigureAppDomain(options);
-                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
-                // Try to load mono.cecil from same folder as tools
-                // This prevents problem if server project contains another version of mono Cecil
-                var cecilPath = toolingAssembly.Location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
-                AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
-                AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 #endif
 
-				using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
+                using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
                 {
                     CodeGenerationHost host = new CodeGenerationHost(loggingService, sharedCodeService);
                     return this.GenerateCode(host, options, parameters.ServerAssemblies, codeGeneratorName);
@@ -157,11 +159,11 @@ namespace OpenRiaServices.Tools
             var (filename, serverAssemblyPath) = GetServerAssembly(parameters);
             if (serverAssemblyPath != null)
             {
-#if NET6_0_OR_GREATER
+#if NETFRAMEWORK
+                var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
+#else
                 var serverAssemblyName = AssemblyName.GetAssemblyName(serverAssemblyPath);
                 var serverAssembly = LoadFromAssemblyName(serverAssemblyName);
-#else
-                var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
 #endif
                 if (serverAssembly != null)
                 {
@@ -212,11 +214,11 @@ namespace OpenRiaServices.Tools
 
             ILogger logger = host as ILogger;
             DomainServiceCatalog catalog = new DomainServiceCatalog(assembliesToLoad, logger
-#if NET6_0_OR_GREATER
-                ,this);
-#else
-);
+#if !NETFRAMEWORK
+                , this
 #endif
+                );
+
             return this.GenerateCode(host, options, catalog, assembliesToLoad, codeGeneratorName);
         }
 
@@ -520,10 +522,10 @@ namespace OpenRiaServices.Tools
             {
                 foreach (string assemblyPath in compositionAssemblyPaths)
                 {
-#if NET6_0_OR_GREATER
-                    Assembly assembly = CustomLoadAssembly(assemblyPath, logger);
-#else
+#if NETFRAMEWORK
                     Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyPath, logger);
+#else
+                    Assembly assembly = CustomLoadAssembly(assemblyPath, logger);
 #endif
                     if (assembly != null)
                     {
@@ -542,8 +544,12 @@ namespace OpenRiaServices.Tools
             return assemblies;
         }
 
-#if NET6_0_OR_GREATER
-        public Assembly CustomLoadAssembly(string assemblyPath, ILogger logger)
+#if NETFRAMEWORK
+        void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
+        {
+        }
+#else
+         public Assembly CustomLoadAssembly(string assemblyPath, ILogger logger)
         {
             Assembly assembly = null;
 
@@ -577,13 +583,7 @@ namespace OpenRiaServices.Tools
             }
             return assembly;
         }
-#endif
 
-#if NETFRAMEWORK
-        void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
-        {
-        }
-#else
         protected override Assembly Load(AssemblyName assemblyName)
         {
             string assemblyPath = _assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);

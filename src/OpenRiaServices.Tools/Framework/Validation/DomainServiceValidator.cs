@@ -26,11 +26,11 @@ namespace OpenRiaServices.Tools.Validation
             // Just creating an instance of the DomainServiceCatalog will locate all the DomainServices in the specified
             // assemblies and use their corresponding DomainServiceDescriptions to identify and report errors. These
             // errors will be reported using the logger we provide.
-#if NET6_0_OR_GREATER
+#if NETFRAMEWORK
+            new DomainServiceCatalog(assemblies, logger);
+#else
             using(var dispatcher = new ClientCodeGenerationDispatcher())
                 new DomainServiceCatalog(assemblies, logger, dispatcher);
-#else
-            new DomainServiceCatalog(assemblies, logger);
 #endif
         }
 

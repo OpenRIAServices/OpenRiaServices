@@ -105,7 +105,7 @@ namespace OpenRiaServices.Tools
 
             if (propertyName.Equals("TypeId", StringComparison.Ordinal))
                 return null;
-#if NET6_0_OR_GREATER
+#if !NETFRAMEWORK
             // We strip "TypeId" from all CustomValidationAttribute for NET 6.0 since we cannot set it, it is calculated indirectly
             else if (attribute is CustomValidationAttribute && propertyInfo.Name == nameof(CustomValidationAttribute.RequiresValidationContext))
                 return null;
