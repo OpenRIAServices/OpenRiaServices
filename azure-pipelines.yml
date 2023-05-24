@@ -24,7 +24,7 @@ steps:
 
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: 6.6.0
+    versionSpec: 6.5.0
     
 - task: gitversion/setup@0
   displayName: Install GitVersion
