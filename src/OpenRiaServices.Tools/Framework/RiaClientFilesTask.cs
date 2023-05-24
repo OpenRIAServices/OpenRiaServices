@@ -111,13 +111,6 @@ namespace OpenRiaServices.Tools
             }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public RiaClientFilesTask()
-        : base()
-        {
-        }
 
         /// <summary>
         /// Gets the path of the file where to write the list of generated files
