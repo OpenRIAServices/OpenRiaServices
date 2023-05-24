@@ -3,7 +3,8 @@
 * Code Generation
   * Switch to using Mono.Cecil to parse pdb files during code generation (#410)
     This should make it possible to use portable and embedded pdb's on the server
-* Asp Core
+  * 
+* AspNetCore
     * New extension method to add OpenRiaServices to services.
         ```C#
         services.AddOpenRiaServices<T>()
@@ -12,6 +13,12 @@
         ```C#
         endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
         ```
+    * Add Net7 build target to support "Finally Conventions" (`IEndpointConventionBuilder.Finally`)
+    * Add `OpenRiaServices.Server.DomainOperationEntry` to endpoint metadata
+        * This allows end user to easier implement additional conventions (such as Open Api or similar)
+    * Copy `AuthorizationAttribute`s to endpoint metadata for queries and invokes to support [AspNetCore Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple?view=aspnetcore-7.0)
+        *  Attributes can be set on either method or class level
+        
         
 # 5.3.0 with EFCore 2.0.1
 
