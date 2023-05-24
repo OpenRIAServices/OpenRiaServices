@@ -170,7 +170,7 @@ namespace OpenRiaServices.Tools.Test
                 {
                     PropertyInfo prop2 = properties2.First(p => p.Name == prop1.Name);
                     Assert.IsNotNull(prop2, $"Could not find a property matching '{prop1.Name}' in t4 codegen generated assembly");
-                    Assert.AreEqual(prop1.PropertyType.Name, prop2.PropertyType.Name);
+                    Assert.IsTrue(prop1.PropertyType.Name == prop2.PropertyType.Name);
                     TestHelper.VerifyAttributesEquality(prop1.GetCustomAttributesData(), prop2.GetCustomAttributesData());
                 }
             }
@@ -220,16 +220,7 @@ namespace OpenRiaServices.Tools.Test
             return null;
         }
 
-        private static bool AreTypesEqual(Type t1, Type t2)
-        {
-            string t1Name = OpenRiaServices.Tools.TextTemplate.CodeGenUtilities.GetTypeName(t1);
-            string t2Name = OpenRiaServices.Tools.TextTemplate.CodeGenUtilities.GetTypeName(t2);
-            if (t1Name == t2Name)
-            {
-                return true;
-            }
-            return false;
-        }
+        private static bool AreTypesEqual(Type t1, Type t2) => t1.FullName == t2.FullName;
 
         private static bool AreNotNull(object[] o1, object[] o2)
         {

@@ -690,7 +690,7 @@ namespace OpenRiaServices.Tools
 
             // If we need to generate the file, do that now
             if (needToGenerate)
-            {
+            {                
                 // Warn the user if the server assembly has no PDB
                 this.WarnIfNoPdb(assemblyFile);
 
@@ -702,9 +702,7 @@ namespace OpenRiaServices.Tools
                 string sourceDir = this.ServerProjectDirectory;
                 string targetDir = null;
 
-                
-
-                    // Capture the list of assemblies to load into an array to marshal across AppDomains
+                // Capture the list of assemblies to load into an array to marshal across AppDomains
                 string[] assembliesToLoadArray = assembliesToLoad.ToArray();
 
                 // Create the list of options we will pass to the generator.
@@ -721,6 +719,17 @@ namespace OpenRiaServices.Tools
                     UseFullTypeNames = this.UseFullTypeNamesAsBool,
                     ClientProjectTargetPlatform = this.ClientTargetPlatform,
                 };
+
+
+                // Call the console app from here if Net 6.0 or greater
+
+                //if (ServerProject.Framework == Net6)
+                //{
+                //   // Send ClientCodeGenerationOptions to the Console exe as arguments.
+                //    System.CommandLine.
+                //}
+
+                // ---------------- TO RUN IN CONSOLE APP: START---------------------------------
 
                 // The other AppDomain gets a logger that will log back to this AppDomain
                 CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
@@ -749,6 +758,7 @@ namespace OpenRiaServices.Tools
                     // the appropriate code generator.
                     generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
                 }
+
 #else
                 // Create the "dispatcher" in the 2nd AppDomain.
                 // This object will find and invoke the appropriate code generator
@@ -760,10 +770,6 @@ namespace OpenRiaServices.Tools
                     }
                 }
 #endif
-
-
-
-
                 // Tell the user where we are writing the generated code
                 if (!string.IsNullOrEmpty(generatedFileContent))
                 {
@@ -773,12 +779,16 @@ namespace OpenRiaServices.Tools
                 // If VS is hosting us, write to its TextBuffer, else simply write to disk
                 // If the file is empty, delete it.
                 this.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false);
+
+// ---------------- TO RUN IN CONSOLE APP: END---------------------------------
+
             }
             else
             {
                 // Log a message telling user we are skipping code gen because the inputs are older than the generated code
                 this.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Skipping_CodeGen, generatedFileName));
             }
+
 
             // We unconditionally declare the file was generated if it exists
             // on disk after this method finishes, even if it was not modified.
