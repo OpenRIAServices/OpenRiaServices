@@ -36,7 +36,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.GenerateCodeAssertFailure("C#", typeof(MockOrderWithoutAssociations_DomainService), error);
         }
 
-#if !NET6_0_OR_GREATER
+#if NETFRAMEWORK
         /// <summary>
         /// Verifies that Entity Framework entities that properly reference POCO entities generate code as expected.
         /// </summary>

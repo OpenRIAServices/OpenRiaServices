@@ -22,7 +22,7 @@ namespace OpenRiaServices.Tools
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
     /// AppDomain boundaries.</remarks>
     internal class ClientCodeGenerationDispatcher :
-#if !NET6_0_OR_GREATER
+#if NETFRAMEWORK
         MarshalByRefObject, System.Web.Hosting.IRegisteredObject,
 #else
          System.Runtime.Loader.AssemblyLoadContext,
@@ -579,7 +579,7 @@ namespace OpenRiaServices.Tools
         }
 #endif
 
-#if !NET6_0_OR_GREATER
+#if NETFRAMEWORK
         void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
         {
         }

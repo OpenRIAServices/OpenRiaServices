@@ -39,7 +39,7 @@ namespace OpenRiaServices.Tools
             else
                 frameworkManifest = GetFrameworkManifest(options.ClientFrameworkPath);
 
-#if !NET6_0_OR_GREATER
+#if NETFRAMEWORK
             AppDomain.CurrentDomain.SetData(FrameworkManifestKey, frameworkManifest);
             AppDomain.CurrentDomain.ReflectionOnlyAssemblyResolve += AppDomainUtilities.ResolveFrameworkAssemblyVersioning;
 #endif

@@ -130,7 +130,7 @@ namespace OpenRiaServices.Tools
 
             this.WarnIfAssembliesDontExist(assemblies);
 
-#if !NET6_0_OR_GREATER
+#if NETFRAMEWORK
             // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
             // This can occur when the build environment is configured incorrectly
             if (System.Web.Hosting.HostingEnvironment.InitializationException != null)

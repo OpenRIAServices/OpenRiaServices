@@ -163,7 +163,7 @@ namespace OpenRiaServices.Tools
             return assembly;
         }
 
-#if !NET6_0_OR_GREATER
+#if NETFRAMEWORK
 
         /// <summary>
         /// Does a "reflection only load" of all the reference assemblies for the given <paramref name="assembly"/>
