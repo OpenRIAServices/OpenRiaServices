@@ -18,7 +18,10 @@
         * This allows end user to easier implement additional conventions (such as Open Api or similar)
     * Copy `AuthorizationAttribute`s to endpoint metadata for queries and invokes to support [AspNetCore Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple?view=aspnetcore-7.0)
         *  Attributes can be set on either method or class level
-        
+    * Fixed serialization of sizes larger than 1 GB
+
+*Other*
+- Updated nuget packages
         
 # 5.3.0 with EFCore 2.0.1
 
