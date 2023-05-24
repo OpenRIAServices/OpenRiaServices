@@ -203,7 +203,9 @@ namespace OpenRiaServices.Hosting.Wcf
             HashSet<int> visited = new HashSet<int>();
             foreach (var entityGroup in changeSetEntries.Where(p => (p.Associations != null && p.Associations.Count > 0) || (p.OriginalAssociations != null && p.OriginalAssociations.Count > 0)).GroupBy(p => p.Entity.GetType()))
             {
+#pragma warning disable CS0618 // Type or member is obsolete: AssociationAttribute
                 Dictionary<string, PropertyDescriptor> associationMemberMap = TypeDescriptor.GetProperties(entityGroup.Key).Cast<PropertyDescriptor>().Where(p => p.Attributes[typeof(AssociationAttribute)] != null).ToDictionary(p => p.Name);
+#pragma warning restore CS0618 // Type or member is obsolete
                 foreach (ChangeSetEntry changeSetEntry in entityGroup)
                 {
                     if (visited.Contains(changeSetEntry.Id))
