@@ -10,6 +10,13 @@ variables:
 
 steps:
 
+# install dotnet 6 sdk so we can run tests against them
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '6.0.x'
+
+# install dotet 7 sdk to allow compilation target
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
@@ -17,7 +24,7 @@ steps:
 
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: 6.3.0
+    versionSpec: 6.6.0
     
 - task: gitversion/setup@0
   displayName: Install GitVersion
