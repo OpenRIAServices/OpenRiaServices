@@ -111,7 +111,7 @@ namespace OpenRiaServices.Tools
             return string.Join(" ", parameters);
         }
 
-        private string SetupParameter(string name, string value) => $@"--{name} ""{this.Language}""";
+        public static string SetupParameter(string name, string value) => $@"--{name} ""{value}""";
 
     }
 }

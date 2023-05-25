@@ -153,22 +153,22 @@ namespace OpenRiaServices.Tools.Test
             task.BuildEngine = mockBuildEngine;
 
             // Test 1 -- null and empty deletes do nothing
-            task.SafeFileDelete(null);
+            CleanOpenRiaClientFilesTask.SafeFileDelete(null, task);
             TestHelper.AssertNoErrorsOrWarnings(mockBuildEngine.ConsoleLogger);
 
-            task.SafeFileDelete(string.Empty);
+            CleanOpenRiaClientFilesTask.SafeFileDelete(string.Empty,task);
             TestHelper.AssertNoErrorsOrWarnings(mockBuildEngine.ConsoleLogger);
 
             // Test 2 -- nonexistant file does nothing
             string fileName = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
             Assert.IsFalse(File.Exists(fileName));
-            task.SafeFileDelete(fileName);
+            CleanOpenRiaClientFilesTask.SafeFileDelete(fileName, task);
             TestHelper.AssertNoErrorsOrWarnings(mockBuildEngine.ConsoleLogger);
 
             // Test 3 -- verify delete on actual file succeeds without error
             File.WriteAllText(fileName, "stuff");
             Assert.IsTrue(File.Exists(fileName));
-            task.SafeFileDelete(fileName);
+            CleanOpenRiaClientFilesTask.SafeFileDelete(fileName, task);
             Assert.IsFalse(File.Exists(fileName));
             TestHelper.AssertNoErrorsOrWarnings(mockBuildEngine.ConsoleLogger);
 
@@ -176,7 +176,7 @@ namespace OpenRiaServices.Tools.Test
             File.WriteAllText(fileName, "stuff");
             File.SetAttributes(fileName, FileAttributes.ReadOnly);
             Assert.IsTrue(File.Exists(fileName));
-            task.SafeFileDelete(fileName);
+            CleanOpenRiaClientFilesTask.SafeFileDelete(fileName, task);
             Assert.IsFalse(File.Exists(fileName));
             TestHelper.AssertNoErrorsOrWarnings(mockBuildEngine.ConsoleLogger);
 
@@ -197,7 +197,7 @@ namespace OpenRiaServices.Tools.Test
                     errorMessage = ioe.Message;
                 }
                 Assert.IsNotNull(errorMessage, "Expected File.Delete to throw IOException");
-                task.SafeFileDelete(fileName);
+                CleanOpenRiaClientFilesTask.SafeFileDelete(fileName, task);
             }
             Assert.IsTrue(File.Exists(fileName));
             File.Delete(fileName);

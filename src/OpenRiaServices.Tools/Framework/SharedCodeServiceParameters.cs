@@ -8,7 +8,7 @@ namespace OpenRiaServices.Tools
     /// passed across an AppDomain boundary to construct a <see cref="SharedCodeService"/>.
     /// </summary>
     [Serializable]
-    internal class SharedCodeServiceParameters
+    public class SharedCodeServiceParameters
     {
         /// <summary>
         /// Gets or sets the set of source files common to both the reference and dependent projects

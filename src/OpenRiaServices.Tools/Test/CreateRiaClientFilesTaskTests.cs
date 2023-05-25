@@ -1210,7 +1210,7 @@ namespace OpenRiaServices.Tools.Test
             try
             {
                 // Now, use normal helper to create it if it does not exist
-                bool createdFolder = task.SafeFolderCreate(fullPath);
+                bool createdFolder = CleanOpenRiaClientFilesTask.SafeFolderCreate(fullPath, task);
                 Assert.IsTrue(createdFolder, "Failed to create folder");
                 Assert.IsTrue(Directory.Exists(fullPath), "Generated code path should have been generated");
             }

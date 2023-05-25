@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -343,7 +344,7 @@ namespace OpenRiaServices.Tools
         /// <param name="fileName">Full path to the file to modify</param>
         /// <param name="newState">The desired state of the bit</param>
         /// <returns><c>false</c> if a problem occurred and the bit could not be altered.</returns>
-        internal bool SafeSetReadOnlyAttribute(string fileName, bool newState)
+        internal static bool SafeSetReadOnlyAttribute(string fileName, bool newState, ILoggingService logger)
         {
             string errorMessage = null;
 
@@ -374,7 +375,7 @@ namespace OpenRiaServices.Tools
 
                 if (errorMessage != null)
                 {
-                    this.LogError(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Modify_ReadOnly, fileName, errorMessage));
+                    logger.LogError(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Modify_ReadOnly, fileName, errorMessage));
                 }
             }
 
@@ -386,13 +387,13 @@ namespace OpenRiaServices.Tools
         /// </summary>
         /// <param name="fileName">The full path to the file to delete.</param>
         /// <returns><c>false</c> if an error occurred and the file could not be deleted.</returns>
-        internal bool SafeFileDelete(string fileName)
+        internal static bool SafeFileDelete(string fileName, ILoggingService logger)
         {
             string errorMessage = null;
             if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
             {
                 // Ensure readonly bit is turned off
-                if (!this.SafeSetReadOnlyAttribute(fileName, false))
+                if (!SafeSetReadOnlyAttribute(fileName, false, logger))
                 {
                     return false;
                 }
@@ -416,7 +417,7 @@ namespace OpenRiaServices.Tools
 
                 if (errorMessage != null)
                 {
-                    this.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Delete_File_Error, fileName, errorMessage));
+                    logger.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Delete_File_Error, fileName, errorMessage));
                 }
             }
 
@@ -429,7 +430,7 @@ namespace OpenRiaServices.Tools
         /// <param name="fileName">The full path to the file to write.</param>
         /// <param name="contents">The string content to write.</param>
         /// <returns><c>false</c> if an error occurred and the file could not be written.</returns>
-        internal bool SafeFileWrite(string fileName, string contents)
+        internal static bool SafeFileWrite(string fileName, string contents, ILoggingService logger)
         {
             string errorMessage = null;
 
@@ -452,7 +453,7 @@ namespace OpenRiaServices.Tools
 
             if (errorMessage != null)
             {
-                this.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Write_File, fileName, errorMessage));
+                logger.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Write_File, fileName, errorMessage));
             }
   
             return (errorMessage == null);
@@ -472,12 +473,12 @@ namespace OpenRiaServices.Tools
                 !string.IsNullOrEmpty(sourceFile) && File.Exists(sourceFile))
             {
                 // Ensure the destination folder exists
-                this.SafeFolderCreate(Path.GetDirectoryName(destinationFile));
+                SafeFolderCreate(Path.GetDirectoryName(destinationFile), this);
 
                 // Ensure the read-only attribute is reset on the destination if it exists
                 if (isProjectFile)
                 {
-                    this.SafeSetReadOnlyAttribute(destinationFile, false);
+                    SafeSetReadOnlyAttribute(destinationFile, false, this);
                 }
 
                 try
@@ -509,7 +510,7 @@ namespace OpenRiaServices.Tools
             // Failure here is logged but does not affect the success of the write.
             if (isProjectFile)
             {
-                this.SafeSetReadOnlyAttribute(destinationFile, true);
+                SafeSetReadOnlyAttribute(destinationFile, true, this);
                 this.FilesWereWritten = true;
             }
 
@@ -529,7 +530,7 @@ namespace OpenRiaServices.Tools
                 !string.IsNullOrEmpty(sourceFile) && File.Exists(sourceFile))
             {
                 // Ensure the destination is gone
-                this.SafeFileDelete(destinationFile);
+                SafeFileDelete(destinationFile, this);
 
                 try
                 {
@@ -567,7 +568,7 @@ namespace OpenRiaServices.Tools
         /// </remarks>
         /// <param name="directoryPath">The full path to the folder to create.</param>
         /// <returns><c>false</c> if an error occurred and the folder could not be created.</returns>
-        internal bool SafeFolderCreate(string directoryPath)
+        internal static bool SafeFolderCreate(string directoryPath, ILoggingService logger)
         {
             string errorMessage = null;
             if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
@@ -591,7 +592,7 @@ namespace OpenRiaServices.Tools
 
                 if (errorMessage != null)
                 {
-                    this.LogError(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Create_Folder, directoryPath, errorMessage));
+                    logger.LogError(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Create_Folder, directoryPath, errorMessage));
                 }
             }
             return (errorMessage == null);
@@ -666,7 +667,7 @@ namespace OpenRiaServices.Tools
         /// <param name="content">Content to write to file</param>
         /// <param name="forceWriteToFile">If <c>true</c>, write file always, even if Intellisense only build.</param>
         /// <returns><c>true</c> if the write succeeded, <c>false</c> if it was deleted or the write failed.</returns>
-        internal bool WriteOrDeleteFileToVS(string destinationFile, string content, bool forceWriteToFile)
+        internal static bool WriteOrDeleteFileToVS(string destinationFile, string content, bool forceWriteToFile, ILoggingService logger)
         {
             if (string.IsNullOrEmpty(content))
             {
@@ -674,14 +675,14 @@ namespace OpenRiaServices.Tools
                 // If there was nothing generated and no file exists, it is better simply to say nothing.
                 if (File.Exists(destinationFile))
                 {
-                    this.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Deleting_Empty_File, destinationFile));
-                    this.DeleteFileFromVS(destinationFile);
+                    logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Deleting_Empty_File, destinationFile));
+                    DeleteFileFromVS(destinationFile, logger);
                 }
                 return false;
             }
             else
             {
-                return this.WriteFileToVS(destinationFile, content, forceWriteToFile);
+                return WriteFileToVS(destinationFile, content, forceWriteToFile, logger);
             }
         }
 
@@ -692,30 +693,29 @@ namespace OpenRiaServices.Tools
         /// <param name="content">String content of file to write</param>
         /// <param name="forceWriteToFile">If <c>true</c>, write file always, even if Intellisense only build.</param>
         /// <returns><c>true</c> if the write succeeded</returns>
-        internal bool WriteFileToVS(string destinationFile, string content, bool forceWriteToFile)
+        internal static bool WriteFileToVS(string destinationFile, string content, bool forceWriteToFile, ILoggingService logger)
         {
             // Create the folder as late as possible, but a failure here
             // logs a message and does not do the write
             string folder = Path.GetDirectoryName(destinationFile);
-            if (!this.SafeFolderCreate(folder))
+            if (!SafeFolderCreate(folder, logger))
             {
                 return false;
             }
 
             // Reset read-only bit first or write may fail.
             // We do this because we are the ones who set that attribute in the first place (to discourage user edits)
-            if (!this.SafeSetReadOnlyAttribute(destinationFile, false))
+            if (!SafeSetReadOnlyAttribute(destinationFile, false, logger))
             {
                 return false;
             }
 
-            this.SafeFileWrite(destinationFile, content);
+            SafeFileWrite(destinationFile, content, logger);
 
             // Set ReadOnly attribute to prevent casual edits.
             // Failure here is logged but does not affect the success of the write.
-            this.SafeSetReadOnlyAttribute(destinationFile, true);
+            SafeSetReadOnlyAttribute(destinationFile, true, logger);
 
-            this.FilesWereWritten = true;
             return true;
         }
 
@@ -723,22 +723,22 @@ namespace OpenRiaServices.Tools
         /// Deletes the specified file in VS-compatible way
         /// </summary>
         /// <param name="fileName">Full path of the file to delete.  It may or may not exist on disk.</param>
-        internal void DeleteFileFromVS(string fileName)
+        internal static void DeleteFileFromVS(string fileName, ILoggingService logger)
         {
             if (File.Exists(fileName))
             {
                 // Reset Read-Only file attribute
                 // We do this because we set this attribute on files we generate.
-                this.SafeSetReadOnlyAttribute(fileName, false);
+                SafeSetReadOnlyAttribute(fileName, false, logger);
 
                 // If VS does not delete this file or if VS is not present, delete it
                 // from the file system manually.
-                this.SafeFileDelete(fileName);
+                SafeFileDelete(fileName, logger);
 
                 // If anything failed here, log a warning so user knows the file could not be removed.
                 if (File.Exists(fileName))
                 {
-                    this.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Delete_File, fileName));
+                    logger.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Delete_File, fileName));
                 }
             }
         }
@@ -967,7 +967,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                SafeFileDelete(fileName, this);
             }
 
             fileName = this.ClientReferenceListPath();
@@ -975,7 +975,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                SafeFileDelete(fileName, this);
             }
 
             fileName = this.ServerReferenceListPath();
@@ -983,7 +983,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                SafeFileDelete(fileName,this);
             }
 
             // Delete our list of source files
@@ -992,7 +992,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                SafeFileDelete(fileName, this);
             }
 
             // Delete our list of RIA Links
@@ -1001,7 +1001,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                SafeFileDelete(fileName, this);
             }
 
             // And delete the history folder itself if it is empty

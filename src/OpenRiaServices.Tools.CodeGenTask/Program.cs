@@ -4,6 +4,7 @@ using System.IO;
 using OpenRiaServices.Tools;
 using System.Linq;
 using System.CommandLine;
+using System.Runtime.CompilerServices;
 
 public class CodeGenTask
 {    
@@ -21,28 +22,21 @@ public class CodeGenTask
             language
         };
 
-        var isCsharp = false;
+        var success = false;
+        var options = new ClientCodeGenerationOptions{ };
+        var sharedCodeServiceParameters = new SharedCodeServiceParameters { };
+        var codeGeneratorName = string.Empty;
 
         rootCommand.SetHandler((language) =>
         {
-            //var codeGenTask = new CreateOpenRiaClientFilesTask();
-            // Run the codegen
-            var success = true;//codeGenTask.Execute();
-            if (success && language == "C#")
-            {
-                isCsharp = true;
-                Console.WriteLine("Code generation succeeded");
-                //Console.WriteLine($"Generated code can be found at: {codeGenTask.GeneratedCodePath}");
-            }
-            else
-            {
-                Console.WriteLine("Code generation failed");
-            }
-        },
-            language);
+                CreateOpenRiaClientFilesTask.CodeGenForNet6("filename.g.cs", options, null, sharedCodeServiceParameters, codeGeneratorName);
+                Console.WriteLine("Code generation succeeded");  
+                success = true;
+            
+        }, language);
 
         rootCommand.Invoke(args);
-        if(isCsharp)
+        if(success)
             return 0;
         else
             return -1;

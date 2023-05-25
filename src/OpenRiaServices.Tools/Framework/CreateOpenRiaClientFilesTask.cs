@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
@@ -550,7 +551,7 @@ namespace OpenRiaServices.Tools
                 // Write out our cache of source files in other projects.
                 if (!this.ServerProjectSourceFileCache.IsFileCacheCurrent)
                 {
-                    if (this.SafeFolderCreate(Path.GetDirectoryName(this.SourceFileListPath())))
+                    if (SafeFolderCreate(Path.GetDirectoryName(this.SourceFileListPath()), this))
                     {
                         this.ServerProjectSourceFileCache.SaveCacheToFile();
                     }
@@ -559,7 +560,7 @@ namespace OpenRiaServices.Tools
                 // Write out our cache of Open RIA Services Links
                 if (!this.LinkedServerProjectCache.IsFileCacheCurrent)
                 {
-                    if (this.SafeFolderCreate(Path.GetDirectoryName(this.LinkedServerProjectsPath())))
+                    if (SafeFolderCreate(Path.GetDirectoryName(this.LinkedServerProjectsPath()), this))
                     {
                         this.LinkedServerProjectCache.SaveCacheToFile();
                     }
@@ -722,20 +723,7 @@ namespace OpenRiaServices.Tools
                     UseFullTypeNames = this.UseFullTypeNamesAsBool,
                     ClientProjectTargetPlatform = this.ClientTargetPlatform,
                 };
-
-
-
-                if(!IsNetFramework(ServerProjectPath))
-                {
-                    // Call the console app from here if Net 6.0 or greater
-                    // Send ClientCodeGenerationOptions to the console program as arguments.
-                    var commands = options.GetParameterString();
-                    var process = System.Diagnostics.Process.Start("OpenRiaServices.Tools.CodeGenTask.exe", commands);
-                }
-
-
-                // ---------------- TO RUN IN CONSOLE APP: START---------------------------------
-
+                
                 // The other AppDomain gets a logger that will log back to this AppDomain
                 CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
 
@@ -743,6 +731,7 @@ namespace OpenRiaServices.Tools
                 SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
 
 #if NETFRAMEWORK
+
                 // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
                 // This can occur when the build environment is configured incorrectly
                 if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
@@ -764,28 +753,64 @@ namespace OpenRiaServices.Tools
                     generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
                 }
 
-#else
-                // Create the "dispatcher" in the 2nd AppDomain.
-                // This object will find and invoke the appropriate code generator
-                using (var dispatcher = new ClientCodeGenerationDispatcher())
-                {
-                    using (var context = dispatcher.EnterContextualReflection())
-                    {
-                        generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
-                    }
-                }
-#endif
                 // Tell the user where we are writing the generated code
                 if (!string.IsNullOrEmpty(generatedFileContent))
                 {
-                    this.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
+                    logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
                 }
 
                 // If VS is hosting us, write to its TextBuffer, else simply write to disk
                 // If the file is empty, delete it.
-                this.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false);
+                FilesWereWritten = WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
 
-// ---------------- TO RUN IN CONSOLE APP: END---------------------------------
+#else
+                if (IsNetFramework(ServerProjectPath))
+                {
+                    // If target framework is NETFRAMEWORK we can run the code as is
+                    FilesWereWritten = CodeGenForNet6(
+                        generatedFileName, 
+                        options, 
+                        logger, 
+                        sharedCodeServiceParameters, 
+                        this.CodeGeneratorName
+                        );
+                }
+                else
+                {
+                    // Call the console app from here if Net 6.0 or greater
+                    // Send ClientCodeGenerationOptions to the console program as arguments.
+                    var generatedFileNameParameter = ClientCodeGenerationOptions.SetupParameter("generatedFileName", generatedFileName);
+                    var optionParameters = options.GetParameterString();
+
+                    var sharedCodeServicePath = Path.GetTempFileName();
+                    using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Create))
+                    {
+                        var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                        binaryFormatter.Serialize(stream, sharedCodeServiceParameters);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                    }
+
+                    using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Create))
+                    {
+                        var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                        binaryFormatter.Serialize(stream, sharedCodeServiceParameters);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                    }
+                    using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Open))
+                    {
+                        var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                        var sharedCode = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
+                    }
+
+                    var codeGeneratorNameParameter = ClientCodeGenerationOptions.SetupParameter("codeGeneratorName", this.CodeGeneratorName);
+                    var sharedCodeServicePathParameter = ClientCodeGenerationOptions.SetupParameter("sharedCodeServiceParameterPath", sharedCodeServicePath);
+                    var parameters = string.Join(" ", generatedFileNameParameter, optionParameters, sharedCodeServicePathParameter, codeGeneratorNameParameter);
+                    var process = System.Diagnostics.Process.Start("OpenRiaServices.Tools.CodeGenTask.exe", parameters);
+                    FilesWereWritten = process.ExitCode == 0;
+                }
+#endif
 
             }
             else
@@ -818,7 +843,32 @@ namespace OpenRiaServices.Tools
             return;
         }
 
+#if !NETFRAMEWORK
+        public static bool CodeGenForNet6(string generatedFileName, ClientCodeGenerationOptions options, ILoggingService logger, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName)
+        {
+            string generatedFileContent;
+            // Create the "dispatcher" in the 2nd AppDomain.
+            // This object will find and invoke the appropriate code generator
+            using (var dispatcher = new ClientCodeGenerationDispatcher())
+            {
+                using (var context = dispatcher.EnterContextualReflection())
+                {
+                    generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, codeGeneratorName);
+                }
+            }
 
+            // Tell the user where we are writing the generated code
+            if (!string.IsNullOrEmpty(generatedFileContent))
+            {
+                logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
+            }
+
+            // If VS is hosting us, write to its TextBuffer, else simply write to disk
+            // If the file is empty, delete it.
+            var isWritten = WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
+            return isWritten;
+        }
+#endif
 
         internal static bool IsNetFramework(string projectPath)
         {
@@ -1089,7 +1139,7 @@ namespace OpenRiaServices.Tools
                     if (!generatedFile)
                     {
                         this.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Deleting_Orphan, fileName));
-                        this.DeleteFileFromVS(fileName);
+                        DeleteFileFromVS(fileName, this);
                         this.DeleteFolderIfEmpty(Path.GetDirectoryName(fileName));
                     }
                 }
@@ -1127,9 +1177,9 @@ namespace OpenRiaServices.Tools
             string fileListFile = this.FileListPath();
             if (this.FilesWereWritten && !string.IsNullOrEmpty(fileListFile))
             {
-                if (this.SafeFolderCreate(Path.GetDirectoryName(fileListFile)))
+                if (SafeFolderCreate(Path.GetDirectoryName(fileListFile), this))
                 {
-                    this.SafeFileWrite(fileListFile, outputFileLines);
+                    SafeFileWrite(fileListFile, outputFileLines, this);
                 }
             }
         }
@@ -1156,9 +1206,9 @@ namespace OpenRiaServices.Tools
 
             if (!string.IsNullOrEmpty(fileName))
             {
-                if (this.SafeFolderCreate(Path.GetDirectoryName(fileName)))
+                if (SafeFolderCreate(Path.GetDirectoryName(fileName), this))
                 {
-                    this.SafeFileWrite(fileName, outputFileLines);
+                    SafeFileWrite(fileName, outputFileLines, this);
                 }
             }
         }
@@ -1335,7 +1385,7 @@ namespace OpenRiaServices.Tools
             string destinationFolder = Path.GetDirectoryName(destinationFilePath);
 
             // Create the destination folder as late as possible
-            if (!this.SafeFolderCreate(destinationFolder))
+            if (!SafeFolderCreate(destinationFolder, this))
             {
                 return false;
             }
