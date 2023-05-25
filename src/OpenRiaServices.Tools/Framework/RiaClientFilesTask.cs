@@ -13,7 +13,7 @@ namespace OpenRiaServices.Tools
     /// <summary>
     /// Common base class shared by <see cref="CreateOpenRiaClientFilesTask"/> and <see cref="CleanOpenRiaClientFilesTask"/>
     /// </summary>
-    public abstract class RiaClientFilesTask : Microsoft.Build.Utilities.Task, ILogger, ILoggingService
+    public abstract class RiaClientFilesTask : Task, ILogger, ILoggingService
     {
         // Name of the folder where generated code will be written
         internal const string GeneratedCodeFolderName = "Generated_Code";
@@ -666,7 +666,7 @@ namespace OpenRiaServices.Tools
         /// <param name="content">Content to write to file</param>
         /// <param name="forceWriteToFile">If <c>true</c>, write file always, even if Intellisense only build.</param>
         /// <returns><c>true</c> if the write succeeded, <c>false</c> if it was deleted or the write failed.</returns>
-        internal bool WriteOrDeleteFileToVS(string destinationFile, string content, bool forceWriteToFile)
+        internal static bool WriteOrDeleteFileToVS(string destinationFile, string content, bool forceWriteToFile)
         {
             if (string.IsNullOrEmpty(content))
             {

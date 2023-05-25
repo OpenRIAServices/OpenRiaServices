@@ -1,35 +1,51 @@
 ﻿using System;
-using Microsoft.Build.Utilities;
+//using Microsoft.Build.Utilities;
 using System.IO;
 using OpenRiaServices.Tools;
 using System.Linq;
+using System.CommandLine;
 
 public class CodeGenTask
-{    static void Main(string[] args) // Take in params to setup the build here
+{    
+    static int Main(string[] args) // Take in params to setup the build here
      {
-        // Setup the codegen task based on the parameters
-        ClientCodeGenerationOptions options = ParseCodeGenOptions(args);
-        var codeGenTask = new CreateOpenRiaClientFilesTask();
-        codeGenTask.BuildEngine = null; // TODO - migth not be ne
-        codeGenTask.Language = "C#"; // Take in to decide if we should use vb or C#
-        codeGenTask.ServerProjectPath = ""; // TODO
-        
-        // ... Set up the rest of the parameters
-        // Run the codegen
-        var success = codeGenTask.Execute();
-        if (success)
+        var language = new Option<string>(
+            name: "--Language",
+            description: "The language to use")
+        { 
+            IsRequired = true
+        };
+
+        var rootCommand = new RootCommand("Sample app for running code generation")
         {
-            Console.WriteLine("Code generation succeeded");
-            Console.WriteLine($"Generated code can be found at: {codeGenTask.GeneratedCodePath}");
-        }
+            language
+        };
+
+        var isCsharp = false;
+
+        rootCommand.SetHandler((language) =>
+        {
+            //var codeGenTask = new CreateOpenRiaClientFilesTask();
+            // Run the codegen
+            var success = true;//codeGenTask.Execute();
+            if (success && language == "C#")
+            {
+                isCsharp = true;
+                Console.WriteLine("Code generation succeeded");
+                //Console.WriteLine($"Generated code can be found at: {codeGenTask.GeneratedCodePath}");
+            }
+            else
+            {
+                Console.WriteLine("Code generation failed");
+            }
+        },
+            language);
+
+        rootCommand.Invoke(args);
+        if(isCsharp)
+            return 0;
         else
-        {
-            Console.WriteLine("Code generation failed");
-        }
+            return -1;
     }
 
-    private static ClientCodeGenerationOptions ParseCodeGenOptions(string[] args)
-    {
-        throw new NotImplementedException();
-    }
 }

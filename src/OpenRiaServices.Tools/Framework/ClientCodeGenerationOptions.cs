@@ -92,5 +92,26 @@ namespace OpenRiaServices.Tools
         /// generate fully qualified type names and avoid adding unnecessary imports.
         /// </remarks>
         public bool UseFullTypeNames { get; set; }
+
+
+        public string GetParameterString()
+        {
+            var parameters = new string[]
+            {
+                SetupParameter("Language", Language),
+                //SetupParameter("ClientRootNamespace", ClientRootNamespace),
+                //SetupParameter("ServerRootNamespace", ServerRootNamespace),
+                //SetupParameter("ClientProjectPath", ClientProjectPath),
+                //SetupParameter("ServerProjectPath", ServerProjectPath),
+                //SetupParameter("IsApplicationContextGenerationEnabled", IsApplicationContextGenerationEnabled.ToString()),
+                //SetupParameter("UseFullTypeNames", UseFullTypeNames.ToString()),
+                //SetupParameter("ClientProjectTargetPlatform", ClientProjectTargetPlatform.ToString()),
+
+            };
+            return string.Join(" ", parameters);
+        }
+
+        private string SetupParameter(string name, string value) => $@"--{name} ""{this.Language}""";
+
     }
 }

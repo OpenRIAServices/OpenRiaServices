@@ -5,8 +5,11 @@ using System.Data.Common;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
+using Microsoft.Build.Evaluation;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using OpenRiaServices.Tools.SharedTypes;
@@ -721,13 +724,15 @@ namespace OpenRiaServices.Tools
                 };
 
 
-                // Call the console app from here if Net 6.0 or greater
 
-                //if (ServerProject.Framework == Net6)
-                //{
-                //   // Send ClientCodeGenerationOptions to the Console exe as arguments.
-                //    System.CommandLine.
-                //}
+                if(!IsNetFramework(ServerProjectPath))
+                {
+                    // Call the console app from here if Net 6.0 or greater
+                    // Send ClientCodeGenerationOptions to the console program as arguments.
+                    var commands = options.GetParameterString();
+                    var process = System.Diagnostics.Process.Start("OpenRiaServices.Tools.CodeGenTask.exe", commands);
+                }
+
 
                 // ---------------- TO RUN IN CONSOLE APP: START---------------------------------
 
@@ -812,6 +817,45 @@ namespace OpenRiaServices.Tools
 
             return;
         }
+
+
+
+        internal static bool IsNetFramework(string projectPath)
+        {
+            using (var projectCollection = new ProjectCollection())
+            {
+                var project = projectCollection.LoadProject(projectPath, projectCollection.DefaultToolsVersion);
+                
+                var targetFramework = project.GetProperty("TargetFramework")?.EvaluatedValue;
+                if (targetFramework != null)
+                    return IsNetFrameworkTargetFramework(targetFramework);
+
+                var targetFrameworks = project.GetProperty("TargetFrameworks")?.EvaluatedValue;
+                if (targetFrameworks != null)
+                {
+                    if (!targetFrameworks.Contains(';'))
+                    {
+                        return IsNetFrameworkTargetFramework(targetFrameworks);
+                    }
+                    else
+                    {
+                        var version = (TargetFrameworkAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Runtime.Versioning.TargetFrameworkAttribute), false).SingleOrDefault();
+                        return version.FrameworkName.StartsWith(".NETFramework");
+                    }
+                }
+
+                return false;
+            }
+        }
+
+
+        /// <summary>
+        /// If it is a Netframework, it will not contain a dot
+        /// see: https://learn.microsoft.com/en-us/dotnet/standard/frameworks
+        /// </summary>
+        /// <param name="framework"></param>
+        /// <returns></returns>
+        private static bool IsNetFrameworkTargetFramework(string framework) => !framework.Contains(".");
 
         /// <summary>
         /// Returns the computed list of shared and linked files between the server and client projects.
