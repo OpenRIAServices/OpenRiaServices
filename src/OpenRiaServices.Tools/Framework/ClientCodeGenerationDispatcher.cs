@@ -44,7 +44,7 @@ namespace OpenRiaServices.Tools
         }
 #else
         public const string AssemblyLoadContextName = "ClientCodeGenContext";
-        private System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
+        private readonly System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
@@ -86,7 +86,7 @@ namespace OpenRiaServices.Tools
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 // Try to load mono.cecil from same folder as tools
                 // This prevents problem if server project contains another version of mono Cecil
-                var cecilPath = toolingAssembly.Location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
+                var cecilPath = location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
                 AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
                 AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 #else
@@ -101,6 +101,8 @@ namespace OpenRiaServices.Tools
                 }
                 var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
+                //this.CustomLoadAssembly(cecilPath, loggingService);
+                //this.CustomLoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 
                 // Note: we might want to fallback to also searching the paths of all references assemblies on any error
                 // Meybe can be removed if we create a AssemblyDependencyResolver for the output assembly of the server projekt ?
