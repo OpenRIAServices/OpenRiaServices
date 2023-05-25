@@ -120,6 +120,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             _buffer = null;
 
             int nextSize = _position * 2;
+            // If the size is >1GB the next size might be larger than int.MaxValue
+            // which means it will become negative
             if (nextSize < 0)
             {
                 if (_position > 0 && _position < int.MaxValue)
