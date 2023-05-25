@@ -844,7 +844,7 @@ namespace OpenRiaServices.Tools
                     }
                 }
 
-                return false;
+                return true;
             }
         }
 

@@ -666,7 +666,7 @@ namespace OpenRiaServices.Tools
         /// <param name="content">Content to write to file</param>
         /// <param name="forceWriteToFile">If <c>true</c>, write file always, even if Intellisense only build.</param>
         /// <returns><c>true</c> if the write succeeded, <c>false</c> if it was deleted or the write failed.</returns>
-        internal static bool WriteOrDeleteFileToVS(string destinationFile, string content, bool forceWriteToFile)
+        internal bool WriteOrDeleteFileToVS(string destinationFile, string content, bool forceWriteToFile)
         {
             if (string.IsNullOrEmpty(content))
             {
