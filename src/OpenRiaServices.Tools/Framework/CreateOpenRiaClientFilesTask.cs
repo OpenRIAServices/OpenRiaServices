@@ -791,14 +791,6 @@ namespace OpenRiaServices.Tools
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                     }
 
-                    using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Create))
-                    {
-                        var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-#pragma warning disable SYSLIB0011 // Type or member is obsolete
-                        binaryFormatter.Serialize(stream, sharedCodeServiceParameters);
-#pragma warning restore SYSLIB0011 // Type or member is obsolete
-                    }
-
                     var codeGeneratorNameParameter = ClientCodeGenerationOptions.SetupParameter("codeGeneratorName", this.CodeGeneratorName);
                     var sharedCodeServicePathParameter = ClientCodeGenerationOptions.SetupParameter("sharedCodeServiceParameterPath", sharedCodeServicePath);
                     var parameters = string.Join(" ", generatedFileNameParameter, optionParameters, sharedCodeServicePathParameter, codeGeneratorNameParameter);

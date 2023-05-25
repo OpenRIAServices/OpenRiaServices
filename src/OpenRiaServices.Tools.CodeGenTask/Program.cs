@@ -11,9 +11,7 @@ public class CodeGenTask
 {    
     static int Main(string[] args) // Take in params to setup the build here
      {
-        var language = new Option<string>(
-            name: "--Language",
-            description: "The language to use")
+        var language = new Option<string>(name: "--Language")
         { 
             IsRequired = true
         };
@@ -41,12 +39,15 @@ public class CodeGenTask
         };
 
         var success = false;
-        var options = new ClientCodeGenerationOptions{ };
         SharedCodeServiceParameters sharedCodeServiceParameters;
-        
+
 
         rootCommand.SetHandler((language, sharedCodeServicePath, codeGeneratorName, generatedFileName) =>
         {
+            var options = new ClientCodeGenerationOptions
+            {
+                Language = language,
+            };
             using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Open))
             {
                 var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
