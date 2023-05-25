@@ -1,4 +1,4 @@
-# Not releaseed
+# 5.3.1 with EFCore 2.0.2 and AspNetCore 0.3.0
 
 * Code Generation
   * Switch to using Mono.Cecil to parse pdb files during code generation (#410)
@@ -22,7 +22,7 @@
 
 *Other*
 - Updated nuget packages
-        
+
 # 5.3.0 with EFCore 2.0.1
 
 * Fix shadow property issue in EF Core DB Context extensions (#397):
