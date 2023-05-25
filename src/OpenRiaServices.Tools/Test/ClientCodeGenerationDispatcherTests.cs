@@ -12,6 +12,7 @@ using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
 using OpenRiaServices.Tools.Test.T4Generator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -38,6 +39,10 @@ namespace OpenRiaServices.Tools.Test
             }, Resource.Null_Language_Property, "options");
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher finds a custom code generator")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Finds_Custom()
@@ -66,6 +71,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher finds a custom code generator derived from another")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Finds_Derived_Custom()
@@ -94,6 +103,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher custom code generator logs warnings successfully")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Custom_Warns_Full()
@@ -125,6 +138,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher custom code generator logs errors successfully")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Custom_Errors_Full()
@@ -191,6 +208,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher finds single custom code generator")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Finds_Solitary_Custom()
@@ -222,6 +243,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher finds a custom code generator in the presence of several")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Finds_Custom_Among_Many()
@@ -279,6 +304,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher finds T4 custom generator and can generate code")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Generate_Using_T4_Custom()
@@ -393,8 +422,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-
-
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher logs error if generator throws during code generation, uses logical name")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Throws_Exception_Logical_Name()
@@ -453,6 +484,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher logs warning when multiple generators exist")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Error_Multiple_Generators()
@@ -490,6 +525,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher logs error when multiple generators exist with the same name")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Error_Multiple_Generators_Same_Name()
@@ -530,6 +569,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("ClientCodeGenerationDispatcher logs an warning and survives a TypeLoadException creating MEF")]
         [TestMethod]
         [DeploymentItem(@"TypeLoadExceptionProject.dll")]

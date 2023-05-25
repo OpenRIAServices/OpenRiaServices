@@ -18,11 +18,19 @@ namespace OpenRiaServices.Tools.Test
 
         [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         public void CleanRiaClientFiles_Deletes_Generated_Files_Copy()
         {
             CleanRiaClientFiles_Deletes_Generated_Files(OpenRiaSharedFilesMode.Copy);
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("CleanOpenRiaClientFilesTask deletes ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CleanRiaClientFiles_Deletes_Generated_Files_Link()
