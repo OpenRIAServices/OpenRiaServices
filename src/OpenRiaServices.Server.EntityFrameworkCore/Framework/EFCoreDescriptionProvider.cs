@@ -66,7 +66,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         }
 
         public override bool LookupIsEntityType(Type type) =>
-#if NETSTANDARD2_0 || NET6_0_OR_GREATER
+#if NETSTANDARD2_0
             // EF6 excludes "complex objects" here so we exclude owned entities
             _typeDescriptionContext.GetEntityType(type) is IEntityType entityType
                 && !entityType.IsOwned();
