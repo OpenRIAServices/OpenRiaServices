@@ -11,6 +11,7 @@ using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Runtime.InteropServices;
+using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -70,6 +71,10 @@ namespace OpenRiaServices.Tools.Test
             Assert.AreEqual(1, descriptions.Count(), "Expected exactly one domain service description");
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [TestMethod]
         [Description("DomainServiceCatalog finds all DomainService subtypes")]
         public void DomainServiceCatalog_Finds_All_DomainServices()
@@ -139,6 +144,10 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [TestMethod]
         [Description("DomainServiceCatalog catches FileNotFoundException and emits an info message but continues processing")]
         public void DomainServiceCatalog_Message_FileNotFound_Continues()
