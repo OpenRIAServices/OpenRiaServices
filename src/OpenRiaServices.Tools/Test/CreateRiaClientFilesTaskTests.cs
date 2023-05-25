@@ -160,7 +160,7 @@ namespace OpenRiaServices.Tools.Test
 
             Assert.IsNotNull(realMessage, "Expected creation of fake folder " + fakeFolder + " to fail.");
 
-            bool success = task.SafeFolderCreate(fakeFolder);
+            bool success = CreateOpenRiaClientFilesTask.SafeFolderCreate(fakeFolder, task);
             Assert.IsFalse(success, "Expected SafeFolderCreate to report failure for " + fakeFolder);
             Assert.IsFalse(Directory.Exists(fakeFolder), "Did not expect SafeFolderCreate to really create " + fakeFolder);
 
@@ -175,7 +175,7 @@ namespace OpenRiaServices.Tools.Test
 
             try
             {
-                success = task.SafeFolderCreate(realFolder);
+                success = CreateOpenRiaClientFilesTask.SafeFolderCreate(realFolder, task);
                 Assert.IsTrue(success, "Expected SafeFolderCreate to have reported success for " + realFolder);
                 Assert.IsTrue(Directory.Exists(realFolder), "Expected SafeFolderCreate to have created " + realFolder);
             }
@@ -202,7 +202,7 @@ namespace OpenRiaServices.Tools.Test
                 string outputFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
                 Assert.IsFalse(File.Exists(outputFile));
 
-                bool result = task.WriteOrDeleteFileToVS(outputFile, string.Empty, true);
+                bool result = CreateOpenRiaClientFilesTask.WriteOrDeleteFileToVS(outputFile, string.Empty, true, task);
 
                 Assert.IsFalse(result);                     // should have reported false
                 Assert.IsFalse(File.Exists(outputFile));    // should not have created file

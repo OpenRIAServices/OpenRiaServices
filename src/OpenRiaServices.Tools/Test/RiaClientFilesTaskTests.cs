@@ -92,7 +92,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.AreEqual((int) FileAttributes.ReadOnly, (int)(fa & FileAttributes.ReadOnly), "Expected RO bit to be set");
 
                 Assert.IsTrue(task.FilesWereWritten, "Should have marked files as written");
-                task.SafeFileDelete(file2);
+                CreateOpenRiaClientFilesTask.SafeFileDelete(file2, task);
 
                 string errorMessage = String.Empty;
 

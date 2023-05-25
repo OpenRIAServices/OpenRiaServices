@@ -798,11 +798,6 @@ namespace OpenRiaServices.Tools
                         binaryFormatter.Serialize(stream, sharedCodeServiceParameters);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                     }
-                    using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Open))
-                    {
-                        var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                        var sharedCode = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
-                    }
 
                     var codeGeneratorNameParameter = ClientCodeGenerationOptions.SetupParameter("codeGeneratorName", this.CodeGeneratorName);
                     var sharedCodeServicePathParameter = ClientCodeGenerationOptions.SetupParameter("sharedCodeServiceParameterPath", sharedCodeServicePath);
