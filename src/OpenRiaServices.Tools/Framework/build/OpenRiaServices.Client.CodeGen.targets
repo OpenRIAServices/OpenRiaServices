@@ -22,11 +22,12 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
     <_OpenRiaDesignTimeBuild Condition="'$(DesignTimeBuild)' == 'true' OR '$(BuildingProject)' != 'true'">true</_OpenRiaDesignTimeBuild> 
   </PropertyGroup>
 
-  <UsingTask TaskName="$(MSBuildThisFileDirectory)../tasks/$(_OpenRiaTaskFramework)/OpenRiaServices.Tools.CreateOpenRiaClientFilesTask"
-           AssemblyFile="OpenRiaServices.Tools.dll" />
+  <UsingTask TaskName="OpenRiaServices.Tools.CreateOpenRiaClientFilesTask"
+           AssemblyFile="$(MSBuildThisFileDirectory)../tasks/$(_OpenRiaTaskFramework)/OpenRiaServices.Tools.dll" />
 
-  <UsingTask TaskName="$(MSBuildThisFileDirectory)../tasks/$(_OpenRiaTaskFramework)/OpenRiaServices.Tools.CleanOpenRiaClientFilesTask"
-             AssemblyFile="OpenRiaServices.Tools.dll" />
+  <UsingTask TaskName="OpenRiaServices.Tools.CleanOpenRiaClientFilesTask"
+             AssemblyFile="$(MSBuildThisFileDirectory)../tasks/$(_OpenRiaTaskFramework)/OpenRiaServices.Tools.dll" />
+
 
   <!--
     ============================================================
