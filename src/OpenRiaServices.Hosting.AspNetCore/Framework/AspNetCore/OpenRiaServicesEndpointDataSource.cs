@@ -3,6 +3,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -16,14 +18,15 @@ namespace OpenRiaServices.Hosting.AspNetCore
 {
     internal class OpenRiaServicesEndpointDataSource : EndpointDataSource, IEndpointConventionBuilder
     {
-        private readonly List<Action<EndpointBuilder>> _conventions;
+        private readonly List<Action<EndpointBuilder>> _conventions = new();
+        private readonly List<Action<EndpointBuilder>> _finallyConventions = new();
 
         public Dictionary<string, DomainServiceDescription> DomainServices { get; } = new();
         private List<Endpoint> _endpoints;
 
-        public OpenRiaServicesEndpointDataSource(RoutePatternTransformer routePatternTransformer)
+        public OpenRiaServicesEndpointDataSource()
         {
-            _conventions = new List<Action<EndpointBuilder>>();
+
         }
 
         public override IReadOnlyList<Endpoint> Endpoints
@@ -47,9 +50,18 @@ namespace OpenRiaServices.Hosting.AspNetCore
             var getOrPost = new HttpMethodMetadata(new[] { "GET", "POST" });
             var postOnly = new HttpMethodMetadata(new[] { "POST" });
 
+
             foreach (var (name, domainService) in DomainServices)
             {
                 var serializationHelper = new SerializationHelper(domainService);
+                List<object> additionalMetadata = new List<object>();
+                foreach (Attribute attribute in domainService.Attributes)
+                {
+                    if (CopyAttributeToEndpointMetadata(attribute))
+                        additionalMetadata.Add(attribute);
+                }
+                // Consider adding additional metadata souch as route groups etc
+                //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(domainService));
 
                 foreach (var operation in domainService.DomainOperationEntries)
                 {
@@ -70,14 +82,14 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     else
                         continue;
 
-                    AddEndpoint(endpoints, name, invoker, hasSideEffects ? postOnly : getOrPost);
+                    AddEndpoint(endpoints, name, invoker, hasSideEffects ? postOnly : getOrPost, additionalMetadata);
                 }
 
                 var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
                     typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
                 var submitOperationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
-                AddEndpoint(endpoints, name, submitOperationInvoker, postOnly);
+                AddEndpoint(endpoints, name, submitOperationInvoker, postOnly, additionalMetadata);
 
 
             }
@@ -85,15 +97,9 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return endpoints;
         }
 
-        private void AddEndpoint(List<Endpoint> endpoints, string domainService, OperationInvoker invoker, HttpMethodMetadata httpMethod)
+        private void AddEndpoint(List<Endpoint> endpoints, string domainService, OperationInvoker invoker, HttpMethodMetadata httpMethod, List<object> additionalMetadata)
         {
             var route = RoutePatternFactory.Parse($"{Prefix}/{domainService}/{invoker.OperationName}");
-
-            // TODO: looka at adding authorization and authentication metadata to endpoiunt
-            // authorization - look for any attribute implementing microsoft.aspnetcore.authorization.iauthorizedata 
-            // https://docs.microsoft.com/en-us/dotnet/api/microsoft.aspnetcore.authorization.iauthorizedata?view=aspnetcore-6.0
-
-            //var aut = operation.Attributes.Cast<Attribute>().OfType<Microsoft.spNetCore.Authorization.IAuthorizeData>().ToList();
 
             var endpointBuilder = new RouteEndpointBuilder(
                 invoker.Invoke,
@@ -103,12 +109,49 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 DisplayName = $"{domainService}.{invoker.OperationName}"
             };
             endpointBuilder.Metadata.Add(httpMethod);
-            //endpointBuilder.Metadata.Add(new EndpointGroupNameAttribute(domainService));
+            endpointBuilder.Metadata.Add(invoker.DomainOperation);
+
+            // Copy all AspNetCore Authorization attributes
+            foreach (Attribute attribute in invoker.DomainOperation.Attributes)
+            {
+                if (CopyAttributeToEndpointMetadata(attribute))
+                    endpointBuilder.Metadata.Add(attribute);
+            }
+
+            // Try to add MethodInfo
+            //if (TryGetMethodInfo(invoker) is MethodInfo method)
+            //{
+            //    endpointBuilder.Metadata.Add(method);
+            //}
+
+            foreach (var metadata in additionalMetadata)
+                endpointBuilder.Metadata.Add(metadata);
+
             foreach (var convention in _conventions)
             {
                 convention(endpointBuilder);
             }
+
+            foreach (var finallyConvention in _finallyConventions)
+                finallyConvention(endpointBuilder);
+
             endpoints.Add(endpointBuilder.Build());
+        }
+
+        private static bool CopyAttributeToEndpointMetadata(Attribute authorizeAttribute)
+        {
+            return authorizeAttribute is IAuthorizeData;
+        }
+
+        private static MethodInfo TryGetMethodInfo(OperationInvoker invoker)
+        {
+            MethodInfo method = invoker.DomainOperation.DomainServiceType.GetMethod(invoker.DomainOperation.Name);
+            if (method == null && invoker.DomainOperation.IsTaskAsync)
+            {
+                method = invoker.DomainOperation.DomainServiceType.GetMethod(invoker.DomainOperation.Name + "Async");
+            }
+
+            return method;
         }
 
         public override IChangeToken GetChangeToken()
@@ -120,5 +163,12 @@ namespace OpenRiaServices.Hosting.AspNetCore
         {
             _conventions.Add(convention);
         }
+
+#if NET7_0_OR_GREATER
+        void IEndpointConventionBuilder.Finally(System.Action<Microsoft.AspNetCore.Builder.EndpointBuilder> finallyConvention)
+        {
+            _finallyConventions.Add(finallyConvention);
+        }
+#endif
     }
 }
