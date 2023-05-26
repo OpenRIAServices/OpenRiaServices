@@ -5,11 +5,11 @@
     This should make it possible to use portable and embedded pdb's on the server
   * 
 * AspNetCore
-    * New extension method to add OpenRiaServices to services.
+    * New extension method to add OpenRiaServices to services from #413 by @ehsangfl.
         ```C#
         services.AddOpenRiaServices<T>()
         ```
-    * New extension method to add OpenRiaServices to pipeline.
+    * New extension method to add OpenRiaServices to pipeline from #413 by @ehsangfl.
         ```C#
         endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
         ```
