@@ -99,15 +99,15 @@ namespace OpenRiaServices.Tools
             var parameters = new string[]
             {
                 SetupParameter("Language", Language),
-                //SetupParameter("ClientRootNamespace", ClientRootNamespace),
-                //SetupParameter("ServerRootNamespace", ServerRootNamespace),
-                //SetupParameter("ClientProjectPath", ClientProjectPath),
-                //SetupParameter("ServerProjectPath", ServerProjectPath),
-                //SetupParameter("IsApplicationContextGenerationEnabled", IsApplicationContextGenerationEnabled.ToString()),
-                //SetupParameter("UseFullTypeNames", UseFullTypeNames.ToString()),
-                //SetupParameter("ClientProjectTargetPlatform", ClientProjectTargetPlatform.ToString()),
+                SetupParameter("ClientRootNamespace", ClientRootNamespace),
+                SetupParameter("ServerRootNamespace", ServerRootNamespace),
+                SetupParameter("ClientProjectPath", ClientProjectPath),
+                SetupParameter("ServerProjectPath", ServerProjectPath),
+                SetupParameter("IsApplicationContextGenerationEnabled", IsApplicationContextGenerationEnabled.ToString()),
+                SetupParameter("UseFullTypeNames", UseFullTypeNames.ToString()),
+                SetupParameter("ClientProjectTargetPlatform", ClientProjectTargetPlatform.ToString()),
 
-            };
+                };
             return string.Join(" ", parameters);
         }
 

@@ -12,7 +12,36 @@ public class CodeGenTask
     static int Main(string[] args) // Take in params to setup the build here
      {
         var language = new Option<string>(name: "--Language")
-        { 
+        {
+            IsRequired = true
+        };
+
+        var ClientRootNamespace = new Option<string>(name: "--ClientRootNamespace")
+        {
+            IsRequired = true
+        };
+        var ServerRootNamespace = new Option<string>(name: "--ServerRootNamespace")
+        {
+            IsRequired = true
+        };
+        var ClientProjectPath = new Option<string>(name: "--ClientProjectPath")
+        {
+            IsRequired = true
+        };
+        var ServerProjectPath = new Option<string>(name: "--ServerProjectPath")
+        {
+            IsRequired = true
+        };
+        var IsApplicationContextGenerationEnabled = new Option<bool>(name: "--IsApplicationContextGenerationEnabled")
+        {
+            IsRequired = true
+        };
+        var UseFullTypeNames = new Option<bool>(name: "--UseFullTypeNames")
+        {
+            IsRequired = true
+        };
+        var ClientProjectTargetPlatform = new Option<string>(name: "--ClientProjectTargetPlatform")
+        {
             IsRequired = true
         };
 
@@ -42,7 +71,11 @@ public class CodeGenTask
         SharedCodeServiceParameters sharedCodeServiceParameters;
 
 
-        rootCommand.SetHandler((language, sharedCodeServicePath, codeGeneratorName, generatedFileName) =>
+        rootCommand.SetHandler((language, 
+            sharedCodeServicePath, 
+            codeGeneratorName, 
+            generatedFileName,
+            ) =>
         {
             var options = new ClientCodeGenerationOptions
             {
@@ -53,7 +86,7 @@ public class CodeGenTask
                 var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 sharedCodeServiceParameters = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
             }
-            CreateOpenRiaClientFilesTask.CodeGenForNet6(generatedFileName, options, new Logger(), sharedCodeServiceParameters, codeGeneratorName);
+            //CreateOpenRiaClientFilesTask.CodeGenForNet6(generatedFileName, options, new Logger(), sharedCodeServiceParameters, codeGeneratorName);
             Console.WriteLine("Code generation succeeded");
             success = true;
 
