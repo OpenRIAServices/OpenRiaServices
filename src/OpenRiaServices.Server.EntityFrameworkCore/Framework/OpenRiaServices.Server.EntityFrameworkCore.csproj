@@ -3,8 +3,8 @@
     <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX;EFCORE</DefineConstants>
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
-    <VersionPrefix>2.0.1</VersionPrefix>
-    <AssemblyVersion>2.0.1</AssemblyVersion>
+    <VersionPrefix>2.0.2</VersionPrefix>
+    <AssemblyVersion>2.0.2</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>

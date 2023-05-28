@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX;ASPNET_CORE</DefineConstants>
     <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
     <!-- Ignore documentation varnings while experimental-->
     <NoWarn>$(NoWarn);CS1574;CS1573;CS1591;CS1572</NoWarn>
-    <VersionPrefix>0.2.1</VersionPrefix>
+    <VersionPrefix>0.3.0</VersionPrefix>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Daniel-Svensson</Authors>
     <PackageTags>OpenRiaServices AspNetCore Hosting DomainServices AspNet WCF RIA Services Server</PackageTags>
@@ -40,8 +40,8 @@
   </ItemGroup>
   
   <ItemGroup>
-    <None Update="LICENSE.md" Pack="true" PackagePath="\" />
-    <None Update="README.md" Pack="true" PackagePath="\" />
+    <Content Include="LICENSE.md" Pack="true" PackagePath="" />
+    <Content Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
   
   <ItemGroup>
