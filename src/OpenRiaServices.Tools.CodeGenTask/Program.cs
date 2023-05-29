@@ -5,42 +5,13 @@ using OpenRiaServices.Tools;
 using System.Linq;
 using System.CommandLine;
 using System.Runtime.CompilerServices;
-using Microsoft.Build.Framework;
+
 
 public class CodeGenTask
 {    
     static int Main(string[] args) // Take in params to setup the build here
      {
-        var language = new Option<string>(name: "--Language")
-        {
-            IsRequired = true
-        };
-
-        var ClientRootNamespace = new Option<string>(name: "--ClientRootNamespace")
-        {
-            IsRequired = true
-        };
-        var ServerRootNamespace = new Option<string>(name: "--ServerRootNamespace")
-        {
-            IsRequired = true
-        };
-        var ClientProjectPath = new Option<string>(name: "--ClientProjectPath")
-        {
-            IsRequired = true
-        };
-        var ServerProjectPath = new Option<string>(name: "--ServerProjectPath")
-        {
-            IsRequired = true
-        };
-        var IsApplicationContextGenerationEnabled = new Option<bool>(name: "--IsApplicationContextGenerationEnabled")
-        {
-            IsRequired = true
-        };
-        var UseFullTypeNames = new Option<bool>(name: "--UseFullTypeNames")
-        {
-            IsRequired = true
-        };
-        var ClientProjectTargetPlatform = new Option<string>(name: "--ClientProjectTargetPlatform")
+        var clientCodeGenerationOptionPath = new Option<string>(name: "--clientCodeGenerationOptionPath")
         {
             IsRequired = true
         };
@@ -62,35 +33,65 @@ public class CodeGenTask
 
         var rootCommand = new RootCommand("Sample app for running code generation")
         {
-            language,
+            clientCodeGenerationOptionPath,
             sharedCodeServicePath,
             codeGeneratorName,
+            generatedFileName
         };
 
         var success = false;
         SharedCodeServiceParameters sharedCodeServiceParameters;
+        ClientCodeGenerationOptions clientCodeGenerationOption;
 
-
-        rootCommand.SetHandler((language, 
-            sharedCodeServicePath, 
-            codeGeneratorName, 
-            generatedFileName,
+        rootCommand.SetHandler((
+                clientCodeGenerationOptionPath,
+                sharedCodeServicePath,
+                codeGeneratorName,
+                generatedFileName
             ) =>
         {
-            var options = new ClientCodeGenerationOptions
+            try
             {
-                Language = language,
-            };
+
+            using (Stream stream = File.Open(clientCodeGenerationOptionPath, FileMode.Open))
+            {
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                clientCodeGenerationOption = (ClientCodeGenerationOptions)binaryFormatter.Deserialize(stream);
+            }
+
             using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Open))
             {
                 var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
                 sharedCodeServiceParameters = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
             }
-            //CreateOpenRiaClientFilesTask.CodeGenForNet6(generatedFileName, options, new Logger(), sharedCodeServiceParameters, codeGeneratorName);
+            CreateOpenRiaClientFilesTask.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, new Logger(), sharedCodeServiceParameters, codeGeneratorName);
             Console.WriteLine("Code generation succeeded");
             success = true;
 
-        }, language, sharedCodeServicePath, codeGeneratorName, generatedFileName);
+            }
+            catch (Exception ex)
+            {
+                using (StreamWriter writer = new StreamWriter("CodeGenLog.txt", true))
+                {
+                    writer.WriteLine("-----------------------------------------------------------------------------");
+                    writer.WriteLine("Date : " + DateTime.Now.ToString());
+                    writer.WriteLine();
+
+                    while (ex != null)
+                    {
+                        writer.WriteLine(ex.GetType().FullName);
+                        writer.WriteLine("Message : " + ex.Message);
+                        writer.WriteLine("StackTrace : " + ex.StackTrace);
+
+                        ex = ex.InnerException;
+                    }
+                }
+            }
+        },
+        clientCodeGenerationOptionPath,
+        sharedCodeServicePath,
+        codeGeneratorName,
+        generatedFileName);
 
         rootCommand.Invoke(args);
         if(success)

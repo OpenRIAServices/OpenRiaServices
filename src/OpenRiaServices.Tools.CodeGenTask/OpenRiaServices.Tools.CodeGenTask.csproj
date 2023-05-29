@@ -6,7 +6,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.0.0" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.0.0"  PrivateAssets="All" ExcludeAssets="Runtime"/>
   </ItemGroup>
 
   <ItemGroup>
@@ -14,4 +14,7 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy C:\Users\crmhli\source\repos\OpenRiaServices\src\bin\Debug\net6.0\OpenRiaServices.Tools.CodeGenTask.* C:\Users\crmhli\source\repos\OpenRiaServices\src\OpenRiaServices.Tools\Test\bin\Debug\net6.0\OpenRiaServices.Tools.CodeGenTask.* /Y" />
+  </Target>
 </Project>

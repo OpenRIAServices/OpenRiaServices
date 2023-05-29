@@ -778,9 +778,8 @@ namespace OpenRiaServices.Tools
                 else
                 {
                     // Call the console app from here if Net 6.0 or greater
-                    // Send ClientCodeGenerationOptions to the console program as arguments.
+
                     var generatedFileNameParameter = ClientCodeGenerationOptions.SetupParameter("generatedFileName", generatedFileName);
-                    var optionParameters = options.GetParameterString();
 
                     var sharedCodeServicePath = Path.GetTempFileName();
                     using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Create))
@@ -790,10 +789,21 @@ namespace OpenRiaServices.Tools
                         binaryFormatter.Serialize(stream, sharedCodeServiceParameters);
 #pragma warning restore SYSLIB0011 // Type or member is obsolete
                     }
+                    var sharedCodeServicePathParameter = ClientCodeGenerationOptions.SetupParameter("sharedCodeServiceParameterPath", sharedCodeServicePath);
+
+                    var clientCodeGenerationOptionPath = Path.GetTempFileName();
+                    using (Stream stream = File.Open(clientCodeGenerationOptionPath, FileMode.Create))
+                    {
+                        var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+#pragma warning disable SYSLIB0011 // Type or member is obsolete
+                        binaryFormatter.Serialize(stream, options);
+#pragma warning restore SYSLIB0011 // Type or member is obsolete
+                    }
+                    var clientCodeGenerationOptionPathParameter = ClientCodeGenerationOptions.SetupParameter("clientCodeGenerationOptionPath", clientCodeGenerationOptionPath);
 
                     var codeGeneratorNameParameter = ClientCodeGenerationOptions.SetupParameter("codeGeneratorName", this.CodeGeneratorName);
-                    var sharedCodeServicePathParameter = ClientCodeGenerationOptions.SetupParameter("sharedCodeServiceParameterPath", sharedCodeServicePath);
-                    var parameters = string.Join(" ", generatedFileNameParameter, optionParameters, sharedCodeServicePathParameter, codeGeneratorNameParameter);
+
+                    var parameters = string.Join(" ", generatedFileNameParameter, clientCodeGenerationOptionPathParameter, sharedCodeServicePathParameter, codeGeneratorNameParameter);
                     var process = System.Diagnostics.Process.Start("OpenRiaServices.Tools.CodeGenTask.exe", parameters);
                     FilesWereWritten = process.ExitCode == 0;
                 }
