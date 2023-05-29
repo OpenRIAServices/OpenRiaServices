@@ -5,12 +5,12 @@ using OpenRiaServices.Tools;
 using System.Linq;
 using System.CommandLine;
 using System.Runtime.CompilerServices;
-
+using System.Collections.Generic;
 
 public class CodeGenTask
-{    
+{
     static int Main(string[] args) // Take in params to setup the build here
-     {
+    {
         var clientCodeGenerationOptionPath = new Option<string>(name: "--clientCodeGenerationOptionPath")
         {
             IsRequired = true
@@ -53,20 +53,41 @@ public class CodeGenTask
             try
             {
 
-            using (Stream stream = File.Open(clientCodeGenerationOptionPath, FileMode.Open))
-            {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                clientCodeGenerationOption = (ClientCodeGenerationOptions)binaryFormatter.Deserialize(stream);
-            }
+                using (Stream stream = File.Open(clientCodeGenerationOptionPath, FileMode.Open))
+                {
+                    var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    clientCodeGenerationOption = (ClientCodeGenerationOptions)binaryFormatter.Deserialize(stream);
+                }
 
-            using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Open))
-            {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                sharedCodeServiceParameters = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
-            }
-            CreateOpenRiaClientFilesTask.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, new Logger(), sharedCodeServiceParameters, codeGeneratorName);
-            Console.WriteLine("Code generation succeeded");
-            success = true;
+                using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Open))
+                {
+                    var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                    sharedCodeServiceParameters = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
+                }
+                var log = new Logger();
+                
+                log.LogMessage("SymbolSearchPaths: " + string.Join(",", sharedCodeServiceParameters.SymbolSearchPaths));
+                log.LogMessage("ServerAssemblies: " + string.Join(",", sharedCodeServiceParameters.ServerAssemblies));
+                log.LogMessage("ClientAssemblies: " + string.Join(",", sharedCodeServiceParameters.ClientAssemblies));
+                log.LogMessage("SharedSourceFiles: " + string.Join(",", sharedCodeServiceParameters.SharedSourceFiles));
+
+                log.LogMessage("Language: " + clientCodeGenerationOption.Language);
+                log.LogMessage("ClientProjectPath: " + clientCodeGenerationOption.ClientProjectPath);
+                log.LogMessage("ServerProjectPath: " + clientCodeGenerationOption.ServerProjectPath);
+
+                log.LogMessage("CodeGeneratorName" + codeGeneratorName);
+                log.LogMessage("GeneratedFileName" + generatedFileName);
+
+                log.DumpMessages();
+
+
+                RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
+                if (log.HasLoggedErrors)
+                {
+                    throw log.Errors;
+                }
+                Console.WriteLine("Code generation succeeded");
+                success = true;
 
             }
             catch (Exception ex)
@@ -94,7 +115,7 @@ public class CodeGenTask
         generatedFileName);
 
         rootCommand.Invoke(args);
-        if(success)
+        if (success)
             return 0;
         else
             return -1;
@@ -102,37 +123,60 @@ public class CodeGenTask
 
     public class Logger : ILoggingService
     {
-        public bool HasLoggedErrors => false;
+        private readonly List<string> _errors = new List<string>();
+        private readonly List<string> _messages = new List<string>();
+        private readonly List<string> _exceptions = new List<string>();
+        private readonly List<string> _warnings = new List<string>();
+        public bool HasLoggedErrors => _errors.Count > 0;
+
+        public AggregateException Errors => new AggregateException(_errors.Select(e => new Exception(e)));
 
         public void LogError(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber)
         {
-            // Intentionally left empty
+            _errors.Add(message);
         }
 
         public void LogError(string message)
         {
-            // Intentionally left empty
+            _errors.Add(message);
         }
 
         public void LogException(Exception ex)
         {
-            // Intentionally left empty
+            _exceptions.Add(ex.ToString());
         }
 
         public void LogMessage(string message)
         {
-            // Intentionally left empty
+            _messages.Add(message);
         }
 
         public void LogWarning(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber)
         {
-            // Intentionally left empty
+            _warnings.Add(message);
         }
 
         public void LogWarning(string message)
         {
-            // Intentionally left empty
+            _warnings.Add($"{message}");
         }
+
+
+        public void DumpMessages()
+        {
+            using (StreamWriter writer = new StreamWriter("CodeGenLog_Messages.txt", true))
+            {
+                writer.WriteLine("-----------------------------------------------------------------------------");
+                writer.WriteLine("Date : " + DateTime.Now.ToString());
+                writer.WriteLine();
+
+                foreach (var message in _messages)
+                {
+                    writer.WriteLine($"{message}");
+                }
+            }
+        }
+
     }
 
 }

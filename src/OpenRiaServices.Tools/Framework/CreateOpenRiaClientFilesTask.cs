@@ -551,7 +551,7 @@ namespace OpenRiaServices.Tools
                 // Write out our cache of source files in other projects.
                 if (!this.ServerProjectSourceFileCache.IsFileCacheCurrent)
                 {
-                    if (SafeFolderCreate(Path.GetDirectoryName(this.SourceFileListPath()), this))
+                    if (RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(this.SourceFileListPath()), this))
                     {
                         this.ServerProjectSourceFileCache.SaveCacheToFile();
                     }
@@ -560,7 +560,7 @@ namespace OpenRiaServices.Tools
                 // Write out our cache of Open RIA Services Links
                 if (!this.LinkedServerProjectCache.IsFileCacheCurrent)
                 {
-                    if (SafeFolderCreate(Path.GetDirectoryName(this.LinkedServerProjectsPath()), this))
+                    if (RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(this.LinkedServerProjectsPath()), this))
                     {
                         this.LinkedServerProjectCache.SaveCacheToFile();
                     }
@@ -761,13 +761,13 @@ namespace OpenRiaServices.Tools
 
                 // If VS is hosting us, write to its TextBuffer, else simply write to disk
                 // If the file is empty, delete it.
-                FilesWereWritten = WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
+                FilesWereWritten = RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
 
 #else
                 if (IsNetFramework(ServerProjectPath))
                 {
                     // If target framework is NETFRAMEWORK we can run the code as is
-                    FilesWereWritten = CodeGenForNet6(
+                    FilesWereWritten = RiaClientFilesTaskHelpers.CodeGenForNet6(
                         generatedFileName, 
                         options, 
                         logger, 
@@ -805,6 +805,7 @@ namespace OpenRiaServices.Tools
 
                     var parameters = string.Join(" ", generatedFileNameParameter, clientCodeGenerationOptionPathParameter, sharedCodeServicePathParameter, codeGeneratorNameParameter);
                     var process = System.Diagnostics.Process.Start("OpenRiaServices.Tools.CodeGenTask.exe", parameters);
+                    process.WaitForExit(30000);
                     FilesWereWritten = process.ExitCode == 0;
                 }
 #endif
@@ -839,33 +840,6 @@ namespace OpenRiaServices.Tools
 
             return;
         }
-
-#if !NETFRAMEWORK
-        public static bool CodeGenForNet6(string generatedFileName, ClientCodeGenerationOptions options, ILoggingService logger, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName)
-        {
-            string generatedFileContent;
-            // Create the "dispatcher" in the 2nd AppDomain.
-            // This object will find and invoke the appropriate code generator
-            using (var dispatcher = new ClientCodeGenerationDispatcher())
-            {
-                using (var context = dispatcher.EnterContextualReflection())
-                {
-                    generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, codeGeneratorName);
-                }
-            }
-
-            // Tell the user where we are writing the generated code
-            if (!string.IsNullOrEmpty(generatedFileContent))
-            {
-                logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
-            }
-
-            // If VS is hosting us, write to its TextBuffer, else simply write to disk
-            // If the file is empty, delete it.
-            var isWritten = WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
-            return isWritten;
-        }
-#endif
 
         internal static bool IsNetFramework(string projectPath)
         {
@@ -1136,7 +1110,7 @@ namespace OpenRiaServices.Tools
                     if (!generatedFile)
                     {
                         this.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Deleting_Orphan, fileName));
-                        DeleteFileFromVS(fileName, this);
+                        RiaClientFilesTaskHelpers.DeleteFileFromVS(fileName, this);
                         this.DeleteFolderIfEmpty(Path.GetDirectoryName(fileName));
                     }
                 }
@@ -1174,9 +1148,9 @@ namespace OpenRiaServices.Tools
             string fileListFile = this.FileListPath();
             if (this.FilesWereWritten && !string.IsNullOrEmpty(fileListFile))
             {
-                if (SafeFolderCreate(Path.GetDirectoryName(fileListFile), this))
+                if (RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(fileListFile), this))
                 {
-                    SafeFileWrite(fileListFile, outputFileLines, this);
+                    RiaClientFilesTaskHelpers.SafeFileWrite(fileListFile, outputFileLines, this);
                 }
             }
         }
@@ -1203,9 +1177,9 @@ namespace OpenRiaServices.Tools
 
             if (!string.IsNullOrEmpty(fileName))
             {
-                if (SafeFolderCreate(Path.GetDirectoryName(fileName), this))
+                if (RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(fileName), this))
                 {
-                    SafeFileWrite(fileName, outputFileLines, this);
+                    RiaClientFilesTaskHelpers.SafeFileWrite(fileName, outputFileLines, this);
                 }
             }
         }
@@ -1382,7 +1356,7 @@ namespace OpenRiaServices.Tools
             string destinationFolder = Path.GetDirectoryName(destinationFilePath);
 
             // Create the destination folder as late as possible
-            if (!SafeFolderCreate(destinationFolder, this))
+            if (!RiaClientFilesTaskHelpers.SafeFolderCreate(destinationFolder, this))
             {
                 return false;
             }

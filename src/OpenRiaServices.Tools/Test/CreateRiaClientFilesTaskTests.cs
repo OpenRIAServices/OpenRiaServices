@@ -160,7 +160,7 @@ namespace OpenRiaServices.Tools.Test
 
             Assert.IsNotNull(realMessage, "Expected creation of fake folder " + fakeFolder + " to fail.");
 
-            bool success = CreateOpenRiaClientFilesTask.SafeFolderCreate(fakeFolder, task);
+            bool success = RiaClientFilesTaskHelpers.SafeFolderCreate(fakeFolder, task);
             Assert.IsFalse(success, "Expected SafeFolderCreate to report failure for " + fakeFolder);
             Assert.IsFalse(Directory.Exists(fakeFolder), "Did not expect SafeFolderCreate to really create " + fakeFolder);
 
@@ -175,7 +175,7 @@ namespace OpenRiaServices.Tools.Test
 
             try
             {
-                success = CreateOpenRiaClientFilesTask.SafeFolderCreate(realFolder, task);
+                success = RiaClientFilesTaskHelpers.SafeFolderCreate(realFolder, task);
                 Assert.IsTrue(success, "Expected SafeFolderCreate to have reported success for " + realFolder);
                 Assert.IsTrue(Directory.Exists(realFolder), "Expected SafeFolderCreate to have created " + realFolder);
             }
@@ -202,7 +202,7 @@ namespace OpenRiaServices.Tools.Test
                 string outputFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
                 Assert.IsFalse(File.Exists(outputFile));
 
-                bool result = CreateOpenRiaClientFilesTask.WriteOrDeleteFileToVS(outputFile, string.Empty, true, task);
+                bool result = RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(outputFile, string.Empty, true, task);
 
                 Assert.IsFalse(result);                     // should have reported false
                 Assert.IsFalse(File.Exists(outputFile));    // should not have created file
@@ -1210,7 +1210,7 @@ namespace OpenRiaServices.Tools.Test
             try
             {
                 // Now, use normal helper to create it if it does not exist
-                bool createdFolder = CleanOpenRiaClientFilesTask.SafeFolderCreate(fullPath, task);
+                bool createdFolder = RiaClientFilesTaskHelpers.SafeFolderCreate(fullPath, task);
                 Assert.IsTrue(createdFolder, "Failed to create folder");
                 Assert.IsTrue(Directory.Exists(fullPath), "Generated code path should have been generated");
             }
