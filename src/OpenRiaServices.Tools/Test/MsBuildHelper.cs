@@ -115,11 +115,7 @@ namespace OpenRiaServices.Tools.Test
             outputAssembly = Path.Combine(outputPath, assemblyName);
             outputAssembly = Path.GetFullPath(outputAssembly);
 
-#if NETFRAMEWORK
             string extension = outputType.Equals("Exe", StringComparison.InvariantCultureIgnoreCase) ? ".exe" : ".dll";
-#else
-            string extension = ".dll";
-#endif
             outputAssembly += extension;
             var fullPath = MakeFullPath(outputAssembly, Path.GetDirectoryName(projectPath));
             if (!File.Exists(fullPath))
