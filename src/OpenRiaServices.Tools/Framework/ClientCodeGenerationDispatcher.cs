@@ -101,8 +101,6 @@ namespace OpenRiaServices.Tools
                 }
                 var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
-                //this.CustomLoadAssembly(cecilPath, loggingService);
-                //this.CustomLoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 
                 // Note: we might want to fallback to also searching the paths of all references assemblies on any error
                 // Meybe can be removed if we create a AssemblyDependencyResolver for the output assembly of the server projekt ?
@@ -500,7 +498,7 @@ namespace OpenRiaServices.Tools
                 // An exception is possible in situations where the user has included
                 // reference assemblies that cause TypeLoadFailures.  If we encounter
                 // this situation, fallback to using only our current assembly as the
-                // catalog.   This allows MEF to still work for types in this assembly. 	mscorlib.dll!System.Reflection.Assembly.GetTypes()	Unknown
+                // catalog.   This allows MEF to still work for types in this assembly.
 
                 logger.LogWarning(string.Format(CultureInfo.CurrentCulture,
                                 Resource.Failed_To_Create_Composition_Container, ex.Message));

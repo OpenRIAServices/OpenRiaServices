@@ -118,7 +118,6 @@ namespace OpenRiaServices.Tools.Test
 #if NETFRAMEWORK
             string extension = outputType.Equals("Exe", StringComparison.InvariantCultureIgnoreCase) ? ".exe" : ".dll";
 #else
-            // TODO: change here or not ?
             string extension = ".dll";
 #endif
             outputAssembly += extension;
