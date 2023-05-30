@@ -972,6 +972,10 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+        [TestCategory("NET6_ERRORS")]
+#endif
         [Description("CreateOpenRiaClientFilesTask purges orphan files and folders on subsequent builds")]
         [TestMethod]
         public void CreateRiaClientFiles_Deletes_Orphan_Files()
