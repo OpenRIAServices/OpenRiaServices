@@ -5,14 +5,8 @@
     <DefineConstants>$(DefineConstants);SILVERLIGHT</DefineConstants>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.Windows" />
-    <Reference Include="mscorlib" />
-    <Reference Include="system" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ServerClassLib\CodelessType.linked.cs">
