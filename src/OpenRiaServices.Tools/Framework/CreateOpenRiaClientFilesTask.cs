@@ -3,6 +3,7 @@ using System.CodeDom.Compiler;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data.Common;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -804,7 +805,30 @@ namespace OpenRiaServices.Tools
                     var codeGeneratorNameParameter = ClientCodeGenerationOptions.SetupParameter("codeGeneratorName", this.CodeGeneratorName);
 
                     var parameters = string.Join(" ", generatedFileNameParameter, clientCodeGenerationOptionPathParameter, sharedCodeServicePathParameter, codeGeneratorNameParameter);
-                    var process = System.Diagnostics.Process.Start("OpenRiaServices.Tools.CodeGenTask.exe", parameters);
+
+                    var path = Path.Combine(Path.GetDirectoryName(typeof(CreateOpenRiaClientFilesTask).Assembly.Location),
+                        @"../net6.0/OpenRiaServices.Tools.CodeGenTask.exe");
+
+                    if (!File.Exists(path))
+                        throw new FileNotFoundException(path);
+
+                    var startInfo = new ProcessStartInfo
+                    {
+                        FileName = path,
+                        Arguments = parameters,
+                        RedirectStandardOutput = true,
+                        UseShellExecute = false,
+                        CreateNoWindow = true
+                    };
+
+                    var process = Process.Start(startInfo);
+
+                    string str = string.Empty;
+                    while ((str = process.StandardOutput.ReadLine()) != null)
+                    {
+                        //Todo: skicka till loggen istället
+                        Debug.WriteLine(str);
+                    }
                     process.WaitForExit(30000);
                     FilesWereWritten = process.ExitCode == 0;
                 }

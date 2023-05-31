@@ -64,7 +64,9 @@ public class CodeGenTask
                     sharedCodeServiceParameters = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
                 }
                 var log = new Logger();
-                
+
+                log.LogMessage(Environment.CommandLine);
+
                 log.LogMessage("SymbolSearchPaths: " + string.Join(",", sharedCodeServiceParameters.SymbolSearchPaths));
                 log.LogMessage("ServerAssemblies: " + string.Join(",", sharedCodeServiceParameters.ServerAssemblies));
                 log.LogMessage("ClientAssemblies: " + string.Join(",", sharedCodeServiceParameters.ClientAssemblies));
@@ -79,14 +81,44 @@ public class CodeGenTask
 
                 log.DumpMessages();
 
-
-                RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
+                try
+                {
+                    RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
+                }
+                finally
+                {
+                    log.DumpMessages();
+                }
                 if (log.HasLoggedErrors)
                 {
                     throw log.Errors;
                 }
                 Console.WriteLine("Code generation succeeded");
                 success = true;
+
+            }
+            catch (AggregateException aggregatedException)
+            {
+                using (StreamWriter writer = new StreamWriter("CodeGenLog.txt", true))
+                {
+                    writer.WriteLine("-----------------------------------------------------------------------------");
+                    writer.WriteLine("Date : " + DateTime.Now.ToString());
+                    writer.WriteLine();
+ 
+                    foreach (var innerException in aggregatedException.InnerExceptions)
+                    {
+                        var exceptionToLog = innerException;
+                        while (exceptionToLog != null)
+                        {
+                            writer.WriteLine(exceptionToLog.GetType().FullName);
+                            writer.WriteLine("Message : " + exceptionToLog.Message);
+                            writer.WriteLine("StackTrace : " + exceptionToLog.StackTrace);
+
+                            exceptionToLog = exceptionToLog.InnerException;
+                        }
+                    }
+                }
+
 
             }
             catch (Exception ex)
@@ -106,6 +138,8 @@ public class CodeGenTask
                         ex = ex.InnerException;
                     }
                 }
+
+
             }
         },
         clientCodeGenerationOptionPath,

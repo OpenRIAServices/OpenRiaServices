@@ -3,13 +3,17 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net6.0</TargetFrameworks>
+
+    <OutputPath Condition="'$(IsFrameworkProject)' == 'true'">$(MSBuildThisFileDirectory)bin\$(Configuration)</OutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
   </PropertyGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
+    <PackageReference Include="Microsoft.Build" Version="17.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.0.0" PrivateAssets="All"/>
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy $(OutDir)OpenRiaServices.Tools.CodeGenTask.* $(SolutionDir)OpenRiaServices.Tools\Test\bin\Debug\net6.0\OpenRiaServices.Tools.CodeGenTask.* /Y" />
-  </Target>
 </Project>
