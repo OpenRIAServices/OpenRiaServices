@@ -8,6 +8,7 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
@@ -137,7 +138,7 @@ namespace OpenRiaServices.Tools
         /// Gets the string form of a boolean that indicates
         /// whether the shared files should be copied (instead of linked).
         /// </summary>
-        public string SharedFilesMode { set => LinkSharedFilesInsteadOfCopy = !string.Equals(value,  OpenRiaSharedFilesMode.Copy.ToString(), StringComparison.OrdinalIgnoreCase); }
+        public string SharedFilesMode { set => LinkSharedFilesInsteadOfCopy = !string.Equals(value, OpenRiaSharedFilesMode.Copy.ToString(), StringComparison.OrdinalIgnoreCase); }
 
         private bool LinkSharedFilesInsteadOfCopy { get; set; } = true;
 
@@ -672,7 +673,7 @@ namespace OpenRiaServices.Tools
             // Therefore, its absence always triggers a code-gen pass, even though this has the
             // negative perf impact of causing a full code gen pass everytime until errors have been
             // resolved.
-            
+
             if (!needToGenerate)
             {
                 FileInfo fileInfo = new FileInfo(generatedFileName);
@@ -695,14 +696,14 @@ namespace OpenRiaServices.Tools
 
             // If we need to generate the file, do that now
             if (needToGenerate)
-            {                
+            {
                 // Warn the user if the server assembly has no PDB
                 this.WarnIfNoPdb(assemblyFile);
 
                 string generatedFileContent = string.Empty;
 
                 // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
-                
+
 
                 string sourceDir = this.ServerProjectDirectory;
                 string targetDir = null;
@@ -724,14 +725,15 @@ namespace OpenRiaServices.Tools
                     UseFullTypeNames = this.UseFullTypeNamesAsBool,
                     ClientProjectTargetPlatform = this.ClientTargetPlatform,
                 };
-                
-                // The other AppDomain gets a logger that will log back to this AppDomain
-                CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
 
                 // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
                 SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
 
+                if (IsNetFramework(ServerProjectPath))
+                {
 #if NETFRAMEWORK
+                // The other AppDomain gets a logger that will log back to this AppDomain
+                CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
 
                 // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
                 // This can occur when the build environment is configured incorrectly
@@ -765,16 +767,16 @@ namespace OpenRiaServices.Tools
                 FilesWereWritten = RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
 
 #else
-                if (IsNetFramework(ServerProjectPath))
-                {
+                    // TODO: Verify below statement, I exepct that it might not work (and does not need to work)
                     // If target framework is NETFRAMEWORK we can run the code as is
                     FilesWereWritten = RiaClientFilesTaskHelpers.CodeGenForNet6(
-                        generatedFileName, 
-                        options, 
-                        logger, 
-                        sharedCodeServiceParameters, 
-                        this.CodeGeneratorName
-                        );
+                    generatedFileName,
+                    options,
+                    this,
+                    sharedCodeServiceParameters,
+                    this.CodeGeneratorName
+                    );
+#endif
                 }
                 else
                 {
@@ -832,7 +834,7 @@ namespace OpenRiaServices.Tools
                     process.WaitForExit(30000);
                     FilesWereWritten = process.ExitCode == 0;
                 }
-#endif
+
 
             }
             else
@@ -865,12 +867,13 @@ namespace OpenRiaServices.Tools
             return;
         }
 
-        internal static bool IsNetFramework(string projectPath)
+        // TODO PERF: Consider changing Task parameter to ITaskItem so we can get TargetFramework metadata from reference
+        internal bool IsNetFramework(string projectPath)
         {
             using (var projectCollection = new ProjectCollection())
             {
                 var project = projectCollection.LoadProject(projectPath, projectCollection.DefaultToolsVersion);
-                
+
                 var targetFramework = project.GetProperty("TargetFramework")?.EvaluatedValue;
                 if (targetFramework != null)
                     return IsNetFrameworkTargetFramework(targetFramework);
@@ -878,14 +881,42 @@ namespace OpenRiaServices.Tools
                 var targetFrameworks = project.GetProperty("TargetFrameworks")?.EvaluatedValue;
                 if (targetFrameworks != null)
                 {
+                    // TODO: Consider choosing first framework ?
                     if (!targetFrameworks.Contains(';'))
                     {
                         return IsNetFrameworkTargetFramework(targetFrameworks);
                     }
                     else
                     {
-                        var version = (TargetFrameworkAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Runtime.Versioning.TargetFrameworkAttribute), false).SingleOrDefault();
-                        return version.FrameworkName.StartsWith(".NETFramework");
+                        if (ServerAssemblies.FirstOrDefault() is ITaskItem serverAssembly)
+                        {
+                            var targetIdentifier = serverAssembly.GetMetadata("TargetFrameworkIdentifier");
+                            if (!string.IsNullOrEmpty(targetIdentifier))
+                            {
+                                bool isFramework = targetIdentifier == ".NETFramework";
+                                Log.LogMessage("Is server project .NETFramework based on TargetFrameworkIdentifier: {0}", isFramework.ToString());
+
+                                return isFramework;
+                            }
+
+                            // TODO: Look at output assembly instead of what framework the code generation uses
+                            // If ServerProject this
+                            // An other solution would also be to look at the assemblies referenced
+                            // and se if there are any paths which contains '.NETFramework' or '\net4*\'
+                            using var server = Mono.Cecil.AssemblyDefinition.ReadAssembly(serverAssembly.ItemSpec);
+
+                            var name = typeof(TargetFrameworkAttribute).FullName;
+                            var targetFrameworkAttribute =
+                                server.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == name);
+
+                            if (targetFrameworkAttribute != null
+                                && targetFrameworkAttribute.HasConstructorArguments)
+                            {
+                                bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework");
+                                Log.LogMessage("Is server project .NETFramework based on TargetFrameworkAttribute: {0}", isFramework.ToString());
+                                return isFramework;
+                            }
+                        }
                     }
                 }
 
