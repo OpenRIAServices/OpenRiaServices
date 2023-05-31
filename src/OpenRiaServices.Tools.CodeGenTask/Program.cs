@@ -132,31 +132,37 @@ public class CodeGenTask
 
         public void LogError(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber)
         {
+            Console.WriteLine($"ERROR: {message}, errorCode: {errorCode} file: {file}:{lineNumber}-{endColumnNumber}");
             _errors.Add(message);
         }
 
         public void LogError(string message)
         {
+            Console.WriteLine($"ERROR: {message}");
             _errors.Add(message);
         }
 
         public void LogException(Exception ex)
         {
+            Console.WriteLine($"Exception: {ex.Message}\n\t {ex.ToString()}");
             _exceptions.Add(ex.ToString());
         }
 
         public void LogMessage(string message)
         {
+            Console.WriteLine($"Info: {message}");
             _messages.Add(message);
         }
 
         public void LogWarning(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber)
         {
+            Console.WriteLine($"WARN: {message}, errorCode: {errorCode} file: {file}:{lineNumber}-{endColumnNumber}");
             _warnings.Add(message);
         }
 
         public void LogWarning(string message)
         {
+            Console.WriteLine($"WARN: {message}");
             _warnings.Add($"{message}");
         }
 
