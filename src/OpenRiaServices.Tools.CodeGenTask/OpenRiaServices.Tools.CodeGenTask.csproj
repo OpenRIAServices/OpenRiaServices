@@ -10,6 +10,6 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy $(OutDir)OpenRiaServices.Tools.CodeGenTask.* $(SolutionDir)OpenRiaServices.Tools\Test\bin\Debug\net6.0\OpenRiaServices.Tools.CodeGenTask.* /Y" />
+    <Exec Command="xcopy $(OutDir)OpenRiaServices.Tools.CodeGenTask.* $(SolutionDir)OpenRiaServices.Tools\Test\bin\Debug\net6.0\OpenRiaServices.Tools.CodeGenTask.* /Y" />
   </Target>
 </Project>
