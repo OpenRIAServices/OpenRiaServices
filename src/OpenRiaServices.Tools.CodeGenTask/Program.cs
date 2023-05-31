@@ -10,6 +10,12 @@ public class CodeGenTask
 {
     static int Main(string[] args) // Take in params to setup the build here
     {
+        // TODO: Remove dependency on MSBuild and then remove any PackageReferences to MSBuild and MSBuildLocator
+        // * This will require splitting "OpenRiaServices.Tools" into 2 separate projects, one with MSbuild tasks and one without (just code generation)
+        // For now register the most recent version of MSBuild
+        Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(Microsoft.Build.Locator.MSBuildLocator.QueryVisualStudioInstances().OrderByDescending(
+           instance => instance.Version).First());
+
         var clientCodeGenerationOptionPath = new Option<string>(name: "--clientCodeGenerationOptionPath")
         {
             IsRequired = true

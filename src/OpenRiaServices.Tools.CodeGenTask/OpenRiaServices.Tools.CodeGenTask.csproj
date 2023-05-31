@@ -10,9 +10,7 @@
   
   <ItemGroup>
     <ProjectReference Include="..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
-    <PackageReference Include="Microsoft.Build" Version="17.0.0" PrivateAssets="All"/>
-    <PackageReference Include="Microsoft.Build.Framework" Version="17.0.0" PrivateAssets="All"/>
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.5.5" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
   </ItemGroup>
