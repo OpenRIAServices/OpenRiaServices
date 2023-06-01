@@ -117,6 +117,8 @@ namespace OpenRiaServices.Tools.Test
         /// <returns></returns>
         public static List<string> ServerClassLibReferences(string serverProjectPath, string[] hardCodedAsm = null)
         {
+            //TODO: Change code to get output assemblies instead of references
+
             // We need to map any server side assembly references back to our deployment directory
             // if we have the same assembly there, otherwise the assembly load from calls end up
             // with multiple assemblies with the same types

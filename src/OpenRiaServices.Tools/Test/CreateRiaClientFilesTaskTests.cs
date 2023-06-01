@@ -301,6 +301,8 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsTrue(task);
             Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }
+#endif
+
 
         private static string[] GetAssemblies(string projectPath, string path)
         {
@@ -313,18 +315,20 @@ namespace OpenRiaServices.Tools.Test
         [Ignore]
         public void CreateRIA60_TS()
         {
-            var clientProjectPath = "C:\\Dev2\\production\\Finance\\Client\\CRM.Finance.Client.Model\\CRM.Finance.Client.Model.csproj";
-            var serverProjectPath = "C:\\Dev2\\production\\Finance\\Web\\CRM.Finance.Web.Hosting\\CRM.Finance.Web.Hosting.csproj";
-            //var coreProjectPath = "C:\\Dev2\\production\\Finance\\Web\\CRM.Finance.Web.Core\\CRM.Finance.Web.Core.csproj";
-            var serverAsm = GetAssemblies(serverProjectPath, "bin\\Debug\\net6.0").ToList();
-            string[] clientAsm = GetAssemblies(clientProjectPath, "bin\\Debug\\net6.0-windows");
-            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, hardCodedServerAsm: serverAsm.ToArray());
+            var clientProjectPath = "C:\\dev\\net\\production\\Finance\\Client\\CRM.Finance.Client.Model\\CRM.Finance.Client.Model.csproj";
+            var serverProjectPath = "C:\\dev\\net\\production\\Finance\\Web\\CRM.Finance.Web.Hosting\\CRM.Finance.Web.Hosting.csproj";
+
+            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, true, null);
+
+            var serverAsm = GetAssemblies(serverProjectPath, "bin\\Debug\\net7.0").ToList();
+            //string[] clientAsm = GetAssemblies(clientProjectPath, "bin\\Debug\\net7.0-windows");
+            code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, true, serverAsm.ToArray());
+
 
             var task = code.Execute();
             Assert.IsTrue(task);
             Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }
-#endif
 
 #if !NETFRAMEWORK
         [Ignore("Do no work in NET6")]

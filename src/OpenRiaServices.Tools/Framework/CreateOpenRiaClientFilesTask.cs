@@ -1455,6 +1455,12 @@ namespace OpenRiaServices.Tools
                 {
                     assemblyName = Path.GetFullPath(Path.Combine(this.ClientProjectDirectory, assemblyName));
                 }
+
+                // If server project target AspNetCore then it might be an exe (the native dotnet host) which we cannot do reflection on
+                // Change to .dll so that we target the actual managed implementation
+                if (assemblyName.EndsWith(".exe"))
+                    assemblyName = Path.ChangeExtension(assemblyName, ".dll");
+
                 assemblies.Add(assemblyName);
             }
             return assemblies;
