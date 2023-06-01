@@ -18,4 +18,9 @@
     <PackageReference Include="Microsoft.Build.Locator" Version="1.5.5" />
   </ItemGroup>
 
+  <ItemGroup>
+    <!-- Enable loading of aspnetcore assemblies -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
 </Project>
