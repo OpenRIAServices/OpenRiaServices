@@ -2,7 +2,7 @@
   "profiles": {
     "OpenRiaServices.Tools.CodeGenTask": {
       "commandName": "Project",
-      "commandLineArgs": "--generatedFileName \"C:\\Users\\crmhli\\AppData\\Local\\Temp\\9eb4e7c0-4f4e-4eaa-b4fc-2d545057050b\\Generated_Code\\ServerClassLib.g.cs\" --clientCodeGenerationOptionPath \"C:\\Users\\crmhli\\AppData\\Local\\Temp\\tmpCA67.tmp\" --sharedCodeServiceParameterPath \"C:\\Users\\crmhli\\AppData\\Local\\Temp\\tmpCA56.tmp\" --codeGeneratorName \"\""
+      "commandLineArgs": "--generatedFileName \"C:\\Users\\crmhli\\AppData\\Local\\Temp\\10974f3e-1135-4569-9615-452427ae079d\\Generated_Code\\ServerClassLib.g.cs\" --clientCodeGenerationOptionPath \"C:\\Users\\crmhli\\AppData\\Local\\Temp\\tmp2E2C.tmp\" --sharedCodeServiceParameterPath \"C:\\Users\\crmhli\\AppData\\Local\\Temp\\tmp2E1C.tmp\" --codeGeneratorName \"\""
     }
   }
 }
