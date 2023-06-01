@@ -10,6 +10,9 @@ public class CodeGenTask
 {
     static int Main(string[] args) // Take in params to setup the build here
     {
+        Console.WriteLine($"OpenRiaServices CodeGen running on {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
+
+
         // TODO: Remove dependency on MSBuild and then remove any PackageReferences to MSBuild and MSBuildLocator
         // * This will require splitting "OpenRiaServices.Tools" into 2 separate projects, one with MSbuild tasks and one without (just code generation)
         // For now register the most recent version of MSBuild

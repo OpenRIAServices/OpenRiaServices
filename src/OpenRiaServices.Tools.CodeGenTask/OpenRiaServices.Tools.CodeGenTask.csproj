@@ -3,6 +3,11 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net6.0</TargetFrameworks>
+    
+    <!-- Does this make sense ?? https://learn.microsoft.com/en-us/dotnet/core/versions/selection#control-roll-forward-behavior 
+    -->
+    <RollForward>LatestMajor</RollForward>
+    
 
     <OutputPath Condition="'$(IsFrameworkProject)' == 'true'">$(MSBuildThisFileDirectory)bin\$(Configuration)</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
@@ -12,6 +17,5 @@
     <ProjectReference Include="..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.5.5" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
-  </ItemGroup>
+
 </Project>
