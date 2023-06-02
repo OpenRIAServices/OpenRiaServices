@@ -318,12 +318,11 @@ namespace OpenRiaServices.Tools.Test
             var clientProjectPath = "C:\\dev\\net\\production\\Finance\\Client\\CRM.Finance.Client.Model\\CRM.Finance.Client.Model.csproj";
             var serverProjectPath = "C:\\dev\\net\\production\\Finance\\Web\\CRM.Finance.Web.Hosting\\CRM.Finance.Web.Hosting.csproj";
 
-            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, true, null);
-
             var serverAsm = GetAssemblies(serverProjectPath, "bin\\Debug\\net7.0").ToList();
             //string[] clientAsm = GetAssemblies(clientProjectPath, "bin\\Debug\\net7.0-windows");
-            code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, serverAsm.ToArray());
-
+            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, serverAsm.ToArray());
+            code.CodeGeneratorName = "CRM.Finance.Web.ClientGeneration.RiaClientCodeGenerator, CRM.Finance.Web.Hosting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
+            Environment.CurrentDirectory = Path.GetDirectoryName(code.ClientProjectPath);
 
             var task = code.Execute();
             Assert.IsTrue(task);

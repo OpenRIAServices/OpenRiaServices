@@ -12,6 +12,8 @@ public class CodeGenTask
     {
         Console.WriteLine($"OpenRiaServices CodeGen running on {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
 
+        // TODO: Coonsider setting "working diretory" (when launching exe? or here) to match old behaviour 
+        // TODO: Find app.config/web.config and setup A
 
         // TODO: Remove dependency on MSBuild and then remove any PackageReferences to MSBuild and MSBuildLocator
         // * This will require splitting "OpenRiaServices.Tools" into 2 separate projects, one with MSbuild tasks and one without (just code generation)
