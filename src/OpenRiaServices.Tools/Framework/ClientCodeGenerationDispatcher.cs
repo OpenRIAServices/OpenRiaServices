@@ -11,6 +11,18 @@ using OpenRiaServices.Server;
 using System.Text;
 using OpenRiaServices.Tools.SharedTypes;
 using System.IO;
+#if !NETFRAMEWORK
+/**
+ * TODO: Move all AssemblyLoadContext to a separate class (and file) instead of having it in  ClientCodeGenerationDispatcher
+Below might be good to read about how it works
+ * https://jeremybytes.blogspot.com/2020/01/dynamically-loading-types-in-net-core.html
+ * https://tsuyoshiushio.medium.com/understand-advanced-assemblyloadcontext-with-c-16a9d0cfeae3
+ * https://github.com/dotnet/runtime/issues/6880
+ * 
+*/
+
+using System.Runtime.Loader;
+#endif
 
 namespace OpenRiaServices.Tools
 {
@@ -24,8 +36,6 @@ namespace OpenRiaServices.Tools
     internal class ClientCodeGenerationDispatcher :
 #if NETFRAMEWORK
         MarshalByRefObject, System.Web.Hosting.IRegisteredObject,
-#else
-         System.Runtime.Loader.AssemblyLoadContext,
 #endif
         IDisposable
     {
@@ -44,16 +54,14 @@ namespace OpenRiaServices.Tools
         }
 #else
         public const string AssemblyLoadContextName = "ClientCodeGenContext";
-        private readonly System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
+//        private System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
         /// </summary>
         public ClientCodeGenerationDispatcher()
-            : base(AssemblyLoadContextName)
+            //: base(AssemblyLoadContextName)
         {
-            var pathToOpenRiaServerDll = typeof(DomainService).Assembly.Location;
-            _assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(pathToOpenRiaServerDll);
         }
 #endif
 
@@ -90,32 +98,44 @@ namespace OpenRiaServices.Tools
                 AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
                 AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 #else
-                string ReplaceLastOccurrence(string source, string find, string replace)
-                {
-                    int place = source.LastIndexOf(find);
+                //_assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(parameters.ServerAssemblies.First());
 
-                    if (place == -1)
-                        return source;
-
-                    return source.Remove(place, find.Length).Insert(place, replace);
-                }
-                var cecilPath = ReplaceLastOccurrence(location, toolingAssembly.GetName().Name, "Mono.Cecil");
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
+                // Try to load mono.cecil from same folder as tools
+                // This prevents problem if server project contains another version of mono Cecil
+                var cecilPath = location.Replace(toolingAssembly.GetName().Name+".dll", "Mono.Cecil.dll");
+                AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
+                AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 
                 // Note: we might want to fallback to also searching the paths of all references assemblies on any error
                 // Meybe can be removed if we create a AssemblyDependencyResolver for the output assembly of the server projekt ?
-                base.Resolving += (System.Runtime.Loader.AssemblyLoadContext arg1, AssemblyName arg2) => 
+
+                var assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(parameters.ServerAssemblies.First());
+
+                System.Runtime.Loader.AssemblyLoadContext.Default.Resolving += (System.Runtime.Loader.AssemblyLoadContext loadContext, AssemblyName assemblyName) => 
                 {
-                    string dllName = arg2.Name + ".dll";
+                    if (assemblyName.Name.EndsWith(".resources"))
+                        return null;
+
+                    // Resolve dependency using server projects .deps.json file first
+                    string path = assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
+                    if(path != null && loadContext.LoadFromAssemblyPath(path) is Assembly assembly)
+                    {
+                        return assembly;
+                    }
+
+                    // TODO: Remove code ?
+                    string dllName = assemblyName.Name + ".dll";
                     var match = parameters.ServerAssemblies.FirstOrDefault(x => x.EndsWith(dllName));
                     if (match != null)
                     {
-                        return arg1.LoadFromAssemblyPath(match);
+                        Debugger.Break();
+                        // Should not need this code
+                        Console.WriteLine($"!!!! Resolving path '{match}' based on ServerAssemblies works, but not from AssemblyDependencyResolver");
+                        return loadContext.LoadFromAssemblyPath(match);
                     }
-                    else
-                    {
-                        return null;
-                    }
+
+                    return null;
                 };
 #endif
 
@@ -159,12 +179,12 @@ namespace OpenRiaServices.Tools
             var (filename, serverAssemblyPath) = GetServerAssembly(parameters);
             if (serverAssemblyPath != null)
             {
-#if NETFRAMEWORK
+//#if NETFRAMEWORK
                 var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
-#else
-                var serverAssemblyName = AssemblyName.GetAssemblyName(serverAssemblyPath);
-                var serverAssembly = LoadFromAssemblyName(serverAssemblyName);
-#endif
+//#else
+//                var serverAssemblyName = AssemblyName.GetAssemblyName(serverAssemblyPath);
+//                var serverAssembly = LoadFromAssemblyName(serverAssemblyName);
+//#endif
                 if (serverAssembly != null)
                 {
                     // Since this assembly (OpenRiaServices.Tools) requires the Server assembly to be loaded
@@ -320,7 +340,8 @@ namespace OpenRiaServices.Tools
             // such as the default CodeDom generator.
             if (!string.IsNullOrEmpty(codeGeneratorName) && codeGeneratorName.Contains(','))
             {
-                Type codeGeneratorType = Type.GetType(codeGeneratorName, /*throwOnError*/ false);
+                Type codeGeneratorType = Type.GetType(codeGeneratorName, /*throwOnError*/
+false);
                 if (codeGeneratorType != null)
                 {
                     if (!typeof(IDomainServiceClientCodeGenerator).IsAssignableFrom(codeGeneratorType))
@@ -522,11 +543,11 @@ namespace OpenRiaServices.Tools
             {
                 foreach (string assemblyPath in compositionAssemblyPaths)
                 {
-#if NETFRAMEWORK
+//#if NETFRAMEWORK
                     Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyPath, logger);
-#else
-                    Assembly assembly = CustomLoadAssembly(assemblyPath, logger);
-#endif
+//#else
+//                    Assembly assembly = CustomLoadAssembly(assemblyPath, logger);
+//#endif
                     if (assembly != null)
                     {
                         // Don't put System assemblies into container
@@ -549,6 +570,7 @@ namespace OpenRiaServices.Tools
         {
         }
 #else
+        /*
          public Assembly CustomLoadAssembly(string assemblyPath, ILogger logger)
         {
             Assembly assembly = null;
@@ -587,14 +609,29 @@ namespace OpenRiaServices.Tools
         protected override Assembly Load(AssemblyName assemblyName)
         {
             string assemblyPath = _assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
+
+
             if (assemblyPath != null
                 // SEE: https://github.com/dotnet/core/issues/2547
                 && assemblyName.FullName != typeof(DomainService).Assembly.FullName)
             {
-                return LoadFromAssemblyPath(assemblyPath);
+                try
+                {
+                    return LoadFromAssemblyPath(assemblyPath);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"ERR: LoadFromAssemblyPath failed, trying from system {ex}");
+                    Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
+                    Console.WriteLine($"info: loaded {assemblyName.Name} from AssemblyLoadContext.Default ? {assembly != null}");
+                    return assembly;
+                }
             }
 
-            return null;
+            // TODO: Look in runtime directory (maybe based on framework references?)
+            var systemAssembly = AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
+
+            return systemAssembly;
         }
 
         protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
@@ -608,6 +645,7 @@ namespace OpenRiaServices.Tools
 
             return IntPtr.Zero;
         }
+        */
 #endif
 
         #region IDisposable members

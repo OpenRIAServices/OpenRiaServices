@@ -13,10 +13,11 @@ internal static class RiaClientFilesTaskHelpers
         // This object will find and invoke the appropriate code generator
         using (var dispatcher = new ClientCodeGenerationDispatcher())
         {
-            using (var context = dispatcher.EnterContextualReflection())
-            {
+            // TODO:? Use assmebly load context if running within task
+            //using (var context = dispatcher.EnterContextualReflection())
+            //{
                 generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, codeGeneratorName);
-            }
+            //}
         }
 
         // Tell the user where we are writing the generated code

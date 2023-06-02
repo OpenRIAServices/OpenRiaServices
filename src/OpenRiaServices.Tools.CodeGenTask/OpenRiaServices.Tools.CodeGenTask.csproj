@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <OutputType>Exe</OutputType>
-    <TargetFrameworks>net6.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
     
     <!-- Does this make sense ?? https://learn.microsoft.com/en-us/dotnet/core/versions/selection#control-roll-forward-behavior 
     -->

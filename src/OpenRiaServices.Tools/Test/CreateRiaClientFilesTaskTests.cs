@@ -322,7 +322,7 @@ namespace OpenRiaServices.Tools.Test
 
             var serverAsm = GetAssemblies(serverProjectPath, "bin\\Debug\\net7.0").ToList();
             //string[] clientAsm = GetAssemblies(clientProjectPath, "bin\\Debug\\net7.0-windows");
-            code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, true, serverAsm.ToArray());
+            code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, serverAsm.ToArray());
 
 
             var task = code.Execute();

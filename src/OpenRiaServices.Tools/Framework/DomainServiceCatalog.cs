@@ -265,11 +265,11 @@ namespace OpenRiaServices.Tools
             foreach (string assemblyName in this._assembliesToLoad)
             {
                 Assembly assembly = null;
-#if NETFRAMEWORK
+//#if NETFRAMEWORK
                 assembly = AssemblyUtilities.LoadAssembly(assemblyName, _logger);
-#else
-                assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName, _logger);
-#endif
+//#else
+//                assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName, _logger);
+//#endif
                 if (assembly != null)
                 {
                     // The bool value indicates whether this assembly should be searched for a DomainService

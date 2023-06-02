@@ -60,7 +60,7 @@ public class CodeGenTask
         {
             try
             {
-
+#pragma warning disable SYSLIB0011
                 using (Stream stream = File.Open(clientCodeGenerationOptionPath, FileMode.Open))
                 {
                     var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();

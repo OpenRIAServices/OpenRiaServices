@@ -768,7 +768,7 @@ namespace OpenRiaServices.Tools
 
 #else
                     // TODO: Verify below statement, I exepct that it might not work (and does not need to work)
-                    // If target framework is NETFRAMEWORK we can run the code as is
+                    // Probably we need a "hosting process" for net framework in this case
                     FilesWereWritten = RiaClientFilesTaskHelpers.CodeGenForNet6(
                     generatedFileName,
                     options,
