@@ -3,6 +3,7 @@
     "OpenRiaServices.Tools.CodeGenTask": {
       "commandName": "Project",
       "commandLineArgs": "--generatedFileName \"C:\\Users\\crmhli\\AppData\\Local\\Temp\\10974f3e-1135-4569-9615-452427ae079d\\Generated_Code\\ServerClassLib.g.cs\" --clientCodeGenerationOptionPath \"C:\\Users\\crmhli\\AppData\\Local\\Temp\\tmp2E2C.tmp\" --sharedCodeServiceParameterPath \"C:\\Users\\crmhli\\AppData\\Local\\Temp\\tmp2E1C.tmp\" --codeGeneratorName \"\""
+      "workingDirectory": "C:\\dev\\net\\production\\Finance\\Client\\CRM.Finance.Client.Model"
     }
   }
 }

@@ -13,7 +13,6 @@ public class CodeGenTask
         Console.WriteLine($"OpenRiaServices CodeGen running on {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
 
         // TODO: Coonsider setting "working diretory" (when launching exe? or here) to match old behaviour 
-        // TODO: Find app.config/web.config and setup A
 
         // TODO: Remove dependency on MSBuild and then remove any PackageReferences to MSBuild and MSBuildLocator
         // * This will require splitting "OpenRiaServices.Tools" into 2 separate projects, one with MSbuild tasks and one without (just code generation)
@@ -94,6 +93,8 @@ public class CodeGenTask
 
                 try
                 {
+                    SetupAppConfig(clientCodeGenerationOption);
+
                     RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
                 }
                 finally
@@ -163,6 +164,26 @@ public class CodeGenTask
             return 0;
         else
             return -1;
+    }
+
+    // TODO: Find app.config/web.config https://stackoverflow.com/questions/4738/using-configurationmanager-to-load-config-from-an-arbitrary-location/14246260#14246260
+    // Ensure this code works (EF6 DbDomainContext (or ex EfCore) using ConfigurationManager API to get connection string should work)
+
+    // Note: This just looks for "app.config" in the root,
+    // we might want to be smarter when searching for them.
+    // Note: Prefer web.config if running on NETFRAMEWORK
+    // Note we probably want to change this to a recursive search
+    // (using glob pattern to ignore bin/obj folders)
+    private static void SetupAppConfig(ClientCodeGenerationOptions clientCodeGenerationOption)
+    {
+        var serverProjectPath = Path.GetDirectoryName(clientCodeGenerationOption.ServerProjectPath);
+
+        var configFiles = Directory.GetFiles(serverProjectPath, "*.config");
+        var configFile = configFiles.FirstOrDefault(f => f.EndsWith("app.config", StringComparison.InvariantCultureIgnoreCase));
+        if (configFile != null)
+        {
+            AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", configFile);
+        }
     }
 
     public class Logger : ILoggingService

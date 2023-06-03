@@ -312,7 +312,7 @@ namespace OpenRiaServices.Tools.Test
         }
 
         [TestMethod]
-        [Ignore]
+        [Ignore("TODO: Remove - only when developing PoC")]
         public void CreateRIA60_TS()
         {
             var clientProjectPath = "C:\\dev\\net\\production\\Finance\\Client\\CRM.Finance.Client.Model\\CRM.Finance.Client.Model.csproj";
@@ -329,19 +329,11 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CreateRiaClientFiles_Validate_Generated_Files_Copy()
             => CreateRiaClientFiles_Validate_Generated_Files(OpenRiaSharedFilesMode.Copy);
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
         public void CreateRiaClientFiles_Validate_Generated_Files_Link()
@@ -626,20 +618,11 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask does not regen files on second code-gen (OpenRiaSharedFilesMode.Copy)")]
         [TestMethod]
         public void CreateRiaClientFiles_Second_CodeGen_Does_Nothing_Copy()
             => CreateRiaClientFiles_Second_CodeGen_Does_Nothing(OpenRiaSharedFilesMode.Copy);
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask does not regen files on second code-gen (OpenRiaSharedFilesMode.Link)")]
         [TestMethod]
         public void CreateRiaClientFiles_Second_CodeGen_Does_Nothing_Link()
@@ -746,19 +729,11 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask generates breadcrumb files with relative paths, and does nothing on second build")]
         [TestMethod]
         public void CreateRiaClientFiles_CopyClientProject_Copy()
             => CreateRiaClientFiles_CopyClientProject(OpenRiaSharedFilesMode.Copy);
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask generates breadcrumb files with relative paths, and does nothing on second build")]
         [TestMethod]
         public void CreateRiaClientFiles_CopyClientProject_Link()
@@ -877,19 +852,11 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask regenerates code if list of references changes")]
         [TestMethod]
         public void CreateRiaClientFiles_Missing_ReferenceList_Regens_Copy()
             => CreateRiaClientFiles_Missing_ReferenceList_Regens(OpenRiaSharedFilesMode.Copy);
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask regenerates code if list of references changes")]
         [TestMethod]
         public void CreateRiaClientFiles_Missing_ReferenceList_Regens_Link()
@@ -974,10 +941,6 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask purges orphan files and folders on subsequent builds")]
         [TestMethod]
         public void CreateRiaClientFiles_Deletes_Orphan_Files()
