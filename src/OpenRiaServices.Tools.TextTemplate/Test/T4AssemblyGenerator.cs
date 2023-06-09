@@ -101,6 +101,12 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             }
         }
 
+        internal MetadataLoadContext MetadataLoadContext
+        {
+            set => _metadataLoadContext = value;
+            get => _metadataLoadContext ??= new MetadataLoadContext(new PathAssemblyResolver(this.ReferenceAssemblies));
+        }
+
         internal MockBuildEngine MockBuildEngine
         {
             get
@@ -286,9 +292,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             MemoryStream generatedAssembly = CompileSource();
             Assert.IsNotNull(generatedAssembly, "Expected compile to succeed");
 
-            var metadataLoadContext = (_metadataLoadContext ??= new MetadataLoadContext(new PathAssemblyResolver(this.ReferenceAssemblies)));
-
-            return metadataLoadContext.LoadFromStream(generatedAssembly);
+            return MetadataLoadContext.LoadFromStream(generatedAssembly);
         }
 
         private MemoryStream CompileSource()
