@@ -7,17 +7,9 @@
          a debug build of the solution
     -->
     <DefineConstants>TRACE</DefineConstants>
-    <DebugType>pdbonly</DebugType>
+    <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
   </PropertyGroup>
-  <!--<ItemGroup>
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.DataSetExtensions" />
-  </ItemGroup>-->
-  <ItemGroup>
-    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.Data.DataSetExtensions" Version="4.5.0" />
-  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ClientClassLib\TestEntity.reverse.linked.cs" Link="TestEntity.reverse.linked.cs" />
   </ItemGroup>

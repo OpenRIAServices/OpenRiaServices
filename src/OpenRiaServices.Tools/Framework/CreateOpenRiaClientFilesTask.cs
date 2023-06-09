@@ -701,10 +701,6 @@ namespace OpenRiaServices.Tools
                 this.WarnIfNoPdb(assemblyFile);
 
                 string generatedFileContent = string.Empty;
-
-                // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
-
-
                 string sourceDir = this.ServerProjectDirectory;
                 string targetDir = null;
 
@@ -743,7 +739,8 @@ namespace OpenRiaServices.Tools
                             Resource.HttpRuntimeInitializationError,
                             System.Web.Hosting.HostingEnvironment.InitializationException);
                     }
-
+                    
+                    // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
                     System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter()
                     {
                         PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,

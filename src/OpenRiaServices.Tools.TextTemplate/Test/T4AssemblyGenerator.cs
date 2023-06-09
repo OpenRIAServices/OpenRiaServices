@@ -33,7 +33,6 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
         private readonly bool _useFullTypeNames;
         private MetadataLoadContext _metadataLoadContext;
 
-
         public T4AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
             this(isCSharp, false, domainServiceTypes)
         {
@@ -45,7 +44,6 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             this._useFullTypeNames = useFullTypeNames;
             this._domainServiceTypes = domainServiceTypes;
         }
-
 
         internal bool IsCSharp
         {
@@ -103,7 +101,6 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             }
         }
 
-
         internal MockBuildEngine MockBuildEngine
         {
             get
@@ -127,7 +124,6 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                 return this._mockSharedCodeService;
             }
         }
-
 
         internal ConsoleLogger ConsoleLogger
         {
@@ -292,17 +288,8 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
 
             var metadataLoadContext = (_metadataLoadContext ??= new MetadataLoadContext(new PathAssemblyResolver(this.ReferenceAssemblies)));
 
-            try
-            {
-                return metadataLoadContext.LoadFromStream(generatedAssembly);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Encountered exception doing reflection only loads:\r\n" + ex.Message);
-                throw;
-            }
+            return metadataLoadContext.LoadFromStream(generatedAssembly);
         }
-
 
         private MemoryStream CompileSource()
         {

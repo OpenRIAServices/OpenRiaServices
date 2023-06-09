@@ -68,26 +68,13 @@ namespace OpenRiaServices.Tools.Test
 
                 if (results.ResultsByTarget.TryGetValue("ResolveAssemblyReferences", out TargetResult resolveAssemblyReferences))
                 {
-                    foreach (ITaskItem reference in resolveAssemblyReferences.Items)
+                    foreach (string assemblyPath in resolveAssemblyReferences.Items.Select(i => i.ItemSpec))
                     {
-                        string assemblyPath = reference.ItemSpec;
-
                         if (!assemblies.Contains(assemblyPath))
                             assemblies.Add(assemblyPath);
                     }
                 }
             }
-        }
-
-        private static string GetFullPath(string projectPath, ProjectItemInstance reference)
-        {
-            string otherProjectPath = reference.EvaluatedInclude;
-            if (!Path.IsPathRooted(otherProjectPath))
-            {
-                otherProjectPath = Path.Combine(Path.GetDirectoryName(projectPath), otherProjectPath);
-            }
-
-            return otherProjectPath;
         }
 
         /// <summary>
@@ -150,7 +137,7 @@ namespace OpenRiaServices.Tools.Test
                     else
                     {
                         var frameworks = targetFrameworks.Split(';');
-                        var version = (TargetFrameworkAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(System.Runtime.Versioning.TargetFrameworkAttribute), false).SingleOrDefault();
+                        var version = (TargetFrameworkAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(TargetFrameworkAttribute), false).SingleOrDefault();
                         var isNet472 = version.FrameworkName == ".NETFramework,Version=v4.7.2";
                         var framework = isNet472 ? "net472" : frameworks.First(f => f != "net472");
                         project.SetGlobalProperty("TargetFramework", framework);
@@ -334,8 +321,6 @@ namespace OpenRiaServices.Tools.Test
             public void Initialize(IEventSource eventSource)
             {
                 eventSource.ErrorRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
-                //eventSource.WarningRaised += (s, a) => this._errors.Add($"{a.File}({a.LineNumber},{a.ColumnNumber}): error {a.Code}: {a.Message}");
-                //eventSource.AnyEventRaised += (s, a) => this._errors.Add(a.Message);
             }
 
             public void Shutdown() { }

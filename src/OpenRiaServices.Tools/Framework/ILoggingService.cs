@@ -5,7 +5,7 @@
     /// with sufficient information to identify the location of the error in
     /// source code.
     /// </summary>
-    public interface ILoggingService : ILogger
+    internal interface ILoggingService : ILogger
     {
         /// <summary>
         /// Logs the given message as an error, together with information about the source location.

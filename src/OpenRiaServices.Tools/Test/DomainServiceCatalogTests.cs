@@ -21,10 +21,6 @@ namespace OpenRiaServices.Tools.Test
     [TestClass]
     public class DomainServiceCatalogTests
     {
-        public DomainServiceCatalogTests()
-        {
-        }
-
         [TestMethod]
         [Description("DomainServiceCatalog ctors work properly")]
         public void DomainServiceCatalog_Ctors()
@@ -33,24 +29,16 @@ namespace OpenRiaServices.Tools.Test
             ConsoleLogger logger = new ConsoleLogger();
 
             // Ctor taking assemblies -- null arg tests
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((IEnumerable<string>)null, logger
-#if !NETFRAMEWORK
-                , null
-#endif
-                ), "assembliesToLoad");
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(empty, null
-#if !NETFRAMEWORK
-                , null 
-#endif
-                ), "logger");
+            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((IEnumerable<string>)null, logger), "assembliesToLoad");
+            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(empty, null), "logger");
 
             // Ctor taking one type -- null arg tests
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((Type) null, logger), "domainServiceType");
+            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((Type)null, logger), "domainServiceType");
             ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(typeof(DSC_DomainServiceType), null), "logger");
 
             // Ctor taking multiple types -- null arg tests
             ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((IEnumerable<Type>)null, logger), "domainServiceTypes");
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(new Type[] {typeof(DSC_DomainServiceType)}, null), "logger");
+            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(new Type[] { typeof(DSC_DomainServiceType) }, null), "logger");
 
             // Ctor taking assemblies -- legit
             string[] realAssemblies = new string[] { this.GetType().Assembly.Location,
@@ -65,7 +53,7 @@ namespace OpenRiaServices.Tools.Test
             Assert.AreEqual(1, descriptions.Count(), "Expected exactly one domain service description");
 
             // Ctor taking multiple type -- legit
-            dsc = new DomainServiceCatalog(new Type[] {typeof(DSC_DomainServiceType)}, logger);
+            dsc = new DomainServiceCatalog(new Type[] { typeof(DSC_DomainServiceType) }, logger);
             descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions, "Did not expect null descriptions");
             Assert.AreEqual(1, descriptions.Count(), "Expected exactly one domain service description");
@@ -107,20 +95,10 @@ namespace OpenRiaServices.Tools.Test
                     }
                 }
             }
-#if NETFRAMEWORK
             DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             Assert.IsTrue(descriptions.Count >= expectedDomainServices);
-#else
-            using(var dispatcher = new ClientCodeGenerationDispatcher())
-            {
-                DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger, dispatcher);
-                ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
-                Assert.IsNotNull(descriptions);
-                Assert.IsTrue(descriptions.Count >= expectedDomainServices);
-            }
-#endif
         }
 
         [TestMethod]
@@ -129,11 +107,7 @@ namespace OpenRiaServices.Tools.Test
         {
             string assemblyFileName = @"c:\Nowhere\DontExist.dll";
             ConsoleLogger logger = new ConsoleLogger();
-            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger
-#if !NETFRAMEWORK
-            , new ClientCodeGenerationDispatcher()
-#endif
-            );
+            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             Assert.AreEqual(0, descriptions.Count);
@@ -156,14 +130,10 @@ namespace OpenRiaServices.Tools.Test
 
             ConsoleLogger logger = new ConsoleLogger();
             IEnumerable<string> assemblies = new string[] { assemblyFileName, this.GetType().Assembly.Location };
-            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger
-#if !NETFRAMEWORK
-            , new ClientCodeGenerationDispatcher()
-#endif
-            );
-            ICollection < DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
+            DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
+            ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
-            
+
             string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, String.Empty).TrimEnd();
             Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
 
@@ -179,12 +149,7 @@ namespace OpenRiaServices.Tools.Test
             File.WriteAllText(assemblyFileName, "neener neener neener");
 
             ConsoleLogger logger = new ConsoleLogger();
-#if NETFRAMEWORK
             DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
-#else
-            var dispatcher = new ClientCodeGenerationDispatcher();
-            DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger, dispatcher);
-#endif
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
             Assert.AreEqual(0, descriptions.Count);
@@ -239,6 +204,6 @@ namespace OpenRiaServices.Tools.Test
     }
     public class DSC_Entity
     {
-       [Key] public string TheKey {get;set;}
+        [Key] public string TheKey { get; set; }
     }
 }

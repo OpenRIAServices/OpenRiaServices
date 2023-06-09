@@ -20,25 +20,14 @@ namespace OpenRiaServices.Tools
         private readonly List<DomainServiceDescription> _domainServiceDescriptions = new List<DomainServiceDescription>();
         private readonly ILogger _logger;
 
-#if !NETFRAMEWORK
-        ClientCodeGenerationDispatcher _assemblyLoadContext;
-#endif
-
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceCatalog"/> class with the specified input and reference assemblies
         /// </summary>
         /// <param name="assembliesToLoad">The set of assemblies to load (includes all known assemblies and references).</param>
         /// <param name="logger">logger for logging messages while processing</param>
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="assembliesToLoad"/> or <paramref name="logger"/> is null.</exception>
-        public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, ILogger logger
-#if NETFRAMEWORK
-            )
+        public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, ILogger logger)
         {
-#else
-            , ClientCodeGenerationDispatcher context)
-        { 
-            _assemblyLoadContext = context;
-#endif 
             if (assembliesToLoad == null)
             {
                 throw new ArgumentNullException(nameof(assembliesToLoad));
@@ -151,7 +140,6 @@ namespace OpenRiaServices.Tools
                 // Translate these exceptions into clean error logs
                 // so that they appear in the Error window in VS
                 this.LogError(ae.Message);
-                
             }
             catch (InvalidOperationException ioe)
             {
@@ -219,7 +207,7 @@ namespace OpenRiaServices.Tools
                 {
                     // Utility autorecovers and logs for common exceptions
                     IEnumerable<Type> types = AssemblyUtilities.GetExportedTypes(pair.Key, this._logger);
-                     foreach (Type t in types)
+                    foreach (Type t in types)
                     {
                         if (typeof(DomainService).IsAssignableFrom(t) &&
                             TypeDescriptor.GetAttributes(t)[typeof(EnableClientAccessAttribute)] != null)
@@ -241,7 +229,7 @@ namespace OpenRiaServices.Tools
         private DomainServiceDescription GetProviderDescription(Type providerType)
         {
             try
-            {               
+            {
                 return DomainServiceDescription.GetDescription(providerType);
             }
             catch (Exception ex)
@@ -264,12 +252,7 @@ namespace OpenRiaServices.Tools
 
             foreach (string assemblyName in this._assembliesToLoad)
             {
-                Assembly assembly = null;
-//#if NETFRAMEWORK
-                assembly = AssemblyUtilities.LoadAssembly(assemblyName, _logger);
-//#else
-//                assembly = _assemblyLoadContext.CustomLoadAssembly(assemblyName, _logger);
-//#endif
+                var assembly = AssemblyUtilities.LoadAssembly(assemblyName, _logger);
                 if (assembly != null)
                 {
                     // The bool value indicates whether this assembly should be searched for a DomainService

@@ -48,122 +48,117 @@ class Program
             generatedFileName
         };
 
-        var success = false;
-        SharedCodeServiceParameters sharedCodeServiceParameters;
-        ClientCodeGenerationOptions clientCodeGenerationOption;
+        bool success = false;
 
-        rootCommand.SetHandler((
-                clientCodeGenerationOptionPath,
-                sharedCodeServicePath,
-                codeGeneratorName,
-                generatedFileName
-            ) =>
-        {
-            try
-            {
-#pragma warning disable SYSLIB0011
-                using (Stream stream = File.Open(clientCodeGenerationOptionPath, FileMode.Open))
-                {
-                    var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    clientCodeGenerationOption = (ClientCodeGenerationOptions)binaryFormatter.Deserialize(stream);
-                }
-
-                using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Open))
-                {
-                    var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                    sharedCodeServiceParameters = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
-                }
-                var log = new Logger();
-
-                log.LogMessage(Environment.CommandLine);
-
-                log.LogMessage("SymbolSearchPaths: " + string.Join(",", sharedCodeServiceParameters.SymbolSearchPaths));
-                log.LogMessage("ServerAssemblies: " + string.Join(",", sharedCodeServiceParameters.ServerAssemblies));
-                log.LogMessage("ClientAssemblies: " + string.Join(",", sharedCodeServiceParameters.ClientAssemblies));
-                log.LogMessage("SharedSourceFiles: " + string.Join(",", sharedCodeServiceParameters.SharedSourceFiles));
-
-                log.LogMessage("Language: " + clientCodeGenerationOption.Language);
-                log.LogMessage("ClientProjectPath: " + clientCodeGenerationOption.ClientProjectPath);
-                log.LogMessage("ServerProjectPath: " + clientCodeGenerationOption.ServerProjectPath);
-
-                log.LogMessage("CodeGeneratorName" + codeGeneratorName);
-                log.LogMessage("GeneratedFileName" + generatedFileName);
-
-                log.DumpMessages();
-
-                try
-                {
-                    SetupAppConfig(clientCodeGenerationOption);
-
-                    RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
-                }
-                finally
-                {
-                    log.DumpMessages();
-                }
-                if (log.HasLoggedErrors)
-                {
-                    throw log.Errors;
-                }
-                Console.WriteLine("Code generation succeeded");
-                success = true;
-
-            }
-            catch (AggregateException aggregatedException)
-            {
-                using (StreamWriter writer = new StreamWriter("CodeGenLog.txt", true))
-                {
-                    writer.WriteLine("-----------------------------------------------------------------------------");
-                    writer.WriteLine("Date : " + DateTime.Now.ToString());
-                    writer.WriteLine();
- 
-                    foreach (var innerException in aggregatedException.InnerExceptions)
-                    {
-                        var exceptionToLog = innerException;
-                        while (exceptionToLog != null)
-                        {
-                            writer.WriteLine(exceptionToLog.GetType().FullName);
-                            writer.WriteLine("Message : " + exceptionToLog.Message);
-                            writer.WriteLine("StackTrace : " + exceptionToLog.StackTrace);
-
-                            exceptionToLog = exceptionToLog.InnerException;
-                        }
-                    }
-                }
-
-
-            }
-            catch (Exception ex)
-            {
-                using (StreamWriter writer = new StreamWriter("CodeGenLog.txt", true))
-                {
-                    writer.WriteLine("-----------------------------------------------------------------------------");
-                    writer.WriteLine("Date : " + DateTime.Now.ToString());
-                    writer.WriteLine();
-
-                    while (ex != null)
-                    {
-                        writer.WriteLine(ex.GetType().FullName);
-                        writer.WriteLine("Message : " + ex.Message);
-                        writer.WriteLine("StackTrace : " + ex.StackTrace);
-
-                        ex = ex.InnerException;
-                    }
-                }
-
-
-            }
-        },
-        clientCodeGenerationOptionPath,
-        sharedCodeServicePath,
-        codeGeneratorName,
-        generatedFileName);
+        rootCommand.SetHandler((clientCodeGenerationOptionPath, sharedCodeServicePath, codeGeneratorName, generatedFileName)
+            => RunCodeGenForNet6(clientCodeGenerationOptionPath, sharedCodeServicePath, codeGeneratorName, generatedFileName, out success),
+            clientCodeGenerationOptionPath,
+            sharedCodeServicePath,
+            codeGeneratorName,
+            generatedFileName);
 
         rootCommand.Invoke(args);
         if (success)
             return 0;
         else
             return -1;
+    }
+
+    private static void RunCodeGenForNet6(string clientCodeGenerationOptionPath, string sharedCodeServicePath, string codeGeneratorName, string generatedFileName, out bool success)
+    {
+        success = false;
+        SharedCodeServiceParameters sharedCodeServiceParameters;
+        ClientCodeGenerationOptions clientCodeGenerationOption;
+
+        try
+        {
+#pragma warning disable SYSLIB0011
+            using (Stream stream = File.Open(clientCodeGenerationOptionPath, FileMode.Open))
+            {
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                clientCodeGenerationOption = (ClientCodeGenerationOptions)binaryFormatter.Deserialize(stream);
+            }
+
+            using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Open))
+            {
+                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
+                sharedCodeServiceParameters = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
+            }
+            var log = new Logger();
+
+            log.LogMessage(Environment.CommandLine);
+
+            log.LogMessage("SymbolSearchPaths: " + string.Join(",", sharedCodeServiceParameters.SymbolSearchPaths));
+            log.LogMessage("ServerAssemblies: " + string.Join(",", sharedCodeServiceParameters.ServerAssemblies));
+            log.LogMessage("ClientAssemblies: " + string.Join(",", sharedCodeServiceParameters.ClientAssemblies));
+            log.LogMessage("SharedSourceFiles: " + string.Join(",", sharedCodeServiceParameters.SharedSourceFiles));
+
+            log.LogMessage("Language: " + clientCodeGenerationOption.Language);
+            log.LogMessage("ClientProjectPath: " + clientCodeGenerationOption.ClientProjectPath);
+            log.LogMessage("ServerProjectPath: " + clientCodeGenerationOption.ServerProjectPath);
+
+            log.LogMessage("CodeGeneratorName" + codeGeneratorName);
+            log.LogMessage("GeneratedFileName" + generatedFileName);
+
+            log.DumpMessages();
+
+            try
+            {
+                SetupAppConfig(clientCodeGenerationOption);
+
+                RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
+            }
+            finally
+            {
+                log.DumpMessages();
+            }
+            if (log.HasLoggedErrors)
+            {
+                throw log.Errors;
+            }
+            Console.WriteLine("Code generation succeeded");
+            success = true;
+        }
+        catch (AggregateException aggregatedException)
+        {
+            using (StreamWriter writer = new StreamWriter("CodeGenLog.txt", true))
+            {
+                writer.WriteLine("-----------------------------------------------------------------------------");
+                writer.WriteLine("Date : " + DateTime.Now.ToString());
+                writer.WriteLine();
+
+                foreach (var innerException in aggregatedException.InnerExceptions)
+                {
+                    var exceptionToLog = innerException;
+                    while (exceptionToLog != null)
+                    {
+                        writer.WriteLine(exceptionToLog.GetType().FullName);
+                        writer.WriteLine("Message : " + exceptionToLog.Message);
+                        writer.WriteLine("StackTrace : " + exceptionToLog.StackTrace);
+
+                        exceptionToLog = exceptionToLog.InnerException;
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            using (StreamWriter writer = new StreamWriter("CodeGenLog.txt", true))
+            {
+                writer.WriteLine("-----------------------------------------------------------------------------");
+                writer.WriteLine("Date : " + DateTime.Now.ToString());
+                writer.WriteLine();
+
+                while (ex != null)
+                {
+                    writer.WriteLine(ex.GetType().FullName);
+                    writer.WriteLine("Message : " + ex.Message);
+                    writer.WriteLine("StackTrace : " + ex.StackTrace);
+
+                    ex = ex.InnerException;
+                }
+            }
+        }
     }
 
     // TODO: Find app.config/web.config https://stackoverflow.com/questions/4738/using-configurationmanager-to-load-config-from-an-arbitrary-location/14246260#14246260
@@ -210,7 +205,7 @@ class Program
 
         public void LogException(Exception ex)
         {
-            Console.WriteLine($"Exception: {ex.Message}\n\t {ex.ToString()}");
+            Console.WriteLine($"Exception: {ex.Message}\n\t {ex}");
             _exceptions.Add(ex.ToString());
         }
 
@@ -232,7 +227,6 @@ class Program
             _warnings.Add($"{message}");
         }
 
-
         public void DumpMessages()
         {
             using (StreamWriter writer = new StreamWriter("CodeGenLog_Messages.txt", true))
@@ -247,7 +241,5 @@ class Program
                 }
             }
         }
-
     }
-
 }

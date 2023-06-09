@@ -39,31 +39,17 @@ namespace OpenRiaServices.Tools
 #endif
         IDisposable
     {
-
         // MEF composition container and part catalog, computed lazily and only once
         private CompositionContainer _compositionContainer;
         private ComposablePartCatalog _partCatalog;
-        public const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.Server.dll";
+        private const string OpenRiaServices_DomainServices_Server_Assembly = "OpenRiaServices.Server.dll";
 
-#if NETFRAMEWORK
         /// <summary>
         /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
         /// </summary>
         public ClientCodeGenerationDispatcher()
         {
         }
-#else
-        public const string AssemblyLoadContextName = "ClientCodeGenContext";
-//        private System.Runtime.Loader.AssemblyDependencyResolver _assemblyDependencyResolver;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ClientCodeGenerationDispatcher"/> class.
-        /// </summary>
-        public ClientCodeGenerationDispatcher()
-            //: base(AssemblyLoadContextName)
-        {
-        }
-#endif
 
         // MEF import of all code generators
         [ImportMany(typeof(IDomainServiceClientCodeGenerator))]
@@ -97,8 +83,6 @@ namespace OpenRiaServices.Tools
                 AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
                 AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 #else
-                //_assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(parameters.ServerAssemblies.First());
-
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 // Try to load mono.cecil from same folder as tools
                 // This prevents problem if server project contains another version of mono Cecil
@@ -109,9 +93,9 @@ namespace OpenRiaServices.Tools
                 // Note: we might want to fallback to also searching the paths of all references assemblies on any error
                 // Meybe can be removed if we create a AssemblyDependencyResolver for the output assembly of the server projekt ?
 
-                var assemblyDependencyResolver = new System.Runtime.Loader.AssemblyDependencyResolver(parameters.ServerAssemblies.First());
+                var assemblyDependencyResolver = new AssemblyDependencyResolver(parameters.ServerAssemblies.First());
 
-                System.Runtime.Loader.AssemblyLoadContext.Default.Resolving += (System.Runtime.Loader.AssemblyLoadContext loadContext, AssemblyName assemblyName) => 
+                AssemblyLoadContext.Default.Resolving += (AssemblyLoadContext loadContext, AssemblyName assemblyName) =>
                 {
                     if (assemblyName.Name.EndsWith(".resources"))
                         return null;
@@ -178,12 +162,7 @@ namespace OpenRiaServices.Tools
             var (filename, serverAssemblyPath) = GetServerAssembly(parameters);
             if (serverAssemblyPath != null)
             {
-//#if NETFRAMEWORK
                 var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
-//#else
-//                var serverAssemblyName = AssemblyName.GetAssemblyName(serverAssemblyPath);
-//                var serverAssembly = LoadFromAssemblyName(serverAssemblyName);
-//#endif
                 if (serverAssembly != null)
                 {
                     // Since this assembly (OpenRiaServices.Tools) requires the Server assembly to be loaded
@@ -194,14 +173,12 @@ namespace OpenRiaServices.Tools
                     {
                         loggingService.LogWarning(Resource.ClientCodeGen_SignedTools_UnsignedServer);
                     }
-
                 }
                 else
                 {
                     loggingService.LogError(string.Format(CultureInfo.CurrentCulture,
                         Resource.ClientCodeGen_Failed_Loading_OpenRiaServices_Assembly, filename, serverAssemblyPath));
                 }
-
             }
             else
             {
@@ -232,11 +209,7 @@ namespace OpenRiaServices.Tools
             Debug.Assert(assembliesToLoad != null, "assembliesToLoad cannot be null");
 
             ILogger logger = host as ILogger;
-            DomainServiceCatalog catalog = new DomainServiceCatalog(assembliesToLoad, logger
-#if !NETFRAMEWORK
-                , this
-#endif
-                );
+            DomainServiceCatalog catalog = new DomainServiceCatalog(assembliesToLoad, logger);
 
             return this.GenerateCode(host, options, catalog, assembliesToLoad, codeGeneratorName);
         }
@@ -339,8 +312,7 @@ namespace OpenRiaServices.Tools
             // such as the default CodeDom generator.
             if (!string.IsNullOrEmpty(codeGeneratorName) && codeGeneratorName.Contains(','))
             {
-                Type codeGeneratorType = Type.GetType(codeGeneratorName, /*throwOnError*/
-false);
+                Type codeGeneratorType = Type.GetType(codeGeneratorName, /*throwOnError*/ false);
                 if (codeGeneratorType != null)
                 {
                     if (!typeof(IDomainServiceClientCodeGenerator).IsAssignableFrom(codeGeneratorType))
@@ -542,18 +514,11 @@ false);
             {
                 foreach (string assemblyPath in compositionAssemblyPaths)
                 {
-//#if NETFRAMEWORK
                     Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyPath, logger);
-//#else
-//                    Assembly assembly = CustomLoadAssembly(assemblyPath, logger);
-//#endif
-                    if (assembly != null)
+                    // Don't put System assemblies into container
+                    if (assembly != null && !assembly.IsSystemAssembly())
                     {
-                        // Don't put System assemblies into container
-                        if (!assembly.IsSystemAssembly())
-                        {
-                            assemblies.Add(assembly);
-                        }
+                        assemblies.Add(assembly);
                     }
                 }
             }
@@ -568,83 +533,6 @@ false);
         void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
         {
         }
-#else
-        /*
-         public Assembly CustomLoadAssembly(string assemblyPath, ILogger logger)
-        {
-            Assembly assembly = null;
-
-            try
-            {
-                // We can not load the server assembly since it will break IsAssignableFrom
-                if (!assemblyPath.EndsWith(ClientCodeGenerationDispatcher.OpenRiaServices_DomainServices_Server_Assembly))
-                {
-                    assembly = this.LoadFromAssemblyPath(assemblyPath);
-                }
-                return assembly;
-            }
-            catch (Exception ex)
-            {
-                // Some common exceptions log a warning and keep running
-                if (ex is System.IO.FileNotFoundException ||
-                    ex is System.IO.FileLoadException ||
-                    ex is System.IO.PathTooLongException ||
-                    ex is BadImageFormatException ||
-                    ex is System.Security.SecurityException)
-                {
-                    if (logger != null)
-                    {
-                        logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyPath, ex.Message));
-                    }
-                }
-                else
-                {
-                    throw;
-                }
-            }
-            return assembly;
-        }
-
-        protected override Assembly Load(AssemblyName assemblyName)
-        {
-            string assemblyPath = _assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
-
-
-            if (assemblyPath != null
-                // SEE: https://github.com/dotnet/core/issues/2547
-                && assemblyName.FullName != typeof(DomainService).Assembly.FullName)
-            {
-                try
-                {
-                    return LoadFromAssemblyPath(assemblyPath);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"ERR: LoadFromAssemblyPath failed, trying from system {ex}");
-                    Assembly assembly = AssemblyLoadContext.Default.LoadFromAssemblyPath(assemblyPath);
-                    Console.WriteLine($"info: loaded {assemblyName.Name} from AssemblyLoadContext.Default ? {assembly != null}");
-                    return assembly;
-                }
-            }
-
-            // TODO: Look in runtime directory (maybe based on framework references?)
-            var systemAssembly = AssemblyLoadContext.Default.LoadFromAssemblyName(assemblyName);
-
-            return systemAssembly;
-        }
-
-        protected override IntPtr LoadUnmanagedDll(string unmanagedDllName)
-        {
-            string libraryPath = _assemblyDependencyResolver.ResolveUnmanagedDllToPath(unmanagedDllName);
-
-            if (libraryPath != null)
-            {
-                return LoadUnmanagedDllFromPath(libraryPath);
-            }
-
-            return IntPtr.Zero;
-        }
-        */
 #endif
 
         #region IDisposable members

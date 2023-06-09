@@ -360,17 +360,9 @@ namespace OpenRiaServices.Tools.Test
             MemoryStream generatedAssembly = CompileSource();
             Assert.IsNotNull(generatedAssembly, "Expected compile to succeed");
 
-            var metadataLoadContext = (_metadataLoadContext ??= new MetadataLoadContext(new PathAssemblyResolver(this.ReferenceAssemblies)));
+            var metadataLoadContext = _metadataLoadContext ??= new MetadataLoadContext(new PathAssemblyResolver(this.ReferenceAssemblies));
 
-            try
-            {
-                return metadataLoadContext.LoadFromStream(generatedAssembly);
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Encountered exception doing reflection only loads:\r\n" + ex.Message);
-                throw;
-            }
+            return metadataLoadContext.LoadFromStream(generatedAssembly);
         }
 
         private MemoryStream CompileSource()
