@@ -729,42 +729,42 @@ namespace OpenRiaServices.Tools
                 // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
                 SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
 
-                if (IsNetFramework(ServerProjectPath))
+                if (IsServerProjectNetFramework())
                 {
 #if NETFRAMEWORK
-                // The other AppDomain gets a logger that will log back to this AppDomain
-                CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
+                    // The other AppDomain gets a logger that will log back to this AppDomain
+                    CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
 
-                // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
-                // This can occur when the build environment is configured incorrectly
-                if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-                {
-                    throw new InvalidOperationException(
-                        Resource.HttpRuntimeInitializationError,
-                        System.Web.Hosting.HostingEnvironment.InitializationException);
-                }
+                    // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
+                    // This can occur when the build environment is configured incorrectly
+                    if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+                    {
+                        throw new InvalidOperationException(
+                            Resource.HttpRuntimeInitializationError,
+                            System.Web.Hosting.HostingEnvironment.InitializationException);
+                    }
 
-                System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter() 
-                {
-                    PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,
-                };
-                using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
-                using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
-                {
-                    // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
-                    // the appropriate code generator.
-                    generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
-                }
+                    System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter()
+                    {
+                        PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,
+                    };
+                    using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
+                    using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
+                    {
+                        // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
+                        // the appropriate code generator.
+                        generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
+                    }
 
-                // Tell the user where we are writing the generated code
-                if (!string.IsNullOrEmpty(generatedFileContent))
-                {
-                    logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
-                }
+                    // Tell the user where we are writing the generated code
+                    if (!string.IsNullOrEmpty(generatedFileContent))
+                    {
+                        logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
+                    }
 
-                // If VS is hosting us, write to its TextBuffer, else simply write to disk
-                // If the file is empty, delete it.
-                FilesWereWritten = RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
+                    // If VS is hosting us, write to its TextBuffer, else simply write to disk
+                    // If the file is empty, delete it.
+                    FilesWereWritten = RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
 
 #else
                     // TODO: Verify below statement, I exepct that it might not work (and does not need to work)
@@ -867,71 +867,40 @@ namespace OpenRiaServices.Tools
             return;
         }
 
-        // TODO PERF: Consider changing Task parameter to ITaskItem so we can get TargetFramework metadata from reference
-        internal bool IsNetFramework(string projectPath)
+        private bool IsServerProjectNetFramework()
         {
-            using (var projectCollection = new ProjectCollection())
+            if (ServerAssemblies.FirstOrDefault() is ITaskItem serverAssembly)
             {
-                var project = projectCollection.LoadProject(projectPath, projectCollection.DefaultToolsVersion);
-
-                var targetFramework = project.GetProperty("TargetFramework")?.EvaluatedValue;
-                if (targetFramework != null)
-                    return IsNetFrameworkTargetFramework(targetFramework);
-
-                var targetFrameworks = project.GetProperty("TargetFrameworks")?.EvaluatedValue;
-                if (targetFrameworks != null)
+                var targetIdentifier = serverAssembly.GetMetadata("TargetFrameworkIdentifier");
+                if (!string.IsNullOrEmpty(targetIdentifier))
                 {
-                    // TODO: Consider choosing first framework ?
-                    if (!targetFrameworks.Contains(';'))
-                    {
-                        return IsNetFrameworkTargetFramework(targetFrameworks);
-                    }
-                    else
-                    {
-                        if (ServerAssemblies.FirstOrDefault() is ITaskItem serverAssembly)
-                        {
-                            var targetIdentifier = serverAssembly.GetMetadata("TargetFrameworkIdentifier");
-                            if (!string.IsNullOrEmpty(targetIdentifier))
-                            {
-                                bool isFramework = targetIdentifier == ".NETFramework";
-                                Log.LogMessage("Is server project .NETFramework based on TargetFrameworkIdentifier: {0}", isFramework.ToString());
+                    bool isFramework = targetIdentifier == ".NETFramework";
+                    Log.LogMessage("Is server project .NETFramework based on TargetFrameworkIdentifier: {0}", isFramework.ToString());
 
-                                return isFramework;
-                            }
-
-                            // TODO: Look at output assembly instead of what framework the code generation uses
-                            // If ServerProject this
-                            // An other solution would also be to look at the assemblies referenced
-                            // and se if there are any paths which contains '.NETFramework' or '\net4*\'
-                            using var server = Mono.Cecil.AssemblyDefinition.ReadAssembly(serverAssembly.ItemSpec);
-
-                            var name = typeof(TargetFrameworkAttribute).FullName;
-                            var targetFrameworkAttribute =
-                                server.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == name);
-
-                            if (targetFrameworkAttribute != null
-                                && targetFrameworkAttribute.HasConstructorArguments)
-                            {
-                                bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework");
-                                Log.LogMessage("Is server project .NETFramework based on TargetFrameworkAttribute: {0}", isFramework.ToString());
-                                return isFramework;
-                            }
-                        }
-                    }
+                    return isFramework;
                 }
 
-                return true;
+                // TODO: Look at output assembly instead of what framework the code generation uses
+                // If ServerProject this
+                // An other solution would also be to look at the assemblies referenced
+                // and se if there are any paths which contains '.NETFramework' or '\net4*\'
+                using var server = Mono.Cecil.AssemblyDefinition.ReadAssembly(serverAssembly.ItemSpec);
+
+                var name = typeof(TargetFrameworkAttribute).FullName;
+                var targetFrameworkAttribute =
+                    server.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == name);
+
+                if (targetFrameworkAttribute != null
+                    && targetFrameworkAttribute.HasConstructorArguments)
+                {
+                    bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework");
+                    Log.LogMessage("Is server project .NETFramework based on TargetFrameworkAttribute: {0}", isFramework.ToString());
+                    return isFramework;
+                }
             }
+
+            return true;
         }
-
-
-        /// <summary>
-        /// If it is a Netframework, it will not contain a dot
-        /// see: https://learn.microsoft.com/en-us/dotnet/standard/frameworks
-        /// </summary>
-        /// <param name="framework"></param>
-        /// <returns></returns>
-        private static bool IsNetFrameworkTargetFramework(string framework) => !framework.Contains(".");
 
         /// <summary>
         /// Returns the computed list of shared and linked files between the server and client projects.
