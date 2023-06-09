@@ -56,9 +56,6 @@
     <ProjectReference Include="ServerClassLib\ServerClassLib.csproj" />
     <ProjectReference Include="T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <ProjectReference Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
-  </ItemGroup>
   <ItemGroup>
     <Content Include="NotificationMethodGeneratorTestCodeSnippets.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
