@@ -293,24 +293,13 @@ namespace OpenRiaServices.Tools.Test
             var serverProjectPath = Path.Combine(rootPath,  "ServerClassLib\\ServerClassLib.csproj");
             var clientProjectPath = Path.Combine(rootPath, "ClientClassLib\\ClientClassLib.csproj");
             
-            var asmPath = "bin\\Debug\\net6.0";
-            string[] serverAsm = GetAssemblies(serverProjectPath, asmPath);
-            string[] clientAsm = GetAssemblies(clientProjectPath, asmPath).Where(c => !c.Contains("Client")).ToArray(); // Exclude client asm since they should not being built yet
-            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, serverAsm, clientAsm);
+            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false);
 
             var task = code.Execute();
             Assert.IsTrue(task);
             Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }
 #endif
-
-
-        private static string[] GetAssemblies(string projectPath, string path)
-        {
-            var asmPath = Path.Combine(Path.GetDirectoryName(projectPath), path);
-            var asm = Directory.GetFiles(asmPath, "*.dll");
-            return asm;
-        }
 
         [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
@@ -469,7 +458,6 @@ namespace OpenRiaServices.Tools.Test
 
 #if !NETFRAMEWORK
         [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
 #endif
         [Description("CreateOpenRiaClientFilesTask can access web.config using ASP.NET AppDomain")]
         [TestMethod]
