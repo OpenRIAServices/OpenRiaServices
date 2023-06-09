@@ -6,7 +6,7 @@ using System.CommandLine;
 using System.Runtime.CompilerServices;
 using System.Collections.Generic;
 
-public class CodeGenTask
+class Program
 {
     static int Main(string[] args) // Take in params to setup the build here
     {

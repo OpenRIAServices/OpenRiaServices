@@ -261,6 +261,7 @@ namespace OpenRiaServices.Tools.Test
 
                 // Move PDB file so it cannot be found
                 Assert.IsTrue(File.Exists(serverPdbFile), "Expected to find " + serverPdbFile);
+                RiaClientFilesTaskHelpers.SafeFileDelete(serverTempFile, mockBuildEngine.ConsoleLogger);
                 File.Move(serverPdbFile, serverTempFile);
                 Assert.IsFalse(File.Exists(serverPdbFile));
 
@@ -309,24 +310,6 @@ namespace OpenRiaServices.Tools.Test
             var asmPath = Path.Combine(Path.GetDirectoryName(projectPath), path);
             var asm = Directory.GetFiles(asmPath, "*.dll");
             return asm;
-        }
-
-        [TestMethod]
-        [Ignore("TODO: Remove - only when developing PoC")]
-        public void CreateRIA60_TS()
-        {
-            var clientProjectPath = "C:\\dev\\net\\production\\Finance\\Client\\CRM.Finance.Client.Model\\CRM.Finance.Client.Model.csproj";
-            var serverProjectPath = "C:\\dev\\net\\production\\Finance\\Web\\CRM.Finance.Web.Hosting\\CRM.Finance.Web.Hosting.csproj";
-
-            var serverAsm = GetAssemblies(serverProjectPath, "bin\\Debug\\net7.0").ToList();
-            //string[] clientAsm = GetAssemblies(clientProjectPath, "bin\\Debug\\net7.0-windows");
-            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false, serverAsm.ToArray());
-            code.CodeGeneratorName = "CRM.Finance.Web.ClientGeneration.RiaClientCodeGenerator, CRM.Finance.Web.Hosting, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null";
-            Environment.CurrentDirectory = Path.GetDirectoryName(code.ClientProjectPath);
-
-            var task = code.Execute();
-            Assert.IsTrue(task);
-            Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }
 
         [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
