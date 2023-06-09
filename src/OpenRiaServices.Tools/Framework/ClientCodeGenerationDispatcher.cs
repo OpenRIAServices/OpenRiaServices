@@ -90,7 +90,6 @@ namespace OpenRiaServices.Tools
                 var location = toolingAssembly.Location;
 
 #if NETFRAMEWORK
-                AppDomainUtilities.ConfigureAppDomain(options);
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 // Try to load mono.cecil from same folder as tools
                 // This prevents problem if server project contains another version of mono Cecil

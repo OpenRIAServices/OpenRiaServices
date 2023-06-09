@@ -29,6 +29,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
       <Reference Include="mscorlib" />
       <Reference Include="system" />
+      <Reference Include="System.ComponentModel.Composition" />
       <Reference Include="System.ComponentModel.DataAnnotations" />
       <Reference Include="System.Configuration" />
       <Reference Include="System.ServiceModel" />
@@ -39,7 +40,7 @@
       <Reference Include="Microsoft.Build.Utilities.v4.0" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
-    <!-- Use Microsoft.Build 17.0.0 to make it work with Net6 -->
+    <!-- Use Microsoft.Build 17.0.0 to be sure it works with all versions Net6 -->
     <PackageReference Include="Microsoft.Build" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Framework" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
@@ -47,11 +48,9 @@
     <PackageReference Include="System.ServiceModel.Primitives" Version="6.0.0" />
     <!-- Required for validation attributes -->
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
-    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
-    <PackageReference Include="System.CodeDom" Version="7.0.0" />
-  </ItemGroup>
-  <ItemGroup>    
+    <!-- MEF Attribute: TODO consider removing MEF support for .NET (non framework) -->
     <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
+    <PackageReference Include="System.CodeDom" Version="7.0.0" />
   </ItemGroup>
   <ItemGroup>
     <!-- Use PrivateAssets="all" to prevent nuget packages to become nuget dependencies -->
