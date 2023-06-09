@@ -75,24 +75,19 @@ namespace OpenRiaServices.Tools
                 // Try to load mono.cecil from same folder as tools
                 var location = toolingAssembly.Location;
 
-#if NETFRAMEWORK
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 // Try to load mono.cecil from same folder as tools
                 // This prevents problem if server project contains another version of mono Cecil
-                var cecilPath = location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
-                AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
-                AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
-#else
-                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
-                // Try to load mono.cecil from same folder as tools
-                // This prevents problem if server project contains another version of mono Cecil
-                var cecilPath = location.Replace(toolingAssembly.GetName().Name+".dll", "Mono.Cecil.dll");
+                var cecilPath = location.Replace(toolingAssembly.GetName().Name + ".dll", "Mono.Cecil.dll");
                 AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
                 AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 
+#if !NETFRAMEWORK
                 // Note: we might want to fallback to also searching the paths of all references assemblies on any error
-                // Meybe can be removed if we create a AssemblyDependencyResolver for the output assembly of the server projekt ?
 
+                // TODO: should this code be called before calling into ClientCodeGeneratorDispatcher ?
+
+                // Assume first item in parameters.ServerAssemblies is output of server project
                 var assemblyDependencyResolver = new AssemblyDependencyResolver(parameters.ServerAssemblies.First());
 
                 AssemblyLoadContext.Default.Resolving += (AssemblyLoadContext loadContext, AssemblyName assemblyName) =>
@@ -105,17 +100,6 @@ namespace OpenRiaServices.Tools
                     if(path != null && loadContext.LoadFromAssemblyPath(path) is Assembly assembly)
                     {
                         return assembly;
-                    }
-
-                    // TODO: Remove code ?
-                    string dllName = assemblyName.Name + ".dll";
-                    var match = parameters.ServerAssemblies.FirstOrDefault(x => x.EndsWith(dllName));
-                    if (match != null)
-                    {
-                        Debugger.Break();
-                        // Should not need this code
-                        Console.WriteLine($"!!!! Resolving path '{match}' based on ServerAssemblies works, but not from AssemblyDependencyResolver");
-                        return loadContext.LoadFromAssemblyPath(match);
                     }
 
                     return null;
@@ -154,7 +138,7 @@ namespace OpenRiaServices.Tools
         /// </summary>
         /// <param name="parameters">The parameters.</param>
         /// <param name="loggingService">The logging service.</param>
-        private void LoadOpenRiaServicesServerAssembly(SharedCodeServiceParameters parameters, ILoggingService loggingService)
+        private static void LoadOpenRiaServicesServerAssembly(SharedCodeServiceParameters parameters, ILoggingService loggingService)
         {
             // Try to load the OpenRiaServices.DomainServies.Server assembly using the one used by the server project
             // This way we can be sure that codegen works with both signed and unsigned server assembly while
