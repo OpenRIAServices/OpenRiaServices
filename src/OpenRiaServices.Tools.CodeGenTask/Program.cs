@@ -46,6 +46,8 @@ class Program
             IsRequired = true
         };
 
+        var loggingPipe = new Option<string>(name: "--loggingPipe");
+
         var rootCommand = new RootCommand("Sample app for running code generation")
         {
             languageOption,
@@ -63,19 +65,21 @@ class Program
             clientAssembliesOption,
             clientAssemblyPathsNormalizedOption,
             codeGeneratorName,
-            generatedFileName
+            generatedFileName,
+            loggingPipe,
         };
 
         bool success = false;
 
-        rootCommand.SetHandler((clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName)
-            => RunCodeGenForNet6(clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, out success),
+        rootCommand.SetHandler((clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, pipeName)
+            => RunCodeGenForNet6(clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, pipeName, out success),
             new ClientCodeGenerationOptionsBinder(
                 languageOption, clientFrameworkOption, serverProjectPathOption, clientProjectPathOption, clientRootNamespaceOption, serverRootNamespaceOption,
                 isApplicationContextGenerationEnabledOption, clientProjectTargetPlatformsOption, useFullTypeNamesOption),
             new SharedCodeServiceParametersBinder(sharedSourceFilesOption, symbolSearchPathsOption, serverAssembliesOption, clientAssembliesOption, clientAssemblyPathsNormalizedOption),
             codeGeneratorName,
-            generatedFileName);
+            generatedFileName,
+            loggingPipe);
 
         rootCommand.Invoke(args);
         if (success)
@@ -84,86 +88,29 @@ class Program
             return -1;
     }
 
-    private static void RunCodeGenForNet6(ClientCodeGenerationOptions clientCodeGenerationOption, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName, string generatedFileName, out bool success)
+    private static void RunCodeGenForNet6(ClientCodeGenerationOptions clientCodeGenerationOption, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName, string generatedFileName, string loggingPipe,  out bool success)
     {
         success = false;
 
+        ILoggingService log = string.IsNullOrEmpty(loggingPipe) ? new ConsoleLogger() : new OpenRiaServices.Tools.Logging.CrossProcessLoggingWriter(loggingPipe);
         try
         {
-            var log = new Logger();
+            // TODO: Remove
+            log.LogMessage("CommandLine: " + Environment.CommandLine);
 
-            log.LogMessage(Environment.CommandLine);
-
-            log.LogMessage("SymbolSearchPaths: " + string.Join(",", sharedCodeServiceParameters.SymbolSearchPaths));
-            log.LogMessage("ServerAssemblies: " + string.Join(",", sharedCodeServiceParameters.ServerAssemblies));
-            log.LogMessage("ClientAssemblies: " + string.Join(",", sharedCodeServiceParameters.ClientAssemblies));
-            log.LogMessage("SharedSourceFiles: " + string.Join(",", sharedCodeServiceParameters.SharedSourceFiles));
-
-            log.LogMessage("Language: " + clientCodeGenerationOption.Language);
-            log.LogMessage("ClientProjectPath: " + clientCodeGenerationOption.ClientProjectPath);
-            log.LogMessage("ServerProjectPath: " + clientCodeGenerationOption.ServerProjectPath);
-
-            log.LogMessage("CodeGeneratorName" + codeGeneratorName);
-            log.LogMessage("GeneratedFileName" + generatedFileName);
-
-            log.DumpMessages();
-
-            try
-            {
-                SetupAppConfig(clientCodeGenerationOption);
-
-                RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
-            }
-            finally
-            {
-                log.DumpMessages();
-            }
-            if (log.HasLoggedErrors)
-            {
-                throw log.Errors;
-            }
-            Console.WriteLine("Code generation succeeded");
+            
+            SetupAppConfig(clientCodeGenerationOption);
+            RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
+            log.Message("Code generation succeeded");
             success = true;
-        }
-        catch (AggregateException aggregatedException)
-        {
-            using (StreamWriter writer = new StreamWriter("CodeGenLog.txt", true))
-            {
-                writer.WriteLine("-----------------------------------------------------------------------------");
-                writer.WriteLine("Date : " + DateTime.Now.ToString());
-                writer.WriteLine();
-
-                foreach (var innerException in aggregatedException.InnerExceptions)
-                {
-                    var exceptionToLog = innerException;
-                    while (exceptionToLog != null)
-                    {
-                        writer.WriteLine(exceptionToLog.GetType().FullName);
-                        writer.WriteLine("Message : " + exceptionToLog.Message);
-                        writer.WriteLine("StackTrace : " + exceptionToLog.StackTrace);
-
-                        exceptionToLog = exceptionToLog.InnerException;
-                    }
-                }
-            }
         }
         catch (Exception ex)
         {
-            using (StreamWriter writer = new StreamWriter("CodeGenLog.txt", true))
-            {
-                writer.WriteLine("-----------------------------------------------------------------------------");
-                writer.WriteLine("Date : " + DateTime.Now.ToString());
-                writer.WriteLine();
-
-                while (ex != null)
-                {
-                    writer.WriteLine(ex.GetType().FullName);
-                    writer.WriteLine("Message : " + ex.Message);
-                    writer.WriteLine("StackTrace : " + ex.StackTrace);
-
-                    ex = ex.InnerException;
-                }
-            }
+            log.LogException(ex);
+        }
+        finally
+        {
+            (log as IDisposable)?.Dispose();
         }
     }
 
@@ -184,68 +131,6 @@ class Program
         if (configFile != null)
         {
             AppDomain.CurrentDomain.SetData("APP_CONFIG_FILE", configFile);
-        }
-    }
-
-    public class Logger : ILoggingService
-    {
-        private readonly List<string> _errors = new List<string>();
-        private readonly List<string> _messages = new List<string>();
-        private readonly List<string> _exceptions = new List<string>();
-        private readonly List<string> _warnings = new List<string>();
-        public bool HasLoggedErrors => _errors.Count > 0;
-
-        public AggregateException Errors => new AggregateException(_errors.Select(e => new Exception(e)));
-
-        public void LogError(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber)
-        {
-            Console.WriteLine($"ERROR: {message}, errorCode: {errorCode} file: {file}:{lineNumber}-{endColumnNumber}");
-            _errors.Add(message);
-        }
-
-        public void LogError(string message)
-        {
-            Console.WriteLine($"ERROR: {message}");
-            _errors.Add(message);
-        }
-
-        public void LogException(Exception ex)
-        {
-            Console.WriteLine($"Exception: {ex.Message}\n\t {ex}");
-            _exceptions.Add(ex.ToString());
-        }
-
-        public void LogMessage(string message)
-        {
-            Console.WriteLine($"Info: {message}");
-            _messages.Add(message);
-        }
-
-        public void LogWarning(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber)
-        {
-            Console.WriteLine($"WARN: {message}, errorCode: {errorCode} file: {file}:{lineNumber}-{endColumnNumber}");
-            _warnings.Add(message);
-        }
-
-        public void LogWarning(string message)
-        {
-            Console.WriteLine($"WARN: {message}");
-            _warnings.Add($"{message}");
-        }
-
-        public void DumpMessages()
-        {
-            using (StreamWriter writer = new StreamWriter("CodeGenLog_Messages.txt", true))
-            {
-                writer.WriteLine("-----------------------------------------------------------------------------");
-                writer.WriteLine("Date : " + DateTime.Now.ToString());
-                writer.WriteLine();
-
-                foreach (var message in _messages)
-                {
-                    writer.WriteLine($"{message}");
-                }
-            }
         }
     }
 }

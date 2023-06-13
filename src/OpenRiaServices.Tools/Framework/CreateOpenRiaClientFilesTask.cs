@@ -17,6 +17,7 @@ using System.Threading;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
+using OpenRiaServices.Tools.Logging;
 using OpenRiaServices.Tools.SharedTypes;
 
 namespace OpenRiaServices.Tools
@@ -786,24 +787,31 @@ namespace OpenRiaServices.Tools
                     if (!File.Exists(path))
                         throw new FileNotFoundException(path);
 
+                    using var loggingServer = new CrossProcessLoggingServer();
                     var startInfo = new ProcessStartInfo
                     {
                         FileName = path,
-                        RedirectStandardOutput = true,
+                        Arguments = $"--loggingPipe {loggingServer.PipeName}",
                         UseShellExecute = false,
                         CreateNoWindow = true,
                     };
-                    SetArgumentListForConsoleApp(generatedFileName, options, sharedCodeServiceParameters, startInfo);
+                    SetArgumentListForConsoleApp(generatedFileName, options, sharedCodeServiceParameters, startInfo, loggingServer.PipeName);
                     var process = Process.Start(startInfo);
-
-                    string str = string.Empty;
-                    while ((str = process.StandardOutput.ReadLine()) != null)
+                    // Informs the system that this task has a long-running out-of - process component
+                    //     and other work can be done in the build while that work completes.
+                    BuildEngine3.Yield();
+                    try
                     {
-                        //Todo: skicka till loggen istället
-                        Debug.WriteLine(str);
+                        process.WaitForExit(60_000);
+                        FilesWereWritten = process.ExitCode == 0;
+
+
                     }
-                    process.WaitForExit(30000);
-                    FilesWereWritten = process.ExitCode == 0;
+                    finally
+                    {
+                        loggingServer.WriteLogsTo(this);
+                        BuildEngine3.Reacquire();
+                    }
                 }
             }
             else
@@ -1503,7 +1511,7 @@ namespace OpenRiaServices.Tools
             }
         }
 
-        private void SetArgumentListForConsoleApp(string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters parameters, ProcessStartInfo startInfo)
+        private void SetArgumentListForConsoleApp(string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters parameters, ProcessStartInfo startInfo, string pipeName)
         {
 #if NETFRAMEWORK //ArgumentList is not availible for netframework
                     throw new Exception("Should never be here with netframework");
@@ -1554,6 +1562,9 @@ namespace OpenRiaServices.Tools
             startInfo.ArgumentList.Add(CodeGeneratorName ?? string.Empty);
             startInfo.ArgumentList.Add("--generatedFileName");
             startInfo.ArgumentList.Add(generatedFileName);
+
+            startInfo.ArgumentList.Add("--loggingPipe");
+            startInfo.ArgumentList.Add(loggingServer.PipeName);
 #endif
         }
 

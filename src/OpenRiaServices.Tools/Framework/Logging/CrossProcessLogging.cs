@@ -166,8 +166,15 @@ internal sealed class CrossProcessLoggingServer : IDisposable
 
     public string PipeName { get; }
 
+    /// <summary>
+    ///  Read logs and forwards them to <paramref name="logger"/>.
+    ///  any exception will catched and logged
+    /// </summary>
     public void WriteLogsTo(ILoggingService logger)
     {
+        // The local part of the pipe must be closed (after proces is started and before we read from the pipe)
+        _pipe.DisposeLocalCopyOfClientHandle();
+
         try
         {
             while (true)
