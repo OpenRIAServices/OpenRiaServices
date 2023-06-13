@@ -1528,6 +1528,24 @@ namespace OpenRiaServices.Tools
             {
                 list.Add($"\"{parameter}\"");
             }
+            static void AddParameters(List<string> list, string parameter, string[] values)
+            {
+                if (values != null && values.Length > 0)
+                {
+                    list.Add(parameter);
+                    foreach (var value in values)
+                        AddEscaped(list, value);
+                }
+            }
+            static void AddParameter(List<string> list, string parameter, string value)
+            {
+                if (value is not null)
+                {
+                    list.Add(parameter);
+                    AddEscaped(list, value);
+                }
+            }
+
 
             //Arguments for ClientCodeGenerationOptions
             arguments.Add("--language");
@@ -1550,34 +1568,16 @@ namespace OpenRiaServices.Tools
             arguments.Add(options.UseFullTypeNames.ToString());
 
             //Arguments for SharedCodeServiceParameters
-            arguments.Add("--sharedSourceFiles");
-            foreach (var file in parameters.SharedSourceFiles)
-                AddEscaped(arguments, file);
-            
-            arguments.Add("--symbolSearchPaths");
-            foreach (var file in parameters.SymbolSearchPaths)
-                AddEscaped(arguments, file);
-            
-            arguments.Add("--serverAssemblies");
-            foreach (var file in parameters.ServerAssemblies)
-                AddEscaped(arguments, file);
-            
-            arguments.Add("--clientAssemblies");
-            foreach (var file in parameters.ClientAssemblies)
-                AddEscaped(arguments, file);
-            
-            arguments.Add("--clientAssemblyPathsNormalized");
-            foreach (var file in parameters.ClientAssemblyPathsNormalized)
-                AddEscaped(arguments, file);
+            AddParameters(arguments, "--sharedSourceFiles", parameters.SharedSourceFiles);
+            AddParameters(arguments, "--symbolSearchPaths", parameters.SymbolSearchPaths);
+            AddParameters(arguments, "--serverAssemblies", parameters.ServerAssemblies);
+            AddParameters(arguments, "--clientAssemblies", parameters.ClientAssemblies);
+            AddParameters(arguments, "--clientAssemblyPathsNormalized", parameters.ClientAssemblyPathsNormalized);
 
             //Other arguments
-            arguments.Add("--codeGeneratorName");
-            AddEscaped(arguments, CodeGeneratorName ?? string.Empty);
-            arguments.Add("--generatedFileName");
-            AddEscaped(arguments, generatedFileName);
-
-            arguments.Add("--loggingPipe");
-            AddEscaped(arguments, pipeName);
+            AddParameter(arguments, "--codeGeneratorName", CodeGeneratorName);
+            AddParameter(arguments, "--generatedFileName", generatedFileName);
+            AddParameter(arguments, "--loggingPipe", pipeName);
         }
 
         #region Nested Types
