@@ -1,10 +1,10 @@
 ﻿using System;
 using System.IO;
-using OpenRiaServices.Tools;
 using System.Linq;
 using System.CommandLine;
-using System.Runtime.CompilerServices;
 using System.Collections.Generic;
+
+namespace OpenRiaServices.Tools.CodeGenTask;
 
 class Program
 {
@@ -20,15 +20,21 @@ class Program
         Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(Microsoft.Build.Locator.MSBuildLocator.QueryVisualStudioInstances().OrderByDescending(
            instance => instance.Version).First());
 
-        var clientCodeGenerationOptionPath = new Option<string>(name: "--clientCodeGenerationOptionPath")
-        {
-            IsRequired = true
-        };
+        var languageOption = new Option<string>("--language");
+        var clientFrameworkOption = new Option<string>("--clientFrameworkPath");
+        var serverProjectPathOption = new Option<string>("--serverProjectPath");
+        var clientProjectPathOption = new Option<string>("--clientProjectPath");
+        var clientRootNamespaceOption = new Option<string>("--clientRootNamespace");
+        var serverRootNamespaceOption = new Option<string>("--serverRootNamespace");
+        var isApplicationContextGenerationEnabledOption = new Option<bool>("--isApplicationContextGenerationEnabled");
+        var clientProjectTargetPlatformsOption = new Option<TargetPlatform>("--clientProjectTargetPlatform");
+        var useFullTypeNamesOption = new Option<bool>("--useFullTypeNames");
 
-        var sharedCodeServicePath = new Option<string>(name: "--sharedCodeServiceParameterPath")
-        {
-            IsRequired = true
-        };
+        var sharedSourceFilesOption = new Option<IEnumerable<string>>("--sharedSourceFiles") { AllowMultipleArgumentsPerToken = true };
+        var symbolSearchPathsOption = new Option<IEnumerable<string>>("--symbolSearchPaths") { AllowMultipleArgumentsPerToken = true };
+        var serverAssembliesOption = new Option<IEnumerable<string>>("--serverAssemblies") { AllowMultipleArgumentsPerToken = true };
+        var clientAssembliesOption = new Option<IEnumerable<string>>("--clientAssemblies") { AllowMultipleArgumentsPerToken = true };
+        var clientAssemblyPathsNormalizedOption = new Option<IEnumerable<string>>("--clientAssemblyPathsNormalized") { AllowMultipleArgumentsPerToken = true };
 
         var codeGeneratorName = new Option<string>(name: "--codeGeneratorName")
         {
@@ -42,18 +48,32 @@ class Program
 
         var rootCommand = new RootCommand("Sample app for running code generation")
         {
-            clientCodeGenerationOptionPath,
-            sharedCodeServicePath,
+            languageOption,
+            clientFrameworkOption,
+            serverProjectPathOption,
+            clientProjectPathOption,
+            clientRootNamespaceOption,
+            serverRootNamespaceOption,
+            isApplicationContextGenerationEnabledOption,
+            clientProjectTargetPlatformsOption,
+            useFullTypeNamesOption,
+            sharedSourceFilesOption,
+            symbolSearchPathsOption,
+            serverAssembliesOption,
+            clientAssembliesOption,
+            clientAssemblyPathsNormalizedOption,
             codeGeneratorName,
             generatedFileName
         };
 
         bool success = false;
 
-        rootCommand.SetHandler((clientCodeGenerationOptionPath, sharedCodeServicePath, codeGeneratorName, generatedFileName)
-            => RunCodeGenForNet6(clientCodeGenerationOptionPath, sharedCodeServicePath, codeGeneratorName, generatedFileName, out success),
-            clientCodeGenerationOptionPath,
-            sharedCodeServicePath,
+        rootCommand.SetHandler((clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName)
+            => RunCodeGenForNet6(clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, out success),
+            new ClientCodeGenerationOptionsBinder(
+                languageOption, clientFrameworkOption, serverProjectPathOption, clientProjectPathOption, clientRootNamespaceOption, serverRootNamespaceOption,
+                isApplicationContextGenerationEnabledOption, clientProjectTargetPlatformsOption, useFullTypeNamesOption),
+            new SharedCodeServiceParametersBinder(sharedSourceFilesOption, symbolSearchPathsOption, serverAssembliesOption, clientAssembliesOption, clientAssemblyPathsNormalizedOption),
             codeGeneratorName,
             generatedFileName);
 
@@ -64,26 +84,12 @@ class Program
             return -1;
     }
 
-    private static void RunCodeGenForNet6(string clientCodeGenerationOptionPath, string sharedCodeServicePath, string codeGeneratorName, string generatedFileName, out bool success)
+    private static void RunCodeGenForNet6(ClientCodeGenerationOptions clientCodeGenerationOption, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName, string generatedFileName, out bool success)
     {
         success = false;
-        SharedCodeServiceParameters sharedCodeServiceParameters;
-        ClientCodeGenerationOptions clientCodeGenerationOption;
 
         try
         {
-#pragma warning disable SYSLIB0011
-            using (Stream stream = File.Open(clientCodeGenerationOptionPath, FileMode.Open))
-            {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                clientCodeGenerationOption = (ClientCodeGenerationOptions)binaryFormatter.Deserialize(stream);
-            }
-
-            using (Stream stream = File.Open(sharedCodeServicePath, FileMode.Open))
-            {
-                var binaryFormatter = new System.Runtime.Serialization.Formatters.Binary.BinaryFormatter();
-                sharedCodeServiceParameters = (SharedCodeServiceParameters)binaryFormatter.Deserialize(stream);
-            }
             var log = new Logger();
 
             log.LogMessage(Environment.CommandLine);

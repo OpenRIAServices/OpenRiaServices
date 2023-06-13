@@ -56,6 +56,7 @@
     <!-- Use PrivateAssets="all" to prevent nuget packages to become nuget dependencies -->
     <!-- IMPORTANT: Also use ExcludeAssets="Runtime" if referencing msbuild packages https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022#dont-bundle-the-microsoftbuildutilitiescore-assembly -->
     <PackageReference Include="Mono.Cecil" Version="0.11.5" PrivateAssets="all" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" ExcludeAssets="Runtime" PrivateAssets="all">
