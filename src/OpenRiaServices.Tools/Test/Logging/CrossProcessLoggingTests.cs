@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Server.Test.Utilities;
 using OpenRiaServices.Tools.Logging;
@@ -24,7 +25,7 @@ namespace OpenRiaServices.Tools.Test
             }
 
             var destination = new ConsoleLogger();
-            server.WriteLogsTo(destination);
+            server.WriteLogsTo(destination, CancellationToken.None);
 
             CollectionAssert.AreEqual(new[] { "Message" }, destination.InfoMessages);
             CollectionAssert.AreEqual(new[] { "Warning", "LongWarning" }, destination.WarningMessages);
@@ -79,7 +80,7 @@ namespace OpenRiaServices.Tools.Test
             }
 
             var destination = new ConsoleLogger();
-            server.WriteLogsTo(destination);
+            server.WriteLogsTo(destination, CancellationToken.None);
 
             string errorMessage = destination.ErrorMessages.Single();
             StringAssert.Contains(errorMessage, ex.Message);

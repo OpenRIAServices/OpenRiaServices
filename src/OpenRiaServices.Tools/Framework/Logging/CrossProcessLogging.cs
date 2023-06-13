@@ -2,6 +2,7 @@
 using System.IO;
 using System.IO.Pipes;
 using System.Text;
+using System.Threading;
 
 /**
 # Cross Process Logger
@@ -79,7 +80,7 @@ internal sealed class CrossProcessLoggingWriter : ILoggingService, IDisposable
         _binaryWriter = new BinaryWriter(new BufferedStream(pipe), Encoding.Unicode);
     }
 
-    bool ILogger.HasLoggedErrors => throw new NotImplementedException();
+    public bool HasLoggedErrors { get; private set; }
 
     void ILoggingService.LogError(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber)
         => Write(LogLevel.Error, message, subcategory, errorCode, helpKeyword, file, lineNumber, columnNumber, endLineNumber, endColumnNumber);
@@ -122,6 +123,9 @@ internal sealed class CrossProcessLoggingWriter : ILoggingService, IDisposable
     {
         byte type = (byte)((int)packageType << 4 | (int)logLevel);
         _binaryWriter.Write(type);
+
+        if (logLevel == LogLevel.Error)
+            HasLoggedErrors = true;
     }
 
     private void Write(LogLevel logLevel, string message)
@@ -170,14 +174,14 @@ internal sealed class CrossProcessLoggingServer : IDisposable
     ///  Read logs and forwards them to <paramref name="logger"/>.
     ///  any exception will catched and logged
     /// </summary>
-    public void WriteLogsTo(ILoggingService logger)
+    public void WriteLogsTo(ILoggingService logger, CancellationToken cancellationToken)
     {
         // The local part of the pipe must be closed (after proces is started and before we read from the pipe)
         _pipe.DisposeLocalCopyOfClientHandle();
 
         try
         {
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
                 byte type = _binaryReader.ReadByte();
                 var logLevel = (LogLevel)(type & 0b0000_1111);

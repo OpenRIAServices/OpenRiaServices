@@ -3,6 +3,7 @@ using System.IO;
 using System.Linq;
 using System.CommandLine;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace OpenRiaServices.Tools.CodeGenTask;
 
@@ -10,8 +11,6 @@ class Program
 {
     static int Main(string[] args) // Take in params to setup the build here
     {
-        Console.WriteLine($"OpenRiaServices CodeGen running on {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
-
         // TODO: Coonsider setting "working diretory" (when launching exe? or here) to match old behaviour 
 
         // TODO: Remove dependency on MSBuild and then remove any PackageReferences to MSBuild and MSBuildLocator
@@ -93,6 +92,7 @@ class Program
         success = false;
 
         ILoggingService log = string.IsNullOrEmpty(loggingPipe) ? new ConsoleLogger() : new OpenRiaServices.Tools.Logging.CrossProcessLoggingWriter(loggingPipe);
+        log.LogMessage($"OpenRiaServices CodeGen running on {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
         try
         {
             // TODO: Remove

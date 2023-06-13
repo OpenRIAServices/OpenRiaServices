@@ -791,7 +791,6 @@ namespace OpenRiaServices.Tools
                     var startInfo = new ProcessStartInfo
                     {
                         FileName = path,
-                        Arguments = $"--loggingPipe {loggingServer.PipeName}",
                         UseShellExecute = false,
                         CreateNoWindow = true,
                     };
@@ -802,14 +801,27 @@ namespace OpenRiaServices.Tools
                     BuildEngine3.Yield();
                     try
                     {
-                        process.WaitForExit(60_000);
+                        // Read all logs from child process
+                        TimeSpan timeout = TimeSpan.FromSeconds(60);
+#if DEBUG
+                        // Increase timeout when debugger is attached
+                        if (Debugger.IsAttached)
+                            timeout = TimeSpan.FromSeconds(600);
+#endif
+
+                        // Consider doing async IO or similar in background and specify a timeout
+                        using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
+                        {
+                            using var _ = cts.Token.Register(obj => ((Process)obj).Kill(), process);
+                            loggingServer.WriteLogsTo(this, cts.Token);
+                        }
+
+
+                        process.WaitForExit();
                         FilesWereWritten = process.ExitCode == 0;
-
-
                     }
                     finally
                     {
-                        loggingServer.WriteLogsTo(this);
                         BuildEngine3.Reacquire();
                     }
                 }
