@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
-using OpenRiaServices.Tools;
 
+namespace OpenRiaServices.Tools.CodeGenTask;
 
 class ConsoleLogger : ILoggingService
 {

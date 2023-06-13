@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.CommandLine;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace OpenRiaServices.Tools.CodeGenTask;
 
@@ -35,10 +34,7 @@ class Program
         var clientAssembliesOption = new Option<IEnumerable<string>>("--clientAssemblies") { AllowMultipleArgumentsPerToken = true };
         var clientAssemblyPathsNormalizedOption = new Option<IEnumerable<string>>("--clientAssemblyPathsNormalized") { AllowMultipleArgumentsPerToken = true };
 
-        var codeGeneratorName = new Option<string>(name: "--codeGeneratorName")
-        {
-            IsRequired = true
-        };
+        var codeGeneratorName = new Option<string>(name: "--codeGeneratorName") { };
 
         var generatedFileName = new Option<string>(name: "--generatedFileName")
         {
@@ -70,8 +66,8 @@ class Program
 
         bool success = false;
 
-        rootCommand.SetHandler((clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, pipeName)
-            => RunCodeGenForNet6(clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, pipeName, out success),
+       rootCommand.SetHandler((clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, pipeName)
+            => success = RunCodeGenForNet6(clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, pipeName),
             new ClientCodeGenerationOptionsBinder(
                 languageOption, clientFrameworkOption, serverProjectPathOption, clientProjectPathOption, clientRootNamespaceOption, serverRootNamespaceOption,
                 isApplicationContextGenerationEnabledOption, clientProjectTargetPlatformsOption, useFullTypeNamesOption),
@@ -87,26 +83,26 @@ class Program
             return -1;
     }
 
-    private static void RunCodeGenForNet6(ClientCodeGenerationOptions clientCodeGenerationOption, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName, string generatedFileName, string loggingPipe,  out bool success)
+    private static bool RunCodeGenForNet6(ClientCodeGenerationOptions clientCodeGenerationOption, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName, string generatedFileName, string loggingPipe)
     {
-        success = false;
-
         ILoggingService log = string.IsNullOrEmpty(loggingPipe) ? new ConsoleLogger() : new OpenRiaServices.Tools.Logging.CrossProcessLoggingWriter(loggingPipe);
-        log.LogMessage($"OpenRiaServices CodeGen running on {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
+        
         try
         {
+            log.LogMessage($"OpenRiaServices CodeGen running on {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
+
             // TODO: Remove
             log.LogMessage("CommandLine: " + Environment.CommandLine);
 
-            
             SetupAppConfig(clientCodeGenerationOption);
             RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
             log.LogMessage("Code generation succeeded");
-            success = true;
+            return true;
         }
         catch (Exception ex)
         {
             log.LogException(ex);
+            return false;
         }
         finally
         {

@@ -1,20 +1,12 @@
 ﻿using System;
-using System.CodeDom.Compiler;
-using System.Collections;
 using System.Collections.Generic;
-using System.CommandLine;
-using System.CommandLine.Binding;
-using System.Data.Common;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
-using Microsoft.Build.Evaluation;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using OpenRiaServices.Tools.Logging;
@@ -794,7 +786,14 @@ namespace OpenRiaServices.Tools
                         UseShellExecute = false,
                         CreateNoWindow = true,
                     };
-                    SetArgumentListForConsoleApp(generatedFileName, options, sharedCodeServiceParameters, startInfo, loggingServer.PipeName);
+                    List<string> arguments = new List<string>();
+                    SetArgumentListForConsoleApp(arguments, generatedFileName, options, sharedCodeServiceParameters, loggingServer.PipeName);
+
+                    // TODO: Make code robust
+                    string filename = Path.GetTempFileName();
+                    File.WriteAllLines(filename, arguments);
+                    startInfo.Arguments = "@" + filename;
+
                     var process = Process.Start(startInfo);
                     // Informs the system that this task has a long-running out-of - process component
                     //     and other work can be done in the build while that work completes.
@@ -816,13 +815,13 @@ namespace OpenRiaServices.Tools
                             loggingServer.WriteLogsTo(this, cts.Token);
                         }
 
-
                         process.WaitForExit();
                         FilesWereWritten = process.ExitCode == 0;
                     }
                     finally
                     {
                         BuildEngine3.Reacquire();
+                        RiaClientFilesTaskHelpers.SafeFileDelete(filename, this);
                     }
                 }
             }
@@ -1227,7 +1226,7 @@ namespace OpenRiaServices.Tools
             parameters.ClientAssemblyPathsNormalized = this.ClientAssemblyPathsNormalized.ToArray();
 
             // Convert the list of server assemblies into a search path for PDB's
-            parameters.SymbolSearchPaths = serverAssemblies.Select(a => Path.GetDirectoryName(a)).ToArray();
+            parameters.SymbolSearchPaths = serverAssemblies.Select(a => Path.GetDirectoryName(a)).Distinct().ToArray();
 
             return parameters;
         }
@@ -1523,61 +1522,62 @@ namespace OpenRiaServices.Tools
             }
         }
 
-        private void SetArgumentListForConsoleApp(string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters parameters, ProcessStartInfo startInfo, string pipeName)
+        private void SetArgumentListForConsoleApp(List<string> arguments, string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters parameters,string pipeName)
         {
-#if NETFRAMEWORK //ArgumentList is not availible for netframework
-                    throw new Exception("Should never be here with netframework");
-#else
+            static void AddEscaped(List<string> list, string parameter)
+            {
+                list.Add($"\"{parameter}\"");
+            }
+
             //Arguments for ClientCodeGenerationOptions
-            startInfo.ArgumentList.Add("--language");
-            startInfo.ArgumentList.Add(options.Language);
-            startInfo.ArgumentList.Add("--clientFrameworkPath");
-            startInfo.ArgumentList.Add(options.ClientFrameworkPath);
-            startInfo.ArgumentList.Add("--serverProjectPath");
-            startInfo.ArgumentList.Add(options.ServerProjectPath);
-            startInfo.ArgumentList.Add("--clientProjectPath");
-            startInfo.ArgumentList.Add(options.ClientProjectPath);
-            startInfo.ArgumentList.Add("--clientRootNamespace");
-            startInfo.ArgumentList.Add(options.ClientRootNamespace ?? string.Empty);
-            startInfo.ArgumentList.Add("--serverRootNamespace");
-            startInfo.ArgumentList.Add(options.ServerRootNamespace);
-            startInfo.ArgumentList.Add("--isApplicationContextGenerationEnabled");
-            startInfo.ArgumentList.Add(options.IsApplicationContextGenerationEnabled.ToString());
-            startInfo.ArgumentList.Add("--clientProjectTargetPlatform");
-            startInfo.ArgumentList.Add(options.ClientProjectTargetPlatform.ToString());
-            startInfo.ArgumentList.Add("--useFullTypeNames");
-            startInfo.ArgumentList.Add(options.UseFullTypeNames.ToString());
+            arguments.Add("--language");
+            arguments.Add(options.Language);
+            arguments.Add("--clientFrameworkPath");
+            AddEscaped(arguments, options.ClientFrameworkPath);
+            arguments.Add("--serverProjectPath");
+            AddEscaped(arguments, options.ServerProjectPath);
+            arguments.Add("--clientProjectPath");
+            AddEscaped(arguments, options.ClientProjectPath);
+            arguments.Add("--clientRootNamespace");
+            AddEscaped(arguments, options.ClientRootNamespace ?? string.Empty);
+            arguments.Add("--serverRootNamespace");
+            AddEscaped(arguments, options.ServerRootNamespace);
+            arguments.Add("--isApplicationContextGenerationEnabled");
+            arguments.Add(options.IsApplicationContextGenerationEnabled.ToString());
+            arguments.Add("--clientProjectTargetPlatform");
+            arguments.Add(options.ClientProjectTargetPlatform.ToString());
+            arguments.Add("--useFullTypeNames");
+            arguments.Add(options.UseFullTypeNames.ToString());
 
             //Arguments for SharedCodeServiceParameters
-            startInfo.ArgumentList.Add("--sharedSourceFiles");
+            arguments.Add("--sharedSourceFiles");
             foreach (var file in parameters.SharedSourceFiles)
-                startInfo.ArgumentList.Add(file);
+                AddEscaped(arguments, file);
             
-            startInfo.ArgumentList.Add("--symbolSearchPaths");
+            arguments.Add("--symbolSearchPaths");
             foreach (var file in parameters.SymbolSearchPaths)
-                startInfo.ArgumentList.Add(file);
+                AddEscaped(arguments, file);
             
-            startInfo.ArgumentList.Add("--serverAssemblies");
+            arguments.Add("--serverAssemblies");
             foreach (var file in parameters.ServerAssemblies)
-                startInfo.ArgumentList.Add(file);
+                AddEscaped(arguments, file);
             
-            startInfo.ArgumentList.Add("--clientAssemblies");
+            arguments.Add("--clientAssemblies");
             foreach (var file in parameters.ClientAssemblies)
-                startInfo.ArgumentList.Add(file);
+                AddEscaped(arguments, file);
             
-            startInfo.ArgumentList.Add("--clientAssemblyPathsNormalized");
+            arguments.Add("--clientAssemblyPathsNormalized");
             foreach (var file in parameters.ClientAssemblyPathsNormalized)
-                startInfo.ArgumentList.Add(file);
+                AddEscaped(arguments, file);
 
             //Other arguments
-            startInfo.ArgumentList.Add("--codeGeneratorName");
-            startInfo.ArgumentList.Add(CodeGeneratorName ?? string.Empty);
-            startInfo.ArgumentList.Add("--generatedFileName");
-            startInfo.ArgumentList.Add(generatedFileName);
+            arguments.Add("--codeGeneratorName");
+            AddEscaped(arguments, CodeGeneratorName ?? string.Empty);
+            arguments.Add("--generatedFileName");
+            AddEscaped(arguments, generatedFileName);
 
-            startInfo.ArgumentList.Add("--loggingPipe");
-            startInfo.ArgumentList.Add(pipeName);
-#endif
+            arguments.Add("--loggingPipe");
+            AddEscaped(arguments, pipeName);
         }
 
         #region Nested Types
@@ -1628,95 +1628,5 @@ namespace OpenRiaServices.Tools
             }
         }
         #endregion // Nested Types
-    }
-
-    /// <summary>
-    /// Binder class for <see cref="ClientCodeGenerationOptions"/>. Used to bind arguments to handlers
-    /// </summary>
-    public class ClientCodeGenerationOptionsBinder : BinderBase<ClientCodeGenerationOptions>
-    {
-        private readonly Option<string> _language;
-        private readonly Option<string> _clientFrameworkPath;
-        private readonly Option<string> _serverProjectPath;
-        private readonly Option<string> _clientProjectPath;
-        private readonly Option<string> _clientRootNamespace;
-        private readonly Option<string> _serverRootNamespace;
-        private readonly Option<bool> _isApplicationContextGenerationEnabled;
-        private readonly Option<TargetPlatform> _clientProjectTargetPlatform;
-        private readonly Option<bool> _useFullTypeNames;
-
-        /// <summary>
-        /// Constructor that sets all arguments
-        /// </summary>
-        public ClientCodeGenerationOptionsBinder(Option<string> language, Option<string> clientFrameworkPath, Option<string> serverProjectPath, Option<string> clientProjectPath, Option<string> clientRootNamespace, Option<string> serverRootNamespace, Option<bool> isApplicationContextGenerationEnabled, Option<TargetPlatform> clientProjectTargetPlatform, Option<bool> useFullTypeNames)
-        {
-            _language = language;
-            _clientFrameworkPath = clientFrameworkPath;
-            _serverProjectPath = serverProjectPath;
-            _clientProjectPath = clientProjectPath;
-            _clientRootNamespace = clientRootNamespace;
-            _serverRootNamespace = serverRootNamespace;
-            _isApplicationContextGenerationEnabled = isApplicationContextGenerationEnabled;
-            _clientProjectTargetPlatform = clientProjectTargetPlatform;
-            _useFullTypeNames = useFullTypeNames;
-        }
-
-        /// <summary>
-        /// Parse result in binding context to create and return <see cref="ClientCodeGenerationOptions"/>
-        /// </summary>
-        protected override ClientCodeGenerationOptions GetBoundValue(BindingContext bindingContext)
-        {
-            return new ClientCodeGenerationOptions
-            {
-                Language = bindingContext.ParseResult.GetValueForOption(_language),
-                ClientFrameworkPath = bindingContext.ParseResult.GetValueForOption(_clientFrameworkPath),
-                ServerProjectPath = bindingContext.ParseResult.GetValueForOption(_serverProjectPath),
-                ClientProjectPath = bindingContext.ParseResult.GetValueForOption(_clientProjectPath),
-                ClientRootNamespace = bindingContext.ParseResult.GetValueForOption(_clientRootNamespace),
-                ServerRootNamespace = bindingContext.ParseResult.GetValueForOption(_serverRootNamespace),
-                IsApplicationContextGenerationEnabled = bindingContext.ParseResult.GetValueForOption(_isApplicationContextGenerationEnabled),
-                ClientProjectTargetPlatform = bindingContext.ParseResult.GetValueForOption(_clientProjectTargetPlatform),
-                UseFullTypeNames = bindingContext.ParseResult.GetValueForOption(_useFullTypeNames),
-            };
-        }
-    }
-
-    /// <summary>
-    /// Binder class for <see cref="SharedCodeServiceParameters"/>. Used to bind arguments to handlers
-    /// </summary>
-    internal class SharedCodeServiceParametersBinder : BinderBase<SharedCodeServiceParameters>
-    {
-        private readonly Option<IEnumerable<string>> _sharedSourceFiles;
-        private readonly Option<IEnumerable<string>> _symbolSearchPaths;
-        private readonly Option<IEnumerable<string>> _serverAssemblies;
-        private readonly Option<IEnumerable<string>> _clientAssemblies;
-        private readonly Option<IEnumerable<string>> _clientAssemblyPathsNomalized;
-
-        /// <summary>
-        /// Constructor that sets all arguments
-        /// </summary>
-        internal SharedCodeServiceParametersBinder(Option<IEnumerable<string>> sharedSourceFiles, Option<IEnumerable<string>> symbolSearchPaths, Option<IEnumerable<string>> serverAssemblies, Option<IEnumerable<string>> clientAssemblies, Option<IEnumerable<string>> clientAssemblyPathsNomalized)
-        {
-            _sharedSourceFiles = sharedSourceFiles;
-            _symbolSearchPaths = symbolSearchPaths;
-            _serverAssemblies = serverAssemblies;
-            _clientAssemblies = clientAssemblies;
-            _clientAssemblyPathsNomalized = clientAssemblyPathsNomalized;
-        }
-
-        /// <summary>
-        /// Parse result in binding context to create and return <see cref="SharedCodeServiceParameters"/>
-        /// </summary>
-        protected override SharedCodeServiceParameters GetBoundValue(BindingContext bindingContext)
-        {
-            return new SharedCodeServiceParameters
-            {
-                SharedSourceFiles = bindingContext.ParseResult.GetValueForOption(_sharedSourceFiles).ToArray(),
-                SymbolSearchPaths = bindingContext.ParseResult.GetValueForOption(_symbolSearchPaths).ToArray(),
-                ServerAssemblies = bindingContext.ParseResult.GetValueForOption(_serverAssemblies).ToArray(),
-                ClientAssemblies = bindingContext.ParseResult.GetValueForOption(_clientAssemblies).ToArray(),
-                ClientAssemblyPathsNormalized = bindingContext.ParseResult.GetValueForOption(_clientAssemblyPathsNomalized).ToArray(),
-            };
-        }
     }
 }
