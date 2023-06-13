@@ -62,6 +62,7 @@ namespace OpenRiaServices.Tools
         /// <value>
         /// This property is no longer used but exists for backward compatibility
         /// </value>
+        [Obsolete("to remove")]
         public string LiveIntellisense { get; set; }
 
         /// <summary>
