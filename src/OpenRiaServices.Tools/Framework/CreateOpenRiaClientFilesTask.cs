@@ -1576,7 +1576,7 @@ namespace OpenRiaServices.Tools
             startInfo.ArgumentList.Add(generatedFileName);
 
             startInfo.ArgumentList.Add("--loggingPipe");
-            startInfo.ArgumentList.Add(loggingServer.PipeName);
+            startInfo.ArgumentList.Add(pipeName);
 #endif
         }
 

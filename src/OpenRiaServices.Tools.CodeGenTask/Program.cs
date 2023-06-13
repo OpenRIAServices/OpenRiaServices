@@ -101,7 +101,7 @@ class Program
             
             SetupAppConfig(clientCodeGenerationOption);
             RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
-            log.Message("Code generation succeeded");
+            log.LogMessage("Code generation succeeded");
             success = true;
         }
         catch (Exception ex)
