@@ -835,12 +835,17 @@ namespace OpenRiaServices.Tools
                 // 1. Either the process has either closed the pipe and is shutting down and should exit within a few ms
                 // 2. or the timeout has elapsed and we have called Kill on the process so it should be stopped or stopping
                 process.WaitForExit();
-                return process.ExitCode == 0;
+                var success = process.ExitCode == 0;
+                if (!success)
+                {
+                    Log.LogError("Process failed with ExitCode: {0}", process.ExitCode);
+                }
+                return success;
             }
             finally
             {
                 BuildEngine3.Reacquire();
-                RiaClientFilesTaskHelpers.SafeFileDelete(filename, this);
+                //RiaClientFilesTaskHelpers.SafeFileDelete(filename, this);
             }
         }
 
