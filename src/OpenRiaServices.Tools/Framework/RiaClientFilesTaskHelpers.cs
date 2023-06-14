@@ -1,6 +1,11 @@
 ﻿using System;
 using System.Globalization;
 using System.IO;
+using System.Linq;
+#if !NETFRAMEWORK
+using System.Reflection;
+using System.Runtime.Loader;
+#endif
 using OpenRiaServices.Tools;
 
 internal static class RiaClientFilesTaskHelpers
@@ -8,30 +13,67 @@ internal static class RiaClientFilesTaskHelpers
 #if !NETFRAMEWORK
     public static bool CodeGenForNet6(string generatedFileName, ClientCodeGenerationOptions options, ILoggingService logger, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName)
     {
-        string generatedFileContent;
-        // Create the "dispatcher" in the 2nd AppDomain.
-        // This object will find and invoke the appropriate code generator
-        using (var dispatcher = new ClientCodeGenerationDispatcher())
+        // We might want to create and use a separate AssemblyLoadContext to allow unloading of server assemblies 
+        // the following proves good information (apart from official documentation)
+        // * https://jeremybytes.blogspot.com/2020/01/dynamically-loading-types-in-net-core.html
+        // * https://tsuyoshiushio.medium.com/understand-advanced-assemblyloadcontext-with-c-16a9d0cfeae3
+        // * https://github.com/dotnet/runtime/issues/6880
+        // 
+        // If using a custom assemblyLoadContext we need to add `using (var context = loadContext.EnterContextualReflection())` around the call to dispatcher.GenerateCode
+        //  OR before calling this method
+        Func<AssemblyLoadContext, AssemblyName, Assembly> resolveFromServerAssemblies = GetServerAssemblyResolver(sharedCodeServiceParameters.ServerAssemblies.First());
+        var assemblyLoadContext = AssemblyLoadContext.CurrentContextualReflectionContext ?? AssemblyLoadContext.Default;
+        assemblyLoadContext.Resolving += resolveFromServerAssemblies;
+        try
         {
-            // TODO:? Use assmebly load context if running within task
-            //using (var context = dispatcher.EnterContextualReflection())
-            //{
-                generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, codeGeneratorName);
-            //}
-        }
+            // Create the "dispatcher" in the 2nd AppDomain.
+            // This object will find and invoke the appropriate code generator
+            using (var dispatcher = new ClientCodeGenerationDispatcher())
+            {
+                string generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, codeGeneratorName);
 
-        // Tell the user where we are writing the generated code
-        if (!string.IsNullOrEmpty(generatedFileContent))
+                // Tell the user where we are writing the generated code
+                if (!string.IsNullOrEmpty(generatedFileContent))
+                {
+                    logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
+                }
+
+                // If VS is hosting us, write to its TextBuffer, else simply write to disk
+                // If the file is empty, delete it.
+                return WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
+            }
+        }
+        finally
         {
-            logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
+            assemblyLoadContext.Resolving -= resolveFromServerAssemblies;
         }
+    }
 
-        // If VS is hosting us, write to its TextBuffer, else simply write to disk
-        // If the file is empty, delete it.
-        var isWritten = WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
-        return isWritten;
+    /// <summary>
+    /// Get a method which will resolve assemblies based the server projects dependencies (by looking at .deps.json)
+    /// </summary>
+    /// <param name="serverAssemblyPath">path to server assembly</param>
+    private static Func<AssemblyLoadContext, AssemblyName, Assembly> GetServerAssemblyResolver(string serverAssemblyPath)
+    {
+        // Assume first item in parameters.ServerAssemblies is output of server project
+        var assemblyDependencyResolver = new AssemblyDependencyResolver(serverAssemblyPath);
+        return (AssemblyLoadContext loadContext, AssemblyName assemblyName) =>
+        {
+            if (assemblyName.Name.EndsWith(".resources"))
+                return null;
+
+            // Resolve dependency using server projects .deps.json file first
+            string path = assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
+            if (path != null && loadContext.LoadFromAssemblyPath(path) is Assembly assembly)
+            {
+                return assembly;
+            }
+
+            return null;
+        };
     }
 #endif
+
     /// <summary>
     /// Deletes the specified file in VS-compatible way
     /// </summary>

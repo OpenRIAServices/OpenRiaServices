@@ -10,19 +10,6 @@ using System.Reflection;
 using OpenRiaServices.Server;
 using System.Text;
 using OpenRiaServices.Tools.SharedTypes;
-using System.IO;
-#if !NETFRAMEWORK
-/**
- * TODO: Move all AssemblyLoadContext to a separate class (and file) instead of having it in  ClientCodeGenerationDispatcher
-Below might be good to read about how it works
- * https://jeremybytes.blogspot.com/2020/01/dynamically-loading-types-in-net-core.html
- * https://tsuyoshiushio.medium.com/understand-advanced-assemblyloadcontext-with-c-16a9d0cfeae3
- * https://github.com/dotnet/runtime/issues/6880
- * 
-*/
-
-using System.Runtime.Loader;
-#endif
 
 namespace OpenRiaServices.Tools
 {
@@ -75,35 +62,20 @@ namespace OpenRiaServices.Tools
                 // Try to load mono.cecil from same folder as tools
                 var location = toolingAssembly.Location;
 
-                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
                 // Try to load mono.cecil from same folder as tools
                 // This prevents problem if server project contains another version of mono Cecil
                 var cecilPath = location.Replace(toolingAssembly.GetName().Name + ".dll", "Mono.Cecil.dll");
                 AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
                 AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 
-#if !NETFRAMEWORK
-                // Note: we might want to fallback to also searching the paths of all references assemblies on any error
+#if NETFRAMEWORK
+                // For Netframework build we have just started executing in a new AppDomain for the server project
+                // We only have the current executing assembly loaded
 
-                // TODO: should this code be called before calling into ClientCodeGeneratorDispatcher ?
-
-                // Assume first item in parameters.ServerAssemblies is output of server project
-                var assemblyDependencyResolver = new AssemblyDependencyResolver(parameters.ServerAssemblies.First());
-
-                AssemblyLoadContext.Default.Resolving += (AssemblyLoadContext loadContext, AssemblyName assemblyName) =>
-                {
-                    if (assemblyName.Name.EndsWith(".resources"))
-                        return null;
-
-                    // Resolve dependency using server projects .deps.json file first
-                    string path = assemblyDependencyResolver.ResolveAssemblyToPath(assemblyName);
-                    if(path != null && loadContext.LoadFromAssemblyPath(path) is Assembly assembly)
-                    {
-                        return assembly;
-                    }
-
-                    return null;
-                };
+                // We load the ".Server" assembly actually from the server projects output folder since it was previously required to mix stongly named and not stronly named
+                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
+#else
+               // The current AssemblyLoadContext has been previously setup to load the server projects dependencies, no additional action is needed
 #endif
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
@@ -143,7 +115,8 @@ namespace OpenRiaServices.Tools
             // Try to load the OpenRiaServices.DomainServies.Server assembly using the one used by the server project
             // This way we can be sure that codegen works with both signed and unsigned server assembly while
             // making sure that only a single version is loaded
-            var (filename, serverAssemblyPath) = GetServerAssembly(parameters);
+            var filename = OpenRiaServices_DomainServices_Server_Assembly;
+            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(filename));
             if (serverAssemblyPath != null)
             {
                 var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
@@ -168,13 +141,6 @@ namespace OpenRiaServices.Tools
             {
                 loggingService.LogError(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Missing_OpenRiaServices_Reference, filename));
             }
-        }
-
-        private static (string FileName, string serverAsmPath) GetServerAssembly(SharedCodeServiceParameters parameters)
-        {
-            var filename = OpenRiaServices_DomainServices_Server_Assembly;
-            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(filename));
-            return (filename, serverAssemblyPath);
         }
 
         /// <summary>
@@ -516,6 +482,7 @@ namespace OpenRiaServices.Tools
 #if NETFRAMEWORK
         void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
         {
+            // Intentionally left empty, there is nothing to do
         }
 #endif
 
