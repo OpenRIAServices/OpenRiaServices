@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
@@ -723,41 +724,7 @@ namespace OpenRiaServices.Tools
                 if (IsServerProjectNetFramework())
                 {
 #if NETFRAMEWORK
-                    // The other AppDomain gets a logger that will log back to this AppDomain
-                    CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
-
-                    // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
-                    // This can occur when the build environment is configured incorrectly
-                    if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-                    {
-                        throw new InvalidOperationException(
-                            Resource.HttpRuntimeInitializationError,
-                            System.Web.Hosting.HostingEnvironment.InitializationException);
-                    }
-                    
-                    // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
-                    System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter()
-                    {
-                        PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,
-                    };
-                    using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
-                    using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
-                    {
-                        // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
-                        // the appropriate code generator.
-                        generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
-                    }
-
-                    // Tell the user where we are writing the generated code
-                    if (!string.IsNullOrEmpty(generatedFileContent))
-                    {
-                        logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
-                    }
-
-                    // If VS is hosting us, write to its TextBuffer, else simply write to disk
-                    // If the file is empty, delete it.
-                    FilesWereWritten = RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
-
+                    generatedFileContent = GenerateClientProxiesForNetFramework(generatedFileName, sourceDir, targetDir, options, sharedCodeServiceParameters);
 #else
                     // TODO: Verify below statement, I exepct that it might not work (and does not need to work)
                     // Probably we need a "hosting process" for net framework in this case
@@ -772,57 +739,9 @@ namespace OpenRiaServices.Tools
                 }
                 else
                 {
-                    // Call the console app from here if Net 6.0 or greater
-                    var path = Path.Combine(Path.GetDirectoryName(typeof(CreateOpenRiaClientFilesTask).Assembly.Location),
-                        "../net6.0/OpenRiaServices.Tools.CodeGenTask.exe");
-
-                    if (!File.Exists(path))
-                        throw new FileNotFoundException(path);
-
-                    using var loggingServer = new CrossProcessLoggingServer();
-                    var startInfo = new ProcessStartInfo
-                    {
-                        FileName = path,
-                        UseShellExecute = false,
-                        CreateNoWindow = true,
-                    };
-                    List<string> arguments = new List<string>();
-                    SetArgumentListForConsoleApp(arguments, generatedFileName, options, sharedCodeServiceParameters, loggingServer.PipeName);
-
-                    // TODO: Make code robust
-                    string filename = Path.GetTempFileName();
-                    File.WriteAllLines(filename, arguments);
-                    startInfo.Arguments = "@" + filename;
-
-                    var process = Process.Start(startInfo);
-                    // Informs the system that this task has a long-running out-of - process component
-                    //     and other work can be done in the build while that work completes.
-                    BuildEngine3.Yield();
-                    try
-                    {
-                        // Read all logs from child process
-                        TimeSpan timeout = TimeSpan.FromSeconds(60);
-#if DEBUG
-                        // Increase timeout when debugger is attached
-                        if (Debugger.IsAttached)
-                            timeout = TimeSpan.FromSeconds(600);
-#endif
-
-                        // Consider doing async IO or similar in background and specify a timeout
-                        using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
-                        {
-                            using var _ = cts.Token.Register(obj => ((Process)obj).Kill(), process);
-                            loggingServer.WriteLogsTo(this, cts.Token);
-                        }
-
-                        process.WaitForExit();
-                        FilesWereWritten = process.ExitCode == 0;
-                    }
-                    finally
-                    {
-                        BuildEngine3.Reacquire();
-                        RiaClientFilesTaskHelpers.SafeFileDelete(filename, this);
-                    }
+                    // PERF: If running with a compatible target framework (!NETFRAMEWORK) 
+                    // we should be able to call into the code generation directly without invoking the executable
+                    FilesWereWritten = GenerateClientProxiesOutOfProcess(generatedFileName, options, sharedCodeServiceParameters);
                 }
             }
             else
@@ -854,6 +773,126 @@ namespace OpenRiaServices.Tools
             return;
         }
 
+        /// <summary>
+        /// Run code generation in a separate .exe in order to support .NET (net core) code generation from NETFRAMEWORK version of msbuild
+        /// </summary>
+        /// <remarks>
+        ///  We might want to add a "targetframework" parameter to 
+        ///  1. allow running code generation under a specific target framework (instead of "lastest major")
+        ///  2. allow launching NETFRAMEWORK version of code generation from dotnet build
+        /// </remarks>
+        private bool GenerateClientProxiesOutOfProcess(string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters sharedCodeServiceParameters)
+        {
+            // Call the console app from here if Net 6.0 or greater
+            string path = Path.Combine(Path.GetDirectoryName(typeof(CreateOpenRiaClientFilesTask).Assembly.Location),
+                "../net6.0/OpenRiaServices.Tools.CodeGenTask.exe");
+
+            if (!File.Exists(path))
+                throw new FileNotFoundException(path);
+
+            using var loggingServer = new CrossProcessLoggingServer();
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = path,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+            List<string> arguments = new List<string>();
+            SetArgumentListForConsoleApp(arguments, generatedFileName, options, sharedCodeServiceParameters, loggingServer.PipeName);
+
+            // TODO: Make code robust
+            string filename = Path.GetTempFileName();
+            File.WriteAllLines(filename, arguments);
+            startInfo.Arguments = "@" + filename;
+
+            var process = Process.Start(startInfo);
+
+            // Informs the system that this task has a long-running out-of - process component
+            //     and other work can be done in the build while that work completes.
+            BuildEngine3.Yield();
+            try
+            {
+                // Read all logs from child process
+                TimeSpan timeout = TimeSpan.FromSeconds(60);
+#if DEBUG
+                // Increase timeout when debugger is attached
+                if (Debugger.IsAttached)
+                    timeout = TimeSpan.FromSeconds(600);
+#endif
+
+                // Consider doing async IO or similar in background and specify a timeout
+                using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
+                {
+                    // Kill process if CancellationTokenSource elapses before we go out of scope
+                    using var _ = cts.Token.Register(obj => ((Process)obj).Kill(), process);
+
+                    // Read logs from pipe and forward to this, it will no complete until the client has closed the pipe
+                    // in case of any serious error where client fails to close the pipe, we rely on the CancellationTokenSource to timeout
+                    loggingServer.WriteLogsTo(this, cts.Token);
+                }
+
+                // Even without a timeout this should complete quickly
+                // 1. Either the process has either closed the pipe and is shutting down and should exit within a few ms
+                // 2. or the timeout has elapsed and we have called Kill on the process so it should be stopped or stopping
+                process.WaitForExit();
+                return process.ExitCode == 0;
+            }
+            finally
+            {
+                BuildEngine3.Reacquire();
+                RiaClientFilesTaskHelpers.SafeFileDelete(filename, this);
+            }
+        }
+
+#if NETFRAMEWORK
+        /// <summary>
+        /// Use <see cref="System.Web.Compilation"/> to build and load the server project assemblies
+        /// </summary>
+        /// <remarks>
+        /// Prevent inlining so that we only reference and load System.Web when needed for compilation
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private string GenerateClientProxiesForNetFramework(string generatedFileName, string sourceDir, string targetDir, ClientCodeGenerationOptions options, SharedCodeServiceParameters sharedCodeServiceParameters)
+        {
+            string generatedFileContent;
+            // The other AppDomain gets a logger that will log back to this AppDomain
+            CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
+
+            // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
+            // This can occur when the build environment is configured incorrectly
+            if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+            {
+                throw new InvalidOperationException(
+                    Resource.HttpRuntimeInitializationError,
+                    System.Web.Hosting.HostingEnvironment.InitializationException);
+            }
+
+            // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
+            System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter()
+            {
+                PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,
+            };
+            using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
+            using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
+            {
+                // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
+                // the appropriate code generator.
+                generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
+            }
+
+            // Tell the user where we are writing the generated code
+            if (!string.IsNullOrEmpty(generatedFileContent))
+            {
+                logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
+            }
+
+            // If VS is hosting us, write to its TextBuffer, else simply write to disk
+            // If the file is empty, delete it.
+            FilesWereWritten = RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
+            return generatedFileContent;
+        }
+#endif
+
         private bool IsServerProjectNetFramework()
         {
             if (ServerAssemblies.FirstOrDefault() is ITaskItem serverAssembly)
@@ -867,26 +906,37 @@ namespace OpenRiaServices.Tools
                     return isFramework;
                 }
 
-                // TODO: Look at output assembly instead of what framework the code generation uses
-                // If ServerProject this
-                // An other solution would also be to look at the assemblies referenced
-                // and se if there are any paths which contains '.NETFramework' or '\net4*\'
-                using var server = Mono.Cecil.AssemblyDefinition.ReadAssembly(serverAssembly.ItemSpec);
-
-                var name = typeof(TargetFrameworkAttribute).FullName;
-                var targetFrameworkAttribute =
-                    server.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == name);
-
-                if (targetFrameworkAttribute != null
-                    && targetFrameworkAttribute.HasConstructorArguments)
-                {
-                    bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework");
-                    Log.LogMessage("Is server project .NETFramework based on TargetFrameworkAttribute: {0}", isFramework.ToString());
-                    return isFramework;
-                }
+                return IsAssemblyNetFramework(serverAssembly.ItemSpec);
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Fallback for determining target framework based on assembly.
+        /// It is "only" required for tests since in runtime we can look at TaskItem metadata to determine target framework
+        /// </summary>
+        [MethodImpl(MethodImplOptions.NoInlining)] // Avoid having to load mono.cecil if not called
+        private bool IsAssemblyNetFramework(string assemblyPath)
+        {
+            // An other solution would also be to look at the assemblies referenced
+            // and se if there are any paths which contains '.NETFramework' or '\net4*\'
+            var assembly = Mono.Cecil.AssemblyDefinition.ReadAssembly(assemblyPath);
+            var targetFrameworkAttribute = assembly.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == typeof(TargetFrameworkAttribute).FullName);
+
+            if (targetFrameworkAttribute != null
+                && targetFrameworkAttribute.HasConstructorArguments)
+            {
+                bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework");
+                Log.LogMessage("Is server project .NETFramework based on TargetFrameworkAttribute: {0}", isFramework.ToString());
+                return isFramework;
+            }
+
+#if NETFRAMEWORK
+            return true;
+#else
+            return false;
+#endif
         }
 
         /// <summary>
