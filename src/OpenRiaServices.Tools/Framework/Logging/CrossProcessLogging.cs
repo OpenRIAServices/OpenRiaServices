@@ -1,64 +1,62 @@
-﻿using System;
+﻿// # Cross Process Logger
+// 
+// The cross process logger uses a shared memory mapped file (to avoid disk IO, and filename clashes).
+// The format is a simple binary format with 2 kinds of payloads, a simple string message or a more complex message with line information.
+// 
+// Goals
+// - No msbuild dependencies
+// - Simple
+// - Fast 
+// - Few dependencies for a smaller and faster distributable
+// 
+// 
+// # Binary Format
+// 
+// BinaryWriter, BinaryReader is used for writing/reading
+// There are 2 types of packets: Simple and Complex, a single "Type" byte is used to describe type of payload
+// 
+// ---------------------------------------------
+// | Type (1 byte) |  PAYLOAD (depend on Type) |
+// ---------------------------------------------
+// 
+// ## Type
+// 
+// Type contains information about log level (and kind of message)
+// 
+// * Type (1 byte)
+//   - 2 lower bits for log level
+//       * 01 Message
+//       * 10 Warning
+//       * 11 Error
+//   - 4 upper bits for packet type (Note 
+//       * 0000 INVALID/EOF - not allowed so we can distinguish it from 
+//       * 0001 Simple (string)
+//       * 0010 Complex
+//   - 0 is used for EOF 
+// 
+// ### Simple Packet 
+// 
+// These packages are used for logging calls to the ILogger where there is a single (string) message parameter
+// 
+// -------------------
+// | Type | string |
+// -------------------
+// 
+// ### Comples Packet 
+// 
+// These packages are used for logging calls to the ILoggingService where the parameters are
+// * string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber
+// 
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+// | Type    | string message | string subcategory | string errorCode | string helpKeyword | string file | int lineNumber | int columnNumber| int endLineNumber | int endColumnNumber |
+// ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+using System;
 using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using System.Threading;
 
-/**
-# Cross Process Logger
-
-The cross process logger uses a shared memory mapped file (to avoid disk IO, and filename clashes).
-The format is a simple binary format with 2 kinds of payloads, a simple string message or a more complex message with line information.
-
-Goals
-- No msbuild dependencies
-- Simple
-- Fast 
-- Few dependencies for a smaller and faster distributable
-
-
-# Binary Format
-
-BinaryWriter, BinaryReader is used for writing/reading
-There are 2 types of packets: Simple and Complex, a single "Type" byte is used to describe type of payload
-
----------------------------------------------
-| Type (1 byte) |  PAYLOAD (depend on Type) |
----------------------------------------------
-
-## Type
-
-Type contains information about log level (and kind of message)
-
-* Type (1 byte)
-  - 2 lower bits for log level
-      * 01 Message
-      * 10 Warning
-      * 11 Error
-  - 4 upper bits for packet type (Note 
-      * 0000 INVALID/EOF - not allowed so we can distinguish it from 
-      * 0001 Simple (string)
-      * 0010 Complex
-  - 0 is used for EOF 
-
-### Simple Packet 
-
-These packages are used for logging calls to the ILogger where there is a single (string) message parameter
-
--------------------
-| Type | string |
--------------------
-
-### Comples Packet 
-
-These packages are used for logging calls to the ILoggingService where the parameters are
-* string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber
-
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-| Type    | string message | string subcategory | string errorCode | string helpKeyword | string file | int lineNumber | int columnNumber| int endLineNumber | int endColumnNumber |
-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-
-*/
 namespace OpenRiaServices.Tools.Logging;
 
 enum LogLevel
