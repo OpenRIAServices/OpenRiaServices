@@ -21,9 +21,9 @@
         <dependency id="Mono.Cecil" version="0.11.5" />
       </group>
       <group targetFramework="net472">
-      </group>
         <dependency id="OpenRiaServices.Server" version="$version$" />
         <dependency id="Mono.Cecil" version="0.11.5" />
+      </group>
     </dependencies>
   </metadata>
   <files>
