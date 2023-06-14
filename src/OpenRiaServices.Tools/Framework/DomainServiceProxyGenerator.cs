@@ -229,7 +229,7 @@ namespace OpenRiaServices.Tools
             // ----------------------------------------------------------------
             // method body: return new 'innerClass'
             // ----------------------------------------------------------------
-            var innerClassReference = CodeGenUtilities.GetTypeReference(proxyClass.UserData["Namespace"] as string + "." + proxyClass.Name + "." + innerClass.Name, proxyClass.UserData["Namespace"] as string, true);
+            var innerClassReference = CodeGenUtilities.GetTypeReference($"{proxyClass.UserData["Namespace"] as string}.{proxyClass.Name}.{innerClass.Name}", proxyClass.UserData["Namespace"] as string, true);
             var newInnerClassExpr = new CodeObjectCreateExpression(innerClassReference, Array.Empty<CodeExpression>());
             var returnStatement = new CodeMethodReturnStatement(newInnerClassExpr);
 
