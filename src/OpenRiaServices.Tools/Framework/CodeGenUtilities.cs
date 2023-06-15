@@ -266,7 +266,7 @@ namespace OpenRiaServices.Tools
             }
 
             // No mapping - use schema + CLR namespace instead.
-            return CodeGenUtilities.DefaultDataContractSchema + Uri.EscapeUriString(entityTypeNamespace);
+            return CodeGenUtilities.DefaultDataContractSchema + Uri.EscapeDataString(entityTypeNamespace);
         }
 
         /// <summary>

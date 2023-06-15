@@ -348,7 +348,7 @@ namespace OpenRiaServices.Tools.TextTemplate
             }
 
             // No mapping - use schema + CLR namespace instead.
-            return DefaultDataContractSchema + Uri.EscapeUriString(entityTypeNamespace);
+            return DefaultDataContractSchema + Uri.EscapeDataString(entityTypeNamespace);
         }
     }
 }

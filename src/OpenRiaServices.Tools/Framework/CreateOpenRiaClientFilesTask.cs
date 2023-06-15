@@ -698,7 +698,6 @@ namespace OpenRiaServices.Tools
 
                 string generatedFileContent = string.Empty;
                 string sourceDir = this.ServerProjectDirectory;
-                string targetDir = null;
 
                 // Capture the list of assemblies to load into an array to marshal across AppDomains
                 string[] assembliesToLoadArray = assembliesToLoad.ToArray();
@@ -724,16 +723,16 @@ namespace OpenRiaServices.Tools
                 if (IsServerProjectNetFramework())
                 {
 #if NETFRAMEWORK
-                    generatedFileContent = GenerateClientProxiesForNetFramework(generatedFileName, sourceDir, targetDir, options, sharedCodeServiceParameters);
+                    FilesWereWritten = GenerateClientProxiesForNetFramework(generatedFileName, sourceDir, options, sharedCodeServiceParameters);
 #else
                     // TODO: Verify below statement, I exepct that it might not work (and does not need to work)
                     // Probably we need a "hosting process" for net framework in this case
                     FilesWereWritten = RiaClientFilesTaskHelpers.CodeGenForNet6(
-                    generatedFileName,
-                    options,
-                    this,
-                    sharedCodeServiceParameters,
-                    this.CodeGeneratorName
+                        generatedFileName,
+                        options,
+                        this,
+                        sharedCodeServiceParameters,
+                        this.CodeGeneratorName
                     );
 #endif
                 }
@@ -857,7 +856,7 @@ namespace OpenRiaServices.Tools
         /// Prevent inlining so that we only reference and load System.Web when needed for compilation
         /// </remarks>
         [MethodImpl(MethodImplOptions.NoInlining)]
-        private string GenerateClientProxiesForNetFramework(string generatedFileName, string sourceDir, string targetDir, ClientCodeGenerationOptions options, SharedCodeServiceParameters sharedCodeServiceParameters)
+        private bool GenerateClientProxiesForNetFramework(string generatedFileName, string sourceDir, ClientCodeGenerationOptions options, SharedCodeServiceParameters sharedCodeServiceParameters)
         {
             string generatedFileContent;
             // The other AppDomain gets a logger that will log back to this AppDomain
@@ -877,7 +876,7 @@ namespace OpenRiaServices.Tools
             {
                 PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,
             };
-            using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
+            using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, null, cbmParameter))
             using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
             {
                 // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
@@ -893,8 +892,7 @@ namespace OpenRiaServices.Tools
 
             // If VS is hosting us, write to its TextBuffer, else simply write to disk
             // If the file is empty, delete it.
-            FilesWereWritten = RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
-            return generatedFileContent;
+            return RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
         }
 #endif
 
@@ -1577,7 +1575,7 @@ namespace OpenRiaServices.Tools
             }
         }
 
-        private void SetArgumentListForConsoleApp(List<string> arguments, string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters parameters,string pipeName)
+        private void SetArgumentListForConsoleApp(List<string> arguments, string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters parameters, string pipeName)
         {
             static void AddEscaped(List<string> list, string parameter)
             {
