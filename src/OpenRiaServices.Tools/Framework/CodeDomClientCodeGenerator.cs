@@ -138,7 +138,7 @@ namespace OpenRiaServices.Tools
         /// Creates a new instance.
         /// </summary>
         /// <remarks>
-        /// This form of the constructor exists to allow construction by the <see cref="System.Web.Compilation.ClientBuildManager"/> to
+        /// This form of the constructor exists to allow construction by the "System.Web.Compilation.ClientBuildManager" or reflection to
         /// create an ASP.NET app domain.  Callers of this contructor must call <see cref="Initialize"/> after instantiation before using
         /// this instance.
         /// </remarks>

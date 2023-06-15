@@ -9,7 +9,7 @@
     https://learn.microsoft.com/en-us/dotnet/core/versions/selection#control-roll-forward-behavior 
     -->
     <RollForward>LatestMajor</RollForward>
-    <PublishReadyToRun>true</PublishReadyToRun>
+    <!--<PublishReadyToRun>true</PublishReadyToRun>-->
 
     <OutputPath Condition="'$(IsFrameworkProject)' == 'true'">$(MSBuildThisFileDirectory)bin\$(Configuration)</OutputPath>
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>

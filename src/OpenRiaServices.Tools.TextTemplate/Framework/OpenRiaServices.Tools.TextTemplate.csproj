@@ -4,6 +4,10 @@
     <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' != 'net472'">
+    <!-- Disable obsolete warning (primarily AssociationAttribute) -->
+    <NoWarn>$(NoWarn);CS0618</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeBuilderException.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeBuilderException.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeDeclaration.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeDeclaration.cs" />

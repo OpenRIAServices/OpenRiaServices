@@ -457,7 +457,7 @@ namespace OpenRiaServices.Tools
         /// <param name="compositionAssemblyPaths">Optional set of assembly locations to include.</param>
         /// <param name="logger"><see cref="ILogger"/> instance to report issues.</param>
         /// <returns>The set of <see cref="Assembly"/> instances to use.</returns>
-        private IEnumerable<Assembly> GetCompositionAssemblies(IEnumerable<string> compositionAssemblyPaths, ILogger logger)
+        private static IEnumerable<Assembly> GetCompositionAssemblies(IEnumerable<string> compositionAssemblyPaths, ILogger logger)
         {
             HashSet<Assembly> assemblies = new HashSet<Assembly>();
             if (compositionAssemblyPaths != null)
