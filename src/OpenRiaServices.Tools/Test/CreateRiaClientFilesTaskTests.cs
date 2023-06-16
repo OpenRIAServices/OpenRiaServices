@@ -254,7 +254,7 @@ namespace OpenRiaServices.Tools.Test
             try
             {
                 task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("", /*includeClientOutputAssembly*/ false);
-                MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
+                MockBuildEngine mockBuildEngine = (MockBuildEngine)task.BuildEngine;
                 string serverAssemblyFile = task.ServerAssemblies[0].ItemSpec;  // use name we mapped to deployment dir
                 string serverPdbFile = Path.ChangeExtension(serverAssemblyFile, "pdb");
                 string serverTempFile = Path.ChangeExtension(serverAssemblyFile, "tmp");
