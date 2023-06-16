@@ -138,9 +138,21 @@ namespace OpenRiaServices.Hosting.AspNetCore
             endpoints.Add(endpointBuilder.Build());
         }
 
-        private static bool CopyAttributeToEndpointMetadata(Attribute authorizeAttribute)
+        /// <summary>
+        /// Copy all attributes except for attributes handled internally by OpenRiaServices
+        /// </summary>
+        /// <remarks>
+        /// This should enable all middlewares using attributes to control their behaviour to work.
+        /// </remarks>
+        /// <param name="attribute"></param>
+        /// <returns></returns>
+        private static bool CopyAttributeToEndpointMetadata(Attribute attribute)
         {
-            return authorizeAttribute is IAuthorizeData;
+           
+            return attribute.GetType().Assembly != typeof(DomainService).Assembly
+                && attribute is not System.ComponentModel.DataAnnotations.ValidationAttribute
+                && attribute is not System.ComponentModel.DataAnnotations.AuthorizationAttribute
+                && !attribute.GetType().FullName.StartsWith("System.Diagnostics");
         }
 
         private static MethodInfo TryGetMethodInfo(OperationInvoker invoker)
