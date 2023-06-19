@@ -118,10 +118,6 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
         }
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [TestMethod]
         [Description("DomainServiceCatalog catches FileNotFoundException and emits an info message but continues processing")]
         public void DomainServiceCatalog_Message_FileNotFound_Continues()
