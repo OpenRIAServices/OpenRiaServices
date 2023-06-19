@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using NorthwindModel;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
@@ -16,14 +14,12 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [ClassInitialize()]
         public static void MyClassInitialize(TestContext testContext)
         {
-            UnitTestTraceListener.Initialize(testContext, true);
             TestHelper.EnsureL2SSupport(true);
         }
 
         [ClassCleanup()]
         public static void MyClassCleanup()
         {
-            UnitTestTraceListener.Reset();
             TestHelper.EnsureL2SSupport(false);
         }
 
