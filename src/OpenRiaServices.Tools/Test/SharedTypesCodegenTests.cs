@@ -20,10 +20,6 @@ namespace OpenRiaServices.Tools.Test
         {
         }
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask does not codegen shared types or properties on entities and complex types (OpenRiaSharedFilesMode = Copy)")]
         [TestMethod]
         public void SharedTypes_CodeGen_Skips_Shared_Types_And_Properties_Copy()
@@ -31,10 +27,6 @@ namespace OpenRiaServices.Tools.Test
             SharedTypes_CodeGen_Skips_Shared_Types_And_Properties(OpenRiaSharedFilesMode.Copy);
         }
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask does not codegen shared types or properties on entities and complex types (OpenRiaSharedFilesMode = Link)")]
         [TestMethod]
         public void SharedTypes_CodeGen_Skips_Shared_Types_And_Properties_Link()
@@ -127,10 +119,6 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [Description("CreateOpenRiaClientFilesTask produces error when detecting existing generated entity")]
         [TestMethod]
         public void SharedTypes_CodeGen_Errors_On_Existing_Generated_Entity()

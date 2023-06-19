@@ -676,13 +676,12 @@ namespace OpenRiaServices.Tools
                 // file has been touched since we last analyzed our server references, it is an indication
                 // the user modified the generated file.  So force a code gen and
                 // force a rewrite of the server reference file to short circuit this same code next build.
-                if (!needToGenerate && File.Exists(this.ServerReferenceListPath()))
+                if (!needToGenerate &&
+                    File.Exists(ServerReferenceListPath()) &&
+                    File.GetLastWriteTime(generatedFileName) > File.GetLastWriteTime(ServerReferenceListPath()))
                 {
-                    if (File.GetLastWriteTime(generatedFileName) > File.GetLastWriteTime(this.ServerReferenceListPath()))
-                    {
-                        needToGenerate = true;
-                        serverReferencesChanged = true;
-                    }
+                    needToGenerate = true;
+                    serverReferencesChanged = true;
                 }
             }
 
@@ -691,9 +690,6 @@ namespace OpenRiaServices.Tools
             {
                 // Warn the user if the server assembly has no PDB
                 this.WarnIfNoPdb(assemblyFile);
-
-                string generatedFileContent = string.Empty;
-                string sourceDir = this.ServerProjectDirectory;
 
                 // Capture the list of assemblies to load into an array to marshal across AppDomains
                 string[] assembliesToLoadArray = assembliesToLoad.ToArray();
@@ -719,6 +715,7 @@ namespace OpenRiaServices.Tools
                 if (IsServerProjectNetFramework())
                 {
 #if NETFRAMEWORK
+                    string sourceDir = ServerProjectDirectory;
                     FilesWereWritten = GenerateClientProxiesForNetFramework(generatedFileName, sourceDir, options, sharedCodeServiceParameters);
 #else
                     // TODO: Verify below statement, I exepct that it might not work (and does not need to work)
@@ -860,7 +857,7 @@ namespace OpenRiaServices.Tools
         {
             string generatedFileContent;
             // The other AppDomain gets a logger that will log back to this AppDomain
-            CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
+            CrossAppDomainLogger logger = new CrossAppDomainLogger(this);
 
             // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
             // This can occur when the build environment is configured incorrectly
@@ -1595,26 +1592,16 @@ namespace OpenRiaServices.Tools
                 }
             }
 
-
             //Arguments for ClientCodeGenerationOptions
-            arguments.Add("--language");
-            arguments.Add(options.Language);
-            arguments.Add("--clientFrameworkPath");
-            AddEscaped(arguments, options.ClientFrameworkPath);
-            arguments.Add("--serverProjectPath");
-            AddEscaped(arguments, options.ServerProjectPath);
-            arguments.Add("--clientProjectPath");
-            AddEscaped(arguments, options.ClientProjectPath);
-            arguments.Add("--clientRootNamespace");
-            AddEscaped(arguments, options.ClientRootNamespace ?? string.Empty);
-            arguments.Add("--serverRootNamespace");
-            AddEscaped(arguments, options.ServerRootNamespace);
-            arguments.Add("--isApplicationContextGenerationEnabled");
-            arguments.Add(options.IsApplicationContextGenerationEnabled.ToString());
-            arguments.Add("--clientProjectTargetPlatform");
-            arguments.Add(options.ClientProjectTargetPlatform.ToString());
-            arguments.Add("--useFullTypeNames");
-            arguments.Add(options.UseFullTypeNames.ToString());
+            AddParameter(arguments, "--language", options.Language);
+            AddParameter(arguments, "--clientFrameworkPath", options.ClientFrameworkPath);
+            AddParameter(arguments, "--serverProjectPath", options.ServerProjectPath);
+            AddParameter(arguments, "--clientProjectPath", options.ClientProjectPath);
+            AddParameter(arguments, "--clientRootNamespace", options.ClientRootNamespace);
+            AddParameter(arguments, "--serverRootNamespace", options.ServerRootNamespace);
+            AddParameter(arguments, "--isApplicationContextGenerationEnabled", options.IsApplicationContextGenerationEnabled.ToString());
+            AddParameter(arguments, "--clientProjectTargetPlatform", options.ClientProjectTargetPlatform.ToString());
+            AddParameter(arguments, "--useFullTypeNames", options.UseFullTypeNames.ToString());
 
             //Arguments for SharedCodeServiceParameters
             AddParameters(arguments, "--sharedSourceFiles", parameters.SharedSourceFiles);

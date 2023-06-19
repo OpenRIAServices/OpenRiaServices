@@ -59,10 +59,6 @@ namespace OpenRiaServices.Tools.Test
             Assert.AreEqual(1, descriptions.Count(), "Expected exactly one domain service description");
         }
 
-#if !NETFRAMEWORK
-        [Ignore("Do no work in NET6")]
-        [TestCategory("NET6_ERRORS")]
-#endif
         [TestMethod]
         [Description("DomainServiceCatalog finds all DomainService subtypes")]
         public void DomainServiceCatalog_Finds_All_DomainServices()

@@ -18,6 +18,7 @@ static class Program
         Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(Microsoft.Build.Locator.MSBuildLocator.QueryVisualStudioInstances().OrderByDescending(
            instance => instance.Version).First());
 
+        // TODO: Look at which options should be required. Should be the same as in OpenRiaServices.Client.CodeGen.targets
         var languageOption = new Option<string>("--language");
         var clientFrameworkOption = new Option<string>("--clientFrameworkPath");
         var serverProjectPathOption = new Option<string>("--serverProjectPath");
