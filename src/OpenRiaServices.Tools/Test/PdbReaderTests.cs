@@ -20,14 +20,14 @@ namespace OpenRiaServices.Tools.Test
         {
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "PDB")]
+        [DeploymentItem("ProjectPath.txt")]
         [Description("PdbReader finds files defining properties in server assembly")]
         [TestMethod]
         public void PdbReader_Finds_Method_Files()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("PDB", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
 
             using (ISourceFileProvider pdbReader = new PdbSourceFileProviderFactory(/*symbolSearchPath*/ null, /*logger*/ null).CreateProvider())
             {
@@ -59,14 +59,14 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-        [DeploymentItem(@"ProjectPath.txt", "PDB")]
+        [DeploymentItem("ProjectPath.txt")]
         [Description("PdbReader finds all files for a type")]
         [TestMethod]
         public void PdbReader_Finds_Types_Files()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("PDB", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
             string serverProjectPath = CodeGenHelper.ServerClassLibProjectPath(projectPath);
             string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
             ConsoleLogger logger = new ConsoleLogger();

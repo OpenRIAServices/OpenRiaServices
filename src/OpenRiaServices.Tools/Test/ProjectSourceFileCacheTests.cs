@@ -280,12 +280,12 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("Tests ProjectSourceFileCache loads files for project")]
-        [DeploymentItem(@"ProjectPath.txt", "SSFC")]
+        [DeploymentItem(@"ProjectPath.txt")]
         public void ProjectSourceFileCache_Loads_Real_Project()
         {
             string projectPath = null;
             string outputPath = null;
-            TestHelper.GetProjectPaths("SSFC", out projectPath, out outputPath);
+            TestHelper.GetProjectPaths("", out projectPath, out outputPath);
             string serverProjectPath = CodeGenHelper.ServerClassLibProjectPath(projectPath);
             string breadCrumbFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString() + ".txt");
             ConsoleLogger logger = new ConsoleLogger();
