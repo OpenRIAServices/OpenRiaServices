@@ -1152,10 +1152,11 @@ namespace TestDomainServices
             return GetCities();
         }
 
-#if !NET6_0
+
         private IQueryable<CityWithCacheData> GetCitiesWithCacheLocation()
         {
-            HttpCachePolicy policy = HttpContext.Current.Response.Cache;
+#if NETFRAMEWORK
+HttpCachePolicy policy = HttpContext.Current.Response.Cache;
 
             HttpCacheability cacheability = (HttpCacheability)policy
                 .GetType()
@@ -1169,6 +1170,9 @@ namespace TestDomainServices
                     CacheData = cacheability.ToString()
                 }
             }.AsQueryable();
+#else
+            throw new NotImplementedException();
+#endif
         }
 
         [Query]
@@ -1205,7 +1209,7 @@ namespace TestDomainServices
         {
             return GetCities();
         }
-#endif
+
         // Cache on server because that's the only deterministic scenario.
         [Query]
         [OutputCache(OutputCacheLocation.Server, 5, VaryByHeaders = "foo")]
