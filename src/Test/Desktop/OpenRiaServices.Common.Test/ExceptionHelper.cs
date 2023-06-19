@@ -245,7 +245,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(message, e.Message);
 
             HttpWebResponse response = e.Response as HttpWebResponse;
-            Assert.AreEqual(errorCode, response.StatusCode);
+            Assert.AreEqual((HttpStatusCode)errorCode, response.StatusCode);
             return e;
         }
 
