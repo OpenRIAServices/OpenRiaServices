@@ -18,32 +18,6 @@ namespace OpenRiaServices.Tools.Test
             set { this.context = value; }
         }
 
-        #region Additional test attributes
-
-        [ClassInitialize()]
-        public static void MyClassInitialize(TestContext testContext)
-        {
-            UnitTestTraceListener.Initialize(testContext, true);
-        }
-
-        [ClassCleanup()]
-        public static void MyClassCleanup()
-        {
-            UnitTestTraceListener.Reset();
-        }
-
-        [TestInitialize()]
-        public void MyTestInitialize()
-        {
-        }
-
-        [TestCleanup()]
-        public void MyTestCleanup()
-        {
-        }
-
-        #endregion
-
         private static XmlReader XmlReader;
 
         static IEnumerable<object[]> GetTestCasesFromXml(string filename, string nodeName, string[] attributes)
