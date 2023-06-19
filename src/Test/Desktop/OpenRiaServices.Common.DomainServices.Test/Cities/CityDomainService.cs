@@ -327,13 +327,16 @@ namespace Cities
             _deletedCities.Clear();
         }
 
-#if !NET6_0
         [Invoke]
         public bool UsesCustomHost()
         {
+#if !NET6_0
             return (OperationContext.Current.Host.GetType() == typeof(CityDomainServiceHost));
-        }
+#else
+            throw new NotImplementedException();
 #endif
+        }
+
 
         // Invoke that has a custom authorization attribute.  Permission denied for any City
         // whose state is Ohio unless the user is Mathew.

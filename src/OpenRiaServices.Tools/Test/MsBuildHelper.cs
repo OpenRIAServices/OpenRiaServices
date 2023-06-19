@@ -137,9 +137,12 @@ namespace OpenRiaServices.Tools.Test
                     else
                     {
                         var frameworks = targetFrameworks.Split(';');
-                        var version = (TargetFrameworkAttribute)Assembly.GetExecutingAssembly().GetCustomAttributes(typeof(TargetFrameworkAttribute), false).SingleOrDefault();
-                        var isNet472 = version.FrameworkName == ".NETFramework,Version=v4.7.2";
-                        var framework = isNet472 ? "net472" : frameworks.First(f => f != "net472");
+
+#if NETFRAMEWORK
+                        string framework = frameworks.First(f => f.StartsWith("net4"));
+#else
+                        string framework = frameworks.First(f => !f.StartsWith("net4"));
+#endif
                         project.SetGlobalProperty("TargetFramework", framework);
                     }
                 }

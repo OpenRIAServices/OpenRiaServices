@@ -8,6 +8,9 @@
   <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='net472'">
+    <PackageReference Include="System.ServiceModel.Http" Version="4.10.2" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ServerClassLib\CodelessType.linked.cs">
       <Link>CodelessType.linked.cs</Link>
