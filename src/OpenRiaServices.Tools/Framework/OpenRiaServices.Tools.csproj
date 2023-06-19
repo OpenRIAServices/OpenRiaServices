@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)' == 'net472'">$(DefineConstants);HAS_LINQ2SQL</DefineConstants>
     <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <PackageId>OpenRiaServices.Client.CodeGen</PackageId>
     <Title>OpenRiaServices Client Code Generator</Title>
