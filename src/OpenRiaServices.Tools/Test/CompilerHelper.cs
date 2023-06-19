@@ -116,7 +116,10 @@ namespace OpenRiaServices.Tools.Test
             string documentationFile = null)
         {
             List<MetadataReference> references = LoadReferences(referenceAssemblies);
+#if NETFRAMEWORK
+            // Not needed in net6 since VB types lives in core assembly
             references.Add(GetVisualBasicReference());
+#endif
 
             try
             {
