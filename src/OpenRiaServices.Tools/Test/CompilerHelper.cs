@@ -132,6 +132,15 @@ namespace OpenRiaServices.Tools.Test
                 var compileOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
                     rootNamespace: rootNamespace,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
+
+#if !NETFRAMEWORK
+                compileOptions = compileOptions.WithSpecificDiagnosticOptions(new[]
+                {
+                    // 'AssociationAttribute' is obsolete: 'This attribute is no longer in use and will be ignored if applied.
+                    new KeyValuePair<string, ReportDiagnostic>("BC40000", ReportDiagnostic.Suppress)
+                });
+#endif
+
                 Compilation compilation = VisualBasicCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
 
                 // Same file
@@ -240,10 +249,10 @@ namespace OpenRiaServices.Tools.Test
             string projectDir = Path.GetDirectoryName(projectPath);
 
             // Folder of project we want to build
-            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.Tools\Test\ClientClassLib\"));
+            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.Client.Web\Framework"));
 
             string projectOutputDir = Path.Combine(testProjectDir, outputPath);
-            string testProjectFile = Path.Combine(testProjectDir, @"ClientClassLib.csproj");
+            string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.Client.Web.csproj");
             Assert.IsTrue(File.Exists(testProjectFile), "This test could not find its required project at " + testProjectFile);
 
             // Retrieve all the assembly references from the test project (follows project-to-project references too)
