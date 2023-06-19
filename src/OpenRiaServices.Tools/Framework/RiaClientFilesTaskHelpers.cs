@@ -79,6 +79,7 @@ internal static class RiaClientFilesTaskHelpers
     /// Deletes the specified file in VS-compatible way
     /// </summary>
     /// <param name="fileName">Full path of the file to delete.  It may or may not exist on disk.</param>
+    /// <param name="logger">Logger to keep track of warnings and errors.</param>
     internal static void DeleteFileFromVS(string fileName, ILoggingService logger)
     {
         if (File.Exists(fileName))
@@ -103,6 +104,7 @@ internal static class RiaClientFilesTaskHelpers
     /// Safe form of File.Delete that catches and logs exceptions as warnings.
     /// </summary>
     /// <param name="fileName">The full path to the file to delete.</param>
+    /// <param name="logger">Logger to keep track of warnings and errors.</param>
     /// <returns><c>false</c> if an error occurred and the file could not be deleted.</returns>
     internal static bool SafeFileDelete(string fileName, ILoggingService logger)
     {
@@ -146,6 +148,7 @@ internal static class RiaClientFilesTaskHelpers
     /// </summary>
     /// <param name="fileName">The full path to the file to write.</param>
     /// <param name="contents">The string content to write.</param>
+    /// <param name="logger">Logger to keep track of warnings and errors.</param>
     /// <returns><c>false</c> if an error occurred and the file could not be written.</returns>
     internal static bool SafeFileWrite(string fileName, string contents, ILoggingService logger)
     {
@@ -185,6 +188,7 @@ internal static class RiaClientFilesTaskHelpers
     /// and return <c>false</c>
     /// </remarks>
     /// <param name="directoryPath">The full path to the folder to create.</param>
+    /// <param name="logger">Logger to keep track of warnings and errors.</param>
     /// <returns><c>false</c> if an error occurred and the folder could not be created.</returns>
     internal static bool SafeFolderCreate(string directoryPath, ILoggingService logger)
     {
@@ -221,6 +225,7 @@ internal static class RiaClientFilesTaskHelpers
     /// </summary>
     /// <param name="fileName">Full path to the file to modify</param>
     /// <param name="newState">The desired state of the bit</param>
+    /// <param name="logger">Logger to keep track of warnings and errors.</param>
     /// <returns><c>false</c> if a problem occurred and the bit could not be altered.</returns>
     internal static bool SafeSetReadOnlyAttribute(string fileName, bool newState, ILoggingService logger)
     {
@@ -266,6 +271,7 @@ internal static class RiaClientFilesTaskHelpers
     /// <param name="destinationFile">Name of the file to create/write</param>
     /// <param name="content">String content of file to write</param>
     /// <param name="forceWriteToFile">If <c>true</c>, write file always, even if Intellisense only build.</param>
+    /// <param name="logger">Logger to keep track of warnings and errors.</param>
     /// <returns><c>true</c> if the write succeeded</returns>
     internal static bool WriteFileToVS(string destinationFile, string content, bool forceWriteToFile, ILoggingService logger)
     {
@@ -299,6 +305,7 @@ internal static class RiaClientFilesTaskHelpers
     /// <param name="destinationFile">Full path to file to write or delete</param>
     /// <param name="content">Content to write to file</param>
     /// <param name="forceWriteToFile">If <c>true</c>, write file always, even if Intellisense only build.</param>
+    /// <param name="logger">Logger to keep track of warnings and errors.</param>
     /// <returns><c>true</c> if the write succeeded, <c>false</c> if it was deleted or the write failed.</returns>
     internal static bool WriteOrDeleteFileToVS(string destinationFile, string content, bool forceWriteToFile, ILoggingService logger)
     {
