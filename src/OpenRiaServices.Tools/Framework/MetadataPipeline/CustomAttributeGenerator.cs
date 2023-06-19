@@ -8,6 +8,7 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
+using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Tools
 {
@@ -40,8 +41,21 @@ namespace OpenRiaServices.Tools
         /// <summary>
         /// Known attribute builder instances.
         /// </summary>
-        private static Dictionary<Type, ICustomAttributeBuilder> _knownBuilders = new Dictionary<Type, ICustomAttributeBuilder>();
-
+        private static Dictionary<Type, ICustomAttributeBuilder> _knownBuilders = new Dictionary<Type, ICustomAttributeBuilder>()
+        {
+             // OpenRiaServices Attributes which should not be copied over
+            { typeof(EnableClientAccessAttribute), null },
+            { typeof(IncludeAttribute), null },
+            { typeof(ExcludeAttribute), null },
+            { typeof(QueryAttribute), null },
+            { typeof(InvokeAttribute), null },
+            { typeof(InsertAttribute), null },
+            { typeof(UpdateAttribute), null },
+            { typeof(DeleteAttribute), null },
+            { typeof(EntityActionAttribute), null },
+            { typeof(RequiresAuthenticationAttribute), null },
+            { typeof(RequiresRoleAttribute), null },
+        };
         /// <summary>
         /// Gets the dictionary mapping custom attribute types to their known custom attribute builder types
         /// </summary>
