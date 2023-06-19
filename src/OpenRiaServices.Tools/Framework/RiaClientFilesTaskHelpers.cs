@@ -6,7 +6,8 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 #endif
-using OpenRiaServices.Tools;
+
+namespace OpenRiaServices.Tools;
 
 internal static class RiaClientFilesTaskHelpers
 {

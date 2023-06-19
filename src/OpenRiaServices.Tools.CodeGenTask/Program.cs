@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace OpenRiaServices.Tools.CodeGenTask;
 
-class Program
+static class Program
 {
     static int Main(string[] args) // Take in params to setup the build here
     {

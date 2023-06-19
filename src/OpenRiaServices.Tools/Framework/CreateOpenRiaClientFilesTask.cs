@@ -547,21 +547,17 @@ namespace OpenRiaServices.Tools
                 this.WriteFileList();
 
                 // Write out our cache of source files in other projects.
-                if (!this.ServerProjectSourceFileCache.IsFileCacheCurrent)
+                if (!this.ServerProjectSourceFileCache.IsFileCacheCurrent &&
+                    RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(this.SourceFileListPath()), this))
                 {
-                    if (RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(this.SourceFileListPath()), this))
-                    {
-                        this.ServerProjectSourceFileCache.SaveCacheToFile();
-                    }
+                    this.ServerProjectSourceFileCache.SaveCacheToFile();
                 }
 
                 // Write out our cache of Open RIA Services Links
-                if (!this.LinkedServerProjectCache.IsFileCacheCurrent)
+                if (!this.LinkedServerProjectCache.IsFileCacheCurrent &&
+                    RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(this.LinkedServerProjectsPath()), this))
                 {
-                    if (RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(this.LinkedServerProjectsPath()), this))
-                    {
-                        this.LinkedServerProjectCache.SaveCacheToFile();
-                    }
+                    this.LinkedServerProjectCache.SaveCacheToFile();
                 }
 
                 double secondsAsDouble = stopWatch.ElapsedMilliseconds / 1000.0;
@@ -799,7 +795,8 @@ namespace OpenRiaServices.Tools
             List<string> arguments = new List<string>();
             SetArgumentListForConsoleApp(arguments, generatedFileName, options, sharedCodeServiceParameters, loggingServer.PipeName);
 
-            // TODO: Make code robust
+            // TODO: Fix vulnerability with GetTempFileName, see https://sonarcloud.io/project/issues?resolved=false&severities=BLOCKER%2CCRITICAL%2CMAJOR%2CMINOR&sinceLeakPeriod=true&types=VULNERABILITY&pullRequest=414&id=OpenRIAServices_OpenRiaServices&open=AYi1D8MZVJzuBbc9Xd8Q&tab=why
+            // and add error handling 
             string filename = Path.GetTempFileName();
             File.WriteAllLines(filename, arguments);
             startInfo.Arguments = "@" + filename;
@@ -812,11 +809,11 @@ namespace OpenRiaServices.Tools
             try
             {
                 // Read all logs from child process
-                TimeSpan timeout = TimeSpan.FromSeconds(60);
+                TimeSpan timeout = TimeSpan.FromSeconds(600);
 #if DEBUG
                 // Increase timeout when debugger is attached
                 if (Debugger.IsAttached)
-                    timeout = TimeSpan.FromSeconds(600);
+                    timeout = TimeSpan.FromSeconds(1200);
 #endif
 
                 // Consider doing async IO or similar in background and specify a timeout
@@ -839,12 +836,15 @@ namespace OpenRiaServices.Tools
                 {
                     Log.LogError("Process failed with ExitCode: {0}", process.ExitCode);
                 }
+                else
+                {
+                    RiaClientFilesTaskHelpers.SafeFileDelete(filename, this);
+                }
                 return success;
             }
             finally
             {
                 BuildEngine3.Reacquire();
-                //RiaClientFilesTaskHelpers.SafeFileDelete(filename, this);
             }
         }
 
@@ -1210,12 +1210,10 @@ namespace OpenRiaServices.Tools
             }
 
             string fileListFile = this.FileListPath();
-            if (this.FilesWereWritten && !string.IsNullOrEmpty(fileListFile))
+            if (this.FilesWereWritten && !string.IsNullOrEmpty(fileListFile) &&
+                RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(fileListFile), this))
             {
-                if (RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(fileListFile), this))
-                {
-                    RiaClientFilesTaskHelpers.SafeFileWrite(fileListFile, outputFileLines, this);
-                }
+                RiaClientFilesTaskHelpers.SafeFileWrite(fileListFile, outputFileLines, this);
             }
         }
 
@@ -1238,12 +1236,10 @@ namespace OpenRiaServices.Tools
             }
             string outputFileLines = sb.ToString();
 
-            if (!string.IsNullOrEmpty(fileName))
+            if (!string.IsNullOrEmpty(fileName) &&
+                RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(fileName), this))
             {
-                if (RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(fileName), this))
-                {
-                    RiaClientFilesTaskHelpers.SafeFileWrite(fileName, outputFileLines, this);
-                }
+                RiaClientFilesTaskHelpers.SafeFileWrite(fileName, outputFileLines, this);
             }
         }
 
