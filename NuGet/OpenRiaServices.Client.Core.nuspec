@@ -21,8 +21,8 @@
       <group targetFramework="net472" />
       <group targetFramework="netstandard2.0">
         <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
-        <dependency id="System.ServiceModel.Http" version="4.8.1" />
-		<dependency id="System.ServiceModel.Primitives" version="4.8.1" />
+        <dependency id="System.ServiceModel.Http" version="4.10.2" />
+		<dependency id="System.ServiceModel.Primitives" version="4.10.2" />
       </group>
     </dependencies>
     <frameworkAssemblies>

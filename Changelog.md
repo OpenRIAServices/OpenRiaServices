@@ -1,3 +1,42 @@
+# 5.3.1 with EFCore 2.0.2 and AspNetCore 0.3.0
+
+* Code Generation
+  * Switch to using Mono.Cecil to parse pdb files during code generation (#410)
+    This should make it possible to use portable and embedded pdb's on the server
+  * 
+* AspNetCore
+    * New extension method to add OpenRiaServices to services from #413 by @ehsangfl.
+        ```C#
+        services.AddOpenRiaServices<T>()
+        ```
+    * New extension method to add OpenRiaServices to pipeline from #413 by @ehsangfl.
+        ```C#
+        endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
+        ```
+    * Add Net7 build target to support "Finally Conventions" (`IEndpointConventionBuilder.Finally`)
+    * Add `OpenRiaServices.Server.DomainOperationEntry` to endpoint metadata
+        * This allows end user to easier implement additional conventions (such as Open Api or similar)
+    * Copy `AuthorizationAttribute`s to endpoint metadata for queries and invokes to support [AspNetCore Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple?view=aspnetcore-7.0)
+        *  Attributes can be set on either method or class level
+    * Fixed serialization of sizes larger than 1 GB
+
+*Other*
+- Updated nuget packages
+
+# 5.3.0 with EFCore 2.0.1
+
+* Fix shadow property issue in EF Core DB Context extensions (#397):
+    * Based on Allianz PR #393
+    * Fix bug with shadowproperties being marked as modified when performing AttachAsModified in DbContextEFCoreExtensions
+* DomainServiceTestHost improvements 1 (#395):
+    * Allow usage of CRUD-methods ending with Async in testhost.
+* DomainServiceTestHost improvements 2 (#396):
+    * Add support for async IEnumerable queries in test host, i.e. querys returning `async Task<IEnumerable<` 
+
+*Other*
+- Fixed github Code QL validation of builds
+- Updated nuget packages
+
 # 5.2.0
 
 * Client: Make construktors for Operation classes public to make them more testable (#387)
