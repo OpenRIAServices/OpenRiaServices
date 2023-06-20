@@ -268,6 +268,9 @@ namespace OpenRiaServices.Tools.Test
                     // Is acceptable core type?
                     t.Namespace.Equals("System") ||
 
+                    // ComponentModel conatains DefaultValueAttribute
+                    t.Namespace.Equals("System.ComponentModel") ||
+
                     // Is acceptable DataAnnotations Type?
                     t.Namespace.Equals("System.ComponentModel.DataAnnotations") ||
 
@@ -289,31 +292,7 @@ namespace OpenRiaServices.Tools.Test
             Type systemType = Type.GetType(typeName, /*throwOnError*/ false);
             if (systemType != null)
             {
-                if (!SystemWebDomainServices::OpenRiaServices.TypeUtility.IsSystemAssembly(systemType.Assembly))
-                {
-                    return false;
-                }
-                // Mock matches the real shared assemblies in allowing all mscorlib to match
-                if (AssemblyUtilities.IsAssemblyMsCorlib(systemType.Assembly.GetName()))
-                {
-                    return true;
-                }
-                // The mock declares that anything in System is also shared
-                // Anything in EntityFramework.dll is not shared.
-                string assemblyName = systemType.Assembly.FullName;
-                int comma = assemblyName.IndexOf(',');
-                if (comma >= 0)
-                {
-                    assemblyName = assemblyName.Substring(0, comma);
-                    if (string.Equals("System", assemblyName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return true;
-                    }
-                    if (string.Equals("EntityFramework", assemblyName, StringComparison.OrdinalIgnoreCase))
-                    {
-                        return false;
-                    }
-                }
+                return IsSharedFrameworkType(systemType);
             }
             typeName = MockSharedCodeService.AssemblyQualifiedTypeNameToFullTypeName(typeName);
 
