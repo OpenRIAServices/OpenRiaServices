@@ -10,7 +10,7 @@ namespace OpenRiaServices.Tools.Validation
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
     /// AppDomain boundaries.
     /// </remarks>
-    internal class DomainServiceValidator : MarshalByRefObject, IDisposable
+    internal sealed class DomainServiceValidator : MarshalByRefObject, IDisposable
 #if NETFRAMEWORK
         , System.Web.Hosting.IRegisteredObject
 #endif

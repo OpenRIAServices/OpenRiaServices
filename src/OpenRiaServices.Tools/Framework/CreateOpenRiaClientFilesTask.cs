@@ -718,15 +718,8 @@ namespace OpenRiaServices.Tools
                     string sourceDir = ServerProjectDirectory;
                     FilesWereWritten = GenerateClientProxiesForNetFramework(generatedFileName, sourceDir, options, sharedCodeServiceParameters);
 #else
-                    // TODO: Verify below statement, I exepct that it might not work (and does not need to work)
-                    // Probably we need a "hosting process" for net framework in this case
-                    FilesWereWritten = RiaClientFilesTaskHelpers.CodeGenForNet6(
-                        generatedFileName,
-                        options,
-                        this,
-                        sharedCodeServiceParameters,
-                        this.CodeGeneratorName
-                    );
+                    FilesWereWritten = false;
+                    LogError(Resource.ClientCodeGen_NetFrameworkNotSupported);
 #endif
                 }
                 else
