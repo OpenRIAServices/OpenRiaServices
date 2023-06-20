@@ -99,7 +99,7 @@ namespace Cities
         }
 
         [Query]
-#if !NET6_0
+#if NETFRAMEWORK
         public IQueryable<State> GetStatesInShippingZone(ShippingZone shippingZone, [InjectParameter] System.Web.HttpContext httpContext, [InjectParameter] System.Security.Principal.IPrincipal principal)
         {
             if (!object.ReferenceEquals(httpContext, System.Web.HttpContext.Current))
