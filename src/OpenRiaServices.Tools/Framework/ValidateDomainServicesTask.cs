@@ -129,24 +129,27 @@ namespace OpenRiaServices.Tools
                 this.ReferenceAssemblies.Select(i => this.GetFileName(i)));
 
             this.WarnIfAssembliesDontExist(assemblies);
-
 #if NETFRAMEWORK
-            // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
-            // This can occur when the build environment is configured incorrectly
-            if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+            using (System.Web.Compilation.ClientBuildManager cbm = new(/* appVirtualDir */ "/", this.ProjectDirectory))
             {
-                throw new InvalidOperationException(
-                    Resource.HttpRuntimeInitializationError,
-                    System.Web.Hosting.HostingEnvironment.InitializationException);
-            }
-#endif
+                // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
+                // This can occur when the build environment is configured incorrectly
+                if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+                {
+                    throw new InvalidOperationException(
+                        Resource.HttpRuntimeInitializationError,
+                        System.Web.Hosting.HostingEnvironment.InitializationException);
+                }
 
-            using (DomainServiceValidator validator = (DomainServiceValidator)Activator.CreateInstance(typeof(DomainServiceValidator)))
+                using (DomainServiceValidator validator = (DomainServiceValidator)cbm.CreateObject(typeof(DomainServiceValidator), false))
                 {
                     // Transfer control to Web Application AppDomain to invoke the validator
                     validator.Validate(assemblies.ToArray(), this.LoggingService);
                 }
-            
+            }
+#else
+            throw new NotImplementedException("Validation task is only implemented for .NetFramework");
+#endif
         }
 
         /// <summary>
@@ -164,7 +167,7 @@ namespace OpenRiaServices.Tools
             }
         }
 
-        #endregion
+#endregion
 
         #region Nested Classes
 

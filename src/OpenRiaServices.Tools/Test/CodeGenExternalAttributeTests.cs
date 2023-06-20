@@ -36,7 +36,6 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.GenerateCodeAssertFailure("C#", typeof(MockOrderWithoutAssociations_DomainService), error);
         }
 
-#if NETFRAMEWORK
         /// <summary>
         /// Verifies that Entity Framework entities that properly reference POCO entities generate code as expected.
         /// </summary>
@@ -59,7 +58,6 @@ namespace OpenRiaServices.Tools.Test
                 "public global::DataTests.Scenarios.EF.Northwind.PersonalDetails PersonalDetails_MarkedAsExternal",
                 "private bool FilterPersonalDetails_MarkedAsExternal(global::DataTests.Scenarios.EF.Northwind.PersonalDetails entity)");
         }
-#endif
     }
 
     #region Mock Entities

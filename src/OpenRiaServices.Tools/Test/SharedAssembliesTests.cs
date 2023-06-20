@@ -218,23 +218,8 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsNull(sharedType, "Should not have detected any shared type.");
             }
 
-#if NETFRAMEWORK // Reflection Only is only supported for net framework
-            string errorMessage = null;
-            try
-            {
-                Assembly.ReflectionOnlyLoadFrom(assemblyFileName);
-            }
-            catch (BadImageFormatException bife)
-            {
-                errorMessage = bife.Message;
-            }
-            finally
-            {
-                File.Delete(assemblyFileName);
-            }
             string message = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, null);
             TestHelper.AssertHasInfoThatStartsWith(logger, message);
-#endif
         }
 
         private static string GetSharedTypeLocation(SharedAssemblies sa, Type type)

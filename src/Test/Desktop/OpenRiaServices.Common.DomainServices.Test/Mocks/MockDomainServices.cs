@@ -5244,8 +5244,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
 #endregion
 }
 
-
-#if !NET6_0
+#if NETFRAMEWORK
 #region LTS Northwind Scenarios
 
 namespace DataTests.Scenarios.LTS.Northwind
@@ -5287,6 +5286,7 @@ namespace DataTests.Scenarios.LTS.Northwind
 }
 
 #endregion LTS Northwind Scenarios
+#endif
 
 #region EF Northwind Scenarios
 
@@ -5334,8 +5334,6 @@ namespace DataTests.Scenarios.EF.Northwind
 }
 
 #endregion EF Northwind Scenarios
-
-#endif
 
 #region VB Root Namespace Scenarios
 namespace VBRootNamespaceTest
