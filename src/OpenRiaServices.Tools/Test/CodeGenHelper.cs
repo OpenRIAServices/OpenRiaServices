@@ -120,7 +120,7 @@ namespace OpenRiaServices.Tools.Test
             // We need to map any server side assembly references back to our deployment directory
             // if we have the same assembly there, otherwise the assembly load from calls end up
             // with multiple assemblies with the same types
-            string deploymentDir = Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
+            string deploymentDir = System.IO.Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
             List<string> assemblies = MsBuildHelper.GetReferenceAssemblies(serverProjectPath);
             MapAssemblyReferencesToDeployment(deploymentDir, assemblies);
             return assemblies;

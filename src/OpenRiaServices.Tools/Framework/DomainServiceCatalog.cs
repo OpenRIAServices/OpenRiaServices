@@ -139,7 +139,6 @@ namespace OpenRiaServices.Tools
                 // Translate these exceptions into clean error logs
                 // so that they appear in the Error window in VS
                 this.LogError(ae.Message);
-                
             }
             catch (InvalidOperationException ioe)
             {
@@ -207,7 +206,6 @@ namespace OpenRiaServices.Tools
                 {
                     // Utility autorecovers and logs for common exceptions
                     IEnumerable<Type> types = AssemblyUtilities.GetExportedTypes(pair.Key, this._logger);
-
                     foreach (Type t in types)
                     {
                         if (typeof(DomainService).IsAssignableFrom(t) &&
@@ -230,7 +228,7 @@ namespace OpenRiaServices.Tools
         private DomainServiceDescription GetProviderDescription(Type providerType)
         {
             try
-            {               
+            {
                 return DomainServiceDescription.GetDescription(providerType);
             }
             catch (Exception ex)
@@ -253,14 +251,13 @@ namespace OpenRiaServices.Tools
 
             foreach (string assemblyName in this._assembliesToLoad)
             {
-                Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyName, this._logger);
+                var assembly = AssemblyUtilities.LoadAssembly(assemblyName, _logger);
                 if (assembly != null)
                 {
                     // The bool value indicates whether this assembly should be searched for a DomainService
                     this._loadedAssemblies[assembly] = TypeUtility.CanContainDomainServiceImplementations(assembly);
                 }
             }
-
             AssemblyUtilities.SetAssemblyResolver(this._loadedAssemblies.Keys);
         }
 

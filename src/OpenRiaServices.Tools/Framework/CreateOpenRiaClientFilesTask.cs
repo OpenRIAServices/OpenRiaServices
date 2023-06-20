@@ -1,14 +1,16 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading;
-using System.Web.Compilation;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
+using OpenRiaServices.Tools.Logging;
 using OpenRiaServices.Tools.SharedTypes;
 
 namespace OpenRiaServices.Tools
@@ -132,7 +134,7 @@ namespace OpenRiaServices.Tools
         /// Gets the string form of a boolean that indicates
         /// whether the shared files should be copied (instead of linked).
         /// </summary>
-        public string SharedFilesMode { set => LinkSharedFilesInsteadOfCopy = !string.Equals(value,  OpenRiaSharedFilesMode.Copy.ToString(), StringComparison.OrdinalIgnoreCase); }
+        public string SharedFilesMode { set => LinkSharedFilesInsteadOfCopy = !string.Equals(value, OpenRiaSharedFilesMode.Copy.ToString(), StringComparison.OrdinalIgnoreCase); }
 
         private bool LinkSharedFilesInsteadOfCopy { get; set; } = true;
 
@@ -545,21 +547,17 @@ namespace OpenRiaServices.Tools
                 this.WriteFileList();
 
                 // Write out our cache of source files in other projects.
-                if (!this.ServerProjectSourceFileCache.IsFileCacheCurrent)
+                if (!this.ServerProjectSourceFileCache.IsFileCacheCurrent &&
+                    RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(this.SourceFileListPath()), this))
                 {
-                    if (this.SafeFolderCreate(Path.GetDirectoryName(this.SourceFileListPath())))
-                    {
-                        this.ServerProjectSourceFileCache.SaveCacheToFile();
-                    }
+                    this.ServerProjectSourceFileCache.SaveCacheToFile();
                 }
 
                 // Write out our cache of Open RIA Services Links
-                if (!this.LinkedServerProjectCache.IsFileCacheCurrent)
+                if (!this.LinkedServerProjectCache.IsFileCacheCurrent &&
+                    RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(this.LinkedServerProjectsPath()), this))
                 {
-                    if (this.SafeFolderCreate(Path.GetDirectoryName(this.LinkedServerProjectsPath())))
-                    {
-                        this.LinkedServerProjectCache.SaveCacheToFile();
-                    }
+                    this.LinkedServerProjectCache.SaveCacheToFile();
                 }
 
                 double secondsAsDouble = stopWatch.ElapsedMilliseconds / 1000.0;
@@ -667,6 +665,7 @@ namespace OpenRiaServices.Tools
             // Therefore, its absence always triggers a code-gen pass, even though this has the
             // negative perf impact of causing a full code gen pass everytime until errors have been
             // resolved.
+
             if (!needToGenerate)
             {
                 FileInfo fileInfo = new FileInfo(generatedFileName);
@@ -677,13 +676,12 @@ namespace OpenRiaServices.Tools
                 // file has been touched since we last analyzed our server references, it is an indication
                 // the user modified the generated file.  So force a code gen and
                 // force a rewrite of the server reference file to short circuit this same code next build.
-                if (!needToGenerate && File.Exists(this.ServerReferenceListPath()))
+                if (!needToGenerate &&
+                    File.Exists(ServerReferenceListPath()) &&
+                    File.GetLastWriteTime(generatedFileName) > File.GetLastWriteTime(ServerReferenceListPath()))
                 {
-                    if (File.GetLastWriteTime(generatedFileName) > File.GetLastWriteTime(this.ServerReferenceListPath()))
-                    {
-                        needToGenerate = true;
-                        serverReferencesChanged = true;
-                    }
+                    needToGenerate = true;
+                    serverReferencesChanged = true;
                 }
             }
 
@@ -693,71 +691,43 @@ namespace OpenRiaServices.Tools
                 // Warn the user if the server assembly has no PDB
                 this.WarnIfNoPdb(assemblyFile);
 
-                string generatedFileContent = string.Empty;
+                // Capture the list of assemblies to load into an array to marshal across AppDomains
+                string[] assembliesToLoadArray = assembliesToLoad.ToArray();
 
-                // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
-                ClientBuildManagerParameter cbmParameter = new ClientBuildManagerParameter()
+                // Create the list of options we will pass to the generator.
+                // This instance is serializable and can cross AppDomains
+                ClientCodeGenerationOptions options = new ClientCodeGenerationOptions()
                 {
-                    PrecompilationFlags = PrecompilationFlags.ForceDebug,
+                    Language = this.Language,
+                    ClientFrameworkPath = this.ClientFrameworkPath,
+                    ClientRootNamespace = this.ClientProjectRootNamespace,
+                    ServerRootNamespace = this.ServerProjectRootNameSpace,
+                    ClientProjectPath = this.ClientProjectPath,
+                    ServerProjectPath = this.ServerProjectPath,
+                    IsApplicationContextGenerationEnabled = this.IsClientApplicationAsBool,
+                    UseFullTypeNames = this.UseFullTypeNamesAsBool,
+                    ClientProjectTargetPlatform = this.ClientTargetPlatform,
                 };
 
-                string sourceDir = this.ServerProjectDirectory;
-                string targetDir = null;
+                // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
+                SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
 
-                using (ClientBuildManager cbm = new ClientBuildManager(/* appVDir */ "/", sourceDir, targetDir, cbmParameter))
+                if (IsServerProjectNetFramework())
                 {
-                    // Capture the list of assemblies to load into an array to marshal across AppDomains
-                    string[] assembliesToLoadArray = assembliesToLoad.ToArray();
-
-                    // Create the list of options we will pass to the generator.
-                    // This instance is serializable and can cross AppDomains
-                    ClientCodeGenerationOptions options = new ClientCodeGenerationOptions()
-                    {
-                        Language = this.Language,
-                        ClientFrameworkPath = this.ClientFrameworkPath,
-                        ClientRootNamespace = this.ClientProjectRootNamespace,
-                        ServerRootNamespace = this.ServerProjectRootNameSpace,
-                        ClientProjectPath = this.ClientProjectPath,
-                        ServerProjectPath = this.ServerProjectPath,
-                        IsApplicationContextGenerationEnabled = this.IsClientApplicationAsBool,
-                        UseFullTypeNames = this.UseFullTypeNamesAsBool,
-                        ClientProjectTargetPlatform = this.ClientTargetPlatform,
-                    };
-
-                    // The other AppDomain gets a logger that will log back to this AppDomain
-                    CrossAppDomainLogger logger = new CrossAppDomainLogger((ILoggingService)this);
-
-                    // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
-                    SharedCodeServiceParameters sharedCodeServiceParameters = this.CreateSharedCodeServiceParameters(assembliesToLoadArray);
-
-                    // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
-                    // This can occur when the build environment is configured incorrectly
-                    if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-                    {
-                        throw new InvalidOperationException(
-                            Resource.HttpRuntimeInitializationError,
-                            System.Web.Hosting.HostingEnvironment.InitializationException);
-                    }
-
-                    // Create the "dispatcher" in the 2nd AppDomain.
-                    // This object will find and invoke the appropriate code generator
-                    using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
-                    {
-                        // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
-                        // the appropriate code generator.
-                        generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
-                    }
+#if NETFRAMEWORK
+                    string sourceDir = ServerProjectDirectory;
+                    FilesWereWritten = GenerateClientProxiesForNetFramework(generatedFileName, sourceDir, options, sharedCodeServiceParameters);
+#else
+                    FilesWereWritten = false;
+                    LogError(Resource.ClientCodeGen_NetFrameworkNotSupported);
+#endif
                 }
-
-                // Tell the user where we are writing the generated code
-                if (!string.IsNullOrEmpty(generatedFileContent))
+                else
                 {
-                    this.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
+                    // PERF: If running with a compatible target framework (!NETFRAMEWORK) 
+                    // we should be able to call into the code generation directly without invoking the executable
+                    FilesWereWritten = GenerateClientProxiesOutOfProcess(generatedFileName, options, sharedCodeServiceParameters);
                 }
-
-                // If VS is hosting us, write to its TextBuffer, else simply write to disk
-                // If the file is empty, delete it.
-                this.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false);
             }
             else
             {
@@ -786,6 +756,180 @@ namespace OpenRiaServices.Tools
             }
 
             return;
+        }
+
+        /// <summary>
+        /// Run code generation in a separate .exe in order to support .NET (net core) code generation from NETFRAMEWORK version of msbuild
+        /// </summary>
+        /// <remarks>
+        ///  We might want to add a "targetframework" parameter to 
+        ///  1. allow running code generation under a specific target framework (instead of "lastest major")
+        ///  2. allow launching NETFRAMEWORK version of code generation from dotnet build
+        /// </remarks>
+        private bool GenerateClientProxiesOutOfProcess(string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters sharedCodeServiceParameters)
+        {
+            // Call the console app from here if Net 6.0 or greater
+            string path = Path.Combine(Path.GetDirectoryName(typeof(CreateOpenRiaClientFilesTask).Assembly.Location),
+                "../net6.0/OpenRiaServices.Tools.CodeGenTask.exe");
+
+            if (!File.Exists(path))
+                throw new FileNotFoundException(path);
+
+            using var loggingServer = new CrossProcessLoggingServer();
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = path,
+                UseShellExecute = false,
+                CreateNoWindow = true,
+            };
+            List<string> arguments = new List<string>();
+            SetArgumentListForConsoleApp(arguments, generatedFileName, options, sharedCodeServiceParameters, loggingServer.PipeName);
+
+            // TODO: Fix vulnerability with GetTempFileName, see https://sonarcloud.io/project/issues?resolved=false&severities=BLOCKER%2CCRITICAL%2CMAJOR%2CMINOR&sinceLeakPeriod=true&types=VULNERABILITY&pullRequest=414&id=OpenRIAServices_OpenRiaServices&open=AYi1D8MZVJzuBbc9Xd8Q&tab=why
+            // and add error handling 
+            string filename = Path.GetTempFileName();
+            File.WriteAllLines(filename, arguments);
+            startInfo.Arguments = "@" + filename;
+
+            var process = Process.Start(startInfo);
+
+            // Informs the system that this task has a long-running out-of - process component
+            //     and other work can be done in the build while that work completes.
+            BuildEngine3.Yield();
+            try
+            {
+                // Read all logs from child process
+                TimeSpan timeout = TimeSpan.FromSeconds(600);
+#if DEBUG
+                // Increase timeout when debugger is attached
+                if (Debugger.IsAttached)
+                    timeout = TimeSpan.FromSeconds(1200);
+#endif
+
+                // Consider doing async IO or similar in background and specify a timeout
+                using (CancellationTokenSource cts = new CancellationTokenSource(timeout))
+                {
+                    // Kill process if CancellationTokenSource elapses before we go out of scope
+                    using var _ = cts.Token.Register(obj => ((Process)obj).Kill(), process);
+
+                    // Read logs from pipe and forward to this, it will no complete until the client has closed the pipe
+                    // in case of any serious error where client fails to close the pipe, we rely on the CancellationTokenSource to timeout
+                    loggingServer.WriteLogsTo(this, cts.Token);
+                }
+
+                // Even without a timeout this should complete quickly
+                // 1. Either the process has either closed the pipe and is shutting down and should exit within a few ms
+                // 2. or the timeout has elapsed and we have called Kill on the process so it should be stopped or stopping
+                process.WaitForExit();
+                var success = process.ExitCode == 0;
+                if (!success)
+                {
+                    Log.LogError("Process failed with ExitCode: {0}", process.ExitCode);
+                }
+                else
+                {
+                    RiaClientFilesTaskHelpers.SafeFileDelete(filename, this);
+                }
+                return success;
+            }
+            finally
+            {
+                BuildEngine3.Reacquire();
+            }
+        }
+
+#if NETFRAMEWORK
+        /// <summary>
+        /// Use <see cref="System.Web.Compilation"/> to build and load the server project assemblies
+        /// </summary>
+        /// <remarks>
+        /// Prevent inlining so that we only reference and load System.Web when needed for compilation
+        /// </remarks>
+        [MethodImpl(MethodImplOptions.NoInlining)]
+        private bool GenerateClientProxiesForNetFramework(string generatedFileName, string sourceDir, ClientCodeGenerationOptions options, SharedCodeServiceParameters sharedCodeServiceParameters)
+        {
+            string generatedFileContent;
+            // The other AppDomain gets a logger that will log back to this AppDomain
+            CrossAppDomainLogger logger = new CrossAppDomainLogger(this);
+
+            // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
+            // This can occur when the build environment is configured incorrectly
+            if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
+            {
+                throw new InvalidOperationException(
+                    Resource.HttpRuntimeInitializationError,
+                    System.Web.Hosting.HostingEnvironment.InitializationException);
+            }
+
+            // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
+            System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter()
+            {
+                PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,
+            };
+            using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, null, cbmParameter))
+            using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
+            {
+                // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
+                // the appropriate code generator.
+                generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
+            }
+
+            // Tell the user where we are writing the generated code
+            if (!string.IsNullOrEmpty(generatedFileContent))
+            {
+                logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
+            }
+
+            // If VS is hosting us, write to its TextBuffer, else simply write to disk
+            // If the file is empty, delete it.
+            return RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
+        }
+#endif
+
+        private bool IsServerProjectNetFramework()
+        {
+            if (ServerAssemblies.FirstOrDefault() is ITaskItem serverAssembly)
+            {
+                var targetIdentifier = serverAssembly.GetMetadata("TargetFrameworkIdentifier");
+                if (!string.IsNullOrEmpty(targetIdentifier))
+                {
+                    bool isFramework = targetIdentifier == ".NETFramework";
+                    Log.LogMessage("Is server project .NETFramework based on TargetFrameworkIdentifier: {0}", isFramework.ToString());
+
+                    return isFramework;
+                }
+
+                return IsAssemblyNetFramework(serverAssembly.ItemSpec);
+            }
+
+            return true;
+        }
+
+        /// <summary>
+        /// Fallback for determining target framework based on assembly.
+        /// It is "only" required for tests since in runtime we can look at TaskItem metadata to determine target framework
+        /// </summary>
+        [MethodImpl(MethodImplOptions.NoInlining)] // Avoid having to load mono.cecil if not called
+        private bool IsAssemblyNetFramework(string assemblyPath)
+        {
+            // An other solution would also be to look at the assemblies referenced
+            // and se if there are any paths which contains '.NETFramework' or '\net4*\'
+            var assembly = Mono.Cecil.AssemblyDefinition.ReadAssembly(assemblyPath);
+            var targetFrameworkAttribute = assembly.CustomAttributes.FirstOrDefault(a => a.AttributeType.FullName == typeof(TargetFrameworkAttribute).FullName);
+
+            if (targetFrameworkAttribute != null
+                && targetFrameworkAttribute.HasConstructorArguments)
+            {
+                bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework");
+                Log.LogMessage("Is server project .NETFramework based on TargetFrameworkAttribute: {0}", isFramework.ToString());
+                return isFramework;
+            }
+
+#if NETFRAMEWORK
+            return true;
+#else
+            return false;
+#endif
         }
 
         /// <summary>
@@ -1020,7 +1164,7 @@ namespace OpenRiaServices.Tools
                     if (!generatedFile)
                     {
                         this.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Deleting_Orphan, fileName));
-                        this.DeleteFileFromVS(fileName);
+                        RiaClientFilesTaskHelpers.DeleteFileFromVS(fileName, this);
                         this.DeleteFolderIfEmpty(Path.GetDirectoryName(fileName));
                     }
                 }
@@ -1056,15 +1200,12 @@ namespace OpenRiaServices.Tools
             }
 
             string fileListFile = this.FileListPath();
-            if (this.FilesWereWritten && !string.IsNullOrEmpty(fileListFile))
+            if (this.FilesWereWritten && !string.IsNullOrEmpty(fileListFile) &&
+                RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(fileListFile), this))
             {
-                if (this.SafeFolderCreate(Path.GetDirectoryName(fileListFile)))
-                {
-                    this.SafeFileWrite(fileListFile, outputFileLines);
-                }
+                RiaClientFilesTaskHelpers.SafeFileWrite(fileListFile, outputFileLines, this);
             }
         }
-
 
         /// <summary>
         /// Writes out all the assembly references and their timestamps
@@ -1085,12 +1226,10 @@ namespace OpenRiaServices.Tools
             }
             string outputFileLines = sb.ToString();
 
-            if (!string.IsNullOrEmpty(fileName))
+            if (!string.IsNullOrEmpty(fileName) &&
+                RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(fileName), this))
             {
-                if (this.SafeFolderCreate(Path.GetDirectoryName(fileName)))
-                {
-                    this.SafeFileWrite(fileName, outputFileLines);
-                }
+                RiaClientFilesTaskHelpers.SafeFileWrite(fileName, outputFileLines, this);
             }
         }
 
@@ -1126,7 +1265,7 @@ namespace OpenRiaServices.Tools
             parameters.ClientAssemblyPathsNormalized = this.ClientAssemblyPathsNormalized.ToArray();
 
             // Convert the list of server assemblies into a search path for PDB's
-            parameters.SymbolSearchPaths = serverAssemblies.Select(a => Path.GetDirectoryName(a)).ToArray();
+            parameters.SymbolSearchPaths = serverAssemblies.Select(a => Path.GetDirectoryName(a)).Distinct().ToArray();
 
             return parameters;
         }
@@ -1266,7 +1405,7 @@ namespace OpenRiaServices.Tools
             string destinationFolder = Path.GetDirectoryName(destinationFilePath);
 
             // Create the destination folder as late as possible
-            if (!this.SafeFolderCreate(destinationFolder))
+            if (!RiaClientFilesTaskHelpers.SafeFolderCreate(destinationFolder, this))
             {
                 return false;
             }
@@ -1310,6 +1449,12 @@ namespace OpenRiaServices.Tools
                 {
                     assemblyName = Path.GetFullPath(Path.Combine(this.ClientProjectDirectory, assemblyName));
                 }
+
+                // If server project target AspNetCore then it might be an exe (the native dotnet host) which we cannot do reflection on
+                // Change to .dll so that we target the actual managed implementation
+                if (assemblyName.EndsWith(".exe"))
+                    assemblyName = Path.ChangeExtension(assemblyName, ".dll");
+
                 assemblies.Add(assemblyName);
             }
             return assemblies;
@@ -1414,6 +1559,54 @@ namespace OpenRiaServices.Tools
                 string clientProject = Path.GetFileName(this.ClientProjectPath);
                 this.LogError(string.Format(CultureInfo.CurrentCulture, Resource.Server_Project_File_Does_Not_Exist, clientProject, this.ServerProjectPath));
             }
+        }
+
+        private void SetArgumentListForConsoleApp(List<string> arguments, string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters parameters, string pipeName)
+        {
+            static void AddEscaped(List<string> list, string parameter)
+            {
+                list.Add($"\"{parameter}\"");
+            }
+            static void AddParameters(List<string> list, string parameter, string[] values)
+            {
+                if (values != null && values.Length > 0)
+                {
+                    list.Add(parameter);
+                    foreach (var value in values)
+                        AddEscaped(list, value);
+                }
+            }
+            static void AddParameter(List<string> list, string parameter, string value)
+            {
+                if (value is not null)
+                {
+                    list.Add(parameter);
+                    AddEscaped(list, value);
+                }
+            }
+
+            //Arguments for ClientCodeGenerationOptions
+            AddParameter(arguments, "--language", options.Language);
+            AddParameter(arguments, "--clientFrameworkPath", options.ClientFrameworkPath);
+            AddParameter(arguments, "--serverProjectPath", options.ServerProjectPath);
+            AddParameter(arguments, "--clientProjectPath", options.ClientProjectPath);
+            AddParameter(arguments, "--clientRootNamespace", options.ClientRootNamespace);
+            AddParameter(arguments, "--serverRootNamespace", options.ServerRootNamespace);
+            AddParameter(arguments, "--isApplicationContextGenerationEnabled", options.IsApplicationContextGenerationEnabled.ToString());
+            AddParameter(arguments, "--clientProjectTargetPlatform", options.ClientProjectTargetPlatform.ToString());
+            AddParameter(arguments, "--useFullTypeNames", options.UseFullTypeNames.ToString());
+
+            //Arguments for SharedCodeServiceParameters
+            AddParameters(arguments, "--sharedSourceFiles", parameters.SharedSourceFiles);
+            AddParameters(arguments, "--symbolSearchPaths", parameters.SymbolSearchPaths);
+            AddParameters(arguments, "--serverAssemblies", parameters.ServerAssemblies);
+            AddParameters(arguments, "--clientAssemblies", parameters.ClientAssemblies);
+            AddParameters(arguments, "--clientAssemblyPathsNormalized", parameters.ClientAssemblyPathsNormalized);
+
+            //Other arguments
+            AddParameter(arguments, "--codeGeneratorName", CodeGeneratorName);
+            AddParameter(arguments, "--generatedFileName", generatedFileName);
+            AddParameter(arguments, "--loggingPipe", pipeName);
         }
 
         #region Nested Types

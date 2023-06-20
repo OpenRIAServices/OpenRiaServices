@@ -99,7 +99,7 @@ namespace Cities
         }
 
         [Query]
-#if !NET6_0
+#if NETFRAMEWORK
         public IQueryable<State> GetStatesInShippingZone(ShippingZone shippingZone, [InjectParameter] System.Web.HttpContext httpContext, [InjectParameter] System.Security.Principal.IPrincipal principal)
         {
             if (!object.ReferenceEquals(httpContext, System.Web.HttpContext.Current))
@@ -327,13 +327,16 @@ namespace Cities
             _deletedCities.Clear();
         }
 
-#if !NET6_0
         [Invoke]
         public bool UsesCustomHost()
         {
+#if NETFRAMEWORK
             return (OperationContext.Current.Host.GetType() == typeof(CityDomainServiceHost));
-        }
+#else
+            throw new NotImplementedException();
 #endif
+        }
+
 
         // Invoke that has a custom authorization attribute.  Permission denied for any City
         // whose state is Ohio unless the user is Mathew.

@@ -17,6 +17,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         {
         }
 
+        public override bool HasSideEffects => ((QueryAttribute)DomainOperation.OperationAttribute).HasSideEffects;
+
         public override async Task Invoke(HttpContext context)
         {
             try

@@ -45,7 +45,10 @@ app.MapDomainServices/MapOpenRiaServices("/Services", x =>
 
 * look at adding authorization and authentication metadata to endpoiunt
  - this is handled inside DomainServer at the moment
-* look at copying/adding attributes applied from query/invoke methods to endpoints
+ - For RequiresAuthentication attribute we should be able to 
+   validate authentication early in the pipeline (via metadata?) 
+   so we don't need to check in ValidateMethodPermissions
+
 
 ## Reliability / "production" ready
 

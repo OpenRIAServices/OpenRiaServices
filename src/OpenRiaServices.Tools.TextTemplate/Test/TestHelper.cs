@@ -62,46 +62,40 @@ namespace OpenRiaServices.Tools.Test
 
         internal static void GenerateAndVerifyCodeGenerators(Type[] domainServiceTypes, Type[] sharedTypes, string[] refAssemblies)
         {
-            Assembly codeDomCodeGenAssembly = null;
-            Assembly t4CodeGenAssembly = null;
-            using (AssemblyGenerator asmGen = new AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
+            using AssemblyGenerator asmGen = new AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes);
+            foreach (Type t in sharedTypes)
             {
-                foreach (Type t in sharedTypes)
-                {
-                    asmGen.MockSharedCodeService.AddSharedType(t);
-                }
-
-                foreach (string refAssembly in refAssemblies)
-                {
-                    asmGen.ReferenceAssemblies.Add(refAssembly);
-                }
-
-                string generatedCode = asmGen.GeneratedCode;
-                Assert.IsFalse(string.IsNullOrEmpty(generatedCode), "Failed to generate code:\r\n" + asmGen.ConsoleLogger.Errors);
-
-                codeDomCodeGenAssembly = asmGen.GeneratedAssembly;
-                Assert.IsNotNull(codeDomCodeGenAssembly, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
-
+                asmGen.MockSharedCodeService.AddSharedType(t);
             }
 
-            using (T4AssemblyGenerator asmGen = new T4AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes))
+            foreach (string refAssembly in refAssemblies)
             {
-                foreach (Type t in sharedTypes)
-                {
-                    asmGen.MockSharedCodeService.AddSharedType(t);
-                }
-
-                foreach (string refAssembly in refAssemblies)
-                {
-                    asmGen.ReferenceAssemblies.Add(refAssembly);
-                }
-
-                string generatedCode = asmGen.GeneratedCode;
-                Assert.IsFalse(string.IsNullOrEmpty(generatedCode), "Failed to generate code:\r\n" + asmGen.ConsoleLogger.Errors);
-
-                t4CodeGenAssembly = asmGen.GeneratedAssembly;
-                Assert.IsNotNull(t4CodeGenAssembly, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
+                asmGen.ReferenceAssemblies.Add(refAssembly);
             }
+
+            string generatedCode = asmGen.GeneratedCode;
+            Assert.IsFalse(string.IsNullOrEmpty(generatedCode), "Failed to generate code:\r\n" + asmGen.ConsoleLogger.Errors);
+
+            Assembly codeDomCodeGenAssembly = asmGen.GeneratedAssembly;
+            Assert.IsNotNull(codeDomCodeGenAssembly, "Assembly failed to build: " + asmGen.ConsoleLogger.Errors);
+
+            using T4AssemblyGenerator t4AsmGen = new T4AssemblyGenerator(/* isCSharp */ true, /* useFullTypeNames */ false, domainServiceTypes);
+            // Use same MetadataLoadContext for both assemblies so that types can be compared via normal equality
+            t4AsmGen.MetadataLoadContext = asmGen.MetadataLoadContext;
+            foreach (Type t in sharedTypes)
+            {
+                t4AsmGen.MockSharedCodeService.AddSharedType(t);
+            }
+            foreach (string refAssembly in refAssemblies)
+            {
+                t4AsmGen.ReferenceAssemblies.Add(refAssembly);
+            }
+
+            string t4GeneratedCode = t4AsmGen.GeneratedCode;
+            Assert.IsFalse(string.IsNullOrEmpty(t4GeneratedCode), "Failed to generate code:\r\n" + t4AsmGen.ConsoleLogger.Errors);
+
+            Assembly t4CodeGenAssembly = t4AsmGen.GeneratedAssembly;
+            Assert.IsNotNull(t4CodeGenAssembly, "Assembly failed to build: " + t4AsmGen.ConsoleLogger.Errors);
 
             TestHelper.VerifyAssembliesEquality(codeDomCodeGenAssembly, t4CodeGenAssembly);
         }
@@ -147,10 +141,12 @@ namespace OpenRiaServices.Tools.Test
             if (TestHelper.AreNotNull(attributes1, attributes2))
             {
                 Assert.AreEqual(attributes1.Count(), attributes2.Count());
+
                 foreach (CustomAttributeData attr1 in attributes1)
                 {
-                    CustomAttributeData attr2 = attributes2.First(a => a.ToString() == attr1.ToString());
+                    CustomAttributeData attr2 = attributes2.First(a => TestHelper.AreTypesEqual(a.AttributeType, attr1.AttributeType));
                     Assert.IsNotNull(attr2, $"Could not find an attribute matching '{attr1}' in t4 codegen generated assembly");
+
                     Assert.AreEqual(attr1.ConstructorArguments.Count(), attr2.ConstructorArguments.Count());
                     Assert.AreEqual(attr1.NamedArguments.Count, attr2.NamedArguments.Count);
                 }
@@ -166,7 +162,7 @@ namespace OpenRiaServices.Tools.Test
                 {
                     PropertyInfo prop2 = properties2.First(p => p.Name == prop1.Name);
                     Assert.IsNotNull(prop2, $"Could not find a property matching '{prop1.Name}' in t4 codegen generated assembly");
-                    Assert.IsTrue(AreTypesEqual(prop1.PropertyType, prop2.PropertyType));
+                    Assert.IsTrue(AreTypesEqual(prop1.PropertyType, prop2.PropertyType), "Property was of a different type");
                     TestHelper.VerifyAttributesEquality(prop1.GetCustomAttributesData(), prop2.GetCustomAttributesData());
                 }
             }
@@ -218,13 +214,33 @@ namespace OpenRiaServices.Tools.Test
 
         private static bool AreTypesEqual(Type t1, Type t2)
         {
-            string t1Name = OpenRiaServices.Tools.TextTemplate.CodeGenUtilities.GetTypeName(t1);
-            string t2Name = OpenRiaServices.Tools.TextTemplate.CodeGenUtilities.GetTypeName(t2);
-            if (t1Name == t2Name)
+            // Now check if generic types (or Array)
+            if ((t1.IsGenericType && t2.IsGenericType)
+                || (t1.IsArray && t2.IsArray))
             {
+                // Compare name by name and namespace since "FullName" can contain assemblyqualified type name 
+                if (t1.Name != t2.Name || t1.Namespace != t2.Namespace)
+                    return false;
+
+                Type[] t1Arguments = t1.GetGenericArguments();
+                Type[] t2Arguments = t2.GetGenericArguments();
+
+                if (t1Arguments.Length != t2Arguments.Length)
+                    return false;
+
+                for (int i = 0; i < t1Arguments.Length; i++)
+                {
+                    if (!AreTypesEqual(t1Arguments[i], t2Arguments[i]))
+                        return false;
+                }
+
+                // All arguments are equal
                 return true;
             }
-            return false;
+            else // Name is same, and not a generic type or array
+            {
+                return t1.FullName == t2.FullName;
+            }
         }
 
         private static bool AreNotNull(object[] o1, object[] o2)

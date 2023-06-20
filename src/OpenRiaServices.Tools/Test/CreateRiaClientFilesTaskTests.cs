@@ -2,6 +2,7 @@
 using System.CodeDom;
 using System.CodeDom.Compiler;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -159,7 +160,7 @@ namespace OpenRiaServices.Tools.Test
 
             Assert.IsNotNull(realMessage, "Expected creation of fake folder " + fakeFolder + " to fail.");
 
-            bool success = task.SafeFolderCreate(fakeFolder);
+            bool success = RiaClientFilesTaskHelpers.SafeFolderCreate(fakeFolder, task);
             Assert.IsFalse(success, "Expected SafeFolderCreate to report failure for " + fakeFolder);
             Assert.IsFalse(Directory.Exists(fakeFolder), "Did not expect SafeFolderCreate to really create " + fakeFolder);
 
@@ -174,7 +175,7 @@ namespace OpenRiaServices.Tools.Test
 
             try
             {
-                success = task.SafeFolderCreate(realFolder);
+                success = RiaClientFilesTaskHelpers.SafeFolderCreate(realFolder, task);
                 Assert.IsTrue(success, "Expected SafeFolderCreate to have reported success for " + realFolder);
                 Assert.IsTrue(Directory.Exists(realFolder), "Expected SafeFolderCreate to have created " + realFolder);
             }
@@ -201,7 +202,7 @@ namespace OpenRiaServices.Tools.Test
                 string outputFile = Path.Combine(Path.GetTempPath(), Guid.NewGuid().ToString());
                 Assert.IsFalse(File.Exists(outputFile));
 
-                bool result = task.WriteOrDeleteFileToVS(outputFile, string.Empty, true);
+                bool result = RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(outputFile, string.Empty, true, task);
 
                 Assert.IsFalse(result);                     // should have reported false
                 Assert.IsFalse(File.Exists(outputFile));    // should not have created file
@@ -253,13 +254,14 @@ namespace OpenRiaServices.Tools.Test
             try
             {
                 task = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance("", /*includeClientOutputAssembly*/ false);
-                MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
+                MockBuildEngine mockBuildEngine = (MockBuildEngine)task.BuildEngine;
                 string serverAssemblyFile = task.ServerAssemblies[0].ItemSpec;  // use name we mapped to deployment dir
                 string serverPdbFile = Path.ChangeExtension(serverAssemblyFile, "pdb");
                 string serverTempFile = Path.ChangeExtension(serverAssemblyFile, "tmp");
 
                 // Move PDB file so it cannot be found
                 Assert.IsTrue(File.Exists(serverPdbFile), "Expected to find " + serverPdbFile);
+                RiaClientFilesTaskHelpers.SafeFileDelete(serverTempFile, mockBuildEngine.ConsoleLogger);
                 File.Move(serverPdbFile, serverTempFile);
                 Assert.IsFalse(File.Exists(serverPdbFile));
 
@@ -282,6 +284,22 @@ namespace OpenRiaServices.Tools.Test
                 CodeGenHelper.DeleteTempFolder(task);
             }
         }
+
+#if !NETFRAMEWORK
+        [TestMethod]
+        public void CreateRiaClientFiles_For_Net_60()
+        {
+            var rootPath = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+            var serverProjectPath = Path.Combine(rootPath,  "ServerClassLib\\ServerClassLib.csproj");
+            var clientProjectPath = Path.Combine(rootPath, "ClientClassLib\\ClientClassLib.csproj");
+            
+            var code = CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false);
+
+            var task = code.Execute();
+            Assert.IsTrue(task);
+            Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
+        }
+#endif
 
         [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]
@@ -438,6 +456,9 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
+#if !NETFRAMEWORK
+        [Ignore("Do no work in NET6")]
+#endif
         [Description("CreateOpenRiaClientFilesTask can access web.config using ASP.NET AppDomain")]
         [TestMethod]
         public void CreateRiaClientFiles_ASPNET_AppDomain()
@@ -567,8 +588,6 @@ namespace OpenRiaServices.Tools.Test
                 CodeGenHelper.DeleteTempFolder(task);
             }
         }
-
-
 
         [Description("CreateOpenRiaClientFilesTask does not regen files on second code-gen (OpenRiaSharedFilesMode.Copy)")]
         [TestMethod]
@@ -1131,7 +1150,7 @@ namespace OpenRiaServices.Tools.Test
             try
             {
                 // Now, use normal helper to create it if it does not exist
-                bool createdFolder = task.SafeFolderCreate(fullPath);
+                bool createdFolder = RiaClientFilesTaskHelpers.SafeFolderCreate(fullPath, task);
                 Assert.IsTrue(createdFolder, "Failed to create folder");
                 Assert.IsTrue(Directory.Exists(fullPath), "Generated code path should have been generated");
             }
