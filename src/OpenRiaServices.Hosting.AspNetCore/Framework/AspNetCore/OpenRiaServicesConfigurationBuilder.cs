@@ -2,6 +2,8 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore
@@ -9,27 +11,27 @@ namespace OpenRiaServices.Hosting.AspNetCore
     public class OpenRiaServicesConfigurationBuilder
     {
         private readonly OpenRiaServicesEndpointDataSource _dataSource;
+        private readonly IServiceProviderIsService _typeIsService;
 
-        internal OpenRiaServicesConfigurationBuilder(OpenRiaServicesEndpointDataSource dataSource)
+        internal OpenRiaServicesConfigurationBuilder(OpenRiaServicesEndpointDataSource dataSource, IServiceProviderIsService typeIsService)
         {
             _dataSource = dataSource;
+            _typeIsService = typeIsService;
         }
 
-        public void AddDomainService(Type type)
+        public IEndpointConventionBuilder AddDomainService(Type type)
         {
             var longName = type.FullName.Replace('.', '-') + ".svc";
-            var description = DomainServiceDescription.GetDescription(type);
 
-            _dataSource.DomainServices.Add(longName + "/binary", description);
+            if (!_typeIsService.IsService(type))
+                throw new InvalidOperationException($"Domainservice {type} cannot be resolved by container, register it before calling map");
+
+            return _dataSource.AddDomainService(longName + "/binary", type);
         }
 
-        public void AddDomainService<T>()
+        public IEndpointConventionBuilder AddDomainService<T>() where T : DomainService
         {
-            var type = typeof(T);
-            var longName = type.FullName.Replace('.', '-') + ".svc";
-            var description = DomainServiceDescription.GetDescription(type);
-
-            _dataSource.DomainServices.Add(longName + "/binary", description);
+            return AddDomainService(typeof(T));
         }
     }
 }

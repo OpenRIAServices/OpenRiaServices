@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore
 {
@@ -41,25 +42,39 @@ namespace OpenRiaServices.Hosting.AspNetCore
             var dataSource = endpoints.ServiceProvider.GetRequiredService<OpenRiaServicesEndpointDataSource>();
             dataSource.Prefix = prefix;
 
-            var configurationBuilder = new OpenRiaServicesConfigurationBuilder(dataSource);
-            configure(configurationBuilder);
-
-            // Validate that all domainservices are registered
+            // Scope used to validate that domainservices can be resolved
             using (var scope = endpoints.ServiceProvider.CreateScope())
             {
-                IServiceProviderIsService isService = scope.ServiceProvider.GetService<IServiceProviderIsService>();
-                bool canResolve(Type type) => isService != null ? isService.IsService(type) : scope.ServiceProvider.GetService(type) is not null;
+                // Allow OpenRiaServicesConfigurationBuilder to validate that types are registeredd corretly
+                IServiceProviderIsService isService = scope.ServiceProvider.GetService<IServiceProviderIsService>() 
+                    ?? new DymmyIsService(scope.ServiceProvider);
 
-                foreach (var type in dataSource.DomainServices)
-                {
-                    if (!canResolve(type.Value.DomainServiceType))
-                        throw new InvalidOperationException($"Domainservice {type.Value.DomainServiceType} cannot be resolved by container, register it before calling map");
-                }
+                var configurationBuilder = new OpenRiaServicesConfigurationBuilder(dataSource, isService);
+                configure(configurationBuilder);
             }
 
             endpoints.DataSources.Add(dataSource);
 
             return dataSource;
+        }
+
+        /// <summary>
+        /// Simple implementation of IServiceProviderIsService in case a non conformant DI provider is used
+        /// </summary>
+        sealed class DymmyIsService : IServiceProviderIsService
+        {
+            private readonly IServiceProvider _serviceProvider;
+
+            public DymmyIsService(IServiceProvider serviceProvider)
+            {
+                _serviceProvider = serviceProvider;
+            }
+
+            public bool IsService(Type serviceType)
+            {
+                using var domainService = (DomainService)_serviceProvider.GetService(serviceType);
+                return domainService != null;
+            }
         }
     }
 }

@@ -1,3 +1,20 @@
+# Unreleased
+
+* AspNetCore
+     *   Copies "All" attributes to endpoint metadata      
+         * Some attributes sucha as Validation, Authorization and other attributes specific to OpenRiaServices are not copied
+     * `AddDomainService()` methods inside `MapOpenRiaServices` now returns `IEndpointConventionBuilder` allowing conventions to be specified per `DomainService`
+        ```C#
+        app.MapOpenRiaServices(builder =>
+        {
+            builder.AddDomainService<Cities.CityDomainService>()
+                .WithGroupName("Cities");
+        });
+        ```
+     * CHANGES:
+        * `services.AddOpenRiaServices<T>()` now requires T to derive from DomainServce
+        * `services.AddOpenRiaServices<T>()` has different return type
+
 # 5.3.1 with EFCore 2.0.2 and AspNetCore 0.3.0
 
 * Code Generation
