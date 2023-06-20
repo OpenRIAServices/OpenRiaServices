@@ -148,6 +148,7 @@ namespace OpenRiaServices.Tools
                 }
             }
 #else
+            // Make sure to re enable ValidateDomainServicesTaskRunsSuccessfully test when fixing
             throw new NotImplementedException("Validation task is only implemented for .NetFramework");
 #endif
         }
