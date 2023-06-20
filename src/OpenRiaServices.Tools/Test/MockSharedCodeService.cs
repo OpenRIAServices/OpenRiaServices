@@ -263,8 +263,7 @@ namespace OpenRiaServices.Tools.Test
 
             // We should check int idx = assemblyFullName.IndexOf("PublicKeyToken=", StringComparison.OrdinalIgnoreCase)
             // To handle more types, but this should fix a large part of the system types
-            if (t.Assembly == typeof(object).Assembly
-                || t.Assembly == typeof(DisplayAttribute).Assembly)
+            if (t.Assembly == typeof(object).Assembly)
                 return true;
 
             // Otherwise, we check for specific namespaces and types
