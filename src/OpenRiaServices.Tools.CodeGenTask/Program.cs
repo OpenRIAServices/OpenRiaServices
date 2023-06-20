@@ -8,10 +8,8 @@ namespace OpenRiaServices.Tools.CodeGenTask;
 
 static class Program
 {
-    static int Main(string[] args) // Take in params to setup the build here
+    static int Main(string[] args)
     {
-        // TODO: Coonsider setting "working diretory" (when launching exe? or here) to match old behaviour 
-
         // TODO: Remove dependency on MSBuild and then remove any PackageReferences to MSBuild and MSBuildLocator
         // * This will require splitting "OpenRiaServices.Tools" into 2 separate projects, one with MSbuild tasks and one without (just code generation)
         // For now register the most recent version of MSBuild
@@ -92,9 +90,6 @@ static class Program
         {
             log.LogMessage($"OpenRiaServices CodeGen running on {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
 
-            // TODO: Remove
-            log.LogMessage("CommandLine: " + Environment.CommandLine);
-
             SetupAppConfig(clientCodeGenerationOption);
             RiaClientFilesTaskHelpers.CodeGenForNet6(generatedFileName, clientCodeGenerationOption, log, sharedCodeServiceParameters, codeGeneratorName);
             log.LogMessage("Code generation succeeded");
@@ -111,11 +106,8 @@ static class Program
         }
     }
 
-    // TODO: Find app.config/web.config https://stackoverflow.com/questions/4738/using-configurationmanager-to-load-config-from-an-arbitrary-location/14246260#14246260
-    // Ensure this code works (EF6 DbDomainContext (or ex EfCore) using ConfigurationManager API to get connection string should work)
-
-    // Note: This just looks for "app.config" in the root,
-    // we might want to be smarter when searching for them.
+    // Find app.config/web.config based on https://stackoverflow.com/questions/4738/using-configurationmanager-to-load-config-from-an-arbitrary-location/14246260#14246260
+    // Note: This just looks for "app.config" in the root, we might want to be smarter when searching for them.
     // Note: Prefer web.config if running on NETFRAMEWORK
     // Note we probably want to change this to a recursive search
     // (using glob pattern to ignore bin/obj folders)
