@@ -109,7 +109,7 @@ namespace OpenRiaServices.Client
         private static WcfDomainClientFactory CreateDefaultDomainClientFactory()
         {
 
-#if NETSTANDARD
+#if !NETFRAMEWORK
             return new SoapDomainClientFactory();
 #else
             return new WebDomainClientFactory();

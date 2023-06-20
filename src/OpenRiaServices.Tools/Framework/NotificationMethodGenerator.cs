@@ -220,9 +220,11 @@ namespace OpenRiaServices.Tools
             CodeMemberMethod method = new CodeMemberMethod();
             method.Attributes = MemberAttributes.Public | MemberAttributes.Final;
             method.Name = "On" + methodName;
-            method.Parameters.AddRange(parameters);
 
-            if (this.proxyGenerator.ClientProxyCodeGenerationOptions.UseFullTypeNames)
+            if (parameters != null)
+                method.Parameters.AddRange(parameters);
+
+            if (this.proxyGenerator.ClientProxyCodeGenerationOptions.UseFullTypeNames && parameters is not null)
             {
                 foreach (CodeParameterDeclarationExpression paramExp in parameters.Cast<CodeParameterDeclarationExpression>())
                 {

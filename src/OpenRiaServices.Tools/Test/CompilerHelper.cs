@@ -116,7 +116,10 @@ namespace OpenRiaServices.Tools.Test
             string documentationFile = null)
         {
             List<MetadataReference> references = LoadReferences(referenceAssemblies);
+#if NETFRAMEWORK
+            // Not needed in net6 since VB types lives in core assembly
             references.Add(GetVisualBasicReference());
+#endif
 
             try
             {
@@ -129,6 +132,15 @@ namespace OpenRiaServices.Tools.Test
                 var compileOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
                     rootNamespace: rootNamespace,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
+
+#if !NETFRAMEWORK
+                compileOptions = compileOptions.WithSpecificDiagnosticOptions(new[]
+                {
+                    // 'AssociationAttribute' is obsolete: 'This attribute is no longer in use and will be ignored if applied.
+                    new KeyValuePair<string, ReportDiagnostic>("BC40000", ReportDiagnostic.Suppress)
+                });
+#endif
+
                 Compilation compilation = VisualBasicCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
 
                 // Same file

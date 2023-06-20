@@ -65,7 +65,7 @@ namespace OpenRiaServices.Tools.SharedTypes
                 catch (Exception ex)
                 {
                     // Some common exceptions log a warning and keep running
-                    if (ex is System.IO.FileNotFoundException ||
+                 if (ex is System.IO.FileNotFoundException ||
                         ex is System.IO.FileLoadException ||
                         ex is System.IO.PathTooLongException ||
                         ex is System.BadImageFormatException ||

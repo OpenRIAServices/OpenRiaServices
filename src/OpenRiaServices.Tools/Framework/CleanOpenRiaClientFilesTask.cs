@@ -43,7 +43,7 @@ namespace OpenRiaServices.Tools
                 if (File.Exists(fileName))
                 {
                     this.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Deleting_Orphan, fileName));
-                    this.DeleteFileFromVS(fileName);
+                    RiaClientFilesTaskHelpers.DeleteFileFromVS(fileName, this);
                     this.DeleteFolderIfEmpty(Path.GetDirectoryName(fileName));
                 }
             }

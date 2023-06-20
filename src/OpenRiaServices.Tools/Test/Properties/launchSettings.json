@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "OpenRiaServices.Tools.Test": {
+      "commandName": "Project",
+      "nativeDebugging": true
+    }
+  }
+}
