@@ -330,7 +330,7 @@ namespace Cities
         [Invoke]
         public bool UsesCustomHost()
         {
-#if !NET6_0
+#if NETFRAMEWORK
             return (OperationContext.Current.Host.GetType() == typeof(CityDomainServiceHost));
 #else
             throw new NotImplementedException();
