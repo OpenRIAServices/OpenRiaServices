@@ -1,4 +1,4 @@
-# Unreleased
+#  AspNetCore 0.4.0
 
 * AspNetCore
      *   Copies "All" attributes to endpoint metadata      
@@ -11,6 +11,8 @@
                 .WithGroupName("Cities");
         });
         ```
+     * Updated README.md and added Sample project
+     * Make it compatible with more middleware such as OutputCache middleware by "Completing" responses
      * CHANGES:
         * `services.AddOpenRiaServices<T>()` now requires T to derive from DomainServce
         * `services.AddOpenRiaServices<T>()` has different return type
