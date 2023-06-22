@@ -14,6 +14,8 @@ namespace OpenRiaServices.Client
         private readonly EntityChangeSet _changeSet;
         private readonly Action<SubmitOperation> _completeAction;
 
+        private bool _hasExceptionOnCompleteTask;
+
         /// <summary>
         /// Initializes a new instance of the <see cref="SubmitOperation"/> class.
         /// </summary>
@@ -38,7 +40,7 @@ namespace OpenRiaServices.Client
                 CompleteTask(sumitResultTask);
             else
             {
-                sumitResultTask.ContinueWith(static (task, state) =>
+                var continueTask = sumitResultTask.ContinueWith(static (task, state) =>
                 {
                     var operation = (SubmitOperation)state;
                     operation.CompleteTask(task);
@@ -47,17 +49,33 @@ namespace OpenRiaServices.Client
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
                 , CurrentSynchronizationContextTaskScheduler);
+
+                continueTask.GetAwaiter().OnCompleted(() =>
+                {
+                    if (_hasExceptionOnCompleteTask)
+                    {
+                        throw continueTask.Exception;
+                    }
+                });
             }
         }
 
         internal void CompleteTask(Task<SubmitResult> task)
         {
-            if (task.IsCanceled)
-                base.SetCancelled();
-            else if (task.Exception != null)
-                base.SetError(ExceptionHandlingUtility.GetUnwrappedException(task.Exception));
-            else
-                base.Complete(null);
+            try
+            {
+                if (task.IsCanceled)
+                    base.SetCancelled();
+                else if (task.Exception != null)
+                    base.SetError(ExceptionHandlingUtility.GetUnwrappedException(task.Exception));
+                else
+                    base.Complete(null);
+            }
+            catch
+            {
+                _hasExceptionOnCompleteTask = true;
+                throw;
+            }
         }
 
         /// <summary>
