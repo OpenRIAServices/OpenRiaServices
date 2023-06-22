@@ -10,13 +10,11 @@
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Daniel-Svensson</Authors>
     <PackageTags>OpenRiaServices AspNetCore Hosting DomainServices AspNet WCF RIA Services Server</PackageTags>
-    <Description>PREVIEW: Asp.Net Core Hosting for OpenRiaservices
-    The package is currently in preview, please look at TODO file in reposotiry.
-    Only use if you feel competent to debug and troubleshoot any issues yourself.
-    
-    Public API will change before 1.0.0 release
-    
-    There is no documentation yet, please see AspNetCoreWebsite project in repository for usage.
+    <Description>
+      Asp.Net Core Hosting for OpenRiaservices
+      Public API will change before 1.0.0 release
+
+      See README at https://github.com/OpenRIAServices/OpenRiaServices/tree/main/src/OpenRiaServices.Hosting.AspNetCore/Framework for usage.
     </Description>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageReadmeFile>README.md</PackageReadmeFile>
