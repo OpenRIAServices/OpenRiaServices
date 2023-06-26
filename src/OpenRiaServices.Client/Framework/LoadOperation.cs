@@ -167,8 +167,6 @@ namespace OpenRiaServices.Client
         private ReadOnlyObservableLoaderCollection<TEntity> _entities;
         private readonly Action<LoadOperation<TEntity>> _completeAction;
 
-        private bool _hasExceptionOnCompleteTask;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadOperation"/> class.
         /// </summary>
@@ -213,7 +211,7 @@ namespace OpenRiaServices.Client
                 CompleteTask(loadResultTask);
             else
             {
-                var continueTask = loadResultTask.ContinueWith(static (task, state) =>
+                loadResultTask.ContinueWith(static (task, state) =>
                 {
                     ((LoadOperation<TEntity>)state).CompleteTask(task);
                 }
@@ -221,14 +219,6 @@ namespace OpenRiaServices.Client
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
                 , CurrentSynchronizationContextTaskScheduler);
-
-                continueTask.GetAwaiter().OnCompleted(() =>
-                {
-                    if (_hasExceptionOnCompleteTask)
-                    {
-                        throw continueTask.Exception;
-                    }
-                });
             }
         }
 
@@ -316,26 +306,17 @@ namespace OpenRiaServices.Client
             if (loadTask?.IsCompleted != true)
                 throw new ArgumentException("Task must be completed", nameof(loadTask));
 
-
-            try
+            if (loadTask.IsCanceled)
             {
-                if (loadTask.IsCanceled)
-                {
-                    SetCancelled();
-                }
-                else if (loadTask.Exception != null)
-                {
-                    SetError(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
-                }
-                else
-                {
-                    SetResult(loadTask.Result);
-                }
+                SetCancelled();
             }
-            catch
+            else if (loadTask.Exception != null)
             {
-                _hasExceptionOnCompleteTask = true;
-                throw;
+                SetError(ExceptionHandlingUtility.GetUnwrappedException(loadTask.Exception));
+            }
+            else
+            {
+                SetResult(loadTask.Result);
             }
         }
     }

@@ -134,8 +134,6 @@ namespace OpenRiaServices.Client
     {
         private readonly Action<InvokeOperation<TValue>> _completeAction;
 
-        private bool _hasExceptionOnCompleteTask;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InvokeOperation"/> class.
         /// </summary>
@@ -157,7 +155,7 @@ namespace OpenRiaServices.Client
                 CompleteTask(invokeResultTask);
             else
             {
-                var continueTask = invokeResultTask.ContinueWith(static (loadTask, state) =>
+                invokeResultTask.ContinueWith(static (loadTask, state) =>
                 {
                     ((InvokeOperation<TValue>)state).CompleteTask(loadTask);
                 }
@@ -165,14 +163,6 @@ namespace OpenRiaServices.Client
                 , CancellationToken.None
                 , TaskContinuationOptions.HideScheduler
                 , CurrentSynchronizationContextTaskScheduler);
-
-                continueTask.GetAwaiter().OnCompleted(() =>
-                {
-                    if (_hasExceptionOnCompleteTask)
-                    {
-                        throw continueTask.Exception;
-                    }
-                });
             }
         }
 
@@ -206,25 +196,17 @@ namespace OpenRiaServices.Client
 
         internal void CompleteTask(Task<InvokeResult<TValue>> task)
         {
-            try
+            if (task.IsCanceled)
             {
-                if (task.IsCanceled)
-                {
-                    SetCancelled();
-                }
-                else if (task.Exception != null)
-                {
-                    SetError(ExceptionHandlingUtility.GetUnwrappedException(task.Exception));
-                }
-                else
-                {
-                    SetResult(task.Result);
-                }
+                SetCancelled();
             }
-            catch
+            else if (task.Exception != null)
             {
-                _hasExceptionOnCompleteTask = true;
-                throw;
+                SetError(ExceptionHandlingUtility.GetUnwrappedException(task.Exception));
+            }
+            else
+            {
+                SetResult(task.Result);
             }
         }
     }
