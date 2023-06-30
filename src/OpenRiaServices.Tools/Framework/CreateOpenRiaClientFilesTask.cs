@@ -785,14 +785,8 @@ namespace OpenRiaServices.Tools
             List<string> arguments = new List<string>();
             SetArgumentListForConsoleApp(arguments, generatedFileName, options, sharedCodeServiceParameters, loggingServer.PipeName);
 
-            string tempPath = Path.GetTempPath();
-            string fileName = Path.Combine(tempPath, Path.GetRandomFileName());
-            
-            // Verify fileName does not already exist. If it does exist, try to create a new name
-            for (int i = 1; (string.IsNullOrWhiteSpace(fileName) || File.Exists(fileName)) && i < 10; i++)
-                fileName = Path.Combine(tempPath, Path.GetRandomFileName());
+            string fileName = RiaClientFilesTaskHelpers.CreateAndWriteArgumentsToNewTempFile(arguments);
 
-            File.WriteAllLines(fileName, arguments);
             startInfo.Arguments = "@" + fileName;
 
             var process = Process.Start(startInfo);
