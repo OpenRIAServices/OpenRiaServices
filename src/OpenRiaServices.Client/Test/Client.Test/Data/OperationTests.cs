@@ -12,6 +12,8 @@ using System.Collections;
 using System.Threading.Tasks;
 using System.Threading;
 using System.Runtime.InteropServices;
+using System.Windows.Threading;
+using System.Runtime.ExceptionServices;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -55,6 +57,7 @@ namespace OpenRiaServices.Client.Test
         }
     }
     #endregion
+
 
     /// <summary>
     /// Targeted tests for OperationBase and derived classes
@@ -438,6 +441,91 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueTestComplete();
         }
+
+
+
+        class ExceptionHandleSynchronizationContext : SynchronizationContext
+        {
+            public Exception LastException { get; set; }
+            public override void Send(SendOrPostCallback d, object state)
+            {
+                if (state is ExceptionDispatchInfo exceptionDispatchInfo)
+                {
+                    LastException = exceptionDispatchInfo.SourceException;
+                }
+
+                base.Send(d, state);
+            }
+        }
+
+
+
+
+        /// <summary>
+        /// When operation complated callback occurr exception,
+        /// check if an exception was thrown on the SynchronizationContext.
+        /// </summary>
+        [TestMethod]
+        [Asynchronous]
+        public void Operation_CompleteCallbackHasError_ThrowSycCtx()
+        {
+            TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
+            var query = ctxt.CreateQuery<Product>("GetProducts", null, false, true);
+
+            var syncCtx = new ExceptionHandleSynchronizationContext();
+            bool isCallbackCalled = false;
+            Exception callbackException = new Exception("callbackException");
+
+            Action<LoadOperation<Product>> callback = (op) =>
+            {
+                SynchronizationContext.SetSynchronizationContext(syncCtx);
+
+                try
+                {
+                    throw callbackException;
+                }
+                finally
+                {
+                    isCallbackCalled = true;
+                }
+            };
+
+
+            // test callback Action  (OperationBase.InvokeCompleteAction)
+            ctxt.Load(query, callback, null);
+
+            EnqueueConditional(() => isCallbackCalled);
+            EnqueueCallback(() =>
+            {
+                Assert.IsTrue(syncCtx.LastException == callbackException);
+            });
+
+            EnqueueCallback(() =>
+            {
+                syncCtx.LastException = null;
+                isCallbackCalled = false;
+            });
+
+            EnqueueTestComplete();
+
+
+
+            // test callback Event  (OperationBase.InvokeCompletedEvent)
+            ctxt.Load(query).Completed += (s1, e1) =>
+            {
+                callback((LoadOperation<Product>)s1);
+            };
+
+            EnqueueConditional(() => isCallbackCalled);
+            EnqueueCallback(() =>
+            {
+                Assert.IsTrue(syncCtx.LastException == callbackException);
+            });
+
+            EnqueueTestComplete();
+        }
+
+
 
         private void MarkExceptionAsHandled<TEntity>(LoadOperation<TEntity> loadOperation)
             where TEntity : Entity
