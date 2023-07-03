@@ -1,12 +1,16 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <NoWarn>108</NoWarn>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472</TargetFrameworks>
     <Version>1.0.0.0</Version>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' != 'net472' ">
+    <!-- Disable obsolete warning (primarily AssociationAttribute) -->
+    <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
 
   <ItemGroup>
@@ -74,7 +78,8 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
   </ItemGroup>
-  <ItemGroup>
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="Microsoft.VisualStudio.QualityTools.UnitTestFramework, Version=10.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>$(MSBuildExtensionsPath)\..\Common7\IDE\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll</HintPath>
     </Reference>
@@ -90,6 +95,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
+    <PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
+    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
+  </ItemGroup>
+  
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj">
       <Aliases>httpDomainClient</Aliases>
@@ -98,27 +108,8 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj">
       <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
-    <!--<ProjectReference Include="..\..\..\Test\WebsiteFullTrust\WebsiteFullTrust.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <PrivateAssets>All</PrivateAssets>
-      <Private>false</Private>
-      <ExcludeAssets>All</ExcludeAssets>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-    </ProjectReference>-->
     <ProjectReference Include="..\..\Framework\OpenRiaServices.Client.csproj">
       <Aliases>global,SSmDsClient</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj">
-      <Aliases>DomainServicesLts</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj">
-      <Aliases>DomainServices</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj">
-      <Aliases>WebRia</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
-      <Aliases>DomainServicesTests</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\VbExpressions\VbExpressions.vbproj" />
   </ItemGroup>
