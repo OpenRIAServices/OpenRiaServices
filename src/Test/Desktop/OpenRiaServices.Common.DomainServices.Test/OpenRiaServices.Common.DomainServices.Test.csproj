@@ -5,7 +5,7 @@
     <DebugType>pdbonly</DebugType>
 
     <NoWarn Condition="'$(TargetFramework)'=='net6.0'">$(NoWarn);CS0618</NoWarn>
-    <DefineConstants Condition="'$(TargetFramework)'=='net472'">$(DefineConstants);WCF;LTS</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='net472'">$(DefineConstants);WCF;HAS_LINQ2SQL</DefineConstants>
     <DefineConstants Condition="'$(TargetFramework)'!='net472'">$(DefineConstants);ASPNET_CORE</DefineConstants>
   </PropertyGroup>
 
