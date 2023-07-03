@@ -83,7 +83,7 @@ namespace OpenRiaServices.Client.Test
                 s_aspNetCoreSite = Process.Start(startInfo);
 
                 // TODO: Wait for standard output or similar instead (GET "/"))
-                Thread.Sleep(TimeSpan.FromSeconds(2));
+                Thread.Sleep(TimeSpan.FromSeconds(10));
             }
         }
     }

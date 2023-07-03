@@ -14,13 +14,13 @@ namespace System.Data.Linq
         int? hashCode;
 
         public Binary(byte[] value)
-            :base (value ?? Array.Empty<byte>())
+            : base (value ?? Array.Empty<byte>())
         {
         }
 
         public static implicit operator Binary(byte[] value)
         {
-            return new Binary(value);
+            return value == null ? null : new Binary(value);
         }
 
         public bool Equals(Binary other)
