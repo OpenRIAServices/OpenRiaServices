@@ -1,14 +1,11 @@
-﻿extern alias httpDomainClient; 
+﻿extern alias httpDomainClient;
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Threading;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using httpDomainClient::OpenRiaServices.Client.DomainClients;
 using OpenRiaServices.Common.Test;
 using System.Diagnostics;
@@ -37,7 +34,9 @@ namespace OpenRiaServices.Client.Test
                 AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
             });
 
-            HttpWebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.Default);
+            // Note: Below gives errors when running (at least BinaryHttpDomainClientFactory) against AspNetCore
+            // It seems to cache results even with "private, no-store"
+            //HttpWebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.Default);
         }
 
         [AssemblyCleanup]
@@ -82,8 +81,8 @@ namespace OpenRiaServices.Client.Test
                 startInfo.UseShellExecute = false;
                 s_aspNetCoreSite = Process.Start(startInfo);
 
-                // TODO: Wait for standard output or similar instead (GET "/"))
-                Thread.Sleep(TimeSpan.FromSeconds(10));
+                // TODO: Wait for standard output or similar instead such as makin a successfull (GET "/"))
+                Thread.Sleep(TimeSpan.FromSeconds(20));
             }
         }
     }
