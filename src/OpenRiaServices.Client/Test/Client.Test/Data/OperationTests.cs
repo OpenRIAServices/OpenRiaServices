@@ -56,6 +56,31 @@ namespace OpenRiaServices.Client.Test
             this._completeAction?.Invoke(this);
         }
     }
+
+
+    class ExceptionHandleSynchronizationContext : SynchronizationContext
+    {
+        public Exception LastException { get; set; }
+        public bool HasException { get => LastException != null; }
+
+        public override void Send(SendOrPostCallback d, object state)
+        {
+            try
+            {
+                d(state);
+            }
+            catch (Exception ex)
+            {
+                LastException = ex;
+                throw;
+            }
+        }
+
+        public override void Post(SendOrPostCallback d, object state)
+        {
+            base.Post(_ => this.Send(d, state), state);
+        }
+    }
     #endregion
 
 
@@ -163,6 +188,40 @@ namespace OpenRiaServices.Client.Test
             // verify the exception properties
             Assert.AreSame(expectedException, ex);
             CollectionAssert.AreEqual(validationErrors, (ICollection)lo.ValidationErrors);
+
+
+
+
+            // test - when callback occured exception, throws SynchronizationContext
+            tcs = new TaskCompletionSource<LoadResult<Product>>();
+
+            bool isCallbackCalled = false;
+            Exception expectedCallbackException = null;
+            Exception callbackException = new Exception("callbackException");
+
+            var syncCtx = new ExceptionHandleSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(syncCtx);
+
+            Action<LoadOperation<Product>> callbackWithException = (op) =>
+            {
+                isCallbackCalled = true;
+                throw callbackException;
+            };
+
+            lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, callbackWithException, null, false);
+            try
+            {
+                lo.CompleteTask(Task.FromResult(new LoadResult<Product>(query, LoadBehavior.KeepCurrent, Array.Empty<Product>(), Array.Empty<Entity>(), 0)));
+            }
+            catch (Exception e)
+            {
+                expectedCallbackException = e;
+            }
+
+            // verify the exception properties
+            Assert.IsTrue(isCallbackCalled);
+            Assert.AreSame(expectedCallbackException, syncCtx.LastException);
+            Assert.AreSame(expectedCallbackException, callbackException);
         }
 
         /// <summary>
@@ -173,6 +232,7 @@ namespace OpenRiaServices.Client.Test
         public void UnhandledInvokeOperationError()
         {
             CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
+            
 
             TaskCompletionSource<InvokeResult<string>> tcs = new TaskCompletionSource<InvokeResult<string>>();
             InvokeOperation<string> invoke = new InvokeOperation<string>("Echo", null, null, null, tcs.Task, null);
@@ -211,6 +271,37 @@ namespace OpenRiaServices.Client.Test
             // verify the exception properties
             Assert.AreSame(validationException, expectedException);
             CollectionAssert.AreEqual(validationErrors, (ICollection)invoke.ValidationErrors);
+
+            // test - when callback occured exception, throws SynchronizationContext
+            tcs = new TaskCompletionSource<InvokeResult<string>>();
+
+            bool isCallbackCalled = false;
+            Exception expectedCallbackException = null;
+            Exception callbackException = new Exception("callbackException");
+
+            var syncCtx = new ExceptionHandleSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(syncCtx);
+
+            Action<InvokeOperation> callbackWithException = (op) =>
+            {
+                isCallbackCalled = true;
+                throw callbackException;
+            };
+
+            invoke = new InvokeOperation<string>("Echo", null, callbackWithException, null, tcs.Task, null);
+            try
+            {
+                invoke.CompleteTask(Task.FromResult(new InvokeResult<string>("result")));
+            }
+            catch(Exception e)
+            {
+                expectedCallbackException = e;
+            }
+
+            // verify the exception properties
+            Assert.IsTrue(isCallbackCalled);
+            Assert.AreSame(expectedCallbackException, syncCtx.LastException);
+            Assert.AreSame(expectedCallbackException, callbackException);
         }
 
         /// <summary>
@@ -245,6 +336,39 @@ namespace OpenRiaServices.Client.Test
             // verify the exception properties
             Assert.AreSame(expectedException, ex);
             Assert.AreEqual(false, submit.IsErrorHandled);
+
+
+
+            // test - when callback occured exception, throws SynchronizationContext
+            tcs = new TaskCompletionSource<SubmitResult>();
+
+            bool isCallbackCalled = false;
+            Exception expectedCallbackException = null;
+            Exception callbackException = new Exception("callbackException");
+
+            var syncCtx = new ExceptionHandleSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(syncCtx);
+
+            Action<SubmitOperation> callbackWithException = (op) =>
+            {
+                isCallbackCalled = true;
+                throw callbackException;
+            };
+
+            submit = new SubmitOperation(cities.EntityContainer.GetChanges(), callbackWithException, null, tcs.Task, null);
+            try
+            {
+                submit.CompleteTask(Task.FromResult(new SubmitResult(null)));
+            }
+            catch (Exception e)
+            {
+                expectedCallbackException = e;
+            }
+
+            // verify the exception properties
+            Assert.IsTrue(isCallbackCalled);
+            Assert.AreSame(expectedCallbackException, syncCtx.LastException);
+            Assert.AreSame(expectedCallbackException, callbackException);
         }
 
         [TestMethod]
@@ -439,89 +563,6 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsFalse(lo.IsCanceled);
                 Assert.AreEqual(Resources.AsyncOperation_AlreadyCompleted, expectedException.Message);
             });
-            EnqueueTestComplete();
-        }
-
-
-
-        class ExceptionHandleSynchronizationContext : SynchronizationContext
-        {
-            public Exception LastException { get; set; }
-            public override void Send(SendOrPostCallback d, object state)
-            {
-                if (state is ExceptionDispatchInfo exceptionDispatchInfo)
-                {
-                    LastException = exceptionDispatchInfo.SourceException;
-                }
-
-                base.Send(d, state);
-            }
-        }
-
-
-
-
-        /// <summary>
-        /// When operation complated callback occurr exception,
-        /// check if an exception was thrown on the SynchronizationContext.
-        /// </summary>
-        [TestMethod]
-        [Asynchronous]
-        public void Operation_CompleteCallbackHasError_ThrowSycCtx()
-        {
-            TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
-            var query = ctxt.CreateQuery<Product>("GetProducts", null, false, true);
-
-            var syncCtx = new ExceptionHandleSynchronizationContext();
-            bool isCallbackCalled = false;
-            Exception callbackException = new Exception("callbackException");
-
-            Action<LoadOperation<Product>> callback = (op) =>
-            {
-                SynchronizationContext.SetSynchronizationContext(syncCtx);
-
-                try
-                {
-                    throw callbackException;
-                }
-                finally
-                {
-                    isCallbackCalled = true;
-                }
-            };
-
-
-            // test callback Action  (OperationBase.InvokeCompleteAction)
-            ctxt.Load(query, callback, null);
-
-            EnqueueConditional(() => isCallbackCalled);
-            EnqueueCallback(() =>
-            {
-                Assert.IsTrue(syncCtx.LastException == callbackException);
-            });
-
-            EnqueueCallback(() =>
-            {
-                syncCtx.LastException = null;
-                isCallbackCalled = false;
-            });
-
-            EnqueueTestComplete();
-
-
-
-            // test callback Event  (OperationBase.InvokeCompletedEvent)
-            ctxt.Load(query).Completed += (s1, e1) =>
-            {
-                callback((LoadOperation<Product>)s1);
-            };
-
-            EnqueueConditional(() => isCallbackCalled);
-            EnqueueCallback(() =>
-            {
-                Assert.IsTrue(syncCtx.LastException == callbackException);
-            });
-
             EnqueueTestComplete();
         }
 
