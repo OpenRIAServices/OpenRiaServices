@@ -153,7 +153,6 @@ namespace OpenRiaServices.Client.Web
         /// </summary>
         private static void InitializeChannelFactory<TContract>(WebDomainClient<TContract> domainClient, ChannelFactory<TContract> channelFactory) where TContract : class
         {
-            var originalSyncContext = SynchronizationContext.Current;
             try
             {
                 foreach (OperationDescription op in channelFactory.Endpoint.Contract.Operations)
@@ -163,18 +162,11 @@ namespace OpenRiaServices.Client.Web
                         op.KnownTypes.Add(knownType);
                     }
                 }
-
-                SynchronizationContext.SetSynchronizationContext(null);
-                channelFactory.Open();
             }
             catch
             {
                 ((IDisposable)channelFactory)?.Dispose();
                 throw;
-            }
-            finally
-            {
-                SynchronizationContext.SetSynchronizationContext(originalSyncContext);
             }
         }
 
