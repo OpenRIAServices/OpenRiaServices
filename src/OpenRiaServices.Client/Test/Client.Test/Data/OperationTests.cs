@@ -72,7 +72,6 @@ namespace OpenRiaServices.Client.Test
             catch (Exception ex)
             {
                 LastException = ex;
-                throw;
             }
         }
 
@@ -196,7 +195,6 @@ namespace OpenRiaServices.Client.Test
             tcs = new TaskCompletionSource<LoadResult<Product>>();
 
             bool isCallbackCalled = false;
-            Exception expectedCallbackException = null;
             Exception callbackException = new Exception("callbackException");
 
             var syncCtx = new ExceptionHandleSynchronizationContext();
@@ -209,19 +207,12 @@ namespace OpenRiaServices.Client.Test
             };
 
             lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, callbackWithException, null, false);
-            try
-            {
-                lo.CompleteTask(Task.FromResult(new LoadResult<Product>(query, LoadBehavior.KeepCurrent, Array.Empty<Product>(), Array.Empty<Entity>(), 0)));
-            }
-            catch (Exception e)
-            {
-                expectedCallbackException = e;
-            }
+            lo.CompleteTask(Task.FromResult(new LoadResult<Product>(query, LoadBehavior.KeepCurrent, Array.Empty<Product>(), Array.Empty<Entity>(), 0)));
+
 
             // verify the exception properties
             Assert.IsTrue(isCallbackCalled);
-            Assert.AreSame(expectedCallbackException, syncCtx.LastException);
-            Assert.AreSame(expectedCallbackException, callbackException);
+            Assert.AreSame(callbackException, syncCtx.LastException);
         }
 
         /// <summary>
@@ -276,7 +267,6 @@ namespace OpenRiaServices.Client.Test
             tcs = new TaskCompletionSource<InvokeResult<string>>();
 
             bool isCallbackCalled = false;
-            Exception expectedCallbackException = null;
             Exception callbackException = new Exception("callbackException");
 
             var syncCtx = new ExceptionHandleSynchronizationContext();
@@ -289,19 +279,11 @@ namespace OpenRiaServices.Client.Test
             };
 
             invoke = new InvokeOperation<string>("Echo", null, callbackWithException, null, tcs.Task, null);
-            try
-            {
-                invoke.CompleteTask(Task.FromResult(new InvokeResult<string>("result")));
-            }
-            catch(Exception e)
-            {
-                expectedCallbackException = e;
-            }
+            invoke.CompleteTask(Task.FromResult(new InvokeResult<string>("result")));
 
             // verify the exception properties
             Assert.IsTrue(isCallbackCalled);
-            Assert.AreSame(expectedCallbackException, syncCtx.LastException);
-            Assert.AreSame(expectedCallbackException, callbackException);
+            Assert.AreSame(callbackException, syncCtx.LastException);
         }
 
         /// <summary>
@@ -343,7 +325,6 @@ namespace OpenRiaServices.Client.Test
             tcs = new TaskCompletionSource<SubmitResult>();
 
             bool isCallbackCalled = false;
-            Exception expectedCallbackException = null;
             Exception callbackException = new Exception("callbackException");
 
             var syncCtx = new ExceptionHandleSynchronizationContext();
@@ -356,19 +337,11 @@ namespace OpenRiaServices.Client.Test
             };
 
             submit = new SubmitOperation(cities.EntityContainer.GetChanges(), callbackWithException, null, tcs.Task, null);
-            try
-            {
-                submit.CompleteTask(Task.FromResult(new SubmitResult(null)));
-            }
-            catch (Exception e)
-            {
-                expectedCallbackException = e;
-            }
+            submit.CompleteTask(Task.FromResult(new SubmitResult(null)));
 
             // verify the exception properties
             Assert.IsTrue(isCallbackCalled);
-            Assert.AreSame(expectedCallbackException, syncCtx.LastException);
-            Assert.AreSame(expectedCallbackException, callbackException);
+            Assert.AreSame(callbackException, syncCtx.LastException);
         }
 
         [TestMethod]
