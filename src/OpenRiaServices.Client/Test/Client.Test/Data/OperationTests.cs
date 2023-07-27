@@ -60,7 +60,7 @@ namespace OpenRiaServices.Client.Test
 
     class ExceptionHandleSynchronizationContext : SynchronizationContext
     {
-        public Exception LastException { get; set; }
+        public DomainException LastException { get; set; }
         public bool HasException { get => LastException != null; }
 
         public override void Send(SendOrPostCallback d, object state)
@@ -69,7 +69,7 @@ namespace OpenRiaServices.Client.Test
             {
                 d(state);
             }
-            catch (Exception ex)
+            catch (DomainException ex)
             {
                 LastException = ex;
             }
@@ -193,9 +193,8 @@ namespace OpenRiaServices.Client.Test
 
             // test - when callback occured exception, throws SynchronizationContext
             tcs = new TaskCompletionSource<LoadResult<Product>>();
-
             bool isCallbackCalled = false;
-            Exception callbackException = new Exception("callbackException");
+            DomainException callbackException = new DomainException("callbackException");
 
             var syncCtx = new ExceptionHandleSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(syncCtx);
@@ -206,7 +205,7 @@ namespace OpenRiaServices.Client.Test
                 throw callbackException;
             };
 
-            lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, callbackWithException, null, false);
+            lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, callbackWithException, null, tcs.Task, null);
             lo.CompleteTask(Task.FromResult(new LoadResult<Product>(query, LoadBehavior.KeepCurrent, Array.Empty<Product>(), Array.Empty<Entity>(), 0)));
 
 
@@ -267,7 +266,7 @@ namespace OpenRiaServices.Client.Test
             tcs = new TaskCompletionSource<InvokeResult<string>>();
 
             bool isCallbackCalled = false;
-            Exception callbackException = new Exception("callbackException");
+            DomainException callbackException = new DomainException("callbackException");
 
             var syncCtx = new ExceptionHandleSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(syncCtx);
@@ -325,7 +324,7 @@ namespace OpenRiaServices.Client.Test
             tcs = new TaskCompletionSource<SubmitResult>();
 
             bool isCallbackCalled = false;
-            Exception callbackException = new Exception("callbackException");
+            DomainException callbackException = new DomainException("callbackException");
 
             var syncCtx = new ExceptionHandleSynchronizationContext();
             SynchronizationContext.SetSynchronizationContext(syncCtx);
