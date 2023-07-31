@@ -194,7 +194,7 @@ namespace OpenRiaServices.Client
             this._completeAction?.Invoke(this);
         }
 
-        internal void CompleteTask(Task<InvokeResult<TValue>> task)
+        private void CompleteTask(Task<InvokeResult<TValue>> task)
         {
             if (task.IsCanceled)
             {
