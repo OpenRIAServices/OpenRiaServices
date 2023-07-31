@@ -329,7 +329,15 @@ namespace OpenRiaServices.Client
 
             if (!this.IsErrorHandled)
             {
-                throw error;
+                if (SynchronizationContext.Current is { } syncCtx)
+                {
+                    // Capture exception and rethrow with original stack trace
+                    syncCtx.Send(static (object state) => ((ExceptionDispatchInfo)state).Throw(), ExceptionDispatchInfo.Capture(error));
+                }
+                else
+                {
+                    throw error;
+                }
             }
         }
 
