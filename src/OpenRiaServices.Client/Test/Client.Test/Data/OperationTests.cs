@@ -11,7 +11,6 @@ using OpenRiaServices.Silverlight.Testing;
 using System.Collections;
 using System.Threading.Tasks;
 using System.Threading;
-using System.Runtime.InteropServices;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -54,7 +53,32 @@ namespace OpenRiaServices.Client.Test
             this._completeAction?.Invoke(this);
         }
     }
+
+
+    class ExceptionRecordingSynchronizationContext : SynchronizationContext
+    {
+        public Exception LastException { get; set; }
+        public bool HasException { get => LastException != null; }
+
+        public override void Send(SendOrPostCallback d, object state)
+        {
+            try
+            {
+                d(state);
+            }
+            catch (Exception ex)
+            {
+                LastException = ex;
+            }
+        }
+
+        public override void Post(SendOrPostCallback d, object state)
+        {
+            this.Send(d, state);
+        }
+    }
     #endregion
+
 
     /// <summary>
     /// Targeted tests for OperationBase and derived classes
@@ -118,47 +142,37 @@ namespace OpenRiaServices.Client.Test
         /// errors and don't specify throwOnError = false result in an exception.
         /// </summary>
         [TestMethod]
-        public void UnhandledLoadOperationError()
+        public async Task UnhandledLoadOperationError()
         {
             TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-TestCatalog1.svc"));
+            var syncCtx = new ExceptionRecordingSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(syncCtx);
 
             var query = ctxt.CreateQuery<Product>("ThrowGeneralException", null, false, true);
             var tcs = new TaskCompletionSource<LoadResult<Product>>();
             LoadOperation<Product> lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, tcs.Task, null);
 
-            DomainOperationException expectedException = null;
-            DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
-            try
-            {
-                lo.CompleteTask(Task.FromException<LoadResult<Product>>(ex));
-            }
-            catch (DomainOperationException e)
-            {
-                expectedException = e;
-            }
+            Exception ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
+            tcs.SetException(ex);
+            await lo;
 
             // verify the exception properties
-            Assert.AreSame(ex, expectedException);
-
+            Assert.AreSame(ex, syncCtx.LastException, "Exception should have been thrown on SynchronizationContext");
             Assert.AreEqual(false, lo.IsErrorHandled);
 
             // now test again with validation errors
-            expectedException = null;
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
-            lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, false);
+
+            tcs = new TaskCompletionSource<LoadResult<Product>>();
+            lo = new LoadOperation<Product>(query, LoadBehavior.KeepCurrent, null, null, tcs.Task, null);
             ex = new DomainOperationException("expected", validationErrors);
 
-            try
-            {
-                lo.CompleteTask(Task.FromException<LoadResult<Product>>(ex));
-            }
-            catch (DomainOperationException e)
-            {
-                expectedException = e;
-            }
+            tcs.SetException(ex);
+            await lo;
 
             // verify the exception properties
-            Assert.AreSame(expectedException, ex);
+            Assert.AreSame(ex, syncCtx.LastException, "Exception should have been thrown on SynchronizationContext");
+            Assert.AreEqual(false, lo.IsErrorHandled);
             CollectionAssert.AreEqual(validationErrors, (ICollection)lo.ValidationErrors);
         }
 
@@ -167,46 +181,36 @@ namespace OpenRiaServices.Client.Test
         /// errors and don't specify throwOnError = false result in an exception.
         /// </summary>
         [TestMethod]
-        public void UnhandledInvokeOperationError()
+        public async Task UnhandledInvokeOperationError()
         {
             CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
+
+            var syncCtx = new ExceptionRecordingSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(syncCtx);
 
             TaskCompletionSource<InvokeResult<string>> tcs = new TaskCompletionSource<InvokeResult<string>>();
             InvokeOperation<string> invoke = new InvokeOperation<string>("Echo", null, null, null, tcs.Task, null);
 
-            DomainOperationException expectedException = null;
             DomainOperationException ex = new DomainOperationException("Operation Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
-            try
-            {
-                invoke.CompleteTask(Task.FromException<InvokeResult<string>>(ex));
-            }
-            catch (DomainOperationException e)
-            {
-                expectedException = e;
-            }
+
+            tcs.SetException(ex);
+            await invoke;
 
             // verify the exception properties
-            Assert.AreSame(ex, expectedException);
+            Assert.AreSame(ex, syncCtx.LastException);
             Assert.AreEqual(false, invoke.IsErrorHandled);
 
             // now test again with validation errors
-            expectedException = null;
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
             tcs = new TaskCompletionSource<InvokeResult<string>>();
             invoke = new InvokeOperation<string>("Echo", null, null, null, tcs.Task, null);
             var validationException = new DomainOperationException("validation", validationErrors);
 
-            try
-            {
-                invoke.CompleteTask(Task.FromException<InvokeResult<string>>(validationException));
-            }
-            catch (DomainOperationException e)
-            {
-                expectedException = e;
-            }
+            tcs.SetException(validationException);
+            await invoke;
 
             // verify the exception properties
-            Assert.AreSame(validationException, expectedException);
+            Assert.AreSame(validationException, syncCtx.LastException);
             CollectionAssert.AreEqual(validationErrors, (ICollection)invoke.ValidationErrors);
         }
 
@@ -215,9 +219,12 @@ namespace OpenRiaServices.Client.Test
         /// errors and don't specify throwOnError = false result in an exception.
         /// </summary>
         [TestMethod]
-        public void UnhandledSubmitOperationError()
+        public async Task UnhandledSubmitOperationError()
         {
             CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
+            var syncCtx = new ExceptionRecordingSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(syncCtx);
+
             CityData data = new CityData();
             cities.Cities.LoadEntities(data.Cities.ToArray());
 
@@ -225,22 +232,15 @@ namespace OpenRiaServices.Client.Test
             city.ZoneID = 1;
             Assert.IsTrue(cities.EntityContainer.HasChanges);
 
-            TaskCompletionSource<SubmitResult> tcs = new TaskCompletionSource<SubmitResult>();
-            SubmitOperation submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, tcs.Task, null);
-
-            DomainOperationException expectedException = null;
+            TaskCompletionSource<SubmitResult> submitResult = new TaskCompletionSource<SubmitResult>();
+            SubmitOperation submit = new SubmitOperation(cities.EntityContainer.GetChanges(), null, null, submitResult.Task, null);
             DomainOperationException ex = new DomainOperationException("Submit Failed!", OperationErrorStatus.ServerError, 42, "StackTrace");
-            try
-            {
-                submit.CompleteTask(Task.FromException<SubmitResult>(ex));
-            }
-            catch (DomainOperationException e)
-            {
-                expectedException = e;
-            }
+
+            submitResult.SetException(ex);
+            await submit;
 
             // verify the exception properties
-            Assert.AreSame(expectedException, ex);
+            Assert.AreSame(ex, syncCtx.LastException);
             Assert.AreEqual(false, submit.IsErrorHandled);
         }
 
@@ -296,7 +296,7 @@ namespace OpenRiaServices.Client.Test
 
         [TestMethod]
         [Description("Verifies that exceptions are thrown and callstacks are preserved.")]
-        public void Exceptions()
+        public async Task ExceptionsFromCallbacks()
         {
             Cities.CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
             const string Message = "Fnord!";
@@ -339,12 +339,12 @@ namespace OpenRiaServices.Client.Test
             {
                 try
                 {
-                    var load = new LoadOperation<City>(query, loadBehaviour, loCallback, null, false);
-                    load.CompleteTask(Task.FromResult(new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0)));
+                    LoadResult<City> result = new(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0);
+                    var load = new LoadOperation<City>(query, loadBehaviour, loCallback, null, Task.FromResult(result), null);
                 }
                 catch (Exception ex)
                 {
-                    Assert.IsTrue(ex.StackTrace.Contains("at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+                    Assert.IsTrue(ex.StackTrace.StartsWith("   at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
 
                     throw;
                 }
@@ -358,11 +358,27 @@ namespace OpenRiaServices.Client.Test
                 }
                 catch (Exception ex)
                 {
-                    Assert.IsTrue(ex.StackTrace.Contains("at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+                    Assert.IsTrue(ex.StackTrace.StartsWith("   at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
 
                     throw;
                 }
             }, Message);
+
+            // Verify exceptions from callbacks are properly sent to dispatcher (when task has not completed synchronously)
+            var syncCtx = new ExceptionRecordingSynchronizationContext();
+            SynchronizationContext.SetSynchronizationContext(syncCtx);
+
+            var loadTaskSource = new TaskCompletionSource<LoadResult<City>>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var loadOperation = new LoadOperation<City>(query, loadBehaviour, loCallback, null, loadTaskSource.Task, null);
+            await AssertExceptionIsCorrectlyRaisedOnSyncContext(loadOperation, loadTaskSource, new LoadResult<City>(query, loadBehaviour, Array.Empty<City>(), Array.Empty<Entity>(), 0));
+
+            var invokeTaskSource = new TaskCompletionSource<InvokeResult<object>>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var invokeOperation = new InvokeOperation<object>("Fnord", null, ioCallback, null, invokeTaskSource.Task, null);
+            await AssertExceptionIsCorrectlyRaisedOnSyncContext(invokeOperation, invokeTaskSource, new InvokeResult<object>(null));
+
+            var submitTaskSource = new TaskCompletionSource<SubmitResult>(TaskCreationOptions.RunContinuationsAsynchronously);
+            var submitOperation = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, submitTaskSource.Task, null);
+            await AssertExceptionIsCorrectlyRaisedOnSyncContext(submitOperation, submitTaskSource, new SubmitResult(null));
 
             // verify cancellation callbacks for all fx operation types
             var noCompleteLoad = new TaskCompletionSource<LoadResult<City>>();
@@ -391,6 +407,20 @@ namespace OpenRiaServices.Client.Test
             {
                 io.Cancel();
             }, Message);
+
+            async Task AssertExceptionIsCorrectlyRaisedOnSyncContext<T>(OperationBase operation, TaskCompletionSource<T> tcs, T result)
+            {
+                // Clear exception so it 
+                syncCtx.LastException = null;
+
+                tcs.SetResult(result: result);
+                await operation;
+
+                Assert.IsInstanceOfType(syncCtx.LastException, typeof(InvalidOperationException));
+                Assert.AreEqual(Message, syncCtx.LastException.Message);
+                Assert.IsTrue(syncCtx.LastException.StackTrace.StartsWith("   at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+                Assert.IsNull(operation.Error, "Submit should not have error because of callback");
+            }
         }
 
         /// <summary>
@@ -438,6 +468,8 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueTestComplete();
         }
+
+
 
         private void MarkExceptionAsHandled<TEntity>(LoadOperation<TEntity> loadOperation)
             where TEntity : Entity

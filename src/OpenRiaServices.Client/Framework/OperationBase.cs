@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -328,7 +329,15 @@ namespace OpenRiaServices.Client
 
             if (!this.IsErrorHandled)
             {
-                throw error;
+                if (SynchronizationContext.Current is { } syncCtx)
+                {
+                    // Capture exception and rethrow with original stack trace
+                    syncCtx.Send(static (object state) => ((ExceptionDispatchInfo)state).Throw(), ExceptionDispatchInfo.Capture(error));
+                }
+                else
+                {
+                    throw error;
+                }
             }
         }
 
@@ -343,30 +352,42 @@ namespace OpenRiaServices.Client
         {
             try
             {
-                this.InvokeCompleteAction();
-            }
-            catch (Exception ex)
-            {
                 try
                 {
-                    this.InvokeCompletedEvent();
+                    this.InvokeCompleteAction();
                 }
-                catch (AggregateException ex2)
+                catch (Exception ex)
                 {
-                    var exceptions = new List<Exception>(ex2.InnerExceptions);
-                    exceptions.Add(ex);
-                    throw new AggregateException(exceptions);
-                }
-                catch (Exception ex2)
-                {
-                    throw new AggregateException(ex, ex2);
+                    try
+                    {
+                        this.InvokeCompletedEvent();
+                    }
+                    catch (AggregateException ex2)
+                    {
+                        var exceptions = new List<Exception>(ex2.InnerExceptions);
+                        exceptions.Add(ex);
+                        throw new AggregateException(exceptions);
+                    }
+                    catch (Exception ex2)
+                    {
+                        throw new AggregateException(ex, ex2);
+                    }
+
+                    // Only a single exception so rethrow it as is
+                    throw;
                 }
 
-                // Only a single exception so rethrow it as is
-                throw;
+                InvokeCompletedEvent();
+
             }
-
-            InvokeCompletedEvent();
+            catch (Exception ex) when (SynchronizationContext.Current is { } syncCtx)
+            {
+                // Capture exception and rethrow with original stack trace
+                syncCtx.Send(static (object state) =>
+                {
+                    ((ExceptionDispatchInfo)state).Throw();
+                }, ExceptionDispatchInfo.Capture(ex));
+            }
         }
 
         /// <summary>
