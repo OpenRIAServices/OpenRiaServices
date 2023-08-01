@@ -1,3 +1,17 @@
+# 5.4.0
+
+This release **fully supports .NET 6+** for both server and client without having to rely on workarounds to have the code generation work.
+
+### Code Generation Supports NET6+
+
+* Support net6+ on server (#414)
+   *  Add version of code generation which allows server project to be .NET 6 or later
+   * Works with dotnet build - you can build without installing Visual Studio
+
+### Client
+* Ensure exceptions from xxxOperation callbacks and unhandled exceptions are rethrow on the SyncronizationContext. (#424)
+    * This allows events such as `DispatcherUnhandledException` (for WPF) to be used for showing error messages immediately
+
 #  AspNetCore 0.4.0
 
 * AspNetCore
