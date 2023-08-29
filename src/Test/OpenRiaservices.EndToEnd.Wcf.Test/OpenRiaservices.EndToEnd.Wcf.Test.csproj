@@ -107,9 +107,6 @@
     <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj">
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj">
-      <Aliases>DomainServicesLts</Aliases>
-    </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj">
       <Aliases>DomainServices</Aliases>
     </ProjectReference>
