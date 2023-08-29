@@ -85,10 +85,14 @@ namespace OpenRiaServices.Client.Test
                 ProcessStartInfo startInfo = new(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"");
                 startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
                 startInfo.UseShellExecute = false;
+                startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
                 s_aspNetCoreSite = Process.Start(startInfo);
 
                 // TODO: Wait for standard output or similar instead such as makin a successfull (GET "/"))
-                Thread.Sleep(TimeSpan.FromSeconds(20));
+                Thread.Sleep(TimeSpan.FromSeconds(10));
+
+                if (s_aspNetCoreSite.HasExited)
+                    throw new Exception("Website stopped");
             }
         }
     }
