@@ -36,6 +36,12 @@ namespace OpenRiaServices.Client.Test
                 UseCookies = true,
                 AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
             });
+#if NETFRAMEWORK
+            DomainContext.DomainClientFactory = new Web.WebDomainClientFactory()
+            {
+                ServerBaseUri = TestURIs.RootURI,
+            };
+#endif
 
             HttpWebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.Default);
         }

@@ -28,6 +28,7 @@ namespace OpenRiaServices.Client.Test
 
             StartWebServer();
 
+#if NETFRAMEWORK
             DomainContext.DomainClientFactory = new Web.WebDomainClientFactory()
             {
                 ServerBaseUri = TestURIs.RootURI,
@@ -35,13 +36,14 @@ namespace OpenRiaServices.Client.Test
 
             //// Uncomment below to run tests using BinaryHttpDomainClientFactory instead:
             ///
-
-            //DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, new HttpClientHandler()
-            //{
-            //    CookieContainer = new CookieContainer(),
-            //    UseCookies = true,
-            //    AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
-            //});
+#else
+            DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, new HttpClientHandler()
+            {
+                CookieContainer = new CookieContainer(),
+                UseCookies = true,
+                AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
+            });
+#endif
 
             HttpWebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.Default);
         }
