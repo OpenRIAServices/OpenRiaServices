@@ -35,6 +35,28 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj">
+      <Aliases>httpDomainClient</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj">
+      <Aliases>global,SSmDsWeb</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj">
+      <Aliases>global,SSmDsClient</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.Client\Test\VbExpressions\VbExpressions.vbproj" />
+    <!-- Ensure web server project is built, but do not reference the output assebmly -->
+    <ProjectReference Include="..\..\Test\AspNetCoreWebsite\AspNetCoreWebsite.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <PrivateAssets>All</PrivateAssets>
+      <Private>false</Private>
+      <ExcludeAssets>All</ExcludeAssets>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <SetTargetFramework>TargetFramework=net6.0</SetTargetFramework>
+    </ProjectReference>
+  </ItemGroup>
 
   <ItemGroup>
     <Compile Include="..\OpenRiaServices.EndToEnd.Wcf.Test\**\*.cs" Exclude="..\OpenRiaServices.EndToEnd.Wcf.Test\Main.cs;..\OpenRiaServices.EndToEnd.Wcf.Test\bin\**;..\OpenRiaServices.EndToEnd.Wcf.Test\obj\**" LinkBase="Included" />
@@ -97,29 +119,6 @@
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs" Link="Data\DomainClients\Test.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj">
-      <Aliases>httpDomainClient</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj">
-      <Aliases>global,SSmDsWeb</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj">
-      <Aliases>global,SSmDsClient</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.Client\Test\VbExpressions\VbExpressions.vbproj" />
-    <!-- Ensure web server project is built, but do not reference the output assebmly -->
-    <ProjectReference Include="..\..\Test\AspNetCoreWebsite\AspNetCoreWebsite.csproj">
-      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
-      <PrivateAssets>All</PrivateAssets>
-      <Private>false</Private>
-      <ExcludeAssets>All</ExcludeAssets>
-      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <SetTargetFramework>TargetFramework=net7.0</SetTargetFramework>
-    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
