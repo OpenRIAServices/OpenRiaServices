@@ -1112,7 +1112,7 @@ namespace OpenRiaServices.Client.Test
             LoadOperation lo = provider.Load(query, false);
 
             await lo;
-            Assert.IsNull(lo.Error);
+            Assert.AreEqual(null, lo.Error?.Message);
 
             Assert.AreEqual(3, lo.Entities.Count);
             MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
@@ -1214,6 +1214,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(3, lo.Entities.Count);
             MixedType changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
             Assert.IsNull(changedObj.StringProp);
+
             Assert.IsNull(changedObj.BinaryProp);
             Assert.IsNull(changedObj.ByteArrayProp);
             Assert.IsNull(changedObj.XElementProp);
