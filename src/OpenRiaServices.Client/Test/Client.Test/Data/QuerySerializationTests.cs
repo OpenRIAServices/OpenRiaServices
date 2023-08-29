@@ -14,7 +14,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VbExpressions;
 using DomainServiceDescription = DomainServices::OpenRiaServices.Server.DomainServiceDescription;
 using LinqResource = SSmDsWeb::OpenRiaServices.Client.Resources;
-using NorthwindDomainService = DomainServicesTests::TestDomainServices.LTS.Northwind;
+using NorthwindDomainService = DomainServicesTests::TestDomainServices.EFCore.Northwind;
 using SystemLinqDynamic = WebRia::System.Linq.Dynamic;
 
 namespace OpenRiaServices.Client.Test

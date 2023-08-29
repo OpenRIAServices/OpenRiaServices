@@ -10,7 +10,6 @@ using System.Text;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using httpDomainClient::OpenRiaServices.Client.DomainClients;
-using OpenRiaServices.Common.Test;
 
 namespace OpenRiaServices.Client.Test
 {

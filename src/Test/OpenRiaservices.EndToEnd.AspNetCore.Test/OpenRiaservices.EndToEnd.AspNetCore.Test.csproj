@@ -10,7 +10,7 @@
 
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <!--<PackageReference Include="MSTest.TestAdapter" Version="2.2.10" />
     <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />-->
   </ItemGroup>
@@ -100,24 +100,19 @@
     <ProjectReference Include="..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj">
       <Aliases>global,SSmDsWeb</Aliases>
     </ProjectReference>
-    <ProjectReference Include="..\..\Test\WebsiteFullTrust\WebsiteFullTrust.csproj">
+    <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj">
+      <Aliases>global,SSmDsClient</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.Client\Test\VbExpressions\VbExpressions.vbproj" />
+    <!-- Ensure web server project is built, but do not reference the output assebmly -->
+    <ProjectReference Include="..\..\Test\AspNetCoreWebsite\AspNetCoreWebsite.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <PrivateAssets>All</PrivateAssets>
       <Private>false</Private>
       <ExcludeAssets>All</ExcludeAssets>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <SetTargetFramework>TargetFramework=net7.0</SetTargetFramework>
     </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj">
-      <Aliases>global,SSmDsClient</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj">
-      <Aliases>DomainServices</Aliases>
-    </ProjectReference>
-
-    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj">
-      <Aliases>DomainServicesTests</Aliases>
-    </ProjectReference>
-    <ProjectReference Include="..\..\OpenRiaServices.Client\Test\VbExpressions\VbExpressions.vbproj" />
   </ItemGroup>
 
   <ItemGroup>
