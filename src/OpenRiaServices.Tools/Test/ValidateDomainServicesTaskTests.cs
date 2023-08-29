@@ -10,6 +10,9 @@ namespace OpenRiaServices.Tools.Test
     {
         [Description("ValidateDomainServicesTask runs succesfully for a well-formed DomainService")]
         [TestMethod]
+#if !NETFRAMEWORK
+        [Ignore("Server validation is not yet implemented for .NET")]
+#endif
         public void ValidateDomainServicesTaskRunsSuccessfully()
         {
             ValidateDomainServicesTask task = CodeGenHelper.CreateValidateDomainServicesTask("");

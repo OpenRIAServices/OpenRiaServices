@@ -2,7 +2,6 @@
 using System.Linq;
 using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using RootNamespace.TestNamespace;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.Tools.Test
@@ -45,6 +44,8 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext3.g", Type.EmptyTypes, "VB", Array.Empty<string>(), string.Empty, new ConsoleLogger(), true, true));
         }
 
+#if NETFRAMEWORK
+
         [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
         [DeploymentItem(@"ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
@@ -52,7 +53,7 @@ namespace OpenRiaServices.Tools.Test
         public void OneAuthenticationService()
         {
             // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext1.g", new Type[] { typeof(AuthenticationService1) }, null, Array.Empty<string>(), "RootNamespace", new ConsoleLogger(), true, false));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext1.g", new Type[] { typeof(RootNamespace.TestNamespace.AuthenticationService1) }, null, Array.Empty<string>(), "RootNamespace", new ConsoleLogger(), true, false));
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
@@ -62,7 +63,7 @@ namespace OpenRiaServices.Tools.Test
         public void OneAuthenticationService_FullTypes()
         {
             // Full type names
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext1.g", new Type[] { typeof(AuthenticationService1) }, null, Array.Empty<string>(), "RootNamespace", new ConsoleLogger(), true, true));
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext1.g", new Type[] { typeof(RootNamespace.TestNamespace.AuthenticationService1) }, null, Array.Empty<string>(), "RootNamespace", new ConsoleLogger(), true, true));
         }
 
         [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
@@ -72,7 +73,7 @@ namespace OpenRiaServices.Tools.Test
         public void TwoAuthenticationServices()
         {
             ConsoleLogger logger = new ConsoleLogger();
-            Type[] types = new Type[] { typeof(AuthenticationService1), typeof(AuthenticationService2) };
+            Type[] types = new Type[] { typeof(RootNamespace.TestNamespace.AuthenticationService1), typeof(RootNamespace.TestNamespace.AuthenticationService2) };
 
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\WebContext", "CG_WebContext", @"WebContext2.g", types, null, Array.Empty<string>(), "RootNamespace", logger, true, false));
@@ -88,7 +89,7 @@ namespace OpenRiaServices.Tools.Test
         public void TwoAuthenticationServices_FullTypes()
         {
             ConsoleLogger logger = new ConsoleLogger();
-            Type[] types = new Type[] { typeof(AuthenticationService1), typeof(AuthenticationService2) };
+            Type[] types = new Type[] { typeof(RootNamespace.TestNamespace.AuthenticationService1), typeof(RootNamespace.TestNamespace.AuthenticationService2) };
 
             // Full type names
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\WebContext", "CG_WebContext_FullTypes", @"WebContext2.g", types, null, Array.Empty<string>(), "RootNamespace", logger, true, true));
@@ -101,8 +102,10 @@ namespace OpenRiaServices.Tools.Test
         [Description("Tests that the code is generated correctly when two services are present.")]
         public void EmptyNamespace()
         {
-            string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", typeof(AuthenticationService1));
+            string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", typeof(RootNamespace.TestNamespace.AuthenticationService1));
             TestHelper.AssertGeneratedCodeDoesNotContain(generatedCode, "WebContext");
         }
+
+#endif
     }
 }

@@ -1,3 +1,75 @@
+# 5.4.0
+
+This release **fully supports .NET 6+** for both server and client without having to rely on workarounds to have the code generation work.
+
+### Code Generation Supports NET6+
+
+* Support net6+ on server (#414)
+   *  Add version of code generation which allows server project to be .NET 6 or later
+   * Works with dotnet build - you can build without installing Visual Studio
+
+### Client
+* Ensure exceptions from xxxOperation callbacks and unhandled exceptions are rethrow on the SyncronizationContext. (#424)
+    * This allows events such as `DispatcherUnhandledException` (for WPF) to be used for showing error messages immediately
+
+#  AspNetCore 0.4.0
+
+* AspNetCore
+     *   Copies "All" attributes to endpoint metadata      
+         * Some attributes sucha as Validation, Authorization and other attributes specific to OpenRiaServices are not copied
+     * `AddDomainService()` methods inside `MapOpenRiaServices` now returns `IEndpointConventionBuilder` allowing conventions to be specified per `DomainService`
+        ```C#
+        app.MapOpenRiaServices(builder =>
+        {
+            builder.AddDomainService<Cities.CityDomainService>()
+                .WithGroupName("Cities");
+        });
+        ```
+     * Updated README.md and added Sample project
+     * Make it compatible with more middleware such as OutputCache middleware by "Completing" responses
+     * CHANGES:
+        * `services.AddOpenRiaServices<T>()` now requires T to derive from DomainServce
+        * `services.AddOpenRiaServices<T>()` has different return type
+
+# 5.3.1 with EFCore 2.0.2 and AspNetCore 0.3.0
+
+* Code Generation
+  * Switch to using Mono.Cecil to parse pdb files during code generation (#410)
+    This should make it possible to use portable and embedded pdb's on the server
+  * 
+* AspNetCore
+    * New extension method to add OpenRiaServices to services from #413 by @ehsangfl.
+        ```C#
+        services.AddOpenRiaServices<T>()
+        ```
+    * New extension method to add OpenRiaServices to pipeline from #413 by @ehsangfl.
+        ```C#
+        endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
+        ```
+    * Add Net7 build target to support "Finally Conventions" (`IEndpointConventionBuilder.Finally`)
+    * Add `OpenRiaServices.Server.DomainOperationEntry` to endpoint metadata
+        * This allows end user to easier implement additional conventions (such as Open Api or similar)
+    * Copy `AuthorizationAttribute`s to endpoint metadata for queries and invokes to support [AspNetCore Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple?view=aspnetcore-7.0)
+        *  Attributes can be set on either method or class level
+    * Fixed serialization of sizes larger than 1 GB
+
+*Other*
+- Updated nuget packages
+
+# 5.3.0 with EFCore 2.0.1
+
+* Fix shadow property issue in EF Core DB Context extensions (#397):
+    * Based on Allianz PR #393
+    * Fix bug with shadowproperties being marked as modified when performing AttachAsModified in DbContextEFCoreExtensions
+* DomainServiceTestHost improvements 1 (#395):
+    * Allow usage of CRUD-methods ending with Async in testhost.
+* DomainServiceTestHost improvements 2 (#396):
+    * Add support for async IEnumerable queries in test host, i.e. querys returning `async Task<IEnumerable<` 
+
+*Other*
+- Fixed github Code QL validation of builds
+- Updated nuget packages
+
 # 5.2.0
 
 * Client: Make construktors for Operation classes public to make them more testable (#387)

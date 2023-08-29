@@ -104,6 +104,15 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         }
 
         [TestMethod]
+        public async Task AssertInvokeThatEndsWithAsyncDoesNotThrowError()
+        {
+            var domainService = new ServerSideAsyncDomainService();
+            var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>(() => domainService);
+
+            await testHost.InvokeAsync(s => s.SleepAndSetLastDelayAsync(TimeSpan.Zero));
+        }
+
+        [TestMethod]
         public async Task AssertInvokeAsyncWithoutTaskReturnsTResult()
         {
             var testHost = new DomainServiceTestHost<CityDomainService>();
@@ -136,7 +145,17 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         }
 
         [TestMethod]
-        public async Task SumbitAsync()
+        public async Task IEnumerableQueryAsync()
+        {
+            var testHost = new DomainServiceTestHost<CityDomainService>();
+
+            var result = await testHost.QueryAsync(s => s.GetZipsAsEnumerable(), CancellationToken.None);
+
+            Assert.AreEqual(3, result.Count());
+        }
+
+        [TestMethod]
+        public async Task SubmitAsync()
         {
             var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>();
 

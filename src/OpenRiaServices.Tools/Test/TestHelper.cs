@@ -94,9 +94,6 @@ namespace OpenRiaServices.Tools.Test
                 string realFileInProject = Path.Combine(projectDataDir, Path.GetFileName(referenceFileName));
 
                 // Generate CMD strings to diff and to copy
-                string tfDiffCommand = "tf diff \"" + referenceFileName + "\" \"" + generatedFileName + "\"\r\n";
-                string codeDiffCommand = "git diff \"" + referenceFileName + "\" \"" + generatedFileName + "\"\r\n";
-                string tfEditCommand = "tf edit \"" + realFileInProject + "\"\r\n";
                 string copyCommand = "copy \"" + generatedFileName + "\" \"" + realFileInProject + "\"";
 
                 // Write edit and copy commands to a common .bat file
@@ -105,7 +102,7 @@ namespace OpenRiaServices.Tools.Test
 
                 using (StreamWriter sw = new StreamWriter(updateAllBatFile, true))
                 {
-                    sw.Write("cmd /c " + tfEditCommand);
+                    sw.Write("cmd /c " + copyCommand);
                     sw.WriteLine(copyCommand);
                 }
 
@@ -113,12 +110,7 @@ namespace OpenRiaServices.Tools.Test
                 diffMessage = " Generated file is different than the expected reference file.\r\n" +
                     "    Expected file:       " + referenceFileName + "\r\n" +
                     "    Newly generated file: " + generatedFileName + "\r\n" +
-                    "\r\n ------------------- To diff these files, execute this ------------------\r\n\r\n    " +
-                    tfDiffCommand +
-                    "\r\n or using git diff \r\n\r\n    " +
-                    codeDiffCommand +
                     "\r\n ---------------- To make this the new reference file, execute this ------------------\r\n\r\n    " +
-                    tfEditCommand + "    " +
                     copyCommand + "\r\n\r\n" +
                     " ------------------- To update all baselines, that failed in the current run, execute following from command prompt ------------------\r\n\r\n" +
                     "\"" + updateAllBatFile + "\"" + "\r\n\r\n";

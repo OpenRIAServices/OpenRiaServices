@@ -189,7 +189,7 @@ namespace TestDomainServices
         /// <param name="delay">The delay.</param>
         /// <returns></returns>
         [Invoke(HasSideEffects = true)]
-        public Task SleepAndSetLastDelay(TimeSpan delay)
+        public Task SleepAndSetLastDelayAsync(TimeSpan delay)
         {
             return Delay(delay)
                .ContinueWith(_ =>

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Reflection;
 
 namespace OpenRiaServices.Tools
 {
@@ -53,17 +51,17 @@ namespace OpenRiaServices.Tools
         public string ClientProjectPath { get; set; }
 
         /// <summary>
-        /// Gets or sets the root namespace of the target project. If it's not null or empty, 
+        /// Gets or sets the root namespace of the target project. If it's not null or empty,
         /// the code generator will try to change generated namespaces in such a way that the client and
-        /// server namespaces match. Use this to get correct code generation for Visual Basic projects 
+        /// server namespaces match. Use this to get correct code generation for Visual Basic projects
         /// with nonempty root namespace.
         /// </summary>
         public string ClientRootNamespace { get; set; }
 
         /// <summary>
-        /// Gets or sets the root namespace of the server project. If it's not null or empty, 
+        /// Gets or sets the root namespace of the server project. If it's not null or empty,
         /// the code generator will try to change generated namespaces in such a way that the client and
-        /// server namespaces match. Use this to get correct code generation for Visual Basic projects 
+        /// server namespaces match. Use this to get correct code generation for Visual Basic projects
         /// with nonempty root namespace.
         /// </summary>
         public string ServerRootNamespace { get; set; }

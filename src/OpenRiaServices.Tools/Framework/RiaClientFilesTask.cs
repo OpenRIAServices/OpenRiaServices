@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
@@ -60,6 +62,7 @@ namespace OpenRiaServices.Tools
         /// <value>
         /// This property is no longer used but exists for backward compatibility
         /// </value>
+        [Obsolete("to remove")]
         public string LiveIntellisense { get; set; }
 
         /// <summary>
@@ -109,6 +112,7 @@ namespace OpenRiaServices.Tools
                                                 : this.GetFullPathRelativeToDirectory(value, this.ClientProjectDirectory);
             }
         }
+
 
         /// <summary>
         /// Gets the path of the file where to write the list of generated files
@@ -336,127 +340,6 @@ namespace OpenRiaServices.Tools
         }
 
         /// <summary>
-        /// Sets or resets the read-only file attribute of the given file
-        /// </summary>
-        /// <param name="fileName">Full path to the file to modify</param>
-        /// <param name="newState">The desired state of the bit</param>
-        /// <returns><c>false</c> if a problem occurred and the bit could not be altered.</returns>
-        internal bool SafeSetReadOnlyAttribute(string fileName, bool newState)
-        {
-            string errorMessage = null;
-
-            if (File.Exists(fileName))
-            {
-                try
-                {
-                    FileAttributes attributes = File.GetAttributes(fileName);
-                    bool isSet = ((attributes & FileAttributes.ReadOnly) != 0);
-                    if (isSet != newState)
-                    {
-                        attributes ^= FileAttributes.ReadOnly;
-                        File.SetAttributes(fileName, attributes);
-                    }
-                }
-                catch (IOException ioe)
-                {
-                    errorMessage = ioe.Message;
-                }
-                catch (NotSupportedException nse)
-                {
-                    errorMessage = nse.Message;
-                }
-                catch (UnauthorizedAccessException uae)
-                {
-                    errorMessage = uae.Message;
-                }
-
-                if (errorMessage != null)
-                {
-                    this.LogError(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Modify_ReadOnly, fileName, errorMessage));
-                }
-            }
-
-            return (errorMessage == null);
-        }
-
-        /// <summary>
-        /// Safe form of File.Delete that catches and logs exceptions as warnings.
-        /// </summary>
-        /// <param name="fileName">The full path to the file to delete.</param>
-        /// <returns><c>false</c> if an error occurred and the file could not be deleted.</returns>
-        internal bool SafeFileDelete(string fileName)
-        {
-            string errorMessage = null;
-            if (!string.IsNullOrEmpty(fileName) && File.Exists(fileName))
-            {
-                // Ensure readonly bit is turned off
-                if (!this.SafeSetReadOnlyAttribute(fileName, false))
-                {
-                    return false;
-                }
-
-                try
-                {
-                    File.Delete(fileName);
-                }
-                catch (IOException ioe)
-                {
-                    errorMessage = ioe.Message;
-                }
-                catch (NotSupportedException nse)
-                {
-                    errorMessage = nse.Message;
-                }
-                catch (UnauthorizedAccessException uae)
-                {
-                    errorMessage = uae.Message;
-                }
-
-                if (errorMessage != null)
-                {
-                    this.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Delete_File_Error, fileName, errorMessage));
-                }
-            }
-
-            return (errorMessage == null);
-        }
-
-        /// <summary>
-        /// Safe form of writing string contents to a file.
-        /// </summary>
-        /// <param name="fileName">The full path to the file to write.</param>
-        /// <param name="contents">The string content to write.</param>
-        /// <returns><c>false</c> if an error occurred and the file could not be written.</returns>
-        internal bool SafeFileWrite(string fileName, string contents)
-        {
-            string errorMessage = null;
-
-            try
-            {
-                File.WriteAllText(fileName, contents);
-            }
-            catch (IOException ioe)
-            {
-                errorMessage = ioe.Message;
-            }
-            catch (NotSupportedException nse)
-            {
-                errorMessage = nse.Message;
-            }
-            catch (UnauthorizedAccessException uae)
-            {
-                errorMessage = uae.Message;
-            }
-
-            if (errorMessage != null)
-            {
-                this.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Write_File, fileName, errorMessage));
-            }
-  
-            return (errorMessage == null);
-        }
-
-        /// <summary>
         /// Copies the file specified by <paramref name="sourceFile"/> to <paramref name="destinationFile"/>
         /// </summary>
         /// <param name="sourceFile">Full path of the source file to copy.</param>
@@ -466,16 +349,16 @@ namespace OpenRiaServices.Tools
         internal bool SafeFileCopy(string sourceFile, string destinationFile, bool isProjectFile)
         {
             string errorMessage = null;
-            if (!string.IsNullOrEmpty(destinationFile) && 
+            if (!string.IsNullOrEmpty(destinationFile) &&
                 !string.IsNullOrEmpty(sourceFile) && File.Exists(sourceFile))
             {
                 // Ensure the destination folder exists
-                this.SafeFolderCreate(Path.GetDirectoryName(destinationFile));
+                 RiaClientFilesTaskHelpers.SafeFolderCreate(Path.GetDirectoryName(destinationFile), this);
 
                 // Ensure the read-only attribute is reset on the destination if it exists
                 if (isProjectFile)
                 {
-                    this.SafeSetReadOnlyAttribute(destinationFile, false);
+                    RiaClientFilesTaskHelpers.SafeSetReadOnlyAttribute(destinationFile, false, this);
                 }
 
                 try
@@ -507,7 +390,7 @@ namespace OpenRiaServices.Tools
             // Failure here is logged but does not affect the success of the write.
             if (isProjectFile)
             {
-                this.SafeSetReadOnlyAttribute(destinationFile, true);
+                RiaClientFilesTaskHelpers.SafeSetReadOnlyAttribute(destinationFile, true, this);
                 this.FilesWereWritten = true;
             }
 
@@ -527,7 +410,7 @@ namespace OpenRiaServices.Tools
                 !string.IsNullOrEmpty(sourceFile) && File.Exists(sourceFile))
             {
                 // Ensure the destination is gone
-                this.SafeFileDelete(destinationFile);
+                RiaClientFilesTaskHelpers.SafeFileDelete(destinationFile, this);
 
                 try
                 {
@@ -555,45 +438,6 @@ namespace OpenRiaServices.Tools
             return (errorMessage == null);
         }
 
-        /// <summary>
-        /// Safe form of <see cref="Directory.CreateDirectory(string)"/>
-        /// </summary>
-        /// <remarks>
-        /// This method will do nothing if the folder already exists, otherwise it
-        /// will create it.  Any error in creation will log an appropriate error message
-        /// and return <c>false</c>
-        /// </remarks>
-        /// <param name="directoryPath">The full path to the folder to create.</param>
-        /// <returns><c>false</c> if an error occurred and the folder could not be created.</returns>
-        internal bool SafeFolderCreate(string directoryPath)
-        {
-            string errorMessage = null;
-            if (!string.IsNullOrEmpty(directoryPath) && !Directory.Exists(directoryPath))
-            {
-                try
-                {
-                    Directory.CreateDirectory(directoryPath);
-                }
-                catch (IOException ioe)
-                {
-                    errorMessage = ioe.Message;
-                }
-                catch (NotSupportedException nse)
-                {
-                    errorMessage = nse.Message;
-                }
-                catch (UnauthorizedAccessException uae)
-                {
-                    errorMessage = uae.Message;
-                }
-
-                if (errorMessage != null)
-                {
-                    this.LogError(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Create_Folder, directoryPath, errorMessage));
-                }
-            }
-            return (errorMessage == null);
-        }
 
         #endregion
 
@@ -655,91 +499,7 @@ namespace OpenRiaServices.Tools
         internal string ReadFileFromVS(string fileName)
         {
             return File.ReadAllText(fileName);
-        }
-
-        /// <summary>
-        /// Writes the given content to the given file if it is non-empty, else deletes the file
-        /// </summary>
-        /// <param name="destinationFile">Full path to file to write or delete</param>
-        /// <param name="content">Content to write to file</param>
-        /// <param name="forceWriteToFile">If <c>true</c>, write file always, even if Intellisense only build.</param>
-        /// <returns><c>true</c> if the write succeeded, <c>false</c> if it was deleted or the write failed.</returns>
-        internal bool WriteOrDeleteFileToVS(string destinationFile, string content, bool forceWriteToFile)
-        {
-            if (string.IsNullOrEmpty(content))
-            {
-                // Delete the old generated file -- but only if it exists.
-                // If there was nothing generated and no file exists, it is better simply to say nothing.
-                if (File.Exists(destinationFile))
-                {
-                    this.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Deleting_Empty_File, destinationFile));
-                    this.DeleteFileFromVS(destinationFile);
-                }
-                return false;
-            }
-            else
-            {
-                return this.WriteFileToVS(destinationFile, content, forceWriteToFile);
-            }
-        }
-
-        /// <summary>
-        /// Writes the given file to VS.  If VS is not present, it just writes to the file system
-        /// </summary>
-        /// <param name="destinationFile">Name of the file to create/write</param>
-        /// <param name="content">String content of file to write</param>
-        /// <param name="forceWriteToFile">If <c>true</c>, write file always, even if Intellisense only build.</param>
-        /// <returns><c>true</c> if the write succeeded</returns>
-        internal bool WriteFileToVS(string destinationFile, string content, bool forceWriteToFile)
-        {
-            // Create the folder as late as possible, but a failure here
-            // logs a message and does not do the write
-            string folder = Path.GetDirectoryName(destinationFile);
-            if (!this.SafeFolderCreate(folder))
-            {
-                return false;
-            }
-
-            // Reset read-only bit first or write may fail.
-            // We do this because we are the ones who set that attribute in the first place (to discourage user edits)
-            if (!this.SafeSetReadOnlyAttribute(destinationFile, false))
-            {
-                return false;
-            }
-
-            this.SafeFileWrite(destinationFile, content);
-
-            // Set ReadOnly attribute to prevent casual edits.
-            // Failure here is logged but does not affect the success of the write.
-            this.SafeSetReadOnlyAttribute(destinationFile, true);
-
-            this.FilesWereWritten = true;
-            return true;
-        }
-
-        /// <summary>
-        /// Deletes the specified file in VS-compatible way
-        /// </summary>
-        /// <param name="fileName">Full path of the file to delete.  It may or may not exist on disk.</param>
-        internal void DeleteFileFromVS(string fileName)
-        {
-            if (File.Exists(fileName))
-            {
-                // Reset Read-Only file attribute
-                // We do this because we set this attribute on files we generate.
-                this.SafeSetReadOnlyAttribute(fileName, false);
-
-                // If VS does not delete this file or if VS is not present, delete it
-                // from the file system manually.
-                this.SafeFileDelete(fileName);
-
-                // If anything failed here, log a warning so user knows the file could not be removed.
-                if (File.Exists(fileName))
-                {
-                    this.LogWarning(string.Format(CultureInfo.CurrentCulture, Resource.Failed_To_Delete_File, fileName));
-                }
-            }
-        }
+        }       
 
         #endregion VS Integration
 
@@ -965,7 +725,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                RiaClientFilesTaskHelpers.SafeFileDelete(fileName, this);
             }
 
             fileName = this.ClientReferenceListPath();
@@ -973,7 +733,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                RiaClientFilesTaskHelpers.SafeFileDelete(fileName, this);
             }
 
             fileName = this.ServerReferenceListPath();
@@ -981,7 +741,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                RiaClientFilesTaskHelpers.SafeFileDelete(fileName,this);
             }
 
             // Delete our list of source files
@@ -990,7 +750,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                RiaClientFilesTaskHelpers.SafeFileDelete(fileName, this);
             }
 
             // Delete our list of RIA Links
@@ -999,7 +759,7 @@ namespace OpenRiaServices.Tools
             {
                 // File is not normally visible to VS and is not in generated code folder,
                 // so we brute-force delete it
-                this.SafeFileDelete(fileName);
+                RiaClientFilesTaskHelpers.SafeFileDelete(fileName, this);
             }
 
             // And delete the history folder itself if it is empty
