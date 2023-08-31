@@ -604,12 +604,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Update="DataModels\AdventureWorks - Copy.tt">
-      <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>AdventureWorks - Copy.cs</LastGenOutput>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net472'">
@@ -628,7 +622,7 @@
 
 
     <Compile Remove="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
-    <!--<Compile Remove="DBImager.cs" />-->
+    <!--  AuthenticationServices are added in AspNetCore website instead-->
     <Compile Remove="Mocks\AuthenticationServices.cs" />
   </ItemGroup>
 </Project>

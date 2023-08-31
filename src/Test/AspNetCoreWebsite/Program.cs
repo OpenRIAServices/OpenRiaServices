@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
+using RootNamespace.TestNamespace;
 using TestDomainServices.Testing;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -27,6 +28,9 @@ var domainServices = typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAn
 foreach (var type in domainServices)
     builder.Services.Add(new ServiceDescriptor(type, type, ServiceLifetime.Transient));
 
+// Types in this assembly
+builder.Services.AddTransient<AuthenticationService1>();
+
 var app = builder.Build();
 
 //app.UseEndpoints(endpoints =>
@@ -44,6 +48,9 @@ app.MapOpenRiaServices(builder =>
                Console.WriteLine($"Ignnoreing {type} due to exception: {ex.Message}");
            }
        }
+
+       // Types in this assembly
+       builder.AddDomainService<AuthenticationService1>();
    });
 
 // TestDatabase
