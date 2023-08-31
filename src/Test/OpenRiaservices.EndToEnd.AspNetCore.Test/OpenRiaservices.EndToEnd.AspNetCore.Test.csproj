@@ -62,7 +62,6 @@
     <Compile Include="..\OpenRiaServices.EndToEnd.Wcf.Test\**\*.cs" Exclude="..\OpenRiaServices.EndToEnd.Wcf.Test\Main.cs;..\OpenRiaServices.EndToEnd.Wcf.Test\bin\**;..\OpenRiaServices.EndToEnd.Wcf.Test\obj\**" LinkBase="Included" />
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\MessageUtilityTests.cs" />
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\WebDomainClientTests.cs" />
-    <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\WebDomainClientTestsSimple.cs" />
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\IntegrationTests\SoapXmlEndpointTests.cs" />
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="Data\DomainClients\Cities.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
