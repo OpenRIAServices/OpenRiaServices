@@ -530,6 +530,9 @@ namespace OpenRiaServices.Client.Test
             EnqueueTestComplete();
         }
 
+#if !ASPNETCORE // TODO: Look into how to handles RequiresSecureEndpoint
+// TODO: Maybe obsolete it for netstandard/NET6+ or add check to "OperationInvoker.CreateDomainService" that HttpContext.IsHttps is true if property is true?
+
         [TestMethod]
         [Asynchronous]
         [Description("Ensures the DataFactory does not find a secure service when invoked over HTTP.")]
@@ -552,7 +555,7 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueTestComplete();
         }
-
+#endif
         private void ExecuteRequest(Uri uri, Action<HttpWebResponse> responseCallback)
         {
             ExecuteRequest(uri, /* buildRequest */ null, responseCallback);

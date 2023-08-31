@@ -53,6 +53,9 @@ app.MapDomainServices/MapOpenRiaServices("/Services", x =>
 
 ## Features 
 * Add https checked based on "RequresSecureEndpoint"
+    * Make sure test "InvokingHttpsServiceOverHttpFails" starts running
+    * Can add a check in CreateDomainService method based on httpContext.IsHttps
+    * Save boolean in private field on "operation" (don't look at attribute on each invoke)
 * Add caching support ? - based on WCF implementation's OutputCache
     *  Or obsolete OutputCache attribute ? 
 * Add logging support for exceptions returned
