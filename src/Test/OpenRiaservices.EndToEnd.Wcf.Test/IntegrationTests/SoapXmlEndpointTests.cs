@@ -17,7 +17,7 @@ namespace OpenRiaServices.Client.Test.IntegrationTests
         public async Task WsdlEnpointShouldGenerateValidWSDL()
         {
             // AuthenticationService1
-            using var httpClient = new HttpClient();
+            using var httpClient = new HttpClient() { BaseAddress = TestURIs.RootURI };
             var response = await httpClient.GetAsync(TestURIs.AuthenticationService1 + "?singleWsdl");
             response.EnsureSuccessStatusCode();
             using var contentStream = await response.Content.ReadAsStreamAsync();
