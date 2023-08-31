@@ -32,18 +32,6 @@ namespace OpenRiaServices.Client.Test
             return new TestProvider_Scenarios(new WebDomainClient<TestProvider_Scenarios.ITestProvider_ScenariosContract>(TestURIs.TestProvider_Scenarios));
         }
 
-        [TestMethod]
-        [Asynchronous]
-        [FullTrustTest]
-        public void TestCacheLocations()
-        {
-            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationAnyQuery(), "Public");
-            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationDownstreamQuery(), "Public");
-            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationServerQuery(), "Server");
-            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationServerAndClientQuery(), "ServerAndPrivate");
-
-            EnqueueTestComplete();
-        }
 
         private void ExecuteQuery(Func<TestProvider_Scenarios, EntityQuery<CityWithCacheData>> getQuery, string expectedCacheData)
         {
@@ -67,6 +55,7 @@ namespace OpenRiaServices.Client.Test
             });
         }
 
+#if !ASPNETCORE // Only for WCF Endpoints
         [TestMethod]
         [Asynchronous]
         [WorkItem(880862)]
@@ -81,9 +70,24 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueTestComplete();
         }
+#endif
 
         // Skip the following tests in Silverlight because HttpWebResponse.Headers is not implemented in Silverlight.
-#if !SILVERLIGHT
+#if !ASPNETCORE // Cahcing is not yet implemented (and will probably work a little bit different
+
+        [TestMethod]
+        [Asynchronous]
+        [FullTrustTest]
+        public void TestCacheLocations()
+        {
+            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationAnyQuery(), "Public");
+            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationDownstreamQuery(), "Public");
+            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationServerQuery(), "Server");
+            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationServerAndClientQuery(), "ServerAndPrivate");
+
+            EnqueueTestComplete();
+        }
+
         [TestMethod]
         [Asynchronous]
         public void TestNoCache()
@@ -410,11 +414,13 @@ namespace OpenRiaServices.Client.Test
             EnqueueTestComplete();
         }
 
+#if !ASPNETCORE
         /// <summary>
         /// Verify that errors are propagated correctly for L2S DomainService
         /// </summary>
         [TestMethod]
         [Asynchronous]
+        [TestCategory("Linq2Sql")]
         public void TestL2SProviderConstructorThrows()
         {
             // Test for a provider that derives from LinqToSqlDomainService, since LinqToSqlDomainService is instantiated differently
@@ -431,6 +437,7 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueTestComplete();
         }
+#endif
 
         /// <summary>
         /// Verify that if an invalid DomainService name is specified, that the Load
