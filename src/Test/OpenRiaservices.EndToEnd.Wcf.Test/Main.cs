@@ -62,7 +62,11 @@ namespace OpenRiaServices.Client.Test
         private static void StartWebServer()
         {
             string projectPath = File.ReadAllLines("ClientTestProjectPath.txt")[0];
+#if VBTests
+            string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"..\..\..\Test\WebsiteFullTrust"));
+#else
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"..\WebsiteFullTrust"));
+#endif
 
             if (!Directory.Exists(webSitePath))
                 throw new FileNotFoundException($"Website not found at {webSitePath}");
