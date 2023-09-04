@@ -14,6 +14,7 @@ public static class TestURIs
 
     // Cities
     public static readonly Uri Cities = new Uri(RootURI, "Cities-CityDomainService.svc");
+    // Can below classes be removed, they seems unused in tests
     //public static readonly Uri Cities_AuthRequired = new Uri(RootURI, "Cities-CityDomainService_AuthRequired.svc");
     //public static readonly Uri Cities_RoleRequired = new Uri(RootURI, "Cities-CityDomainService_RoleRequired.svc");
 
@@ -28,7 +29,6 @@ public static class TestURIs
     public static readonly Uri DbCtx_Northwind_CUD = new Uri("TestDomainServices-DbCtx-Northwind_CUD.svc", UriKind.Relative);
     public static readonly Uri DbCtx_Northwind = new Uri("TestDomainServices-DbCtx-Northwind.svc", UriKind.Relative);
     public static readonly Uri DbCtx_Catalog = new Uri("TestDomainServices-DbCtx-Catalog.svc", UriKind.Relative);
-    // Not used?  public static readonly Uri EFCodeFirst = new Uri(RootURI, "EFCodeFirst-EFCodeFirstTestDomainService.svc");
 
     // EF Core
     public static readonly Uri EFCore_Northwind = new Uri(RootURI, "TestDomainServices-EFCore-Northwind.svc");
