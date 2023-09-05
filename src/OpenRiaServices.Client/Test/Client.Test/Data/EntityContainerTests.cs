@@ -4465,7 +4465,7 @@ namespace OpenRiaServices.Client.Test
     public class ChangeTrackingTestContext : DomainContext
     {
         public ChangeTrackingTestContext()
-            : base(new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.LTS_Catalog))
+            : base(DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.LTS_Catalog, false))
         {
 
         }

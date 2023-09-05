@@ -3787,6 +3787,7 @@ namespace OpenRiaServices.Client.Test
         #endregion
     }
 
+#if !ASPNETCORE
     [TestClass]
     public class LTSUpdateTests : UpdateTests
     {
@@ -4044,6 +4045,7 @@ TestContext testContext
             EnqueueTestComplete();
         }
     }
+#endif
 
     [TestClass]
     public class EFUpdateTests : UpdateTests

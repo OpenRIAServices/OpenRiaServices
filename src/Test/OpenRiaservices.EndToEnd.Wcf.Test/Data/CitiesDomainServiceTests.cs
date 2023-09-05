@@ -21,6 +21,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate() {a();});
         }
 
+#if !ASPNETCORE
         [TestMethod]
         [Asynchronous]
         [Description("Verifies that a custom host is used to host CityDomainService")]
@@ -42,6 +43,7 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueTestComplete();
         }
+#endif
 
         /// <summary>
         /// Verify that Enum Entity properties are handled properly by testing

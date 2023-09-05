@@ -11,11 +11,11 @@ using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
+using Cities;
+using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.Client.Test
 {
-    using Cities;
-    using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
     [TestClass]
     public class EntityCollectionTests : UnitTestBase

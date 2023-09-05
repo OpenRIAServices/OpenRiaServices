@@ -32,18 +32,6 @@ namespace OpenRiaServices.Client.Test
             return new TestProvider_Scenarios(new WebDomainClient<TestProvider_Scenarios.ITestProvider_ScenariosContract>(TestURIs.TestProvider_Scenarios));
         }
 
-        [TestMethod]
-        [Asynchronous]
-        [FullTrustTest]
-        public void TestCacheLocations()
-        {
-            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationAnyQuery(), "Public");
-            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationDownstreamQuery(), "Public");
-            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationServerQuery(), "Server");
-            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationServerAndClientQuery(), "ServerAndPrivate");
-
-            EnqueueTestComplete();
-        }
 
         private void ExecuteQuery(Func<TestProvider_Scenarios, EntityQuery<CityWithCacheData>> getQuery, string expectedCacheData)
         {
@@ -67,6 +55,7 @@ namespace OpenRiaServices.Client.Test
             });
         }
 
+#if !ASPNETCORE // Only for WCF Endpoints
         [TestMethod]
         [Asynchronous]
         [WorkItem(880862)]
@@ -81,9 +70,24 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueTestComplete();
         }
+#endif
 
         // Skip the following tests in Silverlight because HttpWebResponse.Headers is not implemented in Silverlight.
-#if !SILVERLIGHT
+#if !ASPNETCORE // Cahcing is not yet implemented (and will probably work a little bit different
+
+        [TestMethod]
+        [Asynchronous]
+        [FullTrustTest]
+        public void TestCacheLocations()
+        {
+            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationAnyQuery(), "Public");
+            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationDownstreamQuery(), "Public");
+            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationServerQuery(), "Server");
+            ExecuteQuery(dc => dc.GetCitiesWithCacheLocationServerAndClientQuery(), "ServerAndPrivate");
+
+            EnqueueTestComplete();
+        }
+
         [TestMethod]
         [Asynchronous]
         public void TestNoCache()
@@ -402,19 +406,30 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 DomainOperationException ex = (DomainOperationException)lo.Error;
-                Assert.IsNotNull(ex);
+#if ASPNETCORE
+                // TODO: Determine how to fix this (ignore difference, fix later? or change all invokers to catch this type of error) 
+                //  If it fails for WCF hosting it will be caught in DomainOperationInvoker.InvokeAsync and returned as any other openria exception (fault)
+                // using binary encoding (HTTP error code will be 500) but DomainOperationException will be NotSupported since the constructor throws NotSupportedException
+                // For ASPNETCORE the exception is not handled at all, giving a http 500 error (with "unparsable" text response by developer middleware)
+
+                Assert.AreEqual(OperationErrorStatus.ServerError, ex.Status);
+                Assert.Inconclusive("TODO: Determine what behaviour we want");
+#else
                 Assert.AreEqual(OperationErrorStatus.NotSupported, ex.Status);
                 Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed, "GetProducts", "Can't construct this type."), ex.Message);
+#endif
             });
 
             EnqueueTestComplete();
         }
 
+#if !ASPNETCORE
         /// <summary>
         /// Verify that errors are propagated correctly for L2S DomainService
         /// </summary>
         [TestMethod]
         [Asynchronous]
+        [TestCategory("Linq2Sql")]
         public void TestL2SProviderConstructorThrows()
         {
             // Test for a provider that derives from LinqToSqlDomainService, since LinqToSqlDomainService is instantiated differently
@@ -431,6 +446,7 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueTestComplete();
         }
+#endif
 
         /// <summary>
         /// Verify that if an invalid DomainService name is specified, that the Load
@@ -523,6 +539,9 @@ namespace OpenRiaServices.Client.Test
             EnqueueTestComplete();
         }
 
+#if !ASPNETCORE // TODO: Look into how to handles RequiresSecureEndpoint
+// TODO: Maybe obsolete it for netstandard/NET6+ or add check to "OperationInvoker.CreateDomainService" that HttpContext.IsHttps is true if property is true?
+
         [TestMethod]
         [Asynchronous]
         [Description("Ensures the DataFactory does not find a secure service when invoked over HTTP.")]
@@ -545,7 +564,7 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueTestComplete();
         }
-
+#endif
         private void ExecuteRequest(Uri uri, Action<HttpWebResponse> responseCallback)
         {
             ExecuteRequest(uri, /* buildRequest */ null, responseCallback);

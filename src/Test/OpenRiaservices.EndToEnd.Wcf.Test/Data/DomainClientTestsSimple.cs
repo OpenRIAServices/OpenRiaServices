@@ -17,7 +17,7 @@ namespace OpenRiaServices.Client.Web.Test
     /// Setup logic and almost all tests are written in a separate way
     /// </summary>
     [TestClass]
-    public class WebDomainClientTestsSimple : UnitTestBase
+    public class DomainClientTestsSimple : UnitTestBase
     {
         /// <summary>
         /// It is possible to specify a query expression who's type doesn't match the
@@ -29,10 +29,8 @@ namespace OpenRiaServices.Client.Web.Test
         [Asynchronous]
         public void TestMethodQueryMismatch()
         {
-            WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract> dc = new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.EF_Catalog)
-            {
-                EntityTypes = new Type[] { typeof(Product), typeof(PurchaseOrder), typeof(PurchaseOrderDetail) }
-            };
+            var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
+            dc.EntityTypes = new Type[] { typeof(Product), typeof(PurchaseOrder), typeof(PurchaseOrderDetail) };
 
             var query = new EntityQuery<PurchaseOrder>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), Array.Empty<PurchaseOrder>().AsQueryable().Take(2));
             query.IncludeTotalCount = true;
@@ -56,10 +54,8 @@ namespace OpenRiaServices.Client.Web.Test
         [Asynchronous]
         public void TestQuery()
         {
-            WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract> dc = new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.EF_Catalog)
-            {
-                EntityTypes = new Type[] { typeof(Product) }
-            };
+            var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
+            dc.EntityTypes = new Type[] { typeof(Product) };
 
             var query = from p in Array.Empty<Product>().AsQueryable()
                         where p.Weight < 10.5M
@@ -89,15 +85,12 @@ namespace OpenRiaServices.Client.Web.Test
         [TestMethod]
         public async Task TestQueryEvents()
         {
-            WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract> dc = new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.EF_Catalog)
-            {
-                EntityTypes = new Type[] { typeof(Product) }
-            };
+            var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
+            dc.EntityTypes = new Type[] { typeof(Product) };
 
             var result = await dc.QueryAsync(new EntityQuery<Product>(dc, "GetProducts", null, true, false), CancellationToken.None);
             Assert.AreEqual(504, result.Entities.Concat(result.IncludedEntities).Count());
             Assert.AreEqual(result.Entities.Count(), result.TotalCount);
         }
-
     }
 }

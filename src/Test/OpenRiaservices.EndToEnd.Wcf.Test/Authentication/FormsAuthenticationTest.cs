@@ -21,24 +21,25 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             service.DomainContext = context;
 
-            AuthenticationOperation ao = service.Login("manager", "manager");
+            LoginOperation loginOperation = service.Login("manager", "manager");
+            LogoutOperation logoutOperation = null;
 
-            this.EnqueueCompletion(() => ao);
+            this.EnqueueCompletion(() => loginOperation);
 
             this.EnqueueCallback(() =>
             {
-                Assert.IsTrue(ao.User.Identity.IsAuthenticated,
-                    "Logged in user should be authenticated.");
-                ao = service.Logout(false);
+                Assert.IsTrue(loginOperation.LoginSuccess);
+                Assert.IsTrue(loginOperation.User.Identity.IsAuthenticated, "Logged in user should be authenticated.");
+                logoutOperation = service.Logout(false);
             });
 
-            this.EnqueueCompletion(() => ao);
+            this.EnqueueCompletion(() => logoutOperation);
 
             this.EnqueueCallback(() =>
             {
-                Assert.IsFalse(ao.User.Identity.IsAuthenticated,
+                Assert.IsFalse(logoutOperation.User.Identity.IsAuthenticated,
                     "Logged out user should not be authenticated.");
-                ao = service.Logout(false);
+                logoutOperation = service.Logout(false);
             });
 
             this.EnqueueTestComplete();

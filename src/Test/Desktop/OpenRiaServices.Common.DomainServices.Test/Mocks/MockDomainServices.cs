@@ -1350,7 +1350,13 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
         }
 
         [Query]
-        public IQueryable<MixedType> GetMixedTypes_Predefined(string idToChange, string s, decimal d, DateTime dt, TimeSpan ts, DateTimeOffset dto, IEnumerable<string> strings, Uri uri, Guid g, Binary b, XElement x, byte[] bArray, TestEnum en, int[] ints, Dictionary<DateTime, DateTime> dictionaryDateTime, Dictionary<Guid, Guid> dictionaryGuid, Dictionary<String, String> dictionaryString, Dictionary<TestEnum, TestEnum> dictionaryTestEnum, Dictionary<XElement, XElement> dictionaryXElement, Dictionary<DateTimeOffset, DateTimeOffset> dictionaryDateTimeOffset)
+        public IQueryable<MixedType> GetMixedTypes_Predefined(string idToChange, string s, decimal d, DateTime dt, TimeSpan ts, DateTimeOffset dto, IEnumerable<string> strings, Uri uri, Guid g,
+#if HAS_LINQ2SQL
+          Binary b,
+#else
+          byte[] b,
+#endif
+          XElement x, byte[] bArray, TestEnum en, int[] ints, Dictionary<DateTime, DateTime> dictionaryDateTime, Dictionary<Guid, Guid> dictionaryGuid, Dictionary<String, String> dictionaryString, Dictionary<TestEnum, TestEnum> dictionaryTestEnum, Dictionary<XElement, XElement> dictionaryXElement, Dictionary<DateTimeOffset, DateTimeOffset> dictionaryDateTimeOffset)
         {
             MixedType entity = _data.Values.FirstOrDefault(e => e.ID == idToChange);
             if (entity != null)
@@ -1771,7 +1777,13 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
         }
 
         [Invoke]
-        public bool TestPredefined_Online(MixedType entity, string s, decimal d, DateTime dt, TimeSpan ts, IEnumerable<string> strings, Uri uri, Guid g, Binary b, XElement x, byte[] bArray, TestEnum en, Guid[] guids, ulong[] ulongs, DateTimeOffset dto)
+        public bool TestPredefined_Online(MixedType entity, string s, decimal d, DateTime dt, TimeSpan ts, IEnumerable<string> strings, Uri uri, Guid g,
+#if HAS_LINQ2SQL
+            Binary b,
+#else
+            byte[] b,
+#endif
+            XElement x, byte[] bArray, TestEnum en, Guid[] guids, ulong[] ulongs, DateTimeOffset dto)
         {
             entity.StringProp = s;
             entity.DecimalProp = d;
@@ -1964,7 +1976,11 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
         }
 
         [Invoke]
+#if HAS_LINQ2SQL
         public Binary ReturnsBinary_Online(Binary value)
+#else
+        public byte[] ReturnsBinary_Online(byte[] value)
+#endif
         {
             return value;
         }
@@ -5244,7 +5260,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
 #endregion
 }
 
-#if NETFRAMEWORK
+#if HAS_LINQ2SQL
 #region LTS Northwind Scenarios
 
 namespace DataTests.Scenarios.LTS.Northwind

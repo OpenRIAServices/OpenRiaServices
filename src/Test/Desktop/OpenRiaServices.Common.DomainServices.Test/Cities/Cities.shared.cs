@@ -134,7 +134,7 @@ namespace Cities
         public static ValidationResult IsThrowExValid(object zipObject, ValidationContext context)
         {
             Zip zip = zipObject as Zip;
-            if ((zip.Code == 99999) && !zip.GetType().Assembly.FullName.Contains("Client"))
+            if ((zip.Code == 99999) && !(zip.GetType().Assembly.FullName.Contains("EndToEnd") || zip.GetType().Assembly.FullName.Contains("Client")))
             {
                 return new ValidationResult("Server fails validation");
             }

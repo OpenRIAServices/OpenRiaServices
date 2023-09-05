@@ -12,32 +12,6 @@ namespace OpenRiaServices.Client.Test
 
     public static class TestHelperMethods
     {
-        /// <summary>
-        /// Perform a submit on the specified context using the DomainClient directy. This bypasses all context operations,
-        /// validation, etc.
-        /// </summary>
-        /// <param name="ctxt">The context to submit on</param>
-        /// <param name="callback">The callback to execute when the submit completes</param>
-        public static void SubmitDirect(DomainContext ctxt, Action<SubmitCompletedResult> callback)
-        {
-            EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-            Debug.Assert(!cs.IsEmpty, "No changes to submit!");
-
-
-            SynchronizationContext syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
-
-            ctxt.DomainClient.SubmitAsync(cs, CancellationToken.None)
-                .ContinueWith(task =>
-                {
-                    SubmitCompletedResult submitResults = task.GetAwaiter().GetResult();
-                    syncContext.Post(
-                        delegate
-                        {
-                            callback(submitResults);
-                        },
-                        null);
-                });
-        }
 
         /// <summary>
         /// Method used to turn property level validation on or off for an entity. This allows invalid
@@ -124,6 +98,14 @@ namespace OpenRiaServices.Client.Test
                 }
             }
             return true;
+        }
+    }
+
+    public class ConfigurableEntityContainer : EntityContainer
+    {
+        public void CreateSet<TEntity>(EntitySetOperations operations) where TEntity : Entity, new()
+        {
+            base.CreateEntitySet<TEntity>(operations);
         }
     }
 

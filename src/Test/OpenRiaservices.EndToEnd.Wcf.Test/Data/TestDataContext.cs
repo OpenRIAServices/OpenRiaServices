@@ -11,7 +11,7 @@ namespace OpenRiaServices.Client.Test
     public class TestDataContext : DomainContext
     {
         public TestDataContext(Uri serviceUri)
-            : base(new WebDomainClient<TestDomainServiceContract>(serviceUri))
+            : base(DomainContext.CreateDomainClient(typeof(TestDomainServiceContract), serviceUri, false))
         {
         }
 

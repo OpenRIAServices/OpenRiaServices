@@ -152,6 +152,12 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Asp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Tools.CodeGenTask", "OpenRiaServices.Tools.CodeGenTask\OpenRiaServices.Tools.CodeGenTask.csproj", "{E0153323-9B1E-47EA-ACAD-E7A1E765001C}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EndToEnd", "EndToEnd", "{27DB096E-8794-4B9A-B3D0-AF74926DF9FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaservices.EndToEnd.Wcf.Test", "Test\OpenRiaservices.EndToEnd.Wcf.Test\OpenRiaservices.EndToEnd.Wcf.Test.csproj", "{9428260A-EA94-430D-9A1A-CB9830B9E8EE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaservices.EndToEnd.AspNetCore.Test", "Test\OpenRiaservices.EndToEnd.AspNetCore.Test\OpenRiaservices.EndToEnd.AspNetCore.Test.csproj", "{17F902F4-7254-4FB9-9AF6-B3291B129B45}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -370,6 +376,14 @@ Global
 		{E0153323-9B1E-47EA-ACAD-E7A1E765001C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0153323-9B1E-47EA-ACAD-E7A1E765001C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0153323-9B1E-47EA-ACAD-E7A1E765001C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9428260A-EA94-430D-9A1A-CB9830B9E8EE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9428260A-EA94-430D-9A1A-CB9830B9E8EE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9428260A-EA94-430D-9A1A-CB9830B9E8EE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9428260A-EA94-430D-9A1A-CB9830B9E8EE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{17F902F4-7254-4FB9-9AF6-B3291B129B45}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{17F902F4-7254-4FB9-9AF6-B3291B129B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{17F902F4-7254-4FB9-9AF6-B3291B129B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{17F902F4-7254-4FB9-9AF6-B3291B129B45}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -440,6 +454,9 @@ Global
 		{7F378F98-E1B2-411A-809E-B1894E768936} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
 		{A9C063D1-4451-47C9-AACE-908FFC8C9F35} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{E0153323-9B1E-47EA-ACAD-E7A1E765001C} = {96D29745-0D96-4959-AB96-8FBEDC8AB485}
+		{27DB096E-8794-4B9A-B3D0-AF74926DF9FD} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
+		{9428260A-EA94-430D-9A1A-CB9830B9E8EE} = {27DB096E-8794-4B9A-B3D0-AF74926DF9FD}
+		{17F902F4-7254-4FB9-9AF6-B3291B129B45} = {27DB096E-8794-4B9A-B3D0-AF74926DF9FD}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}
