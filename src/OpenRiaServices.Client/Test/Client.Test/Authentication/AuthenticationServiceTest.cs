@@ -440,7 +440,6 @@ namespace OpenRiaServices.Client.Authentication.Test
         [Description("Tests that exceptions thrown from EndXx are caught and available in Operation.Error.")]
         public async Task EndExceptionsCaughtAsync()
         {
-            AuthenticationOperation op;
             Exception error = new Exception(ErrorMessage);
             using ThrowingAuthentication mock = new ThrowingAuthentication { EndError = error };
 
