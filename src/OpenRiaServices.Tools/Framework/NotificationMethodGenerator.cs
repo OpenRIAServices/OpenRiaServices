@@ -252,7 +252,7 @@ namespace OpenRiaServices.Tools
             {
                 int idx = snippet.ToString().LastIndexOf(')');
                 snippet.Remove(idx + 1, snippet.Length - idx - 1);
-                snippet.Append(";");
+                snippet.Append(';');
             }
             else // VB.net
             {
