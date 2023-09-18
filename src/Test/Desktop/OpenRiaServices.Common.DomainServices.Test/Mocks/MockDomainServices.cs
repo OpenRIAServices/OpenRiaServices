@@ -1063,7 +1063,7 @@ namespace TestDomainServices
 
         public IEnumerable<A> QueryWithParamValidation([Range(0, 10)] int a, [StringLength(2, MinimumLength = 0)] string b)
         {
-            if (string.Compare(b, "ex", true) == 0)
+            if (string.Equals(b, "ex", StringComparison.OrdinalIgnoreCase))
             {
                 throw new ValidationException("Server validation exception thrown!");
             }
@@ -1074,7 +1074,7 @@ namespace TestDomainServices
         [Invoke]
         public bool InvokeOperationWithParamValidation([Range(0, 10)] int a, [StringLength(2, MinimumLength = 0)] string b, CityWithCacheData entity)
         {
-            if (string.Compare(b, "ex", true) == 0)
+            if (string.Equals(b, "ex", StringComparison.OrdinalIgnoreCase))
             {
                 throw new ValidationException("Server validation exception thrown!");
             }

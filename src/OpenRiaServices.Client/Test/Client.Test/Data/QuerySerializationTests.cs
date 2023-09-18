@@ -967,7 +967,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(query1.SequenceEqual(query2));
 
             // test case insensitive string comparisons
-            query1 = BaselineTestData.Products.AsQueryable().Where(p => string.Compare(p.Color, "black", StringComparison.OrdinalIgnoreCase) == 0);
+            query1 = BaselineTestData.Products.AsQueryable().Where(p => string.Equals(p.Color, "black", StringComparison.OrdinalIgnoreCase));
             query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             List<Product> results = query2.ToList();
             Assert.IsTrue(results.Any(p => p.Color == "Black"));  // verify the search was case insensitive
