@@ -10,6 +10,7 @@
 
     <!-- Use csharp 10.0 for all projects -->
     <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">11.0</LangVersion>
+    <AnalysisMode>Recommended</AnalysisMode>
 
     <SonarQubeTestProject Condition="'$(IsTestProject)' == 'true'">True</SonarQubeTestProject>
 
