@@ -11,7 +11,7 @@ namespace OpenRiaServices.Client.Test
     {
         private readonly string databaseName;
         private readonly HttpClient _httpClient;
-        private Task _initializeTask = null;
+        private Task _initializeTask;
 
         public TestDatabase(string databaseName)
         {

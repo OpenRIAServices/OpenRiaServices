@@ -939,7 +939,7 @@ namespace TestDomainServices
     [EnableClientAccess]
     public partial class TestProvider_Scenarios : DomainService
     {
-        private static int s_counter = 0;
+        private static int s_counter;
         private readonly MixedTypeData _data = new MixedTypeData();
         private readonly MixedTypeData _dataSuperset = new MixedTypeData(true);
 

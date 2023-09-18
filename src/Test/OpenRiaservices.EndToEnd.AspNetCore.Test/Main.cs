@@ -15,8 +15,8 @@ namespace OpenRiaServices.Client.Test
     [TestClass()]
     public sealed class Main
     {
-        private static Process s_aspNetCoreSite = null;
-        private static IISExpressWebserver s_webServer = null;
+        private static Process s_aspNetCoreSite;
+        private static IISExpressWebserver s_webServer;
 
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
@@ -62,10 +62,18 @@ namespace OpenRiaServices.Client.Test
             const string ProcessName = "AspNetCoreWebsite";
             string projectPath = File.ReadAllLines("ClientTestProjectPath.txt")[0];
 #if DEBUG
-            string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/bin/Debug/net6.0/"));
+            string configuration = "Debug";
 #else
-            string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/bin/Release/net6.0/"));
+            string configuration = "Release";
 #endif
+
+#if NET80
+            string targetFramework = "net8.0";
+#else
+            string targetFramework = "net8.0";
+#endif
+
+            string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
 
             string processPath = webSitePath + ProcessName + ".exe";
             //webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite"));

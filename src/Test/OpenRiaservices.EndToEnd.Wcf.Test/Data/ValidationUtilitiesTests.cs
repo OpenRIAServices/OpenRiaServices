@@ -412,7 +412,7 @@ namespace OpenRiaServices.Hosting.Test
         [CustomValidation(typeof(ValTestValidator), "IsValTestValid")]
         public class ValTestClass
         {
-            internal bool _failMethod = false;
+            internal bool _failMethod;
 
             [Required]
             public string RequiredProperty { get; set; }

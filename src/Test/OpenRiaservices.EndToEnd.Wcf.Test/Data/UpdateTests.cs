@@ -28,8 +28,8 @@ namespace OpenRiaServices.Client.Test
     public abstract class UpdateTests : DomainContextTestBase<Northwind>
     {
         private static TestDatabase testDatabase = new TestDatabase("Northwind");
-        private static int custIdSequence = 0;
-        private static int categoryIdSequence = 0; // start with 1000 to avoid collisions with common northwind data
+        private static int custIdSequence;
+        private static int categoryIdSequence; // start with 1000 to avoid collisions with common northwind data
         private static int regionIdSequence = 100;
 
         public UpdateTests(Uri serviceUri, ProviderType providerType)

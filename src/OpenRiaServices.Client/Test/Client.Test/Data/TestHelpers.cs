@@ -114,7 +114,7 @@ namespace OpenRiaServices.Client.Test
     /// </summary>
     public static class BaselineTestData
     {
-        private static IEnumerable<Product> products = null;
+        private static IEnumerable<Product> products;
 
         public static IEnumerable<Product> Products
         {

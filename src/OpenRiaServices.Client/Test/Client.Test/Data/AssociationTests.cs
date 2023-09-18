@@ -22,7 +22,7 @@ namespace OpenRiaServices.Client.Test
     {
         private PurchaseOrder TestOrder;
         private List<PurchaseOrderDetail> TestDetails;
-        private int NumNotifications = 0;
+        private int NumNotifications;
         private int purchaseOrderDetailIDSequence = 1;
 
         [TestInitialize]
