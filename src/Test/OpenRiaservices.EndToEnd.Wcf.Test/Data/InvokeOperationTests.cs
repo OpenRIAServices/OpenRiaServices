@@ -78,7 +78,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(typeof(DomainOperationException), io.Error.GetType());
                 Assert.AreEqual(OperationErrorStatus.ValidationFailed, ((DomainOperationException)io.Error).Status);
                 Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "InvokeOperationWithParamValidation"), io.Error.Message);
-                Assert.AreEqual(1, io.ValidationErrors.Count(),
+                Assert.AreEqual(1, io.ValidationErrors.Count,
                     "There should be 1 validation error.");
                 ValidationResult error = io.ValidationErrors.Single();
                 Assert.AreEqual("Server validation exception thrown!", error.ErrorMessage);
@@ -128,7 +128,7 @@ namespace OpenRiaServices.Client.Test
             InvokeOperation invoke = ctxt.ThrowOnlineException(TestHelperMethods.DefaultOperationAction, null);
 
             // verify that all operation properties can be accessed before completion
-            Assert.AreEqual(0, invoke.ValidationErrors.Count());
+            Assert.AreEqual(0, invoke.ValidationErrors.Count);
             Assert.IsNull(invoke.Value);
 
             this.EnqueueCompletion(() => invoke);

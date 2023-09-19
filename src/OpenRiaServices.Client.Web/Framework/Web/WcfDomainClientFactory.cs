@@ -47,7 +47,7 @@ namespace OpenRiaServices.Client.Web
 
             // ensure endpoint suffix includes a starting "/"
             this._endpointSuffix = endpointSuffix;
-            if (!_endpointSuffix.StartsWith("/"))
+            if (!_endpointSuffix.StartsWith("/", StringComparison.Ordinal))
                 _endpointSuffix = "/" + _endpointSuffix;
 
             // Silverlight uses the browser's cookies by default, in which case we should not manage cookies manually

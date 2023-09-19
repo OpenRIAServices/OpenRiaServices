@@ -433,7 +433,7 @@ namespace OpenRiaServices.Tools.Test
 
                 foreach (string msg in logger.ErrorMessages)
                 {
-                    if (msg.StartsWith(error))
+                    if (msg.StartsWith(error, StringComparison.Ordinal))
                     {
                         foundIt = true;
                         break;
@@ -449,7 +449,7 @@ namespace OpenRiaServices.Tools.Test
         /// <param name="logger"></param>
         public static void AssertNoErrorsOrWarnings(ConsoleLogger logger)
         {
-            if (logger.ErrorMessages.Count() == 0 && logger.WarningMessages.Count() == 0)
+            if (logger.ErrorMessages.Count == 0 && logger.WarningMessages.Count == 0)
                 return;
 
             StringBuilder sb = new StringBuilder();

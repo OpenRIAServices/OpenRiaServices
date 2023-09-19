@@ -93,7 +93,7 @@ namespace OpenRiaServices.Server
         private static string RemoveAsyncFromName(string name)
         {
             const string asyncPostfix = "Async";
-            if (name.EndsWith(asyncPostfix) && name.Length > asyncPostfix.Length)
+            if (name.EndsWith(asyncPostfix, StringComparison.Ordinal) && name.Length > asyncPostfix.Length)
                 return name.Substring(0, name.Length - asyncPostfix.Length);
             else
                 return name;

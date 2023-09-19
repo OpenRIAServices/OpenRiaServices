@@ -1302,14 +1302,14 @@ namespace OpenRiaServices.Client.Test
         public void EntityContainer_EntitySets()
         {
             TestEntityContainer ec = new TestEntityContainer();
-            Assert.AreEqual(5, ec.EntitySets.Count());
+            Assert.AreEqual(5, ec.EntitySets.Count);
 
             // verify that external entity sets aren't included in
             // the collection
             Cities.CityDomainContext cities = new Cities.CityDomainContext(TestURIs.Cities);
             EntityContainer citiesContainer = cities.EntityContainer;
             ec.AddReference(citiesContainer.GetEntitySet(typeof(Cities.City)));
-            Assert.AreEqual(5, ec.EntitySets.Count());
+            Assert.AreEqual(5, ec.EntitySets.Count);
             Assert.IsFalse(ec.EntitySets.Any(p => p.EntityType == typeof(Cities.City)));
         }
 
@@ -2716,7 +2716,7 @@ namespace OpenRiaServices.Client.Test
             });
 
             // verify the EntityCollection count
-            Assert.AreEqual(3, order.PurchaseOrderDetails.Count());
+            Assert.AreEqual(3, order.PurchaseOrderDetails.Count);
 
             // verify the new Order is in the entity set
             orders.Add(order);
@@ -4346,7 +4346,7 @@ namespace OpenRiaServices.Client.Test
         public void TestLoadContainer()
         {
             TestEntityContainer ec = new TestEntityContainer();
-            Assert.AreEqual(5, ec.EntitySets.Count());
+            Assert.AreEqual(5, ec.EntitySets.Count);
 
             ec.LoadEntities(BaselineTestData.Products);
             EntitySet<Product> products = ec.GetEntitySet<Product>();

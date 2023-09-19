@@ -4418,7 +4418,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
             appendIf(current.ReportBody.Report == null, "ReportBody.Report", localCopy.ReportBody.Report, original.ReportBody.Report);
             appendIf(current.ReportBody.TimeEntered <= localCopy.ReportBody.TimeEntered, "ReportBody.TimeEntered", localCopy.ReportBody.TimeEntered, original.ReportBody.TimeEntered);
 
-            if (errors.Count() > 0)
+            if (errors.Count > 0)
             {
                 throw new InvalidOperationException(errors.Aggregate((s1, s2) => s1 + "\n" + s2));
             }

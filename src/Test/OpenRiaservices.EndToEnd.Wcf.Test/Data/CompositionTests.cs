@@ -49,14 +49,14 @@ namespace OpenRiaServices.Client.Test
             container.LoadEntities(new Entity[] { p1, new Child { ID = 1, ParentID = 1 }, new Child { ID = 2, ParentID = 1 }, 
                                                   p2, new Child { ID = 3, ParentID = 2 }, new Child { ID = 4, ParentID = 2 } });
 
-            Assert.AreEqual(2, p1.Children.Count());
-            Assert.AreEqual(2, p2.Children.Count());
+            Assert.AreEqual(2, p1.Children.Count);
+            Assert.AreEqual(2, p2.Children.Count);
 
             Child child = p1.Children.ElementAt(0);
             p1.Children.Remove(child);
 
-            Assert.AreEqual(1, p1.Children.Count());
-            Assert.AreEqual(2, p2.Children.Count());
+            Assert.AreEqual(1, p1.Children.Count);
+            Assert.AreEqual(2, p2.Children.Count);
 
             // This is the repro - this addition was causing the counts to be 1 and 4 below
             p2.Children.Add(child);
@@ -585,7 +585,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.AreEqual(66, lo.AllEntities.Count());
+                Assert.AreEqual(66, lo.AllEntities.Count);
 
                 Assert.AreEqual(3, ctxt.Parents.Count);
                 foreach(Parent p in ctxt.Parents)

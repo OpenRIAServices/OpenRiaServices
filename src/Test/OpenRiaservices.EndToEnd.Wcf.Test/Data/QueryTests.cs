@@ -170,7 +170,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(typeof(DomainOperationException), exception.GetType());
                 Assert.AreEqual(OperationErrorStatus.ValidationFailed, exception.Status);
                 Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "QueryWithParamValidation"), exception.Message);
-                Assert.AreEqual(1, exception.ValidationErrors.Count(),
+                Assert.AreEqual(1, exception.ValidationErrors.Count,
                     "There should be 1 validation error.");
                 ValidationResult error = exception.ValidationErrors.Single();
                 Assert.AreEqual("Server validation exception thrown!", error.ErrorMessage);
@@ -179,7 +179,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.IsNotNull(lo.Error);
                 validateException(lo.Error);
-                Assert.AreEqual(1, lo.ValidationErrors.Count(),
+                Assert.AreEqual(1, lo.ValidationErrors.Count,
                     "There should be 1 validation error.");
                 ValidationResult error = lo.ValidationErrors.Single();
                 Assert.AreEqual("Server validation exception thrown!", error.ErrorMessage);
@@ -1318,7 +1318,7 @@ namespace OpenRiaServices.Client.Test
             PurchaseOrder order = orders.First();
 
             // enumerate the PurchaseOrderDetails collection
-            Assert.IsTrue(order.PurchaseOrderDetails.Count() > 0);
+            Assert.IsTrue(order.PurchaseOrderDetails.Count > 0);
             PurchaseOrderDetail detail = order.PurchaseOrderDetails.First();
 
             // verify the back reference
