@@ -111,7 +111,7 @@ namespace OpenRiaServices.Tools.Test
             Assert.AreEqual(0, logger.WarningMessages.Count);
 
             string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, string.Empty).TrimEnd();
-            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
+            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage, StringComparison.Ordinal)));
         }
 
         [TestMethod]
@@ -127,7 +127,7 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsNotNull(descriptions);
 
             string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, String.Empty).TrimEnd();
-            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
+            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage, StringComparison.Ordinal)));
 
             Assert.IsTrue(descriptions.Count > 0);
         }

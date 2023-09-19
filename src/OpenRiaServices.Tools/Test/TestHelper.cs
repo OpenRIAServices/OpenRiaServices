@@ -25,7 +25,7 @@ namespace OpenRiaServices.Tools.Test
         public static string LineCommentFromLanguage(string language)
         {
             string extension = ExtensionFromLanguage(language);
-            return extension.EndsWith("cs") ? "//" : "'";
+            return extension.EndsWith("cs", StringComparison.Ordinal) ? "//" : "'";
         }
 
         // Returns the full path to a file in the test project's output dir
@@ -131,9 +131,9 @@ namespace OpenRiaServices.Tools.Test
         private static string StripAutoGenPrefix(string s, string lineCommentStart)
         {
             int index = 0;
-            while(string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length) == 0)
+            while(string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length, StringComparison.Ordinal) == 0)
             {
-                index = s.IndexOf("\r\n", index) + 2;
+                index = s.IndexOf("\r\n", index, StringComparison.Ordinal) + 2;
             }
             return s.Substring(index);
         }
@@ -410,7 +410,7 @@ namespace OpenRiaServices.Tools.Test
 
                 foreach (string msg in logger.InfoMessages)
                 {
-                    if (msg.StartsWith(msg))
+                    if (msg.StartsWith(msg, StringComparison.Ordinal))
                     {
                         foundIt = true;
                         break;

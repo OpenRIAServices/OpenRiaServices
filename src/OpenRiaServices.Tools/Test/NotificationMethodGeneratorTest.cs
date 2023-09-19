@@ -95,7 +95,7 @@ namespace OpenRiaServices.Tools.Test
                 {
                     if (!isCSharp)
                     {
-                        Assert.IsTrue(comment.Comment.Text.StartsWith(" "), "All VB XML Doc comments must be prefixed with a space");
+                        Assert.IsTrue(comment.Comment.Text.StartsWith(" ", StringComparison.Ordinal), "All VB XML Doc comments must be prefixed with a space");
                     }
                     snippetstr += comment.Comment.Text.TrimStart();
                 }

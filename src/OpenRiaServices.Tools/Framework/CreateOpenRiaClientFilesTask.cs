@@ -918,7 +918,7 @@ namespace OpenRiaServices.Tools
             if (targetFrameworkAttribute != null
                 && targetFrameworkAttribute.HasConstructorArguments)
             {
-                bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework");
+                bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework", StringComparison.Ordinal);
                 Log.LogMessage("Is server project .NETFramework based on TargetFrameworkAttribute: {0}", isFramework.ToString());
                 return isFramework;
             }
@@ -1450,7 +1450,7 @@ namespace OpenRiaServices.Tools
 
                 // If server project target AspNetCore then it might be an exe (the native dotnet host) which we cannot do reflection on
                 // Change to .dll so that we target the actual managed implementation
-                if (assemblyName.EndsWith(".exe"))
+                if (assemblyName.EndsWith(".exe", StringComparison.Ordinal))
                     assemblyName = Path.ChangeExtension(assemblyName, ".dll");
 
                 assemblies.Add(assemblyName);

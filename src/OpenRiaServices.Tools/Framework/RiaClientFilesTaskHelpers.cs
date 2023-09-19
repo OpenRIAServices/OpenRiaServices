@@ -61,7 +61,7 @@ internal static class RiaClientFilesTaskHelpers
         var assemblyDependencyResolver = new AssemblyDependencyResolver(serverAssemblyPath);
         return (AssemblyLoadContext loadContext, AssemblyName assemblyName) =>
         {
-            if (assemblyName.Name.EndsWith(".resources"))
+            if (assemblyName.Name.EndsWith(".resources", StringComparison.Ordinal))
                 return null;
 
             // Resolve dependency using server projects .deps.json file first

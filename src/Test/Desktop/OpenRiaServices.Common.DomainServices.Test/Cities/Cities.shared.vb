@@ -6,6 +6,7 @@ Imports System.Runtime.Serialization
 Imports System.Text
 Imports OpenRiaServices.Client
 Imports System.Runtime.InteropServices
+Imports System.Windows
 
 Namespace Cities
 
@@ -69,7 +70,7 @@ Namespace Cities
             Dim valueAsString As String = value.ToString
             Dim prefixAsString As String = Me.Prefix.ToString
 
-            If valueAsString.StartsWith(prefixAsString) Then
+            If valueAsString.StartsWith(prefixAsString, StringComparison.Ordinal) Then
                 Return ValidationResult.Success
             Else
                 Return New ValidationResult(Me.FormatErrorMessage(context.MemberName))
@@ -85,7 +86,7 @@ Namespace Cities
     ' Class we can use inside a [CustomValidation] attribute to validate state names
     Public Class StateNameValidator
 
-        Public Shared Function IsStateNameValid(ByVal stateNameObject As Object, ByVal context As ValidationContext,  <Out()> ByRef validationResult As ValidationResult) As Boolean
+        Public Shared Function IsStateNameValid(ByVal stateNameObject As Object, ByVal context As ValidationContext, <Out()> ByRef validationResult As ValidationResult) As Boolean
             validationResult = Nothing
             Dim stateName As String = CType(stateNameObject, String)
             If (stateName Is Nothing) Then
@@ -118,7 +119,7 @@ Namespace Cities
         Public Shared Function IsZipValid(ByVal zipObject As Object, ByVal context As ValidationContext, <Out()> ByRef validationResult As ValidationResult) As Boolean
             validationResult = Nothing
             Dim zip As Zip = CType(zipObject, Zip)
-            Dim result As Boolean = Not String.Equals(zip.StateName, zip.CityName)
+            Dim result As Boolean = Not String.Equals(zip.StateName, zip.CityName, StringComparison.Ordinal)
             If Not result Then
                 validationResult = New ValidationResult("Zip codes cannot have matching city and state names")
             End If

@@ -85,7 +85,7 @@ namespace OpenRiaServices.Tools
                 typeFullName = type.GetGenericTypeDefinition().FullName;
             }
 
-            if (!typeFullName.Equals(systemTypeFullName))
+            if (!typeFullName.Equals(systemTypeFullName, StringComparison.Ordinal))
             {
                 return false;
             }

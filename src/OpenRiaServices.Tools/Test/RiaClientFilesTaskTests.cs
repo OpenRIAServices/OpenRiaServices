@@ -37,11 +37,11 @@ namespace OpenRiaServices.Tools.Test
 
             // Single character slash is removed.  Note, this could expand to include root drive when we evaluate it.
             path = RiaClientFilesTask.NormalizeFolderPath(@"\");
-            Assert.IsFalse(path.EndsWith(@"\"), "Failed to strip slash when only slash was present");
+            Assert.IsFalse(path.EndsWith(@"\", StringComparison.Ordinal), "Failed to strip slash when only slash was present");
 
             // Path with slash removes slash
             string path1 = RiaClientFilesTask.NormalizeFolderPath(@"c:\foo\");
-            Assert.IsFalse(path1.EndsWith(@"\"), "Failed to strip slash");
+            Assert.IsFalse(path1.EndsWith(@"\", StringComparison.Ordinal), "Failed to strip slash");
 
             // Path without slash is not changed
             string path2 = RiaClientFilesTask.NormalizeFolderPath(@"c:\foo");

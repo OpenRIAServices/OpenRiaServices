@@ -224,7 +224,7 @@ namespace Cities
         [CustomValidation(typeof(CityMethodValidator), "ValidateMethod")]
         public void AssignCityZone(City city, string zoneName)
         {
-            if (zoneName.StartsWith("Zone"))
+            if (zoneName.StartsWith("Zone", StringComparison.Ordinal))
             {
                 int zoneID = 0;
                 if (int.TryParse(zoneName.Replace("Zone", ""), out zoneID))

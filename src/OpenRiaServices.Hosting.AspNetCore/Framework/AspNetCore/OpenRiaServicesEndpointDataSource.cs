@@ -193,7 +193,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     && attribute is not System.ComponentModel.DataAnnotations.ValidationAttribute
                     && attribute is not System.ComponentModel.DataAnnotations.AuthorizationAttribute
                     && !(attribute.GetType().FullName.StartsWith("System.Diagnostics")
-                        || attribute.GetType().FullName.StartsWith("System.Runtime"));
+                        || attribute.GetType().FullName.StartsWith("System.Runtime", StringComparison.Ordinal));
             }
 
             foreach (Attribute attribute in attributes)
