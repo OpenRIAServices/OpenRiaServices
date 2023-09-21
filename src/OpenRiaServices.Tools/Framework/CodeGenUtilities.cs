@@ -378,7 +378,7 @@ namespace OpenRiaServices.Tools
 
             // Conditionally add an import statement.  Skip this step if we need to generate a full
             // type name, if we're already in the target namespace, or if the type is in the global namespace.
-            if (!useFullyQualifiedName && !ns.Name.Equals(type.Namespace) && !string.IsNullOrEmpty(type.Namespace))
+            if (!useFullyQualifiedName && !ns.Name.Equals(type.Namespace, StringComparison.Ordinal) && !string.IsNullOrEmpty(type.Namespace))
             {
                 // If the namespace is already imported, the following line will be a no-op.
                 ns.Imports.Add(new CodeNamespaceImport(typeNamespace));
