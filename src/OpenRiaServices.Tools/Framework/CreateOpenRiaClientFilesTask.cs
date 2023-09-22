@@ -999,7 +999,7 @@ namespace OpenRiaServices.Tools
         private static IList<string> GetSubfolders(DirectoryInfo sourceDirectory, DirectoryInfo sourceFileDirectory)
         {
             List<string> folders = new List<string>();
-            while (!sourceFileDirectory.FullName.Equals(sourceDirectory.FullName, StringComparison.Ordinal))
+            while (sourceFileDirectory.FullName != sourceDirectory.FullName)
             {
                 folders.Insert(0, sourceFileDirectory.Name);
                 sourceFileDirectory = sourceFileDirectory.Parent;
