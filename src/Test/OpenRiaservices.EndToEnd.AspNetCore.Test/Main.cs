@@ -70,7 +70,7 @@ namespace OpenRiaServices.Client.Test
 #if NET80
             string targetFramework = "net8.0";
 #else
-            string targetFramework = "net8.0";
+            string targetFramework = "net6.0";
 #endif
 
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));

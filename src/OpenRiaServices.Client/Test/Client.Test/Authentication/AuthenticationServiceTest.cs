@@ -331,22 +331,17 @@ namespace OpenRiaServices.Client.Authentication.Test
             ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.Login(string.Empty, string.Empty).Cancel());
 
-            mock.Dispose();
             mock = new MockAuthenticationNoCancel();
             ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.Logout(false).Cancel());
 
-            mock.Dispose();
             mock = new MockAuthenticationNoCancel();
             ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.LoadUser().Cancel());
 
-            mock.Dispose();
             mock = new MockAuthenticationNoCancel();
             ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.SaveUser(false).Cancel());
-
-            mock.Dispose();
         }
 
         [TestMethod]
@@ -422,27 +417,23 @@ namespace OpenRiaServices.Client.Authentication.Test
             ExceptionHelper.ExpectException<Exception>(
                 () => mock.Login(string.Empty, string.Empty).Cancel(), AuthenticationServiceTest.ErrorMessage);
 
-            mock.Dispose();
             mock = new ThrowingAuthentication();
             mock.CancelError = error;
 
             ExceptionHelper.ExpectException<Exception>(
                 () => mock.Logout(false).Cancel(), AuthenticationServiceTest.ErrorMessage);
 
-            mock.Dispose();
             mock = new ThrowingAuthentication();
             mock.CancelError = error;
 
             ExceptionHelper.ExpectException<Exception>(
                 () => mock.LoadUser().Cancel(), AuthenticationServiceTest.ErrorMessage);
 
-            mock.Dispose();
             mock = new ThrowingAuthentication();
             mock.CancelError = error;
 
             ExceptionHelper.ExpectException<Exception>(
                 () => mock.SaveUser(false).Cancel(), AuthenticationServiceTest.ErrorMessage);
-            mock.Dispose();
         }
 
         [TestMethod]
@@ -784,6 +775,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         #region Async
 
         [TestMethod]
+        [Asynchronous]
         [Description("Tests that Login completes successfully")]
         public void Login()
         {
@@ -813,6 +805,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         }
 
         [TestMethod]
+        [Asynchronous]
         [Description("Tests that Login fails successfully")]
         public void LoginFail()
         {
@@ -846,6 +839,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         }
 
         [TestMethod]
+        [Asynchronous]
         [Description("Tests that Logout completes successfully")]
         public void Logout()
         {
@@ -891,6 +885,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         }
 
         [TestMethod]
+        [Asynchronous]
         [Description("Tests that SaveUser completes successfully")]
         public void SaveUser()
         {
@@ -917,6 +912,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         #region Cancel
 
         [TestMethod]
+        [Asynchronous]
         [Description("Tests that Login cancels successfully")]
         public void LoginCancel()
         {
@@ -950,6 +946,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         }
 
         [TestMethod]
+        [Asynchronous]
         [Description("Tests that Logout cancels successfully")]
         public void LogoutCancel()
         {
@@ -975,6 +972,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         }
 
         [TestMethod]
+        [Asynchronous]
         [Description("Tests that LoadUser cancels successfully")]
         public void LoadUserCancel()
         {
@@ -1000,6 +998,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         }
 
         [TestMethod]
+        [Asynchronous]
         [Description("Tests that SaveUser cancels successfully")]
         public void SaveUserCancel()
         {
@@ -1063,6 +1062,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         }
 
         [TestMethod]
+        [Asynchronous]
         [Description("Tests that Logout handles errors successfully")]
         public void LogoutError()
         {
@@ -1386,6 +1386,7 @@ namespace OpenRiaServices.Client.Authentication.Test
                 },
                 errorVerify,
                 VerificationType.Poll);
+            this.EnqueueTestComplete();
         }
 
         #endregion
