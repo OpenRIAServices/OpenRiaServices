@@ -195,16 +195,16 @@ namespace OpenRiaServices.Tools
         public CodeExpressionStatement GetMethodInvokeExpressionStatementFor(string baseMethodName)
         {
             Debug.Assert(!string.IsNullOrEmpty(baseMethodName), "Unexpected empty or null baseMethodName name!");
-            Debug.Assert(this.methodInvokeExpressions.ContainsKey(baseMethodName), string.Concat("No method has been added for \'", baseMethodName, "\' base name"));
 
-            CodeExpressionStatement statement = null;
-
-            if (!string.IsNullOrEmpty(baseMethodName) && this.methodInvokeExpressions.ContainsKey(baseMethodName))
+            if (baseMethodName is not null && this.methodInvokeExpressions.TryGetValue(baseMethodName, out var expression))
             {
-                statement = new CodeExpressionStatement(this.methodInvokeExpressions[baseMethodName]);
+                return new CodeExpressionStatement(expression);
             }
-
-            return statement;
+            else
+            {
+                Debug.Fail(string.Concat("No method has been added for \'", baseMethodName, "\' base name"));
+                return null;
+            }
         }
 
 
