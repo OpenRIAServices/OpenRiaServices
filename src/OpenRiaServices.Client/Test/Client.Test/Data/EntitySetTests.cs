@@ -1,21 +1,18 @@
 ﻿extern alias SSmDsClient;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
+using Cities;
 using DataTests.Northwind.LTS;
-using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
-using TestDomainServices;
+using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.Client.Test
 {
-    using Cities;
-    using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
     [TestClass]
     public class EntitySetTests : UnitTestBase
@@ -26,7 +23,7 @@ namespace OpenRiaServices.Client.Test
         public void ICVF_CreateView()
         {
             EntitySet<City> entitySet = this.CreateEntitySet<City>();
-            Assert.IsNotNull(this.GetICV(entitySet), 
+            Assert.IsNotNull(this.GetICV(entitySet),
                 "View should not be null.");
         }
 
@@ -240,9 +237,14 @@ namespace OpenRiaServices.Client.Test
         [Description("Tests that the memory leak in ICVF Proxies is fixed.")]
         public void ICVF_MemoryLeakTest()
         {
-            EntitySet<City> entitySet = this.CreateEntitySet<City>();            
-            WeakReference weakRef = new WeakReference(this.GetICV(entitySet));
-            System.GC.Collect();         
+            // Use NoInline so JIT will not keep temp variable alive 
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            WeakReference CreateCollectionViewWeakRef(EntitySet<City> enitySet)
+                => new WeakReference(this.GetICV(enitySet));
+
+            EntitySet<City> entitySet = this.CreateEntitySet<City>();
+            WeakReference weakRef = CreateCollectionViewWeakRef(entitySet);
+            GC.Collect();
             Assert.IsFalse(weakRef.IsAlive);
         }
 #endif
@@ -261,7 +263,7 @@ namespace OpenRiaServices.Client.Test
             productsSet.EntityAdded += (obj, args) => productAdded += 1;
             productsSet.EntityRemoved += (obj, args) => productRemoved += 1;
             productsSet.PropertyChanged += (obj, args) => productPropertyChanged += 1;
-            ((INotifyCollectionChanged) productsSet).CollectionChanged += (obj, args) =>
+            ((INotifyCollectionChanged)productsSet).CollectionChanged += (obj, args) =>
                 productsCollectionChanged += 1;
 
             // create and add order to container

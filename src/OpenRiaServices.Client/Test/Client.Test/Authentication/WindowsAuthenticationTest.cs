@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.Silverlight.Testing;
