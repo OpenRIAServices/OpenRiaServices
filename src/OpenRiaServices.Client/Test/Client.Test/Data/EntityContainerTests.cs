@@ -7,7 +7,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using DataTests.AdventureWorks.LTS;
-using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;

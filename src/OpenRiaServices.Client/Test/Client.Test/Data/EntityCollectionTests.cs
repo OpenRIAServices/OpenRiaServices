@@ -1,17 +1,13 @@
 ﻿extern alias SSmDsClient;
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Globalization;
 using System.Linq;
-using DataTests.AdventureWorks.LTS;
-using Microsoft.Silverlight.Testing;
+using System.Runtime.CompilerServices;
+using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
-using TestDomainServices;
-using Cities;
 using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.Client.Test
@@ -353,11 +349,17 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         [WorkItem(201155)]
         [Description("Tests that the memory leak in ICVF Proxies is fixed.")]
+
         public void ICVF_MemoryLeakTest()
         {
+            // Use NoInline so JIT will not keep temp variable alive 
+            [MethodImpl(MethodImplOptions.NoInlining)]
+            WeakReference CreateCollectionViewWeakRef(EntityCollection<City> entityCollection)
+                => new WeakReference(this.GetICV(entityCollection));
+
             EntitySet<City> entitySet;
             EntityCollection<City> entityCollection = this.CreateEntityCollection(out entitySet);
-            WeakReference weakRef = new WeakReference(this.GetICV(entityCollection));
+            WeakReference weakRef = CreateCollectionViewWeakRef(entityCollection);
             System.GC.Collect();
             Assert.IsFalse(weakRef.IsAlive);
         }
