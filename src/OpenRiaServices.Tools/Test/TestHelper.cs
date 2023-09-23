@@ -25,7 +25,7 @@ namespace OpenRiaServices.Tools.Test
         public static string LineCommentFromLanguage(string language)
         {
             string extension = ExtensionFromLanguage(language);
-            return extension.EndsWith("cs") ? "//" : "'";
+            return extension.EndsWith("cs", StringComparison.Ordinal) ? "//" : "'";
         }
 
         // Returns the full path to a file in the test project's output dir
@@ -131,9 +131,9 @@ namespace OpenRiaServices.Tools.Test
         private static string StripAutoGenPrefix(string s, string lineCommentStart)
         {
             int index = 0;
-            while(string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length) == 0)
+            while(string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length, StringComparison.Ordinal) == 0)
             {
-                index = s.IndexOf("\r\n", index) + 2;
+                index = s.IndexOf("\r\n", index, StringComparison.Ordinal) + 2;
             }
             return s.Substring(index);
         }
@@ -410,7 +410,7 @@ namespace OpenRiaServices.Tools.Test
 
                 foreach (string msg in logger.InfoMessages)
                 {
-                    if (msg.StartsWith(msg))
+                    if (msg.StartsWith(msg, StringComparison.Ordinal))
                     {
                         foundIt = true;
                         break;
@@ -433,7 +433,7 @@ namespace OpenRiaServices.Tools.Test
 
                 foreach (string msg in logger.ErrorMessages)
                 {
-                    if (msg.StartsWith(error))
+                    if (msg.StartsWith(error, StringComparison.Ordinal))
                     {
                         foundIt = true;
                         break;
@@ -449,7 +449,7 @@ namespace OpenRiaServices.Tools.Test
         /// <param name="logger"></param>
         public static void AssertNoErrorsOrWarnings(ConsoleLogger logger)
         {
-            if (logger.ErrorMessages.Count() == 0 && logger.WarningMessages.Count() == 0)
+            if (logger.ErrorMessages.Count == 0 && logger.WarningMessages.Count == 0)
                 return;
 
             StringBuilder sb = new StringBuilder();

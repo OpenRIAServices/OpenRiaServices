@@ -116,7 +116,7 @@ namespace OpenRiaServices.Tools
             // This way we can be sure that codegen works with both signed and unsigned server assembly while
             // making sure that only a single version is loaded
             var filename = OpenRiaServices_DomainServices_Server_Assembly;
-            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(filename));
+            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(filename, StringComparison.Ordinal));
             if (serverAssemblyPath != null)
             {
                 var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);

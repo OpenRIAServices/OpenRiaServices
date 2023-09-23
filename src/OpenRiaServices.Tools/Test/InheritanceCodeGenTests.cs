@@ -142,7 +142,7 @@ namespace OpenRiaServices.Tools.Test
 
                     Type entitySetType = pInfo.PropertyType;
                     Assert.IsTrue(entitySetType.IsGenericType, "EntitySet should have been generic type");
-                    Assert.IsTrue(entitySetType.Name.StartsWith("EntitySet"), "EntitySet should have been of type EntitySet<>");
+                    Assert.IsTrue(entitySetType.Name.StartsWith("EntitySet", StringComparison.Ordinal), "EntitySet should have been of type EntitySet<>");
 
                     Type[] genericArgs = entitySetType.GetGenericArguments();
                     Assert.AreEqual(1, genericArgs.Length, "Expected EntitySet to have 1 generic arg");
@@ -154,7 +154,7 @@ namespace OpenRiaServices.Tools.Test
 
                     Type rootQueryType = mInfo.ReturnType;
                     Assert.IsTrue(rootQueryType.IsGenericType, "Root query should have been generic type");
-                    Assert.IsTrue(rootQueryType.Name.StartsWith("EntityQuery"), "Root query should have been of type EntityQuery<>");
+                    Assert.IsTrue(rootQueryType.Name.StartsWith("EntityQuery", StringComparison.Ordinal), "Root query should have been of type EntityQuery<>");
 
                     genericArgs = rootQueryType.GetGenericArguments();
                     Assert.AreEqual(1, genericArgs.Length, "Expected root query to have 1 generic arg");
@@ -166,7 +166,7 @@ namespace OpenRiaServices.Tools.Test
 
                     Type derivedQueryType = mInfo.ReturnType;
                     Assert.IsTrue(derivedQueryType.IsGenericType, "Derived query should have been generic type");
-                    Assert.IsTrue(derivedQueryType.Name.StartsWith("EntityQuery"), "Derived query should have been of type EntityQuery<>");
+                    Assert.IsTrue(derivedQueryType.Name.StartsWith("EntityQuery", StringComparison.Ordinal), "Derived query should have been of type EntityQuery<>");
 
                     genericArgs = derivedQueryType.GetGenericArguments();
                     Assert.AreEqual(1, genericArgs.Length, "Expected root query to have 1 generic arg");

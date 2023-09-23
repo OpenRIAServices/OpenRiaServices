@@ -918,7 +918,7 @@ namespace OpenRiaServices.Tools
             if (targetFrameworkAttribute != null
                 && targetFrameworkAttribute.HasConstructorArguments)
             {
-                bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework");
+                bool isFramework = targetFrameworkAttribute.ConstructorArguments[0].Value.ToString().StartsWith(".NETFramework", StringComparison.Ordinal);
                 Log.LogMessage("Is server project .NETFramework based on TargetFrameworkAttribute: {0}", isFramework.ToString());
                 return isFramework;
             }
@@ -999,7 +999,7 @@ namespace OpenRiaServices.Tools
         private static IList<string> GetSubfolders(DirectoryInfo sourceDirectory, DirectoryInfo sourceFileDirectory)
         {
             List<string> folders = new List<string>();
-            while (!sourceFileDirectory.FullName.Equals(sourceDirectory.FullName))
+            while (sourceFileDirectory.FullName != sourceDirectory.FullName)
             {
                 folders.Insert(0, sourceFileDirectory.Name);
                 sourceFileDirectory = sourceFileDirectory.Parent;
@@ -1450,7 +1450,7 @@ namespace OpenRiaServices.Tools
 
                 // If server project target AspNetCore then it might be an exe (the native dotnet host) which we cannot do reflection on
                 // Change to .dll so that we target the actual managed implementation
-                if (assemblyName.EndsWith(".exe"))
+                if (assemblyName.EndsWith(".exe", StringComparison.Ordinal))
                     assemblyName = Path.ChangeExtension(assemblyName, ".dll");
 
                 assemblies.Add(assemblyName);

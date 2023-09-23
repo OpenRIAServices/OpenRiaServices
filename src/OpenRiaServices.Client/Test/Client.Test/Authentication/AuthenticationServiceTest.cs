@@ -124,7 +124,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             }
 
             #region IDisposable Support
-            private bool _disposedValue = false; // To detect redundant calls
+            private bool _disposedValue; // To detect redundant calls
 
             protected virtual void Dispose(bool disposing)
             {

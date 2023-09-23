@@ -33,7 +33,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count() == 0);
+                Assert.IsTrue(lo.Entities.Count == 0);
             });
             EnqueueTestComplete();
         }
@@ -52,7 +52,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count() == 0);
+                Assert.IsTrue(lo.Entities.Count == 0);
             });
             EnqueueTestComplete();
         }
@@ -71,7 +71,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count() == 50);
+                Assert.IsTrue(lo.Entities.Count == 50);
             });
             EnqueueTestComplete();
         }
@@ -90,7 +90,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count() > 0);
+                Assert.IsTrue(lo.Entities.Count > 0);
             });
             EnqueueTestComplete();
         }
@@ -109,7 +109,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count() == 50);
+                Assert.IsTrue(lo.Entities.Count == 50);
             });
             EnqueueTestComplete();
         }
@@ -128,7 +128,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count() == 500);
+                Assert.IsTrue(lo.Entities.Count == 500);
             });
             EnqueueTestComplete();
         }

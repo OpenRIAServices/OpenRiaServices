@@ -37,7 +37,7 @@ namespace OpenRiaServices.Client.Test
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
                 // 3 parents, each with 4 children
-                Assert.AreEqual(15, lo.AllEntities.Count(), "Unexpected number of entities in hierarchy");
+                Assert.AreEqual(15, lo.AllEntities.Count, "Unexpected number of entities in hierarchy");
 
                 Assert.AreEqual(3, ctxt.CI_Parents.Count, "Expected this many total parent entities");
                 

@@ -26,7 +26,7 @@ namespace OpenRiaServices.Client.Test
             {
                 TestHelperMethods.AssertOperationSuccess(load);
                 // Ensure DataContract(Name, Namespace) on entity matches.
-                Assert.AreEqual(3, load.Entities.Count(), "GetReportsQuery must return 3 reports");
+                Assert.AreEqual(3, load.Entities.Count, "GetReportsQuery must return 3 reports");
                 int numReportBodies = 0;
 
                 string reportsResult = load.Entities.Aggregate<TestDomainServices.MockReport, string>(string.Empty,

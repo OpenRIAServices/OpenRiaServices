@@ -503,7 +503,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(lo.HasError);
-                Assert.AreEqual(3, lo.Entities.Count());
+                Assert.AreEqual(3, lo.Entities.Count);
 
                 ComplexType_Parent p = ctxt.ComplexType_Parents.First();
                 Assert.IsNotNull(p.ContactInfo);

@@ -38,7 +38,7 @@ namespace OpenRiaServices.Client.Test
                 TestHelperMethods.AssertOperationSuccess(lo);
 
                 // Master, 2 D1's, 2 D2's, 1 D3 and 1 D4
-                Assert.AreEqual(7, lo.AllEntities.Count(), "Unexpected number of entities in hierarchy");
+                Assert.AreEqual(7, lo.AllEntities.Count, "Unexpected number of entities in hierarchy");
 
                 AI_MasterDerived master = ctxt.AI_Masters.OfType<AI_MasterDerived>().FirstOrDefault();
                 Assert.IsNotNull(master, "expected 1 master");

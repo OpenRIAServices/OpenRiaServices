@@ -25,7 +25,7 @@ namespace OpenRiaServices.Tools.Test
         {
             string normalizedGenerated = TestHelper.NormalizeWhitespace(generatedCode);
             string normalizedNotExpected = TestHelper.NormalizeWhitespace(notExpected);
-            Assert.IsTrue(normalizedGenerated.IndexOf(normalizedNotExpected) < 0, "Did not expect <" + notExpected + ">");
+            Assert.IsTrue(normalizedGenerated.IndexOf(normalizedNotExpected, StringComparison.Ordinal) < 0, "Did not expect <" + notExpected + ">");
         }
 
         /// <summary>
@@ -286,7 +286,7 @@ namespace OpenRiaServices.Tools.Test
         {
             try
             {
-                if (tempFolder.StartsWith(Path.GetTempPath()))
+                if (tempFolder.StartsWith(Path.GetTempPath(), StringComparison.OrdinalIgnoreCase))
                 {
                     RecursiveDelete(tempFolder);
                 }

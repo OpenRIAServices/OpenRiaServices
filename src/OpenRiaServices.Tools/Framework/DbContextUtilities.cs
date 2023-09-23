@@ -14,7 +14,7 @@ namespace OpenRiaServices.Tools
         private const string IDatabaseInitializerTypeName = "System.Data.Entity.IDatabaseInitializer`1";
         internal const string DbContextTypeName = @"System.Data.Entity.DbContext";
 
-        private static Type _dbContextTypeReference = null;
+        private static Type _dbContextTypeReference;
 
         /// <summary>
         /// Resets any cached DB Context type reference
@@ -85,7 +85,7 @@ namespace OpenRiaServices.Tools
                 typeFullName = type.GetGenericTypeDefinition().FullName;
             }
 
-            if (!typeFullName.Equals(systemTypeFullName))
+            if (!typeFullName.Equals(systemTypeFullName, StringComparison.Ordinal))
             {
                 return false;
             }

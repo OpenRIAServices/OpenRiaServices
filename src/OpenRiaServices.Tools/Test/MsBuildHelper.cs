@@ -139,9 +139,9 @@ namespace OpenRiaServices.Tools.Test
                         var frameworks = targetFrameworks.Split(';');
 
 #if NETFRAMEWORK
-                        string framework = frameworks.First(f => f.StartsWith("net4"));
+                        string framework = frameworks.First(f => f.StartsWith("net4", StringComparison.Ordinal));
 #else
-                        string framework = frameworks.First(f => !f.StartsWith("net4"));
+                        string framework = frameworks.First(f => !f.StartsWith("net4", StringComparison.Ordinal));
 #endif
                         project.SetGlobalProperty("TargetFramework", framework);
                     }
@@ -270,7 +270,7 @@ namespace OpenRiaServices.Tools.Test
             }
 
             #region IDisposable Support
-            private bool disposedValue = false; // To detect redundant calls
+            private bool disposedValue; // To detect redundant calls
 
             private void Dispose(bool disposing)
             {

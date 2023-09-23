@@ -131,7 +131,7 @@ namespace System.ServiceModel.Dispatcher
                         }
                         else if (parameterType == typeof(byte[]))
                         {
-                            return (!string.IsNullOrEmpty(parameter)) ? Convert.FromBase64String(parameter) : new byte[] { };
+                            return (!string.IsNullOrEmpty(parameter)) ? Convert.FromBase64String(parameter) : Array.Empty<byte>();
                         }
                         else if (parameterType == typeof(Uri))
                         {

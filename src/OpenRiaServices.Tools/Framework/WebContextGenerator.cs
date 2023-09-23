@@ -152,7 +152,7 @@ namespace OpenRiaServices.Tools
             {
                 Type genericType = null;
                 typeof(IAuthentication<>).DefinitionIsAssignableFrom(defaultAuthDescription.DomainServiceType, out genericType);
-                if ((genericType != null) && (genericType.GetGenericArguments().Count() == 1))
+                if ((genericType != null) && (genericType.GetGenericArguments().Length == 1))
                 {
                     CodeMemberProperty userProperty = new CodeMemberProperty();
 

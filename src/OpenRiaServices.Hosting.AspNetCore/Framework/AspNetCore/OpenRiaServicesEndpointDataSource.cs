@@ -192,8 +192,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 return attribute.GetType().Assembly != typeof(DomainService).Assembly
                     && attribute is not System.ComponentModel.DataAnnotations.ValidationAttribute
                     && attribute is not System.ComponentModel.DataAnnotations.AuthorizationAttribute
-                    && !(attribute.GetType().FullName.StartsWith("System.Diagnostics")
-                        || attribute.GetType().FullName.StartsWith("System.Runtime"));
+                    && !(attribute.GetType().FullName.StartsWith("System.Diagnostics", StringComparison.Ordinal)
+                        || attribute.GetType().FullName.StartsWith("System.Runtime", StringComparison.Ordinal));
             }
 
             foreach (Attribute attribute in attributes)

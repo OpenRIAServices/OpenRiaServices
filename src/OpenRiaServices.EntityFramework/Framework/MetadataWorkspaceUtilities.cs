@@ -151,7 +151,7 @@ namespace System.Data.Mapping
             {
                 if (MetadataWorkspaceInfo.IsMetadata(name))
                 {
-                    yield return string.Format("res://{0}/{1}", assembly.FullName, name);
+                    yield return string.Format(CultureInfo.InvariantCulture, "res://{0}/{1}", assembly.FullName, name);
                 }
             }
         }

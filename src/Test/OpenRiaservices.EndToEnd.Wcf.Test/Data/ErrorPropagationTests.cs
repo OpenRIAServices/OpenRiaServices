@@ -123,7 +123,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsFalse(propChanged[2].Contains("Code"));
                 Assert.IsFalse(propChanged[2].Contains("FourDigit"));
                 Assert.IsFalse(propChanged[2].Contains("HasValidationErrors"));
-                Assert.AreEqual(0, zips[2].ValidationErrors.Count());
+                Assert.AreEqual(0, zips[2].ValidationErrors.Count);
                 Assert.AreEqual(refZip, zips[2].Code);
             });
 
@@ -204,7 +204,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsFalse(propChanged[2].Contains("Code"));
                 Assert.IsFalse(propChanged[2].Contains("FourDigit"));
                 Assert.IsFalse(propChanged[2].Contains("HasValidationErrors"));
-                Assert.AreEqual(0, zips[2].ValidationErrors.Count());
+                Assert.AreEqual(0, zips[2].ValidationErrors.Count);
                 Assert.AreEqual(refZip, zips[2].Code);
             });
 
@@ -457,8 +457,8 @@ namespace OpenRiaServices.Client.Test
                 UnitTestHelper.AssertListContains<ValidationResult>(errors, (e => e.ErrorMessage == "The CityName field is required."));
                 UnitTestHelper.AssertListContains<ValidationResult>(errors, (e => e.ErrorMessage == "The StateName field is required."));
 
-                Assert.AreEqual(0, deletedCity.ValidationErrors.Count(), "The deleted city shouldn't have any validation errors");
-                Assert.AreEqual(0, validZip.ValidationErrors.Count(), "The valid city shouldn't have any validation errors");
+                Assert.AreEqual(0, deletedCity.ValidationErrors.Count, "The deleted city shouldn't have any validation errors");
+                Assert.AreEqual(0, validZip.ValidationErrors.Count, "The valid city shouldn't have any validation errors");
             });
 
             EnqueueTestComplete();
@@ -479,7 +479,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsNull(lo.Error);
-                Assert.IsTrue(lo.Entities.Count() > 0);
+                Assert.IsTrue(lo.Entities.Count > 0);
                 A entity = provider.As.First();
                 entity.BID1++;
                 so = provider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);

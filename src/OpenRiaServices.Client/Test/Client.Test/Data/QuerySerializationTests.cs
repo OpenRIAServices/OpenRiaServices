@@ -656,16 +656,16 @@ namespace OpenRiaServices.Client.Test
             bool flag = true;
             IQueryable<PurchaseOrder> result = (IQueryable<PurchaseOrder>)RoundtripQuery(pos.AsQueryable().Where(p => flag), pos.AsQueryable());
             Assert.IsTrue(result.Expression.ToString().Contains("Where(Param_0 => True)"));
-            Assert.AreEqual(1, result.ToArray().Count());
+            Assert.AreEqual(1, result.ToArray().Length);
 
             result = (IQueryable<PurchaseOrder>)RoundtripQuery(pos.AsQueryable().Where(p => true), pos.AsQueryable());
             Assert.IsTrue(result.Expression.ToString().Contains("Where(Param_0 => True)"));
-            Assert.AreEqual(1, result.ToArray().Count());
+            Assert.AreEqual(1, result.ToArray().Length);
 
             Expression<Func<PurchaseOrder, bool>> expr = t => true;
             result = (IQueryable<PurchaseOrder>)RoundtripQuery(pos.AsQueryable().Where(expr), pos.AsQueryable());
             Assert.IsTrue(result.Expression.ToString().Contains("Where(Param_0 => True)"));
-            Assert.AreEqual(1, result.ToArray().Count());
+            Assert.AreEqual(1, result.ToArray().Length);
         }
 
         [TestMethod]
@@ -967,7 +967,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(query1.SequenceEqual(query2));
 
             // test case insensitive string comparisons
-            query1 = BaselineTestData.Products.AsQueryable().Where(p => string.Compare(p.Color, "black", StringComparison.OrdinalIgnoreCase) == 0);
+            query1 = BaselineTestData.Products.AsQueryable().Where(p => string.Equals(p.Color, "black", StringComparison.OrdinalIgnoreCase));
             query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             List<Product> results = query2.ToList();
             Assert.IsTrue(results.Any(p => p.Color == "Black"));  // verify the search was case insensitive

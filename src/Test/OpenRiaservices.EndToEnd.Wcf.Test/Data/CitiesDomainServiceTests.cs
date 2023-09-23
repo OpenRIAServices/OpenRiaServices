@@ -285,7 +285,7 @@ namespace OpenRiaServices.Client.Test
                 if (lo.Error != null)
                     Assert.Fail("LoadOperation.Error: " + lo.Error.Message);
                 var expected = new CityData().Zips.Single(z => z.Code == zipToFind);
-                Assert.AreEqual(1, lo.Entities.Count(), "Wrong number of entities returned");
+                Assert.AreEqual(1, lo.Entities.Count, "Wrong number of entities returned");
                 var returned = lo.Entities.Single();
 
                 Assert.AreEqual(expected.Code, returned.Code);

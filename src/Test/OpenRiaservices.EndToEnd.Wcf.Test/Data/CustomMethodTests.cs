@@ -156,12 +156,12 @@ namespace OpenRiaServices.Client.Test
             EnqueueConditional(() => propChanged.Contains("HasValidationErrors"));
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(1, _cities[0].ValidationErrors.Count());
+                Assert.AreEqual(1, _cities[0].ValidationErrors.Count);
                 propChanged.Clear();
 
                 // set Errors to another list with 2 errors, verify change notification is not raised on HasValidationErrors because the flag does not change
                 _cities[0].ValidationResultCollection.ReplaceErrors(listWithTwoErrors);
-                Assert.AreEqual(2, _cities[0].ValidationErrors.Count());
+                Assert.AreEqual(2, _cities[0].ValidationErrors.Count);
             });
 
             EnqueueDelay(2000);
@@ -172,7 +172,7 @@ namespace OpenRiaServices.Client.Test
 
                 // clear the reference collection assigned to Errors, verify no changes occur to the ValidationErrors property
                 listWithTwoErrors.Clear();
-                Assert.AreEqual(2, _cities[0].ValidationErrors.Count());
+                Assert.AreEqual(2, _cities[0].ValidationErrors.Count);
             });
 
             EnqueueDelay(2000);
@@ -189,7 +189,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueConditional(() => propChanged.Contains("HasValidationErrors"));
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(0, _cities[0].ValidationErrors.Count());
+                Assert.AreEqual(0, _cities[0].ValidationErrors.Count);
             });
 
             EnqueueTestComplete();
@@ -477,7 +477,7 @@ namespace OpenRiaServices.Client.Test
             {
                 var submitResults = submitTask.GetAwaiter().GetResult();
 
-                Assert.AreEqual(1, submitResults.Results.Count());
+                Assert.AreEqual(1, submitResults.Results.Count);
                 Assert.AreEqual(1, submitResults.Results.Where(e => e.Operation == EntityOperationType.Update).Count());
 
                 // REVIEW: Do we really need the operation data back from the server?
@@ -623,10 +623,10 @@ namespace OpenRiaServices.Client.Test
             // invoke then delete the entity. Verify the ModifiedEntities are updated
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
             Assert.AreEqual(1, _cities[0].EntityActions.Count());
-            Assert.AreEqual(1, container.GetChanges().ModifiedEntities.Count());
+            Assert.AreEqual(1, container.GetChanges().ModifiedEntities.Count);
 
             container.GetEntitySet<City>().Remove(_cities[0]);
-            Assert.AreEqual(0, container.GetChanges().ModifiedEntities.Count());
+            Assert.AreEqual(0, container.GetChanges().ModifiedEntities.Count);
         }
 
         [TestMethod]
@@ -641,10 +641,10 @@ namespace OpenRiaServices.Client.Test
             // invoke then delete the entity. Verify the ModifiedEntities are updated
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
             Assert.AreEqual(1, _cities[0].EntityActions.Count());
-            Assert.AreEqual(1, container.GetChanges().ModifiedEntities.Count());
+            Assert.AreEqual(1, container.GetChanges().ModifiedEntities.Count);
 
             container.GetEntitySet<City>().Detach(_cities[0]);
-            Assert.AreEqual(0, container.GetChanges().ModifiedEntities.Count());
+            Assert.AreEqual(0, container.GetChanges().ModifiedEntities.Count);
         }
         #endregion
 
@@ -1220,7 +1220,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
+                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
                 changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
                 valuesObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1275,7 +1275,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
+                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
                 changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
                 valuesObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1333,7 +1333,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
+                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
                 changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
                 valuesObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1389,7 +1389,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
+                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
                 changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
                 valuesObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1437,7 +1437,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count(), "Entities count should be 3");
+                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
                 obj1 = provider.MixedTypes.Single(t => t.ID == "MixedType_Min");
                 obj2 = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1518,7 +1518,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // Verify we loaded OK
                 this.AssertCompletedWithoutErrors(loadOp);
-                Assert.AreEqual(1, loadOp.Entities.Count(), "Expected to load 1 entity.");
+                Assert.AreEqual(1, loadOp.Entities.Count, "Expected to load 1 entity.");
 
                 // Retrieve an editable entity
                 MockEntity1 entity = ctx.MockEntity1s.First();
@@ -1575,7 +1575,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // Verify we loaded OK
                 this.AssertCompletedWithoutErrors(loadOp);
-                Assert.AreEqual(1, loadOp.Entities.Count(), "Expected to load 1 entity.");
+                Assert.AreEqual(1, loadOp.Entities.Count, "Expected to load 1 entity.");
 
                 // Retrieve an editable entity
                 MockEntity1 entity = ctx.MockEntity1s.First();
@@ -1629,7 +1629,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // Verify we loaded OK
                 this.AssertCompletedWithoutErrors(loadOp);
-                Assert.AreEqual(1, loadOp.Entities.Count(), "Expected to load 1 entity.");
+                Assert.AreEqual(1, loadOp.Entities.Count, "Expected to load 1 entity.");
 
                 // Retrieve an editable entity
                 MockEntity2 entity = ctx.MockEntity2s.First();
@@ -2146,9 +2146,9 @@ namespace OpenRiaServices.Client.Test
                             Assert.IsTrue(submitOp.HasError, "Client call: Submit should have failed.");
 
                             // The client should fail validation of only the argument's property.
-                            Assert.AreEqual(1, entity.ValidationErrors.Count(), "Client call: Entity should have an error.");
-                            Assert.AreEqual(0, entity.CommonProperty.ValidationErrors.Count(), "Client call: Validation error was pushed down to property.");
-                            Assert.AreEqual(0, entity.CommonArray[0].ValidationErrors.Count(), "Client call: Validation error was pushed down to array.");
+                            Assert.AreEqual(1, entity.ValidationErrors.Count, "Client call: Entity should have an error.");
+                            Assert.AreEqual(0, entity.CommonProperty.ValidationErrors.Count, "Client call: Validation error was pushed down to property.");
+                            Assert.AreEqual(0, entity.CommonArray[0].ValidationErrors.Count, "Client call: Validation error was pushed down to array.");
 
                             // Reset the validator and get the result from the server.
                             DynamicTestValidator.Reset();
@@ -2163,10 +2163,10 @@ namespace OpenRiaServices.Client.Test
                             // The server should fail validation of all MockEntity4 types.
                             IEnumerable<ValidationResult> expectedServerValidationResults = CustomMethodTests.GetExpectedErrors(methodName);
                             UnitTestHelper.AssertValidationResultsAreEqual(expectedServerValidationResults, entity.ValidationResultCollection);
-                            Assert.AreEqual(1, entity.CommonProperty.ValidationErrors.Count(), "Server call: Validation error was pushed down to property.");
+                            Assert.AreEqual(1, entity.CommonProperty.ValidationErrors.Count, "Server call: Validation error was pushed down to property.");
 
                             // Errors cannot get pushed to arrays.
-                            Assert.AreEqual(0, entity.CommonArray[0].ValidationErrors.Count(), "Server call: Validation error was pushed down to array.");
+                            Assert.AreEqual(0, entity.CommonArray[0].ValidationErrors.Count, "Server call: Validation error was pushed down to array.");
                         });
                 };
 

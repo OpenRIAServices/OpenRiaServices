@@ -99,7 +99,8 @@ namespace OpenRiaServices.Server.UnitTesting
                 expression));
         }
 
-        private static string RemoveAsyncFromName(string name) => name.EndsWith("Async") ? name.Substring(0, name.Length - "Async".Length) : name;
+        private static string RemoveAsyncFromName(string name) 
+            => name.EndsWith("Async", StringComparison.Ordinal) ? name.Substring(0, name.Length - "Async".Length) : name;
 
         private static IEnumerable<object> GetParametersFromLambda(Expression expression)
         {

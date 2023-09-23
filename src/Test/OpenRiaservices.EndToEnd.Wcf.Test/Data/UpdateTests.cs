@@ -28,8 +28,8 @@ namespace OpenRiaServices.Client.Test
     public abstract class UpdateTests : DomainContextTestBase<Northwind>
     {
         private static TestDatabase testDatabase = new TestDatabase("Northwind");
-        private static int custIdSequence = 0;
-        private static int categoryIdSequence = 0; // start with 1000 to avoid collisions with common northwind data
+        private static int custIdSequence;
+        private static int categoryIdSequence; // start with 1000 to avoid collisions with common northwind data
         private static int regionIdSequence = 100;
 
         public UpdateTests(Uri serviceUri, ProviderType providerType)
@@ -1050,7 +1050,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsTrue(ctxt.Customers.Contains(cust));
 
                 // verify that the added entities show up in the EntityCollection
-                Assert.AreEqual(3, order.Order_Details.Count());
+                Assert.AreEqual(3, order.Order_Details.Count);
 
                 // verify the changeset is as expected
                 EntityChangeSet changeSet = ctxt.EntityContainer.GetChanges();
@@ -3593,7 +3593,7 @@ namespace OpenRiaServices.Client.Test
 
                     // validation error should not be reported through Product1. Only conflicts errors are observed.
                     Assert.AreEqual(OperationErrorStatus.Conflicts, ex.Status);
-                    Assert.AreEqual(0, products[1].ValidationErrors.Count());
+                    Assert.AreEqual(0, products[1].ValidationErrors.Count);
 
                     // the conflicts returned are from the resubmit
                     Assert.IsNull(products[0].EntityConflict);
@@ -5114,7 +5114,7 @@ TestContext testContext
                 Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
                 Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
                 Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(1, customer.ValidationErrors.Count());
+                Assert.AreEqual(1, customer.ValidationErrors.Count);
 
                 Assert.AreSame(customer, so.EntitiesInError.First());
                 Assert.AreSame(customer, so.ChangeSet.ModifiedEntities.First());
@@ -5162,7 +5162,7 @@ TestContext testContext
                 Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
                 Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
                 Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(1, customer.ValidationErrors.Count());
+                Assert.AreEqual(1, customer.ValidationErrors.Count);
 
                 Assert.AreSame(customer, so.EntitiesInError.First());
                 Assert.AreSame(customer, so.ChangeSet.ModifiedEntities.First());
@@ -5210,7 +5210,7 @@ TestContext testContext
                 Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
                 Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
                 Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(2, customer.ValidationErrors.Count());
+                Assert.AreEqual(2, customer.ValidationErrors.Count);
 
                 Assert.AreSame(customer, so.EntitiesInError.First());
                 Assert.AreSame(customer, so.ChangeSet.ModifiedEntities.First());

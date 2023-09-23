@@ -262,8 +262,8 @@ namespace OpenRiaServices.Client.Test
 
                 try
                 {
-                    Assert.AreEqual(11, op.AllEntities.Count());
-                    Assert.AreEqual(11, op.Entities.Count());
+                    Assert.AreEqual(11, op.AllEntities.Count);
+                    Assert.AreEqual(11, op.Entities.Count);
                 }
                 catch (Exception e)
                 {
@@ -288,8 +288,8 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNull(callbackException);
                 Assert.IsNull(lo.Error);
 
-                Assert.AreEqual(11, lo.AllEntities.Count());
-                Assert.AreEqual(11, lo.Entities.Count());
+                Assert.AreEqual(11, lo.AllEntities.Count);
+                Assert.AreEqual(11, lo.Entities.Count);
             });
             EnqueueTestComplete();
         }
