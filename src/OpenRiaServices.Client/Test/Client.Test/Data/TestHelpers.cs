@@ -1,11 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading;
-using System.Diagnostics;
 
 namespace OpenRiaServices.Client.Test
 {

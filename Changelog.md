@@ -11,6 +11,11 @@ This release **fully supports .NET 6+** for both server and client without havin
 ### Client
 * Ensure exceptions from xxxOperation callbacks and unhandled exceptions are rethrow on the SyncronizationContext. (#424)
     * This allows events such as `DispatcherUnhandledException` (for WPF) to be used for showing error messages immediately
+* Add **net6.0-windows** TargetFramework for client (#436)
+  * `EntitySet` and `EntityCollection` now implements `ICollectionViewFactory` for *net6.0-windows*. improving supprot with controls using CollectionView
+  * This change came in WCF Ria Services SP1  [WCF Ria Services SP1](https://jeffhandley.com/2011-03-10/riaservicesv1sp1rtm)
+    > DataForm Add/Remove for EntitySet and EntityCollection
+With our initial V1.0 release, many of you found that a DataForm bound to an EntitySet or an EntityCollection did not support the Add or Remove buttons.  This was a difficult cut to make in V1.0, so I’m pleased to announce that with V1.0 SP1, this is now supported.  Silverlight 4 introduced the [ICollectionViewFactory](http://msdn.microsoft.com/en-us/library/system.componentmodel.icollectionviewfactory(VS.95).aspx) interface, with support integrated into DataGrid and DataForm, and both EntitySet and EntityCollection now implement that interface to allow the Add/Remove features to light up.
 
 #  AspNetCore 0.4.0
 

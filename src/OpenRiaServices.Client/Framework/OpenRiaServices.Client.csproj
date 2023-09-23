@@ -1,12 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;netstandard2.0</TargetFrameworks>
-  </PropertyGroup>
+    <TargetFrameworks>net472;netstandard2.0;net6.0-windows</TargetFrameworks>
 
-  <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\CompositionAttribute.cs" />
-  </ItemGroup>
+      <!-- Disable obsolete warning (primarily AssociationAttribute) -->
+    <NoWarn Condition=" '$(TargetFramework)' != 'net472' ">$(NoWarn);CS0618</NoWarn>
+    <DefineConstants Condition=" '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net6.0-windows' ">$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
+    <UseWPF Condition=" '$(TargetFramework)' == 'net6.0-windows' ">true</UseWPF>
+  </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
@@ -15,7 +16,6 @@
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
     <Reference Include="PresentationFramework" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.Linq" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="WindowsBase" />
     <Reference Include="System" />
@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\CompositionAttribute.cs" />
     <Compile Update="Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -45,14 +46,5 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
-    <!-- Disable obsolete warning (primarily AssociationAttribute) -->
-    <NoWarn>$(NoWarn);CS0618</NoWarn>
-  </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net472' ">
-    <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
-  </PropertyGroup>
 
 </Project>
