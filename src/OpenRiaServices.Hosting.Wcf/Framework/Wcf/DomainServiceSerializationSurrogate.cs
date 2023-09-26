@@ -49,17 +49,6 @@ namespace OpenRiaServices.Hosting.Wcf
 
         public IReadOnlyCollection<Type> SurrogateTypes => this.surrogateTypes;
 
-
-        public object GetCustomDataToExport(Type clrType, Type dataContractType)
-        {
-            return null;
-        }
-
-        public object GetCustomDataToExport(System.Reflection.MemberInfo memberInfo, Type dataContractType)
-        {
-            return null;
-        }
-
 #if ASPNET_CORE
         public Type GetSurrogateType(Type type)
 #else
@@ -100,6 +89,16 @@ namespace OpenRiaServices.Hosting.Wcf
         }
 
 #if !ASPNET_CORE
+        public object GetCustomDataToExport(Type clrType, Type dataContractType)
+        {
+            return null;
+        }
+
+        public object GetCustomDataToExport(System.Reflection.MemberInfo memberInfo, Type dataContractType)
+        {
+            return null;
+        }
+
         public void GetKnownCustomDataTypes(System.Collections.ObjectModel.Collection<Type> customDataTypes)
         {
             throw new NotImplementedException();
