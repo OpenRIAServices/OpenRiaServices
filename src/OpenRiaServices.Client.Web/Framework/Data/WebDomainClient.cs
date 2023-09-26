@@ -112,7 +112,9 @@ namespace OpenRiaServices.Client
 #if !NETFRAMEWORK
             return new SoapDomainClientFactory();
 #else
+#pragma warning disable CS0618 // Type or member is obsolete
             return new WebDomainClientFactory();
+#pragma warning restore CS0618 // Type or member is obsolete
 #endif
         }
 

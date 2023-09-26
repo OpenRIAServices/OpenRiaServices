@@ -29,10 +29,12 @@ namespace OpenRiaServices.Client.Test
             StartWebServer();
 
 #if NETFRAMEWORK
+#pragma warning disable CS0618 // Type or member is obsolete
             DomainContext.DomainClientFactory = new Web.WebDomainClientFactory()
             {
                 ServerBaseUri = TestURIs.RootURI,
             };
+#pragma warning restore CS0618 // Type or member is obsolete
 
             //// Uncomment below to run tests using BinaryHttpDomainClientFactory instead:
             ///
