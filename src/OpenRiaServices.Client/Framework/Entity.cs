@@ -1672,7 +1672,7 @@ namespace OpenRiaServices.Client
                 {
                     if (sb.Length > 0)
                     {
-                        sb.Append(",");
+                        sb.Append(',');
                     }
                     object keyValue = keyMember.GetValue(this);
                     sb.Append(keyValue != null ? keyValue.ToString() : "null");
