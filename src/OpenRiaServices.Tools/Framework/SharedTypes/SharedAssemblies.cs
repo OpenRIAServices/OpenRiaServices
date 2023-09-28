@@ -29,7 +29,7 @@ namespace OpenRiaServices.Tools.SharedTypes
         {
             if (assemblyFileNames == null)
             {
-                throw new ArgumentNullException("assemblyFileNames");
+                throw new ArgumentNullException(nameof(assemblyFileNames));
             }
             _logger = logger;
             _sharedTypeByName = new Dictionary<string, TypeInfo>(StringComparer.Ordinal);

@@ -58,9 +58,9 @@ namespace OpenRiaServices.Client.Authentication.Test
                 {
                     users.Attach(this);
                 }
-                this.RaiseDataMemberChanging("MutableProperty");
+                this.RaiseDataMemberChanging(nameof(MutableProperty));
                 this.MutableProperty++;
-                this.RaiseDataMemberChanged("MutableProperty");
+                this.RaiseDataMemberChanged(nameof(MutableProperty));
             }
         }
 
