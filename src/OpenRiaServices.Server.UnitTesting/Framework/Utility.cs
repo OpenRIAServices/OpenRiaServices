@@ -4,12 +4,31 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.Server.UnitTesting
 {
     internal static class Utility
     {
         private const int DefaultChangeSetEntryId = 1;
+
+        /// <summary>
+        /// Do a blocking wait on a ValueTask that work even when task is not completed and it is backed by a IValueTaskSource
+        /// Se https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2012
+        /// </summary>
+        public static T SafeGetResult<T>(this ValueTask<T> valueTask)
+        {
+            return valueTask.IsCompleted ? valueTask.GetAwaiter().GetResult() : valueTask.AsTask().GetAwaiter().GetResult();
+        }
+
+        /// <summary>
+        /// Do a blocking wait on a ValueTask that work even when task is not completed and it is backed by a IValueTaskSource
+        /// Se https://learn.microsoft.com/en-us/dotnet/fundamentals/code-analysis/quality-rules/ca2012
+        /// </summary>
+        public static void SafeGetResult(ValueTask valueTask)
+        {
+            valueTask.AsTask().GetAwaiter().GetResult();
+        }
 
         public static QueryDescription GetQueryDescription(OperationContext context, Expression expression)
         {
@@ -99,7 +118,7 @@ namespace OpenRiaServices.Server.UnitTesting
                 expression));
         }
 
-        private static string RemoveAsyncFromName(string name) 
+        private static string RemoveAsyncFromName(string name)
             => name.EndsWith("Async", StringComparison.Ordinal) ? name.Substring(0, name.Length - "Async".Length) : name;
 
         private static IEnumerable<object> GetParametersFromLambda(Expression expression)

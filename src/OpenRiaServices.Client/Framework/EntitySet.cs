@@ -301,7 +301,7 @@ namespace OpenRiaServices.Client
             // Below we must eagerly enumerate the callbacks (ToArray) since invocation of callbacks might
             // cause _associationUpdateCallbackMap to be modified. We only want to notify the current set
             // of callbacks anyways.
-            bool entityChangesAccepted = (this.CanEdit || this.CanAdd) && string.Compare(propertyName, "EntityState", StringComparison.Ordinal) == 0 && entity.EntityState == EntityState.Unmodified;
+            bool entityChangesAccepted = (this.CanEdit || this.CanAdd) && (propertyName == "EntityState") && entity.EntityState == EntityState.Unmodified;
             IEnumerable<Action<Entity>> callbacks = this._associationUpdateCallbackMap.Where(p => p.Value != null && (entityChangesAccepted || p.Key.OtherKeyMembers.Contains(propertyName))).Select(p => p.Value).ToArray();
             foreach (Action<Entity> callback in callbacks)
             {

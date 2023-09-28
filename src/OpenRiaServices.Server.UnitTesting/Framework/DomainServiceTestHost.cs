@@ -837,7 +837,7 @@ namespace OpenRiaServices.Server.UnitTesting
 
             var queryTask = context.DomainService.QueryAsync<TEntity>(queryDescription, CancellationToken.None);
             // TODO: Remove blocking wait
-            var queryResult = queryTask.GetAwaiter().GetResult();
+            var queryResult = Utility.SafeGetResult(queryTask);
             IEnumerable entities = queryResult.Result;
             validationErrors = queryResult.ValidationErrors;
 
@@ -991,8 +991,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="validationResults">The validation errors that occurred</param>
         private static bool TrySubmitChangeSetCore(OperationContext context, ChangeSet changeSet, out IList<ValidationResult> validationResults)
         {
-            context.DomainService.SubmitAsync(changeSet, CancellationToken.None)
-                .GetAwaiter().GetResult();
+            Utility.SafeGetResult(context.DomainService.SubmitAsync(changeSet, CancellationToken.None));
 
             validationResults = GetValidationResults(changeSet);
             return !changeSet.HasError;
@@ -1046,7 +1045,7 @@ namespace OpenRiaServices.Server.UnitTesting
             InvokeDescription invokeDescription = Utility.GetInvokeDescription(context, invokeOperation);
 
             // TODO: Remove blocking wait
-            var invokeResult = context.DomainService.InvokeAsync(invokeDescription, CancellationToken.None).GetAwaiter().GetResult();
+            var invokeResult = Utility.SafeGetResult(context.DomainService.InvokeAsync(invokeDescription, CancellationToken.None));
             result = (TResult)invokeResult.Result;
             validationResults = invokeResult.HasValidationErrors ? invokeResult.ValidationErrors.ToList() : null;
 

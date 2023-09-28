@@ -7,7 +7,6 @@ using OpenRiaServices;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
-using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
@@ -56,7 +55,7 @@ namespace System.ServiceModel.Dispatcher
                 return true;
             }
             // otherwise check if its an enum
-            if (typeof(Enum).IsAssignableFrom(type))
+            if (type.IsEnum)
             {
                 return true;
             }
@@ -241,7 +240,6 @@ namespace System.ServiceModel.Dispatcher
         }
 
         // hash table is safe for multiple readers single writer
-        [SuppressMessage("Reliability", "Reliability104:CaughtAndHandledExceptionsRule", Justification = "The exception is traced in the finally clause")]
         TypeConverter GetStringConverter(Type parameterType)
         {
             if (this._typeConverterCache.TryGetValue(parameterType, out var typeConverter))
