@@ -4,6 +4,7 @@
     <TargetFrameworks>net472;netstandard2.0;net6.0</TargetFrameworks>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RootNamespace>OpenRiaServices.Client.DomainClients</RootNamespace>
+    <NeutralLanguage>en</NeutralLanguage>
   </PropertyGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="System.ServiceModel.Primitives" Version="4.10.2" />
