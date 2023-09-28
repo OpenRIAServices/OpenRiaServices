@@ -40,7 +40,7 @@ namespace OpenRiaServices.Client
         private readonly object _syncRoot = new object();
         private static IDomainClientFactory s_domainClientFactory;
 
-        private TaskScheduler CurrrentSynchronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
+        private static TaskScheduler CurrrentSynchronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
 
         /// <summary>
         /// Protected constructor

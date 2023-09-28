@@ -72,7 +72,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// Find all types which are part of parameters and add them
         /// </summary>
         /// <returns></returns>
-        private DataContractSerializerSettings GetSubmitDataContractSettings(IEnumerable<Type> entityTypes)
+        private static DataContractSerializerSettings GetSubmitDataContractSettings(IEnumerable<Type> entityTypes)
         {
             var visitedTypes = new HashSet<Type>(entityTypes);
             var knownTypes = new HashSet<Type>(visitedTypes);
