@@ -27,10 +27,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// </summary>
         public static void SafeGetResult(ValueTask valueTask)
         {
-            if (valueTask.IsCompleted)
-                valueTask.GetAwaiter().GetResult();
-            else 
-                valueTask.AsTask().GetAwaiter().GetResult();
+            valueTask.AsTask().GetAwaiter().GetResult();
         }
 
         public static QueryDescription GetQueryDescription(OperationContext context, Expression expression)
@@ -121,7 +118,7 @@ namespace OpenRiaServices.Server.UnitTesting
                 expression));
         }
 
-        private static string RemoveAsyncFromName(string name) 
+        private static string RemoveAsyncFromName(string name)
             => name.EndsWith("Async", StringComparison.Ordinal) ? name.Substring(0, name.Length - "Async".Length) : name;
 
         private static IEnumerable<object> GetParametersFromLambda(Expression expression)
