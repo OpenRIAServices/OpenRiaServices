@@ -539,10 +539,12 @@ namespace OpenRiaServices.Client.Web.Test
     public class WebDomainClientTests_Globalization : UnitTestBase
     {
         private CultureInfo _defaultCulture;
-        private WebDomainClientFactory _webDomainClientfactory = new WebDomainClientFactory()
+#pragma warning disable CS0618 // Type or member is obsolete
+        private readonly WebDomainClientFactory _webDomainClientfactory = new WebDomainClientFactory()
         {
              ServerBaseUri = TestURIs.RootURI,
         };
+#pragma warning restore CS0618 // Type or member is obsolete
 
         [TestInitialize]
         public void SetUp()
