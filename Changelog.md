@@ -16,11 +16,10 @@ This release **fully supports .NET 6+** for both server and client without havin
   * This change came in WCF Ria Services SP1  [WCF Ria Services SP1](https://jeffhandley.com/2011-03-10/riaservicesv1sp1rtm)
     > DataForm Add/Remove for EntitySet and EntityCollection
 With our initial V1.0 release, many of you found that a DataForm bound to an EntitySet or an EntityCollection did not support the Add or Remove buttons.  This was a difficult cut to make in V1.0, so I’m pleased to announce that with V1.0 SP1, this is now supported.  Silverlight 4 introduced the [ICollectionViewFactory](http://msdn.microsoft.com/en-us/library/system.componentmodel.icollectionviewfactory(VS.95).aspx) interface, with support integrated into DataGrid and DataForm, and both EntitySet and EntityCollection now implement that interface to allow the Add/Remove features to light up.
-    
 
 ### Other
 * Run E2E tests against AspNetCore hosting
-* Minor performance fixes and code cleanup (#438), #435
+* Various smaller performance fixes and code cleanup (#438), #435
 
 #  AspNetCore 0.4.0
 
