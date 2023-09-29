@@ -80,7 +80,7 @@ namespace Cities
             {
                 // there is a unit test that relies on this null
                 // check being here
-                throw new ArgumentNullException("state");
+                throw new ArgumentNullException(nameof(state));
             }
             IEnumerable<City> cities = this._cityData.Cities.Where(c => c.StateName.Equals(state));
             return cities.AsQueryable<City>();

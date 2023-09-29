@@ -415,9 +415,10 @@ namespace OpenRiaServices.Server
                 parameters.CopyTo(parametersWithCount, 0);
                 parametersWithCount[parameters.Length] = 0;
 
-                object result = this.InvokeAsync(domainService, parametersWithCount, cancellationToken)
-                    .GetAwaiter() // Cant use await since method has out parameter
-                    .GetResult();
+                ValueTask<object> invokeTask = this.InvokeAsync(domainService, parametersWithCount, cancellationToken);
+
+                // Cant use await since method has out parameter so we need to block
+                object result = invokeTask.IsCompleted ? invokeTask.GetAwaiter().GetResult() : invokeTask.AsTask().GetAwaiter().GetResult();
 
                 totalCount = (int)parametersWithCount[parameters.Length];
                 return new ValueTask<object>(result);

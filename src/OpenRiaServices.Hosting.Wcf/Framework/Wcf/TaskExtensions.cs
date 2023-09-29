@@ -50,7 +50,8 @@ namespace OpenRiaServices.Hosting
                 CompletedSynchronously = valueTask.IsCompleted;
             }
 
-            public T GetResult() => _valueTask.GetAwaiter().GetResult();
+            public T GetResult()
+                => _valueTask.IsCompleted ? _valueTask.GetAwaiter().GetResult() : _valueTask.AsTask().GetAwaiter().GetResult();
 
             // Calls the async callback with this
             public void ExecuteCallback() => _asyncCallback(this);

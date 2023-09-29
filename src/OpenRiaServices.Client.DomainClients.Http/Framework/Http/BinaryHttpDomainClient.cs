@@ -290,7 +290,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 {
                     uriBuilder.Append(i++ == 0 ? "?$" : "&$");
                     uriBuilder.Append(queryPart.QueryOperator);
-                    uriBuilder.Append("=");
+                    uriBuilder.Append('=');
                     // Query strings seems to be double encoded
                     uriBuilder.Append(Uri.EscapeDataString(Uri.EscapeDataString(queryPart.Expression)));
                 }

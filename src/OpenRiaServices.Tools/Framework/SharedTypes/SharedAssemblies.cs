@@ -29,7 +29,7 @@ namespace OpenRiaServices.Tools.SharedTypes
         {
             if (assemblyFileNames == null)
             {
-                throw new ArgumentNullException("assemblyFileNames");
+                throw new ArgumentNullException(nameof(assemblyFileNames));
             }
             _logger = logger;
             _sharedTypeByName = new Dictionary<string, TypeInfo>(StringComparer.Ordinal);
@@ -130,7 +130,7 @@ namespace OpenRiaServices.Tools.SharedTypes
             }
         }
 
-        TypeInfo GetBaseType(TypeInfo typeInfo)
+        private static TypeInfo GetBaseType(TypeInfo typeInfo)
         {
             if (typeInfo.BaseTypeCache == null
                 && typeInfo.TypeDefinition.BaseType != null)
@@ -145,7 +145,7 @@ namespace OpenRiaServices.Tools.SharedTypes
         /// <summary>
         /// Search for a property in a class hierarcy and get the type implementing the property or <c>null</c>
         /// </summary>
-        TypeInfo HasProperty(TypeInfo type, string name)
+        private static TypeInfo HasProperty(TypeInfo type, string name)
         {
             while (type != null)
             {

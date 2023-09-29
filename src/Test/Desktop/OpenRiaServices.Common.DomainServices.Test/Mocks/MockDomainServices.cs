@@ -1240,7 +1240,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
             {
                 // there is a unit test that relies on this null
                 // check being here
-                throw new ArgumentNullException("state");
+                throw new ArgumentNullException(nameof(state));
             }
             return GetCities().Where(c => c.StateName.Equals(state));
         }

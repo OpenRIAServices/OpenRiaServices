@@ -16,7 +16,6 @@ namespace OpenRiaServices.Client.Test
     public sealed class Main
     {
         private static Process s_aspNetCoreSite;
-        private static IISExpressWebserver s_webServer;
 
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
@@ -55,7 +54,6 @@ namespace OpenRiaServices.Client.Test
             // have been run
             ((IDisposable)UpdateTests.TestDatabase).Dispose();
 #endif
-            s_webServer?.Stop();
             s_aspNetCoreSite?.Kill();
         }
 
