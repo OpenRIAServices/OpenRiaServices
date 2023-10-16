@@ -18,7 +18,6 @@
     <Reference Include="System.ServiceModel" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\DomainServiceFault.cs" Link="OpenRiaServices.DomainServices.Client.Web\DomainServiceFault.cs" />
     <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Data\ServiceQueryPart.cs" Link="OpenRiaServices.DomainServices.Client.Web\ServiceQueryPart.cs" />
     <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Linq\Evaluator.cs" Link="OpenRiaServices.DomainServices.Client.Web\Linq\Evaluator.cs" />
     <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Linq\QuerySerializer.cs" Link="OpenRiaServices.DomainServices.Client.Web\Linq\QuerySerializer.cs" />
