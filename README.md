@@ -27,7 +27,7 @@ It is the evolved Open Source version of *WCF RIA Services*.
 
 The source code and issue list is currently kept at github (https://github.com/OpenRiaServices/OpenRiaServices).
 
-Some of ther features are: 
+Some of their features are: 
  * Client side entity change tracking similar in concept to Entity Framework
    * Batch save (all or nothing) and undo functionality
  * Excellent support for data binding in with built in support for validation, INotifyPropertyChanged, INotifyCollectionChanged .. 
@@ -39,7 +39,7 @@ Some of ther features are:
    
 **Release Notes / Changelog**
 
-* A [Change log](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md) is keept keeping track of changes made and write down release notes as features are developed
+* A [Change log](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md) is kept keeping track of changes made and write down release notes as features are developed
 * [Github releases with changes and Release Notes](https://github.com/OpenRIAServices/OpenRiaServices/releases) for specific versions are created when a new version is released to nuget.
 
    
