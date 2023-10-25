@@ -43,7 +43,8 @@ namespace OpenRiaServices.Tools
             ValidationAttribute validationAttribute = (ValidationAttribute)attribute;
             AttributeDeclaration attributeDeclaration = base.GetAttributeDeclaration(attribute);
 
-            RegisterSharedResources(validationAttribute, attributeDeclaration);
+            if (attributeDeclaration is not null)
+                RegisterSharedResources(validationAttribute, attributeDeclaration);
 
             return attributeDeclaration;
         }
@@ -110,14 +111,23 @@ namespace OpenRiaServices.Tools
         /// <returns>The name of the property we should use as the setter or null to suppress codegen.</returns>
         protected override string MapProperty(PropertyInfo propertyInfo, Attribute attribute)
         {
-            if (propertyInfo.DeclaringType == typeof(RegularExpressionAttribute) && propertyInfo.Name == "MatchTimeoutInMilliseconds")
+            if (propertyInfo.DeclaringType == typeof(RegularExpressionAttribute))
             {
-                // MatchTimeoutInMilliseconds was introduced in .Net 4.6.1 with default value -1 / 2000 depending on compatibility switch
-                // Don't generate the property for the default value
-                object actualValue = propertyInfo.GetValue(attribute, null);
-                if (object.Equals(actualValue, MatchTimeoutInMillisecondsDefault))
+                if (propertyInfo.Name == "MatchTimeoutInMilliseconds")
+                {
+                    // MatchTimeoutInMilliseconds was introduced in .Net 4.6.1 with default value -1 / 2000 depending on compatibility switch
+                    // Don't generate the property for the default value
+                    object actualValue = propertyInfo.GetValue(attribute, null);
+                    if (object.Equals(actualValue, MatchTimeoutInMillisecondsDefault))
+                        return null;
+                }
+                else if (propertyInfo.Name == "MatchTimeout")
+                {
+                    // New in .NET7, an alternative getter for MatchTimeoutInMilliseconds (don't try to set it)
                     return null;
+                }
             }
+
             return base.MapProperty(propertyInfo, attribute);
         }
     }
