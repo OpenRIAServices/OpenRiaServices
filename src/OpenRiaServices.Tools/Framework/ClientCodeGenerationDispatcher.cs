@@ -229,6 +229,7 @@ namespace OpenRiaServices.Tools
                                                     string.IsNullOrEmpty(codeGeneratorName) ? proxyGenerator.GetType().FullName : codeGeneratorName,
                                                     options.ClientProjectPath,
                                                     ex.Message));
+                    host.LogException(ex);
                 }
             }
 
