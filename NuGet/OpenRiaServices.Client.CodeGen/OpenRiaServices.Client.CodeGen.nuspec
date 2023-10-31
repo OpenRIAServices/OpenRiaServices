@@ -21,8 +21,11 @@
       </dependencies>
     </metadata>
     <files>
-        <file src="build\OpenRiaServices.CodeGen.targets" target="build\OpenRiaServices.Client.CodeGen.targets"/>
-        <file src="..\..\src\bin\Release\net472\OpenRiaServices.Tools.dll" target="build\OpenRiaServices.Tools.dll"/>
-        <file src="..\..\src\bin\Release\net472\Mono.Cecil.dll" target="build\Mono.Cecil.dll"/>
+        <file src="..\..\src\OpenRiaServices.Tools\Framework\build\OpenRiaServices.Client.CodeGen.targets" target="build\OpenRiaServices.Client.CodeGen.targets"/>
+        <file src="..\..\src\bin\Release\net472\OpenRiaServices.Tools.dll" target="tasks\net472\OpenRiaServices.Tools.dll"/>
+        <file src="..\..\src\bin\Release\net472\Mono.Cecil.dll" target="tasks\net472\Mono.Cecil.dll"/>
+        <file src="..\..\src\bin\Release\net472\Mono.Cecil.Pdb.dll" target="tasks\net472\Mono.Cecil.Pdb.dll"/>
+        <!-- TODO: Make a publish of project and take assemblies from there instead -->
+        <file src="..\..\src\OpenRiaServices.Tools.CodeGenTask\bin\Release\net6.0\**\*.*" target="tasks\net6.0\"/>
     </files>
 </package>

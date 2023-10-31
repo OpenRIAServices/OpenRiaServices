@@ -1,3 +1,71 @@
+# 5.4.0
+
+This release **fully supports .NET 6+** for both server and client without having to rely on workarounds to have the code generation work.
+
+### Code Generation Supports NET6+
+
+* Support net6+ on server (#414)
+   *  Add version of code generation which allows server project to be .NET 6 or later
+   * Works with dotnet build - you can build without installing Visual Studio
+
+### Client
+* Ensure exceptions from xxxOperation callbacks and unhandled exceptions are rethrow on the SyncronizationContext. (#424)
+    * This allows events such as `DispatcherUnhandledException` (for WPF) to be used for showing error messages immediately
+* Add **net6.0-windows** TargetFramework for client (#436)
+  * `EntitySet` and `EntityCollection` now implements `ICollectionViewFactory` for *net6.0-windows*. improving supprot with controls using CollectionView
+  * This change came in WCF Ria Services SP1  [WCF Ria Services SP1](https://jeffhandley.com/2011-03-10/riaservicesv1sp1rtm)
+    > DataForm Add/Remove for EntitySet and EntityCollection
+With our initial V1.0 release, many of you found that a DataForm bound to an EntitySet or an EntityCollection did not support the Add or Remove buttons.  This was a difficult cut to make in V1.0, so I’m pleased to announce that with V1.0 SP1, this is now supported.  Silverlight 4 introduced the [ICollectionViewFactory](http://msdn.microsoft.com/en-us/library/system.componentmodel.icollectionviewfactory(VS.95).aspx) interface, with support integrated into DataGrid and DataForm, and both EntitySet and EntityCollection now implement that interface to allow the Add/Remove features to light up.
+* The WCF based `WebDomainClientFactory` will not receive any new changes and is now marked as obsolete. It is recommeded to switch to `OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory` instead.
+
+### Other
+* Run E2E tests against AspNetCore hosting
+* Various smaller performance fixes and code cleanup (#438), #435
+
+#  AspNetCore 0.4.0
+
+* AspNetCore
+     *   Copies "All" attributes to endpoint metadata      
+         * Some attributes sucha as Validation, Authorization and other attributes specific to OpenRiaServices are not copied
+     * `AddDomainService()` methods inside `MapOpenRiaServices` now returns `IEndpointConventionBuilder` allowing conventions to be specified per `DomainService`
+        ```C#
+        app.MapOpenRiaServices(builder =>
+        {
+            builder.AddDomainService<Cities.CityDomainService>()
+                .WithGroupName("Cities");
+        });
+        ```
+     * Updated README.md and added Sample project
+     * Make it compatible with more middleware such as OutputCache middleware by "Completing" responses
+     * CHANGES:
+        * `services.AddOpenRiaServices<T>()` now requires T to derive from DomainServce
+        * `services.AddOpenRiaServices<T>()` has different return type
+
+# 5.3.1 with EFCore 2.0.2 and AspNetCore 0.3.0
+
+* Code Generation
+  * Switch to using Mono.Cecil to parse pdb files during code generation (#410)
+    This should make it possible to use portable and embedded pdb's on the server
+  * 
+* AspNetCore
+    * New extension method to add OpenRiaServices to services from #413 by @ehsangfl.
+        ```C#
+        services.AddOpenRiaServices<T>()
+        ```
+    * New extension method to add OpenRiaServices to pipeline from #413 by @ehsangfl.
+        ```C#
+        endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
+        ```
+    * Add Net7 build target to support "Finally Conventions" (`IEndpointConventionBuilder.Finally`)
+    * Add `OpenRiaServices.Server.DomainOperationEntry` to endpoint metadata
+        * This allows end user to easier implement additional conventions (such as Open Api or similar)
+    * Copy `AuthorizationAttribute`s to endpoint metadata for queries and invokes to support [AspNetCore Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple?view=aspnetcore-7.0)
+        *  Attributes can be set on either method or class level
+    * Fixed serialization of sizes larger than 1 GB
+
+*Other*
+- Updated nuget packages
+
 # 5.3.0 with EFCore 2.0.1
 
 * Fix shadow property issue in EF Core DB Context extensions (#397):

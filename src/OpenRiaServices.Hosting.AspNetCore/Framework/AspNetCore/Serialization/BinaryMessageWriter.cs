@@ -19,7 +19,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private const int MessageLengthHistorySize = 4;
         private const int InitialBufferSize = 16 * 1024;
         private readonly int[] _lastMessageLengths = new int[MessageLengthHistorySize] { InitialBufferSize, InitialBufferSize, InitialBufferSize, InitialBufferSize };
-        private int _messageLengthIndex = 0;
+        private int _messageLengthIndex;
 
         // Cache at most one writer per thread
         [ThreadStatic]

@@ -17,7 +17,7 @@ namespace OpenRiaServices.Client.DomainClients
         /// Create a <see cref="BinaryHttpDomainClientFactory"/> where all requests share a single <see cref="HttpMessageHandler"/>
         /// <para>IMPORTANT: To handle DNS updates you need to configure <c>System.Net.ServicePointManager.ConnectionLeaseTimeout</c> on .Net framework</para>
         /// </summary>
-        /// <param name="serverBaseUri">The value base all service Uris on (see <see cref="ServerBaseUri"/>)</param>
+        /// <param name="serverBaseUri">The value base all service Uris on (see <see cref="DomainClientFactory.ServerBaseUri"/>)</param>
         /// <param name="messageHandler"><see cref="HttpMessageHandler"/> to be shared by all requests,
         /// if uncertain create a <see cref="HttpClientHandler"/> and enable cookies and compression</param>
         public BinaryHttpDomainClientFactory(Uri serverBaseUri, HttpMessageHandler messageHandler)
@@ -28,7 +28,7 @@ namespace OpenRiaServices.Client.DomainClients
         /// <summary>
         /// Constructor intended for .Net Core where the actual creation is handled by <c>IHttpClientFactory</c> or similar
         /// </summary>
-        /// <param name="serverBaseUri">The value base all service Uris on (see <see cref="ServerBaseUri"/>)</param>
+        /// <param name="serverBaseUri">The value base all service Uris on (see <see cref="DomainClientFactory.ServerBaseUri"/>)</param>
         /// <param name="httpClientFactory">method creating a new HttpClient each time, should never return null</param>
         public BinaryHttpDomainClientFactory(Uri serverBaseUri, Func<HttpClient> httpClientFactory)
         {

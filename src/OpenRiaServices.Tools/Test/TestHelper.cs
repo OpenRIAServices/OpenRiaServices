@@ -25,7 +25,7 @@ namespace OpenRiaServices.Tools.Test
         public static string LineCommentFromLanguage(string language)
         {
             string extension = ExtensionFromLanguage(language);
-            return extension.EndsWith("cs") ? "//" : "'";
+            return extension.EndsWith("cs", StringComparison.Ordinal) ? "//" : "'";
         }
 
         // Returns the full path to a file in the test project's output dir
@@ -94,9 +94,6 @@ namespace OpenRiaServices.Tools.Test
                 string realFileInProject = Path.Combine(projectDataDir, Path.GetFileName(referenceFileName));
 
                 // Generate CMD strings to diff and to copy
-                string tfDiffCommand = "tf diff \"" + referenceFileName + "\" \"" + generatedFileName + "\"\r\n";
-                string codeDiffCommand = "git diff \"" + referenceFileName + "\" \"" + generatedFileName + "\"\r\n";
-                string tfEditCommand = "tf edit \"" + realFileInProject + "\"\r\n";
                 string copyCommand = "copy \"" + generatedFileName + "\" \"" + realFileInProject + "\"";
 
                 // Write edit and copy commands to a common .bat file
@@ -105,7 +102,7 @@ namespace OpenRiaServices.Tools.Test
 
                 using (StreamWriter sw = new StreamWriter(updateAllBatFile, true))
                 {
-                    sw.Write("cmd /c " + tfEditCommand);
+                    sw.Write("cmd /c " + copyCommand);
                     sw.WriteLine(copyCommand);
                 }
 
@@ -113,12 +110,7 @@ namespace OpenRiaServices.Tools.Test
                 diffMessage = " Generated file is different than the expected reference file.\r\n" +
                     "    Expected file:       " + referenceFileName + "\r\n" +
                     "    Newly generated file: " + generatedFileName + "\r\n" +
-                    "\r\n ------------------- To diff these files, execute this ------------------\r\n\r\n    " +
-                    tfDiffCommand +
-                    "\r\n or using git diff \r\n\r\n    " +
-                    codeDiffCommand +
                     "\r\n ---------------- To make this the new reference file, execute this ------------------\r\n\r\n    " +
-                    tfEditCommand + "    " +
                     copyCommand + "\r\n\r\n" +
                     " ------------------- To update all baselines, that failed in the current run, execute following from command prompt ------------------\r\n\r\n" +
                     "\"" + updateAllBatFile + "\"" + "\r\n\r\n";
@@ -139,9 +131,9 @@ namespace OpenRiaServices.Tools.Test
         private static string StripAutoGenPrefix(string s, string lineCommentStart)
         {
             int index = 0;
-            while(string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length) == 0)
+            while(string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length, StringComparison.Ordinal) == 0)
             {
-                index = s.IndexOf("\r\n", index) + 2;
+                index = s.IndexOf("\r\n", index, StringComparison.Ordinal) + 2;
             }
             return s.Substring(index);
         }
@@ -418,7 +410,7 @@ namespace OpenRiaServices.Tools.Test
 
                 foreach (string msg in logger.InfoMessages)
                 {
-                    if (msg.StartsWith(msg))
+                    if (msg.StartsWith(msg, StringComparison.Ordinal))
                     {
                         foundIt = true;
                         break;
@@ -441,7 +433,7 @@ namespace OpenRiaServices.Tools.Test
 
                 foreach (string msg in logger.ErrorMessages)
                 {
-                    if (msg.StartsWith(error))
+                    if (msg.StartsWith(error, StringComparison.Ordinal))
                     {
                         foundIt = true;
                         break;
@@ -457,7 +449,7 @@ namespace OpenRiaServices.Tools.Test
         /// <param name="logger"></param>
         public static void AssertNoErrorsOrWarnings(ConsoleLogger logger)
         {
-            if (logger.ErrorMessages.Count() == 0 && logger.WarningMessages.Count() == 0)
+            if (logger.ErrorMessages.Count == 0 && logger.WarningMessages.Count == 0)
                 return;
 
             StringBuilder sb = new StringBuilder();

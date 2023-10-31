@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
+using System.Runtime.Versioning;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
@@ -51,44 +53,28 @@ namespace OpenRiaServices.Tools.Test
 
             using (var project = LoadProject(projectPath))
             {
-
-
                 // Ask to be told of generated outputs
                 var log = new ErrorLogger();
-                var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new[] { log });
-                Assert.AreEqual(string.Empty, string.Join("\n", log.Errors));
+
+                //"AssignProjectConfiguration"
+                var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new Microsoft.Build.Framework.ILogger[] { log });
+
+                Assert.AreEqual(null, results.Exception, "Build should not have exception result");
+                // Do early assert on log in case there was a task failure
+                if(results.OverallResult != BuildResultCode.Success)
+                    Assert.AreEqual(string.Empty, string.Join("\n", log.Errors), "ResolveAssemblyReferences failed, se log");
                 Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
+                Assert.AreEqual(string.Empty, string.Join("\n", log.Errors), "Task was successful, but there were errors logged");
 
-                foreach (var reference in project.ProjectInstance.GetItems("_ResolveAssemblyReferenceResolvedFiles"))
+                if (results.ResultsByTarget.TryGetValue("ResolveAssemblyReferences", out TargetResult resolveAssemblyReferences))
                 {
-                    string assemblyPath = GetFullPath(projectPath, reference);
-
-                    if (!assemblies.Contains(assemblyPath))
-                        assemblies.Add(assemblyPath);
+                    foreach (string assemblyPath in resolveAssemblyReferences.Items.Select(i => i.ItemSpec))
+                    {
+                        if (!assemblies.Contains(assemblyPath))
+                            assemblies.Add(assemblyPath);
+                    }
                 }
-                
-                foreach (var reference in project.ProjectInstance.GetItems("_ResolvedProjectReferencePaths"))
-                {
-                    string outputAssembly = GetFullPath(projectPath, reference);
-                    
-                    if (!string.IsNullOrEmpty(outputAssembly) && !assemblies.Contains(outputAssembly))
-                        assemblies.Add(outputAssembly);
-                }
-
             }
-
-            MakeFullPaths(assemblies, Path.GetDirectoryName(projectPath));
-        }
-
-        private static string GetFullPath(string projectPath, ProjectItemInstance reference)
-        {
-            string otherProjectPath = reference.EvaluatedInclude;
-            if (!Path.IsPathRooted(otherProjectPath))
-            {
-                otherProjectPath = Path.Combine(Path.GetDirectoryName(projectPath), otherProjectPath);
-            }
-
-            return otherProjectPath;
         }
 
         /// <summary>
@@ -150,8 +136,14 @@ namespace OpenRiaServices.Tools.Test
                     }
                     else
                     {
-                        // fallback to net472
-                        project.SetGlobalProperty("TargetFramework", "net472");
+                        var frameworks = targetFrameworks.Split(';');
+
+#if NETFRAMEWORK
+                        string framework = frameworks.First(f => f.StartsWith("net4", StringComparison.Ordinal));
+#else
+                        string framework = frameworks.First(f => !f.StartsWith("net4", StringComparison.Ordinal));
+#endif
+                        project.SetGlobalProperty("TargetFramework", framework);
                     }
                 }
             }
@@ -259,8 +251,8 @@ namespace OpenRiaServices.Tools.Test
                      {
                          {"Configuration", "Debug" },
                      },
+                    DisableInProcNode = true,
                     Loggers = loggers,
-
                 };
 
                 var projectInstance = BuildManager.GetProjectInstanceForBuild(Project);
@@ -278,7 +270,7 @@ namespace OpenRiaServices.Tools.Test
             }
 
             #region IDisposable Support
-            private bool disposedValue = false; // To detect redundant calls
+            private bool disposedValue; // To detect redundant calls
 
             private void Dispose(bool disposing)
             {

@@ -33,6 +33,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
         public ArrayPoolStream(ArrayPool<byte> arrayPool, int maxBlockSize)
         {
+            if (maxBlockSize < 0)
+                throw new ArgumentOutOfRangeException(nameof(maxBlockSize), maxBlockSize, "Max size can not have a negative value");
+
             _arrayPool = arrayPool;
             _maxSize = maxBlockSize;
         }
@@ -116,7 +119,23 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             // Ensure we never return buffer twice in case TakeBuffer below throws
             _buffer = null;
 
-            int nextSize = Math.Min(_position * 2, _maxSize);
+            int nextSize = _position * 2;
+            // If the size is >1GB the next size might be larger than int.MaxValue
+            // which means it will become negative
+            if (nextSize < 0)
+            {
+                if (_position > 0 && _position < int.MaxValue)
+                {
+                    //This is the space left before we hit max int 
+                    nextSize = int.MaxValue - _position;
+                }
+                else
+                {
+                    throw new InsufficientMemoryException();
+                }
+            }
+
+            nextSize = Math.Min(nextSize, _maxSize);
             _buffer = _arrayPool.Rent(nextSize);
             _bufferWritten = 0;
         }
@@ -240,8 +259,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             {
                 await response.StartAsync(ct);
                 WriteTo(response.BodyWriter);
-                //await response.BodyWriter.FlushAsync(ct);
-                //await response.CompleteAsync(); //? needed ?? 
+
+                // Say that we have finished writing the request, needed for other middleware such as OutputCache middleware
+                await response.CompleteAsync();
             }
 
             private void WriteTo(PipeWriter bodyWriter)

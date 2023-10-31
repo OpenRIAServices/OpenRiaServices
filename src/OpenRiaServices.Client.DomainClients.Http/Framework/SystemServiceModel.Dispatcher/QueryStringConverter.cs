@@ -68,11 +68,11 @@ namespace System.ServiceModel.Dispatcher
         {
             if (parameterType == null)
             {
-                throw new ArgumentNullException("parameterType");
+                throw new ArgumentNullException(nameof(parameterType));
             }
             if (parameterType.IsValueType && parameter == null)
             {
-                throw new ArgumentNullException("parameter");
+                throw new ArgumentNullException(nameof(parameter));
             }
             switch (Type.GetTypeCode(parameterType))
             {

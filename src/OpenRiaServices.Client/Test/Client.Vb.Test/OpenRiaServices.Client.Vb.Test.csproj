@@ -1,11 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472</TargetFrameworks>
     <DefineConstants>TRACE;DEBUG;VBTests</DefineConstants>
     <NoWarn>108</NoWarn>
     <RootNamespace>OpenRiaServices.Client.Test</RootNamespace>
   </PropertyGroup>
+
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.5.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
@@ -24,26 +25,26 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="..\Client.Test\Data\DomainContextTestBase.cs">
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\DomainContextTestBase.cs">
       <Link>Client.Test\Data\DomainContextTestBase.cs</Link>
     </Compile>
-    <Compile Include="..\Client.Test\Data\QueryTests.cs">
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\QueryTests.cs">
       <Link>Client.Test\Data\QueryTests.cs</Link>
     </Compile>
-    <Compile Include="..\Client.Test\Data\TestDataContext.cs">
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\TestDataContext.cs">
       <Link>Client.Test\Data\TestDataContext.cs</Link>
     </Compile>
-    <Compile Include="..\Client.Test\Data\OperationErrorTest.cs">
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\OperationErrorTest.cs">
       <Link>OperationErrorTest.cs</Link>
     </Compile>
-    <Compile Include="..\Client.Test\Data\ServerSideAsyncTests.cs">
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\ServerSideAsyncTests.cs">
       <Link>Client.Test\Data\ServerSideAsyncTests.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Main.cs" Link="Main.cs" />
 
-    <Compile Include="..\Client.Test\Utilities\UnitTestBaseExtensions.cs" Link="Client.Test\Utilities\UnitTestBaseExtensions.cs" />
-    <Compile Include="..\Client.Test\OperationAwaiter.cs" Link="Client.Test\OperationAwaiter.cs" />
-    <Compile Include="..\Client.Test\Main.cs" Link="Main.cs" />
-    <Compile Include="..\Client.Test\TestUris.cs" Link="TestUris.cs" />
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Utilities\UnitTestBaseExtensions.cs" Link="Client.Test\Utilities\UnitTestBaseExtensions.cs" />
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\OperationAwaiter.cs" Link="Client.Test\OperationAwaiter.cs" />
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\TestUris.cs" Link="TestUris.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -62,14 +63,16 @@
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\VbDomainClients\VbDomainClients.vbproj" />
+    <!-- Ensure web server project is built, but do not reference the output assebmly -->
+    <ProjectReference Include="..\..\..\Test\WebsiteFullTrust\WebsiteFullTrust.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <PrivateAssets>All</PrivateAssets>
+      <Private>false</Private>
+      <ExcludeAssets>All</ExcludeAssets>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <SetTargetFramework>TargetFramework=net472</SetTargetFramework>
+    </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <WCFMetadata Include="Service References\" />
-  </ItemGroup>
-  <ItemGroup>
-    <WCFMetadataStorage Include="Service References\Services\" />
-  </ItemGroup>
-
 
   <ItemGroup>
     <Content Include="ClientTestProjectPath.txt">

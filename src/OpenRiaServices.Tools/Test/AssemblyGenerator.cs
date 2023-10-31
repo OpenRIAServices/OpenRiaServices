@@ -23,6 +23,7 @@ namespace OpenRiaServices.Tools.Test
         private Type[] _generatedTypes;
         private string _userCode;
         private readonly bool _useFullTypeNames;
+        private MetadataLoadContext _metadataLoadContext;
 
 
         public AssemblyGenerator(bool isCSharp, IEnumerable<Type> domainServiceTypes) :
@@ -68,6 +69,11 @@ namespace OpenRiaServices.Tools.Test
                 this._userCode = value;
             }
         }
+
+        /// <summary>
+        /// <see cref="MetadataLoadContext"/> used to load the generated assembly
+        /// </summary>
+        internal MetadataLoadContext MetadataLoadContext => _metadataLoadContext ??= new MetadataLoadContext(new PathAssemblyResolver(this.ReferenceAssemblies));
 
         internal MockBuildEngine MockBuildEngine
         {
@@ -220,7 +226,7 @@ namespace OpenRiaServices.Tools.Test
         /// <returns><c>true</c> if the given type is a nullable type</returns>
         public static bool IsNullableType(Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return type.IsGenericType && type.GetGenericTypeDefinition().FullName == typeof(Nullable<>).FullName;
         }
 
         /// <summary>
@@ -305,7 +311,7 @@ namespace OpenRiaServices.Tools.Test
                 if (ctorArgIndex >= 0)
                 {
                     var ctorArg = ctorArgs[ctorArgIndex];
-                    if (typeof(T).IsAssignableFrom(ctorArg.ArgumentType))
+                    if (typeof(T).FullName == ctorArg.ArgumentType.FullName)
                     {
                         value = (T)ctorArg.Value;
                         return true;
@@ -317,7 +323,7 @@ namespace OpenRiaServices.Tools.Test
             {
                 if (string.Equals(valueName, namedArg.MemberInfo.Name, StringComparison.OrdinalIgnoreCase))
                 {
-                    if (typeof(T).IsAssignableFrom(namedArg.TypedValue.ArgumentType))
+                    if (typeof(T).FullName == namedArg.TypedValue.ArgumentType.FullName)
                     {
                         value = (T)namedArg.TypedValue.Value;
                         return true;
@@ -359,58 +365,7 @@ namespace OpenRiaServices.Tools.Test
             MemoryStream generatedAssembly = CompileSource();
             Assert.IsNotNull(generatedAssembly, "Expected compile to succeed");
 
-            Assembly assy = null;
-            Dictionary<AssemblyName, Assembly> loadedAssemblies = new Dictionary<AssemblyName, Assembly>(new AssemblyNameComparer());
-
-            try
-            {
-                foreach (string refAssyName in this.ReferenceAssemblies)
-                {
-                    if (refAssyName.Contains("mscorlib"))
-                    {
-                        continue;
-                    }
-                    try
-                    {
-                        Assembly refAssy = Assembly.ReflectionOnlyLoadFrom(refAssyName);
-                        loadedAssemblies[refAssy.GetName()] = refAssy;
-                    }
-                    catch (Exception ex)
-                    {
-                        System.Diagnostics.Debug.WriteLine(" failed to load " + refAssyName + ":\r\n" + ex.Message);
-                    }
-                }
-
-                assy = Assembly.ReflectionOnlyLoad(generatedAssembly.ToArray());
-                Assert.IsNotNull(assy);
-
-                AssemblyName[] refNames = assy.GetReferencedAssemblies();
-                foreach (AssemblyName refName in refNames)
-                {
-                    if (refName.FullName.Contains("mscorlib"))
-                    {
-                        continue;
-                    }
-                    if (!loadedAssemblies.ContainsKey(refName))
-                    {
-                        try
-                        {
-                            Assembly refAssy = Assembly.ReflectionOnlyLoad(refName.FullName);
-                            loadedAssemblies[refName] = refAssy;
-                        }
-                        catch (Exception ex)
-                        {
-                            System.Diagnostics.Debug.WriteLine(" failed to load " + refName + ":\r\n" + ex.Message);
-                        }
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                Assert.Fail("Encountered exception doing reflection only loads:\r\n" + ex.Message);
-            }
-
-            return assy;
+            return MetadataLoadContext.LoadFromStream(generatedAssembly);
         }
 
         private MemoryStream CompileSource()
@@ -439,6 +394,8 @@ namespace OpenRiaServices.Tools.Test
         {
             this._generatedTypes = null;
             this._generatedAssembly = null;
+            this._metadataLoadContext?.Dispose();
+            this._metadataLoadContext = null;
         }
 
         #endregion

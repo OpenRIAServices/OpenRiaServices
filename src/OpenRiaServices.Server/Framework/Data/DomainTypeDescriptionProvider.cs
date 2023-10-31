@@ -11,8 +11,8 @@ namespace OpenRiaServices.Server
     /// </summary>
     internal class DomainTypeDescriptionProvider : TypeDescriptionProvider
     {
-        private readonly DomainServiceDescriptionProvider _descriptionProvider = null;
-        private ICustomTypeDescriptor _customTypeDescriptor = null; 
+        private readonly DomainServiceDescriptionProvider _descriptionProvider;
+        private ICustomTypeDescriptor _customTypeDescriptor;
         private readonly Type _type;
 
         public DomainTypeDescriptionProvider(Type type, DomainServiceDescriptionProvider descriptionProvider)

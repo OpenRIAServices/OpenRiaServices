@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -44,7 +45,7 @@ namespace Cities
             string valueAsString = value.ToString();
             string prefixAsString = this.Prefix.ToString();
 
-            if (valueAsString.StartsWith(prefixAsString))
+            if (valueAsString.StartsWith(prefixAsString, StringComparison.Ordinal))
             {
                 return ValidationResult.Success;
             }
@@ -92,7 +93,7 @@ namespace Cities
     {
         public static ValidationResult IsZipValid(Zip zip, ValidationContext context)
         {
-            if (string.Equals(zip.StateName, zip.CityName))
+            if (string.Equals(zip.StateName, zip.CityName, StringComparison.Ordinal))
             {
                 return new ValidationResult("Zip codes cannot have matching city and state names", new string[] { "StateName", "CityName" });
             }
@@ -134,7 +135,7 @@ namespace Cities
         public static ValidationResult IsThrowExValid(object zipObject, ValidationContext context)
         {
             Zip zip = zipObject as Zip;
-            if ((zip.Code == 99999) && !zip.GetType().Assembly.FullName.Contains("Client"))
+            if ((zip.Code == 99999) && !(zip.GetType().Assembly.FullName.Contains("EndToEnd") || zip.GetType().Assembly.FullName.Contains("Client")))
             {
                 return new ValidationResult("Server fails validation");
             }

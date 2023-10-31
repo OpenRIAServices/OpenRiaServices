@@ -8,7 +8,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 {
     internal class EFCoreDescriptionProvider : DomainServiceDescriptionProvider
     {
-        private static Dictionary<Type, EFCoreTypeDescriptionContext> tdpContextMap = new Dictionary<Type, EFCoreTypeDescriptionContext>();
+        private static readonly Dictionary<Type, EFCoreTypeDescriptionContext> tdpContextMap = new Dictionary<Type, EFCoreTypeDescriptionContext>();
         private readonly EFCoreTypeDescriptionContext _typeDescriptionContext;
         private readonly Dictionary<Type, ICustomTypeDescriptor> _descriptors = new Dictionary<Type, ICustomTypeDescriptor>();
 

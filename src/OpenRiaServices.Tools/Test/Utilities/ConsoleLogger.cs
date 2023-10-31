@@ -91,7 +91,6 @@ namespace OpenRiaServices.Server.Test.Utilities
         public void LogWarning(string message, string subCategory, string errorCode, string helpString, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber)
         {
             this.LogWarning(message);
-            this.LogError(message);
             LogPacket packet = new LogPacket()
             {
                 Message = message,
@@ -207,7 +206,7 @@ namespace OpenRiaServices.Server.Test.Utilities
             return sb.ToString();
         }
 
-        public class LogPacket
+        public record class LogPacket
         {
             public string Message { get; set; }
             public string Subcategory { get; set; }

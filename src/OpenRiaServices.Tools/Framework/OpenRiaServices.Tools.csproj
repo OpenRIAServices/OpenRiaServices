@@ -1,22 +1,71 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;NET40</DefineConstants>
-    <TargetFramework>net472</TargetFramework>
+    <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)' == 'net472'">$(DefineConstants);HAS_LINQ2SQL</DefineConstants>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <PackageId>OpenRiaServices.Client.CodeGen</PackageId>
+    <Title>OpenRiaServices Client Code Generator</Title>
+    <Description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. </Description>
+    <PackageTags>WCF RIA Services RIAServices OpenRiaServices CodeGen</PackageTags>
+    <DevelopmentDependency>true</DevelopmentDependency>
+
     <!-- Copy Mono.Cecil to output directory -->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+
+    <!-- This target will run when MSBuild is collecting the files to be packaged, and we'll implement it below. This property controls the dependency list for this packaging process, so by adding our custom property we hook ourselves into the process in a supported way. -->
+    <TargetsForTfmSpecificBuildOutput>
+      $(TargetsForTfmSpecificBuildOutput);CopyProjectReferencesToPackage
+    </TargetsForTfmSpecificBuildOutput>
+    <!-- This property tells MSBuild where the root folder of the package's build assets should be. Because we are not a library package, we should not pack to 'lib'. Instead, we choose 'tasks' by convention. -->
+    <BuildOutputTargetFolder>tasks</BuildOutputTargetFolder>
+    <!-- NuGet does validation that libraries in a package are exposed as dependencies, but we _explicitly_ do not want that behavior for MSBuild tasks. They are isolated by design. Therefore we ignore this specific warning. -->
+    <NoWarn>NU5100,NU5128</NoWarn>
+
+    <!-- Tell the SDK to generate a deps.json file : https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022#generate-and-embed-a-depsjson-file -->
+    <GenerateDependencyFile>true</GenerateDependencyFile>
+
+    <!-- Dont add .xml file -->
+    <AllowedReferenceRelatedFileExtensions>.pdb</AllowedReferenceRelatedFileExtensions>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' != 'net472'">
+    <!-- Disable obsolete warning (primarily AssociationAttribute) -->
+    <NoWarn>$(NoWarn);CS0618</NoWarn>
+  </PropertyGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+      <Reference Include="mscorlib" />
+      <Reference Include="system" />
+      <Reference Include="System.ComponentModel.Composition" />
+      <Reference Include="System.ComponentModel.DataAnnotations" />
+      <Reference Include="System.Configuration" />
+      <Reference Include="System.ServiceModel" />
+      <Reference Include="System.ServiceModel.Web" />
+      <Reference Include="System.Web" />
+      <Reference Include="Microsoft.Build" />
+      <Reference Include="Microsoft.Build.Framework" />
+      <Reference Include="Microsoft.Build.Utilities.v4.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
+    <!-- Use Microsoft.Build 17.0.0 to be sure it works with all versions Net6 -->
+    <PackageReference Include="Microsoft.Build" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <!-- Required for known type attributes -->
+    <PackageReference Include="System.ServiceModel.Primitives" Version="6.0.0" />
+    <!-- Required for validation attributes -->
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <!-- MEF Attribute: TODO consider removing MEF support for .NET (non framework) -->
+    <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
+    <PackageReference Include="System.CodeDom" Version="7.0.0" />
+  </ItemGroup>
   <ItemGroup>
-    <Reference Include="Microsoft.Build" />
-    <Reference Include="Microsoft.Build.Framework" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0" />
-    <Reference Include="mscorlib" />
-    <Reference Include="system" />
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Configuration" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web" />
+    <!-- Use PrivateAssets="all" to prevent nuget packages to become nuget dependencies -->
+    <!-- IMPORTANT: Also use ExcludeAssets="Runtime" if referencing msbuild packages https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022#dont-bundle-the-microsoftbuildutilitiescore-assembly -->
+    <PackageReference Include="Mono.Cecil" Version="0.11.5" PrivateAssets="all" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" ExcludeAssets="Runtime" PrivateAssets="all">
+      <Private>False</Private>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="BinaryTypeUtility.cs" />
@@ -24,9 +73,6 @@
     <Compile Include="..\..\OpenRiaServices.Server\Framework\SerializationUtility.cs" Link="SerializationUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="TypeDescriptorExtensions.cs" />
-    <Compile Update="Pdb\SymStore\*.cs">
-      <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
-    </Compile>
     <Compile Update="MetadataPipeline\RangeCustomAttributeBuilder.cs">
       <ExcludeFromStyleCop>true</ExcludeFromStyleCop>
     </Compile>
@@ -45,19 +91,16 @@
       <CustomToolNamespace>OpenRiaServices.Tools</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
+    <Content Include="build\OpenRiaServices.Client.CodeGen.targets" PackagePath="build" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="Pdb\ReadMe.txt" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="..\..\..\NuGet\OpenRiaServices.Client.CodeGen\build\OpenRiaServices.CodeGen.targets" Link="build\OpenRiaServices.CodeGen.targets" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Mono.Cecil" Version="0.11.4" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="build\" />
-  </ItemGroup>
+
+  <!-- This is the target we defined above. It's purpose is to add all of our PackageReference and ProjectReference's runtime assets to our package output.  -->
+  <Target Name="CopyProjectReferencesToPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <!-- The TargetPath is the path inside the package that the source file will be placed. This is already precomputed in the ReferenceCopyLocalPaths items' DestinationSubPath, so reuse it here. -->
+      <BuildOutputInPackage Include="@(ReferenceCopyLocalPaths)" TargetPath="%(ReferenceCopyLocalPaths.DestinationSubPath)" />
+    </ItemGroup>
+  </Target>
 </Project>

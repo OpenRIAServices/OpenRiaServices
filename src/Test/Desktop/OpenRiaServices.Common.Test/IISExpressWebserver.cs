@@ -113,6 +113,10 @@ namespace OpenRiaServices.Common.Test
         [SecuritySafeCritical]
         private static string GetCommandLine(Process processs)
         {
+#if !NETFRAMEWORK
+            if (!OperatingSystem.IsWindows())
+                throw new NotImplementedException();
+#endif
             var commandLineSearcher = new ManagementObjectSearcher(
                 $"SELECT CommandLine FROM Win32_Process WHERE ProcessId = {processs.Id}");
             foreach (ManagementObject commandLineObject in commandLineSearcher.Get())

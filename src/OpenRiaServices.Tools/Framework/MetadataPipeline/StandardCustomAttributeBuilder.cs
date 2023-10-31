@@ -103,8 +103,17 @@ namespace OpenRiaServices.Tools
         {
             string propertyName = propertyInfo.Name;
 
-            // We strip "TypeId" from all Attributes.  It is a property we cannot set via setters or ctor
-            return propertyName.Equals("TypeId", StringComparison.Ordinal) ? null : propertyName;
+            if (propertyName.Equals("TypeId", StringComparison.Ordinal))
+                return null;
+#if !NETFRAMEWORK
+            // We strip "RequiresValidationContext" from ValidationAttribute since there is usually no setter, it is calculated indirectly
+            // Since the default is often true we will (if type as no default cto) look for a constructor taking it as a parameter
+            else if (propertyInfo.Name == nameof(ValidationAttribute.RequiresValidationContext)
+                && attribute is ValidationAttribute 
+                && propertyInfo.SetMethod is null)
+                return null;
+#endif
+            return propertyName;
         }
 
         /// <summary>
@@ -338,6 +347,10 @@ namespace OpenRiaServices.Tools
             {
                 return GetPropertyValues(propertyMaps, defaultAttributeInstance);
             }
+
+            // IMPROVEMENT: If there is no default constructor we can match parameter names against list of "CurrentValues" (case insensitive)
+            // This should solve cases where default value is different from the default (0) value of the type 
+            // such as ValidationAttribute.RequiresValidationContext
 
             // If we were not able to construct an attribute, simply construct
             // default values for every property

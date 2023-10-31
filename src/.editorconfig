@@ -91,7 +91,14 @@ end_of_line = crlf
 dotnet_style_prefer_simplified_boolean_expressions = true:suggestion
 dotnet_style_prefer_simplified_interpolation = true:suggestion
 dotnet_style_namespace_match_folder = true:suggestion
+dotnet_style_operator_placement_when_wrapping = beginning_of_line
+dotnet_style_prefer_inferred_tuple_names = true:suggestion
+dotnet_style_prefer_inferred_anonymous_type_member_names = true:suggestion
+
+
+# Code quality Diagnostics
 dotnet_code_quality_unused_parameters = non_public:suggestion
+dotnet_code_quality.CA1822.api_surface = private, internal
 
 ############################### 
 # C# Coding Conventions       # 

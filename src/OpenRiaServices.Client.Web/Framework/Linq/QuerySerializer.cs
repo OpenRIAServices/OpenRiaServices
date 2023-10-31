@@ -62,11 +62,11 @@ namespace OpenRiaServices.Client
                 // format conditional : iff(Test, IfTrue, IfFalse)
                 this._currPartBuilder.Append("iif(");
                 Expression test = this.Visit(c.Test);
-                this._currPartBuilder.Append(",");
+                this._currPartBuilder.Append(',');
                 Expression ifTrue = this.Visit(c.IfTrue);
-                this._currPartBuilder.Append(",");
+                this._currPartBuilder.Append(',');
                 Expression ifFalse = this.Visit(c.IfFalse);
-                this._currPartBuilder.Append(")");
+                this._currPartBuilder.Append(')');
 
                 if (test != c.Test || ifTrue != c.IfTrue || ifFalse != c.IfFalse)
                 {
@@ -77,7 +77,7 @@ namespace OpenRiaServices.Client
 
             protected override Expression VisitBinary(BinaryExpression b)
             {
-                this._currPartBuilder.Append("(");
+                this._currPartBuilder.Append('(');
 
                 Expression left = this.Visit(b.Left);
 
@@ -96,34 +96,34 @@ namespace OpenRiaServices.Client
                         this._currPartBuilder.Append("||");
                         break;
                     case ExpressionType.GreaterThan:
-                        this._currPartBuilder.Append(">");
+                        this._currPartBuilder.Append('>');
                         break;
                     case ExpressionType.GreaterThanOrEqual:
                         this._currPartBuilder.Append(">=");
                         break;
                     case ExpressionType.LessThan:
-                        this._currPartBuilder.Append("<");
+                        this._currPartBuilder.Append('<');
                         break;
                     case ExpressionType.LessThanOrEqual:
                         this._currPartBuilder.Append("<=");
                         break;
                     case ExpressionType.Multiply:
                     case ExpressionType.MultiplyChecked:
-                        this._currPartBuilder.Append("*");
+                        this._currPartBuilder.Append('*');
                         break;
                     case ExpressionType.Modulo:
-                        this._currPartBuilder.Append("%");
+                        this._currPartBuilder.Append('%');
                         break;
                     case ExpressionType.Subtract:
                     case ExpressionType.SubtractChecked:
-                        this._currPartBuilder.Append("-");
+                        this._currPartBuilder.Append('-');
                         break;
                     case ExpressionType.Divide:
-                        this._currPartBuilder.Append("/");
+                        this._currPartBuilder.Append('/');
                         break;
                     case ExpressionType.Add:
                     case ExpressionType.AddChecked:
-                        this._currPartBuilder.Append("+");
+                        this._currPartBuilder.Append('+');
                         break;
                     case ExpressionType.ArrayIndex:
                         // handled below - the right expression
@@ -141,17 +141,17 @@ namespace OpenRiaServices.Client
 
                 if (b.NodeType == ExpressionType.ArrayIndex)
                 {
-                    this._currPartBuilder.Append("[");
+                    this._currPartBuilder.Append('[');
                 }
 
                 Expression right = this.Visit(b.Right);
 
                 if (b.NodeType == ExpressionType.ArrayIndex)
                 {
-                    this._currPartBuilder.Append("]");
+                    this._currPartBuilder.Append(']');
                 }
 
-                this._currPartBuilder.Append(")");
+                this._currPartBuilder.Append(')');
 
                 Expression conversion = this.Visit(b.Conversion);
                 if (left != b.Left || right != b.Right || conversion != b.Conversion)
@@ -175,7 +175,7 @@ namespace OpenRiaServices.Client
                     case ExpressionType.Not:
                         if (u.Operand.Type == typeof(bool) || u.Operand.Type == typeof(bool?))
                         {
-                            this._currPartBuilder.Append("!");
+                            this._currPartBuilder.Append('!');
                         }
                         else
                         {
@@ -184,7 +184,7 @@ namespace OpenRiaServices.Client
                         break;
                     case ExpressionType.Negate:
                     case ExpressionType.NegateChecked:
-                        this._currPartBuilder.Append("-");
+                        this._currPartBuilder.Append('-');
                         break;
                     case ExpressionType.ArrayLength:
                         this.Visit(u.Operand);
@@ -266,7 +266,7 @@ namespace OpenRiaServices.Client
                 {
                     // Serialize (p => p.enumProp.HasFlag( EnumType.A)) into "(it.enumProp has EnumType.A)"
 
-                    this._currPartBuilder.Append("(");
+                    this._currPartBuilder.Append('(');
                     this.Visit(m.Object);
 
                     // We could convert it to an int here if possible, otherwise we will do it anyway on the server
@@ -277,7 +277,7 @@ namespace OpenRiaServices.Client
                     //this.Visit(Expression.Convert(m.Arguments[0], typeof(int)));
                     this.Visit(m.Arguments[0]);
                    
-                    this._currPartBuilder.Append(")");
+                    this._currPartBuilder.Append(')');
                 }
                 else
                 {
@@ -297,11 +297,11 @@ namespace OpenRiaServices.Client
                     {
                         // for all member accesses other than those directly off of
                         // our query parameter, we need to append a dot
-                        this._currPartBuilder.Append(".");
+                        this._currPartBuilder.Append('.');
                     }
                     this._currPartBuilder.AppendFormat(CultureInfo.InvariantCulture, "{0}(", m.Method.Name);
                     this.VisitMethodParameters(m.Arguments);
-                    this._currPartBuilder.Append(")");
+                    this._currPartBuilder.Append(')');
                 }
 
                 if (this._currPart != null)
@@ -369,7 +369,7 @@ namespace OpenRiaServices.Client
                 {
                     // for all member accesses other than those directly off of
                     // our query parameter, we need to append a dot
-                    this._currPartBuilder.Append(".");
+                    this._currPartBuilder.Append('.');
                 }
                 else
                 {

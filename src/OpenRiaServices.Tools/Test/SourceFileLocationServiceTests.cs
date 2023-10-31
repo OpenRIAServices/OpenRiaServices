@@ -85,7 +85,7 @@ namespace OpenRiaServices.Tools.Test
     // Helper mock factory to create ISourceFileProvider mock instances
     internal class MockSourceFileProviderFactory : ISourceFileProviderFactory
     {
-        public static long createCount = 0;
+        public static long createCount;
 
         private readonly Func<MemberInfo, string> _func;
 
