@@ -1298,13 +1298,12 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Is_ReadOnly, propertyName));
             }
 
-            ComplexObject complexObject = value as ComplexObject;
-            if (complexObject != null && complexObject.IsAttached)
+            if (metaMember.IsComplex && value is ComplexObject complexObject && complexObject.IsAttached)
             {
                 throw new InvalidOperationException(Resource.ComplexType_InstancesCannotBeShared);
             }
 
-            if (this.MetaType.RequiresValidation)
+            if (metaMember.RequiresValidation)
             {
                 ValidationContext validationContext = this.CreateValidationContext();
                 validationContext.MemberName = propertyName;
