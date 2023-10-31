@@ -3,19 +3,17 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFrameworks>net472;net6.0</TargetFrameworks>
   </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.1.1" />
   </ItemGroup>
   
-  <ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'" >
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Management" />
-    <Reference Include="System.Web" />
-    <Reference Include="WindowsBase" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net472' ">
-    <PackageReference Include="MSTest.TestFramework" Version="2.2.10" />
     <PackageReference Include="System.Management" Version="7.0.2" />
   </ItemGroup>
 </Project>
