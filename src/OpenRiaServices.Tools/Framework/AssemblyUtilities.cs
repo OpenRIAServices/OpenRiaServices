@@ -107,6 +107,7 @@ namespace OpenRiaServices.Tools
                 if (ex is System.IO.FileNotFoundException ||
                     ex is System.IO.FileLoadException ||
                     ex is System.IO.PathTooLongException ||
+                    ex is System.IO.DirectoryNotFoundException ||
                     ex is BadImageFormatException ||
                     ex is System.Security.SecurityException)
                 {
