@@ -98,14 +98,6 @@ namespace OpenRiaServices.Client.Test
         }
     }
 
-    public class ConfigurableEntityContainer : EntityContainer
-    {
-        public void CreateSet<TEntity>(EntitySetOperations operations) where TEntity : Entity, new()
-        {
-            base.CreateEntitySet<TEntity>(operations);
-        }
-    }
-
     /// <summary>
     /// Class that provides/caches database data without performing any remote queries.
     /// </summary>

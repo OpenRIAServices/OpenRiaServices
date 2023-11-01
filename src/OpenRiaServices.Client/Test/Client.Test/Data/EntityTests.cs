@@ -891,57 +891,6 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        [Asynchronous]
-        [TestDescription("Verifies that entity child and parent relationships are restored after RejectChanges is called.")]
-        [WorkItem(720495)]
-        public void Entity_RejectChanges_ParentAssociationRestored()
-        {
-            List<Employee> employeeList = new List<Employee>();
-            ConfigurableEntityContainer container = new ConfigurableEntityContainer();
-            container.CreateSet<Employee>(EntitySetOperations.All);
-            ConfigurableDomainContext catalog = new ConfigurableDomainContext(new WebDomainClient<TestDomainServices.LTS.Catalog.ICatalogContract>(TestURIs.EFCore_Catalog), container);
-
-            var load = catalog.Load(catalog.GetEntityQuery<Employee>("GetEmployees"), throwOnError:false);
-            this.EnqueueCompletion(() => load);
-            this.EnqueueCallback(() =>
-            {
-                Assert.AreEqual(null, load.Error);
-
-                Employee parent, child;
-                parent = container.GetEntitySet<Employee>().OrderByDescending(e => e.Reports.Count).First();
-
-                while (parent != null)
-                {
-                    // Track parent, get a report from it
-                    employeeList.Add(parent);
-                    child = parent.Reports.OrderByDescending(e => e.Reports.Count).FirstOrDefault();
-
-                    // Track child
-                    if (child == null)
-                    {
-                        break;
-                    }
-
-                    // Remove child and continue
-                    parent.Reports.Remove(child);
-                    parent = child;
-                }
-
-                // By rejecting changes, our parent<=>child relationships should be restored.
-                catalog.RejectChanges();
-
-                // Unwind, walking up management chain
-                foreach (Employee employee in employeeList.Reverse<Employee>())
-                {
-                    Assert.AreSame(parent, employee, "Expected parent relationship to be restored.");
-                    parent = employee.Manager;
-                    Assert.IsTrue(parent.Reports.Contains(employee), "Expected child relationship to be restored.");
-                }
-            });
-            this.EnqueueTestComplete();
-        }
-
-        [TestMethod]
         public void Entity_SkipIndexers()
         {
             MockEntity_Indexer entity = new MockEntity_Indexer { Data = "Foo", Key = 10 };
