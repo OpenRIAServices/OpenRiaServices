@@ -106,7 +106,7 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: false
+    diagnosticsEnabled: true
   timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@1
