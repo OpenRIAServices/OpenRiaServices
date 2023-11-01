@@ -32,6 +32,7 @@ namespace OpenRiaServices.Client.Internal
         [ThreadStatic]
         private static Dictionary<Type, MetaType> s_metaTypes;
         private readonly bool _requiresValidation;
+        private readonly bool _requiresObjectValidation;
         private readonly Type[] _childTypes;
         private readonly Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
         private readonly ReadOnlyCollection<MetaMember> _dataMembers;
@@ -121,7 +122,8 @@ namespace OpenRiaServices.Client.Internal
             this.Type = type;
 
             _validationAttributes = new ReadOnlyCollection<ValidationAttribute>(this.Type.GetCustomAttributes(typeof(ValidationAttribute), true).OfType<ValidationAttribute>().ToArray());
-            _requiresValidation = _requiresValidation || _validationAttributes.Any() || typeof(IValidatableObject).IsAssignableFrom(type);
+            _requiresObjectValidation = _validationAttributes.Any() || typeof(IValidatableObject).IsAssignableFrom(type);
+            _requiresValidation = _requiresValidation || _requiresObjectValidation;
 
             // for identity purposes, we need to make sure values are always ordered
             KeyMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsKeyMember).OrderBy(m => m.Name).ToArray());
@@ -261,6 +263,12 @@ namespace OpenRiaServices.Client.Internal
         /// validation. The check is recursive through any complex type members.
         /// </summary>
         public bool RequiresValidation => this._requiresValidation;
+
+        /// <summary>
+        /// Gets a value indicating whether the Type requires any Type level
+        /// validation.
+        /// </summary>
+        internal bool RequiresObjectValidation => this._requiresObjectValidation;
 
         /// <summary>
         /// Gets a value indicating whether the Type has any members marked with

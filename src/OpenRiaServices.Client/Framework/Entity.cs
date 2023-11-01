@@ -1309,6 +1309,12 @@ namespace OpenRiaServices.Client
                 validationContext.MemberName = propertyName;
                 this.ValidateProperty(validationContext, value);
             }
+            else if (MetaType.RequiresObjectValidation)
+            {
+                // Validation error must have been set by object level validation
+                // Clear it to mimic old behaviour where validate property was always called in these scenarios
+                this.ValidationResultCollection.ReplaceErrors(propertyName, Array.Empty<ValidationResult>());
+            }
         }
 
         /// <summary>
