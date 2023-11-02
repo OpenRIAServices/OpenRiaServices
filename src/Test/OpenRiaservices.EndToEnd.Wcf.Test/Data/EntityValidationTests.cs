@@ -475,7 +475,7 @@ namespace OpenRiaServices.Client.Test
         public void ValidationErrors_ObjectLevelValidation()
         {
             MockEntity_ObjectValidation entity = new MockEntity_ObjectValidation();
-            INotifyDataErrorInfo notifier = (INotifyDataErrorInfo)entity;
+            INotifyDataErrorInfo notifier = entity;
 
             List<string> actualChanges = new List<string>();
             notifier.ErrorsChanged += (s, e) => actualChanges.Add(e.PropertyName);
@@ -487,8 +487,9 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(0, actualChanges.Count, "No errors should be detected");
 
             // Force object level validation
-            ((IEditableObject)entity).BeginEdit();
-            ((IEditableObject)entity).EndEdit();
+            IEditableObject editableObject = entity;
+            editableObject.BeginEdit();
+            editableObject.EndEdit();
 
             Assert.IsTrue(entity.HasValidationErrors, "Erros should be detected");
             Assert.AreEqual(1, entity.ValidationErrors.Count);
@@ -501,8 +502,8 @@ namespace OpenRiaServices.Client.Test
 
             // Setting property will remove object level validation
             entity.OnlyObjectValidation = null;
-            Assert.IsFalse(entity.HasValidationErrors, "No errors should be detected");
-            Assert.AreEqual(2, actualChanges.Count, "1 errors should be detected");
+            Assert.IsFalse(entity.HasValidationErrors, "Errors should have been removed");
+            Assert.AreEqual(2, actualChanges.Count, "change notification should have happened when clearing error");
         }
 
         [TestMethod]
