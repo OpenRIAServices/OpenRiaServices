@@ -9,6 +9,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace OpenRiaServices.Tools.Test
 {
     [TestClass()]
+    [DeploymentItem("NotificationMethodGeneratorTestCodeSnippets.xml")]
+    [DeploymentItem("NotificationMethodGeneratorTests.xml")]
     public class NotificationMethodGeneratorTest
     {
         private static XmlReader XmlReader;
