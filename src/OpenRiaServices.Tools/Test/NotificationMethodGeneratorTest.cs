@@ -11,13 +11,6 @@ namespace OpenRiaServices.Tools.Test
     [TestClass()]
     public class NotificationMethodGeneratorTest
     {
-        private TestContext context;
-        public TestContext TestContext
-        {
-            get { return this.context; }
-            set { this.context = value; }
-        }
-
         private static XmlReader XmlReader;
 
         static IEnumerable<object[]> GetTestCasesFromXml(string filename, string nodeName, string[] attributes)
@@ -42,8 +35,6 @@ namespace OpenRiaServices.Tools.Test
             => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "PartialMethodsSnippetBlockArgs", new[] { "comments", "baseMethodNames", "parameters" });
 
         [
-        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
-        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTestCodeSnippets.xml"),
         TestMethod,
         DynamicData(nameof(PartialMethodsSnippetBlockTestCases))]
         public void PartialMethodsSnippetBlockTest(string comments, string baseMethodNames, string parameters)
@@ -67,7 +58,7 @@ namespace OpenRiaServices.Tools.Test
             // do verification ...
             if (XmlReader == null)
             {
-                XmlReader = XmlReader.Create(this.TestContext.TestDeploymentDir + "\\NotificationMethodGeneratorTestCodeSnippets.xml");
+                XmlReader = XmlReader.Create("NotificationMethodGeneratorTestCodeSnippets.xml");
             }
 
             do
@@ -110,7 +101,6 @@ namespace OpenRiaServices.Tools.Test
             => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "GetMethodInvokeExpressionStatementFor1Args", new[] { "comments", "baseMethodNames", "parameters" });
 
         [
-        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         TestMethod(),
         DynamicData(nameof(OnCreatedMethodInvokeExpressionTestCases)),
         ]
@@ -152,7 +142,6 @@ namespace OpenRiaServices.Tools.Test
             => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "AddMethodFor1Args", new[] { "comments" });
 
         [
-        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         TestMethod(),
         DynamicData(nameof(AddMethodFor1TestCases))]
         public void AddMethodFor1Test(string comments)
@@ -178,7 +167,6 @@ namespace OpenRiaServices.Tools.Test
             => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "AddMethodFor2Args", new[] { "comments", "parameterDeclaration" });
 
         [
-        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         TestMethod(),
         DynamicData (nameof(AddMethodFor2TestCases))]
         public void AddMethodFor2Test(string comments, string parameterDeclaration)
@@ -216,10 +204,8 @@ namespace OpenRiaServices.Tools.Test
         public static IEnumerable<object> AddMethodFor3TestCases
             => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "AddMethodFor3Args", new[] { "comments", "parameters" });
 
-        [
-        DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
-        TestMethod(),
-        DynamicData(nameof(AddMethodFor3TestCases))]
+        [TestMethod()]
+        [DynamicData(nameof(AddMethodFor3TestCases))]
         public void AddMethodFor3Test(string comments, string paramDeclsArgs)
         {
             AddMethodFor3Test(true, comments, paramDeclsArgs);

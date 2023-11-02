@@ -65,10 +65,10 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="NotificationMethodGeneratorTestCodeSnippets.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="NotificationMethodGeneratorTests.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="ProjectPath.txt">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
