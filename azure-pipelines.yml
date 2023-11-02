@@ -87,7 +87,7 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     diagnosticsEnabled: false
-  timeoutInMinutes: 25
+  timeoutInMinutes: 15
 
 - task: VSTest@2
   displayName: 'Run tests - net6'
@@ -101,13 +101,13 @@ steps:
     runOnlyImpactedTests: false
     # Needed to hardcode path to test adapters for NET48 tests
     # pathtoCustomTestAdapters: '$(Build.SourcesDirectory)\src\OpenRiaServices.Server.UnitTesting\Test\bin\$(BuildConfiguration)\net6.0\'
-    runInParallel: false
+    runInParallel: true
     # runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: true
-  timeoutInMinutes: 25
+    diagnosticsEnabled: false
+  timeoutInMinutes: 15
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
