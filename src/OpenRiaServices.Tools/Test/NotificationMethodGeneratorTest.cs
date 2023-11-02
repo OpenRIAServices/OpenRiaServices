@@ -45,19 +45,7 @@ namespace OpenRiaServices.Tools.Test
         DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTestCodeSnippets.xml"),
         TestMethod,
-#if NETFRAMEWORK
-        DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "PartialMethodsSnippetBlockArgs", DataAccessMethod.Sequential)]
-        public void PartialMethodsSnippetBlockTest()
-        {
-            string comments = this.TestContext.DataRow["comments"].ToString();
-            string baseMethodNames = this.TestContext.DataRow["baseMethodNames"].ToString();
-            string parameters = this.TestContext.DataRow["parameters"].ToString();
-
-            PartialMethodsSnippetBlockTest(comments, baseMethodNames, parameters);
-        }
-#else
         DynamicData(nameof(PartialMethodsSnippetBlockTestCases))]
-#endif
         public void PartialMethodsSnippetBlockTest(string comments, string baseMethodNames, string parameters)
         {
             string[] baseMethodNamesArray = baseMethodNames.Split(new char[] { ',' });
@@ -124,20 +112,8 @@ namespace OpenRiaServices.Tools.Test
         [
         DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         TestMethod(),
-#if NETFRAMEWORK
-        DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "GetMethodInvokeExpressionStatementFor1Args", DataAccessMethod.Sequential)]
-        public void GetMethodInvokeExpressionStatementForTest()
-        {
-            string comments = this.TestContext.DataRow["comments"].ToString();
-            string baseMethodNames = this.TestContext.DataRow["baseMethodNames"].ToString();
-            string parameters = this.TestContext.DataRow["parameters"].ToString();
-
-            GetMethodInvokeExpressionStatementForTest(comments, baseMethodNames, parameters);
-        }
-#else
         DynamicData(nameof(OnCreatedMethodInvokeExpressionTestCases)),
         ]
-#endif
         public void GetMethodInvokeExpressionStatementForTest(string comments, string baseMethodNames, string parameters)
         {
             string[] baseMethodNamesArray = baseMethodNames.Split(new char[] { ',' });
@@ -178,16 +154,7 @@ namespace OpenRiaServices.Tools.Test
         [
         DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         TestMethod(),
-#if NETFRAMEWORK
-        DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "AddMethodFor1Args", DataAccessMethod.Sequential)]
-        public void AddMethodFor1Test()
-        {
-            string comments = this.TestContext.DataRow["comments"].ToString();
-            AddMethodFor1Test(comments);
-        }
-#else
         DynamicData(nameof(AddMethodFor1TestCases))]
-#endif
         public void AddMethodFor1Test(string comments)
         {
             AddMethodFor1Test(true, comments);
@@ -213,17 +180,7 @@ namespace OpenRiaServices.Tools.Test
         [
         DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         TestMethod(),
-#if NETFRAMEWORK
-        DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "AddMethodFor2Args", DataAccessMethod.Sequential)]
-        public void AddMethodFor2Test()
-        {
-            string comments = this.TestContext.DataRow["comments"].ToString();
-            string parameterDeclaration = this.TestContext.DataRow["parameterDeclaration"].ToString();
-            AddMethodFor2Test(comments, parameterDeclaration);
-        }
-#else
         DynamicData (nameof(AddMethodFor2TestCases))]
-#endif
         public void AddMethodFor2Test(string comments, string parameterDeclaration)
         {
 
@@ -262,17 +219,7 @@ namespace OpenRiaServices.Tools.Test
         [
         DeploymentItem("OpenRiaServices.Tools\\Test\\NotificationMethodGeneratorTests.xml"),
         TestMethod(),
-#if NETFRAMEWORK
-        DataSource("Microsoft.VisualStudio.TestTools.DataSource.XML", "|DataDirectory|\\NotificationMethodGeneratorTests.xml", "AddMethodFor3Args", DataAccessMethod.Sequential)]
-        public void AddMethodFor3Test()
-        {
-            string comments = this.TestContext.DataRow["comments"].ToString();
-            string parameters = this.TestContext.DataRow["parameters"].ToString();
-            AddMethodFor2Test(comments, parameters);
-        }
-#else
         DynamicData(nameof(AddMethodFor3TestCases))]
-#endif
         public void AddMethodFor3Test(string comments, string paramDeclsArgs)
         {
             AddMethodFor3Test(true, comments, paramDeclsArgs);
