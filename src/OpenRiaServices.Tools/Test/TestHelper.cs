@@ -12,6 +12,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Server.Test.Utilities;
 using System.Globalization;
 using Microsoft.Build.Exceptions;
+using OpenRiaServices.Tools.Test.Utilities;
+using System.Diagnostics;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -40,15 +42,9 @@ namespace OpenRiaServices.Tools.Test
         // breadcrumbs we can use to get back to it/
         public static void GetProjectPaths(string relativeTestDir, out string projectPath, out string outputPath)
         {
-            string projectPathRelativeFileName = Path.Combine(relativeTestDir, "ProjectPath.txt");
-            string projectPathFile = GetTestFileName(projectPathRelativeFileName);
-            projectPath = string.Empty;
-            outputPath = string.Empty;
-            string inputString = string.Empty;
-            using (StreamReader t1 = new StreamReader(projectPathFile))
-            {
-                inputString = t1.ReadToEnd();
-            }
+            // Read file from output folder
+            string inputString = File.ReadAllText("ProjectPath.txt");
+
 
             string[] split = inputString.Split(',');
             projectPath = split[0];
@@ -131,7 +127,7 @@ namespace OpenRiaServices.Tools.Test
         private static string StripAutoGenPrefix(string s, string lineCommentStart)
         {
             int index = 0;
-            while(string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length, StringComparison.Ordinal) == 0)
+            while (string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length, StringComparison.Ordinal) == 0)
             {
                 index = s.IndexOf("\r\n", index, StringComparison.Ordinal) + 2;
             }
@@ -168,7 +164,7 @@ namespace OpenRiaServices.Tools.Test
         {
             get
             {
-                return Path.GetDirectoryName(typeof(TestHelper).Assembly.Location);
+                return TestInitializer.DeploymentDirectory;
             }
         }
 
@@ -180,7 +176,7 @@ namespace OpenRiaServices.Tools.Test
         public static string NormalizedFolder(string folder)
         {
             int len = folder.Length;
-            return (len > 0 && folder[len-1] == Path.DirectorySeparatorChar) ? folder.Substring(0, folder.Length - 1) : folder;
+            return (len > 0 && folder[len - 1] == Path.DirectorySeparatorChar) ? folder.Substring(0, folder.Length - 1) : folder;
         }
 
         public static string GetOutputTestDataDir(string subDir)
@@ -636,7 +632,7 @@ namespace OpenRiaServices.Tools.Test
             ConsoleLogger logger = new ConsoleLogger();
             ClientCodeGenerationOptions options = CreateMockCodeGenContext(language, false);
             ICodeGenerationHost host = CreateMockCodeGenerationHost(logger, null);
-            string generatedCode = GenerateCode(host, options, domainServiceTypes );
+            string generatedCode = GenerateCode(host, options, domainServiceTypes);
             TestHelper.AssertCodeGenFailure(generatedCode, logger, errors);
         }
 
@@ -663,7 +659,7 @@ namespace OpenRiaServices.Tools.Test
             ClientCodeGenerationOptions options = CreateMockCodeGenContext(language, useFullNames);
             ICodeGenerationHost host = CreateMockCodeGenerationHost(logger, typeService);
             string generatedCode = GenerateCode(host, options, domainServiceTypes);
-            TestHelper.AssertCodeGenSuccess(generatedCode,  ((MockCodeGenerationHost)host).LoggingService as ConsoleLogger);
+            TestHelper.AssertCodeGenSuccess(generatedCode, ((MockCodeGenerationHost)host).LoggingService as ConsoleLogger);
             return generatedCode;
         }
 
@@ -751,7 +747,7 @@ namespace OpenRiaServices.Tools.Test
                 ClientProjectPath = "MockProject.proj",
                 IsApplicationContextGenerationEnabled = codeGenOptions.GenerateApplicationContexts,
                 UseFullTypeNames = codeGenOptions.UseFullTypeNames,
-                ClientProjectTargetPlatform =  TargetPlatform.Silverlight
+                ClientProjectTargetPlatform = TargetPlatform.Silverlight
             };
 
             MockCodeGenerationHost host = TestHelper.CreateMockCodeGenerationHost(codeGenOptions.Logger, codeGenOptions.SharedCodeService);

@@ -14,7 +14,7 @@ namespace OpenRiaServices.Tools.Test.Utilities
     public sealed class TestInitializer
     {
         [AssemblyInitialize]
-        public static void AssemblyInit(TestContext context)
+        public static void AssemblyInit(TestContext testContext)
         {
             // Register the most recent version of MSBuild
             Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(MSBuildLocator.QueryVisualStudioInstances()
@@ -27,11 +27,15 @@ namespace OpenRiaServices.Tools.Test.Utilities
             CultureInfo.DefaultThreadCurrentCulture =
             CultureInfo.DefaultThreadCurrentUICulture = new CultureInfo("en-US");
 
+            DeploymentDirectory = testContext.DeploymentDirectory;
+
             // Ensure we reference sql client so that it is copied to test folder
             // se https://stackoverflow.com/questions/18455747/no-entity-framework-provider-found-for-the-ado-net-provider-with-invariant-name#18642452
             var type = typeof(System.Data.Entity.SqlServer.SqlProviderServices);
             if (type == null)
                 throw new Exception("Do not remove, ensures static reference to System.Data.Entity.SqlServer");
         }
+
+        public static string DeploymentDirectory { get; private set; }
     }
 }
