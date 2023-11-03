@@ -25,7 +25,7 @@ namespace OpenRiaServices.Client.Test
         public void Entity_Validation_Property_Fail_ReadOnly_Throws()
         {
             MockEntity entity = new MockEntity();
-            ExceptionHelper.ExpectInvalidOperationException(delegate()
+            ExceptionHelper.ExpectInvalidOperationException(delegate ()
             {
                 entity.ReadOnlyProperty = "x";
             }, "The 'ReadOnlyProperty' property is read only.");
@@ -54,7 +54,7 @@ namespace OpenRiaServices.Client.Test
         public void Entity_Validation_Property_Fail_NonPublic_Throws()
         {
             MockEntity entity = new MockEntity();
-            ExceptionHelper.ExpectArgumentException(delegate()
+            ExceptionHelper.ExpectArgumentException(delegate ()
             {
                 entity.NonPublicProperty = "x";
             }, "Type 'MockEntity' does not contain a public property named 'NonPublicProperty'.\r\nParameter name: propertyName");
@@ -65,7 +65,7 @@ namespace OpenRiaServices.Client.Test
         public void Entity_Validation_Property_Fail_Bogus_Throws()
         {
             MockEntity entity = new MockEntity();
-            ExceptionHelper.ExpectArgumentException(delegate()
+            ExceptionHelper.ExpectArgumentException(delegate ()
             {
                 entity.BogusProperty = "x";
             }, "Type 'MockEntity' does not contain a public property named 'XXX'.\r\nParameter name: propertyName");
@@ -144,7 +144,7 @@ namespace OpenRiaServices.Client.Test
         {
             MockEntity entity = new MockEntity();
             ValidationContext context = new ValidationContext(entity, null, null);
-            ExceptionHelper.ExpectValidationException(delegate()
+            ExceptionHelper.ExpectValidationException(delegate ()
             {
                 System.ComponentModel.DataAnnotations.Validator.ValidateObject(entity, context);
             }, "The ReadWriteProperty field is required.", typeof(RequiredAttribute), null);
@@ -228,7 +228,7 @@ namespace OpenRiaServices.Client.Test
         [Description("When a ValidationContext is provided to the DomainContext, it should be used for Property Validation")]
         public void ValidationContextUsedForPropertyValidation()
         {
-            Dictionary<object, object> items = new Dictionary<object,object>();
+            Dictionary<object, object> items = new Dictionary<object, object>();
             items.Add("TestMethod", "ValidationContextUsedForPropertyValidation");
             ValidationContext providedValidationContext = new ValidationContext(this, null, items);
 
@@ -467,6 +467,43 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(actualChanges.SequenceEqual(affectedMemberNames), "Events when setting to a valid value");
             Assert.AreEqual<int>(0, errors.Count(), "Expect no errors after setting to a valid value");
             actualChanges.Clear();
+        }
+
+
+        [TestMethod]
+        [Description("Test how object level validation interacts with property level validation")]
+        public void ValidationErrors_ObjectLevelValidation()
+        {
+            MockEntity_ObjectValidation entity = new MockEntity_ObjectValidation();
+            INotifyDataErrorInfo notifier = entity;
+
+            List<string> actualChanges = new List<string>();
+            notifier.ErrorsChanged += (s, e) => actualChanges.Add(e.PropertyName);
+
+            // Setting property directly will not catch any error
+            entity.OnlyObjectValidation = string.Empty;
+
+            Assert.IsFalse(entity.HasValidationErrors, "No errors should be detected");
+            Assert.AreEqual(0, actualChanges.Count, "No errors should be detected");
+
+            // Force object level validation
+            IEditableObject editableObject = entity;
+            editableObject.BeginEdit();
+            editableObject.EndEdit();
+
+            Assert.IsTrue(entity.HasValidationErrors, "Erros should be detected");
+            Assert.AreEqual(1, entity.ValidationErrors.Count);
+
+            var actualError = entity.ValidationErrors.First();
+            Assert.AreEqual("Required", actualError.ErrorMessage);
+            CollectionAssert.AreEqual(new[] { nameof(MockEntity_ObjectValidation.OnlyObjectValidation) }, actualError.MemberNames.ToList(), "membernames");
+
+            Assert.AreEqual(1, actualChanges.Count, "1 errors should be detected");
+
+            // Setting property will remove object level validation
+            entity.OnlyObjectValidation = null;
+            Assert.IsFalse(entity.HasValidationErrors, "Errors should have been removed");
+            Assert.AreEqual(2, actualChanges.Count, "change notification should have happened when clearing error");
         }
 
         [TestMethod]
@@ -940,6 +977,27 @@ namespace OpenRiaServices.Client.Test
         public void CallValidateProperty(ValidationContext validationContext, object value)
         {
             this.ValidateProperty(validationContext, value);
+        }
+    }
+
+    public class MockEntity_ObjectValidation : Entity, IValidatableObject
+    {
+        private string _onlyObjectValidation;
+
+        public string OnlyObjectValidation
+        {
+            get => _onlyObjectValidation;
+            set
+            {
+                this.ValidateProperty(nameof(OnlyObjectValidation), value);
+                _onlyObjectValidation = value;
+            }
+        }
+
+        IEnumerable<ValidationResult> IValidatableObject.Validate(ValidationContext validationContext)
+        {
+            if (string.IsNullOrEmpty(_onlyObjectValidation))
+                yield return new ValidationResult("Required", new[] { nameof(OnlyObjectValidation) });
         }
     }
 
