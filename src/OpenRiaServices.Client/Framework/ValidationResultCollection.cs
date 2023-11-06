@@ -73,26 +73,27 @@ namespace OpenRiaServices.Client
         /// <param name="newResults">The new errors for the property.</param>
         internal void ReplaceErrors(string propertyName, IEnumerable<ValidationResult> newResults)
         {
+            // TODO: Uncomment fast path
+            //if (this.Count == 0)
+            //{
+            //    ReplaceErrors(newResults);
+            //    return;
+            //}
+
             // First determine the set of affected member names. We have to take nested member paths
             // into account.
-            List<string> affectedMembers = this.SelectMany(p => p.MemberNames).Where(p => (p != null) && p.StartsWith(propertyName + ".", StringComparison.Ordinal)).ToList();
-            affectedMembers.Add(propertyName);
+            List<string> affectedMembers = this.SelectMany(p => p.MemberNames)
+                .Where(p => (p != null) 
+                    && p.StartsWith(propertyName, StringComparison.Ordinal)
+                    // name is exact name propertyName , or contains '.' after property name
+                    && (p.Length <= propertyName.Length || p[propertyName.Length] == '.'))
+                .ToList();
 
             // See if there are existing errors for the property
-            IEnumerable<ValidationResult> existingErrors = this.Where(r => r.MemberNames.Intersect(affectedMembers).Any());
-
-            if (existingErrors.Any() || newResults.Any())
+            int removedErrros = _results.RemoveAll(r => r.MemberNames.Any(member => affectedMembers.Contains(member)));
+            if (removedErrros > 0 || newResults.Any())
             {
-                // Capture the existing errors that are unrelated to the specified property, making sure
-                // to enumerate the results before we clear our items
-                IEnumerable<ValidationResult> otherErrors = this.Except(existingErrors).ToArray();
-
-                // Replace the collection with the other errors plus the new results for this property
-                // Clear without notification yet, we'll notify at the end.
-                this._results.Clear();
-
                 // Add back the union of the other errors and our new results
-                this._results.AddRange(otherErrors);
                 this._results.AddRange(newResults);
 
                 // Force the properties of the new results to receive notifications, ensuring that the
