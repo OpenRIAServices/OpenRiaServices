@@ -73,12 +73,11 @@ namespace OpenRiaServices.Client
         /// <param name="newResults">The new errors for the property.</param>
         internal void ReplaceErrors(string propertyName, IEnumerable<ValidationResult> newResults)
         {
-            // TODO: Uncomment fast path
-            //if (this.Count == 0)
-            //{
-            //    ReplaceErrors(newResults);
-            //    return;
-            //}
+            if (this.Count == 0)
+            {
+                ReplaceErrors(newResults);
+                return;
+            }
 
             // First determine the set of affected member names. We have to take nested member paths
             // into account.
@@ -156,7 +155,7 @@ namespace OpenRiaServices.Client
 
                 if (errors.Any(e => !e.MemberNames.Any()))
                 {
-                    propertiesInError = propertiesInError.Union(new string[] { null });
+                    propertiesInError = propertiesInError.Concat(new string[] { null });
                 }
             }
 
