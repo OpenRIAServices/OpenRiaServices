@@ -73,20 +73,15 @@ namespace OpenRiaServices.Client
         /// <param name="newResults">The new errors for the property.</param>
         internal void ReplaceErrors(string propertyName, IEnumerable<ValidationResult> newResults)
         {
-            if (this.Count == 0)
-            {
-                ReplaceErrors(newResults);
-                return;
-            }
-
             // First determine the set of affected member names. We have to take nested member paths
             // into account.
             List<string> affectedMembers = this.SelectMany(p => p.MemberNames)
                 .Where(p => (p != null) 
                     && p.StartsWith(propertyName, StringComparison.Ordinal)
                     // name is exact name propertyName , or contains '.' after property name
-                    && (p.Length <= propertyName.Length || p[propertyName.Length] == '.'))
+                    && (p.Length > propertyName.Length && p[propertyName.Length] == '.'))
                 .ToList();
+            affectedMembers.Add(propertyName);
 
             // See if there are existing errors for the property
             int removedErrros = _results.RemoveAll(r => r.MemberNames.Any(member => affectedMembers.Contains(member)));
