@@ -123,12 +123,13 @@ namespace OpenRiaServices.Client
                 this.OnHasErrorsChanged();
             }
 
-            // Find what properties were: in error but aren't any longer, newly in error, affected by the change
-            IEnumerable<string> noLongerInError = origPropertiesInError.Except(this._propertiesInError);
-            IEnumerable<string> newlyInError = this._propertiesInError.Except(origPropertiesInError);
-
-            // Get the combined list of properties affected.  The Union gives a Distinct result.
-            IEnumerable<string> allPropertiesAffected = noLongerInError.Union(newlyInError).Union(propertiesAffected);
+            // Get the combined list of properties affected.  
+            // SymmetricExceptWith - to get properties in error but aren't any longer or those newly in error
+            // add all affected by the change
+            // PERF: origPropertiesInError is already a HashSet which we could potentially use (Saves 1/8 of time and <20% of allocations)
+            HashSet<string> allPropertiesAffected = new HashSet<string>(origPropertiesInError);
+            allPropertiesAffected.SymmetricExceptWith(_propertiesInError);
+            allPropertiesAffected.UnionWith(propertiesAffected);
 
             // For each property affected, call the errors changed method
             foreach (string propertyName in allPropertiesAffected)
