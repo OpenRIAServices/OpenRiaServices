@@ -22,6 +22,13 @@ steps:
     packageType: 'sdk'
     version: '7.0.x'
 
+# install dotnet 8 sdk so we can run tests against them
+- task: UseDotNet@2
+  inputs:
+   packageType: 'sdk'
+   version: '8.0.x'
+   includePreviewVersions: true
+
 - task: NuGetToolInstaller@1
   inputs:
     versionSpec: 6.7.0
