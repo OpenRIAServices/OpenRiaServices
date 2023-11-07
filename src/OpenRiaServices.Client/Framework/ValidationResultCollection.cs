@@ -73,19 +73,24 @@ namespace OpenRiaServices.Client
         /// <param name="newResults">The new errors for the property.</param>
         internal void ReplaceErrors(string propertyName, IEnumerable<ValidationResult> newResults)
         {
+            List<string> affectedMembers = new List<string>() { propertyName };
+            int removedErrors = 0;
+
+            if (this.Count > 0)
+            {
             // First determine the set of affected member names. We have to take nested member paths
             // into account.
-            List<string> affectedMembers = this.SelectMany(p => p.MemberNames)
+                affectedMembers.AddRange(this.SelectMany(p => p.MemberNames)
                 .Where(p => (p != null) 
                     && p.StartsWith(propertyName, StringComparison.Ordinal)
                     // name is exact name propertyName , or contains '.' after property name
-                    && (p.Length > propertyName.Length && p[propertyName.Length] == '.'))
-                .ToList();
-            affectedMembers.Add(propertyName);
+                        && (p.Length > propertyName.Length && p[propertyName.Length] == '.')));
+
+                removedErrors = _results.RemoveAll(r => r.MemberNames.Any(member => affectedMembers.Contains(member)));
+            }
 
             // See if there are existing errors for the property
-            int removedErrros = _results.RemoveAll(r => r.MemberNames.Any(member => affectedMembers.Contains(member)));
-            if (removedErrros > 0 || newResults.Any())
+            if (removedErrors > 0 || newResults.Any())
             {
                 // Add back the union of the other errors and our new results
                 this._results.AddRange(newResults);
