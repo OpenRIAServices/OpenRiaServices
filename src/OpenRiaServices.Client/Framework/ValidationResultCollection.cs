@@ -115,7 +115,7 @@ namespace OpenRiaServices.Client
 
             // Determine our new state
             this._hasErrors = (this.Count > 0);
-            this._propertiesInError = GetPropertiesInError(this).Distinct();
+            this._propertiesInError = new HashSet<string>(GetPropertiesInError(this)); // HashSet is used to make properties distinct
 
             // Call the notification method if the 'HasErrors' bit has changed
             if (this._hasErrors != origHasErrors)
