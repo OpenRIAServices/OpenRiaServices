@@ -2,7 +2,7 @@
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT</DefineConstants>
     <DefineConstants Condition="'$(TargetFramework)' == 'net472'">$(DefineConstants);HAS_LINQ2SQL</DefineConstants>
-    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <TargetFrameworks>net472;net6.0;net8.0</TargetFrameworks>
     <PackageId>OpenRiaServices.Client.CodeGen</PackageId>
     <Title>OpenRiaServices Client Code Generator</Title>
     <Description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. </Description>
