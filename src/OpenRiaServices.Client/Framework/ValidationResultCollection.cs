@@ -97,7 +97,7 @@ namespace OpenRiaServices.Client
 
                 // Force the properties of the new results to receive notifications, ensuring that the
                 // affected members are included in that list
-                this.OnCollectionChanged(GetPropertiesInError(newResults).Union(affectedMembers));
+                this.OnCollectionChanged(GetPropertiesInError(newResults).Concat(affectedMembers));
             }
         }
 
