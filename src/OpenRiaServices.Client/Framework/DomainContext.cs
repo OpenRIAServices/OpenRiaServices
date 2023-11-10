@@ -745,7 +745,7 @@ namespace OpenRiaServices.Client
         /// <param name="e">The event args</param>
         private void EntityContainerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (string.CompareOrdinal(e.PropertyName, "HasChanges") == 0)
+            if (e.PropertyName == nameof(HasChanges))
             {
                 // just pass the event on
                 this.RaisePropertyChanged(nameof(HasChanges));
