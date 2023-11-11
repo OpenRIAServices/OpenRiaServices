@@ -47,7 +47,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the entities returned from the query
         /// </summary>
-        public IEnumerable<Entity> Entities
+        public IReadOnlyCollection<Entity> Entities
         {
             get
             {
@@ -58,7 +58,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the included entities returned from the query
         /// </summary>
-        public IEnumerable<Entity> IncludedEntities
+        public IReadOnlyCollection<Entity> IncludedEntities
         {
             get
             {
@@ -81,7 +81,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the validation errors.
         /// </summary>
-        public IEnumerable<ValidationResult> ValidationErrors
+        public IReadOnlyCollection<ValidationResult> ValidationErrors
         {
             get
             {

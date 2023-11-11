@@ -15,7 +15,7 @@ namespace OpenRiaServices.Client
     /// </summary>
     public abstract class DomainClient
     {
-        private ReadOnlyCollection<Type> _entityTypes;
+        private Type[] _entityTypes;
 
         /// <summary>
         /// Gets or sets the collection of Entity Types this <see cref="DomainClient"/> will operate on.
@@ -32,7 +32,7 @@ namespace OpenRiaServices.Client
                 {
                     throw new InvalidOperationException(OpenRiaServices.Client.Resource.DomainClient_EntityTypesAlreadyInitialized);
                 }
-                this._entityTypes = new ReadOnlyCollection<Type>(value.ToList());
+                this._entityTypes = value.ToArray();
             }
         }
 

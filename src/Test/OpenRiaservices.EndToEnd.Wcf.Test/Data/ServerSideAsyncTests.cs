@@ -346,7 +346,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify
             Assert.AreEqual(42, rangeItem.Id);
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.AddedEntities);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.AddedEntities.ToList());
         }
 
         [TestMethod]
@@ -382,7 +382,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify
             Assert.AreEqual("updated", rangeItem.Text);
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities.ToList());
         }
 
         [TestMethod]
@@ -421,7 +421,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify
             Assert.AreEqual("custom updated", rangeItem.Text);
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities.ToList());
         }
 
         [TestMethod]
@@ -457,7 +457,7 @@ namespace OpenRiaServices.Client.Test
             var result = await ctx.SubmitChangesAsync();
 
             // Verify
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities);
+            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities.ToList());
         }
 
         [TestMethod]

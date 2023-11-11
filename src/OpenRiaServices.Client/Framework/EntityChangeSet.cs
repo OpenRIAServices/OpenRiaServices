@@ -14,7 +14,7 @@ namespace OpenRiaServices.Client
         private ReadOnlyCollection<Entity> _addedEntities;
         private ReadOnlyCollection<Entity> _removedEntities;
         private ReadOnlyCollection<Entity> _modifiedEntities;
-        private IEnumerable<ChangeSetEntry> _changeSetEntries;
+        private List<ChangeSetEntry> _changeSetEntries;
 
         internal EntityChangeSet(
             ReadOnlyCollection<Entity> addedEntities,
@@ -42,7 +42,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the collection of added Entities
         /// </summary>
-        public ReadOnlyCollection<Entity> AddedEntities
+        public IReadOnlyList<Entity> AddedEntities
         {
             get
             {
@@ -50,7 +50,7 @@ namespace OpenRiaServices.Client
             }
             internal set
             {
-                this._addedEntities = value;
+                this._addedEntities = value is ReadOnlyCollection<Entity> list  ? list : new ReadOnlyCollection<Entity>(value.ToArray());
             }
         }
 
@@ -70,7 +70,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the collection of modified entities
         /// </summary>
-        public ReadOnlyCollection<Entity> ModifiedEntities
+        public IReadOnlyList<Entity> ModifiedEntities
         {
             get
             {
@@ -78,14 +78,14 @@ namespace OpenRiaServices.Client
             }
             internal set
             {
-                this._modifiedEntities = value;
+                this._modifiedEntities = value is ReadOnlyCollection<Entity> list ? list : new ReadOnlyCollection<Entity>(value.ToArray());
             }
         }
 
         /// <summary>
         /// Gets the collection of removed entities
         /// </summary>
-        public ReadOnlyCollection<Entity> RemovedEntities
+        public IReadOnlyList<Entity> RemovedEntities
         {
             get
             {
@@ -93,7 +93,7 @@ namespace OpenRiaServices.Client
             }
             internal set
             {
-                this._removedEntities = value;
+                this._removedEntities = value is ReadOnlyCollection<Entity> list ? list : new ReadOnlyCollection<Entity>(value.ToArray());
             }
         }
 
@@ -115,7 +115,7 @@ namespace OpenRiaServices.Client
         /// Gets the collection of <see cref="ChangeSetEntry"/> items for this changeset.
         /// </summary>
         /// <returns>A collection of <see cref="ChangeSetEntry"/> items.</returns>
-        public IEnumerable<ChangeSetEntry> GetChangeSetEntries()
+        public IReadOnlyCollection<ChangeSetEntry> GetChangeSetEntries()
         {
             if (this._changeSetEntries == null)
             {

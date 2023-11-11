@@ -1610,20 +1610,8 @@ namespace OpenRiaServices.Client
         /// </remarks>
         /// <returns>Collection of custom method invocations pending for this entity</returns>
         [Display(AutoGenerateField = false)]
-        public IEnumerable<EntityAction> EntityActions
-        {
-            get
-            {
-                if (this._customMethodInvocations != null)
-                {
-                    return new ReadOnlyCollection<EntityAction>(this._customMethodInvocations);
-                }
-                else
-                {
-                    return Enumerable.Empty<EntityAction>();
-                }
-            }
-        }
+        public IReadOnlyCollection<EntityAction> EntityActions
+            => this._customMethodInvocations != null ? this._customMethodInvocations : Array.Empty<EntityAction>();
 
         /// <summary>
         /// Return the entity identity, suitable for hashing. If the entity

@@ -31,12 +31,13 @@ namespace OpenRiaServices.Client.Internal
         /// </summary>
         [ThreadStatic]
         private static Dictionary<Type, MetaType> s_metaTypes;
+        private readonly MetaMember[] _keyMembers;
         private readonly bool _requiresValidation;
         private readonly bool _requiresObjectValidation;
         private readonly Type[] _childTypes;
         private readonly Dictionary<string, MetaMember> _metaMembers = new Dictionary<string, MetaMember>();
-        private readonly ReadOnlyCollection<MetaMember> _dataMembers;
-        private readonly ReadOnlyCollection<ValidationAttribute> _validationAttributes;
+        private readonly MetaMember[] _dataMembers;
+        private readonly ValidationAttribute[] _validationAttributes;
         private readonly Dictionary<string, EntityActionAttribute> _customUpdateMethods;
 
         /// <summary>
@@ -121,13 +122,13 @@ namespace OpenRiaServices.Client.Internal
 
             this.Type = type;
 
-            _validationAttributes = new ReadOnlyCollection<ValidationAttribute>(this.Type.GetCustomAttributes(typeof(ValidationAttribute), true).OfType<ValidationAttribute>().ToArray());
+            _validationAttributes = this.Type.GetCustomAttributes(typeof(ValidationAttribute), true).OfType<ValidationAttribute>().ToArray();
             _requiresObjectValidation = _validationAttributes.Any() || typeof(IValidatableObject).IsAssignableFrom(type);
             _requiresValidation = _requiresValidation || _requiresObjectValidation;
 
             // for identity purposes, we need to make sure values are always ordered
-            KeyMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsKeyMember).OrderBy(m => m.Name).ToArray());
-            _dataMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsDataMember).ToArray());
+            _keyMembers = _metaMembers.Values.Where(m => m.IsKeyMember).OrderBy(m => m.Name).ToArray();
+            _dataMembers = _metaMembers.Values.Where(m => m.IsDataMember).ToArray();
 
             if (!_requiresValidation && HasComplexMembers)
             {
@@ -235,12 +236,12 @@ namespace OpenRiaServices.Client.Internal
         /// Gets the collection of key members for this entity Type.
         /// The entries are sorted by Name for identity purposes.
         /// </summary>
-        public ReadOnlyCollection<MetaMember> KeyMembers { get; }
+        public IReadOnlyList<MetaMember> KeyMembers => _keyMembers;
 
         /// <summary>
         /// Gets the collection of data members for this Type.
         /// </summary>
-        public IEnumerable<MetaMember> DataMembers => _dataMembers;
+        public IReadOnlyList<MetaMember> DataMembers => _dataMembers;
 
         /// <summary>
         /// Gets the collection of association members for this entity Type.
@@ -256,7 +257,7 @@ namespace OpenRiaServices.Client.Internal
         /// <summary>
         /// Gets the collection of child types this entity Type composes.
         /// </summary>
-        public IEnumerable<Type> ChildTypes => this._childTypes;
+        public IReadOnlyCollection<Type> ChildTypes => this._childTypes;
 
         /// <summary>
         /// Gets a value indicating whether the Type requires any Type or member level
@@ -279,7 +280,7 @@ namespace OpenRiaServices.Client.Internal
         /// <summary>
         /// Gets the Type level validation attributes for the underlying Type.
         /// </summary>
-        public IEnumerable<ValidationAttribute> ValidationAttributes => _validationAttributes;
+        public IReadOnlyCollection<ValidationAttribute> ValidationAttributes => _validationAttributes;
 
         /// <summary>
         /// This recursive function visits every property in the type tree. For each property,

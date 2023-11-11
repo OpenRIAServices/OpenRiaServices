@@ -103,7 +103,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets a collection of the property names in conflict.
         /// </summary>
-        public IEnumerable<string> PropertyNames
+        public IReadOnlyCollection<string> PropertyNames
         {
             get
             {
