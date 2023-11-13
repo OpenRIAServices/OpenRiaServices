@@ -126,7 +126,6 @@ namespace OpenRiaServices.Client
             // Get the combined list of properties affected.  
             // SymmetricExceptWith - to get properties in error but aren't any longer or those newly in error
             // add all affected by the change
-            // PERF: origPropertiesInError is already a HashSet which we could potentially use (Saves 1/8 of time and <20% of allocations)
             HashSet<string> allPropertiesAffected = new HashSet<string>(origPropertiesInError);
             allPropertiesAffected.SymmetricExceptWith(_propertiesInError);
             allPropertiesAffected.UnionWith(propertiesAffected);
