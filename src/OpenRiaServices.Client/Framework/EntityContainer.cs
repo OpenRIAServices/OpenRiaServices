@@ -156,7 +156,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The property that has changed</param>
         internal void SetPropertyChanged(EntitySet entitySet, string propertyName)
         {
-            if (string.CompareOrdinal(propertyName, "HasChanges") == 0)
+            if (propertyName == nameof(EntitySet.HasChanges))
             {
                 if (entitySet.HasChanges)
                 {

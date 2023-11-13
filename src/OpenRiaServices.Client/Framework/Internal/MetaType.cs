@@ -1,11 +1,10 @@
 ﻿using System;
-using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Linq;
-using System.Linq.Expressions;
 using System.Reflection;
 
 namespace OpenRiaServices.Client.Internal
@@ -24,13 +23,7 @@ namespace OpenRiaServices.Client.Internal
     [DebuggerDisplay("Type = {Type.Name}")]
     public sealed class MetaType
     {
-        /// <summary>
-        /// We're using TLS for performance to avoid taking locks. In multithreaded
-        /// scenarios this means that there may be multiple MetaType caches around
-        /// but that shouldn't be a problem.
-        /// </summary>
-        [ThreadStatic]
-        private static Dictionary<Type, MetaType> s_metaTypes;
+        private static readonly ConcurrentDictionary<Type, MetaType> s_metaTypes = new();
         private readonly bool _requiresValidation;
         private readonly bool _requiresObjectValidation;
         private readonly Type[] _childTypes;
@@ -48,13 +41,7 @@ namespace OpenRiaServices.Client.Internal
         {
             Debug.Assert(!TypeUtility.IsPredefinedType(type), "Should never attempt to create a MetaType for a base type.");
 
-            MetaType metaType = null;
-            if (!MetaTypes.TryGetValue(type, out metaType))
-            {
-                metaType = new MetaType(type);
-                MetaTypes[type] = metaType;
-            }
-            return metaType;
+            return s_metaTypes.GetOrAdd(type, static key => new MetaType(key));
         }
 
         private MetaType(Type type)
@@ -158,8 +145,7 @@ namespace OpenRiaServices.Client.Internal
         {
             get
             {
-                MetaMember mm = null;
-                if (this._metaMembers.TryGetValue(memberName, out mm))
+                if (this._metaMembers.TryGetValue(memberName, out MetaMember mm))
                 {
                     return mm;
                 }
@@ -186,18 +172,6 @@ namespace OpenRiaServices.Client.Internal
         public IEnumerable<EntityActionAttribute> GetEntityActions()
         {
             return _customUpdateMethods.Values;
-        }
-
-        private static Dictionary<Type, MetaType> MetaTypes
-        {
-            get
-            {
-                if (s_metaTypes == null)
-                {
-                    s_metaTypes = new Dictionary<Type, MetaType>();
-                }
-                return s_metaTypes;
-            }
         }
 
         /// <summary>
