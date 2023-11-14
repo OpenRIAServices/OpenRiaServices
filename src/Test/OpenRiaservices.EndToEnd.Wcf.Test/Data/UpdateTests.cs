@@ -25,6 +25,7 @@ namespace OpenRiaServices.Client.Test
 #if !SILVERLIGHT
     [TestClass]
 #endif
+    [DoNotParallelize]
     public abstract class UpdateTests : DomainContextTestBase<Northwind>
     {
         private static TestDatabase testDatabase = new TestDatabase("Northwind");
@@ -32,7 +33,7 @@ namespace OpenRiaServices.Client.Test
         private static int categoryIdSequence; // start with 1000 to avoid collisions with common northwind data
         private static int regionIdSequence = 100;
 
-        public UpdateTests(Uri serviceUri, ProviderType providerType)
+        protected UpdateTests(Uri serviceUri, ProviderType providerType)
             : base(serviceUri, providerType)
         {
 

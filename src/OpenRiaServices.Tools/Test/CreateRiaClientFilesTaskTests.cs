@@ -289,7 +289,9 @@ namespace OpenRiaServices.Tools.Test
         [TestMethod]
         public void CreateRiaClientFiles_For_Net_60()
         {
-            var rootPath = new DirectoryInfo(Directory.GetCurrentDirectory()).Parent.Parent.Parent.FullName;
+            TestHelper.GetProjectPaths("", out string projectPath, out _);
+
+            var rootPath = new DirectoryInfo(projectPath).Parent.FullName;
             var serverProjectPath = Path.Combine(rootPath,  "ServerClassLib\\ServerClassLib.csproj");
             var clientProjectPath = Path.Combine(rootPath, "ClientClassLib\\ClientClassLib.csproj");
             

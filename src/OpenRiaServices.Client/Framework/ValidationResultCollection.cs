@@ -73,31 +73,31 @@ namespace OpenRiaServices.Client
         /// <param name="newResults">The new errors for the property.</param>
         internal void ReplaceErrors(string propertyName, IEnumerable<ValidationResult> newResults)
         {
+            List<string> affectedMembers = new List<string>() { propertyName };
+            int removedErrors = 0;
+
+            if (this.Count > 0)
+            {
             // First determine the set of affected member names. We have to take nested member paths
             // into account.
-            List<string> affectedMembers = this.SelectMany(p => p.MemberNames).Where(p => (p != null) && p.StartsWith(propertyName + ".", StringComparison.Ordinal)).ToList();
-            affectedMembers.Add(propertyName);
+                affectedMembers.AddRange(this.SelectMany(p => p.MemberNames)
+                .Where(p => (p != null) 
+                    && p.StartsWith(propertyName, StringComparison.Ordinal)
+                    // name is exact name propertyName , or contains '.' after property name
+                        && (p.Length > propertyName.Length && p[propertyName.Length] == '.')));
+
+                removedErrors = _results.RemoveAll(r => r.MemberNames.Any(member => affectedMembers.Contains(member)));
+            }
 
             // See if there are existing errors for the property
-            IEnumerable<ValidationResult> existingErrors = this.Where(r => r.MemberNames.Intersect(affectedMembers).Any());
-
-            if (existingErrors.Any() || newResults.Any())
+            if (removedErrors > 0 || newResults.Any())
             {
-                // Capture the existing errors that are unrelated to the specified property, making sure
-                // to enumerate the results before we clear our items
-                IEnumerable<ValidationResult> otherErrors = this.Except(existingErrors).ToArray();
-
-                // Replace the collection with the other errors plus the new results for this property
-                // Clear without notification yet, we'll notify at the end.
-                this._results.Clear();
-
                 // Add back the union of the other errors and our new results
-                this._results.AddRange(otherErrors);
                 this._results.AddRange(newResults);
 
                 // Force the properties of the new results to receive notifications, ensuring that the
                 // affected members are included in that list
-                this.OnCollectionChanged(GetPropertiesInError(newResults).Union(affectedMembers));
+                this.OnCollectionChanged(GetPropertiesInError(newResults).Concat(affectedMembers));
             }
         }
 
@@ -115,7 +115,7 @@ namespace OpenRiaServices.Client
 
             // Determine our new state
             this._hasErrors = (this.Count > 0);
-            this._propertiesInError = GetPropertiesInError(this).Distinct();
+            this._propertiesInError = new HashSet<string>(GetPropertiesInError(this)); // HashSet is used to make properties distinct
 
             // Call the notification method if the 'HasErrors' bit has changed
             if (this._hasErrors != origHasErrors)
@@ -123,12 +123,12 @@ namespace OpenRiaServices.Client
                 this.OnHasErrorsChanged();
             }
 
-            // Find what properties were: in error but aren't any longer, newly in error, affected by the change
-            IEnumerable<string> noLongerInError = origPropertiesInError.Except(this._propertiesInError);
-            IEnumerable<string> newlyInError = this._propertiesInError.Except(origPropertiesInError);
-
-            // Get the combined list of properties affected.  The Union gives a Distinct result.
-            IEnumerable<string> allPropertiesAffected = noLongerInError.Union(newlyInError).Union(propertiesAffected);
+            // Get the combined list of properties affected.  
+            // SymmetricExceptWith - to get properties in error but aren't any longer or those newly in error
+            // add all affected by the change
+            HashSet<string> allPropertiesAffected = new HashSet<string>(origPropertiesInError);
+            allPropertiesAffected.SymmetricExceptWith(_propertiesInError);
+            allPropertiesAffected.UnionWith(propertiesAffected);
 
             // For each property affected, call the errors changed method
             foreach (string propertyName in allPropertiesAffected)
@@ -155,7 +155,7 @@ namespace OpenRiaServices.Client
 
                 if (errors.Any(e => !e.MemberNames.Any()))
                 {
-                    propertiesInError = propertiesInError.Union(new string[] { null });
+                    propertiesInError = propertiesInError.Concat(new string[] { null });
                 }
             }
 
