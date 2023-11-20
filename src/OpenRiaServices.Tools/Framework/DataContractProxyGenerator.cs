@@ -520,7 +520,7 @@ namespace OpenRiaServices.Tools
         private IEnumerable<Attribute> FilterTypeAttributes(AttributeCollection typeAttributes)
         {
             List<Attribute> filteredAttributes = new List<Attribute>();
-            
+
             // Ignore DefaultMemberAttribute if it has been put for an indexer
             IEnumerable<Attribute> defaultMemberAttribs = typeAttributes.Cast<Attribute>().Where(a => a.GetType() == typeof(DefaultMemberAttribute));
             if (defaultMemberAttribs.Any())
@@ -536,11 +536,12 @@ namespace OpenRiaServices.Tools
             }
 
             // Filter out attributes in filteredAttributes as well as DataContractAttribute and KnownTypeAttribute (since they are already handled)
-            return typeAttributes.Cast<Attribute>().Where(a => a.GetType() != typeof(DataContractAttribute) && a.GetType() != typeof(KnownTypeAttribute) &&
+            return typeAttributes.Cast<Attribute>().Where(a => a is not (DataContractAttribute or KnownTypeAttribute
 #if NET8_0
-                a.GetType() != Type.GetType("System.Runtime.CompilerServices.NullableContextAttribute") &&
+                // Filter out NullableContextAttribute, should only be used by compiler
+                or System.Runtime.CompilerServices.NullableContextAttribute
 #endif
-                !(filteredAttributes.Contains(a)));
+                ) && !filteredAttributes.Contains(a));
         }
 
         /// <summary>
