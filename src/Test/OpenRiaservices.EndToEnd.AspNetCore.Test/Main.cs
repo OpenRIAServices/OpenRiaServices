@@ -66,17 +66,10 @@ namespace OpenRiaServices.Client.Test
 #else
             string configuration = "Release";
 #endif
-
-#if NET80
             string targetFramework = "net8.0";
-#else
-            string targetFramework = "net6.0";
-#endif
-
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
-
             string processPath = webSitePath + ProcessName + ".exe";
-            //webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite"));
+
             if (!Directory.Exists(webSitePath))
                 throw new FileNotFoundException($"Website not found at {webSitePath}");
 
