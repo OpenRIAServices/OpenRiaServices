@@ -267,7 +267,7 @@ namespace OpenRiaServices.Server.UnitTesting
 
 
         /// <summary>
-        /// Invokes the specified <paramref name="queryOperation"/> and returns the result
+        /// Invokes the specified <paramref name="queryOperation"/> asynchronously and returns the result
         /// </summary>
         /// <remarks>
         /// This method should be used for query signatures that do no return a collection
@@ -282,7 +282,7 @@ namespace OpenRiaServices.Server.UnitTesting
         }
 
         /// <summary>
-        /// Invokes the specified <paramref name="queryOperation"/> and returns the result
+        /// Invokes the specified <paramref name="queryOperation"/> asynchronously and returns the result
         /// </summary>
         /// <remarks>
         /// This method should be used for query signatures that do no return a collection
