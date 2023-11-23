@@ -94,12 +94,10 @@ this.Write("public new static WebContext Current\r\n{\r\n    get\r\n    {\r\n   
 
 		
 		DomainServiceDescription defaultAuthDescription = this.GetDefaultAuthDescription();
-		if(defaultAuthDescription != null)
+		if(defaultAuthDescription != null 
+               && defaultAuthDescription.TryGetAuthenticationServiceType(out Type genericType) 
+               && (genericType.GetGenericArguments().Count() == 1))
 		{
-			Type genericType = null;
-            typeof(IAuthentication<>).DefinitionIsAssignableFrom(defaultAuthDescription.DomainServiceType, out genericType);
-            if ((genericType != null) && (genericType.GetGenericArguments().Count() == 1))
-            {
 				string typeName = CodeGenUtilities.GetTypeName(genericType.GetGenericArguments()[0]);
 
 this.Write("public new ");
@@ -112,8 +110,6 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write(")base.User; }\r\n}\r\n");
 
-
-			}
 		}
 	}
 
