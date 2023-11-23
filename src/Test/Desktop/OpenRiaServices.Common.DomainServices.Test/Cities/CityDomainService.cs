@@ -135,6 +135,18 @@ namespace Cities
             return await Task.FromResult(GetZips());
         }
 
+        [Query(IsComposable = false)]
+        public async Task<Zip> GetZipByFourDigitCodeAsync(int fourDigitCode)
+        {
+            return await Task.FromResult(GetZipByFourDigitCode2(fourDigitCode));
+        }
+
+        [Query(IsComposable = false)]
+        public Zip GetZipByFourDigitCode2(int fourDigitCode)
+        {
+            return GetZips().Single(z => z.FourDigit == fourDigitCode);
+        }
+
         [Query]
         public async Task<IQueryable<Zip>> GetZipsWithDelay(TimeSpan delay)
         {
