@@ -68,7 +68,7 @@ namespace OpenRiaServices.Client.Authentication
             }
         }
 
-        private protected Task<AuthenticationResult> CastTaskResult<T>(Task<T> task)
+        private protected static Task<AuthenticationResult> CastTaskResult<T>(Task<T> task)
             where T : AuthenticationResult
         {
             return task.ContinueWith<AuthenticationResult>(res =>

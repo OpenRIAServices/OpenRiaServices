@@ -44,7 +44,7 @@ namespace OpenRiaServices.Tools.Test
         public void CodeGen_External_Entity_EFtoPOCO()
         {
             ConsoleLogger logger = new ConsoleLogger();
-            Type[] domainServices = 
+            Type[] domainServices =
                 {
                      typeof(PersonalDetails_DomainService),
                      typeof(EF_NorthwindScenarios_EmployeeWithExternalProperty)

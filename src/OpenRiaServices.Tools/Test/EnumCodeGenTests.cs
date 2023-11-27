@@ -430,6 +430,8 @@ namespace OpenRiaServices.Tools.Test
             string[] clientMemberNames = Enum.GetNames(clientEnumType);
             Assert.AreEqual(serverMemberNames.Length, clientMemberNames.Length, "Different number of fields generated");
 
+            Array.Sort(serverMemberNames);
+            Array.Sort(clientMemberNames);
             for (int i = 0; i < serverMemberNames.Length; ++i)
             {
                 Assert.AreEqual(serverMemberNames[i], clientMemberNames[i], "Member name difference");

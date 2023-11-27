@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Web.Hosting;
 
 namespace OpenRiaServices.Tools.Validation
 {
@@ -11,7 +10,10 @@ namespace OpenRiaServices.Tools.Validation
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
     /// AppDomain boundaries.
     /// </remarks>
-    internal class DomainServiceValidator : MarshalByRefObject, IRegisteredObject, IDisposable
+    internal sealed class DomainServiceValidator : MarshalByRefObject, IDisposable
+#if NETFRAMEWORK
+        , System.Web.Hosting.IRegisteredObject
+#endif
     {
         public void Validate(string[] assemblies, ILoggingService logger)
         {
@@ -27,13 +29,15 @@ namespace OpenRiaServices.Tools.Validation
             // Just creating an instance of the DomainServiceCatalog will locate all the DomainServices in the specified
             // assemblies and use their corresponding DomainServiceDescriptions to identify and report errors. These
             // errors will be reported using the logger we provide.
-            new DomainServiceCatalog(assemblies, logger);
+            _ = new DomainServiceCatalog(assemblies, logger);
         }
 
-        void IRegisteredObject.Stop(bool immediate)
+#if NETFRAMEWORK
+        void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
         {
-            // Do nothing
+            // Do nothing	
         }
+#endif
 
         void IDisposable.Dispose()
         {

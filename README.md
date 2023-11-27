@@ -12,13 +12,12 @@ Azure Pipelines: [![Build Status](https://dev.azure.com/OpenRiaServices/OpenRiaS
 
 
 
-Sonarqube: [![Sonarqube - technical debpt](https://img.shields.io/sonar/https/sonarcloud.io/OpenRIAServices_OpenRiaServices/tech_debt.svg)](https://sonarcloud.io/dashboard?id=OpenRIAServices_OpenRiaServices)
-
-LGTM [![Total alerts](https://img.shields.io/lgtm/alerts/g/OpenRIAServices/OpenRiaServices.svg?logo=lgtm&logoWidth=18)](https://lgtm.com/projects/g/OpenRIAServices/OpenRiaServices/alerts/)
+Sonarqube:
+[![Maintainability Rating](https://sonarcloud.io/api/project_badges/measure?project=OpenRIAServices_OpenRiaServices&metric=sqale_rating)](https://sonarcloud.io/summary/overall?id=OpenRIAServices_OpenRiaServices)
+[![Security Rating](https://sonarcloud.io/api/project_badges/measure?project=OpenRIAServices_OpenRiaServices&metric=security_rating)](https://sonarcloud.io/summary/overall?id=OpenRIAServices_OpenRiaServices)
+[![Vulnerabilities](https://sonarcloud.io/api/project_badges/measure?project=OpenRIAServices_OpenRiaServices&metric=vulnerabilities)](https://sonarcloud.io/project/overview?id=OpenRIAServices_OpenRiaServices)
 
 <!-- Below badges should be reenabled once new scripts for appveyor build is set up
-
-Appveyor: [![Build status](https://img.shields.io/appveyor/ci/OpenRiaServices/openriaservices/main.svg)](https://ci.appveyor.com/project/OpenRiaServices/OpenRiaServices/branch/main)
 
 [![Coverity Scan Build Status](https://scan.coverity.com/projects/8802/badge.svg)](https://scan.coverity.com/projects/daniel-svensson-openriaservices)
 -->
@@ -28,7 +27,7 @@ It is the evolved Open Source version of *WCF RIA Services*.
 
 The source code and issue list is currently kept at github (https://github.com/OpenRiaServices/OpenRiaServices).
 
-Some of ther features are: 
+Some of the features are: 
  * Client side entity change tracking similar in concept to Entity Framework
    * Batch save (all or nothing) and undo functionality
  * Excellent support for data binding in with built in support for validation, INotifyPropertyChanged, INotifyCollectionChanged .. 
@@ -40,7 +39,7 @@ Some of ther features are:
    
 **Release Notes / Changelog**
 
-* A [Change log](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md) is keept keeping track of changes made and write down release notes as features are developed
+* A [Change log](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md) is kept keeping track of changes made and write down release notes as features are developed
 * [Github releases with changes and Release Notes](https://github.com/OpenRIAServices/OpenRiaServices/releases) for specific versions are created when a new version is released to nuget.
 
    

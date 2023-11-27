@@ -1,17 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <TargetFramework>net472</TargetFramework>
+    <DefineConstants Condition="'$(TargetFramework)' == 'net472'">$(DefineConstants);HAS_LINQ2SQL</DefineConstants>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.IdentityModel" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-  </ItemGroup>
+  <PropertyGroup Condition=" '$(TargetFramework)' != 'net472'">
+    <!-- Disable obsolete warning (primarily AssociationAttribute) -->
+    <NoWarn>$(NoWarn);CS0618</NoWarn>
+  </PropertyGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeBuilderException.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeBuilderException.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeDeclaration.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeDeclaration.cs" />
@@ -134,5 +131,19 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
+    <!-- Required for known type attributes -->
+    <PackageReference Include="System.ServiceModel.Primitives" Version="6.0.0" />
+    <!-- Required for validation attributes -->
+    <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">
+    <Reference Include="System.ComponentModel.Composition" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.IdentityModel" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 </Project>

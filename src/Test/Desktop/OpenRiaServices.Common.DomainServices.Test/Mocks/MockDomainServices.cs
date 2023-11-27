@@ -939,7 +939,7 @@ namespace TestDomainServices
     [EnableClientAccess]
     public partial class TestProvider_Scenarios : DomainService
     {
-        private static int s_counter = 0;
+        private static int s_counter;
         private readonly MixedTypeData _data = new MixedTypeData();
         private readonly MixedTypeData _dataSuperset = new MixedTypeData(true);
 
@@ -1063,7 +1063,7 @@ namespace TestDomainServices
 
         public IEnumerable<A> QueryWithParamValidation([Range(0, 10)] int a, [StringLength(2, MinimumLength = 0)] string b)
         {
-            if (string.Compare(b, "ex", true) == 0)
+            if (string.Equals(b, "ex", StringComparison.OrdinalIgnoreCase))
             {
                 throw new ValidationException("Server validation exception thrown!");
             }
@@ -1074,7 +1074,7 @@ namespace TestDomainServices
         [Invoke]
         public bool InvokeOperationWithParamValidation([Range(0, 10)] int a, [StringLength(2, MinimumLength = 0)] string b, CityWithCacheData entity)
         {
-            if (string.Compare(b, "ex", true) == 0)
+            if (string.Equals(b, "ex", StringComparison.OrdinalIgnoreCase))
             {
                 throw new ValidationException("Server validation exception thrown!");
             }
@@ -1152,10 +1152,11 @@ namespace TestDomainServices
             return GetCities();
         }
 
-#if !NET6_0
+
         private IQueryable<CityWithCacheData> GetCitiesWithCacheLocation()
         {
-            HttpCachePolicy policy = HttpContext.Current.Response.Cache;
+#if NETFRAMEWORK
+HttpCachePolicy policy = HttpContext.Current.Response.Cache;
 
             HttpCacheability cacheability = (HttpCacheability)policy
                 .GetType()
@@ -1169,6 +1170,9 @@ namespace TestDomainServices
                     CacheData = cacheability.ToString()
                 }
             }.AsQueryable();
+#else
+            throw new NotImplementedException();
+#endif
         }
 
         [Query]
@@ -1205,7 +1209,7 @@ namespace TestDomainServices
         {
             return GetCities();
         }
-#endif
+
         // Cache on server because that's the only deterministic scenario.
         [Query]
         [OutputCache(OutputCacheLocation.Server, 5, VaryByHeaders = "foo")]
@@ -1236,7 +1240,7 @@ namespace TestDomainServices
             {
                 // there is a unit test that relies on this null
                 // check being here
-                throw new ArgumentNullException("state");
+                throw new ArgumentNullException(nameof(state));
             }
             return GetCities().Where(c => c.StateName.Equals(state));
         }
@@ -1346,7 +1350,13 @@ namespace TestDomainServices
         }
 
         [Query]
-        public IQueryable<MixedType> GetMixedTypes_Predefined(string idToChange, string s, decimal d, DateTime dt, TimeSpan ts, DateTimeOffset dto, IEnumerable<string> strings, Uri uri, Guid g, Binary b, XElement x, byte[] bArray, TestEnum en, int[] ints, Dictionary<DateTime, DateTime> dictionaryDateTime, Dictionary<Guid, Guid> dictionaryGuid, Dictionary<String, String> dictionaryString, Dictionary<TestEnum, TestEnum> dictionaryTestEnum, Dictionary<XElement, XElement> dictionaryXElement, Dictionary<DateTimeOffset, DateTimeOffset> dictionaryDateTimeOffset)
+        public IQueryable<MixedType> GetMixedTypes_Predefined(string idToChange, string s, decimal d, DateTime dt, TimeSpan ts, DateTimeOffset dto, IEnumerable<string> strings, Uri uri, Guid g,
+#if HAS_LINQ2SQL
+          Binary b,
+#else
+          byte[] b,
+#endif
+          XElement x, byte[] bArray, TestEnum en, int[] ints, Dictionary<DateTime, DateTime> dictionaryDateTime, Dictionary<Guid, Guid> dictionaryGuid, Dictionary<String, String> dictionaryString, Dictionary<TestEnum, TestEnum> dictionaryTestEnum, Dictionary<XElement, XElement> dictionaryXElement, Dictionary<DateTimeOffset, DateTimeOffset> dictionaryDateTimeOffset)
         {
             MixedType entity = _data.Values.FirstOrDefault(e => e.ID == idToChange);
             if (entity != null)
@@ -1767,7 +1777,13 @@ namespace TestDomainServices
         }
 
         [Invoke]
-        public bool TestPredefined_Online(MixedType entity, string s, decimal d, DateTime dt, TimeSpan ts, IEnumerable<string> strings, Uri uri, Guid g, Binary b, XElement x, byte[] bArray, TestEnum en, Guid[] guids, ulong[] ulongs, DateTimeOffset dto)
+        public bool TestPredefined_Online(MixedType entity, string s, decimal d, DateTime dt, TimeSpan ts, IEnumerable<string> strings, Uri uri, Guid g,
+#if HAS_LINQ2SQL
+            Binary b,
+#else
+            byte[] b,
+#endif
+            XElement x, byte[] bArray, TestEnum en, Guid[] guids, ulong[] ulongs, DateTimeOffset dto)
         {
             entity.StringProp = s;
             entity.DecimalProp = d;
@@ -1960,7 +1976,11 @@ namespace TestDomainServices
         }
 
         [Invoke]
+#if HAS_LINQ2SQL
         public Binary ReturnsBinary_Online(Binary value)
+#else
+        public byte[] ReturnsBinary_Online(byte[] value)
+#endif
         {
             return value;
         }
@@ -4398,7 +4418,7 @@ namespace TestDomainServices
             appendIf(current.ReportBody.Report == null, "ReportBody.Report", localCopy.ReportBody.Report, original.ReportBody.Report);
             appendIf(current.ReportBody.TimeEntered <= localCopy.ReportBody.TimeEntered, "ReportBody.TimeEntered", localCopy.ReportBody.TimeEntered, original.ReportBody.TimeEntered);
 
-            if (errors.Count() > 0)
+            if (errors.Count > 0)
             {
                 throw new InvalidOperationException(errors.Aggregate((s1, s2) => s1 + "\n" + s2));
             }
@@ -5240,8 +5260,7 @@ namespace TestDomainServices
 #endregion
 }
 
-
-#if !NET6_0
+#if HAS_LINQ2SQL
 #region LTS Northwind Scenarios
 
 namespace DataTests.Scenarios.LTS.Northwind
@@ -5283,6 +5302,7 @@ namespace DataTests.Scenarios.LTS.Northwind
 }
 
 #endregion LTS Northwind Scenarios
+#endif
 
 #region EF Northwind Scenarios
 
@@ -5330,8 +5350,6 @@ namespace DataTests.Scenarios.EF.Northwind
 }
 
 #endregion EF Northwind Scenarios
-
-#endif
 
 #region VB Root Namespace Scenarios
 namespace VBRootNamespaceTest

@@ -195,16 +195,16 @@ namespace OpenRiaServices.Tools
         public CodeExpressionStatement GetMethodInvokeExpressionStatementFor(string baseMethodName)
         {
             Debug.Assert(!string.IsNullOrEmpty(baseMethodName), "Unexpected empty or null baseMethodName name!");
-            Debug.Assert(this.methodInvokeExpressions.Keys.Contains<string>(baseMethodName), string.Concat("No method has been added for \'", baseMethodName, "\' base name"));
 
-            CodeExpressionStatement statement = null;
-
-            if (!string.IsNullOrEmpty(baseMethodName) && this.methodInvokeExpressions.Keys.Contains<string>(baseMethodName))
+            if (baseMethodName is not null && this.methodInvokeExpressions.TryGetValue(baseMethodName, out var expression))
             {
-                statement = new CodeExpressionStatement(this.methodInvokeExpressions[baseMethodName]);
+                return new CodeExpressionStatement(expression);
             }
-
-            return statement;
+            else
+            {
+                Debug.Fail(string.Concat("No method has been added for \'", baseMethodName, "\' base name"));
+                return null;
+            }
         }
 
 
@@ -220,9 +220,11 @@ namespace OpenRiaServices.Tools
             CodeMemberMethod method = new CodeMemberMethod();
             method.Attributes = MemberAttributes.Public | MemberAttributes.Final;
             method.Name = "On" + methodName;
-            method.Parameters.AddRange(parameters);
 
-            if (this.proxyGenerator.ClientProxyCodeGenerationOptions.UseFullTypeNames)
+            if (parameters != null)
+                method.Parameters.AddRange(parameters);
+
+            if (this.proxyGenerator.ClientProxyCodeGenerationOptions.UseFullTypeNames && parameters is not null)
             {
                 foreach (CodeParameterDeclarationExpression paramExp in parameters.Cast<CodeParameterDeclarationExpression>())
                 {
@@ -250,7 +252,7 @@ namespace OpenRiaServices.Tools
             {
                 int idx = snippet.ToString().LastIndexOf(')');
                 snippet.Remove(idx + 1, snippet.Length - idx - 1);
-                snippet.Append(";");
+                snippet.Append(';');
             }
             else // VB.net
             {

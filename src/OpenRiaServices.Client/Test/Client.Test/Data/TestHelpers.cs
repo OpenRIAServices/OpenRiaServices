@@ -1,43 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System.Threading;
-using System.Diagnostics;
 
 namespace OpenRiaServices.Client.Test
 {
 
     public static class TestHelperMethods
     {
-        /// <summary>
-        /// Perform a submit on the specified context using the DomainClient directy. This bypasses all context operations,
-        /// validation, etc.
-        /// </summary>
-        /// <param name="ctxt">The context to submit on</param>
-        /// <param name="callback">The callback to execute when the submit completes</param>
-        public static void SubmitDirect(DomainContext ctxt, Action<SubmitCompletedResult> callback)
-        {
-            EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-            Debug.Assert(!cs.IsEmpty, "No changes to submit!");
-
-
-            SynchronizationContext syncContext = SynchronizationContext.Current ?? new SynchronizationContext();
-
-            ctxt.DomainClient.SubmitAsync(cs, CancellationToken.None)
-                .ContinueWith(task =>
-                {
-                    SubmitCompletedResult submitResults = task.GetAwaiter().GetResult();
-                    syncContext.Post(
-                        delegate
-                        {
-                            callback(submitResults);
-                        },
-                        null);
-                });
-        }
 
         /// <summary>
         /// Method used to turn property level validation on or off for an entity. This allows invalid
@@ -132,7 +103,7 @@ namespace OpenRiaServices.Client.Test
     /// </summary>
     public static class BaselineTestData
     {
-        private static IEnumerable<Product> products = null;
+        private static IEnumerable<Product> products;
 
         public static IEnumerable<Product> Products
         {
@@ -148,27 +119,20 @@ namespace OpenRiaServices.Client.Test
 
         private static IEnumerable<T> LoadTestData<T>(string data)
         {
-            try
-            {
-                Type dataType = null;
-                // the different fx serializers are deserializing into different types
+            Type dataType = null;
+            // the different fx serializers are deserializing into different types
 #if SILVERLIGHT
-                dataType = typeof(Dictionary<string, List<object>>);
+            dataType = typeof(Dictionary<string, List<object>>);
 #else
-                dataType = typeof(Dictionary<string, object[]>);
+            dataType = typeof(Dictionary<string, object[]>);
 #endif
-                System.Runtime.Serialization.Json.DataContractJsonSerializer ser =
-                    new System.Runtime.Serialization.Json.DataContractJsonSerializer(dataType, new Type[] { typeof(T) });
-                System.Text.UnicodeEncoding encoding = new System.Text.UnicodeEncoding();
-                System.IO.MemoryStream ms = new System.IO.MemoryStream(encoding.GetBytes(data));
-                object deserializedData = (((System.Collections.IDictionary)ser.ReadObject(ms))[typeof(T).Name]);
-                return ((IEnumerable<object>)deserializedData).Cast<T>();
-            }
-            catch (Exception e)
-            {
-                string msg = e.Message;
-                throw e;
-            }
+            System.Runtime.Serialization.Json.DataContractJsonSerializer ser =
+                new System.Runtime.Serialization.Json.DataContractJsonSerializer(dataType, new Type[] { typeof(T) });
+            System.Text.UnicodeEncoding encoding = new System.Text.UnicodeEncoding();
+            System.IO.MemoryStream ms = new System.IO.MemoryStream(encoding.GetBytes(data));
+            object deserializedData = (((System.Collections.IDictionary)ser.ReadObject(ms))[typeof(T).Name]);
+            return ((IEnumerable<object>)deserializedData).Cast<T>();
+
         }
 
         /// <summary>

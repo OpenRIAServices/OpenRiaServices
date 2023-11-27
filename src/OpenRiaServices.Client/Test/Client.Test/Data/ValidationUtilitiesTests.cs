@@ -253,7 +253,7 @@ namespace OpenRiaServices.Hosting.Test
             bool result = ValidationUtilities.TryValidateObject(entity, validationContext, validationResults);
             Assert.IsFalse(result,
                 "Validation should fail.");
-            Assert.AreEqual(1, validationResults.Count(),
+            Assert.AreEqual(1, validationResults.Count,
                 "There should be 1 validation error");
 
             Assert.AreEqual("Value contains an invalid string", validationResults[0].ErrorMessage,
@@ -276,7 +276,7 @@ namespace OpenRiaServices.Hosting.Test
             bool result = ValidationUtilities.TryValidateObject(entity, validationContext, validationResults);
             Assert.IsFalse(result,
                 "Validation should fail.");
-            Assert.AreEqual(1, validationResults.Count(),
+            Assert.AreEqual(1, validationResults.Count,
                 "There should be 1 validation error");
             Assert.AreEqual("IValidatableObject Invalid Value", validationResults[0].ErrorMessage,
                 "The validation error message is wrong");
@@ -412,7 +412,7 @@ namespace OpenRiaServices.Hosting.Test
         [CustomValidation(typeof(ValTestValidator), "IsValTestValid")]
         public class ValTestClass
         {
-            internal bool _failMethod = false;
+            internal bool _failMethod;
 
             [Required]
             public string RequiredProperty { get; set; }

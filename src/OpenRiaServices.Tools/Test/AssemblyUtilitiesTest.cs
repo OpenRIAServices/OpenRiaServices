@@ -43,10 +43,10 @@ namespace OpenRiaServices.Tools.Test
             AssemblyName domainServices = typeof(OpenRiaServices.Server.DomainService).Assembly.GetName();
             AssemblyName dataAnnotations = typeof(System.ComponentModel.DataAnnotations.DisplayAttribute).Assembly.GetName();
             AssemblyName executingAssembly = Assembly.GetExecutingAssembly().GetName();
-
+            
             Assert.IsTrue(AssemblyUtilities.IsAssemblyMsCorlib(mscorlib), "mscorlib");
-            Assert.IsFalse(AssemblyUtilities.IsAssemblyMsCorlib(system), "system");
             Assert.IsFalse(AssemblyUtilities.IsAssemblyMsCorlib(systemCore), "systemCore");
+            Assert.IsFalse(AssemblyUtilities.IsAssemblyMsCorlib(system), "system");
             Assert.IsFalse(AssemblyUtilities.IsAssemblyMsCorlib(domainServices), "domainServices");
             Assert.IsFalse(AssemblyUtilities.IsAssemblyMsCorlib(dataAnnotations), "dataAnnotations");
             Assert.IsFalse(AssemblyUtilities.IsAssemblyMsCorlib(executingAssembly), "Executing Assembly");

@@ -24,12 +24,12 @@ steps:
 
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: 6.5.0
+    versionSpec: 6.7.0
     
 - task: gitversion/setup@0
   displayName: Install GitVersion
   inputs:
-    versionSpec: '5.x'
+    versionSpec: '5.9.0'
 
 - task: gitversion/execute@0
   displayName: Use GitVersion
@@ -87,7 +87,7 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     diagnosticsEnabled: false
-  timeoutInMinutes: 25
+  timeoutInMinutes: 15
 
 - task: VSTest@2
   displayName: 'Run tests - net6'
@@ -100,14 +100,14 @@ steps:
 
     runOnlyImpactedTests: false
     # Needed to hardcode path to test adapters for NET48 tests
-    pathtoCustomTestAdapters: '$(Build.SourcesDirectory)\src\OpenRiaServices.Server.UnitTesting\Test\bin\$(BuildConfiguration)\net6.0\'
+    # pathtoCustomTestAdapters: '$(Build.SourcesDirectory)\src\OpenRiaServices.Server.UnitTesting\Test\bin\$(BuildConfiguration)\net6.0\'
     runInParallel: true
-    runSettingsFile: 'src\test.runsettings'
+    # runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     diagnosticsEnabled: false
-  timeoutInMinutes: 25
+  timeoutInMinutes: 15
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'

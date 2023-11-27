@@ -32,7 +32,7 @@ namespace OpenRiaServices
                 return true;
             }
 
-            if (string.Compare(type.FullName, BinaryTypeFullName, StringComparison.Ordinal) == 0)
+            if (type.FullName == BinaryTypeFullName)
             {
                 binaryType = type;
                 return true;

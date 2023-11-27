@@ -70,8 +70,10 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
         public void T4CodeGenBasicTest3()
         {
             Type[] domainServiceTypes = new Type[] {
-                typeof(TestDomainServices.EF.Northwind), 
-                typeof(TestDomainServices.LTS.Northwind)            
+                typeof(TestDomainServices.EF.Northwind),
+#if NETFRAMEWORK
+                typeof(TestDomainServices.LTS.Northwind)
+#endif
             };
             Type[] sharedTypes = new Type[] {
             };

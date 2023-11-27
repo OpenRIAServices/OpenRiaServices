@@ -517,8 +517,8 @@ namespace OpenRiaServices.Hosting.Wcf.OData
         private static bool SkipWhitespace(string text, ref int textIndex)
         {
             Debug.Assert(text != null, "text != null");
-            Debug.Assert(text.Length >= 0, "text >= 0");
-            Debug.Assert(textIndex <= text.Length, "text <= text.Length");
+            Debug.Assert(textIndex >= 0, "textIndex >= 0");
+            Debug.Assert(textIndex <= text.Length, "textIndex <= text.Length");
 
             while (textIndex < text.Length && Char.IsWhiteSpace(text, textIndex))
             {

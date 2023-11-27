@@ -24,8 +24,8 @@ namespace OpenRiaServices.Client
         public EntityActionAttribute(string name, bool allowMultipleInvocations)
         {
             this.Name = name;
-            this.CanInvokePropertyName = string.Format("Can{0}", name);
-            this.IsInvokedPropertyName = string.Format("Is{0}Invoked", name);
+            this.CanInvokePropertyName = "Can" + name;
+            this.IsInvokedPropertyName = string.Concat("Is", name, "Invoked");
             this.AllowMultipleInvocations = allowMultipleInvocations;
         }
 

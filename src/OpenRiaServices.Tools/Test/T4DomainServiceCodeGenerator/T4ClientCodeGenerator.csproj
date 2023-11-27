@@ -3,13 +3,15 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>OpenRiaServices.Tools.Test.T4Generator</RootNamespace>
     <AssemblyName>OpenRiaServices.Tools.Test.T4Generator</AssemblyName>
-    <TargetFramework>net472</TargetFramework>
+    <TargetFrameworks>net472;net6.0</TargetFrameworks>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup  Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup  Condition="'$(TargetFramework)' != 'net472'">
   </ItemGroup>
   <ItemGroup>
     <Compile Update="T4DomainServiceClientCodeGenerator.cs">

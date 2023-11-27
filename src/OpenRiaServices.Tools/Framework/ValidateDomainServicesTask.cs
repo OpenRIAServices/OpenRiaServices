@@ -4,7 +4,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-using System.Web.Compilation;
 using Microsoft.Build.Framework;
 using Microsoft.Build.Utilities;
 using OpenRiaServices.Tools.Validation;
@@ -130,8 +129,8 @@ namespace OpenRiaServices.Tools
                 this.ReferenceAssemblies.Select(i => this.GetFileName(i)));
 
             this.WarnIfAssembliesDontExist(assemblies);
-
-            using (ClientBuildManager cbm = new ClientBuildManager(/* appVirtualDir */ "/", this.ProjectDirectory))
+#if NETFRAMEWORK
+            using (System.Web.Compilation.ClientBuildManager cbm = new(/* appVirtualDir */ "/", this.ProjectDirectory))
             {
                 // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
                 // This can occur when the build environment is configured incorrectly
@@ -148,6 +147,10 @@ namespace OpenRiaServices.Tools
                     validator.Validate(assemblies.ToArray(), this.LoggingService);
                 }
             }
+#else
+            // Make sure to re enable ValidateDomainServicesTaskRunsSuccessfully test when fixing
+            throw new NotImplementedException("Validation task is only implemented for .NetFramework");
+#endif
         }
 
         /// <summary>
@@ -165,7 +168,7 @@ namespace OpenRiaServices.Tools
             }
         }
 
-        #endregion
+#endregion
 
         #region Nested Classes
 

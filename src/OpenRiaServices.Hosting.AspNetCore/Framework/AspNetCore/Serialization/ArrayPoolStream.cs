@@ -259,8 +259,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             {
                 await response.StartAsync(ct);
                 WriteTo(response.BodyWriter);
-                //await response.BodyWriter.FlushAsync(ct);
-                //await response.CompleteAsync(); //? needed ?? 
+
+                // Say that we have finished writing the request, needed for other middleware such as OutputCache middleware
+                await response.CompleteAsync();
             }
 
             private void WriteTo(PipeWriter bodyWriter)

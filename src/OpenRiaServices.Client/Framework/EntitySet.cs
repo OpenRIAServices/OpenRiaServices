@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using OpenRiaServices.Client.Internal;
 
 #if HAS_COLLECTIONVIEW
@@ -30,7 +28,7 @@ namespace OpenRiaServices.Client
         private IList _list;
         // set of entities, for fast lookup
         private HashSet<Entity> _set;
-        private IDictionary<object, Entity> _identityCache;
+        private Dictionary<object, Entity> _identityCache;
         private readonly HashSet<Entity> _interestingEntities;
         private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
 
@@ -301,7 +299,7 @@ namespace OpenRiaServices.Client
             // Below we must eagerly enumerate the callbacks (ToArray) since invocation of callbacks might
             // cause _associationUpdateCallbackMap to be modified. We only want to notify the current set
             // of callbacks anyways.
-            bool entityChangesAccepted = (this.CanEdit || this.CanAdd) && string.Compare(propertyName, "EntityState", StringComparison.Ordinal) == 0 && entity.EntityState == EntityState.Unmodified;
+            bool entityChangesAccepted = (this.CanEdit || this.CanAdd) && (propertyName == "EntityState") && entity.EntityState == EntityState.Unmodified;
             IEnumerable<Action<Entity>> callbacks = this._associationUpdateCallbackMap.Where(p => p.Value != null && (entityChangesAccepted || p.Key.OtherKeyMembers.Contains(propertyName))).Select(p => p.Value).ToArray();
             foreach (Action<Entity> callback in callbacks)
             {
@@ -738,7 +736,7 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
             }
 
-            Entity cachedEntity = null;
+            Entity cachedEntity;
             this._identityCache.TryGetValue(identity, out cachedEntity);
             if (cachedEntity == null)
             {
@@ -813,13 +811,11 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
             }
 
-            // Throw if we already have an entity cached with the same identity
-            if (this._identityCache.ContainsKey(identity))
+            if (!this._identityCache.TryAdd(identity, entity))
             {
+                // Throw if we already have an entity cached with the same identity
                 throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
             }
-
-            this._identityCache[identity] = entity;
         }
 
         /// <summary>

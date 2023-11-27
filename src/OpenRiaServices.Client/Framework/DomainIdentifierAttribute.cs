@@ -2,7 +2,7 @@
 
 namespace OpenRiaServices
 {
-#if SILVERLIGHT
+#if !SERVERFX
      /// <summary>
     /// A tagging attribute used to categorize a Type as being of a particular domain.
     /// </summary>

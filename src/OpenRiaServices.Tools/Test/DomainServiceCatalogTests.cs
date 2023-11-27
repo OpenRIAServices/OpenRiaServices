@@ -10,6 +10,8 @@ using OpenRiaServices.Client.Test;
 using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using System.Runtime.InteropServices;
+using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -19,10 +21,6 @@ namespace OpenRiaServices.Tools.Test
     [TestClass]
     public class DomainServiceCatalogTests
     {
-        public DomainServiceCatalogTests()
-        {
-        }
-
         [TestMethod]
         [Description("DomainServiceCatalog ctors work properly")]
         public void DomainServiceCatalog_Ctors()
@@ -35,12 +33,12 @@ namespace OpenRiaServices.Tools.Test
             ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(empty, null), "logger");
 
             // Ctor taking one type -- null arg tests
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((Type) null, logger), "domainServiceType");
+            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((Type)null, logger), "domainServiceType");
             ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(typeof(DSC_DomainServiceType), null), "logger");
 
             // Ctor taking multiple types -- null arg tests
             ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog((IEnumerable<Type>)null, logger), "domainServiceTypes");
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(new Type[] {typeof(DSC_DomainServiceType)}, null), "logger");
+            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new DomainServiceCatalog(new Type[] { typeof(DSC_DomainServiceType) }, null), "logger");
 
             // Ctor taking assemblies -- legit
             string[] realAssemblies = new string[] { this.GetType().Assembly.Location,
@@ -55,7 +53,7 @@ namespace OpenRiaServices.Tools.Test
             Assert.AreEqual(1, descriptions.Count(), "Expected exactly one domain service description");
 
             // Ctor taking multiple type -- legit
-            dsc = new DomainServiceCatalog(new Type[] {typeof(DSC_DomainServiceType)}, logger);
+            dsc = new DomainServiceCatalog(new Type[] { typeof(DSC_DomainServiceType) }, logger);
             descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions, "Did not expect null descriptions");
             Assert.AreEqual(1, descriptions.Count(), "Expected exactly one domain service description");
@@ -93,7 +91,6 @@ namespace OpenRiaServices.Tools.Test
                     }
                 }
             }
-
             DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
@@ -113,18 +110,8 @@ namespace OpenRiaServices.Tools.Test
             Assert.AreEqual(0, logger.ErrorMessages.Count);
             Assert.AreEqual(0, logger.WarningMessages.Count);
 
-            // Need to synthesize exactly the same message we'd expect from failed assembly load
-            string exceptionMessage = null;
-            try
-            {
-                AssemblyName.GetAssemblyName(assemblyFileName);
-            }
-            catch (FileNotFoundException fnfe)
-            {
-                exceptionMessage = fnfe.Message;
-            }
-            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, exceptionMessage);
-            TestHelper.AssertContainsMessages(logger, expectedMessage);
+            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, string.Empty).TrimEnd();
+            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage, StringComparison.Ordinal)));
         }
 
         [TestMethod]
@@ -138,20 +125,10 @@ namespace OpenRiaServices.Tools.Test
             DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
-            
-            // Need to synthesize exactly the same message we'd expect from failed assembly load
-            string exceptionMessage = null;
-            try
-            {
-                AssemblyName.GetAssemblyName(assemblyFileName);
-            }
-            catch (FileNotFoundException fnfe)
-            {
-                exceptionMessage = fnfe.Message;
-            }
-            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, exceptionMessage);
-            TestHelper.AssertContainsMessages(logger, expectedMessage); 
-            
+
+            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, String.Empty).TrimEnd();
+            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage, StringComparison.Ordinal)));
+
             Assert.IsTrue(descriptions.Count > 0);
         }
 
@@ -185,8 +162,8 @@ namespace OpenRiaServices.Tools.Test
             {
                 File.Delete(assemblyFileName);
             }
-            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, exceptionMessage);
-            TestHelper.AssertContainsMessages(logger, expectedMessage);
+            string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, string.Empty).TrimEnd();
+            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
         }
 
         /// <summary>
@@ -219,6 +196,6 @@ namespace OpenRiaServices.Tools.Test
     }
     public class DSC_Entity
     {
-       [Key] public string TheKey {get;set;}
+        [Key] public string TheKey { get; set; }
     }
 }

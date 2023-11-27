@@ -48,25 +48,19 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             public Exception Error { get; set; }
 
-            private Timer Timer { get; set; }
-
             public bool CreateNullDefaultUser { get; set; }
 
             private readonly SemaphoreSlim _delay = new SemaphoreSlim(0);
 
-            public AuthenticationOperation RequestCallback()
+            public void RequestCallback()
             {
-                var operation = this.Operation;
-
-                this.Timer = null;
                 _delay.Release();
-                return operation;
             }
 
             public void RequestCallback(int delay)
             {
-                // This does not post to the UI thread
-                this.Timer = new Timer(state => this.RequestCallback(), null, delay, Timeout.Infinite);
+                Task.Delay(delay)
+                    .ContinueWith(_ => this.RequestCallback());
             }
 
             protected override IPrincipal CreateDefaultUser()
@@ -130,7 +124,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             }
 
             #region IDisposable Support
-            private bool _disposedValue = false; // To detect redundant calls
+            private bool _disposedValue; // To detect redundant calls
 
             protected virtual void Dispose(bool disposing)
             {
@@ -138,8 +132,6 @@ namespace OpenRiaServices.Client.Authentication.Test
                 {
                     if (disposing)
                     {
-                        if (Timer != null)
-                            Timer.Dispose();
                         _delay.Dispose();
                     }
 
@@ -446,31 +438,25 @@ namespace OpenRiaServices.Client.Authentication.Test
 
         [TestMethod]
         [Description("Tests that exceptions thrown from EndXx are caught and available in Operation.Error.")]
-        public void EndExceptionsCaught()
+        public async Task EndExceptionsCaughtAsync()
         {
-            ThrowingAuthentication mock = new ThrowingAuthentication();
-            Exception error = new Exception(AuthenticationServiceTest.ErrorMessage);
-            mock.EndError = error;
+            Exception error = new Exception(ErrorMessage);
+            using ThrowingAuthentication mock = new ThrowingAuthentication { EndError = error };
 
             Action<AuthenticationOperation> callback =
-                ao => Assert.AreEqual(mock.EndError, ao.Error, "Exceptions should be equal.");
+                ao =>
+                {
+                    Assert.AreEqual(mock.EndError, ao.Error, "Exceptions should be equal.");
+                    ao.MarkErrorAsHandled();
+                };
 
-            mock.Login(new LoginParameters(string.Empty, string.Empty), AuthenticationServiceTest.ConvertCallback<LoginOperation>(callback), null);
+            await CompleteAndCheckErrorAsync(mock, mock.Login(new LoginParameters(string.Empty, string.Empty), ConvertCallback<LoginOperation>(callback), null), error);
 
-            mock = new ThrowingAuthentication();
-            mock.EndError = error;
+            await CompleteAndCheckErrorAsync(mock, mock.Logout(ConvertCallback<LogoutOperation>(callback), null), error);
 
-            mock.Logout(AuthenticationServiceTest.ConvertCallback<LogoutOperation>(callback), null);
+            await CompleteAndCheckErrorAsync(mock, mock.LoadUser(ConvertCallback<LoadUserOperation>(callback), null), error);
 
-            mock = new ThrowingAuthentication();
-            mock.EndError = error;
-
-            mock.LoadUser(AuthenticationServiceTest.ConvertCallback<LoadUserOperation>(callback), null);
-
-            mock = new ThrowingAuthentication();
-            mock.EndError = error;
-
-            mock.SaveUser(AuthenticationServiceTest.ConvertCallback<SaveUserOperation>(callback), null);
+            await CompleteAndCheckErrorAsync(mock, mock.SaveUser(ConvertCallback<SaveUserOperation>(callback), null), error);
         }
 
         #region Tracking
@@ -1421,11 +1407,22 @@ namespace OpenRiaServices.Client.Authentication.Test
         private static async Task CompleteAndCheckStatusAsync(MockAuthenticationNoCancel mock, AuthenticationOperation op)
         {
             Assert.IsFalse(op.IsComplete);
-            await mock.RequestCallback();
+            mock.RequestCallback();
+            await op;
             Assert.IsTrue(op.IsComplete);
             Assert.IsFalse(op.IsCanceled);
             Assert.IsFalse(op.HasError);
         }
 
+        private static async Task CompleteAndCheckErrorAsync(MockAuthenticationNoCancel mock, AuthenticationOperation op, Exception exception)
+        {
+            Assert.IsFalse(op.IsComplete);
+            mock.RequestCallback();
+            await op;
+            Assert.IsTrue(op.IsComplete);
+            Assert.IsFalse(op.IsCanceled);
+            Assert.AreEqual(exception, op.Error);
+            Assert.IsTrue(op.HasError);
+        }
     }
 }

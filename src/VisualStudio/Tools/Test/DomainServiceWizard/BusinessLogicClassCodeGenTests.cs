@@ -16,14 +16,12 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [ClassInitialize()]
         public static void MyClassInitialize(TestContext testContext)
         {
-            UnitTestTraceListener.Initialize(testContext, true);
             TestHelper.EnsureL2SSupport(true);
         }
 
         [ClassCleanup()]
         public static void MyClassCleanup()
         {
-            UnitTestTraceListener.Reset();
             TestHelper.EnsureL2SSupport(false);
         }
 
