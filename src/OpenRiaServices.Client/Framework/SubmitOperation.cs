@@ -50,7 +50,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-        internal void CompleteTask(Task<SubmitResult> task)
+        private void CompleteTask(Task<SubmitResult> task)
         {
             if (task.IsCanceled)
                 base.SetCancelled();

@@ -653,4 +653,7 @@ Gets a user representing the authenticated identity.
   <data name="Project_Is_MultiTarget_Using_TargetFramework" xml:space="preserve">
     <value>Project '{0}' has multiple TargetFrameworks. Choosing first framework: '{1}'</value>
   </data>
+  <data name="ClientCodeGen_NetFrameworkNotSupported" xml:space="preserve">
+    <value>Code genereation for .NET Framework must be built with Visual Studio's msbuild</value>
+  </data>
 </root>

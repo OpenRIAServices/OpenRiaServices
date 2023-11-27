@@ -12,6 +12,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Server.Test.Utilities;
 using System.Globalization;
 using Microsoft.Build.Exceptions;
+using OpenRiaServices.Tools.Test.Utilities;
+using System.Diagnostics;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -25,7 +27,7 @@ namespace OpenRiaServices.Tools.Test
         public static string LineCommentFromLanguage(string language)
         {
             string extension = ExtensionFromLanguage(language);
-            return extension.EndsWith("cs") ? "//" : "'";
+            return extension.EndsWith("cs", StringComparison.Ordinal) ? "//" : "'";
         }
 
         // Returns the full path to a file in the test project's output dir
@@ -40,15 +42,9 @@ namespace OpenRiaServices.Tools.Test
         // breadcrumbs we can use to get back to it/
         public static void GetProjectPaths(string relativeTestDir, out string projectPath, out string outputPath)
         {
-            string projectPathRelativeFileName = Path.Combine(relativeTestDir, "ProjectPath.txt");
-            string projectPathFile = GetTestFileName(projectPathRelativeFileName);
-            projectPath = string.Empty;
-            outputPath = string.Empty;
-            string inputString = string.Empty;
-            using (StreamReader t1 = new StreamReader(projectPathFile))
-            {
-                inputString = t1.ReadToEnd();
-            }
+            // Read file from output folder
+            string inputString = File.ReadAllText("ProjectPath.txt");
+
 
             string[] split = inputString.Split(',');
             projectPath = split[0];
@@ -94,9 +90,6 @@ namespace OpenRiaServices.Tools.Test
                 string realFileInProject = Path.Combine(projectDataDir, Path.GetFileName(referenceFileName));
 
                 // Generate CMD strings to diff and to copy
-                string tfDiffCommand = "tf diff \"" + referenceFileName + "\" \"" + generatedFileName + "\"\r\n";
-                string codeDiffCommand = "git diff \"" + referenceFileName + "\" \"" + generatedFileName + "\"\r\n";
-                string tfEditCommand = "tf edit \"" + realFileInProject + "\"\r\n";
                 string copyCommand = "copy \"" + generatedFileName + "\" \"" + realFileInProject + "\"";
 
                 // Write edit and copy commands to a common .bat file
@@ -105,7 +98,7 @@ namespace OpenRiaServices.Tools.Test
 
                 using (StreamWriter sw = new StreamWriter(updateAllBatFile, true))
                 {
-                    sw.Write("cmd /c " + tfEditCommand);
+                    sw.Write("cmd /c " + copyCommand);
                     sw.WriteLine(copyCommand);
                 }
 
@@ -113,12 +106,7 @@ namespace OpenRiaServices.Tools.Test
                 diffMessage = " Generated file is different than the expected reference file.\r\n" +
                     "    Expected file:       " + referenceFileName + "\r\n" +
                     "    Newly generated file: " + generatedFileName + "\r\n" +
-                    "\r\n ------------------- To diff these files, execute this ------------------\r\n\r\n    " +
-                    tfDiffCommand +
-                    "\r\n or using git diff \r\n\r\n    " +
-                    codeDiffCommand +
                     "\r\n ---------------- To make this the new reference file, execute this ------------------\r\n\r\n    " +
-                    tfEditCommand + "    " +
                     copyCommand + "\r\n\r\n" +
                     " ------------------- To update all baselines, that failed in the current run, execute following from command prompt ------------------\r\n\r\n" +
                     "\"" + updateAllBatFile + "\"" + "\r\n\r\n";
@@ -139,9 +127,9 @@ namespace OpenRiaServices.Tools.Test
         private static string StripAutoGenPrefix(string s, string lineCommentStart)
         {
             int index = 0;
-            while(string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length) == 0)
+            while (string.Compare(s, index, lineCommentStart, 0, lineCommentStart.Length, StringComparison.Ordinal) == 0)
             {
-                index = s.IndexOf("\r\n", index) + 2;
+                index = s.IndexOf("\r\n", index, StringComparison.Ordinal) + 2;
             }
             return s.Substring(index);
         }
@@ -176,7 +164,7 @@ namespace OpenRiaServices.Tools.Test
         {
             get
             {
-                return Path.GetDirectoryName(typeof(TestHelper).Assembly.Location);
+                return TestInitializer.DeploymentDirectory;
             }
         }
 
@@ -188,7 +176,7 @@ namespace OpenRiaServices.Tools.Test
         public static string NormalizedFolder(string folder)
         {
             int len = folder.Length;
-            return (len > 0 && folder[len-1] == Path.DirectorySeparatorChar) ? folder.Substring(0, folder.Length - 1) : folder;
+            return (len > 0 && folder[len - 1] == Path.DirectorySeparatorChar) ? folder.Substring(0, folder.Length - 1) : folder;
         }
 
         public static string GetOutputTestDataDir(string subDir)
@@ -418,7 +406,7 @@ namespace OpenRiaServices.Tools.Test
 
                 foreach (string msg in logger.InfoMessages)
                 {
-                    if (msg.StartsWith(msg))
+                    if (msg.StartsWith(msg, StringComparison.Ordinal))
                     {
                         foundIt = true;
                         break;
@@ -441,7 +429,7 @@ namespace OpenRiaServices.Tools.Test
 
                 foreach (string msg in logger.ErrorMessages)
                 {
-                    if (msg.StartsWith(error))
+                    if (msg.StartsWith(error, StringComparison.Ordinal))
                     {
                         foundIt = true;
                         break;
@@ -457,7 +445,7 @@ namespace OpenRiaServices.Tools.Test
         /// <param name="logger"></param>
         public static void AssertNoErrorsOrWarnings(ConsoleLogger logger)
         {
-            if (logger.ErrorMessages.Count() == 0 && logger.WarningMessages.Count() == 0)
+            if (logger.ErrorMessages.Count == 0 && logger.WarningMessages.Count == 0)
                 return;
 
             StringBuilder sb = new StringBuilder();
@@ -644,7 +632,7 @@ namespace OpenRiaServices.Tools.Test
             ConsoleLogger logger = new ConsoleLogger();
             ClientCodeGenerationOptions options = CreateMockCodeGenContext(language, false);
             ICodeGenerationHost host = CreateMockCodeGenerationHost(logger, null);
-            string generatedCode = GenerateCode(host, options, domainServiceTypes );
+            string generatedCode = GenerateCode(host, options, domainServiceTypes);
             TestHelper.AssertCodeGenFailure(generatedCode, logger, errors);
         }
 
@@ -671,7 +659,7 @@ namespace OpenRiaServices.Tools.Test
             ClientCodeGenerationOptions options = CreateMockCodeGenContext(language, useFullNames);
             ICodeGenerationHost host = CreateMockCodeGenerationHost(logger, typeService);
             string generatedCode = GenerateCode(host, options, domainServiceTypes);
-            TestHelper.AssertCodeGenSuccess(generatedCode,  ((MockCodeGenerationHost)host).LoggingService as ConsoleLogger);
+            TestHelper.AssertCodeGenSuccess(generatedCode, ((MockCodeGenerationHost)host).LoggingService as ConsoleLogger);
             return generatedCode;
         }
 
@@ -759,7 +747,7 @@ namespace OpenRiaServices.Tools.Test
                 ClientProjectPath = "MockProject.proj",
                 IsApplicationContextGenerationEnabled = codeGenOptions.GenerateApplicationContexts,
                 UseFullTypeNames = codeGenOptions.UseFullTypeNames,
-                ClientProjectTargetPlatform =  TargetPlatform.Silverlight
+                ClientProjectTargetPlatform = TargetPlatform.Silverlight
             };
 
             MockCodeGenerationHost host = TestHelper.CreateMockCodeGenerationHost(codeGenOptions.Logger, codeGenOptions.SharedCodeService);

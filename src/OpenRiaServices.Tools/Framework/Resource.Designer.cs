@@ -443,6 +443,15 @@ namespace OpenRiaServices.Tools {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Code genereation for .NET Framework must be built with Visual Studio&apos;s msbuild.
+        /// </summary>
+        internal static string ClientCodeGen_NetFrameworkNotSupported {
+            get {
+                return ResourceManager.GetString("ClientCodeGen_NetFrameworkNotSupported", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to The &apos;{0}&apos; project must be built before client proxy classes can be generated..
         /// </summary>
         internal static string ClientCodeGen_No_Input_Assemblies {

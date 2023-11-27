@@ -17,6 +17,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         {
         }
 
+        public override bool HasSideEffects => ((QueryAttribute)DomainOperation.OperationAttribute).HasSideEffects;
+
         public override async Task Invoke(HttpContext context)
         {
             try
@@ -91,7 +93,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             var queryParts = new List<string>();
             foreach (string queryPart in queryPartCollection.Keys)
             {
-                if (queryPart == null || !queryPart.StartsWith("$", StringComparison.Ordinal))
+                if (queryPart == null || !queryPart.StartsWith('$'))
                 {
                     // not a special query string
                     continue;
@@ -100,7 +102,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 if (queryPart.Equals("$includeTotalCount", StringComparison.OrdinalIgnoreCase))
                 {
                     string value = queryPartCollection[queryPart].First();
-                    bool.TryParse(value, out includeTotalCount);
+                    _ = bool.TryParse(value, out includeTotalCount);
                     continue;
                 }
 

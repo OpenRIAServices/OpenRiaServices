@@ -29,7 +29,7 @@ namespace OpenRiaServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_ComplexTypeScenarios()
         {
-            string[] sharedFiles = new string[] { 
+            string[] sharedFiles = new string[] {
                 TestHelper.GetTestFileName("Test.shared.cs"),
             };
 
@@ -57,7 +57,7 @@ namespace OpenRiaServices.Tools.Test
         [TestMethod]
         public void TestClientCodegen_ComplexTypeScenarios_RootNs_FullTypeNames()
         {
-            string[] sharedFiles = new string[] { 
+            string[] sharedFiles = new string[] {
                 TestHelper.GetTestFileName("Test.shared.cs"),
             };
 
@@ -117,6 +117,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.GenerateCodeAssertFailure("C#", new Type[] { typeof(InvalidAssociationScenarios) }, error);
         }
 
+#if HAS_LINQ2SQL
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_MP")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_MP")]
         [TestMethod]
@@ -126,7 +127,7 @@ namespace OpenRiaServices.Tools.Test
 
             // Default codegen
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_MP", "MultipleProviderScenarios.g",
-                new Type[] { 
+                new Type[] {
                     typeof(TestDomainServices.EF.Northwind), typeof(TestDomainServices.LTS.Northwind)}, "C#", sharedFiles, false));
         }
 
@@ -141,6 +142,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_FullTypes", "MultipleProviderScenarios.g",
                 new Type[] { typeof(TestDomainServices.EF.Northwind), typeof(TestDomainServices.LTS.Northwind) }, "C#", sharedFiles, true));
         }
+#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFDbContext")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_EFDbContext")]
@@ -214,6 +216,7 @@ namespace OpenRiaServices.Tools.Test
                 typeof(TestDomainServices.EFCF.Northwind), sharedFiles, true));
         }
 
+#if HAS_LINQ2SQL
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_LTSNW")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_LTSNW")]
         [TestMethod]
@@ -225,6 +228,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_LTSNW", "LTSNorthwindScenarios.g",
                 typeof(DataTests.Scenarios.LTS.Northwind.LTS_NorthwindScenarios), sharedFiles, false));
         }
+#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_EF_Inheritance")]
         [DeploymentItem(@"ProjectPath.txt", "CG_EF_Inheritance")]
@@ -239,6 +243,7 @@ namespace OpenRiaServices.Tools.Test
                 typeof(DataTests.Inheritance.EF.EF_Inheritance_DomainService), sharedFiles, false));
         }
 
+#if HAS_LINQ2SQL
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_LTS_Inheritance")]
         [DeploymentItem(@"ProjectPath.txt", "CG_LTS_Inheritance")]
         [TestMethod]
@@ -251,6 +256,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_LTS_Inheritance", "LTS_Inheritance.g",
                 typeof(DataTests.Inheritance.LTS.LTS_Inheritance_DomainService), sharedFiles, false));
         }
+#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_Include")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Scenarios_Include")]
@@ -473,7 +479,7 @@ namespace OpenRiaServices.Tools.Test
         {
             // Full type names
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_FullTypes_5", "VBRootNamespaceScenarios.g",
-                new Type[] { typeof(VBRootNamespaceTest.VBRootNamespaceTestDomainService), typeof(VBRootNamespaceTest.Inner.VBRootNamespaceTestProviderInsideInner), typeof(VBRootNamespaceTest2.VBRootNamespaceTestDomainService2), typeof(VBRootNamespaceTest3.VBRootNamespaceTestDomainService3) }, 
+                new Type[] { typeof(VBRootNamespaceTest.VBRootNamespaceTestDomainService), typeof(VBRootNamespaceTest.Inner.VBRootNamespaceTestProviderInsideInner), typeof(VBRootNamespaceTest2.VBRootNamespaceTestDomainService2), typeof(VBRootNamespaceTest3.VBRootNamespaceTestDomainService3) },
                 "VB", Array.Empty<string>(), "VBRootNamespaceTest", true));
         }
 
@@ -485,7 +491,7 @@ namespace OpenRiaServices.Tools.Test
         [Description("Create client proxies for City domain service and compare to known good copy")]
         public void TestCityClientProxies()
         {
-            string[] sharedFiles = new string[] { 
+            string[] sharedFiles = new string[] {
                 TestHelper.GetTestFileName("Cities.shared.cs"),
                 TestHelper.GetTestFileName("Cities.shared.vb")
             };
@@ -506,7 +512,7 @@ namespace OpenRiaServices.Tools.Test
         [Description("Create client proxies for MockCustomer domain service and compare to known good copy")]
         public void TestMockCustomerProviderClientProxies()
         {
-            string[] sharedFiles = new string[] { 
+            string[] sharedFiles = new string[] {
                 TestHelper.GetTestFileName("Cities.g.cs"),
                 TestHelper.GetTestFileName("Cities.shared.cs"),
                 TestHelper.GetTestFileName("Cities.g.vb"),
@@ -517,6 +523,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Mocks", "CG_Mocks", "MockCustomers.g", typeof(MockCustomerDomainService), sharedFiles, false));
         }
 
+#if HAS_LINQ2SQL
         [DeploymentItem(@"Baselines\Default\LTS", "CG_CATLTS")]
         [DeploymentItem(@"ProjectPath.txt", "CG_CATLTS")]
         [TestMethod]
@@ -535,6 +542,7 @@ namespace OpenRiaServices.Tools.Test
             // Default
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\LTS", "CG_NWLTS", "Northwind_LTS.g", typeof(TestDomainServices.LTS.Northwind), Array.Empty<string>(), false));
         }
+#endif
 
         [DeploymentItem(@"Baselines\Default\EF", "CG_NWEF")]
         [DeploymentItem(@"ProjectPath.txt", "CG_NWEF")]
@@ -589,7 +597,7 @@ namespace OpenRiaServices.Tools.Test
         [Description("Create client proxies and verifies that entity type conflicts are resolved correctly.")]
         public void TestClientCodeGen_ConflictResolution()
         {
-            Type[] providerTypes = new Type[] 
+            Type[] providerTypes = new Type[]
             {
                 typeof(DomainServiceScenario1),
                 typeof(DomainServiceScenario2),
@@ -606,7 +614,7 @@ namespace OpenRiaServices.Tools.Test
         [Description("Create client proxies and verifies that entity type conflicts are resolved correctly.")]
         public void TestClientCodeGen_ConflictResolution_FullTypes()
         {
-            Type[] providerTypes = new Type[] 
+            Type[] providerTypes = new Type[]
             {
                 typeof(DomainServiceScenario1),
                 typeof(DomainServiceScenario2),
@@ -675,7 +683,7 @@ namespace OpenRiaServices.Tools.Test
         public void TestClientCodeGen_RangeAttributeWithType()
         {
             MockSharedCodeService sts = TestHelper.CreateCommonMockSharedCodeService();
-            string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] {typeof(Provider_RangeAttributeWithType_Bug629280)}, null, sts);
+            string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] { typeof(Provider_RangeAttributeWithType_Bug629280) }, null, sts);
 
             // Validate generated code
             TestHelper.AssertGeneratedCodeContains(
@@ -711,7 +719,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.AssertGeneratedCodeDoesNotContain(
                 generatedCode,
                 "previous.MockOrderDetails.Remove(this);",
-                "value.MockOrderDetails.Add(this);");       
+                "value.MockOrderDetails.Add(this);");
         }
 
         [TestMethod]
@@ -728,7 +736,7 @@ namespace OpenRiaServices.Tools.Test
         [DeploymentItem(@"Shared\Global.shared.cs")]
         [DeploymentItem(@"Shared\Global.shared.vb")]
         [DeploymentItem(@"ProjectPath.txt", "CG_Global")]
-        [TestMethod] 
+        [TestMethod]
         [WorkItem(851335)]
         [Description("Verifies that codegen succeeds when global types are exposed to all areas of the generator.")]
         public void TestClientCodeGen_GlobalNamespace()
@@ -1035,7 +1043,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.GenerateCodeAssertFailure("C#", typeof(MockDomainService_WithRoundtripOriginalEntities5),
                 string.Format(ServerResource.InvalidAssociation_RoundTripOriginal, "PropWithPropLevelRTO", "TestDomainServices.RTO_EntityWithRoundtripOriginalOnAssociationPropertyAndOnEntity"));
         }
-       
+
         [TestMethod]
         [WorkItem(184735)]
         [Description("Verifies member level RoundtripOriginalAttributes are ignored when it is also applied at the type level")]

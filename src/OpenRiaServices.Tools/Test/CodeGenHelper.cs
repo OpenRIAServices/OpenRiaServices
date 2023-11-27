@@ -25,7 +25,7 @@ namespace OpenRiaServices.Tools.Test
         {
             string normalizedGenerated = TestHelper.NormalizeWhitespace(generatedCode);
             string normalizedNotExpected = TestHelper.NormalizeWhitespace(notExpected);
-            Assert.IsTrue(normalizedGenerated.IndexOf(normalizedNotExpected) < 0, "Did not expect <" + notExpected + ">");
+            Assert.IsTrue(normalizedGenerated.IndexOf(normalizedNotExpected, StringComparison.Ordinal) < 0, "Did not expect <" + notExpected + ">");
         }
 
         /// <summary>
@@ -120,7 +120,7 @@ namespace OpenRiaServices.Tools.Test
             // We need to map any server side assembly references back to our deployment directory
             // if we have the same assembly there, otherwise the assembly load from calls end up
             // with multiple assemblies with the same types
-            string deploymentDir = Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
+            string deploymentDir = System.IO.Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
             List<string> assemblies = MsBuildHelper.GetReferenceAssemblies(serverProjectPath);
             MapAssemblyReferencesToDeployment(deploymentDir, assemblies);
             return assemblies;
@@ -286,7 +286,7 @@ namespace OpenRiaServices.Tools.Test
         {
             try
             {
-                if (tempFolder.StartsWith(Path.GetTempPath()))
+                if (tempFolder.StartsWith(Path.GetTempPath(), StringComparison.OrdinalIgnoreCase))
                 {
                     RecursiveDelete(tempFolder);
                 }

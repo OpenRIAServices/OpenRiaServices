@@ -2,11 +2,15 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.nuspec'
   schedule:
-    - cron: "5 13 * * 1"
+    - cron: "5 13 1 * *"
 
 jobs:
   analyze:

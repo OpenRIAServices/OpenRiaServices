@@ -10,7 +10,7 @@ using System.Threading;
 
 namespace OpenRiaServices.Client.Web
 {
-#if NETSTANDARD
+#if !NETFRAMEWORK
     /// <summary>
     /// Base class DomainClientFactories targeting WCF and creating <see cref="WebDomainClient{TContract}"/> instances.
     /// For most uses you should use a concerete implementation such as 
@@ -47,7 +47,7 @@ namespace OpenRiaServices.Client.Web
 
             // ensure endpoint suffix includes a starting "/"
             this._endpointSuffix = endpointSuffix;
-            if (!_endpointSuffix.StartsWith("/"))
+            if (!_endpointSuffix.StartsWith("/", StringComparison.Ordinal))
                 _endpointSuffix = "/" + _endpointSuffix;
 
             // Silverlight uses the browser's cookies by default, in which case we should not manage cookies manually

@@ -22,7 +22,7 @@ namespace OpenRiaServices.Client.Test
     {
         private PurchaseOrder TestOrder;
         private List<PurchaseOrderDetail> TestDetails;
-        private int NumNotifications = 0;
+        private int NumNotifications;
         private int purchaseOrderDetailIDSequence = 1;
 
         [TestInitialize]
@@ -312,7 +312,7 @@ namespace OpenRiaServices.Client.Test
             // with the order not part of any EntityContainer/Set,
             // its collection returns empty
             Assert.IsNull(TestOrder.EntitySet);
-            Assert.AreEqual(0, TestOrder.PurchaseOrderDetails.Count());
+            Assert.AreEqual(0, TestOrder.PurchaseOrderDetails.Count);
 
             ((INotifyCollectionChanged)TestOrder.PurchaseOrderDetails).CollectionChanged -= EntityCollectionChanged;
         }
@@ -377,7 +377,7 @@ namespace OpenRiaServices.Client.Test
             // with only the order in the container
             // its collection returns empty
             Assert.IsNotNull(TestOrder.EntitySet);
-            Assert.AreEqual(0, TestOrder.PurchaseOrderDetails.Count());
+            Assert.AreEqual(0, TestOrder.PurchaseOrderDetails.Count);
             Assert.AreEqual(0, NumNotifications);
 
             // after we load some entities, we expect a change notification

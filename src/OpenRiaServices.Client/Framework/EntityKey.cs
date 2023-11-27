@@ -138,7 +138,7 @@ namespace OpenRiaServices.Client
             {
                 if (sb.Length > 0)
                 {
-                    sb.Append(",");
+                    sb.Append(',');
                 }
                 sb.Append(value.ToString());
             }

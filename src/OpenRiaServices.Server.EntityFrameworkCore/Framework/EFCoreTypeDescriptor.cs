@@ -269,12 +269,9 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         internal static bool ShouldExcludeEntityMember(PropertyDescriptor pd)
         {
             // exclude IChangeDetector.EntityState members
-            if (pd.PropertyType == typeof(EntityState) && typeof(IChangeDetector).IsAssignableFrom(pd.ComponentType))
-            {
-                return true;
-            }
-
-            return false;
+#pragma warning disable EF1001 // Internal EF Core API usage.
+            return pd.PropertyType == typeof(EntityState) && typeof(IChangeDetector).IsAssignableFrom(pd.ComponentType);
+#pragma warning restore EF1001 // Internal EF Core API usage.
         }
 
         private bool IsForeignKeyMember(string name) => _foreignKeyMembers != null && _foreignKeyMembers.Contains(name);

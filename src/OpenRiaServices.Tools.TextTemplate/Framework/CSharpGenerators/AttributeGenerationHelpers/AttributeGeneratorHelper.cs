@@ -4,62 +4,60 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
+using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Tools.TextTemplate
 {
     internal class AttributeGeneratorHelper
     {
         private const string DefaultDataContractSchema = "http://schemas.datacontract.org/2004/07/";
-        private static readonly Type[] blockList = new Type[]
-            {
-                typeof(MetadataTypeAttribute),
-                typeof(ScaffoldColumnAttribute),
-                typeof(ScaffoldTableAttribute),
-                typeof(SerializableAttribute),
-                typeof(System.Diagnostics.CodeAnalysis.SuppressMessageAttribute)
-            };
-
-        private static Dictionary<Type, Type> _knownBuilderTypes;
-
-        private static Dictionary<Type, ICustomAttributeBuilder> _knownBuilders = new Dictionary<Type, ICustomAttributeBuilder>();
+        private static readonly Type[] s_blockList = new Type[]
+        {
+            typeof(MetadataTypeAttribute),
+            typeof(ScaffoldColumnAttribute),
+#if HAS_LINQ2SQL
+            typeof(ScaffoldTableAttribute),
+#endif
+            typeof(SerializableAttribute),
+            typeof(System.Diagnostics.CodeAnalysis.SuppressMessageAttribute)
+        };
 
         /// <summary>
         /// Gets the dictionary mapping custom attribute types to their known custom attribute builder types
         /// </summary>
-        private static Dictionary<Type, Type> KnownBuilderTypes
+        private static Dictionary<Type, Type> KnownBuilderTypes { get; } = new()
+        // TODO: (ron) this deserves an extensibility mechanism.  For now, hard coded allow list
         {
-            get
-            {
-                if (_knownBuilderTypes == null)
-                {
-                    // TODO: (ron) this deserves an extensibility mechanism.  For now, hard coded allow list
-                    _knownBuilderTypes = new Dictionary<Type, Type>();
-                    _knownBuilderTypes[typeof(CustomValidationAttribute)] = typeof(CustomValidationCustomAttributeBuilder);
-                    _knownBuilderTypes[typeof(DataMemberAttribute)] = typeof(DataMemberAttributeBuilder);
-                    _knownBuilderTypes[typeof(DisplayAttribute)] = typeof(DisplayCustomAttributeBuilder);
-                    _knownBuilderTypes[typeof(DomainIdentifierAttribute)] = typeof(DomainIdentifierAttributeBuilder);
-                    _knownBuilderTypes[typeof(EditableAttribute)] = typeof(EditableAttributeBuilder);
-                    _knownBuilderTypes[typeof(RangeAttribute)] = typeof(RangeCustomAttributeBuilder);
-                    _knownBuilderTypes[typeof(RegularExpressionAttribute)] = typeof(ValidationCustomAttributeBuilder);
-                    _knownBuilderTypes[typeof(RequiredAttribute)] = typeof(ValidationCustomAttributeBuilder);
-                    _knownBuilderTypes[typeof(StringLengthAttribute)] = typeof(ValidationCustomAttributeBuilder);
-                    _knownBuilderTypes[typeof(UIHintAttribute)] = typeof(UIHintCustomAttributeBuilder);
-                }
-                return _knownBuilderTypes;
-            }
-        }
+            [typeof(CustomValidationAttribute)] = typeof(CustomValidationCustomAttributeBuilder),
+            [typeof(DataMemberAttribute)] = typeof(DataMemberAttributeBuilder),
+            [typeof(DisplayAttribute)] = typeof(DisplayCustomAttributeBuilder),
+            [typeof(DomainIdentifierAttribute)] = typeof(DomainIdentifierAttributeBuilder),
+            [typeof(EditableAttribute)] = typeof(EditableAttributeBuilder),
+            [typeof(RangeAttribute)] = typeof(RangeCustomAttributeBuilder),
+            [typeof(RegularExpressionAttribute)] = typeof(ValidationCustomAttributeBuilder),
+            [typeof(RequiredAttribute)] = typeof(ValidationCustomAttributeBuilder),
+            [typeof(StringLengthAttribute)] = typeof(ValidationCustomAttributeBuilder),
+            [typeof(UIHintAttribute)] = typeof(UIHintCustomAttributeBuilder)
+        };
 
         /// <summary>
         /// Gets the dictionary mapping custom attribute types to their builder instances
         /// </summary>
-        private static Dictionary<Type, ICustomAttributeBuilder> KnownBuilders
+        private static Dictionary<Type, ICustomAttributeBuilder> KnownBuilders { get; } = new()
         {
-            get
-            {
-                return _knownBuilders;
-            }
-        }
+             // OpenRiaServices Attributes which should not be copied over
+            { typeof(EnableClientAccessAttribute), null },
+            { typeof(IncludeAttribute), null },
+            { typeof(ExcludeAttribute), null },
+            { typeof(QueryAttribute), null },
+            { typeof(InvokeAttribute), null },
+            { typeof(InsertAttribute), null },
+            { typeof(UpdateAttribute), null },
+            { typeof(DeleteAttribute), null },
+            { typeof(EntityActionAttribute), null },
+            { typeof(RequiresAuthenticationAttribute), null },
+            { typeof(RequiresRoleAttribute), null },
+        };
 
         public static AttributeDeclaration GetAttributeDeclaration(Attribute attribute, ClientCodeGenerator textTemplateClientCodeGenerator, bool forcePropagation)
         {
@@ -255,7 +253,7 @@ namespace OpenRiaServices.Tools.TextTemplate
 
         private static bool IsAttributeBlocked(Type attributeType)
         {
-            return blockList.Contains(attributeType)
+            return s_blockList.Contains(attributeType)
                 // __DynamicallyInvokableAttribute might be added at compile time, don't propagate them
                 || attributeType.FullName == "__DynamicallyInvokableAttribute"
                 ;
@@ -346,7 +344,7 @@ namespace OpenRiaServices.Tools.TextTemplate
             }
 
             // No mapping - use schema + CLR namespace instead.
-            return DefaultDataContractSchema + Uri.EscapeUriString(entityTypeNamespace);
+            return DefaultDataContractSchema + Uri.EscapeDataString(entityTypeNamespace);
         }
     }
 }

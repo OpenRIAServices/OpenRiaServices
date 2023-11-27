@@ -10,7 +10,7 @@ namespace OpenRiaServices.Tools.Test.T4Generator
         public static string AttributeShortName(object attribute)
         {
             string name = attribute.GetType().Name;
-            if (name.EndsWith("Attribute"))
+            if (name.EndsWith("Attribute", StringComparison.Ordinal))
             {
                 name = name.Substring(0, name.Length - 9);
             }
