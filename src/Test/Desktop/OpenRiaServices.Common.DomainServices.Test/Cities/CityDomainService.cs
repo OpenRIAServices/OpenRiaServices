@@ -136,9 +136,9 @@ namespace Cities
         }
 
         [Query(IsComposable = false)]
-        public async Task<Zip> GetZipByFourDigitCodeAsync(int fourDigitCode)
+        public Task<Zip> GetZipByFourDigitCodeAsync(int fourDigitCode)
         {
-            return await Task.FromResult(GetZipByFourDigitCode2(fourDigitCode));
+            return Task.FromResult(GetZipByFourDigitCode2(fourDigitCode));
         }
 
         [Query(IsComposable = false)]
