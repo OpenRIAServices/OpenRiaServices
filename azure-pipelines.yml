@@ -10,23 +10,23 @@ variables:
 
 steps:
 
-# install dotnet 6 sdk so we can run tests against them
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '6.0.x'
+## install dotnet 6
+#- task: UseDotNet@2
+#  inputs:
+#    packageType: 'runtime'
+#    version: '6.0.x'
 
-# install dotet 7 sdk to allow compilation target
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '7.0.x'
+## install dotnet 7
+#- task: UseDotNet@2
+#  inputs:
+#    packageType: 'runtime'
+#    version: '7.0.x'
 
-# install dotnet 8 sdk so we can run tests against them
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '8.0.x'
+## install dotnet 8 sdk
+#- task: UseDotNet@2
+#  inputs:
+#    packageType: 'sdk'
+#    version: '8.0.x'
 
 - task: NuGetToolInstaller@1
   inputs:
