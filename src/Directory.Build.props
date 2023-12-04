@@ -8,8 +8,8 @@
     <DeterministicSourcePaths Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</DeterministicSourcePaths>
     <ContinuousIntegrationBuild Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</ContinuousIntegrationBuild>
 
-    <!-- Use csharp 10.0 for all projects -->
-    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">11.0</LangVersion>
+    <!-- Use csharp 12.0 for all projects -->
+    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">12.0</LangVersion>
     <AnalysisMode Condition="'$(IsFrameworkProject)' == 'true'">Recommended</AnalysisMode>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
 
