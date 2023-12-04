@@ -23,7 +23,7 @@ namespace System.Linq.Dynamic
             MemberExpression mex = null;
             IDictionary<PropertyDescriptor, IncludeAttribute[]> entityIncludeMap = MetaType.GetMetaType(type).ProjectionMemberMap;
 
-            if (entityIncludeMap.Any())
+            if (entityIncludeMap.Count > 0)
             {
                 // Do a reverse lookup in the include map for the type, looking
                 // for the source of the member (if present)
