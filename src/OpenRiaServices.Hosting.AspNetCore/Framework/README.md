@@ -61,7 +61,7 @@ https://github.com/OpenRIAServices/OpenRiaServices/blob/086ea8c8fcb115000749be6b
 
 Minimal program:
 
-```
+```csharp
 using OpenRiaServices.Hosting.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -92,6 +92,83 @@ You can still (and probably should) use the OpenRiaServices specific attributes 
 [Simple authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple?view=aspnetcore-7.0), which works on all methods.
 
 
+
+### AspNetCore Authentication and Authorization
+
+You can use standard [aspnetcore Authentication and Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/?view=aspnetcore-7.0)
+to validate most requests (but **NOT** indivudual Insert,Update,Delete methods, you can apply atttributes to your DomainService class for those).
+The validation will happen before the DomainService is even created, making them more powerful than built in attributes.
+
+The **[AspNetCore Sample](https://github.com/OpenRIAServices/Samples/tree/main/WpfCore_AspNetCore)** shows how cookie based login similar to ASP.NET Membership provider *can* be handled.
+The change was added in [#16: Add AspNetCore AuthenticationService](https://github.com/OpenRIAServices/Samples/pull/16)
+You will need to tweak it so it validates credentials, assign correct Claims (Roles) to users and fits your choosen scheme for authentication.
+
+
+#### Authentication: Client setup
+For the client, **you need to ensure that all HttpClients share the same CookieContainer** and that the it is set to use to cookies (https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclienthandler.usecookies?view=net-7.0#system-net-http-httpclienthandler-usecookies)
+
+#### Authentication: Asp.Net Core Setup Authentication and Authorization setup
+
+In Program.cs the following code is needed
+
+Service registrations, adds cookie based authentication and enable Authorization
+```csharp
+// Additional dependencies for cookie based AuthenticationService
+builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+    .AddCookie();
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.AddAuthorization();
+```
+
+After the "application has been built" and the middleware is configured you should add Authentication (and Authorization if used).
+They should be added **before** *OpenRiaServices*
+
+```csharp
+// Add authentication
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Enable OpenRiaServices
+app.MapOpenRiaServices(....
+```
+
+#### Authorization: Protecting DomainServices using Authorization middleware
+
+A good idea is to protect your DomainServices, all of them or individual, by requiring authorization.
+The [Authorization middleware](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/introduction) should run before the DomainService is created so you will avoid any cost with creating the DomainService and it's dependencies, providing a much better protection against DOS.
+
+**IMPORANT**: error message on the client will be different and not as user friendly as if the `[RequiresAuthentication]` attribute is used.
+You might want to consider changing the HTTP status code to match 401 or similar instead of 404 (when it tries to redirect to missing "/Account/Login" endpoint) 
+**Note**: If you need to selectivly only require authentication for some Submit operations (Insert, Update, Delete or Entity Action) then remember to use `[RequiresAuthentication]`
+
+**Require request to all DomainServices be authorized using default authorization policy**:
+
+```csharp
+app.MapOpenRiaServices(builder =>
+{
+    builder.AddDomainService<SampleDomainService>();
+    builder.AddDomainService<MyAuthenticationService>();
+}).RequireAuthorization();
+```
+
+You can also control the setting per DomainService using code
+```csharp
+app.MapOpenRiaServices(builder =>
+{
+    builder.AddDomainService<SampleDomainService>()
+        .RequireAuthorization();
+});
+```
+
+You can also control the setting per DomainService using attributes
+```csharp
+[Authorize]
+public class MyAuthenticationService : DomainService, IAuthentication<MyUser>
+{
+    [AllowAnonymous]
+    public MyUser GetUser() {...}
+```
 
 
 ###  Output Cache Integration
