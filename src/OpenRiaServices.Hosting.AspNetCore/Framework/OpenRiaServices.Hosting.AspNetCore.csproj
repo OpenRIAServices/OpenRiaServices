@@ -1,18 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net6.0;net7.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;net7.0;net8.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX;ASPNET_CORE</DefineConstants>
     <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
     <!-- Ignore documentation varnings while experimental-->
     <NoWarn>$(NoWarn);CS1574;CS1573;CS1591;CS1572</NoWarn>
-    <VersionPrefix>0.4.0</VersionPrefix>
+    <VersionPrefix>1.0.0</VersionPrefix>
     <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     <Authors>Daniel-Svensson</Authors>
     <PackageTags>OpenRiaServices AspNetCore Hosting DomainServices AspNet WCF RIA Services Server</PackageTags>
     <Description>
       Asp.Net Core Hosting for OpenRiaservices
-      Public API will change before 1.0.0 release
 
       See README at https://github.com/OpenRIAServices/OpenRiaServices/tree/main/src/OpenRiaServices.Hosting.AspNetCore/Framework for usage.
     </Description>
@@ -26,6 +25,7 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" Condition="'$(TargetFramework)' != 'net8.0'" />
   </ItemGroup>
 
   <ItemGroup>
