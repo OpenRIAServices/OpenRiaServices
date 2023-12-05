@@ -96,7 +96,7 @@ You can still (and probably should) use the OpenRiaServices specific attributes 
 ### AspNetCore Authentication and Authorization
 
 You can use standard [aspnetcore Authentication and Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/?view=aspnetcore-7.0)
-to validate most requests (but **NOT** indivudual Insert,Update,Delete methods, you can apply atttributes to your DomainService class for those).
+to validate most requests (but **NOT** indivudual Insert, Update, Delete methods, you can apply atttributes to your DomainService class for those).
 The validation will happen before the DomainService is even created, making them more powerful than built in attributes.
 
 The **[AspNetCore Sample](https://github.com/OpenRIAServices/Samples/tree/main/WpfCore_AspNetCore)** shows how cookie based login similar to ASP.NET Membership provider *can* be handled.
