@@ -10,8 +10,9 @@
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.24" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.24" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.32" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.32" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="5.1.2" />
 
     <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
@@ -50,4 +51,17 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
+  <!-- ################# Remove netstandard 2.0 from nuget package, we want to remove it completely but first need to update tests ###### -->
+  <Target Name="_ExcludeTargetFramework" AfterTargets="_GetTargetFrameworksOutput" BeforeTargets="_WalkEachTargetPerFramework">
+    <ItemGroup>
+      <_TargetFrameworks Remove="netstandard2.0" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_ExcludeTargetFrameworkDependency" AfterTargets="_WalkEachTargetPerFramework" BeforeTargets="GenerateNuspec">
+    <ItemGroup>
+      <_FrameworksWithSuppressedDependencies Include="netstandard2.0" />
+    </ItemGroup>
+  </Target>
 </Project>

@@ -140,8 +140,14 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Azure.Identity">
+      <Version>1.10.2</Version>
+    </PackageReference>
     <PackageReference Include="EntityFramework">
       <Version>6.4.4</Version>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Data.SqlClient">
+      <Version>5.1.2</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer">
       <Version>3.1.32</Version>
