@@ -67,12 +67,14 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     maximumCpuCount: true
- 
+
+# Load test databases and setup msbuild debug path so it becomes part of artifacts 
 - powershell: |
    sqllocaldb start MSSQLLocalDB
    if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
    
    .\Setup-TestDatabases.ps1
+   $env:MSBUILDDEBUGPATH = $env:BUILD_ARTIFACTSTAGINGDIRECTORY
    
   displayName: 'Setup database'
 
