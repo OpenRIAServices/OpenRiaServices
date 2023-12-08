@@ -74,8 +74,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.Wcf
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "T4ClientCodeGenerator", "OpenRiaServices.Tools\Test\T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj", "{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TypeLoadExceptionProject", "Test\Desktop\TypeLoadExceptionProject\TypeLoadExceptionProject.csproj", "{2265A098-F256-418D-9D11-9FD6561E8D42}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Tools.TextTemplate", "OpenRiaServices.Tools.TextTemplate\Framework\OpenRiaServices.Tools.TextTemplate.csproj", "{1D3AE529-961A-47FD-834B-7893FE6FF479}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Tools.TextTemplate.Test", "OpenRiaServices.Tools.TextTemplate\Test\OpenRiaServices.Tools.TextTemplate.Test.csproj", "{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332}"
@@ -150,13 +148,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AspNetCoreWebsite", "Test\A
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Hosting.AspNetCore.Test", "OpenRiaServices.Hosting.AspNetCore\Test\OpenRiaServices.Hosting.AspNetCore.Test\OpenRiaServices.Hosting.AspNetCore.Test.csproj", "{A9C063D1-4451-47C9-AACE-908FFC8C9F35}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Tools.CodeGenTask", "OpenRiaServices.Tools.CodeGenTask\OpenRiaServices.Tools.CodeGenTask.csproj", "{E0153323-9B1E-47EA-ACAD-E7A1E765001C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Tools.CodeGenTask", "OpenRiaServices.Tools.CodeGenTask\OpenRiaServices.Tools.CodeGenTask.csproj", "{E0153323-9B1E-47EA-ACAD-E7A1E765001C}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "EndToEnd", "EndToEnd", "{27DB096E-8794-4B9A-B3D0-AF74926DF9FD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaservices.EndToEnd.Wcf.Test", "Test\OpenRiaservices.EndToEnd.Wcf.Test\OpenRiaservices.EndToEnd.Wcf.Test.csproj", "{9428260A-EA94-430D-9A1A-CB9830B9E8EE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaservices.EndToEnd.Wcf.Test", "Test\OpenRiaservices.EndToEnd.Wcf.Test\OpenRiaservices.EndToEnd.Wcf.Test.csproj", "{9428260A-EA94-430D-9A1A-CB9830B9E8EE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaservices.EndToEnd.AspNetCore.Test", "Test\OpenRiaservices.EndToEnd.AspNetCore.Test\OpenRiaservices.EndToEnd.AspNetCore.Test.csproj", "{17F902F4-7254-4FB9-9AF6-B3291B129B45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaservices.EndToEnd.AspNetCore.Test", "Test\OpenRiaservices.EndToEnd.AspNetCore.Test\OpenRiaservices.EndToEnd.AspNetCore.Test.csproj", "{17F902F4-7254-4FB9-9AF6-B3291B129B45}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -256,10 +254,6 @@ Global
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2265A098-F256-418D-9D11-9FD6561E8D42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2265A098-F256-418D-9D11-9FD6561E8D42}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2265A098-F256-418D-9D11-9FD6561E8D42}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2265A098-F256-418D-9D11-9FD6561E8D42}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1D3AE529-961A-47FD-834B-7893FE6FF479}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1D3AE529-961A-47FD-834B-7893FE6FF479}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D3AE529-961A-47FD-834B-7893FE6FF479}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -416,7 +410,6 @@ Global
 		{FB928CDD-D223-4921-B97D-EB16EEE7D2AA} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
 		{82539B51-6BB5-4C04-B37D-4FA850E397CF} = {2095B11C-903C-47FF-B812-82DFA7A068AC}
 		{5F7848F4-EA6E-49B3-A5DE-65A1FB440C88} = {6B0A9D52-33D8-4E62-A3E3-3AF7C26EFA30}
-		{2265A098-F256-418D-9D11-9FD6561E8D42} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 		{1D3AE529-961A-47FD-834B-7893FE6FF479} = {96D29745-0D96-4959-AB96-8FBEDC8AB485}
 		{5DD0AD3D-8FD7-4FDA-8F00-45108C0DF332} = {6B0A9D52-33D8-4E62-A3E3-3AF7C26EFA30}
 		{72137DB5-8A91-4FF8-A292-5F6E73A66CD6} = {2095B11C-903C-47FF-B812-82DFA7A068AC}

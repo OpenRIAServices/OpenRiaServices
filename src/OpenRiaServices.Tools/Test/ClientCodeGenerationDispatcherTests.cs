@@ -530,7 +530,6 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-        [DeploymentItem("TypeLoadExceptionProject.dll")]
         [Description("ClientCodeGenerationDispatcher logs an warning and survives a TypeLoadException creating MEF")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Error_TypeLoadException()
@@ -553,15 +552,17 @@ namespace OpenRiaServices.Tools.Test
                 string unitTestAssemblyLocation = Assembly.GetExecutingAssembly().Location;
                 string typeLoadExceptionProjectLocation = Path.Combine(Path.GetDirectoryName(unitTestAssemblyLocation), "TypeLoadExceptionProject.dll");
 
-                Assert.IsTrue(File.Exists(typeLoadExceptionProjectLocation), "Expected TypeLoadExceptionProject.dll to coreside with this assembly in test folder");
-
-                using (var assemblyDefinition = AssemblyDefinition.ReadAssembly(typeLoadExceptionProjectLocation, new ReaderParameters { ReadWrite = true }))
+                if (!File.Exists(typeLoadExceptionProjectLocation))
                 {
-                    var module = assemblyDefinition.MainModule;
-                    var class1 = module.Types.Single(t => t.Name == "Class1");
-                    var class2 = module.Types.Single(t => t.Name == "Class2");
-                    class2.BaseType = class1.BaseType;
-                    assemblyDefinition.Write();
+                    var assemblyNameDefinition = new AssemblyNameDefinition("TestAssemblyNameDefinition", new Version(0, 0, 0, 0));
+                    using var newAssembly = AssemblyDefinition.CreateAssembly(assemblyNameDefinition, "TestModuleName", ModuleKind.Dll);
+                    var modules = newAssembly.MainModule;
+                    var class1 = new TypeDefinition("TestNamespace", "Class1", Mono.Cecil.TypeAttributes.Class);
+                    var class2 = new TypeDefinition("TestNamespace", "Class2", Mono.Cecil.TypeAttributes.Class, class1);
+                    class1.BaseType = class2;
+                    modules.Types.Add(class1);
+                    modules.Types.Add(class2);
+                    newAssembly.Write(typeLoadExceptionProjectLocation);
                 }
 
                 // Do what MEF does to load the types so we can capture the exception

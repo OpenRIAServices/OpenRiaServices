@@ -770,11 +770,7 @@ namespace OpenRiaServices.Tools
         {
             // Call the console app from here if Net 6.0 or greater
             string path = Path.Combine(Path.GetDirectoryName(typeof(CreateOpenRiaClientFilesTask).Assembly.Location),
-#if NET8_0
-                "../net8.0/OpenRiaServices.Tools.CodeGenTask.exe");
-#else
                 "../net6.0/OpenRiaServices.Tools.CodeGenTask.exe");
-#endif
 
             if (!File.Exists(path))
                 throw new FileNotFoundException(path);

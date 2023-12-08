@@ -3,4 +3,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <TargetFrameworks>net472;net6.0</TargetFrameworks>
   </PropertyGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
 </Project>

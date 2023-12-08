@@ -59,7 +59,6 @@
     </ProjectReference>
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\..\Test\Desktop\TypeLoadExceptionProject\TypeLoadExceptionProject.csproj" />
     <ProjectReference Include="..\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="ServerClassLib\ServerClassLib.csproj" />
     <ProjectReference Include="T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj" />

@@ -536,12 +536,12 @@ namespace OpenRiaServices.Tools
             }
 
             // Filter out attributes in filteredAttributes as well as DataContractAttribute and KnownTypeAttribute (since they are already handled)
-            return typeAttributes.Cast<Attribute>().Where(a => a is not (DataContractAttribute or KnownTypeAttribute
-#if NET8_0
+            return typeAttributes.Cast<Attribute>().Where(a => a.GetType() != typeof(DataContractAttribute) && a.GetType() != typeof(KnownTypeAttribute)
+#if NET
                 // Filter out NullableContextAttribute, should only be used by compiler
-                or System.Runtime.CompilerServices.NullableContextAttribute
+                && a.GetType() != Type.GetType("System.Runtime.CompilerServices.NullableContextAttribute")
 #endif
-                ) && !filteredAttributes.Contains(a));
+                && !filteredAttributes.Contains(a));
         }
 
         /// <summary>
