@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.VisualBasic;
-using System.Collections.Immutable;
+using System.Collections.Concurrent;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -16,7 +16,7 @@ namespace OpenRiaServices.Tools.Test
     {
         // The version of Silverlight we use in registry keys below
         private const string SLVER = "v5.0";
-        private static Dictionary<string, PortableExecutableReference> s_referenceCache = new Dictionary<string, PortableExecutableReference>();
+        private static ConcurrentDictionary<string, PortableExecutableReference> s_referenceCache = new();
 
         private static ParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5, preprocessorSymbols: new
                     [] { "SILVERLIGHT" });
@@ -179,16 +179,7 @@ namespace OpenRiaServices.Tools.Test
         /// <param name="filename">full path to dll</param>
         private static PortableExecutableReference LoadReference(string filename)
         {
-            PortableExecutableReference reference;
-
-            if (s_referenceCache.TryGetValue(filename, out reference))
-            {
-                return reference;
-            }
-
-            reference = MetadataReference.CreateFromFile(filename);
-            s_referenceCache.Add(filename, reference);
-            return reference;
+            return s_referenceCache.GetOrAdd(filename, static key => MetadataReference.CreateFromFile(key));
         }
 
         /// <summary>
