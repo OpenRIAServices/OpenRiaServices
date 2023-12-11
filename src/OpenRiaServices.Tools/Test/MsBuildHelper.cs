@@ -279,7 +279,7 @@ namespace OpenRiaServices.Tools.Test
                     if (disposing)
                     {
                         _projectInstance = null;
-                        BuildManager.ResetCaches();
+                        //BuildManager.ResetCaches();
                         //if (_buildManager != null)
                         //{
                         //    _buildManager.ResetCaches();
