@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Win32;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp;
@@ -15,13 +14,10 @@ namespace OpenRiaServices.Tools.Test
     public class CompilerHelper
     {
         // The version of Silverlight we use in registry keys below
-        private const string SLVER = "v5.0";
-        private static ConcurrentDictionary<string, PortableExecutableReference> s_referenceCache = new();
-
-        private static ParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5, preprocessorSymbols: new
+        private static readonly ConcurrentDictionary<string, PortableExecutableReference> s_referenceCache = new();
+        private static readonly ParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5, preprocessorSymbols: new
                     [] { "SILVERLIGHT" });
-
-        private static ParseOptions s_VbParseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
+        private static readonly ParseOptions s_VbParseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
                     preprocessorSymbols: new
                     [] { new KeyValuePair<string, object>("SILVERLIGHT", 1) });
 
