@@ -14,7 +14,7 @@ namespace OpenRiaServices.Tools.Test
         public void LogsAreForwarded()
         {
             using var server = new CrossProcessLoggingServer();
-            using (var client = new CrossProcessLoggingWriter(server.PipeName))
+            using (var client = new CrossProcessLoggingWriter(server.ClientSafePipeHandle))
             {
                 var log = (ILoggingService)client;
                 log.LogMessage("Message");
@@ -73,7 +73,7 @@ namespace OpenRiaServices.Tools.Test
                 ex = e;
             }
 
-            using (var client = new CrossProcessLoggingWriter(server.PipeName))
+            using (var client = new CrossProcessLoggingWriter(server.ClientSafePipeHandle))
             {
                 var log = (ILoggingService)client;
                 log.LogException(ex);

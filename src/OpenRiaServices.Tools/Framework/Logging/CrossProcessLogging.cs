@@ -56,6 +56,7 @@ using System.IO;
 using System.IO.Pipes;
 using System.Text;
 using System.Threading;
+using Microsoft.Win32.SafeHandles;
 
 namespace OpenRiaServices.Tools.Logging;
 
@@ -75,6 +76,12 @@ internal sealed class CrossProcessLoggingWriter : ILoggingService, IDisposable
     public CrossProcessLoggingWriter(string pipeName)
     {
         var pipe = new AnonymousPipeClientStream(PipeDirection.Out, pipeName);
+        _binaryWriter = new BinaryWriter(new BufferedStream(pipe), Encoding.Unicode);
+    }
+
+    public CrossProcessLoggingWriter(Microsoft.Win32.SafeHandles.SafePipeHandle pipeHandle)
+    {
+        var pipe = new AnonymousPipeClientStream(PipeDirection.Out, pipeHandle);
         _binaryWriter = new BinaryWriter(new BufferedStream(pipe), Encoding.Unicode);
     }
 
@@ -167,6 +174,8 @@ internal sealed class CrossProcessLoggingServer : IDisposable
     }
 
     public string PipeName { get; }
+
+    public SafePipeHandle ClientSafePipeHandle => _pipe.ClientSafePipeHandle;
 
     /// <summary>
     ///  Read logs and forwards them to <paramref name="logger"/>.
