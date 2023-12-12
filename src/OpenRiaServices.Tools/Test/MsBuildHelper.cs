@@ -143,8 +143,7 @@ namespace OpenRiaServices.Tools.Test
 #elif NET6_0
                         string framework = frameworks.First(f => f.StartsWith("net6", StringComparison.Ordinal));
 #else
-                        string framework = frameworks.FirstOrDefault(f => f.StartsWith("net8", StringComparison.Ordinal))
-                            ?? frameworks.First(f => !f.StartsWith("net4", StringComparison.Ordinal));
+                        string framework = frameworks.First(f => !f.StartsWith("net4", StringComparison.Ordinal));
 #endif
                         project.SetGlobalProperty("TargetFramework", framework);
                     }
