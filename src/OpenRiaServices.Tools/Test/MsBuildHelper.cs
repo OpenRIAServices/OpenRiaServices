@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -15,7 +16,7 @@ namespace OpenRiaServices.Tools.Test
     /// </summary>
     public static class MsBuildHelper
     {
-        private static readonly Dictionary<string, IList<string>> s_ReferenceAssembliesByProjectPath = new Dictionary<string, IList<string>>();
+        private static readonly ConcurrentDictionary<string, IList<string>> s_ReferenceAssembliesByProjectPath = new();
 
         /// <summary>
         /// Extract the list of assemblies both generated and referenced by the named project.
@@ -23,18 +24,12 @@ namespace OpenRiaServices.Tools.Test
         /// <returns></returns>
         public static List<string> GetReferenceAssemblies(string projectPath)
         {
-            IList<string> cachedAssemblies;
-
-            lock (s_ReferenceAssembliesByProjectPath)
+            IList<string> cachedAssemblies = s_ReferenceAssembliesByProjectPath.GetOrAdd(projectPath, static path =>
             {
-                if (!s_ReferenceAssembliesByProjectPath.TryGetValue(projectPath, out cachedAssemblies))
-                {
-                    cachedAssemblies = new List<string>();
-                    GetReferenceAssemblies(projectPath, cachedAssemblies);
-
-                    s_ReferenceAssembliesByProjectPath.Add(projectPath, cachedAssemblies);
-                }
-            }
+                var assemblies = new List<string>();
+                GetReferenceAssemblies(path, assemblies);
+                return assemblies;
+            });
 
             // Create a new copy to prevent modifications to original list
             return new List<string>(cachedAssemblies);
@@ -45,7 +40,7 @@ namespace OpenRiaServices.Tools.Test
         /// </summary>
         /// <param name="projectPath">Absolute path to the project file itself</param>
         /// <param name="assemblies">List to add assembly names to</param>
-        public static void GetReferenceAssemblies(string projectPath, IList<string> assemblies)
+        private static void GetReferenceAssemblies(string projectPath, IList<string> assemblies)
         {
             projectPath = Path.GetFullPath(projectPath);
 
@@ -276,7 +271,7 @@ namespace OpenRiaServices.Tools.Test
                     if (disposing)
                     {
                         _projectInstance = null;
-                        BuildManager.ResetCaches();
+                        //BuildManager.ResetCaches();
                         //if (_buildManager != null)
                         //{
                         //    _buildManager.ResetCaches();
