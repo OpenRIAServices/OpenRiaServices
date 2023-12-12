@@ -5,6 +5,7 @@ variables:
   BuildConfiguration: 'release'
   BuildPlatform: 'any cpu'
   Solution: 'src\RiaServices.sln'
+  MSBUILDDEBUGPATH: $(Build.ArtifactStagingDirectory)
 # Define the following variable for the build pipeline in order to enable sonarcloud analysis
 # sonarcloud-endpoint: 'sonarcloud.io'
 
@@ -74,6 +75,7 @@ steps:
    if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
    
    .\Setup-TestDatabases.ps1
+   echo "msbuild debug path is: $($env:MSBUILDDEBUGPATH)"
    $env:MSBUILDDEBUGPATH = $env:BUILD_ARTIFACTSTAGINGDIRECTORY
    
   displayName: 'Setup database'
