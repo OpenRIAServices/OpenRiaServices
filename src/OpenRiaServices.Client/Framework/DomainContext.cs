@@ -745,7 +745,7 @@ namespace OpenRiaServices.Client
         /// <param name="e">The event args</param>
         private void EntityContainerPropertyChanged(object sender, PropertyChangedEventArgs e)
         {
-            if (string.CompareOrdinal(e.PropertyName, "HasChanges") == 0)
+            if (e.PropertyName == nameof(HasChanges))
             {
                 // just pass the event on
                 this.RaisePropertyChanged(nameof(HasChanges));
@@ -933,9 +933,7 @@ namespace OpenRiaServices.Client
         {
             Debug.Assert(this._activeLoadCount >= 0, "Load count should never be less than zero.");
 
-            Interlocked.Increment(ref this._activeLoadCount);
-
-            if (this._activeLoadCount == 1)
+            if (Interlocked.Increment(ref this._activeLoadCount) == 1)
             {
                 this.RaisePropertyChanged(nameof(IsLoading));
             }
@@ -945,9 +943,7 @@ namespace OpenRiaServices.Client
         {
             Debug.Assert(this._activeLoadCount > 0, "Load count out of sync.");
 
-            Interlocked.Decrement(ref this._activeLoadCount);
-
-            if (this._activeLoadCount == 0)
+            if (Interlocked.Decrement(ref this._activeLoadCount) == 0)
             {
                 this.RaisePropertyChanged(nameof(IsLoading));
             }
