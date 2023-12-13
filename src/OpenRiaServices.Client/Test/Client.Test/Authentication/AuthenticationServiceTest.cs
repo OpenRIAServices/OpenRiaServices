@@ -45,6 +45,8 @@ namespace OpenRiaServices.Client.Authentication.Test
         {
             public const string ValidUserName = "ValidUser";
             public const string InvalidUserName = "InvalidUser";
+            // wait timetout to fix issue with some tests haning
+            private TimeSpan DefaultTimeout => TimeSpan.FromMinutes(1);
 
             public Exception Error { get; set; }
 
@@ -77,7 +79,7 @@ namespace OpenRiaServices.Client.Authentication.Test
                     ((MockIdentity)user.Identity).IsAuthenticated = true;
                 }
 
-                await _delay.WaitAsync(cancellationToken);
+                await _delay.WaitAsync(DefaultTimeout, cancellationToken);
                 if (this.Error != null)
                 {
                     throw this.Error;
@@ -88,7 +90,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             protected internal override async Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
             {
-                await _delay.WaitAsync(cancellationToken);
+                await _delay.WaitAsync(DefaultTimeout, cancellationToken);
 
                 if (this.Error != null)
                 {
@@ -100,7 +102,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             protected internal override async Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
             {
-                await _delay.WaitAsync(cancellationToken);
+                await _delay.WaitAsync(DefaultTimeout, cancellationToken);
 
                 if (this.Error != null)
                 {
@@ -114,7 +116,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             {
                 Assert.IsNotNull(user, "User should never be null.");
 
-                await _delay.WaitAsync(cancellationToken);
+                await _delay.WaitAsync(DefaultTimeout, cancellationToken);
                 if (this.Error != null)
                 {
                     throw this.Error;
@@ -327,20 +329,20 @@ namespace OpenRiaServices.Client.Authentication.Test
         [Description("Tests that cancelling an operation that does not support cancel with throw a NotSupportedException.")]
         public void CancelThrowsWhenNotSupported()
         {
-            MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel();
-            ExceptionHelper.ExpectException<NotSupportedException>(
-                () => mock.Login(string.Empty, string.Empty).Cancel());
+            using (MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel())
+                ExceptionHelper.ExpectException<NotSupportedException>(
+                    () => mock.Login(string.Empty, string.Empty).Cancel());
 
-            mock = new MockAuthenticationNoCancel();
-            ExceptionHelper.ExpectException<NotSupportedException>(
-                () => mock.Logout(false).Cancel());
+            using (MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel())
+                ExceptionHelper.ExpectException<NotSupportedException>(
+                    () => mock.Logout(false).Cancel());
 
-            mock = new MockAuthenticationNoCancel();
-            ExceptionHelper.ExpectException<NotSupportedException>(
+            using (MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel())
+                ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.LoadUser().Cancel());
 
-            mock = new MockAuthenticationNoCancel();
-            ExceptionHelper.ExpectException<NotSupportedException>(
+            using (MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel())
+                ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.SaveUser(false).Cancel());
         }
 
