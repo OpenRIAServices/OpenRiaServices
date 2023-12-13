@@ -7,7 +7,6 @@ using System.Net;
 using System.Net.Http;
 using System.Threading;
 using httpDomainClient::OpenRiaServices.Client.DomainClients;
-using OpenRiaServices.Common.Test;
 using System.Diagnostics;
 
 namespace OpenRiaServices.Client.Test
@@ -66,17 +65,10 @@ namespace OpenRiaServices.Client.Test
 #else
             string configuration = "Release";
 #endif
-
-#if NET80
             string targetFramework = "net8.0";
-#else
-            string targetFramework = "net6.0";
-#endif
-
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
-
             string processPath = webSitePath + ProcessName + ".exe";
-            //webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite"));
+
             if (!Directory.Exists(webSitePath))
                 throw new FileNotFoundException($"Website not found at {webSitePath}");
 
@@ -86,6 +78,7 @@ namespace OpenRiaServices.Client.Test
             var websites = Process.GetProcessesByName(ProcessName);
             if (websites.Any())
             {
+                Console.WriteLine("AssemblyInitialize: Webserver process was already started, not starting anything");
                 // Already running do nothing
             }
             else
@@ -96,12 +89,35 @@ namespace OpenRiaServices.Client.Test
                 startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
                 s_aspNetCoreSite = Process.Start(startInfo);
 
-                // TODO: Wait for standard output or similar instead such as makin a successfull (GET "/"))
-                Thread.Sleep(TimeSpan.FromSeconds(10));
+                Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
+            }
+
+            // Wait for a successfull (GET "/") to succeed so we know webserver has started
+            using HttpClient httpClient = new HttpClient();
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            do
+            {
+                try
+                {
+                    var res = httpClient.GetAsync("http://localhost:5246/").GetAwaiter().GetResult();
+                    if (res.IsSuccessStatusCode)
+                    {
+                        Console.WriteLine("AssemblyInitialize: Webserver started");
+                        return;
+                    }
+                }
+                catch (Exception)
+                {
+                    // Ignore error
+                }
 
                 if (s_aspNetCoreSite.HasExited)
                     throw new Exception("Website stopped");
-            }
+
+                Thread.Sleep(TimeSpan.FromSeconds(1));
+            } while (stopwatch.Elapsed <= TimeSpan.FromMinutes(1));
+
+            throw new TimeoutException("webserver did not respond to '/' in 1 minute");
         }
     }
 }

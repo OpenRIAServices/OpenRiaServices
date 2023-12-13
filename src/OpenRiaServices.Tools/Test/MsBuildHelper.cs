@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Versioning;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
@@ -17,7 +16,7 @@ namespace OpenRiaServices.Tools.Test
     /// </summary>
     public static class MsBuildHelper
     {
-        private static readonly Dictionary<string, IList<string>> s_ReferenceAssembliesByProjectPath = new Dictionary<string, IList<string>>();
+        private static readonly ConcurrentDictionary<string, IList<string>> s_ReferenceAssembliesByProjectPath = new();
 
         /// <summary>
         /// Extract the list of assemblies both generated and referenced by the named project.
@@ -25,18 +24,12 @@ namespace OpenRiaServices.Tools.Test
         /// <returns></returns>
         public static List<string> GetReferenceAssemblies(string projectPath)
         {
-            IList<string> cachedAssemblies;
-
-            lock (s_ReferenceAssembliesByProjectPath)
+            IList<string> cachedAssemblies = s_ReferenceAssembliesByProjectPath.GetOrAdd(projectPath, static path =>
             {
-                if (!s_ReferenceAssembliesByProjectPath.TryGetValue(projectPath, out cachedAssemblies))
-                {
-                    cachedAssemblies = new List<string>();
-                    GetReferenceAssemblies(projectPath, cachedAssemblies);
-
-                    s_ReferenceAssembliesByProjectPath.Add(projectPath, cachedAssemblies);
-                }
-            }
+                var assemblies = new List<string>();
+                GetReferenceAssemblies(path, assemblies);
+                return assemblies;
+            });
 
             // Create a new copy to prevent modifications to original list
             return new List<string>(cachedAssemblies);
@@ -47,7 +40,7 @@ namespace OpenRiaServices.Tools.Test
         /// </summary>
         /// <param name="projectPath">Absolute path to the project file itself</param>
         /// <param name="assemblies">List to add assembly names to</param>
-        public static void GetReferenceAssemblies(string projectPath, IList<string> assemblies)
+        private static void GetReferenceAssemblies(string projectPath, IList<string> assemblies)
         {
             projectPath = Path.GetFullPath(projectPath);
 
@@ -59,12 +52,11 @@ namespace OpenRiaServices.Tools.Test
                 //"AssignProjectConfiguration"
                 var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new Microsoft.Build.Framework.ILogger[] { log });
 
-                Assert.AreEqual(null, results.Exception, "Build should not have exception result");
                 // Do early assert on log in case there was a task failure
-                if(results.OverallResult != BuildResultCode.Success)
-                    Assert.AreEqual(string.Empty, string.Join("\n", log.Errors), "ResolveAssemblyReferences failed, se log");
-                Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
-                Assert.AreEqual(string.Empty, string.Join("\n", log.Errors), "Task was successful, but there were errors logged");
+                if (results.OverallResult != BuildResultCode.Success || results.Exception is not null || log.Errors.Any())
+                {
+                    Assert.Fail($"ResolveAssemblyReferences failed.\n Status {BuildResultCode.Success}.\n\nLog:\n {string.Join("\n", log.Errors)}\n\nException: {results.Exception}");
+                }
 
                 if (results.ResultsByTarget.TryGetValue("ResolveAssemblyReferences", out TargetResult resolveAssemblyReferences))
                 {
@@ -281,7 +273,7 @@ namespace OpenRiaServices.Tools.Test
                     if (disposing)
                     {
                         _projectInstance = null;
-                        BuildManager.ResetCaches();
+                        //BuildManager.ResetCaches();
                         //if (_buildManager != null)
                         //{
                         //    _buildManager.ResetCaches();
