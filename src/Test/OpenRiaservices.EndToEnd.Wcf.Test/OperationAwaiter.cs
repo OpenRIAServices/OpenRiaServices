@@ -38,6 +38,12 @@ namespace OpenRiaServices.Client
 
             public void UnsafeOnCompleted(Action continuation)
             {
+                if (_operation.IsComplete)
+                {
+                    continuation();
+                    return;
+                }
+
                 // Capture syncContext and scheduler from await location
                 var syncContext = SynchronizationContext.Current;
                 TaskScheduler scheduler;
