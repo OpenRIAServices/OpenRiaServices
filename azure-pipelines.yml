@@ -151,7 +151,7 @@ steps:
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
     Contents: |
-     TestResults/**/*
+     TestResults/*/*
      **/*.diag
     TargetFolder: '$(build.artifactstagingdirectory)/vstest'
   condition: succeededOrFailed()
