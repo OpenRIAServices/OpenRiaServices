@@ -3,8 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Versioning;
 using Microsoft.Build.Evaluation;
 using Microsoft.Build.Execution;
 using Microsoft.Build.Framework;
@@ -54,12 +52,11 @@ namespace OpenRiaServices.Tools.Test
                 //"AssignProjectConfiguration"
                 var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new Microsoft.Build.Framework.ILogger[] { log });
 
-                Assert.AreEqual(null, results.Exception, "Build should not have exception result");
                 // Do early assert on log in case there was a task failure
-                if(results.OverallResult != BuildResultCode.Success)
-                    Assert.AreEqual(string.Empty, string.Join("\n", log.Errors), "ResolveAssemblyReferences failed, se log");
-                Assert.AreEqual(BuildResultCode.Success, results.OverallResult, "ResolveAssemblyReferences failed");
-                Assert.AreEqual(string.Empty, string.Join("\n", log.Errors), "Task was successful, but there were errors logged");
+                if (results.OverallResult != BuildResultCode.Success || results.Exception is not null || log.Errors.Any())
+                {
+                    Assert.Fail($"ResolveAssemblyReferences failed.\n Status {BuildResultCode.Success}.\n\nLog:\n {string.Join("\n", log.Errors)}\n\nException: {results.Exception}");
+                }
 
                 if (results.ResultsByTarget.TryGetValue("ResolveAssemblyReferences", out TargetResult resolveAssemblyReferences))
                 {

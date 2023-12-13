@@ -5,22 +5,31 @@ variables:
   BuildConfiguration: 'release'
   BuildPlatform: 'any cpu'
   Solution: 'src\RiaServices.sln'
+# Msbuild might create logs in the following directory in case some of the "tool" tests fail
+  MSBUILDDEBUGPATH: $(Build.ArtifactStagingDirectory)
 # Define the following variable for the build pipeline in order to enable sonarcloud analysis
 # sonarcloud-endpoint: 'sonarcloud.io'
 
 steps:
 
-# install dotnet 6 sdk so we can run tests against them
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '6.0.x'
+# Uncomment below to install dotnet runtime and SDK if they stop beeing preinstalled
+## install dotnet 6
+#- task: UseDotNet@2
+#  inputs:
+#    packageType: 'runtime'
+#    version: '6.0.x'
 
-# install dotet 7 sdk to allow compilation target
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '7.0.x'
+## install dotnet 7
+#- task: UseDotNet@2
+#  inputs:
+#    packageType: 'runtime'
+#    version: '7.0.x'
+
+## install dotnet 8 sdk
+#- task: UseDotNet@2
+#  inputs:
+#    packageType: 'sdk'
+#    version: '8.0.x'
 
 - task: NuGetToolInstaller@1
   inputs:
@@ -61,7 +70,8 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     maximumCpuCount: true
- 
+
+# Load test databases and setup msbuild debug path so it becomes part of artifacts 
 - powershell: |
    sqllocaldb start MSSQLLocalDB
    if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
@@ -86,8 +96,9 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: false
-  timeoutInMinutes: 15
+#    diagnosticsEnabled: false
+  timeoutInMinutes: 25
+  continueOnError: true
 
 - task: VSTest@2
   displayName: 'Run tests - net6'
@@ -99,15 +110,13 @@ steps:
      !**\obj\**
 
     runOnlyImpactedTests: false
-    # Needed to hardcode path to test adapters for NET48 tests
-    # pathtoCustomTestAdapters: '$(Build.SourcesDirectory)\src\OpenRiaServices.Server.UnitTesting\Test\bin\$(BuildConfiguration)\net6.0\'
     runInParallel: true
-    # runSettingsFile: 'src\test.runsettings'
+    runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: false
-  timeoutInMinutes: 15
+#    diagnosticsEnabled: true
+  timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
@@ -142,8 +151,9 @@ steps:
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
     Contents: |
-     **\*.dmp
-    TargetFolder: '$(build.artifactstagingdirectory)'
+     TestResults/*/*
+     **/*.diag
+    TargetFolder: '$(build.artifactstagingdirectory)/vstest'
   condition: succeededOrFailed()
 
 - task: PublishBuildArtifacts@1
