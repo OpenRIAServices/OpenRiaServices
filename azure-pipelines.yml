@@ -96,8 +96,8 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: false
-  timeoutInMinutes: 15
+#    diagnosticsEnabled: false
+  timeoutInMinutes: 25
   continueOnError: true
 
 - task: VSTest@2
@@ -115,8 +115,8 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: true
-  timeoutInMinutes: 15
+#    diagnosticsEnabled: true
+  timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@1
   displayName: 'Run Code Analysis'
@@ -151,8 +151,9 @@ steps:
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
     Contents: |
-     **\*.dmp
-    TargetFolder: '$(build.artifactstagingdirectory)'
+     TestResults/**/*
+     **/*.diag
+    TargetFolder: '$(build.artifactstagingdirectory)/vstest'
   condition: succeededOrFailed()
 
 - task: PublishBuildArtifacts@1
