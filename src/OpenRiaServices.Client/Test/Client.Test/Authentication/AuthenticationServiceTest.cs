@@ -45,8 +45,6 @@ namespace OpenRiaServices.Client.Authentication.Test
         {
             public const string ValidUserName = "ValidUser";
             public const string InvalidUserName = "InvalidUser";
-            // wait timetout to fix issue with some tests haning
-            private TimeSpan DefaultTimeout => TimeSpan.FromMinutes(1);
 
             public Exception Error { get; set; }
 
@@ -65,6 +63,12 @@ namespace OpenRiaServices.Client.Authentication.Test
                     .ContinueWith(_ => this.RequestCallback());
             }
 
+
+            private async Task WaitForRequestCallback(CancellationToken cancellationToken)
+            {
+                await _delay.WaitAsync(cancellationToken);
+            }
+
             protected override IPrincipal CreateDefaultUser()
             {
                 return this.CreateNullDefaultUser ? null : new MockPrincipal();
@@ -79,7 +83,7 @@ namespace OpenRiaServices.Client.Authentication.Test
                     ((MockIdentity)user.Identity).IsAuthenticated = true;
                 }
 
-                await _delay.WaitAsync(DefaultTimeout, cancellationToken);
+                await WaitForRequestCallback(cancellationToken);
                 if (this.Error != null)
                 {
                     throw this.Error;
@@ -90,7 +94,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             protected internal override async Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
             {
-                await _delay.WaitAsync(DefaultTimeout, cancellationToken);
+                await WaitForRequestCallback(cancellationToken);
 
                 if (this.Error != null)
                 {
@@ -102,7 +106,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             protected internal override async Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
             {
-                await _delay.WaitAsync(DefaultTimeout, cancellationToken);
+                await WaitForRequestCallback(cancellationToken);
 
                 if (this.Error != null)
                 {
@@ -116,7 +120,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             {
                 Assert.IsNotNull(user, "User should never be null.");
 
-                await _delay.WaitAsync(DefaultTimeout, cancellationToken);
+                await WaitForRequestCallback(cancellationToken);
                 if (this.Error != null)
                 {
                     throw this.Error;
@@ -134,6 +138,14 @@ namespace OpenRiaServices.Client.Authentication.Test
                 {
                     if (disposing)
                     {
+                        this.Error = new ObjectDisposedException("disposed");
+                        // It is unclear if the following pattern is safe, Dispose of SemaphoreSlim is NOT thread safe
+                        // All operations should have completed before disposing.
+                        // Now we try to realease any blocking thread and then dispose the lock (hoping that any WaitAsync has completed between Release and Dispose)
+                        // 
+                        // ideally we SHOULD change the code to use a TaskCompletionSource or similar instead
+                        //  (create the TaskCompletionSource when waiting, and then set to null after wait is complete)
+                        _delay.Release(100);
                         _delay.Dispose();
                     }
 
