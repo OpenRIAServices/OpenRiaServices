@@ -50,17 +50,41 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             public bool CreateNullDefaultUser { get; set; }
 
-            private readonly SemaphoreSlim _delay = new SemaphoreSlim(0);
+            private TaskCompletionSource<object> _waitTask;
 
             public void RequestCallback()
             {
-                _delay.Release();
+                if (_waitTask is null)
+                    throw new InvalidOperationException("RequestCallback called before wait");
+                
+                _waitTask.SetResult(null);
             }
 
             public void RequestCallback(int delay)
             {
+                if (_waitTask is null)
+                    throw new InvalidOperationException("RequestCallback called before wait");
+
                 Task.Delay(delay)
                     .ContinueWith(_ => this.RequestCallback());
+            }
+
+
+            private async Task WaitForRequestCallback(CancellationToken cancellationToken)
+            {
+                if (_waitTask is not null)
+                    throw new InvalidOperationException("waitTask not null in WaitForRequestCallback");
+
+                _waitTask = new TaskCompletionSource<object>(TaskCreationOptions.RunContinuationsAsynchronously);
+                cancellationToken.Register(() => _waitTask.SetCanceled());
+                try
+                {
+                    await _waitTask.Task;
+                }
+                finally
+                {
+                    _waitTask = null;
+                }
             }
 
             protected override IPrincipal CreateDefaultUser()
@@ -77,7 +101,7 @@ namespace OpenRiaServices.Client.Authentication.Test
                     ((MockIdentity)user.Identity).IsAuthenticated = true;
                 }
 
-                await _delay.WaitAsync(cancellationToken);
+                await WaitForRequestCallback(cancellationToken);
                 if (this.Error != null)
                 {
                     throw this.Error;
@@ -88,7 +112,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             protected internal override async Task<LogoutResult> LogoutAsync(CancellationToken cancellationToken)
             {
-                await _delay.WaitAsync(cancellationToken);
+                await WaitForRequestCallback(cancellationToken);
 
                 if (this.Error != null)
                 {
@@ -100,7 +124,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             protected internal override async Task<LoadUserResult> LoadUserAsync(CancellationToken cancellationToken)
             {
-                await _delay.WaitAsync(cancellationToken);
+                await WaitForRequestCallback(cancellationToken);
 
                 if (this.Error != null)
                 {
@@ -114,7 +138,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             {
                 Assert.IsNotNull(user, "User should never be null.");
 
-                await _delay.WaitAsync(cancellationToken);
+                await WaitForRequestCallback(cancellationToken);
                 if (this.Error != null)
                 {
                     throw this.Error;
@@ -132,7 +156,8 @@ namespace OpenRiaServices.Client.Authentication.Test
                 {
                     if (disposing)
                     {
-                        _delay.Dispose();
+                        this.Error = new ObjectDisposedException("disposed");
+                        _waitTask?.TrySetException(this.Error);
                     }
 
                     _disposedValue = true;
@@ -327,20 +352,20 @@ namespace OpenRiaServices.Client.Authentication.Test
         [Description("Tests that cancelling an operation that does not support cancel with throw a NotSupportedException.")]
         public void CancelThrowsWhenNotSupported()
         {
-            MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel();
-            ExceptionHelper.ExpectException<NotSupportedException>(
-                () => mock.Login(string.Empty, string.Empty).Cancel());
+            using (MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel())
+                ExceptionHelper.ExpectException<NotSupportedException>(
+                    () => mock.Login(string.Empty, string.Empty).Cancel());
 
-            mock = new MockAuthenticationNoCancel();
-            ExceptionHelper.ExpectException<NotSupportedException>(
-                () => mock.Logout(false).Cancel());
+            using (MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel())
+                ExceptionHelper.ExpectException<NotSupportedException>(
+                    () => mock.Logout(false).Cancel());
 
-            mock = new MockAuthenticationNoCancel();
-            ExceptionHelper.ExpectException<NotSupportedException>(
+            using (MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel())
+                ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.LoadUser().Cancel());
 
-            mock = new MockAuthenticationNoCancel();
-            ExceptionHelper.ExpectException<NotSupportedException>(
+            using (MockAuthenticationNoCancel mock = new MockAuthenticationNoCancel())
+                ExceptionHelper.ExpectException<NotSupportedException>(
                 () => mock.SaveUser(false).Cancel());
         }
 

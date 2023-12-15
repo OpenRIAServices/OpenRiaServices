@@ -96,9 +96,7 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-#    diagnosticsEnabled: false
   timeoutInMinutes: 25
-  continueOnError: true
 
 - task: VSTest@2
   displayName: 'Run tests - net6'
@@ -115,7 +113,6 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-#    diagnosticsEnabled: true
   timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@1
@@ -153,6 +150,7 @@ steps:
     Contents: |
      TestResults/*/*
      **/*.diag
+     !TestResults/*/*.coverage*
     TargetFolder: '$(build.artifactstagingdirectory)/vstest'
   condition: succeededOrFailed()
 
