@@ -265,6 +265,37 @@ namespace OpenRiaServices.Server.UnitTesting
             return this.QueryCore<TEntity>(queryOperation).SingleOrDefault();
         }
 
+
+        /// <summary>
+        /// Invokes the specified <paramref name="queryOperation"/> asynchronously and returns the result
+        /// </summary>
+        /// <remarks>
+        /// This method should be used for query signatures that do no return a collection
+        /// </remarks>
+        /// <typeparam name="TEntity">The type of entity to return</typeparam>
+        /// <param name="queryOperation">The <see cref="Expression"/> identifying the query operation to invoke</param>
+        /// <returns>The entity returned from the specified operation</returns>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public async Task<TEntity> QuerySingleAsync<TEntity>(Expression<Func<TDomainService, TEntity>> queryOperation, CancellationToken ct = default) where TEntity : class
+        {
+            return (await this.QueryCoreAsync<TEntity>(queryOperation, ct)).SingleOrDefault();
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="queryOperation"/> asynchronously and returns the result
+        /// </summary>
+        /// <remarks>
+        /// This method should be used for query signatures that do no return a collection
+        /// </remarks>
+        /// <typeparam name="TEntity">The type of entity to return</typeparam>
+        /// <param name="queryOperation">The <see cref="Expression"/> identifying the query operation to invoke</param>
+        /// <returns>The entity returned from the specified operation</returns>
+        /// <exception cref="DomainServiceTestHostException">is thrown if there are any validation errors</exception>
+        public async Task<TEntity> QuerySingleAsync<TEntity>(Expression<Func<TDomainService, Task<TEntity>>> queryOperation, CancellationToken ct = default) where TEntity : class
+        {
+            return (await this.QueryCoreAsync<TEntity>(queryOperation, ct)).SingleOrDefault();
+        }
+
         /// <summary>
         /// Invokes the specified <paramref name="queryOperation"/> and returns the results, the validation errors,
         /// and whether the operation completed successfully
@@ -292,6 +323,26 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <param name="validationErrors">The validation errors that occurred</param>
         /// <returns>Whether the operation completed without error</returns>
         public bool TryQuerySingle<TEntity>(Expression<Func<TDomainService, TEntity>> queryOperation, out TEntity result, out IList<ValidationResult> validationErrors) where TEntity : class
+        {
+            IEnumerable<TEntity> results;
+            bool success = this.TryQueryCore<TEntity>(queryOperation, out results, out validationErrors);
+            result = (results == null) ? null : results.SingleOrDefault();
+            return success;
+        }
+
+        /// <summary>
+        /// Invokes the specified <paramref name="queryOperation"/> and returns the result, the validation errors,
+        /// and whether the operation completed successfully
+        /// </summary>
+        /// <remarks>
+        /// This method should be used for query signatures that do no return a collection
+        /// </remarks>
+        /// <typeparam name="TEntity">The type of entity in the result</typeparam>
+        /// <param name="queryOperation">The <see cref="Expression"/> identifying the query operation to invoke</param>
+        /// <param name="result">The entity returned from the specified operation</param>
+        /// <param name="validationErrors">The validation errors that occurred</param>
+        /// <returns>Whether the operation completed without error</returns>
+        public bool TryQuerySingle<TEntity>(Expression<Func<TDomainService, Task<TEntity>>> queryOperation, out TEntity result, out IList<ValidationResult> validationErrors) where TEntity : class
         {
             IEnumerable<TEntity> results;
             bool success = this.TryQueryCore<TEntity>(queryOperation, out results, out validationErrors);

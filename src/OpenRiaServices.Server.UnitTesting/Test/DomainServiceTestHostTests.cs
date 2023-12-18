@@ -155,6 +155,46 @@ namespace OpenRiaServices.Server.UnitTesting.Test
         }
 
         [TestMethod]
+        public async Task QuerySingleAsync()
+        {
+            var testHost = new DomainServiceTestHost<CityDomainService>();
+
+            var result = await testHost.QuerySingleAsync(s => s.GetZipByFourDigitCodeAsync(8625), CancellationToken.None);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public async Task QuerySingleAsyncWithSynchronousQuery()
+        {
+            var testHost = new DomainServiceTestHost<CityDomainService>();
+
+            var result = await testHost.QuerySingleAsync(s => s.GetZipByFourDigitCode2(8625), CancellationToken.None);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void TryQuerySingleTaskOverload()
+        {
+            var testHost = new DomainServiceTestHost<CityDomainService>();
+
+           testHost.TryQuerySingle(s => s.GetZipByFourDigitCodeAsync(8625), out Zip result, out var validationErrors);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
+        public void TryQuerySingle()
+        {
+            var testHost = new DomainServiceTestHost<CityDomainService>();
+
+            testHost.TryQuerySingle(s => s.GetZipByFourDigitCode2(8625), out Zip result, out var validationErrors);
+
+            Assert.IsNotNull(result);
+        }
+
+        [TestMethod]
         public async Task SubmitAsync()
         {
             var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>();
