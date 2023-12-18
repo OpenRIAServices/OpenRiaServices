@@ -22,6 +22,7 @@ namespace OpenRiaServices.Tools
     {
         private readonly bool _isRoundtripType;
         private readonly IDictionary<Type, CodeTypeDeclaration> _typeMapping;
+        private readonly List<Type> _attributeTypesToFilter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataContractProxyGenerator"/> class.
@@ -32,10 +33,23 @@ namespace OpenRiaServices.Tools
         protected DataContractProxyGenerator(CodeDomClientCodeGenerator proxyGenerator, Type type, IDictionary<Type, CodeTypeDeclaration> typeMapping)
             : base(proxyGenerator)
         {
-            this.Type = type;
-            this._typeMapping = typeMapping;
-            this.NotificationMethodGen = new NotificationMethodGenerator(proxyGenerator);
-            this._isRoundtripType = type.Attributes()[typeof(RoundtripOriginalAttribute)] != null;
+            Type = type;
+            _typeMapping = typeMapping;
+            NotificationMethodGen = new NotificationMethodGenerator(proxyGenerator);
+            _isRoundtripType = type.Attributes()[typeof(RoundtripOriginalAttribute)] != null;
+
+            // Add attributes which should be used to filter the attributes on type to be generated
+            _attributeTypesToFilter = new()
+            {
+                // DataContractAttribute and KnownTypeAttribute are handled seperatly
+                typeof(DataContractAttribute),
+                typeof(KnownTypeAttribute),
+#if NET
+                // Filter out NullableAttribute and NullableContextAttribute, should only be used by compiler
+                Type.GetType("System.Runtime.CompilerServices.NullableAttribute"),
+                Type.GetType("System.Runtime.CompilerServices.NullableContextAttribute"),
+#endif
+            };
         }
 
         /// <summary>
@@ -105,7 +119,7 @@ namespace OpenRiaServices.Tools
             this.ProxyClass.TypeAttributes = TypeAttributes.Public;
 
             // Abstract classes must be preserved as abstract to avoid explicit instantiation on client
-            bool isAbstract = (this.Type.IsAbstract);            
+            bool isAbstract = (this.Type.IsAbstract);
             if (isAbstract)
             {
                 this.ProxyClass.TypeAttributes |= TypeAttributes.Abstract;
@@ -140,7 +154,7 @@ namespace OpenRiaServices.Tools
             constructor.Attributes = isAbstract ? MemberAttributes.Family : MemberAttributes.Public;
 
             // add default ctor doc comments
-            comment = string.Format(CultureInfo.CurrentCulture, Resource.CodeGen_Default_Constructor_Summary_Comments, this.Type.Name); 
+            comment = string.Format(CultureInfo.CurrentCulture, Resource.CodeGen_Default_Constructor_Summary_Comments, this.Type.Name);
             constructor.Comments.AddRange(CodeGenUtilities.GenerateSummaryCodeComment(comment, this.ClientProxyGenerator.IsCSharp));
 
             // add call to default OnCreated method
@@ -284,9 +298,9 @@ namespace OpenRiaServices.Tools
                         new CodeMethodInvokeExpression(
                             new CodeThisReferenceExpression(),
                             "ValidateProperty",
-                            new CodeExpression[] 
+                            new CodeExpression[]
                             {
-                                new CodePrimitiveExpression(propertyName), 
+                                new CodePrimitiveExpression(propertyName),
                                 new CodePropertySetValueReferenceExpression()
                             }));
         }
@@ -420,9 +434,9 @@ namespace OpenRiaServices.Tools
             }
 
             // Here we check for database generated fields. In that case we strip any RequiredAttribute from the property.
-            if (propertyAttributes.Any(a=>a.GetType().Name == "DatabaseGeneratedAttribute"))
+            if (propertyAttributes.Any(a => a.GetType().Name == "DatabaseGeneratedAttribute"))
             {
-                propertyAttributes.RemoveAll(attr => attr.GetType() == typeof (RequiredAttribute));
+                propertyAttributes.RemoveAll(attr => attr.GetType() == typeof(RequiredAttribute));
             }
 
             // Here, we check for the presence of a complex type. If it exists we need to add a DisplayAttribute
@@ -520,7 +534,7 @@ namespace OpenRiaServices.Tools
         private IEnumerable<Attribute> FilterTypeAttributes(AttributeCollection typeAttributes)
         {
             List<Attribute> filteredAttributes = new List<Attribute>();
-            
+
             // Ignore DefaultMemberAttribute if it has been put for an indexer
             IEnumerable<Attribute> defaultMemberAttribs = typeAttributes.Cast<Attribute>().Where(a => a.GetType() == typeof(DefaultMemberAttribute));
             if (defaultMemberAttribs.Any())
@@ -535,9 +549,8 @@ namespace OpenRiaServices.Tools
                 }
             }
 
-            // Filter out attributes in filteredAttributes as well as DataContractAttribute and KnownTypeAttribute (since they are already handled)
-            return typeAttributes.Cast<Attribute>().Where(a => a.GetType() != typeof(DataContractAttribute) && a.GetType() != typeof(KnownTypeAttribute) && 
-                !(filteredAttributes.Contains(a)));
+            // Filter out attributes in filteredAttributes and attributeTypesToFilter
+            return typeAttributes.Cast<Attribute>().Where(a => !_attributeTypesToFilter.Contains(a.GetType()) && !filteredAttributes.Contains(a));
         }
 
         /// <summary>
