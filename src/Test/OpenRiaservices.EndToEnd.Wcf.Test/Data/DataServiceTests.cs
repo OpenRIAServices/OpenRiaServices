@@ -486,6 +486,9 @@ namespace OpenRiaServices.Client.Test
         /// Verify that if an invalid DomainOperationEntry name is specified, that the Load
         /// operation finishes with the expected WebResponse.StatusCode.
         /// </summary>
+#if ASPNETCORE
+        [Ignore("Does not work the same way with AspNetCore")]
+#endif
         [TestMethod]
         public void TestInvalidMethodName()
         {

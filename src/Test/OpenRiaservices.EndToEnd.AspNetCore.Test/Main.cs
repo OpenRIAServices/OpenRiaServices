@@ -31,14 +31,6 @@ namespace OpenRiaServices.Client.Test
                 UseCookies = true,
                 AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
             });
-#if NETFRAMEWORK
-#pragma warning disable CS0618 // Type or member is obsolete
-            DomainContext.DomainClientFactory = new Web.WebDomainClientFactory()
-            {
-                ServerBaseUri = TestURIs.RootURI,
-            };
-#pragma warning restore CS0618 // Type or member is obsolete
-#endif
 
             // Note: Below gives errors when running (at least BinaryHttpDomainClientFactory) against AspNetCore
             // It seems to cache results even with "private, no-store"

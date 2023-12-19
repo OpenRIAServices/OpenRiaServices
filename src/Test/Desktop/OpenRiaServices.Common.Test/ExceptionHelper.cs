@@ -260,5 +260,12 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(webExceptionStatus, e.Status);
             return e;
         }
+
+        public static InvalidCastException ExpectInvalidCastException(GenericDelegate del, string message)
+        {
+            InvalidCastException e = ExpectExceptionHelper<InvalidCastException>(del);
+            Assert.AreEqual(message, e.Message);
+            return e;
+        }
     }
 }
