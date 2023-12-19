@@ -22,7 +22,6 @@ namespace OpenRiaServices.Tools
     {
         private readonly bool _isRoundtripType;
         private readonly IDictionary<Type, CodeTypeDeclaration> _typeMapping;
-        private readonly List<Type> _attributeTypesToFilter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DataContractProxyGenerator"/> class.
@@ -37,19 +36,6 @@ namespace OpenRiaServices.Tools
             _typeMapping = typeMapping;
             NotificationMethodGen = new NotificationMethodGenerator(proxyGenerator);
             _isRoundtripType = type.Attributes()[typeof(RoundtripOriginalAttribute)] != null;
-
-            // Add attributes which should be used to filter the attributes on type to be generated
-            _attributeTypesToFilter = new()
-            {
-                // DataContractAttribute and KnownTypeAttribute are handled seperatly
-                typeof(DataContractAttribute),
-                typeof(KnownTypeAttribute),
-#if NET
-                // Filter out NullableAttribute and NullableContextAttribute, should only be used by compiler
-                Type.GetType("System.Runtime.CompilerServices.NullableAttribute"),
-                Type.GetType("System.Runtime.CompilerServices.NullableContextAttribute"),
-#endif
-            };
         }
 
         /// <summary>
@@ -399,7 +385,8 @@ namespace OpenRiaServices.Tools
             property.Name = propertyName;
             property.Type = propTypeReference;
             property.Attributes = MemberAttributes.Public | MemberAttributes.Final; // final needed, else becomes virtual
-            List<Attribute> propertyAttributes = propertyDescriptor.ExplicitAttributes().Cast<Attribute>().ToList();
+            var propertyAttributes = propertyDescriptor.ExplicitAttributes().Cast<Attribute>()
+                .Where(a => a.GetType().Namespace != "System.Runtime.CompilerServices").ToList(); //Do not use attributes only used by the compiler
 
             // Generate <summary> for property
             string comment = string.Format(CultureInfo.CurrentCulture, Resource.CodeGen_Entity_Property_Summary_Comment, propertyName);
@@ -549,8 +536,11 @@ namespace OpenRiaServices.Tools
                 }
             }
 
-            // Filter out attributes in filteredAttributes and attributeTypesToFilter
-            return typeAttributes.Cast<Attribute>().Where(a => !_attributeTypesToFilter.Contains(a.GetType()) && !filteredAttributes.Contains(a));
+            // Filter out attributes in filteredAttributes, attributes which should only be used by the compiler,
+            // DataContractAttribute and KnownTypeAttribute since they are handled seperatly
+            return typeAttributes.Cast<Attribute>().Where(a => a.GetType().Namespace != "System.Runtime.CompilerServices"
+            && a.GetType() != typeof(DataContractAttribute) && a.GetType() != typeof(KnownTypeAttribute)
+            && !filteredAttributes.Contains(a));
         }
 
         /// <summary>
