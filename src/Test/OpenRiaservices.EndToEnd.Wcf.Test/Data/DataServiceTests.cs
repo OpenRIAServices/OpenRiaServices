@@ -487,7 +487,7 @@ namespace OpenRiaServices.Client.Test
         /// operation finishes with the expected WebResponse.StatusCode.
         /// </summary>
 #if ASPNETCORE
-        [Ignore("Does not work the same way with AspNetCore")]
+        [Ignore("BinaryHttpDomainClientFactory does not validate if method exists, and since name is always specified by code generation it is not important to validate it")]
 #endif
         [TestMethod]
         public void TestInvalidMethodName()
