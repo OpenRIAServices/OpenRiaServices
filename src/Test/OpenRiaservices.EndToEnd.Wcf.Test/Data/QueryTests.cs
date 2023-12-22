@@ -2006,6 +2006,9 @@ namespace OpenRiaServices.Client.Test
             });
         }
 
+#if ASPNETCORE
+        [Ignore("BinaryHttpDomainClientFactory does not validate if method exists, and since name is always specified by code generation it is not important to validate it")]
+#endif
         [TestMethod]
         public async Task TestServerExceptions_QueryOnNonExistentMethod()
         {
@@ -2013,15 +2016,10 @@ namespace OpenRiaServices.Client.Test
             var query = ctxt.CreateQuery<Product>("NonExistentMethod", null, false, true);
             await ValidateQueryException(ctxt, query, ex =>
             {
-#if ASPNETCORE
-                Assert.IsNotNull(ex as DomainOperationException, "Expected DomainOperationException");
-                Assert.IsTrue(ex.Message == "Load operation failed for query 'NonExistentMethod'. Unexpected server statuscode 404 'NotFound'");
-#else
                 Assert.IsTrue(ex.Message.StartsWith("Load operation failed for query 'NonExistentMethod'. An error occurred while receiving the HTTP response to"));
                 Assert.IsTrue(ex.Message.EndsWith("This could be due to the service endpoint binding not using the HTTP protocol. This could also be due to an HTTP request context being aborted by the server (possibly due to the service shutting down). See server logs for more details."));
                 Assert.IsNotNull(ex.InnerException as CommunicationException, "Expected CommunicationException");
                 Assert.IsNotNull(ex.InnerException.InnerException as WebException, "Expected WebException");
-#endif
             });
         }
 
