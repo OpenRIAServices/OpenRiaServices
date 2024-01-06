@@ -104,10 +104,10 @@ namespace OpenRiaServices.Tools
             catch (Exception ex)
             {
                 // Some common exceptions log a warning and keep running
-                if (ex is System.IO.FileNotFoundException ||
-                    ex is System.IO.FileLoadException ||
-                    ex is System.IO.PathTooLongException ||
-                    ex is System.IO.DirectoryNotFoundException ||
+                if (ex is FileNotFoundException ||
+                    ex is FileLoadException ||
+                    ex is PathTooLongException ||
+                    ex is DirectoryNotFoundException ||
                     ex is BadImageFormatException ||
                     ex is System.Security.SecurityException)
                 {

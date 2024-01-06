@@ -1,3 +1,32 @@
+# Unreleased
+
+### AspNetCore updates
+* Add authentication documentation #466
+* Use FrozenSet in first location (QueryStringConverter)
+* Update versionprefix to 1.0.0 (for next release)
+
+### Other
+* Update nuget dependencies for tests
+* Fix test which would sometimes hang
+
+# 5.4.1
+
+### Code generation
+* Fix .NET7+ code generation crash for RegularExpressionAttribute #449
+
+### Client
+* Improved performance of property setters (and Add) #451 #453 #456
+  * Use Dictionary.TryAdd for minor perf improvements in entityset add by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/451
+  * Speed up ValidateProperty by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/453
+  * Improve perf of ReplaceErrors by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/456
+
+### Other
+* Remove typo by @omimakhare in https://github.com/OpenRIAServices/OpenRiaServices/pull/446
+* Use mstestv3 as testing framework by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/372
+* Move more tests from EndToEnd tests to Client.Test by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/454
+* Add new test that validate how object level validation interact with property level validation by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/455
+* Various fixes by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/460
+  
 # 5.4.0
 
 This release **fully supports .NET 6+** for both server and client without having to rely on workarounds to have the code generation work.

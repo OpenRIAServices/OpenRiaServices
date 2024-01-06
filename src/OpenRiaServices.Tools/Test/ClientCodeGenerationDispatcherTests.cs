@@ -1,7 +1,6 @@
 ﻿extern alias TextTemplate;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.Composition;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
@@ -12,6 +11,7 @@ using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
 using OpenRiaServices.Tools.Test.T4Generator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Mono.Cecil;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -54,7 +54,7 @@ namespace OpenRiaServices.Tools.Test
             // into the MEF composition container
             using (ClientCodeGenerationDispatcher dispatcher = new ClientCodeGenerationDispatcher())
             {
-                string[] compositionAssemblies = new string[] { Assembly.GetExecutingAssembly().Location};
+                string[] compositionAssemblies = new string[] { Assembly.GetExecutingAssembly().Location };
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, MockCodeGenerator.GeneratorName);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");
@@ -180,11 +180,11 @@ namespace OpenRiaServices.Tools.Test
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, "NotAGenerator");
                 Assert.IsNull(generator, "the dispatcher should not find any code generator");
 
-                string error = string.Format(CultureInfo.CurrentCulture, 
-                                            Resource.Code_Generator_Not_Found, 
-                                            "NotAGenerator", 
-                                            options.Language, 
-                                            options.ServerProjectPath, 
+                string error = string.Format(CultureInfo.CurrentCulture,
+                                            Resource.Code_Generator_Not_Found,
+                                            "NotAGenerator",
+                                            options.Language,
+                                            options.ServerProjectPath,
                                             options.ClientProjectPath,
                                             CodeDomClientCodeGenerator.GeneratorName);
                 TestHelper.AssertContainsErrors(logger, error);
@@ -479,11 +479,11 @@ namespace OpenRiaServices.Tools.Test
                 string errorParam = "    " + MockCodeGenerator.GeneratorName + Environment.NewLine +
                                     "    " + T4DomainServiceClientCodeGenerator.GeneratorName + Environment.NewLine;
 
-                string error = (string.Format(CultureInfo.CurrentCulture, 
-                                                Resource.Multiple_Custom_Code_Generators_Using_Default, 
-                                                options.Language, 
-                                                errorParam, 
-                                                options.ClientProjectPath, 
+                string error = (string.Format(CultureInfo.CurrentCulture,
+                                                Resource.Multiple_Custom_Code_Generators_Using_Default,
+                                                options.Language,
+                                                errorParam,
+                                                options.ClientProjectPath,
                                                 MockCodeGenerator.GeneratorName,
                                                 CodeDomClientCodeGenerator.GeneratorName));
                 TestHelper.AssertContainsWarnings(logger, error);
@@ -518,19 +518,18 @@ namespace OpenRiaServices.Tools.Test
                 string errorParam = "    " + typeof(MockFSharpCodeGenerator1).FullName + Environment.NewLine +
                                     "    " + typeof(MockFSharpCodeGenerator2).FullName + Environment.NewLine;
 
-                string error = string.Format(CultureInfo.CurrentCulture, 
-                                                        Resource.Multiple_Named_Code_Generators, 
+                string error = string.Format(CultureInfo.CurrentCulture,
+                                                        Resource.Multiple_Named_Code_Generators,
                                                         generatorName,
-                                                        options.Language, 
+                                                        options.Language,
                                                         errorParam,
-                                                        options.ServerProjectPath, 
+                                                        options.ServerProjectPath,
                                                         options.ClientProjectPath,
                                                         typeof(MockFSharpCodeGenerator1).AssemblyQualifiedName);
                 TestHelper.AssertContainsErrors(logger, error);
             }
         }
 
-        [DeploymentItem("TypeLoadExceptionProject.dll")]
         [Description("ClientCodeGenerationDispatcher logs an warning and survives a TypeLoadException creating MEF")]
         [TestMethod]
         public void ClientCodeGenerationDispatcher_Error_TypeLoadException()
@@ -553,7 +552,18 @@ namespace OpenRiaServices.Tools.Test
                 string unitTestAssemblyLocation = Assembly.GetExecutingAssembly().Location;
                 string typeLoadExceptionProjectLocation = Path.Combine(Path.GetDirectoryName(unitTestAssemblyLocation), "TypeLoadExceptionProject.dll");
 
-                Assert.IsTrue(File.Exists(typeLoadExceptionProjectLocation), "Expected TypeLoadExceptionProject.dll to coreside with this assembly in test folder");
+                if (!File.Exists(typeLoadExceptionProjectLocation))
+                {
+                    var assemblyNameDefinition = new AssemblyNameDefinition("TestAssemblyNameDefinition", new Version(0, 0, 0, 0));
+                    using var newAssembly = AssemblyDefinition.CreateAssembly(assemblyNameDefinition, "TestModuleName", ModuleKind.Dll);
+                    var modules = newAssembly.MainModule;
+                    var class1 = new TypeDefinition("TestNamespace", "Class1", Mono.Cecil.TypeAttributes.Class);
+                    var class2 = new TypeDefinition("TestNamespace", "Class2", Mono.Cecil.TypeAttributes.Class, class1);
+                    class1.BaseType = class2;
+                    modules.Types.Add(class1);
+                    modules.Types.Add(class2);
+                    newAssembly.Write(typeLoadExceptionProjectLocation);
+                }
 
                 // Do what MEF does to load the types so we can capture the exception
                 Exception expectedException = null;
@@ -657,7 +667,7 @@ namespace OpenRiaServices.Tools.Test
             return MockCodeGenerator.FakeGeneratedCode;
         }
     }
-    
+
     // Commented out so MEF does not discover this generator.
     // It is used exclusively for testing fully qualified assembly name loading of generators.
     // [DomainServiceClientCodeGenerator("ThrowingCtorCodeGenerator", "C#")]

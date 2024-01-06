@@ -5,47 +5,48 @@
 //------------------------------------------------------------
 using OpenRiaServices;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
+using System.Collections.Frozen;
 using System.ComponentModel;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
 
-#pragma warning disable 1634, 1691
 namespace System.ServiceModel.Dispatcher
 {
     // Thread Safety: This class is thread safe
     class QueryStringConverter
     {
-        private readonly HashSet<Type> _defaultSupportedQueryStringTypes = new();
+        private readonly FrozenSet<Type> _defaultSupportedQueryStringTypes;
         // the cache does not have a quota since it is per endpoint and is
         // bounded by the number of types in the contract at the endpoint
         private readonly ConcurrentDictionary<Type, TypeConverter> _typeConverterCache = new();
 
         public QueryStringConverter()
         {
-            this._defaultSupportedQueryStringTypes.Add(typeof(byte));
-            this._defaultSupportedQueryStringTypes.Add(typeof(sbyte));
-            this._defaultSupportedQueryStringTypes.Add(typeof(short));
-            this._defaultSupportedQueryStringTypes.Add(typeof(int));
-            this._defaultSupportedQueryStringTypes.Add(typeof(long));
-            this._defaultSupportedQueryStringTypes.Add(typeof(ushort));
-            this._defaultSupportedQueryStringTypes.Add(typeof(uint));
-            this._defaultSupportedQueryStringTypes.Add(typeof(ulong));
-            this._defaultSupportedQueryStringTypes.Add(typeof(float));
-            this._defaultSupportedQueryStringTypes.Add(typeof(double));
-            this._defaultSupportedQueryStringTypes.Add(typeof(bool));
-            this._defaultSupportedQueryStringTypes.Add(typeof(char));
-            this._defaultSupportedQueryStringTypes.Add(typeof(decimal));
-            this._defaultSupportedQueryStringTypes.Add(typeof(string));
-            this._defaultSupportedQueryStringTypes.Add(typeof(object));
-            this._defaultSupportedQueryStringTypes.Add(typeof(DateTime));
-            this._defaultSupportedQueryStringTypes.Add(typeof(TimeSpan));
-            this._defaultSupportedQueryStringTypes.Add(typeof(byte[]));
-            this._defaultSupportedQueryStringTypes.Add(typeof(Guid));
-            this._defaultSupportedQueryStringTypes.Add(typeof(Uri));
-            this._defaultSupportedQueryStringTypes.Add(typeof(DateTimeOffset));
+            this._defaultSupportedQueryStringTypes = FrozenSet.ToFrozenSet(new Type[] {
+                typeof(byte),
+                typeof(sbyte),
+                typeof(short),
+                typeof(int),
+                typeof(long),
+                typeof(ushort),
+                typeof(uint),
+                typeof(ulong),
+                typeof(float),
+                typeof(double),
+                typeof(bool),
+                typeof(char),
+                typeof(decimal),
+                typeof(string),
+                typeof(object),
+                typeof(DateTime),
+                typeof(TimeSpan),
+                typeof(byte[]),
+                typeof(Guid),
+                typeof(Uri),
+                typeof(DateTimeOffset),
+            });
         }
 
         public virtual bool CanConvert(Type type)
@@ -157,7 +158,7 @@ namespace System.ServiceModel.Dispatcher
         {
             ArgumentNullException.ThrowIfNull(parameterType);
             if (parameterType.IsValueType)
-            ArgumentNullException.ThrowIfNull(parameter);
+                ArgumentNullException.ThrowIfNull(parameter);
 
             switch (Type.GetTypeCode(parameterType))
             {
