@@ -15,7 +15,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using DataModels.ScenarioModels;
 
-#if !NET6_0
+#if !NET6_0 && !NET8_0
 using DataTests.AdventureWorks.LTS;
 using OpenRiaServices.LinqToSql;
 using System.Web;
@@ -200,7 +200,7 @@ namespace TestDomainServices
         }
     }
 
-#if !NET6_0
+#if !NET6_0 && !NET8_0
     /// <summary>
     /// This domain service attempts to declare L2S description provider with EF context
     /// </summary>
@@ -268,7 +268,7 @@ namespace TestDomainServices
         }
     }
 
-#if !NET6_0
+#if !NET6_0 && !NET8_0
     /// <summary>
     /// This mock LINQ to SQL DomainService throws an exception in its constructor
     /// </summary>
@@ -1096,7 +1096,7 @@ namespace TestDomainServices
         public IQueryable<TestSideEffects> CreateAndGetSideEffectsObjects(string name, [InjectParameter] HttpContext httpContext)
         {
             HttpRequest request = httpContext.Request;
-#if NET6_0
+#if NET6_0 || NET8_0
             string verb = request.Method;
             var url = new Uri ("http://" + request.Host.ToString() + request.Path.ToString() + request.QueryString.ToString());
 #else
@@ -2114,7 +2114,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
         [Invoke(HasSideEffects = true)]
         public string ReturnHttpMethodWithSideEffects_Online([InjectParameter] HttpContext httpContext)
         {
-#if NET6_0
+#if NET6_0 || NET8_0
             return httpContext.Request.Method;
 #else
             return httpContext.Request.HttpMethod;
@@ -2124,7 +2124,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
         [Invoke(HasSideEffects = false)]
         public string ReturnHttpMethodWithoutSideEffects_Online([InjectParameter] HttpContext httpContext)
         {
-#if NET6_0
+#if NET6_0 || NET8_0
             return httpContext.Request.Method;
 #else
             return httpContext.Request.HttpMethod;

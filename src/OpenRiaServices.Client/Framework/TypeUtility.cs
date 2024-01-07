@@ -32,6 +32,9 @@ namespace OpenRiaServices
             "b03f5f7f11d50a3a", // Microsoft.VisualBasic, Microsoft.CSharp, System.Configuration
             "7cec85d7bea7798e",  // Silverlight system assemblies
             OpenRiaServicesPublicKeyToken, // OpenRiaServices.
+#if NETCOREAPP
+            "adb9793829ddae60"
+#endif
         };
 
         /// <summary>

@@ -12,7 +12,11 @@ namespace OpenRiaServices.Tools
     {
         private const string DatabaseTypeName = @"System.Data.Entity.Database";
         private const string IDatabaseInitializerTypeName = "System.Data.Entity.IDatabaseInitializer`1";
+#if NETCOREAPP
+        internal const string DbContextTypeName = @"Microsoft.EntityFrameworkCore.DbContext";
+#else
         internal const string DbContextTypeName = @"System.Data.Entity.DbContext";
+#endif
 
         private static Type _dbContextTypeReference;
 
@@ -184,8 +188,11 @@ namespace OpenRiaServices.Tools
             }
         }
 #else
+#if NETCOREAPP
+        private const string DbDomainServiceTypeName = @"OpenRiaServices.Server.EntityFrameworkCore.DbDomainService`1";
+#else
         private const string DbDomainServiceTypeName = @"OpenRiaServices.EntityFramework.DbDomainService`1";
-
+#endif
         /// <summary>
         /// Returns the DbContext type given the <see cref="DomainService"/> type. Uses late binding so as to avoid adding a reference to EF 4.1.
         /// </summary>
