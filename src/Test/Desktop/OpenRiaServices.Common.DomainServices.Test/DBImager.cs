@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.IO;
-#if !NET6_0 && !NET8_0
+#if !NET6_0_OR_GREATER
 using System.Web.Hosting;
 #endif
 
@@ -33,7 +33,7 @@ namespace TestDomainServices.Testing
                 return Path.Combine(Directory.GetCurrentDirectory(), fileName);
 
             // If path is not relative to working directory then check if it is a virtual path
-#if NET6_0 || NET8_0
+#if NET6_0_OR_GREATER
             // Relative directoy when running in website project folder
             string mappedPath = fileName.Replace("~/", "../WebsiteFullTrust/");
             if (File.Exists(mappedPath))
