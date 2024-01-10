@@ -1,13 +1,13 @@
 # Unreleased
 
-# 5.4.2
+# 5.4.2 / AspNetCore 1.0.0
 
 ### .NET8
 * Build with .NET8 sdk and run AspNetCore tests with .NET8 by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/463
-* Run most client, server and code generation tests with .NET8 @SandstromErik in https://github.com/OpenRIAServices/OpenRiaServices/pull/458
+* Run most client, server and code generation tests with .NET8 by @SandstromErik in https://github.com/OpenRIAServices/OpenRiaServices/pull/458
 
 ### Code generation
-* Do not use attributes reserved for the compiler in code generation. Will make it possible to use the `required` modifier for fields and properties @SandstromErik in https://github.com/OpenRIAServices/OpenRiaServices/pull/472
+* Do not use attributes reserved for the compiler in code generation. Will make it possible to use nullable reference types and the `required` modifier for fields and properties by @SandstromErik in https://github.com/OpenRIAServices/OpenRiaServices/pull/472
 
 ### AspNetCore updates
 * Various updates by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/466
@@ -15,9 +15,11 @@
     * Use FrozenSet in first location (QueryStringConverter)
     * Update versionprefix to 1.0.0 (for next release)
 
+### Testhost
+* Add support in `DomainServiceTestHost` for asynchronous queries that return a single entity by @erikoijwall in https://github.com/OpenRIAServices/OpenRiaServices/pull/464
+
 ### Other
 * Build improvments, including set `MSBUILDDEBUGPATH` allowing troubleshooting of build failures by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/463
-* Add support in `DomainServiceTestHost` for asynchronous queries that return a single entity @erikoijwall in https://github.com/OpenRIAServices/OpenRiaServices/pull/464
 * Update nuget dependencies for tests by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/468
 * Fix test which would sometimes hang by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/469
 * Add tests to see that codegen works with nullable reference types by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/470
