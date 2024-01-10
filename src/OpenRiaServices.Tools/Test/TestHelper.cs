@@ -43,7 +43,11 @@ namespace OpenRiaServices.Tools.Test
         public static void GetProjectPaths(string relativeTestDir, out string projectPath, out string outputPath)
         {
             // Read file from output folder
-            string inputString = File.ReadAllText("ProjectPath.txt");
+            string inputString;
+            if (!string.IsNullOrEmpty(relativeTestDir))
+                inputString = File.ReadAllText($"{relativeTestDir}\\ProjectPath.txt");
+            else
+                inputString = File.ReadAllText("ProjectPath.txt");
 
 
             string[] split = inputString.Split(',');

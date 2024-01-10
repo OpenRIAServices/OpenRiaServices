@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net6.0;netstandard2.0;net8.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX;EFCORE</DefineConstants>
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
     <VersionPrefix>2.0.2</VersionPrefix>
@@ -13,8 +13,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.24" />
 
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='net6.0'" Version="6.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='net6.0'" Version="6.0.*" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='net8.0'" Version="8.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='net8.0'" Version="8.0.*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />

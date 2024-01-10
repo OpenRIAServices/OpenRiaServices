@@ -33,5 +33,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
         {
             return AddDomainService(typeof(T));
         }
+
     }
 }
