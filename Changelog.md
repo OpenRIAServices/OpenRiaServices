@@ -17,11 +17,11 @@
 
 ### Other
 * Build improvments, including set `MSBUILDDEBUGPATH` allowing troubleshooting of build failures by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/463
-* Add support in `DomainServiceTestHost` for asynchronous queries that return a single entity @SandstromErik in https://github.com/OpenRIAServices/OpenRiaServices/pull/464
+* Add support in `DomainServiceTestHost` for asynchronous queries that return a single entity @erikoijwall in https://github.com/OpenRIAServices/OpenRiaServices/pull/464
 * Update nuget dependencies for tests by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/468
 * Fix test which would sometimes hang by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/469
 * Add tests to see that codegen works with nullable reference types by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/470
-* Use `BinaryHttpDomainClient` in AspNetCore Test by @erikoijwall in https://github.com/OpenRIAServices/OpenRiaServices/pull/471
+* Use `BinaryHttpDomainClient` in AspNetCore Test by @SandstromErik in https://github.com/OpenRIAServices/OpenRiaServices/pull/471
 
 # 5.4.1
 
