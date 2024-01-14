@@ -12,7 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.32" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.32" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="5.1.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="5.1.4" />
 
     <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
