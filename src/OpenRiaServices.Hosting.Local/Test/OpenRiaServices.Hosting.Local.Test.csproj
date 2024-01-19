@@ -2,10 +2,6 @@
   <PropertyGroup>
     <TargetFramework>net472</TargetFramework>
   </PropertyGroup>
-  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
-    <Message Text="Writing project path" />
-    <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
-  </Target>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.1.1" />
