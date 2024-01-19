@@ -82,7 +82,7 @@ namespace OpenRiaServices.Tools.Test
                 }
                 snippetstr += snippet.Text;
             }
-            Assert.AreEqual(snippetstr.Replace("\r\n", "").TrimEnd(), XmlReader.Value.Replace("\n", ""));
+            Assert.AreEqual(XmlReader.Value.Replace("\n", ""), snippetstr.Replace("\r\n", "").TrimEnd());
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace OpenRiaServices.Tools.Test
         {
             NotificationMethodGenerator target = new NotificationMethodGenerator(CreateProxyGenerator(isCSharp));
 
-            Assert.AreEqual(target.OnCreatedMethodInvokeExpression.Method.MethodName, "OnCreated");
+            Assert.AreEqual("OnCreated", target.OnCreatedMethodInvokeExpression.Method.MethodName);
         }
 
         public static IEnumerable<object> OnCreatedMethodInvokeExpressionTestCases
@@ -130,12 +130,12 @@ namespace OpenRiaServices.Tools.Test
                 CodeExpressionStatement actual = target.GetMethodInvokeExpressionStatementFor(baseMethodName);
                 CodeMethodInvokeExpression actualExpression = actual.Expression as CodeMethodInvokeExpression;
 
-                Assert.AreEqual(actualExpression.Method.MethodName, "On" + baseMethodName);
+                Assert.AreEqual("On" + baseMethodName, actualExpression.Method.MethodName);
 
                 for (int idx = 0; idx < parameters.Length; idx++)
                 {
                     string paramName = ((CodeArgumentReferenceExpression)actualExpression.Parameters[idx]).ParameterName;
-                    Assert.AreEqual(paramName, parameters[idx].Name);
+                    Assert.AreEqual(parameters[idx].Name, paramName);
                 }
             }
         }
@@ -257,7 +257,7 @@ namespace OpenRiaServices.Tools.Test
                     if (paramDecl != "")
                     {
                         string[] args = paramDecl.Split(new char[] { ',' });
-                        Assert.AreEqual(args.Length, 2, "Params definition file not in the correct format!");
+                        Assert.AreEqual(2, args.Length, "Params definition file not in the correct format!");
                         CodeParameterDeclarationExpression codeParam = new CodeParameterDeclarationExpression(args[0], args[1]);
                         parameters.Add(codeParam);
                     }
