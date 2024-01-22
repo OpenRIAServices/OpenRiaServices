@@ -2,7 +2,6 @@
 using System.CodeDom;
 using System.Collections.Generic;
 using OpenRiaServices.Server;
-using OpenRiaServices.Server.Test.Utilities;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -41,7 +40,7 @@ namespace OpenRiaServices.Tools.Test
         DynamicData(nameof(PartialMethodsSnippetBlockTestCases))]
         public void PartialMethodsSnippetBlockTest(string comments, string baseMethodNames, string parameters)
         {
-            string[] baseMethodNamesArray = baseMethodNames.Split(new char[] { ',' });
+            string[] baseMethodNamesArray = baseMethodNames.Split(',');
 
             PartialMethodsSnippetBlockTest(true, comments, baseMethodNamesArray, parameters);
             PartialMethodsSnippetBlockTest(false, comments, baseMethodNamesArray, parameters);
@@ -82,7 +81,7 @@ namespace OpenRiaServices.Tools.Test
                 }
                 snippetstr += snippet.Text;
             }
-            Assert.AreEqual(snippetstr.Replace("\r\n", "").TrimEnd(), XmlReader.Value.Replace("\n", ""));
+            Assert.AreEqual(XmlReader.Value.Replace("\n", ""), snippetstr.Replace("\r\n", "").TrimEnd());
         }
 
         [TestMethod]
@@ -96,7 +95,7 @@ namespace OpenRiaServices.Tools.Test
         {
             NotificationMethodGenerator target = new NotificationMethodGenerator(CreateProxyGenerator(isCSharp));
 
-            Assert.AreEqual(target.OnCreatedMethodInvokeExpression.Method.MethodName, "OnCreated");
+            Assert.AreEqual("OnCreated", target.OnCreatedMethodInvokeExpression.Method.MethodName);
         }
 
         public static IEnumerable<object> OnCreatedMethodInvokeExpressionTestCases
@@ -108,7 +107,7 @@ namespace OpenRiaServices.Tools.Test
         ]
         public void GetMethodInvokeExpressionStatementForTest(string comments, string baseMethodNames, string parameters)
         {
-            string[] baseMethodNamesArray = baseMethodNames.Split(new char[] { ',' });
+            string[] baseMethodNamesArray = baseMethodNames.Split(',');
 
             GetMethodInvokeExpressionStatementForTest(true, comments, baseMethodNamesArray, parameters);
             GetMethodInvokeExpressionStatementForTest(false, comments, baseMethodNamesArray, parameters);
@@ -128,14 +127,14 @@ namespace OpenRiaServices.Tools.Test
                 target.AddMethodFor(baseMethodName, expressions, comments);
 
                 CodeExpressionStatement actual = target.GetMethodInvokeExpressionStatementFor(baseMethodName);
-                CodeMethodInvokeExpression actualExpression = actual.Expression as CodeMethodInvokeExpression;
+                CodeMethodInvokeExpression actualExpression = (CodeMethodInvokeExpression)actual.Expression;
 
-                Assert.AreEqual(actualExpression.Method.MethodName, "On" + baseMethodName);
+                Assert.AreEqual("On" + baseMethodName, actualExpression.Method.MethodName);
 
                 for (int idx = 0; idx < parameters.Length; idx++)
                 {
                     string paramName = ((CodeArgumentReferenceExpression)actualExpression.Parameters[idx]).ParameterName;
-                    Assert.AreEqual(paramName, parameters[idx].Name);
+                    Assert.AreEqual(parameters[idx].Name, paramName);
                 }
             }
         }
@@ -188,7 +187,7 @@ namespace OpenRiaServices.Tools.Test
             }
             else if (paramDeclArgs != "null")
             {
-                string[] args = paramDeclArgs.Split(new char[] { ',' });
+                string[] args = paramDeclArgs.Split(',');
                 parameterDeclaration = new CodeParameterDeclarationExpression(args[0], args[1]);
             }
 
@@ -251,13 +250,13 @@ namespace OpenRiaServices.Tools.Test
             {
                 parameters = new CodeParameterDeclarationExpressionCollection();
 
-                string[] paramDecls = paramDeclsArgs.Split(new char[] { ';' });
+                string[] paramDecls = paramDeclsArgs.Split(';');
                 foreach (string paramDecl in paramDecls)
                 {
                     if (paramDecl != "")
                     {
-                        string[] args = paramDecl.Split(new char[] { ',' });
-                        Assert.AreEqual(args.Length, 2, "Params definition file not in the correct format!");
+                        string[] args = paramDecl.Split(',');
+                        Assert.AreEqual(2, args.Length, "Params definition file not in the correct format!");
                         CodeParameterDeclarationExpression codeParam = new CodeParameterDeclarationExpression(args[0], args[1]);
                         parameters.Add(codeParam);
                     }
