@@ -129,11 +129,11 @@ namespace System.Linq.Dynamic
 
     internal partial class ExpressionParser
     {
-        struct Token
+        struct Token(TokenId id, int pos, int length)
         {
-            public TokenId id;
-            public string text;
-            public int pos;
+            public TokenId id = id;
+            public int pos = pos;
+            public int length = length;
         }
 
         enum TokenId
@@ -313,24 +313,30 @@ namespace System.Linq.Dynamic
             typeof(Uri)
         };
 
-        static readonly Expression trueLiteral = Expression.Constant(true);
-        static readonly Expression falseLiteral = Expression.Constant(false);
-        static readonly Expression nullLiteral = Expression.Constant(null);
+        static readonly ConstantExpression trueLiteral = Expression.Constant(true);
+        static readonly ConstantExpression falseLiteral = Expression.Constant(false);
+        static readonly ConstantExpression nullLiteral = Expression.Constant(null);
 
         const string keywordIt = "it";
         const string keywordIif = "iif";
 
         static readonly Dictionary<string, object> keywords = CreateKeywords();
 
-        Dictionary<string, object> symbols;
-        Dictionary<Expression, string> literals;
+        readonly Dictionary<string, object> symbols = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+        readonly Dictionary<ConstantExpression, ReadOnlyMemory<char>> literals = new();
         ParameterExpression it;
-        string text;
+        readonly string text;
         int textPos;
-        int textLen;
         char ch;
-        Token token;
+        TokenId _tokenId;
+        private int _tokenStart;
+
+        Token token => new Token(_tokenId, _tokenStart, textPos - _tokenStart);
         QueryResolver queryResolver;
+        ReadOnlySpan<char> GetText(Token token) => text.AsSpan(token.pos, token.length);
+        ReadOnlySpan<char> GetText() => GetText(this.token);
+        string GetString(Token token) => GetText(this.token).ToString();
+
 
         public ExpressionParser(ParameterExpression[] parameters, string expression, QueryResolver queryResolver)
         {
@@ -338,12 +344,9 @@ namespace System.Linq.Dynamic
                 throw new ArgumentNullException(nameof(expression));
 
             this.queryResolver = queryResolver;
-            symbols = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            literals = new Dictionary<Expression, string>();
             if (parameters != null)
                 ProcessParameters(parameters);
             text = expression;
-            textLen = text.Length;
             SetTextPos(0);
             NextToken();
         }
@@ -383,15 +386,19 @@ namespace System.Linq.Dynamic
             {
                 Expression expr = ParseExpression();
                 bool ascending = true;
-                if (TokenIdentifierIs("asc") || TokenIdentifierIs("ascending"))
+                if (_tokenId == TokenId.Identifier)
                 {
-                    NextToken();
+                    if (TokenIdentifierIs("asc") || TokenIdentifierIs("ascending"))
+                    {
+                        NextToken();
+                    }
+                    else if (TokenIdentifierIs("desc") || TokenIdentifierIs("descending"))
+                    {
+                        NextToken();
+                        ascending = false;
+                    }
                 }
-                else if (TokenIdentifierIs("desc") || TokenIdentifierIs("descending"))
-                {
-                    NextToken();
-                    ascending = false;
-                }
+
                 orderings.Add(new DynamicOrdering
                 {
                     Selector = expr,
@@ -432,7 +439,7 @@ namespace System.Linq.Dynamic
                 Token op = token;
                 NextToken();
                 Expression right = ParseLogicalAnd();
-                CheckAndPromoteOperands(typeof(ILogicalSignatures), op.text, ref left, ref right, op.pos);
+                CheckAndPromoteOperands(typeof(ILogicalSignatures), op, ref left, ref right);
                 left = Expression.OrElse(left, right);
             }
             return left;
@@ -447,7 +454,7 @@ namespace System.Linq.Dynamic
                 Token op = token;
                 NextToken();
                 Expression right = ParseHasOperator();
-                CheckAndPromoteOperands(typeof(ILogicalSignatures), op.text, ref left, ref right, op.pos);
+                CheckAndPromoteOperands(typeof(ILogicalSignatures), op, ref left, ref right);
                 left = Expression.AndAlso(left, right);
             }
             return left;
@@ -484,19 +491,19 @@ namespace System.Linq.Dynamic
                     // Read the enum field name, parse it and remove it
                     if (token.id != TokenId.Identifier)
                         throw new ParseException("Expected an Identifier", token.pos);
-                    right = Expression.Constant(ParseEnum(token.text, enumType), enumType);
+                    right = Expression.Constant(ParseEnum(GetText(token), enumType), enumType);
                     NextToken();
                 }
                 else // Either numeric value or member access
-                {                    
+                {
                     right = ParseComparison();
                 }
 
                 left = ConvertEnumExpression(left, right);
                 right = ConvertEnumExpression(right, left);
 
-                CheckAndPromoteOperands(typeof(IArithmeticSignatures), op.text, ref left, ref right, op.pos);
-                
+                CheckAndPromoteOperands(typeof(IArithmeticSignatures), op, ref left, ref right);
+
                 // Treat as (left & right) == right which is the same behaviour as calling Enum.HasFlag
                 // but it will work with entity framework and probably most other query providers
                 left = Expression.Equal(Expression.And(left, right), right);
@@ -532,7 +539,7 @@ namespace System.Linq.Dynamic
                         }
                         else
                         {
-                            throw IncompatibleOperandsError(op.text, left, right, op.pos);
+                            throw IncompatibleOperandsError(GetString(op), left, right, op.pos);
                         }
                     }
                 }
@@ -543,12 +550,12 @@ namespace System.Linq.Dynamic
                     right = ConvertEnumExpression(right, left);
 
                     CheckAndPromoteOperands(isEquality ? typeof(IEqualitySignatures) : typeof(IRelationalSignatures),
-                        op.text, ref left, ref right, op.pos);
+                        op, ref left, ref right);
                 }
                 else
                 {
                     CheckAndPromoteOperands(isEquality ? typeof(IEqualitySignatures) : typeof(IRelationalSignatures),
-                        op.text, ref left, ref right, op.pos);
+                        op, ref left, ref right);
                 }
                 switch (op.id)
                 {
@@ -619,11 +626,11 @@ namespace System.Linq.Dynamic
                     case TokenId.Plus:
                         if (left.Type == typeof(string) || right.Type == typeof(string))
                             goto case TokenId.Amphersand;
-                        CheckAndPromoteOperands(typeof(IAddSignatures), op.text, ref left, ref right, op.pos);
+                        CheckAndPromoteOperands(typeof(IAddSignatures), op, ref left, ref right);
                         left = GenerateAdd(left, right);
                         break;
                     case TokenId.Minus:
-                        CheckAndPromoteOperands(typeof(ISubtractSignatures), op.text, ref left, ref right, op.pos);
+                        CheckAndPromoteOperands(typeof(ISubtractSignatures), op, ref left, ref right);
                         left = GenerateSubtract(left, right);
                         break;
                     case TokenId.Amphersand:
@@ -644,7 +651,7 @@ namespace System.Linq.Dynamic
                 Token op = token;
                 NextToken();
                 Expression right = ParseUnary();
-                CheckAndPromoteOperands(typeof(IArithmeticSignatures), op.text, ref left, ref right, op.pos);
+                CheckAndPromoteOperands(typeof(IArithmeticSignatures), op, ref left, ref right);
                 switch (op.id)
                 {
                     case TokenId.Asterisk:
@@ -673,19 +680,20 @@ namespace System.Linq.Dynamic
                 if (op.id == TokenId.Minus && (token.id == TokenId.IntegerLiteral ||
                     token.id == TokenId.RealLiteral))
                 {
-                    token.text = "-" + token.text;
-                    token.pos = op.pos;
+                    //token.text = "-" + token.text;
+                    //token.pos = op.pos;
+                    _tokenStart = op.pos;
                     return ParsePrimary();
                 }
                 Expression expr = ParseUnary();
                 if (op.id == TokenId.Minus)
                 {
-                    CheckAndPromoteOperand(typeof(INegationSignatures), op.text, ref expr, op.pos);
+                    CheckAndPromoteOperand(typeof(INegationSignatures), op, ref expr);
                     expr = Expression.Negate(expr);
                 }
                 else
                 {
-                    CheckAndPromoteOperand(typeof(INotSignatures), op.text, ref expr, op.pos);
+                    CheckAndPromoteOperand(typeof(INotSignatures), op, ref expr);
                     expr = Expression.Not(expr);
                 }
                 return expr;
@@ -737,9 +745,10 @@ namespace System.Linq.Dynamic
         Expression ParseStringLiteral()
         {
             ValidateToken(TokenId.StringLiteral);
-            char quote = token.text[0];
+            var text = GetText(token);
+            char quote = text[0];
             // Unwrap string (remove surrounding quotes) and unwrap backslashes.
-            string s = token.text.Substring(1, token.text.Length - 2).Replace("\\\\", "\\");
+            string s = text.Slice(1, text.Length - 2).ToString().Replace("\\\\", "\\");
             if (quote == '\'')
             {
                 // Unwrap quotes.
@@ -761,56 +770,66 @@ namespace System.Linq.Dynamic
 
         Expression ParseIntegerLiteral()
         {
+            Token integerToken = token;
             ValidateToken(TokenId.IntegerLiteral);
-            string text = token.text;
+#if NET
+            ReadOnlySpan<char> text = GetText(integerToken);
+#else
+            string text = GetString(token);
+#endif
             if (text[0] != '-')
             {
                 ulong value;
                 if (!UInt64.TryParse(text, NumberStyles.None, CultureInfo.InvariantCulture, out value))
-                    throw ParseError(Resource.InvalidIntegerLiteral, text);
+                    throw ParseError(Resource.InvalidIntegerLiteral, text.ToString());
                 NextToken();
                 if (value <= (ulong)Int32.MaxValue)
-                    return CreateLiteral((int)value, text);
+                    return CreateLiteral((int)value, integerToken);
                 if (value <= (ulong)UInt32.MaxValue)
-                    return CreateLiteral((uint)value, text);
+                    return CreateLiteral((uint)value, integerToken);
                 if (value <= (ulong)Int64.MaxValue)
-                    return CreateLiteral((long)value, text);
-                return CreateLiteral(value, text);
+                    return CreateLiteral((long)value, integerToken);
+                return CreateLiteral(value, integerToken);
             }
             else
             {
                 long value;
                 if (!Int64.TryParse(text, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out value))
-                    throw ParseError(Resource.InvalidIntegerLiteral, text);
+                    throw ParseError(Resource.InvalidIntegerLiteral, text.ToString());
                 NextToken();
                 if (value >= Int32.MinValue && value <= Int32.MaxValue)
-                    return CreateLiteral((int)value, text);
-                return CreateLiteral(value, text);
+                    return CreateLiteral((int)value, integerToken);
+                return CreateLiteral(value, integerToken);
             }
         }
 
         Expression ParseRealLiteral()
         {
             ValidateToken(TokenId.RealLiteral);
-            string text = token.text;
+            Token literal = token;
+#if NET
+            ReadOnlySpan<char> text = GetText(literal);
+#else
+            string text = GetString(literal);
+#endif
             object value = null;
             char last = text[text.Length - 1];
             if (last == 'F' || last == 'f')
             {
                 float f;
-                if (Single.TryParse(text.Substring(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out f))
+                if (Single.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out f))
                     value = f;
             }
             else if (last == 'M' || last == 'm')
             {
                 decimal m;
-                if (Decimal.TryParse(text.Substring(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out m))
+                if (Decimal.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out m))
                     value = m;
             }
             else if (last == 'D' || last == 'd')
             {
                 double d;
-                if (Double.TryParse(text.Substring(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out d))
+                if (Double.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out d))
                     value = d;
             }
             else
@@ -820,15 +839,21 @@ namespace System.Linq.Dynamic
                     value = d;
             }
             if (value == null)
-                throw ParseError(Resource.InvalidRealLiteral, text);
+                throw ParseError(Resource.InvalidRealLiteral, text.ToString());
             NextToken();
-            return CreateLiteral(value, text);
+            return CreateLiteral(value, literal);
         }
 
         Expression CreateLiteral(object value, string valueAsString)
         {
             ConstantExpression expr = Expression.Constant(value);
-            literals.Add(expr, valueAsString);
+            literals.Add(expr, valueAsString.AsMemory());
+            return expr;
+        }
+        Expression CreateLiteral(object value, Token token)
+        {
+            ConstantExpression expr = Expression.Constant(value);
+            literals.Add(expr, text.AsMemory(token.pos, token.length));
             return expr;
         }
 
@@ -846,7 +871,9 @@ namespace System.Linq.Dynamic
         {
             ValidateToken(TokenId.Identifier);
             object value;
-            if (keywords.TryGetValue(token.text, out value))
+            string text = GetString(token);
+
+            if (keywords.TryGetValue(text, out value))
             {
                 if (value is Type)
                     return ParseTypeAccess((Type)value);
@@ -857,7 +884,7 @@ namespace System.Linq.Dynamic
                 NextToken();
                 return (Expression)value;
             }
-            if (symbols.TryGetValue(token.text, out value))
+            if (symbols.TryGetValue(text, out value))
             {
                 Expression expr = value as Expression;
                 if (expr == null)
@@ -869,7 +896,7 @@ namespace System.Linq.Dynamic
             }
             if (it != null)
                 return ParseMemberAccess(null, it);
-            throw ParseError(Resource.UnknownIdentifier, token.text);
+            throw ParseError(Resource.UnknownIdentifier, text);
         }
 
         Expression ParseIt()
@@ -1218,22 +1245,22 @@ namespace System.Linq.Dynamic
             return GetNonNullableType(type).IsEnum;
         }
 
-        void CheckAndPromoteOperand(Type signatures, string opName, ref Expression expr, int errorPos)
+        void CheckAndPromoteOperand(Type signatures, Token op, ref Expression expr)
         {
             Expression[] args = new Expression[] { expr };
             MethodBase method;
             if (FindMethod(signatures, "F", false, args, out method) != 1)
-                throw ParseError(errorPos, Resource.IncompatibleOperand,
-                    opName, GetTypeName(args[0].Type));
+                throw ParseError(op.pos, Resource.IncompatibleOperand,
+                    GetString(op), GetTypeName(args[0].Type));
             expr = args[0];
         }
 
-        void CheckAndPromoteOperands(Type signatures, string opName, ref Expression left, ref Expression right, int errorPos)
+        void CheckAndPromoteOperands(Type signatures, Token op, ref Expression left, ref Expression right)
         {
             Expression[] args = new Expression[] { left, right };
             MethodBase method;
             if (FindMethod(signatures, "F", false, args, out method) != 1)
-                throw IncompatibleOperandsError(opName, left, right, errorPos);
+                throw IncompatibleOperandsError(GetString(op), left, right, op.pos);
             left = args[0];
             right = args[1];
         }
@@ -1394,8 +1421,7 @@ namespace System.Linq.Dynamic
                 }
                 else
                 {
-                    string text;
-                    if (literals.TryGetValue(ce, out text))
+                    if (literals.TryGetValue(ce, out ReadOnlyMemory<char> text))
                     {
                         Type target = GetNonNullableType(type);
                         Object value = null;
@@ -1408,7 +1434,7 @@ namespace System.Linq.Dynamic
                                 if (target.IsEnum)
                                 {
                                     // promoting from a number to an enum
-                                    value = Enum.Parse(target, text);
+                                    value = Enum.ToObject(target, ce.Value);
                                 }
                                 else if (target == typeof(char))
                                 {
@@ -1425,15 +1451,25 @@ namespace System.Linq.Dynamic
                                 }
                                 else
                                 {
-                                    value = ParseNumber(text, target);
+                                    value = ParseNumber(text.Span, target);
                                 }
                                 break;
                             case TypeCode.Double:
+                                // Wanted decimal but it got parsed as double, needs to reparse to avoid loosing precision
                                 if (target == typeof(decimal))
-                                    value = ParseNumber(text, target);
+                                    value = ParseNumber(text.Span, target);
                                 break;
                             case TypeCode.String:
-                                value = ParseEnum(text, target);
+                                if (ce.Value is string str)
+                                {
+                                    // We parsed as text but wanted it as something else, probaly an enum
+                                    value = ParseEnum(str, target);
+                                }
+                                else
+                                {
+                                    // We parsed as text but wanted it as something else, probaly an enum
+                                    value = ParseEnum(text.Span, target);
+                                }
                                 break;
                         }
                         if (value != null)
@@ -1450,7 +1486,7 @@ namespace System.Linq.Dynamic
             return null;
         }
 
-        static object ParseNumber(string text, Type type)
+        static object ParseNumber(ReadOnlySpan<char> text, Type type)
         {
             switch (Type.GetTypeCode(GetNonNullableType(type)))
             {
@@ -1513,15 +1549,17 @@ namespace System.Linq.Dynamic
             return null;
         }
 
-        static object ParseEnum(string name, Type type)
+        static object ParseEnum(ReadOnlySpan<char> name, Type type)
         {
             if (type.IsEnum)
             {
-                MemberInfo[] memberInfos = type.FindMembers(MemberTypes.Field,
-                    BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Static,
-                    Type.FilterNameIgnoreCase, name);
-                if (memberInfos.Length != 0)
-                    return ((FieldInfo)memberInfos[0]).GetValue(null);
+#if NET
+                Enum.TryParse(type, name, ignoreCase: true, out var result);
+#else
+
+                Enum.TryParse(type, name.ToString(), ignoreCase: true, out var result);
+#endif
+                return result;
             }
             return null;
         }
@@ -1791,14 +1829,14 @@ namespace System.Linq.Dynamic
         void SetTextPos(int pos)
         {
             textPos = pos;
-            ch = textPos < textLen ? text[textPos] : '\0';
+            ch = textPos < text.Length ? text[textPos] : '\0';
         }
 
         void NextChar()
         {
-            if (textPos < textLen)
+            if (textPos < text.Length)
                 textPos++;
-            ch = textPos < textLen ? text[textPos] : '\0';
+            ch = textPos < text.Length ? text[textPos] : '\0';
         }
 
         void NextToken()
@@ -1806,7 +1844,7 @@ namespace System.Linq.Dynamic
             while (Char.IsWhiteSpace(ch))
                 NextChar();
             TokenId t;
-            int tokenPos = textPos;
+            _tokenStart = textPos;
             switch (ch)
             {
                 case '!':
@@ -1944,7 +1982,7 @@ namespace System.Linq.Dynamic
                     do
                     {
                         NextChar();
-                        while (textPos < textLen && ch != quote)
+                        while (textPos < text.Length && ch != quote)
                         {
                             if (ch == '\\')
                             {
@@ -1954,7 +1992,7 @@ namespace System.Linq.Dynamic
                             NextChar();
                         }
 
-                        if (textPos == textLen)
+                        if (textPos == text.Length)
                             throw ParseError(textPos, Resource.UnterminatedStringLiteral);
                         NextChar();
                     } while (ch == quote);
@@ -2006,16 +2044,19 @@ namespace System.Linq.Dynamic
                         }
                         break;
                     }
-                    if (textPos == textLen)
+                    if (textPos == text.Length)
                     {
                         t = TokenId.End;
                         break;
                     }
                     throw ParseError(textPos, Resource.InvalidCharacter, ch);
             }
-            token.id = t;
-            token.text = text.Substring(tokenPos, textPos - tokenPos);
-            token.pos = tokenPos;
+
+            _tokenId = t;
+            //token.id = t;
+            //// TODO skip ?
+            //token.text = text.Substring(tokenPos, textPos - tokenPos);
+            //token.pos = tokenPos;
         }
 
         static bool IsIdentifierStart(char ch)
@@ -2049,16 +2090,19 @@ namespace System.Linq.Dynamic
 
         bool TokenIdentifierIs(string id)
         {
-            return token.id == TokenId.Identifier && String.Equals(id, token.text, StringComparison.OrdinalIgnoreCase);
+            Token token = this.token;
+            return _tokenId == TokenId.Identifier 
+                && token.length == id.Length
+                && GetText(token).Equals(id, StringComparison.OrdinalIgnoreCase);
         }
 
         string GetIdentifier()
         {
             ValidateToken(TokenId.Identifier, Resource.IdentifierExpected);
-            string id = token.text;
+            var id = GetText(token);
             if (id.Length > 1 && id[0] == '@')
-                id = id.Substring(1);
-            return id;
+                id = id.Slice(1);
+            return id.ToString();
         }
 
         void ValidateDigit()
@@ -2069,13 +2113,13 @@ namespace System.Linq.Dynamic
 
         void ValidateToken(TokenId t, string errorMessage)
         {
-            if (token.id != t)
+            if (_tokenId != t)
                 throw ParseError(errorMessage);
         }
 
         void ValidateToken(TokenId t)
         {
-            if (token.id != t)
+            if (_tokenId != t)
                 throw ParseError(Resource.SyntaxError);
         }
 
