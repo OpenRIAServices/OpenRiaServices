@@ -390,7 +390,6 @@ namespace System.Linq.Dynamic
             return expr;
         }
 
-#pragma warning disable 0219
         public IEnumerable<DynamicOrdering> ParseOrdering()
         {
             List<DynamicOrdering> orderings = new List<DynamicOrdering>();
@@ -423,7 +422,6 @@ namespace System.Linq.Dynamic
             ValidateToken(TokenId.End, Resource.SyntaxError);
             return orderings;
         }
-#pragma warning restore 0219
 
         // ?: operator
         Expression ParseExpression()
