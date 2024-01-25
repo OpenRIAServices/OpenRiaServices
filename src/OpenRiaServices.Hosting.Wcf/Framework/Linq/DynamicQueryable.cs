@@ -3,9 +3,18 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
+using System;
 
 namespace System.Linq.Dynamic
 {
+#if NETFRAMEWORK
+    static class StringExtensions
+    {
+        static public string Slice(this string str, int startIndex, int length)
+            => str.Substring(startIndex, length);
+    }
+#endif
+
     internal static class DynamicQueryable
     {
         public static IQueryable Where(this IQueryable source, string predicate, QueryResolver queryResolver)
@@ -1460,12 +1469,14 @@ namespace System.Linq.Dynamic
                                     value = ParseNumber(text.Span, target);
                                 break;
                             case TypeCode.String:
+#if !NETFRAMEWORK
                                 if (ce.Value is string str)
                                 {
                                     // We parsed as text but wanted it as something else, probaly an enum
                                     value = ParseEnum(str, target);
                                 }
                                 else
+#endif
                                 {
                                     // We parsed as text but wanted it as something else, probaly an enum
                                     value = ParseEnum(text.Span, target);
@@ -1486,8 +1497,14 @@ namespace System.Linq.Dynamic
             return null;
         }
 
+#if NETFRAMEWORK
+        static object ParseNumber(ReadOnlySpan<char> span, Type type)
+        {
+            string text = span.ToString();
+#else
         static object ParseNumber(ReadOnlySpan<char> text, Type type)
         {
+#endif
             switch (Type.GetTypeCode(GetNonNullableType(type)))
             {
                 case TypeCode.SByte:
@@ -1556,8 +1573,16 @@ namespace System.Linq.Dynamic
 #if NET
                 Enum.TryParse(type, name, ignoreCase: true, out var result);
 #else
+                object result;
+                try
+                {
+                    result = Enum.Parse(type, name.ToString(), ignoreCase: true);
 
-                Enum.TryParse(type, name.ToString(), ignoreCase: true, out var result);
+                }
+                catch (Exception)
+                {
+                    result = null;
+                }
 #endif
                 return result;
             }
@@ -2093,7 +2118,7 @@ namespace System.Linq.Dynamic
             Token token = this.token;
             return _tokenId == TokenId.Identifier 
                 && token.length == id.Length
-                && GetText(token).Equals(id, StringComparison.OrdinalIgnoreCase);
+                && GetText(token).Equals(id.AsSpan(), StringComparison.OrdinalIgnoreCase);
         }
 
         string GetIdentifier()

@@ -21,6 +21,7 @@
     <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices</tags>
 	<dependencies>
 		<group targetFramework="net472">
+			<dependency id="System.Memory" version="4.5.5"/>
 			<dependency id="OpenRiaServices.Server" version="$version$"/>
 			<dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="7.0.0"/>
 		</group>
