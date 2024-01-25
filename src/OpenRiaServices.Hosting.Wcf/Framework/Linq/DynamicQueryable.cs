@@ -366,9 +366,9 @@ namespace System.Linq.Dynamic
         void ProcessParameters(ParameterExpression[] parameters)
         {
             foreach (ParameterExpression pe in parameters)
-                if (!String.IsNullOrEmpty(pe.Name))
+                if (!string.IsNullOrEmpty(pe.Name))
                     AddSymbol(pe.Name, pe);
-            if (parameters.Length == 1 && String.IsNullOrEmpty(parameters[0].Name))
+            if (parameters.Length == 1 && string.IsNullOrEmpty(parameters[0].Name))
                 _it = parameters[0];
         }
 
@@ -791,24 +791,24 @@ namespace System.Linq.Dynamic
             if (text[0] != '-')
             {
                 ulong value;
-                if (!UInt64.TryParse(text, NumberStyles.None, CultureInfo.InvariantCulture, out value))
+                if (!ulong.TryParse(text, NumberStyles.None, CultureInfo.InvariantCulture, out value))
                     throw ParseError(Resource.InvalidIntegerLiteral, text.ToString());
                 NextToken();
-                if (value <= (ulong)Int32.MaxValue)
+                if (value <= (ulong)int.MaxValue)
                     return CreateLiteral((int)value, integerToken);
-                if (value <= (ulong)UInt32.MaxValue)
+                if (value <= (ulong)uint.MaxValue)
                     return CreateLiteral((uint)value, integerToken);
-                if (value <= (ulong)Int64.MaxValue)
+                if (value <= (ulong)long.MaxValue)
                     return CreateLiteral((long)value, integerToken);
                 return CreateLiteral(value, integerToken);
             }
             else
             {
                 long value;
-                if (!Int64.TryParse(text, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out value))
+                if (!long.TryParse(text, NumberStyles.AllowLeadingSign, CultureInfo.InvariantCulture, out value))
                     throw ParseError(Resource.InvalidIntegerLiteral, text.ToString());
                 NextToken();
-                if (value >= Int32.MinValue && value <= Int32.MaxValue)
+                if (value >= int.MinValue && value <= int.MaxValue)
                     return CreateLiteral((int)value, integerToken);
                 return CreateLiteral(value, integerToken);
             }
@@ -828,25 +828,25 @@ namespace System.Linq.Dynamic
             if (last == 'F' || last == 'f')
             {
                 float f;
-                if (Single.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out f))
+                if (float.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out f))
                     value = f;
             }
             else if (last == 'M' || last == 'm')
             {
                 decimal m;
-                if (Decimal.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out m))
+                if (decimal.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out m))
                     value = m;
             }
             else if (last == 'D' || last == 'd')
             {
                 double d;
-                if (Double.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out d))
+                if (double.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out d))
                     value = d;
             }
             else
             {
                 double d;
-                if (Double.TryParse(text, NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out d))
+                if (double.TryParse(text, NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out d))
                     value = d;
             }
             if (value == null)
@@ -1435,7 +1435,7 @@ namespace System.Linq.Dynamic
                     if (_literals.TryGetValue(ce, out ReadOnlyMemory<char> text))
                     {
                         Type target = GetNonNullableType(type);
-                        Object value = null;
+                        object value = null;
                         switch (Type.GetTypeCode(ce.Type))
                         {
                             case TypeCode.Int32:
@@ -1868,7 +1868,7 @@ namespace System.Linq.Dynamic
 
         void NextToken()
         {
-            while (Char.IsWhiteSpace(_ch))
+            while (char.IsWhiteSpace(_ch))
                 NextChar();
             TokenId t;
             _tokenStart = _textPos;
@@ -2035,13 +2035,13 @@ namespace System.Linq.Dynamic
                         t = TokenId.Identifier;
                         break;
                     }
-                    if (Char.IsDigit(_ch))
+                    if (char.IsDigit(_ch))
                     {
                         t = TokenId.IntegerLiteral;
                         do
                         {
                             NextChar();
-                        } while (Char.IsDigit(_ch));
+                        } while (char.IsDigit(_ch));
                         if (_ch == '.')
                         {
                             t = TokenId.RealLiteral;
@@ -2050,7 +2050,7 @@ namespace System.Linq.Dynamic
                             do
                             {
                                 NextChar();
-                            } while (Char.IsDigit(_ch));
+                            } while (char.IsDigit(_ch));
                         }
                         if (_ch == 'E' || _ch == 'e')
                         {
@@ -2062,7 +2062,7 @@ namespace System.Linq.Dynamic
                             do
                             {
                                 NextChar();
-                            } while (Char.IsDigit(_ch));
+                            } while (char.IsDigit(_ch));
                         }
                         if (_ch == 'F' || _ch == 'f' || _ch == 'M' || _ch == 'm' || _ch == 'D' || _ch == 'd')
                         {
@@ -2091,7 +2091,7 @@ namespace System.Linq.Dynamic
                 1 << (int)UnicodeCategory.ModifierLetter |
                 1 << (int)UnicodeCategory.OtherLetter |
                 1 << (int)UnicodeCategory.LetterNumber;
-            return (1 << (int)Char.GetUnicodeCategory(ch) & mask) != 0;
+            return (1 << (int)char.GetUnicodeCategory(ch) & mask) != 0;
         }
 
         static bool IsIdentifierPart(char ch)
@@ -2108,7 +2108,7 @@ namespace System.Linq.Dynamic
                 1 << (int)UnicodeCategory.NonSpacingMark |
                 1 << (int)UnicodeCategory.SpacingCombiningMark |
                 1 << (int)UnicodeCategory.Format;
-            return (1 << (int)Char.GetUnicodeCategory(ch) & mask) != 0;
+            return (1 << (int)char.GetUnicodeCategory(ch) & mask) != 0;
         }
 
         bool TokenIdentifierIs(string id)
@@ -2130,7 +2130,7 @@ namespace System.Linq.Dynamic
 
         void ValidateDigit()
         {
-            if (!Char.IsDigit(_ch))
+            if (!char.IsDigit(_ch))
                 throw ParseError(_textPos, Resource.DigitExpected);
         }
 
