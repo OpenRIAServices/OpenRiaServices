@@ -140,9 +140,9 @@ namespace System.Linq.Dynamic
     {
         struct Token(TokenId id, int pos, int length)
         {
-            public TokenId id = id;
-            public int pos = pos;
-            public int length = length;
+            public readonly TokenId id = id;
+            public readonly int pos = pos;
+            public readonly int length = length;
         }
 
         enum TokenId
