@@ -780,12 +780,12 @@ namespace System.Linq.Dynamic
 
         Expression ParseIntegerLiteral()
         {
-            Token integerToken = CurrentToken;
+            Token token = CurrentToken;
             ValidateToken(TokenId.IntegerLiteral);
 #if NET
-            ReadOnlySpan<char> text = GetText(integerToken);
+            ReadOnlySpan<char> text = GetText(token);
 #else
-            string text = GetString(CurrentToken);
+            string text = GetString(token);
 #endif
             if (text[0] != '-')
             {
@@ -794,12 +794,12 @@ namespace System.Linq.Dynamic
                     throw ParseError(Resource.InvalidIntegerLiteral, text.ToString());
                 NextToken();
                 if (value <= (ulong)int.MaxValue)
-                    return CreateLiteral((int)value, integerToken);
+                    return CreateLiteral((int)value, token);
                 if (value <= (ulong)uint.MaxValue)
-                    return CreateLiteral((uint)value, integerToken);
+                    return CreateLiteral((uint)value, token);
                 if (value <= (ulong)long.MaxValue)
-                    return CreateLiteral((long)value, integerToken);
-                return CreateLiteral(value, integerToken);
+                    return CreateLiteral((long)value, token);
+                return CreateLiteral(value, token);
             }
             else
             {
@@ -808,8 +808,8 @@ namespace System.Linq.Dynamic
                     throw ParseError(Resource.InvalidIntegerLiteral, text.ToString());
                 NextToken();
                 if (value >= int.MinValue && value <= int.MaxValue)
-                    return CreateLiteral((int)value, integerToken);
-                return CreateLiteral(value, integerToken);
+                    return CreateLiteral((int)value, token);
+                return CreateLiteral(value, token);
             }
         }
 
@@ -885,11 +885,11 @@ namespace System.Linq.Dynamic
 
             if (s_keywords.TryGetValue(text, out value))
             {
-                if (value is Type)
-                    return ParseTypeAccess((Type)value);
-                if (value == (object)KeywordIt)
+                if (value is Type type)
+                    return ParseTypeAccess(type);
+                if (object.ReferenceEquals(value, KeywordIt))
                     return ParseIt();
-                if (value == (object)KeywordIif)
+                if (object.ReferenceEquals(value, KeywordIif))
                     return ParseIif();
                 NextToken();
                 return (Expression)value;
@@ -1470,18 +1470,8 @@ namespace System.Linq.Dynamic
                                     value = ParseNumber(text.Span, target);
                                 break;
                             case TypeCode.String:
-#if !NETFRAMEWORK
-                                if (ce.Value is string str)
-                                {
-                                    // We parsed as text but wanted it as something else, probaly an enum
-                                    value = ParseEnum(str, target);
-                                }
-                                else
-#endif
-                                {
-                                    // We parsed as text but wanted it as something else, probaly an enum
-                                    value = ParseEnum(text.Span, target);
-                                }
+                                // We parsed as text but wanted it as something else, probaly an enum
+                                value = ParseEnum(text.Span, target);
                                 break;
                         }
                         if (value != null)
@@ -1572,20 +1562,15 @@ namespace System.Linq.Dynamic
             if (type.IsEnum)
             {
 #if NET
-                Enum.TryParse(type, name, ignoreCase: true, out var result);
+                if (Enum.TryParse(type, name, ignoreCase: true, out var result))
+                    return result;
 #else
-                object result;
-                try
-                {
-                    result = Enum.Parse(type, name.ToString(), ignoreCase: true);
-
-                }
-                catch (Exception)
-                {
-                    result = null;
-                }
+                MemberInfo[] memberInfos = type.FindMembers(MemberTypes.Field,
+                    BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Static,
+                    Type.FilterNameIgnoreCase, name.ToString());
+                if (memberInfos.Length != 0)
+                    return ((FieldInfo)memberInfos[0]).GetValue(null);
 #endif
-                return result;
             }
             return null;
         }
@@ -2157,12 +2142,14 @@ namespace System.Linq.Dynamic
 
         static Dictionary<string, object> CreateKeywords()
         {
-            Dictionary<string, object> d = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-            d.Add("true", TrueLiteral);
-            d.Add("false", FalseLiteral);
-            d.Add("null", NullLiteral);
-            d.Add(KeywordIt, KeywordIt);
-            d.Add(KeywordIif, KeywordIif);
+            Dictionary<string, object> d = new(capacity: 5 + s_predefinedTypes.Length, StringComparer.OrdinalIgnoreCase)
+            {
+                { "true", TrueLiteral },
+                { "false", FalseLiteral },
+                { "null", NullLiteral },
+                { KeywordIt, KeywordIt },
+                { KeywordIif, KeywordIif }
+            };
             foreach (Type type in s_predefinedTypes)
                 d.Add(type.Name, type);
             return d;
