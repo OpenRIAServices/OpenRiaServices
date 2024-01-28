@@ -15,4 +15,7 @@
     <ProjectReference Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\..\Framework\OpenRiaServices.Hosting.AspNetCore.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\..\..\OpenRiaServices.Hosting.Wcf\Test\Linq\*.cs" LinkBase="Linq"  />
+  </ItemGroup>
 </Project>
