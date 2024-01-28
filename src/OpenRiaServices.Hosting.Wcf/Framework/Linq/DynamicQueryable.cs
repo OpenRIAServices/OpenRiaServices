@@ -525,16 +525,17 @@ namespace System.Linq.Dynamic
         Expression ParseComparison()
         {
             Expression left = ParseAdditive();
-            while (CurrentToken.id == TokenId.Equal || CurrentToken.id == TokenId.DoubleEqual ||
-                CurrentToken.id == TokenId.ExclamationEqual || CurrentToken.id == TokenId.LessGreater ||
-                CurrentToken.id == TokenId.GreaterThan || CurrentToken.id == TokenId.GreaterThanEqual ||
-                CurrentToken.id == TokenId.LessThan || CurrentToken.id == TokenId.LessThanEqual)
+
+            while (CurrentToken.id is TokenId.Equal or TokenId.DoubleEqual or
+                TokenId.ExclamationEqual or TokenId.LessGreater or
+                TokenId.GreaterThan or TokenId.GreaterThanEqual or
+                TokenId.LessThan or TokenId.LessThanEqual)
             {
                 Token op = CurrentToken;
                 NextToken();
                 Expression right = ParseAdditive();
-                bool isEquality = op.id == TokenId.Equal || op.id == TokenId.DoubleEqual ||
-                    op.id == TokenId.ExclamationEqual || op.id == TokenId.LessGreater;
+                bool isEquality = op.id is TokenId.Equal or TokenId.DoubleEqual or
+                    TokenId.ExclamationEqual or TokenId.LessGreater;
                 if (isEquality && !left.Type.IsValueType && !right.Type.IsValueType)
                 {
                     if (left.Type != right.Type)
@@ -625,8 +626,8 @@ namespace System.Linq.Dynamic
         Expression ParseAdditive()
         {
             Expression left = ParseMultiplicative();
-            while (CurrentToken.id == TokenId.Plus || CurrentToken.id == TokenId.Minus ||
-                CurrentToken.id == TokenId.Amphersand)
+            while (CurrentToken.id is TokenId.Plus or TokenId.Minus or
+                TokenId.Amphersand)
             {
                 Token op = CurrentToken;
                 NextToken();
@@ -823,19 +824,19 @@ namespace System.Linq.Dynamic
 #endif
             object value = null;
             char last = text[text.Length - 1];
-            if (last == 'F' || last == 'f')
+            if (last is 'F' or 'f')
             {
                 float f;
                 if (float.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out f))
                     value = f;
             }
-            else if (last == 'M' || last == 'm')
+            else if (last is 'M' or 'm')
             {
                 decimal m;
                 if (decimal.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out m))
                     value = m;
             }
-            else if (last == 'D' || last == 'd')
+            else if (last is 'D' or 'd')
             {
                 double d;
                 if (double.TryParse(text.Slice(0, text.Length - 1), NumberStyles.Number | NumberStyles.AllowExponent, CultureInfo.InvariantCulture, out d))
@@ -1103,7 +1104,7 @@ namespace System.Linq.Dynamic
             if (FindMethod(typeof(IEnumerableSignatures), methodName, false, args, out signature) != 1)
                 throw ParseError(errorPos, Resource.NoApplicableAggregate, methodName);
             Type[] typeArgs;
-            if (signature.Name == "Min" || signature.Name == "Max")
+            if (signature.Name is "Min" or "Max")
             {
                 typeArgs = new Type[] { elementType, args[0].Type };
             }
@@ -2050,11 +2051,11 @@ namespace System.Linq.Dynamic
                                 NextChar();
                             } while (char.IsDigit(_ch));
                         }
-                        if (_ch == 'E' || _ch == 'e')
+                        if (_ch is 'E' or 'e')
                         {
                             t = TokenId.RealLiteral;
                             NextChar();
-                            if (_ch == '+' || _ch == '-')
+                            if (_ch is '+' or '-')
                                 NextChar();
                             ValidateDigit();
                             do
@@ -2062,7 +2063,7 @@ namespace System.Linq.Dynamic
                                 NextChar();
                             } while (char.IsDigit(_ch));
                         }
-                        if (_ch == 'F' || _ch == 'f' || _ch == 'M' || _ch == 'm' || _ch == 'D' || _ch == 'd')
+                        if (_ch is 'F' or 'f' or 'M' or 'm' or 'D' or 'd')
                         {
                             t = TokenId.RealLiteral;
                             NextChar();
