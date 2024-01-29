@@ -1,4 +1,9 @@
-# Unreleased
+# Unreleased (5.5.0)
+
+### Server
+* Reduced allocatgions when parsing queries on server (both WCF and AspNetCore hosting) in https://github.com/OpenRIAServices/OpenRiaServices/pull/485
+* Update nuget dependencies and add new dependencies to OpenRiaServices.Hosting.Wcf
+  * `System.Collections.Immutable` and `System.Memory` are new dependencies of Wcf hosting
 
 # 5.4.2 / AspNetCore 1.0.0
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections.Frozen;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq.Expressions;
@@ -329,7 +330,7 @@ namespace System.Linq.Dynamic
         const string KeywordIt = "it";
         const string KeywordIif = "iif";
 
-        static readonly Dictionary<string, object> s_keywords = CreateKeywords();
+        static readonly FrozenDictionary<string, object> s_keywords = CreateKeywords();
 
         readonly Dictionary<string, object> _symbols = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
         readonly Dictionary<ConstantExpression, ReadOnlyMemory<char>> _literals = new();
@@ -2140,7 +2141,7 @@ namespace System.Linq.Dynamic
             return new ParseException(string.Format(CultureInfo.CurrentCulture, format, args), pos);
         }
 
-        static Dictionary<string, object> CreateKeywords()
+        static FrozenDictionary<string, object> CreateKeywords()
         {
             Dictionary<string, object> d = new(capacity: 5 + s_predefinedTypes.Length, StringComparer.OrdinalIgnoreCase)
             {
@@ -2152,7 +2153,8 @@ namespace System.Linq.Dynamic
             };
             foreach (Type type in s_predefinedTypes)
                 d.Add(type.Name, type);
-            return d;
+
+            return d.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
         }
     }
 }
