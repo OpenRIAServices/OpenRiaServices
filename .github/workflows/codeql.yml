@@ -2,11 +2,15 @@ name: "CodeQL"
 
 on:
   push:
-    branches: [ "main", "master" ]
+    branches: [ "main" ]
   pull_request:
     branches: [ "main" ]
+    paths-ignore:
+      - '**/*.md'
+      - '**/*.txt'
+      - '**/*.nuspec'
   schedule:
-    - cron: "5 13 * * 1"
+    - cron: "5 13 1 * *"
 
 jobs:
   analyze:
@@ -32,8 +36,11 @@ jobs:
           languages: ${{ matrix.language }}
           queries: +security-and-quality
 
-      - name: Autobuild
-        uses: github/codeql-action/autobuild@v2
+      - name: Add msbuild to PATH
+        uses: microsoft/setup-msbuild@v1.1
+
+      - name: build
+        run: msbuild src\RiaServices.sln -restore /p:Configuration=Release -v:minimal -m
 
       - name: Perform CodeQL Analysis
         uses: github/codeql-action/analyze@v2

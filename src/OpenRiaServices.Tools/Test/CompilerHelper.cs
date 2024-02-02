@@ -3,25 +3,21 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Win32;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.VisualBasic;
-using System.Collections.Immutable;
+using System.Collections.Concurrent;
 
 namespace OpenRiaServices.Tools.Test
 {
     public class CompilerHelper
     {
         // The version of Silverlight we use in registry keys below
-        private const string SLVER = "v5.0";
-        private static Dictionary<string, PortableExecutableReference> s_referenceCache = new Dictionary<string, PortableExecutableReference>();
-
-        private static ParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5, preprocessorSymbols: new
+        private static readonly ConcurrentDictionary<string, PortableExecutableReference> s_referenceCache = new();
+        private static readonly ParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5, preprocessorSymbols: new
                     [] { "SILVERLIGHT" });
-
-        private static ParseOptions s_VbParseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
+        private static readonly ParseOptions s_VbParseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
                     preprocessorSymbols: new
                     [] { new KeyValuePair<string, object>("SILVERLIGHT", 1) });
 
@@ -116,7 +112,10 @@ namespace OpenRiaServices.Tools.Test
             string documentationFile = null)
         {
             List<MetadataReference> references = LoadReferences(referenceAssemblies);
+#if NETFRAMEWORK
+            // Not needed in net6 since VB types lives in core assembly
             references.Add(GetVisualBasicReference());
+#endif
 
             try
             {
@@ -129,6 +128,15 @@ namespace OpenRiaServices.Tools.Test
                 var compileOptions = new VisualBasicCompilationOptions(OutputKind.DynamicallyLinkedLibrary,
                     rootNamespace: rootNamespace,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
+
+#if !NETFRAMEWORK
+                compileOptions = compileOptions.WithSpecificDiagnosticOptions(new[]
+                {
+                    // 'AssociationAttribute' is obsolete: 'This attribute is no longer in use and will be ignored if applied.
+                    new KeyValuePair<string, ReportDiagnostic>("BC40000", ReportDiagnostic.Suppress)
+                });
+#endif
+
                 Compilation compilation = VisualBasicCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
 
                 // Same file
@@ -167,16 +175,7 @@ namespace OpenRiaServices.Tools.Test
         /// <param name="filename">full path to dll</param>
         private static PortableExecutableReference LoadReference(string filename)
         {
-            PortableExecutableReference reference;
-
-            if (s_referenceCache.TryGetValue(filename, out reference))
-            {
-                return reference;
-            }
-
-            reference = MetadataReference.CreateFromFile(filename);
-            s_referenceCache.Add(filename, reference);
-            return reference;
+            return s_referenceCache.GetOrAdd(filename, static key => MetadataReference.CreateFromFile(key));
         }
 
         /// <summary>

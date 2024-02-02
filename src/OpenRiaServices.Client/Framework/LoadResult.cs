@@ -2,11 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
-using System.Reflection;
 
 namespace OpenRiaServices.Client
 {
@@ -14,7 +11,7 @@ namespace OpenRiaServices.Client
     /// The result of a sucessfully completed load operation
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity loaded.</typeparam>
-    public class LoadResult<TEntity> : IEnumerable<TEntity>, ICollection, ILoadResult where TEntity : Entity
+    public class LoadResult<TEntity> : IReadOnlyCollection<TEntity>, ICollection, ILoadResult where TEntity : Entity
     {
         private readonly ReadOnlyCollection<TEntity> _loadedEntites;
 

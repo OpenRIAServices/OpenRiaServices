@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.Composition;
 using System.ComponentModel.Composition.Hosting;
@@ -10,7 +9,6 @@ using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Server;
 using System.Text;
-using System.Web.Hosting;
 using OpenRiaServices.Tools.SharedTypes;
 
 namespace OpenRiaServices.Tools
@@ -22,7 +20,11 @@ namespace OpenRiaServices.Tools
     /// <remarks>
     /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
     /// AppDomain boundaries.</remarks>
-    internal class ClientCodeGenerationDispatcher : MarshalByRefObject, IRegisteredObject, IDisposable
+    internal sealed class ClientCodeGenerationDispatcher :
+#if NETFRAMEWORK
+        MarshalByRefObject, System.Web.Hosting.IRegisteredObject,
+#endif
+        IDisposable
     {
         // MEF composition container and part catalog, computed lazily and only once
         private CompositionContainer _compositionContainer;
@@ -56,13 +58,25 @@ namespace OpenRiaServices.Tools
 
             try
             {
-                AppDomainUtilities.ConfigureAppDomain(options);
-                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
-                // Try to load mono.cecil from same folder as tools
                 var toolingAssembly = typeof(ClientCodeGenerationDispatcher).Assembly;
-                var cecilPath = toolingAssembly.Location.Replace(toolingAssembly.GetName().Name, "Mono.Cecil");
-                AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
+                // Try to load mono.cecil from same folder as tools
+                var location = toolingAssembly.Location;
 
+                // Try to load mono.cecil from same folder as tools
+                // This prevents problem if server project contains another version of mono Cecil
+                var cecilPath = location.Replace(toolingAssembly.GetName().Name + ".dll", "Mono.Cecil.dll");
+                AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
+                AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
+
+#if NETFRAMEWORK
+                // For Netframework build we have just started executing in a new AppDomain for the server project
+                // We only have the current executing assembly loaded
+
+                // We load the ".Server" assembly actually from the server projects output folder since it was previously required to mix stongly named and not stronly named
+                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
+#else
+               // The current AssemblyLoadContext has been previously setup to load the server projects dependencies, no additional action is needed
+#endif
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
                 {
@@ -102,7 +116,7 @@ namespace OpenRiaServices.Tools
             // This way we can be sure that codegen works with both signed and unsigned server assembly while
             // making sure that only a single version is loaded
             var filename = OpenRiaServices_DomainServices_Server_Assembly;
-            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(filename));
+            var serverAssemblyPath = parameters.ServerAssemblies.FirstOrDefault(sa => sa.EndsWith(filename, StringComparison.Ordinal));
             if (serverAssemblyPath != null)
             {
                 var serverAssembly = AssemblyUtilities.LoadAssembly(serverAssemblyPath, loggingService);
@@ -116,14 +130,12 @@ namespace OpenRiaServices.Tools
                     {
                         loggingService.LogWarning(Resource.ClientCodeGen_SignedTools_UnsignedServer);
                     }
-
                 }
                 else
                 {
                     loggingService.LogError(string.Format(CultureInfo.CurrentCulture,
                         Resource.ClientCodeGen_Failed_Loading_OpenRiaServices_Assembly, filename, serverAssemblyPath));
                 }
-
             }
             else
             {
@@ -148,6 +160,7 @@ namespace OpenRiaServices.Tools
 
             ILogger logger = host as ILogger;
             DomainServiceCatalog catalog = new DomainServiceCatalog(assembliesToLoad, logger);
+
             return this.GenerateCode(host, options, catalog, assembliesToLoad, codeGeneratorName);
         }
 
@@ -216,6 +229,7 @@ namespace OpenRiaServices.Tools
                                                     string.IsNullOrEmpty(codeGeneratorName) ? proxyGenerator.GetType().FullName : codeGeneratorName,
                                                     options.ClientProjectPath,
                                                     ex.Message));
+                    host.LogException(ex);
                 }
             }
 
@@ -415,11 +429,11 @@ namespace OpenRiaServices.Tools
             try
             {
                 // This code creates a MEF composition container from all the assemblies of this solution
-                IEnumerable<AssemblyCatalog> catalogs = ClientCodeGenerationDispatcher.GetCompositionAssemblies(compositionAssemblyPaths, logger).Select<Assembly, AssemblyCatalog>(a => new AssemblyCatalog(a));
+                IEnumerable<AssemblyCatalog> catalogs = GetCompositionAssemblies(compositionAssemblyPaths, logger).Select<Assembly, AssemblyCatalog>(a => new AssemblyCatalog(a));
                 this._partCatalog = new AggregateCatalog(catalogs);
                 this._compositionContainer = new CompositionContainer(this._partCatalog);
 
-                // Add this instance to the container to satisfy the [ImportMany]
+                // Add this instance to the container to satisfy the [ImportMany] 
                 this._compositionContainer.ComposeParts(this);
             }
             catch (Exception ex)
@@ -428,6 +442,7 @@ namespace OpenRiaServices.Tools
                 // reference assemblies that cause TypeLoadFailures.  If we encounter
                 // this situation, fallback to using only our current assembly as the
                 // catalog.   This allows MEF to still work for types in this assembly.
+
                 logger.LogWarning(string.Format(CultureInfo.CurrentCulture,
                                 Resource.Failed_To_Create_Composition_Container, ex.Message));
                 this._partCatalog = new AssemblyCatalog(Assembly.GetExecutingAssembly());
@@ -450,14 +465,11 @@ namespace OpenRiaServices.Tools
             {
                 foreach (string assemblyPath in compositionAssemblyPaths)
                 {
-                    Assembly a = AssemblyUtilities.LoadAssembly(assemblyPath, logger);
-                    if (a != null)
+                    Assembly assembly = AssemblyUtilities.LoadAssembly(assemblyPath, logger);
+                    // Don't put System assemblies into container
+                    if (assembly != null && !assembly.IsSystemAssembly())
                     {
-                        // Don't put System assemblies into container
-                        if (!a.IsSystemAssembly())
-                        {
-                            assemblies.Add(a);
-                        }
+                        assemblies.Add(assembly);
                     }
                 }
             }
@@ -468,12 +480,12 @@ namespace OpenRiaServices.Tools
             return assemblies;
         }
 
-        #region IRegisteredObject Members
-        void IRegisteredObject.Stop(bool immediate)
+#if NETFRAMEWORK
+        void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
         {
+            // Intentionally left empty, there is nothing to do
         }
-        #endregion   
-
+#endif
 
         #region IDisposable members
 

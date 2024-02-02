@@ -342,7 +342,7 @@ namespace OpenRiaServices.Server.Authentication
             {
                 implementsLogin = false;
             }
-            if (doe.Parameters.Count() != 4 ||
+            if (doe.Parameters.Count != 4 ||
                 doe.Parameters[0].ParameterType != typeof(string) ||
                 doe.Parameters[1].ParameterType != typeof(string) ||
                 doe.Parameters[2].ParameterType != typeof(bool) ||
@@ -430,7 +430,7 @@ namespace OpenRiaServices.Server.Authentication
             {
                 implementsUpdateUser = false;
             }
-            if (doe.Parameters.Count() != 1 ||
+            if (doe.Parameters.Count != 1 ||
                 doe.Parameters[0].ParameterType != userType)
             {
                 implementsUpdateUser = false;

@@ -1298,17 +1298,22 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Is_ReadOnly, propertyName));
             }
 
-            ComplexObject complexObject = value as ComplexObject;
-            if (complexObject != null && complexObject.IsAttached)
+            if (metaMember.IsComplex && value is ComplexObject complexObject && complexObject.IsAttached)
             {
                 throw new InvalidOperationException(Resource.ComplexType_InstancesCannotBeShared);
             }
 
-            if (this.MetaType.RequiresValidation)
+            if (metaMember.RequiresValidation)
             {
                 ValidationContext validationContext = this.CreateValidationContext();
                 validationContext.MemberName = propertyName;
                 this.ValidateProperty(validationContext, value);
+            }
+            else if (MetaType.RequiresObjectValidation)
+            {
+                // Validation error must have been set by object level validation
+                // Clear it to mimic old behaviour where validate property was always called in these scenarios
+                this.ValidationResultCollection.ReplaceErrors(propertyName, Array.Empty<ValidationResult>());
             }
         }
 
@@ -1672,7 +1677,7 @@ namespace OpenRiaServices.Client
                 {
                     if (sb.Length > 0)
                     {
-                        sb.Append(",");
+                        sb.Append(',');
                     }
                     object keyValue = keyMember.GetValue(this);
                     sb.Append(keyValue != null ? keyValue.ToString() : "null");

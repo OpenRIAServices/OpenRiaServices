@@ -476,7 +476,7 @@ namespace OpenRiaServices.Tools.Test
                 //Check if the constructor with one int param was used
                 IList<CustomAttributeTypedArgument> ctr2args = cad.ConstructorArguments;
                 Assert.AreEqual(ctr2args.Count, 1);
-                Assert.AreEqual(ctr2args[0].ArgumentType, typeof(int));
+                Assert.AreEqual(ctr2args[0].ArgumentType.FullName, typeof(int).FullName);
                 Assert.AreEqual(ctr2args[0].Value, 0);
 
                 MemberInfo[] prop3 = clientEntityType.GetMember("Prop3");
@@ -486,7 +486,7 @@ namespace OpenRiaServices.Tools.Test
                 // Check if the ctor with one string param was used
                 IList<CustomAttributeTypedArgument> ctr3args = cad.ConstructorArguments;
                 Assert.AreEqual(ctr3args.Count, 1);
-                Assert.AreEqual(ctr3args[0].ArgumentType, typeof(string));
+                Assert.AreEqual(ctr3args[0].ArgumentType.FullName, typeof(string).FullName);
                 Assert.AreEqual(ctr3args[0].Value, null);
 
                 MemberInfo[] prop4 = clientEntityType.GetMember("Prop4");
@@ -496,7 +496,7 @@ namespace OpenRiaServices.Tools.Test
                 // Check if the first ctor was used
                 IList<CustomAttributeTypedArgument> ctr4args = cad.ConstructorArguments;
                 Assert.AreEqual(ctr4args.Count, 1);
-                Assert.AreEqual(ctr4args[0].ArgumentType, typeof(int));
+                Assert.AreEqual(ctr4args[0].ArgumentType.FullName, typeof(int).FullName);
                 Assert.AreEqual(ctr4args[0].Value, 0);
             }            
         }

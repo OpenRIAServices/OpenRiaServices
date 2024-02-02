@@ -18,6 +18,7 @@ namespace OpenRiaServices.Client.Web
         /// <summary>
         /// Initializes a new instance of the <see cref="WebDomainClientFactory" /> class.
         /// </summary>
+        [Obsolete("The WCF based WebDomainClientFactory will not receive any new changes. It is recommeded to switch to OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory instead.")]
         public WebDomainClientFactory()
             : base("binary")
         {

@@ -239,23 +239,13 @@ namespace OpenRiaServices.Client.Test
             return e;
         }
 
-#if !SILVERLIGHT
-        public static HttpException ExpectHttpException(GenericDelegate del, string message, int errorCode)
-        {
-            HttpException e = ExpectExceptionHelper<HttpException>(del);
-            Assert.AreEqual(message, e.Message);
-            Assert.AreEqual(errorCode, e.GetHttpCode());
-            return e;
-        }
-#endif
-
         public static WebException ExpectWebException(GenericDelegate del, string message, int errorCode)
         {
             WebException e = ExpectExceptionHelper<WebException>(del);
             Assert.AreEqual(message, e.Message);
 
-            HttpWebResponse response = e.Response as HttpWebResponse;
-            Assert.AreEqual(errorCode, response.StatusCode);
+            HttpWebResponse response = (HttpWebResponse)e.Response;
+            Assert.AreEqual((HttpStatusCode)errorCode, response.StatusCode);
             return e;
         }
 
@@ -268,6 +258,13 @@ namespace OpenRiaServices.Client.Test
 #endif
 
             Assert.AreEqual(webExceptionStatus, e.Status);
+            return e;
+        }
+
+        public static InvalidCastException ExpectInvalidCastException(GenericDelegate del, string message)
+        {
+            InvalidCastException e = ExpectExceptionHelper<InvalidCastException>(del);
+            Assert.AreEqual(message, e.Message);
             return e;
         }
     }

@@ -69,19 +69,23 @@
           </CodeCoverage>
         </Configuration>
       </DataCollector>
+        <DataCollector friendlyName="blame" enabled="True">
+            <Configuration>
+                <CollectDump DumpType="Full" />
+                <CollectDumpOnTestSessionHang TestTimeout="20min" HangDumpType="Full" />
+            </Configuration>
+        </DataCollector>
     </DataCollectors>
   </DataCollectionRunSettings>
 
   <!-- Parameters used by tests at run time -->
   <TestRunParameters>
-    <Parameter name="webAppUrl" value="http://localhost" />
-    <Parameter name="webAppUserName" value="Admin" />
-    <Parameter name="webAppPassword" value="Password" />
+    <!--<Parameter name="webAppUserName" value="Admin" />-->
   </TestRunParameters>
 
   <!-- Adapter Specific sections -->
 
-  <!-- MSTest adapter -->
+  <!-- MSTest adapter : https://learn.microsoft.com/sv-se/visualstudio/test/configure-unit-tests-by-using-a-dot-runsettings-file?view=vs-2022#mstest-element -->
   <MSTest>
     <!--
     <MapInconclusiveToFailed>True</MapInconclusiveToFailed>

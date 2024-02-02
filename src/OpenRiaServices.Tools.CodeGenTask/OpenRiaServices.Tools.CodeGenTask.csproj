@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFrameworks>net6.0</TargetFrameworks>
+    
+    <!-- Enable roll forward to newer versions so that we run with latest stable dotnet release
+    As long as there is no unpatched install of dotnet 6
+    https://learn.microsoft.com/en-us/dotnet/core/versions/selection#control-roll-forward-behavior 
+    -->
+    <RollForward>LatestMajor</RollForward>
+    <!--<PublishReadyToRun>true</PublishReadyToRun>-->
+
+    <OutputPath Condition="'$(IsFrameworkProject)' == 'true'">$(MSBuildThisFileDirectory)bin\$(Configuration)</OutputPath>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  
+  <ItemGroup>
+    <ProjectReference Include="..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.6.10" />
+    <PackageReference Include="System.CommandLine" Version="2.0.0-beta4.22272.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <!-- Enable loading of aspnetcore assemblies -->
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>

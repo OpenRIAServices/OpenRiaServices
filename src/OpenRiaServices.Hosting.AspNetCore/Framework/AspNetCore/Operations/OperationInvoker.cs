@@ -49,6 +49,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         }
 
         public virtual string OperationName => _operation.Name;
+        public DomainOperationEntry DomainOperation => _operation;
+
+        public abstract bool HasSideEffects { get; }
 
         public abstract Task Invoke(HttpContext context);
 

@@ -13,6 +13,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         private readonly DataContractSerializer _parameterSerializer;
 
         public override string OperationName => "SubmitChanges";
+        public override bool HasSideEffects => true;
 
         public SubmitOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper)
                 : base(operation, DomainOperationType.Submit, serializationHelper, serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>)))

@@ -80,7 +80,7 @@ namespace Cities
             {
                 // there is a unit test that relies on this null
                 // check being here
-                throw new ArgumentNullException("state");
+                throw new ArgumentNullException(nameof(state));
             }
             IEnumerable<City> cities = this._cityData.Cities.Where(c => c.StateName.Equals(state));
             return cities.AsQueryable<City>();
@@ -99,7 +99,7 @@ namespace Cities
         }
 
         [Query]
-#if !NET6_0
+#if NETFRAMEWORK
         public IQueryable<State> GetStatesInShippingZone(ShippingZone shippingZone, [InjectParameter] System.Web.HttpContext httpContext, [InjectParameter] System.Security.Principal.IPrincipal principal)
         {
             if (!object.ReferenceEquals(httpContext, System.Web.HttpContext.Current))
@@ -133,6 +133,18 @@ namespace Cities
         public async Task<IEnumerable<Zip>> GetZipsAsEnumerable()
         {
             return await Task.FromResult(GetZips());
+        }
+
+        [Query(IsComposable = false)]
+        public Task<Zip> GetZipByFourDigitCodeAsync(int fourDigitCode)
+        {
+            return Task.FromResult(GetZipByFourDigitCode2(fourDigitCode));
+        }
+
+        [Query(IsComposable = false)]
+        public Zip GetZipByFourDigitCode2(int fourDigitCode)
+        {
+            return GetZips().Single(z => z.FourDigit == fourDigitCode);
         }
 
         [Query]
@@ -224,7 +236,7 @@ namespace Cities
         [CustomValidation(typeof(CityMethodValidator), "ValidateMethod")]
         public void AssignCityZone(City city, string zoneName)
         {
-            if (zoneName.StartsWith("Zone"))
+            if (zoneName.StartsWith("Zone", StringComparison.Ordinal))
             {
                 int zoneID = 0;
                 if (int.TryParse(zoneName.Replace("Zone", ""), out zoneID))
@@ -327,13 +339,16 @@ namespace Cities
             _deletedCities.Clear();
         }
 
-#if !NET6_0
         [Invoke]
         public bool UsesCustomHost()
         {
+#if NETFRAMEWORK
             return (OperationContext.Current.Host.GetType() == typeof(CityDomainServiceHost));
-        }
+#else
+            throw new NotImplementedException();
 #endif
+        }
+
 
         // Invoke that has a custom authorization attribute.  Permission denied for any City
         // whose state is Ohio unless the user is Mathew.

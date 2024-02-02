@@ -51,7 +51,13 @@ namespace Cities
         public string CountyName { get; set; }
         public string StateName { get; set; }
         public County County {get;set;}
+#if NET
+#nullable enable
+        public string? ZoneName { get; set; }
+#nullable restore
+#else
         public string ZoneName { get; set; }
+#endif
         public string CalculatedCounty { get { return this.CountyName; } set { } }
         public int ZoneID { get; set; }
 

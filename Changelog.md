@@ -1,8 +1,118 @@
-# Not releaseed
+# Unreleased
+
+* .NET Framework builds now includes the smaller portable pdb's instead of of the old "full" windows style pdb's
+  * NOTE: For .NET Framework apps ensure that *supportedRuntime* in *app.config* and corresponding setting in *web.config* does not specify an older runtime if you wan't line numbers in stack traces.
+
+# 5.4.2 / AspNetCore 1.0.0
+
+### .NET8
+* Build with .NET8 sdk and run AspNetCore tests with .NET8 by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/463
+* Run most client, server and code generation tests with .NET8 by @SandstromErik in https://github.com/OpenRIAServices/OpenRiaServices/pull/458
+
+### Code generation
+* Do not use attributes reserved for the compiler in code generation. Will make it possible to use nullable reference types and the `required` modifier for fields and properties by @SandstromErik in https://github.com/OpenRIAServices/OpenRiaServices/pull/472
+
+### AspNetCore updates
+* Various updates by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/466
+    * Add authentication documentation
+    * Use FrozenSet in first location (QueryStringConverter)
+    * Update versionprefix to 1.0.0 (for next release)
+
+### Testhost
+* Add support in `DomainServiceTestHost` for asynchronous queries that return a single entity by @erikoijwall in https://github.com/OpenRIAServices/OpenRiaServices/pull/464
+
+### Other
+* Build improvments, including set `MSBUILDDEBUGPATH` allowing troubleshooting of build failures by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/463
+* Update nuget dependencies for tests by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/468
+* Fix test which would sometimes hang by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/469
+* Add tests to see that codegen works with nullable reference types by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/470
+* Use `BinaryHttpDomainClient` in AspNetCore Test by @SandstromErik in https://github.com/OpenRIAServices/OpenRiaServices/pull/471
+
+# 5.4.1
+
+### Code generation
+* Fix .NET7+ code generation crash for RegularExpressionAttribute #449
+
+### Client
+* Improved performance of property setters (and Add) #451 #453 #456
+  * Use Dictionary.TryAdd for minor perf improvements in entityset add by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/451
+  * Speed up ValidateProperty by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/453
+  * Improve perf of ReplaceErrors by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/456
+
+### Other
+* Remove typo by @omimakhare in https://github.com/OpenRIAServices/OpenRiaServices/pull/446
+* Use mstestv3 as testing framework by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/372
+* Move more tests from EndToEnd tests to Client.Test by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/454
+* Add new test that validate how object level validation interact with property level validation by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/455
+* Various fixes by @Daniel-Svensson in https://github.com/OpenRIAServices/OpenRiaServices/pull/460
+  
+# 5.4.0
+
+This release **fully supports .NET 6+** for both server and client without having to rely on workarounds to have the code generation work.
+
+### Code Generation Supports NET6+
+
+* Support net6+ on server (#414)
+   *  Add version of code generation which allows server project to be .NET 6 or later
+   * Works with dotnet build - you can build without installing Visual Studio
+
+### Client
+* Ensure exceptions from xxxOperation callbacks and unhandled exceptions are rethrow on the SyncronizationContext. (#424)
+    * This allows events such as `DispatcherUnhandledException` (for WPF) to be used for showing error messages immediately
+* Add **net6.0-windows** TargetFramework for client (#436)
+  * `EntitySet` and `EntityCollection` now implements `ICollectionViewFactory` for *net6.0-windows*. improving supprot with controls using CollectionView
+  * This change came in WCF Ria Services SP1  [WCF Ria Services SP1](https://jeffhandley.com/2011-03-10/riaservicesv1sp1rtm)
+    > DataForm Add/Remove for EntitySet and EntityCollection
+With our initial V1.0 release, many of you found that a DataForm bound to an EntitySet or an EntityCollection did not support the Add or Remove buttons.  This was a difficult cut to make in V1.0, so I’m pleased to announce that with V1.0 SP1, this is now supported.  Silverlight 4 introduced the [ICollectionViewFactory](http://msdn.microsoft.com/en-us/library/system.componentmodel.icollectionviewfactory(VS.95).aspx) interface, with support integrated into DataGrid and DataForm, and both EntitySet and EntityCollection now implement that interface to allow the Add/Remove features to light up.
+* The WCF based `WebDomainClientFactory` will not receive any new changes and is now marked as obsolete. It is recommeded to switch to `OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory` instead.
+
+### Other
+* Run E2E tests against AspNetCore hosting
+* Various smaller performance fixes and code cleanup (#438), #435
+
+#  AspNetCore 0.4.0
+
+* AspNetCore
+     *   Copies "All" attributes to endpoint metadata      
+         * Some attributes sucha as Validation, Authorization and other attributes specific to OpenRiaServices are not copied
+     * `AddDomainService()` methods inside `MapOpenRiaServices` now returns `IEndpointConventionBuilder` allowing conventions to be specified per `DomainService`
+        ```C#
+        app.MapOpenRiaServices(builder =>
+        {
+            builder.AddDomainService<Cities.CityDomainService>()
+                .WithGroupName("Cities");
+        });
+        ```
+     * Updated README.md and added Sample project
+     * Make it compatible with more middleware such as OutputCache middleware by "Completing" responses
+     * CHANGES:
+        * `services.AddOpenRiaServices<T>()` now requires T to derive from DomainServce
+        * `services.AddOpenRiaServices<T>()` has different return type
+
+# 5.3.1 with EFCore 2.0.2 and AspNetCore 0.3.0
 
 * Code Generation
   * Switch to using Mono.Cecil to parse pdb files during code generation (#410)
     This should make it possible to use portable and embedded pdb's on the server
+  * 
+* AspNetCore
+    * New extension method to add OpenRiaServices to services from #413 by @ehsangfl.
+        ```C#
+        services.AddOpenRiaServices<T>()
+        ```
+    * New extension method to add OpenRiaServices to pipeline from #413 by @ehsangfl.
+        ```C#
+        endpoints.MapOpenRiaServices(opt => opt.AddDomainService<T>())
+        ```
+    * Add Net7 build target to support "Finally Conventions" (`IEndpointConventionBuilder.Finally`)
+    * Add `OpenRiaServices.Server.DomainOperationEntry` to endpoint metadata
+        * This allows end user to easier implement additional conventions (such as Open Api or similar)
+    * Copy `AuthorizationAttribute`s to endpoint metadata for queries and invokes to support [AspNetCore Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple?view=aspnetcore-7.0)
+        *  Attributes can be set on either method or class level
+    * Fixed serialization of sizes larger than 1 GB
+
+*Other*
+- Updated nuget packages
 
 # 5.3.0 with EFCore 2.0.1
 

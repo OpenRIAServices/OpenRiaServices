@@ -1,0 +1,128 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+
+  <PropertyGroup>
+    <!-- Note NET6 has problem with some of the tests which tests instant cancellation -->
+    <TargetFrameworks>net472<!--;net6.0--></TargetFrameworks>
+    <ImplicitUsings>false</ImplicitUsings>
+    <IsPackable>false</IsPackable>
+    <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW;ASPNETCORE</DefineConstants>
+  </PropertyGroup>
+
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.2.0" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.2.0" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <Reference Include="Microsoft.VisualBasic" />
+    <Reference Include="PresentationFramework" />
+    <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Data.Linq" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Management" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.ServiceModel.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="WindowsBase" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj">
+      <Aliases>httpDomainClient</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj">
+      <Aliases>global,SSmDsWeb</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj">
+      <Aliases>global,SSmDsClient</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.Client\Test\VbExpressions\VbExpressions.vbproj" />
+    <!-- Ensure web server project is built, but do not reference the output assebmly -->
+    <ProjectReference Include="..\..\Test\AspNetCoreWebsite\AspNetCoreWebsite.csproj">
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+      <PrivateAssets>All</PrivateAssets>
+      <Private>false</Private>
+      <ExcludeAssets>All</ExcludeAssets>
+      <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <SetTargetFramework>TargetFramework=net8.0</SetTargetFramework>
+    </ProjectReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Include="..\OpenRiaServices.EndToEnd.Wcf.Test\**\*.cs" Exclude="..\OpenRiaServices.EndToEnd.Wcf.Test\Main.cs;..\OpenRiaServices.EndToEnd.Wcf.Test\bin\**;..\OpenRiaServices.EndToEnd.Wcf.Test\obj\**" LinkBase="Included" />
+    <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\MessageUtilityTests.cs" />
+    <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\WebDomainClientTests.cs" />
+    <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\IntegrationTests\SoapXmlEndpointTests.cs" />
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="Data\DomainClients\Cities.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.cs" Link="Data\DomainClients\Catalog_LTS.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.cs" Link="Data\DomainClients\Northwind_LTS.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ComplexTypeScenarios.g.cs" Link="Data\DomainClients\ComplexTypeScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\MockCustomers.g.cs" Link="Data\DomainClients\MockCustomers.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ServerSideAsyncDomainService.g.cs" Link="Data\DomainClients\ServerSideAsyncDomainService.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs" Link="Data\DomainClients\CompositionInheritanceScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionScenarios.g.cs" Link="Data\DomainClients\CompositionScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\EFDbContextScenarios.g.cs" Link="Data\DomainClients\EFDbContextScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs" Link="Data\DomainClients\IncludeScenariosTestProvider.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\InheritanceScenarios1.g.cs" Link="Data\DomainClients\InheritanceScenarios1.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\RequiresSecureEndpointScenarios.g.cs" Link="Data\DomainClients\RequiresSecureEndpointScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\SharedEntities.g.cs" Link="Data\DomainClients\SharedEntities.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.cs" Link="Data\DomainClients\TestProvider_Scenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext1.g.cs" Link="Data\DomainClients\WebContext1.g.cs" />
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs" Link="Data\DomainClients\Cities.shared.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\CityData.cs" Link="Data\DomainClients\CityData.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs" Link="Data\DomainClients\Mock.shared.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs" Link="Data\DomainClients\Test.shared.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="ClientTestProjectPath.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+  </ItemGroup>
+
+  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
+    <Message Text="Writing project path" />
+    <WriteLinesToFile File="ClientTestProjectPath.txt" Lines="$(MSBuildProjectDirectory)" Overwrite="true" WriteOnlyWhenDifferent="true" />
+  </Target>
+
+</Project>

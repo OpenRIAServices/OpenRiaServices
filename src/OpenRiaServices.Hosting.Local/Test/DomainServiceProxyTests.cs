@@ -666,28 +666,6 @@ namespace OpenRiaServices.Hosting.Local.Test
 
         #endregion // IDisposable Tests
 
-        #region MediumTrust Tests
-
-
-        [TestMethod]
-        [Ignore]
-        // TODO: [roncain] Need to work with CLR team to understand why we require SecurityPermission.Unrestricted to be
-        // run this test.  With only Internet zone permissions, OperationException throws TypeLoadException due to its
-        // GetObjectData being SecuritySafeCritical.
-        [Description("Verifies the proxies in partial trust")]
-        public void DomainServiceProxy_MediumTrust_Proxies()
-        {
-            SandBoxer.ExecuteInMediumTrust(Callback_MediumTrust_Proxies);
-        }
-
-        public static void Callback_MediumTrust_Proxies()
-        {
-            var proxy = DomainServiceProxy.Create<IMockDomainServiceContract, MockDomainService>(new MockDomainServiceContext(DomainOperationType.Query));
-            var results = proxy.GetEntities();
-        }
-
-        #endregion // MediumTrust Tests
-
         #endregion Test Methods
 
         #region Helper Methods

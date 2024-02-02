@@ -7,44 +7,20 @@ namespace System.Data.Linq
 {
     [DataContract]
     [Serializable]
-    public sealed class Binary : IEquatable<Binary>, ICollection<byte>
+    public sealed class Binary : List<byte>, IEquatable<Binary> 
+        // , ICollection<byte>
+        
     {
-        byte[] bytes;
         int? hashCode;
 
         public Binary(byte[] value)
+            : base (value ?? Array.Empty<byte>())
         {
-            if (value == null)
-            {
-                this.bytes = new byte[0];
-            }
-            else
-            {
-                this.bytes = new byte[value.Length];
-                Array.Copy(value, this.bytes, value.Length);
-            }
-            this.ComputeHash();
         }
-
-        public byte[] ToArray()
-        {
-            byte[] copy = new byte[this.bytes.Length];
-            Array.Copy(this.bytes, copy, copy.Length);
-            return copy;
-        }
-
-        public int Length
-        {
-            get { return this.bytes.Length; }
-        }
-
-        public int Count => ((ICollection<byte>)bytes).Count;
-
-        public bool IsReadOnly => ((ICollection<byte>)bytes).IsReadOnly;
 
         public static implicit operator Binary(byte[] value)
         {
-            return new Binary(value);
+            return value == null ? null : new Binary(value);
         }
 
         public bool Equals(Binary other)
@@ -94,9 +70,9 @@ namespace System.Data.Linq
         public override string ToString()
         {
             StringBuilder sb = new StringBuilder();
-            sb.Append("\"");
-            sb.Append(System.Convert.ToBase64String(this.bytes, 0, this.bytes.Length));
-            sb.Append("\"");
+            sb.Append('"');
+            sb.Append(System.Convert.ToBase64String(base.ToArray()));
+            sb.Append('"');
             return sb.ToString();
         }
 
@@ -106,13 +82,13 @@ namespace System.Data.Linq
                 return true;
             if ((object)binary == null)
                 return false;
-            if (this.bytes.Length != binary.bytes.Length)
+            if (this.Count != binary.Count)
                 return false;
             if (this.GetHashCode() != binary.GetHashCode())
                 return false;
-            for (int i = 0, n = this.bytes.Length; i < n; i++)
+            for (int i = 0, n = this.Count; i < n; i++)
             {
-                if (this.bytes[i] != binary.bytes[i])
+                if (this[i] != binary[i])
                     return false;
             }
             return true;
@@ -126,46 +102,11 @@ namespace System.Data.Linq
         {
             int s = 314, t = 159;
             hashCode = 0;
-            for (int i = 0; i < bytes.Length; i++)
+            for (int i = 0; i < Count; i++)
             {
-                hashCode = hashCode * s + bytes[i];
+                hashCode = hashCode * s + base[i];
                 s = s * t;
             }
-        }
-
-        public void Add(byte item)
-        {
-            ((ICollection<byte>)bytes).Add(item);
-        }
-
-        public void Clear()
-        {
-            ((ICollection<byte>)bytes).Clear();
-        }
-
-        public bool Contains(byte item)
-        {
-            return ((ICollection<byte>)bytes).Contains(item);
-        }
-
-        public void CopyTo(byte[] array, int arrayIndex)
-        {
-            ((ICollection<byte>)bytes).CopyTo(array, arrayIndex);
-        }
-
-        public bool Remove(byte item)
-        {
-            return ((ICollection<byte>)bytes).Remove(item);
-        }
-
-        public IEnumerator<byte> GetEnumerator()
-        {
-            return ((IEnumerable<byte>)bytes).GetEnumerator();
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return bytes.GetEnumerator();
         }
     }
 }
