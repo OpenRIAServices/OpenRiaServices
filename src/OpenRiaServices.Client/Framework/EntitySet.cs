@@ -1063,11 +1063,23 @@ namespace OpenRiaServices.Client
                 }
 
                 EntitySet set = this._container.GetEntitySet(entity.GetType());
-                if (!this._isTopLevel && !set.IsAttached(entity))
+                if (!this._isTopLevel)
+                {
+                    if (!set.IsAttached(entity))
                 {
                     // infer for all detached entities except the root
                     entity.IsInferred = true;
                     this._action(set, entity);
+                }
+                    else
+                    {
+                        // Entity is attached so state must anything but Detached: New, Unmodified, Modified, Deleted
+                        // * For New, Unchanged, Modified then all changes to EntityRef/EntityCollections are tracked and corresponding entities are
+                        // added directly to the EntitySet, so any changes there will have been previously processed
+                        // * Deleted => Are not tracked (just as for Detached handled above) so they might point to new entities to discover
+                        if (entity.EntityState != EntityState.Deleted)
+                            return;
+                    }
                 }
 
                 this._visited.Add(entity, true);
