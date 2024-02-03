@@ -28,8 +28,8 @@ namespace OpenRiaServices.Client
         private IList _list;
         // set of entities, for fast lookup
         private HashSet<Entity> _set;
-        private Dictionary<object, Entity> _identityCache;
-        private readonly HashSet<Entity> _interestingEntities;
+        private Dictionary<object, Entity> _identityCache = new();
+        private readonly HashSet<Entity> _interestingEntities = new();
         private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
 
         /// <summary>
@@ -49,8 +49,6 @@ namespace OpenRiaServices.Client
             }
 
             this._entityType = entityType;
-            this._identityCache = new Dictionary<object, Entity>();
-            this._interestingEntities = new HashSet<Entity>();
         }
 
         /// <summary>
@@ -58,9 +56,9 @@ namespace OpenRiaServices.Client
         /// </summary>
         public Type EntityType
         {
-            get 
-            { 
-                return this._entityType; 
+            get
+            {
+                return this._entityType;
             }
         }
 
@@ -198,29 +196,22 @@ namespace OpenRiaServices.Client
         {
             if (isInteresting)
             {
-                if (!this.InterestingEntities.Contains(entity))
+                if (this._interestingEntities.Add(entity)
+                    && this._interestingEntities.Count == 1)
                 {
-                    this._interestingEntities.Add(entity);
-                    if (this._interestingEntities.Count == 1)
-                    {
-                        // this is the first interesting entity in this set
-                        // so raise the change notifications
-                        this.RaisePropertyChanged(nameof(HasChanges));
-                    }
+                    // this is the first interesting entity in this set
+                    // so raise the change notifications
+                    this.RaisePropertyChanged(nameof(HasChanges));
                 }
             }
             else
             {
-                if (this._interestingEntities != null)
+                if (this._interestingEntities.Remove(entity)
+                    && this._interestingEntities.Count == 0)
                 {
-                    int prevCount = this._interestingEntities.Count;
-                    this._interestingEntities.Remove(entity);
-                    if (this._interestingEntities.Count == 0 && prevCount == 1)
-                    {
-                        // if the last interesting entity has been removed, this set
-                        // no longer has changes, so raise the change notifications
-                        this.RaisePropertyChanged(nameof(HasChanges));
-                    }
+                    // if the last interesting entity has been removed, this set
+                    // no longer has changes, so raise the change notifications
+                    this.RaisePropertyChanged(nameof(HasChanges));
                 }
             }
         }
@@ -317,8 +308,7 @@ namespace OpenRiaServices.Client
         /// <param name="register">True if the callback is being registered, false if it is being unregistered</param>
         internal void RegisterAssociationCallback(AssociationAttribute association, Action<Entity> callback, bool register)
         {
-            Action<Entity> del = null;
-            this._associationUpdateCallbackMap.TryGetValue(association, out del);
+            this._associationUpdateCallbackMap.TryGetValue(association, out Action<Entity> del);
             if (register)
             {
                 this._associationUpdateCallbackMap[association] = (Action<Entity>)Delegate.Combine(del, callback);
@@ -364,7 +354,7 @@ namespace OpenRiaServices.Client
 
             // An entity is considered attached if it is in this set or
             // if it is "know" by this set, for example having been deleted
-            return entity.EntitySet == this || this.InterestingEntities.Contains(entity);
+            return entity.EntitySet == this || this._interestingEntities.Contains(entity);
         }
 
         /// <summary>
@@ -936,23 +926,23 @@ namespace OpenRiaServices.Client
             }
         }
 
-#region IEnumerable Members
+        #region IEnumerable Members
         IEnumerator IEnumerable.GetEnumerator()
         {
             return this.GetEnumerator();
         }
-#endregion
+        #endregion
 
-#region ICollection Members
+        #region ICollection Members
         bool ICollection.IsSynchronized { get { return false; } }
         object ICollection.SyncRoot { get { return _list.SyncRoot; } }
         void ICollection.CopyTo(Array array, int index)
         {
             this._list.CopyTo(array, index);
         }
-#endregion
+        #endregion
 
-#region INotifyCollectionChanged Members
+        #region INotifyCollectionChanged Members
 
         /// <summary>
         /// Event raised when the collection has changed, or the collection is reset.
@@ -969,18 +959,18 @@ namespace OpenRiaServices.Client
             }
         }
 
-#endregion
+        #endregion
 
-#region IRevertibleChangeTracking Members
+        #region IRevertibleChangeTracking Members
 
         void IRevertibleChangeTracking.RejectChanges()
         {
             this.RejectChanges();
         }
 
-#endregion
+        #endregion
 
-#region IChangeTracking Members
+        #region IChangeTracking Members
 
         bool IChangeTracking.IsChanged
         {
@@ -995,9 +985,9 @@ namespace OpenRiaServices.Client
             this.AcceptChanges();
         }
 
-#endregion
+        #endregion
 
-#region INotifyPropertyChanged Members
+        #region INotifyPropertyChanged Members
         /// <summary>
         /// Event raised when a property has changed.
         /// </summary>
@@ -1017,7 +1007,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-#endregion
+        #endregion
 
         /// <summary>
         /// Visitor used to traverse all associations in a graph and infer
@@ -1025,7 +1015,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         private class AddAttachInferrer : EntityVisitor
         {
-            private readonly Dictionary<Entity, bool> _visited = new Dictionary<Entity, bool>();
+            private readonly HashSet<Entity> _visited = new HashSet<Entity>();
             private readonly EntityContainer _container;
             private bool _isTopLevel = true;
             private readonly Action<EntitySet, Entity> _action;
@@ -1056,8 +1046,8 @@ namespace OpenRiaServices.Client
 
             public override void Visit(Entity entity)
             {
-                // avoid cycles
-                if (this._visited.ContainsKey(entity))
+                // avoid cycles, stop if entity has already been visisted
+                if (!this._visited.Add(entity))
                 {
                     return;
                 }
@@ -1066,11 +1056,11 @@ namespace OpenRiaServices.Client
                 if (!this._isTopLevel)
                 {
                     if (!set.IsAttached(entity))
-                {
-                    // infer for all detached entities except the root
-                    entity.IsInferred = true;
-                    this._action(set, entity);
-                }
+                    {
+                        // infer for all detached entities except the root
+                        entity.IsInferred = true;
+                        this._action(set, entity);
+                    }
                     else
                     {
                         // Entity is attached so state must anything but Detached: New, Unmodified, Modified, Deleted
@@ -1081,8 +1071,6 @@ namespace OpenRiaServices.Client
                             return;
                     }
                 }
-
-                this._visited.Add(entity, true);
 
                 this._isTopLevel = false;
 
@@ -1222,7 +1210,7 @@ namespace OpenRiaServices.Client
             }
         }
     }
-        
+
     /// <summary>
     /// Represents a collection of <see cref="Entity"/> instances, providing change tracking and other services.
     /// </summary>
@@ -1354,14 +1342,14 @@ namespace OpenRiaServices.Client
             base.OnCollectionChanged(action, affectedObject, index);
         }
 
-#region IEnumerable<TEntity> Members
+        #region IEnumerable<TEntity> Members
         IEnumerator<TEntity> IEnumerable<TEntity>.GetEnumerator()
         {
             return this.GetEnumerator();
         }
-#endregion
+        #endregion
 
-#region ICollection<TEntity> Members
+        #region ICollection<TEntity> Members
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
             ((IList<TEntity>)List).CopyTo(array, arrayIndex);
@@ -1389,9 +1377,9 @@ namespace OpenRiaServices.Client
                     throw;
             }
         }
-#endregion
+        #endregion
 
-#region ICollectionViewFactory
+        #region ICollectionViewFactory
 #if HAS_COLLECTIONVIEW
         /// <summary>
         /// Returns a custom view for specialized sorting, filtering, grouping, and currency.
@@ -1568,6 +1556,6 @@ namespace OpenRiaServices.Client
 #endregion
         }
 #endif
-#endregion
+        #endregion
     }
 }
