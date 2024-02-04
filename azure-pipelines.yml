@@ -129,7 +129,7 @@ steps:
     versionEnvVar: Build.BuildNumber
     packDestination: '$(Build.ArtifactStagingDirectory)' 
   continueOnError: true
-  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
+#  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
 - task: CopyFiles@2
   displayName: 'Copy VS Extension: $(build.artifactstagingdirectory)'
