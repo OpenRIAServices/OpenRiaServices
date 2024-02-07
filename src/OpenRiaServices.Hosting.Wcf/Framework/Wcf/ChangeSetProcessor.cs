@@ -208,11 +208,10 @@ namespace OpenRiaServices.Hosting.Wcf
 #pragma warning restore CS0618 // Type or member is obsolete
                 foreach (ChangeSetEntry changeSetEntry in entityGroup)
                 {
-                    if (visited.Contains(changeSetEntry.Id))
+                    if (!visited.Add(changeSetEntry.Id))
                     {
                         continue;
                     }
-                    visited.Add(changeSetEntry.Id);
 
                     // set current associations
                     if (changeSetEntry.Associations != null)

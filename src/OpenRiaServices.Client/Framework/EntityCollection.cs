@@ -259,9 +259,8 @@ namespace OpenRiaServices.Client
 
                 // we may have to check for containment once more, since the EntitySet.Add calls
                 // above can cause a dynamic add to this EntityCollection behind the scenes
-                if (!addedToSet || !this.EntitiesHashSet.Contains(entity))
+                if (!addedToSet && TryAddEntity(entity))
                 {
-                    this.AddEntity(entity);
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, this.Entities.Count - 1);
                 }
 
@@ -350,28 +349,34 @@ namespace OpenRiaServices.Client
         /// should be done through this method.
         /// </summary>
         /// <param name="entity">The <see cref="Entity"/>to add.</param>
-        private void AddEntity(TEntity entity)
+        private bool TryAddEntity(TEntity entity)
         {
-            Debug.Assert(!this.EntitiesHashSet.Contains(entity), "Entity is already in this collection!");
-
-            this.Entities.Add(entity);
-            this.EntitiesHashSet.Add(entity);
-
-            if (this.IsComposition)
+            if (this.EntitiesHashSet.Add(entity))
             {
-                entity.SetParent(this._parent, this.AssocAttribute);
+                this.Entities.Add(entity);
+
+                if (this.IsComposition)
+                {
+                    entity.SetParent(this._parent, this.AssocAttribute);
+                }
+
+                return true;
+            }
+            else
+            {
+                return false;
             }
         }
 
         private bool RemoveEntity(TEntity entity)
         {
-            var isRemoved = this.Entities.Remove(entity);
-            var isRemovedInHashSet = this.EntitiesHashSet.Remove(entity);
-            Debug.Assert(isRemoved == isRemovedInHashSet
-                , "The entity should be present in both Entities and EntitiesHashSet"
-                , "Entities.Removed: {0}, EntitiesHashSet.Removed: {1}", isRemoved, isRemovedInHashSet
-            );
-            return isRemoved;
+            if (this.EntitiesHashSet.Remove(entity))
+            {
+                bool isRemoved = this.Entities.Remove(entity);
+                Debug.Assert(isRemoved, "The entity should be present in both Entities and EntitiesHashSet");
+                return true;
+            }
+            return false;
         }
 
         /// <summary>
@@ -431,10 +436,7 @@ namespace OpenRiaServices.Client
             EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
             foreach (TEntity entity in set.OfType<TEntity>().Where(this.Filter))
             {
-                if (!this.EntitiesHashSet.Contains(entity))
-                {
-                    this.AddEntity(entity);
-                }
+                this.TryAddEntity(entity);
             }
 
             // once we've loaded entities, we're caching them, so we need to update
@@ -618,7 +620,7 @@ namespace OpenRiaServices.Client
                 {
                     // Add matching entity to our set. When adding, we use the stronger Filter to
                     // filter out New entities
-                    this.AddEntity(typedEntity);
+                    _ = this.TryAddEntity(typedEntity);
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
                 }
                 else if (containsEntity && !this._entityPredicate(typedEntity))
@@ -653,9 +655,8 @@ namespace OpenRiaServices.Client
                     foreach (TEntity newEntity in newEntities)
                     {
                         newStartingIdx = this.Entities.Count;
-                        if (!this.EntitiesHashSet.Contains(newEntity))
+                        if (this.TryAddEntity(newEntity))
                         {
-                            this.AddEntity(newEntity);
                             affectedEntities.Add(newEntity);
                         }
                     }
@@ -1029,9 +1030,9 @@ namespace OpenRiaServices.Client
         }
         bool ICollection<TEntity>.Remove(TEntity item)
         {
-            int idx = Entities.IndexOf(item);
+            bool removed = this.EntitiesHashSet.Contains(item);
             Remove(item);
-            return idx != -1;
+            return removed;
         }
         /// <summary>
         /// Removes all items.

@@ -1311,12 +1311,10 @@ namespace OpenRiaServices.Server
             // If we have already visited this entity type, its composition map
             // entry is accurate and can be used as is.
             this._compositionMap.TryGetValue(entityType, out parentAssociations);
-            if (fixedEntities.Contains(entityType))
+            if (!fixedEntities.Add(entityType))
             {
                 return parentAssociations;
             }
-
-            fixedEntities.Add(entityType);
 
             // Get the base class's associations.  This will re-entrantly walk back
             // the hierarchy and repair the composition map as it goes.
@@ -1995,11 +1993,10 @@ namespace OpenRiaServices.Server
             }
 
             // Avoid infinite recursion in the case of composition cycles
-            if (visited.Contains(entityType))
+            if (!visited.Add(entityType))
             {
                 return false;
             }
-            visited.Add(entityType);
 
             // for compositional children, if the parent supports the operation (or supports
             // Update) the operation is supported.
