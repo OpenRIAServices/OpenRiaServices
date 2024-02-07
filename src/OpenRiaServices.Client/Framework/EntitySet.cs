@@ -27,8 +27,8 @@ namespace OpenRiaServices.Client
         // backing entity list
         private IList _list;
         // set of entities, for fast lookup
-        private HashSet<Entity> _set;
-        private Dictionary<object, Entity> _identityCache = new();
+        private readonly HashSet<Entity> _set = new();
+        private readonly Dictionary<object, Entity> _identityCache = new();
         private readonly HashSet<Entity> _interestingEntities = new();
         private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
 
@@ -115,10 +115,10 @@ namespace OpenRiaServices.Client
                 entity.Reset();
             }
 
-            this._identityCache = new Dictionary<object, Entity>();
+            this._identityCache.Clear();
             this._interestingEntities.Clear();
             this._list = this.CreateList();
-            this._set = new HashSet<Entity>();
+            this._set.Clear();
 
             this.OnCollectionChanged(NotifyCollectionChangedAction.Reset, clearedEntities, -1);
 
@@ -265,7 +265,6 @@ namespace OpenRiaServices.Client
             this._supportedOperations = operationsToSupport;
 
             this._list = this.CreateList();
-            this._set = new HashSet<Entity>();
         }
 
         /// <summary>
@@ -484,7 +483,7 @@ namespace OpenRiaServices.Client
 
         internal bool Contains(Entity entity)
         {
-            return this._set != null && this._set.Contains(entity);
+            return this._set.Contains(entity);
         }
 
         /// <summary>
