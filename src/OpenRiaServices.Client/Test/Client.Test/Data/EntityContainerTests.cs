@@ -3834,7 +3834,7 @@ namespace OpenRiaServices.Client.Test
 
 
         [TestMethod]
-        public void EntitySet_Remove_InfferedEntities()
+        public void EntitySet_Remove_Inferred_Entities()
         {
             TestEntityContainer ec = new TestEntityContainer();
             EntitySet<Product> products = ec.GetEntitySet<Product>();
@@ -3854,8 +3854,8 @@ namespace OpenRiaServices.Client.Test
             // Delete the entity, it should be marked for deletion
             products.Remove(product);
             Assert.AreEqual(EntityState.Deleted, product.EntityState);
-            Assert.AreEqual(EntityState.Unmodified, product.PurchaseOrderDetails.First().EntityState);
-            Assert.AreEqual(EntityState.Unmodified, product.PurchaseOrderDetails.First().PurchaseOrder.EntityState);
+            Assert.AreEqual(EntityState.Unmodified, detail1.EntityState);
+            Assert.AreEqual(EntityState.Unmodified, order.EntityState);
 
             var detail2 = new PurchaseOrderDetail() { PurchaseOrderDetailID = 2, Product = product, PurchaseOrderID = order.PurchaseOrderID };
             var detail3 = new PurchaseOrderDetail() { PurchaseOrderDetailID = 3, Product = product, PurchaseOrderID = order.PurchaseOrderID };
@@ -3863,16 +3863,16 @@ namespace OpenRiaServices.Client.Test
             product.PurchaseOrderDetails.Add(detail2);
             product.PurchaseOrderDetails.Add(detail3);
 
+            Assert.AreEqual(EntityState.Deleted, product.EntityState);
             Assert.AreEqual(EntityState.Detached, detail2.EntityState);
             Assert.AreEqual(EntityState.Detached, detail3.EntityState);
-            Assert.AreEqual(EntityState.Deleted, product.EntityState);
 
-            // Add detail2 , which should trigger detail3 to be discovered
+            // Add detail2, which should trigger detail3 to be discovered via product (which should still be deleted)
             order.PurchaseOrderDetails.Add(detail2);
 
+            Assert.AreEqual(EntityState.Deleted, product.EntityState);
             Assert.AreEqual(EntityState.New, detail2.EntityState);
             Assert.AreEqual(EntityState.New, detail3.EntityState);
-            Assert.AreEqual(EntityState.Deleted, product.EntityState);
         }
 
         [TestMethod]
