@@ -250,8 +250,8 @@ namespace OpenRiaServices.Client
                     EntitySet entitySet = this.LastSet;
                     if (entitySet != null)
                     {
-                        bool isInteresting = this._entityState != EntityState.Unmodified
-                            && this._entityState != EntityState.Detached;
+                        bool isInteresting = this._entityState is not EntityState.Unmodified
+                            and not EntityState.Detached;
                         entitySet.TrackAsInteresting(this, isInteresting);
                     }
 
@@ -302,12 +302,9 @@ namespace OpenRiaServices.Client
                 }
             }
 
-            if (this.EntitySet != null)
-            {
-                // when a child has been changed in any way, the parent becomes
-                // interesting
-                this.EntitySet.TrackAsInteresting(this, true);
-            }
+            // when a child has been changed in any way, the parent becomes
+            // interesting
+            this.EntitySet?.TrackAsInteresting(this, true);
         }
 
         /// <summary>
@@ -526,8 +523,7 @@ namespace OpenRiaServices.Client
                 this._isMerging = value;
                 foreach (MetaMember metaMember in MetaType.DataMembers.Where(f => f.IsComplex && !f.IsCollection))
                 {
-                    ComplexObject propertyValue = metaMember.GetValue(this) as ComplexObject;
-                    if (propertyValue != null)
+                    if (metaMember.GetValue(this) is ComplexObject propertyValue)
                     {
                         propertyValue.IsMergingState = this._isMerging;
                     }
@@ -647,10 +643,7 @@ namespace OpenRiaServices.Client
             this._editSession = null;
             this._trackChanges = false;
             UndoAllEntityActions(throwIfSubmitting: true);
-            if (this._validationErrors != null)
-            {
-                this._validationErrors.Clear();
-            }
+            this._validationErrors?.Clear();
             this.EntityConflict = null;
             this.EntitySet = null;
             this._lastSet = null;
@@ -682,8 +675,8 @@ namespace OpenRiaServices.Client
         /// </summary>
         protected void AcceptChanges()
         {
-            if (this.EntityState == EntityState.Unmodified ||
-                this.EntityState == EntityState.Detached)
+            if (this.EntityState is EntityState.Unmodified or
+                EntityState.Detached)
             {
                 // if we're detached or have no changes, noop after
                 // closing any in progress edit session
@@ -696,11 +689,7 @@ namespace OpenRiaServices.Client
             // Accept any child changes. Note, we must accept child changes before setting our own
             // state to Unmodified. This avoids a situation where we get notifications from child
             // entities that cause our state to flip back to Modified.
-            if (entitySet != null)
-            {
-                // accept any child changes
-                entitySet.EntityContainer.CompleteChildChanges(this, true);
-            }
+            entitySet?.EntityContainer.CompleteChildChanges(this, true);
 
             if (this.EntityState == EntityState.New)
             {
@@ -730,19 +719,13 @@ namespace OpenRiaServices.Client
             else if (this.EntityState == EntityState.Deleted)
             {
                 this.StopTracking();
-                if (entitySet != null)
-                {
-                    entitySet.RemoveFromCache(this);
-                }
+                entitySet?.RemoveFromCache(this);
                 // move back to the default state
                 this.EntityState = EntityState.Detached;
             }
 
-            if (entitySet != null)
-            {
-                // remove from the interesting entities set
-                entitySet.TrackAsInteresting(this, false);
-            }
+            // remove from the interesting entities set
+            entitySet?.TrackAsInteresting(this, false);
 
             // need to end any in progress edit session
             this._editSession = null;
@@ -750,10 +733,7 @@ namespace OpenRiaServices.Client
             // clear all custom method invocations
             this.UndoAllEntityActions(throwIfSubmitting: false);
 
-            if (this._validationErrors != null)
-            {
-                this._validationErrors.Clear();
-            }
+            this._validationErrors?.Clear();
             this.EntityConflict = null;
             this.IsInferred = false;
             this._hasChildChanges = false;
@@ -769,8 +749,8 @@ namespace OpenRiaServices.Client
         /// </summary>
         protected void RejectChanges()
         {
-            if (this.EntityState == EntityState.Unmodified ||
-                this.EntityState == EntityState.Detached)
+            if (this.EntityState is EntityState.Unmodified or
+                EntityState.Detached)
             {
                 // if we're detached or have no changes, noop after
                 // closing any in progress edit session
@@ -783,10 +763,7 @@ namespace OpenRiaServices.Client
             // Reject any child changes. Note, we must reject child changes before setting our own
             // state to Unmodified. This avoids a situation where we get notifications from child
             // entities that cause our state to flip back to Modified.
-            if (entitySet != null)
-            {
-                entitySet.EntityContainer.CompleteChildChanges(this, false);
-            }
+            entitySet?.EntityContainer.CompleteChildChanges(this, false);
 
             if (this._entityState == EntityState.Modified || this.Parent != null)
             {
@@ -830,10 +807,7 @@ namespace OpenRiaServices.Client
             UndoAllEntityActions();
 
             // Empty out the error collections
-            if (this._validationErrors != null)
-            {
-                this._validationErrors.Clear();
-            }
+            this._validationErrors?.Clear();
             this.EntityConflict = null;
             this._hasChildChanges = false;
             Debug.Assert(!this.HasChanges, "Entity.HasChanges should be false");
@@ -1845,7 +1819,7 @@ namespace OpenRiaServices.Client
             {
                 this._entity = entity;
                 this._lastState = entity.EntityState;
-                this._customMethodInvocations = entity._customMethodInvocations != null ? entity._customMethodInvocations.ToArray() : null;
+                this._customMethodInvocations = entity._customMethodInvocations?.ToArray();
                 this._validationErrors = entity.ValidationErrors.ToArray();
                 this._modifiedProperties = new List<string>();
             }
