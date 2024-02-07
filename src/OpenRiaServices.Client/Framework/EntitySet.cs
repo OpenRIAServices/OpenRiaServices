@@ -394,9 +394,10 @@ namespace OpenRiaServices.Client
                 // - scenarios where the entity instance itself is the one already cached (for infer attach
                 //   state transition scenarios)
                 object identity = entity.GetIdentity();
-                Entity cachedEntity = null;
-                if (identity != null && this._identityCache.TryGetValue(identity, out cachedEntity) &&
-                    cachedEntity.EntityState != EntityState.Deleted && !(object.ReferenceEquals(entity, cachedEntity)))
+                if (identity != null
+                    && this._identityCache.TryGetValue(identity, out Entity cachedEntity)
+                    && cachedEntity.EntityState != EntityState.Deleted
+                    && !object.ReferenceEquals(entity, cachedEntity))
                 {
                     throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
                 }
@@ -411,10 +412,9 @@ namespace OpenRiaServices.Client
                 entity.UndoDelete();
             }
 
-            if (!this._set.Contains(entity))
+            if (this._set.Add(entity))
             {
                 int idx = this._list.Add(entity);
-                this._set.Add(entity);
                 entity.EntitySet = this;
                 this.OnCollectionChanged(NotifyCollectionChangedAction.Add, entity, idx);
             }
@@ -735,11 +735,10 @@ namespace OpenRiaServices.Client
                 cachedEntity = entity;
 
                 int idx = 0;
-                bool isInList = this._set.Contains(entity);
-                if (!isInList)
+                bool isAdded = this._set.Add(entity);
+                if (isAdded)
                 {
                     idx = this._list.Add(entity);
-                    this._set.Add(entity);
                 }
 
                 entity.MarkUnmodified();
@@ -754,7 +753,7 @@ namespace OpenRiaServices.Client
 
                 entity.OnLoaded(true);
 
-                if (!isInList)
+                if (isAdded)
                 {
                     this.OnCollectionChanged(NotifyCollectionChangedAction.Add, entity, idx);
                 }
@@ -1217,7 +1216,7 @@ namespace OpenRiaServices.Client
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> this set will contain</typeparam>
     public sealed class EntitySet<TEntity> : EntitySet, IEntityCollection<TEntity>
 #if HAS_COLLECTIONVIEW
-        , ICollectionViewFactory 
+        , ICollectionViewFactory
 #endif
         where TEntity : Entity
     {
@@ -1388,7 +1387,7 @@ namespace OpenRiaServices.Client
         ICollectionView ICollectionViewFactory.CreateView()
         {
             // We use the CollectionViewSource to obtain a ListCollectionView, a type internal to Silverlight
-            return new CollectionViewSource() { Source = new ListCollectionViewProxy<TEntity>(this) } .View;
+            return new CollectionViewSource() { Source = new ListCollectionViewProxy<TEntity>(this) }.View;
         }
 
         /// <summary>
@@ -1413,7 +1412,7 @@ namespace OpenRiaServices.Client
                     WeakCollectionChangedListener.CreateIfNecessary(this._source, this);
             }
 
-#region IList
+            #region IList
 
             public int Add(object value)
             {
@@ -1425,8 +1424,12 @@ namespace OpenRiaServices.Client
                         nameof(value));
                 }
 
+                int countBefore = this.Source.Count;
                 this.Source.Add(entity);
-                return this.IndexOf(entity);
+                int countAfter = this.Source.Count;
+
+                // If count increased then the item was added last, otherwise return -1 for "not added"
+                return (countAfter > countBefore) ? countBefore : -1;
             }
 
             public void Clear()
@@ -1436,7 +1439,7 @@ namespace OpenRiaServices.Client
 
             public bool Contains(object value)
             {
-                return this.IndexOf(value) >= 0;
+                return (value is Entity e) && this.Source.Contains(e);
             }
 
             public int IndexOf(object value)
@@ -1462,13 +1465,10 @@ namespace OpenRiaServices.Client
 
             public void Remove(object value)
             {
-                T entity = (T)value;
-                if (entity == null)
+                if (value is T entity)
                 {
-                    return;
+                    this.Source.Remove(entity);
                 }
-
-                this.Source.Remove(entity);
             }
 
             public void RemoveAt(int index)
@@ -1480,10 +1480,6 @@ namespace OpenRiaServices.Client
             {
                 get
                 {
-                    if ((index < 0) || (index >= this.Source.Count))
-                    {
-                        throw new ArgumentOutOfRangeException(nameof(index));
-                    }
                     return this.Source.List[index];
                 }
                 set
@@ -1528,9 +1524,9 @@ namespace OpenRiaServices.Client
                 get { return this._source; }
             }
 
-#endregion
+            #endregion
 
-#region INotifyCollectionChanged
+            #region INotifyCollectionChanged
 
             public event NotifyCollectionChangedEventHandler CollectionChanged;
 
@@ -1544,16 +1540,16 @@ namespace OpenRiaServices.Client
                 this.OnCollectionChanged(e);
             }
 
-#endregion
+            #endregion
 
-#region ICollectionChangedListener
+            #region ICollectionChangedListener
 
             void ICollectionChangedListener.OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
             {
                 this.OnSourceCollectionChanged(sender, e);
             }
 
-#endregion
+            #endregion
         }
 #endif
         #endregion
