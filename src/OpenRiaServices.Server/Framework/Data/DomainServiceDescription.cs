@@ -1619,12 +1619,10 @@ namespace OpenRiaServices.Server
                 this._submitMethods[entityType] = entitySubmitMethods;
             }
 
-            if (entitySubmitMethods.ContainsKey(method.Operation))
+            if (!entitySubmitMethods.TryAdd(method.Operation, method))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainService_DuplicateCUDMethod, methodName, entitySubmitMethods[method.Operation].Name));
             }
-
-            entitySubmitMethods[method.Operation] = method;
         }
 
         /// <summary>
@@ -1879,11 +1877,11 @@ namespace OpenRiaServices.Server
                 entityCustomMethods = new Dictionary<string, DomainOperationEntry>();
                 this._customMethods[entityType] = entityCustomMethods;
             }
-            else if (entityCustomMethods.ContainsKey(methodName))
+
+            if (!entityCustomMethods.TryAdd(methodName, method))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainOperationEntryOverload_NotSupported, methodName));
             }
-            entityCustomMethods[methodName] = method;
         }
 
         /// <summary>
@@ -1896,12 +1894,10 @@ namespace OpenRiaServices.Server
             ValidateMethodSignature(this, method);
 
             string methodName = method.Name;
-            if (this._invokeOperations.ContainsKey(methodName))
+            if (!this._invokeOperations.TryAdd(methodName, method))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainOperationEntryOverload_NotSupported, methodName));
             }
-
-            this._invokeOperations[methodName] = method;
         }
 
         /// <summary>

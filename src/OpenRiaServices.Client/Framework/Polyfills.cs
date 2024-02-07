@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace OpenRiaServices.Client
+namespace System.Collections.Generic
 {
 #if !NET
     /// <summary>

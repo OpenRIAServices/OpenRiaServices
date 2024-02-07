@@ -93,7 +93,8 @@ namespace OpenRiaServices.Client
             }
 
             Type entityType = entitySet.EntityType;
-            if (this._entitySets.ContainsKey(entityType) || this._referencedEntitySets.ContainsKey(entityType))
+            if (this._entitySets.ContainsKey(entityType) 
+                || !this._referencedEntitySets.TryAdd(entityType, entitySet))
             {
                 throw new ArgumentException(
                     string.Format(
@@ -101,8 +102,6 @@ namespace OpenRiaServices.Client
                         Resource.EntityContainer_EntitySetAlreadyExists,
                         entityType));
             }
-
-            this._referencedEntitySets.Add(entityType, entitySet);
         }
 
         /// <summary>

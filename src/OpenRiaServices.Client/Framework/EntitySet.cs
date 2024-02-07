@@ -730,7 +730,7 @@ namespace OpenRiaServices.Client
             if (cachedEntity == null)
             {
                 // add the entity to the cache
-                this.AddToCache(entity);
+                this._identityCache.Add(identity, entity);
                 cachedEntity = entity;
 
                 int idx = 0;

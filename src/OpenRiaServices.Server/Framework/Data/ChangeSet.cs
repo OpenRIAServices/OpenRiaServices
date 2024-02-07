@@ -460,9 +460,8 @@ namespace OpenRiaServices.Server
                 ChangeSetEntry changeSetEntry = this._changeSetEntries.Single(p => p.Entity == entity);
                 if (changeSetEntry.Associations != null)
                 {
-                    if (changeSetEntry.Associations.ContainsKey(compositionMember.Name))
+                    if (changeSetEntry.Associations.TryGetValue(compositionMember.Name, out int[] associatedIds))
                     {
-                        int[] associatedIds = changeSetEntry.Associations[compositionMember.Name];
                         IEnumerable<ChangeSetEntry> childOperations = associatedIds.Select(p => entityOperationMap[p]);
                         associatedChangesList.AddRange(childOperations);
                     }
@@ -471,9 +470,8 @@ namespace OpenRiaServices.Server
                 // next get any child delete operations
                 if (changeSetEntry.OriginalAssociations != null)
                 {
-                    if (changeSetEntry.OriginalAssociations.ContainsKey(compositionMember.Name))
+                    if (changeSetEntry.OriginalAssociations.TryGetValue(compositionMember.Name, out int[] originalAssociatedIds))
                     {
-                        int[] originalAssociatedIds = changeSetEntry.OriginalAssociations[compositionMember.Name];
                         IEnumerable<ChangeSetEntry> deletedChildOperations = originalAssociatedIds
                             .Select(p => entityOperationMap[p])
                             .Where(p => p.Operation == DomainOperation.Delete);
@@ -519,18 +517,18 @@ namespace OpenRiaServices.Server
                         List<int> childIds = new List<int>();
                         if (operation.Associations != null)
                         {
-                            if (operation.Associations.ContainsKey(compositionMember.Name))
+                            if (operation.Associations.TryGetValue(compositionMember.Name, out int[] associatedIds))
                             {
-                                childIds.AddRange(operation.Associations[compositionMember.Name]);
+                                childIds.AddRange(associatedIds);
                             }
                         }
 
                         // add any original associations
                         if (operation.OriginalAssociations != null)
                         {
-                            if (operation.OriginalAssociations.ContainsKey(compositionMember.Name))
+                            if (operation.OriginalAssociations.TryGetValue(compositionMember.Name, out int[] associatedIds))
                             {
-                                childIds.AddRange(operation.OriginalAssociations[compositionMember.Name]);
+                                childIds.AddRange(associatedIds);
                             }
                         }
 

@@ -31,6 +31,7 @@
     <Compile Include="..\..\OpenRiaServices.Client\Framework\DomainException.cs" Link="Data\DomainException.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\DomainIdentifierAttribute.cs" Link="Data\DomainIdentifierAttribute.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExternalReferenceAttribute.cs" Link="Data\ExternalAttribute.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Data\Polyfills.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\RoundtripOriginalAttribute.cs" Link="Data\RoundtripOriginalAttribute.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\Serialization\KeyValue.cs" Link="Data\Serialization\KeyValue.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="Data\TypeUtility.cs" />
