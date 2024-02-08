@@ -31,6 +31,7 @@ namespace OpenRiaServices.Client.Internal
         private readonly ReadOnlyCollection<MetaMember> _dataMembers;
         private readonly ReadOnlyCollection<ValidationAttribute> _validationAttributes;
         private readonly Dictionary<string, EntityActionAttribute> _customUpdateMethods;
+        private readonly MetaMember[] _associationMembers;
 
         /// <summary>
         /// Returns the MetaType for the specified Type.
@@ -115,6 +116,7 @@ namespace OpenRiaServices.Client.Internal
             // for identity purposes, we need to make sure values are always ordered
             KeyMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsKeyMember).OrderBy(m => m.Name).ToArray());
             _dataMembers = new ReadOnlyCollection<MetaMember>(_metaMembers.Values.Where(m => m.IsDataMember).ToArray());
+            _associationMembers = _metaMembers.Values.Where(m => m.IsAssociationMember).ToArray();
 
             if (!_requiresValidation && HasComplexMembers)
             {
@@ -219,13 +221,7 @@ namespace OpenRiaServices.Client.Internal
         /// <summary>
         /// Gets the collection of association members for this entity Type.
         /// </summary>
-        public IEnumerable<MetaMember> AssociationMembers
-        {
-            get
-            {
-                return this._metaMembers.Values.Where(m => m.IsAssociationMember);
-            }
-        }
+        public IEnumerable<MetaMember> AssociationMembers => _associationMembers;
 
         /// <summary>
         /// Gets the collection of child types this entity Type composes.

@@ -5,6 +5,9 @@
 * Update nuget dependencies and add new dependencies to OpenRiaServices.Hosting.Wcf
   * `System.Collections.Immutable` and `System.Memory` are new dependencies of Wcf hosting
 
+* .NET Framework builds now includes the smaller portable pdb's instead of of the old "full" windows style pdb's
+  * NOTE: For .NET Framework apps ensure that *supportedRuntime* in *app.config* and corresponding setting in *web.config* does not specify an older runtime if you wan't line numbers in stack traces.
+
 # 5.4.2 / AspNetCore 1.0.0
 
 ### .NET8

@@ -3832,6 +3832,49 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(ec.GetChanges().IsEmpty);
         }
 
+
+        [TestMethod]
+        public void EntitySet_Remove_Inferred_Entities()
+        {
+            TestEntityContainer ec = new TestEntityContainer();
+            EntitySet<Product> products = ec.GetEntitySet<Product>();
+
+            // attach a product
+            Product product = new Product
+            {
+                ProductID = 1,
+                Name = "Choco Crisp",
+            };
+            // EntityCollection
+            var order = new PurchaseOrder { PurchaseOrderID = 1 };
+            var detail1 = new PurchaseOrderDetail() { PurchaseOrder = order, PurchaseOrderID = 1, PurchaseOrderDetailID = 1 };
+            product.PurchaseOrderDetails.Add(detail1);
+            products.Attach(product);
+
+            // Delete the entity, it should be marked for deletion
+            products.Remove(product);
+            Assert.AreEqual(EntityState.Deleted, product.EntityState);
+            Assert.AreEqual(EntityState.Unmodified, detail1.EntityState);
+            Assert.AreEqual(EntityState.Unmodified, order.EntityState);
+
+            var detail2 = new PurchaseOrderDetail() { PurchaseOrderDetailID = 2, Product = product, PurchaseOrderID = order.PurchaseOrderID };
+            var detail3 = new PurchaseOrderDetail() { PurchaseOrderDetailID = 3, Product = product, PurchaseOrderID = order.PurchaseOrderID };
+
+            product.PurchaseOrderDetails.Add(detail2);
+            product.PurchaseOrderDetails.Add(detail3);
+
+            Assert.AreEqual(EntityState.Deleted, product.EntityState);
+            Assert.AreEqual(EntityState.Detached, detail2.EntityState);
+            Assert.AreEqual(EntityState.Detached, detail3.EntityState);
+
+            // Add detail2, which should trigger detail3 to be discovered via product (which should still be deleted)
+            order.PurchaseOrderDetails.Add(detail2);
+
+            Assert.AreEqual(EntityState.Deleted, product.EntityState);
+            Assert.AreEqual(EntityState.New, detail2.EntityState);
+            Assert.AreEqual(EntityState.New, detail3.EntityState);
+        }
+
         [TestMethod]
         public void EntitySet_CollectionChangedEvents()
         {
