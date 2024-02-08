@@ -1425,12 +1425,10 @@ namespace OpenRiaServices.Client
 
                 int countBefore = this.Source.Count;
                 this.Source.Add(entity);
-                int countAfter = this.Source.Count;
 
-                if (this.Source.Count == countBefore + 1)
-                    return countBefore;
-                else 
-                    return ((List<T>)this.Source.List).IndexOf(entity, countBefore);
+                return this.Source.Count == countBefore + 1 
+                    ? countBefore
+                    : ((List<T>)this.Source.List).IndexOf(entity, countBefore);
             }
 
             public void Clear()

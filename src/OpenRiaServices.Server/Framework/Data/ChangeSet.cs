@@ -458,25 +458,22 @@ namespace OpenRiaServices.Server
                 // first get any current child operations
                 List<ChangeSetEntry> associatedChangesList = new List<ChangeSetEntry>();
                 ChangeSetEntry changeSetEntry = this._changeSetEntries.Single(p => p.Entity == entity);
-                if (changeSetEntry.Associations != null)
+
+                if (changeSetEntry.Associations != null
+                    && changeSetEntry.Associations.TryGetValue(compositionMember.Name, out int[] associatedIds))
                 {
-                    if (changeSetEntry.Associations.TryGetValue(compositionMember.Name, out int[] associatedIds))
-                    {
-                        IEnumerable<ChangeSetEntry> childOperations = associatedIds.Select(p => entityOperationMap[p]);
-                        associatedChangesList.AddRange(childOperations);
-                    }
+                    IEnumerable<ChangeSetEntry> childOperations = associatedIds.Select(p => entityOperationMap[p]);
+                    associatedChangesList.AddRange(childOperations);
                 }
 
                 // next get any child delete operations
-                if (changeSetEntry.OriginalAssociations != null)
+                if (changeSetEntry.OriginalAssociations != null
+                    && changeSetEntry.OriginalAssociations.TryGetValue(compositionMember.Name, out int[] originalAssociatedIds))
                 {
-                    if (changeSetEntry.OriginalAssociations.TryGetValue(compositionMember.Name, out int[] originalAssociatedIds))
-                    {
-                        IEnumerable<ChangeSetEntry> deletedChildOperations = originalAssociatedIds
-                            .Select(p => entityOperationMap[p])
-                            .Where(p => p.Operation == DomainOperation.Delete);
-                        associatedChangesList.AddRange(deletedChildOperations);
-                    }
+                    IEnumerable<ChangeSetEntry> deletedChildOperations = originalAssociatedIds
+                        .Select(p => entityOperationMap[p])
+                        .Where(p => p.Operation == DomainOperation.Delete);
+                    associatedChangesList.AddRange(deletedChildOperations);
                 }
 
                 associatedChanges[compositionMember] = associatedChangesList;
@@ -515,21 +512,17 @@ namespace OpenRiaServices.Server
 
                         // add any current associations
                         List<int> childIds = new List<int>();
-                        if (operation.Associations != null)
+                        if (operation.Associations != null 
+                            && operation.Associations.TryGetValue(compositionMember.Name, out int[] associatedIds))
                         {
-                            if (operation.Associations.TryGetValue(compositionMember.Name, out int[] associatedIds))
-                            {
-                                childIds.AddRange(associatedIds);
-                            }
+                            childIds.AddRange(associatedIds);
                         }
 
                         // add any original associations
-                        if (operation.OriginalAssociations != null)
+                        if (operation.OriginalAssociations != null
+                            && operation.OriginalAssociations.TryGetValue(compositionMember.Name, out int[] associatedIds))
                         {
-                            if (operation.OriginalAssociations.TryGetValue(compositionMember.Name, out int[] associatedIds))
-                            {
-                                childIds.AddRange(associatedIds);
-                            }
+                            childIds.AddRange(associatedIds);
                         }
 
                         // foreach identified child operation, set the parent

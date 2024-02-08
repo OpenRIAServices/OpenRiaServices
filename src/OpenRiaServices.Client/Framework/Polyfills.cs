@@ -1,8 +1,8 @@
-﻿using System;
+﻿#if !NET
+using System;
 
 namespace System.Collections.Generic
 {
-#if !NET
     /// <summary>
     /// Helper methods to allow "newer" .NET methods on older frameworks
     /// </summary>
@@ -24,5 +24,5 @@ namespace System.Collections.Generic
             }
         }
     }
-#endif
 }
+#endif
