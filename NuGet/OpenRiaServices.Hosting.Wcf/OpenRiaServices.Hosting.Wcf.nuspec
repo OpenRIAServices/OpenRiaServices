@@ -16,13 +16,15 @@
     </description>
     <summary>Open RIA Services - Server-side assemblies and configuration</summary>
     <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
-    <copyright>2019 Outercurve Foundation</copyright>
+    <copyright>2024 .NET Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices</tags>
 	<dependencies>
 		<group targetFramework="net472">
+			<dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="8.0.0"/>
 			<dependency id="OpenRiaServices.Server" version="$version$"/>
-			<dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="7.0.0"/>
+			<dependency id="System.Collections.Immutable" version="8.0.0" />
+			<dependency id="System.Memory" version="4.5.5"/>
 		</group>
 	</dependencies>
   </metadata>

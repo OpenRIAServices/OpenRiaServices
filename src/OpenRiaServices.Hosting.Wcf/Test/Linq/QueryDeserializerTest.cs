@@ -2,7 +2,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Runtime.Serialization;
-using OpenRiaServices.Client.Test;
 using OpenRiaServices.Server;
 using OpenRiaServices.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -45,7 +44,7 @@ namespace System.Linq.Dynamic.UnitTests
                 new ServiceQueryPart("where", "it.Double.ToString() == String('a', 1000)")
             };
 
-            ExceptionHelper.ExpectException<ParseException>(delegate
+            Assert.ThrowsException<ParseException>(() =>
             {
                 QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts);
             }, string.Format(CultureInfo.CurrentCulture, System.Linq.Dynamic.Resource.MethodsAreInaccessible + " (at index 24)", typeof(String).Name));
@@ -69,7 +68,7 @@ namespace System.Linq.Dynamic.UnitTests
                 new ServiceQueryPart("where", String.Format("it.{0} == \"Whatever\"", memberToAccess))
             };
 
-            ExceptionHelper.ExpectInvalidOperationException(delegate
+            Assert.ThrowsException<InvalidOperationException>(() =>
             {
                 QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts);
             }, string.Format(CultureInfo.CurrentCulture, System.Linq.Dynamic.Resource.UnknownPropertyOrField, memberToAccess, entityType.Name));
