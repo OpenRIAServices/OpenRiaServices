@@ -149,7 +149,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         internal class UnmodifiedOperationAdder : EntityVisitor
         {
-            private readonly Dictionary<object, bool> _visited = new Dictionary<object, bool>();
+            private readonly HashSet<object> _visited = new HashSet<object>();
             private readonly List<ChangeSetEntry> _changeSetEntries;
             private int _id;
             private bool _isChild;
@@ -180,7 +180,7 @@ namespace OpenRiaServices.Client
 
             public override void Visit(Entity entity)
             {
-                if (this._visited.ContainsKey(entity))
+                if (!this._visited.Add(entity))
                 {
                     return;
                 }
@@ -191,8 +191,6 @@ namespace OpenRiaServices.Client
                     ChangeSetEntry op = new ChangeSetEntry(entity, this._id++, EntityOperationType.None);
                     this._changeSetEntries.Add(op);
                 }
-
-                this._visited.Add(entity, true);
 
                 base.Visit(entity);
             }

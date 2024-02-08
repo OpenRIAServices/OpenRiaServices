@@ -68,7 +68,7 @@ namespace OpenRiaServices.Server
             this._changeSetEntries = changeSetEntries;
             if (requiresOrdering)
             {
-                this._changeSetEntries = this.OrderChangeset(changeSetEntries);
+                this._changeSetEntries = OrderChangeset(changeSetEntries);
             }
         }
 
@@ -90,21 +90,19 @@ namespace OpenRiaServices.Server
                 }
 
                 // ensure unique client IDs
-                if (idSet.Contains(entry.Id))
+                if (!idSet.Add(entry.Id))
                 {
                     throw new InvalidOperationException(
                         string.Format(CultureInfo.CurrentCulture, Resource.InvalidChangeSet, Resource.InvalidChangeSet_DuplicateId));
                 }
-                idSet.Add(entry.Id);
 
                 // ensure unique entity instances - there can only be a single entry
                 // for a given entity instance
-                if (entitySet.Contains(entry.Entity))
+                if (!entitySet.Add(entry.Entity))
                 {
                     throw new InvalidOperationException(
                         string.Format(CultureInfo.CurrentCulture, Resource.InvalidChangeSet, Resource.InvalidChangeSet_DuplicateEntity));
                 }
-                entitySet.Add(entry.Entity);
 
                 // entities must be of the same type
                 if (entry.OriginalEntity != null && !(entry.Entity.GetType() == entry.OriginalEntity.GetType()))
@@ -460,27 +458,22 @@ namespace OpenRiaServices.Server
                 // first get any current child operations
                 List<ChangeSetEntry> associatedChangesList = new List<ChangeSetEntry>();
                 ChangeSetEntry changeSetEntry = this._changeSetEntries.Single(p => p.Entity == entity);
-                if (changeSetEntry.Associations != null)
+
+                if (changeSetEntry.Associations != null
+                    && changeSetEntry.Associations.TryGetValue(compositionMember.Name, out int[] associatedIds))
                 {
-                    if (changeSetEntry.Associations.ContainsKey(compositionMember.Name))
-                    {
-                        int[] associatedIds = changeSetEntry.Associations[compositionMember.Name];
-                        IEnumerable<ChangeSetEntry> childOperations = associatedIds.Select(p => entityOperationMap[p]);
-                        associatedChangesList.AddRange(childOperations);
-                    }
+                    IEnumerable<ChangeSetEntry> childOperations = associatedIds.Select(p => entityOperationMap[p]);
+                    associatedChangesList.AddRange(childOperations);
                 }
 
                 // next get any child delete operations
-                if (changeSetEntry.OriginalAssociations != null)
+                if (changeSetEntry.OriginalAssociations != null
+                    && changeSetEntry.OriginalAssociations.TryGetValue(compositionMember.Name, out int[] originalAssociatedIds))
                 {
-                    if (changeSetEntry.OriginalAssociations.ContainsKey(compositionMember.Name))
-                    {
-                        int[] originalAssociatedIds = changeSetEntry.OriginalAssociations[compositionMember.Name];
-                        IEnumerable<ChangeSetEntry> deletedChildOperations = originalAssociatedIds
-                            .Select(p => entityOperationMap[p])
-                            .Where(p => p.Operation == DomainOperation.Delete);
-                        associatedChangesList.AddRange(deletedChildOperations);
-                    }
+                    IEnumerable<ChangeSetEntry> deletedChildOperations = originalAssociatedIds
+                        .Select(p => entityOperationMap[p])
+                        .Where(p => p.Operation == DomainOperation.Delete);
+                    associatedChangesList.AddRange(deletedChildOperations);
                 }
 
                 associatedChanges[compositionMember] = associatedChangesList;
@@ -498,7 +491,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         /// <param name="changeSetEntries">The changeset operations to order.</param>
         /// <returns>The ordered operations.</returns>
-        private IEnumerable<ChangeSetEntry> OrderChangeset(IEnumerable<ChangeSetEntry> changeSetEntries)
+        private static IEnumerable<ChangeSetEntry> OrderChangeset(IEnumerable<ChangeSetEntry> changeSetEntries)
         {
             Dictionary<int, ChangeSetEntry> cudOpIdMap = changeSetEntries.ToDictionary(p => p.Id);
             Dictionary<ChangeSetEntry, List<ChangeSetEntry>> operationChildMap = new Dictionary<ChangeSetEntry, List<ChangeSetEntry>>();
@@ -519,21 +512,17 @@ namespace OpenRiaServices.Server
 
                         // add any current associations
                         List<int> childIds = new List<int>();
-                        if (operation.Associations != null)
+                        if (operation.Associations != null 
+                            && operation.Associations.TryGetValue(compositionMember.Name, out int[] associatedIds))
                         {
-                            if (operation.Associations.ContainsKey(compositionMember.Name))
-                            {
-                                childIds.AddRange(operation.Associations[compositionMember.Name]);
-                            }
+                            childIds.AddRange(associatedIds);
                         }
 
                         // add any original associations
-                        if (operation.OriginalAssociations != null)
+                        if (operation.OriginalAssociations != null
+                            && operation.OriginalAssociations.TryGetValue(compositionMember.Name, out associatedIds))
                         {
-                            if (operation.OriginalAssociations.ContainsKey(compositionMember.Name))
-                            {
-                                childIds.AddRange(operation.OriginalAssociations[compositionMember.Name]);
-                            }
+                            childIds.AddRange(associatedIds);
                         }
 
                         // foreach identified child operation, set the parent
@@ -582,7 +571,7 @@ namespace OpenRiaServices.Server
             IEnumerable<ChangeSetEntry> rootOperations = changeSetEntries.Where(p => p.ParentOperation == null);
             foreach (ChangeSetEntry operation in rootOperations)
             {
-                this.OrderOperations(operation, operationChildMap, orderedOperations);
+                OrderOperations(operation, operationChildMap, orderedOperations);
             }
 
             // now add any remaining operations
@@ -596,7 +585,7 @@ namespace OpenRiaServices.Server
         /// <param name="operation">The operation to order.</param>
         /// <param name="operationChildMap">Map of operation to child operations.</param>
         /// <param name="orderedOperations">The list of ordered operations.</param>
-        private void OrderOperations(ChangeSetEntry operation, Dictionary<ChangeSetEntry, List<ChangeSetEntry>> operationChildMap, List<ChangeSetEntry> orderedOperations)
+        private static void OrderOperations(ChangeSetEntry operation, Dictionary<ChangeSetEntry, List<ChangeSetEntry>> operationChildMap, List<ChangeSetEntry> orderedOperations)
         {
             // first add the operation
             orderedOperations.Add(operation);
@@ -609,7 +598,7 @@ namespace OpenRiaServices.Server
             }
             foreach (ChangeSetEntry childOperation in childOps)
             {
-                this.OrderOperations(childOperation, operationChildMap, orderedOperations);
+                OrderOperations(childOperation, operationChildMap, orderedOperations);
             }
         }
 

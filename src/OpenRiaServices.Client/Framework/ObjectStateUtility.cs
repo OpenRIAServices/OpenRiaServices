@@ -28,13 +28,9 @@ namespace OpenRiaServices.Client
             MetaType metaType = MetaType.GetMetaType(o.GetType());
             Dictionary<string, object> extractedState = new Dictionary<string, object>();
 
-            if (visited.Contains(o))
+            if (!visited.Add(o))
             {
                 throw new InvalidOperationException(Resource.CyclicReferenceError);
-            }
-            else
-            {
-                visited.Add(o);
             }
 
             foreach (MetaMember metaMember in metaType.DataMembers)

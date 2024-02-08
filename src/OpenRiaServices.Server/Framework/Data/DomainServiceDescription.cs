@@ -1311,12 +1311,10 @@ namespace OpenRiaServices.Server
             // If we have already visited this entity type, its composition map
             // entry is accurate and can be used as is.
             this._compositionMap.TryGetValue(entityType, out parentAssociations);
-            if (fixedEntities.Contains(entityType))
+            if (!fixedEntities.Add(entityType))
             {
                 return parentAssociations;
             }
-
-            fixedEntities.Add(entityType);
 
             // Get the base class's associations.  This will re-entrantly walk back
             // the hierarchy and repair the composition map as it goes.
@@ -1621,12 +1619,10 @@ namespace OpenRiaServices.Server
                 this._submitMethods[entityType] = entitySubmitMethods;
             }
 
-            if (entitySubmitMethods.ContainsKey(method.Operation))
+            if (!entitySubmitMethods.TryAdd(method.Operation, method))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainService_DuplicateCUDMethod, methodName, entitySubmitMethods[method.Operation].Name));
             }
-
-            entitySubmitMethods[method.Operation] = method;
         }
 
         /// <summary>
@@ -1881,11 +1877,11 @@ namespace OpenRiaServices.Server
                 entityCustomMethods = new Dictionary<string, DomainOperationEntry>();
                 this._customMethods[entityType] = entityCustomMethods;
             }
-            else if (entityCustomMethods.ContainsKey(methodName))
+
+            if (!entityCustomMethods.TryAdd(methodName, method))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainOperationEntryOverload_NotSupported, methodName));
             }
-            entityCustomMethods[methodName] = method;
         }
 
         /// <summary>
@@ -1898,12 +1894,10 @@ namespace OpenRiaServices.Server
             ValidateMethodSignature(this, method);
 
             string methodName = method.Name;
-            if (this._invokeOperations.ContainsKey(methodName))
+            if (!this._invokeOperations.TryAdd(methodName, method))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainOperationEntryOverload_NotSupported, methodName));
             }
-
-            this._invokeOperations[methodName] = method;
         }
 
         /// <summary>
@@ -1995,11 +1989,10 @@ namespace OpenRiaServices.Server
             }
 
             // Avoid infinite recursion in the case of composition cycles
-            if (visited.Contains(entityType))
+            if (!visited.Add(entityType))
             {
                 return false;
             }
-            visited.Add(entityType);
 
             // for compositional children, if the parent supports the operation (or supports
             // Update) the operation is supported.

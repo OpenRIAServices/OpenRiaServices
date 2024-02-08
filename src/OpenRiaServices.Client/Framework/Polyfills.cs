@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿#if !NET
+using System;
 
-namespace OpenRiaServices.Client
+namespace System.Collections.Generic
 {
-#if !NET
     /// <summary>
     /// Helper methods to allow "newer" .NET methods on older frameworks
     /// </summary>
@@ -25,5 +24,5 @@ namespace OpenRiaServices.Client
             }
         }
     }
-#endif
 }
+#endif
