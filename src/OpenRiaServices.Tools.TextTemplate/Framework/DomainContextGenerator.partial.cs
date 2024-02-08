@@ -120,10 +120,8 @@ namespace OpenRiaServices.Tools.TextTemplate
                 this._queryMethods.Add(domainOperationEntry);
 
                 Type entityType = TypeUtility.GetElementType(domainOperationEntry.ReturnType);
-                if (!visitedEntityTypes.Contains(entityType))
+                if (visitedEntityTypes.Add(entityType))
                 {
-                    visitedEntityTypes.Add(entityType);
-
                     bool isComposedType = this.DomainServiceDescription
                         .GetParentAssociations(entityType).Any(p => p.ComponentType != entityType);
 

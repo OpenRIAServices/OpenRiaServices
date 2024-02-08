@@ -730,7 +730,7 @@ namespace OpenRiaServices.Client
             if (cachedEntity == null)
             {
                 // add the entity to the cache
-                this.AddToCache(entity);
+                this._identityCache.Add(identity, entity);
                 cachedEntity = entity;
 
                 int idx = 0;
@@ -1425,10 +1425,10 @@ namespace OpenRiaServices.Client
 
                 int countBefore = this.Source.Count;
                 this.Source.Add(entity);
-                int countAfter = this.Source.Count;
 
-                // If count increased then the item was added last, otherwise return -1 for "not added"
-                return (countAfter > countBefore) ? countBefore : -1;
+                return this.Source.Count == countBefore + 1 
+                    ? countBefore
+                    : ((List<T>)this.Source.List).IndexOf(entity, countBefore);
             }
 
             public void Clear()

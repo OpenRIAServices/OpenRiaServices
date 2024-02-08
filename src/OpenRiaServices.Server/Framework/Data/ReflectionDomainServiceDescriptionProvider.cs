@@ -127,13 +127,9 @@ namespace OpenRiaServices.Server
                 {
                     currentType = attribute.MetadataClassType;
                     // If we find a cyclic reference, throw an error. 
-                    if (metadataTypeReferences.Contains(currentType))
+                    if (!metadataTypeReferences.Add(currentType))
                     {
                         throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture, Resource.CyclicMetadataTypeAttributesFound, type.FullName));
-                    }
-                    else
-                    {
-                        metadataTypeReferences.Add(currentType);
                     }
                 }
             }

@@ -375,9 +375,8 @@ namespace System.Linq.Dynamic
 
         void AddSymbol(string name, object value)
         {
-            if (_symbols.ContainsKey(name))
+            if (!_symbols.TryAdd(name, value))
                 throw ParseError(Resource.DuplicateIdentifier, name);
-            _symbols.Add(name, value);
         }
 
         public Expression Parse(Type resultType)

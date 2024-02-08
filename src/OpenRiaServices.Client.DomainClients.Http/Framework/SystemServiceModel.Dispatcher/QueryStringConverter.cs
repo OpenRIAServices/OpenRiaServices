@@ -159,9 +159,9 @@ namespace System.ServiceModel.Dispatcher
         [SuppressMessage("Reliability", "Reliability104:CaughtAndHandledExceptionsRule", Justification = "The exception is traced in the finally clause")]
         TypeConverter GetStringConverter(Type parameterType)
         {
-            if (this._typeConverterCache.ContainsKey(parameterType))
+            if (this._typeConverterCache.TryGetValue(parameterType, out TypeConverter typeConverter))
             {
-                return (TypeConverter)this._typeConverterCache[parameterType];
+                return typeConverter;
             }
             TypeConverterAttribute[] typeConverterAttrs = parameterType.GetCustomAttributes(typeof(TypeConverterAttribute), true) as TypeConverterAttribute[];
             if (typeConverterAttrs != null)

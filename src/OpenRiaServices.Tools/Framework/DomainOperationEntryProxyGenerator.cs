@@ -49,10 +49,8 @@ namespace OpenRiaServices.Tools
                 this.GenerateEntityQueryMethod(domainOperationEntry);
 
                 Type entityType = TypeUtility.GetElementType(domainOperationEntry.ReturnType);
-                if (!visitedEntityTypes.Contains(entityType))
+                if (visitedEntityTypes.Add(entityType))
                 {
-                    visitedEntityTypes.Add(entityType);
-
                     // We don't generate entity sets for composed Types. However the special
                     // case can arise where a Type is its own parent (and no other Types 
                     // are its parent), in which case we need to generate the set.
