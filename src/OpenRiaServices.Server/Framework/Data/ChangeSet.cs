@@ -520,7 +520,7 @@ namespace OpenRiaServices.Server
 
                         // add any original associations
                         if (operation.OriginalAssociations != null
-                            && operation.OriginalAssociations.TryGetValue(compositionMember.Name, out int[] associatedIds))
+                            && operation.OriginalAssociations.TryGetValue(compositionMember.Name, out associatedIds))
                         {
                             childIds.AddRange(associatedIds);
                         }
