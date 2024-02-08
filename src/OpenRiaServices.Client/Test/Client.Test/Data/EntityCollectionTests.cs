@@ -50,6 +50,28 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        [Description("Tests that ListCollectionViewProxy returns correct index")]
+        public void ICVF_ListCollectionViewProxy_Add()
+        {
+            EntitySet<City> entitySet;
+            EntityCollection<City> entityCollection = this.CreateEntityCollection(out entitySet);
+            EntityCollection<City>.ListCollectionViewProxy<City> collection = new(entityCollection);
+
+            for (int i=0; i < 3; ++i)
+            {
+                var city = new City() {  ZoneID = i };
+
+                Assert.IsFalse(collection.Contains(city));
+                int idx = collection.Add(city);
+
+                Assert.AreEqual(i, idx);
+                Assert.AreSame(city, collection[idx]);
+                Assert.IsTrue(collection.Contains(city));
+                Assert.IsTrue(entityCollection.Contains(city));
+            }
+        }
+
+        [TestMethod]
         [Description("Tests that calling AddNew on the View adds to the EntityCollection and EntitySet and CancelNew removes both.")]
         public void ICVF_CancelNew()
         {

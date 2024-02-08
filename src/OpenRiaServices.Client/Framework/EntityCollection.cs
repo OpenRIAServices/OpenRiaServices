@@ -620,7 +620,8 @@ namespace OpenRiaServices.Client
                 {
                     // Add matching entity to our set. When adding, we use the stronger Filter to
                     // filter out New entities
-                    _ = this.TryAddEntity(typedEntity);
+                    bool added = this.TryAddEntity(typedEntity);
+                    Debug.Assert(added);
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
                 }
                 else if (containsEntity && !this._entityPredicate(typedEntity))
@@ -826,7 +827,7 @@ namespace OpenRiaServices.Client
         /// is sufficient for interaction with the ListCollectionView.
         /// </remarks>
         /// <typeparam name="T">The entity type of this proxy</typeparam>
-        private class ListCollectionViewProxy<T> : IList, IEnumerable<T>, INotifyCollectionChanged, ICollectionChangedListener where T : Entity
+        internal class ListCollectionViewProxy<T> : IList, IEnumerable<T>, INotifyCollectionChanged, ICollectionChangedListener where T : Entity
         {
             private readonly object _syncRoot = new object();
             private readonly EntityCollection<T> _source;
@@ -856,8 +857,10 @@ namespace OpenRiaServices.Client
                 }
 
                 this._addedEntities.Add(entity);
+                int countBefore = this.Source.Count;
                 this.Source.Add(entity);
-                return this.IndexOf(entity);
+
+                return this.Source.Entities.IndexOf(entity, countBefore);
             }
 
             public void Clear()
@@ -868,7 +871,7 @@ namespace OpenRiaServices.Client
 
             public bool Contains(object value)
             {
-                return this.IndexOf(value) >= 0;
+                return this.Source.EntitiesHashSet.Contains(value);
             }
 
             public int IndexOf(object value)
