@@ -259,7 +259,7 @@ namespace OpenRiaServices.Client
 
                 // we may have to check for containment once more, since the EntitySet.Add calls
                 // above can cause a dynamic add to this EntityCollection behind the scenes
-                if (!addedToSet && TryAddEntity(entity))
+                if (TryAddEntity(entity) || addedToSet)
                 {
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, this.Entities.Count - 1);
                 }

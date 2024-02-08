@@ -1427,8 +1427,10 @@ namespace OpenRiaServices.Client
                 this.Source.Add(entity);
                 int countAfter = this.Source.Count;
 
-                // If count increased then the item was added last, otherwise return -1 for "not added"
-                return (countAfter > countBefore) ? countBefore : -1;
+                if (this.Source.Count == countBefore + 1)
+                    return countBefore;
+                else 
+                    return ((List<T>)this.Source.List).IndexOf(entity, countBefore);
             }
 
             public void Clear()
