@@ -223,8 +223,11 @@ namespace OpenRiaServices.Client
         /// <returns>The entity or null.</returns>
         private TEntity GetSingleMatch(IEnumerable entities)
         {
+            IEnumerable<TEntity> enumerable = (entities as ICollection<TEntity>)
+                ?? entities.OfType<TEntity>();
+
             TEntity entity = null;
-            foreach (TEntity currEntity in entities.OfType<TEntity>().Where(this.Filter))
+            foreach (TEntity currEntity in enumerable.Where(this.Filter))
             {
                 if (entity != null)
                 {
@@ -281,8 +284,8 @@ namespace OpenRiaServices.Client
         /// <param name="args">The collection changed event arguments.</param>
         private void SourceSet_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
         {
-            if (this._parent.EntityState != EntityState.New &&
-                args.Action == NotifyCollectionChangedAction.Add)
+            if (args.Action == NotifyCollectionChangedAction.Add
+                && this._parent.EntityState != EntityState.New)
             {
                 TEntity newEntity = this.GetSingleMatch(args.NewItems);
                 if ((newEntity != null) && (newEntity != this._entity))
@@ -294,7 +297,7 @@ namespace OpenRiaServices.Client
             }
             else if (args.Action == NotifyCollectionChangedAction.Remove)
             {
-                if (this._entity != null && args.OldItems.OfType<TEntity>().Contains(this._entity))
+                if (this._entity != null && args.OldItems.Contains(this._entity))
                 {
                     // if the referenced Entity has been removed from the source EntitySet,
                     // we need to clear out our cached reference and raise the notification
