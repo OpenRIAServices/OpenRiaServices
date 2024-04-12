@@ -228,13 +228,9 @@ namespace OpenRiaServices.Tools.Test
         /// <returns></returns>
         public static List<string> GetClientAssemblies(string relativeTestDir)
         {
-            // Our current project's folder
+            // Get full path of OpenRiaServices.Client.Web.csproj
             string projectDir = GetCurrentProjectFolder();
-
-            // Folder of project we want to build
             string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.Client.Web\Framework"));
-
-            string projectOutputDir = Path.Combine(testProjectDir, "Generated_Code");
             string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.Client.Web.csproj");
             Assert.IsTrue(File.Exists(testProjectFile), "This test could not find its required project at " + testProjectFile);
 
