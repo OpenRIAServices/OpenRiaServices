@@ -1,6 +1,12 @@
-# EF Core 2.1.0
+# EF Core 3.0.0
 
-* Target EF Core 8 when running on .NET 8
+* Target EF Core 8
+  *  **IMPORTANT** EF Core 8 is NOT backwards compatible with models (DbContexct) classes compiled against earlier versions of EF Core.
+   Methods such as `HasName` in `OnConfigure` will throw `MethodNotFoundException`
+   This means that to use EF Core 8 all referenced EF Core projects needs to be updated to 8.0
+* Drop support for earlier TargetFrameworks
+   * Due to limitations above with binary breaking changes in EF Core earlier frameworks **will not** be supported to reduce risk of mixing EF Core versions.
+   * Use the 2.0.* version of the nuget package if you need support for earlier versions of EF COre
 
 # 5.4.3
 
