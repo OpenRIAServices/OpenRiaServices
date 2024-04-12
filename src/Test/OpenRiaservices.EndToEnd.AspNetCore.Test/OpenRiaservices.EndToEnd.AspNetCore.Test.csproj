@@ -114,15 +114,4 @@
     </Compile>
   </ItemGroup>
 
-  <ItemGroup>
-    <Content Include="ClientTestProjectPath.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
-
-  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
-    <Message Text="Writing project path" />
-    <WriteLinesToFile File="ClientTestProjectPath.txt" Lines="$(MSBuildProjectDirectory)" Overwrite="true" WriteOnlyWhenDifferent="true" />
-  </Target>
-
 </Project>
