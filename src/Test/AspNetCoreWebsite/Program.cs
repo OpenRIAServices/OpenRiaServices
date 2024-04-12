@@ -43,9 +43,13 @@ app.MapOpenRiaServices(builder =>
            {
                builder.AddDomainService(type);
            }
+           catch (global::System.MissingMethodException)
+           {
+               throw;
+           }
            catch (global::System.Exception ex)
            {
-               Console.WriteLine($"Ignnoreing {type} due to exception: {ex.Message}");
+               Console.WriteLine($"Ignoring {type} due to exception: {ex.Message}");
            }
        }
 
