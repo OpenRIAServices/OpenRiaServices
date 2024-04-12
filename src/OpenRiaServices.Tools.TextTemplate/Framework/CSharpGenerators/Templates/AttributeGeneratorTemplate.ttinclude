@@ -15,7 +15,7 @@
 	/// <param name="forcePropagation">Causes the attributes to be generated even if the attribute verification fails.</param>
 	protected virtual void GenerateAttributes(IEnumerable<Attribute> attributes, bool forcePropagation)
 	{
-		foreach (Attribute attribute in attributes.OrderBy(a => a.GetType().Name))
+		foreach (Attribute attribute in attributes)
         {
 			AttributeDeclaration attributeDeclaration = AttributeGeneratorHelper.GetAttributeDeclaration(attribute, this.ClientCodeGenerator, forcePropagation);
             if (attributeDeclaration == null || attributeDeclaration.HasErrors)

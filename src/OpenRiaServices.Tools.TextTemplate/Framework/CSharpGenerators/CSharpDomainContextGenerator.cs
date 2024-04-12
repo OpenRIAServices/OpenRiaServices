@@ -770,7 +770,8 @@ this.Write("IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSe
 	{
 		string domainServiceName = this.DomainServiceDescription.DomainServiceType.Name;
 		string actionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultActionSchema, domainServiceName, operationName);
-		string replyActionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultReplyActionSchema, domainServiceName, operationName);		
+		string replyActionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultReplyActionSchema, domainServiceName, operationName);
+		
 
 this.Write("[OperationContract(AsyncPattern=true, Action=\"");
 
@@ -866,7 +867,7 @@ this.Write("\r\n");
 	/// <param name="forcePropagation">Causes the attributes to be generated even if the attribute verification fails.</param>
 	protected virtual void GenerateAttributes(IEnumerable<Attribute> attributes, bool forcePropagation)
 	{
-		foreach (Attribute attribute in attributes.OrderBy(a => a.GetType().Name))
+		foreach (Attribute attribute in attributes)
         {
 			AttributeDeclaration attributeDeclaration = AttributeGeneratorHelper.GetAttributeDeclaration(attribute, this.ClientCodeGenerator, forcePropagation);
             if (attributeDeclaration == null || attributeDeclaration.HasErrors)
