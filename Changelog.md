@@ -1,4 +1,8 @@
-# Unreleased (5.5.0)
+# EF Core 2.1.0
+
+* Target EF Core 8 when running on .NET 8
+
+# 5.4.3
 
 ### Server
 * Reduced allocatgions when parsing queries on server (both WCF and AspNetCore hosting) in https://github.com/OpenRIAServices/OpenRiaServices/pull/485
