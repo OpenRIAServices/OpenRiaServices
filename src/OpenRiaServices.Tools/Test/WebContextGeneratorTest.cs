@@ -15,7 +15,6 @@ namespace OpenRiaServices.Tools.Test
         [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
         [DeploymentItem(@"Baselines\Default\WebContext\WebContext0.g.cs")]
         [DeploymentItem(@"Baselines\Default\WebContext\WebContext0.g.vb")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]
         public void NoAuthenticationServices()
@@ -25,7 +24,6 @@ namespace OpenRiaServices.Tools.Test
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]
         public void NoAuthenticationServices_FullTypes()
@@ -35,7 +33,6 @@ namespace OpenRiaServices.Tools.Test
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when no services are present.")]
         public void NoAuthenticationServices_FullTypes_NoRootNamespace()
@@ -47,7 +44,6 @@ namespace OpenRiaServices.Tools.Test
 #if NETFRAMEWORK
 
         [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when a single service is present.")]
         public void OneAuthenticationService()
@@ -57,7 +53,6 @@ namespace OpenRiaServices.Tools.Test
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when a single service is present.")]
         public void OneAuthenticationService_FullTypes()
@@ -67,7 +62,6 @@ namespace OpenRiaServices.Tools.Test
         }
 
         [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when two services are present.")]
         public void TwoAuthenticationServices()
@@ -83,7 +77,6 @@ namespace OpenRiaServices.Tools.Test
         }
 
         [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when two services are present.")]
         public void TwoAuthenticationServices_FullTypes()

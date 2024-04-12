@@ -228,17 +228,13 @@ namespace OpenRiaServices.Tools.Test
         /// <returns></returns>
         public static List<string> GetClientAssemblies(string relativeTestDir)
         {
-            string projectPath = string.Empty;  // path to current project
-            string outputPath = string.Empty;   // output path for current project, used to infer output path of test project
-            TestHelper.GetProjectPaths(relativeTestDir, out projectPath, out outputPath);
-
             // Our current project's folder
-            string projectDir = Path.GetDirectoryName(projectPath);
+            string projectDir = GetCurrentProjectFolder();
 
             // Folder of project we want to build
             string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.Client.Web\Framework"));
 
-            string projectOutputDir = Path.Combine(testProjectDir, outputPath);
+            string projectOutputDir = Path.Combine(testProjectDir, "Generated_Code");
             string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.Client.Web.csproj");
             Assert.IsTrue(File.Exists(testProjectFile), "This test could not find its required project at " + testProjectFile);
 
@@ -253,5 +249,9 @@ namespace OpenRiaServices.Tools.Test
             return assemblies;
 
         }
+
+        // This file lies in the root of the project so we can get the projects directory easily
+        private static string GetCurrentProjectFolder([System.Runtime.CompilerServices.CallerFilePath]string callerFilePath = null)
+            => Path.GetDirectoryName(callerFilePath);
     }
 }

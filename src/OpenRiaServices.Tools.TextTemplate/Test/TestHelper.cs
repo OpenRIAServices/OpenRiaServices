@@ -6,54 +6,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Reflection;
 using System.IO;
 using OpenRiaServices.Tools.TextTemplate.Test;
+using System.Runtime.CompilerServices;
 
 namespace OpenRiaServices.Tools.Test
 {
     public class TestHelper
     {
-        // Returns the folder under which this test is currently running.
-        public static string TestDir
-        {
-            get
-            {
-                return Path.GetDirectoryName(typeof(TestHelper).Assembly.Location);
-            }
-        }
-
-        // Returns the path of the currently executing project as well as the output path
-        // This unusual logic is necessary because MSTest has deployed this test to somewhere
-        // from which we cannot locate our test project.  We use this technique to leave
-        // breadcrumbs we can use to get back to it/
-        public static void GetProjectPaths(string relativeTestDir, out string projectPath, out string outputPath)
-        {
-            string projectPathRelativeFileName = Path.Combine(relativeTestDir, "ProjectPath.txt");
-            string projectPathFile = GetTestFileName(projectPathRelativeFileName);
-            projectPath = string.Empty;
-            outputPath = string.Empty;
-            string inputString = string.Empty;
-            using (StreamReader t1 = new StreamReader(projectPathFile))
-            {
-                inputString = t1.ReadToEnd();
-            }
-
-            string[] split = inputString.Split(',');
-            projectPath = split[0];
-            outputPath = split[1];
-        }
-
-        // Returns the full path to a deployment item file
-        public static string GetTestFileName(string baseName)
-        {
-            string testFileName = Path.Combine(TestDir, baseName);
-
-            Assert.IsTrue(File.Exists(testFileName), "Cannot locate " + testFileName +
-                " which is a necessary input file to this test.\r\n" +
-                " Be sure to add a [DeploymentItem] attribute for every new test file.");
-
-            return testFileName;
-        }
-
-        // Creates a mock code generation host that uses the given logger and shared type service
+         // Creates a mock code generation host that uses the given logger and shared type service
         internal static MockCodeGenerationHost CreateMockCodeGenerationHost(ILoggingService logger, ISharedCodeService sharedCodeService)
         {
             MockCodeGenerationHost host = new MockCodeGenerationHost(logger, sharedCodeService);

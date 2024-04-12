@@ -64,7 +64,7 @@ namespace OpenRiaServices.Client.Test
 
         private static void StartWebServer([CallerFilePathAttribute] string filepath = null)
         {
-            string projectPath = Path.GetDirectoryName(filepath); ;
+            string projectPath = Path.GetDirectoryName(filepath);
 #if VBTests
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"..\..\..\Test\WebsiteFullTrust"));
 #else
