@@ -70,9 +70,6 @@
     <Content Include="NotificationMethodGeneratorTests.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="ProjectPath.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ClientClassLib2\**" />
@@ -94,10 +91,5 @@
     <None Remove="T4DomainServiceCodeGenerator\**" />
     <None Remove="TestWap\**" />
   </ItemGroup>
-
-  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
-    <Message Text="Writing project path" />
-    <WriteLinesToFile File="ProjectPath.txt" Lines="$(MSBuildProjectFullPath),Generated_Code," Overwrite="true" />
-  </Target>
-
+  
 </Project>

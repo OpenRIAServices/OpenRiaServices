@@ -20,7 +20,6 @@ namespace OpenRiaServices.Tools.Test
         {
         }
 
-        [DeploymentItem("ProjectPath.txt")]
         [Description("PdbReader finds files defining properties in server assembly")]
         [TestMethod]
         public void PdbReader_Finds_Method_Files()
@@ -59,7 +58,6 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-        [DeploymentItem("ProjectPath.txt")]
         [Description("PdbReader finds all files for a type")]
         [TestMethod]
         public void PdbReader_Finds_Types_Files()

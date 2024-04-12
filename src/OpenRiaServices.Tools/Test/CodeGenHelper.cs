@@ -348,9 +348,7 @@ namespace OpenRiaServices.Tools.Test
         public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstance(string relativeTestDir, bool includeClientOutputAssembly)
         {
             string deploymentDir = Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
-            string projectPath = null;
-            string outputPath = null;
-            TestHelper.GetProjectPaths(relativeTestDir, out projectPath, out outputPath);
+            string projectPath = TestHelper.GetToolsTestProjectPath();           
 
             Assert.IsTrue(File.Exists(projectPath), "Could not locate " + projectPath + " necessary for test.");
             string serverProjectPath = CodeGenHelper.ServerClassLibProjectPath(projectPath);
