@@ -53,4 +53,19 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
+  <!-- ################# Remove old TargetFrameworks from nuget package, we want to remove it completely but first need to update tests ###### -->
+  <Target Name="_ExcludeTargetFramework" AfterTargets="_GetTargetFrameworksOutput" BeforeTargets="_WalkEachTargetPerFramework">
+    <ItemGroup>
+      <_TargetFrameworks Remove="netstandard2.0" />
+      <_TargetFrameworks Remove="net6.0" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_ExcludeTargetFrameworkDependency" AfterTargets="_WalkEachTargetPerFramework" BeforeTargets="GenerateNuspec">
+    <ItemGroup>
+      <_FrameworksWithSuppressedDependencies Include="netstandard2.0" />
+      <_FrameworksWithSuppressedDependencies Include="net6.0" />
+    </ItemGroup>
+  </Target>
 </Project>
