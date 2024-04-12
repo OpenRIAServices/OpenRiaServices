@@ -5,13 +5,13 @@
     <AssemblyName>OpenRiaServices.Tools.Test.T4Generator</AssemblyName>
     <TargetFrameworks>net472;net6.0</TargetFrameworks>
   </PropertyGroup>
-  <ItemGroup  Condition="'$(TargetFramework)' == 'net472'">
+  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
-  <ItemGroup  Condition="'$(TargetFramework)' != 'net472'">
+  <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
   </ItemGroup>
   <ItemGroup>
     <Compile Update="T4DomainServiceClientCodeGenerator.cs">
@@ -22,7 +22,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="*.ttinclude" />
-    <None Include="T4DomainServiceClientCodeGenerator.tt">
+    <None Update="T4DomainServiceClientCodeGenerator.tt">
       <Generator>TextTemplatingFilePreprocessor</Generator>
       <LastGenOutput>T4DomainServiceClientCodeGenerator.cs</LastGenOutput>
     </None>
@@ -30,5 +30,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
     <ProjectReference Include="..\..\Framework\OpenRiaServices.Tools.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
 </Project>

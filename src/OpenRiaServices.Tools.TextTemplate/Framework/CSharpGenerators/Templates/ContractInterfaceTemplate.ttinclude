@@ -77,10 +77,8 @@ IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result);
 	private void GenerateContractMethodAttributes(string operationName)
 	{
 		string domainServiceName = this.DomainServiceDescription.DomainServiceType.Name;
-		string faultTypeName = typeof(DomainServiceFault).Name;
 		string actionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultActionSchema, domainServiceName, operationName);
 		string replyActionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultReplyActionSchema, domainServiceName, operationName);
-		string faultActionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultFaultActionSchema, domainServiceName, operationName, faultTypeName);
 		
 #>
 [OperationContract(AsyncPattern=true, Action="<#= actionString #>", ReplyAction="<#= replyActionString #>")]	
