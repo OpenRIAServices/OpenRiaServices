@@ -1269,7 +1269,7 @@ namespace OpenRiaServices.Server
                 }
             }
 
-#if NET6_0_OR_GREATER
+#if NET
             if (enumerable is IAsyncEnumerable<T> asyncEnumerable)
             {
                 return EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);

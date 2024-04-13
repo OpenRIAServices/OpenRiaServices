@@ -17,7 +17,7 @@ namespace DataModels.ScenarioModels
         }
     }
 
-#if !NET6_0
+#if HAS_LINQ2SQL
     /// <summary>
     /// This class is used to test instantiation errors at code gen
     /// </summary>
@@ -44,7 +44,7 @@ namespace DataModels.ScenarioModels
         }
     }
 
-#if !NET6_0
+#if HAS_LINQ2SQL
     /// <summary>
     /// This class is used to make sure one can inherit from DataContext and BO wizard still works.
     /// </summary>

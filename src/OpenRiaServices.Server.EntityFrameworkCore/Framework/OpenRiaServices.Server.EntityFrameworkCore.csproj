@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net6.0;netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX;EFCORE</DefineConstants>
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
-    <VersionPrefix>2.0.2</VersionPrefix>
-    <AssemblyVersion>2.0.2</AssemblyVersion>
+    <VersionPrefix>3.0.0</VersionPrefix>
+    <AssemblyVersion>3.0.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
@@ -13,8 +13,11 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='netstandard2.0'" Version="3.1.24" />
 
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'!='netstandard2.0'" Version="6.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='net6.0'" Version="6.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='net6.0'" Version="6.0.*" />
+
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='net8.0'" Version="8.0.*" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='net8.0'" Version="8.0.*" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
@@ -50,4 +53,19 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
+
+  <!-- ################# Remove old TargetFrameworks from nuget package, we want to remove it completely but first need to update tests ###### -->
+  <Target Name="_ExcludeTargetFramework" AfterTargets="_GetTargetFrameworksOutput" BeforeTargets="_WalkEachTargetPerFramework">
+    <ItemGroup>
+      <_TargetFrameworks Remove="netstandard2.0" />
+      <_TargetFrameworks Remove="net6.0" />
+    </ItemGroup>
+  </Target>
+
+  <Target Name="_ExcludeTargetFrameworkDependency" AfterTargets="_WalkEachTargetPerFramework" BeforeTargets="GenerateNuspec">
+    <ItemGroup>
+      <_FrameworksWithSuppressedDependencies Include="netstandard2.0" />
+      <_FrameworksWithSuppressedDependencies Include="net6.0" />
+    </ItemGroup>
+  </Target>
 </Project>
