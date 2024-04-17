@@ -280,7 +280,6 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("Tests ProjectSourceFileCache loads files for project")]
-        [DeploymentItem(@"ProjectPath.txt")]
         public void ProjectSourceFileCache_Loads_Real_Project()
         {
             string projectPath = null;

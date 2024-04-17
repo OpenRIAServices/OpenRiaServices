@@ -11,6 +11,7 @@ using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using httpDomainClient::OpenRiaServices.Client.DomainClients;
 using OpenRiaServices.Common.Test;
+using System.Runtime.CompilerServices;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -61,14 +62,10 @@ namespace OpenRiaServices.Client.Test
             s_webServer?.Stop();
         }
 
-        private static void StartWebServer()
+        private static void StartWebServer([CallerFilePathAttribute] string filepath = null)
         {
-            string projectPath = File.ReadAllLines("ClientTestProjectPath.txt")[0];
-#if VBTests
-            string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"..\..\..\Test\WebsiteFullTrust"));
-#else
+            string projectPath = Path.GetDirectoryName(filepath);
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @"..\WebsiteFullTrust"));
-#endif
 
             if (!Directory.Exists(webSitePath))
                 throw new FileNotFoundException($"Website not found at {webSitePath}");

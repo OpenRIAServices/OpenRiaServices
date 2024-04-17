@@ -229,7 +229,6 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("Entity exposing property with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Warn_System_Property()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -252,7 +251,6 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("Entity exposing property with nested enum type is illegal")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Warn_Nested_Property()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -273,7 +271,6 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing query with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Err_System_Query()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -296,7 +293,6 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing invoke with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Err_System_Invoke()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -319,7 +315,6 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing named update with enum in System namespace emits warning if it is not shared")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM")]
         public void Enum_Gen_Err_System_Named()
         {
             foreach (bool isCSharp in new bool[] { true, false })
@@ -342,7 +337,6 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("DomainService exposing query with enum containing custom attributes that throw logs a warning")]
-        [DeploymentItem(@"ProjectPath.txt", "CG_ENUM_THROW")]
         public void Enum_Gen_Warning_Throwing_CustomAttribute_Query()
         {
             foreach (bool isCSharp in new bool[] { true, false })

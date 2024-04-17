@@ -8,6 +8,7 @@ using System.Net.Http;
 using System.Threading;
 using httpDomainClient::OpenRiaServices.Client.DomainClients;
 using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -48,10 +49,10 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
-        private static void StartWebServer()
+        private static void StartWebServer([CallerFilePath]string filePaht = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
-            string projectPath = File.ReadAllLines("ClientTestProjectPath.txt")[0];
+            string projectPath = Path.GetDirectoryName(filePaht);
 #if DEBUG
             string configuration = "Debug";
 #else

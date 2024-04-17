@@ -102,7 +102,6 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-        [DeploymentItem("ProjectPath.txt")]
         [Description("SharedCodeService locates shared properties between projects")]
         [TestMethod]
         public void SharedCodeService_Properties()

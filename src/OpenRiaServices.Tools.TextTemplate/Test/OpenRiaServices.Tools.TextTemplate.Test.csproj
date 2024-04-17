@@ -28,12 +28,7 @@
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\Framework\OpenRiaServices.Tools.TextTemplate.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Content Include="..\..\OpenRiaServices.Tools\Test\ProjectPath.txt">
-      <Link>ProjectPath.txt</Link>
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-  </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.4" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.7.8" />

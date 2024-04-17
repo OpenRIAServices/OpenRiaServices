@@ -42,14 +42,18 @@ namespace OpenRiaServices.Tools.Test
         // breadcrumbs we can use to get back to it/
         public static void GetProjectPaths(string relativeTestDir, out string projectPath, out string outputPath)
         {
-            // Read file from output folder
-            string inputString = File.ReadAllText("ProjectPath.txt");
-
-
-            string[] split = inputString.Split(',');
-            projectPath = split[0];
-            outputPath = split[1];
+            projectPath = GetToolsTestProjectPath();
+            outputPath = "Generated_Code";
         }
+
+        public static string GetToolsTestProjectPath()
+            => Path.Combine(GetCurrentProjectDirectorImpl(), "OpenRiaServices.Tools.Test.csproj");
+
+        public static string GetToolsTestProjectDirectory()
+            => GetCurrentProjectDirectorImpl();
+
+        private static string GetCurrentProjectDirectorImpl([System.Runtime.CompilerServices.CallerFilePath] string callerFilePath = null)
+            => Path.GetDirectoryName(callerFilePath);
 
         // Validates that a generated file matches a reference file.
         // Strips off code-gen boilerplate that may cause comparison problems
