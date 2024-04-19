@@ -93,17 +93,6 @@ namespace OpenRiaServices.Tools.Test
         /// <summary>
         /// Validate that important complex exceptions are unwrapped so all "inner" details are part of message
         /// </summary>
-        /// <remarks>
-        /// The following exception graph is tested
-        /// <code>
-        /// AggregateException
-        /// |-> ArgumentException
-        /// |   |-> ReflectionTypeLoadException
-        /// |        |-> ArgumentNullException 
-        /// |        |-> InvalidArgumentException
-        /// |-> InvalidCastException
-        /// </code>
-        /// </remarks>
         [TestMethod]
         public void ComplexExceptionsAreForwarded()
         {
