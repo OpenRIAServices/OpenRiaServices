@@ -54,6 +54,7 @@
 using System;
 using System.IO;
 using System.IO.Pipes;
+using System.Reflection;
 using System.Text;
 using System.Threading;
 using Microsoft.Win32.SafeHandles;
@@ -99,20 +100,54 @@ internal sealed class CrossProcessLoggingWriter : ILoggingService, IDisposable
         string stackTrace = ex?.StackTrace;
 
         int indentLevel = 0;
-        while (ex != null)
-        {
-            stringBuilder.Append(' ', indentLevel);
-            stringBuilder.Append("Exception : ");
-            stringBuilder.AppendLine(ex.Message);
-
-            indentLevel += 2;
-            ex = ex.InnerException;
-        }
+        FormatException(stringBuilder, ex, indentLevel);
 
         stringBuilder.AppendLine();
-        stringBuilder.Append($"StackTrace:\n\t{stackTrace}");
+        stringBuilder.AppendLine($"StackTrace:");
+        stringBuilder.Append('\t');
+        stringBuilder.Append(stackTrace);
         Write(LogLevel.Error, stringBuilder.ToString());
+
+        static void FormatException(StringBuilder stringBuilder, Exception ex, int indentLevel)
+        {
+            while (ex != null)
+            {
+                stringBuilder.Append(' ', indentLevel);
+                stringBuilder.Append(ex.GetType().Name);
+                stringBuilder.Append(" : ");
+                stringBuilder.AppendLine(ex.Message);
+
+                if (ex is TypeLoadException typeLoadException)
+                {
+                    stringBuilder.Append(' ', indentLevel);
+                    stringBuilder.Append("Caused by Type: ");
+                    stringBuilder.Append(typeLoadException.TypeName);
+                }
+                else if (ex is ReflectionTypeLoadException reflectionTypeLoadException)
+                {
+                    stringBuilder.Append(' ', indentLevel);
+                    stringBuilder.AppendLine("LoaderExceptions: ");
+                    foreach (var loaderException in reflectionTypeLoadException.LoaderExceptions)
+                    {
+                        FormatException(stringBuilder, loaderException, indentLevel + 2);
+                    }
+                }
+                else if (ex is AggregateException aggregateException)
+                {
+                    foreach(var innerException in aggregateException.InnerExceptions)
+                    {
+                        FormatException(stringBuilder, innerException, indentLevel + 2);
+                    }
+                    return;
+                }
+
+                indentLevel += 2;
+                ex = ex.InnerException;
+            }
+        }
     }
+
+    
 
     void ILogger.LogMessage(string message)
         => Write(LogLevel.Message, message);
