@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Server.Test.Utilities;
@@ -86,6 +88,75 @@ namespace OpenRiaServices.Tools.Test
             StringAssert.Contains(errorMessage, ex.Message);
             StringAssert.Contains(errorMessage, ex.InnerException.Message);
             StringAssert.Contains(errorMessage, ex.StackTrace);
+        }
+
+        /// <summary>
+        /// Validate that important complex exceptions are unwrapped so all "inner" details are part of message
+        /// </summary>
+        /// <remarks>
+        /// The following exception graph is tested
+        /// <code>
+        /// AggregateException
+        /// |-> ArgumentException
+        /// |   |-> ReflectionTypeLoadException
+        /// |        |-> ArgumentNullException 
+        /// |        |-> InvalidArgumentException
+        /// |-> InvalidCastException
+        /// </code>
+        /// </remarks>
+        [TestMethod]
+        public void ComplexExceptionsAreForwarded()
+        {
+            using var server = new CrossProcessLoggingServer();
+            Exception ex;
+            Type[] typeLoadClasses = [typeof(CrossProcessLoggingServer), typeof(CrossProcessLoggingWriter)];
+            List<Exception> allExceptions = new();
+
+            try
+            {
+                allExceptions.Add(new ArgumentNullException("AME:param", "ANE:message"));
+                allExceptions.Add(new InvalidOperationException("IOE:message"));
+
+                allExceptions.Add(new ReflectionTypeLoadException(typeLoadClasses, allExceptions.ToArray(), "RTE:message"));
+                allExceptions.Add(new ArgumentException("AE:message", allExceptions.Last()));
+                allExceptions.Add(new InvalidCastException("ICE:message"));
+
+                allExceptions.Add(new AggregateException("AGG:message", allExceptions[4], allExceptions[3]));
+
+                // Initialize callstack
+                throw allExceptions.Last();
+            }
+            catch (Exception e)
+            {
+                ex = e;
+            }
+
+            using (var client = new CrossProcessLoggingWriter(server.ClientSafePipeHandle))
+            {
+                var log = (ILoggingService)client;
+                log.LogException(ex);
+            }
+
+            var destination = new ConsoleLogger();
+            server.WriteLogsTo(destination, CancellationToken.None);
+
+            string errorMessage = destination.ErrorMessages.Single();
+
+            StringAssert.Contains(errorMessage, ex.StackTrace);
+
+            foreach (var exception in allExceptions) 
+            {
+                StringAssert.Contains(errorMessage, exception.Message);
+                StringAssert.Contains(errorMessage, exception.GetType().Name);
+
+                if (ex is ArgumentException ae)
+                    StringAssert.Contains(errorMessage, ae.ParamName);
+            }
+
+            foreach(var type in typeLoadClasses)
+            {
+                StringAssert.Contains(errorMessage, type.FullName);
+            }
         }
     }
 }

@@ -54,7 +54,9 @@
 using System;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
 using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using Microsoft.Win32.SafeHandles;
@@ -125,6 +127,17 @@ internal sealed class CrossProcessLoggingWriter : ILoggingService, IDisposable
                 }
                 else if (ex is ReflectionTypeLoadException reflectionTypeLoadException)
                 {
+                    var first5failedTypes = reflectionTypeLoadException.Types?.Take(5).Select(t => t.FullName) ?? Enumerable.Empty<string>();
+                    stringBuilder.Append(' ', indentLevel);
+                    stringBuilder.AppendLine("Classes failed to load: ");
+
+                    foreach(var type in first5failedTypes)
+                    {
+                        stringBuilder.Append(' ', indentLevel);
+                        stringBuilder.Append(" - ");
+                        stringBuilder.AppendLine(type);
+                    }
+
                     stringBuilder.Append(' ', indentLevel);
                     stringBuilder.AppendLine("LoaderExceptions: ");
                     foreach (var loaderException in reflectionTypeLoadException.LoaderExceptions)
