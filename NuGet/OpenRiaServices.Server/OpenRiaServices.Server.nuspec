@@ -4,8 +4,7 @@
     <id>OpenRiaServices.Server</id>
     <version>4.6.0-preview1</version>
     <title>OpenRiaServices.Server</title>
-    <authors>Outercurve RIA Services</authors>
-    <owners>Outercurve</owners>
+    <authors>OpenRIAServices</authors>
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -16,7 +15,7 @@
     </description>
     <summary>Open RIA Services - Server-side assemblies.</summary>
     <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
-    <copyright>2019 Outercurve Foundation</copyright>
+    <copyright>.NET Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices</tags>
     <frameworkAssemblies>

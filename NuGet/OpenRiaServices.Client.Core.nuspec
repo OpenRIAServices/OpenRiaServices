@@ -4,8 +4,7 @@
     <id>OpenRiaServices.Client.Core</id>
     <version>5.0.0</version>
     <title>Open RIA Services Client</title>
-    <authors>Outercurve RIA Services</authors>
-    <owners>Outercurve</owners>
+    <authors>OpenRIAServices</authors>
     <license type="expression">Apache-2.0</license>
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,7 +13,7 @@
     </description>
     <summary>Open RIA Services - client assemblies and references.</summary>
     <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
-    <copyright>2018 Outercurve Foundation</copyright>
+    <copyright>2024 .NET Foundation</copyright>
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
     <dependencies>

@@ -4,15 +4,14 @@
         <id>OpenRiaServices.Client</id>
         <version>5.0.0</version>
         <title>Open RIA Services Full Client</title>
-        <authors>Outercurve RIA Services</authors>
-        <owners>Outercurve</owners>
+        <authors>OpenRIAServices</authors>
         <license type="expression">Apache-2.0</license>
         <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
         <description>OpenRiaServices.Client is the full OpenRiaServices client including code generation in a single package.</description>
         <summary>Open RIA Services - Full client</summary>
         <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
-        <copyright>2018 Outercurve Foundation</copyright>
+        <copyright>2024 .NET Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices</tags>
         <dependencies>
