@@ -17,8 +17,11 @@
         <copyright>2018 Outercurve Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices CodeGen</tags>
-      <dependencies>
-      </dependencies>
+       <dependencies>
+            <group>
+                <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
+            </group>
+        </dependencies>
     </metadata>
     <files>
         <file src="..\..\src\OpenRiaServices.Tools\Framework\build\OpenRiaServices.Client.CodeGen.targets" target="build\OpenRiaServices.Client.CodeGen.targets"/>
