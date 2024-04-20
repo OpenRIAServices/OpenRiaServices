@@ -221,9 +221,7 @@ namespace OpenRiaServices.Tools
             public void LogException(Exception ex)
             {
                 this._hasLoggedErrors = true;
-                this.Log.LogError("Exception: " + ex.Message);
-                if (ex.InnerException != null)
-                    LogException(ex.InnerException);
+                this.Log.LogError(Logging.LoggingHelper.FormatException(ex));
             }
 
             public void LogWarning(string message)
