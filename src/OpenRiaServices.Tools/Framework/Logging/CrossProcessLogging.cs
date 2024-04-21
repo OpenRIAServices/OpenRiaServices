@@ -54,6 +54,9 @@
 using System;
 using System.IO;
 using System.IO.Pipes;
+using System.Linq;
+using System.Reflection;
+using System.Runtime.ExceptionServices;
 using System.Text;
 using System.Threading;
 using Microsoft.Win32.SafeHandles;
@@ -94,25 +97,7 @@ internal sealed class CrossProcessLoggingWriter : ILoggingService, IDisposable
         => Write(LogLevel.Error, message);
 
     void ILogger.LogException(Exception ex)
-    {
-        var stringBuilder = new StringBuilder();
-        string stackTrace = ex?.StackTrace;
-
-        int indentLevel = 0;
-        while (ex != null)
-        {
-            stringBuilder.Append(' ', indentLevel);
-            stringBuilder.Append("Exception : ");
-            stringBuilder.AppendLine(ex.Message);
-
-            indentLevel += 2;
-            ex = ex.InnerException;
-        }
-
-        stringBuilder.AppendLine();
-        stringBuilder.Append($"StackTrace:\n\t{stackTrace}");
-        Write(LogLevel.Error, stringBuilder.ToString());
-    }
+        => Write(LogLevel.Error, LoggingHelper.FormatException(ex));
 
     void ILogger.LogMessage(string message)
         => Write(LogLevel.Message, message);

@@ -2,10 +2,9 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata minClientVersion="2.8">
         <id>OpenRiaServices.Client.CodeGen</id>
-        <version>4.5.4</version>
+        <version>5.4.4</version>
         <title>Open RIA Services Client Code Generator</title>
-        <authors>Outercurve RIA Services</authors>
-        <owners>Outercurve</owners>
+        <authors>OpenRIAServices</authors>
         <license type="expression">Apache-2.0</license>
         <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
         <requireLicenseAcceptance>false</requireLicenseAcceptance>
@@ -14,11 +13,14 @@
         <summary>Open RIA Services - Code generation client assemblies and targets.</summary>
         <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
         <developmentDependency>true</developmentDependency>
-        <copyright>2018 Outercurve Foundation</copyright>
+        <copyright>2024 .NET Foundation</copyright>
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices CodeGen</tags>
-      <dependencies>
-      </dependencies>
+       <dependencies>
+            <group>
+                <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
+            </group>
+        </dependencies>
     </metadata>
     <files>
         <file src="..\..\src\OpenRiaServices.Tools\Framework\build\OpenRiaServices.Client.CodeGen.targets" target="build\OpenRiaServices.Client.CodeGen.targets"/>

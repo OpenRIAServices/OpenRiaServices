@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Server.Test.Utilities;
@@ -58,17 +60,32 @@ namespace OpenRiaServices.Tools.Test
             }, destination.WarningPackets);
         }
 
+        /// <summary>
+        /// Validate that important complex exceptions are unwrapped so all "inner" details are part of message
+        /// </summary>
         [TestMethod]
         public void ExceptionsAreForwarded()
         {
             using var server = new CrossProcessLoggingServer();
             Exception ex;
+            Type[] typeLoadClasses = [typeof(CrossProcessLoggingServer), typeof(CrossProcessLoggingWriter)];
+            List<Exception> allExceptions = new();
+
             try
             {
-                // Throw exeption to setup callstack, required for net framework
-                throw new ArgumentException("exception message", new InvalidOperationException("inner message"));
+                allExceptions.Add(new ArgumentNullException("AME:param", "ANE:message"));
+                allExceptions.Add(new InvalidOperationException("IOE:message"));
+
+                allExceptions.Add(new ReflectionTypeLoadException(typeLoadClasses, allExceptions.ToArray(), "RTE:message"));
+                allExceptions.Add(new ArgumentException("AE:message", allExceptions.Last()));
+                allExceptions.Add(new InvalidCastException("ICE:message"));
+
+                allExceptions.Add(new AggregateException("AGG:message", allExceptions[4], allExceptions[3]));
+
+                // Initialize callstack
+                throw allExceptions.Last();
             }
-            catch (Exception e)
+            catch (AggregateException e)
             {
                 ex = e;
             }
@@ -83,9 +100,23 @@ namespace OpenRiaServices.Tools.Test
             server.WriteLogsTo(destination, CancellationToken.None);
 
             string errorMessage = destination.ErrorMessages.Single();
-            StringAssert.Contains(errorMessage, ex.Message);
-            StringAssert.Contains(errorMessage, ex.InnerException.Message);
+
             StringAssert.Contains(errorMessage, ex.StackTrace);
+
+            // Exception Type and message should be logged for all exceptions in the hierarchy
+            foreach (var exception in allExceptions) 
+            {
+                StringAssert.Contains(errorMessage, exception.Message);
+                StringAssert.Contains(errorMessage, exception.GetType().Name);
+
+                if (ex is ArgumentException ae)
+                    StringAssert.Contains(errorMessage, ae.ParamName);
+            }
+
+            foreach(var type in typeLoadClasses)
+            {
+                StringAssert.Contains(errorMessage, type.FullName);
+            }
         }
     }
 }
