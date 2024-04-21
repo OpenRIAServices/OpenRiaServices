@@ -60,41 +60,11 @@ namespace OpenRiaServices.Tools.Test
             }, destination.WarningPackets);
         }
 
-        [TestMethod]
-        public void ExceptionsAreForwarded()
-        {
-            using var server = new CrossProcessLoggingServer();
-            Exception ex;
-            try
-            {
-                // Throw exeption to setup callstack, required for net framework
-                throw new ArgumentException("exception message", new InvalidOperationException("inner message"));
-            }
-            catch (Exception e)
-            {
-                ex = e;
-            }
-
-            using (var client = new CrossProcessLoggingWriter(server.ClientSafePipeHandle))
-            {
-                var log = (ILoggingService)client;
-                log.LogException(ex);
-            }
-
-            var destination = new ConsoleLogger();
-            server.WriteLogsTo(destination, CancellationToken.None);
-
-            string errorMessage = destination.ErrorMessages.Single();
-            StringAssert.Contains(errorMessage, ex.Message);
-            StringAssert.Contains(errorMessage, ex.InnerException.Message);
-            StringAssert.Contains(errorMessage, ex.StackTrace);
-        }
-
         /// <summary>
         /// Validate that important complex exceptions are unwrapped so all "inner" details are part of message
         /// </summary>
         [TestMethod]
-        public void ComplexExceptionsAreForwarded()
+        public void ExceptionsAreForwarded()
         {
             using var server = new CrossProcessLoggingServer();
             Exception ex;
@@ -115,7 +85,7 @@ namespace OpenRiaServices.Tools.Test
                 // Initialize callstack
                 throw allExceptions.Last();
             }
-            catch (Exception e)
+            catch (AggregateException e)
             {
                 ex = e;
             }
@@ -133,6 +103,7 @@ namespace OpenRiaServices.Tools.Test
 
             StringAssert.Contains(errorMessage, ex.StackTrace);
 
+            // Exception Type and message should be logged for all exceptions in the hierarchy
             foreach (var exception in allExceptions) 
             {
                 StringAssert.Contains(errorMessage, exception.Message);

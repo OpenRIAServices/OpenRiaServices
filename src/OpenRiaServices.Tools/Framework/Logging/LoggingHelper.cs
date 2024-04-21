@@ -64,15 +64,10 @@ internal static class LoggingHelper
         stringBuilder.Append(" : ");
         stringBuilder.AppendLine(ex.Message);
 
-        if (ex is TypeLoadException typeLoadException)
+        if (ex is ReflectionTypeLoadException reflectionTypeLoadException)
         {
-            stringBuilder.Append(' ', indentLevel);
-            stringBuilder.Append("Caused by Type: ");
-            stringBuilder.Append(typeLoadException.TypeName);
-        }
-        else if (ex is ReflectionTypeLoadException reflectionTypeLoadException)
-        {
-            var first5failedTypes = reflectionTypeLoadException.Types?.Take(5).Select(t => t.FullName) ?? Enumerable.Empty<string>();
+            var first5failedTypes = reflectionTypeLoadException.Types?.Take(5).Select(t => t?.FullName) 
+                ?? Enumerable.Empty<string>();
             stringBuilder.Append(' ', indentLevel);
             stringBuilder.AppendLine("Classes failed to load: ");
 
