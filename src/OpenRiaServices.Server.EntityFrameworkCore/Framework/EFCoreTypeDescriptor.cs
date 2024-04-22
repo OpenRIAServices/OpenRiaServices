@@ -245,8 +245,18 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 #else
                 bool isManyToMany = navigation.IsCollection && navigation.Inverse?.IsCollection == true;
 #endif
+
+#if NETSTANDARD2_0
                 if (!isManyToMany)
                 {
+#else
+                if (!isManyToMany
+                    // Don't generate association attributes for Owned types (onless they have all FK fields explictly defined, in which case they can be treated as Entities)
+                    //  if we generate association attributes then it cannot be treated as a ComplexObject
+                    && !(navigation.TargetEntityType.IsOwned() && navigation.ForeignKey.Properties.Any(static p => p.IsShadowProperty())))
+                {
+#endif
+
                     var assocAttrib = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];
                     if (assocAttrib == null)
                     {

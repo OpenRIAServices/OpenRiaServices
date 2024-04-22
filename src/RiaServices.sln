@@ -155,6 +155,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaservices.EndToEnd.Wc
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaservices.EndToEnd.AspNetCore.Test", "Test\OpenRiaservices.EndToEnd.AspNetCore.Test\OpenRiaservices.EndToEnd.AspNetCore.Test.csproj", "{17F902F4-7254-4FB9-9AF6-B3291B129B45}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "OpenRiaServices.Server.EntityFrameworkCore.Test", "OpenRiaServices.Server.EntityFrameworkCore\Test\OpenRiaServices.Server.EntityFrameworkCore.Test\OpenRiaServices.Server.EntityFrameworkCore.Test.csproj", "{76DBD075-9DC2-4583-8BAB-2713E60F555B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -377,6 +379,10 @@ Global
 		{17F902F4-7254-4FB9-9AF6-B3291B129B45}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{17F902F4-7254-4FB9-9AF6-B3291B129B45}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{17F902F4-7254-4FB9-9AF6-B3291B129B45}.Release|Any CPU.Build.0 = Release|Any CPU
+		{76DBD075-9DC2-4583-8BAB-2713E60F555B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{76DBD075-9DC2-4583-8BAB-2713E60F555B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{76DBD075-9DC2-4583-8BAB-2713E60F555B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{76DBD075-9DC2-4583-8BAB-2713E60F555B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -449,6 +455,7 @@ Global
 		{27DB096E-8794-4B9A-B3D0-AF74926DF9FD} = {BB0E26DD-14D3-4CD5-8F2B-B5C1CA281719}
 		{9428260A-EA94-430D-9A1A-CB9830B9E8EE} = {27DB096E-8794-4B9A-B3D0-AF74926DF9FD}
 		{17F902F4-7254-4FB9-9AF6-B3291B129B45} = {27DB096E-8794-4B9A-B3D0-AF74926DF9FD}
+		{76DBD075-9DC2-4583-8BAB-2713E60F555B} = {E8CAC11B-50B6-4243-A12A-D831EBB064CB}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {C135CEC9-180C-4B67-92AC-3342375AE14C}
