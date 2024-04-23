@@ -8,21 +8,22 @@ using Microsoft.EntityFrameworkCore;
 
 #if NET8_0_OR_GREATER
 
-namespace EFCoreModels.OwnedTypes
+namespace EFCoreModels.Scenarios.ComplexTypes
 {
 
     public class Address
     {
-        [StringLength(100)] public required string AddressLine { get; set; }
-        [StringLength(50)] public required string City { get; set; }
+        public required string AddressLine { get; set; }
+        public required string City { get; set; }
     }
 
     public class ContactInfo
     {
         public required Address Address { get; set; }
 
-        [StringLength(24)]
         public required string HomePhone { get; set; }
+
+        public int PossibleId { get; set; }
     }
 
     public class Employee
@@ -31,14 +32,13 @@ namespace EFCoreModels.OwnedTypes
         public required ContactInfo ContactInfo { get; set; }
     }
 
-    // TODO: Owned typed with "backwards" FK
-    public class OwnedTypesDbContext : DbContext
+    public class ComplexTypesDbContext : DbContext
     {
-        public OwnedTypesDbContext()
+        public ComplexTypesDbContext()
         {
         }
 
-        public OwnedTypesDbContext(DbContextOptions<OwnedTypesDbContext> options)
+        public ComplexTypesDbContext(DbContextOptions<ComplexTypesDbContext> options)
             : base(options)
         {
         }
@@ -50,10 +50,20 @@ namespace EFCoreModels.OwnedTypes
             // add concurrencymode = Fixed on all "Owned types" ??
 
             modelBuilder.Owned<Address>();
-            modelBuilder.Owned<ContactInfo>();
+            //modelBuilder.Owned<ContactInfo>();
 
             modelBuilder.Entity<Employee>()
-                .HasKey(e => e.EmployeeId);
+                .ComplexProperty(typeof(ContactInfo), nameof(Employee.ContactInfo), x =>
+                {
+                    x.Property(nameof(ContactInfo.HomePhone)).HasMaxLength(24);
+                    x.ComplexProperty(typeof(Address), nameof(ContactInfo.Address), address =>
+                    {
+                        address.Property(nameof(Address.AddressLine)).HasMaxLength(100);
+                        address.Property(nameof(Address.City)).HasMaxLength(50);
+                    });
+                })
+                .HasKey(e => e.EmployeeId)
+                ;
 
             base.OnModelCreating(modelBuilder);
         }

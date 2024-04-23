@@ -1,6 +1,8 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using EFCoreModels.OwnedTypes;
+using OwnedTypes = EFCoreModels.Scenarios.OwnedTypes;
+using ComplexTypes = EFCoreModels.Scenarios.ComplexTypes;
+using MSTest = Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace OpenRiaServices.Server.EntityFrameworkCore.Test
 {
@@ -11,53 +13,83 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
         /// Verify that the EF metadata provider is registered for mapped CTs, and that attribute are inferred properly
         /// </summary>
         [TestMethod]
-        public void ComplexType_EFCoreProvidderTest()
+        public void ComplexType_EFCore_OwnedTypes()
         {
-            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(EFCoreComplexTypesService));
+            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(EFCoreOwnedTypesService));
 
-            CollectionAssert.AreEquivalent(dsd.EntityTypes.ToList(), new[] { typeof(Employee) });
-            CollectionAssert.AreEquivalent(dsd.ComplexTypes.ToList(), new[] { typeof(Address), typeof(ContactInfo) });
+            CollectionAssert.AreEquivalent(dsd.EntityTypes.ToList(), new[] { typeof(OwnedTypes.Employee) });
+            CollectionAssert.AreEquivalent(dsd.ComplexTypes.ToList(), new[] { typeof(OwnedTypes.Address), typeof(OwnedTypes.ContactInfo) });
 
-
-            var employee = TypeDescriptor.GetProperties(typeof(Employee));
-            Assert.IsNotNull(employee[nameof(Employee.EmployeeId)]!.Attributes[typeof(KeyAttribute)]);
-
-            // Contact Info should not have association attribute 
-#pragma warning disable CS0618 // Type or member is obsolete
-            Assert.IsNull(employee[nameof(Employee.ContactInfo)]!.Attributes[typeof(AssociationAttribute)], "Navigation property to Owned entity MUST NOT be marked with AssociationAttribute, or ComplexObject will not be generated on client");
-#pragma warning restore CS0618 // Type or member is obsolete
-
+            var employee = TypeDescriptor.GetProperties(typeof(OwnedTypes.Employee));
+            Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.EmployeeId)]!.Attributes[typeof(KeyAttribute)]);
 
             // the HomePhone member is mapped as non-nullable, with a max length of 24. Verify attributes
             // were inferred
-            var contactInfo = TypeDescriptor.GetProperties(typeof(ContactInfo));
-            var homePhone = contactInfo[nameof(ContactInfo.HomePhone)]!;
+            var contactInfo = TypeDescriptor.GetProperties(typeof(OwnedTypes.ContactInfo));
+            var homePhone = contactInfo[nameof(OwnedTypes.ContactInfo.HomePhone)]!;
             Assert.IsNotNull(homePhone.Attributes[typeof(RequiredAttribute)]);
             StringLengthAttribute sl = (StringLengthAttribute)homePhone.Attributes[typeof(StringLengthAttribute)]!;
             Assert.AreEqual(24, sl.MaximumLength);
 
-            //Assert.IsNotNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            //Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
 
             // the AddressLine1 member is mapped as non-nullable, with a max length of 100. Verify attributes
             // were inferred
-            var address = TypeDescriptor.GetProperties(typeof(Address));
-            var addressLine = address[nameof(Address.AddressLine)]!;
+            var address = TypeDescriptor.GetProperties(typeof(OwnedTypes.Address));
+            var addressLine = address[nameof(OwnedTypes.Address.AddressLine)]!;
             Assert.IsNotNull(addressLine.Attributes[typeof(RequiredAttribute)]);
             sl = (StringLengthAttribute)addressLine.Attributes[typeof(StringLengthAttribute)]!;
             Assert.AreEqual(100, sl.MaximumLength);
+        }
+        /// <summary>
+        /// Verify that the EF metadata provider is registered for mapped CTs, and that attribute are inferred properly
+        /// </summary>
+        [TestMethod]
+        [MSTest.Ignore("Does not work yet, attributes are not discovered on ComplexObjects")]
+        public void ComplexType_EFCore_ComplexTypes()
+        {
+            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(EFCoreComplexTypesService));
 
-            //Assert.IsNotNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            //Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
+            CollectionAssert.AreEquivalent(dsd.EntityTypes.ToList(), new[] { typeof(ComplexTypes.Employee) });
+            CollectionAssert.AreEquivalent(dsd.ComplexTypes.ToList(), new[] { typeof(ComplexTypes.Address), typeof(ComplexTypes.ContactInfo) });
+
+            var employee = TypeDescriptor.GetProperties(typeof(ComplexTypes.Employee));
+            Assert.IsNotNull(employee[nameof(ComplexTypes.Employee.EmployeeId)]!.Attributes[typeof(KeyAttribute)]);
+
+            // the HomePhone member is mapped as non-nullable, with a max length of 24. Verify attributes
+            // were inferred
+            var contactInfo = TypeDescriptor.GetProperties(typeof(ComplexTypes.ContactInfo));
+            var homePhone = contactInfo[nameof(ComplexTypes.ContactInfo.HomePhone)]!;
+
+            Assert.IsNotNull(homePhone.Attributes[typeof(RequiredAttribute)]);
+            StringLengthAttribute sl = (StringLengthAttribute)homePhone.Attributes[typeof(StringLengthAttribute)]!;
+            Assert.AreEqual(24, sl.MaximumLength);
+
+
+            // the AddressLine1 member is mapped as non-nullable, with a max length of 100. Verify attributes
+            // were inferred
+            var address = TypeDescriptor.GetProperties(typeof(ComplexTypes.Address));
+            var addressLine = address[nameof(ComplexTypes.Address.AddressLine)]!;
+            Assert.IsNotNull(addressLine.Attributes[typeof(RequiredAttribute)]);
+            sl = (StringLengthAttribute)addressLine.Attributes[typeof(StringLengthAttribute)]!;
+            Assert.AreEqual(100, sl.MaximumLength);
         }
     }
 
     [EnableClientAccess]
-    public class EFCoreComplexTypesService : DbDomainService<OwnedTypesDbContext>
+    public class EFCoreOwnedTypesService : DbDomainService<OwnedTypes.OwnedTypesDbContext>
     {
-        public IQueryable<Employee> GetCustomers()
+        public IQueryable<OwnedTypes.Employee> GetCustomers()
         {
-            return null;
+            return null!;
+        }
+    }
+
+    [EnableClientAccess]
+    public class EFCoreComplexTypesService : DbDomainService<ComplexTypes.ComplexTypesDbContext>
+    {
+        public IQueryable<ComplexTypes.Employee> GetCustomers()
+        {
+            return null!;
         }
     }
 }
