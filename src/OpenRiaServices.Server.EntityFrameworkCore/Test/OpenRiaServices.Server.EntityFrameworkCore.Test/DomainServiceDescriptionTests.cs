@@ -40,6 +40,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
             sl = (StringLengthAttribute)addressLine.Attributes[typeof(StringLengthAttribute)]!;
             Assert.AreEqual(100, sl.MaximumLength);
         }
+
         /// <summary>
         /// Verify that the EF metadata provider is registered for mapped CTs, and that attribute are inferred properly
         /// </summary>

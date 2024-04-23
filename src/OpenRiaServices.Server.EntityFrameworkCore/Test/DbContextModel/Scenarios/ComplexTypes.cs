@@ -47,11 +47,6 @@ namespace EFCoreModels.Scenarios.ComplexTypes
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            // add concurrencymode = Fixed on all "Owned types" ??
-
-            modelBuilder.Owned<Address>();
-            //modelBuilder.Owned<ContactInfo>();
-
             modelBuilder.Entity<Employee>()
                 .ComplexProperty(typeof(ContactInfo), nameof(Employee.ContactInfo), x =>
                 {
@@ -62,8 +57,7 @@ namespace EFCoreModels.Scenarios.ComplexTypes
                         address.Property(nameof(Address.City)).HasMaxLength(50);
                     });
                 })
-                .HasKey(e => e.EmployeeId)
-                ;
+                .HasKey(e => e.EmployeeId);
 
             base.OnModelCreating(modelBuilder);
         }
