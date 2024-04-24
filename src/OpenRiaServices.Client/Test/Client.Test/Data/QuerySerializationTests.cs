@@ -82,29 +82,29 @@ namespace OpenRiaServices.Client.Test
         public void TestEnumComparisons()
         {
             // simple equality
-            Cities.State[] states = new Cities.State[0];
-            IQueryable<Cities.State> q1 = new Cities.State[0].AsQueryable();
+            Cities.State[] states = Array.Empty<Cities.State>();
+            IQueryable<Cities.State> q1 = Array.Empty<Cities.State>().AsQueryable();
             q1 = q1.Where(p => p.TimeZone == Cities.TimeZone.Eastern);
             IQueryable<Cities.State> q2 = (IQueryable<Cities.State>)RoundtripQuery(q1, states.AsQueryable());
 
             // inequality against null
-            q1 = new Cities.State[0].AsQueryable();
+            q1 = Array.Empty<Cities.State>().AsQueryable();
             q1 = q1.Where(p => p.TimeZone > null);
             q2 = (IQueryable<Cities.State>)RoundtripQuery(q1, states.AsQueryable());
-            q1 = new Cities.State[0].AsQueryable();
+            q1 = Array.Empty<Cities.State>().AsQueryable();
             q1 = q1.Where(p => null < p.TimeZone);
             q2 = (IQueryable<Cities.State>)RoundtripQuery(q1, states.AsQueryable());
 
             // inequality against an enum value
-            q1 = new Cities.State[0].AsQueryable();
+            q1 = Array.Empty<Cities.State>().AsQueryable();
             q1 = q1.Where(p => p.TimeZone >= Cities.TimeZone.Eastern);
             q2 = (IQueryable<Cities.State>)RoundtripQuery(q1, states.AsQueryable());
-            q1 = new Cities.State[0].AsQueryable();
+            q1 = Array.Empty<Cities.State>().AsQueryable();
             q1 = q1.Where(p => Cities.TimeZone.Eastern <= p.TimeZone);
             q2 = (IQueryable<Cities.State>)RoundtripQuery(q1, states.AsQueryable());
 
             // test where both sides are a member expression
-            q1 = new Cities.State[0].AsQueryable();
+            q1 = Array.Empty<Cities.State>().AsQueryable();
             q1 = q1.Where(p => p.TimeZone >= p.TimeZone);
             q2 = (IQueryable<Cities.State>)RoundtripQuery(q1, states.AsQueryable());
         }
@@ -542,17 +542,17 @@ namespace OpenRiaServices.Client.Test
                 Picture = new byte[] { 1, 2, 3 }
             });
 
-            IQueryable<DataTests.Northwind.LTS.Category> query = new DataTests.Northwind.LTS.Category[0].AsQueryable().Where(p => p.Picture.Length > 0);
+            IQueryable<DataTests.Northwind.LTS.Category> query = Array.Empty<DataTests.Northwind.LTS.Category>().AsQueryable().Where(p => p.Picture.Length > 0);
             IQueryable<DataTests.Northwind.LTS.Category> query2 = (IQueryable<DataTests.Northwind.LTS.Category>)RoundtripQuery(query, categories.AsQueryable());
             Assert.AreEqual(1, query2.Count());
 
             // verify ArrayIndex expressions are translated properly
-            query = new DataTests.Northwind.LTS.Category[0].AsQueryable().Where(p => p.Picture[0] == 1 && p.Picture[1] == 2);
+            query = Array.Empty<DataTests.Northwind.LTS.Category>().AsQueryable().Where(p => p.Picture[0] == 1 && p.Picture[1] == 2);
             query2 = (IQueryable<DataTests.Northwind.LTS.Category>)RoundtripQuery(query, categories.AsQueryable());
             Assert.AreEqual(1, query2.Count());
 
             // verify an expression as the index
-            query = new DataTests.Northwind.LTS.Category[0].AsQueryable().Where(p => p.Picture[p.CategoryID] == 2);
+            query = Array.Empty<DataTests.Northwind.LTS.Category>().AsQueryable().Where(p => p.Picture[p.CategoryID] == 2);
             query2 = (IQueryable<DataTests.Northwind.LTS.Category>)RoundtripQuery(query, categories.AsQueryable());
             Assert.AreEqual(1, query2.Count());
         }
