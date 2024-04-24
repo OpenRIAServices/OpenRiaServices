@@ -117,12 +117,10 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
             bool hasKeyAttribute = pd.Attributes[typeof(KeyAttribute)] != null;
             var property = _entityType.FindProperty(pd.Name);
-            // TODO: Review all usage of isEntity to validate if we should really copy logic from EF6
-            bool isEntity = !_entityType.IsOwned();
 
             if (property != null)
             {
-                if (isEntity && property.IsPrimaryKey() && !hasKeyAttribute)
+                if (property.IsPrimaryKey() && !hasKeyAttribute)
                 {
                     attributes.Add(new KeyAttribute());
                     hasKeyAttribute = true;
