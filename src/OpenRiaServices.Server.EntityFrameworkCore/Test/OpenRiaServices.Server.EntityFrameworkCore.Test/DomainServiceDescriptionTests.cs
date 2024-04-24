@@ -17,11 +17,30 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(EFCoreOwnedTypesService));
 
-            CollectionAssert.AreEquivalent(dsd.EntityTypes.ToList(), new[] { typeof(OwnedTypes.Employee) });
-            CollectionAssert.AreEquivalent(dsd.ComplexTypes.ToList(), new[] { typeof(OwnedTypes.Address), typeof(OwnedTypes.ContactInfo) });
+            CollectionAssert.AreEquivalent(new[] {
+                typeof(OwnedTypes.Address),
+                typeof(OwnedTypes.ContactInfo),
+                typeof(OwnedTypes.OwnedEntityWithBackNavigation),
+                }, dsd.ComplexTypes.ToList());
+
+            CollectionAssert.AreEquivalent(new[] {
+                typeof(OwnedTypes.Employee),
+                typeof(OwnedTypes.OwnedEntityWithExplicitId),
+                typeof(OwnedTypes.OwnedEntityWithExplicitIdAndBackNavigation)
+            }, dsd.EntityTypes.ToList());
 
             var employee = TypeDescriptor.GetProperties(typeof(OwnedTypes.Employee));
             Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.EmployeeId)]!.Attributes[typeof(KeyAttribute)]);
+
+#pragma warning disable CS0618 // Type or member is obsolete
+            Assert.IsNull(employee[nameof(OwnedTypes.Employee.ContactInfo)]!.Attributes[typeof(AssociationAttribute)]);
+            Assert.IsNull(employee[nameof(OwnedTypes.Employee.OwnedEntityWithBackNavigation)]!.Attributes[typeof(AssociationAttribute)]);
+            Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.OwnedEntityWithExplicitId)]!.Attributes[typeof(AssociationAttribute)]);
+            Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.OwnedEntityWithExplicitIdAndBackNavigation)]!.Attributes[typeof(AssociationAttribute)]);
+#pragma warning restore CS0618 // Type or member is obsolete
+
+            //var contactInfoProperty = employee[nameof(OwnedTypes.Employee.ContactInfo)]!;
+            //Assert.IsNotNull(contactInfoProperty.Attributes[typeof(RequiredAttribute)], "ComplexObject property should be required");
 
             // the HomePhone member is mapped as non-nullable, with a max length of 24. Verify attributes
             // were inferred
@@ -30,7 +49,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
             Assert.IsNotNull(homePhone.Attributes[typeof(RequiredAttribute)]);
             StringLengthAttribute sl = (StringLengthAttribute)homePhone.Attributes[typeof(StringLengthAttribute)]!;
             Assert.AreEqual(24, sl.MaximumLength);
-
+            //Assert.IsNotNull(contactInfo[nameof(OwnedTypes.ContactInfo.Address)]!.Attributes[typeof(RequiredAttribute)], "ComplexObject.ComplexObject property should be required");
 
             // the AddressLine1 member is mapped as non-nullable, with a max length of 100. Verify attributes
             // were inferred
@@ -56,6 +75,9 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
             var employee = TypeDescriptor.GetProperties(typeof(ComplexTypes.Employee));
             Assert.IsNotNull(employee[nameof(ComplexTypes.Employee.EmployeeId)]!.Attributes[typeof(KeyAttribute)]);
 
+            //var contactInfoProperty = employee[nameof(OwnedTypes.Employee.ContactInfo)]!;
+            //Assert.IsNotNull(contactInfoProperty.Attributes[typeof(RequiredAttribute)], "ComplexObject property should be required");
+
             // the HomePhone member is mapped as non-nullable, with a max length of 24. Verify attributes
             // were inferred
             var contactInfo = TypeDescriptor.GetProperties(typeof(ComplexTypes.ContactInfo));
@@ -64,6 +86,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
             Assert.IsNotNull(homePhone.Attributes[typeof(RequiredAttribute)]);
             StringLengthAttribute sl = (StringLengthAttribute)homePhone.Attributes[typeof(StringLengthAttribute)]!;
             Assert.AreEqual(24, sl.MaximumLength);
+            //Assert.IsNotNull(contactInfo[nameof(OwnedTypes.ContactInfo.Address)]!.Attributes[typeof(RequiredAttribute)], "ComplexObject.ComplexObject property should be required");
 
 
             // the AddressLine1 member is mapped as non-nullable, with a max length of 100. Verify attributes

@@ -119,8 +119,6 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         
         private string _homePhone;
         
-        private int _possibleId;
-        
         #region Extensibility Method Definitions
 
         /// <summary>
@@ -132,8 +130,6 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         partial void OnAddressChanged();
         partial void OnHomePhoneChanging(string value);
         partial void OnHomePhoneChanged();
-        partial void OnPossibleIdChanging(int value);
-        partial void OnPossibleIdChanged();
 
         #endregion
         
@@ -196,30 +192,6 @@ namespace EFCoreModels.Scenarios.OwnedTypes
                 }
             }
         }
-        
-        /// <summary>
-        /// Gets or sets the 'PossibleId' value.
-        /// </summary>
-        [DataMember()]
-        public int PossibleId
-        {
-            get
-            {
-                return this._possibleId;
-            }
-            set
-            {
-                if ((this._possibleId != value))
-                {
-                    this.OnPossibleIdChanging(value);
-                    this.RaiseDataMemberChanging("PossibleId");
-                    this.ValidateProperty("PossibleId", value);
-                    this._possibleId = value;
-                    this.RaiseDataMemberChanged("PossibleId");
-                    this.OnPossibleIdChanged();
-                }
-            }
-        }
     }
     
     /// <summary>
@@ -233,6 +205,12 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         
         private int _employeeId;
         
+        private OwnedEntityWithBackNavigation _ownedEntityWithBackNavigation;
+        
+        private EntityRef<OwnedEntityWithExplicitId> _ownedEntityWithExplicitId;
+        
+        private EntityRef<OwnedEntityWithExplicitIdAndBackNavigation> _ownedEntityWithExplicitIdAndBackNavigation;
+        
         #region Extensibility Method Definitions
 
         /// <summary>
@@ -244,6 +222,8 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         partial void OnContactInfoChanged();
         partial void OnEmployeeIdChanging(int value);
         partial void OnEmployeeIdChanged();
+        partial void OnOwnedEntityWithBackNavigationChanging(OwnedEntityWithBackNavigation value);
+        partial void OnOwnedEntityWithBackNavigationChanged();
 
         #endregion
         
@@ -305,6 +285,381 @@ namespace EFCoreModels.Scenarios.OwnedTypes
                     this.OnEmployeeIdChanged();
                 }
             }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'OwnedEntityWithBackNavigation' value.
+        /// </summary>
+        [DataMember()]
+        [Display(AutoGenerateField=false)]
+        public OwnedEntityWithBackNavigation OwnedEntityWithBackNavigation
+        {
+            get
+            {
+                return this._ownedEntityWithBackNavigation;
+            }
+            set
+            {
+                if ((this._ownedEntityWithBackNavigation != value))
+                {
+                    this.OnOwnedEntityWithBackNavigationChanging(value);
+                    this.RaiseDataMemberChanging("OwnedEntityWithBackNavigation");
+                    this.ValidateProperty("OwnedEntityWithBackNavigation", value);
+                    this._ownedEntityWithBackNavigation = value;
+                    this.RaiseDataMemberChanged("OwnedEntityWithBackNavigation");
+                    this.OnOwnedEntityWithBackNavigationChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the associated <see cref="OwnedEntityWithExplicitId"/> entity.
+        /// </summary>
+        [Association("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitId", "EmployeeId", "EmployeeId")]
+        public OwnedEntityWithExplicitId OwnedEntityWithExplicitId
+        {
+            get
+            {
+                if ((this._ownedEntityWithExplicitId == null))
+                {
+                    this._ownedEntityWithExplicitId = new EntityRef<OwnedEntityWithExplicitId>(this, "OwnedEntityWithExplicitId", this.FilterOwnedEntityWithExplicitId);
+                }
+                return this._ownedEntityWithExplicitId.Entity;
+            }
+            set
+            {
+                OwnedEntityWithExplicitId previous = this.OwnedEntityWithExplicitId;
+                if ((previous != value))
+                {
+                    this.ValidateProperty("OwnedEntityWithExplicitId", value);
+                    this._ownedEntityWithExplicitId.Entity = value;
+                    this.RaisePropertyChanged("OwnedEntityWithExplicitId");
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the associated <see cref="OwnedEntityWithExplicitIdAndBackNavigation"/> entity.
+        /// </summary>
+        [Association("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitIdAndBackNavigation" +
+            "", "EmployeeId", "EmployeeId")]
+        public OwnedEntityWithExplicitIdAndBackNavigation OwnedEntityWithExplicitIdAndBackNavigation
+        {
+            get
+            {
+                if ((this._ownedEntityWithExplicitIdAndBackNavigation == null))
+                {
+                    this._ownedEntityWithExplicitIdAndBackNavigation = new EntityRef<OwnedEntityWithExplicitIdAndBackNavigation>(this, "OwnedEntityWithExplicitIdAndBackNavigation", this.FilterOwnedEntityWithExplicitIdAndBackNavigation);
+                }
+                return this._ownedEntityWithExplicitIdAndBackNavigation.Entity;
+            }
+            set
+            {
+                OwnedEntityWithExplicitIdAndBackNavigation previous = this.OwnedEntityWithExplicitIdAndBackNavigation;
+                if ((previous != value))
+                {
+                    this.ValidateProperty("OwnedEntityWithExplicitIdAndBackNavigation", value);
+                    this._ownedEntityWithExplicitIdAndBackNavigation.Entity = value;
+                    this.RaisePropertyChanged("OwnedEntityWithExplicitIdAndBackNavigation");
+                }
+            }
+        }
+        
+        private bool FilterOwnedEntityWithExplicitId(OwnedEntityWithExplicitId entity)
+        {
+            return (entity.EmployeeId == this.EmployeeId);
+        }
+        
+        private bool FilterOwnedEntityWithExplicitIdAndBackNavigation(OwnedEntityWithExplicitIdAndBackNavigation entity)
+        {
+            return (entity.EmployeeId == this.EmployeeId);
+        }
+        
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._employeeId;
+        }
+    }
+    
+    /// <summary>
+    /// The 'OwnedEntityWithBackNavigation' class.
+    /// </summary>
+    [DataContract(Namespace="http://schemas.datacontract.org/2004/07/EFCoreModels.Scenarios.OwnedTypes")]
+    public sealed partial class OwnedEntityWithBackNavigation : ComplexObject
+    {
+        
+        private string _description;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnDescriptionChanging(string value);
+        partial void OnDescriptionChanged();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OwnedEntityWithBackNavigation"/> class.
+        /// </summary>
+        public OwnedEntityWithBackNavigation()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Description' value.
+        /// </summary>
+        [DataMember()]
+        [Required()]
+        public string Description
+        {
+            get
+            {
+                return this._description;
+            }
+            set
+            {
+                if ((this._description != value))
+                {
+                    this.OnDescriptionChanging(value);
+                    this.RaiseDataMemberChanging("Description");
+                    this.ValidateProperty("Description", value);
+                    this._description = value;
+                    this.RaiseDataMemberChanged("Description");
+                    this.OnDescriptionChanged();
+                }
+            }
+        }
+    }
+    
+    /// <summary>
+    /// The 'OwnedEntityWithExplicitId' entity class.
+    /// </summary>
+    [DataContract(Namespace="http://schemas.datacontract.org/2004/07/EFCoreModels.Scenarios.OwnedTypes")]
+    public sealed partial class OwnedEntityWithExplicitId : Entity
+    {
+        
+        private string _description;
+        
+        private int _employeeId;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnDescriptionChanging(string value);
+        partial void OnDescriptionChanged();
+        partial void OnEmployeeIdChanging(int value);
+        partial void OnEmployeeIdChanged();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OwnedEntityWithExplicitId"/> class.
+        /// </summary>
+        public OwnedEntityWithExplicitId()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Description' value.
+        /// </summary>
+        [DataMember()]
+        [Required()]
+        public string Description
+        {
+            get
+            {
+                return this._description;
+            }
+            set
+            {
+                if ((this._description != value))
+                {
+                    this.OnDescriptionChanging(value);
+                    this.RaiseDataMemberChanging("Description");
+                    this.ValidateProperty("Description", value);
+                    this._description = value;
+                    this.RaiseDataMemberChanged("Description");
+                    this.OnDescriptionChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'EmployeeId' value.
+        /// </summary>
+        [DataMember()]
+        [Editable(false, AllowInitialValue=true)]
+        [Key()]
+        [RoundtripOriginal()]
+        public int EmployeeId
+        {
+            get
+            {
+                return this._employeeId;
+            }
+            set
+            {
+                if ((this._employeeId != value))
+                {
+                    this.OnEmployeeIdChanging(value);
+                    this.ValidateProperty("EmployeeId", value);
+                    this._employeeId = value;
+                    this.RaisePropertyChanged("EmployeeId");
+                    this.OnEmployeeIdChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._employeeId;
+        }
+    }
+    
+    /// <summary>
+    /// The 'OwnedEntityWithExplicitIdAndBackNavigation' entity class.
+    /// </summary>
+    [DataContract(Namespace="http://schemas.datacontract.org/2004/07/EFCoreModels.Scenarios.OwnedTypes")]
+    public sealed partial class OwnedEntityWithExplicitIdAndBackNavigation : Entity
+    {
+        
+        private string _description;
+        
+        private EntityRef<Employee> _employee;
+        
+        private int _employeeId;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnDescriptionChanging(string value);
+        partial void OnDescriptionChanged();
+        partial void OnEmployeeIdChanging(int value);
+        partial void OnEmployeeIdChanged();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="OwnedEntityWithExplicitIdAndBackNavigation"/> class.
+        /// </summary>
+        public OwnedEntityWithExplicitIdAndBackNavigation()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Description' value.
+        /// </summary>
+        [DataMember()]
+        [Required()]
+        public string Description
+        {
+            get
+            {
+                return this._description;
+            }
+            set
+            {
+                if ((this._description != value))
+                {
+                    this.OnDescriptionChanging(value);
+                    this.RaiseDataMemberChanging("Description");
+                    this.ValidateProperty("Description", value);
+                    this._description = value;
+                    this.RaiseDataMemberChanged("Description");
+                    this.OnDescriptionChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the associated <see cref="Employee"/> entity.
+        /// </summary>
+        [Association("FK_Employees_Employees_EmployeeId", "EmployeeId", "EmployeeId", IsForeignKey=true)]
+        public Employee Employee
+        {
+            get
+            {
+                if ((this._employee == null))
+                {
+                    this._employee = new EntityRef<Employee>(this, "Employee", this.FilterEmployee);
+                }
+                return this._employee.Entity;
+            }
+            set
+            {
+                Employee previous = this.Employee;
+                if ((previous != value))
+                {
+                    this.ValidateProperty("Employee", value);
+                    if ((value != null))
+                    {
+                        this.EmployeeId = value.EmployeeId;
+                    }
+                    else
+                    {
+                        this.EmployeeId = default(int);
+                    }
+                    this._employee.Entity = value;
+                    this.RaisePropertyChanged("Employee");
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'EmployeeId' value.
+        /// </summary>
+        [DataMember()]
+        [Editable(false, AllowInitialValue=true)]
+        [Key()]
+        [RoundtripOriginal()]
+        public int EmployeeId
+        {
+            get
+            {
+                return this._employeeId;
+            }
+            set
+            {
+                if ((this._employeeId != value))
+                {
+                    this.OnEmployeeIdChanging(value);
+                    this.ValidateProperty("EmployeeId", value);
+                    this._employeeId = value;
+                    this.RaisePropertyChanged("EmployeeId");
+                    this.OnEmployeeIdChanged();
+                }
+            }
+        }
+        
+        private bool FilterEmployee(Employee entity)
+        {
+            return (entity.EmployeeId == this.EmployeeId);
         }
         
         /// <summary>
@@ -437,6 +792,8 @@ namespace OpenRiaServices.Tools.Test
             public EFCoreComplexTypesContextEntityContainer()
             {
                 this.CreateEntitySet<Employee>(EntitySetOperations.None);
+                this.CreateEntitySet<OwnedEntityWithExplicitId>(EntitySetOperations.None);
+                this.CreateEntitySet<OwnedEntityWithExplicitIdAndBackNavigation>(EntitySetOperations.None);
             }
         }
     }

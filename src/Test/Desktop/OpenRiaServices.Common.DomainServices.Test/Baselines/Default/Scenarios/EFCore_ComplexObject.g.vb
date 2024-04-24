@@ -122,8 +122,6 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         
         Private _homePhone As String
         
-        Private _possibleId As Integer
-        
         #Region "Extensibility Method Definitions"
 
         ''' <summary>
@@ -139,10 +137,6 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         Private Partial Sub OnHomePhoneChanging(ByVal value As String)
         End Sub
         Private Partial Sub OnHomePhoneChanged()
-        End Sub
-        Private Partial Sub OnPossibleIdChanging(ByVal value As Integer)
-        End Sub
-        Private Partial Sub OnPossibleIdChanged()
         End Sub
 
         #End Region
@@ -198,27 +192,6 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
                 End If
             End Set
         End Property
-        
-        ''' <summary>
-        ''' Gets or sets the 'PossibleId' value.
-        ''' </summary>
-        <DataMember()>  _
-        Public Property PossibleId() As Integer
-            Get
-                Return Me._possibleId
-            End Get
-            Set
-                If ((Me._possibleId = value)  _
-                            = false) Then
-                    Me.OnPossibleIdChanging(value)
-                    Me.RaiseDataMemberChanging("PossibleId")
-                    Me.ValidateProperty("PossibleId", value)
-                    Me._possibleId = value
-                    Me.RaiseDataMemberChanged("PossibleId")
-                    Me.OnPossibleIdChanged
-                End If
-            End Set
-        End Property
     End Class
     
     ''' <summary>
@@ -231,6 +204,12 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         Private _contactInfo As ContactInfo
         
         Private _employeeId As Integer
+        
+        Private _ownedEntityWithBackNavigation As OwnedEntityWithBackNavigation
+        
+        Private _ownedEntityWithExplicitId As EntityRef(Of OwnedEntityWithExplicitId)
+        
+        Private _ownedEntityWithExplicitIdAndBackNavigation As EntityRef(Of OwnedEntityWithExplicitIdAndBackNavigation)
         
         #Region "Extensibility Method Definitions"
 
@@ -247,6 +226,10 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         Private Partial Sub OnEmployeeIdChanging(ByVal value As Integer)
         End Sub
         Private Partial Sub OnEmployeeIdChanged()
+        End Sub
+        Private Partial Sub OnOwnedEntityWithBackNavigationChanging(ByVal value As OwnedEntityWithBackNavigation)
+        End Sub
+        Private Partial Sub OnOwnedEntityWithBackNavigationChanged()
         End Sub
 
         #End Region
@@ -303,6 +286,349 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
                 End If
             End Set
         End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'OwnedEntityWithBackNavigation' value.
+        ''' </summary>
+        <DataMember(),  _
+         Display(AutoGenerateField:=false)>  _
+        Public Property OwnedEntityWithBackNavigation() As OwnedEntityWithBackNavigation
+            Get
+                Return Me._ownedEntityWithBackNavigation
+            End Get
+            Set
+                If (Object.Equals(Me._ownedEntityWithBackNavigation, value) = false) Then
+                    Me.OnOwnedEntityWithBackNavigationChanging(value)
+                    Me.RaiseDataMemberChanging("OwnedEntityWithBackNavigation")
+                    Me.ValidateProperty("OwnedEntityWithBackNavigation", value)
+                    Me._ownedEntityWithBackNavigation = value
+                    Me.RaiseDataMemberChanged("OwnedEntityWithBackNavigation")
+                    Me.OnOwnedEntityWithBackNavigationChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the associated <see cref="OwnedEntityWithExplicitId"/> entity.
+        ''' </summary>
+        <Association("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitId", "EmployeeId", "EmployeeId")>  _
+        Public Property OwnedEntityWithExplicitId() As OwnedEntityWithExplicitId
+            Get
+                If (Me._ownedEntityWithExplicitId Is Nothing) Then
+                    Me._ownedEntityWithExplicitId = New EntityRef(Of OwnedEntityWithExplicitId)(Me, "OwnedEntityWithExplicitId", AddressOf Me.FilterOwnedEntityWithExplicitId)
+                End If
+                Return Me._ownedEntityWithExplicitId.Entity
+            End Get
+            Set
+                Dim previous As OwnedEntityWithExplicitId = Me.OwnedEntityWithExplicitId
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("OwnedEntityWithExplicitId", value)
+                    Me._ownedEntityWithExplicitId.Entity = value
+                    Me.RaisePropertyChanged("OwnedEntityWithExplicitId")
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the associated <see cref="OwnedEntityWithExplicitIdAndBackNavigation"/> entity.
+        ''' </summary>
+        <Association("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitIdAndBackNavigation"& _ 
+            "", "EmployeeId", "EmployeeId")>  _
+        Public Property OwnedEntityWithExplicitIdAndBackNavigation() As OwnedEntityWithExplicitIdAndBackNavigation
+            Get
+                If (Me._ownedEntityWithExplicitIdAndBackNavigation Is Nothing) Then
+                    Me._ownedEntityWithExplicitIdAndBackNavigation = New EntityRef(Of OwnedEntityWithExplicitIdAndBackNavigation)(Me, "OwnedEntityWithExplicitIdAndBackNavigation", AddressOf Me.FilterOwnedEntityWithExplicitIdAndBackNavigation)
+                End If
+                Return Me._ownedEntityWithExplicitIdAndBackNavigation.Entity
+            End Get
+            Set
+                Dim previous As OwnedEntityWithExplicitIdAndBackNavigation = Me.OwnedEntityWithExplicitIdAndBackNavigation
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("OwnedEntityWithExplicitIdAndBackNavigation", value)
+                    Me._ownedEntityWithExplicitIdAndBackNavigation.Entity = value
+                    Me.RaisePropertyChanged("OwnedEntityWithExplicitIdAndBackNavigation")
+                End If
+            End Set
+        End Property
+        
+        Private Function FilterOwnedEntityWithExplicitId(ByVal entity As OwnedEntityWithExplicitId) As Boolean
+            Return Object.Equals(entity.EmployeeId, Me.EmployeeId)
+        End Function
+        
+        Private Function FilterOwnedEntityWithExplicitIdAndBackNavigation(ByVal entity As OwnedEntityWithExplicitIdAndBackNavigation) As Boolean
+            Return Object.Equals(entity.EmployeeId, Me.EmployeeId)
+        End Function
+        
+        ''' <summary>
+        ''' Computes a value from the key fields that uniquely identifies this entity instance.
+        ''' </summary>
+        ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
+        Public Overrides Function GetIdentity() As Object
+            Return Me._employeeId
+        End Function
+    End Class
+    
+    ''' <summary>
+    ''' The 'OwnedEntityWithBackNavigation' class.
+    ''' </summary>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/EFCoreModels.Scenarios.OwnedTypes")>  _
+    Partial Public NotInheritable Class OwnedEntityWithBackNavigation
+        Inherits ComplexObject
+        
+        Private _description As String
+        
+        #Region "Extensibility Method Definitions"
+
+        ''' <summary>
+        ''' This method is invoked from the constructor once initialization is complete and
+        ''' can be used for further object setup.
+        ''' </summary>
+        Private Partial Sub OnCreated()
+        End Sub
+        Private Partial Sub OnDescriptionChanging(ByVal value As String)
+        End Sub
+        Private Partial Sub OnDescriptionChanged()
+        End Sub
+
+        #End Region
+        
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="OwnedEntityWithBackNavigation"/> class.
+        ''' </summary>
+        Public Sub New()
+            MyBase.New
+            Me.OnCreated
+        End Sub
+        
+        ''' <summary>
+        ''' Gets or sets the 'Description' value.
+        ''' </summary>
+        <DataMember(),  _
+         Required()>  _
+        Public Property Description() As String
+            Get
+                Return Me._description
+            End Get
+            Set
+                If (String.Equals(Me._description, value) = false) Then
+                    Me.OnDescriptionChanging(value)
+                    Me.RaiseDataMemberChanging("Description")
+                    Me.ValidateProperty("Description", value)
+                    Me._description = value
+                    Me.RaiseDataMemberChanged("Description")
+                    Me.OnDescriptionChanged
+                End If
+            End Set
+        End Property
+    End Class
+    
+    ''' <summary>
+    ''' The 'OwnedEntityWithExplicitId' entity class.
+    ''' </summary>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/EFCoreModels.Scenarios.OwnedTypes")>  _
+    Partial Public NotInheritable Class OwnedEntityWithExplicitId
+        Inherits Entity
+        
+        Private _description As String
+        
+        Private _employeeId As Integer
+        
+        #Region "Extensibility Method Definitions"
+
+        ''' <summary>
+        ''' This method is invoked from the constructor once initialization is complete and
+        ''' can be used for further object setup.
+        ''' </summary>
+        Private Partial Sub OnCreated()
+        End Sub
+        Private Partial Sub OnDescriptionChanging(ByVal value As String)
+        End Sub
+        Private Partial Sub OnDescriptionChanged()
+        End Sub
+        Private Partial Sub OnEmployeeIdChanging(ByVal value As Integer)
+        End Sub
+        Private Partial Sub OnEmployeeIdChanged()
+        End Sub
+
+        #End Region
+        
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="OwnedEntityWithExplicitId"/> class.
+        ''' </summary>
+        Public Sub New()
+            MyBase.New
+            Me.OnCreated
+        End Sub
+        
+        ''' <summary>
+        ''' Gets or sets the 'Description' value.
+        ''' </summary>
+        <DataMember(),  _
+         Required()>  _
+        Public Property Description() As String
+            Get
+                Return Me._description
+            End Get
+            Set
+                If (String.Equals(Me._description, value) = false) Then
+                    Me.OnDescriptionChanging(value)
+                    Me.RaiseDataMemberChanging("Description")
+                    Me.ValidateProperty("Description", value)
+                    Me._description = value
+                    Me.RaiseDataMemberChanged("Description")
+                    Me.OnDescriptionChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'EmployeeId' value.
+        ''' </summary>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
+        Public Property EmployeeId() As Integer
+            Get
+                Return Me._employeeId
+            End Get
+            Set
+                If ((Me._employeeId = value)  _
+                            = false) Then
+                    Me.OnEmployeeIdChanging(value)
+                    Me.ValidateProperty("EmployeeId", value)
+                    Me._employeeId = value
+                    Me.RaisePropertyChanged("EmployeeId")
+                    Me.OnEmployeeIdChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Computes a value from the key fields that uniquely identifies this entity instance.
+        ''' </summary>
+        ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
+        Public Overrides Function GetIdentity() As Object
+            Return Me._employeeId
+        End Function
+    End Class
+    
+    ''' <summary>
+    ''' The 'OwnedEntityWithExplicitIdAndBackNavigation' entity class.
+    ''' </summary>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/EFCoreModels.Scenarios.OwnedTypes")>  _
+    Partial Public NotInheritable Class OwnedEntityWithExplicitIdAndBackNavigation
+        Inherits Entity
+        
+        Private _description As String
+        
+        Private _employee As EntityRef(Of Employee)
+        
+        Private _employeeId As Integer
+        
+        #Region "Extensibility Method Definitions"
+
+        ''' <summary>
+        ''' This method is invoked from the constructor once initialization is complete and
+        ''' can be used for further object setup.
+        ''' </summary>
+        Private Partial Sub OnCreated()
+        End Sub
+        Private Partial Sub OnDescriptionChanging(ByVal value As String)
+        End Sub
+        Private Partial Sub OnDescriptionChanged()
+        End Sub
+        Private Partial Sub OnEmployeeIdChanging(ByVal value As Integer)
+        End Sub
+        Private Partial Sub OnEmployeeIdChanged()
+        End Sub
+
+        #End Region
+        
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="OwnedEntityWithExplicitIdAndBackNavigation"/> class.
+        ''' </summary>
+        Public Sub New()
+            MyBase.New
+            Me.OnCreated
+        End Sub
+        
+        ''' <summary>
+        ''' Gets or sets the 'Description' value.
+        ''' </summary>
+        <DataMember(),  _
+         Required()>  _
+        Public Property Description() As String
+            Get
+                Return Me._description
+            End Get
+            Set
+                If (String.Equals(Me._description, value) = false) Then
+                    Me.OnDescriptionChanging(value)
+                    Me.RaiseDataMemberChanging("Description")
+                    Me.ValidateProperty("Description", value)
+                    Me._description = value
+                    Me.RaiseDataMemberChanged("Description")
+                    Me.OnDescriptionChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the associated <see cref="Employee"/> entity.
+        ''' </summary>
+        <Association("FK_Employees_Employees_EmployeeId", "EmployeeId", "EmployeeId", IsForeignKey:=true)>  _
+        Public Property Employee() As Employee
+            Get
+                If (Me._employee Is Nothing) Then
+                    Me._employee = New EntityRef(Of Employee)(Me, "Employee", AddressOf Me.FilterEmployee)
+                End If
+                Return Me._employee.Entity
+            End Get
+            Set
+                Dim previous As Employee = Me.Employee
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("Employee", value)
+                    If (Not (value) Is Nothing) Then
+                        Me.EmployeeId = value.EmployeeId
+                    Else
+                        Me.EmployeeId = CType(Nothing, Integer)
+                    End If
+                    Me._employee.Entity = value
+                    Me.RaisePropertyChanged("Employee")
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'EmployeeId' value.
+        ''' </summary>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
+        Public Property EmployeeId() As Integer
+            Get
+                Return Me._employeeId
+            End Get
+            Set
+                If ((Me._employeeId = value)  _
+                            = false) Then
+                    Me.OnEmployeeIdChanging(value)
+                    Me.ValidateProperty("EmployeeId", value)
+                    Me._employeeId = value
+                    Me.RaisePropertyChanged("EmployeeId")
+                    Me.OnEmployeeIdChanged
+                End If
+            End Set
+        End Property
+        
+        Private Function FilterEmployee(ByVal entity As Employee) As Boolean
+            Return Object.Equals(entity.EmployeeId, Me.EmployeeId)
+        End Function
         
         ''' <summary>
         ''' Computes a value from the key fields that uniquely identifies this entity instance.
@@ -414,6 +740,8 @@ Namespace OpenRiaServices.Tools.Test
             Public Sub New()
                 MyBase.New
                 Me.CreateEntitySet(Of Employee)(EntitySetOperations.None)
+                Me.CreateEntitySet(Of OwnedEntityWithExplicitId)(EntitySetOperations.None)
+                Me.CreateEntitySet(Of OwnedEntityWithExplicitIdAndBackNavigation)(EntitySetOperations.None)
             End Sub
         End Class
     End Class

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
+using OpenRiaServices.Server;
 
 #nullable enable
 
@@ -32,14 +33,38 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         public required Address Address { get; set; }
 
         public required string HomePhone { get; set; }
+    }
 
-        public int PossibleId { get; set; }
+    public class OwnedEntityWithExplicitId
+    {
+        public int EmployeeId { get; set; }
+        public required string Description { get; set; }
+    }
+
+    public class OwnedEntityWithBackNavigation
+    {
+        public required string Description { get; set; }
+        [Include]
+        public required Employee Employee { get; set; }
+    }
+
+    public class OwnedEntityWithExplicitIdAndBackNavigation
+    {
+        public int EmployeeId { get; set; }
+        [Include]
+        public required Employee Employee { get; set; }
+        public required string Description { get; set; }
     }
 
     public class Employee
     {
         public int EmployeeId { get; set; }
         public required ContactInfo ContactInfo { get; set; }
+        [Include]
+        public required OwnedEntityWithExplicitId OwnedEntityWithExplicitId { get; set; }
+        [Include] 
+        public required OwnedEntityWithExplicitIdAndBackNavigation OwnedEntityWithExplicitIdAndBackNavigation { get; set; }
+        public required OwnedEntityWithBackNavigation OwnedEntityWithBackNavigation { get; set; }
     }
 
     // TODO: Owned typed with "backwards" FK
@@ -59,7 +84,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>()
-                .OwnsOne(typeof(ContactInfo), nameof(Employee.ContactInfo), x =>
+                .OwnsOne<ContactInfo>(nameof(Employee.ContactInfo), x =>
                 {
                     x.Property(nameof(ContactInfo.HomePhone)).HasMaxLength(24);
                     x.OwnsOne(typeof(Address), nameof(ContactInfo.Address), address =>
@@ -68,7 +93,27 @@ namespace EFCoreModels.Scenarios.OwnedTypes
                         address.Property(nameof(Address.City)).HasMaxLength(50);
                     });
                 })
+                .OwnsOne<OwnedEntityWithExplicitId>(nameof(Employee.OwnedEntityWithExplicitId), x =>
+                {
+                    x.WithOwner().HasForeignKey(nameof(OwnedEntityWithExplicitId.EmployeeId));
+                })
+                .OwnsOne<OwnedEntityWithExplicitIdAndBackNavigation>(nameof(Employee.OwnedEntityWithExplicitIdAndBackNavigation), x =>
+                {
+                    x.WithOwner(nameof(OwnedEntityWithExplicitIdAndBackNavigation.Employee));
+                })
+                .OwnsOne<OwnedEntityWithBackNavigation>(nameof(Employee.OwnedEntityWithBackNavigation), x =>
+                {
+                    x.WithOwner(nameof(OwnedEntityWithBackNavigation.Employee));
+                    //x.Navigation(nameof(OwnedEntityWithBackNavigation.Employee))
+                    //    .UsePropertyAccessMode(PropertyAccessMode.Property);
+                })
                 .HasKey(nameof(Employee.EmployeeId));
+
+#if NET8_0
+            modelBuilder.Entity<Employee>()
+                .Navigation(x => x.ContactInfo)
+                .IsRequired();
+#endif
 
             base.OnModelCreating(modelBuilder);
         }
