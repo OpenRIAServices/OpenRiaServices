@@ -192,7 +192,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 bool isStringType = pd.PropertyType == typeof(string) || pd.PropertyType == typeof(char[]);
                 if (isStringType &&
                     pd.Attributes[typeof(StringLengthAttribute)] == null &&
-                    property.GetMaxLength() is int maxLength)                  
+                    property.GetMaxLength() is int maxLength)
                 {
                     attributes.Add(new StringLengthAttribute(maxLength));
                 }
@@ -228,43 +228,32 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                         attributes.Add(new RoundtripOriginalAttribute());
                     }
                 }
-            }
 
-            // Add the Editable attribute if required
-            if (editableAttribute != null && pd.Attributes[typeof(EditableAttribute)] == null)
-            {
-                attributes.Add(editableAttribute);
+                // Add the Editable attribute if required
+                if (editableAttribute != null && pd.Attributes[typeof(EditableAttribute)] == null)
+                {
+                    attributes.Add(editableAttribute);
+                }
             }
 
             // Add AssociationAttribute if required for the specified property
-            if (isEntity
-                && _entityType.FindNavigation(pd.Name) is INavigation navigation)
+            if (_entityType.FindNavigation(pd.Name) is { } navigation)
             {
 #if NETSTANDARD2_0
                 bool isManyToMany = navigation.IsCollection() && navigation.FindInverse()?.IsCollection() == true;
+                bool addAssociationAttribute = !isManyToMany;
 #else
                 bool isManyToMany = navigation.IsCollection && navigation.Inverse?.IsCollection == true;
-#endif
-
-#if NETSTANDARD2_0
-                if (!isManyToMany)
-                {
-#else
-                if (!isManyToMany
+                bool addAssociationAttribute = !isManyToMany
                     // Don't generate association attributes for Owned types (onless they have all FK fields explictly defined, in which case they can be treated as Entities)
                     //  if we generate association attributes then it cannot be treated as a ComplexObject
-                    && !(navigation.TargetEntityType.IsOwned() && navigation.ForeignKey.Properties.Any(static p => p.IsShadowProperty())))
-                {
+                    && !(navigation.ForeignKey.Properties.Any(static p => p.IsShadowProperty()));
 #endif
 
-                    var assocAttrib = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];
-                    if (assocAttrib == null)
-                    {
-                        assocAttrib = TypeDescriptionContext.CreateAssociationAttribute(navigation);
-                        attributes.Add(assocAttrib);
-                    }
+                if (addAssociationAttribute && pd.Attributes[typeof(AssociationAttribute)] is null)
+                {
+                    attributes.Add(TypeDescriptionContext.CreateAssociationAttribute(navigation));
                 }
-
             }
 
             return attributes.ToArray();
