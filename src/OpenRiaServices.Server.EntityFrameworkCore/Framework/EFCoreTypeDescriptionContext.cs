@@ -64,6 +64,8 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
             string thisKey;
             string otherKey;
+            string name = fk.GetConstraintName();
+
 #if NETSTANDARD2_0
             if (navigationProperty.IsDependentToPrincipal())
 #else
@@ -79,9 +81,18 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
                 thisKey = FormatMemberList(fk.PrincipalKey.Properties);
                 otherKey = FormatMemberList(fk.Properties);
+                Debug.Assert(fk.IsOwnership == fk.DeclaringEntityType.IsOwned());
+
+                // In case there are multiple navigation properties to Owned entities
+                // and they have explicity defined keys (they mirror the owners key) then
+                // they will have the same foreign key name and we have to make them unique
+                if (fk.DeclaringEntityType.IsOwned())
+                {
+                    name += "|owns:" + navigationProperty.Name;
+                }
             }
 
-            var assocAttrib = new AssociationAttribute(fk.GetConstraintName(), thisKey, otherKey);
+            var assocAttrib = new AssociationAttribute(name, thisKey, otherKey);
             assocAttrib.IsForeignKey = IsForeignKey(navigationProperty);
             return assocAttrib;
         }
