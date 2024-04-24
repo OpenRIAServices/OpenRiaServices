@@ -265,6 +265,9 @@ namespace OpenRiaServices.Tools.Test
                 typeof(EFComplexTypesService), sharedFiles, false));
         }
 
+#if NET 
+        // in NET472 the navigation properties to "Owned" types are Required, just as for EF6
+        // - We should probably try to update the model so it matches for net6-8
         [TestMethod]
         [DeploymentItem(@"Baselines\Default\Scenarios", @"Baselines\Default\Scenarios")]
         public void TestClientCodegen_EFCore_ComplexObject()
@@ -275,6 +278,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", @"Baselines\Default\Scenarios", "EFCore_ComplexObject.g",
                 typeof(EFCoreComplexTypesService), sharedFiles, false));
         }
+#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_Inherit")]
         [TestMethod]
