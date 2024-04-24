@@ -316,19 +316,19 @@ namespace TestDomainServices
         [Query]
         public IQueryable<AdventureWorksModel.Product> GetProducts()
         {
-            return (new AdventureWorksModel.Product[0]).AsQueryable();
+            return (Array.Empty<AdventureWorksModel.Product>()).AsQueryable();
         }
 
         [Query]
         public IQueryable<AdventureWorksModel.PurchaseOrder> GetPurchaseOrders()
         {
-            return (new AdventureWorksModel.PurchaseOrder[0]).AsQueryable();
+            return (Array.Empty<AdventureWorksModel.PurchaseOrder>()).AsQueryable();
         }
 
         [Query]
         public IQueryable<AdventureWorksModel.PurchaseOrderDetail> GetPurchaseOrderDetails()
         {
-            return (new AdventureWorksModel.PurchaseOrderDetail[0]).AsQueryable();
+            return (Array.Empty<AdventureWorksModel.PurchaseOrderDetail>()).AsQueryable();
         }
     }
 

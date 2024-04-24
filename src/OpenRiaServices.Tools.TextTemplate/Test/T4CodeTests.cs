@@ -75,8 +75,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                 typeof(TestDomainServices.LTS.Northwind)
 #endif
             };
-            Type[] sharedTypes = new Type[] {
-            };
+            Type[] sharedTypes = Array.Empty<Type>();
             string[] refAssemblies = new string[] {
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
             };
@@ -109,7 +108,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.EF.Northwind),
             };            
-            Type[] sharedTypes = new Type[] { };
+            Type[] sharedTypes = Array.Empty<Type>();
             string[] refAssemblies = new string[] {
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
             };
@@ -125,7 +124,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                 typeof(TestDomainServices.ComplexTypes_DomainService),
                 typeof(TestDomainServices.ComplexTypes_InvokeOperationsOnly)
             };
-            Type[] sharedTypes = new Type[] { };
+            Type[] sharedTypes = Array.Empty<Type>();
 
             string[] refAssemblies = new string[] {
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
@@ -142,7 +141,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                 typeof(TestDomainServices.TypeNameConflictResolution.ExternalConflicts.DomainServiceScenario2),
                 typeof(TestDomainServices.TypeNameConflictResolution.BaseTypeConflicts)
             };
-            Type[] sharedTypes = new Type[] { };
+            Type[] sharedTypes = Array.Empty<Type>();
 
             string[] refAssemblies = new string[] {
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
@@ -158,7 +157,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
                 typeof(TestDomainServices.CompositionInheritanceScenarios),
                 typeof(TestDomainServices.AssociationInheritanceScenarios)
             };
-            Type[] sharedTypes = new Type[] { };
+            Type[] sharedTypes = Array.Empty<Type>();
 
             string[] refAssemblies = new string[] {
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
@@ -173,7 +172,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainService1)
             };
-            Type[] sharedTypes = new Type[] { };
+            Type[] sharedTypes = Array.Empty<Type>();
 
             string[] refAssemblies = new string[] {
                 Assembly.GetExecutingAssembly().ManifestModule.FullyQualifiedName,
@@ -212,7 +211,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
         [TestMethod]
         public void T4CodeGenTest_VBCodeGenTest()
         {
-            Type[] domainServiceTypes = new Type[] {};
+            Type[] domainServiceTypes = Array.Empty<Type>();
             ClientCodeGenerationOptions options = new ClientCodeGenerationOptions()
             {
                 Language = "VB",
