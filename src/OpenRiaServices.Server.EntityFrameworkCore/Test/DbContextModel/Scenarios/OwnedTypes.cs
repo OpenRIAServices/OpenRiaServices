@@ -6,7 +6,17 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable enable
 
-#if NET8_0_OR_GREATER
+#if NETSTANDARD2_0
+namespace System.Runtime.CompilerServices
+{
+    internal class RequiredMemberAttribute { };
+    internal class CompilerFeatureRequiredAttribute {
+        public CompilerFeatureRequiredAttribute() { }
+        public CompilerFeatureRequiredAttribute(string _) :this() { } 
+    };
+}
+#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
+#endif
 
 namespace EFCoreModels.Scenarios.OwnedTypes
 {
@@ -58,7 +68,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
                         address.Property(nameof(Address.City)).HasMaxLength(50);
                     });
                 })
-                .HasKey(e => e.EmployeeId);
+                .HasKey(nameof(Employee.EmployeeId));
 
             base.OnModelCreating(modelBuilder);
         }
@@ -72,4 +82,3 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         }
     }
 }
-#endif

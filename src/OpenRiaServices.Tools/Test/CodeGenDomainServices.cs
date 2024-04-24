@@ -254,6 +254,28 @@ namespace OpenRiaServices.Tools.Test
                 typeof(TestDomainServices.IncludeScenariosTestProvider), sharedFiles, false));
         }
 
+        [TestMethod]
+        [DeploymentItem(@"Baselines\Default\Scenarios", @"Baselines\Default\Scenarios")]
+        public void TestClientCodegen_EF_ComplexObject()
+        {
+            string[] sharedFiles = Array.Empty<string>();
+
+            // Default
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", @"Baselines\Default\Scenarios", "EF_ComplexObject.g",
+                typeof(EFComplexTypesService), sharedFiles, false));
+        }
+
+        [TestMethod]
+        [DeploymentItem(@"Baselines\Default\Scenarios", @"Baselines\Default\Scenarios")]
+        public void TestClientCodegen_EFCore_ComplexObject()
+        {
+            string[] sharedFiles = Array.Empty<string>();
+
+            // Default
+            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", @"Baselines\Default\Scenarios", "EFCore_ComplexObject.g",
+                typeof(EFCoreComplexTypesService), sharedFiles, false));
+        }
+
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_Inherit")]
         [TestMethod]
         public void TestClientCodegen_InheritanceScenarios()
@@ -1008,6 +1030,24 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.AssertGeneratedCodeDoesNotContain(generatedCode,
                     @"[DataMember()] [Editable(false, AllowInitialValue=true)] [Key()] [RoundtripOriginal()] public int ID",
                     @"[DataMember()] [RoundtripOriginal()] public string PropWithPropLevelRTO");
+        }
+    }
+
+    [EnableClientAccess]
+    public class EFComplexTypesService : OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios>
+    {
+        public IQueryable<DataTests.Scenarios.EF.Northwind.EmployeeWithCT> GetCustomers()
+        {
+            return null;
+        }
+    }
+
+    [EnableClientAccess]
+    public class EFCoreComplexTypesService : OpenRiaServices.Server.EntityFrameworkCore.DbDomainService<EFCoreModels.Scenarios.OwnedTypes.OwnedTypesDbContext>
+    {
+        public IQueryable<EFCoreModels.Scenarios.OwnedTypes.Employee> GetCustomers()
+        {
+            return null;
         }
     }
 }

@@ -58,6 +58,18 @@
     <Content Include="Baselines\Default\Mocks\ServerSideAsyncDomainService.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Baselines\Default\Scenarios\EFCore_ComplexObject.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EFCore_ComplexObject.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EF_ComplexObject.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\Scenarios\EF_ComplexObject.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Baselines\Default\Scenarios\EFCoreContextScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -597,6 +609,8 @@
     <None Remove="Baselines\Default\EF\Catalog_EFCore.g.vb" />
     <None Remove="Baselines\Default\EF\Northwind_EFCore.g.vb" />
     <None Remove="Baselines\Default\Scenarios\EFCoreContextScenarios.g.vb" />
+    <None Remove="Baselines\Default\Scenarios\EFCore_ComplexObject.g.vb" />
+    <None Remove="Baselines\Default\Scenarios\EF_ComplexObject.g.vb" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Baselines\Default\EF\Northwind_EFCore.g.cs">
