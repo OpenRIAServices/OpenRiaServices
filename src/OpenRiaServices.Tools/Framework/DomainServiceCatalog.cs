@@ -138,11 +138,11 @@ namespace OpenRiaServices.Tools
                 // Our DPD layer reports problems only by throwing.
                 // Translate these exceptions into clean error logs
                 // so that they appear in the Error window in VS
-                this.LogError(ae.Message);
+                this.LogException(ae);
             }
             catch (InvalidOperationException ioe)
             {
-                this.LogError(ioe.Message);
+                this.LogException(ioe);
             }
         }
 
@@ -237,7 +237,7 @@ namespace OpenRiaServices.Tools
                 {
                     throw;
                 }
-                this.LogError(ex.Message);
+                this.LogException(ex);
             }
             return null;
         }
