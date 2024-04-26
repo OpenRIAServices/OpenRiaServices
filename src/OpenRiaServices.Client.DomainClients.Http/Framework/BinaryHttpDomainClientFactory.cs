@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
 using OpenRiaServices.Client.DomainClients.Http;
 
@@ -49,8 +50,42 @@ namespace OpenRiaServices.Client.DomainClients
         private HttpClient CreateHttpClient(Uri serviceUri)
         {
             var httpClient = _httpClientFactory();
-            httpClient.BaseAddress = new Uri(serviceUri.AbsoluteUri + "/binary/", UriKind.Absolute);
+
+            string absoluteUri = serviceUri.AbsoluteUri;
+
+            //TODO: Handle absolute URI's
+            if (UseShortNames && absoluteUri.EndsWith(".svc", StringComparison.Ordinal))
+            {
+                int dash = absoluteUri.LastIndexOf('-');
+                int pathSeparator = absoluteUri.LastIndexOf('/');
+                if (dash > 0 && pathSeparator > 0)
+                {
+                    // Keep last part of type name, throwing avay
+                    string typeName = absoluteUri.Substring(dash + 1, absoluteUri.Length - (dash + 4 + 1));
+                    serviceUri = new Uri(absoluteUri.Substring(0, pathSeparator + 1) + typeName, UriKind.Absolute);
+                }
+                else
+                {
+                    Debug.Assert(false);
+                    serviceUri = new Uri(serviceUri.AbsoluteUri + "/binary/", UriKind.Absolute);
+                }
+            }
+            else
+            {
+                serviceUri = new Uri(serviceUri.AbsoluteUri + "/binary/", UriKind.Absolute);
+            }
+
+
+            httpClient.BaseAddress = serviceUri;
             return httpClient;
         }
+
+        // TODO: Document and switch to enum {Default, "Short/Modern/New", WCF/Legacy" ?
+        public bool UseShortNames { get; set; } = true;
     }
+
+    //enum UrlScheme
+    //{
+
+    //}
 }
