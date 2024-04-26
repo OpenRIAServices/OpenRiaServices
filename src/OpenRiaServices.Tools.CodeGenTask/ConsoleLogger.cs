@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Globalization;
 using System.IO;
+using OpenRiaServices.Tools.Logging;
 
 namespace OpenRiaServices.Tools.CodeGenTask;
 
@@ -24,17 +26,9 @@ class ConsoleLogger : ILoggingService
         TextWriter writer = Console.Out;
 
         writer.WriteLine("-----------------------------------------------------------------------------");
-        writer.WriteLine("Date : " + DateTime.Now.ToString());
+        writer.WriteLine("Date : " + DateTime.Now.ToString(CultureInfo.CurrentCulture));
         writer.WriteLine();
-
-        while (ex != null)
-        {
-            writer.WriteLine(ex.GetType().FullName);
-            writer.WriteLine("Message : " + ex.Message);
-            writer.WriteLine("StackTrace : " + ex.StackTrace);
-
-            ex = ex.InnerException;
-        }
+        writer.WriteLine(LoggingHelper.FormatException(ex));
     }
 
     public void LogMessage(string message)
