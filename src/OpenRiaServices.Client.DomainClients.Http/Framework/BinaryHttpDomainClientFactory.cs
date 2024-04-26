@@ -81,7 +81,7 @@ namespace OpenRiaServices.Client.DomainClients
         }
 
         // TODO: Document and switch to enum {Default, "Short/Modern/New", WCF/Legacy" ?
-        public bool UseShortNames { get; set; } = true;
+        public bool UseShortNames { get; set; } = false;
     }
 
     //enum UrlScheme
