@@ -769,8 +769,8 @@ namespace OpenRiaServices.Tools
         private bool GenerateClientProxiesOutOfProcess(string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters sharedCodeServiceParameters)
         {
             // Call the console app from here if Net 6.0 or greater
-            string path = Path.Combine(Path.GetDirectoryName(typeof(CreateOpenRiaClientFilesTask).Assembly.Location),
-                "../net6.0/OpenRiaServices.Tools.CodeGenTask.exe");
+            string path = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(typeof(CreateOpenRiaClientFilesTask).Assembly.Location),
+                "../net6.0/OpenRiaServices.Tools.CodeGenTask.dll"));
 
             if (!File.Exists(path))
                 throw new FileNotFoundException(path);
@@ -778,7 +778,7 @@ namespace OpenRiaServices.Tools
             using var loggingServer = new CrossProcessLoggingServer();
             var startInfo = new ProcessStartInfo
             {
-                FileName = path,
+                FileName = "dotnet",
                 UseShellExecute = false,
                 CreateNoWindow = true,
             };
@@ -787,7 +787,7 @@ namespace OpenRiaServices.Tools
 
             string fileName = RiaClientFilesTaskHelpers.CreateAndWriteArgumentsToNewTempFile(arguments);
 
-            startInfo.Arguments = "@" + fileName;
+            startInfo.Arguments = path + " @" + fileName;
 
             var process = Process.Start(startInfo);
 
