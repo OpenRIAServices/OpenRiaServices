@@ -267,7 +267,7 @@ namespace OpenRiaServices.EntityFramework
 
                 // Determine which members are in conflict by comparing original values to the current DB values
                 var dbValues = await stateEntry.GetDatabaseValuesAsync(cancellationToken);
-                
+
                 PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
 
                 // dbValues will be null if the entity has been deleted in the store (i.e. Delete/Delete conflict)
@@ -303,6 +303,66 @@ namespace OpenRiaServices.EntityFramework
 #endif
                 }
             }
+        }
+
+        /// <summary>
+        /// Insert the entity into the specified db set
+        /// </summary>
+        /// <typeparam name="TEntity">Entity type</typeparam>
+        /// <param name="dbSet">The db set</param>
+        /// <param name="entity">The modified entity</param>
+        protected void AttachAsAdded<TEntity>(DbSet<TEntity> dbSet, TEntity entity)
+            where TEntity : class
+        {
+            EntityEntry<TEntity> entityEntry = DbContext.Entry(entity);
+
+            if (entityEntry.State != EntityState.Detached)
+            {
+                entityEntry.State = EntityState.Added;
+            }
+            else
+            {
+                dbSet.Add(entity);
+            }
+        }
+
+        /// <summary>
+        /// Mark the object for removal from the specified db set
+        /// </summary>
+        /// <typeparam name="TEntity">Entity type</typeparam>
+        /// <param name="dbSet">The db set</param>
+        /// <param name="entity">The entity to remove</param>
+        protected void AttachAsDeleted<TEntity>(DbSet<TEntity> dbSet, TEntity entity)
+            where TEntity : class
+        {
+            EntityEntry<TEntity> entityEntry = DbContext.Entry(entity);
+
+            if (entityEntry.State != EntityState.Deleted)
+            {
+                entityEntry.State = EntityState.Deleted;
+            }
+            else
+            {
+                dbSet.Attach(entity);
+                dbSet.Remove(entity);
+            }
+        }
+
+        /// <summary>
+        /// Mark the entity as modified in the specified db set
+        /// </summary>
+        /// <typeparam name="TEntity">Entity type</typeparam>
+        /// <param name="dbSet">The db set</param>
+        /// <param name="entity">The modified entity</param>
+        protected void AttachAsModified<TEntity>(DbSet<TEntity> dbSet, TEntity entity)
+            where TEntity : class
+        {
+            var original = ChangeSet.GetOriginal(entity);
+
+            if (original != null)
+                dbSet.AttachAsModified(entity, original, DbContext);
+            else
+                dbSet.AttachAsModified(entity, DbContext);
         }
     }
 }
