@@ -306,12 +306,12 @@ namespace OpenRiaServices.EntityFramework
         }
 
         /// <summary>
-        /// Insert the entity into the specified db set
+        /// Mark the entity as added
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
-        /// <param name="dbSet">The db set</param>
         /// <param name="entity">The modified entity</param>
-        protected void AttachAsAdded<TEntity>(DbSet<TEntity> dbSet, TEntity entity)
+        /// <param name="dbSet">The db set</param>
+        protected void AttachAsAdded<TEntity>(TEntity entity, DbSet<TEntity> dbSet = null)
             where TEntity : class
         {
             EntityEntry<TEntity> entityEntry = DbContext.Entry(entity);
@@ -322,17 +322,18 @@ namespace OpenRiaServices.EntityFramework
             }
             else
             {
+                dbSet ??= DbContext.Set<TEntity>();
                 dbSet.Add(entity);
             }
         }
 
         /// <summary>
-        /// Mark the object for removal from the specified db set
+        /// Mark the object for removal
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
-        /// <param name="dbSet">The db set</param>
         /// <param name="entity">The entity to remove</param>
-        protected void AttachAsDeleted<TEntity>(DbSet<TEntity> dbSet, TEntity entity)
+        /// <param name="dbSet">The db set</param>
+        protected void AttachAsDeleted<TEntity>(TEntity entity, DbSet<TEntity> dbSet = null)
             where TEntity : class
         {
             EntityEntry<TEntity> entityEntry = DbContext.Entry(entity);
@@ -343,20 +344,22 @@ namespace OpenRiaServices.EntityFramework
             }
             else
             {
+                dbSet ??= DbContext.Set<TEntity>();
                 dbSet.Attach(entity);
                 dbSet.Remove(entity);
             }
         }
 
         /// <summary>
-        /// Mark the entity as modified in the specified db set
+        /// Mark the entity as modified
         /// </summary>
         /// <typeparam name="TEntity">Entity type</typeparam>
-        /// <param name="dbSet">The db set</param>
         /// <param name="entity">The modified entity</param>
-        protected void AttachAsModified<TEntity>(DbSet<TEntity> dbSet, TEntity entity)
+        /// <param name="dbSet">The db set</param>
+        protected void AttachAsModified<TEntity>(TEntity entity, DbSet<TEntity> dbSet = null)
             where TEntity : class
         {
+            dbSet ??= DbContext.Set<TEntity>();
             var original = ChangeSet.GetOriginal(entity);
 
             if (original != null)
