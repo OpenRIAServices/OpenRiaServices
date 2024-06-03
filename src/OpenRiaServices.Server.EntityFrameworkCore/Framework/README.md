@@ -22,7 +22,7 @@ This excludes usage by the Russian state, Russian state-owned companies, Russian
 2. Add a reference to *OpenRiaServices.Server.EntityFrameworkCore*
     `dotnet add package OpenRiaServices.Server.EntityFrameworkCore`
 3. Add one or more domainservices. 
-Given that you have a EfCore model named `MyDbContext` with an entity `MyEntity` you add CRUD methods using something similar to below
+Given that you have a Ef Core model named `MyDbContext` with an entity `MyEntity` you add CRUD methods using something similar to below
 
 ```csharp
 using using Microsoft.EntityFrameworkCore;
@@ -31,6 +31,11 @@ using OpenRiaServices.Server.EntityFrameworkCore;
 [EnableClientAccess]
 public class MyDomainService : DbDomainService<MyDbContext>
 {
+    // Not required: But it is generally a good idea to allow dependency injection of DbContext
+    public MyDomainService(MyDbContext dbContext)
+        : base(context)
+    { }
+
     /* Example of CUD methods */
     public void InsertMyEntity(MyEntity entity)
         => DbContext.Entry(entity).State = EntityState.Added; // Or  DbContext.Add, but it might add related entities differently
@@ -48,18 +53,15 @@ public class MyDomainService : DbDomainService<MyDbContext>
     [Query]
     IQueryable<MyEntity> GetMyEntities()
         => DbContext.MyEntities.OrderBy(x => x.Id); // Sort by id to get stable Skip/Take if client does paging
-
-    [Query]
-    async Task<MyEntity> GetMyEntityById(int id) // CancellationToken can be added as parameter instead for easier testing
-        => await DbContext.MyEntities.FindAsync(x.Id, ServiceContext.CancellationToken);
 }
 ```
-4. Ensure that `MyDomainService` is mapped, (See [`OpenRiaServices.Hosting.AspNetCore` readme](https://www.nuget.org/packages/OpenRiaServices.Hosting.AspNetCore))
+4. Ensure that `MyDomainService` is mapped, (See [Setup instructions in OpenRiaServices.Hosting.AspNetCore readme](https://www.nuget.org/packages/OpenRiaServices.Hosting.AspNetCore))
+
 
 ## Owned Entities
 
 * *one-to-one* relations using Owned Entities are fully supported
-   * Any ef core configuration/metadata applied to the owned entity (such as Required, MaxLength etc) are part of generated client Code
+   * Any EF Core configuration/metadata applied to the owned entity (such as Required, MaxLength etc) are part of generated client Code
 * *one-to-many* relations might work, but it has not been verified at the moment
 
 ### Owned Entities without explicit key
@@ -73,7 +75,7 @@ This makes the owned entity available during Insert, Update and Delete operation
 
 ## Complex Types
 
-The *Complex Types* introduced in EF Core 8 is partially supported with some limitations.
+The *Complex Types* introduced in EF Core 8 are *partially supported** with some limitations.
 
 1. The types are mapped to to OpenRiaServices's [Complex Types]
 2. Any ef core configuration/metadata applied to the ComplexType (as part of fluent configuration) **IS NOT** discovered.The `DbDomainServiceDescriptionProvider` and `DbDomainService` classes does not have any special handling of *Complex Types*.    * Attributes on the types are discovered as expected using the normal built in reflection based attribute discovery
