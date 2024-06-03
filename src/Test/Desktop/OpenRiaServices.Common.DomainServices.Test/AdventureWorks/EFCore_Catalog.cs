@@ -59,7 +59,7 @@ namespace TestDomainServices.EFCore
         [Update]
         public void UpdateProduct(Product current)
         {
-            this.DbContext.Products.AttachAsModified(current, this.ChangeSet.GetOriginal(current), this.DbContext);
+            AttachAsModified(current);
         }
 
         [Delete]
