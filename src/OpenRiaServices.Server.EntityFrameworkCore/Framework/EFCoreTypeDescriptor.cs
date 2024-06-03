@@ -250,7 +250,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
                 if (addAssociationAttribute && pd.Attributes[typeof(AssociationAttribute)] is null)
                 {
-                    attributes.Add(TypeDescriptionContext.CreateAssociationAttribute(navigation));
+                    attributes.Add(EFCoreTypeDescriptionContext.CreateAssociationAttribute(navigation));
                 }
             }
 

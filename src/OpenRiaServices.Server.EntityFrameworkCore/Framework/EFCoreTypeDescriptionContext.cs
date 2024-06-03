@@ -58,7 +58,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         /// </summary>
         /// <param name="navigationProperty">The navigation property that corresponds to the association (it identifies the end points)</param>
         /// <returns>A new AssociationAttribute that describes the given navigation property association</returns>
-        internal AssociationAttribute CreateAssociationAttribute(IReadOnlyNavigation navigationProperty)
+        internal static AssociationAttribute CreateAssociationAttribute(IReadOnlyNavigation navigationProperty)
         {
             var fk = navigationProperty.ForeignKey;
 
