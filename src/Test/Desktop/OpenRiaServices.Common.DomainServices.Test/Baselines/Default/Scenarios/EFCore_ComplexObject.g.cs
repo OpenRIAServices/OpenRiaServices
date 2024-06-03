@@ -316,6 +316,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// Gets or sets the associated <see cref="OwnedEntityWithExplicitId"/> entity.
         /// </summary>
         [Association("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitId", "EmployeeId", "EmployeeId")]
+        [Composition()]
         public OwnedEntityWithExplicitId OwnedEntityWithExplicitId
         {
             get
@@ -343,6 +344,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// </summary>
         [Association("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitIdAndBackNavigation" +
             "", "EmployeeId", "EmployeeId")]
+        [Composition()]
         public OwnedEntityWithExplicitIdAndBackNavigation OwnedEntityWithExplicitIdAndBackNavigation
         {
             get

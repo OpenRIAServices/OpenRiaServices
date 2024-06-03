@@ -248,9 +248,16 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                     && !(navigation.ForeignKey.Properties.Any(static p => p.IsShadowProperty()));
 #endif
 
-                if (addAssociationAttribute && pd.Attributes[typeof(AssociationAttribute)] is null)
+                if (addAssociationAttribute)
                 {
-                    attributes.Add(EFCoreTypeDescriptionContext.CreateAssociationAttribute(navigation));
+                    if (pd.Attributes[typeof(AssociationAttribute)] is null)
+                        attributes.Add(EFCoreTypeDescriptionContext.CreateAssociationAttribute(navigation));
+#if NET
+                    if (navigation.TargetEntityType.IsOwned() && pd.Attributes[typeof(CompositionAttribute)] is null)
+                    {
+                        attributes.Add(new CompositionAttribute());
+                    }
+#endif
                 }
             }
 

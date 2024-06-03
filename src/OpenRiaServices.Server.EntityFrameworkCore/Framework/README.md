@@ -67,14 +67,13 @@ EF Core owned entities are mapped to OpenRiaServices's [Complex Types](https://o
 
 
 ### Owned Entities with explicit key
-If an explicit key to an owned entity then they are mapped as a normal entity.
+If an explicit key to an owned entity then they are mapped as a normal entity and the navigation property to the owned entity adds `[Composition]` 
 
-You should generally also mark the property with `[Composition]` so that the owned entity is always sent togheter with the `Owner` in case the owner changes
-in order to have the owned entity available during Insert, Update and Delete operations
+This makes the owned entity available during Insert, Update and Delete operations and prevents if from accidentaly having all fields set to `null`.
 
 ## Complex Types
 
 The *Complex Types* introduced in EF Core 8 is partially supported with some limitations.
 
 1. The types are mapped to to OpenRiaServices's [Complex Types]
-2. Any ef core configuration/metadata applied to the ComplexType (as part of fluent configuration) **IS NOT** discovered.The `DbDomainService` and `DbDomainServiceDescriptionProvider` does not process *Complex Types* at all.    3. Attributes on the types are discovered as expected
+2. Any ef core configuration/metadata applied to the ComplexType (as part of fluent configuration) **IS NOT** discovered.The `DbDomainServiceDescriptionProvider` and `DbDomainService` classes does not have any special handling of *Complex Types*.    * Attributes on the types are discovered as expected using the normal built in reflection based attribute discovery
