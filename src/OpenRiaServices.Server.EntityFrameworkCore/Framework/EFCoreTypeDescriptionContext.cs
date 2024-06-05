@@ -7,6 +7,12 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
+#if NETSTANDARD
+using IReadOnlyNavigation = Microsoft.EntityFrameworkCore.Metadata.INavigation;
+using IReadOnlyEntityType = Microsoft.EntityFrameworkCore.Metadata.IEntityType;
+using IReadOnlyProperty = Microsoft.EntityFrameworkCore.Metadata.IProperty;
+#endif
+
 namespace OpenRiaServices.Server.EntityFrameworkCore
 {
     /// <summary>
@@ -45,23 +51,21 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         }
 
         // Verify that full name is not null since Model.FindEntityType throws argument exception if full name is null
-#if NETSTANDARD2_0
-        public IEntityType GetEntityType(Type type) => type?.FullName != null ? Model.FindEntityType(type) : null;
-#else
-        public IReadOnlyEntityType GetEntityType(Type type) => type?.FullName != null ? ((IReadOnlyModel)Model).FindEntityType(type) : null;
-#endif
+        public IReadOnlyEntityType GetEntityType(Type type) => type?.FullName != null ? Model.FindEntityType(type) : null;
 
         /// <summary>
         /// Creates an AssociationAttribute for the specified navigation property
         /// </summary>
         /// <param name="navigationProperty">The navigation property that corresponds to the association (it identifies the end points)</param>
         /// <returns>A new AssociationAttribute that describes the given navigation property association</returns>
-        internal AssociationAttribute CreateAssociationAttribute(INavigation navigationProperty)
+        internal static AssociationAttribute CreateAssociationAttribute(IReadOnlyNavigation navigationProperty)
         {
             var fk = navigationProperty.ForeignKey;
 
             string thisKey;
             string otherKey;
+            string name = fk.GetConstraintName();
+
 #if NETSTANDARD2_0
             if (navigationProperty.IsDependentToPrincipal())
 #else
@@ -77,17 +81,26 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
                 thisKey = FormatMemberList(fk.PrincipalKey.Properties);
                 otherKey = FormatMemberList(fk.Properties);
+                Debug.Assert(fk.IsOwnership == fk.DeclaringEntityType.IsOwned());
+
+                // In case there are multiple navigation properties to Owned entities
+                // and they have explicity defined keys (they mirror the owners key) then
+                // they will have the same foreign key name and we have to make them unique
+                if (fk.DeclaringEntityType.IsOwned())
+                {
+                    name += "|owns:" + navigationProperty.Name;
+                }
             }
 
-            var assocAttrib = new AssociationAttribute(fk.GetConstraintName(), thisKey, otherKey);
+            var assocAttrib = new AssociationAttribute(name, thisKey, otherKey);
             assocAttrib.IsForeignKey = IsForeignKey(navigationProperty);
             return assocAttrib;
         }
 
 #if NETSTANDARD2_0
-        private static bool IsForeignKey(INavigation navigationProperty) => navigationProperty.IsDependentToPrincipal();
+        private static bool IsForeignKey(IReadOnlyNavigation navigationProperty) => navigationProperty.IsDependentToPrincipal();
 #else
-        private static bool IsForeignKey(INavigation navigationProperty) => navigationProperty.IsOnDependent;
+        private static bool IsForeignKey(IReadOnlyNavigation navigationProperty) => navigationProperty.IsOnDependent;
 #endif
 
 
@@ -96,7 +109,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         /// </summary>
         /// <param name="members">A collection of members.</param>
         /// <returns>A comma delimited list of member names.</returns>
-        protected static string FormatMemberList(IEnumerable<IProperty> members)
+        protected static string FormatMemberList(IEnumerable<IReadOnlyProperty> members)
         {
             string memberList = string.Empty;
             foreach (var prop in members)

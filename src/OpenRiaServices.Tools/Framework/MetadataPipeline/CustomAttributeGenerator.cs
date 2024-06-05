@@ -633,6 +633,7 @@ namespace OpenRiaServices.Tools
             return s_blockList.Contains(attributeType)
                 // __DynamicallyInvokableAttribute might be added at compile time, don't propagate them
                 || attributeType.FullName == "__DynamicallyInvokableAttribute"
+                || attributeType.Namespace == "System.Runtime.CompilerServices"
                 ;
         }
 

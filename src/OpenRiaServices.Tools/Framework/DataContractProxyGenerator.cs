@@ -385,8 +385,7 @@ namespace OpenRiaServices.Tools
             property.Name = propertyName;
             property.Type = propTypeReference;
             property.Attributes = MemberAttributes.Public | MemberAttributes.Final; // final needed, else becomes virtual
-            var propertyAttributes = propertyDescriptor.ExplicitAttributes().Cast<Attribute>()
-                .Where(a => a.GetType().Namespace != "System.Runtime.CompilerServices").ToList(); //Do not use attributes only used by the compiler
+            var propertyAttributes = propertyDescriptor.ExplicitAttributes().Cast<Attribute>().ToList(); //Do not use attributes only used by the compiler
 
             // Generate <summary> for property
             string comment = string.Format(CultureInfo.CurrentCulture, Resource.CodeGen_Entity_Property_Summary_Comment, propertyName);
@@ -523,8 +522,8 @@ namespace OpenRiaServices.Tools
             List<Attribute> filteredAttributes = new List<Attribute>();
 
             // Ignore DefaultMemberAttribute if it has been put for an indexer
-            IEnumerable<Attribute> defaultMemberAttribs = typeAttributes.Cast<Attribute>().Where(a => a.GetType() == typeof(DefaultMemberAttribute));
-            if (defaultMemberAttribs.Any())
+            List<DefaultMemberAttribute> defaultMemberAttribs = new(typeAttributes.OfType<DefaultMemberAttribute>());
+            if (defaultMemberAttribs.Count > 0)
             {
                 HashSet<string> properties = new HashSet<string>(TypeDescriptor.GetProperties(this.Type).Cast<PropertyDescriptor>().Select(p => p.Name), StringComparer.Ordinal);
                 foreach (DefaultMemberAttribute attrib in defaultMemberAttribs)
@@ -538,9 +537,9 @@ namespace OpenRiaServices.Tools
 
             // Filter out attributes in filteredAttributes, attributes which should only be used by the compiler,
             // DataContractAttribute and KnownTypeAttribute since they are handled seperatly
-            return typeAttributes.Cast<Attribute>().Where(a => a.GetType().Namespace != "System.Runtime.CompilerServices"
-            && a.GetType() != typeof(DataContractAttribute) && a.GetType() != typeof(KnownTypeAttribute)
-            && !filteredAttributes.Contains(a));
+            return typeAttributes.Cast<Attribute>()
+                .Where(a => a.GetType() != typeof(DataContractAttribute) && a.GetType() != typeof(KnownTypeAttribute)
+                    && !filteredAttributes.Contains(a));
         }
 
         /// <summary>
