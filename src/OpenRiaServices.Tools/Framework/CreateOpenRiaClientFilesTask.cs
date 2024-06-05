@@ -384,26 +384,6 @@ namespace OpenRiaServices.Tools
             }
         }
 
-        internal TargetPlatform ClientTargetPlatform
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(ClientFrameworkPath))
-                    return TargetPlatform.Unknown;
-
-                if (ClientFrameworkPath.IndexOf("Silverlight", StringComparison.InvariantCultureIgnoreCase) != -1)
-                    return TargetPlatform.Silverlight;
-                if (ClientFrameworkPath.IndexOf(".NETPortable", StringComparison.InvariantCultureIgnoreCase) != -1)
-                    return TargetPlatform.Portable;
-                if (ClientFrameworkPath.IndexOf(".NETFramework", StringComparison.InvariantCultureIgnoreCase) != -1)
-                    return TargetPlatform.Desktop;
-                if (ClientFrameworkPath.IndexOf(".NETCore", StringComparison.InvariantCultureIgnoreCase) != -1)
-                    return TargetPlatform.Win8;
-
-                return TargetPlatform.Unknown;
-            }
-        }
-
         /// <summary>
         /// Gets a value indicating whether the server project file has been specified
         /// and exists on disk.
@@ -705,8 +685,7 @@ namespace OpenRiaServices.Tools
                     ClientProjectPath = this.ClientProjectPath,
                     ServerProjectPath = this.ServerProjectPath,
                     IsApplicationContextGenerationEnabled = this.IsClientApplicationAsBool,
-                    UseFullTypeNames = this.UseFullTypeNamesAsBool,
-                    ClientProjectTargetPlatform = this.ClientTargetPlatform,
+                    UseFullTypeNames = this.UseFullTypeNamesAsBool
                 };
 
                 // Compose the parameters we will pass to the other AppDomain to create the SharedCodeService
@@ -1591,7 +1570,6 @@ namespace OpenRiaServices.Tools
             AddParameter(arguments, "--clientRootNamespace", options.ClientRootNamespace);
             AddParameter(arguments, "--serverRootNamespace", options.ServerRootNamespace);
             AddParameter(arguments, "--isApplicationContextGenerationEnabled", options.IsApplicationContextGenerationEnabled.ToString());
-            AddParameter(arguments, "--clientProjectTargetPlatform", options.ClientProjectTargetPlatform.ToString());
             AddParameter(arguments, "--useFullTypeNames", options.UseFullTypeNames.ToString());
 
             //Arguments for SharedCodeServiceParameters

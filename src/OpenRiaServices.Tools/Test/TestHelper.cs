@@ -750,8 +750,7 @@ namespace OpenRiaServices.Tools.Test
                 ClientRootNamespace = codeGenOptions.RootNamespace,
                 ClientProjectPath = "MockProject.proj",
                 IsApplicationContextGenerationEnabled = codeGenOptions.GenerateApplicationContexts,
-                UseFullTypeNames = codeGenOptions.UseFullTypeNames,
-                ClientProjectTargetPlatform = TargetPlatform.Silverlight
+                UseFullTypeNames = codeGenOptions.UseFullTypeNames
             };
 
             MockCodeGenerationHost host = TestHelper.CreateMockCodeGenerationHost(codeGenOptions.Logger, codeGenOptions.SharedCodeService);
