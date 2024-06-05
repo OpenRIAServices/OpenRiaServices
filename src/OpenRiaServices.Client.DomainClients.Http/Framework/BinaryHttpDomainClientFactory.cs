@@ -12,7 +12,7 @@ namespace OpenRiaServices.Client.DomainClients
     public class BinaryHttpDomainClientFactory
         : DomainClientFactory
     {
-        private readonly Func<HttpClient> _httpClientFactory;
+        private readonly Func<Uri, HttpClient> _httpClientFactory;
 
         /// <summary>
         /// Create a <see cref="BinaryHttpDomainClientFactory"/> where all requests share a single <see cref="HttpMessageHandler"/>
@@ -34,6 +34,25 @@ namespace OpenRiaServices.Client.DomainClients
         public BinaryHttpDomainClientFactory(Uri serverBaseUri, Func<HttpClient> httpClientFactory)
         {
             base.ServerBaseUri = serverBaseUri;
+            if (httpClientFactory is null)
+                throw new ArgumentNullException(nameof(httpClientFactory));
+
+            this._httpClientFactory = (Uri uri) =>
+            {
+                HttpClient httpClient = httpClientFactory();
+                httpClient.BaseAddress = uri;
+                return httpClient;
+            };
+        }
+
+        /// <summary>
+        /// Constructor intended for .Net Core where the actual creation is handled by <c>IHttpClientFactory</c> or similar
+        /// </summary>
+        /// <param name="serverBaseUri">The value base all service Uris on (see <see cref="DomainClientFactory.ServerBaseUri"/>)</param>
+        /// <param name="httpClientFactory">method creating a new HttpClient each time, should never return null</param>
+        public BinaryHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory)
+        {
+            base.ServerBaseUri = serverBaseUri;
             this._httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
@@ -49,43 +68,23 @@ namespace OpenRiaServices.Client.DomainClients
         // what parameters to support, it might make sens to do changes per DomainService/DomainContext
         private HttpClient CreateHttpClient(Uri serviceUri)
         {
-            var httpClient = _httpClientFactory();
-
-            string absoluteUri = serviceUri.AbsoluteUri;
-
-            //TODO: Handle absolute URI's
-            if (UseShortNames && absoluteUri.EndsWith(".svc", StringComparison.Ordinal))
+            // Add /binary only for WCF style Uris
+            if (serviceUri.AbsolutePath.EndsWith(".svc", StringComparison.Ordinal))
             {
-                int dash = absoluteUri.LastIndexOf('-');
-                int pathSeparator = absoluteUri.LastIndexOf('/');
-                if (dash > 0 && pathSeparator > 0)
-                {
-                    // Keep last part of type name, throwing avay
-                    string typeName = absoluteUri.Substring(dash + 1, absoluteUri.Length - (dash + 4 + 1));
-                    serviceUri = new Uri(absoluteUri.Substring(0, pathSeparator + 1) + typeName, UriKind.Absolute);
-                }
-                else
-                {
-                    Debug.Assert(false);
-                    serviceUri = new Uri(serviceUri.AbsoluteUri + "/binary/", UriKind.Absolute);
-                }
+               serviceUri = new Uri(serviceUri.AbsoluteUri + "/binary/");
             }
-            else
+            
+
+            var httpClient = _httpClientFactory(serviceUri);
+            httpClient.BaseAddress ??= serviceUri;
+
+            // Ensure Uri always end with "/" so that we can call Get and Post with just the method name
+            if (!httpClient.BaseAddress.AbsoluteUri.EndsWith("/", StringComparison.Ordinal))
             {
-                serviceUri = new Uri(serviceUri.AbsoluteUri + "/binary/", UriKind.Absolute);
+                httpClient.BaseAddress = new Uri(httpClient.BaseAddress.AbsoluteUri + '/');
             }
 
-
-            httpClient.BaseAddress = serviceUri;
             return httpClient;
         }
-
-        // TODO: Document and switch to enum {Default, "Short/Modern/New", WCF/Legacy" ?
-        public bool UseShortNames { get; set; } = false;
     }
-
-    //enum UrlScheme
-    //{
-
-    //}
 }

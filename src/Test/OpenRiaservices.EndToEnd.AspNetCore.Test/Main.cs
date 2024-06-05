@@ -26,16 +26,33 @@ namespace OpenRiaServices.Client.Test
 
             StartWebServer();
 
-            DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, new HttpClientHandler()
+            var clientHandler = new HttpClientHandler()
             {
                 CookieContainer = new CookieContainer(),
                 UseCookies = true,
                 AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
-            });
+            };
 
-            // Note: Below gives errors when running (at least BinaryHttpDomainClientFactory) against AspNetCore
-            // It seems to cache results even with "private, no-store"
-            //HttpWebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.Default);
+            // Map enpoint names from WCF format to "FullName" format
+            // We do this since all DomainContext were generated usign old WCF format
+            Func<Uri, HttpClient> httpClientFactory = uri =>
+            {
+                HttpClient httpClient = new HttpClient(clientHandler, disposeHandler: false);
+
+                // Remove ".svc/binary" from the URI
+                const string toRemove = ".svc/binary/";
+                string uriString = uri.AbsoluteUri;
+
+                if (uriString.EndsWith(toRemove, StringComparison.Ordinal))
+                {
+                    uri = new Uri(uriString.Remove(uriString.Length - toRemove.Length));
+                }
+
+                httpClient.BaseAddress = uri;
+                return httpClient;
+            };
+
+            DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
         }
 
         [AssemblyCleanup]
