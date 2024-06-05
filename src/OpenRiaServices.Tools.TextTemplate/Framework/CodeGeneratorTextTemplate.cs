@@ -260,6 +260,16 @@ namespace OpenRiaServices.Tools.TextTemplate
                     }
                 }
             }
+
+
+            /// <summary>
+            /// String specialization of <see cref="ToStringWithCulture(object)"/>
+            /// </summary>
+            public string ToStringWithCulture(string objectToConvert)
+            {
+                return objectToConvert;
+            }
+
             /// <summary>
             /// This is called from the compile/run appdomain to convert objects within an expression block to a string
             /// </summary>
