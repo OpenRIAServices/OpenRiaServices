@@ -261,7 +261,6 @@ namespace OpenRiaServices.Tools.TextTemplate
                 }
             }
 
-
             /// <summary>
             /// String specialization of <see cref="ToStringWithCulture(object)"/>
             /// </summary>

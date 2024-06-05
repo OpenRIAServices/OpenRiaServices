@@ -6,6 +6,9 @@ namespace OpenRiaServices.Server
     /// <summary>
     /// Determine how endpoints routes (Uris to access DomainServices) are generated
     /// </summary>
+    /// <remarks>
+    /// IMPORTANT: If any value is changed here, then the corresponding value must be changed in "OpenRiaServices.Tools.EndpointRoutePattern"
+    /// </remarks>
     public enum EndpointRoutePattern
     {
         /// <summary>

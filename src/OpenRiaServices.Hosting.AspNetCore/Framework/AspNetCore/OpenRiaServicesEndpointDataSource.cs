@@ -47,11 +47,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return endpointBuilder;
         }
 
-        internal void TryAddDomainService(string path, Type type)
-        {
-            if (!_paths.Contains(path))
-                AddDomainService(path, type);
-        }
 
         public override IReadOnlyList<Endpoint> Endpoints
         {
