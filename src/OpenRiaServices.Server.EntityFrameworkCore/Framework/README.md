@@ -41,7 +41,7 @@ public class MyDomainService : DbDomainService<MyDbContext>
         => DbContext.Entry(entity).State = EntityState.Added; // Or  DbContext.Add, but it might add related entities differently
 
     public void UpdateMyEntity(MyEntity entity)
-        => AttachAsModified(entity); // This sets state to Modified and set modified status on individual properties based on client changes and if `RountTripOriginal` attribute is specified or not
+        => base.AttachAsModified(entity); // This sets state to Modified and set modified status on individual properties based on client changes and if `RountTripOriginal` attribute is specified or not
 
     public void DeleteMyEntity(MyEntity entity)
         => DbContext.Entry(entity).State =  EntityState.Deleted;
@@ -78,4 +78,6 @@ This makes the owned entity available during Insert, Update and Delete operation
 The *Complex Types* introduced in EF Core 8 are *partially supported** with some limitations.
 
 1. The types are mapped to to OpenRiaServices's [Complex Types]
-2. Any ef core configuration/metadata applied to the ComplexType (as part of fluent configuration) **IS NOT** discovered.The `DbDomainServiceDescriptionProvider` and `DbDomainService` classes does not have any special handling of *Complex Types*.    * Attributes on the types are discovered as expected using the normal built in reflection based attribute discovery
+2. Any ef core configuration/metadata applied to the ComplexType (as part of fluent configuration) **IS NOT** discovered.
+The `DbDomainServiceDescriptionProvider` and `DbDomainService` classes does not have any special handling of *Complex Types*.
+    * Attributes on the types are discovered as expected using the normal built in reflection based attribute discovery
