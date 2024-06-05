@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Server;
@@ -19,6 +20,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
             _typeIsService = typeIsService;
         }
 
+        public IEndpointConventionBuilder AddDomainService<T>() where T : DomainService
+        {
+            return AddDomainService(typeof(T));
+        }
+
         public IEndpointConventionBuilder AddDomainService(Type type)
         {
             ArgumentNullException.ThrowIfNull(nameof(type));
@@ -26,14 +32,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             if (!_typeIsService.IsService(type))
                 throw new InvalidOperationException($"Domainservice {type} cannot be resolved by container, register it before calling map");
 
-            _dataSource.TryAddDomainService(type.Name, type);
-            var longName = type.FullName.Replace('.', '-') + ".svc";
-            return _dataSource.AddDomainService(longName + "/binary", type);
-        }
-
-        public IEndpointConventionBuilder AddDomainService<T>() where T : DomainService
-        {
-            return AddDomainService(typeof(T));
+            return _dataSource.AddDomainService(GetDomainServiceRoute(type), type);
         }
 
         public IEndpointConventionBuilder AddDomainService(Type type, string path)
@@ -49,9 +48,28 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return _dataSource.AddDomainService(path, type);
         }
 
+        // TODO: Remove
         public IEndpointConventionBuilder AddDomainService<T>(string path) where T : DomainService
         {
             return AddDomainService(typeof(T), path);
+        }
+
+        private static string GetDomainServiceRoute(Type type)
+        {
+            // Lookup DomainServiceEndpointRoutePatternAttribute in same assembly as DomainService
+            // - Fallback to FullName
+            EndpointRoutePattern pattern =
+                type.Assembly.GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern
+                ?? Assembly.GetEntryAssembly().GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern
+                ?? EndpointRoutePattern.FullName;
+
+            return pattern switch
+            {
+                EndpointRoutePattern.Name => type.Name,
+                EndpointRoutePattern.WCF => type.FullName.Replace('.', '-') + ".svc/binary",
+                EndpointRoutePattern.FullName => type.FullName.Replace('.', '-'),
+                _ => throw new NotImplementedException(),
+            };
         }
     }
 }

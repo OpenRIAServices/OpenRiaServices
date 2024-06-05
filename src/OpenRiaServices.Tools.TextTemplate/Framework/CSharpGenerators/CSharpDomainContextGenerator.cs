@@ -85,13 +85,13 @@ this.Write("\r\n");
 
 	}
 	
-	/// <summary>
+    /// <summary>
     /// Generates the DomainContext class constructors.
     /// </summary>	
 	protected virtual void GenerateConstructors()
 	{
 		bool requiresSecureEndpoint = this.GetRequiresSecureEndpoint();
-		string relativeServiceUri = string.Format(CultureInfo.InvariantCulture, "{0}.svc", this.DomainServiceDescription.DomainServiceType.FullName.Replace('.', '-'));
+		string relativeServiceUri = GetDomainServiceUri();
 
 this.Write("public ");
 
@@ -101,7 +101,7 @@ this.Write("() : \r\n\tthis(new Uri(\"");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(relativeServiceUri));
 
-this.Write("\", UriKind.Relative))\r\n{\r\n}\r\n\t\t\r\npublic ");
+this.Write("\", UriKind.Relative))\r\n{\r\n}\r\n\r\npublic ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 
