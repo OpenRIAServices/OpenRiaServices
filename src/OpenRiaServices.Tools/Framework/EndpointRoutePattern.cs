@@ -2,7 +2,9 @@
 {
 #if NET
     /// <summary>
-    /// Determine how endpoints routes (Uris to access DomainServices) are generated
+    /// IMPORTANT: THIS IS AN EXACT copy of <see cref="Server.EndpointRoutePattern"/> where all values are identical.
+    /// We don't use the server version in the options because we don't want to load in the Server assembly until a bit later
+    /// after the options are created.
     /// </summary>
     public enum EndpointRoutePattern
     {

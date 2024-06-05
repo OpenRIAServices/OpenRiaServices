@@ -4,7 +4,6 @@
 using System;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Server;
 
@@ -34,6 +33,26 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 throw new InvalidOperationException($"Domainservice {type} cannot be resolved by container, register it before calling map");
 
             return _dataSource.AddDomainService(GetDomainServiceRoute(type), type);
+        }
+
+        public IEndpointConventionBuilder AddDomainService(Type type, string path)
+        {
+            ArgumentNullException.ThrowIfNull(nameof(type));
+#if NET7_0_OR_GREATER
+            ArgumentNullException.ThrowIfNullOrEmpty(nameof(path));
+#endif
+            if (path.EndsWith('/'))
+                throw new ArgumentException("Path should not end with /", nameof(path));
+
+            if (!_typeIsService.IsService(type))
+                throw new InvalidOperationException($"Domainservice {type} cannot be resolved by container, register it before calling map");
+
+            return _dataSource.AddDomainService(path, type);
+        }
+
+        public IEndpointConventionBuilder AddDomainService<T>(string path) where T : DomainService
+        {
+            return AddDomainService(typeof(T), path);
         }
 
         private static string GetDomainServiceRoute(Type type)
