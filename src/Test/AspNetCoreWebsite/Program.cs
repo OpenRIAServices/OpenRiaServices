@@ -12,7 +12,7 @@ using OpenRiaServices.Server;
 using RootNamespace.TestNamespace;
 using TestDomainServices.Testing;
 
-//[assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
+[assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();

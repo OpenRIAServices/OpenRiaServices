@@ -92,11 +92,15 @@ namespace OpenRiaServices.Tools
         /// </remarks>
         public bool UseFullTypeNames { get; set; }
 
-#if NET
+
         /// <summary>
-        /// <see cref="Server.EndpointRoutePattern"/> determining how default Uri's for accessing DomainServices are generated.
+        /// See "Server.EndpointRoutePattern" determining how default Uri's for accessing DomainServices are generated.
         /// </summary>
-        public EndpointRoutePattern DefaultEndpointRoutePattern { get; set; } = EndpointRoutePattern.FullName;
+        public EndpointRoutePattern DefaultEndpointRoutePattern { get; set; }
+#if NET
+            = EndpointRoutePattern.FullName;
+#else
+            = EndpointRoutePattern.WCF;
 #endif
 
     }

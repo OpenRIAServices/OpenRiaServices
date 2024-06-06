@@ -1,6 +1,9 @@
-﻿namespace OpenRiaServices.Tools
+﻿#if NETFRAMEWORK
+#pragma warning disable 1574 // Server.EndpointRoutePattern is not available
+#endif
+
+namespace OpenRiaServices.Tools
 {
-#if NET
     /// <summary>
     /// IMPORTANT: THIS IS AN EXACT copy of <see cref="Server.EndpointRoutePattern"/> where all values are identical.
     /// We don't use the server version in the options because we don't want to load in the Server assembly until a bit later
@@ -23,5 +26,4 @@
         /// </summary>
         WCF
     }
-#endif
 }
