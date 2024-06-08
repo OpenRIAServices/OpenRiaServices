@@ -13,7 +13,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the AssociationAttribute for this collection.
         /// </summary>
-        AssociationAttribute Association
+        EntityAssociationAttribute Association
         {
             get;
         }

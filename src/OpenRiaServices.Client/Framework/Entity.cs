@@ -38,7 +38,7 @@ namespace OpenRiaServices.Client
 
         private bool _trackChanges;
         private Entity _parent;
-        private AssociationAttribute _parentAssociation;
+        private EntityAssociationAttribute _parentAssociation;
         private bool _hasChildChanges;
         private Dictionary<string, ComplexObject> _trackedInstances;
         private MetaType _metaType;
@@ -86,7 +86,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the parent association for this entity.
         /// </summary>
-        internal AssociationAttribute ParentAssociation
+        internal EntityAssociationAttribute ParentAssociation
         {
             get
             {
@@ -121,7 +121,7 @@ namespace OpenRiaServices.Client
         /// </remarks>
         /// <param name="parent">The parent.</param>
         /// <param name="association">The parent association.</param>
-        internal void SetParent(Entity parent, AssociationAttribute association)
+        internal void SetParent(Entity parent, EntityAssociationAttribute association)
         {
             if (this._parent != parent)
             {
