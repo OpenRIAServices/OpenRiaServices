@@ -73,7 +73,6 @@ namespace OpenRiaServices.Client.DomainClients
             {
                serviceUri = new Uri(serviceUri.AbsoluteUri + "/binary/");
             }
-            
 
             var httpClient = _httpClientFactory(serviceUri);
             httpClient.BaseAddress ??= serviceUri;
