@@ -666,6 +666,16 @@ namespace OpenRiaServices.Tools
                 }
                 return e;
             }
+            // Handle arrays
+            if (value is Array array)
+            {
+                CodeArrayCreateExpression arrayCreateExpression = new CodeArrayCreateExpression(CodeGenUtilities.GetTypeReference(typeOfValue.GetElementType(), proxyGenerator, referencingType), array.Length);
+                foreach (object element in array)
+                {
+                    arrayCreateExpression.Initializers.Add(CreateCodeExpression(proxyGenerator, referencingType, element));
+                }
+                return arrayCreateExpression;
+            }
 
             // typeof(T) requires special handling
             Type valueAsType = value as Type;
