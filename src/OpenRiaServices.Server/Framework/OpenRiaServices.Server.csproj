@@ -3,10 +3,6 @@
     <TargetFrameworks>net472;netstandard2.0;net6.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(TargetFramework)' != 'net472'">
-    <!-- Disable obsolete warning (primarily AssociationAttribute) -->
-    <NoWarn>$(NoWarn);CS0618</NoWarn>
-  </PropertyGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="mscorlib" />
@@ -30,6 +26,7 @@
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="Data\BinaryTypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\DomainException.cs" Link="Data\DomainException.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\DomainIdentifierAttribute.cs" Link="Data\DomainIdentifierAttribute.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\EntityAssociationAttribute.cs" Link="Data\EntityAssociationAttribute.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExternalReferenceAttribute.cs" Link="Data\ExternalAttribute.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Data\Polyfills.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\RoundtripOriginalAttribute.cs" Link="Data\RoundtripOriginalAttribute.cs" />
