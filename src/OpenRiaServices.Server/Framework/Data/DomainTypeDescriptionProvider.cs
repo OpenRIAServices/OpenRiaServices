@@ -84,7 +84,7 @@ namespace OpenRiaServices.Server
             HashSet<string> foreignKeyMembers = new HashSet<string>();
             foreach (PropertyDescriptor pd in this._customTypeDescriptor.GetProperties())
             {
-                AssociationAttribute assoc = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];
+                EntityAssociationAttribute assoc = (EntityAssociationAttribute)pd.Attributes[typeof(EntityAssociationAttribute)];
                 if (assoc != null && assoc.IsForeignKey)
                 {
                     foreach (string foreignKeyMember in assoc.ThisKeyMembers)

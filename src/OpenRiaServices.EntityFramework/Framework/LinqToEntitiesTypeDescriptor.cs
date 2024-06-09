@@ -219,9 +219,9 @@ namespace OpenRiaServices.EntityFramework
                 // member that member should be the ONLY member we apply RTO to.
                 // Dont apply RTO if it is an association member.
                 bool isForeignKeyMember = this._foreignKeyMembers != null && this._foreignKeyMembers.Contains(member);
-                if ((this._timestampMember == null || this._timestampMember == member) &&
-                    (inferRoundtripOriginalAttribute || isForeignKeyMember) &&
-                    pd.Attributes[typeof(AssociationAttribute)] == null)
+                if ((this._timestampMember == null || this._timestampMember == member) 
+                    && (inferRoundtripOriginalAttribute || isForeignKeyMember) 
+                    && pd.Attributes[typeof(EntityAssociationAttribute)] == null)
                 {
                     if (pd.Attributes[typeof(RoundtripOriginalAttribute)] == null)
                     {
@@ -283,10 +283,10 @@ namespace OpenRiaServices.EntityFramework
                                     navProperty.RelationshipType.RelationshipEndMembers[1].RelationshipMultiplicity == RelationshipMultiplicity.Many;
                 if (!isManyToMany)
                 {
-                    AssociationAttribute assocAttrib = (AssociationAttribute)pd.Attributes[typeof(System.ComponentModel.DataAnnotations.AssociationAttribute)];
+                    EntityAssociationAttribute assocAttrib = (EntityAssociationAttribute)pd.Attributes[typeof(EntityAssociationAttribute)];
                     if (assocAttrib == null)
                     {
-                        assocAttrib = this.TypeDescriptionContext.CreateAssociationAttribute(navProperty);
+                        assocAttrib = this.TypeDescriptionContext.CreateEntityAssociationAttribute(navProperty);
                         attributes.Add(assocAttrib);
                     }
                 }

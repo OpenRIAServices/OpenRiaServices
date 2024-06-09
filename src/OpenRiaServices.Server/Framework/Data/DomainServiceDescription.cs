@@ -593,7 +593,7 @@ namespace OpenRiaServices.Server
                 {
                     if (pd.Attributes[typeof(ExternalReferenceAttribute)] != null ||
                         pd.Attributes[typeof(ExcludeAttribute)] != null ||
-                        pd.Attributes[typeof(AssociationAttribute)] != null)
+                        pd.Attributes[typeof(EntityAssociationAttribute)] != null)
                     {
                         continue;
                     }
@@ -1048,7 +1048,7 @@ namespace OpenRiaServices.Server
             foreach (PropertyDescriptor pd in TypeDescriptor.GetProperties(entityType))
             {
                 // All properties marked with [ExternalReference] must also have an [Association].  If not found, throw an exception.
-                if (pd.Attributes[typeof(ExternalReferenceAttribute)] != null && pd.Attributes[typeof(AssociationAttribute)] == null)
+                if (pd.Attributes[typeof(ExternalReferenceAttribute)] != null && pd.Attributes[typeof(EntityAssociationAttribute)] == null)
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture,
                         Resource.InvalidExternal_NonAssociationMember, entityType.Name, pd.Name));
@@ -1058,7 +1058,7 @@ namespace OpenRiaServices.Server
                 // verify that the member is also an association
                 if (pd.Attributes[typeof(CompositionAttribute)] != null)
                 {
-                    if (pd.Attributes[typeof(AssociationAttribute)] == null)
+                    if (pd.Attributes[typeof(EntityAssociationAttribute)] == null)
                     {
                         throw new InvalidOperationException(
                             string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_InvalidCompositionMember, pd.ComponentType, pd.Name));
@@ -1205,8 +1205,7 @@ namespace OpenRiaServices.Server
                         if (!include.IsProjection)
                         {
                             // verify that non-projection Includes are only placed on Association members
-                            AssociationAttribute assoc = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];
-                            if (assoc == null)
+                            if (pd.Attributes[typeof(EntityAssociationAttribute)] is null)
                             {
                                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidInclude_NonAssociationMember, pd.ComponentType.Name, pd.Name));
                             }
@@ -1455,28 +1454,16 @@ namespace OpenRiaServices.Server
             foreach (PropertyDescriptor pd in entityProperties)
             {
                 // validate the association attribute (if any)
-                AssociationAttribute assocAttrib = pd.Attributes[typeof(AssociationAttribute)] as AssociationAttribute;
+                EntityAssociationAttribute assocAttrib = pd.Attributes[typeof(EntityAssociationAttribute)] as EntityAssociationAttribute;
                 if (assocAttrib == null)
                 {
                     continue;
                 }
 
                 string assocName = assocAttrib.Name;
-                if (string.IsNullOrEmpty(assocName))
-                {
-                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidAssociation_NameCannotBeNullOrEmpty, pd.Name, entityType));
-                }
-                if (string.IsNullOrEmpty(assocAttrib.ThisKey))
-                {
-                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidAssociation_StringCannotBeNullOrEmpty, assocName, entityType, "ThisKey"));
-                }
-                if (string.IsNullOrEmpty(assocAttrib.OtherKey))
-                {
-                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidAssociation_StringCannotBeNullOrEmpty, assocName, entityType, "OtherKey"));
-                }
 
                 // The number of keys in 'this' and 'other' must be the same
-                if (assocAttrib.ThisKeyMembers.Count() != assocAttrib.OtherKeyMembers.Count())
+                if (assocAttrib.ThisKeyMembers.Count != assocAttrib.OtherKeyMembers.Count)
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidAssociation_Key_Count_Mismatch, assocName, entityType, assocAttrib.ThisKey, assocAttrib.OtherKey));
                 }
@@ -1493,7 +1480,7 @@ namespace OpenRiaServices.Server
                 // Verify that the association name is unique. In inheritance scenarios, self-referencing associations
                 // on the base type should be inheritable by the derived types.
                 Type otherEntityType = TypeUtility.GetElementType(pd.PropertyType);
-                int otherMemberCount = entityProperties.Cast<PropertyDescriptor>().Count(p => p.Name != pd.Name && p.Attributes.OfType<AssociationAttribute>().Any(a => a.Name == assocAttrib.Name));
+                int otherMemberCount = entityProperties.Cast<PropertyDescriptor>().Count(p => p.Name != pd.Name && p.Attributes.OfType<EntityAssociationAttribute>().Any(a => a.Name == assocAttrib.Name));
                 bool isSelfReference = otherEntityType.IsAssignableFrom(entityType);
                 if ((!isSelfReference && otherMemberCount > 0) || (isSelfReference && otherMemberCount > 1))
                 {
@@ -1527,12 +1514,12 @@ namespace OpenRiaServices.Server
                 if (this._entityTypes.Contains(otherEntityType))
                 {
                     PropertyDescriptorCollection otherEntityProperties = TypeDescriptor.GetProperties(otherEntityType);
-                    PropertyDescriptor otherMember = otherEntityProperties.Cast<PropertyDescriptor>().FirstOrDefault(p => p.Name != pd.Name && p.Attributes.OfType<AssociationAttribute>().Any(a => a.Name == assocName));
+                    PropertyDescriptor otherMember = otherEntityProperties.Cast<PropertyDescriptor>().FirstOrDefault(p => p.Name != pd.Name && p.Attributes.OfType<EntityAssociationAttribute>().Any(a => a.Name == assocName));
                     if (otherMember != null)
                     {
                         // Bi-directional association
                         // make sure IsForeignKey is set to true on one and only one side of the association
-                        AssociationAttribute otherAssocAttrib = (AssociationAttribute)otherMember.Attributes[typeof(AssociationAttribute)];
+                        EntityAssociationAttribute otherAssocAttrib = (EntityAssociationAttribute)otherMember.Attributes[typeof(EntityAssociationAttribute)];
                         if (otherAssocAttrib != null &&
                             !((assocAttrib.IsForeignKey != otherAssocAttrib.IsForeignKey)
                              && (assocAttrib.IsForeignKey || otherAssocAttrib.IsForeignKey)))

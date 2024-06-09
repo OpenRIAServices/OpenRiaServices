@@ -148,7 +148,7 @@ namespace OpenRiaServices.Server
                 // ensure that the member is an association member
                 string associationMemberName = associationItem.Key;
                 PropertyDescriptor associationMember = properties[associationMemberName];
-                if (associationMember == null || associationMember.Attributes[typeof(AssociationAttribute)] == null)
+                if (associationMember == null || associationMember.Attributes[typeof(EntityAssociationAttribute)] == null)
                 {
                     throw new InvalidOperationException(
                         string.Format(CultureInfo.CurrentCulture, Resource.InvalidChangeSet,
@@ -392,7 +392,7 @@ namespace OpenRiaServices.Server
 
             // validate that the member specified is an compositional association member
             PropertyDescriptor pd = TypeDescriptor.GetProperties(entity.GetType())[associationMember.Name];
-            if (pd.Attributes[typeof(AssociationAttribute)] == null)
+            if (pd.Attributes[typeof(EntityAssociationAttribute)] == null)
             {
                 throw new ArgumentException(
                     string.Format(CultureInfo.CurrentCulture, Resource.MemberNotAnAssociation, associationMember.DeclaringType, associationMember.Name), nameof(expression));

@@ -127,7 +127,7 @@ namespace OpenRiaServices.Tools
                 // If the ultimate element type is not allowed, it's not acceptable, no matter whether
                 // this is an array, Nullable<T> or whatever
                 Type elementType = TypeUtility.GetElementType(propertyDescriptor.PropertyType);
-                if (!this._domainServiceDescriptionAggregate.EntityTypes.Contains(elementType) || (propertyDescriptor.Attributes[typeof(AssociationAttribute)] == null))
+                if (!this._domainServiceDescriptionAggregate.EntityTypes.Contains(elementType) || (propertyDescriptor.Attributes[typeof(EntityAssociationAttribute)] == null))
                 {
                     // If the base class says we can't generate the property, it is because the property is not serializable.
                     // The only other type entity would serialize is associations. Since it is not, return now.
@@ -204,7 +204,7 @@ namespace OpenRiaServices.Tools
         protected override bool GenerateNonSerializableProperty(PropertyDescriptor propertyDescriptor)
         {
             AttributeCollection propertyAttributes = propertyDescriptor.ExplicitAttributes();
-            AssociationAttribute associationAttr = (AssociationAttribute)propertyAttributes[typeof(AssociationAttribute)];
+            EntityAssociationAttribute associationAttr = (EntityAssociationAttribute)propertyAttributes[typeof(EntityAssociationAttribute)];
             bool externalReference = propertyAttributes[typeof(ExternalReferenceAttribute)] != null;
 
             if (associationAttr != null)
@@ -363,9 +363,9 @@ namespace OpenRiaServices.Tools
         /// association.  For example, given PurchaseOrderDetail.Product, will return Product.PurchaseOrderDetails.
         /// </summary>
         /// <param name="propertyDescriptor">The assocation property <see cref="PropertyDescriptor"/>.</param>
-        /// <param name="assocAttrib">The association property <see cref="AssociationAttribute"/>.</param>
+        /// <param name="assocAttrib">The association property <see cref="EntityAssociationAttribute"/>.</param>
         /// <returns>The association member on the other side of the specified association property.</returns>
-        private static PropertyDescriptor GetReverseAssociation(PropertyDescriptor propertyDescriptor, AssociationAttribute assocAttrib)
+        private static PropertyDescriptor GetReverseAssociation(PropertyDescriptor propertyDescriptor, EntityAssociationAttribute assocAttrib)
         {
             Type otherType = TypeUtility.GetElementType(propertyDescriptor.PropertyType);
 
@@ -379,7 +379,7 @@ namespace OpenRiaServices.Tools
                     continue;
                 }
 
-                AssociationAttribute otherAssocAttrib = entityMember.Attributes[typeof(AssociationAttribute)] as AssociationAttribute;
+                EntityAssociationAttribute otherAssocAttrib = entityMember.Attributes[typeof(EntityAssociationAttribute)] as EntityAssociationAttribute;
                 if (otherAssocAttrib != null && otherAssocAttrib.Name == assocAttrib.Name)
                 {
                     return entityMember;
@@ -457,7 +457,7 @@ namespace OpenRiaServices.Tools
             return false;
         }
 
-        private void GenerateCollectionSideAssociation(CodeTypeDeclaration proxyClass, PropertyDescriptor pd, AssociationAttribute associationAttribute, bool isExternal)
+        private void GenerateCollectionSideAssociation(CodeTypeDeclaration proxyClass, PropertyDescriptor pd, EntityAssociationAttribute EntityAssociationAttribute, bool isExternal)
         {
             CodeTypeReference propType = CodeGenUtilities.GetTypeReference(TypeConstants.EntityCollectionTypeFullName, this.Type.Namespace, false);
             CodeTypeReference fldType;
@@ -496,8 +496,8 @@ namespace OpenRiaServices.Tools
             // private bool filter_PurchaseOrderDetails(PurchaseOrderDetail entity) {
             //     return entity.ProductID == ProductID;
             // }
-            string[] thisKeyProps = associationAttribute.ThisKeyMembers.ToArray();
-            string[] otherKeyProps = associationAttribute.OtherKeyMembers.ToArray();
+            string[] thisKeyProps = EntityAssociationAttribute.ThisKeyMembers.ToArray();
+            string[] otherKeyProps = EntityAssociationAttribute.OtherKeyMembers.ToArray();
             CodeMemberMethod filterMethod = this.GenerateFilterMethod(proxyClass, pd.Name, elementType, thisKeyProps, otherKeyProps, isExternal);
 
             CodeMemberProperty prop = new CodeMemberProperty();
@@ -544,14 +544,14 @@ namespace OpenRiaServices.Tools
                 CodeGenUtilities.MakeDelegateCreateExpression(this.ClientProxyGenerator.IsCSharp, new CodeTypeReference("System.Func"), filterMethod.Name);
 
             // only generate attach and detach when the relation is two-way
-            PropertyDescriptor reverseAssociationMember = GetReverseAssociation(pd, associationAttribute);
+            PropertyDescriptor reverseAssociationMember = GetReverseAssociation(pd, EntityAssociationAttribute);
             bool isBiDirectionalAssociation = (reverseAssociationMember != null) && this.CanGenerateProperty(reverseAssociationMember);
             if (isBiDirectionalAssociation)
             {
                 if (IsCollectionType(pd.PropertyType))
                 {
-                    CodeMemberMethod attach = this.GenerateAttach(proxyClass, elementType, associationAttribute, pd);
-                    CodeMemberMethod detach = this.GenerateDetach(proxyClass, elementType, associationAttribute, pd);
+                    CodeMemberMethod attach = this.GenerateAttach(proxyClass, elementType, EntityAssociationAttribute, pd);
+                    CodeMemberMethod detach = this.GenerateDetach(proxyClass, elementType, EntityAssociationAttribute, pd);
 
                     //// generate : 
                     //// if (_PurchaseOrderDetails == null) {
@@ -599,7 +599,7 @@ namespace OpenRiaServices.Tools
             proxyClass.Members.Add(filterMethod);
         }
 
-        private CodeMemberMethod GenerateAttach(CodeTypeDeclaration proxyClass, Type entityType, AssociationAttribute assoc, PropertyDescriptor pd)
+        private CodeMemberMethod GenerateAttach(CodeTypeDeclaration proxyClass, Type entityType, EntityAssociationAttribute assoc, PropertyDescriptor pd)
         {
             // attach method
             CodeMemberMethod method = new CodeMemberMethod();
@@ -639,7 +639,7 @@ namespace OpenRiaServices.Tools
             return method;
         }
 
-        private CodeMemberMethod GenerateDetach(CodeTypeDeclaration proxyClass, Type entityType, AssociationAttribute assoc, PropertyDescriptor pd)
+        private CodeMemberMethod GenerateDetach(CodeTypeDeclaration proxyClass, Type entityType, EntityAssociationAttribute assoc, PropertyDescriptor pd)
         {
             // detach method
             CodeMemberMethod method = new CodeMemberMethod();
@@ -729,7 +729,7 @@ namespace OpenRiaServices.Tools
             return filterMethod;
         }
 
-        private void GenEntityAssocationProperty(CodeTypeDeclaration proxyClass, PropertyDescriptor pd, AssociationAttribute associationAttribute, bool isExternal)
+        private void GenEntityAssocationProperty(CodeTypeDeclaration proxyClass, PropertyDescriptor pd, EntityAssociationAttribute EntityAssociationAttribute, bool isExternal)
         {
             // Register property types to prevent conflicts
             Type associationType =
@@ -755,15 +755,15 @@ namespace OpenRiaServices.Tools
 
             if (!IsCollectionType(pd.PropertyType))
             {
-                this.GenerateSingletonAssociation(proxyClass, pd, associationAttribute, isExternal);
+                this.GenerateSingletonAssociation(proxyClass, pd, EntityAssociationAttribute, isExternal);
             }
             else
             {
-                this.GenerateCollectionSideAssociation(proxyClass, pd, associationAttribute, isExternal);
+                this.GenerateCollectionSideAssociation(proxyClass, pd, EntityAssociationAttribute, isExternal);
             }
         }
 
-        private void GenerateSingletonAssociation(CodeTypeDeclaration proxyClass, PropertyDescriptor pd, AssociationAttribute associationAttribute, bool isExternal)
+        private void GenerateSingletonAssociation(CodeTypeDeclaration proxyClass, PropertyDescriptor pd, EntityAssociationAttribute EntityAssociationAttribute, bool isExternal)
         {
             CodeTypeReference propType =
                 isExternal ?
@@ -792,7 +792,7 @@ namespace OpenRiaServices.Tools
 
             // For the FK side of external associations, we generate a "reduced" setter that
             // does validation and synchronizes FK members
-            if (isExternal && !associationAttribute.IsForeignKey)
+            if (isExternal && !EntityAssociationAttribute.IsForeignKey)
             {
                 prop.HasSet = false;
             }
@@ -822,8 +822,8 @@ namespace OpenRiaServices.Tools
             // private bool filter_Product(Product entity) {
             //     return entity.ProductID == ProductID;
             // }
-            string[] thisKeyProps = associationAttribute.ThisKeyMembers.ToArray();
-            string[] otherKeyProps = associationAttribute.OtherKeyMembers.ToArray();
+            string[] thisKeyProps = EntityAssociationAttribute.ThisKeyMembers.ToArray();
+            string[] otherKeyProps = EntityAssociationAttribute.OtherKeyMembers.ToArray();
             CodeMemberMethod filterMethod = this.GenerateFilterMethod(proxyClass, pd.Name, pd.PropertyType, thisKeyProps, otherKeyProps, isExternal);
 
             // --------------------------
@@ -859,7 +859,7 @@ namespace OpenRiaServices.Tools
             // --------------------------
             if (prop.HasSet)
             {
-                PropertyDescriptor reverseAssociationMember = GetReverseAssociation(pd, associationAttribute);
+                PropertyDescriptor reverseAssociationMember = GetReverseAssociation(pd, EntityAssociationAttribute);
 
                 CodeStatement detachStatement = null;
                 CodeStatement attachStatement = null;
@@ -913,7 +913,7 @@ namespace OpenRiaServices.Tools
                 List<CodeStatement> statements1 = null;
                 List<CodeStatement> statements2 = null;
                 statements1 = new List<CodeStatement>();
-                if (associationAttribute.IsForeignKey)
+                if (EntityAssociationAttribute.IsForeignKey)
                 {
                     // only emit FK sync code if this is a foreign key association
                     for (int i = 0; i < thisKeyProps.Length; i++)
@@ -976,7 +976,7 @@ namespace OpenRiaServices.Tools
 
                 // if (value != null)
                 CodeConditionStatement stmt;
-                if (associationAttribute.IsForeignKey)
+                if (EntityAssociationAttribute.IsForeignKey)
                 {
                     stmt = new CodeConditionStatement(
                     CodeGenUtilities.MakeNotEqualToNull(
