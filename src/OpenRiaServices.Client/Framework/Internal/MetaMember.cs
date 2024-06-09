@@ -52,7 +52,10 @@ namespace OpenRiaServices.Client.Internal
             // TODO: Remove fallback when code generation has used the never attribute for a little while
             else if (property.GetCustomAttribute<AssociationAttribute>(false) is { } associationAttribute)
             {
-                this.AssociationAttribute = new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray());
+                this.AssociationAttribute = new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray())
+                {
+                    IsForeignKey = associationAttribute.IsForeignKey,
+                };
             }
 #pragma warning restore CS0618 // Type or member is obsolete
 
