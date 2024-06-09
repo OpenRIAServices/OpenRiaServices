@@ -324,7 +324,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Employee"/> entity.
         ''' </summary>
-        <Association("Employee_Employee", "ManagerID", "EmployeeID", IsForeignKey:=true)>  _
+        <EntityAssociation("Employee_Employee", New String() {"ManagerID"}, New String() {"EmployeeID"}, IsForeignKey:=true)>  _
         Public Property Manager() As Employee
             Get
                 If (Me._manager Is Nothing) Then
@@ -450,7 +450,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="PurchaseOrder"/> entity instances.
         ''' </summary>
-        <Association("Employee_PurchaseOrder", "EmployeeID", "EmployeeID")>  _
+        <EntityAssociation("Employee_PurchaseOrder", New String() {"EmployeeID"}, New String() {"EmployeeID"})>  _
         Public ReadOnly Property PurchaseOrders() As EntityCollection(Of PurchaseOrder)
             Get
                 If (Me._purchaseOrders Is Nothing) Then
@@ -463,7 +463,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="Employee"/> entity instances.
         ''' </summary>
-        <Association("Employee_Employee", "EmployeeID", "ManagerID")>  _
+        <EntityAssociation("Employee_Employee", New String() {"EmployeeID"}, New String() {"ManagerID"})>  _
         Public ReadOnly Property Reports() As EntityCollection(Of Employee)
             Get
                 If (Me._reports Is Nothing) Then
@@ -1124,7 +1124,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         ''' </summary>
-        <Association("Product_PurchaseOrderDetail", "ProductID", "ProductID")>  _
+        <EntityAssociation("Product_PurchaseOrderDetail", New String() {"ProductID"}, New String() {"ProductID"})>  _
         Public ReadOnly Property PurchaseOrderDetails() As EntityCollection(Of PurchaseOrderDetail)
             Get
                 If (Me._purchaseOrderDetails Is Nothing) Then
@@ -1495,7 +1495,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Employee"/> entity.
         ''' </summary>
-        <Association("Employee_PurchaseOrder", "EmployeeID", "EmployeeID", IsForeignKey:=true)>  _
+        <EntityAssociation("Employee_PurchaseOrder", New String() {"EmployeeID"}, New String() {"EmployeeID"}, IsForeignKey:=true)>  _
         Public Property Employee() As Employee
             Get
                 If (Me._employee Is Nothing) Then
@@ -1620,7 +1620,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         ''' </summary>
-        <Association("PurchaseOrder_PurchaseOrderDetail", "PurchaseOrderID", "PurchaseOrderID")>  _
+        <EntityAssociation("PurchaseOrder_PurchaseOrderDetail", New String() {"PurchaseOrderID"}, New String() {"PurchaseOrderID"})>  _
         Public ReadOnly Property PurchaseOrderDetails() As EntityCollection(Of PurchaseOrderDetail)
             Get
                 If (Me._purchaseOrderDetails Is Nothing) Then
@@ -2052,7 +2052,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Product"/> entity.
         ''' </summary>
-        <Association("Product_PurchaseOrderDetail", "ProductID", "ProductID", IsForeignKey:=true)>  _
+        <EntityAssociation("Product_PurchaseOrderDetail", New String() {"ProductID"}, New String() {"ProductID"}, IsForeignKey:=true)>  _
         Public Property Product() As Product
             Get
                 If (Me._product Is Nothing) Then
@@ -2108,7 +2108,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="PurchaseOrder"/> entity.
         ''' </summary>
-        <Association("PurchaseOrder_PurchaseOrderDetail", "PurchaseOrderID", "PurchaseOrderID", IsForeignKey:=true)>  _
+        <EntityAssociation("PurchaseOrder_PurchaseOrderDetail", New String() {"PurchaseOrderID"}, New String() {"PurchaseOrderID"}, IsForeignKey:=true)>  _
         Public Property PurchaseOrder() As PurchaseOrder
             Get
                 If (Me._purchaseOrder Is Nothing) Then
