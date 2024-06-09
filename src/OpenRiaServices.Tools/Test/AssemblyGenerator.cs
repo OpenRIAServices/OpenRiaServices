@@ -7,6 +7,8 @@ using OpenRiaServices.Server.Test.Utilities;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Microsoft.CodeAnalysis.Text;
+using System.Collections.ObjectModel;
+using System.Collections;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -314,6 +316,13 @@ namespace OpenRiaServices.Tools.Test
                     if (typeof(T).FullName == ctorArg.ArgumentType.FullName)
                     {
                         value = (T)ctorArg.Value;
+                        return true;
+                    }
+                    // Special case to handle backwards compat for tests written againt AssociationAttribute 
+                    //  that takes string arguments in constructor insterad of Arrrays as EntityAssociationAttribute does
+                    else if (typeof(T) == typeof(string) && ctorArg.ArgumentType.IsArray)
+                    {
+                        value = (T)(object)string.Join(", ", ((IEnumerable<CustomAttributeTypedArgument>)ctorArg.Value).Select(arg => arg.Value?.ToString() ?? "null"));
                         return true;
                     }
                 }
