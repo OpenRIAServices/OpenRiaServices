@@ -23,14 +23,24 @@ namespace OpenRiaServices.Tools
                 attributeDeclaration.ConstructorArguments.Add(entityAssociation.Name);
                 attributeDeclaration.ConstructorArguments.Add((string[])entityAssociation.ThisKeyMembers);
                 attributeDeclaration.ConstructorArguments.Add((string[])entityAssociation.OtherKeyMembers);
+
+                if (entityAssociation.IsForeignKey)
+                {
+                    attributeDeclaration.NamedParameters.Add(nameof(EntityAssociationAttribute.IsForeignKey), true);
+                }
             }
-            //else if (attribute is AssociationAttribute associationAttribute)
-            //{
-            //    // [AssociationAttribute( {true|false} )]
-            //    attributeDeclaration.ConstructorArguments.Add(associationAttribute.Name);
-            //    attributeDeclaration.ConstructorArguments.Add(associationAttribute.ThisKeyMembers.ToArray());
-            //    attributeDeclaration.ConstructorArguments.Add(associationAttribute.OtherKeyMembers.ToArray());
-            //}
+            else if (attribute is AssociationAttribute associationAttribute)
+            {
+                // [EntityAssociation( {true|false} )]
+                attributeDeclaration.ConstructorArguments.Add(associationAttribute.Name);
+                attributeDeclaration.ConstructorArguments.Add(associationAttribute.ThisKeyMembers.ToArray());
+                attributeDeclaration.ConstructorArguments.Add(associationAttribute.OtherKeyMembers.ToArray());
+
+                if (associationAttribute.IsForeignKey)
+                {
+                    attributeDeclaration.NamedParameters.Add(nameof(EntityAssociationAttribute.IsForeignKey), true);
+                }
+            }
             else
             {
                 return null;

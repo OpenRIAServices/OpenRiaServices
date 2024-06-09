@@ -66,6 +66,10 @@ namespace OpenRiaServices.Tools
             { typeof(EntityActionAttribute), null },
             { typeof(RequiresAuthenticationAttribute), null },
             { typeof(RequiresRoleAttribute), null },
+
+            // Translate all AssociationAttribute to EntityAssociationAttribute on the client
+            { typeof(AssociationAttribute), new EntityAssociationAttributeBuilder() },
+            //{ typeof(EntityAssociationAttribute), new EntityAssociationAttributeBuilder() },
         };
 
         /// <summary>
