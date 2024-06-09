@@ -131,7 +131,7 @@ Namespace Cities
         ''' <summary>
         ''' Gets or sets the associated <see cref="County"/> entity.
         ''' </summary>
-        <Association("County_City", "CountyName,StateName", "Name,StateName", IsForeignKey:=true)>  _
+        <EntityAssociation("County_City", New String() {"CountyName", "StateName"}, New String() {"Name", "StateName"}, IsForeignKey:=true)>  _
         Public Property County() As County
             Get
                 If (Me._county Is Nothing) Then
@@ -238,7 +238,7 @@ Namespace Cities
         ''' <summary>
         ''' Gets the collection of associated <see cref="Zip"/> entity instances.
         ''' </summary>
-        <Association("City_Zip", "Name, CountyName, StateName", "CityName,  CountyName, StateName")>  _
+        <EntityAssociation("City_Zip", New String() {"Name", "CountyName", "StateName"}, New String() {"CityName", "CountyName", "StateName"})>  _
         Public ReadOnly Property ZipCodes() As EntityCollection(Of Zip)
             Get
                 If (Me._zipCodes Is Nothing) Then
@@ -1497,7 +1497,7 @@ Namespace Cities
         ''' <summary>
         ''' Gets the collection of associated <see cref="ZipWithInfo"/> entity instances.
         ''' </summary>
-        <Association("CityWithInfo_ZipWithInfo", "Name, CountyName, StateName", "CityName,  CountyName, StateName")>  _
+        <EntityAssociation("CityWithInfo_ZipWithInfo", New String() {"Name", "CountyName", "StateName"}, New String() {"CityName", "CountyName", "StateName"})>  _
         Public ReadOnly Property ZipCodesWithInfo() As EntityCollection(Of ZipWithInfo)
             Get
                 If (Me._zipCodesWithInfo Is Nothing) Then
@@ -1590,7 +1590,7 @@ Namespace Cities
         ''' <summary>
         ''' Gets the collection of associated <see cref="City"/> entity instances.
         ''' </summary>
-        <Association("County_City", "Name,StateName", "CountyName,StateName")>  _
+        <EntityAssociation("County_City", New String() {"Name", "StateName"}, New String() {"CountyName", "StateName"})>  _
         Public ReadOnly Property Cities() As EntityCollection(Of City)
             Get
                 If (Me._cities Is Nothing) Then
@@ -1628,7 +1628,7 @@ Namespace Cities
         ''' <summary>
         ''' Gets or sets the associated <see cref="State"/> entity.
         ''' </summary>
-        <Association("State_County", "StateName", "Name", IsForeignKey:=true)>  _
+        <EntityAssociation("State_County", New String() {"StateName"}, New String() {"Name"}, IsForeignKey:=true)>  _
         Public Property State() As State
             Get
                 If (Me._state Is Nothing) Then
@@ -1791,9 +1791,9 @@ Namespace Cities
         ''' <summary>
         ''' Gets the collection of associated <see cref="County"/> entity instances.
         ''' </summary>
-        <Association("State_County", "Name", "StateName"),  _
-         CustomValidation(GetType(CountiesValidator), "AreCountiesValid"),  _
+        <CustomValidation(GetType(CountiesValidator), "AreCountiesValid"),  _
          Editable(false),  _
+         EntityAssociation("State_County", New String() {"Name"}, New String() {"StateName"}),  _
          [ReadOnly](true)>  _
         Public ReadOnly Property Counties() As EntityCollection(Of County)
             Get
@@ -1995,8 +1995,8 @@ Namespace Cities
         ''' <summary>
         ''' Gets or sets the associated <see cref="City"/> entity.
         ''' </summary>
-        <Association("City_Zip", "CityName,  CountyName, StateName", "Name, CountyName, StateName", IsForeignKey:=true),  _
-         CustomValidation(GetType(CityPropertyValidator), "IsValidCity")>  _
+        <CustomValidation(GetType(CityPropertyValidator), "IsValidCity"),  _
+         EntityAssociation("City_Zip", New String() {"CityName", "CountyName", "StateName"}, New String() {"Name", "CountyName", "StateName"}, IsForeignKey:=true)>  _
         Public Property City() As City
             Get
                 If (Me._city Is Nothing) Then
