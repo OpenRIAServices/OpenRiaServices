@@ -66,6 +66,10 @@ namespace OpenRiaServices.Tools
             { typeof(EntityActionAttribute), null },
             { typeof(RequiresAuthenticationAttribute), null },
             { typeof(RequiresRoleAttribute), null },
+
+            // Translate all AssociationAttribute to EntityAssociationAttribute on the client
+            { typeof(AssociationAttribute), new EntityAssociationAttributeBuilder() },
+            //{ typeof(EntityAssociationAttribute), new EntityAssociationAttributeBuilder() },
         };
 
         /// <summary>
@@ -661,6 +665,16 @@ namespace OpenRiaServices.Tools
                     e = new CodeCastExpression(value.GetType(), e);
                 }
                 return e;
+            }
+            // Handle arrays
+            if (value is Array array)
+            {
+                CodeArrayCreateExpression arrayCreateExpression = new CodeArrayCreateExpression(CodeGenUtilities.GetTypeReference(typeOfValue.GetElementType(), proxyGenerator, referencingType), array.Length);
+                foreach (object element in array)
+                {
+                    arrayCreateExpression.Initializers.Add(CreateCodeExpression(proxyGenerator, referencingType, element));
+                }
+                return arrayCreateExpression;
             }
 
             // typeof(T) requires special handling

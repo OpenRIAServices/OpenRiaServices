@@ -311,8 +311,8 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         ''' <summary>
         ''' Gets or sets the associated <see cref="OwnedEntityWithExplicitId"/> entity.
         ''' </summary>
-        <Association("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitId", "EmployeeId", "EmployeeId"),  _
-         Composition()>  _
+        <Composition(),  _
+         EntityAssociation("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitId", New String() {"EmployeeId"}, New String() {"EmployeeId"})>  _
         Public Property OwnedEntityWithExplicitId() As OwnedEntityWithExplicitId
             Get
                 If (Me._ownedEntityWithExplicitId Is Nothing) Then
@@ -333,9 +333,9 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         ''' <summary>
         ''' Gets or sets the associated <see cref="OwnedEntityWithExplicitIdAndBackNavigation"/> entity.
         ''' </summary>
-        <Association("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitIdAndBackNavigation"& _ 
-            "", "EmployeeId", "EmployeeId"),  _
-         Composition()>  _
+        <Composition(),  _
+         EntityAssociation("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitIdAndBackNavigation"& _ 
+            "", New String() {"EmployeeId"}, New String() {"EmployeeId"})>  _
         Public Property OwnedEntityWithExplicitIdAndBackNavigation() As OwnedEntityWithExplicitIdAndBackNavigation
             Get
                 If (Me._ownedEntityWithExplicitIdAndBackNavigation Is Nothing) Then
@@ -582,7 +582,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         ''' <summary>
         ''' Gets or sets the associated <see cref="Employee"/> entity.
         ''' </summary>
-        <Association("FK_Employees_Employees_EmployeeId", "EmployeeId", "EmployeeId", IsForeignKey:=true)>  _
+        <EntityAssociation("FK_Employees_Employees_EmployeeId", New String() {"EmployeeId"}, New String() {"EmployeeId"}, IsForeignKey:=true)>  _
         Public Property Employee() As Employee
             Get
                 If (Me._employee Is Nothing) Then

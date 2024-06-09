@@ -368,7 +368,7 @@ namespace OpenRiaServices.Client
             /// </summary>
             /// <param name="association">The association to check.</param>
             /// <returns>The resulting collection of entries.</returns>
-            private IEnumerable<ChangeSetEntry> FindOriginalChildren(AssociationAttribute association)
+            private IEnumerable<ChangeSetEntry> FindOriginalChildren(EntityAssociationAttribute association)
             {
                 foreach (ChangeSetEntry entry in this._changeSetEntries.Where(p => p.Entity.EntityState == EntityState.Deleted))
                 {
@@ -467,7 +467,7 @@ namespace OpenRiaServices.Client
                 // look for any invalid updates made to composed children
                 if (entityCollection.HasValues && member.IsComposition)
                 {
-                    AssociationAttribute assoc = member.AssociationAttribute;
+                    EntityAssociationAttribute assoc = member.AssociationAttribute;
                     foreach (Entity childEntity in entityCollection.Entities)
                     {
                         CheckInvalidChildUpdates(childEntity, assoc);
@@ -498,7 +498,7 @@ namespace OpenRiaServices.Client
             /// </summary>
             /// <param name="entity">The child entity to check.</param>
             /// <param name="compositionAttribute">The composition attribute.</param>
-            private static void CheckInvalidChildUpdates(Entity entity, AssociationAttribute compositionAttribute)
+            private static void CheckInvalidChildUpdates(Entity entity, EntityAssociationAttribute compositionAttribute)
             {
                 if (compositionAttribute == null)
                 {

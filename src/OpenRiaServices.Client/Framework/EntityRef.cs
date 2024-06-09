@@ -27,7 +27,7 @@ namespace OpenRiaServices.Client
 
         private string MemberName => _metaMember.Name;
         private bool IsComposition => _metaMember.IsComposition;
-        private AssociationAttribute AssocAttribute => _metaMember.AssociationAttribute;
+        private EntityAssociationAttribute AssocAttribute => _metaMember.AssociationAttribute;
 
         /// <summary>
         /// Initializes a new instance of the EntityRef class
@@ -58,7 +58,7 @@ namespace OpenRiaServices.Client
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, parent.GetType(), memberName), nameof(memberName));
             }
-            if (this._metaMember.AssociationAttribute == null)
+            if (!this._metaMember.IsAssociationMember)
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.MemberMustBeAssociation, memberName), nameof(memberName));
             }
@@ -393,7 +393,7 @@ namespace OpenRiaServices.Client
         }
 
         #region IEntityRef Members
-        AssociationAttribute IEntityRef.Association
+        EntityAssociationAttribute IEntityRef.Association
         {
             get
             {
@@ -441,7 +441,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the AssociationAttribute for this reference.
         /// </summary>
-        AssociationAttribute Association
+        EntityAssociationAttribute Association
         {
             get;
         }

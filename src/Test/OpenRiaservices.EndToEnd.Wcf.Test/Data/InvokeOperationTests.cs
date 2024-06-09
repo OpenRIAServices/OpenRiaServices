@@ -30,7 +30,7 @@ namespace OpenRiaServices.Client.Test
         {
             TestDomainServices.TestProvider_Scenarios ctxt = new TestDomainServices.TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
-            Double d = Double.Parse("9.2233720368547758E+18");
+            Double d = 9.2233720368547758E+18;
 
             InvokeOperation<double> invoke = ctxt.RoundtripDouble(d);
 

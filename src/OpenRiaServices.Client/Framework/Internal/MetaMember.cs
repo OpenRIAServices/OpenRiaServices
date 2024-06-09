@@ -44,7 +44,21 @@ namespace OpenRiaServices.Client.Internal
             IsKeyMember = TypeUtility.IsAttributeDefined(property, typeof(KeyAttribute), false);
             IsComposition = TypeUtility.IsAttributeDefined(property, typeof(CompositionAttribute), false);
 
-            AssociationAttribute = (AssociationAttribute)property.GetCustomAttributes(typeof(AssociationAttribute), false).SingleOrDefault();
+            if (property.GetCustomAttribute<EntityAssociationAttribute>(false) is { } association)
+            {
+                this.AssociationAttribute = association;
+            }
+#pragma warning disable CS0618 // Type or member is obsolete
+            // TODO: Remove fallback when code generation has used the never attribute for a little while
+            else if (property.GetCustomAttribute<AssociationAttribute>(false) is { } associationAttribute)
+            {
+                this.AssociationAttribute = new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray())
+                {
+                    IsForeignKey = associationAttribute.IsForeignKey,
+                };
+            }
+#pragma warning restore CS0618 // Type or member is obsolete
+
             EditableAttribute = (EditableAttribute)property.GetCustomAttributes(typeof(EditableAttribute), false).SingleOrDefault();
 
             IsRoundtripMember = CheckIfRoundtripMember(this, isRoundtripEntity);
@@ -88,7 +102,7 @@ namespace OpenRiaServices.Client.Internal
         /// Gets any <see cref="AssociationAttribute"/> applied to the property, or <c>null</c>
         /// if no attribute is specified for the property
         /// </summary>
-        public AssociationAttribute AssociationAttribute { get; }
+        public EntityAssociationAttribute AssociationAttribute { get; }
 
         /// <summary>
         /// Gets a value indicating whether this member is one of the supported values to send between 

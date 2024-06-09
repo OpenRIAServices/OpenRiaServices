@@ -290,7 +290,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsNotNull(pInfo, "Expected 'Target' property on derived type");
                     Assert.AreEqual(otherType, pInfo.PropertyType, "'Target' property should have been of type " + otherType);
 
-                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Target' property");
 
                     string value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -347,7 +347,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsNotNull(pInfo, "Expected 'Target' property on derived type");
                     Assert.AreEqual(targetType, pInfo.PropertyType, "'Target' property should have been of type " + targetType);
 
-                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Target' property");
 
                     string value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -365,7 +365,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsNotNull(pInfo, "Expected 'Source' property on target type");
                     Assert.AreEqual(derivedType, pInfo.PropertyType, "'Source' property should have been of type " + derivedType);
 
-                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Source' property");
 
                     value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -428,7 +428,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsNotNull(pInfo, "Expected 'Target' property on derived type");
                     Assert.AreEqual(targetType, pInfo.PropertyType, "'Target' property should have been of type " + targetType);
 
-                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Target' property");
 
                     string value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -446,7 +446,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsNotNull(pInfo, "Expected 'Source' property on target type");
                     Assert.AreEqual(derivedType, pInfo.PropertyType, "'Source' property should have been of type " + derivedType);
 
-                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Source' property");
 
                     value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -513,7 +513,7 @@ namespace OpenRiaServices.Tools.Test
                     Type genericType = propType.GetGenericArguments()[0];
                     Assert.AreEqual(targetType, genericType, "'Targets' property should have been of type " + targetType + ", not " + genericType);
 
-                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Targets' property");
 
                     string value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -532,7 +532,7 @@ namespace OpenRiaServices.Tools.Test
                     propType = pInfo.PropertyType;
                     Assert.AreEqual(derivedType, propType, "'Sources' property should have been of type " + derivedType + ", not " + propType);
 
-                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Source' property");
 
                     value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -597,7 +597,7 @@ namespace OpenRiaServices.Tools.Test
                     Type propType = pInfo.PropertyType;
                     Assert.AreEqual(targetType, propType, "'Target' property should have been of type " + targetType + ", not " + propType);
 
-                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Targets' property");
 
                     string value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -619,7 +619,7 @@ namespace OpenRiaServices.Tools.Test
                     Type genericType = propType.GetGenericArguments()[0];
                     Assert.AreEqual(derivedType, genericType, "'Sources' property should have been of type " + derivedType + ", not " + genericType);
 
-                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Source' property");
 
                     value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -691,7 +691,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsNotNull(pInfo, "Expected 'Target' property on derived type");
                     Assert.AreEqual(targetType, pInfo.PropertyType, "'Target' property should have been of type " + targetType);
 
-                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Target' property");
 
                     string value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -709,7 +709,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsNotNull(pInfo, "Expected 'Source' property on target type");
                     Assert.AreEqual(derivedType, pInfo.PropertyType, "'Source' property should have been of type " + derivedType);
 
-                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Source' property");
 
                     value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -790,7 +790,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsNotNull(pInfo, "Expected 'Target' property on derived type");
                     Assert.AreEqual(targetType, pInfo.PropertyType, "'Target' property should have been of type " + targetType);
 
-                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    CustomAttributeData assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Target' property");
 
                     string value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");
@@ -808,7 +808,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsNotNull(pInfo, "Expected 'Source' property on target type");
                     Assert.AreEqual(derivedType, pInfo.PropertyType, "'Source' property should have been of type " + derivedType);
 
-                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(AssociationAttribute)).SingleOrDefault();
+                    assocCad = AssemblyGenerator.GetCustomAttributeData(pInfo, typeof(EntityAssociationAttribute)).SingleOrDefault();
                     Assert.IsNotNull(assocCad, "Could not find Association custom attribute data on 'Source' property");
 
                     value = AssemblyGenerator.GetCustomAttributeValue<string>(assocCad, "thisKey");

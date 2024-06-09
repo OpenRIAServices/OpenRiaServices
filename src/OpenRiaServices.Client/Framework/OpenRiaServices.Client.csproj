@@ -3,8 +3,6 @@
   <PropertyGroup>
     <TargetFrameworks>net472;netstandard2.0;net6.0-windows</TargetFrameworks>
 
-      <!-- Disable obsolete warning (primarily AssociationAttribute) -->
-    <NoWarn Condition=" '$(TargetFramework)' != 'net472' ">$(NoWarn);CS0618</NoWarn>
     <DefineConstants Condition=" '$(TargetFramework)' == 'net472' or '$(TargetFramework)' == 'net6.0-windows' ">$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
     <UseWPF Condition=" '$(TargetFramework)' == 'net6.0-windows' ">true</UseWPF>
   </PropertyGroup>
