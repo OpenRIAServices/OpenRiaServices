@@ -1,0 +1,16 @@
+﻿OpenRiaServices.Hosting.Wcf.JsonEndpointFactory
+OpenRiaServices.Hosting.Wcf.JsonEndpointFactory.JsonEndpointFactory() -> void
+OpenRiaServices.Hosting.Wcf.SoapXmlEndpointFactory
+OpenRiaServices.Hosting.Wcf.SoapXmlEndpointFactory.SoapXmlEndpointFactory() -> void
+OpenRiaServices.Hosting.Wcf.Tracing.InMemoryTraceListener
+OpenRiaServices.Hosting.Wcf.Tracing.InMemoryTraceListener.InMemoryTraceListener() -> void
+OpenRiaServices.Hosting.Wcf.Tracing.InMemoryTraceListener.InMemoryTraceListener(string name) -> void
+OpenRiaServices.Hosting.Wcf.Tracing.TracingDomainServiceEndpointFactory
+OpenRiaServices.Hosting.Wcf.Tracing.TracingDomainServiceEndpointFactory.TracingDomainServiceEndpointFactory() -> void
+OpenRiaServices.Hosting.Wcf.Tracing.WcfTraceService
+OpenRiaServices.Hosting.Wcf.Tracing.WcfTraceService.GetTrace(string format) -> System.ServiceModel.Channels.Message
+override OpenRiaServices.Hosting.Wcf.JsonEndpointFactory.CreateEndpointForAddress(System.ServiceModel.Description.ContractDescription contract, System.Uri address) -> System.ServiceModel.Description.ServiceEndpoint
+override OpenRiaServices.Hosting.Wcf.SoapXmlEndpointFactory.CreateEndpointForAddress(System.ServiceModel.Description.ContractDescription contract, System.Uri address) -> System.ServiceModel.Description.ServiceEndpoint
+override OpenRiaServices.Hosting.Wcf.Tracing.InMemoryTraceListener.Write(string message) -> void
+override OpenRiaServices.Hosting.Wcf.Tracing.InMemoryTraceListener.WriteLine(string message) -> void
+override OpenRiaServices.Hosting.Wcf.Tracing.TracingDomainServiceEndpointFactory.CreateEndpoints(OpenRiaServices.Server.DomainServiceDescription description, OpenRiaServices.Hosting.Wcf.DomainServiceHost serviceHost, System.ServiceModel.Description.ContractDescription contractDescription) -> System.Collections.Generic.IEnumerable<System.ServiceModel.Description.ServiceEndpoint>

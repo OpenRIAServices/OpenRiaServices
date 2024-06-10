@@ -1,0 +1,8 @@
+﻿OpenRiaServices.Hosting.Local.OperationException
+OpenRiaServices.Hosting.Local.OperationException.OperationErrors.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Server.ValidationResultInfo>
+OpenRiaServices.Hosting.Wcf.OData.DomainDataService
+OpenRiaServices.Hosting.Wcf.OData.DomainDataService.GetService(System.Type serviceType) -> object
+OpenRiaServices.Hosting.Wcf.ODataEndpointFactory
+OpenRiaServices.Hosting.Wcf.ODataEndpointFactory.ODataEndpointFactory() -> void
+override OpenRiaServices.Hosting.Wcf.ODataEndpointFactory.CreateEndpoints(OpenRiaServices.Server.DomainServiceDescription description, OpenRiaServices.Hosting.Wcf.DomainServiceHost serviceHost, System.ServiceModel.Description.ContractDescription contractDescription) -> System.Collections.Generic.IEnumerable<System.ServiceModel.Description.ServiceEndpoint>
+static OpenRiaServices.Hosting.Wcf.OData.DomainDataService.InitializeService(System.Data.Services.DataServiceConfiguration config) -> void
