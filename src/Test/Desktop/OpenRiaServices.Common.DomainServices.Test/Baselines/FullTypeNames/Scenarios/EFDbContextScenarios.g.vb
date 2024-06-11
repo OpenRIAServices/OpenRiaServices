@@ -157,7 +157,7 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Product"/> entity instances.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Category_Product", New String() {"CategoryID"}, New String() {"CategoryID"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", New String() {"CategoryID"}, New String() {"CategoryID"})>  _
         Public ReadOnly Property Products() As Global.OpenRiaServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Product)
             Get
                 If (Me._products Is Nothing) Then
@@ -473,7 +473,7 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Order"/> entity instances.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Customer_Order", New String() {"CustomerID"}, New String() {"CustomerID"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", New String() {"CustomerID"}, New String() {"CustomerID"})>  _
         Public ReadOnly Property Orders() As Global.OpenRiaServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order)
             Get
                 If (Me._orders Is Nothing) Then
@@ -697,7 +697,7 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Customer"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Customer_Order", New String() {"CustomerID"}, New String() {"CustomerID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", New String() {"CustomerID"}, New String() {"CustomerID"}, IsForeignKey:=true)>  _
         Public Property Customer() As Global.DbContextModels.Northwind.Customer
             Get
                 If (Me._customer Is Nothing) Then
@@ -818,7 +818,7 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", New String() {"OrderID"}, New String() {"OrderID"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", New String() {"OrderID"}, New String() {"OrderID"})>  _
         Public ReadOnly Property Order_Details() As Global.OpenRiaServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
             Get
                 If (Me._order_Details Is Nothing) Then
@@ -1190,7 +1190,7 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Order"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", New String() {"OrderID"}, New String() {"OrderID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", New String() {"OrderID"}, New String() {"OrderID"}, IsForeignKey:=true)>  _
         Public Property Order() As Global.DbContextModels.Northwind.Order
             Get
                 If (Me._order Is Nothing) Then
@@ -1247,7 +1247,7 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Product"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", New String() {"ProductID"}, New String() {"ProductID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", New String() {"ProductID"}, New String() {"ProductID"}, IsForeignKey:=true)>  _
         Public Property Product() As Global.DbContextModels.Northwind.Product
             Get
                 If (Me._product Is Nothing) Then
@@ -1480,7 +1480,7 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Category"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Category_Product", New String() {"CategoryID"}, New String() {"CategoryID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", New String() {"CategoryID"}, New String() {"CategoryID"}, IsForeignKey:=true)>  _
         Public Property Category() As Global.DbContextModels.Northwind.Category
             Get
                 If (Me._category Is Nothing) Then
@@ -1579,7 +1579,7 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", New String() {"ProductID"}, New String() {"ProductID"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", New String() {"ProductID"}, New String() {"ProductID"})>  _
         Public ReadOnly Property Order_Details() As Global.OpenRiaServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Order_Detail)
             Get
                 If (Me._order_Details Is Nothing) Then
@@ -2096,8 +2096,8 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets the collection of associated <see cref="Territory"/> entity instances.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Region_Territory", New String() {"RegionID"}, New String() {"RegionID"}),  _
-         Global.System.ComponentModel.DataAnnotations.CompositionAttribute()>  _
+        <Global.System.ComponentModel.DataAnnotations.CompositionAttribute(),  _
+         Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", New String() {"RegionID"}, New String() {"RegionID"})>  _
         Public ReadOnly Property Territories() As Global.OpenRiaServices.Client.EntityCollection(Of Global.DbContextModels.Northwind.Territory)
             Get
                 If (Me._territories Is Nothing) Then
@@ -2178,7 +2178,7 @@ Namespace DbContextModels.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Region"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("Region_Territory", New String() {"RegionID"}, New String() {"RegionID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", New String() {"RegionID"}, New String() {"RegionID"}, IsForeignKey:=true)>  _
         Public Property Region() As Global.DbContextModels.Northwind.Region
             Get
                 If (Me._region Is Nothing) Then

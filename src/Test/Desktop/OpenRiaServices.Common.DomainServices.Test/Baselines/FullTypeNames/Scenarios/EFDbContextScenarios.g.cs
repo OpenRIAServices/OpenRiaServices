@@ -159,7 +159,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Product"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Category_Product", new string[] {
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", new string[] {
                 "CategoryID"}, new string[] {
                 "CategoryID"})]
         public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Product> Products
@@ -493,7 +493,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Customer_Order", new string[] {
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", new string[] {
                 "CustomerID"}, new string[] {
                 "CustomerID"})]
         public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order> Orders
@@ -707,7 +707,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Customer"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Customer_Order", new string[] {
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", new string[] {
                 "CustomerID"}, new string[] {
                 "CustomerID"}, IsForeignKey=true)]
         public global::DbContextModels.Northwind.Customer Customer
@@ -856,7 +856,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", new string[] {
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", new string[] {
                 "OrderID"}, new string[] {
                 "OrderID"})]
         public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> Order_Details
@@ -1273,7 +1273,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Order"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", new string[] {
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", new string[] {
                 "OrderID"}, new string[] {
                 "OrderID"}, IsForeignKey=true)]
         public global::DbContextModels.Northwind.Order Order
@@ -1345,7 +1345,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", new string[] {
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", new string[] {
                 "ProductID"}, new string[] {
                 "ProductID"}, IsForeignKey=true)]
         public global::DbContextModels.Northwind.Product Product
@@ -1573,7 +1573,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Category"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Category_Product", new string[] {
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", new string[] {
                 "CategoryID"}, new string[] {
                 "CategoryID"}, IsForeignKey=true)]
         public global::DbContextModels.Northwind.Category Category
@@ -1695,7 +1695,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", new string[] {
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", new string[] {
                 "ProductID"}, new string[] {
                 "ProductID"})]
         public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Order_Detail> Order_Details
@@ -2275,10 +2275,10 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Territory"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Region_Territory", new string[] {
+        [global::System.ComponentModel.DataAnnotations.CompositionAttribute()]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", new string[] {
                 "RegionID"}, new string[] {
                 "RegionID"})]
-        [global::System.ComponentModel.DataAnnotations.CompositionAttribute()]
         public global::OpenRiaServices.Client.EntityCollection<global::DbContextModels.Northwind.Territory> Territories
         {
             get
@@ -2359,7 +2359,7 @@ namespace DbContextModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Region"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Region_Territory", new string[] {
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", new string[] {
                 "RegionID"}, new string[] {
                 "RegionID"}, IsForeignKey=true)]
         public global::DbContextModels.Northwind.Region Region
