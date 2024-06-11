@@ -14,7 +14,7 @@ namespace System.ComponentModel.DataAnnotations
 #pragma warning restore CS3015 // Type has no accessible constructors which use only CLS-compliant types
     {
         /// <summary>
-        /// Full form of constructor
+        /// Create an instance that defines an association between two entities, using any number of key members.
         /// </summary>
         /// <param name="name">The name of the association. For bi-directional associations,
         /// the name must be the same on both sides of the association</param>
@@ -35,12 +35,12 @@ namespace System.ComponentModel.DataAnnotations
         }
 
         /// <summary>
-        /// Full form of constructor
+        /// Create an instance that defines an association using a single key member.
         /// </summary>
         /// <param name="name">The name of the association. For bi-directional associations,
         /// the name must be the same on both sides of the association</param>
-        /// <param name="thisKey">List of the property names of the key values on this side of the association</param>
-        /// <param name="otherKey">List of the property names of the key values on the other side of the association</param>
+        /// <param name="thisKey">A single property name of the key value on this side of the association</param>
+        /// <param name="otherKey">A single property name of the key value on the other side of the association</param>
         public EntityAssociationAttribute(string name, string thisKey, string otherKey)
         {
             if (string.IsNullOrEmpty(name))
