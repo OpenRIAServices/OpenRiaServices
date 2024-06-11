@@ -27,9 +27,10 @@ namespace OpenRiaServices.Tools.Test
             typeof(DataMemberAttribute), 
             typeof(System.ComponentModel.DescriptionAttribute),
             typeof(DomainIdentifierAttribute),
-            typeof(ExternalReferenceAttribute),                    
+            typeof(ExternalReferenceAttribute),
             typeof(ReadOnlyAttribute),
-            typeof(CompositionAttribute)
+            typeof(CompositionAttribute),
+            typeof(EntityAssociationAttribute)
         };
 
         private readonly HashSet<Type> _sharedTypes;

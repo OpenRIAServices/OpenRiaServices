@@ -117,12 +117,10 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
             bool hasKeyAttribute = pd.Attributes[typeof(KeyAttribute)] != null;
             var property = _entityType.FindProperty(pd.Name);
-            // TODO: Review all usage of isEntity to validate if we should really copy logic from EF6
-            bool isEntity = !_entityType.IsOwned();
 
             if (property != null)
             {
-                if (isEntity && property.IsPrimaryKey() && !hasKeyAttribute)
+                if (property.IsPrimaryKey() && !hasKeyAttribute)
                 {
                     attributes.Add(new KeyAttribute());
                     hasKeyAttribute = true;
@@ -192,7 +190,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 bool isStringType = pd.PropertyType == typeof(string) || pd.PropertyType == typeof(char[]);
                 if (isStringType &&
                     pd.Attributes[typeof(StringLengthAttribute)] == null &&
-                    property.GetMaxLength() is int maxLength)                  
+                    property.GetMaxLength() is int maxLength)
                 {
                     attributes.Add(new StringLengthAttribute(maxLength));
                 }
@@ -228,33 +226,39 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                         attributes.Add(new RoundtripOriginalAttribute());
                     }
                 }
-            }
 
-            // Add the Editable attribute if required
-            if (editableAttribute != null && pd.Attributes[typeof(EditableAttribute)] == null)
-            {
-                attributes.Add(editableAttribute);
+                // Add the Editable attribute if required
+                if (editableAttribute != null && pd.Attributes[typeof(EditableAttribute)] == null)
+                {
+                    attributes.Add(editableAttribute);
+                }
             }
 
             // Add AssociationAttribute if required for the specified property
-            if (isEntity
-                && _entityType.FindNavigation(pd.Name) is INavigation navigation)
+            if (_entityType.FindNavigation(pd.Name) is { } navigation)
             {
 #if NETSTANDARD2_0
                 bool isManyToMany = navigation.IsCollection() && navigation.FindInverse()?.IsCollection() == true;
+                bool addAssociationAttribute = !isManyToMany;
 #else
                 bool isManyToMany = navigation.IsCollection && navigation.Inverse?.IsCollection == true;
+                bool addAssociationAttribute = !isManyToMany
+                    // Don't generate association attributes for Owned types (onless they have all FK fields explictly defined, in which case they can be treated as Entities)
+                    //  if we generate association attributes then it cannot be treated as a ComplexObject
+                    && !(navigation.ForeignKey.Properties.Any(static p => p.IsShadowProperty()));
 #endif
-                if (!isManyToMany)
-                {
-                    var assocAttrib = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];
-                    if (assocAttrib == null)
-                    {
-                        assocAttrib = TypeDescriptionContext.CreateAssociationAttribute(navigation);
-                        attributes.Add(assocAttrib);
-                    }
-                }
 
+                if (addAssociationAttribute)
+                {
+                    if (pd.Attributes[typeof(AssociationAttribute)] is null)
+                        attributes.Add(EFCoreTypeDescriptionContext.CreateAssociationAttribute(navigation));
+#if NET
+                    if (navigation.TargetEntityType.IsOwned() && pd.Attributes[typeof(CompositionAttribute)] is null)
+                    {
+                        attributes.Add(new CompositionAttribute());
+                    }
+#endif
+                }
             }
 
             return attributes.ToArray();

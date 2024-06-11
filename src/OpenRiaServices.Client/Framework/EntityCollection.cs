@@ -41,7 +41,7 @@ namespace OpenRiaServices.Client
         private bool _entitiesLoaded;
         private bool _entitiesAdded;
 
-        private AssociationAttribute AssocAttribute => _metaMember.AssociationAttribute;
+        private EntityAssociationAttribute AssocAttribute => _metaMember.AssociationAttribute;
         private bool IsComposition => _metaMember.IsComposition;
 
         /// <summary>
@@ -74,7 +74,7 @@ namespace OpenRiaServices.Client
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Does_Not_Exist, parent.GetType(), memberName), nameof(memberName));
             }
-            if (this._metaMember.AssociationAttribute == null)
+            if (!this._metaMember.IsAssociationMember)
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.MemberMustBeAssociation, memberName), nameof(memberName));
             }
@@ -770,7 +770,7 @@ namespace OpenRiaServices.Client
         #endregion
 
         #region IEntityCollection Members
-        AssociationAttribute IEntityCollection.Association
+        EntityAssociationAttribute IEntityCollection.Association
         {
             get
             {

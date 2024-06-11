@@ -102,7 +102,7 @@ namespace OpenRiaServices.Tools.Test
 
                 using (StreamWriter sw = new StreamWriter(updateAllBatFile, true))
                 {
-                    sw.Write("cmd /c " + copyCommand);
+                    sw.Write("cmd /c ");
                     sw.WriteLine(copyCommand);
                 }
 

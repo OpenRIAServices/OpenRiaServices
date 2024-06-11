@@ -3,10 +3,11 @@
     <TargetFrameworks>net8.0;net6.0;netstandard2.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX;EFCORE</DefineConstants>
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
-    <VersionPrefix>3.0.0</VersionPrefix>
+    <VersionPrefix>3.1.0</VersionPrefix>
     <AssemblyVersion>3.0.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression></PackageLicenseExpression>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
   </PropertyGroup>
   <ItemGroup>
@@ -41,6 +42,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="LICENSE.md" Pack="true" PackagePath="\" />
+    <Content Include="README.md" Pack="true" PackagePath="" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Update="DbResource.resx">

@@ -267,7 +267,7 @@ namespace OpenRiaServices.EntityFramework
 
                 // Determine which members are in conflict by comparing original values to the current DB values
                 var dbValues = await stateEntry.GetDatabaseValuesAsync(cancellationToken);
-                
+
                 PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
 
                 // dbValues will be null if the entity has been deleted in the store (i.e. Delete/Delete conflict)
@@ -303,6 +303,23 @@ namespace OpenRiaServices.EntityFramework
 #endif
                 }
             }
+        }
+
+        /// <summary>
+        /// Mark the entity as modified
+        /// </summary>
+        /// <typeparam name="TEntity">Entity type</typeparam>
+        /// <param name="entity">The modified entity</param>
+        protected void AttachAsModified<TEntity>(TEntity entity)
+            where TEntity : class
+        {
+            var dbSet = DbContext.Set<TEntity>();
+            var original = ChangeSet.GetOriginal(entity);
+
+            if (original != null)
+                dbSet.AttachAsModified(entity, original, DbContext);
+            else
+                dbSet.AttachAsModified(entity, DbContext);
         }
     }
 }

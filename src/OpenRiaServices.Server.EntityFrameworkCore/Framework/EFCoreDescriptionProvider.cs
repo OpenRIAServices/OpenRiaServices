@@ -49,6 +49,9 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                     td = new EFCoreTypeDescriptor(_typeDescriptionContext, entityType, parent);
                 }
 #else
+                // TODO: Determine if we can handle Complex Types
+                // - it must "look the same" for all usages (be configured the same in all places to make sense)
+                // - Should they instead be treated as different types per usage (on the client)
                 if (model != null && model.FindEntityType(objectType.FullName) is IReadOnlyEntityType entityType)
                 {
                     td = new EFCoreTypeDescriptor(_typeDescriptionContext, entityType, parent);

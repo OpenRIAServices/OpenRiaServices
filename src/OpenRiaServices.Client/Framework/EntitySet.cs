@@ -20,7 +20,7 @@ namespace OpenRiaServices.Client
     /// </summary>
     public abstract class EntitySet : IEnumerable, ICollection, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
     {
-        private readonly Dictionary<AssociationAttribute, Action<Entity>> _associationUpdateCallbackMap = new Dictionary<AssociationAttribute, Action<Entity>>();
+        private readonly Dictionary<EntityAssociationAttribute, Action<Entity>> _associationUpdateCallbackMap = new();
         private readonly Type _entityType;
         private EntityContainer _entityContainer;
         private EntitySetOperations _supportedOperations;
@@ -305,7 +305,7 @@ namespace OpenRiaServices.Client
         /// <param name="association">AssociationAttribute indicating the association to monitor</param>
         /// <param name="callback">The callback to call</param>
         /// <param name="register">True if the callback is being registered, false if it is being unregistered</param>
-        internal void RegisterAssociationCallback(AssociationAttribute association, Action<Entity> callback, bool register)
+        internal void RegisterAssociationCallback(EntityAssociationAttribute association, Action<Entity> callback, bool register)
         {
             this._associationUpdateCallbackMap.TryGetValue(association, out Action<Entity> del);
             if (register)
@@ -1426,7 +1426,7 @@ namespace OpenRiaServices.Client
                 int countBefore = this.Source.Count;
                 this.Source.Add(entity);
 
-                return this.Source.Count == countBefore + 1 
+                return this.Source.Count == countBefore + 1
                     ? countBefore
                     : ((List<T>)this.Source.List).IndexOf(entity, countBefore);
             }

@@ -112,7 +112,11 @@ namespace Cities
         /// <summary>
         /// Gets or sets the associated <see cref="County"/> entity.
         /// </summary>
-        [Association("County_City", "CountyName,StateName", "Name,StateName", IsForeignKey=true)]
+        [EntityAssociation("County_City", new string[] {
+                "CountyName",
+                "StateName"}, new string[] {
+                "Name",
+                "StateName"}, IsForeignKey=true)]
         public County County
         {
             get
@@ -241,7 +245,13 @@ namespace Cities
         /// <summary>
         /// Gets the collection of associated <see cref="Zip"/> entity instances.
         /// </summary>
-        [Association("City_Zip", "Name, CountyName, StateName", "CityName,  CountyName, StateName")]
+        [EntityAssociation("City_Zip", new string[] {
+                "Name",
+                "CountyName",
+                "StateName"}, new string[] {
+                "CityName",
+                "CountyName",
+                "StateName"})]
         public EntityCollection<Zip> ZipCodes
         {
             get
@@ -1587,7 +1597,13 @@ namespace Cities
         /// <summary>
         /// Gets the collection of associated <see cref="ZipWithInfo"/> entity instances.
         /// </summary>
-        [Association("CityWithInfo_ZipWithInfo", "Name, CountyName, StateName", "CityName,  CountyName, StateName")]
+        [EntityAssociation("CityWithInfo_ZipWithInfo", new string[] {
+                "Name",
+                "CountyName",
+                "StateName"}, new string[] {
+                "CityName",
+                "CountyName",
+                "StateName"})]
         public EntityCollection<ZipWithInfo> ZipCodesWithInfo
         {
             get
@@ -1685,7 +1701,11 @@ namespace Cities
         /// <summary>
         /// Gets the collection of associated <see cref="City"/> entity instances.
         /// </summary>
-        [Association("County_City", "Name,StateName", "CountyName,StateName")]
+        [EntityAssociation("County_City", new string[] {
+                "Name",
+                "StateName"}, new string[] {
+                "CountyName",
+                "StateName"})]
         public EntityCollection<City> Cities
         {
             get
@@ -1730,7 +1750,9 @@ namespace Cities
         /// <summary>
         /// Gets or sets the associated <see cref="State"/> entity.
         /// </summary>
-        [Association("State_County", "StateName", "Name", IsForeignKey=true)]
+        [EntityAssociation("State_County", new string[] {
+                "StateName"}, new string[] {
+                "Name"}, IsForeignKey=true)]
         public State State
         {
             get
@@ -1906,9 +1928,11 @@ namespace Cities
         /// <summary>
         /// Gets the collection of associated <see cref="County"/> entity instances.
         /// </summary>
-        [Association("State_County", "Name", "StateName")]
         [CustomValidation(typeof(CountiesValidator), "AreCountiesValid")]
         [Editable(false)]
+        [EntityAssociation("State_County", new string[] {
+                "Name"}, new string[] {
+                "StateName"})]
         [ReadOnly(true)]
         public EntityCollection<County> Counties
         {
@@ -2117,8 +2141,14 @@ namespace Cities
         /// <summary>
         /// Gets or sets the associated <see cref="City"/> entity.
         /// </summary>
-        [Association("City_Zip", "CityName,  CountyName, StateName", "Name, CountyName, StateName", IsForeignKey=true)]
         [CustomValidation(typeof(CityPropertyValidator), "IsValidCity")]
+        [EntityAssociation("City_Zip", new string[] {
+                "CityName",
+                "CountyName",
+                "StateName"}, new string[] {
+                "Name",
+                "CountyName",
+                "StateName"}, IsForeignKey=true)]
         public City City
         {
             get

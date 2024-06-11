@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Text;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Tools.TextTemplate
@@ -57,6 +59,9 @@ namespace OpenRiaServices.Tools.TextTemplate
             { typeof(EntityActionAttribute), null },
             { typeof(RequiresAuthenticationAttribute), null },
             { typeof(RequiresRoleAttribute), null },
+            // Translate all AssociationAttribute to EntityAssociationAttribute on the client
+            { typeof(AssociationAttribute), new EntityAssociationAttributeBuilder() },
+            //{ typeof(EntityAssociationAttribute), new EntityAssociationAttributeBuilder() },
         };
 
         public static AttributeDeclaration GetAttributeDeclaration(Attribute attribute, ClientCodeGenerator textTemplateClientCodeGenerator, bool forcePropagation)
@@ -296,6 +301,25 @@ namespace OpenRiaServices.Tools.TextTemplate
             if (value.GetType().IsEnum)
             {
                 return CodeGenUtilities.GetTypeName(value.GetType()) + "." + value.ToString();
+            }
+
+            if (value is Array array)
+            {
+                Debug.Assert(isCSharp);
+
+                StringBuilder stringBuilder = new StringBuilder(200);
+
+                stringBuilder.Append($"new ");
+                stringBuilder.Append(CodeGenUtilities.GetTypeName(value.GetType().GetElementType()));
+                stringBuilder.Append("[] {");
+                for (int i=0; i < array.Length; i++)
+                {
+                    if (i > 0)
+                        stringBuilder.Append(", ");
+                    stringBuilder.Append(ConvertValueToCode(array.GetValue(i), isCSharp));
+                }
+                stringBuilder.Append('}');
+                return stringBuilder.ToString();
             }
 
             return value.ToString();

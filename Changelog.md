@@ -1,3 +1,20 @@
+# 5.4.4 / EF Core 3.1.0
+
+### EF Core 3.1.0
+* Initial support for Owned Entities for one-to-one navigation properties (#500)
+  * Owned entities without explicit keys are mapped to OpenRiaServices's [Complex Types]
+  * Owned entities with explicit keys are generated as normal *"Entities"* but are automatically annotated with `[Composition]`
+  * EFCore "Complex Types" introduced in EFCore 8.0 does not have any special handling
+* Add new helper method `AttachAsModified<TEntity>(TEntity entity)` (#506)
+  * It works similar to the existing `AttachAsModified` extension methods on `DbSet` but
+    * is smarter (works with and without original entity)
+    * reduces code that needs to be written and works both with and without "OriginalEntity" (`RoundTripAttribute`)
+* Add package README to `OpenRiaServices.Server.EntityFrameworkCore`
+
+### Code generation
+* Log whole Exceptions in DomainServiceCatalog instead of just message (#502), for better error messages on code generation failure
+* Call "dotnet CodeGenTask.dll" instead of "CodeGenTask.exe" #503
+
 # EF Core 3.0.0
 
 * Target EF Core 8
