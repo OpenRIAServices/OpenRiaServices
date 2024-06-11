@@ -542,9 +542,7 @@ namespace TestDomainServices
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.DisplayAttribute(Description="D_Ref1")]
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", new string[] {
-                "DID_Ref1"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", "DID_Ref1", "ID", IsForeignKey=true)]
         public global::TestDomainServices.D D_Ref1
         {
             get
@@ -587,9 +585,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref2", new string[] {
-                "DID_Ref2"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref2", "DID_Ref2", "ID", IsForeignKey=true)]
         public global::TestDomainServices.D D_Ref2
         {
             get
@@ -803,9 +799,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="C"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", new string[] {
-                "ID"}, new string[] {
-                "DID_Ref1"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", "ID", "DID_Ref1")]
         public global::TestDomainServices.C C
         {
             get
@@ -840,9 +834,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", new string[] {
-                "DSelfRef_ID1"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", "DSelfRef_ID1", "ID", IsForeignKey=true)]
         public global::TestDomainServices.D D1
         {
             get
@@ -885,9 +877,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", new string[] {
-                "DSelfRef_ID2"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", "DSelfRef_ID2", "ID", IsForeignKey=true)]
         public global::TestDomainServices.D D2
         {
             get
@@ -930,9 +920,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", new string[] {
-                "ID"}, new string[] {
-                "DSelfRef_ID2"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", "ID", "DSelfRef_ID2")]
         public global::TestDomainServices.D D2_BackRef
         {
             get
@@ -967,9 +955,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="D"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", new string[] {
-                "ID"}, new string[] {
-                "DSelfRef_ID1"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", "ID", "DSelfRef_ID1")]
         public global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.D> Ds
         {
             get

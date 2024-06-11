@@ -159,9 +159,7 @@ namespace CodeFirstModels
         /// <summary>
         /// Gets the collection of associated <see cref="Product"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", "CategoryID", "CategoryID")]
         public global::OpenRiaServices.Client.EntityCollection<global::CodeFirstModels.Product> Products
         {
             get
@@ -492,9 +490,7 @@ namespace CodeFirstModels
         /// <summary>
         /// Gets the collection of associated <see cref="Order"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", "CustomerID", "CustomerID")]
         public global::OpenRiaServices.Client.EntityCollection<global::CodeFirstModels.Order> Orders
         {
             get
@@ -706,9 +702,7 @@ namespace CodeFirstModels
         /// <summary>
         /// Gets or sets the associated <see cref="Customer"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", "CustomerID", "CustomerID", IsForeignKey=true)]
         public global::CodeFirstModels.Customer Customer
         {
             get
@@ -855,9 +849,7 @@ namespace CodeFirstModels
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", "OrderID", "OrderID")]
         public global::OpenRiaServices.Client.EntityCollection<global::CodeFirstModels.Order_Detail> Order_Details
         {
             get
@@ -1272,9 +1264,7 @@ namespace CodeFirstModels
         /// <summary>
         /// Gets or sets the associated <see cref="Order"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", "OrderID", "OrderID", IsForeignKey=true)]
         public global::CodeFirstModels.Order Order
         {
             get
@@ -1344,9 +1334,7 @@ namespace CodeFirstModels
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", "ProductID", "ProductID", IsForeignKey=true)]
         public global::CodeFirstModels.Product Product
         {
             get
@@ -1572,9 +1560,7 @@ namespace CodeFirstModels
         /// <summary>
         /// Gets or sets the associated <see cref="Category"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", "CategoryID", "CategoryID", IsForeignKey=true)]
         public global::CodeFirstModels.Category Category
         {
             get
@@ -1694,9 +1680,7 @@ namespace CodeFirstModels
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", "ProductID", "ProductID")]
         public global::OpenRiaServices.Client.EntityCollection<global::CodeFirstModels.Order_Detail> Order_Details
         {
             get
@@ -2274,9 +2258,7 @@ namespace CodeFirstModels
         /// Gets the collection of associated <see cref="Territory"/> entity instances.
         /// </summary>
         [global::System.ComponentModel.DataAnnotations.CompositionAttribute()]
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", "RegionID", "RegionID")]
         public global::OpenRiaServices.Client.EntityCollection<global::CodeFirstModels.Territory> Territories
         {
             get
@@ -2357,9 +2339,7 @@ namespace CodeFirstModels
         /// <summary>
         /// Gets or sets the associated <see cref="Region"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", "RegionID", "RegionID", IsForeignKey=true)]
         public global::CodeFirstModels.Region Region
         {
             get

@@ -89,7 +89,7 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="GrandChild"/> entity instances.
         ''' </summary>
         <Composition(),  _
-         EntityAssociation("GrandChild_Child", New String() {"ID"}, New String() {"ParentID"})>  _
+         EntityAssociation("GrandChild_Child", "ID", "ParentID")>  _
         Public ReadOnly Property Children() As EntityCollection(Of GrandChild)
             Get
                 If (Me._children Is Nothing) Then
@@ -145,7 +145,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="Parent"/> entity.
         ''' </summary>
-        <EntityAssociation("Child_Parent", New String() {"ParentID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Child_Parent", "ParentID", "ID", IsForeignKey:=true)>  _
         Public Property Parent() As Parent
             Get
                 If (Me._parent Is Nothing) Then
@@ -365,7 +365,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="CompositionScenarios_Parent"/> entity.
         ''' </summary>
-        <EntityAssociation("Parent_Child", New String() {"ParentID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Parent_Child", "ParentID", "ID", IsForeignKey:=true)>  _
         Public Property Parent() As CompositionScenarios_Parent
             Get
                 If (Me._parent Is Nothing) Then
@@ -649,7 +649,7 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="CompositionScenarios_Child"/> entity instances.
         ''' </summary>
         <Composition(),  _
-         EntityAssociation("Parent_Child", New String() {"ID"}, New String() {"ParentID"})>  _
+         EntityAssociation("Parent_Child", "ID", "ParentID")>  _
         Public ReadOnly Property Children() As EntityCollection(Of CompositionScenarios_Child)
             Get
                 If (Me._children Is Nothing) Then
@@ -991,7 +991,7 @@ Namespace TestDomainServices
         ''' Gets or sets the associated <see cref="GreatGrandChild"/> entity.
         ''' </summary>
         <Composition(),  _
-         EntityAssociation("GreatGrandChild_GrandChild", New String() {"ID"}, New String() {"ParentID"})>  _
+         EntityAssociation("GreatGrandChild_GrandChild", "ID", "ParentID")>  _
         Public Property Child() As GreatGrandChild
             Get
                 If (Me._child Is Nothing) Then
@@ -1062,7 +1062,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="Child"/> entity.
         ''' </summary>
-        <EntityAssociation("GrandChild_Child", New String() {"ParentID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("GrandChild_Child", "ParentID", "ID", IsForeignKey:=true)>  _
         Public Property Parent() As Child
             Get
                 If (Me._parent Is Nothing) Then
@@ -1284,7 +1284,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="GrandChild"/> entity.
         ''' </summary>
-        <EntityAssociation("GreatGrandChild_GrandChild", New String() {"ParentID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("GreatGrandChild_GrandChild", "ParentID", "ID", IsForeignKey:=true)>  _
         Public Property Parent() As GrandChild
             Get
                 If (Me._parent Is Nothing) Then
@@ -1454,7 +1454,7 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="Child"/> entity instances.
         ''' </summary>
         <Composition(),  _
-         EntityAssociation("Child_Parent", New String() {"ID"}, New String() {"ParentID"})>  _
+         EntityAssociation("Child_Parent", "ID", "ParentID")>  _
         Public ReadOnly Property Children() As EntityCollection(Of Child)
             Get
                 If (Me._children Is Nothing) Then
@@ -1631,7 +1631,7 @@ Namespace TestDomainServices
         ''' Gets or sets the associated <see cref="SelfReferencingComposition"/> entity.
         ''' </summary>
         <Composition(),  _
-         EntityAssociation("Ref_Assoc", New String() {"ID"}, New String() {"ParentID"})>  _
+         EntityAssociation("Ref_Assoc", "ID", "ParentID")>  _
         Public Property Child() As SelfReferencingComposition
             Get
                 If (Me._child Is Nothing) Then
@@ -1682,7 +1682,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="SelfReferencingComposition"/> entity.
         ''' </summary>
-        <EntityAssociation("Ref_Assoc", New String() {"ParentID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Ref_Assoc", "ParentID", "ID", IsForeignKey:=true)>  _
         Public Property Parent() As SelfReferencingComposition
             Get
                 If (Me._parent Is Nothing) Then
@@ -1824,7 +1824,7 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="SelfReferencingComposition_OneToMany"/> entity instances.
         ''' </summary>
         <Composition(),  _
-         EntityAssociation("SelfReferencingComposition_OneToMany", New String() {"ID"}, New String() {"ParentID"})>  _
+         EntityAssociation("SelfReferencingComposition_OneToMany", "ID", "ParentID")>  _
         Public ReadOnly Property Children() As EntityCollection(Of SelfReferencingComposition_OneToMany)
             Get
                 If (Me._children Is Nothing) Then
@@ -1860,7 +1860,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="SelfReferencingComposition_OneToMany"/> entity.
         ''' </summary>
-        <EntityAssociation("SelfReferencingComposition_OneToMany", New String() {"ParentID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("SelfReferencingComposition_OneToMany", "ParentID", "ID", IsForeignKey:=true)>  _
         Public Property Parent() As SelfReferencingComposition_OneToMany
             Get
                 If (Me._parent Is Nothing) Then

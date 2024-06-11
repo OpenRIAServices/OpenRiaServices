@@ -528,7 +528,7 @@ Namespace TestDomainServices
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
         <Display(Description:="D_Ref1"),  _
-         EntityAssociation("C_D_Ref1", New String() {"DID_Ref1"}, New String() {"ID"}, IsForeignKey:=true)>  _
+         EntityAssociation("C_D_Ref1", "DID_Ref1", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref1() As D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
@@ -561,7 +561,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("C_D_Ref2", New String() {"DID_Ref2"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("C_D_Ref2", "DID_Ref2", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref2() As D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
@@ -764,7 +764,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="C"/> entity.
         ''' </summary>
-        <EntityAssociation("C_D_Ref1", New String() {"ID"}, New String() {"DID_Ref1"})>  _
+        <EntityAssociation("C_D_Ref1", "ID", "DID_Ref1")>  _
         Public Property C() As C
             Get
                 If (Me._c Is Nothing) Then
@@ -792,7 +792,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("D_D", New String() {"DSelfRef_ID1"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("D_D", "DSelfRef_ID1", "ID", IsForeignKey:=true)>  _
         Public Property D1() As D
             Get
                 If (Me._d1 Is Nothing) Then
@@ -825,7 +825,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("D_D2", New String() {"DSelfRef_ID2"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("D_D2", "DSelfRef_ID2", "ID", IsForeignKey:=true)>  _
         Public Property D2() As D
             Get
                 If (Me._d2 Is Nothing) Then
@@ -858,7 +858,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("D_D2", New String() {"ID"}, New String() {"DSelfRef_ID2"})>  _
+        <EntityAssociation("D_D2", "ID", "DSelfRef_ID2")>  _
         Public Property D2_BackRef() As D
             Get
                 If (Me._d2_BackRef Is Nothing) Then
@@ -886,7 +886,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="D"/> entity instances.
         ''' </summary>
-        <EntityAssociation("D_D", New String() {"ID"}, New String() {"DSelfRef_ID1"})>  _
+        <EntityAssociation("D_D", "ID", "DSelfRef_ID1")>  _
         Public ReadOnly Property Ds() As EntityCollection(Of D)
             Get
                 If (Me._ds Is Nothing) Then

@@ -336,9 +336,7 @@ namespace TestDomainServices
         // 
         // - An exception occurred generating the 'ThrowingEntityAssociationAttributeProperty' property on attribute of type 'TestDomainServices.ThrowingEntityAssociationAttribute'.
         // 
-        [EntityAssociation("Association", new string[] {
-                "ThrowingProperty"}, new string[] {
-                "NonThrowingProperty"}, IsForeignKey=true)]
+        [EntityAssociation("Association", "ThrowingProperty", "NonThrowingProperty", IsForeignKey=true)]
         public AttributeThrowingEntity ThrowingAssociation
         {
             get
@@ -376,9 +374,7 @@ namespace TestDomainServices
         // 
         // - An exception occurred generating the 'ThrowingEntityAssociationCollectionAttributeProperty' property on attribute of type 'TestDomainServices.ThrowingEntityAssociationCollectionAttribute'.
         // 
-        [EntityAssociation("AssociationCollection", new string[] {
-                "NonThrowingProperty"}, new string[] {
-                "ThrowingProperty"})]
+        [EntityAssociation("AssociationCollection", "NonThrowingProperty", "ThrowingProperty")]
         public EntityCollection<AttributeThrowingEntity> ThrowingAssociationCollection
         {
             get

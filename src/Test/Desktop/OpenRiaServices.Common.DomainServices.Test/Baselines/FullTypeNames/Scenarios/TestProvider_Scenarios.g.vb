@@ -515,7 +515,7 @@ Namespace TestDomainServices
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.DisplayAttribute(Description:="D_Ref1"),  _
-         Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", New String() {"DID_Ref1"}, New String() {"ID"}, IsForeignKey:=true)>  _
+         Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", "DID_Ref1", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref1() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
@@ -548,7 +548,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref2", New String() {"DID_Ref2"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref2", "DID_Ref2", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref2() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
@@ -717,7 +717,7 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="CartItem"/> entity instances.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.EditableAttribute(false),  _
-         Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("CartItem_Cart", New String() {"CartId"}, New String() {"CartItemId"}),  _
+         Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("CartItem_Cart", "CartId", "CartItemId"),  _
          Global.System.ComponentModel.ReadOnlyAttribute(true)>  _
         Public ReadOnly Property Items() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.CartItem)
             Get
@@ -799,7 +799,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="Cart"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("CartItem_Cart", New String() {"CartItemId"}, New String() {"CartId"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("CartItem_Cart", "CartItemId", "CartId", IsForeignKey:=true)>  _
         Public Property Cart() As Global.TestDomainServices.Cart
             Get
                 If (Me._cart Is Nothing) Then
@@ -1124,7 +1124,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="C"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", New String() {"ID"}, New String() {"DID_Ref1"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", "ID", "DID_Ref1")>  _
         Public Property C() As Global.TestDomainServices.C
             Get
                 If (Me._c Is Nothing) Then
@@ -1152,7 +1152,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", New String() {"DSelfRef_ID1"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", "DSelfRef_ID1", "ID", IsForeignKey:=true)>  _
         Public Property D1() As Global.TestDomainServices.D
             Get
                 If (Me._d1 Is Nothing) Then
@@ -1185,7 +1185,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", New String() {"DSelfRef_ID2"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", "DSelfRef_ID2", "ID", IsForeignKey:=true)>  _
         Public Property D2() As Global.TestDomainServices.D
             Get
                 If (Me._d2 Is Nothing) Then
@@ -1218,7 +1218,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", New String() {"ID"}, New String() {"DSelfRef_ID2"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", "ID", "DSelfRef_ID2")>  _
         Public Property D2_BackRef() As Global.TestDomainServices.D
             Get
                 If (Me._d2_BackRef Is Nothing) Then
@@ -1246,7 +1246,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="D"/> entity instances.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", New String() {"ID"}, New String() {"DSelfRef_ID1"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", "ID", "DSelfRef_ID1")>  _
         Public ReadOnly Property Ds() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.D)
             Get
                 If (Me._ds Is Nothing) Then
@@ -5161,7 +5161,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="NullableFKParent"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Parent_Child", New String() {"ParentID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Parent_Child", "ParentID", "ID", IsForeignKey:=true)>  _
         Public Property Parent() As Global.TestDomainServices.NullableFKParent
             Get
                 If (Me._parent Is Nothing) Then
@@ -5194,7 +5194,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="NullableFKParent"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Parent_Child_Singleton", New String() {"ParentID_Singleton"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Parent_Child_Singleton", "ParentID_Singleton", "ID", IsForeignKey:=true)>  _
         Public Property Parent2() As Global.TestDomainServices.NullableFKParent
             Get
                 If (Me._parent2 Is Nothing) Then
@@ -5329,7 +5329,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="NullableFKChild"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Parent_Child_Singleton", New String() {"ID"}, New String() {"ParentID_Singleton"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Parent_Child_Singleton", "ID", "ParentID_Singleton")>  _
         Public Property Child() As Global.TestDomainServices.NullableFKChild
             Get
                 If (Me._child Is Nothing) Then
@@ -5357,7 +5357,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="NullableFKChild"/> entity instances.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Parent_Child", New String() {"ID"}, New String() {"ParentID"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Parent_Child", "ID", "ParentID")>  _
         Public ReadOnly Property Children() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.NullableFKChild)
             Get
                 If (Me._children Is Nothing) Then
@@ -5801,7 +5801,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="RoundtripOriginal_TestEntity"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("RTO_RTO2", New String() {"ID"}, New String() {"ID"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("RTO_RTO2", "ID", "ID")>  _
         Public Property AssocProp() As Global.TestDomainServices.RoundtripOriginal_TestEntity
             Get
                 If (Me._assocProp Is Nothing) Then
@@ -6166,7 +6166,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="TestCycles"/> entity.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("TestCycle_Parent", New String() {"ParentName"}, New String() {"Name"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("TestCycle_Parent", "ParentName", "Name", IsForeignKey:=true)>  _
         Public Property IncludedT() As Global.TestDomainServices.TestCycles
             Get
                 If (Me._includedT Is Nothing) Then
@@ -6199,7 +6199,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="TestCycles"/> entity instances.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("TestCycle_Parent", New String() {"Name"}, New String() {"ParentName"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("TestCycle_Parent", "Name", "ParentName")>  _
         Public ReadOnly Property IncludedTs() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.TestCycles)
             Get
                 If (Me._includedTs Is Nothing) Then

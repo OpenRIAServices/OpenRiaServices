@@ -154,7 +154,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="AI_MasterDerived"/> entity.
         ''' </summary>
-        <EntityAssociation("Master_to_Derived1_Many", New String() {"MasterID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Master_to_Derived1_Many", "MasterID", "ID", IsForeignKey:=true)>  _
         Public Property Master() As AI_MasterDerived
             Get
                 If (Me._master Is Nothing) Then
@@ -221,7 +221,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="AI_MasterDerived"/> entity.
         ''' </summary>
-        <EntityAssociation("Master_to_Derived2_Many", New String() {"MasterID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Master_to_Derived2_Many", "MasterID", "ID", IsForeignKey:=true)>  _
         Public Property Master() As AI_MasterDerived
             Get
                 If (Me._master Is Nothing) Then
@@ -288,7 +288,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="AI_MasterDerived"/> entity.
         ''' </summary>
-        <EntityAssociation("Master_to_Derived3_One", New String() {"MasterID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Master_to_Derived3_One", "MasterID", "ID", IsForeignKey:=true)>  _
         Public Property Master() As AI_MasterDerived
             Get
                 If (Me._master Is Nothing) Then
@@ -355,7 +355,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="AI_MasterDerived"/> entity.
         ''' </summary>
-        <EntityAssociation("Master_to_Derived4_One", New String() {"MasterID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Master_to_Derived4_One", "MasterID", "ID", IsForeignKey:=true)>  _
         Public Property Master() As AI_MasterDerived
             Get
                 If (Me._master Is Nothing) Then
@@ -494,7 +494,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="AI_DetailDerived1"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Master_to_Derived1_Many", New String() {"ID"}, New String() {"MasterID"})>  _
+        <EntityAssociation("Master_to_Derived1_Many", "ID", "MasterID")>  _
         Public ReadOnly Property DetailDerived1s() As EntityCollection(Of AI_DetailDerived1)
             Get
                 If (Me._detailDerived1s Is Nothing) Then
@@ -507,7 +507,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="AI_DetailDerived2"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Master_to_Derived2_Many", New String() {"ID"}, New String() {"MasterID"})>  _
+        <EntityAssociation("Master_to_Derived2_Many", "ID", "MasterID")>  _
         Public ReadOnly Property DetailDerived2s() As EntityCollection(Of AI_DetailDerived2)
             Get
                 If (Me._detailDerived2s Is Nothing) Then
@@ -520,7 +520,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="AI_DetailDerived3"/> entity.
         ''' </summary>
-        <EntityAssociation("Master_to_Derived3_One", New String() {"ID"}, New String() {"MasterID"})>  _
+        <EntityAssociation("Master_to_Derived3_One", "ID", "MasterID")>  _
         Public Property DetailDerived3() As AI_DetailDerived3
             Get
                 If (Me._detailDerived3 Is Nothing) Then
@@ -548,7 +548,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="AI_DetailDerived4"/> entity.
         ''' </summary>
-        <EntityAssociation("Master_to_Derived4_One", New String() {"ID"}, New String() {"MasterID"})>  _
+        <EntityAssociation("Master_to_Derived4_One", "ID", "MasterID")>  _
         Public Property DetailDerived4() As AI_DetailDerived4
             Get
                 If (Me._detailDerived4 Is Nothing) Then
@@ -954,7 +954,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="CI_Parent"/> entity.
         ''' </summary>
-        <EntityAssociation("Child_Parent", New String() {"ParentID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Child_Parent", "ParentID", "ID", IsForeignKey:=true)>  _
         Public Property Parent() As CI_Parent
             Get
                 If (Me._parent Is Nothing) Then
@@ -1125,7 +1125,7 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="CI_Child"/> entity instances.
         ''' </summary>
         <Composition(),  _
-         EntityAssociation("Child_Parent", New String() {"ID"}, New String() {"ParentID"})>  _
+         EntityAssociation("Child_Parent", "ID", "ParentID")>  _
         Public ReadOnly Property Children() As EntityCollection(Of CI_Child)
             Get
                 If (Me._children Is Nothing) Then

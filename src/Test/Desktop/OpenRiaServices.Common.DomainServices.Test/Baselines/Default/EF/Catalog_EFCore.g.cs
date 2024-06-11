@@ -291,9 +291,7 @@ namespace EFCoreModels.AdventureWorks
         /// <summary>
         /// Gets or sets the associated <see cref="Employee"/> entity.
         /// </summary>
-        [EntityAssociation("FK_Employee_Employee_ManagerID", new string[] {
-                "ManagerID"}, new string[] {
-                "EmployeeID"}, IsForeignKey=true)]
+        [EntityAssociation("FK_Employee_Employee_ManagerID", "ManagerID", "EmployeeID", IsForeignKey=true)]
         public Employee Manager
         {
             get
@@ -1185,9 +1183,7 @@ namespace EFCoreModels.AdventureWorks
         /// <summary>
         /// Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         /// </summary>
-        [EntityAssociation("FK_PurchaseOrderDetail_Product_ProductID", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"})]
+        [EntityAssociation("FK_PurchaseOrderDetail_Product_ProductID", "ProductID", "ProductID")]
         public EntityCollection<PurchaseOrderDetail> PurchaseOrderDetails
         {
             get
@@ -1649,9 +1645,7 @@ namespace EFCoreModels.AdventureWorks
         /// <summary>
         /// Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         /// </summary>
-        [EntityAssociation("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID", new string[] {
-                "PurchaseOrderID"}, new string[] {
-                "PurchaseOrderID"})]
+        [EntityAssociation("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID", "PurchaseOrderID", "PurchaseOrderID")]
         public EntityCollection<PurchaseOrderDetail> PurchaseOrderDetails
         {
             get
@@ -2080,9 +2074,7 @@ namespace EFCoreModels.AdventureWorks
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [EntityAssociation("FK_PurchaseOrderDetail_Product_ProductID", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"}, IsForeignKey=true)]
+        [EntityAssociation("FK_PurchaseOrderDetail_Product_ProductID", "ProductID", "ProductID", IsForeignKey=true)]
         public Product Product
         {
             get
@@ -2150,9 +2142,7 @@ namespace EFCoreModels.AdventureWorks
         /// <summary>
         /// Gets or sets the associated <see cref="PurchaseOrder"/> entity.
         /// </summary>
-        [EntityAssociation("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID", new string[] {
-                "PurchaseOrderID"}, new string[] {
-                "PurchaseOrderID"}, IsForeignKey=true)]
+        [EntityAssociation("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID", "PurchaseOrderID", "PurchaseOrderID", IsForeignKey=true)]
         public PurchaseOrder PurchaseOrder
         {
             get

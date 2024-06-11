@@ -557,9 +557,7 @@ namespace TestDomainServices
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
         [Display(Description="D_Ref1")]
-        [EntityAssociation("C_D_Ref1", new string[] {
-                "DID_Ref1"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("C_D_Ref1", "DID_Ref1", "ID", IsForeignKey=true)]
         public D D_Ref1
         {
             get
@@ -602,9 +600,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
-        [EntityAssociation("C_D_Ref2", new string[] {
-                "DID_Ref2"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("C_D_Ref2", "DID_Ref2", "ID", IsForeignKey=true)]
         public D D_Ref2
         {
             get
@@ -793,9 +789,7 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="CartItem"/> entity instances.
         /// </summary>
         [Editable(false)]
-        [EntityAssociation("CartItem_Cart", new string[] {
-                "CartId"}, new string[] {
-                "CartItemId"})]
+        [EntityAssociation("CartItem_Cart", "CartId", "CartItemId")]
         [ReadOnly(true)]
         public EntityCollection<CartItem> Items
         {
@@ -877,9 +871,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="Cart"/> entity.
         /// </summary>
-        [EntityAssociation("CartItem_Cart", new string[] {
-                "CartItemId"}, new string[] {
-                "CartId"}, IsForeignKey=true)]
+        [EntityAssociation("CartItem_Cart", "CartItemId", "CartId", IsForeignKey=true)]
         public Cart Cart
         {
             get
@@ -1224,9 +1216,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="C"/> entity.
         /// </summary>
-        [EntityAssociation("C_D_Ref1", new string[] {
-                "ID"}, new string[] {
-                "DID_Ref1"})]
+        [EntityAssociation("C_D_Ref1", "ID", "DID_Ref1")]
         public C C
         {
             get
@@ -1261,9 +1251,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
-        [EntityAssociation("D_D", new string[] {
-                "DSelfRef_ID1"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("D_D", "DSelfRef_ID1", "ID", IsForeignKey=true)]
         public D D1
         {
             get
@@ -1306,9 +1294,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
-        [EntityAssociation("D_D2", new string[] {
-                "DSelfRef_ID2"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("D_D2", "DSelfRef_ID2", "ID", IsForeignKey=true)]
         public D D2
         {
             get
@@ -1351,9 +1337,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="D"/> entity.
         /// </summary>
-        [EntityAssociation("D_D2", new string[] {
-                "ID"}, new string[] {
-                "DSelfRef_ID2"})]
+        [EntityAssociation("D_D2", "ID", "DSelfRef_ID2")]
         public D D2_BackRef
         {
             get
@@ -1388,9 +1372,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="D"/> entity instances.
         /// </summary>
-        [EntityAssociation("D_D", new string[] {
-                "ID"}, new string[] {
-                "DSelfRef_ID1"})]
+        [EntityAssociation("D_D", "ID", "DSelfRef_ID1")]
         public EntityCollection<D> Ds
         {
             get
@@ -5517,9 +5499,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="NullableFKParent"/> entity.
         /// </summary>
-        [EntityAssociation("Parent_Child", new string[] {
-                "ParentID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Parent_Child", "ParentID", "ID", IsForeignKey=true)]
         public NullableFKParent Parent
         {
             get
@@ -5562,9 +5542,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="NullableFKParent"/> entity.
         /// </summary>
-        [EntityAssociation("Parent_Child_Singleton", new string[] {
-                "ParentID_Singleton"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Parent_Child_Singleton", "ParentID_Singleton", "ID", IsForeignKey=true)]
         public NullableFKParent Parent2
         {
             get
@@ -5715,9 +5693,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="NullableFKChild"/> entity.
         /// </summary>
-        [EntityAssociation("Parent_Child_Singleton", new string[] {
-                "ID"}, new string[] {
-                "ParentID_Singleton"})]
+        [EntityAssociation("Parent_Child_Singleton", "ID", "ParentID_Singleton")]
         public NullableFKChild Child
         {
             get
@@ -5752,9 +5728,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="NullableFKChild"/> entity instances.
         /// </summary>
-        [EntityAssociation("Parent_Child", new string[] {
-                "ID"}, new string[] {
-                "ParentID"})]
+        [EntityAssociation("Parent_Child", "ID", "ParentID")]
         public EntityCollection<NullableFKChild> Children
         {
             get
@@ -6220,9 +6194,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="RoundtripOriginal_TestEntity"/> entity.
         /// </summary>
-        [EntityAssociation("RTO_RTO2", new string[] {
-                "ID"}, new string[] {
-                "ID"})]
+        [EntityAssociation("RTO_RTO2", "ID", "ID")]
         public RoundtripOriginal_TestEntity AssocProp
         {
             get
@@ -6607,9 +6579,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="TestCycles"/> entity.
         /// </summary>
-        [EntityAssociation("TestCycle_Parent", new string[] {
-                "ParentName"}, new string[] {
-                "Name"}, IsForeignKey=true)]
+        [EntityAssociation("TestCycle_Parent", "ParentName", "Name", IsForeignKey=true)]
         public TestCycles IncludedT
         {
             get
@@ -6652,9 +6622,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="TestCycles"/> entity instances.
         /// </summary>
-        [EntityAssociation("TestCycle_Parent", new string[] {
-                "Name"}, new string[] {
-                "ParentName"})]
+        [EntityAssociation("TestCycle_Parent", "Name", "ParentName")]
         public EntityCollection<TestCycles> IncludedTs
         {
             get

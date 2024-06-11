@@ -163,9 +163,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="InheritanceT1"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("InheritanceBase_InheritanceT1", new string[] {
-                "T1_ID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("InheritanceBase_InheritanceT1", "T1_ID", "ID", IsForeignKey=true)]
         public global::TestDomainServices.InheritanceT1 T1
         {
             get
@@ -224,9 +222,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="InheritanceT1"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("InheritanceT1_InheritanceBase", new string[] {
-                "ID"}, new string[] {
-                "InheritanceBase_ID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("InheritanceT1_InheritanceBase", "ID", "InheritanceBase_ID")]
         public global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> T1s
         {
             get
@@ -411,9 +407,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="InheritanceT1"/> entity.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("InheritanceBase_InheritanceT1", new string[] {
-                "T1_ID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("InheritanceBase_InheritanceT1", "T1_ID", "ID", IsForeignKey=true)]
         public global::TestDomainServices.InheritanceT1 T1
         {
             get
@@ -472,9 +466,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="InheritanceT1"/> entity instances.
         /// </summary>
-        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("InheritanceT1_InheritanceBase", new string[] {
-                "ID"}, new string[] {
-                "InheritanceBase_ID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("InheritanceT1_InheritanceBase", "ID", "InheritanceBase_ID")]
         public global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.InheritanceT1> T1s
         {
             get
