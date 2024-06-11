@@ -97,11 +97,7 @@ namespace OpenRiaServices.Tools
         /// See "Server.EndpointRoutePattern" determining how default Uri's for accessing DomainServices are generated.
         /// </summary>
         public EndpointRoutePattern DefaultEndpointRoutePattern { get; set; }
-#if NET
-            = EndpointRoutePattern.FullName;
-#else
             = EndpointRoutePattern.WCF;
-#endif
 
     }
 }

@@ -65,7 +65,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             EndpointRoutePattern pattern =
                 type.Assembly.GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern
                 ?? Assembly.GetEntryAssembly().GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern
-                ?? EndpointRoutePattern.FullName;
+                ?? EndpointRoutePattern.WCF;
 
             return pattern switch
             {
