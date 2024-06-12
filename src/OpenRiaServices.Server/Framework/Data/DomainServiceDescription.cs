@@ -10,6 +10,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using OpenRiaServices.Server.Authentication;
 
 namespace OpenRiaServices.Server
 {
@@ -2073,6 +2074,14 @@ namespace OpenRiaServices.Server
                 }
             }
             return this._rootEntityTypes;
+        }
+
+        public bool IsAuthenticationService() => TryGetAuthenticationServiceType(out var _);
+
+        public bool TryGetAuthenticationServiceType(out Type genericType)
+        {
+            return typeof(IAuthentication<>).DefinitionIsAssignableFrom(DomainServiceType, out genericType)
+                || typeof(IAuthenticationAsync<>).DefinitionIsAssignableFrom(DomainServiceType, out genericType);
         }
     }
 }
