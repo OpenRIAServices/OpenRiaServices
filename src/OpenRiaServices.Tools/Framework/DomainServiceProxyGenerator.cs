@@ -354,13 +354,11 @@ namespace OpenRiaServices.Tools
         private string GetDomainServiceUri()
         {
             Type type = _domainServiceDescription.DomainServiceType;
-#if NET
+
             // Lookup DomainServiceEndpointRoutePatternAttribute first in same assembly as DomainService
-            // Then in the entry point assembly
-            // - Fallback
-            EndpointRoutePattern routePattern = type.Assembly.GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern is { } endpointRoutePattern
-                ? (EndpointRoutePattern)(int)(endpointRoutePattern)
-                : base.ClientProxyGenerator.ClientProxyCodeGenerationOptions.DefaultEndpointRoutePattern;
+            // Otherwise fallback to default
+            EndpointRoutePattern routePattern = SharedCodeGenUtilities.TryGetRoutePatternFromAssembly(type.Assembly)
+                ??  base.ClientProxyGenerator.ClientProxyCodeGenerationOptions.DefaultEndpointRoutePattern;
 
             return routePattern switch
             {
@@ -369,9 +367,6 @@ namespace OpenRiaServices.Tools
                 EndpointRoutePattern.FullName => type.FullName.Replace('.', '-'),
                 _ => throw new NotImplementedException(),
             };
-#else
-            return type.FullName.Replace('.', '-') + ".svc";
-#endif
         }
 
         private void GenerateConstructors(CodeTypeDeclaration proxyClass, CodeTypeDeclaration contractInterface, EnableClientAccessAttribute enableClientAccessAttribute, CodeMethodInvokeExpression onCreatedExpression)

@@ -82,15 +82,12 @@ namespace OpenRiaServices.Tools
                 {
                     CodeGenerationHost host = new CodeGenerationHost(loggingService, sharedCodeService);
 
-#if NET
                     // If the server assembly has a DomainServiceEndpointRoutePatternAttribute, we use it to set the default EndpointRoutePattern
                     Assembly linkedServerAssembly = AssemblyUtilities.LoadAssembly(parameters.ServerAssemblies.First() + ".dll", loggingService);
-                    if (linkedServerAssembly?.GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>() is { } routeAttribute)
+                    if (SharedCodeGenUtilities.TryGetRoutePatternFromAssembly(linkedServerAssembly) is { } pattern)
                     {
-                        options.DefaultEndpointRoutePattern = (EndpointRoutePattern)(int)routeAttribute.EndpointRoutePattern;
+                        options.DefaultEndpointRoutePattern = pattern;
                     }
-#endif
-
                     return this.GenerateCode(host, options, parameters.ServerAssemblies, codeGeneratorName);
                 }
             }

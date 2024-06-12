@@ -10,6 +10,7 @@
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\SharedCodeGenUtilities.cs" Link="Utilities\SharedCodeGenUtilities.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeBuilderException.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeBuilderException.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\AttributeDeclaration.cs" Link="CSharpGenerators\AttributeGenerationHelpers\AttributeDeclaration.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\CustomValidationCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\CustomValidationCustomAttributeBuilder.cs" />
