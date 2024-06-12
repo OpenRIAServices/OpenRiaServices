@@ -1628,7 +1628,7 @@ Namespace Cities
         ''' <summary>
         ''' Gets or sets the associated <see cref="State"/> entity.
         ''' </summary>
-        <EntityAssociation("State_County", New String() {"StateName"}, New String() {"Name"}, IsForeignKey:=true)>  _
+        <EntityAssociation("State_County", "StateName", "Name", IsForeignKey:=true)>  _
         Public Property State() As State
             Get
                 If (Me._state Is Nothing) Then
@@ -1793,7 +1793,7 @@ Namespace Cities
         ''' </summary>
         <CustomValidation(GetType(CountiesValidator), "AreCountiesValid"),  _
          Editable(false),  _
-         EntityAssociation("State_County", New String() {"Name"}, New String() {"StateName"}),  _
+         EntityAssociation("State_County", "Name", "StateName"),  _
          [ReadOnly](true)>  _
         Public ReadOnly Property Counties() As EntityCollection(Of County)
             Get

@@ -1750,9 +1750,7 @@ namespace Cities
         /// <summary>
         /// Gets or sets the associated <see cref="State"/> entity.
         /// </summary>
-        [EntityAssociation("State_County", new string[] {
-                "StateName"}, new string[] {
-                "Name"}, IsForeignKey=true)]
+        [EntityAssociation("State_County", "StateName", "Name", IsForeignKey=true)]
         public State State
         {
             get
@@ -1930,9 +1928,7 @@ namespace Cities
         /// </summary>
         [CustomValidation(typeof(CountiesValidator), "AreCountiesValid")]
         [Editable(false)]
-        [EntityAssociation("State_County", new string[] {
-                "Name"}, new string[] {
-                "StateName"})]
+        [EntityAssociation("State_County", "Name", "StateName")]
         [ReadOnly(true)]
         public EntityCollection<County> Counties
         {

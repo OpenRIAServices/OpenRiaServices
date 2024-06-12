@@ -24,7 +24,6 @@ static class Program
         var clientRootNamespaceOption = new Option<string>("--clientRootNamespace");
         var serverRootNamespaceOption = new Option<string>("--serverRootNamespace");
         var isApplicationContextGenerationEnabledOption = new Option<bool>("--isApplicationContextGenerationEnabled");
-        var clientProjectTargetPlatformsOption = new Option<TargetPlatform>("--clientProjectTargetPlatform");
         var useFullTypeNamesOption = new Option<bool>("--useFullTypeNames");
 
         var sharedSourceFilesOption = new Option<IEnumerable<string>>("--sharedSourceFiles") { AllowMultipleArgumentsPerToken = true };
@@ -51,7 +50,6 @@ static class Program
             clientRootNamespaceOption,
             serverRootNamespaceOption,
             isApplicationContextGenerationEnabledOption,
-            clientProjectTargetPlatformsOption,
             useFullTypeNamesOption,
             sharedSourceFilesOption,
             symbolSearchPathsOption,
@@ -69,7 +67,7 @@ static class Program
             => success = RunCodeGenForNet6(clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, pipeName),
             new ClientCodeGenerationOptionsBinder(
                 languageOption, clientFrameworkOption, serverProjectPathOption, clientProjectPathOption, clientRootNamespaceOption, serverRootNamespaceOption,
-                isApplicationContextGenerationEnabledOption, clientProjectTargetPlatformsOption, useFullTypeNamesOption),
+                isApplicationContextGenerationEnabledOption, useFullTypeNamesOption),
             new SharedCodeServiceParametersBinder(sharedSourceFilesOption, symbolSearchPathsOption, serverAssembliesOption, clientAssembliesOption, clientAssemblyPathsNormalizedOption),
             codeGeneratorName,
             generatedFileName,

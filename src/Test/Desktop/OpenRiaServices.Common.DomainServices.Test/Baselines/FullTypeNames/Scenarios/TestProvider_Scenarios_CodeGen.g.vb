@@ -95,7 +95,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="B"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("A_B", New String() {"BID1", "BID2"}, New String() {"ID1", "ID2"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("A_B", New String() {"BID1", "BID2"}, New String() {"ID1", "ID2"}, IsForeignKey:=true)>  _
         Public Property B() As Global.TestDomainServices.B
             Get
                 If (Me._b Is Nothing) Then
@@ -338,8 +338,8 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="C"/> entity instances.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("B_C", New String() {"ID1", "ID2"}, New String() {"BID1", "BID2"}),  _
-         Global.System.ComponentModel.DataAnnotations.DisplayAttribute(Description:="Cs")>  _
+        <Global.System.ComponentModel.DataAnnotations.DisplayAttribute(Description:="Cs"),  _
+         Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("B_C", New String() {"ID1", "ID2"}, New String() {"BID1", "BID2"})>  _
         Public ReadOnly Property Cs() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.C)
             Get
                 If (Me._cs Is Nothing) Then
@@ -514,8 +514,8 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("C_D_Ref1", New String() {"DID_Ref1"}, New String() {"ID"}, IsForeignKey:=true),  _
-         Global.System.ComponentModel.DataAnnotations.DisplayAttribute(Description:="D_Ref1")>  _
+        <Global.System.ComponentModel.DataAnnotations.DisplayAttribute(Description:="D_Ref1"),  _
+         Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", "DID_Ref1", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref1() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
@@ -548,7 +548,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("C_D_Ref2", New String() {"DID_Ref2"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref2", "DID_Ref2", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref2() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
@@ -751,7 +751,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="C"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("C_D_Ref1", New String() {"ID"}, New String() {"DID_Ref1"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("C_D_Ref1", "ID", "DID_Ref1")>  _
         Public Property C() As Global.TestDomainServices.C
             Get
                 If (Me._c Is Nothing) Then
@@ -779,7 +779,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("D_D", New String() {"DSelfRef_ID1"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", "DSelfRef_ID1", "ID", IsForeignKey:=true)>  _
         Public Property D1() As Global.TestDomainServices.D
             Get
                 If (Me._d1 Is Nothing) Then
@@ -812,7 +812,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("D_D2", New String() {"DSelfRef_ID2"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", "DSelfRef_ID2", "ID", IsForeignKey:=true)>  _
         Public Property D2() As Global.TestDomainServices.D
             Get
                 If (Me._d2 Is Nothing) Then
@@ -845,7 +845,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("D_D2", New String() {"ID"}, New String() {"DSelfRef_ID2"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D2", "ID", "DSelfRef_ID2")>  _
         Public Property D2_BackRef() As Global.TestDomainServices.D
             Get
                 If (Me._d2_BackRef Is Nothing) Then
@@ -873,7 +873,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="D"/> entity instances.
         ''' </summary>
-        <Global.OpenRiaServices.EntityAssociationAttribute("D_D", New String() {"ID"}, New String() {"DSelfRef_ID1"})>  _
+        <Global.System.ComponentModel.DataAnnotations.EntityAssociationAttribute("D_D", "ID", "DSelfRef_ID1")>  _
         Public ReadOnly Property Ds() As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.D)
             Get
                 If (Me._ds Is Nothing) Then

@@ -153,7 +153,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="City"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Customer_PreviousResidences", New String() {"StateName"}, New String() {"StateName"}),  _
+        <EntityAssociation("Customer_PreviousResidences", "StateName", "StateName"),  _
          ExternalReference()>  _
         Public ReadOnly Property PreviousResidences() As EntityCollection(Of Global.Cities.City)
             Get
@@ -480,7 +480,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="MockCustomer"/> entity.
         ''' </summary>
-        <EntityAssociation("R_C", New String() {"CustomerId"}, New String() {"CustomerId"})>  _
+        <EntityAssociation("R_C", "CustomerId", "CustomerId")>  _
         Public Property Customer() As MockCustomer
             Get
                 If (Me._customer Is Nothing) Then

@@ -74,9 +74,7 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="GrandChild"/> entity instances.
         /// </summary>
         [Composition()]
-        [EntityAssociation("GrandChild_Child", new string[] {
-                "ID"}, new string[] {
-                "ParentID"})]
+        [EntityAssociation("GrandChild_Child", "ID", "ParentID")]
         public EntityCollection<GrandChild> Children
         {
             get
@@ -142,9 +140,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="Parent"/> entity.
         /// </summary>
-        [EntityAssociation("Child_Parent", new string[] {
-                "ParentID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Child_Parent", "ParentID", "ID", IsForeignKey=true)]
         public Parent Parent
         {
             get
@@ -391,9 +387,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="CompositionScenarios_Parent"/> entity.
         /// </summary>
-        [EntityAssociation("Parent_Child", new string[] {
-                "ParentID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Parent_Child", "ParentID", "ID", IsForeignKey=true)]
         public CompositionScenarios_Parent Parent
         {
             get
@@ -702,9 +696,7 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="CompositionScenarios_Child"/> entity instances.
         /// </summary>
         [Composition()]
-        [EntityAssociation("Parent_Child", new string[] {
-                "ID"}, new string[] {
-                "ParentID"})]
+        [EntityAssociation("Parent_Child", "ID", "ParentID")]
         public EntityCollection<CompositionScenarios_Child> Children
         {
             get
@@ -1059,9 +1051,7 @@ namespace TestDomainServices
         /// Gets or sets the associated <see cref="GreatGrandChild"/> entity.
         /// </summary>
         [Composition()]
-        [EntityAssociation("GreatGrandChild_GrandChild", new string[] {
-                "ID"}, new string[] {
-                "ParentID"})]
+        [EntityAssociation("GreatGrandChild_GrandChild", "ID", "ParentID")]
         public GreatGrandChild Child
         {
             get
@@ -1146,9 +1136,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="Child"/> entity.
         /// </summary>
-        [EntityAssociation("GrandChild_Child", new string[] {
-                "ParentID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("GrandChild_Child", "ParentID", "ID", IsForeignKey=true)]
         public Child Parent
         {
             get
@@ -1391,9 +1379,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="GrandChild"/> entity.
         /// </summary>
-        [EntityAssociation("GreatGrandChild_GrandChild", new string[] {
-                "ParentID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("GreatGrandChild_GrandChild", "ParentID", "ID", IsForeignKey=true)]
         public GrandChild Parent
         {
             get
@@ -1578,9 +1564,7 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="Child"/> entity instances.
         /// </summary>
         [Composition()]
-        [EntityAssociation("Child_Parent", new string[] {
-                "ID"}, new string[] {
-                "ParentID"})]
+        [EntityAssociation("Child_Parent", "ID", "ParentID")]
         public EntityCollection<Child> Children
         {
             get
@@ -1773,9 +1757,7 @@ namespace TestDomainServices
         /// Gets or sets the associated <see cref="SelfReferencingComposition"/> entity.
         /// </summary>
         [Composition()]
-        [EntityAssociation("Ref_Assoc", new string[] {
-                "ID"}, new string[] {
-                "ParentID"})]
+        [EntityAssociation("Ref_Assoc", "ID", "ParentID")]
         public SelfReferencingComposition Child
         {
             get
@@ -1836,9 +1818,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="SelfReferencingComposition"/> entity.
         /// </summary>
-        [EntityAssociation("Ref_Assoc", new string[] {
-                "ParentID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Ref_Assoc", "ParentID", "ID", IsForeignKey=true)]
         public SelfReferencingComposition Parent
         {
             get
@@ -1993,9 +1973,7 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="SelfReferencingComposition_OneToMany"/> entity instances.
         /// </summary>
         [Composition()]
-        [EntityAssociation("SelfReferencingComposition_OneToMany", new string[] {
-                "ID"}, new string[] {
-                "ParentID"})]
+        [EntityAssociation("SelfReferencingComposition_OneToMany", "ID", "ParentID")]
         public EntityCollection<SelfReferencingComposition_OneToMany> Children
         {
             get
@@ -2037,9 +2015,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="SelfReferencingComposition_OneToMany"/> entity.
         /// </summary>
-        [EntityAssociation("SelfReferencingComposition_OneToMany", new string[] {
-                "ParentID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("SelfReferencingComposition_OneToMany", "ParentID", "ID", IsForeignKey=true)]
         public SelfReferencingComposition_OneToMany Parent
         {
             get

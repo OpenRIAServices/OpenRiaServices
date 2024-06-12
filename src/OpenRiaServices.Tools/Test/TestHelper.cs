@@ -753,7 +753,6 @@ namespace OpenRiaServices.Tools.Test
                 // Since we use the same baseline for NETFRAMEWORK and NET we need to set the same endpoint pattern for both
                 DefaultEndpointRoutePattern = EndpointRoutePattern.WCF,
                 UseFullTypeNames = codeGenOptions.UseFullTypeNames,
-                ClientProjectTargetPlatform = TargetPlatform.Silverlight
             };
 
             MockCodeGenerationHost host = TestHelper.CreateMockCodeGenerationHost(codeGenOptions.Logger, codeGenOptions.SharedCodeService);

@@ -1,6 +1,5 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <NoWarn>618</NoWarn>
     <RootNamespace>CodeFirstModels</RootNamespace>
     <AssemblyName>CodeFirstModels</AssemblyName>
     <TargetFrameworks>net472;net6.0</TargetFrameworks>

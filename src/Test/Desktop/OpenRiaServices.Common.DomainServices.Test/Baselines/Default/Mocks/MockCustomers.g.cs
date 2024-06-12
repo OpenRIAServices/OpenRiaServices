@@ -159,9 +159,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="City"/> entity instances.
         /// </summary>
-        [EntityAssociation("Customer_PreviousResidences", new string[] {
-                "StateName"}, new string[] {
-                "StateName"})]
+        [EntityAssociation("Customer_PreviousResidences", "StateName", "StateName")]
         [ExternalReference()]
         public EntityCollection<global::Cities.City> PreviousResidences
         {
@@ -501,9 +499,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="MockCustomer"/> entity.
         /// </summary>
-        [EntityAssociation("R_C", new string[] {
-                "CustomerId"}, new string[] {
-                "CustomerId"})]
+        [EntityAssociation("R_C", "CustomerId", "CustomerId")]
         public MockCustomer Customer
         {
             get

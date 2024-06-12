@@ -531,7 +531,7 @@ Namespace TestDomainServices
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
         <Display(Description:="D_Ref1"),  _
-         EntityAssociation("C_D_Ref1", New String() {"DID_Ref1"}, New String() {"ID"}, IsForeignKey:=true)>  _
+         EntityAssociation("C_D_Ref1", "DID_Ref1", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref1() As D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
@@ -564,7 +564,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("C_D_Ref2", New String() {"DID_Ref2"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("C_D_Ref2", "DID_Ref2", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref2() As D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
@@ -733,7 +733,7 @@ Namespace TestDomainServices
         ''' Gets the collection of associated <see cref="CartItem"/> entity instances.
         ''' </summary>
         <Editable(false),  _
-         EntityAssociation("CartItem_Cart", New String() {"CartId"}, New String() {"CartItemId"}),  _
+         EntityAssociation("CartItem_Cart", "CartId", "CartItemId"),  _
          [ReadOnly](true)>  _
         Public ReadOnly Property Items() As EntityCollection(Of CartItem)
             Get
@@ -815,7 +815,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="Cart"/> entity.
         ''' </summary>
-        <EntityAssociation("CartItem_Cart", New String() {"CartItemId"}, New String() {"CartId"}, IsForeignKey:=true)>  _
+        <EntityAssociation("CartItem_Cart", "CartItemId", "CartId", IsForeignKey:=true)>  _
         Public Property Cart() As Cart
             Get
                 If (Me._cart Is Nothing) Then
@@ -1140,7 +1140,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="C"/> entity.
         ''' </summary>
-        <EntityAssociation("C_D_Ref1", New String() {"ID"}, New String() {"DID_Ref1"})>  _
+        <EntityAssociation("C_D_Ref1", "ID", "DID_Ref1")>  _
         Public Property C() As C
             Get
                 If (Me._c Is Nothing) Then
@@ -1168,7 +1168,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("D_D", New String() {"DSelfRef_ID1"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("D_D", "DSelfRef_ID1", "ID", IsForeignKey:=true)>  _
         Public Property D1() As D
             Get
                 If (Me._d1 Is Nothing) Then
@@ -1201,7 +1201,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("D_D2", New String() {"DSelfRef_ID2"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("D_D2", "DSelfRef_ID2", "ID", IsForeignKey:=true)>  _
         Public Property D2() As D
             Get
                 If (Me._d2 Is Nothing) Then
@@ -1234,7 +1234,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("D_D2", New String() {"ID"}, New String() {"DSelfRef_ID2"})>  _
+        <EntityAssociation("D_D2", "ID", "DSelfRef_ID2")>  _
         Public Property D2_BackRef() As D
             Get
                 If (Me._d2_BackRef Is Nothing) Then
@@ -1262,7 +1262,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="D"/> entity instances.
         ''' </summary>
-        <EntityAssociation("D_D", New String() {"ID"}, New String() {"DSelfRef_ID1"})>  _
+        <EntityAssociation("D_D", "ID", "DSelfRef_ID1")>  _
         Public ReadOnly Property Ds() As EntityCollection(Of D)
             Get
                 If (Me._ds Is Nothing) Then
@@ -5177,7 +5177,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="NullableFKParent"/> entity.
         ''' </summary>
-        <EntityAssociation("Parent_Child", New String() {"ParentID"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Parent_Child", "ParentID", "ID", IsForeignKey:=true)>  _
         Public Property Parent() As NullableFKParent
             Get
                 If (Me._parent Is Nothing) Then
@@ -5210,7 +5210,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="NullableFKParent"/> entity.
         ''' </summary>
-        <EntityAssociation("Parent_Child_Singleton", New String() {"ParentID_Singleton"}, New String() {"ID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Parent_Child_Singleton", "ParentID_Singleton", "ID", IsForeignKey:=true)>  _
         Public Property Parent2() As NullableFKParent
             Get
                 If (Me._parent2 Is Nothing) Then
@@ -5345,7 +5345,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="NullableFKChild"/> entity.
         ''' </summary>
-        <EntityAssociation("Parent_Child_Singleton", New String() {"ID"}, New String() {"ParentID_Singleton"})>  _
+        <EntityAssociation("Parent_Child_Singleton", "ID", "ParentID_Singleton")>  _
         Public Property Child() As NullableFKChild
             Get
                 If (Me._child Is Nothing) Then
@@ -5373,7 +5373,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="NullableFKChild"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Parent_Child", New String() {"ID"}, New String() {"ParentID"})>  _
+        <EntityAssociation("Parent_Child", "ID", "ParentID")>  _
         Public ReadOnly Property Children() As EntityCollection(Of NullableFKChild)
             Get
                 If (Me._children Is Nothing) Then
@@ -5817,7 +5817,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="RoundtripOriginal_TestEntity"/> entity.
         ''' </summary>
-        <EntityAssociation("RTO_RTO2", New String() {"ID"}, New String() {"ID"})>  _
+        <EntityAssociation("RTO_RTO2", "ID", "ID")>  _
         Public Property AssocProp() As RoundtripOriginal_TestEntity
             Get
                 If (Me._assocProp Is Nothing) Then
@@ -6182,7 +6182,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="TestCycles"/> entity.
         ''' </summary>
-        <EntityAssociation("TestCycle_Parent", New String() {"ParentName"}, New String() {"Name"}, IsForeignKey:=true)>  _
+        <EntityAssociation("TestCycle_Parent", "ParentName", "Name", IsForeignKey:=true)>  _
         Public Property IncludedT() As TestCycles
             Get
                 If (Me._includedT Is Nothing) Then
@@ -6215,7 +6215,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="TestCycles"/> entity instances.
         ''' </summary>
-        <EntityAssociation("TestCycle_Parent", New String() {"Name"}, New String() {"ParentName"})>  _
+        <EntityAssociation("TestCycle_Parent", "Name", "ParentName")>  _
         Public ReadOnly Property IncludedTs() As EntityCollection(Of TestCycles)
             Get
                 If (Me._includedTs Is Nothing) Then

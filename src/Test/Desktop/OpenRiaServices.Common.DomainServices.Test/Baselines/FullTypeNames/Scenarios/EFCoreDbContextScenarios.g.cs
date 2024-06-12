@@ -159,9 +159,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Product"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", "CategoryID", "CategoryID")]
         public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Product> Products
         {
             get
@@ -493,9 +491,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", "CustomerID", "CustomerID")]
         public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order> Orders
         {
             get
@@ -707,9 +703,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Customer"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", "CustomerID", "CustomerID", IsForeignKey=true)]
         public global::EFCoreModels.Northwind.Customer Customer
         {
             get
@@ -856,9 +850,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", "OrderID", "OrderID")]
         public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order_Detail> Order_Details
         {
             get
@@ -1273,9 +1265,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Order"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", "OrderID", "OrderID", IsForeignKey=true)]
         public global::EFCoreModels.Northwind.Order Order
         {
             get
@@ -1345,9 +1335,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", "ProductID", "ProductID", IsForeignKey=true)]
         public global::EFCoreModels.Northwind.Product Product
         {
             get
@@ -1573,9 +1561,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Category"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", "CategoryID", "CategoryID", IsForeignKey=true)]
         public global::EFCoreModels.Northwind.Category Category
         {
             get
@@ -1695,9 +1681,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", "ProductID", "ProductID")]
         public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Order_Detail> Order_Details
         {
             get
@@ -2275,10 +2259,8 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets the collection of associated <see cref="Territory"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"})]
         [global::System.ComponentModel.DataAnnotations.CompositionAttribute()]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", "RegionID", "RegionID")]
         public global::OpenRiaServices.Client.EntityCollection<global::EFCoreModels.Northwind.Territory> Territories
         {
             get
@@ -2359,9 +2341,7 @@ namespace EFCoreModels.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Region"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", "RegionID", "RegionID", IsForeignKey=true)]
         public global::EFCoreModels.Northwind.Region Region
         {
             get
