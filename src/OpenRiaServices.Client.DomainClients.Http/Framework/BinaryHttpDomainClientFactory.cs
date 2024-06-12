@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Net.Http;
 using OpenRiaServices.Client.DomainClients.Http;
 
@@ -11,7 +12,7 @@ namespace OpenRiaServices.Client.DomainClients
     public class BinaryHttpDomainClientFactory
         : DomainClientFactory
     {
-        private readonly Func<HttpClient> _httpClientFactory;
+        private readonly Func<Uri, HttpClient> _httpClientFactory;
 
         /// <summary>
         /// Create a <see cref="BinaryHttpDomainClientFactory"/> where all requests share a single <see cref="HttpMessageHandler"/>
@@ -33,6 +34,25 @@ namespace OpenRiaServices.Client.DomainClients
         public BinaryHttpDomainClientFactory(Uri serverBaseUri, Func<HttpClient> httpClientFactory)
         {
             base.ServerBaseUri = serverBaseUri;
+            if (httpClientFactory is null)
+                throw new ArgumentNullException(nameof(httpClientFactory));
+
+            this._httpClientFactory = (Uri uri) =>
+            {
+                HttpClient httpClient = httpClientFactory();
+                httpClient.BaseAddress = uri;
+                return httpClient;
+            };
+        }
+
+        /// <summary>
+        /// Constructor intended for .Net Core where the actual creation is handled by <c>IHttpClientFactory</c> or similar
+        /// </summary>
+        /// <param name="serverBaseUri">The value base all service Uris on (see <see cref="DomainClientFactory.ServerBaseUri"/>)</param>
+        /// <param name="httpClientFactory">method creating a new HttpClient each time, should never return null</param>
+        public BinaryHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory)
+        {
+            base.ServerBaseUri = serverBaseUri;
             this._httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
         }
 
@@ -48,8 +68,21 @@ namespace OpenRiaServices.Client.DomainClients
         // what parameters to support, it might make sens to do changes per DomainService/DomainContext
         private HttpClient CreateHttpClient(Uri serviceUri)
         {
-            var httpClient = _httpClientFactory();
-            httpClient.BaseAddress = new Uri(serviceUri.AbsoluteUri + "/binary/", UriKind.Absolute);
+            // Add /binary only for WCF style Uris
+            if (serviceUri.AbsolutePath.EndsWith(".svc", StringComparison.Ordinal))
+            {
+               serviceUri = new Uri(serviceUri.AbsoluteUri + "/binary/");
+            }
+
+            var httpClient = _httpClientFactory(serviceUri);
+            httpClient.BaseAddress ??= serviceUri;
+
+            // Ensure Uri always end with "/" so that we can call Get and Post with just the method name
+            if (!httpClient.BaseAddress.AbsoluteUri.EndsWith("/", StringComparison.Ordinal))
+            {
+                httpClient.BaseAddress = new Uri(httpClient.BaseAddress.AbsoluteUri + '/');
+            }
+
             return httpClient;
         }
     }

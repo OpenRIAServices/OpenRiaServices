@@ -350,6 +350,30 @@ namespace OpenRiaServices.Tools
             return innerClass;
         }
 
+
+        private string GetDomainServiceUri()
+        {
+            Type type = _domainServiceDescription.DomainServiceType;
+#if NET
+            // Lookup DomainServiceEndpointRoutePatternAttribute first in same assembly as DomainService
+            // Then in the entry point assembly
+            // - Fallback
+            EndpointRoutePattern routePattern = type.Assembly.GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern is { } endpointRoutePattern
+                ? (EndpointRoutePattern)(int)(endpointRoutePattern)
+                : base.ClientProxyGenerator.ClientProxyCodeGenerationOptions.DefaultEndpointRoutePattern;
+
+            return routePattern switch
+            {
+                EndpointRoutePattern.Name => type.Name,
+                EndpointRoutePattern.WCF => type.FullName.Replace('.', '-') + ".svc",
+                EndpointRoutePattern.FullName => type.FullName.Replace('.', '-'),
+                _ => throw new NotImplementedException(),
+            };
+#else
+            return type.FullName.Replace('.', '-') + ".svc";
+#endif
+        }
+
         private void GenerateConstructors(CodeTypeDeclaration proxyClass, CodeTypeDeclaration contractInterface, EnableClientAccessAttribute enableClientAccessAttribute, CodeMethodInvokeExpression onCreatedExpression)
         {
             CodeTypeReference uriTypeRef = CodeGenUtilities.GetTypeReference(typeof(Uri), this.ClientProxyGenerator, proxyClass);
@@ -363,7 +387,7 @@ namespace OpenRiaServices.Tools
                     true);
 
             // construct relative URI
-            string relativeServiceUri = string.Format(CultureInfo.InvariantCulture, "{0}.svc", this._domainServiceDescription.DomainServiceType.FullName.Replace('.', '-'));
+            string relativeServiceUri = GetDomainServiceUri();
             CodeExpression relativeUriExpression = new CodeObjectCreateExpression(
                 uriTypeRef,
                 new CodePrimitiveExpression(relativeServiceUri),

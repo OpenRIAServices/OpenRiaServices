@@ -24,17 +24,11 @@ This excludes usage by the Russian state, Russian state-owned companies, Russian
 - You allow anonymized telemetry to collected and sent during the preview releases to gather feedback about usage
 
 
-## Production Ready - "preview"
+## Sample
 
-The package is production ready, but does not yet contain all features planened for 1.0.
-Please look at TODO in project's folder for more details.
-    
-**Public API will change before 1.0.0 release**
-    
-There is no documentation yet, please see AspNetCoreWebsite project in repository for usage.
+There is no documentation except for this yet readme, please see AspNetCoreWebsite project in repository for usage.
 
 * For a sample see [WpfCore_AspNetCore in Samples repository](https://github.com/OpenRIAServices/Samples/tree/main/WpfCore_AspNetCore)
-
 
 
 ## Getting Started
@@ -77,6 +71,42 @@ app.MapOpenRiaServices(builder =>
 
 
 app.Run();
+```
+
+## Advanced
+
+### Specifying endpoint routes
+
+You can choose between 3 different approaches to how the endpoint routes are generated.
+You do this by adding the `DomainServiceEndpointRoutePattern` attribute to your assembly.
+   - If the attribute is defined in the assembly of a specific DomainService, then that will be used
+   - Otherwise if there is an attribute in the "startup" assembly then that will be used 
+     (since the code generation cannot know what project is the startup project, 
+    it will always treat the "LinkedServerProject" as the startup project)
+   
+The options are `WCF`, `FullName` and `ShortName`.
+ * `WCF` will generate the same routes as WCF RIA Services `Some-Namespace-TypeName.svc/binary/Method`
+    * This is the only option that works with the (obsolete) WCF based DomainClient
+ * `FullName` will generate routes with the full name of the DomainService `Some-Namespace-TypeName/Method`
+ * `Name` will generate routes with the short name of the DomainService `TypeName/Method`
+
+The default will be changed to `FullName` which is the same as in WCF RIA Services.
+```csharp
+[assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.WCF)]
+// or 
+[assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
+// or 
+[assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.Name)]
+```
+
+If you want to change the route for a specific DomainService or need to map a DomainService to multiple routes you can specify 
+a route directly when adding domainservices during the `MapOpenRiaServices` call.
+
+```csharp
+app.MapOpenRiaServices(builder =>
+{
+    builder.AddDomainService<Cities.CityDomainService>("Cities-CityDomainService.svc/binary");
+});
 ```
 
 ## Asp.Net Core integration

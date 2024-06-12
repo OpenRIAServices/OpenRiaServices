@@ -750,7 +750,9 @@ namespace OpenRiaServices.Tools.Test
                 ClientRootNamespace = codeGenOptions.RootNamespace,
                 ClientProjectPath = "MockProject.proj",
                 IsApplicationContextGenerationEnabled = codeGenOptions.GenerateApplicationContexts,
-                UseFullTypeNames = codeGenOptions.UseFullTypeNames
+                // Since we use the same baseline for NETFRAMEWORK and NET we need to set the same endpoint pattern for both
+                DefaultEndpointRoutePattern = EndpointRoutePattern.WCF,
+                UseFullTypeNames = codeGenOptions.UseFullTypeNames,
             };
 
             MockCodeGenerationHost host = TestHelper.CreateMockCodeGenerationHost(codeGenOptions.Logger, codeGenOptions.SharedCodeService);

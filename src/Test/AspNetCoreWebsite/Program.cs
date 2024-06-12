@@ -12,6 +12,8 @@ using OpenRiaServices.Server;
 using RootNamespace.TestNamespace;
 using TestDomainServices.Testing;
 
+[assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();
 
@@ -55,6 +57,10 @@ app.MapOpenRiaServices(builder =>
 
        // Types in this assembly
        builder.AddDomainService<AuthenticationService1>();
+
+       // Add services with old endpoint structure to allow unit tests to work
+       // REMARKDS: The unit tests should be rewritten so this is not needed
+       builder.AddDomainService<Cities.CityDomainService>("Cities-CityDomainService.svc/binary");
    });
 
 // TestDatabase

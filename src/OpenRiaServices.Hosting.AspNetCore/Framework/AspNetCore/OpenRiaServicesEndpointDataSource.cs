@@ -21,7 +21,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
         private readonly HttpMethodMetadata _getOrPost = new(new[] { "GET", "POST" });
         private readonly HttpMethodMetadata _postOnly = new(new[] { "POST" });
 
-        private readonly Dictionary<string, DomainServiceEndpointBuilder> _endpointBuilders = new();
+        private readonly HashSet<string> _paths = new();
+        private readonly Dictionary<Type, DomainServiceEndpointBuilder> _endpointBuilders = new();
         private List<Endpoint> _endpoints;
 
         public OpenRiaServicesEndpointDataSource()
@@ -31,12 +32,21 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
         internal IEndpointConventionBuilder AddDomainService(string path, Type type)
         {
-            var description = DomainServiceDescription.GetDescription(type);
-            var endpointBuilder = new DomainServiceEndpointBuilder(description);
+            if (!_paths.Add(path))
+                throw new ArgumentException($"Endpoint {path} is already in use for a DomainService", paramName: path);
 
-            _endpointBuilders.Add(path, endpointBuilder);
+            if (!_endpointBuilders.TryGetValue(type, out var endpointBuilder))
+            {
+                var description = DomainServiceDescription.GetDescription(type);
+                endpointBuilder = new DomainServiceEndpointBuilder(description);
+                _endpointBuilders.Add(type, endpointBuilder);
+            }
+
+            endpointBuilder.Paths.Add(path);
+
             return endpointBuilder;
         }
+
 
         public override IReadOnlyList<Endpoint> Endpoints
         {
@@ -82,14 +92,14 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     else // Submit related methods are not directly accessible
                         continue;
 
-                    endpoints.Add(BuildEndpoint(name, invoker, domainServiceBuilder, additionalMetadata));
+                    AddEndpoints(endpoints, invoker, domainServiceBuilder, additionalMetadata);
                 }
 
                 var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
                     typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
                 var submitOperationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
-                endpoints.Add(BuildEndpoint(name, submitOperationInvoker, domainServiceBuilder, additionalMetadata));
+                AddEndpoints(endpoints, submitOperationInvoker, domainServiceBuilder, additionalMetadata);
             }
 
             return endpoints;
@@ -110,6 +120,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
             }
 
             public DomainServiceDescription Description { get { return _description; } }
+
+            public List<string> Paths { get; } = new();
 
             public void Add(Action<EndpointBuilder> convention)
             {
@@ -136,16 +148,23 @@ namespace OpenRiaServices.Hosting.AspNetCore
             }
         }
 
-        private Endpoint BuildEndpoint(string domainService, OperationInvoker invoker, DomainServiceEndpointBuilder domainServiceEndpointBuilder, List<object> additionalMetadata)
+        private void AddEndpoints(List<Endpoint> endpoints, OperationInvoker invoker, DomainServiceEndpointBuilder domainServiceEndpointBuilder, List<object> additionalMetadata)
         {
-            var route = RoutePatternFactory.Parse($"{Prefix}/{domainService}/{invoker.OperationName}");
+            foreach(string path in domainServiceEndpointBuilder.Paths)
+            {
+                var route = RoutePatternFactory.Parse($"{Prefix}/{path}/{invoker.OperationName}");
+                endpoints.Add(BuildEndpoint(route, invoker, domainServiceEndpointBuilder, additionalMetadata));
+            }
+        }
 
+        private Endpoint BuildEndpoint(RoutePattern route, OperationInvoker invoker, DomainServiceEndpointBuilder domainServiceEndpointBuilder, List<object> additionalMetadata)
+        {
             var endpointBuilder = new RouteEndpointBuilder(
                 invoker.Invoke,
                 route,
                 0)
             {
-                DisplayName = $"{domainService}.{invoker.OperationName}"
+                DisplayName = $"{invoker.DomainOperation.DomainServiceType.Name}.{invoker.OperationName}"
             };
 
             endpointBuilder.Metadata.Add(invoker.HasSideEffects ? _postOnly : _getOrPost);

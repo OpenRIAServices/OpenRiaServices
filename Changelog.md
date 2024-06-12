@@ -1,4 +1,4 @@
-# 5.4.4 / EF Core 3.1.0
+# 5.5.0 / EF Core 3.1.0
 
 ### EF Core 3.1.0
 * Initial support for Owned Entities for one-to-one navigation properties (#500)
@@ -11,9 +11,29 @@
     * reduces code that needs to be written and works both with and without "OriginalEntity" (`RoundTripAttribute`)
 * Add package README to `OpenRiaServices.Server.EntityFrameworkCore`
 
+### AspNetCore 1.2.0
+* Add support for specifying endpoints routes (#508, issue: #507)
+  You can choose between 3 different approaches to how the endpoint routes are generated.
+  See AspNetCore readme for more details.
+    * `WCF` will generate the same routes as WCF RIA Services `Some-Namespace-TypeName.svc/binary/Method`
+    * `FullName` will generate routes with the full name of the DomainService `Some-Namespace-TypeName/Method`
+    * `Name` will generate routes with the short name of the DomainService `TypeName/Method`
+ 
 ### Code generation
 * Log whole Exceptions in DomainServiceCatalog instead of just message (#502), for better error messages on code generation failure
 * Call "dotnet CodeGenTask.dll" instead of "CodeGenTask.exe" #503
+* Support for the 3 different approaches to how the endpoint routes are generated for AspNetCore hosting (#508)
+* Replace obsolete AssociationAttribute with new EntityAssociationAttribute on client (#509)
+
+### Client
+* Replace obsolete AssociationAttribute with new EntityAssociationAttribute on client (#509)
+   * The client currently detect `AssociationAttribute` but it will be removed in future versions.
+   * Ensure you have the corresponding version of the Code generation
+
+
+### Client
+
+### AspNetCore 1.2.0
 
 # EF Core 3.0.0
 

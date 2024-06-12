@@ -75,12 +75,22 @@ namespace OpenRiaServices.Tools
                 // We load the ".Server" assembly actually from the server projects output folder since it was previously required to mix stongly named and not stronly named
                 LoadOpenRiaServicesServerAssembly(parameters, loggingService);
 #else
-               // The current AssemblyLoadContext has been previously setup to load the server projects dependencies, no additional action is needed
+                // The current AssemblyLoadContext has been previously setup to load the server projects dependencies, no additional action is needed
 #endif
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
                 {
                     CodeGenerationHost host = new CodeGenerationHost(loggingService, sharedCodeService);
+
+#if NET
+                    // If the server assembly has a DomainServiceEndpointRoutePatternAttribute, we use it to set the default EndpointRoutePattern
+                    Assembly linkedServerAssembly = AssemblyUtilities.LoadAssembly(parameters.ServerAssemblies.First() + ".dll", loggingService);
+                    if (linkedServerAssembly?.GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>() is { } routeAttribute)
+                    {
+                        options.DefaultEndpointRoutePattern = (EndpointRoutePattern)(int)routeAttribute.EndpointRoutePattern;
+                    }
+#endif
+
                     return this.GenerateCode(host, options, parameters.ServerAssemblies, codeGeneratorName);
                 }
             }

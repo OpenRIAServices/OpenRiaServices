@@ -78,6 +78,7 @@ namespace OpenRiaServices.Tools
         /// <summary>
         /// Gets or sets a value the target platform of the client.
         /// </summary>
+        [Obsolete("ClientProjectTargetPlatform is no longer used")]
         public TargetPlatform ClientProjectTargetPlatform { get; set; }
 
         /// <summary>
@@ -90,5 +91,13 @@ namespace OpenRiaServices.Tools
         /// generate fully qualified type names and avoid adding unnecessary imports.
         /// </remarks>
         public bool UseFullTypeNames { get; set; }
+
+
+        /// <summary>
+        /// See "Server.EndpointRoutePattern" determining how default Uri's for accessing DomainServices are generated.
+        /// </summary>
+        public EndpointRoutePattern DefaultEndpointRoutePattern { get; set; }
+            = EndpointRoutePattern.WCF;
+
     }
 }
