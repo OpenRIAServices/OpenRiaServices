@@ -316,9 +316,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// Gets or sets the associated <see cref="OwnedEntityWithExplicitId"/> entity.
         /// </summary>
         [Composition()]
-        [EntityAssociation("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitId", new string[] {
-                "EmployeeId"}, new string[] {
-                "EmployeeId"})]
+        [EntityAssociation("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitId", "EmployeeId", "EmployeeId")]
         public OwnedEntityWithExplicitId OwnedEntityWithExplicitId
         {
             get
@@ -346,9 +344,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// </summary>
         [Composition()]
         [EntityAssociation("FK_Employees_Employees_EmployeeId|owns:OwnedEntityWithExplicitIdAndBackNavigation" +
-            "", new string[] {
-                "EmployeeId"}, new string[] {
-                "EmployeeId"})]
+            "", "EmployeeId", "EmployeeId")]
         public OwnedEntityWithExplicitIdAndBackNavigation OwnedEntityWithExplicitIdAndBackNavigation
         {
             get
@@ -606,9 +602,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// <summary>
         /// Gets or sets the associated <see cref="Employee"/> entity.
         /// </summary>
-        [EntityAssociation("FK_Employees_Employees_EmployeeId", new string[] {
-                "EmployeeId"}, new string[] {
-                "EmployeeId"}, IsForeignKey=true)]
+        [EntityAssociation("FK_Employees_Employees_EmployeeId", "EmployeeId", "EmployeeId", IsForeignKey=true)]
         public Employee Employee
         {
             get

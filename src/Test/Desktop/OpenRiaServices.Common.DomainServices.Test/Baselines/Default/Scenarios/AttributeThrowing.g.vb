@@ -332,7 +332,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the associated <see cref="AttributeThrowingEntity"/> entity.
         ''' </summary>
-        <EntityAssociation("Association", New String() {"ThrowingProperty"}, New String() {"NonThrowingProperty"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Association", "ThrowingProperty", "NonThrowingProperty", IsForeignKey:=true)>  _
         Public Property ThrowingAssociation() As AttributeThrowingEntity
             Get
                 If (Me._throwingAssociation Is Nothing) Then
@@ -362,7 +362,7 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets the collection of associated <see cref="AttributeThrowingEntity"/> entity instances.
         ''' </summary>
-        <EntityAssociation("AssociationCollection", New String() {"NonThrowingProperty"}, New String() {"ThrowingProperty"})>  _
+        <EntityAssociation("AssociationCollection", "NonThrowingProperty", "ThrowingProperty")>  _
         Public ReadOnly Property ThrowingAssociationCollection() As EntityCollection(Of AttributeThrowingEntity)
             Get
                 If (Me._throwingAssociationCollection Is Nothing) Then

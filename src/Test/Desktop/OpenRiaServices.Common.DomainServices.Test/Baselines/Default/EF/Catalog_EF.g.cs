@@ -295,9 +295,7 @@ namespace AdventureWorksModel
         /// <summary>
         /// Gets or sets the associated <see cref="Employee"/> entity.
         /// </summary>
-        [EntityAssociation("Employee_Employee", new string[] {
-                "ManagerID"}, new string[] {
-                "EmployeeID"}, IsForeignKey=true)]
+        [EntityAssociation("Employee_Employee", "ManagerID", "EmployeeID", IsForeignKey=true)]
         public Employee Manager
         {
             get
@@ -441,9 +439,7 @@ namespace AdventureWorksModel
         /// <summary>
         /// Gets the collection of associated <see cref="PurchaseOrder"/> entity instances.
         /// </summary>
-        [EntityAssociation("Employee_PurchaseOrder", new string[] {
-                "EmployeeID"}, new string[] {
-                "EmployeeID"})]
+        [EntityAssociation("Employee_PurchaseOrder", "EmployeeID", "EmployeeID")]
         public EntityCollection<PurchaseOrder> PurchaseOrders
         {
             get
@@ -459,9 +455,7 @@ namespace AdventureWorksModel
         /// <summary>
         /// Gets the collection of associated <see cref="Employee"/> entity instances.
         /// </summary>
-        [EntityAssociation("Employee_Employee", new string[] {
-                "EmployeeID"}, new string[] {
-                "ManagerID"})]
+        [EntityAssociation("Employee_Employee", "EmployeeID", "ManagerID")]
         public EntityCollection<Employee> Reports
         {
             get
@@ -1265,9 +1259,7 @@ namespace AdventureWorksModel
         /// <summary>
         /// Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         /// </summary>
-        [EntityAssociation("Product_PurchaseOrderDetail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"})]
+        [EntityAssociation("Product_PurchaseOrderDetail", "ProductID", "ProductID")]
         public EntityCollection<PurchaseOrderDetail> PurchaseOrderDetails
         {
             get
@@ -1637,9 +1629,7 @@ namespace AdventureWorksModel
         /// <summary>
         /// Gets or sets the associated <see cref="Employee"/> entity.
         /// </summary>
-        [EntityAssociation("Employee_PurchaseOrder", new string[] {
-                "EmployeeID"}, new string[] {
-                "EmployeeID"}, IsForeignKey=true)]
+        [EntityAssociation("Employee_PurchaseOrder", "EmployeeID", "EmployeeID", IsForeignKey=true)]
         public Employee Employee
         {
             get
@@ -1779,9 +1769,7 @@ namespace AdventureWorksModel
         /// <summary>
         /// Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         /// </summary>
-        [EntityAssociation("PurchaseOrder_PurchaseOrderDetail", new string[] {
-                "PurchaseOrderID"}, new string[] {
-                "PurchaseOrderID"})]
+        [EntityAssociation("PurchaseOrder_PurchaseOrderDetail", "PurchaseOrderID", "PurchaseOrderID")]
         public EntityCollection<PurchaseOrderDetail> PurchaseOrderDetails
         {
             get
@@ -2217,9 +2205,7 @@ namespace AdventureWorksModel
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [EntityAssociation("Product_PurchaseOrderDetail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"}, IsForeignKey=true)]
+        [EntityAssociation("Product_PurchaseOrderDetail", "ProductID", "ProductID", IsForeignKey=true)]
         public Product Product
         {
             get
@@ -2287,9 +2273,7 @@ namespace AdventureWorksModel
         /// <summary>
         /// Gets or sets the associated <see cref="PurchaseOrder"/> entity.
         /// </summary>
-        [EntityAssociation("PurchaseOrder_PurchaseOrderDetail", new string[] {
-                "PurchaseOrderID"}, new string[] {
-                "PurchaseOrderID"}, IsForeignKey=true)]
+        [EntityAssociation("PurchaseOrder_PurchaseOrderDetail", "PurchaseOrderID", "PurchaseOrderID", IsForeignKey=true)]
         public PurchaseOrder PurchaseOrder
         {
             get

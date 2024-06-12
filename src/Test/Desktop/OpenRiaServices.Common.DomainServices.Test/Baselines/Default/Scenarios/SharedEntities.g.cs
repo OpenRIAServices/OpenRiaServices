@@ -74,9 +74,7 @@ namespace SharedEntities
         /// <summary>
         /// Gets or sets the associated <see cref="EntityB"/> entity.
         /// </summary>
-        [EntityAssociation("A_B", new string[] {
-                "IdB"}, new string[] {
-                "Id"})]
+        [EntityAssociation("A_B", "IdB", "Id")]
         public EntityB EntityB
         {
             get
@@ -102,9 +100,7 @@ namespace SharedEntities
         /// <summary>
         /// Gets or sets the associated <see cref="EntityC"/> entity.
         /// </summary>
-        [EntityAssociation("A_C", new string[] {
-                "IdC"}, new string[] {
-                "Id"})]
+        [EntityAssociation("A_C", "IdC", "Id")]
         public EntityC EntityC
         {
             get
@@ -565,9 +561,7 @@ namespace SharedEntities
         /// <summary>
         /// Gets or sets the associated <see cref="EntityZ"/> entity.
         /// </summary>
-        [EntityAssociation("Y_Z", new string[] {
-                "IdZ"}, new string[] {
-                "Id"})]
+        [EntityAssociation("Y_Z", "IdZ", "Id")]
         public EntityZ EntityZ
         {
             get

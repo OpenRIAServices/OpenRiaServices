@@ -674,9 +674,7 @@ namespace DataTests.Scenarios.LTS.Northwind
         /// <summary>
         /// Gets or sets the associated <see cref="Customer_Bug479436"/> entity.
         /// </summary>
-        [EntityAssociation("Customer_Bug479436_Order_Bug479436", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"}, IsForeignKey=true)]
+        [EntityAssociation("Customer_Bug479436_Order_Bug479436", "CustomerID", "CustomerID", IsForeignKey=true)]
         public Customer_Bug479436 Customer
         {
             get

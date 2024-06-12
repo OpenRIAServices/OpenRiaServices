@@ -670,7 +670,7 @@ Namespace DataTests.Scenarios.LTS.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Customer_Bug479436"/> entity.
         ''' </summary>
-        <EntityAssociation("Customer_Bug479436_Order_Bug479436", New String() {"CustomerID"}, New String() {"CustomerID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Customer_Bug479436_Order_Bug479436", "CustomerID", "CustomerID", IsForeignKey:=true)>  _
         Public Property Customer() As Customer_Bug479436
             Get
                 If (Me._customer Is Nothing) Then

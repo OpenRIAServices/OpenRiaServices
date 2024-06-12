@@ -174,9 +174,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="InheritanceT1"/> entity.
         /// </summary>
-        [EntityAssociation("InheritanceBase_InheritanceT1", new string[] {
-                "T1_ID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("InheritanceBase_InheritanceT1", "T1_ID", "ID", IsForeignKey=true)]
         public InheritanceT1 T1
         {
             get
@@ -235,9 +233,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="InheritanceT1"/> entity instances.
         /// </summary>
-        [EntityAssociation("InheritanceT1_InheritanceBase", new string[] {
-                "ID"}, new string[] {
-                "InheritanceBase_ID"})]
+        [EntityAssociation("InheritanceT1_InheritanceBase", "ID", "InheritanceBase_ID")]
         public EntityCollection<InheritanceT1> T1s
         {
             get
@@ -422,9 +418,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="InheritanceT1"/> entity.
         /// </summary>
-        [EntityAssociation("InheritanceBase_InheritanceT1", new string[] {
-                "T1_ID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("InheritanceBase_InheritanceT1", "T1_ID", "ID", IsForeignKey=true)]
         public InheritanceT1 T1
         {
             get
@@ -483,9 +477,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="InheritanceT1"/> entity instances.
         /// </summary>
-        [EntityAssociation("InheritanceT1_InheritanceBase", new string[] {
-                "ID"}, new string[] {
-                "InheritanceBase_ID"})]
+        [EntityAssociation("InheritanceT1_InheritanceBase", "ID", "InheritanceBase_ID")]
         public EntityCollection<InheritanceT1> T1s
         {
             get

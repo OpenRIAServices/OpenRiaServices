@@ -89,7 +89,7 @@ Namespace SharedEntities
         ''' <summary>
         ''' Gets or sets the associated <see cref="EntityB"/> entity.
         ''' </summary>
-        <EntityAssociation("A_B", New String() {"IdB"}, New String() {"Id"})>  _
+        <EntityAssociation("A_B", "IdB", "Id")>  _
         Public Property EntityB() As EntityB
             Get
                 If (Me._entityB Is Nothing) Then
@@ -110,7 +110,7 @@ Namespace SharedEntities
         ''' <summary>
         ''' Gets or sets the associated <see cref="EntityC"/> entity.
         ''' </summary>
-        <EntityAssociation("A_C", New String() {"IdC"}, New String() {"Id"})>  _
+        <EntityAssociation("A_C", "IdC", "Id")>  _
         Public Property EntityC() As EntityC
             Get
                 If (Me._entityC Is Nothing) Then
@@ -543,7 +543,7 @@ Namespace SharedEntities
         ''' <summary>
         ''' Gets or sets the associated <see cref="EntityZ"/> entity.
         ''' </summary>
-        <EntityAssociation("Y_Z", New String() {"IdZ"}, New String() {"Id"})>  _
+        <EntityAssociation("Y_Z", "IdZ", "Id")>  _
         Public Property EntityZ() As EntityZ
             Get
                 If (Me._entityZ Is Nothing) Then

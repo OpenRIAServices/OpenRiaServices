@@ -151,9 +151,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="AI_MasterDerived"/> entity.
         /// </summary>
-        [EntityAssociation("Master_to_Derived1_Many", new string[] {
-                "MasterID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Master_to_Derived1_Many", "MasterID", "ID", IsForeignKey=true)]
         public AI_MasterDerived Master
         {
             get
@@ -230,9 +228,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="AI_MasterDerived"/> entity.
         /// </summary>
-        [EntityAssociation("Master_to_Derived2_Many", new string[] {
-                "MasterID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Master_to_Derived2_Many", "MasterID", "ID", IsForeignKey=true)]
         public AI_MasterDerived Master
         {
             get
@@ -309,9 +305,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="AI_MasterDerived"/> entity.
         /// </summary>
-        [EntityAssociation("Master_to_Derived3_One", new string[] {
-                "MasterID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Master_to_Derived3_One", "MasterID", "ID", IsForeignKey=true)]
         public AI_MasterDerived Master
         {
             get
@@ -388,9 +382,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="AI_MasterDerived"/> entity.
         /// </summary>
-        [EntityAssociation("Master_to_Derived4_One", new string[] {
-                "MasterID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Master_to_Derived4_One", "MasterID", "ID", IsForeignKey=true)]
         public AI_MasterDerived Master
         {
             get
@@ -540,9 +532,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="AI_DetailDerived1"/> entity instances.
         /// </summary>
-        [EntityAssociation("Master_to_Derived1_Many", new string[] {
-                "ID"}, new string[] {
-                "MasterID"})]
+        [EntityAssociation("Master_to_Derived1_Many", "ID", "MasterID")]
         public EntityCollection<AI_DetailDerived1> DetailDerived1s
         {
             get
@@ -558,9 +548,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets the collection of associated <see cref="AI_DetailDerived2"/> entity instances.
         /// </summary>
-        [EntityAssociation("Master_to_Derived2_Many", new string[] {
-                "ID"}, new string[] {
-                "MasterID"})]
+        [EntityAssociation("Master_to_Derived2_Many", "ID", "MasterID")]
         public EntityCollection<AI_DetailDerived2> DetailDerived2s
         {
             get
@@ -576,9 +564,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="AI_DetailDerived3"/> entity.
         /// </summary>
-        [EntityAssociation("Master_to_Derived3_One", new string[] {
-                "ID"}, new string[] {
-                "MasterID"})]
+        [EntityAssociation("Master_to_Derived3_One", "ID", "MasterID")]
         public AI_DetailDerived3 DetailDerived3
         {
             get
@@ -613,9 +599,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="AI_DetailDerived4"/> entity.
         /// </summary>
-        [EntityAssociation("Master_to_Derived4_One", new string[] {
-                "ID"}, new string[] {
-                "MasterID"})]
+        [EntityAssociation("Master_to_Derived4_One", "ID", "MasterID")]
         public AI_DetailDerived4 DetailDerived4
         {
             get
@@ -1045,9 +1029,7 @@ namespace TestDomainServices
         /// <summary>
         /// Gets or sets the associated <see cref="CI_Parent"/> entity.
         /// </summary>
-        [EntityAssociation("Child_Parent", new string[] {
-                "ParentID"}, new string[] {
-                "ID"}, IsForeignKey=true)]
+        [EntityAssociation("Child_Parent", "ParentID", "ID", IsForeignKey=true)]
         public CI_Parent Parent
         {
             get
@@ -1233,9 +1215,7 @@ namespace TestDomainServices
         /// Gets the collection of associated <see cref="CI_Child"/> entity instances.
         /// </summary>
         [Composition()]
-        [EntityAssociation("Child_Parent", new string[] {
-                "ID"}, new string[] {
-                "ParentID"})]
+        [EntityAssociation("Child_Parent", "ID", "ParentID")]
         public EntityCollection<CI_Child> Children
         {
             get

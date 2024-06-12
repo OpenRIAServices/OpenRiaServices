@@ -307,7 +307,7 @@ Namespace EFCoreModels.AdventureWorks
         ''' <summary>
         ''' Gets or sets the associated <see cref="Employee"/> entity.
         ''' </summary>
-        <EntityAssociation("FK_Employee_Employee_ManagerID", New String() {"ManagerID"}, New String() {"EmployeeID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("FK_Employee_Employee_ManagerID", "ManagerID", "EmployeeID", IsForeignKey:=true)>  _
         Public Property Manager() As Employee
             Get
                 If (Me._manager Is Nothing) Then
@@ -1151,7 +1151,7 @@ Namespace EFCoreModels.AdventureWorks
         ''' <summary>
         ''' Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         ''' </summary>
-        <EntityAssociation("FK_PurchaseOrderDetail_Product_ProductID", New String() {"ProductID"}, New String() {"ProductID"})>  _
+        <EntityAssociation("FK_PurchaseOrderDetail_Product_ProductID", "ProductID", "ProductID")>  _
         Public ReadOnly Property PurchaseOrderDetails() As EntityCollection(Of PurchaseOrderDetail)
             Get
                 If (Me._purchaseOrderDetails Is Nothing) Then
@@ -1585,7 +1585,7 @@ Namespace EFCoreModels.AdventureWorks
         ''' <summary>
         ''' Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         ''' </summary>
-        <EntityAssociation("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID", New String() {"PurchaseOrderID"}, New String() {"PurchaseOrderID"})>  _
+        <EntityAssociation("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID", "PurchaseOrderID", "PurchaseOrderID")>  _
         Public ReadOnly Property PurchaseOrderDetails() As EntityCollection(Of PurchaseOrderDetail)
             Get
                 If (Me._purchaseOrderDetails Is Nothing) Then
@@ -1990,7 +1990,7 @@ Namespace EFCoreModels.AdventureWorks
         ''' <summary>
         ''' Gets or sets the associated <see cref="Product"/> entity.
         ''' </summary>
-        <EntityAssociation("FK_PurchaseOrderDetail_Product_ProductID", New String() {"ProductID"}, New String() {"ProductID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("FK_PurchaseOrderDetail_Product_ProductID", "ProductID", "ProductID", IsForeignKey:=true)>  _
         Public Property Product() As Product
             Get
                 If (Me._product Is Nothing) Then
@@ -2045,7 +2045,7 @@ Namespace EFCoreModels.AdventureWorks
         ''' <summary>
         ''' Gets or sets the associated <see cref="PurchaseOrder"/> entity.
         ''' </summary>
-        <EntityAssociation("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID", New String() {"PurchaseOrderID"}, New String() {"PurchaseOrderID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID", "PurchaseOrderID", "PurchaseOrderID", IsForeignKey:=true)>  _
         Public Property PurchaseOrder() As PurchaseOrder
             Get
                 If (Me._purchaseOrder Is Nothing) Then

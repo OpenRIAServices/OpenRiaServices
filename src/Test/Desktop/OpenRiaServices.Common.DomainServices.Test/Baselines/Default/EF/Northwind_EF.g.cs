@@ -169,9 +169,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets the collection of associated <see cref="Product"/> entity instances.
         /// </summary>
-        [EntityAssociation("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"})]
+        [EntityAssociation("Category_Product", "CategoryID", "CategoryID")]
         public EntityCollection<Product> Products
         {
             get
@@ -503,9 +501,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets the collection of associated <see cref="Order"/> entity instances.
         /// </summary>
-        [EntityAssociation("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"})]
+        [EntityAssociation("Customer_Order", "CustomerID", "CustomerID")]
         public EntityCollection<Order> Orders
         {
             get
@@ -717,9 +713,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Customer"/> entity.
         /// </summary>
-        [EntityAssociation("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"}, IsForeignKey=true)]
+        [EntityAssociation("Customer_Order", "CustomerID", "CustomerID", IsForeignKey=true)]
         public Customer Customer
         {
             get
@@ -866,9 +860,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [EntityAssociation("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"})]
+        [EntityAssociation("Order_Order_Detail", "OrderID", "OrderID")]
         public EntityCollection<Order_Detail> Order_Details
         {
             get
@@ -1283,9 +1275,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Order"/> entity.
         /// </summary>
-        [EntityAssociation("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"}, IsForeignKey=true)]
+        [EntityAssociation("Order_Order_Detail", "OrderID", "OrderID", IsForeignKey=true)]
         public Order Order
         {
             get
@@ -1355,9 +1345,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [EntityAssociation("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"}, IsForeignKey=true)]
+        [EntityAssociation("Product_Order_Detail", "ProductID", "ProductID", IsForeignKey=true)]
         public Product Product
         {
             get
@@ -1583,9 +1571,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Category"/> entity.
         /// </summary>
-        [EntityAssociation("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"}, IsForeignKey=true)]
+        [EntityAssociation("Category_Product", "CategoryID", "CategoryID", IsForeignKey=true)]
         public Category Category
         {
             get
@@ -1705,9 +1691,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [EntityAssociation("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"})]
+        [EntityAssociation("Product_Order_Detail", "ProductID", "ProductID")]
         public EntityCollection<Order_Detail> Order_Details
         {
             get
@@ -2286,9 +2270,7 @@ namespace NorthwindModel
         /// Gets the collection of associated <see cref="Territory"/> entity instances.
         /// </summary>
         [Composition()]
-        [EntityAssociation("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"})]
+        [EntityAssociation("Region_Territory", "RegionID", "RegionID")]
         public EntityCollection<Territory> Territories
         {
             get
@@ -2369,9 +2351,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Region"/> entity.
         /// </summary>
-        [EntityAssociation("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"}, IsForeignKey=true)]
+        [EntityAssociation("Region_Territory", "RegionID", "RegionID", IsForeignKey=true)]
         public Region Region
         {
             get
