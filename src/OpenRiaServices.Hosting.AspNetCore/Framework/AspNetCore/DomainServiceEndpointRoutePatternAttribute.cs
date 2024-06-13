@@ -1,8 +1,7 @@
 ﻿using System;
 
-namespace OpenRiaServices.Server
+namespace OpenRiaServices.Hosting.AspNetCore
 {
-#if NET
     /// <summary>
     /// Determine how endpoints routes (Uris to access DomainServices) are generated
     /// </summary>
@@ -28,7 +27,7 @@ namespace OpenRiaServices.Server
     }
 
     /// <summary>
-    /// Attribute to configure the pattern used for endpoint, see <see cref="Server.EndpointRoutePattern"/>
+    /// Attribute to configure the pattern used for endpoint, see <see cref="AspNetCore.EndpointRoutePattern"/>
     /// </summary>
     [AttributeUsage(AttributeTargets.Assembly, AllowMultiple = false, Inherited = true)]
     public sealed class DomainServiceEndpointRoutePatternAttribute : Attribute
@@ -36,7 +35,7 @@ namespace OpenRiaServices.Server
         /// <summary>
         /// Initializes a new instance of the <see cref="DomainServiceEndpointRoutePatternAttribute"/> class.
         /// </summary>
-        /// <param name="endpointRoutePattern"><see cref="Server.EndpointRoutePattern"/> to use</param>
+        /// <param name="endpointRoutePattern"><see cref="AspNetCore.EndpointRoutePattern"/> to use</param>
         public DomainServiceEndpointRoutePatternAttribute(EndpointRoutePattern endpointRoutePattern)
             => EndpointRoutePattern = endpointRoutePattern;
 
@@ -45,5 +44,4 @@ namespace OpenRiaServices.Server
         /// </summary>
         public EndpointRoutePattern EndpointRoutePattern { get; }
     }
-#endif
 }

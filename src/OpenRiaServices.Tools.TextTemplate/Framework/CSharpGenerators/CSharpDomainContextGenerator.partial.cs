@@ -150,13 +150,11 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
         private string GetDomainServiceUri()
         {
             Type type = this.DomainServiceDescription.DomainServiceType;
-#if NET
+
             // Lookup DomainServiceEndpointRoutePatternAttribute first in same assembly as DomainService
-            // Then in the entry point assembly
-            // - Fallback
-            EndpointRoutePattern routePattern = type.Assembly.GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern is { } endpointRoutePattern
-                ? (EndpointRoutePattern)(int)(endpointRoutePattern)
-                : (EndpointRoutePattern)(int)this.ClientCodeGenerator.Options.DefaultEndpointRoutePattern;
+            // Otherwise fallback to default
+            EndpointRoutePattern routePattern = SharedCodeGenUtilities.TryGetRoutePatternFromAssembly(type.Assembly)
+                ?? this.ClientCodeGenerator.Options.DefaultEndpointRoutePattern;
 
             return routePattern switch
             {
@@ -165,9 +163,6 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
                 EndpointRoutePattern.FullName => type.FullName.Replace('.', '-'),
                 _ => throw new NotImplementedException(),
             };
-#else
-            return type.FullName.Replace('.', '-') + ".svc";
-#endif
         }
     }
 }
