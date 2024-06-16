@@ -1,0 +1,133 @@
+﻿abstract OpenRiaServices.Tools.RiaClientFilesTask.ExecuteInternal() -> bool
+OpenRiaServices.Tools.CleanOpenRiaClientFilesTask
+OpenRiaServices.Tools.CleanOpenRiaClientFilesTask.CleanOpenRiaClientFilesTask() -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ClientCodeGenerationOptions() -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ClientFrameworkPath.get -> string
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ClientFrameworkPath.set -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ClientProjectPath.get -> string
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ClientProjectPath.set -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ClientProjectTargetPlatform.get -> OpenRiaServices.Tools.TargetPlatform
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ClientProjectTargetPlatform.set -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ClientRootNamespace.get -> string
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ClientRootNamespace.set -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions.IsApplicationContextGenerationEnabled.get -> bool
+OpenRiaServices.Tools.ClientCodeGenerationOptions.IsApplicationContextGenerationEnabled.set -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions.Language.get -> string
+OpenRiaServices.Tools.ClientCodeGenerationOptions.Language.set -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ServerProjectPath.get -> string
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ServerProjectPath.set -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ServerRootNamespace.get -> string
+OpenRiaServices.Tools.ClientCodeGenerationOptions.ServerRootNamespace.set -> void
+OpenRiaServices.Tools.ClientCodeGenerationOptions.UseFullTypeNames.get -> bool
+OpenRiaServices.Tools.ClientCodeGenerationOptions.UseFullTypeNames.set -> void
+OpenRiaServices.Tools.CodeMemberShareKind
+OpenRiaServices.Tools.CodeMemberShareKind.NotShared = 1 -> OpenRiaServices.Tools.CodeMemberShareKind
+OpenRiaServices.Tools.CodeMemberShareKind.Shared = OpenRiaServices.Tools.CodeMemberShareKind.SharedBySource | OpenRiaServices.Tools.CodeMemberShareKind.SharedByReference -> OpenRiaServices.Tools.CodeMemberShareKind
+OpenRiaServices.Tools.CodeMemberShareKind.SharedByReference = 4 -> OpenRiaServices.Tools.CodeMemberShareKind
+OpenRiaServices.Tools.CodeMemberShareKind.SharedBySource = 2 -> OpenRiaServices.Tools.CodeMemberShareKind
+OpenRiaServices.Tools.CodeMemberShareKind.Unknown = 0 -> OpenRiaServices.Tools.CodeMemberShareKind
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientAssemblySearchPaths.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientAssemblySearchPaths.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientFrameworkPath.get -> string
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientFrameworkPath.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientProjectRootNamespace.get -> string
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientProjectRootNamespace.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientReferenceAssemblies.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientReferenceAssemblies.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientSourceFiles.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ClientSourceFiles.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.CodeGeneratorName.get -> string
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.CodeGeneratorName.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.CopiedFiles.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.CreateOpenRiaClientFilesTask() -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.GeneratedFiles.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.IsClientApplication.get -> string
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.IsClientApplication.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.Language.get -> string
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.Language.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.LinkedFiles.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.OutputFiles.get -> System.Collections.Generic.IEnumerable<Microsoft.Build.Framework.ITaskItem>
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ServerAssemblies.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ServerAssemblies.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ServerProjectPath.get -> string
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ServerProjectPath.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ServerReferenceAssemblies.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ServerReferenceAssemblies.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.SharedFiles.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.SharedFilesMode.set -> void
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.UseFullTypeNames.get -> string
+OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.UseFullTypeNames.set -> void
+OpenRiaServices.Tools.DomainServiceClientCodeGeneratorAttribute
+OpenRiaServices.Tools.DomainServiceClientCodeGeneratorAttribute.DomainServiceClientCodeGeneratorAttribute(string generatorName, string language) -> void
+OpenRiaServices.Tools.DomainServiceClientCodeGeneratorAttribute.DomainServiceClientCodeGeneratorAttribute(System.Type generatorType, string language) -> void
+OpenRiaServices.Tools.DomainServiceClientCodeGeneratorAttribute.GeneratorName.get -> string
+OpenRiaServices.Tools.DomainServiceClientCodeGeneratorAttribute.Language.get -> string
+OpenRiaServices.Tools.ICodeGenerationHost
+OpenRiaServices.Tools.ICodeGenerationHost.GetMethodShareKind(string typeName, string methodName, System.Collections.Generic.IEnumerable<string> parameterTypeNames) -> OpenRiaServices.Tools.CodeMemberShareKind
+OpenRiaServices.Tools.ICodeGenerationHost.GetPropertyShareKind(string typeName, string propertyName) -> OpenRiaServices.Tools.CodeMemberShareKind
+OpenRiaServices.Tools.ICodeGenerationHost.GetTypeShareKind(string typeName) -> OpenRiaServices.Tools.CodeMemberShareKind
+OpenRiaServices.Tools.ICodeGenerationHost.LogError(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber) -> void
+OpenRiaServices.Tools.ICodeGenerationHost.LogWarning(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber) -> void
+OpenRiaServices.Tools.ICodeGeneratorMetadata
+OpenRiaServices.Tools.ICodeGeneratorMetadata.GeneratorName.get -> string
+OpenRiaServices.Tools.ICodeGeneratorMetadata.Language.get -> string
+OpenRiaServices.Tools.IDomainServiceClientCodeGenerator
+OpenRiaServices.Tools.IDomainServiceClientCodeGenerator.GenerateCode(OpenRiaServices.Tools.ICodeGenerationHost codeGenerationHost, System.Collections.Generic.IEnumerable<OpenRiaServices.Server.DomainServiceDescription> domainServiceDescriptions, OpenRiaServices.Tools.ClientCodeGenerationOptions options) -> string
+OpenRiaServices.Tools.ILogger
+OpenRiaServices.Tools.ILogger.HasLoggedErrors.get -> bool
+OpenRiaServices.Tools.ILogger.LogError(string message) -> void
+OpenRiaServices.Tools.ILogger.LogException(System.Exception ex) -> void
+OpenRiaServices.Tools.ILogger.LogMessage(string message) -> void
+OpenRiaServices.Tools.ILogger.LogWarning(string message) -> void
+OpenRiaServices.Tools.InvokeKind
+OpenRiaServices.Tools.InvokeKind.Async = 2 -> OpenRiaServices.Tools.InvokeKind
+OpenRiaServices.Tools.InvokeKind.WithCallback = 1 -> OpenRiaServices.Tools.InvokeKind
+OpenRiaServices.Tools.InvokeKind.WithoutCallback = 0 -> OpenRiaServices.Tools.InvokeKind
+OpenRiaServices.Tools.OpenRiaSharedFilesMode
+OpenRiaServices.Tools.OpenRiaSharedFilesMode.Copy = 1 -> OpenRiaServices.Tools.OpenRiaSharedFilesMode
+OpenRiaServices.Tools.OpenRiaSharedFilesMode.Link = 0 -> OpenRiaServices.Tools.OpenRiaSharedFilesMode
+OpenRiaServices.Tools.RiaClientFilesTask
+OpenRiaServices.Tools.RiaClientFilesTask.ClientProjectDirectory.get -> string
+OpenRiaServices.Tools.RiaClientFilesTask.ClientProjectPath.get -> string
+OpenRiaServices.Tools.RiaClientFilesTask.ClientProjectPath.set -> void
+OpenRiaServices.Tools.RiaClientFilesTask.DeleteCodeGenMetafileLists() -> void
+OpenRiaServices.Tools.RiaClientFilesTask.DeleteFolderIfEmpty(string folderPath) -> void
+OpenRiaServices.Tools.RiaClientFilesTask.FilesPreviouslyWritten() -> System.Collections.Generic.IEnumerable<string>
+OpenRiaServices.Tools.RiaClientFilesTask.GetFullPathRelativeToDirectory(string fileName, string directory) -> string
+OpenRiaServices.Tools.RiaClientFilesTask.HasLoggedErrors.get -> bool
+OpenRiaServices.Tools.RiaClientFilesTask.HasLoggedErrors.set -> void
+OpenRiaServices.Tools.RiaClientFilesTask.LiveIntellisense.get -> string
+OpenRiaServices.Tools.RiaClientFilesTask.LiveIntellisense.set -> void
+OpenRiaServices.Tools.RiaClientFilesTask.LogError(string message) -> void
+OpenRiaServices.Tools.RiaClientFilesTask.LogError(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber) -> void
+OpenRiaServices.Tools.RiaClientFilesTask.LogException(System.Exception ex) -> void
+OpenRiaServices.Tools.RiaClientFilesTask.LogMessage(string message) -> void
+OpenRiaServices.Tools.RiaClientFilesTask.LogWarning(string message) -> void
+OpenRiaServices.Tools.RiaClientFilesTask.LogWarning(string message, string subcategory, string errorCode, string helpKeyword, string file, int lineNumber, int columnNumber, int endLineNumber, int endColumnNumber) -> void
+OpenRiaServices.Tools.RiaClientFilesTask.OutputDirectory.get -> string
+OpenRiaServices.Tools.RiaClientFilesTask.OutputPath.get -> string
+OpenRiaServices.Tools.RiaClientFilesTask.OutputPath.set -> void
+OpenRiaServices.Tools.RiaClientFilesTask.RiaClientFilesTask() -> void
+OpenRiaServices.Tools.TargetPlatform
+OpenRiaServices.Tools.TargetPlatform.Desktop = 3 -> OpenRiaServices.Tools.TargetPlatform
+OpenRiaServices.Tools.TargetPlatform.Portable = 2 -> OpenRiaServices.Tools.TargetPlatform
+OpenRiaServices.Tools.TargetPlatform.Silverlight = 1 -> OpenRiaServices.Tools.TargetPlatform
+OpenRiaServices.Tools.TargetPlatform.Unknown = 0 -> OpenRiaServices.Tools.TargetPlatform
+OpenRiaServices.Tools.TargetPlatform.Win8 = 4 -> OpenRiaServices.Tools.TargetPlatform
+OpenRiaServices.Tools.ValidateDomainServicesTask
+OpenRiaServices.Tools.ValidateDomainServicesTask.Assembly.get -> Microsoft.Build.Framework.ITaskItem
+OpenRiaServices.Tools.ValidateDomainServicesTask.Assembly.set -> void
+OpenRiaServices.Tools.ValidateDomainServicesTask.ProjectPath.get -> string
+OpenRiaServices.Tools.ValidateDomainServicesTask.ProjectPath.set -> void
+OpenRiaServices.Tools.ValidateDomainServicesTask.ReferenceAssemblies.get -> Microsoft.Build.Framework.ITaskItem[]
+OpenRiaServices.Tools.ValidateDomainServicesTask.ReferenceAssemblies.set -> void
+OpenRiaServices.Tools.ValidateDomainServicesTask.ValidateDomainServicesTask() -> void
+override OpenRiaServices.Tools.CleanOpenRiaClientFilesTask.ExecuteInternal() -> bool
+override OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.ExecuteInternal() -> bool
+override OpenRiaServices.Tools.CreateOpenRiaClientFilesTask.NormalizeProjectPaths() -> void
+override OpenRiaServices.Tools.RiaClientFilesTask.Execute() -> bool
+override OpenRiaServices.Tools.ValidateDomainServicesTask.Execute() -> bool
+static OpenRiaServices.Tools.RiaClientFilesTask.GetPathRelativeToProjectDirectory(string fileName, string projectDirectoryPath) -> string
+virtual OpenRiaServices.Tools.RiaClientFilesTask.NormalizeProjectPaths() -> void
