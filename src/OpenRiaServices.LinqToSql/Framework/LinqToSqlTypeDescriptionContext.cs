@@ -56,18 +56,18 @@ namespace OpenRiaServices.LinqToSql
         }
 
         /// <summary>
-        /// Returns an AssociationAttribute for the specified association member
+        /// Returns an EntityAssociationAttribute for the specified association member
         /// </summary>
         /// <param name="member">The metadata member corresponding to the association member</param>
         /// <returns>The Association attribute</returns>
-        public System.ComponentModel.DataAnnotations.AssociationAttribute CreateAssociationAttribute(MetaDataMember member)
+        public EntityAssociationAttribute CreateAssociationAttribute(MetaDataMember member)
         {
             MetaAssociation metaAssociation = member.Association;
 
             string associationName = this.GetAssociationName(metaAssociation);
-            string thisKey = TypeDescriptionContextBase.FormatMemberList(metaAssociation.ThisKey.Select(p => p.Name));
-            string otherKey = TypeDescriptionContextBase.FormatMemberList(metaAssociation.OtherKey.Select(p => p.Name));
-            System.ComponentModel.DataAnnotations.AssociationAttribute assocAttrib = new System.ComponentModel.DataAnnotations.AssociationAttribute(associationName, thisKey, otherKey);
+            string[] thisKey = metaAssociation.ThisKey.Select(p => p.Name).ToArray();
+            string[] otherKey = metaAssociation.OtherKey.Select(p => p.Name).ToArray();
+            EntityAssociationAttribute assocAttrib = new EntityAssociationAttribute(associationName, thisKey, otherKey);
             assocAttrib.IsForeignKey = metaAssociation.IsForeignKey;
 
             return assocAttrib;

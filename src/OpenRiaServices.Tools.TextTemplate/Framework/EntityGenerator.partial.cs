@@ -120,7 +120,7 @@ namespace OpenRiaServices.Tools.TextTemplate
                 // If the ultimate element type is not allowed, it's not acceptable, no matter whether
                 // this is an array, Nullable<T> or whatever
                 Type elementType = TypeUtility.GetElementType(propertyDescriptor.PropertyType);
-                if (!this._domainServiceDescriptionAggregate.EntityTypes.Contains(elementType) || (propertyDescriptor.Attributes[typeof(AssociationAttribute)] == null))
+                if (!this._domainServiceDescriptionAggregate.EntityTypes.Contains(elementType) || (propertyDescriptor.Attributes[typeof(EntityAssociationAttribute)] == null))
                 {
                     // If the base class says we can't generate the property, it is because the property is not serializable.
                     // The only other type entity would serialize is associations. Since it is not, return now.
@@ -264,7 +264,7 @@ namespace OpenRiaServices.Tools.TextTemplate
         internal override bool HandleNonSerializableProperty(PropertyDescriptor propertyDescriptor)
         {
             AttributeCollection propertyAttributes = propertyDescriptor.ExplicitAttributes();
-            AssociationAttribute associationAttr = (AssociationAttribute)propertyAttributes[typeof(AssociationAttribute)];
+            EntityAssociationAttribute associationAttr = (EntityAssociationAttribute)propertyAttributes[typeof(EntityAssociationAttribute)];
             bool externalReference = propertyAttributes[typeof(ExternalReferenceAttribute)] != null;
 
             if (associationAttr != null)
@@ -580,7 +580,7 @@ namespace OpenRiaServices.Tools.TextTemplate
             return typeof(IEnumerable).IsAssignableFrom(t);
         }
 
-        internal static PropertyDescriptor GetReverseAssociation(PropertyDescriptor propertyDescriptor, AssociationAttribute assocAttrib)
+        internal static PropertyDescriptor GetReverseAssociation(PropertyDescriptor propertyDescriptor, EntityAssociationAttribute assocAttrib)
         {
             Type otherType = TypeUtility.GetElementType(propertyDescriptor.PropertyType);
 
@@ -594,7 +594,7 @@ namespace OpenRiaServices.Tools.TextTemplate
                     continue;
                 }
 
-                AssociationAttribute otherAssocAttrib = entityMember.Attributes[typeof(AssociationAttribute)] as AssociationAttribute;
+                EntityAssociationAttribute otherAssocAttrib = entityMember.Attributes[typeof(EntityAssociationAttribute)] as EntityAssociationAttribute;
                 if (otherAssocAttrib != null && otherAssocAttrib.Name == assocAttrib.Name)
                 {
                     return entityMember;

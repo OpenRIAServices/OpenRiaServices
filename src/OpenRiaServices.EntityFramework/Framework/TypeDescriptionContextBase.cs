@@ -27,24 +27,5 @@ namespace OpenRiaServices.Server
 
             return currSuggestion;
         }
-
-        /// <summary>
-        /// Comma delimits the specified member name collection
-        /// </summary>
-        /// <param name="members">A collection of members.</param>
-        /// <returns>A comma delimited list of member names.</returns>
-        protected static string FormatMemberList(IEnumerable<string> members)
-        {
-            string memberList = string.Empty;
-            foreach (string name in members)
-            {
-                if (memberList.Length > 0)
-                {
-                    memberList += ",";
-                }
-                memberList += name;
-            }
-            return memberList;
-        }
     }
 }
