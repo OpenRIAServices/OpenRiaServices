@@ -15,20 +15,49 @@ using TestDomainServices.Testing;
 [assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices();
+builder.Services.AddOpenRiaServices(o =>
+{
+    o.IncludeExceptionMessageInFault = (ex) => true;
+    o.UnsafeIncludeStackTraceInErrors = true;
+});
+
+builder.Services.AddAuthentication();
+
+//builder.Services.AddOpenRiaServices(x =>
+//{
+//    x.WithOnError((ex, context) =>
+//    {
+//        Console.WriteLine($"Error: {ex.Message}");
+//        context.Response.StatusCode = 500;
+//        return Task.CompletedTask;
+//    });
+//    x.RegisterDomainService<AuthenticationService1>();
+//    x.RegisterDomainServicesInAssembly(...);
+//    x.RegisterDomainServicesInAssembly(...);
+//});
+
+
+//builder.Services.AddOpenRiaServices(x =>
+//{
+//    x.WithOnError((ex, context) =>
+//    {
+//        Console.WriteLine($"Error: {ex.Message}");
+//        context.Response.StatusCode = 500;
+//        return Task.CompletedTask;
+//    });
+//})
+//    .RegisterDomainService<AuthenticationService1>()
+//    .RegisterDomainServicesInAssembly(...)
+//    .RegisterDomainServicesInLoadedAssemblies(...);
+
+
 
 // Allow injection of HttpContext
-
 
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpContext>(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext);
 
-var domainServices = typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate).Assembly.ExportedTypes
-    .Where(t => typeof(DomainService).IsAssignableFrom(t) && !t.IsAbstract && t.GetCustomAttribute(typeof(EnableClientAccessAttribute), inherit: true) != null)
-    .ToArray();
-
-foreach (var type in domainServices)
-    builder.Services.Add(new ServiceDescriptor(type, type, ServiceLifetime.Transient));
+builder.Services.AddDomainServicesFromAssembly(typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate).Assembly);
 
 // Types in this assembly
 builder.Services.AddTransient<AuthenticationService1>();
@@ -39,27 +68,11 @@ var app = builder.Build();
 //{
 app.MapOpenRiaServices(builder =>
    {
-       foreach(var type in domainServices)
-       {
-           try
-           {
-               builder.AddDomainService(type);
-           }
-           catch (global::System.MissingMethodException)
-           {
-               throw;
-           }
-           catch (global::System.Exception ex)
-           {
-               Console.WriteLine($"Ignoring {type} due to exception: {ex.Message}");
-           }
-       }
-
-       // Types in this assembly
-       builder.AddDomainService<AuthenticationService1>();
-
+       // All all domainservices registered in the container
+       builder.AddRegisteredDomainServices(suppressAndLogErrors: true);
+ 
        // Add services with old endpoint structure to allow unit tests to work
-       // REMARKDS: The unit tests should be rewritten so this is not needed
+       // REMARKS: The unit tests should be rewritten so this is not needed
        builder.AddDomainService<Cities.CityDomainService>("Cities-CityDomainService.svc/binary");
    });
 
