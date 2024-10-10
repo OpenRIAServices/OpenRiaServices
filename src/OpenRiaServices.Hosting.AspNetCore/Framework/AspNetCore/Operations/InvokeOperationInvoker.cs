@@ -7,8 +7,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class InvokeOperationInvoker : OperationInvoker
     {
-        public InvokeOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper)
-                : base(operation, DomainOperationType.Invoke, serializationHelper, serializationHelper.GetSerializer(operation.ReturnType))
+        public InvokeOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Invoke, serializationHelper, serializationHelper.GetSerializer(operation.ReturnType), options)
         {
         }
 
@@ -44,13 +44,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {
-                    await WriteError(context, ex, hideStackTrace: domainService.GetDisableStackTraces());
+                    await WriteError(context, ex);
                     return;
                 }
 
                 if (invokeResult.HasValidationErrors)
                 {
-                    await WriteError(context, invokeResult.ValidationErrors, hideStackTrace: true);
+                    await WriteError(context, invokeResult.ValidationErrors);
                 }
                 else
                 {

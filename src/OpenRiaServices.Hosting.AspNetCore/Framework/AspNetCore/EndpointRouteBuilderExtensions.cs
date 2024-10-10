@@ -2,29 +2,23 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore
 {
     public static class EndpointRouteBuilderExtensions
     {
-        // TODO: Other return types and parameters?? 
-        // Action<HostingOptions>
-        // return builder ...
-        // move this to separate collection extensions class
-        public static void AddOpenRiaServices(this IServiceCollection services)
+        [Obsolete("Moved to OpenRiaServicesServiceCollectionExtensions")]
+        public static void AddOpenRiaServices(IServiceCollection services)
         {
-            ArgumentNullException.ThrowIfNull(services);
-
-            services.AddSingleton<OpenRiaServicesEndpointDataSource>();
+            services.AddOpenRiaServices();
         }
 
-        public static void AddOpenRiaServices<T>(this IServiceCollection services) where T : OpenRiaServices.Server.DomainService
+        [Obsolete("Use AddOpenRiaServices() instead and add domainServices using AddDomainServices.. ")]
+        public static void AddOpenRiaServices<T>(this IServiceCollection services) where T : DomainService
         {
-            ArgumentNullException.ThrowIfNull(services);
-
-            services.AddSingleton<OpenRiaServicesEndpointDataSource>();
-
+            services.AddOpenRiaServices();
             services.AddTransient<T>();
         }
 
@@ -49,7 +43,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 IServiceProviderIsService isService = scope.ServiceProvider.GetService<IServiceProviderIsService>() 
                     ?? new DymmyIsService(scope.ServiceProvider);
 
-                var configurationBuilder = new OpenRiaServicesConfigurationBuilder(dataSource, isService);
+                var configurationBuilder = new OpenRiaServicesConfigurationBuilder(dataSource, isService, endpoints.ServiceProvider, scope);
                 configure(configurationBuilder);
             }
 

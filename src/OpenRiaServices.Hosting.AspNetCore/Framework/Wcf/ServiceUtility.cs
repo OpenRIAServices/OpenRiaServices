@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Web;
-using System.Xml;
-using OpenRiaServices.Hosting.Wcf.Behaviors;
+using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
 // WARNING: Keep this file in sync with OpenRiaServices.Hosting
@@ -17,10 +11,6 @@ namespace OpenRiaServices.Hosting.Wcf
 {
     internal static class ServiceUtility
     {
-        internal const long MaxReceivedMessageSize = int.MaxValue;
-        internal const string SubmitOperationName = "SubmitChanges";
-        internal const string ServiceFileExtension = ".svc";
-
         /// <summary>
         /// Transforms the specified exception as appropriate into a fault message that can be sent
         /// back to the client.
@@ -29,9 +19,8 @@ namespace OpenRiaServices.Hosting.Wcf
         /// This method will also trace the exception if tracing is enabled.
         /// </remarks>
         /// <param name="e">The exception that was caught.</param>
-        /// <param name="hideStackTrace">same as <see cref="HttpContext.IsCustomErrorEnabled"/> <c>true</c> means dont send stack traces</param>
         /// <returns>The exception to return.</returns>
-        internal static DomainServiceFault CreateFaultException(Exception e, bool hideStackTrace)
+        internal static DomainServiceFault CreateFaultException(Exception e, OpenRiaServicesOptions options)
         {
             Debug.Assert(!e.IsFatal(), "Fatal exception passed in");
             DomainServiceFault fault = new DomainServiceFault();
@@ -62,9 +51,8 @@ namespace OpenRiaServices.Hosting.Wcf
                     fault.ErrorCode = dpe.ErrorCode;
                     fault.ErrorMessage = FormatExceptionMessage(dpe);
                     fault.IsDomainException = true;
-                    if (!hideStackTrace)
+                    if (options.UnsafeIncludeStackTraceInErrors)
                     {
-                        // also send the stack trace if custom errors is disabled
                         fault.StackTrace = dpe.StackTrace;
                     }
 
@@ -74,10 +62,13 @@ namespace OpenRiaServices.Hosting.Wcf
 
             // set error code. Also set error message if custom errors is disabled
             fault.ErrorCode = errorCode;
-            if (!hideStackTrace)
+            if (options.AlwaysIncludeExceptionMessageInFault == true
+                || (options.IncludeExceptionMessageInFault is { } filter && filter(e)))
             {
                 fault.ErrorMessage = FormatExceptionMessage(e);
-                fault.StackTrace = e.StackTrace;
+
+                if (options.UnsafeIncludeStackTraceInErrors)
+                    fault.StackTrace = e.StackTrace;
             }
 
             return fault;

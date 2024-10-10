@@ -15,8 +15,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         public override string OperationName => "SubmitChanges";
         public override bool HasSideEffects => true;
 
-        public SubmitOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper)
-                : base(operation, DomainOperationType.Submit, serializationHelper, serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>)))
+        public SubmitOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Submit, serializationHelper, serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>)), options)
         {
             _parameterSerializer = serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>));
         }
@@ -44,7 +44,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {
-                    await WriteError(context, ex, domainService.GetDisableStackTraces());
+                    await WriteError(context, ex);
                     return;
                 }
 

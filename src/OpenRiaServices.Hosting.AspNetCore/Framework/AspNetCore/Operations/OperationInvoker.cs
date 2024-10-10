@@ -37,13 +37,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         protected OperationInvoker(DomainOperationEntry operation, DomainOperationType operationType,
             SerializationHelper serializationHelper,
-            DataContractSerializer responseSerializer)
+            DataContractSerializer responseSerializer,
+            OpenRiaServicesOptions options)
         {
             this._operation = operation;
             this._operationType = operationType;
             this._serializationHelper = serializationHelper;
             this._responseSerializer = responseSerializer;
-
+            Options = options;
             _responseName = OperationName + "Response";
             _resultName = OperationName + "Result";
         }
@@ -52,6 +53,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         public DomainOperationEntry DomainOperation => _operation;
 
         public abstract bool HasSideEffects { get; }
+        public OpenRiaServicesOptions Options { get; }
 
         public abstract Task Invoke(HttpContext context);
 
@@ -253,14 +255,15 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             }
         }
 
-        protected Task WriteError(HttpContext context, IEnumerable<ValidationResult> validationErrors, bool hideStackTrace)
+        protected Task WriteError(HttpContext context, IEnumerable<ValidationResult> validationErrors)
         {
             var errors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames)).ToList();
+            bool unsafeShowStackTrace = Options.UnsafeIncludeStackTraceInErrors;
 
             // if custom errors is turned on, clear out the stacktrace.
             foreach (ValidationResultInfo error in errors)
             {
-                if (hideStackTrace)
+                if (unsafeShowStackTrace == false)
                 {
                     error.StackTrace = null;
                 }
@@ -277,9 +280,17 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         /// <param name="ex">The exception that was caught.</param>
         /// <param name="hideStackTrace">same as <see cref="HttpContext.IsCustomErrorEnabled"/> <c>true</c> means dont send stack traces</param>
         /// <returns>The exception to return.</returns>
-        protected Task WriteError(HttpContext context, Exception ex, bool hideStackTrace)
+        protected Task WriteError(HttpContext context, Exception ex)
         {
-            var fault = ServiceUtility.CreateFaultException(ex, hideStackTrace);
+            var fault = ServiceUtility.CreateFaultException(ex, Options);
+
+            // TODO: Transform error based on options
+            // ex = options.TransformError(ex) , or AspNetCoreDomainServiceFault =  options.OnError(context, ex)
+            //if (Options.OnError is { } onError)
+            //{
+            //    onError(fault.ErrorCode, ex);
+            //}
+
             return WriteError(context, fault);
         }
 

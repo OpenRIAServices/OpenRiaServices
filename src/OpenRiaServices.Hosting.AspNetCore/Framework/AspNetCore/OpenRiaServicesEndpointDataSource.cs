@@ -7,7 +7,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.AspNetCore.Routing.Patterns;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using OpenRiaServices.Hosting.AspNetCore.Operations;
 using OpenRiaServices.Server;
@@ -23,11 +25,13 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
         private readonly HashSet<string> _paths = new();
         private readonly Dictionary<Type, DomainServiceEndpointBuilder> _endpointBuilders = new();
+        private readonly OpenRiaServicesOptions _options;
         private List<Endpoint> _endpoints;
 
-        public OpenRiaServicesEndpointDataSource()
+        public OpenRiaServicesEndpointDataSource(IServiceCollection services, IOptions<OpenRiaServicesOptions> options)
         {
-
+            ServiceCollection = services;
+            _options = options.Value;
         }
 
         internal IEndpointConventionBuilder AddDomainService(string path, Type type)
@@ -62,6 +66,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         }
 
         public string Prefix { get; internal set; }
+        public IServiceCollection ServiceCollection { get; }
 
         private List<Endpoint> BuildEndpoints()
         {
@@ -83,11 +88,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     if (operation.Operation == DomainOperation.Query)
                     {
                         invoker = (OperationInvoker)Activator.CreateInstance(typeof(QueryOperationInvoker<>).MakeGenericType(operation.AssociatedType),
-                            new object[] { operation, serializationHelper });
+                            new object[] { operation, serializationHelper , _options });
                     }
                     else if (operation.Operation == DomainOperation.Invoke)
                     {
-                        invoker = new InvokeOperationInvoker(operation, serializationHelper);
+                        invoker = new InvokeOperationInvoker(operation, serializationHelper, _options);
                     }
                     else // Submit related methods are not directly accessible
                         continue;
@@ -98,7 +103,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
                     typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
-                var submitOperationInvoker = new SubmitOperationInvoker(submit, serializationHelper);
+                var submitOperationInvoker = new SubmitOperationInvoker(submit, serializationHelper, _options);
                 AddEndpoints(endpoints, submitOperationInvoker, domainServiceBuilder, additionalMetadata);
             }
 
@@ -123,13 +128,13 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
             public List<string> Paths { get; } = new();
 
-            public void Add(Action<EndpointBuilder> convention)
+            void IEndpointConventionBuilder.Add(Action<EndpointBuilder> convention)
             {
                 _conventions.Add(convention);
             }
 
 #if NET7_0_OR_GREATER
-            public void Finally(System.Action<Microsoft.AspNetCore.Builder.EndpointBuilder> finallyConvention)
+            void IEndpointConventionBuilder.Finally(System.Action<Microsoft.AspNetCore.Builder.EndpointBuilder> finallyConvention)
             {
                 _finallyConventions.Add(finallyConvention);
             }
