@@ -2,6 +2,7 @@
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,12 +21,12 @@ namespace OpenRiaServices.Hosting.AspNetCore
             _typeIsService = typeIsService;
         }
 
-        public IEndpointConventionBuilder AddDomainService<T>() where T : DomainService
+        public IEndpointConventionBuilder AddDomainService<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] T>() where T : DomainService
         {
             return AddDomainService(typeof(T));
         }
 
-        public IEndpointConventionBuilder AddDomainService(Type type)
+        public IEndpointConventionBuilder AddDomainService([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type)
         {
             ArgumentNullException.ThrowIfNull(nameof(type));
 
@@ -35,7 +36,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return _dataSource.AddDomainService(GetDomainServiceRoute(type), type);
         }
 
-        public IEndpointConventionBuilder AddDomainService(Type type, string path)
+        public IEndpointConventionBuilder AddDomainService([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type, string path)
         {
             ArgumentNullException.ThrowIfNull(nameof(type));
 #if NET7_0_OR_GREATER
@@ -50,7 +51,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return _dataSource.AddDomainService(path, type);
         }
 
-        public IEndpointConventionBuilder AddDomainService<T>(string path) where T : DomainService
+        public IEndpointConventionBuilder AddDomainService<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] T>(string path) where T : DomainService
         {
             return AddDomainService(typeof(T), path);
         }
