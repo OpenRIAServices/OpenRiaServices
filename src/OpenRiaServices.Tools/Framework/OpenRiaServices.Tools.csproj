@@ -54,13 +54,13 @@
     <!-- Required for validation attributes -->
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <!-- MEF Attribute: TODO consider removing MEF support for .NET (non framework) -->
-    <PackageReference Include="System.ComponentModel.Composition" Version="7.0.0" />
-    <PackageReference Include="System.CodeDom" Version="7.0.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
+    <PackageReference Include="System.CodeDom" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
     <!-- Use PrivateAssets="all" to prevent nuget packages to become nuget dependencies -->
     <!-- IMPORTANT: Also use ExcludeAssets="Runtime" if referencing msbuild packages https://learn.microsoft.com/en-us/visualstudio/msbuild/tutorial-custom-task-code-generation?view=vs-2022#dont-bundle-the-microsoftbuildutilitiescore-assembly -->
-    <PackageReference Include="Mono.Cecil" Version="0.11.5" PrivateAssets="all" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.6" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" ExcludeAssets="Runtime" PrivateAssets="all">

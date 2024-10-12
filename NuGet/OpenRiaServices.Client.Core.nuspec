@@ -24,8 +24,8 @@
         <dependency id="System.ServiceModel.Primitives" version="4.10.2" />
       </group>
       <group targetFramework="net6.0-windows7.0">
-        <dependency id="System.ServiceModel.Http" version="4.10.2" />
-        <dependency id="System.ServiceModel.Primitives" version="4.10.2" />
+        <dependency id="System.ServiceModel.Http" version="6.2.0" />
+        <dependency id="System.ServiceModel.Primitives" version="6.2.0" />
       </group>
     </dependencies>
     <frameworkReferences>

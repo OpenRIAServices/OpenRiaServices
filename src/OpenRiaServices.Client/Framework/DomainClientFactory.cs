@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Diagnostics.CodeAnalysis;
 
 namespace OpenRiaServices.Client
 {
@@ -60,7 +61,7 @@ namespace OpenRiaServices.Client
         /// <exception cref="ArgumentNullException"><paramref name="serviceContract"/> or <paramref name="serviceUri"/> is null</exception>
         /// <exception cref="ArgumentException"><paramref name="serviceContract"/>  is not an interface</exception>
         /// <returns>A <see cref="DomainClient"/> to use when communicating with the service</returns>
-        public DomainClient CreateDomainClient(Type serviceContract, Uri serviceUri, bool requiresSecureEndpoint)
+        public DomainClient CreateDomainClient([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type serviceContract, Uri serviceUri, bool requiresSecureEndpoint)
         {
             if (serviceContract == null)
                 throw new ArgumentNullException(nameof(serviceContract));
