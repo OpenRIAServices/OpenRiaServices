@@ -1,8 +1,9 @@
 ﻿// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
+#nullable enable
+
 using System;
-using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
@@ -15,10 +16,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
     {
         private readonly OpenRiaServicesEndpointDataSource _dataSource;
         private readonly IServiceProviderIsService _typeIsService;
-        private readonly ILogger<OpenRiaServicesConfigurationBuilder> _logger;
+        private readonly ILogger? _logger;
         private readonly IServiceScope _scope;
 
-        internal OpenRiaServicesConfigurationBuilder(OpenRiaServicesEndpointDataSource dataSource, IServiceProviderIsService typeIsService, ILogger<OpenRiaServicesConfigurationBuilder> logger, IServiceScope scope)
+        internal OpenRiaServicesConfigurationBuilder(OpenRiaServicesEndpointDataSource dataSource, IServiceProviderIsService typeIsService, ILogger? logger, IServiceScope scope)
         {
             _dataSource = dataSource;
             _typeIsService = typeIsService;
@@ -75,7 +76,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
                     if (!TypeUtility.IsAttributeDefined(serviceType, typeof(EnableClientAccessAttribute), true))
                     {
-                        _logger.LogTrace("Skipping DomainService '{DomainServiceType}' since it is not marked with EnableClientAccessAttribute", serviceType);
+                        _logger?.LogTrace("Skipping DomainService '{DomainServiceType}' since it is not marked with EnableClientAccessAttribute", serviceType);
                         continue;
                     }
 
@@ -88,11 +89,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     {
                         if (suppressAndLogErrors && ex is not MissingMethodException)
                         {
-                            _logger.LogWarning(ex, "Skipped domain service '{DomainServiceType}' since it resulted in error: {Error}", serviceType, ex.Message);
+                            _logger?.LogWarning(ex, "Skipped domain service '{DomainServiceType}' since it resulted in error: {Error}", serviceType, ex.Message);
                         }
                         else
                         {
-                            _logger.LogError(ex, "Error adding DomainService '{DomainServiceType}'", serviceType);
+                            _logger?.LogError(ex, "Error adding DomainService '{DomainServiceType}'", serviceType);
                             throw;
                         }
                     }
@@ -112,14 +113,14 @@ namespace OpenRiaServices.Hosting.AspNetCore
             // - Fallback to FullName
             EndpointRoutePattern pattern =
                 type.Assembly.GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern
-                ?? Assembly.GetEntryAssembly().GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern
+                ?? Assembly.GetEntryAssembly()?.GetCustomAttribute<DomainServiceEndpointRoutePatternAttribute>()?.EndpointRoutePattern
                 ?? EndpointRoutePattern.WCF;
 
             return pattern switch
             {
                 EndpointRoutePattern.Name => type.Name,
-                EndpointRoutePattern.WCF => type.FullName.Replace('.', '-') + ".svc/binary",
-                EndpointRoutePattern.FullName => type.FullName.Replace('.', '-'),
+                EndpointRoutePattern.WCF => type.FullName!.Replace('.', '-') + ".svc/binary",
+                EndpointRoutePattern.FullName => type.FullName?.Replace('.', '-') ?? throw new InvalidOperationException("Type.FullName must not be null"),
                 _ => throw new NotImplementedException(),
             };
         }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
@@ -43,7 +44,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 IServiceProviderIsService isService = scope.ServiceProvider.GetService<IServiceProviderIsService>() 
                     ?? new DymmyIsService(scope.ServiceProvider);
 
-                var configurationBuilder = new OpenRiaServicesConfigurationBuilder(dataSource, isService, endpoints.ServiceProvider, scope);
+                var logger = scope.ServiceProvider.GetService<ILogger<OpenRiaServicesConfigurationBuilder>>();
+                var configurationBuilder = new OpenRiaServicesConfigurationBuilder(dataSource, isService, logger, scope);
                 configure(configurationBuilder);
             }
 
