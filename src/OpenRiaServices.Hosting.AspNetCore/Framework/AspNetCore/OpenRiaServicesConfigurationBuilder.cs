@@ -29,11 +29,17 @@ namespace OpenRiaServices.Hosting.AspNetCore
             _scope = scope;
         }
 
+        /// <summary>
+        /// Map (add routes) for the specified <see cref="DomainService"/> <typeparamref name="T"/> so it can be accessed by clients.
+        /// </summary>
         public IEndpointConventionBuilder AddDomainService<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] T>() where T : DomainService
         {
             return AddDomainService(typeof(T));
         }
 
+        /// <summary>
+        /// Map (add routes) for the specified <see cref="DomainService"/> <paramref name="type"/> so it can be accessed by clients.
+        /// </summary>
         public IEndpointConventionBuilder AddDomainService([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type)
         {
             ArgumentNullException.ThrowIfNull(nameof(type));
@@ -44,6 +50,9 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return _dataSource.AddDomainService(GetDomainServiceRoute(type), type);
         }
 
+        /// <summary>
+        /// Map (add routes) for the specified <see cref="DomainService"/> <paramref name="type"/> under the specified path so it can be accessed by clients.
+        /// </summary>
         public IEndpointConventionBuilder AddDomainService([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type, string path)
         {
             ArgumentNullException.ThrowIfNull(nameof(type));
@@ -59,11 +68,20 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return _dataSource.AddDomainService(path, type);
         }
 
+        /// <summary>
+        /// Map (add routes) for the specified <see cref="DomainService"/> type under the specified path so it can be accessed by clients.
+        /// </summary>
         public IEndpointConventionBuilder AddDomainService<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] T>(string path) where T : DomainService
         {
             return AddDomainService(typeof(T), path);
         }
 
+        /// <summary>
+        /// Map (add routes) for all <see cref="DomainService"/> implementations that has been registered in the <see cref="IServiceCollection"/>
+        /// that was passed to <see cref="OpenRiaServicesServiceCollectionExtensions.AddOpenRiaServices(IServiceCollection)"/>.
+        /// </summary>
+        /// <param name="suppressAndLogErrors"><c>true</c> means that exceptions are supressed and logged, default <c>false</c></param>
+        /// <returns></returns>
         public IEndpointConventionBuilder AddRegisteredDomainServices(bool suppressAndLogErrors = false)
         {
             CompositeEndpointConventionBuilder compositeEndpointConventionBuilder = new();
