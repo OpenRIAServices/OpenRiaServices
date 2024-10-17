@@ -48,8 +48,8 @@ steps:
   inputs:
     restoreSolution: '$(Solution)'
     configuration: '$(BuildConfiguration)'
-    
-- task: SonarCloudPrepare@1
+
+- task: SonarCloudPrepare@2
   displayName: 'Prepare analysis on SonarCloud'
   condition: variables['sonarcloud-endpoint']
   inputs:
@@ -115,7 +115,9 @@ steps:
     configuration: '$(BuildConfiguration)'
   timeoutInMinutes: 25
 
-- task: SonarCloudAnalyze@1
+- task: SonarCloudAnalyze@2
+  inputs:
+    jdkversion: 'JAVA_HOME_21_X64'
   displayName: 'Run Code Analysis'
   continueOnError: true
   condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))))
@@ -160,7 +162,7 @@ steps:
     PathtoPublish: '$(build.artifactstagingdirectory)'
   condition: succeededOrFailed()
 
-- task: SonarCloudPublish@1
+- task: SonarCloudPublish@2
   displayName: 'Publish Quality Gate Result'
   continueOnError: true  
   condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))))
