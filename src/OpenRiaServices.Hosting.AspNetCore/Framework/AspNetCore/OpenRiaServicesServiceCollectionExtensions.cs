@@ -8,8 +8,14 @@ using OpenRiaServices.Server;
 
 namespace Microsoft.Extensions.DependencyInjection
 {
+    /// <summary>
+    /// Extension methods for registering OpenRiaServices services in an <see cref="IServiceCollection"/>
+    /// </summary>
     public static class OpenRiaServicesServiceCollectionExtensions
     {
+        /// <summary>
+        /// Adds services required for using OpenRiaServices
+        /// </summary>
         public static OpenRiaServicesOptionsBuilder AddOpenRiaServices(this IServiceCollection services)
         {
             ArgumentNullException.ThrowIfNull(services);
@@ -20,6 +26,9 @@ namespace Microsoft.Extensions.DependencyInjection
             return new OpenRiaServicesOptionsBuilder(services);
         }
 
+        /// <summary>
+        /// Adds services required for using OpenRiaServices and configures the options
+        /// </summary>
         public static OpenRiaServicesOptionsBuilder AddOpenRiaServices(this IServiceCollection services, Action<OpenRiaServicesOptions> configure)
         {
             ArgumentNullException.ThrowIfNull(services);
@@ -30,21 +39,30 @@ namespace Microsoft.Extensions.DependencyInjection
             return new OpenRiaServicesOptionsBuilder(services);
         }
 
-        public static IServiceCollection AddDomainService<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors)] T>(this IServiceCollection services) where T : DomainService
+        /// <summary>
+        /// Registers <typeparamref name="TService"/> as a transient service in <paramref name="services"/>
+        /// </summary>
+        public static IServiceCollection AddDomainService<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors)] TService>(this IServiceCollection services) where TService : DomainService
         {
-            return AddDomainService<T>(services, ServiceLifetime.Transient);
+            return AddDomainService<TService>(services, ServiceLifetime.Transient);
         }
 
-        public static IServiceCollection AddDomainService<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors)] T>(this IServiceCollection services, ServiceLifetime serviceLifetime) where T : DomainService
+        /// <summary>
+        /// Registers <typeparamref name="TService"/> as a service with <paramref name="serviceLifetime"/> in <paramref name="services"/>
+        /// </summary>
+        public static IServiceCollection AddDomainService<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods | DynamicallyAccessedMemberTypes.PublicConstructors)] TService>(this IServiceCollection services, ServiceLifetime serviceLifetime) where TService : DomainService
         {
-            services.Add(new ServiceDescriptor(typeof(T), typeof(T), serviceLifetime));
+            services.Add(new ServiceDescriptor(typeof(TService), typeof(TService), serviceLifetime));
             return services;
         }
 
         // TODO:
         // - From or In Assemblies
         // [RequiresUnreferencedCode("DomainService types are loaded dynamically and may be trimmed.")]
-        public static IServiceCollection AddDomainServicesFromAssemblies(this IServiceCollection services, IEnumerable<Assembly> assemblies, ServiceLifetime serviceLifetime)
+        /// <summary>
+        /// Registers public <see cref="DomainService"/>s marked with <see cref="EnableClientAccessAttribute"/> in <paramref name="assemblies"/> for dependency injection
+        /// </summary>
+        public static IServiceCollection AddDomainServicesFromAssemblies(this IServiceCollection services, IEnumerable<Assembly> assemblies, ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
         {
             ArgumentNullException.ThrowIfNull(assemblies);
 
@@ -58,7 +76,7 @@ namespace Microsoft.Extensions.DependencyInjection
         }
 
         /// <summary>
-        /// Registers public <see cref="DomainService"/>s that are marked with <see cref="EnableClientAccessAttribute"/> from <paramref name="assembly"/> 
+        /// Registers public <see cref="DomainService"/>s that are marked with <see cref="EnableClientAccessAttribute"/> from <paramref name="assembly"/> for dependency injection
         /// </summary>
         public static IServiceCollection AddDomainServicesFromAssembly(this IServiceCollection services, Assembly assembly, ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
         {
