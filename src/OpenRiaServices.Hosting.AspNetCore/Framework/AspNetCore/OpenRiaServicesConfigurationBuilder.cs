@@ -4,6 +4,7 @@
 #nullable enable
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.AspNetCore.Builder;
@@ -65,6 +66,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
         public IEndpointConventionBuilder AddRegisteredDomainServices(bool suppressAndLogErrors = false)
         {
+            CompositeEndpointConventionBuilder compositeEndpointConventionBuilder = new();
+
             foreach (ServiceDescriptor service in _dataSource.ServiceCollection)
             {
                 Type serviceType = service.ServiceType;
@@ -72,37 +75,28 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 {
                     if (service.ServiceType != service.ImplementationType)
                     {
-                        throw new InvalidOperationException($"ServiceDescriptor for '{serviceType}' has different ServiceType and ImplementationType '{service.ImplementationType}'");
+                        // Fallback to trying to resolve the actual implementation type using _scope
+                        serviceType = _scope.ServiceProvider.GetRequiredService(serviceType).GetType();
                     }
 
                     if (!TypeUtility.IsAttributeDefined(serviceType, typeof(EnableClientAccessAttribute), true))
                     {
-                        _logger?.LogTrace("Skipping DomainService '{DomainServiceType}' since it is not marked with EnableClientAccessAttribute", serviceType);
+                        _logger?.NoEnableClientAccessAttributeSkipping(serviceType);
                         continue;
                     }
 
-
                     try
                     {
-                        AddDomainService(serviceType);
+                        compositeEndpointConventionBuilder.AddBuilder(AddDomainService(serviceType));
                     }
-                    catch (Exception ex)
+                    catch (Exception ex) when (suppressAndLogErrors && ex is not MissingMethodException)
                     {
-                        if (suppressAndLogErrors && ex is not MissingMethodException)
-                        {
-                            _logger?.LogWarning(ex, "Skipped domain service '{DomainServiceType}' since it resulted in error: {Error}", serviceType, ex.Message);
-                        }
-                        else
-                        {
-                            _logger?.LogError(ex, "Error adding DomainService '{DomainServiceType}'", serviceType);
-                            throw;
-                        }
+                        _logger?.NotMappingDomainServiceDueToException(serviceType, ex);
                     }
                 }
             }
-            //composite convention builder ?
-            // return this;
-            return null;
+
+            return compositeEndpointConventionBuilder;
         }
 
         private static string GetDomainServiceRoute(Type type)
@@ -125,5 +119,39 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 _ => throw new NotImplementedException(),
             };
         }
+
+        sealed class CompositeEndpointConventionBuilder : IEndpointConventionBuilder
+        {
+            private readonly List<IEndpointConventionBuilder> _builders = new();
+
+            public CompositeEndpointConventionBuilder()
+            {
+            }
+
+            public void AddBuilder(IEndpointConventionBuilder builder)
+            {
+                _builders.Add(builder);
+            }
+
+            void IEndpointConventionBuilder.Add(Action<EndpointBuilder> convention)
+            {
+                foreach (var builder in _builders)
+                    builder.Add(convention);
+            }
+
+#if NET7_0_OR_GREATER
+            /// <summary>
+            /// Registers the specified convention for execution after conventions registered
+            /// via <see cref="Add(Action{EndpointBuilder})"/>
+            /// </summary>
+            /// <param name="finallyConvention">The convention to add to the builder.</param>
+            void IEndpointConventionBuilder.Finally(Action<EndpointBuilder> finallyConvention)
+            {
+                foreach (var builder in _builders)
+                    builder.Finally(finallyConvention);
+            }
+#endif
+        }
     }
+
 }
