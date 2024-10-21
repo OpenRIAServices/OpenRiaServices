@@ -1,30 +1,27 @@
-﻿using System;
+﻿#nullable enable
+
+using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore
 {
     public static class EndpointRouteBuilderExtensions
     {
-        // TODO: Other return types and parameters?? 
-        // Action<HostingOptions>
-        // return builder ...
-        // move this to separate collection extensions class
-        public static void AddOpenRiaServices(this IServiceCollection services)
+        [Obsolete("Moved to OpenRiaServicesServiceCollectionExtensions")]
+        public static void AddOpenRiaServices(IServiceCollection services)
         {
-            ArgumentNullException.ThrowIfNull(services);
-
-            services.AddSingleton<OpenRiaServicesEndpointDataSource>();
+            services.AddOpenRiaServices();
         }
 
-        public static void AddOpenRiaServices<T>(this IServiceCollection services) where T : OpenRiaServices.Server.DomainService
+        [Obsolete("Use AddOpenRiaServices() instead and add domainServices using AddDomainServices.. ")]
+        public static void AddOpenRiaServices<T>(this IServiceCollection services) where T : DomainService
         {
-            ArgumentNullException.ThrowIfNull(services);
-
-            services.AddSingleton<OpenRiaServicesEndpointDataSource>();
-
+            services.AddOpenRiaServices();
             services.AddTransient<T>();
         }
 
@@ -47,9 +44,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
             {
                 // Allow OpenRiaServicesConfigurationBuilder to validate that types are registeredd corretly
                 IServiceProviderIsService isService = scope.ServiceProvider.GetService<IServiceProviderIsService>() 
-                    ?? new DymmyIsService(scope.ServiceProvider);
+                    ?? new DymmyIsService(scope);
 
-                var configurationBuilder = new OpenRiaServicesConfigurationBuilder(dataSource, isService);
+                var logger = scope.ServiceProvider.GetService<ILogger<OpenRiaServicesConfigurationBuilder>>();
+                var configurationBuilder = new OpenRiaServicesConfigurationBuilder(dataSource, isService, logger, scope);
                 configure(configurationBuilder);
             }
 
@@ -63,17 +61,17 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// </summary>
         sealed class DymmyIsService : IServiceProviderIsService
         {
-            private readonly IServiceProvider _serviceProvider;
+            private readonly IServiceScope _scope;
 
-            public DymmyIsService(IServiceProvider serviceProvider)
+            public DymmyIsService(IServiceScope scope)
             {
-                _serviceProvider = serviceProvider;
+                _scope = scope;
             }
 
             public bool IsService(Type serviceType)
             {
-                using var domainService = (DomainService)_serviceProvider.GetService(serviceType);
-                return domainService != null;
+                // No need to dispose, the scope should dispose the instance
+                return _scope.ServiceProvider.GetService(serviceType) is DomainService;
             }
         }
     }

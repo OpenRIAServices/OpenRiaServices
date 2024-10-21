@@ -18,7 +18,9 @@ namespace OpenRiaServices.Hosting.AspNetCore;
 [TestClass]
 public class OperationInvokerTests
 {
-    private static readonly DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(typeof(OperationCanceledDomainService));
+    private static readonly DomainServiceDescription s_domainServiceDescription = DomainServiceDescription.GetDescription(typeof(OperationCanceledDomainService));
+    private static readonly OpenRiaServicesOptions s_options = new();
+
 
     public enum SubmitType
     {
@@ -30,9 +32,9 @@ public class OperationInvokerTests
     [Description("Invoke operation: Cancellation is requested but method returned succesfully")]
     public async Task TestInvoke_CancelAndReturn()
     {
-        var operation = domainServiceDescription.GetInvokeOperation(nameof(OperationCanceledDomainService.Invoke_CancelAndReturn));
+        var operation = s_domainServiceDescription.GetInvokeOperation(nameof(OperationCanceledDomainService.Invoke_CancelAndReturn));
         
-        var operationInvoker = new InvokeOperationInvoker(operation, GetSerializationHelper());
+        var operationInvoker = new InvokeOperationInvoker(operation, GetSerializationHelper(), s_options);
         
         await InvokeAndAssertNoResponseIsWritten(operationInvoker);
     }
@@ -41,9 +43,9 @@ public class OperationInvokerTests
     [Description("Invoke operation: Cancellation is requested and method throws OperationCanceledException")]
     public async Task TestInvoke_CancelAndAbort()
     {
-        var operation = domainServiceDescription.GetInvokeOperation(nameof(OperationCanceledDomainService.Invoke_CancelAndAbort));
+        var operation = s_domainServiceDescription.GetInvokeOperation(nameof(OperationCanceledDomainService.Invoke_CancelAndAbort));
         
-        var operationInvoker = new InvokeOperationInvoker(operation, GetSerializationHelper());
+        var operationInvoker = new InvokeOperationInvoker(operation, GetSerializationHelper(), s_options);
         
         await InvokeAndAssertNoResponseIsWritten(operationInvoker);
     }
@@ -52,9 +54,9 @@ public class OperationInvokerTests
     [Description("Query operation: Cancellation is requested but method returned succesfully")]
     public async Task TestQuery_CancelAndReturn()
     {
-        var operation = domainServiceDescription.GetQueryMethod(nameof(OperationCanceledDomainService.Query_CancelAndReturn));
+        var operation = s_domainServiceDescription.GetQueryMethod(nameof(OperationCanceledDomainService.Query_CancelAndReturn));
         
-        var operationInvoker = new QueryOperationInvoker<City>(operation, GetSerializationHelper());
+        var operationInvoker = new QueryOperationInvoker<City>(operation, GetSerializationHelper(), s_options);
         
         await InvokeAndAssertNoResponseIsWritten(operationInvoker);
     }
@@ -63,9 +65,9 @@ public class OperationInvokerTests
     [Description("Query operation: Cancellation is requested and method throws OperationCanceledException")]
     public async Task TestQuery_CancelAndAbort()
     {
-        var operation = domainServiceDescription.GetQueryMethod(nameof(OperationCanceledDomainService.Query_CancelAndAbort));
+        var operation = s_domainServiceDescription.GetQueryMethod(nameof(OperationCanceledDomainService.Query_CancelAndAbort));
         
-        var operationInvoker = new QueryOperationInvoker<City>(operation, GetSerializationHelper());
+        var operationInvoker = new QueryOperationInvoker<City>(operation, GetSerializationHelper(), s_options);
         
         await InvokeAndAssertNoResponseIsWritten(operationInvoker);
     }
@@ -74,10 +76,10 @@ public class OperationInvokerTests
     [Description("Submit operation: Cancellation is requested but method returned succesfully")]
     public async Task TestSubmit_CancelAndReturn()
     {
-        var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainServiceDescription.DomainServiceType,
+        var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(s_domainServiceDescription.DomainServiceType,
             typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
-        var operationInvoker = new SubmitOperationInvoker(submit, GetSerializationHelper());
+        var operationInvoker = new SubmitOperationInvoker(submit, GetSerializationHelper(), s_options);
 
         await InvokeAndAssertNoResponseIsWritten(operationInvoker, SubmitType.Cancel);
     }
@@ -86,15 +88,15 @@ public class OperationInvokerTests
     [Description("Submit operation: Cancellation is requested and method throws OperationCanceledException")]
     public async Task TestSubmit_CancelAndAbort()
     {
-        var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainServiceDescription.DomainServiceType,
+        var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(s_domainServiceDescription.DomainServiceType,
             typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
-        var operationInvoker = new SubmitOperationInvoker(submit, GetSerializationHelper());
+        var operationInvoker = new SubmitOperationInvoker(submit, GetSerializationHelper(), s_options);
 
         await InvokeAndAssertNoResponseIsWritten(operationInvoker, SubmitType.CancelAndThrow);
     }
 
-    private static SerializationHelper GetSerializationHelper() => new (domainServiceDescription);
+    private static SerializationHelper GetSerializationHelper() => new (s_domainServiceDescription);
 
     private static async Task InvokeAndAssertNoResponseIsWritten(OperationInvoker operationInvoker)
     {
@@ -133,7 +135,7 @@ public class OperationInvokerTests
     private static MemoryStream GetEmptyChangeSet(IEnumerable<ChangeSetEntry> changeSet)
     {
         var requestBody = new MemoryStream();
-        var dataContract = new DataContractSerializer(typeof(ChangeSetEntry[]), domainServiceDescription.EntityTypes);
+        var dataContract = new DataContractSerializer(typeof(ChangeSetEntry[]), s_domainServiceDescription.EntityTypes);
         using (var serializer = XmlDictionaryWriter.CreateBinaryWriter(requestBody, null, null, ownsStream: false))
         {
             serializer.WriteStartElement("SubmitChanges");

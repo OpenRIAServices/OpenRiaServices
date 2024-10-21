@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Globalization;
-using System.Linq;
 using System.Net;
-using System.Text;
-using System.Web;
-using System.Xml;
-using OpenRiaServices.Hosting.Wcf.Behaviors;
+using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
 // WARNING: Keep this file in sync with OpenRiaServices.Hosting
@@ -17,10 +11,6 @@ namespace OpenRiaServices.Hosting.Wcf
 {
     internal static class ServiceUtility
     {
-        internal const long MaxReceivedMessageSize = int.MaxValue;
-        internal const string SubmitOperationName = "SubmitChanges";
-        internal const string ServiceFileExtension = ".svc";
-
         /// <summary>
         /// Transforms the specified exception as appropriate into a fault message that can be sent
         /// back to the client.
@@ -29,21 +19,16 @@ namespace OpenRiaServices.Hosting.Wcf
         /// This method will also trace the exception if tracing is enabled.
         /// </remarks>
         /// <param name="e">The exception that was caught.</param>
-        /// <param name="hideStackTrace">same as <see cref="HttpContext.IsCustomErrorEnabled"/> <c>true</c> means dont send stack traces</param>
         /// <returns>The exception to return.</returns>
-        internal static DomainServiceFault CreateFaultException(Exception e, bool hideStackTrace)
+        internal static DomainServiceFault CreateFaultException(Exception e, OpenRiaServicesOptions options)
         {
             Debug.Assert(!e.IsFatal(), "Fatal exception passed in");
             DomainServiceFault fault = new DomainServiceFault();
-
-            // Unwrap any TargetInvocationExceptions to get the real exception.
-            e = ExceptionHandlingUtility.GetUnwrappedException(e);
 
             // we always send back a 200 (i.e. not re-throwing) with the actual error code in 
             // the results (except fo 404) because silverlight only supports 404/500 error code. If customErrors 
             // are disabled, we'll also send the error message.
             int errorCode = (int)HttpStatusCode.InternalServerError;
-
             if (e is InvalidOperationException)
             {
                 // invalid operation exception at root level generates BadRequest
@@ -62,9 +47,8 @@ namespace OpenRiaServices.Hosting.Wcf
                     fault.ErrorCode = dpe.ErrorCode;
                     fault.ErrorMessage = FormatExceptionMessage(dpe);
                     fault.IsDomainException = true;
-                    if (!hideStackTrace)
+                    if (options.IncludeExceptionStackTraceInErrors)
                     {
-                        // also send the stack trace if custom errors is disabled
                         fault.StackTrace = dpe.StackTrace;
                     }
 
@@ -74,10 +58,12 @@ namespace OpenRiaServices.Hosting.Wcf
 
             // set error code. Also set error message if custom errors is disabled
             fault.ErrorCode = errorCode;
-            if (!hideStackTrace)
+            if (options.IncludeExceptionMessageInErrors)
             {
                 fault.ErrorMessage = FormatExceptionMessage(e);
-                fault.StackTrace = e.StackTrace;
+
+                if (options.IncludeExceptionStackTraceInErrors)
+                    fault.StackTrace = e.StackTrace;
             }
 
             return fault;
