@@ -15,62 +15,39 @@ using TestDomainServices.Testing;
 [assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices(o =>
-{
-    o.IncludeExceptionMessageInFault = (ex) => true;
-    o.UnsafeIncludeStackTraceInErrors = true;
-});
+builder.Services.AddOpenRiaServices(o => {
+    o.OnError = (onErrorArgs) =>
+    {
+        // Pass all
+        onErrorArgs.ErrorMessage ??= onErrorArgs.Exception.Message;
+    };
+    //o.IncludeExceptionMessageInFault = (ex) => true;
+    o.IncludeExceptionStackTraceInErrors = true;
+})
+// Possible future extension point for configuring OpenRia Services
+//.WithBinaryXmlFormat(options => { ... MaxItemsInObjectGraph, XmlDictionaryReaderQuotas Writer/ReaderQuotas ... })
+//.WithBinaryXml(false)
+;
 
 builder.Services.AddAuthentication();
 
-//builder.Services.AddOpenRiaServices(x =>
-//{
-//    x.WithOnError((ex, context) =>
-//    {
-//        Console.WriteLine($"Error: {ex.Message}");
-//        context.Response.StatusCode = 500;
-//        return Task.CompletedTask;
-//    });
-//    x.RegisterDomainService<AuthenticationService1>();
-//    x.RegisterDomainServicesInAssembly(...);
-//    x.RegisterDomainServicesInAssembly(...);
-//});
-
-
-//builder.Services.AddOpenRiaServices(x =>
-//{
-//    x.WithOnError((ex, context) =>
-//    {
-//        Console.WriteLine($"Error: {ex.Message}");
-//        context.Response.StatusCode = 500;
-//        return Task.CompletedTask;
-//    });
-//})
-//    .RegisterDomainService<AuthenticationService1>()
-//    .RegisterDomainServicesInAssembly(...)
-//    .RegisterDomainServicesInLoadedAssemblies(...);
-
-
-
 // Allow injection of HttpContext
-
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpContext>(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext);
 
+// Add DomainServices
 builder.Services.AddDomainServicesFromAssembly(typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate).Assembly);
-
-// Types in this assembly
 builder.Services.AddTransient<AuthenticationService1>();
 
 var app = builder.Build();
 
-//app.UseEndpoints(endpoints =>
-//{
+app.UseAuthentication();
+
 app.MapOpenRiaServices(builder =>
    {
        // All all domainservices registered in the container
        builder.AddRegisteredDomainServices(suppressAndLogErrors: true);
- 
+
        // Add services with old endpoint structure to allow unit tests to work
        // REMARKS: The unit tests should be rewritten so this is not needed
        builder.AddDomainService<Cities.CityDomainService>("Cities-CityDomainService.svc/binary");

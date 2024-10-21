@@ -19,7 +19,7 @@ namespace OpenRiaServices.Hosting
         {
             // todo: allow configuring via options, or maybe tweak based on "environment"
             return !domainService.ServiceContext.GetRequiredService<IOptions<OpenRiaServicesOptions>>()
-                .Value.UnsafeIncludeStackTraceInErrors;
+                .Value.IncludeExceptionStackTraceInErrors;
         }
     }
 }

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
@@ -258,7 +259,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         protected Task WriteError(HttpContext context, IEnumerable<ValidationResult> validationErrors)
         {
             var errors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames)).ToList();
-            bool unsafeShowStackTrace = Options.UnsafeIncludeStackTraceInErrors;
+            bool unsafeShowStackTrace = Options.IncludeExceptionStackTraceInErrors;
 
             // if custom errors is turned on, clear out the stacktrace.
             foreach (ValidationResultInfo error in errors)
@@ -269,7 +270,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
             }
 
-            return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity });
+            return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity }, HttpStatusCode.InternalServerError);
         }
 
 
@@ -280,21 +281,27 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         /// <param name="ex">The exception that was caught.</param>
         /// <param name="hideStackTrace">same as <see cref="HttpContext.IsCustomErrorEnabled"/> <c>true</c> means dont send stack traces</param>
         /// <returns>The exception to return.</returns>
-        protected Task WriteError(HttpContext context, Exception ex)
+        protected Task WriteError(HttpContext context, Exception ex, DomainService domainService)
         {
+            // Unwrap any TargetInvocationExceptions to get the real exception.
+            ex = ExceptionHandlingUtility.GetUnwrappedException(ex);
             var fault = ServiceUtility.CreateFaultException(ex, Options);
 
-            // TODO: Transform error based on options
-            // ex = options.TransformError(ex) , or AspNetCoreDomainServiceFault =  options.OnError(context, ex)
-            //if (Options.OnError is { } onError)
-            //{
-            //    onError(fault.ErrorCode, ex);
-            //}
+            HttpStatusCode httpStatusCode = fault.ErrorCode == (int)HttpStatusCode.Unauthorized ? HttpStatusCode.Unauthorized : HttpStatusCode.InternalServerError;
+            if (Options.OnError is { } onError)
+            {
+                var onErrorArgs = new DomainServiceErrorInfo(ex, fault, domainService)
+                {
+                    HttpStatusCode = httpStatusCode
+                };
+                onError(onErrorArgs);
+                httpStatusCode = onErrorArgs.HttpStatusCode;
+            }
 
-            return WriteError(context, fault);
+            return WriteError(context, fault, httpStatusCode);
         }
 
-        protected Task WriteError(HttpContext context, DomainServiceFault fault)
+        protected static Task WriteError(HttpContext context, DomainServiceFault fault, HttpStatusCode httpStatusCode)
         {
             var ct = context.RequestAborted;
             if (ct.IsCancellationRequested)
@@ -312,7 +319,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
                 response.Headers.ContentType = "application/msbin1";
                 // We should be able to use fault.ErrorCode as long as it is not Bad request (400, which result in special WCF client throwing another exception) and not a domainOperation
-                response.StatusCode = 500; //  fault.IsDomainException || fault.ErrorCode == 400 ? 500 : fault.ErrorCode;
+                response.StatusCode = (int)httpStatusCode;
                 response.ContentLength = bufferMemory.Length;
                 response.Headers.CacheControl = "private, no-store";
 

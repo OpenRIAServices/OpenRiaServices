@@ -44,7 +44,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {
-                    await WriteError(context, ex);
+                    await WriteError(context, ex, domainService);
                     return;
                 }
 
