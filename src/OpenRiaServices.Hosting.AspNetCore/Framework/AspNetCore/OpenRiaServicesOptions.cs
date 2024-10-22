@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 using OpenRiaServices.Server;
 
 #nullable enable
@@ -8,8 +9,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
     public sealed class OpenRiaServicesOptions
     {
         // TODO: Naming, should it be a single parameter, or should exception details (exception, ServiceContext) be passed as separate parameters?
-        public Action<DomainServiceErrorInfo>? OnError { get; set; }
-        // public void WithOnError(Action<Exception, DomainServiceErrorInfo>) { }
+        public Action<UnhandledExceptionParameters>? UnhandledException { get; set; }
+        // public OpenRiaServicesOptions WithOnUnhandledException(Action<Exception, DomainServiceErrorInfo>) { }
 
         /// <summary>
         /// Gets or sets a value indicating whether exception stack trace information should be included in error messages.
@@ -34,19 +35,20 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
     // TODO: 1: Naming, 2: Move to separate file
     /// <summary>
-    /// <see cref="DomainServiceErrorInfo"/> can be used to control how errors are passed to the client
+    /// <see cref="UnhandledExceptionParameters"/> can be used to control how errors are passed to the client
     /// </summary>
     /// <param name="exception"></param>
     /// <param name="fault"></param>
-    public sealed class DomainServiceErrorInfo(Exception exception, DomainServiceFault fault, DomainService domainService)
+    public sealed class UnhandledExceptionParameters(Exception exception, DomainServiceFault fault, DomainService domainService, Microsoft.AspNetCore.Http.HttpContext httpContext)
     {
         public Exception Exception { get; } = exception;
         //public DomainService? DomainService { get; } = domainService; // om enkelt att komma åt ananrs ServiceContext
         public DomainServiceContext ServiceContext { get; } = domainService.ServiceContext;
+        public HttpContext HttpContext { get; } = httpContext;
 
         public string ErrorMessage { get => fault.ErrorMessage; set => fault.ErrorMessage = value; }
         public int ErrorCode { get => fault.ErrorCode; set => fault.ErrorCode = value; }
-        public System.Net.HttpStatusCode HttpStatusCode { get; set; }
+        public System.Net.HttpStatusCode HttpStatusCode { get => (System.Net.HttpStatusCode)HttpContext.Response.StatusCode; set => HttpContext.Response.StatusCode = (int)value; }
         // TO REVIEW: Use getter/seter or Set methods (which makes settable properties stand out a bit, but it is not as straightforward as setters)
         // SetErrorMessage()
         // SetErrorCode

@@ -270,7 +270,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
             }
 
-            return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity }, HttpStatusCode.InternalServerError);
+            context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
+            return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity });
         }
 
 
@@ -287,21 +288,17 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             ex = ExceptionHandlingUtility.GetUnwrappedException(ex);
             var fault = ServiceUtility.CreateFaultException(ex, Options);
 
-            HttpStatusCode httpStatusCode = fault.ErrorCode == (int)HttpStatusCode.Unauthorized ? HttpStatusCode.Unauthorized : HttpStatusCode.InternalServerError;
-            if (Options.OnError is { } onError)
+            context.Response.StatusCode = fault.ErrorCode == (int)HttpStatusCode.Unauthorized ? fault.ErrorCode : (int)HttpStatusCode.InternalServerError;
+            if (Options.UnhandledException is { } unhandledExceptionCallback)
             {
-                var onErrorArgs = new DomainServiceErrorInfo(ex, fault, domainService)
-                {
-                    HttpStatusCode = httpStatusCode
-                };
-                onError(onErrorArgs);
-                httpStatusCode = onErrorArgs.HttpStatusCode;
+                var onErrorArgs = new UnhandledExceptionParameters(ex, fault, domainService, context);
+                unhandledExceptionCallback(onErrorArgs);
             }
 
-            return WriteError(context, fault, httpStatusCode);
+            return WriteError(context, fault);
         }
 
-        protected static Task WriteError(HttpContext context, DomainServiceFault fault, HttpStatusCode httpStatusCode)
+        protected static Task WriteError(HttpContext context, DomainServiceFault fault)
         {
             var ct = context.RequestAborted;
             if (ct.IsCancellationRequested)
@@ -316,12 +313,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 messageWriter = null;
 
                 var response = context.Response;
-
-                response.Headers.ContentType = "application/msbin1";
-                // We should be able to use fault.ErrorCode as long as it is not Bad request (400, which result in special WCF client throwing another exception) and not a domainOperation
-                response.StatusCode = (int)httpStatusCode;
-                response.ContentLength = bufferMemory.Length;
                 response.Headers.CacheControl = "private, no-store";
+                response.Headers.ContentType = "application/msbin1";
+                response.ContentLength = bufferMemory.Length;
 
                 return bufferMemory.WriteTo(response, ct);
             }

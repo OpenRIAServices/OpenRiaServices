@@ -16,7 +16,7 @@ using TestDomainServices.Testing;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices(o => {
-    o.OnError = (onErrorArgs) =>
+    o.UnhandledException = (onErrorArgs) =>
     {
         // Pass all
         onErrorArgs.ErrorMessage ??= onErrorArgs.Exception.Message;
