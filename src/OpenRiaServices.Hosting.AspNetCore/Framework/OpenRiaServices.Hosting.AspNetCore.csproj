@@ -55,7 +55,7 @@
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DynamicQueryableMethodValidator.cs" Link="Linq\DynamicQueryableMethodValidator.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryDeserializer.cs" Link="Linq\QueryDeserializer.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryResolver.cs" Link="Linq\QueryResolver.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\Resource.Designer.cs">
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\Resource.Designer.cs" Link="Linq\Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resource.resx</DependentUpon>
@@ -66,7 +66,7 @@
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\DataContractSurrogateGenerator.cs" Link="Wcf\DataContractSurrogateGenerator.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\DomainServiceSerializationSurrogate.cs" Link="Wcf\DomainServiceSerializationSurrogate.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\QueryProcessor.cs" Link="Wcf\QueryProcessor.cs" />
-    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\Resource.Designer.cs">
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Wcf\Resource.Designer.cs" Link="Wcf\Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
       <DependentUpon>Resource.resx</DependentUpon>
