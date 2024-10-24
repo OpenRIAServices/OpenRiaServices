@@ -53,22 +53,27 @@ https://github.com/OpenRIAServices/OpenRiaServices/blob/086ea8c8fcb115000749be6b
 
 5. Setup hosting integration
 
-Minimal program:
+Sample program:
 
 ```csharp
 using OpenRiaServices.Hosting.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();
-builder.Services.AddTransient<CityDomainService>();
+
+// Register DomainServices in DI
+builder.Services.AddDomainService<CityDomainService>();
+// OR builder.Services.AddDomainServicesFromAssembly(typeof(CityDomainService).Assembly);
+// OR builder.Services.AddDomainServicesFromAssemblies(AppDomain.CurrentDomain.GetAssemblies());
 
 
 var app = builder.Build();
-app.MapOpenRiaServices(builder =>
-{
-    builder.AddDomainService<CityDomainService>();
-});
 
+// Map OpenRiaServices routes , you can optionally add a prefix such as "/Services"
+// This will automatically map all DomainServices that are registered in builder.Services
+// Using routes similar to $"{DomainServiceName}/{MethodName}"
+app.MapOpenRiaServices();
+// OR app.MapOpenRiaServices(builder => { builder.AddDomainService<CityDomainService>(); }); to specify exactly the DomainServices to map which works better with Trimming
 
 app.Run();
 ```

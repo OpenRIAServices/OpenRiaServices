@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
-using OpenRiaServices;
-using OpenRiaServices.Hosting.AspNetCore;
+using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Server;
 
-namespace Microsoft.Extensions.DependencyInjection
+namespace OpenRiaServices.Hosting.AspNetCore
 {
     /// <summary>
     /// Extension methods for registering OpenRiaServices services in an <see cref="IServiceCollection"/>
@@ -33,7 +32,7 @@ namespace Microsoft.Extensions.DependencyInjection
         {
             ArgumentNullException.ThrowIfNull(services);
 
-            AddOpenRiaServices(services);
+            services.AddOpenRiaServices();
             services.Configure(configure);
 
             return new OpenRiaServicesOptionsBuilder(services);
@@ -83,8 +82,8 @@ namespace Microsoft.Extensions.DependencyInjection
             ArgumentNullException.ThrowIfNull(services);
             ArgumentNullException.ThrowIfNull(assembly);
 
-            //if (serviceLifetime == ServiceLifetime.Singleton)
-            //                throw new ArgumentOutOfRangeException(nameof(serviceLifetime), Resource.OpenRiaServicesServiceCollectionExtensions_SingletonNotAllowed);
+            if (serviceLifetime == ServiceLifetime.Singleton)
+                throw new ArgumentOutOfRangeException(nameof(serviceLifetime), "Singleton is not a valid serviceLifetime");
 
             foreach (var exportedType in assembly.GetExportedTypes())
             {

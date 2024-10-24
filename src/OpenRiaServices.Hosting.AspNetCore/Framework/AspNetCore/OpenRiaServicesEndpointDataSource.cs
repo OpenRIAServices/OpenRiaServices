@@ -51,6 +51,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return endpointBuilder;
         }
 
+        internal bool HasMappedAnyDomainService()
+            => _endpointBuilders.Count > 0;
 
         public override IReadOnlyList<Endpoint> Endpoints
         {
