@@ -259,12 +259,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         protected Task WriteError(HttpContext context, IEnumerable<ValidationResult> validationErrors)
         {
             var errors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames)).ToList();
-            bool unsafeShowStackTrace = Options.IncludeExceptionStackTraceInErrors;
 
             // if custom errors is turned on, clear out the stacktrace.
-            foreach (ValidationResultInfo error in errors)
+            if (!Options.IncludeExceptionStackTraceInErrors)
             {
-                if (unsafeShowStackTrace == false)
+                foreach (ValidationResultInfo error in errors)
                 {
                     error.StackTrace = null;
                 }

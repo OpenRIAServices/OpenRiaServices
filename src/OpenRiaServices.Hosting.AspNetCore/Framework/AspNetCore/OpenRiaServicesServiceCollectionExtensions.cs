@@ -66,13 +66,15 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// </summary>
         public static IServiceCollection AddDomainServices(this IServiceCollection services, ServiceLifetime serviceLifetime, params Assembly[] assemblies)
         {
+            ArgumentNullException.ThrowIfNull(services);
             ArgumentNullException.ThrowIfNull(assemblies);
+
             if (serviceLifetime == ServiceLifetime.Singleton)
                 throw new ArgumentOutOfRangeException(nameof(serviceLifetime), "Singleton is not a valid serviceLifetime");
 
             foreach (var assembly in assemblies)
             {
-                if (TypeUtility.CanContainDomainServiceImplementations(assembly))
+                if (assembly is not null && TypeUtility.CanContainDomainServiceImplementations(assembly))
                     AddDomainServicesFromAssembly(services, assembly, serviceLifetime);
             }
 
@@ -82,11 +84,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <summary>
         /// Registers public <see cref="DomainService"/>s that are marked with <see cref="EnableClientAccessAttribute"/> from <paramref name="assembly"/> for dependency injection
         /// </summary>
-        private static IServiceCollection AddDomainServicesFromAssembly(this IServiceCollection services, Assembly assembly, ServiceLifetime serviceLifetime)
+        private static void AddDomainServicesFromAssembly(this IServiceCollection services, Assembly assembly, ServiceLifetime serviceLifetime)
         {
-            ArgumentNullException.ThrowIfNull(services);
-            ArgumentNullException.ThrowIfNull(assembly);
-
             foreach (var exportedType in assembly.GetExportedTypes())
             {
                 if (exportedType.IsAbstract || exportedType.IsInterface || !typeof(DomainService).IsAssignableFrom(exportedType))
@@ -101,8 +100,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
                 services.Add(new ServiceDescriptor(exportedType, exportedType, serviceLifetime));
             }
-
-            return services;
         }
 
     }
