@@ -2,6 +2,7 @@
 using System.Diagnostics;
 using System.Globalization;
 using System.Net;
+using Microsoft.AspNetCore.Http;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
@@ -33,21 +34,17 @@ namespace OpenRiaServices.Hosting.Wcf
             }
 
             // we always send back a 200 (i.e. not re-throwing) with the actual error code in 
-            // the results (except fo 404) because silverlight only supports 404/500 error code. If customErrors 
-            // are disabled, we'll also send the error message.
-            int errorCode = (int)HttpStatusCode.InternalServerError;
-            if (e is InvalidOperationException)
+            // the results (except fo 404) because silverlight only supports 404/500 error code
+            fault.ErrorCode = e switch
             {
                 // invalid operation exception at root level generates BadRequest
-                errorCode = (int)HttpStatusCode.BadRequest;
-            }
-            else if (e is UnauthorizedAccessException)
-            {
-                errorCode = (int)HttpStatusCode.Unauthorized;
-            }
+                InvalidOperationException => StatusCodes.Status400BadRequest,
+                // invalid operation exception at root level generates BadRequest
+                UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+                _ => StatusCodes.Status500InternalServerError,
+            };
 
-            // set error code. Also set error message if custom errors is disabled
-            fault.ErrorCode = errorCode;
+            // Set error message if custom errors is disabled
             if (options.IncludeExceptionMessageInErrors)
             {
                 fault.SetFromException(e, options.IncludeExceptionStackTraceInErrors);
