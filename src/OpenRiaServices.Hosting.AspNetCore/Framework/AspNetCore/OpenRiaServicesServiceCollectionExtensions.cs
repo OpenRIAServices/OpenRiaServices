@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
@@ -55,15 +54,21 @@ namespace OpenRiaServices.Hosting.AspNetCore
             return services;
         }
 
-        // TODO:
-        // - From or In Assemblies
+        /// <summary>
+        /// Registers public <see cref="DomainService"/>s marked with <see cref="EnableClientAccessAttribute"/> in <paramref name="assemblies"/> as Transient services
+        /// </summary>
+        public static IServiceCollection AddDomainServices(this IServiceCollection services, params Assembly[] assemblies)
+            => AddDomainServices(services, ServiceLifetime.Transient, assemblies);
+
         // [RequiresUnreferencedCode("DomainService types are loaded dynamically and may be trimmed.")]
         /// <summary>
         /// Registers public <see cref="DomainService"/>s marked with <see cref="EnableClientAccessAttribute"/> in <paramref name="assemblies"/> for dependency injection
         /// </summary>
-        public static IServiceCollection AddDomainServicesFromAssemblies(this IServiceCollection services, IEnumerable<Assembly> assemblies, ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
+        public static IServiceCollection AddDomainServices(this IServiceCollection services, ServiceLifetime serviceLifetime, params Assembly[] assemblies)
         {
             ArgumentNullException.ThrowIfNull(assemblies);
+            if (serviceLifetime == ServiceLifetime.Singleton)
+                throw new ArgumentOutOfRangeException(nameof(serviceLifetime), "Singleton is not a valid serviceLifetime");
 
             foreach (var assembly in assemblies)
             {
@@ -77,13 +82,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <summary>
         /// Registers public <see cref="DomainService"/>s that are marked with <see cref="EnableClientAccessAttribute"/> from <paramref name="assembly"/> for dependency injection
         /// </summary>
-        public static IServiceCollection AddDomainServicesFromAssembly(this IServiceCollection services, Assembly assembly, ServiceLifetime serviceLifetime = ServiceLifetime.Transient)
+        private static IServiceCollection AddDomainServicesFromAssembly(this IServiceCollection services, Assembly assembly, ServiceLifetime serviceLifetime)
         {
             ArgumentNullException.ThrowIfNull(services);
             ArgumentNullException.ThrowIfNull(assembly);
-
-            if (serviceLifetime == ServiceLifetime.Singleton)
-                throw new ArgumentOutOfRangeException(nameof(serviceLifetime), "Singleton is not a valid serviceLifetime");
 
             foreach (var exportedType in assembly.GetExportedTypes())
             {
