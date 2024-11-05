@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Http;
 using OpenRiaServices.Server;
 
 #nullable enable
@@ -8,9 +7,12 @@ namespace OpenRiaServices.Hosting.AspNetCore
 {
     public sealed class OpenRiaServicesOptions
     {
-        // TODO: should it be a single parameter (Action<UnhandledExceptionParameters>), or Action<Exception, UnhandledExceptionParameters>
-        public Action<UnhandledExceptionParameters>? ExceptionHandler { get; set; }
-        // public OpenRiaServicesOptions OnUnhandledException(Action<UnhandledExceptionParameters>) { }
+        /// <summary>
+        /// Specifies a global exception handler for unhandled exceptions that occur during the processing of a request.
+        /// <para>It is similar to <see cref="DomainService.OnError(DomainServiceErrorInfo)"/> but is shared for all DomainServices 
+        /// and allows direct modification of the error message and status code sent to the client.</para>
+        /// </summary>
+        public Action<UnhandledExceptionContext, UnhandledExceptionResponse>? ExceptionHandler { get; set; }
 
         /// <summary>
         /// Gets or sets a value indicating whether exception stack trace information should be included in error messages.
@@ -32,35 +34,4 @@ namespace OpenRiaServices.Hosting.AspNetCore
          * int RouteOrder { get; set; }
          * */
     }
-
-    // TODO: 1: Naming UnhandledExceptionParameters or UnhandledExceptionArguments, 2: Move to separate file?
-    /// <summary>
-    /// <see cref="UnhandledExceptionParameters"/> can be used to control how errors are passed to the client
-    /// </summary>
-    /// <param name="exception"></param>
-    /// <param name="fault"></param>
-    public sealed class UnhandledExceptionParameters(Exception exception, DomainServiceFault fault, DomainService domainService, Microsoft.AspNetCore.Http.HttpContext httpContext)
-    {
-        public Exception Exception { get; } = exception;
-        //public DomainService? DomainService { get; } = domainService; // om enkelt att komma åt ananrs ServiceContext
-        public DomainServiceContext ServiceContext { get; } = domainService.ServiceContext;
-
-        // Consider exposing in the future for easier access to HTTP headers (user can use ServiceContext.GetService<IHttpContextAccessor>() )
-        internal HttpContext HttpContext { get; } = httpContext;
-
-        public string ErrorMessage { get => fault.ErrorMessage; set => fault.ErrorMessage = value; }
-        public int ErrorCode { get => fault.ErrorCode; set => fault.ErrorCode = value; }
-        public System.Net.HttpStatusCode HttpStatusCode { get => (System.Net.HttpStatusCode)HttpContext.Response.StatusCode; set => HttpContext.Response.StatusCode = (int)value; }
-
-        // TO REVIEW: Use getter/seter or Set methods (which makes settable properties stand out a bit, but it is not as straightforward as setters)
-        // SetErrorMessage()
-        // SetErrorCode
-        // SetHttpStatusCode
-
-
-        internal DomainServiceFault DomainServiceFault { get => fault; }
-        
-        // Maybe
-        // void SetFromException(DomainException domainException) { }
-    };
 }

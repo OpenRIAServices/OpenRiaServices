@@ -16,13 +16,9 @@ using TestDomainServices.Testing;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices(o => {
-    o.ExceptionHandler = (args) =>
-    {
-        // Pass all
-        args.ErrorMessage ??= args.Exception.Message;
-    };
- 
-    //o.IncludeExceptionMessageInFault = (ex) => true;
+    // There is at least one test which test that checks that calls stacks of normal exceptions are passed to the client
+    // To get StackTrack of "normal" exceptions we need to pass them on to the user, as well as include stack traces
+    o.IncludeExceptionMessageInErrors = true;
     o.IncludeExceptionStackTraceInErrors = true;
 })
 // Possible future extension point for configuring OpenRia Services

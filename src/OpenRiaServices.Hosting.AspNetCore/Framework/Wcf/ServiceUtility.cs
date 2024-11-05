@@ -25,6 +25,13 @@ namespace OpenRiaServices.Hosting.Wcf
             Debug.Assert(!e.IsFatal(), "Fatal exception passed in");
             DomainServiceFault fault = new DomainServiceFault();
 
+            if (e is DomainException dpe)
+            {
+                // we always propagate error info to the client for DomainServiceExceptions
+                fault.SetFromDomainException(dpe, options.IncludeExceptionStackTraceInErrors);
+                return fault;
+            }
+
             // we always send back a 200 (i.e. not re-throwing) with the actual error code in 
             // the results (except fo 404) because silverlight only supports 404/500 error code. If customErrors 
             // are disabled, we'll also send the error message.
@@ -38,50 +45,15 @@ namespace OpenRiaServices.Hosting.Wcf
             {
                 errorCode = (int)HttpStatusCode.Unauthorized;
             }
-            else
-            {
-                DomainException dpe = e as DomainException;
-                if (dpe != null)
-                {
-                    // we always propagate error info to the client for DomainServiceExceptions
-                    fault.ErrorCode = dpe.ErrorCode;
-                    fault.ErrorMessage = FormatExceptionMessage(dpe);
-                    fault.IsDomainException = true;
-                    if (options.IncludeExceptionStackTraceInErrors)
-                    {
-                        fault.StackTrace = dpe.StackTrace;
-                    }
-
-                    return fault;
-                }
-            }
 
             // set error code. Also set error message if custom errors is disabled
             fault.ErrorCode = errorCode;
             if (options.IncludeExceptionMessageInErrors)
             {
-                fault.ErrorMessage = FormatExceptionMessage(e);
-
-                if (options.IncludeExceptionStackTraceInErrors)
-                    fault.StackTrace = e.StackTrace;
+                fault.SetFromException(e, options.IncludeExceptionStackTraceInErrors);
             }
 
             return fault;
-        }
-
-        /// <summary>
-        /// For the specified exception, return the error message concatenating
-        /// the message of any inner exception to one level deep.
-        /// </summary>
-        /// <param name="e">The exception</param>
-        /// <returns>The formatted exception message.</returns>
-        private static string FormatExceptionMessage(Exception e)
-        {
-            if (e.InnerException == null)
-            {
-                return e.Message;
-            }
-            return string.Format(CultureInfo.CurrentCulture, Resource.FaultException_InnerExceptionDetails, e.Message, e.InnerException.Message);
         }
     }
 }

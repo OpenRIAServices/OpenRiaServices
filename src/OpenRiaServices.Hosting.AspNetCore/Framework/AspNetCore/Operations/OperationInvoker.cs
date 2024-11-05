@@ -289,10 +289,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             var fault = ServiceUtility.CreateFaultException(ex, Options);
 
             context.Response.StatusCode = fault.ErrorCode == (int)HttpStatusCode.Unauthorized ? fault.ErrorCode : (int)HttpStatusCode.InternalServerError;
-            if (Options.ExceptionHandler is { } unhandledExceptionCallback)
+            if (Options.ExceptionHandler is { } exceptionHandler)
             {
-                var onErrorArgs = new UnhandledExceptionParameters(ex, fault, domainService, context);
-                unhandledExceptionCallback(onErrorArgs);
+                var errorDetails = new UnhandledExceptionResponse(fault, context);
+                exceptionHandler(new UnhandledExceptionContext(ex, domainService), errorDetails);
             }
 
             return WriteError(context, fault);
