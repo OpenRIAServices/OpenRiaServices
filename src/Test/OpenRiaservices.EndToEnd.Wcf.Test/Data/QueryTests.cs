@@ -1824,10 +1824,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task TestLoad_DefaultContractNamespace()
         {
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(City) }
-            };
+            DomainClient client = CreateCitiesDomainClient([typeof(City)]);
 
             var results = await client.QueryAsync(new EntityQuery<City>(client, "GetCities", null, true, true), CancellationToken.None);
             Assert.IsTrue(results.TotalCount > 0);
@@ -1840,10 +1837,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task TestLoad_AuthenticationRequired()
         {
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(Zip) }
-            };
+            DomainClient client = CreateCitiesDomainClient([typeof(Zip)]);
 
             var queryTask = client.QueryAsync(
                 new EntityQuery<Zip>(client, "GetZipsIfAuthenticated", null, true, false),
@@ -1862,10 +1856,8 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task TestLoad_RoleRequired()
         {
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(Zip) }
-            };
+            DomainClient client = CreateCitiesDomainClient([typeof(Zip)]);
+
             var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfInRole", null, true, false), CancellationToken.None);
 
             DomainOperationException error = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(() => queryTask);
@@ -1881,10 +1873,7 @@ namespace OpenRiaServices.Client.Test
         [Description("Accessing a query with a custom authorization attribute asserting a specific user is denied")]
         public async Task TestLoad_UserRequired()
         {
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(Zip) }
-            };
+            DomainClient client = CreateCitiesDomainClient([typeof(Zip)]);
 
             var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfUser", null, true, false), CancellationToken.None);
             DomainOperationException error = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(() => queryTask);
@@ -2179,6 +2168,14 @@ namespace OpenRiaServices.Client.Test
             var ex = await ExceptionHelper.ExpectExceptionAsync<Exception>(() => ctxt.LoadAsync(query), allowDerivedExceptions: true);
             validateException(ex);
         }
+
+        private static DomainClient CreateCitiesDomainClient(Type[] entityTypes)
+        {
+            var client = DomainContext.DomainClientFactory.CreateDomainClient(typeof(CityDomainContext.ICityDomainServiceContract), TestURIs.Cities, requiresSecureEndpoint: false);
+            client.EntityTypes = entityTypes;
+            return client;
+        }
+
     }
 
     internal class ScenariosEntityContainer : EntityContainer
