@@ -11,6 +11,9 @@ namespace OpenRiaServices.Hosting.AspNetCore
         public AspNetDomainServiceContext(HttpContext httpContext, DomainOperationType operationType)
             : base(httpContext.RequestServices, httpContext.User, operationType, httpContext.RequestAborted)
         {
+            HttpContext = httpContext;
         }
+
+        public HttpContext HttpContext { get; }
     }
 }

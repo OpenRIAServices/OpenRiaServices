@@ -16,11 +16,12 @@ using TestDomainServices.Testing;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices(o => {
-    o.UnhandledException = (onErrorArgs) =>
+    o.ExceptionHandler = (args) =>
     {
         // Pass all
-        onErrorArgs.ErrorMessage ??= onErrorArgs.Exception.Message;
+        args.ErrorMessage ??= args.Exception.Message;
     };
+ 
     //o.IncludeExceptionMessageInFault = (ex) => true;
     o.IncludeExceptionStackTraceInErrors = true;
 })
