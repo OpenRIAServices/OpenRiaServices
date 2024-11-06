@@ -21,7 +21,7 @@ namespace OpenRiaServices.Hosting.Wcf
         /// </remarks>
         /// <param name="e">The exception that was caught.</param>
         /// <returns>The exception to return.</returns>
-        internal static DomainServiceFault CreateFaultException(Exception e, OpenRiaServicesOptions options)
+        internal static DomainServiceFault CreateFaultException(Exception e, OpenRiaServicesOptions options, System.Security.Principal.IPrincipal user)
         {
             Debug.Assert(!e.IsFatal(), "Fatal exception passed in");
             DomainServiceFault fault = new DomainServiceFault();
@@ -39,8 +39,8 @@ namespace OpenRiaServices.Hosting.Wcf
             {
                 // invalid operation exception at root level generates BadRequest
                 InvalidOperationException => StatusCodes.Status400BadRequest,
-                // invalid operation exception at root level generates BadRequest
-                UnauthorizedAccessException => StatusCodes.Status401Unauthorized,
+                // UnauthorizedAccessException can happen if we lack permission or are not authenticcated
+                UnauthorizedAccessException => user.Identity?.IsAuthenticated == true ? StatusCodes.Status403Forbidden : StatusCodes.Status401Unauthorized,
                 _ => StatusCodes.Status500InternalServerError,
             };
 

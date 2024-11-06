@@ -105,19 +105,19 @@ namespace OpenRiaServices.Client
         }
 
 #if SERVERFX
-        internal void SetFromDomainException(DomainException ex, bool includeExceptionMessageInErrors)
+        internal void SetFromDomainException(DomainException ex, bool includeStackTrace)
         {
             ErrorCode = ex.ErrorCode;
             ErrorMessage = FormatExceptionMessage(ex);
             IsDomainException = true;
-            StackTrace = includeExceptionMessageInErrors ? ex.StackTrace : null;
+            StackTrace = includeStackTrace ? ex.StackTrace : null;
         }
 
-        internal void SetFromException(Exception ex, bool includeExceptionMessageInErrors)
+        internal void SetFromException(Exception ex, bool includeStackTrace)
         {
             ErrorMessage = FormatExceptionMessage(ex);
             IsDomainException = false;
-            StackTrace = includeExceptionMessageInErrors ? ex.StackTrace : null;
+            StackTrace = includeStackTrace ? ex.StackTrace : null;
         }
 
         /// <summary>

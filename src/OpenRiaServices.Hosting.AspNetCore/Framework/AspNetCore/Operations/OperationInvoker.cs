@@ -285,17 +285,16 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         {
             // Unwrap any TargetInvocationExceptions to get the real exception.
             ex = ExceptionHandlingUtility.GetUnwrappedException(ex);
-            var fault = ServiceUtility.CreateFaultException(ex, Options);
+            var fault = ServiceUtility.CreateFaultException(ex, Options, domainService.ServiceContext.User);
 
             // Set HttpStatus
             context.Response.StatusCode = (ex is UnauthorizedAccessException)
-                ? (domainService.ServiceContext.User?.Identity.IsAuthenticated == true ? StatusCodes.Status403Forbidden : StatusCodes.Status401Unauthorized)
+                ? (domainService.ServiceContext.User.Identity?.IsAuthenticated == true ? StatusCodes.Status403Forbidden : StatusCodes.Status401Unauthorized)
                 : StatusCodes.Status500InternalServerError;
 
             if (Options.ExceptionHandler is { } exceptionHandler)
             {
-                var errorDetails = new UnhandledExceptionResponse(fault, context);
-                exceptionHandler(new UnhandledExceptionContext(ex, domainService), errorDetails);
+                exceptionHandler(new UnhandledExceptionContext(ex, domainService), new UnhandledExceptionResponse(fault, context));
             }
 
             return WriteError(context, fault);
