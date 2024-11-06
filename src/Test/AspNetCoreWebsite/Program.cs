@@ -20,6 +20,11 @@ builder.Services.AddOpenRiaServices(o => {
     // To get StackTrack of "normal" exceptions we need to pass them on to the user, as well as include stack traces
     o.IncludeExceptionMessageInErrors = true;
     o.IncludeExceptionStackTraceInErrors = true;
+
+    o.ExceptionHandler = (context, response) =>
+    {
+        // Can set breakpoint here to debug exceptions and check http return values
+    };
 })
 // Possible future extension point for configuring OpenRia Services
 //.WithBinaryXmlFormat(options => { ... MaxItemsInObjectGraph, XmlDictionaryReaderQuotas Writer/ReaderQuotas ... })
