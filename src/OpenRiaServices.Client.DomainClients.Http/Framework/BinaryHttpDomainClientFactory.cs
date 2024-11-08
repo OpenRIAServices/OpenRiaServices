@@ -76,6 +76,8 @@ namespace OpenRiaServices.Client.DomainClients
 
             var httpClient = _httpClientFactory(serviceUri);
             httpClient.BaseAddress ??= serviceUri;
+            if (httpClient.DefaultRequestHeaders.Accept.Count == 0)
+                httpClient.DefaultRequestHeaders.Accept.Add(new System.Net.Http.Headers.MediaTypeWithQualityHeaderValue("application/msbin1"));
 
             // Ensure Uri always end with "/" so that we can call Get and Post with just the method name
             if (!httpClient.BaseAddress.AbsoluteUri.EndsWith("/", StringComparison.Ordinal))
