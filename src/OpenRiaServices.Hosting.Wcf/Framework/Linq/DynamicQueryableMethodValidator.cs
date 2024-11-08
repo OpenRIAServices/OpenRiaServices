@@ -2,6 +2,8 @@
 using System.Linq.Expressions;
 using System.Reflection;
 
+#nullable disable
+
 namespace System.Linq.Dynamic
 {
     internal partial class ExpressionParser

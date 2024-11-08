@@ -8,6 +8,8 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class QueryOperationInvoker<TEntity> : OperationInvoker

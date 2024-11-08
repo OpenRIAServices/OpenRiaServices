@@ -12,6 +12,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
 
+#nullable disable
+
 namespace System.ServiceModel.Dispatcher
 {
     // Thread Safety: This class is thread safe

@@ -15,6 +15,8 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Xml;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     abstract class OperationInvoker

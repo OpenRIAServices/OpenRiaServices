@@ -14,6 +14,8 @@ using Microsoft.Extensions.Primitives;
 using OpenRiaServices.Hosting.AspNetCore.Operations;
 using OpenRiaServices.Server;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.AspNetCore
 {
     internal sealed class OpenRiaServicesEndpointDataSource : EndpointDataSource, IEndpointConventionBuilder
@@ -218,8 +220,9 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 return attribute.GetType().Assembly != typeof(DomainService).Assembly
                     && attribute is not System.ComponentModel.DataAnnotations.ValidationAttribute
                     && attribute is not System.ComponentModel.DataAnnotations.AuthorizationAttribute
-                    && !(attribute.GetType().FullName.StartsWith("System.Diagnostics", StringComparison.Ordinal)
-                        || attribute.GetType().FullName.StartsWith("System.Runtime", StringComparison.Ordinal));
+                    && !(attribute.GetType().FullName is string fullName
+                         && (fullName.StartsWith("System.Diagnostics", StringComparison.Ordinal)
+                            || fullName.StartsWith("System.Runtime", StringComparison.Ordinal)));
             }
 
             foreach (Attribute attribute in attributes)

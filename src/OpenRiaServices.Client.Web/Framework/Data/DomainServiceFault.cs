@@ -9,6 +9,8 @@ using System.Runtime.Serialization;
 using OpenRiaServices.Server;
 #endif
 
+#nullable disable
+
 #if SERVERFX
 namespace OpenRiaServices.Hosting
 #else

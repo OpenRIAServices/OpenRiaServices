@@ -17,8 +17,9 @@
      * Added new overloads of `MapOpenRiaServices()` which do not require a callback, it will map app registered domain services
      * `MapOpenRiaServices` now throws if there are no domain services registered
 * Added new OpenRiaServicesOptions for configuration openria services 
-    * Se [Readme](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.md#configuring-hosting-options) for a description of the4 settings
+    * Se [Readme](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.md#configuring-hosting-options) for a description of the settings
 * The `StatusCodes` property on exception will now be 403 when authorization fails but the user is logged in as an authenticated user (it was 401 before)
+* Add more nullability annotations to AspNetCore hosting
 
 
 ## 5.6.0

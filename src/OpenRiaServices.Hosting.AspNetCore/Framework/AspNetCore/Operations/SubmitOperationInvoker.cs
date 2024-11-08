@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class SubmitOperationInvoker : OperationInvoker

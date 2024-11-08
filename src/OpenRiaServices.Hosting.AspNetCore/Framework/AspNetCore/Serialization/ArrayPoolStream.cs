@@ -9,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     /// <summary>

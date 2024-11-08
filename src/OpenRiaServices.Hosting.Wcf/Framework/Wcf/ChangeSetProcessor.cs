@@ -9,6 +9,8 @@ using System.Reflection;
 using OpenRiaServices.Server;
 using System.Threading.Tasks;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>

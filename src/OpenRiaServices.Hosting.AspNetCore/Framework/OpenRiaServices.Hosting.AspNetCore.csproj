@@ -15,6 +15,7 @@
 
       See README at https://github.com/OpenRIAServices/OpenRiaServices/tree/main/src/OpenRiaServices.Hosting.AspNetCore/Framework for usage.
     </Description>
+    <Nullable>enable</Nullable>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
