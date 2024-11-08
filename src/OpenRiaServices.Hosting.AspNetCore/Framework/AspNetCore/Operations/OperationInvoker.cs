@@ -260,7 +260,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         {
             var errors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames)).ToList();
 
-            // if custom errors is turned on, clear out the stacktrace.
+            // Clear out the stacktrace if they should not be sent
             if (!Options.IncludeExceptionStackTraceInErrors)
             {
                 foreach (ValidationResultInfo error in errors)
