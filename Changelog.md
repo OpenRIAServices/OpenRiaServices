@@ -1,5 +1,43 @@
-# 5.5.0 / EF Core 3.1.0
+# 5.6.0 / AspNetCore 1.3.0
 
+## AspNetCore 1.3.0 (#518)
+
+* **New Http status codes** returned
+   * 401 unauthorized, 403 forbidden and 422 Unprocessable Entity (for validation failure)
+   * IMPORTANT: **POSSIBLE BREAKING CHANGE**: this will not work with the obsolete wcf based domain client 
+* New Methods on `IServiceCollection` for Setup and registration of DomainServices
+    * AddOpenRiaServices now **accept a callback for configuring Options**
+        *  `AddOpenRiaServices(Action<OpenRiaServicesOptions> configure)`
+    * New helper methods for registering *DomainService*s
+        *  `AddDomainService<TDomainService>()`
+        *  `AddDomainService(typeof(DomainService))`
+        *  `AddDomainServices(params IEnumerable<Assembly>)`
+* Simplified `MapOpenRiaServices`
+     * Add `AddRegisteredDomainServices()` to "map" (add endpoints) for all registered domain services
+     * Added new overloads of `MapOpenRiaServices()` which do not require a callback, it will map app registered domain services
+     * `MapOpenRiaServices` now throws if there are no domain services registered
+* Added new OpenRiaServicesOptions for configuration openria services 
+    * Se [Readme](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.md#configuring-hosting-options) for a description of the4 settings
+* The `StatusCodes` property on exception will now be 403 when authorization fails but the user is logged in as an authenticated user (it was 401 before)
+
+
+## 5.6.0
+This is proably the last version with support for .netstandard2.0 and .Net < 8 as well as *WCF* based *WebDomainClientFactory*
+and **maybe even WCF based hosting**
+
+**Client**
+* Handle exceptions when Exception StatusCode is 403 (Required for AspNetCore 1.3.0)
+* Set Accept header to "application/msbin1" (#521) for BinarHttpDomainClient
+
+**General**
+* Update nuget package dependencies
+* Update to latest version of Mono.Cecil
+* Updated integration test to run on .NET 8 instead of .NET Framework
+
+
+
+* # 5.5.0 / EF Core 3.1.0 / AspNetCore 1.2.0
+* 
 ### EF Core 3.1.0
 * Initial support for Owned Entities for one-to-one navigation properties (#500)
   * Owned entities without explicit keys are mapped to OpenRiaServices's [Complex Types]
@@ -14,7 +52,7 @@
 ### AspNetCore 1.2.0
 * Add support for specifying endpoints routes (#508, issue: #507)
   You can choose between 3 different approaches to how the endpoint routes are generated.
-  See AspNetCore readme for more details.
+  See [AspNetCore readme](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.md#specifying-endpoint-routes) for more details.
     * `WCF` will generate the same routes as WCF RIA Services `Some-Namespace-TypeName.svc/binary/Method`
     * `FullName` will generate routes with the full name of the DomainService `Some-Namespace-TypeName/Method`
     * `Name` will generate routes with the short name of the DomainService `TypeName/Method`
