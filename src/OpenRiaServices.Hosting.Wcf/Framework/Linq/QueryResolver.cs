@@ -1,5 +1,7 @@
 ﻿using System.Linq.Expressions;
 
+#nullable disable
+
 namespace System.Linq.Dynamic
 {
     /// <summary>

@@ -11,6 +11,8 @@ using System.Security;
 using OpenRiaServices.Server;
 using System.Threading;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.Wcf
 {
     /// <summary>

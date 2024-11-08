@@ -4,6 +4,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
 
+#nullable disable
+
 #if SERVERFX
 namespace OpenRiaServices.Hosting
 #else

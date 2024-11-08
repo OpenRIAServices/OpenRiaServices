@@ -15,51 +15,43 @@ using TestDomainServices.Testing;
 [assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices();
+builder.Services.AddOpenRiaServices(o => {
+    // There is at least one test which test that checks that calls stacks of normal exceptions are passed to the client
+    // To get StackTrack of "normal" exceptions we need to pass them on to the user, as well as include stack traces
+    o.IncludeExceptionMessageInErrors = true;
+    o.IncludeExceptionStackTraceInErrors = true;
+
+    o.ExceptionHandler = (context, response) =>
+    {
+        // Can set breakpoint here to debug exceptions and check http return values
+    };
+})
+// Possible future extension point for configuring OpenRia Services
+//.WithBinaryXmlFormat(options => { ... MaxItemsInObjectGraph, XmlDictionaryReaderQuotas Writer/ReaderQuotas ... })
+//.WithBinaryXml(false)
+;
+
+builder.Services.AddAuthentication();
 
 // Allow injection of HttpContext
-
-
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<HttpContext>(s => s.GetRequiredService<IHttpContextAccessor>().HttpContext);
 
-var domainServices = typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate).Assembly.ExportedTypes
-    .Where(t => typeof(DomainService).IsAssignableFrom(t) && !t.IsAbstract && t.GetCustomAttribute(typeof(EnableClientAccessAttribute), inherit: true) != null)
-    .ToArray();
-
-foreach (var type in domainServices)
-    builder.Services.Add(new ServiceDescriptor(type, type, ServiceLifetime.Transient));
-
-// Types in this assembly
-builder.Services.AddTransient<AuthenticationService1>();
+// Add DomainServices
+builder.Services.AddDomainServices(typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate).Assembly);
+builder.Services.AddDomainService<AuthenticationService1>();
 
 var app = builder.Build();
 
-//app.UseEndpoints(endpoints =>
-//{
+app.UseAuthentication();
+
 app.MapOpenRiaServices(builder =>
    {
-       foreach(var type in domainServices)
-       {
-           try
-           {
-               builder.AddDomainService(type);
-           }
-           catch (global::System.MissingMethodException)
-           {
-               throw;
-           }
-           catch (global::System.Exception ex)
-           {
-               Console.WriteLine($"Ignoring {type} due to exception: {ex.Message}");
-           }
-       }
-
-       // Types in this assembly
-       builder.AddDomainService<AuthenticationService1>();
+       // All all domainservices registered in the container
+       builder.AddRegisteredDomainServices(suppressAndLogErrors: true);
 
        // Add services with old endpoint structure to allow unit tests to work
-       // REMARKDS: The unit tests should be rewritten so this is not needed
+       // REMARKS: The unit tests should be rewritten so this is not needed
        builder.AddDomainService<Cities.CityDomainService>("Cities-CityDomainService.svc/binary");
    });
 

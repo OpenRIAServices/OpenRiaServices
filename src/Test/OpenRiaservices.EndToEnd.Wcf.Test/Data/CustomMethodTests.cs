@@ -449,12 +449,8 @@ namespace OpenRiaServices.Client.Test
         public void DomainClient_SubmitWithNullInvocation()
         {
             TestEntityContainer container = new TestEntityContainer();
+            DomainClient client = TestHelperMethods.CreateCitiesDomainClient([typeof(City), typeof(ChangeSetEntry), typeof(EntityOperationType)]);
 
-            //TODO: find a better way to not hardcode the list of known types
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(City), typeof(ChangeSetEntry), typeof(EntityOperationType) }
-            };
             List<Entity> emptyList = new List<Entity>();
             List<Entity> modifiedEntities = new List<Entity>();
 
@@ -495,10 +491,8 @@ namespace OpenRiaServices.Client.Test
         public void DomainClient_SubmitWithNonexistentDomainMethod()
         {
             TestEntityContainer container = new TestEntityContainer();
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(City) }
-            };
+            DomainClient client = TestHelperMethods.CreateCitiesDomainClient([typeof(City)]);
+
             List<Entity> emptyList = new List<Entity>();
             List<Entity> modifiedEntities = new List<Entity>();
 

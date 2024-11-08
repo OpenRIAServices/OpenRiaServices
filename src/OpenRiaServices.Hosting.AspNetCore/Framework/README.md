@@ -53,27 +53,60 @@ https://github.com/OpenRIAServices/OpenRiaServices/blob/086ea8c8fcb115000749be6b
 
 5. Setup hosting integration
 
-Minimal program:
+Sample program:
 
 ```csharp
 using OpenRiaServices.Hosting.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();
-builder.Services.AddTransient<CityDomainService>();
+
+// Register DomainServices in DI
+builder.Services.AddDomainService<CityDomainService>();
+// OR builder.Services.AddDomainServices(AppDomain.CurrentDomain.GetAssemblies());
 
 
 var app = builder.Build();
-app.MapOpenRiaServices(builder =>
-{
-    builder.AddDomainService<CityDomainService>();
-});
 
+// Map OpenRiaServices routes , you can optionally add a prefix such as "/Services"
+// This will automatically map all DomainServices that are registered in builder.Services
+// Using routes similar to $"{DomainServiceName}/{MethodName}"
+app.MapOpenRiaServices();
+// OR app.MapOpenRiaServices(builder => { builder.AddDomainService<CityDomainService>(); }); to specify exactly the DomainServices to map which works better with Trimming
 
 app.Run();
 ```
 
 ## Advanced
+
+### Configuring Hosting Options
+
+You can configure the hosting options by passing a callback to `AddOpenRiaServices` method.
+
+Options include:
+- `ExceptionHandler` - A delegate that can be used to handle exceptions that occur during the execution of a DomainService method.
+    - It allows customizing the error message, and error code that is sent to the client as well as the HTTP status code.
+- `IncludeExceptionMessageInErrors` - A boolean that determines if the exception message should be included in the error response.
+   - **WARNING**: Exposing this information might help a hacker. It is generally better to use the `ExceptionHandler` and 
+    ensuring that the message is not passed on to the client is "safe" and does not give to much information about the system to a potential hacker.
+- `IncludeExceptionStackTraceInErrors` - A boolean that determines if the exception stack trace should be included in the error response. 
+   - **WARNING**: This is considered INSECURE and is *NOT* *recommended for production use as it would gives an attacker detailed information about your system
+
+Example setup:
+```csharp
+builder.Services.AddOpenRiaServices(o => {
+    o.ExceptionHandler = (context, response) =>
+    {
+        // Pass all exceptions to client
+        response.ErrorMessage ??= context.Exception.Message;
+    };
+ 
+    // There is at least one test which test that checks that calls stacks of normal exceptions are passed to the client
+    // To get StackTrack of "normal" exceptions we need to pass them on to the user, as well as include stack traces
+    o.IncludeExceptionMessageInErrors = true;
+    o.IncludeExceptionStackTraceInErrors = true;
+});
+```
 
 ### Specifying endpoint routes
 
@@ -214,7 +247,7 @@ builder.Services.AddOutputCache(options =>
     options.AddBasePolicy(builder => builder.NoCache());
 });
 
-builder.Services.AddTransient<CacheTestDomainService>();
+builder.Services.AddDomainService<CacheTestDomainService>();
 
 var app = builder.Build();
 

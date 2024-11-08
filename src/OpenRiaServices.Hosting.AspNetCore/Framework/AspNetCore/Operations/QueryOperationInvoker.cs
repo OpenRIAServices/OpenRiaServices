@@ -8,12 +8,14 @@ using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using System.Web;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class QueryOperationInvoker<TEntity> : OperationInvoker
     {
-        public QueryOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper)
-                : base(operation, DomainOperationType.Query, serializationHelper, serializationHelper.GetSerializer(typeof(QueryResult<TEntity>)))
+        public QueryOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Query, serializationHelper, serializationHelper.GetSerializer(typeof(QueryResult<TEntity>)), options)
         {
         }
 
@@ -52,12 +54,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {
-                    await WriteError(context, ex, hideStackTrace: domainService.GetDisableStackTraces());
+                    await WriteError(context, ex, domainService);
                     return;
                 }
 
                 if (result.ValidationErrors != null && result.ValidationErrors.Any())
-                    await WriteError(context, result.ValidationErrors, hideStackTrace: true);
+                    await WriteError(context, result.ValidationErrors);
                 else
                     await WriteResponse(context, result);
             }

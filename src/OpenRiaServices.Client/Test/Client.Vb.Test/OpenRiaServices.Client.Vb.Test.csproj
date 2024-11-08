@@ -39,6 +39,7 @@
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\ServerSideAsyncTests.cs">
       <Link>Client.Test\Data\ServerSideAsyncTests.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\TestHelpers.cs" Link="TestHelpers.cs" />
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Main.cs" Link="Main.cs" />
 
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Utilities\UnitTestBaseExtensions.cs" Link="Client.Test\Utilities\UnitTestBaseExtensions.cs" />

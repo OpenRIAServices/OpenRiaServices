@@ -57,7 +57,12 @@ namespace OpenRiaServices.Client.Test
             ExceptionHelper.ExpectArgumentException(delegate ()
             {
                 entity.NonPublicProperty = "x";
+#if NET
+            }, "Type 'MockEntity' does not contain a public property named 'NonPublicProperty'. (Parameter 'propertyName')");
+#else
             }, "Type 'MockEntity' does not contain a public property named 'NonPublicProperty'.\r\nParameter name: propertyName");
+#endif
+
         }
 
         [TestMethod]
@@ -68,7 +73,11 @@ namespace OpenRiaServices.Client.Test
             ExceptionHelper.ExpectArgumentException(delegate ()
             {
                 entity.BogusProperty = "x";
+#if NET
+            }, "Type 'MockEntity' does not contain a public property named 'XXX'. (Parameter 'propertyName')");
+#else
             }, "Type 'MockEntity' does not contain a public property named 'XXX'.\r\nParameter name: propertyName");
+#endif
         }
 
         [TestMethod]
@@ -134,7 +143,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual<string>("The field ReadWriteProperty must be a string with a maximum length of 10.", results.Single().ErrorMessage, "ErrorMessage from the result");
         }
 
-        #endregion Property tests
+#endregion Property tests
 
         #region Object tests
 

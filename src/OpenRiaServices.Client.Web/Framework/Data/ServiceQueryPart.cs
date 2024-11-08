@@ -2,6 +2,8 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 
+#nullable disable
+
 #if SERVERFX
 using OpenRiaServices.Hosting.Wcf;
 

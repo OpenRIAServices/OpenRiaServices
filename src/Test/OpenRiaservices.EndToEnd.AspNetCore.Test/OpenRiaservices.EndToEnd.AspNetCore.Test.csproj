@@ -2,13 +2,11 @@
 
 
   <PropertyGroup>
-    <!-- Note NET6 has problem with some of the tests which tests instant cancellation -->
-    <TargetFrameworks>net472<!--;net6.0--></TargetFrameworks>
+    <TargetFrameworks>net8.0</TargetFrameworks>
     <ImplicitUsings>false</ImplicitUsings>
     <IsPackable>false</IsPackable>
-    <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW;ASPNETCORE</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASPNETCORE</DefineConstants>
   </PropertyGroup>
-
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />

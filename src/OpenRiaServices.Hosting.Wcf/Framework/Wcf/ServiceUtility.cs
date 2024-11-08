@@ -141,7 +141,7 @@ namespace OpenRiaServices.Hosting.Wcf
             OperationDescription operationDesc = ServiceUtility.CreateBasicOperationDescription(declaringContract, ServiceUtility.SubmitOperationName);
 
             // Propagate behaviors.
-            MethodInfo submitMethod = declaringContract.ContractType.GetMethod( nameof(DomainService.SubmitAsync));
+            MethodInfo submitMethod = declaringContract.ContractType.GetMethod(nameof(DomainService.SubmitAsync));
             foreach (IOperationBehavior behavior in submitMethod.GetCustomAttributes(/* inherit */ true).OfType<IOperationBehavior>())
             {
                 operationDesc.Behaviors.Add(behavior);
@@ -216,7 +216,7 @@ namespace OpenRiaServices.Hosting.Wcf
                 stringBuilder.Append("?");
                 foreach (DomainOperationParameter parameter in operation.Parameters)
                 {
-                    stringBuilder.AppendFormat("{0}={{{0}}}&",parameter.Name);
+                    stringBuilder.AppendFormat("{0}={{{0}}}&", parameter.Name);
                 }
                 stringBuilder.Remove(stringBuilder.Length - 1, 1);
             }
@@ -457,77 +457,49 @@ namespace OpenRiaServices.Hosting.Wcf
             // Unwrap any TargetInvocationExceptions to get the real exception.
             e = ExceptionHandlingUtility.GetUnwrappedException(e);
 
-            // we always send back a 200 (i.e. not re-throwing) with the actual error code in 
-            // the results (except fo 404) because silverlight only supports 404/500 error code. If customErrors 
-            // are disabled, we'll also send the error message.
-            int errorCode = (int)HttpStatusCode.InternalServerError;
+            if (e is DomainException dpe)
+            {
+                // we always propagate error info to the client for DomainServiceExceptions
+                fault.SetFromDomainException(dpe, !hideStackTrace);
 
-            if (e is InvalidOperationException)
-            {
-                // invalid operation exception at root level generates BadRequest
-                errorCode = (int)HttpStatusCode.BadRequest;
-            }
-            else if (e is UnauthorizedAccessException)
-            {
-                errorCode = (int)HttpStatusCode.Unauthorized;
+                return new FaultException<DomainServiceFault>(fault, new FaultReason(new FaultReasonText(fault.ErrorMessage ?? String.Empty, CultureInfo.CurrentCulture)));
             }
             else
             {
-                DomainException dpe = e as DomainException;
-                if (dpe != null)
-                {
-                    // we always propagate error info to the client for DomainServiceExceptions
-                    fault.ErrorCode = dpe.ErrorCode;
-                    fault.ErrorMessage = FormatExceptionMessage(dpe);
-                    fault.IsDomainException = true;
-                    if (!hideStackTrace)
-                    {
-                        // also send the stack trace if custom errors is disabled
-                        fault.StackTrace = dpe.StackTrace;
-                    }
+                // we always send back a 200 (i.e. not re-throwing) with the actual error code in 
+                // the results (except fo 404) because silverlight only supports 404/500 error code. If customErrors 
+                // are disabled, we'll also send the error message.
+                int errorCode = (int)HttpStatusCode.InternalServerError;
 
-                    return new FaultException<DomainServiceFault>(fault, new FaultReason(new FaultReasonText(fault.ErrorMessage ?? String.Empty, CultureInfo.CurrentCulture)));
-                }
-                else
+                if (e is InvalidOperationException)
                 {
-                    HttpException httpException = e as HttpException;
-                    if (httpException != null)
+                    // invalid operation exception at root level generates BadRequest
+                    errorCode = (int)HttpStatusCode.BadRequest;
+                }
+                else if (e is UnauthorizedAccessException)
+                {
+                    errorCode = (int)HttpStatusCode.Unauthorized;
+                }
+                else if (e is HttpException httpException)
+                {
+                    errorCode = httpException.GetHttpCode();
+                    if (errorCode == (int)HttpStatusCode.NotFound)
                     {
-                        errorCode = httpException.GetHttpCode();
-                        if (errorCode == (int)HttpStatusCode.NotFound)
-                        {
-                            // for NotFound errors, we don't provide detailed error
-                            // info, we just rethrow
-                            throw e;
-                        }
+                        // for NotFound errors, we don't provide detailed error
+                        // info, we just rethrow
+                        throw e;
                     }
                 }
-            }
 
-            // set error code. Also set error message if custom errors is disabled
-            fault.ErrorCode = errorCode;
-            if (!hideStackTrace)
-            {
-                fault.ErrorMessage = FormatExceptionMessage(e);
-                fault.StackTrace = e.StackTrace;
-            }
+                // set error code. Also set error message if custom errors is disabled
+                fault.ErrorCode = errorCode;
+                if (!hideStackTrace)
+                {
+                    fault.SetFromException(e, true);
+                }
 
-            return new FaultException<DomainServiceFault>(fault, new FaultReason(new FaultReasonText(fault.ErrorMessage ?? String.Empty, CultureInfo.CurrentCulture)));
-        }
-
-        /// <summary>
-        /// For the specified exception, return the error message concatenating
-        /// the message of any inner exception to one level deep.
-        /// </summary>
-        /// <param name="e">The exception</param>
-        /// <returns>The formatted exception message.</returns>
-        private static string FormatExceptionMessage(Exception e)
-        {
-            if (e.InnerException == null)
-            {
-                return e.Message;
+                return new FaultException<DomainServiceFault>(fault, new FaultReason(new FaultReasonText(fault.ErrorMessage ?? String.Empty, CultureInfo.CurrentCulture)));
             }
-            return string.Format(CultureInfo.CurrentCulture, Resource.FaultException_InnerExceptionDetails, e.Message, e.InnerException.Message);
         }
 
         /// <summary>

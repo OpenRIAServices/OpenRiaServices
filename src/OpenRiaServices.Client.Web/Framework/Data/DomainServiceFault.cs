@@ -1,11 +1,15 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 #if SERVERFX
 using OpenRiaServices.Server;
 #endif
+
+#nullable disable
 
 #if SERVERFX
 namespace OpenRiaServices.Hosting
@@ -101,5 +105,37 @@ namespace OpenRiaServices.Client
             
             return this.OperationErrors.Select(oe => new ValidationResult(oe.Message, oe.SourceMemberNames)).ToList();
         }
+
+#if SERVERFX
+        internal void SetFromDomainException(DomainException ex, bool includeStackTrace)
+        {
+            ErrorCode = ex.ErrorCode;
+            ErrorMessage = FormatExceptionMessage(ex);
+            IsDomainException = true;
+            StackTrace = includeStackTrace ? ex.StackTrace : null;
+        }
+
+        internal void SetFromException(Exception ex, bool includeStackTrace)
+        {
+            ErrorMessage = FormatExceptionMessage(ex);
+            IsDomainException = false;
+            StackTrace = includeStackTrace ? ex.StackTrace : null;
+        }
+
+        /// <summary>
+        /// For the specified exception, return the error message concatenating
+        /// the message of any inner exception to one level deep.
+        /// </summary>
+        /// <param name="e">The exception</param>
+        /// <returns>The formatted exception message.</returns>
+        private static string FormatExceptionMessage(Exception e)
+        {
+            if (e.InnerException == null)
+            {
+                return e.Message;
+            }
+            return string.Format(CultureInfo.InvariantCulture, Wcf.Resource.FaultException_InnerExceptionDetails, e.Message, e.InnerException.Message);
+        }
+#endif
     }
 }

@@ -1824,10 +1824,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task TestLoad_DefaultContractNamespace()
         {
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(City) }
-            };
+            DomainClient client = TestHelperMethods.CreateCitiesDomainClient([typeof(City)]);
 
             var results = await client.QueryAsync(new EntityQuery<City>(client, "GetCities", null, true, true), CancellationToken.None);
             Assert.IsTrue(results.TotalCount > 0);
@@ -1840,10 +1837,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task TestLoad_AuthenticationRequired()
         {
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(Zip) }
-            };
+            DomainClient client = TestHelperMethods.CreateCitiesDomainClient([typeof(Zip)]);
 
             var queryTask = client.QueryAsync(
                 new EntityQuery<Zip>(client, "GetZipsIfAuthenticated", null, true, false),
@@ -1862,10 +1856,8 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task TestLoad_RoleRequired()
         {
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(Zip) }
-            };
+            DomainClient client = TestHelperMethods.CreateCitiesDomainClient([typeof(Zip)]);
+
             var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfInRole", null, true, false), CancellationToken.None);
 
             DomainOperationException error = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(() => queryTask);
@@ -1881,10 +1873,7 @@ namespace OpenRiaServices.Client.Test
         [Description("Accessing a query with a custom authorization attribute asserting a specific user is denied")]
         public async Task TestLoad_UserRequired()
         {
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(Zip) }
-            };
+            DomainClient client = TestHelperMethods.CreateCitiesDomainClient([typeof(Zip)]);
 
             var queryTask = client.QueryAsync(new EntityQuery<Zip>(client, "GetZipsIfUser", null, true, false), CancellationToken.None);
             DomainOperationException error = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(() => queryTask);
@@ -1953,11 +1942,18 @@ namespace OpenRiaServices.Client.Test
             paramValues["minListPrice"] = 50;
             paramValues["color"] = "Yellow";
 #if ASPNETCORE
+
+            string expectedError =
+#if NET
+                "Unable to cast object of type 'System.String' to type 'System.Int32'.";
+#else
+                "Specified cast is not valid.";
+#endif
             ExceptionHelper.ExpectInvalidCastException(delegate
             {
                 var query = ctxt.CreateQuery<Product>("GetProductsMultipleParams", paramValues, false, true);
                 ctxt.Load(query, false);
-            }, "Specified cast is not valid.");
+            }, expectedError);
 #else
             ExceptionHelper.ExpectArgumentException(delegate
             {
