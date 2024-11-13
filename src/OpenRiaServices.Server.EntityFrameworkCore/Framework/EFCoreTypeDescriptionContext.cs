@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
-#if NETSTANDARD
+#if NETFRAMEWORK
 using IReadOnlyNavigation = Microsoft.EntityFrameworkCore.Metadata.INavigation;
 using IReadOnlyEntityType = Microsoft.EntityFrameworkCore.Metadata.IEntityType;
 using IReadOnlyProperty = Microsoft.EntityFrameworkCore.Metadata.IProperty;
@@ -66,7 +66,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             string otherKey;
             string name = fk.GetConstraintName();
 
-#if NETSTANDARD2_0
+#if NETFRAMEWORK
             if (navigationProperty.IsDependentToPrincipal())
 #else
             if (navigationProperty.IsOnDependent)
@@ -97,7 +97,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             return assocAttrib;
         }
 
-#if NETSTANDARD2_0
+#if NETFRAMEWORK
         private static bool IsForeignKey(IReadOnlyNavigation navigationProperty) => navigationProperty.IsDependentToPrincipal();
 #else
         private static bool IsForeignKey(IReadOnlyNavigation navigationProperty) => navigationProperty.IsOnDependent;

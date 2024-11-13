@@ -2,7 +2,7 @@
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT</DefineConstants>
     <DefineConstants Condition="'$(TargetFramework)' == 'net472'">$(DefineConstants);HAS_LINQ2SQL</DefineConstants>
-    <TargetFrameworks>net472;net6.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <PackageId>OpenRiaServices.Client.CodeGen</PackageId>
     <Title>OpenRiaServices Client Code Generator</Title>
     <Description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. </Description>
@@ -38,7 +38,6 @@
       <Reference Include="System.ComponentModel.DataAnnotations" />
       <Reference Include="System.Configuration" />
       <Reference Include="System.ServiceModel" />
-      <Reference Include="System.ServiceModel.Web" />
       <Reference Include="System.Web" />
       <Reference Include="Microsoft.Build" />
       <Reference Include="Microsoft.Build.Framework" />
@@ -46,15 +45,15 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
     <!-- Use Microsoft.Build 17.0.0 to be sure it works with all versions Net6 -->
-    <PackageReference Include="Microsoft.Build" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.0.0" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build" Version="17.8.3" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.8.3" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.8.3" PrivateAssets="All" ExcludeAssets="Runtime" />
     <!-- Required for known type attributes -->
-    <PackageReference Include="System.ServiceModel.Primitives" Version="6.0.0" />
+    <PackageReference Include="System.ServiceModel.Primitives" Version="8.1.0" />
     <!-- Required for validation attributes -->
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <!-- MEF Attribute: TODO consider removing MEF support for .NET (non framework) -->
-    <PackageReference Include="System.ComponentModel.Composition" Version="8.0.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="9.0.0" />
     <PackageReference Include="System.CodeDom" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
