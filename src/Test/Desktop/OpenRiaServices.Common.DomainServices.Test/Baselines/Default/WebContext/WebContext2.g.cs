@@ -74,7 +74,6 @@ namespace RootNamespace.TestNamespace
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel;
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
@@ -187,7 +186,6 @@ namespace RootNamespace.TestNamespace
         /// <summary>
         /// Service contract for the 'AuthenticationService1' DomainService.
         /// </summary>
-        [ServiceContract()]
         public interface IAuthenticationService1Contract
         {
             
@@ -198,7 +196,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/GetUser", ReplyAction="http://tempuri.org/AuthenticationService1/GetUserResponse")]
             IAsyncResult BeginGetUser(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -219,7 +216,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/Login", ReplyAction="http://tempuri.org/AuthenticationService1/LoginResponse")]
             IAsyncResult BeginLogin(string userName, string password, bool isPersistent, string customData, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -236,7 +232,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/Logout", ReplyAction="http://tempuri.org/AuthenticationService1/LogoutResponse")]
             IAsyncResult BeginLogout(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -253,7 +248,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/SubmitChanges", ReplyAction="http://tempuri.org/AuthenticationService1/SubmitChangesResponse")]
             IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -380,7 +374,6 @@ namespace RootNamespace.TestNamespace
         /// <summary>
         /// Service contract for the 'AuthenticationService2' DomainService.
         /// </summary>
-        [ServiceContract()]
         public interface IAuthenticationService2Contract
         {
             
@@ -391,7 +384,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/GetUser", ReplyAction="http://tempuri.org/AuthenticationService2/GetUserResponse")]
             IAsyncResult BeginGetUser(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -412,7 +404,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/Login", ReplyAction="http://tempuri.org/AuthenticationService2/LoginResponse")]
             IAsyncResult BeginLogin(string userName, string password, bool isPersistent, string customData, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -429,7 +420,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/Logout", ReplyAction="http://tempuri.org/AuthenticationService2/LogoutResponse")]
             IAsyncResult BeginLogout(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -446,7 +436,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/SubmitChanges", ReplyAction="http://tempuri.org/AuthenticationService2/SubmitChangesResponse")]
             IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
             
             /// <summary>

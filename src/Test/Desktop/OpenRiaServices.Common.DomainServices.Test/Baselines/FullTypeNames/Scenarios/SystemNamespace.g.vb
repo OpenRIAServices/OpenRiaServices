@@ -87,7 +87,6 @@ Namespace System
         ''' <summary>
         ''' Service contract for the 'SystemDomainService' DomainService.
         ''' </summary>
-        <Global.System.ServiceModel.ServiceContractAttribute()>  _
         Public Interface ISystemDomainServiceContract
             
             ''' <summary>
@@ -96,8 +95,7 @@ Namespace System
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
-             Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/SystemDomainService/GetSystemEntities", ReplyAction:="http://tempuri.org/SystemDomainService/GetSystemEntitiesResponse")>  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false)>  _
             Function BeginGetSystemEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
@@ -352,7 +350,6 @@ Namespace System.Subsystem
         ''' <summary>
         ''' Service contract for the 'SubsystemDomainService' DomainService.
         ''' </summary>
-        <Global.System.ServiceModel.ServiceContractAttribute()>  _
         Public Interface ISubsystemDomainServiceContract
             
             ''' <summary>
@@ -361,8 +358,7 @@ Namespace System.Subsystem
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
-             Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/SubsystemDomainService/GetSubsystemEntities", ReplyAction:="http://tempuri.org/SubsystemDomainService/GetSubsystemEntitiesResponse")>  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false)>  _
             Function BeginGetSubsystemEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
@@ -616,7 +612,6 @@ Namespace SystemExtensions
         ''' <summary>
         ''' Service contract for the 'SystemExtensionsDomainService' DomainService.
         ''' </summary>
-        <Global.System.ServiceModel.ServiceContractAttribute()>  _
         Public Interface ISystemExtensionsDomainServiceContract
             
             ''' <summary>
@@ -625,9 +620,7 @@ Namespace SystemExtensions
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
-             Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntities", ReplyAction:="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntitiesRespo"& _ 
-                "nse")>  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false)>  _
             Function BeginGetSystemExtensionsEntities(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>

@@ -18,18 +18,11 @@
     <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
     <dependencies>
       <group targetFramework="net472" />
-      <group targetFramework="netstandard2.0">
-        <dependency id="System.ComponentModel.Annotations" version="5.0.0" />
-        <dependency id="System.ServiceModel.Http" version="4.10.2" />
-        <dependency id="System.ServiceModel.Primitives" version="4.10.2" />
-      </group>
-      <group targetFramework="net6.0-windows7.0">
-        <dependency id="System.ServiceModel.Http" version="6.2.0" />
-        <dependency id="System.ServiceModel.Primitives" version="6.2.0" />
-      </group>
+      <group targetFramework="net8.0" />
+	  <group targetFramework="net8.0-windows7.0" />
     </dependencies>
     <frameworkReferences>
-      <group targetFramework="net6.0-windows7.0">
+      <group targetFramework="net8.0-windows7.0">
         <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
       </group>
     </frameworkReferences>
@@ -37,12 +30,11 @@
       <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net472" />
       <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net472" />
       <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net472" />
-      <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="net472" />
-      <frameworkAssembly assemblyName="System.ServiceModel.Web" targetFramework="net472" />
     </frameworkAssemblies>
   </metadata>
   <files>
     <!-- netstandard binaries -->	
+	<!--
     <file src="..\src\bin\Release\netstandard2.0\OpenRiaServices.Client.dll" target="lib\netstandard2.0\OpenRiaServices.Client.dll" />
     <file src="..\src\bin\Release\netstandard2.0\OpenRiaServices.Client.pdb" target="lib\netstandard2.0\OpenRiaServices.Client.pdb" />
     <file src="..\src\bin\Release\netstandard2.0\OpenRiaServices.Client.xml" target="lib\netstandard2.0\OpenRiaServices.Client.xml" />
@@ -52,28 +44,45 @@
     <file src="..\src\bin\Release\netstandard2.0\OpenRiaServices.Client.DomainClients.Http.dll" target="lib\netstandard2.0\OpenRiaServices.Client.DomainClients.Http.dll" />
     <file src="..\src\bin\Release\netstandard2.0\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\netstandard2.0\OpenRiaServices.Client.DomainClients.Http.pdb" />
     <file src="..\src\bin\Release\netstandard2.0\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\netstandard2.0\OpenRiaServices.Client.DomainClients.Http.xml" />
-
+-->
    <!-- Desktop binaries -->
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.dll" target="lib\net472\OpenRiaServices.Client.dll" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.pdb" target="lib\net472\OpenRiaServices.Client.pdb" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.xml" target="lib\net472\OpenRiaServices.Client.xml" />
+	<!--
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.Web.dll" target="lib\net472\OpenRiaServices.Client.Web.dll" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.Web.pdb" target="lib\net472\OpenRiaServices.Client.Web.pdb" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.Web.xml" target="lib\net472\OpenRiaServices.Client.Web.xml" />
+	-->
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.DomainClients.Http.dll" target="lib\net472\OpenRiaServices.Client.DomainClients.Http.dll" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\net472\OpenRiaServices.Client.DomainClients.Http.pdb" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\net472\OpenRiaServices.Client.DomainClients.Http.xml" />
 
-    <!-- Net6 binaries -->
-    <file src="..\src\bin\Release\net6.0-windows\OpenRiaServices.Client.dll" target="lib\net6.0-windows7.0\OpenRiaServices.Client.dll" />
-    <file src="..\src\bin\Release\net6.0-windows\OpenRiaServices.Client.pdb" target="lib\net6.0-windows7.0\OpenRiaServices.Client.pdb" />
-    <file src="..\src\bin\Release\net6.0-windows\OpenRiaServices.Client.xml" target="lib\net6.0-windows7.0\OpenRiaServices.Client.xml" />
-    <file src="..\src\bin\Release\net6.0\OpenRiaServices.Client.Web.dll" target="lib\net6.0-windows7.0\OpenRiaServices.Client.Web.dll" />
-    <file src="..\src\bin\Release\net6.0\OpenRiaServices.Client.Web.pdb" target="lib\net6.0-windows7.0\OpenRiaServices.Client.Web.pdb" />
-    <file src="..\src\bin\Release\net6.0\OpenRiaServices.Client.Web.xml" target="lib\net6.0-windows7.0\OpenRiaServices.Client.Web.xml" />
-    <file src="..\src\bin\Release\net6.0\OpenRiaServices.Client.DomainClients.Http.dll" target="lib\net6.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.dll" />
-    <file src="..\src\bin\Release\net6.0\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\net6.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.pdb" />
-    <file src="..\src\bin\Release\net6.0\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\net6.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.xml" />
+    <!-- net8 binaries -->
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.dll" target="lib\net8.0\OpenRiaServices.Client.dll" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.pdb" target="lib\net8.0\OpenRiaServices.Client.pdb" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.xml" target="lib\net8.0\OpenRiaServices.Client.xml" />
+	<!--
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.Web.dll" target="lib\net8.0\OpenRiaServices.Client.Web.dll" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.Web.pdb" target="lib\net8.0\OpenRiaServices.Client.Web.pdb" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.Web.xml" target="lib\net8.0\OpenRiaServices.Client.Web.xml" />
+	-->
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.dll" target="lib\net8.0\OpenRiaServices.Client.DomainClients.Http.dll" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\net8.0\OpenRiaServices.Client.DomainClients.Http.pdb" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\net8.0\OpenRiaServices.Client.DomainClients.Http.xml" />
+	
+    <!-- net8-windows7 binaries -->
+    <file src="..\src\bin\Release\net8.0-windows\OpenRiaServices.Client.dll" target="lib\net8.0-windows7.0\OpenRiaServices.Client.dll" />
+    <file src="..\src\bin\Release\net8.0-windows\OpenRiaServices.Client.pdb" target="lib\net8.0-windows7.0\OpenRiaServices.Client.pdb" />
+    <file src="..\src\bin\Release\net8.0-windows\OpenRiaServices.Client.xml" target="lib\net8.0-windows7.0\OpenRiaServices.Client.xml" />
+	<!--
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.Web.dll" target="lib\net8.0-windows7.0\OpenRiaServices.Client.Web.dll" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.Web.pdb" target="lib\net8.0-windows7.0\OpenRiaServices.Client.Web.pdb" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.Web.xml" target="lib\net8.0-windows7.0\OpenRiaServices.Client.Web.xml" />
+	-->
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.dll" target="lib\net8.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.dll" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\net8.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.pdb" />
+    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\net8.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.xml" />
 
   </files>
 </package>

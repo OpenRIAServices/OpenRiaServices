@@ -231,8 +231,6 @@ namespace OpenRiaServices.Tools.TextTemplate
                     // on the client when the [ServiceKnownType] is created.
                     t = new VirtualType(t.Name, CodeGenUtilities.TranslateNamespace(t), t.Assembly, t.BaseType);
                 }
-
-                knownTypeAttributes.Add(new ServiceKnownTypeAttribute(t));
             }
 
             return knownTypeAttributes;

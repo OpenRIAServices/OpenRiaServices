@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Server</id>
-    <version>4.6.0-preview1</version>
+    <version>5.6.0</version>
     <title>OpenRiaServices.Server</title>
     <authors>OpenRIAServices</authors>
     <license type="expression">Apache-2.0</license>
@@ -21,35 +21,38 @@
     <frameworkAssemblies>
       <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net472" />
     </frameworkAssemblies>
-	<dependencies>
-		<group targetFramework="net472">
-			<dependency id="System.Threading.Tasks.Extensions" version="4.5.4"/>
-		</group>
-		<group targetFramework="netstandard2.0">
-			<dependency id="System.ComponentModel.Annotations" version="5.0.0"/>
-			<dependency id="System.Reflection.Emit.Lightweight" version="4.7.0"/>
-			<dependency id="System.CodeDom" version="8.0.0"/>
-			<dependency id="System.Threading.Tasks.Extensions" version="4.5.4"/>
-		</group>
-		<group targetFramework="net6.0">
-			<dependency id="System.CodeDom" version="8.0.0"/>
-		</group>
-	</dependencies>
+    <dependencies>
+        <group targetFramework="net472">
+            <dependency id="System.Threading.Tasks.Extensions" version="4.6.0"/>
+        </group>
+        <!--
+        <group targetFramework="netstandard2.0">
+            <dependency id="System.ComponentModel.Annotations" version="5.0.0"/>
+            <dependency id="System.Reflection.Emit.Lightweight" version="4.7.0"/>
+            <dependency id="System.CodeDom" version="9.0.0"/>
+            <dependency id="System.Threading.Tasks.Extensions" version="4.6.0"/>
+        </group>
+        -->
+        <group targetFramework="net8.0">
+            <dependency id="System.CodeDom" version="8.0.0"/>
+        </group>
+    </dependencies>
   </metadata>
   <files>
     <file src="build\OpenRiaServices.Server.targets" target="build\OpenRiaServices.Server.targets" />
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Tools.dll" target="build\OpenRiaServices.Tools.dll" />
-	<file src="..\..\src\bin\Release\net472\Mono.Cecil.dll" target="build\Mono.Cecil.dll"/>
+    <file src="..\..\src\bin\Release\net472\Mono.Cecil.dll" target="build\Mono.Cecil.dll"/>
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.dll" target="lib\net472\OpenRiaServices.Server.dll" />
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.pdb" target="lib\net472\OpenRiaServices.Server.pdb" />
     <file src="..\..\src\bin\Release\net472\OpenRiaServices.Server.xml" target="lib\net472\OpenRiaServices.Server.xml" />
 
+<!--
     <file src="..\..\src\bin\Release\netstandard2.0\OpenRiaServices.Server.dll" target="lib\netstandard2.0\OpenRiaServices.Server.dll" />
     <file src="..\..\src\bin\Release\netstandard2.0\OpenRiaServices.Server.pdb" target="lib\netstandard2.0\OpenRiaServices.Server.pdb" />
     <file src="..\..\src\bin\Release\netstandard2.0\OpenRiaServices.Server.xml" target="lib\netstandard2.0\OpenRiaServices.Server.xml" />
-
-    <file src="..\..\src\bin\Release\net6.0\OpenRiaServices.Server.dll" target="lib\net6.0\OpenRiaServices.Server.dll" />
-    <file src="..\..\src\bin\Release\net6.0\OpenRiaServices.Server.pdb" target="lib\net6.0\OpenRiaServices.Server.pdb" />
-    <file src="..\..\src\bin\Release\net6.0\OpenRiaServices.Server.xml" target="lib\net6.0\OpenRiaServices.Server.xml" />
+-->
+    <file src="..\..\src\bin\Release\net8.0\OpenRiaServices.Server.dll" target="lib\net8.0\OpenRiaServices.Server.dll" />
+    <file src="..\..\src\bin\Release\net8.0\OpenRiaServices.Server.pdb" target="lib\net8.0\OpenRiaServices.Server.pdb" />
+    <file src="..\..\src\bin\Release\net8.0\OpenRiaServices.Server.xml" target="lib\net8.0\OpenRiaServices.Server.xml" />
   </files>
 </package>

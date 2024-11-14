@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Hosting.Wcf</id>
-    <version>4.6.0-preview1</version>
+    <version>5.6.0</version>
     <title>OpenRiaServices.Hosting.Wcf</title>
     <authors>OpenRIAServices</authors>
     <license type="expression">Apache-2.0</license>
@@ -20,10 +20,10 @@
     <tags>WCF RIA Services RIAServices Server aspnet OpenRiaServices</tags>
 	<dependencies>
 		<group targetFramework="net472">
-			<dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="8.0.2"/>
+			<dependency id="Microsoft.Extensions.DependencyInjection.Abstractions" version="9.0.0"/>
 			<dependency id="OpenRiaServices.Server" version="$version$"/>
-			<dependency id="System.Collections.Immutable" version="8.0.0" />
-			<dependency id="System.Memory" version="4.5.5"/>
+			<dependency id="System.Collections.Immutable" version="9.0.0" />
+			<dependency id="System.Memory" version="4.6.0"/>
 		</group>
 	</dependencies>
   </metadata>

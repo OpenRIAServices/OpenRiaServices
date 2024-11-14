@@ -7,7 +7,7 @@ using OpenRiaServices.Server;
 
 #nullable enable
 
-#if NETSTANDARD2_0
+#if !NET
 namespace System.Runtime.CompilerServices
 {
     internal class RequiredMemberAttribute { };

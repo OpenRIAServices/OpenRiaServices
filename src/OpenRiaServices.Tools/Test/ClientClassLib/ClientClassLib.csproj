@@ -1,15 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;net6.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <DefineConstants>$(DefineConstants);SILVERLIGHT</DefineConstants>
     <DebugType>pdbonly</DebugType>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <Reference Include="System.ComponentModel.DataAnnotations" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'!='net472'">
-    <PackageReference Include="System.ServiceModel.Http" Version="6.2.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\ServerClassLib\CodelessType.linked.cs">

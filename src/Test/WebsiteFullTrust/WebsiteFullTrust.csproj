@@ -113,8 +113,6 @@
     <ProjectReference Include="..\..\OpenRiaServices.Server.EntityFrameworkCore\Framework\OpenRiaServices.Server.EntityFrameworkCore.csproj">
       <Project>{b8d39090-3b76-41bb-a139-956e42619e91}</Project>
       <Name>OpenRiaServices.Server.EntityFrameworkCore</Name>
-      <!-- For some reason the build sometimes complains about EntityFrameworkCore beeing netcoreapp even when it has netstandard target-->
-      <SetTargetFramework>TargetFramework=netstandard2.0</SetTargetFramework>
     </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj">
       <Project>{B33BF27F-7DF7-46FF-A1DA-F12A873E124F}</Project>
@@ -143,19 +141,19 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework">
-      <Version>6.4.4</Version>
+      <Version>6.5.1</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer">
       <Version>3.1.32</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection">
-      <Version>8.0.1</Version>
+      <Version>9.0.0</Version>
     </PackageReference>
     <PackageReference Include="System.Collections.Immutable">
-      <Version>8.0.0</Version>
+      <Version>9.0.0</Version>
     </PackageReference>
     <PackageReference Include="System.Threading.Tasks.Extensions">
-      <Version>4.5.4</Version>
+      <Version>4.6.0</Version>
     </PackageReference>
   </ItemGroup>
   <PropertyGroup>

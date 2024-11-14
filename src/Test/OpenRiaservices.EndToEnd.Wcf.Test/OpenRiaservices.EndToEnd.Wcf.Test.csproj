@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <!-- Note NET6 has problem with some of the tests which tests instant cancellation -->
-    <TargetFrameworks>net472<!--;net6.0--></TargetFrameworks>
+    <TargetFrameworks>net472<!--;net8.0--></TargetFrameworks>
     <ImplicitUsings>false</ImplicitUsings>
     <IsPackable>false</IsPackable>
     <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
@@ -11,8 +11,8 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.6.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.6.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.6.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.6.3" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net472'">

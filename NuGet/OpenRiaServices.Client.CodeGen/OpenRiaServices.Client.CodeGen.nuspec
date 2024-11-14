@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
     <metadata minClientVersion="2.8">
         <id>OpenRiaServices.Client.CodeGen</id>
-        <version>5.4.4</version>
+        <version>5.6.0</version>
         <title>Open RIA Services Client Code Generator</title>
         <authors>OpenRIAServices</authors>
         <license type="expression">Apache-2.0</license>
@@ -17,9 +17,12 @@
         <language>en-US</language>
         <tags>WCF RIA Services RIAServices OpenRiaServices CodeGen</tags>
        <dependencies>
-            <group>
-                <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
-            </group>
+         <group targetFramework="net472">
+           <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
+         </group>
+         <group targetFramework="net8.0">
+           <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
+         </group>
         </dependencies>
     </metadata>
     <files>
@@ -28,6 +31,6 @@
         <file src="..\..\src\bin\Release\net472\Mono.Cecil.dll" target="tasks\net472\Mono.Cecil.dll"/>
         <file src="..\..\src\bin\Release\net472\Mono.Cecil.Pdb.dll" target="tasks\net472\Mono.Cecil.Pdb.dll"/>
         <!-- TODO: Make a publish of project and take assemblies from there instead -->
-        <file src="..\..\src\OpenRiaServices.Tools.CodeGenTask\bin\Release\net6.0\**\*.*" target="tasks\net6.0\"/>
+        <file src="..\..\src\OpenRiaServices.Tools.CodeGenTask\bin\Release\net8.0\**\*.*" target="tasks\net8.0\"/>
     </files>
 </package>

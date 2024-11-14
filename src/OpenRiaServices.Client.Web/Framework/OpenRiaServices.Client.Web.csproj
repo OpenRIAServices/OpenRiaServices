@@ -1,17 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net472;net8.0;net6.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <PackageTags>WCF;RIA;Services;RIAServices;Silverlight;OpenRiaServices</PackageTags>
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0'  ">
-    <PackageReference Include="System.ServiceModel.Http" Version="4.10.2" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net472' and '$(TargetFramework)' != 'netstandard2.0' ">
-    <PackageReference Include="System.ServiceModel.Http" Version="6.2.0" />
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
+    <PackageReference Include="System.ServiceModel.Http" Version="8.1.0" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472' ">

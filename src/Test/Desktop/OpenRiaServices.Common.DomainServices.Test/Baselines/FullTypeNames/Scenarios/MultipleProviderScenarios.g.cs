@@ -5198,7 +5198,6 @@ namespace TestDomainServices.EF
         /// <summary>
         /// Service contract for the 'Northwind' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
         public interface INorthwindContract
         {
             
@@ -5209,7 +5208,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCategories", ReplyAction="http://tempuri.org/Northwind/GetCategoriesResponse")]
             global::System.IAsyncResult BeginGetCategories(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5226,7 +5224,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCustomers", ReplyAction="http://tempuri.org/Northwind/GetCustomersResponse")]
             global::System.IAsyncResult BeginGetCustomers(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5243,7 +5240,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction="http://tempuri.org/Northwind/GetOrderDetailsResponse")]
             global::System.IAsyncResult BeginGetOrderDetails(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5260,7 +5256,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrders", ReplyAction="http://tempuri.org/Northwind/GetOrdersResponse")]
             global::System.IAsyncResult BeginGetOrders(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5278,7 +5273,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductById", ReplyAction="http://tempuri.org/Northwind/GetProductByIdResponse")]
             global::System.IAsyncResult BeginGetProductById(int id, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5295,7 +5289,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductInfos", ReplyAction="http://tempuri.org/Northwind/GetProductInfosResponse")]
             global::System.IAsyncResult BeginGetProductInfos(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5312,7 +5305,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProducts", ReplyAction="http://tempuri.org/Northwind/GetProductsResponse")]
             global::System.IAsyncResult BeginGetProducts(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5330,7 +5322,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegionById", ReplyAction="http://tempuri.org/Northwind/GetRegionByIdResponse")]
             global::System.IAsyncResult BeginGetRegionById(int id, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5347,7 +5338,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegions", ReplyAction="http://tempuri.org/Northwind/GetRegionsResponse")]
             global::System.IAsyncResult BeginGetRegions(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5364,7 +5354,6 @@ namespace TestDomainServices.EF
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/SubmitChanges", ReplyAction="http://tempuri.org/Northwind/SubmitChangesResponse")]
             global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5634,7 +5623,6 @@ namespace TestDomainServices.LTS
         /// <summary>
         /// Service contract for the 'Northwind' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
         public interface INorthwindContract
         {
             
@@ -5645,7 +5633,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCategories", ReplyAction="http://tempuri.org/Northwind/GetCategoriesResponse")]
             global::System.IAsyncResult BeginGetCategories(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5662,7 +5649,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCustomers", ReplyAction="http://tempuri.org/Northwind/GetCustomersResponse")]
             global::System.IAsyncResult BeginGetCustomers(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5679,7 +5665,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction="http://tempuri.org/Northwind/GetOrderDetailsResponse")]
             global::System.IAsyncResult BeginGetOrderDetails(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5696,7 +5681,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrders", ReplyAction="http://tempuri.org/Northwind/GetOrdersResponse")]
             global::System.IAsyncResult BeginGetOrders(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5714,7 +5698,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductById", ReplyAction="http://tempuri.org/Northwind/GetProductByIdResponse")]
             global::System.IAsyncResult BeginGetProductById(int id, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5731,7 +5714,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductInfos", ReplyAction="http://tempuri.org/Northwind/GetProductInfosResponse")]
             global::System.IAsyncResult BeginGetProductInfos(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5748,7 +5730,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProducts", ReplyAction="http://tempuri.org/Northwind/GetProductsResponse")]
             global::System.IAsyncResult BeginGetProducts(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5766,7 +5747,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegionById", ReplyAction="http://tempuri.org/Northwind/GetRegionByIdResponse")]
             global::System.IAsyncResult BeginGetRegionById(int id, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5783,7 +5763,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegions", ReplyAction="http://tempuri.org/Northwind/GetRegionsResponse")]
             global::System.IAsyncResult BeginGetRegions(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5800,7 +5779,6 @@ namespace TestDomainServices.LTS
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/SubmitChanges", ReplyAction="http://tempuri.org/Northwind/SubmitChangesResponse")]
             global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>

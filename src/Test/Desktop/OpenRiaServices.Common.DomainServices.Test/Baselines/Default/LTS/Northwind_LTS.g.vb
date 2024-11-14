@@ -23,7 +23,6 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
-Imports System.ServiceModel
 Imports System.Threading.Tasks
 
 Namespace DataTests.Northwind.LTS
@@ -2528,7 +2527,6 @@ Namespace TestDomainServices.LTS
         ''' <summary>
         ''' Service contract for the 'Northwind' DomainService.
         ''' </summary>
-        <ServiceContract()>  _
         Public Interface INorthwindContract
             
             ''' <summary>
@@ -2537,8 +2535,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetCategories", ReplyAction:="http://tempuri.org/Northwind/GetCategoriesResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetCategories(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2554,8 +2551,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetCustomers", ReplyAction:="http://tempuri.org/Northwind/GetCustomersResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetCustomers(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2571,8 +2567,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction:="http://tempuri.org/Northwind/GetOrderDetailsResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetOrderDetails(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2588,8 +2583,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetOrders", ReplyAction:="http://tempuri.org/Northwind/GetOrdersResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetOrders(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2606,8 +2600,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetProductById", ReplyAction:="http://tempuri.org/Northwind/GetProductByIdResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2623,8 +2616,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetProductInfos", ReplyAction:="http://tempuri.org/Northwind/GetProductInfosResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductInfos(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2640,8 +2632,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetProducts", ReplyAction:="http://tempuri.org/Northwind/GetProductsResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProducts(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2658,8 +2649,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetRegionById", ReplyAction:="http://tempuri.org/Northwind/GetRegionByIdResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetRegionById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2675,8 +2665,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetRegions", ReplyAction:="http://tempuri.org/Northwind/GetRegionsResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetRegions(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2693,7 +2682,6 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/SubmitChanges", ReplyAction:="http://tempuri.org/Northwind/SubmitChangesResponse")>  _
             Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
