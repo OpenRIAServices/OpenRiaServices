@@ -23,22 +23,29 @@
 
 
 ## 5.6.0
-This is proably the last version with support for .netstandard2.0 and .Net < 8 as well as *WCF* based *WebDomainClientFactory*
-and **maybe even WCF based hosting**
+This is proably the last version with for **WCF based hosting**
 
-**Client**
+**BREAKING CHANGES**:
+- Drops support for .NET6 and .netstandard2.0
+- Stop shipping WCF based domainclient as part of OpenRiaServices.Client.Core nuget
+  The WebDomainClient has been depreciated since 2023
+  - code gen
+- **NOTE**: WCF based hosting is considered depreciated and will be removed in the near future
+
+**Client Improvements**
 * Handle exceptions when Exception StatusCode is 403 (Required for AspNetCore 1.3.0)
 * Set Accept header to "application/msbin1" (#521) for BinarHttpDomainClient
+* Client nugets no longer have a dependency on `System.ServiceModel`
 
-**General**
+**General Improvements**
 * Update nuget package dependencies
 * Update to latest version of Mono.Cecil
 * Updated integration test to run on .NET 8 instead of .NET Framework
+* Updated E2E integration tests no longer use WCF based client
 
 
+# 5.5.0 / EF Core 3.1.0 / AspNetCore 1.2.0
 
-* # 5.5.0 / EF Core 3.1.0 / AspNetCore 1.2.0
-* 
 ### EF Core 3.1.0
 * Initial support for Owned Entities for one-to-one navigation properties (#500)
   * Owned entities without explicit keys are mapped to OpenRiaServices's [Complex Types]
