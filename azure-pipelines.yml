@@ -28,13 +28,11 @@ steps:
 - task: NuGetToolInstaller@1
   inputs:
     versionSpec: 6.9.1
-
-- task: gitversion/setup@0
-  displayName: Install GitVersion
+- task: gitversion/setup@3
   inputs:
     versionSpec: '5.9.0'
 
-- task: gitversion/execute@0
+- task: gitversion/execute@3
   displayName: Use GitVersion
 
 - task: NuGetCommand@2
