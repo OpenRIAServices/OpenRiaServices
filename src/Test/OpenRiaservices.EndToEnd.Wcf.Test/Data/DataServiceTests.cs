@@ -483,23 +483,6 @@ namespace OpenRiaServices.Client.Test
         }
 
         /// <summary>
-        /// Verify that if an invalid DomainOperationEntry name is specified, that the Load
-        /// operation finishes with the expected WebResponse.StatusCode.
-        /// </summary>
-#if ASPNETCORE
-        [Ignore("BinaryHttpDomainClientFactory does not validate if method exists, and since name is always specified by code generation it is not important to validate it")]
-#endif
-        [TestMethod]
-        public void TestInvalidMethodName()
-        {
-            TestDataContext ctxt = new TestDataContext(TestURIs.LTS_Catalog);
-            ExceptionHelper.ExpectException<MissingMethodException>(delegate
-            {
-                ctxt.Load(ctxt.CreateQuery<Product>("DNE", null), false);
-            }, String.Format(Resource.WebDomainClient_OperationDoesNotExist, "DNE"));
-        }
-
-        /// <summary>
         /// Verify that an existing DomainService is not accessible by the client if
         /// it is not publically exposed via the DomainService.EnableServiceAccess property.
         /// </summary>
@@ -550,7 +533,7 @@ namespace OpenRiaServices.Client.Test
         [Description("Ensures the DataFactory does not find a secure service when invoked over HTTP.")]
         public void InvokingHttpsServiceOverHttpFails()
         {
-            TestService_RequiresSecureEndpoint service = new TestService_RequiresSecureEndpoint(new WebDomainClient<TestService_RequiresSecureEndpoint.ITestService_RequiresSecureEndpointContract>(TestURIs.TestService_RequiresSecureEndpoint));
+            TestService_RequiresSecureEndpoint service = new TestService_RequiresSecureEndpoint(TestURIs.TestService_RequiresSecureEndpoint);
 
             LoadOperation lo = service.Load(service.GetTestEntitiesQuery(), false);
 
