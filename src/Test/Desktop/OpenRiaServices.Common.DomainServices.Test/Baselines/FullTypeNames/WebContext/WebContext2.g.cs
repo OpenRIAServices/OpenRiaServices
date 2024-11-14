@@ -167,7 +167,6 @@ namespace RootNamespace.TestNamespace
         /// <summary>
         /// Service contract for the 'AuthenticationService1' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
         public interface IAuthenticationService1Contract
         {
             
@@ -178,7 +177,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/GetUser", ReplyAction="http://tempuri.org/AuthenticationService1/GetUserResponse")]
             global::System.IAsyncResult BeginGetUser(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -199,7 +197,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(true)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/Login", ReplyAction="http://tempuri.org/AuthenticationService1/LoginResponse")]
             global::System.IAsyncResult BeginLogin(string userName, string password, bool isPersistent, string customData, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -216,7 +213,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(true)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/Logout", ReplyAction="http://tempuri.org/AuthenticationService1/LogoutResponse")]
             global::System.IAsyncResult BeginLogout(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -233,7 +229,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService1/SubmitChanges", ReplyAction="http://tempuri.org/AuthenticationService1/SubmitChangesResponse")]
             global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -360,7 +355,6 @@ namespace RootNamespace.TestNamespace
         /// <summary>
         /// Service contract for the 'AuthenticationService2' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
         public interface IAuthenticationService2Contract
         {
             
@@ -371,7 +365,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/GetUser", ReplyAction="http://tempuri.org/AuthenticationService2/GetUserResponse")]
             global::System.IAsyncResult BeginGetUser(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -392,7 +385,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(true)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/Login", ReplyAction="http://tempuri.org/AuthenticationService2/LoginResponse")]
             global::System.IAsyncResult BeginLogin(string userName, string password, bool isPersistent, string customData, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -409,7 +401,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(true)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/Logout", ReplyAction="http://tempuri.org/AuthenticationService2/LogoutResponse")]
             global::System.IAsyncResult BeginLogout(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -426,7 +417,6 @@ namespace RootNamespace.TestNamespace
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/AuthenticationService2/SubmitChanges", ReplyAction="http://tempuri.org/AuthenticationService2/SubmitChangesResponse")]
             global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>

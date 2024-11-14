@@ -4983,7 +4983,6 @@ namespace TestDomainServices.EF
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.ServiceModel;
     using System.Threading.Tasks;
     using NorthwindModel;
     using OpenRiaServices;
@@ -5229,7 +5228,6 @@ namespace TestDomainServices.EF
         /// <summary>
         /// Service contract for the 'Northwind' DomainService.
         /// </summary>
-        [ServiceContract()]
         public interface INorthwindContract
         {
             
@@ -5240,7 +5238,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCategories", ReplyAction="http://tempuri.org/Northwind/GetCategoriesResponse")]
             IAsyncResult BeginGetCategories(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5257,7 +5254,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCustomers", ReplyAction="http://tempuri.org/Northwind/GetCustomersResponse")]
             IAsyncResult BeginGetCustomers(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5274,7 +5270,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction="http://tempuri.org/Northwind/GetOrderDetailsResponse")]
             IAsyncResult BeginGetOrderDetails(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5291,7 +5286,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrders", ReplyAction="http://tempuri.org/Northwind/GetOrdersResponse")]
             IAsyncResult BeginGetOrders(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5309,7 +5303,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductById", ReplyAction="http://tempuri.org/Northwind/GetProductByIdResponse")]
             IAsyncResult BeginGetProductById(int id, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5326,7 +5319,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductInfos", ReplyAction="http://tempuri.org/Northwind/GetProductInfosResponse")]
             IAsyncResult BeginGetProductInfos(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5343,7 +5335,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProducts", ReplyAction="http://tempuri.org/Northwind/GetProductsResponse")]
             IAsyncResult BeginGetProducts(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5361,7 +5352,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegionById", ReplyAction="http://tempuri.org/Northwind/GetRegionByIdResponse")]
             IAsyncResult BeginGetRegionById(int id, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5378,7 +5368,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegions", ReplyAction="http://tempuri.org/Northwind/GetRegionsResponse")]
             IAsyncResult BeginGetRegions(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5395,7 +5384,6 @@ namespace TestDomainServices.EF
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/SubmitChanges", ReplyAction="http://tempuri.org/Northwind/SubmitChangesResponse")]
             IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5430,7 +5418,6 @@ namespace TestDomainServices.LTS
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.ServiceModel;
     using System.Threading.Tasks;
     using DataTests.Northwind.LTS;
     using OpenRiaServices;
@@ -5676,7 +5663,6 @@ namespace TestDomainServices.LTS
         /// <summary>
         /// Service contract for the 'Northwind' DomainService.
         /// </summary>
-        [ServiceContract()]
         public interface INorthwindContract
         {
             
@@ -5687,7 +5673,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCategories", ReplyAction="http://tempuri.org/Northwind/GetCategoriesResponse")]
             IAsyncResult BeginGetCategories(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5704,7 +5689,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCustomers", ReplyAction="http://tempuri.org/Northwind/GetCustomersResponse")]
             IAsyncResult BeginGetCustomers(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5721,7 +5705,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction="http://tempuri.org/Northwind/GetOrderDetailsResponse")]
             IAsyncResult BeginGetOrderDetails(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5738,7 +5721,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrders", ReplyAction="http://tempuri.org/Northwind/GetOrdersResponse")]
             IAsyncResult BeginGetOrders(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5756,7 +5738,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductById", ReplyAction="http://tempuri.org/Northwind/GetProductByIdResponse")]
             IAsyncResult BeginGetProductById(int id, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5773,7 +5754,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductInfos", ReplyAction="http://tempuri.org/Northwind/GetProductInfosResponse")]
             IAsyncResult BeginGetProductInfos(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5790,7 +5770,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProducts", ReplyAction="http://tempuri.org/Northwind/GetProductsResponse")]
             IAsyncResult BeginGetProducts(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5808,7 +5787,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegionById", ReplyAction="http://tempuri.org/Northwind/GetRegionByIdResponse")]
             IAsyncResult BeginGetRegionById(int id, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5825,7 +5803,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegions", ReplyAction="http://tempuri.org/Northwind/GetRegionsResponse")]
             IAsyncResult BeginGetRegions(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5842,7 +5819,6 @@ namespace TestDomainServices.LTS
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Northwind/SubmitChanges", ReplyAction="http://tempuri.org/Northwind/SubmitChangesResponse")]
             IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
             
             /// <summary>

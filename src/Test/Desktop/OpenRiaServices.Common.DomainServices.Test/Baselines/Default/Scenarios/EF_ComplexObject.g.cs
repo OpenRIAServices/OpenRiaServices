@@ -306,7 +306,6 @@ namespace OpenRiaServices.Tools.Test
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.ServiceModel;
     using System.Threading.Tasks;
     using DataTests.Scenarios.EF.Northwind;
     using OpenRiaServices;
@@ -391,7 +390,6 @@ namespace OpenRiaServices.Tools.Test
         /// <summary>
         /// Service contract for the 'EFComplexTypesService' DomainService.
         /// </summary>
-        [ServiceContract()]
         public interface IEFComplexTypesServiceContract
         {
             
@@ -402,7 +400,6 @@ namespace OpenRiaServices.Tools.Test
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/EFComplexTypesService/GetCustomers", ReplyAction="http://tempuri.org/EFComplexTypesService/GetCustomersResponse")]
             IAsyncResult BeginGetCustomers(AsyncCallback callback, object asyncState);
             
             /// <summary>

@@ -223,8 +223,6 @@ namespace GlobalNamespaceTest
         /// <summary>
         /// Service contract for the 'GlobalNamespaceTest_DomainService' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
-        [global::System.ServiceModel.ServiceKnownTypeAttribute(typeof(global::GlobalNamespaceTest_Enum))]
         public interface IGlobalNamespaceTest_DomainServiceContract
         {
             
@@ -235,7 +233,6 @@ namespace GlobalNamespaceTest
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntities", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntitiesResponse")]
             global::System.IAsyncResult BeginGetEntities(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -253,7 +250,6 @@ namespace GlobalNamespaceTest
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(true)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturn", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturnResponse")]
             global::System.IAsyncResult BeginInvokeReturn(global::GlobalNamespaceTest_Enum enumParameter, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -271,7 +267,6 @@ namespace GlobalNamespaceTest
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(true)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoid", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoidResponse")]
             global::System.IAsyncResult BeginInvokeVoid(global::GlobalNamespaceTest_Enum enumParameter, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -288,7 +283,6 @@ namespace GlobalNamespaceTest
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntities", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntitiesResponse")]
             global::System.IAsyncResult BeginReadEntities(global::GlobalNamespaceTest_Enum enumParameter, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -305,7 +299,6 @@ namespace GlobalNamespaceTest
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChanges", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChangesResponse")]
             global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>

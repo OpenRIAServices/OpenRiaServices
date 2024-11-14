@@ -20,10 +20,8 @@
          <group targetFramework="net472">
            <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
          </group>
-         <group targetFramework="net8.0" />
+         <group targetFramework="net8.0">
            <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
-           <!-- Generated code uses some of these attributes -->
-           <dependency id="System.ServiceModel.Primitives" version="8.1.0" />
          </group>
         </dependencies>
     </metadata>

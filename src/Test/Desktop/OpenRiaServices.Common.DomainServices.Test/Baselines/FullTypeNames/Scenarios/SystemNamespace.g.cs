@@ -89,7 +89,6 @@ namespace System
         /// <summary>
         /// Service contract for the 'SystemDomainService' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
         public interface ISystemDomainServiceContract
         {
             
@@ -100,7 +99,6 @@ namespace System
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/SystemDomainService/GetSystemEntities", ReplyAction="http://tempuri.org/SystemDomainService/GetSystemEntitiesResponse")]
             global::System.IAsyncResult BeginGetSystemEntities(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -367,7 +365,6 @@ namespace System.Subsystem
         /// <summary>
         /// Service contract for the 'SubsystemDomainService' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
         public interface ISubsystemDomainServiceContract
         {
             
@@ -378,7 +375,6 @@ namespace System.Subsystem
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/SubsystemDomainService/GetSubsystemEntities", ReplyAction="http://tempuri.org/SubsystemDomainService/GetSubsystemEntitiesResponse")]
             global::System.IAsyncResult BeginGetSubsystemEntities(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -644,7 +640,6 @@ namespace SystemExtensions
         /// <summary>
         /// Service contract for the 'SystemExtensionsDomainService' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
         public interface ISystemExtensionsDomainServiceContract
         {
             
@@ -655,8 +650,6 @@ namespace SystemExtensions
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntities", ReplyAction="http://tempuri.org/SystemExtensionsDomainService/GetSystemExtensionsEntitiesRespo" +
-                "nse")]
             global::System.IAsyncResult BeginGetSystemExtensionsEntities(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>

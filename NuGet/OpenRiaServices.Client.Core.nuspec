@@ -30,8 +30,6 @@
       <frameworkAssembly assemblyName="System.ComponentModel.DataAnnotations" targetFramework="net472" />
       <frameworkAssembly assemblyName="System.Net.Http" targetFramework="net472" />
       <frameworkAssembly assemblyName="System.Runtime.Serialization" targetFramework="net472" />
-      <frameworkAssembly assemblyName="System.ServiceModel" targetFramework="net472" />
-      <frameworkAssembly assemblyName="System.ServiceModel.Web" targetFramework="net472" />
     </frameworkAssemblies>
   </metadata>
   <files>

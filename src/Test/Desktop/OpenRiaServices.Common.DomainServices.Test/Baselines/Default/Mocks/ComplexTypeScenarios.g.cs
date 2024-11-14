@@ -16,7 +16,6 @@ namespace TestDomainServices
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel;
     using System.Threading;
     using System.Threading.Tasks;
     using OpenRiaServices;
@@ -807,9 +806,6 @@ namespace TestDomainServices
         /// <summary>
         /// Service contract for the 'ComplexTypes_DomainService' DomainService.
         /// </summary>
-        [ServiceContract()]
-        [ServiceKnownType(typeof(global::TestDomainServices.ComplexInheritance_Child))]
-        [ServiceKnownType(typeof(TestDomainServices.ComplexInheritance_Child[]))]
         public interface IComplexTypes_DomainServiceContract
         {
             
@@ -822,7 +818,6 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_DomainService/GetHighestChild", ReplyAction="http://tempuri.org/ComplexTypes_DomainService/GetHighestChildResponse")]
             IAsyncResult BeginGetHighestChild(ComplexInheritance_Child child, ComplexInheritance_Child[] children, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -840,7 +835,6 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_DomainService/GetInheritedMember", ReplyAction="http://tempuri.org/ComplexTypes_DomainService/GetInheritedMemberResponse")]
             IAsyncResult BeginGetInheritedMember(ComplexInheritance_Child child, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -857,7 +851,6 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_DomainService/GetStub", ReplyAction="http://tempuri.org/ComplexTypes_DomainService/GetStubResponse")]
             IAsyncResult BeginGetStub(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -874,7 +867,6 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_DomainService/SubmitChanges", ReplyAction="http://tempuri.org/ComplexTypes_DomainService/SubmitChangesResponse")]
             IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -1068,7 +1060,6 @@ namespace TestDomainServices
         /// <summary>
         /// Service contract for the 'ComplexTypes_InvokeOperationsOnly' DomainService.
         /// </summary>
-        [ServiceContract()]
         public interface IComplexTypes_InvokeOperationsOnlyContract
         {
             
@@ -1079,8 +1070,6 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/InvokeGetInvalidAddress", ReplyAction="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/InvokeGetInvalidAddressRespo" +
-                "nse")]
             IAsyncResult BeginInvokeGetInvalidAddress(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -1098,7 +1087,6 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/RoundtripAddress", ReplyAction="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/RoundtripAddressResponse")]
             IAsyncResult BeginRoundtripAddress(Address address, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -1116,7 +1104,6 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/UpdateContact", ReplyAction="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/UpdateContactResponse")]
             IAsyncResult BeginUpdateContact(ContactInfo contact, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -1306,8 +1293,6 @@ namespace TestDomainServices
         /// <summary>
         /// Service contract for the 'ComplexTypes_TestService' DomainService.
         /// </summary>
-        [ServiceContract()]
-        [ServiceKnownType(typeof(global::TestDomainServices.Phone))]
         public interface IComplexTypes_TestServiceContract
         {
             
@@ -1318,7 +1303,6 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_TestService/GetParents", ReplyAction="http://tempuri.org/ComplexTypes_TestService/GetParentsResponse")]
             IAsyncResult BeginGetParents(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -1336,7 +1320,6 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_TestService/ReturnHomeAddress", ReplyAction="http://tempuri.org/ComplexTypes_TestService/ReturnHomeAddressResponse")]
             IAsyncResult BeginReturnHomeAddress(ContactInfo contact, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -1354,7 +1337,6 @@ namespace TestDomainServices
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_TestService/RoundtripAddress", ReplyAction="http://tempuri.org/ComplexTypes_TestService/RoundtripAddressResponse")]
             IAsyncResult BeginRoundtripAddress(Address address, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -1371,7 +1353,6 @@ namespace TestDomainServices
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/ComplexTypes_TestService/SubmitChanges", ReplyAction="http://tempuri.org/ComplexTypes_TestService/SubmitChangesResponse")]
             IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
             
             /// <summary>

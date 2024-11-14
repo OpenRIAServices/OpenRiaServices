@@ -5,7 +5,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
-using System.ServiceModel;
 using OpenRiaServices.Server;
 using OpenRiaServices.Tools.SharedTypes;
 
@@ -468,11 +467,6 @@ namespace OpenRiaServices.Tools
             contractInterface.Comments.AddRange(CodeGenUtilities.GenerateSummaryCodeComment(comment, this.ClientProxyGenerator.IsCSharp));
 
             contractInterface.IsInterface = true;
-            contractInterface.CustomAttributes.Add(
-                CodeGenUtilities.CreateAttributeDeclaration(
-                    typeof(ServiceContractAttribute),
-                    this.ClientProxyGenerator,
-                    proxyClass));
 
             // Used to track types registered with ServiceKnownTypeAttribute (for Custom methods)
             HashSet<Type> registeredServiceTypes = new HashSet<Type>();
@@ -548,8 +542,6 @@ namespace OpenRiaServices.Tools
                     // on the client when the [ServiceKnownType] is created.
                     t = new VirtualType(t.Name, CodeGenUtilities.TranslateNamespace(t, this.ClientProxyGenerator), t.Assembly, t.BaseType);
                 }
-
-                knownTypeAttributes.Add(new ServiceKnownTypeAttribute(t));
             }
 
             if (knownTypeAttributes.Count > 0)
@@ -590,8 +582,6 @@ namespace OpenRiaServices.Tools
 
             // Generate <returns> doc comment
             beginMethod.Comments.AddRange(CodeGenUtilities.GenerateReturnsCodeComment(Resource.CodeGen_DomainContext_ServiceContract_Begin_Method_Returns_Comment, this.ClientProxyGenerator.IsCSharp));
-
-            this.GenerateContractMethodAttributes(contractInterface, beginMethod, domainServiceName, operation.Name);
 
             foreach (DomainOperationParameter parameter in operation.Parameters)
             {
@@ -691,8 +681,6 @@ namespace OpenRiaServices.Tools
             // Generate <returns> doc comment
             beginQueryMethod.Comments.AddRange(CodeGenUtilities.GenerateReturnsCodeComment(Resource.CodeGen_DomainContext_ServiceContract_Begin_Method_Returns_Comment, this.ClientProxyGenerator.IsCSharp));
 
-            this.GenerateContractMethodAttributes(contractInterface, beginQueryMethod, domainServiceName, "SubmitChanges");
-
             CodeTypeReference enumTypeRef = CodeGenUtilities.GetTypeReference(TypeConstants.IEnumerableFullName, contractInterface.UserData["Namespace"] as string, false);
             enumTypeRef.TypeArguments.Add(CodeGenUtilities.GetTypeReference(TypeConstants.ChangeSetEntryTypeFullName, contractInterface.UserData["Namespace"] as string, false));
 
@@ -737,15 +725,6 @@ namespace OpenRiaServices.Tools
                 new CodeParameterDeclarationExpression(
                     CodeGenUtilities.GetTypeReference(typeof(IAsyncResult), this.ClientProxyGenerator, contractInterface),
                     "result"));
-        }
-
-        private void GenerateContractMethodAttributes(CodeTypeDeclaration contractInterface, CodeMemberMethod beginQueryMethod, string domainServiceName, string operationName)
-        {
-            CodeAttributeDeclaration operationContractAtt = CodeGenUtilities.CreateAttributeDeclaration(typeof(OperationContractAttribute), this.ClientProxyGenerator, contractInterface);
-            operationContractAtt.Arguments.Add(new CodeAttributeArgument("AsyncPattern", new CodePrimitiveExpression(true)));
-            operationContractAtt.Arguments.Add(new CodeAttributeArgument("Action", new CodePrimitiveExpression(string.Format(CultureInfo.InvariantCulture, DomainServiceProxyGenerator.DefaultActionSchema, domainServiceName, operationName))));
-            operationContractAtt.Arguments.Add(new CodeAttributeArgument("ReplyAction", new CodePrimitiveExpression(string.Format(CultureInfo.InvariantCulture, DomainServiceProxyGenerator.DefaultReplyActionSchema, domainServiceName, operationName))));
-            beginQueryMethod.CustomAttributes.Add(operationContractAtt);
         }
 
         /// <summary>

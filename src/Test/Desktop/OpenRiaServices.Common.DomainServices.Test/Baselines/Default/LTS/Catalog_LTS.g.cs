@@ -2448,7 +2448,6 @@ namespace TestDomainServices.LTS
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.ServiceModel;
     using System.Threading.Tasks;
     using DataTests.AdventureWorks.LTS;
     using OpenRiaServices;
@@ -2608,7 +2607,6 @@ namespace TestDomainServices.LTS
         /// <summary>
         /// Service contract for the 'Catalog' DomainService.
         /// </summary>
-        [ServiceContract()]
         public interface ICatalogContract
         {
             
@@ -2619,7 +2617,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetEmployees", ReplyAction="http://tempuri.org/Catalog/GetEmployeesResponse")]
             IAsyncResult BeginGetEmployees(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2636,7 +2633,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetProducts", ReplyAction="http://tempuri.org/Catalog/GetProductsResponse")]
             IAsyncResult BeginGetProducts(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2654,7 +2650,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetProductsByCategory", ReplyAction="http://tempuri.org/Catalog/GetProductsByCategoryResponse")]
             IAsyncResult BeginGetProductsByCategory(int subCategoryID, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2671,7 +2666,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetProductsWithCaching", ReplyAction="http://tempuri.org/Catalog/GetProductsWithCachingResponse")]
             IAsyncResult BeginGetProductsWithCaching(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2688,7 +2682,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetProductsWithCustomTotalCount", ReplyAction="http://tempuri.org/Catalog/GetProductsWithCustomTotalCountResponse")]
             IAsyncResult BeginGetProductsWithCustomTotalCount(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2705,7 +2698,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetPurchaseOrders", ReplyAction="http://tempuri.org/Catalog/GetPurchaseOrdersResponse")]
             IAsyncResult BeginGetPurchaseOrders(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2722,7 +2714,6 @@ namespace TestDomainServices.LTS
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/SubmitChanges", ReplyAction="http://tempuri.org/Catalog/SubmitChangesResponse")]
             IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
             
             /// <summary>

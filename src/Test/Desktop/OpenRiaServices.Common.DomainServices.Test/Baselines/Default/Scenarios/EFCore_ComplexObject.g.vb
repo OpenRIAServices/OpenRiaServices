@@ -22,7 +22,6 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
-Imports System.ServiceModel
 Imports System.Threading.Tasks
 
 Namespace EFCoreModels.Scenarios.OwnedTypes
@@ -715,7 +714,6 @@ Namespace OpenRiaServices.Tools.Test
         ''' <summary>
         ''' Service contract for the 'EFCoreComplexTypesService' DomainService.
         ''' </summary>
-        <ServiceContract()>  _
         Public Interface IEFCoreComplexTypesServiceContract
             
             ''' <summary>
@@ -724,8 +722,7 @@ Namespace OpenRiaServices.Tools.Test
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/EFCoreComplexTypesService/GetCustomers", ReplyAction:="http://tempuri.org/EFCoreComplexTypesService/GetCustomersResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetCustomers(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>

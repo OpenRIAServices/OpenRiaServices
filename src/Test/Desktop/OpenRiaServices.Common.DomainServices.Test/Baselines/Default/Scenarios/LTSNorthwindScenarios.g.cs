@@ -16,7 +16,6 @@ namespace DataTests.Scenarios.LTS.Northwind
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel;
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
@@ -522,7 +521,6 @@ namespace DataTests.Scenarios.LTS.Northwind
         /// <summary>
         /// Service contract for the 'LTS_NorthwindScenarios' DomainService.
         /// </summary>
-        [ServiceContract()]
         public interface ILTS_NorthwindScenariosContract
         {
             
@@ -533,7 +531,6 @@ namespace DataTests.Scenarios.LTS.Northwind
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/LTS_NorthwindScenarios/GetCustomer_Bug479436s", ReplyAction="http://tempuri.org/LTS_NorthwindScenarios/GetCustomer_Bug479436sResponse")]
             IAsyncResult BeginGetCustomer_Bug479436s(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -550,7 +547,6 @@ namespace DataTests.Scenarios.LTS.Northwind
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/LTS_NorthwindScenarios/GetOrder_Bug479436s", ReplyAction="http://tempuri.org/LTS_NorthwindScenarios/GetOrder_Bug479436sResponse")]
             IAsyncResult BeginGetOrder_Bug479436s(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -567,8 +563,6 @@ namespace DataTests.Scenarios.LTS.Northwind
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/LTS_NorthwindScenarios/GetRequiredAttributeTestEntities", ReplyAction="http://tempuri.org/LTS_NorthwindScenarios/GetRequiredAttributeTestEntitiesRespons" +
-                "e")]
             IAsyncResult BeginGetRequiredAttributeTestEntities(AsyncCallback callback, object asyncState);
             
             /// <summary>

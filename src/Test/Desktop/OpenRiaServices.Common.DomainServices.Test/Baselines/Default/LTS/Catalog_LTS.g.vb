@@ -23,7 +23,6 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
-Imports System.ServiceModel
 Imports System.Threading.Tasks
 
 Namespace DataTests.AdventureWorks.LTS
@@ -2434,7 +2433,6 @@ Namespace TestDomainServices.LTS
         ''' <summary>
         ''' Service contract for the 'Catalog' DomainService.
         ''' </summary>
-        <ServiceContract()>  _
         Public Interface ICatalogContract
             
             ''' <summary>
@@ -2443,8 +2441,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetEmployees", ReplyAction:="http://tempuri.org/Catalog/GetEmployeesResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetEmployees(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2460,8 +2457,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetProducts", ReplyAction:="http://tempuri.org/Catalog/GetProductsResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProducts(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2478,8 +2474,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetProductsByCategory", ReplyAction:="http://tempuri.org/Catalog/GetProductsByCategoryResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductsByCategory(ByVal subCategoryID As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2495,8 +2490,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetProductsWithCaching", ReplyAction:="http://tempuri.org/Catalog/GetProductsWithCachingResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductsWithCaching(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2512,8 +2506,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetProductsWithCustomTotalCount", ReplyAction:="http://tempuri.org/Catalog/GetProductsWithCustomTotalCountResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductsWithCustomTotalCount(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2529,8 +2522,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetPurchaseOrders", ReplyAction:="http://tempuri.org/Catalog/GetPurchaseOrdersResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetPurchaseOrders(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2547,7 +2539,6 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/SubmitChanges", ReplyAction:="http://tempuri.org/Catalog/SubmitChangesResponse")>  _
             Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>

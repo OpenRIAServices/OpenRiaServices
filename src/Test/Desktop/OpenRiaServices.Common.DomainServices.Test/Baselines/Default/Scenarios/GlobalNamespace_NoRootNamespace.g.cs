@@ -44,7 +44,6 @@ namespace GlobalNamespaceTest
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
-    using System.ServiceModel;
     using System.Threading;
     using System.Threading.Tasks;
     using OpenRiaServices;
@@ -245,8 +244,6 @@ namespace GlobalNamespaceTest
         /// <summary>
         /// Service contract for the 'GlobalNamespaceTest_DomainService' DomainService.
         /// </summary>
-        [ServiceContract()]
-        [ServiceKnownType(typeof(GlobalNamespaceTest_Enum))]
         public interface IGlobalNamespaceTest_DomainServiceContract
         {
             
@@ -257,7 +254,6 @@ namespace GlobalNamespaceTest
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntities", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntitiesResponse")]
             IAsyncResult BeginGetEntities(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -275,7 +271,6 @@ namespace GlobalNamespaceTest
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturn", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturnResponse")]
             IAsyncResult BeginInvokeReturn(GlobalNamespaceTest_Enum enumParameter, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -293,7 +288,6 @@ namespace GlobalNamespaceTest
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoid", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoidResponse")]
             IAsyncResult BeginInvokeVoid(GlobalNamespaceTest_Enum enumParameter, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -310,7 +304,6 @@ namespace GlobalNamespaceTest
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntities", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntitiesResponse")]
             IAsyncResult BeginReadEntities(GlobalNamespaceTest_Enum enumParameter, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -327,7 +320,6 @@ namespace GlobalNamespaceTest
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChanges", ReplyAction="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChangesResponse")]
             IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
             
             /// <summary>
