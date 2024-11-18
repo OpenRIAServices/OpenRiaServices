@@ -1,4 +1,4 @@
-## AspNetCore - UNRELEASED
+## AspNetCore - 1.3.1
 
 * **New Http status codes** returned
    * Submit can now return 409 and 422 Unprocessable Entity (for conflicts and validation failure)
