@@ -50,6 +50,20 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     return;
                 }
 
+                // Set HTTP StatusCode on failed requests
+                foreach (var change in result)
+                {
+                    if (change.HasError)
+                    {
+                        if (change.HasConflict)
+                            context.Response.StatusCode = StatusCodes.Status409Conflict;
+                        else
+                            context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
+
+                        break;
+                    }
+                }
+
                 await WriteResponse(context, result);
             }
             catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
