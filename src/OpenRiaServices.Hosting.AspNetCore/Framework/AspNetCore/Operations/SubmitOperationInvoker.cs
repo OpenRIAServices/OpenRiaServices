@@ -32,7 +32,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
                 if (context.Request.ContentType != "application/msbin1")
                 {
-                    context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
+                    context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
                     return;
                 }
 
