@@ -373,7 +373,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
                 var response = context.Response;
                 response.Headers.ContentType = "application/msbin1";
-                response.StatusCode = 200;
                 response.ContentLength = bufferMemory.Length;
                 response.Headers.CacheControl = "private, no-store";
 

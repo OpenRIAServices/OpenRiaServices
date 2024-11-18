@@ -32,7 +32,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
                 if (context.Request.ContentType != "application/msbin1")
                 {
-                    context.Response.StatusCode = 400; // maybe 406 / System.Net.HttpStatusCode.NotAcceptable
+                    context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
                     return;
                 }
 
@@ -48,6 +48,20 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 {
                     await WriteError(context, ex, domainService);
                     return;
+                }
+
+                // Set HTTP StatusCode on failed requests
+                foreach (var change in result)
+                {
+                    if (change.HasError)
+                    {
+                        if (change.HasConflict)
+                            context.Response.StatusCode = StatusCodes.Status409Conflict;
+                        else
+                            context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
+
+                        break;
+                    }
                 }
 
                 await WriteResponse(context, result);
