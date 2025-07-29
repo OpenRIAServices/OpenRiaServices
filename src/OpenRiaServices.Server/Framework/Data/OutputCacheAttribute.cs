@@ -9,7 +9,7 @@ namespace OpenRiaServices.Server
         AttributeTargets.Field | AttributeTargets.Method | AttributeTargets.Property,
         AllowMultiple = false, Inherited = true)]
 #if NET
-    [Obsolete("OutputCacheAttribute is not applied by AspNetCore hosting, please se Readme of how caching can be achived.\nThe attribute will probably be removed in future releases")]
+    [Obsolete("OutputCacheAttribute is not applied by AspNetCore hosting, please see Readme of how caching can be achieved.\nThe attribute will probably be removed in future releases")]
 #endif
     public sealed class OutputCacheAttribute : Attribute
     {
