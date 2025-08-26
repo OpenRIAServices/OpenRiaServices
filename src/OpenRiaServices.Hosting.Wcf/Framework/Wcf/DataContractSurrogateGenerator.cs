@@ -24,10 +24,12 @@ namespace OpenRiaServices.Hosting.Wcf
     /// </summary>
     internal static class DataContractSurrogateGenerator
     {
-        private static HashSet<string> coveredContractNamespaces = new HashSet<string>();
-        private static ModuleBuilder moduleBuilder = DataContractSurrogateGenerator.CreateModuleBuilder();
-        private static Dictionary<Type, Type> surrogateTypes = new Dictionary<Type, Type>();
-        private static ReaderWriterLockSlim surrogateTypeLock = new ReaderWriterLockSlim(LockRecursionPolicy.SupportsRecursion);
+        private static readonly HashSet<string> s_coveredContractNamespaces = new HashSet<string>();
+        private static readonly ModuleBuilder s_moduleBuilder = DataContractSurrogateGenerator.CreateModuleBuilder();
+        // Use lazy to avoid creating the same surrogate type multiple times concurrently.
+        private static readonly ConcurrentDictionary<Type, Lazy<Type>> s_surrogateTypes = new();
+        private static readonly SemaphoreSlim s_moduleBuilderLock = new SemaphoreSlim(1);
+
 
         /// <summary>
         /// Emits a surrogate type for the specified type.
@@ -37,49 +39,28 @@ namespace OpenRiaServices.Hosting.Wcf
         /// <returns>The surrogate type.</returns>
         public static Type GetSurrogateType(HashSet<Type> knownExposedTypes, Type type)
         {
-            DataContractSurrogateGenerator.surrogateTypeLock.EnterUpgradeableReadLock();
-            Type surrogateType;
-
-            try
+            // Get the type for which we'll generate a surrogate.
+            type = GetSerializationType(knownExposedTypes, type);
+            if (type == null)
             {
-                // Get the type for which we'll generate a surrogate.
-                type = GetSerializationType(knownExposedTypes, type);
-                if (type == null)
-                {
-                    return null;
-                }
-
-                if (!DataContractSurrogateGenerator.surrogateTypes.TryGetValue(type, out surrogateType))
-                {
-                    // We couldn't find a surrogate for the type, so create one now. We don't ever 
-                    // want to create multiple surrogate types (not even from multiple threads), so 
-                    // make sure we serialize that process by taking a write lock.
-                    // We don't use a ConcurrentDictionary because it doesn't help us serializing 
-                    // surrogate generation.
-                    DataContractSurrogateGenerator.surrogateTypeLock.EnterWriteLock();
-                    try
-                    {
-                        surrogateType = CreateSurrogateType(knownExposedTypes, type);
-                        DataContractSurrogateGenerator.surrogateTypes.Add(type, surrogateType);
-                    }
-                    finally
-                    {
-                        if (DataContractSurrogateGenerator.surrogateTypeLock.IsWriteLockHeld)
-                        {
-                            DataContractSurrogateGenerator.surrogateTypeLock.ExitWriteLock();
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                if (DataContractSurrogateGenerator.surrogateTypeLock.IsUpgradeableReadLockHeld)
-                {
-                    DataContractSurrogateGenerator.surrogateTypeLock.ExitUpgradeableReadLock();
-                }
+                return null;
             }
 
-            return surrogateType;
+            return s_surrogateTypes.GetOrAdd(type, static (key, exposedTypes) => new Lazy<Type>(() =>
+            {
+                // The Lazy type ensures that only one thread will call CreateSurrogateType for a given key
+                // however multiple threads may call this lambda concurrently for different types.
+                // protects concurrent aceess to coveredContractNamespaces and moduleBuilder (unsure if ModuleBuilder is thread-safe).
+                s_moduleBuilderLock.Wait();
+                try
+                {
+                    return CreateSurrogateType(exposedTypes, key);
+                }
+                finally
+                {
+                    s_moduleBuilderLock.Release();
+                }
+            }), knownExposedTypes).Value;
         }
 
         private static Type GetSerializationType(HashSet<Type> knownExposedTypes, Type type)
@@ -110,7 +91,7 @@ namespace OpenRiaServices.Hosting.Wcf
                 typeAttributes |= TypeAttributes.Sealed;
             }
 
-            TypeBuilder typeBuilder = DataContractSurrogateGenerator.moduleBuilder.DefineType(type.FullName, typeAttributes);
+            TypeBuilder typeBuilder = DataContractSurrogateGenerator.s_moduleBuilder.DefineType(type.FullName, typeAttributes);
             if (dataContractAttBuilder != null)
             {
                 typeBuilder.SetCustomAttribute(dataContractAttBuilder);
@@ -210,7 +191,7 @@ namespace OpenRiaServices.Hosting.Wcf
                 // base()
                 constructorGenerator.Emit(OpCodes.Ldarg_0);
                 constructorGenerator.Emit(OpCodes.Call, parentSurrogateType.GetConstructor(Type.EmptyTypes));
-                
+
                 // _wrapper = wrapper
                 constructorGenerator.Emit(OpCodes.Ldarg_0);
                 constructorGenerator.Emit(OpCodes.Ldarg_1);
@@ -699,7 +680,7 @@ namespace OpenRiaServices.Hosting.Wcf
         {
             // CONSIDER: Fix this. Things aren't correct when entity types come from multiple assemblies. We ought to be 
             //           generating a new assembly as well.
-            if (!DataContractSurrogateGenerator.coveredContractNamespaces.Contains(type.Assembly.FullName))
+            if (!DataContractSurrogateGenerator.s_coveredContractNamespaces.Contains(type.Assembly.FullName))
             {
                 Type cnaType = typeof(ContractNamespaceAttribute);
                 foreach (ContractNamespaceAttribute contractNamespaceAtt in type.Assembly.GetCustomAttributes(cnaType, false).OfType<ContractNamespaceAttribute>())
@@ -710,10 +691,10 @@ namespace OpenRiaServices.Hosting.Wcf
                             new object[] { contractNamespaceAtt.ContractNamespace },
                             new PropertyInfo[] { cnaType.GetProperty("ClrNamespace") },
                             new object[] { contractNamespaceAtt.ClrNamespace });
-                    DataContractSurrogateGenerator.moduleBuilder.SetCustomAttribute(contractNamespaceAttBuilder);
+                    DataContractSurrogateGenerator.s_moduleBuilder.SetCustomAttribute(contractNamespaceAttBuilder);
                 }
 
-                DataContractSurrogateGenerator.coveredContractNamespaces.Add(type.Assembly.FullName);
+                DataContractSurrogateGenerator.s_coveredContractNamespaces.Add(type.Assembly.FullName);
             }
         }
 
