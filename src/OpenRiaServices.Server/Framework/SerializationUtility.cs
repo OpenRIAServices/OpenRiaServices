@@ -90,7 +90,7 @@ namespace OpenRiaServices
                 return false;
             }
 
-            if (propertyDescriptor.Attributes[typeof(AssociationAttribute)] != null)
+            if (propertyDescriptor.Attributes[typeof(EntityAssociationAttribute)] != null)
             {
                 // associations are not data members
                 return false;

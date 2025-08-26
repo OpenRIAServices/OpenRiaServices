@@ -231,7 +231,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                 ReadOnlyAttribute readonlyAttr = (ReadOnlyAttribute)propertyAttributes[typeof(ReadOnlyAttribute)];
                 this.IsReadOnly = (readonlyAttr != null) ? readonlyAttr.IsReadOnly : false;
 
-                AssociationAttribute associationAttr = (AssociationAttribute)propertyAttributes[typeof(AssociationAttribute)];
+                EntityAssociationAttribute associationAttr = (EntityAssociationAttribute)propertyAttributes[typeof(EntityAssociationAttribute)];
                 if (associationAttr != null)
                 {
                     this.Association = new TypePropertyAssociationMetadata(associationAttr);
@@ -321,7 +321,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
             public IEnumerable<string> ThisKeyMembers { get { return this.thisKeyMembers; } }
             public IEnumerable<string> OtherKeyMembers { get { return this.otherKeyMembers; } }
 
-            public TypePropertyAssociationMetadata(AssociationAttribute associationAttr)
+            public TypePropertyAssociationMetadata(EntityAssociationAttribute associationAttr)
             {
                 this.Name = associationAttr.Name;
                 this.IsForeignKey = associationAttr.IsForeignKey;
