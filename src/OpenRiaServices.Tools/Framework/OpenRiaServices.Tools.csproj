@@ -44,8 +44,8 @@
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
     <!-- Use Microsoft.Build 17.0.0 to be sure it works with all versions Net6 -->
-    <PackageReference Include="Microsoft.Build" Version="17.8.3" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="17.8.3" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.8.3" PrivateAssets="All" ExcludeAssets="Runtime" />
     <!-- Required for validation attributes -->
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
