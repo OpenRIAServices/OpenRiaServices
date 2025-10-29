@@ -9,7 +9,6 @@ using System.Reflection.Emit;
 using System.Runtime.Serialization;
 using System.Security;
 using OpenRiaServices.Server;
-using System.Threading;
 
 #nullable disable
 
@@ -28,7 +27,7 @@ namespace OpenRiaServices.Hosting.Wcf
         private static readonly ModuleBuilder s_moduleBuilder = DataContractSurrogateGenerator.CreateModuleBuilder();
         // Use lazy to avoid creating the same surrogate type multiple times concurrently.
         private static readonly ConcurrentDictionary<Type, Lazy<Type>> s_surrogateTypes = new();
-        private static readonly SemaphoreSlim s_moduleBuilderLock = new SemaphoreSlim(1);
+        private static readonly object s_moduleBuilderLock = new object();
 
 
         /// <summary>
@@ -50,15 +49,10 @@ namespace OpenRiaServices.Hosting.Wcf
             {
                 // The Lazy type ensures that only one thread will call CreateSurrogateType for a given key
                 // however multiple threads may call this lambda concurrently for different types.
-                // protects concurrent aceess to coveredContractNamespaces and moduleBuilder (unsure if ModuleBuilder is thread-safe).
-                s_moduleBuilderLock.Wait();
-                try
+                // protects concurrent acceess to coveredContractNamespaces and moduleBuilder (unsure if ModuleBuilder is thread-safe).
+                lock (s_moduleBuilderLock)
                 {
                     return CreateSurrogateType(exposedTypes, key);
-                }
-                finally
-                {
-                    s_moduleBuilderLock.Release();
                 }
             }), knownExposedTypes).Value;
         }
