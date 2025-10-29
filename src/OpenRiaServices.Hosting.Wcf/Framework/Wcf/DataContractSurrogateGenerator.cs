@@ -49,7 +49,7 @@ namespace OpenRiaServices.Hosting.Wcf
             {
                 // The Lazy type ensures that only one thread will call CreateSurrogateType for a given key
                 // however multiple threads may call this lambda concurrently for different types.
-                // protects concurrent acceess to coveredContractNamespaces and moduleBuilder (unsure if ModuleBuilder is thread-safe).
+                // Protects concurrent access to s_coveredContractNamespaces and s_moduleBuilder during surrogate type creation.
                 lock (s_moduleBuilderLock)
                 {
                     return CreateSurrogateType(exposedTypes, key);
