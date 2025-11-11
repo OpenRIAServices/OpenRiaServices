@@ -12,7 +12,7 @@ variables:
 
 steps:
 
-# Uncomment below to install dotnet runtime and SDK if they stop beeing preinstalled
+# Uncomment below to install dotnet runtime and SDK if they stop being preinstalled
 ## install dotnet 6
 #- task: UseDotNet@2
 #  inputs:
@@ -24,6 +24,12 @@ steps:
 #  inputs:
 #    packageType: 'sdk'
 #    version: '8.0.x'
+
+## install dotnet 10 sdk
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '10.0.x'
 
 - task: NuGetToolInstaller@1
   inputs:
