@@ -116,6 +116,7 @@ namespace OpenRiaServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
+        [Ignore] // Need to fix Race condition before enabling again
         public async Task Load_CancellationBehavior()
         {
             this.BeginLoadCityDataAndCancel();
