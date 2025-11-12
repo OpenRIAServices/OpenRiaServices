@@ -10,6 +10,7 @@ using OpenRiaServices.Tools.Test;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 {
+    [DeploymentItem("DomainServiceToolsPath.txt")]
     [TestClass]
     public class BusinessLogicClassCodeGenTests
     {
