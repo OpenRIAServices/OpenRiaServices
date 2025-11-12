@@ -67,7 +67,9 @@ steps:
     solution: '$(Solution)'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    maximumCpuCount: true
+    maximumCpuCount: false
+    msbuildArgs: '/nr:false /p:UseSharedCompilation=false'
+    clean: true
 
 # Load test databases and setup msbuild debug path so it becomes part of artifacts 
 - powershell: |
