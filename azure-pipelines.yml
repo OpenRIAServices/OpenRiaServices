@@ -91,7 +91,7 @@ steps:
      !**\obj\**
 
     runOnlyImpactedTests: false
-    runInParallel: true
+    runInParallel: false
     runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
@@ -108,7 +108,7 @@ steps:
      !**\obj\**
 
     runOnlyImpactedTests: false
-    runInParallel: true
+    runInParallel: false
     runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
