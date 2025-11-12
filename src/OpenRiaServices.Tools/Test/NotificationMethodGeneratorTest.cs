@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.Text;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Server;
@@ -72,7 +73,7 @@ namespace OpenRiaServices.Tools.Test
                 target.AddMethodFor(baseMethodName, expressions, comments);
             }
 
-            string actualSnippet = "";
+            StringBuilder actualSnippet = new StringBuilder();
 
             foreach (CodeSnippetTypeMember snippet in target.PartialMethodsSnippetBlock)
             {
@@ -82,12 +83,12 @@ namespace OpenRiaServices.Tools.Test
                     {
                         Assert.IsTrue(comment.Comment.Text.StartsWith(" ", StringComparison.Ordinal), "All VB XML Doc comments must be prefixed with a space");
                     }
-                    actualSnippet += comment.Comment.Text.TrimStart();
+                    actualSnippet.Append(comment.Comment.Text.TrimStart());
                 }
-                actualSnippet += snippet.Text;
+                actualSnippet.Append(snippet.Text);
             }
             string expectedSnippet = s_expectedSnippets[index];
-            Assert.AreEqual(expectedSnippet, actualSnippet.Replace("\r\n", "").TrimEnd());
+            Assert.AreEqual(expectedSnippet, actualSnippet.Replace("\r\n", "").ToString().TrimEnd());
         }
 
         [TestMethod]
