@@ -20,6 +20,50 @@ using System.Xml;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
+    public abstract class SerializationProvider
+    {
+        public ICollection<string> SupportedMimeTypes { get; protected set; }
+
+        public abstract DataContractSerializer GetSerializer(Type type);
+    }
+
+    internal abstract class RequestSerializer
+    {
+        // TODO: public
+        public abstract object[] GetParametersFromUri(HttpContext context, DomainOperationEntry operationInvoker);
+        public abstract object[] ReadParametersFromBodyAsync(HttpContext context, DomainOperationEntry operationInvoker);
+
+        public abstract ServiceQuery GetServiceQueryFromParameters(HttpContext context);
+
+        public abstract Task WriteErrorAsync(HttpContext context, DomainServiceFault fault);
+        public abstract Task WriteResponseAsync(HttpContext context, object result);
+    }
+
+    internal sealed class BinaryXmlRequestSerializer : RequestSerializer
+    {
+        public override object[] GetParametersFromUri(HttpContext context, DomainOperationEntry operationInvoker)
+        {
+            throw new NotImplementedException();
+        }
+        public override object[] ReadParametersFromBodyAsync(HttpContext context, DomainOperationEntry operationInvoker)
+        {
+            throw new NotImplementedException();
+        }
+        public override ServiceQuery GetServiceQueryFromParameters(HttpContext context)
+        {
+            throw new NotImplementedException();
+        }
+        public override Task WriteErrorAsync(HttpContext context, DomainServiceFault fault)
+        {
+            throw new NotImplementedException();
+        }
+        public override Task WriteResponseAsync(HttpContext context, object result)
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+
     abstract class OperationInvoker
     {
         private static readonly WebHttpQueryStringConverter s_queryStringConverter = new();
