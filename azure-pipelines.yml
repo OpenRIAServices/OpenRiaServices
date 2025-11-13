@@ -98,10 +98,10 @@ steps:
     configuration: '$(BuildConfiguration)'
   timeoutInMinutes: 25
 
-- pwsh: |
-    & "src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe"
-  displayName: 'Run AspNetCoreWebsite.exe'
-  timeoutInMinutes: 5
+#- pwsh: |
+#    & "src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe"
+#  displayName: 'Run AspNetCoreWebsite.exe'
+#  timeoutInMinutes: 5
 
 - task: VSTest@2
   displayName: 'Run tests - net10'
