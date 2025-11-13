@@ -102,7 +102,6 @@ namespace OpenRiaServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        [Ignore] // Need to fix Race condition before enabling again
         public void Bug706128_InvokeOperationCancellation()
         {
             TestProvider_Scenarios ctxt = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
