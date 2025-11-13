@@ -98,8 +98,13 @@ steps:
     configuration: '$(BuildConfiguration)'
   timeoutInMinutes: 25
 
+- pwsh: |
+    & "src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe"
+  displayName: 'Run AspNetCoreWebsite.exe'
+  timeoutInMinutes: 25
+
 - task: VSTest@2
-  displayName: 'Run tests - net6'
+  displayName: 'Run tests - net10'
   inputs:
     testAssemblyVer2: |
      **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
