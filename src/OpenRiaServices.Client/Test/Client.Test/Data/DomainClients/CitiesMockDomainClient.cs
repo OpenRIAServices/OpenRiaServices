@@ -7,7 +7,6 @@ using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
 using OpenRiaServices.Client;
-using OpenRiaServices.Client.Test.Utilities;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,7 +45,7 @@ namespace OpenRiaServices.Client.Test
 
             int entityCount = entities.Count();
             QueryCompletedResult results = new QueryCompletedResult(entities, Array.Empty<Entity>(), entityCount, Array.Empty<ValidationResult>());
-            return TaskHelper.FromResult(results);
+            return Task.FromResult(results);
         }
 
         protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
@@ -64,7 +63,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // perform mock submit operations
                 SubmitCompletedResult submitResults = new SubmitCompletedResult(changeSet, submitOperations);
-                return TaskHelper.FromResult(submitResults);
+                return Task.FromResult(submitResults);
             }
         }
 
@@ -80,7 +79,7 @@ namespace OpenRiaServices.Client.Test
                 returnValue = "Echo: " + (string)invokeArgs.Parameters.Values.First();
             }
 
-            return TaskHelper.FromResult(new InvokeCompletedResult(returnValue));
+            return Task.FromResult(new InvokeCompletedResult(returnValue));
         }
 
         /// <summary>

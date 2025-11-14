@@ -35,6 +35,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\Data\DomainClients\CitiesMockDomainClient.cs" Link="Data\CitiesMockDomainClient.cs" />
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="Data\DomainClients\Cities.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
