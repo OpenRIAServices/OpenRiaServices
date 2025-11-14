@@ -80,7 +80,7 @@ steps:
    
   displayName: 'Setup database'
 
-- task: VSTest@2
+- task: VSTest@3
   displayName: 'Run tests - net48'
   inputs:
     testAssemblyVer2: |
@@ -103,7 +103,7 @@ steps:
 #  displayName: 'Run AspNetCoreWebsite.exe'
 #  timeoutInMinutes: 5
 
-- task: VSTest@2
+- task: VSTest@3
   displayName: 'Run tests - net10'
   inputs:
     testAssemblyVer2: |
