@@ -122,7 +122,7 @@ namespace OpenRiaServices.Client.Test
                         Console.WriteLine("[WEB STDERR] " + e.Data);
                 };
 
-                s_aspNetCoreSite = Process.Start(startInfo);
+                s_aspNetCoreSite.Start();
                 s_aspNetCoreSite.BeginOutputReadLine();
                 s_aspNetCoreSite.BeginErrorReadLine();
 
