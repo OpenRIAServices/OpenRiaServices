@@ -95,11 +95,20 @@ namespace OpenRiaServices.Client.Test
             }
             else
             {
-                ProcessStartInfo startInfo = new(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"");
-                startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
-                startInfo.UseShellExecute = false;
-                startInfo.RedirectStandardOutput = true;
-                startInfo.RedirectStandardError = true;
+                var startInfo = new ProcessStartInfo(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"")
+                {
+                    UseShellExecute = false,
+                    WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/")),
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                };
+                startInfo.EnvironmentVariables["ASPNETCORE_ENVIRONMENT"] = "Development";
+
+                s_aspNetCoreSite = new Process
+                {
+                    StartInfo = startInfo,
+                    EnableRaisingEvents = true
+                };
 
                 s_aspNetCoreSite.OutputDataReceived += (_, e) =>
                 {
@@ -113,7 +122,6 @@ namespace OpenRiaServices.Client.Test
                         Console.WriteLine("[WEB STDERR] " + e.Data);
                 };
 
-                startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
                 s_aspNetCoreSite = Process.Start(startInfo);
                 s_aspNetCoreSite.BeginOutputReadLine();
                 s_aspNetCoreSite.BeginErrorReadLine();
