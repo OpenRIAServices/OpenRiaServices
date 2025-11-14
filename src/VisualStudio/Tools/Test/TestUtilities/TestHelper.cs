@@ -14,7 +14,11 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
         public static string ExtensionFromLanguage(string language) => ToolHelper.ExtensionFromLanguage(language);
 
         public static string GetProjectPath()
+#if NETFRAMEWORK
             => Path.Combine(GetCurrentProjectFolder(), "../OpenRiaServices.VisualStudio.DomainServices.Tools.Test.csproj");
+#else
+            => Path.Join(GetCurrentProjectFolder(), "../OpenRiaServices.VisualStudio.DomainServices.Tools.Test.csproj");
+#endif
 
         public static string GetProjectDir()
             => Path.GetDirectoryName(GetProjectPath());
