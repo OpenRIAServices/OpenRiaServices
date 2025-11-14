@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks>net10.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX;ASPNET_CORE</DefineConstants>
     <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
     <!-- Ignore documentation varnings while experimental-->
@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="System.Collections.Immutable" Version="8.0.0" Condition="'$(TargetFramework)' != 'net10.0'" />
   </ItemGroup>
 
   <ItemGroup>

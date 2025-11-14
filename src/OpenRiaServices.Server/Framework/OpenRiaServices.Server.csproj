@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <TargetFrameworks>net472;net10.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
   </PropertyGroup>
 
@@ -11,7 +11,7 @@
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0'">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net10.0'">
     <PackageReference Include="System.CodeDom" Version="8.0.0" />
   </ItemGroup>
 

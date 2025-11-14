@@ -74,8 +74,9 @@ namespace OpenRiaServices.Client.Test
 #else
             string configuration = "Release";
 #endif
-            string targetFramework = "net8.0";
+            string targetFramework = "net10.0";
 
+            Console.WriteLine($"Running TFM: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
 
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
