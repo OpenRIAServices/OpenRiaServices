@@ -18,10 +18,7 @@ namespace OpenRiaServices.Client.Test
     using Resources = SSmDsClient::OpenRiaServices.Client.Resources;
 
     [TestClass]
-    // TODO: Should this be moved to client.test "shared" instead ?
-#if !NETFRAMEWORK
-    [Ignore("Tests with cancellation has problems")]
-#endif
+
     public class DomainContextWithMockDomainClientTests : UnitTestBase
     {
         [TestMethod]
@@ -46,31 +43,25 @@ namespace OpenRiaServices.Client.Test
         /// Test that query processing works using a mock DomainClient.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void Invoke()
+        public async Task Invoke()
         {
             Cities.CityDomainContext ctx = new Cities.CityDomainContext(new CitiesMockDomainClient());
             string myState = "Test User State";
 
             InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
 
-            this.EnqueueCompletion(() => invoke);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(invoke.Error);
-                Assert.AreSame(myState, invoke.UserState);
-                Assert.AreEqual("Echo: TestInvoke", invoke.Value);
-            });
+            await invoke;
 
-            EnqueueTestComplete();
+            Assert.IsNull(invoke.Error);
+            Assert.AreSame(myState, invoke.UserState);
+            Assert.AreEqual("Echo: TestInvoke", invoke.Value);
         }
 
         /// <summary>
         /// Test that ValidationErrors for invoke are properly returned.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void Invoke_ValidationErrors()
+        public async Task Invoke_ValidationErrors()
         {
             var mockDomainClient = new CitiesMockDomainClient();
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
@@ -80,22 +71,18 @@ namespace OpenRiaServices.Client.Test
 
             InvokeOperation invoke = ctx.Echo("TestInvoke", TestHelperMethods.DefaultOperationAction, myState);
 
-            this.EnqueueCompletion(() => invoke);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNotNull(invoke.Error);
-                Assert.AreSame(myState, invoke.UserState);
+            await invoke;
 
-                CollectionAssert.AreEqual(validationErrors, (ICollection)invoke.ValidationErrors);
+            Assert.IsNotNull(invoke.Error);
+            Assert.AreSame(myState, invoke.UserState);
 
-                // verify the exception properties
-                var ex = (DomainOperationException)invoke.Error;
-                Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
-                CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
-                Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"), ex.Message);
-            });
+            CollectionAssert.AreEqual(validationErrors, (ICollection)invoke.ValidationErrors);
 
-            EnqueueTestComplete();
+            // verify the exception properties
+            var ex = (DomainOperationException)invoke.Error;
+            Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
+            CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
+            Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"), ex.Message);
         }
 
         /// <summary>
@@ -236,8 +223,7 @@ namespace OpenRiaServices.Client.Test
         /// Test that ValidationErrors for invoke are properly returned.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void Load_ValidationErrors()
+        public async Task Load_ValidationErrors()
         {
             var mockDomainClient = new CitiesMockDomainClient();
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
@@ -247,21 +233,17 @@ namespace OpenRiaServices.Client.Test
 
             LoadOperation<Cities.City> loadOperation = ctx.Load(ctx.GetCitiesQuery(), LoadBehavior.RefreshCurrent, l => l.MarkErrorAsHandled(), myState); ;
 
-            this.EnqueueCompletion(() => loadOperation);
-            EnqueueCallback(delegate
-            {
-                Assert.AreSame(myState, loadOperation.UserState);
+            await loadOperation;
 
-                CollectionAssert.AreEqual(validationErrors, (ICollection)loadOperation.ValidationErrors);
+            Assert.AreSame(myState, loadOperation.UserState);
 
-                // verify the exception properties
-                var ex = loadOperation.Error as DomainOperationException;
-                Assert.IsNotNull(ex, "expected exception of type DomainOperationException");
-                Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
-                Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "GetCities"), ex.Message);
-            });
+            CollectionAssert.AreEqual(validationErrors, (ICollection)loadOperation.ValidationErrors);
 
-            EnqueueTestComplete();
+            // verify the exception properties
+            var ex = loadOperation.Error as DomainOperationException;
+            Assert.IsNotNull(ex, "expected exception of type DomainOperationException");
+            Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
+            Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed_Validation, "GetCities"), ex.Message);
         }
 
         /// <summary>
@@ -332,8 +314,7 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void Submit()
+        public async Task Submit()
         {
             Cities.CityDomainContext ctx = new Cities.CityDomainContext(new CitiesMockDomainClient());
             string myState = "Test User State";
@@ -348,25 +329,19 @@ namespace OpenRiaServices.Client.Test
             ctx.Zips.Add(newZip);
             SubmitOperation so = ctx.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
 
-            this.EnqueueCompletion(() => so);
-            EnqueueCallback(delegate
-            {
-                // verify that validation logic is run
-                Assert.IsNotNull(so.Error);
-                Assert.AreSame(newZip, so.EntitiesInError.Single());
+            await so;
+            // verify that validation logic is run
+            Assert.IsNotNull(so.Error);
+            Assert.AreSame(newZip, so.EntitiesInError.Single());
 
-                // fix by setting the Name
-                newZip.StateName = "WA";
-                so = ctx.SubmitChanges(null, myState);
-            });
-            this.EnqueueCompletion(() => so);
-            EnqueueCallback(delegate
-            {
-                Assert.IsNull(so.Error);
-                Assert.AreEqual(myState, so.UserState);
-            });
+            // fix by setting the Name
+            newZip.StateName = "WA";
+            so = ctx.SubmitChanges(null, myState);
 
-            EnqueueTestComplete();
+            await so;
+
+            Assert.IsNull(so.Error);
+            Assert.AreEqual(myState, so.UserState);
         }
 
         [TestMethod]

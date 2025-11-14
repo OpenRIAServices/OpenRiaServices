@@ -51,6 +51,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\Data\DomainClients\CitiesMockDomainClient.cs" Link="Data\CitiesMockDomainClient.cs" />
     <Compile Include="..\OpenRiaServices.EndToEnd.Wcf.Test\**\*.cs" Exclude="..\OpenRiaServices.EndToEnd.Wcf.Test\Main.cs;..\OpenRiaServices.EndToEnd.Wcf.Test\bin\**;..\OpenRiaServices.EndToEnd.Wcf.Test\obj\**" LinkBase="Included" />
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\MessageUtilityTests.cs" />
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\WebDomainClientTests.cs" />
