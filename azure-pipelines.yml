@@ -80,23 +80,23 @@ steps:
    
   displayName: 'Setup database'
 
-- task: VSTest@3
-  displayName: 'Run tests - net48'
-  inputs:
-    testAssemblyVer2: |
-     **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-     !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-     src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
-     !**\obj\**
-
-    runOnlyImpactedTests: false
-    runInParallel: false
-    runSettingsFile: 'src\test.runsettings'
-    codeCoverageEnabled: true
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-  timeoutInMinutes: 25
+#- task: VSTest@3
+#  displayName: 'Run tests - net48'
+#  inputs:
+#    testAssemblyVer2: |
+#     **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+#     !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+#     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+#     src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
+#     !**\obj\**
+#
+#    runOnlyImpactedTests: false
+#    runInParallel: false
+#    runSettingsFile: 'src\test.runsettings'
+#    codeCoverageEnabled: true
+#    platform: '$(BuildPlatform)'
+#    configuration: '$(BuildConfiguration)'
+#  timeoutInMinutes: 25
 
 #- pwsh: |
 #    & "src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe"

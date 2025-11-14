@@ -118,9 +118,16 @@ namespace OpenRiaServices.Client.Test
                         return;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // Ignore error
+                    Console.WriteLine("Exception when trying to Get from localhost:");
+                    Console.WriteLine(ex.ToString());
+
+                    if (ex.InnerException != null)
+                    {
+                        Console.WriteLine("Inner exception:");
+                        Console.WriteLine(ex.InnerException.ToString());
+                    }
                 }
 
                 if (s_aspNetCoreSite.HasExited)
