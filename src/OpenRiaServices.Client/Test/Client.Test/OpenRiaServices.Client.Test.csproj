@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net472;net10.0-windows</TargetFrameworks>
     <Version>1.0.0.0</Version>
     <UseWPF>true</UseWPF>
     <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>

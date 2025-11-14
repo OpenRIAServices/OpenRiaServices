@@ -1,14 +1,13 @@
 ﻿extern alias httpDomainClient;
-
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using httpDomainClient::OpenRiaServices.Client.DomainClients;
-using System.Diagnostics;
-using System.Runtime.CompilerServices;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -66,16 +65,19 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
-        private static void StartWebServer([CallerFilePath]string filePaht = null)
+        private static void StartWebServer([CallerFilePath] string filePath = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
-            string projectPath = Path.GetDirectoryName(filePaht);
+            string projectPath = Path.GetDirectoryName(filePath);
 #if DEBUG
             string configuration = "Debug";
 #else
             string configuration = "Release";
 #endif
-            string targetFramework = "net8.0";
+            string targetFramework = "net10.0";
+
+            Console.WriteLine($"Running TFM: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
+
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
 
@@ -93,11 +95,36 @@ namespace OpenRiaServices.Client.Test
             }
             else
             {
-                ProcessStartInfo startInfo = new(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"");
-                startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
-                startInfo.UseShellExecute = false;
-                startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
-                s_aspNetCoreSite = Process.Start(startInfo);
+                var startInfo = new ProcessStartInfo(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"")
+                {
+                    UseShellExecute = false,
+                    WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/")),
+                    RedirectStandardOutput = true,
+                    RedirectStandardError = true,
+                };
+                startInfo.EnvironmentVariables["ASPNETCORE_ENVIRONMENT"] = "Development";
+
+                s_aspNetCoreSite = new Process
+                {
+                    StartInfo = startInfo,
+                    EnableRaisingEvents = true
+                };
+
+                s_aspNetCoreSite.OutputDataReceived += (_, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                        Console.WriteLine("[WEB STDOUT] " + e.Data);
+                };
+
+                s_aspNetCoreSite.ErrorDataReceived += (_, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                        Console.WriteLine("[WEB STDERR] " + e.Data);
+                };
+
+                s_aspNetCoreSite.Start();
+                s_aspNetCoreSite.BeginOutputReadLine();
+                s_aspNetCoreSite.BeginErrorReadLine();
 
                 Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
             }
@@ -116,9 +143,16 @@ namespace OpenRiaServices.Client.Test
                         return;
                     }
                 }
-                catch (Exception)
+                catch (Exception ex)
                 {
-                    // Ignore error
+                    Console.WriteLine("Exception when trying to Get from localhost:");
+                    Console.WriteLine(ex.ToString());
+
+                    if (ex.InnerException != null)
+                    {
+                        Console.WriteLine("Inner exception:");
+                        Console.WriteLine(ex.InnerException.ToString());
+                    }
                 }
 
                 if (s_aspNetCoreSite.HasExited)

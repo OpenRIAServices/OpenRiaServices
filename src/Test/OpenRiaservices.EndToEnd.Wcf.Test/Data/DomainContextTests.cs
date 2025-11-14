@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Cities;
 using Microsoft.Silverlight.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices.LTS;
 
@@ -99,31 +98,30 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void Load_DefaultBehavior()
+        public async Task Load_DefaultBehavior()
         {
-            this.EnqueueCallback(() =>
-            {
-                this.BeginLoadCityData();
-            });
-            this.EnqueueCompletion(() => LoadOperation);
-            this.EnqueueCallback(() =>
-            {
-                Assert.IsNull(LoadOperation.Error);
-            });
-            this.EnqueueTestComplete();
+            var query = this.CityDomainContext.GetCitiesQuery();
+            var loadOperation = this.CityDomainContext.Load<City>(query, LoadBehavior.RefreshCurrent, null, null);
+
+            await loadOperation;
+            Assert.IsNull(loadOperation.Error);
+            Assert.IsTrue(loadOperation.IsComplete);
         }
 
         [TestMethod]
-        [Asynchronous]
         public async Task Load_CancellationBehavior()
         {
-            this.BeginLoadCityDataAndCancel();
+            var timestamp = DateTime.UtcNow;
+            var query = this.CityDomainContext.GetZipsWithDelayQuery(TimeSpan.FromSeconds(30));
+            var loadOperation = this.CityDomainContext.Load<Zip>(query, LoadBehavior.RefreshCurrent, null, null);
+            loadOperation.Cancel();
 
-            await LoadOperation;
+            await loadOperation;
+            var elapsed = DateTime.UtcNow - timestamp;
 
-            this.AssertLoadCancelled();
-            this.EnqueueTestComplete();
+            Assert.IsTrue(elapsed < TimeSpan.FromSeconds(3));
+            Assert.IsTrue(loadOperation.IsComplete);
+            Assert.IsTrue(loadOperation.IsCanceled);
         }
 
         [TestMethod]
@@ -132,7 +130,7 @@ namespace OpenRiaServices.Client.Test
         {
             this.EnqueueCallback(() =>
             {
-                this.BeginSubmitCityData();
+                this.BeginSubmitCityData(null);
             });
             this.EnqueueCompletion(() => SubmitOperation);
             this.EnqueueCallback(() =>
@@ -353,47 +351,12 @@ namespace OpenRiaServices.Client.Test
             Assert.IsFalse(newCity.ValidationErrors.Any());
         }
 
-        private void BeginLoadCityData(Action<LoadOperation<City>> callback, object userState)
-        {
-            Assert.IsTrue(this.LoadOperation == null);
-
-            var query = this.CityDomainContext.GetCitiesQuery();
-            this.LoadOperation = this.CityDomainContext.Load(query, LoadBehavior.RefreshCurrent, callback, userState);
-        }
-
-        private void BeginLoadCityData()
-        {
-            this.BeginLoadCityData(null, null);
-        }
-
-        private void BeginLoadCityDataAndCancel()
-        {
-            this.BeginLoadCityData(null, null);
-            this.LoadOperation.Cancel();
-        }
-
         private void BeginSubmitCityData(Action<SubmitOperation> callback)
         {
             EntitySet entitySet = this.CityDomainContext.EntityContainer.GetEntitySet<City>();
             entitySet.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
 
             this.SubmitOperation = this.CityDomainContext.SubmitChanges(callback, this.CityDomainContext);
-        }
-
-        private void BeginSubmitCityData()
-        {
-            this.BeginSubmitCityData(null);
-        }
-
-        private void AssertLoadCancelled()
-        {
-            this.AssertOperationCompleted(this.LoadOperation, true);
-        }
-
-        private void AssertOperationCompleted(OperationBase operation, bool cancelled)
-        {
-            Assert.IsTrue(operation.IsComplete);
-            Assert.AreEqual(cancelled, operation.IsCanceled);
         }
 
         #endregion // Test Methods

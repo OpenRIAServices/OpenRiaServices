@@ -1,9 +1,10 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
-using OpenRiaServices.Server;
+using System.Text;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -12,7 +13,23 @@ namespace OpenRiaServices.Tools.Test
     [DeploymentItem("NotificationMethodGeneratorTests.xml")]
     public class NotificationMethodGeneratorTest
     {
-        private static XmlReader XmlReader;
+        private static readonly string[] s_expectedSnippets = LoadSnippets("NotificationMethodGeneratorTestCodeSnippets.xml");
+
+        private static string[] LoadSnippets(string path)
+        {
+            List<string> list = [];
+            using XmlReader xmlReader = XmlReader.Create(path);
+
+            while (xmlReader.Read())
+            {
+                if (xmlReader.NodeType == XmlNodeType.CDATA)
+                {
+                    list.Add(xmlReader.Value.Replace("\n", ""));
+                }
+            }
+
+            return [.. list];
+        }
 
         static IEnumerable<object[]> GetTestCasesFromXml(string filename, string nodeName, string[] attributes)
         {
@@ -33,20 +50,20 @@ namespace OpenRiaServices.Tools.Test
         }
 
         public static IEnumerable<object> PartialMethodsSnippetBlockTestCases
-            => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "PartialMethodsSnippetBlockArgs", new[] { "comments", "baseMethodNames", "parameters" });
+            => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "PartialMethodsSnippetBlockArgs", new[] { "comments", "baseMethodNames", "parameters", "index" });
 
         [
         TestMethod,
         DynamicData(nameof(PartialMethodsSnippetBlockTestCases))]
-        public void PartialMethodsSnippetBlockTest(string comments, string baseMethodNames, string parameters)
+        public void PartialMethodsSnippetBlockTest(string comments, string baseMethodNames, string parameters, string index)
         {
             string[] baseMethodNamesArray = baseMethodNames.Split(',');
 
-            PartialMethodsSnippetBlockTest(true, comments, baseMethodNamesArray, parameters);
-            PartialMethodsSnippetBlockTest(false, comments, baseMethodNamesArray, parameters);
+            PartialMethodsSnippetBlockTest(true, comments, baseMethodNamesArray, parameters, int.Parse(index));
+            PartialMethodsSnippetBlockTest(false, comments, baseMethodNamesArray, parameters, int.Parse(index) + 1);
         }
 
-        public void PartialMethodsSnippetBlockTest(bool isCSharp, string comments, string[] baseMethodNames, string paramDeclsArgs)
+        public void PartialMethodsSnippetBlockTest(bool isCSharp, string comments, string[] baseMethodNames, string paramDeclsArgs, int index)
         {
             NotificationMethodGenerator target = new NotificationMethodGenerator(CreateProxyGenerator(isCSharp));
             CodeParameterDeclarationExpressionCollection expressions = GetCodeParameterDeclaraionExpressions(paramDeclsArgs);
@@ -56,18 +73,7 @@ namespace OpenRiaServices.Tools.Test
                 target.AddMethodFor(baseMethodName, expressions, comments);
             }
 
-            // do verification ...
-            if (XmlReader == null)
-            {
-                XmlReader = XmlReader.Create("NotificationMethodGeneratorTestCodeSnippets.xml");
-            }
-
-            do
-            {
-                XmlReader.Read();
-            }
-            while (!XmlReader.EOF && XmlReader.NodeType != XmlNodeType.CDATA);
-            string snippetstr = "";
+            StringBuilder actualSnippet = new StringBuilder();
 
             foreach (CodeSnippetTypeMember snippet in target.PartialMethodsSnippetBlock)
             {
@@ -77,11 +83,12 @@ namespace OpenRiaServices.Tools.Test
                     {
                         Assert.IsTrue(comment.Comment.Text.StartsWith(" ", StringComparison.Ordinal), "All VB XML Doc comments must be prefixed with a space");
                     }
-                    snippetstr += comment.Comment.Text.TrimStart();
+                    actualSnippet.Append(comment.Comment.Text.TrimStart());
                 }
-                snippetstr += snippet.Text;
+                actualSnippet.Append(snippet.Text);
             }
-            Assert.AreEqual(XmlReader.Value.Replace("\n", ""), snippetstr.Replace("\r\n", "").TrimEnd());
+            string expectedSnippet = s_expectedSnippets[index];
+            Assert.AreEqual(expectedSnippet, actualSnippet.Replace("\r\n", "").ToString().TrimEnd());
         }
 
         [TestMethod]
@@ -169,7 +176,7 @@ namespace OpenRiaServices.Tools.Test
 
         [
         TestMethod(),
-        DynamicData (nameof(AddMethodFor2TestCases))]
+        DynamicData(nameof(AddMethodFor2TestCases))]
         public void AddMethodFor2Test(string comments, string parameterDeclaration)
         {
 

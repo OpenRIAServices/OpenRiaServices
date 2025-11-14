@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Microsoft.Win32;
 using OpenRiaServices.LinqToSql;
 using ToolHelper = OpenRiaServices.Tools.Test.TestHelper;
 
@@ -15,19 +14,17 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
         public static string ExtensionFromLanguage(string language) => ToolHelper.ExtensionFromLanguage(language);
 
         public static string GetProjectPath()
-        {
-            string projectPathFile = Path.Combine(TestHelper.TestDir, "DomainServiceToolsPath.txt");
-            if (!File.Exists(projectPathFile))
-                Assert.Fail("Could not find " + projectPathFile + ".  Did you forget a [Deployment] attribute?");
-
-            var path = File.ReadAllText(projectPathFile);
-            return path.Trim();
-        }
+#if NETFRAMEWORK
+            => Path.Combine(GetCurrentProjectFolder(), "../OpenRiaServices.VisualStudio.DomainServices.Tools.Test.csproj");
+#else
+            => Path.Join(GetCurrentProjectFolder(), "../OpenRiaServices.VisualStudio.DomainServices.Tools.Test.csproj");
+#endif
 
         public static string GetProjectDir()
-        {
-            return Path.GetDirectoryName(GetProjectPath());
-        }
+            => Path.GetDirectoryName(GetProjectPath());
+
+        private static string GetCurrentProjectFolder([System.Runtime.CompilerServices.CallerFilePath] string callerFilePath = null)
+            => Path.GetDirectoryName(callerFilePath);
 
         // Validates that a generated file matches a reference file.
         // Strips off code-gen boilerplate that may cause comparison problems
@@ -129,7 +126,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
             }
         }
 
-        
+
         /// <summary>
         /// Enables or disables L2S support.
         /// </summary>

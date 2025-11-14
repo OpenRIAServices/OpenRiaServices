@@ -3,7 +3,7 @@
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <RootNamespace>OpenRiaServices.Tools.Test.T4Generator</RootNamespace>
     <AssemblyName>OpenRiaServices.Tools.Test.T4Generator</AssemblyName>
-    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <TargetFrameworks>net472;net10.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
     <Reference Include="System.ComponentModel.Composition" />
