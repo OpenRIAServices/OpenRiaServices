@@ -65,10 +65,10 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
-        private static void StartWebServer([CallerFilePath] string filePaht = null)
+        private static void StartWebServer([CallerFilePath] string filePath = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
-            string projectPath = Path.GetDirectoryName(filePaht);
+            string projectPath = Path.GetDirectoryName(filePath);
 #if DEBUG
             string configuration = "Debug";
 #else
@@ -98,8 +98,25 @@ namespace OpenRiaServices.Client.Test
                 ProcessStartInfo startInfo = new(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"");
                 startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
                 startInfo.UseShellExecute = false;
+                startInfo.RedirectStandardOutput = true;
+                startInfo.RedirectStandardError = true;
+
+                s_aspNetCoreSite.OutputDataReceived += (_, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                        Console.WriteLine("[WEB STDOUT] " + e.Data);
+                };
+
+                s_aspNetCoreSite.ErrorDataReceived += (_, e) =>
+                {
+                    if (!string.IsNullOrEmpty(e.Data))
+                        Console.WriteLine("[WEB STDERR] " + e.Data);
+                };
+
                 startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
                 s_aspNetCoreSite = Process.Start(startInfo);
+                s_aspNetCoreSite.BeginOutputReadLine();
+                s_aspNetCoreSite.BeginErrorReadLine();
 
                 Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
             }
