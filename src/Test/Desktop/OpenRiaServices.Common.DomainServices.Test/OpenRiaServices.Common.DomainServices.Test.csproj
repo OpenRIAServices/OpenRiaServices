@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
-    <TargetFrameworks>net472;net10.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0;net10.0</TargetFrameworks>
     <DebugType>pdbonly</DebugType>
 
     <NoWarn Condition="'$(TargetFramework)'!='net472'">$(NoWarn);CS0618</NoWarn>
