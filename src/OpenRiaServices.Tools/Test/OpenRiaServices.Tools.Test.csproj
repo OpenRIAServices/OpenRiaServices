@@ -2,7 +2,7 @@
   <PropertyGroup>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
-    <TargetFrameworks>net472;net10.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
     <DefineConstants Condition="'$(TargetFramework)' == 'net472'">$(DefineConstants);HAS_LINQ2SQL</DefineConstants>

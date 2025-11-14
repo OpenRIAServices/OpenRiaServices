@@ -74,11 +74,8 @@ namespace OpenRiaServices.Client.Test
 #else
             string configuration = "Release";
 #endif
-#if NET10_0
-            string targetFramework = "net10.0";
-#else
             string targetFramework = "net8.0";
-#endif
+
 
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
@@ -123,7 +120,6 @@ namespace OpenRiaServices.Client.Test
                 catch (Exception ex)
                 {
                     // Ignore error
-                    Console.WriteLine(ex.Message);
                 }
 
                 if (s_aspNetCoreSite.HasExited)
