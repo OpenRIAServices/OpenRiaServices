@@ -117,7 +117,7 @@ namespace OpenRiaServices.Client.Test
                         return;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
                     // Ignore error
                 }
