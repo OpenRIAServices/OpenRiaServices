@@ -83,7 +83,7 @@ namespace OpenRiaServices.Client.Test
             string targetFramework = "net8.0";
 #endif
 
-            string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
+            string webSitePath = Path.GetFullPath(Path.Join(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
 
             if (!Directory.Exists(webSitePath))
@@ -104,7 +104,7 @@ namespace OpenRiaServices.Client.Test
                 {
                     FileName = processPath,
                     UseShellExecute = false,
-                    WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"))
+                    WorkingDirectory = Path.GetFullPath(Path.Join(projectPath, @"../AspNetCoreWebsite/"))
                 };
                 startInfo.ArgumentList.Add("--urls");
                 startInfo.ArgumentList.Add("https://localhost:7045;http://localhost:5246");
