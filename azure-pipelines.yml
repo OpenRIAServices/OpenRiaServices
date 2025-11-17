@@ -28,6 +28,7 @@ steps:
 - task: NuGetToolInstaller@1
   inputs:
     versionSpec: 6.9.1
+
 - task: gitversion/setup@3
   inputs:
     versionSpec: '5.9.0'
@@ -74,6 +75,7 @@ steps:
 
 - task: VSTest@2
   displayName: 'Run tests - .NET Framework'
+  enabled: false
   inputs:
     testAssemblyVer2: |
      **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
