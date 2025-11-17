@@ -125,7 +125,7 @@ namespace OpenRiaServices.Client.Test
                 Console.WriteLine($"ExitCode = {proc.ExitCode}");
 
 
-                Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
+                Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", proc.Id);
             }
 
             // Wait for a successfull (GET "/") to succeed so we know webserver has started
