@@ -16,7 +16,7 @@ steps:
 ## install dotnet 8
 - task: UseDotNet@2
   inputs:
-    packageType: 'runtime'
+    packageType: 'sdk'
     version: '8.0.x'
 
 ## install dotnet 8 sdk
@@ -27,7 +27,7 @@ steps:
 
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: 6.9.1
+    versionSpec: 7.0.0
 
 - task: gitversion/setup@3
   inputs:
