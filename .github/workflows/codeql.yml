@@ -6,11 +6,11 @@ on:
   pull_request:
     branches: [ "main" ]
     paths-ignore:
-      - '**/*.md'
-      - '**/*.txt'
-      - '**/*.nuspec'
+    - '**/*.md'
+    - '**/*.txt'
+    - '**/*.nuspec'
   schedule:
-    - cron: "5 13 1 * *"
+  - cron: "5 13 1 * *"
 
 jobs:
   analyze:
@@ -27,27 +27,27 @@ jobs:
         language: [ csharp ]
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Setup .NET SDK
-        uses: actions/setup-dotnet@v5
-        with:
-          dotnet-version: '10.0.x'
+    - name: Setup .NET SDK
+      uses: actions/setup-dotnet@v5
+      with:
+        dotnet-version: '10.0.x'
 
-      - name: Initialize CodeQL
-        uses: github/codeql-action/init@v3
-        with:
-          languages: ${{ matrix.language }}
-          queries: +security-and-quality
+    - name: Initialize CodeQL
+      uses: github/codeql-action/init@v4
+      with:
+        languages: ${{ matrix.language }}
+        queries: +security-and-quality
 
-      - name: Add msbuild to PATH
-        uses: microsoft/setup-msbuild@v2
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v2
 
-      - name: build
-        run: msbuild src\RiaServices.sln -restore /p:Configuration=Release -v:minimal -m
+    - name: build
+      run: msbuild src\RiaServices.sln -restore /p:Configuration=Release -v:minimal -m
 
-      - name: Perform CodeQL Analysis
-        uses: github/codeql-action/analyze@v3
-        with:
-          category: "/language:${{ matrix.language }}"
+    - name: Perform CodeQL Analysis
+      uses: github/codeql-action/analyze@v3
+      with:
+        category: "/language:${{ matrix.language }}"
