@@ -5,10 +5,10 @@ variables:
   BuildConfiguration: 'release'
   BuildPlatform: 'any cpu'
   Solution: 'src\RiaServices.sln'
-# Msbuild might create logs in the following directory in case some of the "tool" tests fail
+  # Msbuild might create logs in the following directory in case some of the "tool" tests fail
   MSBUILDDEBUGPATH: $(Build.ArtifactStagingDirectory)
-# Define the following variable for the build pipeline in order to enable SonarCloud analysis
-# sonarcloud-endpoint: 'sonarcloud.io'
+  # Define the following variable for the build pipeline in order to enable SonarCloud analysis
+  # sonarcloud-endpoint: 'sonarcloud.io'
 
 steps:
 
@@ -40,7 +40,7 @@ steps:
     versionSpec: '5.9.0'
 
 - task: gitversion/execute@3
-  displayName: Use GitVersion
+  displayName: 'Use GitVersion'
 
 - task: NuGetCommand@2
   displayName: 'NuGet restore RiaServices.sln'
@@ -72,21 +72,21 @@ steps:
 
 # Load test databases and setup msbuild debug path so it becomes part of artifacts 
 - powershell: |
-   sqllocaldb start MSSQLLocalDB
-   if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
-   
-   .\Setup-TestDatabases.ps1
+    sqllocaldb start MSSQLLocalDB
+    if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
+
+    .\Setup-TestDatabases.ps1
   displayName: 'Setup database'
 
 - task: VSTest@3
   displayName: 'Run tests (.NET Framework)'
   inputs:
     testAssemblyVer2: |
-     **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-     !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-     src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
-     !**\obj\**
+      **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+      !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+      src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
+      !**\obj\**
 
     runOnlyImpactedTests: false
     runInParallel: true
@@ -100,10 +100,10 @@ steps:
   displayName: 'Run tests (.NET)'
   inputs:
     testAssemblyVer2: |
-     **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
-     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-     !**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-     !**\obj\**
+      **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
+      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+      !**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+      !**\obj\**
 
     runOnlyImpactedTests: false
     runInParallel: true
@@ -127,7 +127,7 @@ steps:
     packagesToPack: 'NuGet\**\*.nuspec'
     versioningScheme: byEnvVar
     versionEnvVar: Build.BuildNumber
-    packDestination: '$(Build.ArtifactStagingDirectory)' 
+    packDestination: '$(Build.ArtifactStagingDirectory)'
   continueOnError: true
 #  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
@@ -136,9 +136,9 @@ steps:
   inputs:
     SourceFolder: '$(build.sourcesdirectory)'
     Contents: |
-     src\VisualStudio\Installer\bin\$(BuildConfiguration)\*.vsix
-     src\VisualStudio\Installer\publishManifest.json
-     src\VisualStudio\Installer\assets\**
+      src\VisualStudio\Installer\bin\$(BuildConfiguration)\*.vsix
+      src\VisualStudio\Installer\publishManifest.json
+      src\VisualStudio\Installer\assets\**
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
@@ -147,9 +147,9 @@ steps:
   inputs:
     SourceFolder: '$(Agent.TempDirectory)'
     Contents: |
-     TestResults/*/*
-     **/*.diag
-     !TestResults/*/*.coverage*
+      TestResults/*/*
+      **/*.diag
+      !TestResults/*/*.coverage*
     TargetFolder: '$(build.artifactstagingdirectory)/vstest'
   condition: succeededOrFailed()
 
@@ -161,5 +161,5 @@ steps:
 
 - task: SonarCloudPublish@3
   displayName: 'Publish Quality Gate Result'
-  continueOnError: true  
+  continueOnError: true
   condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))))
