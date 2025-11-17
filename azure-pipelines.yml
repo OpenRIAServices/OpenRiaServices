@@ -70,6 +70,8 @@ steps:
     maximumCpuCount: false
     msbuildArgs: '/nr:false /p:UseSharedCompilation=false'
     clean: true
+    createLogFile: true
+    logFileVerbosity: normal
 
 - task: CopyFiles@2
   displayName: 'Copy files to ArtifactStagingDirectory'
@@ -86,6 +88,14 @@ steps:
     ArtifactName: 'drop1'
     publishLocation: 'Container'
   condition: succeededOrFailed()
+
+- task: PublishBuildArtifacts@1
+  displayName: 'Publicera MSBuild-logg'
+  inputs:
+    PathtoPublish: '$(Build.SourcesDirectory)\msbuild.log'
+    ArtifactName: 'msbuild-log'
+    publishLocation: 'Container'
+
 
 # Load test databases and setup msbuild debug path so it becomes part of artifacts 
 - powershell: |
