@@ -107,8 +107,6 @@ namespace OpenRiaServices.Client.Test
                 startInfo.ArgumentList.Add("--urls");
                 startInfo.ArgumentList.Add("https://localhost:7045;http://localhost:5246");
                 startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
-                startInfo.UseShellExecute = false;
-                startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
                 s_aspNetCoreSite = Process.Start(startInfo);
 
                 Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
