@@ -2,7 +2,7 @@ pool:
   vmImage: 'windows-2022'
 
 variables:
-  BuildConfiguration: 'debug'
+  BuildConfiguration: 'release'
   BuildPlatform: 'any cpu'
   Solution: 'src\RiaServices.sln'
 # Msbuild might create logs in the following directory in case some of the "tool" tests fail
@@ -98,11 +98,11 @@ steps:
 #    configuration: '$(BuildConfiguration)'
 #  timeoutInMinutes: 25
 
-- pwsh: |
-    $env:ASPNETCORE_ENVIRONMENT="Development"
-    & "src\Test\AspNetCoreWebsite\bin\debug\net10.0\AspNetCoreWebsite.exe" --urls "https://localhost:7045;http://localhost:5246"
-  displayName: 'Run AspNetCoreWebsite.exe'
-  timeoutInMinutes: 5
+#- pwsh: |
+#    $env:ASPNETCORE_ENVIRONMENT="Development"
+#    & "src\Test\AspNetCoreWebsite\bin\debug\net10.0\AspNetCoreWebsite.exe" --urls "https://localhost:7045;http://localhost:5246"
+#  displayName: 'Run AspNetCoreWebsite.exe'
+#  timeoutInMinutes: 5
 
 - task: VSTest@3
   displayName: 'Run tests - net10'
