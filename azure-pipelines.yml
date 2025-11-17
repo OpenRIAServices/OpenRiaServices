@@ -20,10 +20,10 @@ steps:
 #    version: '6.0.x'
 
 ## install dotnet 8 sdk
-- task: UseDotNet@2
-  inputs:
-    packageType: 'sdk'
-    version: '8.0.x'
+#- task: UseDotNet@2
+#  inputs:
+#    packageType: 'sdk'
+#    version: '8.0.x'
 
 ## install dotnet 10 sdk
 - task: UseDotNet@2
@@ -98,10 +98,11 @@ steps:
 #    configuration: '$(BuildConfiguration)'
 #  timeoutInMinutes: 25
 
-#- pwsh: |
-#    & "src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe"
-#  displayName: 'Run AspNetCoreWebsite.exe'
-#  timeoutInMinutes: 5
+- pwsh: |
+    $env:ASPNETCORE_ENVIRONMENT="Development"
+    & "src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe" --urls "https://localhost:7045;http://localhost:5246"
+  displayName: 'Run AspNetCoreWebsite.exe'
+  timeoutInMinutes: 5
 
 - task: VSTest@3
   displayName: 'Run tests - net10'
