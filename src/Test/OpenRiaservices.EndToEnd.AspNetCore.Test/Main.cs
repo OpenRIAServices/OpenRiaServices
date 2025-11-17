@@ -1,13 +1,14 @@
 ﻿extern alias httpDomainClient;
+
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using httpDomainClient::OpenRiaServices.Client.DomainClients;
+using System.Diagnostics;
+using System.Runtime.CompilerServices;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -65,7 +66,7 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
-        private static void StartWebServer([CallerFilePath] string filePath = null)
+        private static void StartWebServer([CallerFilePath]string filePath = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
             string projectPath = Path.GetDirectoryName(filePath);
@@ -75,17 +76,18 @@ namespace OpenRiaServices.Client.Test
             string configuration = "Release";
 #endif
             string targetFramework = "net10.0";
-
-            Console.WriteLine($"Running TFM: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
-
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
+            string dllPath = Path.Combine(webSitePath, "AspNetCoreWebsite.dll");
 
             if (!Directory.Exists(webSitePath))
                 throw new FileNotFoundException($"Website not found at {webSitePath}");
 
             if (!File.Exists(processPath))
                 throw new FileNotFoundException($"AspNetCore website not found at {processPath}");
+
+            if (!File.Exists(dllPath))
+                throw new FileNotFoundException($"AspNetCore website dll not found at {dllPath}");
 
             var websites = Process.GetProcessesByName(ProcessName);
             if (websites.Any())
@@ -95,37 +97,21 @@ namespace OpenRiaServices.Client.Test
             }
             else
             {
-                var startInfo = new ProcessStartInfo(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"")
+                var startInfo = new ProcessStartInfo
                 {
+                    FileName = "dotnet",
                     UseShellExecute = false,
-                    WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/")),
-                    RedirectStandardOutput = true,
-                    RedirectStandardError = true,
+                    WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"))
                 };
-                startInfo.EnvironmentVariables["ASPNETCORE_ENVIRONMENT"] = "Development";
+                startInfo.ArgumentList.Add(dllPath);
+                startInfo.ArgumentList.Add("--urls");
+                startInfo.ArgumentList.Add("https://localhost:7045;http://localhost:5246");
+                startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
+                startInfo.UseShellExecute = false;
+                startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
+                s_aspNetCoreSite = Process.Start(startInfo);
 
-                Console.WriteLine("WorkingDirectory: {0}", startInfo.WorkingDirectory);
-                Console.WriteLine("webSitePath: {0}", webSitePath);
-                Console.WriteLine("processPath: {0}", processPath);
-
-                using var proc = new Process { StartInfo = startInfo };
-
-                proc.Start();
-
-                string stdout = proc.StandardOutput.ReadToEnd();
-                string stderr = proc.StandardError.ReadToEnd();
-
-                proc.WaitForExit();
-
-                Console.WriteLine("=== STDOUT ===");
-                Console.WriteLine(stdout);
-
-                Console.WriteLine("=== STDERR ===");
-                Console.WriteLine(stderr);
-                Console.WriteLine($"ExitCode = {proc.ExitCode}");
-
-
-                Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", proc.Id);
+                Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
             }
 
             // Wait for a successfull (GET "/") to succeed so we know webserver has started
@@ -142,16 +128,9 @@ namespace OpenRiaServices.Client.Test
                         return;
                     }
                 }
-                catch (Exception ex)
+                catch (Exception)
                 {
-                    Console.WriteLine("Exception when trying to Get from localhost:");
-                    Console.WriteLine(ex.ToString());
-
-                    if (ex.InnerException != null)
-                    {
-                        Console.WriteLine("Inner exception:");
-                        Console.WriteLine(ex.InnerException.ToString());
-                    }
+                    // Ignore error
                 }
 
                 if (s_aspNetCoreSite.HasExited)
