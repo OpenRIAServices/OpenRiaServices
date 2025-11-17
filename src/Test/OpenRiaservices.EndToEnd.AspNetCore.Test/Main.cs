@@ -99,7 +99,7 @@ namespace OpenRiaServices.Client.Test
             }
             else
             {
-                ProcessStartInfo startInfo = new(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"");
+                ProcessStartInfo startInfo = new(processPath, $"--urls \"{TestURIs.RootURI}\"");
                 startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
                 startInfo.UseShellExecute = false;
                 startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
@@ -115,7 +115,7 @@ namespace OpenRiaServices.Client.Test
             {
                 try
                 {
-                    var res = httpClient.GetAsync("http://localhost:5246/").GetAwaiter().GetResult();
+                    var res = httpClient.GetAsync(TestURIs.RootURI).GetAwaiter().GetResult();
                     if (res.IsSuccessStatusCode)
                     {
                         Console.WriteLine("AssemblyInitialize: Webserver started");
