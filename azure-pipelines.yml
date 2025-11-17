@@ -2,7 +2,7 @@ pool:
   vmImage: 'windows-2022'
 
 variables:
-  BuildConfiguration: 'release'
+  BuildConfiguration: 'debug'
   BuildPlatform: 'any cpu'
   Solution: 'src\RiaServices.sln'
 # Msbuild might create logs in the following directory in case some of the "tool" tests fail
