@@ -104,27 +104,26 @@ namespace OpenRiaServices.Client.Test
                 };
                 startInfo.EnvironmentVariables["ASPNETCORE_ENVIRONMENT"] = "Development";
 
-                s_aspNetCoreSite = new Process
-                {
-                    StartInfo = startInfo,
-                    EnableRaisingEvents = true
-                };
+                Console.WriteLine("WorkingDirectory: {0}", startInfo.WorkingDirectory);
+                Console.WriteLine("webSitePath: {0}", webSitePath);
+                Console.WriteLine("processPath: {0}", processPath);
 
-                s_aspNetCoreSite.OutputDataReceived += (_, e) =>
-                {
-                    if (!string.IsNullOrEmpty(e.Data))
-                        Console.WriteLine("[WEB STDOUT] " + e.Data);
-                };
+                using var proc = new Process { StartInfo = startInfo };
 
-                s_aspNetCoreSite.ErrorDataReceived += (_, e) =>
-                {
-                    if (!string.IsNullOrEmpty(e.Data))
-                        Console.WriteLine("[WEB STDERR] " + e.Data);
-                };
+                proc.Start();
 
-                s_aspNetCoreSite.Start();
-                s_aspNetCoreSite.BeginOutputReadLine();
-                s_aspNetCoreSite.BeginErrorReadLine();
+                string stdout = proc.StandardOutput.ReadToEnd();
+                string stderr = proc.StandardError.ReadToEnd();
+
+                proc.WaitForExit();
+
+                Console.WriteLine("=== STDOUT ===");
+                Console.WriteLine(stdout);
+
+                Console.WriteLine("=== STDERR ===");
+                Console.WriteLine(stderr);
+                Console.WriteLine($"ExitCode = {proc.ExitCode}");
+
 
                 Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
             }
