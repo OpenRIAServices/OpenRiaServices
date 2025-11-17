@@ -83,8 +83,9 @@ steps:
   displayName: 'Publish artifact drop'
   inputs:
     PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop'
+    ArtifactName: 'drop1'
     publishLocation: 'Container'
+  condition: succeededOrFailed()
 
 # Load test databases and setup msbuild debug path so it becomes part of artifacts 
 - powershell: |
