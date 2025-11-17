@@ -100,7 +100,7 @@ steps:
 
 - pwsh: |
     $env:ASPNETCORE_ENVIRONMENT="Development"
-    & "src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe" --urls "https://localhost:7045;http://localhost:5246"
+    & "src\Test\AspNetCoreWebsite\bin\debug\net10.0\AspNetCoreWebsite.exe" --urls "https://localhost:7045;http://localhost:5246"
   displayName: 'Run AspNetCoreWebsite.exe'
   timeoutInMinutes: 5
 
