@@ -10,7 +10,6 @@ using OpenRiaServices.Server;
 namespace OpenRiaServices.Tools.Test
 {
     [TestClass()]
-    [DeploymentItem("NotificationMethodGeneratorTests.xml")]
     public class NotificationMethodGeneratorTest
     {
         static readonly string s_notificationMethodGeneratorTestCodeSnippets = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
@@ -85,6 +84,46 @@ namespace OpenRiaServices.Tools.Test
 
         private static readonly string[] s_expectedSnippets = LoadSnippets(s_notificationMethodGeneratorTestCodeSnippets);
 
+        static readonly string s_notificationMethodGeneratorTests = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<TestMethods>
+  <AddMethodFor1Args comments=""These are the comments for the generated method.""/>
+  <AddMethodFor1Args comments=""""/>
+  <AddMethodFor1Args comments=""null""/>
+
+  <AddMethodFor2Args comments=""These are the comments for the generated method."" parameterDeclaration=""System.Int32,value""/>
+  <AddMethodFor2Args comments=""null"" parameterDeclaration=""""/>
+  <AddMethodFor2Args comments=""null"" parameterDeclaration=""null""/>
+  <AddMethodFor2Args comments=""These are the comments for the generated method."" parameterDeclaration=""null""/>
+
+  <AddMethodFor3Args comments=""These are the comments for the generated method."" parameters=""System.System.Int32,arg1;System.System.Boolean,arg2;System.String,arg3""/>
+  <AddMethodFor3Args comments=""null"" parameters=""""/>
+  <AddMethodFor3Args comments=""null"" parameters=""null""/>
+  <AddMethodFor3Args comments=""These are the comments for the generated method."" parameters=""null""/>
+  
+  <GetMethodInvokeExpressionStatementFor1Args comments=""These are the comments for the generated method."" parameters=""System.Int32,arg1;System.Boolean,arg2;System.String,arg3"" baseMethodNames=""MyProperty""/>
+  <GetMethodInvokeExpressionStatementFor1Args comments="""" parameters=""System.Int32,arg1;System.Boolean,arg2;System.String,arg3"" baseMethodNames=""MyProperty""/>
+  <GetMethodInvokeExpressionStatementFor1Args comments=""These are the comments for the generated method."" parameters="""" baseMethodNames=""MyProperty,Invoke""/>
+  <GetMethodInvokeExpressionStatementFor1Args comments="""" parameters=""System.Int32,arg1;System.Boolean,arg2;System.String,arg3"" baseMethodNames=""MyProperty,Invoke""/>
+  <GetMethodInvokeExpressionStatementFor1Args comments="""" parameters="""" baseMethodNames=""MyProperty,Invoke""/>
+  <GetMethodInvokeExpressionStatementFor1Args comments=""These are the comments for the generated method."" parameters=""System.Int32,arg1"" baseMethodNames=""PropertyChanged""/>
+  <GetMethodInvokeExpressionStatementFor1Args comments="""" parameters=""System.Int32,arg1"" baseMethodNames=""PropertyChanged""/>
+  
+  <OnCreatedMethodInvokeExpressionArgs isCSharp=""true""></OnCreatedMethodInvokeExpressionArgs>
+  
+  <PartialMethodsSnippetBlockArgs comments=""These are the comments for the generated method."" parameters=""System.Int32,arg1;System.Boolean,arg2;System.String,arg3"" baseMethodNames=""MyPropertyChanged"" index=""0""/>
+  <PartialMethodsSnippetBlockArgs comments="""" parameters="""" baseMethodNames=""MyProperty,Invoke"" index=""2""/>
+  <PartialMethodsSnippetBlockArgs comments="""" parameters=""System.Int32,arg1;System.Boolean,arg2;System.String,arg3"" baseMethodNames=""MyProperty,Invoke"" index=""4""/>
+  
+  <PartialMethodsSnippetBlockArgs comments="""" parameters=""System.Int32,publicArg1;System.Int32,PublicArg2;System.Boolean,ispublic;System.Boolean,isPublic"" baseMethodNames=""IsPublic"" index=""6""/>
+  <PartialMethodsSnippetBlockArgs comments="""" parameters=""System.Int32,publicArg1;System.Int32,PublicArg2;System.Boolean,ispublic;System.Boolean,isPublic"" baseMethodNames=""ispublic"" index=""8""/>
+  <PartialMethodsSnippetBlockArgs comments="""" parameters=""System.Int32,publicArg1;System.Int32,PublicArg2;System.Boolean,ispublic;System.Boolean,isPublic"" baseMethodNames=""publicProp"" index=""10""/>
+  <PartialMethodsSnippetBlockArgs comments="""" parameters=""System.Int32,publicArg1;System.Int32,PublicArg2;System.Boolean,ispublic;System.Boolean,isPublic"" baseMethodNames=""PublicProp"" index=""12""/>
+  <PartialMethodsSnippetBlockArgs comments="""" parameters=""System.Int32,publicArg1;System.Int32,PublicArg2;System.Boolean,ispublic;System.Boolean,isPublic"" baseMethodNames=""IsPartial"" index=""14""/>
+  <PartialMethodsSnippetBlockArgs comments="""" parameters=""System.Int32,publicArg1;System.Int32,PublicArg2;System.Boolean,ispublic;System.Boolean,isPublic"" baseMethodNames=""ispartial"" index=""16""/>
+  <PartialMethodsSnippetBlockArgs comments="""" parameters=""System.Int32,publicArg1;System.Int32,PublicArg2;System.Boolean,ispublic;System.Boolean,isPublic"" baseMethodNames=""partialProp"" index=""18""/>
+  <PartialMethodsSnippetBlockArgs comments="""" parameters=""System.Int32,publicArg1;System.Int32,PublicArg2;System.Boolean,ispublic;System.Boolean,isPublic"" baseMethodNames=""PartialProp"" index=""20""/>
+</TestMethods>";
+
         private static string[] LoadSnippets(string snippets)
         {
             List<string> list = [];
@@ -102,9 +141,10 @@ namespace OpenRiaServices.Tools.Test
             return [.. list];
         }
 
-        static IEnumerable<object[]> GetTestCasesFromXml(string filename, string nodeName, string[] attributes)
+        static IEnumerable<object[]> GetTestCasesFromXml(string xml, string nodeName, string[] attributes)
         {
-            using var reader = XmlReader.Create(filename);
+            using StringReader stringReader = new StringReader(xml);
+            using XmlReader reader = XmlReader.Create(stringReader);
             if (!reader.ReadToDescendant(nodeName))
                 throw new ArgumentException(message: "No node with specified name exist", paramName: nameof(nodeName));
 
@@ -121,7 +161,7 @@ namespace OpenRiaServices.Tools.Test
         }
 
         public static IEnumerable<object> PartialMethodsSnippetBlockTestCases
-            => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "PartialMethodsSnippetBlockArgs", new[] { "comments", "baseMethodNames", "parameters", "index" });
+            => GetTestCasesFromXml(s_notificationMethodGeneratorTests, "PartialMethodsSnippetBlockArgs", ["comments", "baseMethodNames", "parameters", "index"]);
 
         [
         TestMethod,
@@ -177,7 +217,7 @@ namespace OpenRiaServices.Tools.Test
         }
 
         public static IEnumerable<object> OnCreatedMethodInvokeExpressionTestCases
-            => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "GetMethodInvokeExpressionStatementFor1Args", new[] { "comments", "baseMethodNames", "parameters" });
+            => GetTestCasesFromXml(s_notificationMethodGeneratorTests, "GetMethodInvokeExpressionStatementFor1Args", ["comments", "baseMethodNames", "parameters"]);
 
         [
         TestMethod(),
@@ -218,7 +258,7 @@ namespace OpenRiaServices.Tools.Test
         }
 
         public static IEnumerable<object> AddMethodFor1TestCases
-            => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "AddMethodFor1Args", new[] { "comments" });
+            => GetTestCasesFromXml(s_notificationMethodGeneratorTests, "AddMethodFor1Args", ["comments"]);
 
         [
         TestMethod(),
@@ -243,7 +283,7 @@ namespace OpenRiaServices.Tools.Test
         }
 
         public static IEnumerable<object> AddMethodFor2TestCases
-            => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "AddMethodFor2Args", new[] { "comments", "parameterDeclaration" });
+            => GetTestCasesFromXml(s_notificationMethodGeneratorTests, "AddMethodFor2Args", ["comments", "parameterDeclaration"]);
 
         [
         TestMethod(),
@@ -281,7 +321,7 @@ namespace OpenRiaServices.Tools.Test
 
 
         public static IEnumerable<object> AddMethodFor3TestCases
-            => GetTestCasesFromXml("NotificationMethodGeneratorTests.xml", "AddMethodFor3Args", new[] { "comments", "parameters" });
+            => GetTestCasesFromXml(s_notificationMethodGeneratorTests, "AddMethodFor3Args", ["comments", "parameters"]);
 
         [TestMethod()]
         [DynamicData(nameof(AddMethodFor3TestCases))]
