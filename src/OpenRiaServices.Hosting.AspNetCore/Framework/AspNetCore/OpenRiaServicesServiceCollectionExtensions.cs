@@ -86,7 +86,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// </summary>
         private static void AddDomainServicesFromAssembly(this IServiceCollection services, Assembly assembly, ServiceLifetime serviceLifetime)
         {
-            Console.WriteLine($"AddDomainServicesFromAssembly Running TFM: {System.Runtime.InteropServices.RuntimeInformation.FrameworkDescription}");
             foreach (var exportedType in assembly.GetExportedTypes())
             {
                 if (exportedType.IsAbstract || exportedType.IsInterface || !typeof(DomainService).IsAssignableFrom(exportedType))

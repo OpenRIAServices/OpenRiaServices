@@ -70,24 +70,27 @@ namespace OpenRiaServices.Client.Test
         {
             const string ProcessName = "AspNetCoreWebsite";
             string projectPath = Path.GetDirectoryName(filePath);
+
 #if DEBUG
             string configuration = "Debug";
 #else
             string configuration = "Release";
 #endif
+
+#if NET10_0
             string targetFramework = "net10.0";
+#else
+            string targetFramework = "net8.0";
+#endif
+
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
-            string dllPath = Path.Combine(webSitePath, "AspNetCoreWebsite.dll");
 
             if (!Directory.Exists(webSitePath))
                 throw new FileNotFoundException($"Website not found at {webSitePath}");
 
             if (!File.Exists(processPath))
                 throw new FileNotFoundException($"AspNetCore website not found at {processPath}");
-
-            if (!File.Exists(dllPath))
-                throw new FileNotFoundException($"AspNetCore website dll not found at {dllPath}");
 
             var websites = Process.GetProcessesByName(ProcessName);
             if (websites.Any())
@@ -99,11 +102,10 @@ namespace OpenRiaServices.Client.Test
             {
                 var startInfo = new ProcessStartInfo
                 {
-                    FileName = "dotnet",
+                    FileName = processPath,
                     UseShellExecute = false,
                     WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"))
                 };
-                startInfo.ArgumentList.Add(dllPath);
                 startInfo.ArgumentList.Add("--urls");
                 startInfo.ArgumentList.Add("https://localhost:7045;http://localhost:5246");
                 startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");

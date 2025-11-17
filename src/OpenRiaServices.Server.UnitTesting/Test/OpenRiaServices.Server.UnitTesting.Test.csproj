@@ -2,7 +2,7 @@
   <PropertyGroup>
     <NoWarn>618</NoWarn>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <TargetFrameworks>net472;net10.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="9.0.0" />

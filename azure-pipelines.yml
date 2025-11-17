@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'windows-2022'
+  vmImage: 'windows-2025'
 
 variables:
   BuildConfiguration: 'release'
@@ -7,7 +7,7 @@ variables:
   Solution: 'src\RiaServices.sln'
 # Msbuild might create logs in the following directory in case some of the "tool" tests fail
   MSBUILDDEBUGPATH: $(Build.ArtifactStagingDirectory)
-# Define the following variable for the build pipeline in order to enable sonarcloud analysis
+# Define the following variable for the build pipeline in order to enable SonarCloud analysis
 # sonarcloud-endpoint: 'sonarcloud.io'
 
 steps:
@@ -20,10 +20,10 @@ steps:
 #    version: '6.0.x'
 
 ## install dotnet 8 sdk
-#- task: UseDotNet@2
-#  inputs:
-#    packageType: 'sdk'
-#    version: '8.0.x'
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'
 
 ## install dotnet 10 sdk
 - task: UseDotNet@2
@@ -33,7 +33,8 @@ steps:
 
 - task: NuGetToolInstaller@1
   inputs:
-    versionSpec: 6.9.1
+    versionSpec: 7.0.0
+
 - task: gitversion/setup@3
   inputs:
     versionSpec: '5.9.0'
@@ -67,35 +68,7 @@ steps:
     solution: '$(Solution)'
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-    maximumCpuCount: false
-    msbuildArgs: '/nr:false /p:UseSharedCompilation=false'
-    clean: true
-    createLogFile: true
-    logFileVerbosity: normal
-
-- task: CopyFiles@2
-  displayName: 'Copy files to ArtifactStagingDirectory'
-  inputs:
-    SourceFolder: '$(System.DefaultWorkingDirectory)'
-    Contents: |
-      **\bin\$(BuildConfiguration)\**
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publish artifact drop'
-  inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
-    ArtifactName: 'drop1'
-    publishLocation: 'Container'
-  condition: succeededOrFailed()
-
-- task: PublishBuildArtifacts@1
-  displayName: 'Publicera MSBuild-logg'
-  inputs:
-    PathtoPublish: '$(Build.SourcesDirectory)\msbuild.log'
-    ArtifactName: 'msbuild-log'
-    publishLocation: 'Container'
-
+    maximumCpuCount: true
 
 # Load test databases and setup msbuild debug path so it becomes part of artifacts 
 - powershell: |
@@ -103,35 +76,28 @@ steps:
    if (-not $?) { write-error  "failed to start  MSSQLLocalDB" }
    
    .\Setup-TestDatabases.ps1
-   
   displayName: 'Setup database'
 
-#- task: VSTest@3
-#  displayName: 'Run tests - net48'
-#  inputs:
-#    testAssemblyVer2: |
-#     **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-#     !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-#     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-#     src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
-#     !**\obj\**
-#
-#    runOnlyImpactedTests: false
-#    runInParallel: false
-#    runSettingsFile: 'src\test.runsettings'
-#    codeCoverageEnabled: true
-#    platform: '$(BuildPlatform)'
-#    configuration: '$(BuildConfiguration)'
-#  timeoutInMinutes: 25
+- task: VSTest@3
+  displayName: 'Run tests (.NET Framework)'
+  inputs:
+    testAssemblyVer2: |
+     **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+     src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
+     !**\obj\**
 
-#- pwsh: |
-#    $env:ASPNETCORE_ENVIRONMENT="Development"
-#    & "src\Test\AspNetCoreWebsite\bin\debug\net10.0\AspNetCoreWebsite.exe" --urls "https://localhost:7045;http://localhost:5246"
-#  displayName: 'Run AspNetCoreWebsite.exe'
-#  timeoutInMinutes: 5
+    runOnlyImpactedTests: false
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+  timeoutInMinutes: 25
 
 - task: VSTest@3
-  displayName: 'Run tests - net10'
+  displayName: 'Run tests (.NET)'
   inputs:
     testAssemblyVer2: |
      **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
@@ -140,7 +106,7 @@ steps:
      !**\obj\**
 
     runOnlyImpactedTests: false
-    runInParallel: false
+    runInParallel: true
     runSettingsFile: 'src\test.runsettings'
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
@@ -176,7 +142,6 @@ steps:
     TargetFolder: '$(build.artifactstagingdirectory)'
   condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
-  
 - task: CopyFiles@2
   displayName: 'Copy dump files  to $(build.artifactstagingdirectory)'
   inputs:
