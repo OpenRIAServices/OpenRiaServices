@@ -1,6 +1,7 @@
 ﻿using System;
 using System.CodeDom;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Xml;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -9,16 +10,86 @@ using OpenRiaServices.Server;
 namespace OpenRiaServices.Tools.Test
 {
     [TestClass()]
-    [DeploymentItem("NotificationMethodGeneratorTestCodeSnippets.xml")]
     [DeploymentItem("NotificationMethodGeneratorTests.xml")]
     public class NotificationMethodGeneratorTest
     {
-        private static readonly string[] s_expectedSnippets = LoadSnippets("NotificationMethodGeneratorTestCodeSnippets.xml");
+        static readonly string s_notificationMethodGeneratorTestCodeSnippets = @"<?xml version=""1.0"" encoding=""utf-8"" ?>
+<CodeSnippets>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();These are the comments for the generated method.        partial void OnMyPropertyChanged(int arg1, bool arg2, string arg3);]]>""
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End SubThese are the comments for the generated method.        Private Partial Sub OnMyPropertyChanged(ByVal arg1 As Integer, ByVal arg2 As Boolean, ByVal arg3 As String)        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void OnMyProperty();        partial void OnInvoke();]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub OnMyProperty()        End Sub        Private Partial Sub OnInvoke()        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void OnMyProperty(int arg1, bool arg2, string arg3);        partial void OnInvoke(int arg1, bool arg2, string arg3);]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub OnMyProperty(ByVal arg1 As Integer, ByVal arg2 As Boolean, ByVal arg3 As String)        End Sub        Private Partial Sub OnInvoke(ByVal arg1 As Integer, ByVal arg2 As Boolean, ByVal arg3 As String)        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void OnIsPublic(int publicArg1, int PublicArg2, bool ispublic, bool isPublic);]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub OnIsPublic(ByVal publicArg1 As Integer, ByVal PublicArg2 As Integer, ByVal ispublic As Boolean, ByVal isPublic As Boolean)        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void Onispublic(int publicArg1, int PublicArg2, bool ispublic, bool isPublic);]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub Onispublic(ByVal publicArg1 As Integer, ByVal PublicArg2 As Integer, ByVal ispublic As Boolean, ByVal isPublic As Boolean)        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void OnpublicProp(int publicArg1, int PublicArg2, bool ispublic, bool isPublic);]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub OnpublicProp(ByVal publicArg1 As Integer, ByVal PublicArg2 As Integer, ByVal ispublic As Boolean, ByVal isPublic As Boolean)        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void OnPublicProp(int publicArg1, int PublicArg2, bool ispublic, bool isPublic);]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub OnPublicProp(ByVal publicArg1 As Integer, ByVal PublicArg2 As Integer, ByVal ispublic As Boolean, ByVal isPublic As Boolean)        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void OnIsPartial(int publicArg1, int PublicArg2, bool ispublic, bool isPublic);]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub OnIsPartial(ByVal publicArg1 As Integer, ByVal PublicArg2 As Integer, ByVal ispublic As Boolean, ByVal isPublic As Boolean)        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void Onispartial(int publicArg1, int PublicArg2, bool ispublic, bool isPublic);]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub Onispartial(ByVal publicArg1 As Integer, ByVal PublicArg2 As Integer, ByVal ispublic As Boolean, ByVal isPublic As Boolean)        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void OnpartialProp(int publicArg1, int PublicArg2, bool ispublic, bool isPublic);]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub OnpartialProp(ByVal publicArg1 As Integer, ByVal PublicArg2 As Integer, ByVal ispublic As Boolean, ByVal isPublic As Boolean)        End Sub]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        partial void OnCreated();        partial void OnPartialProp(int publicArg1, int PublicArg2, bool ispublic, bool isPublic);]]>
+  </snippet>
+  <snippet>
+    <![CDATA[<summary>This method is invoked from the constructor once initialization is complete andcan be used for further object setup.</summary>        Private Partial Sub OnCreated()        End Sub        Private Partial Sub OnPartialProp(ByVal publicArg1 As Integer, ByVal PublicArg2 As Integer, ByVal ispublic As Boolean, ByVal isPublic As Boolean)        End Sub]]>
+  </snippet>  
+</CodeSnippets>";
 
-        private static string[] LoadSnippets(string path)
+        private static readonly string[] s_expectedSnippets = LoadSnippets(s_notificationMethodGeneratorTestCodeSnippets);
+
+        private static string[] LoadSnippets(string snippets)
         {
             List<string> list = [];
-            using XmlReader xmlReader = XmlReader.Create(path);
+            using StringReader stringReader = new(snippets);
+            using XmlReader xmlReader = XmlReader.Create(stringReader);
 
             while (xmlReader.Read())
             {

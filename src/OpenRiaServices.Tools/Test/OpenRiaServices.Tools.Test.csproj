@@ -66,9 +66,6 @@
     <ProjectReference Include="T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="NotificationMethodGeneratorTestCodeSnippets.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
     <Content Include="NotificationMethodGeneratorTests.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
