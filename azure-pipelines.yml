@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'windows-2022'
+  vmImage: 'windows-2025'
 
 variables:
   BuildConfiguration: 'release'
@@ -17,13 +17,13 @@ steps:
 #- task: UseDotNet@2
 #  inputs:
 #    packageType: 'runtime'
-#    version: '6.0.x'
+#    version: '8.0.x'
 
 ## install dotnet 8 sdk
 - task: UseDotNet@2
- inputs:
-   packageType: 'sdk'
-   version: '10.0.x'
+  inputs:
+    packageType: 'sdk'
+    version: '10.0.x'
 
 - task: NuGetToolInstaller@1
   inputs:
