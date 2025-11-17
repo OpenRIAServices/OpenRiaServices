@@ -20,10 +20,10 @@ steps:
 #    version: '6.0.x'
 
 ## install dotnet 8 sdk
-#- task: UseDotNet@2
-#  inputs:
-#    packageType: 'sdk'
-#    version: '8.0.x'
+- task: UseDotNet@2
+ inputs:
+   packageType: 'sdk'
+   version: '10.0.x'
 
 - task: NuGetToolInstaller@1
   inputs:
@@ -73,7 +73,7 @@ steps:
   displayName: 'Setup database'
 
 - task: VSTest@2
-  displayName: 'Run tests - net48'
+  displayName: 'Run tests - .NET Framework'
   inputs:
     testAssemblyVer2: |
      **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
@@ -91,7 +91,7 @@ steps:
   timeoutInMinutes: 25
 
 - task: VSTest@2
-  displayName: 'Run tests - net6'
+  displayName: 'Run tests - .NET'
   inputs:
     testAssemblyVer2: |
      **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll

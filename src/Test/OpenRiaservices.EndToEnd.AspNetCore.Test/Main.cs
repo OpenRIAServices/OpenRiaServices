@@ -66,7 +66,7 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
-        private static void StartWebServer([CallerFilePath]string filePaht = null)
+        private static void StartWebServer([CallerFilePath] string filePaht = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
             string projectPath = Path.GetDirectoryName(filePaht);
@@ -75,7 +75,13 @@ namespace OpenRiaServices.Client.Test
 #else
             string configuration = "Release";
 #endif
+
+#if NET10_0
+            string targetFramework = "net10.0";
+#else
             string targetFramework = "net8.0";
+#endif
+
             string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
 
