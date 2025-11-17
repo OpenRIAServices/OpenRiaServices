@@ -13,11 +13,11 @@ variables:
 steps:
 
 # Uncomment below to install dotnet runtime and SDK if they stop beeing preinstalled
-## install dotnet 6
-#- task: UseDotNet@2
-#  inputs:
-#    packageType: 'runtime'
-#    version: '8.0.x'
+## install dotnet 8
+- task: UseDotNet@2
+  inputs:
+    packageType: 'runtime'
+    version: '8.0.x'
 
 ## install dotnet 8 sdk
 - task: UseDotNet@2
