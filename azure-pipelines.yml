@@ -99,6 +99,7 @@ steps:
      **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
      !**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+     !**\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
      !**\obj\**
 
     runOnlyImpactedTests: false
@@ -109,6 +110,22 @@ steps:
     configuration: '$(BuildConfiguration)'
   timeoutInMinutes: 25
 
+- task: VSTest@2
+  displayName: 'Run tests - .NET 10'
+  inputs:
+    testAssemblyVer2: |
+     **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
+     !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+     !**\obj\**
+
+    runOnlyImpactedTests: false
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+  timeoutInMinutes: 25
+  
 - task: SonarCloudAnalyze@3
   inputs:
     jdkversion: 'JAVA_HOME_21_X64'
