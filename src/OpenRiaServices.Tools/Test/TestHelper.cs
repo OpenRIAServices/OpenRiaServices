@@ -47,11 +47,7 @@ namespace OpenRiaServices.Tools.Test
         }
 
         public static string GetToolsTestProjectPath()
-#if NETFRAMEWORK
             => Path.Combine(GetCurrentProjectDirectorImpl(), "OpenRiaServices.Tools.Test.csproj");
-#else
-            => Path.Join(GetCurrentProjectDirectorImpl(), "OpenRiaServices.Tools.Test.csproj");
-#endif
 
         public static string GetToolsTestProjectDirectory()
             => GetCurrentProjectDirectorImpl();
