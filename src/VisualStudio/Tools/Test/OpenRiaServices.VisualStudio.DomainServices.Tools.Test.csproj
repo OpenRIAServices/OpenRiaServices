@@ -9,9 +9,6 @@
     <TargetFramework>net472</TargetFramework>
     <_GetChildProjectCopyToOutputDirectoryItems>false</_GetChildProjectCopyToOutputDirectoryItems>
   </PropertyGroup>
-  <Target Name="WriteProjectPath" BeforeTargets="GetCopyToOutputDirectoryItems">
-    <WriteLinesToFile File="DomainServiceToolsPath.txt" Lines="$(MSBuildProjectFullPath)" Overwrite="true" WriteOnlyWhenDifferent="true" />
-  </Target>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
@@ -34,10 +31,6 @@
     <Content Include="Baselines\*" />
     <Compile Remove="Baselines\*" />
     <None Remove="Baselines\web.config" />
-    <None Remove="DomainServiceToolsPath.txt" />
-    <Content Include="DomainServiceToolsPath.txt">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
