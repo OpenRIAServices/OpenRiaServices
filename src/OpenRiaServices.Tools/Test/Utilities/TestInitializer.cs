@@ -16,9 +16,29 @@ namespace OpenRiaServices.Tools.Test.Utilities
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext testContext)
         {
+            var allInstances = MSBuildLocator.QueryVisualStudioInstances()
+                .OrderByDescending(instance => instance.Version);
+
+            var instance = allInstances.FirstOrDefault();
+            // IMPORTANT: MSBuildLocator only discover SDK versions that are as old or older thant the
+            // current target framework.
+            //
+            // This means we can get errors in case, we compile for .NET 8 but only have .NET 9 or 10 SDK
+#if NET
+            string currentRuntime = (typeof(TestInitializer).Assembly.GetCustomAttribute<System.Runtime.Versioning.TargetFrameworkAttribute>()).FrameworkDisplayName;
+
+            Assert.IsNotNull(instance, $"No dotnet SDK found (searched version <= {currentRuntime})");
+
+            // Extract current runtime version
+            StringAssert.StartsWith(currentRuntime, ".NET ");
+            Version runtimeVersion = Version.Parse(currentRuntime.Substring(5));
+            
+            Assert.IsTrue(runtimeVersion < instance.Version, $"Expected dotnet sdk to be at least {runtimeVersion}, but found {instance.Version}");
+#endif
+
+            Assert.IsNotNull(instance, $"MSBuildLocator failed to find msbuild");
             // Register the most recent version of MSBuild
-            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(MSBuildLocator.QueryVisualStudioInstances()
-                .OrderByDescending(instance => instance.Version).First());
+            Microsoft.Build.Locator.MSBuildLocator.RegisterInstance(instance);
 
             //Set currenct culture to en-US by default since there are hard coded
             //strings in some tests
