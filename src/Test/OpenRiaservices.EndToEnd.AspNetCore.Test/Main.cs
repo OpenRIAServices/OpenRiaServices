@@ -107,7 +107,7 @@ namespace OpenRiaServices.Client.Test
                     WorkingDirectory = Path.GetFullPath(Path.Join(projectPath, @"../AspNetCoreWebsite/"))
                 };
                 startInfo.ArgumentList.Add("--urls");
-                startInfo.ArgumentList.Add(TestURIs.RootURI);
+                startInfo.ArgumentList.Add(TestURIs.RootURI.ToString());
                 startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
                 s_aspNetCoreSite = Process.Start(startInfo);
 
