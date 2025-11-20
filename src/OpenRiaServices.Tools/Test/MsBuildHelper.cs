@@ -49,7 +49,9 @@ namespace OpenRiaServices.Tools.Test
                 // Ask to be told of generated outputs
                 var log = new ErrorLogger();
 
-                //"AssignProjectConfiguration"
+                // Execute ResolveAssemblyReferences target to get compile time dependencies
+                // This will match something similar to the following 
+                // /t:ResolveAssemblyReferences /p:TargetFramework=net8.0 /p:BuildProjectReferences=false /p:Configuration=Debug 
                 var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new Microsoft.Build.Framework.ILogger[] { log });
 
                 // Do early assert on log in case there was a task failure
@@ -58,6 +60,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.Fail($"ResolveAssemblyReferences failed.\n Status {BuildResultCode.Success}.\n\nLog:\n {string.Join("\n", log.Errors)}\n\nException: {results.Exception}");
                 }
 
+                // Consider typeof(object).Assembly.Location in case we do not have any "mscorlib" /"netstandard" or "System.Private.Corelib" assemblies
                 if (results.ResultsByTarget.TryGetValue("ResolveAssemblyReferences", out TargetResult resolveAssemblyReferences))
                 {
                     foreach (string assemblyPath in resolveAssemblyReferences.Items.Select(i => i.ItemSpec))
