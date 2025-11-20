@@ -219,7 +219,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 // Dont apply RTO if it is an association member.
                 if ((_timestampProperty == null || _timestampProperty == property) &&
                     (inferRoundtripOriginalAttribute || IsForeignKeyMember(property.Name)) &&
-                    pd.Attributes[typeof(AssociationAttribute)] == null)
+                    pd.Attributes[typeof(EntityAssociationAttribute)] == null)
                 {
                     if (pd.Attributes[typeof(RoundtripOriginalAttribute)] == null)
                     {
@@ -250,7 +250,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
                 if (addAssociationAttribute)
                 {
-                    if (pd.Attributes[typeof(AssociationAttribute)] is null)
+                    if (pd.Attributes[typeof(EntityAssociationAttribute)] is null)
                         attributes.Add(EFCoreTypeDescriptionContext.CreateAssociationAttribute(navigation));
 #if NET
                     if (navigation.TargetEntityType.IsOwned() && pd.Attributes[typeof(CompositionAttribute)] is null)

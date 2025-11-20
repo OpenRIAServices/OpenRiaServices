@@ -72,7 +72,7 @@ namespace OpenRiaServices.Hosting.Wcf.OData
         /// <returns>true if property is an association, false otherwise.</returns>
         internal static bool IsAssociation(PropertyDescriptor property)
         {
-            return HasAttribute(property, typeof(AssociationAttribute));
+            return HasAttribute(property, typeof(EntityAssociationAttribute));
         }
 
         /// <summary>Checks if the given property represents a composition.</summary>

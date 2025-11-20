@@ -137,13 +137,13 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
         public string PropertyName { get; private set; }
         public string FieldName { get; private set; }
         public IEnumerable<Attribute> Attributes { get; private set; }
-        public AssociationAttribute AssociationAttribute { get; private set; }
+        public EntityAssociationAttribute AssociationAttribute { get; private set; }
 
         public AssociationMetadata(PropertyDescriptor pd)
         {
             this.PropertyDescriptor = pd;
             AttributeCollection propertyAttributes = pd.ExplicitAttributes();
-            this.AssociationAttribute = (AssociationAttribute)propertyAttributes[typeof(AssociationAttribute)];
+            this.AssociationAttribute = (EntityAssociationAttribute)propertyAttributes[typeof(EntityAssociationAttribute)];
             this.IsExternal = propertyAttributes[typeof(ExternalReferenceAttribute)] != null;
             this.IsCollection = EntityGenerator.IsCollectionType(pd.PropertyType);
 

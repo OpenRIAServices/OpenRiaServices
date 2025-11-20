@@ -86,9 +86,9 @@ namespace OpenRiaServices.LinqToSql
                 }
 
                 if (member.IsAssociation &&
-                    pd.Attributes[typeof(System.ComponentModel.DataAnnotations.AssociationAttribute)] == null)
+                    pd.Attributes[typeof(EntityAssociationAttribute)] == null)
                 {
-                    System.ComponentModel.DataAnnotations.AssociationAttribute assocAttrib = this.TypeDescriptionContext.CreateAssociationAttribute(member);
+                    EntityAssociationAttribute assocAttrib = this.TypeDescriptionContext.CreateAssociationAttribute(member);
                     attributes.Add(assocAttrib);
                 }
 
@@ -126,7 +126,7 @@ namespace OpenRiaServices.LinqToSql
                 //   member we apply RTO to.
                 // - the member is marked with AssociationAttribute
                 if (!member.IsAssociation && 
-                    pd.Attributes[typeof(System.ComponentModel.DataAnnotations.AssociationAttribute)] == null
+                    pd.Attributes[typeof(EntityAssociationAttribute)] == null
                     && (this._metaType.VersionMember == null || member.IsVersion))
                 {
                     if (pd.Attributes[typeof(RoundtripOriginalAttribute)] == null)
