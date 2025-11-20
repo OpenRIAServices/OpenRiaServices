@@ -66,10 +66,11 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
-        private static void StartWebServer([CallerFilePath] string filePaht = null)
+        private static void StartWebServer([CallerFilePath]string filePath = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
-            string projectPath = Path.GetDirectoryName(filePaht);
+            string projectPath = Path.GetDirectoryName(filePath);
+
 #if DEBUG
             string configuration = "Debug";
 #else
@@ -82,7 +83,7 @@ namespace OpenRiaServices.Client.Test
             string targetFramework = "net8.0";
 #endif
 
-            string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
+            string webSitePath = Path.GetFullPath(Path.Join(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
 
             if (!Directory.Exists(webSitePath))
@@ -99,10 +100,15 @@ namespace OpenRiaServices.Client.Test
             }
             else
             {
-                ProcessStartInfo startInfo = new(processPath, $"--urls \"{TestURIs.RootURI}\"");
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = processPath,
+                    UseShellExecute = false,
+                    WorkingDirectory = Path.GetFullPath(Path.Join(projectPath, @"../AspNetCoreWebsite/"))
+                };
+                startInfo.ArgumentList.Add("--urls");
+                startInfo.ArgumentList.Add(TestURIs.RootURI);
                 startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
-                startInfo.UseShellExecute = false;
-                startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
                 s_aspNetCoreSite = Process.Start(startInfo);
 
                 Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
