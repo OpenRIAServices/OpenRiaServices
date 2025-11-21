@@ -70,6 +70,10 @@ namespace OpenRiaServices
         {
             typeof(string),
             typeof(decimal),
+#if NET6_0_OR_GREATER
+            typeof(TimeOnly),
+            typeof(DateOnly),
+#endif
             typeof(DateTime),
             typeof(DateTimeOffset),
             typeof(TimeSpan),
@@ -259,6 +263,21 @@ namespace OpenRiaServices
             if (string.Equals(type.FullName, "System.Xml.Linq.XElement", StringComparison.Ordinal))
             {
                 return true;
+            }
+            // We test by Type Name so our client framework assembly can avoid
+            // taking assembly references to System.Xml.Linq and NodaTime
+
+            switch (type.FullName)
+            {
+                case "System.Xml.Linq.XElement":
+                case "NodaTime.LocalDate":
+                case "NodaTime.LocalTime":
+                case "NodaTime.LocalDateTime":
+                case "NodaTime.OffsetDate":
+                case "NodaTime.OffsetTime":
+                    return true;
+                default:
+                    break;
             }
 
             return false;
