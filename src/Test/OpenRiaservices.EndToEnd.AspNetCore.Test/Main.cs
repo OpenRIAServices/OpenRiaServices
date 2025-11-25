@@ -110,10 +110,11 @@ namespace OpenRiaServices.Client.Test
             {
                 var startInfo = new ProcessStartInfo
                 {
-                    FileName = processPath,
+                    FileName = "dotnet",
                     UseShellExecute = false,
                     WorkingDirectory = Path.GetFullPath(Path.Join(projectPath, @"../AspNetCoreWebsite/"))
                 };
+                startInfo.ArgumentList.Add(Path.ChangeExtension(processPath, ".dll"));
                 startInfo.ArgumentList.Add("--urls");
                 startInfo.ArgumentList.Add(TestURIs.RootURI.ToString());
                 startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
