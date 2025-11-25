@@ -108,23 +108,19 @@ steps:
     diagnosticsEnabled: true
   timeoutInMinutes: 25
 
-- task: VSTest@3
+- task: DotNetCoreCLI@2
   displayName: 'Run tests - .NET'
   inputs:
-    testAssemblyVer2: |
-      **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
-      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-      !**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-      !**\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
-      !**\obj\**
-
-    runOnlyImpactedTests: false
-    runInParallel: true
-    runSettingsFile: 'src\test.runsettings'
-    codeCoverageEnabled: true
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: true
+    command: 'test'
+    projects: |
+      **/OpenRiaServices.*Test.dll
+      !**/OpenRiaServices.Common*Test.dll
+      !**/net4*/OpenRiaServices.*Test.dll
+      !**/net10.0/OpenRiaServices.*Test.dll
+      !**/obj/**
+    arguments: '--configuration $(BuildConfiguration) --no-build --blame-crash --collect:"Code Coverage" --settings src/test.runsettings --logger trx'
+    publishTestResults: true
+    testRunTitle: 'Run tests - .NET'
   timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@3
