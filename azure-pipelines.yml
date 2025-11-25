@@ -105,6 +105,7 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
+    diagnosticsEnabled: true
   timeoutInMinutes: 25
 
 - task: VSTest@3
@@ -123,6 +124,7 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
+    diagnosticsEnabled: true
   timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@3
