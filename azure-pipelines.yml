@@ -93,13 +93,9 @@ steps:
 # todo, START AspNetCoreWebsite.exe in background (before test) to enable these tests
 # Can we start process monitor to capture any file/registry access violations during the tests?
 
-- script: |
-    dotnet --info
-    dotnet --list-sdks
-    dotnet --list-runtimes
-
+- script:
     set ASPNETCORE_ENVIRONMENT=Development
-    src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe --urls http://localhost:5247/
+    start "" src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe --urls http://localhost:5247/
   displayName: 'Display dotnet info'
   timeoutInMinutes: 1
   continueOnError: true
@@ -122,6 +118,10 @@ steps:
   timeoutInMinutes: 25
   continueOnError: true
 
+
+- script:
+    taskkill /IM  AspNetCoreWebsite.exe /F
+  
 - task: DotNetCoreCLI@2
   displayName: 'Run tests - .NET'
   inputs:
