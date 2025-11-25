@@ -95,10 +95,32 @@ steps:
 
 - script:
     set ASPNETCORE_ENVIRONMENT=Development
-    start "" src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe --urls http://localhost:5247/
+    src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe --urls http://localhost:5247/
   displayName: 'Display dotnet info'
   timeoutInMinutes: 1
   continueOnError: true
+
+# Pseudocode plan:
+# 1. Download Procmon.exe to the agent (if not already present).
+# 2. Start Procmon in the background before the ".NET 10" test task, set it to capture all events, and save the log to $(Build.ArtifactStagingDirectory)\procmon.pml.
+# 3. Run the test task as usual.
+# 4. After the test task, stop Procmon and ensure the log is saved.
+# 5. Optionally, copy the log to artifacts if not already in the right place.
+
+# Insert before the "Run tests - .NET 10" task:
+- powershell: |
+    $procmonUrl = "https://live.sysinternals.com/Procmon.exe"
+    $procmonDir = "$(Agent.TempDirectory)\procmon"
+    $procmonExe = "$procmonDir\Procmon.exe"
+    $logPath = "$(Build.ArtifactStagingDirectory)\procmon.pml"
+
+    mkdir $procmonDir | Out-Null
+    Invoke-WebRequest -Uri $procmonUrl -OutFile $procmonExe
+
+    # Start Procmon in the background, capturing all events, auto-accept EULA, and save to log
+    Start-Process -FilePath $procmonExe -ArgumentList "/Minimized /Quiet /AcceptEula /Backingfile $logPath" -WindowStyle Hidden
+  displayName: 'Start Procmon to capture system activity'
+  timeoutInMinutes: 2
 
 - task: VSTest@3
   displayName: 'Run tests - .NET 10'
@@ -118,10 +140,23 @@ steps:
   timeoutInMinutes: 25
   continueOnError: true
 
+# Insert immediately after the "Run tests - .NET 10" task:
+- powershell: |
+    $procmonDir = "$(Agent.TempDirectory)\procmon"
+    $procmonExe = "$procmonDir\Procmon.exe"
+    $logPath = "$(Build.ArtifactStagingDirectory)\procmon.pml"
 
-- script:
-    taskkill /IM  AspNetCoreWebsite.exe /F
-  
+    # Stop Procmon and flush the log
+    & $procmonExe /Terminate
+    Start-Sleep -Seconds 5
+    # Ensure the log file exists
+    if (!(Test-Path $logPath)) {
+      Write-Error "Procmon log not found at $logPath"
+    }
+  displayName: 'Stop Procmon and finalize log'
+  timeoutInMinutes: 2
+  condition: always
+
 - task: DotNetCoreCLI@2
   displayName: 'Run tests - .NET'
   inputs:
