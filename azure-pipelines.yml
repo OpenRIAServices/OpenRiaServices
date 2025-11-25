@@ -96,16 +96,10 @@ steps:
 - script:
     set ASPNETCORE_ENVIRONMENT=Development
     src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe --urls http://localhost:5247/
-  displayName: 'Display dotnet info'
+  displayName: 'Start web server .NET 10'
   timeoutInMinutes: 1
   continueOnError: true
 
-# Pseudocode plan:
-# 1. Download Procmon.exe to the agent (if not already present).
-# 2. Start Procmon in the background before the ".NET 10" test task, set it to capture all events, and save the log to $(Build.ArtifactStagingDirectory)\procmon.pml.
-# 3. Run the test task as usual.
-# 4. After the test task, stop Procmon and ensure the log is saved.
-# 5. Optionally, copy the log to artifacts if not already in the right place.
 
 # Insert before the "Run tests - .NET 10" task:
 - powershell: |
@@ -155,7 +149,7 @@ steps:
     }
   displayName: 'Stop Procmon and finalize log'
   timeoutInMinutes: 2
-  condition: always
+  condition: always()
 
 - task: DotNetCoreCLI@2
   displayName: 'Run tests - .NET'

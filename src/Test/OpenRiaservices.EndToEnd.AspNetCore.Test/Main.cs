@@ -86,14 +86,6 @@ namespace OpenRiaServices.Client.Test
             string webSitePath = Path.GetFullPath(Path.Join(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
 
-            Console.WriteLine("----------------------------------------------------------------");
-            Console.WriteLine("AssemblyInitialize: Dumping environment");
-            foreach (System.Collections.DictionaryEntry de in Environment.GetEnvironmentVariables())
-            {
-                Console.WriteLine($"  {de.Key}={de.Value}");
-            }
-            Console.WriteLine("----------------------------------------------------------------");
-
             if (!Directory.Exists(webSitePath))
                 throw new FileNotFoundException($"Website not found at {webSitePath}");
 
