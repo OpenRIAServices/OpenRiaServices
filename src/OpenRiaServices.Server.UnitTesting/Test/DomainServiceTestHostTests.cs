@@ -52,8 +52,8 @@ namespace OpenRiaServices.Server.UnitTesting.Test
             void CheckIsAuthenticated(string scenario, DomainServiceTestHost<UserTestDomainService> testHost)
             {
                 Assert.AreEqual(defaultUser.Identity.Name, testHost.User.Identity.Name);
-                Assert.AreEqual(expectedAuthenticated, testHost.User.Identity.IsAuthenticated, "testHost.User.Identity.IsAuthenticated was false for scenario: {0}", scenario);
-                Assert.AreEqual(expectedAuthenticated, testHost.Invoke(x => x.IsAuthenticated()), "ServiceContext.User.Identity.IsAuthenticated was false for scenario: {0}", scenario);
+                Assert.AreEqual(expectedAuthenticated, testHost.User.Identity.IsAuthenticated, $"testHost.User.Identity.IsAuthenticated was false for scenario: {scenario}");
+                Assert.AreEqual(expectedAuthenticated, testHost.Invoke(x => x.IsAuthenticated()), $"ServiceContext.User.Identity.IsAuthenticated was false for scenario: {scenario}");
             };
         }
 

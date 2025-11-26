@@ -401,7 +401,7 @@ namespace OpenRiaServices.Tools.Test
                 // Files list 
                 bool shouldCopy = (sharedFilesMode == OpenRiaSharedFilesMode.Copy);
                 foreach (var sharedFile in expectedServerNamedSharedFiles)
-                    Assert.AreEqual(shouldCopy, fileListContents.Contains(sharedFile), "Checking if OpenRiaFiles.txt contains '{0}' with mode '{1}' actual content is '{2}'", sharedFile, sharedFilesMode, fileListContents);
+                    Assert.AreEqual(shouldCopy, fileListContents.Contains(sharedFile), $"Checking if OpenRiaFiles.txt contains '{sharedFile}' with mode '{sharedFilesMode}' actual content is '{fileListContents}'");
 
 
                 // ---------------------------------------------
