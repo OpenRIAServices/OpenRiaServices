@@ -19,11 +19,16 @@ steps:
     packageType: 'sdk'
     version: '8.0.x'
 
-## install dotnet 8 sdk
+## install dotnet 10 sdk
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
     version: '10.0.x'
+
+- task: VisualStudioTestPlatformInstaller@1
+  inputs:
+    packageFeedSelector: 'nugetOrg'
+    versionSelector: 'latestStable'
 
 - task: NuGetToolInstaller@1
   inputs:
@@ -116,8 +121,22 @@ steps:
   displayName: 'Start Procmon to capture system activity'
   timeoutInMinutes: 2
 
-- task: VSTest@3
+- task: DotNetCoreCLI@2
   displayName: 'Run tests - .NET 10'
+  inputs:
+    command: 'test'
+    projects: |
+      **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
+      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+      !**\obj\**
+    arguments: '--configuration $(BuildConfiguration) --no-build --settings src/test.runsettings --logger trx'
+    publishTestResults: true
+    testRunTitle: 'Run tests - .NET'
+  timeoutInMinutes: 25
+  # --collect:"Code Coverage"
+
+- task: VSTest@3
+  displayName: 'Run tests - .NET 10 (vstest - latest)'
   inputs:
     testAssemblyVer2: |
       **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
@@ -131,7 +150,24 @@ steps:
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
     diagnosticsEnabled: true
-  timeoutInMinutes: 25
+    vsTestVersion: 'toolsInstaller'
+  timeoutInMinutes: 5
+  continueOnError: true
+
+- task: VSTest@3
+  displayName: 'Run tests - .NET 10 (vstest no coverage)'
+  inputs:
+    testAssemblyVer2: |
+      **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
+      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
+      !**\obj\**
+
+    runOnlyImpactedTests: false
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+  timeoutInMinutes: 5
   continueOnError: true
 
 # Insert immediately after the "Run tests - .NET 10" task:

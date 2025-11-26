@@ -96,7 +96,7 @@ namespace OpenRiaServices.Client.Test
             if (websites.Any())
             {
                 Console.WriteLine("AssemblyInitialize: Webserver process was already started, not starting anything");
-                // Already running do nothing
+                // Already running. do nothing
             }
             else
             {
