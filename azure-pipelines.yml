@@ -7,6 +7,7 @@ variables:
   Solution: 'src\RiaServices.sln'
   # Msbuild might create logs in the following directory in case some of the "tool" tests fail
   MSBUILDDEBUGPATH: $(Build.ArtifactStagingDirectory)
+  RunProcMonDuringTest: false
   # Define the following variable for the build pipeline in order to enable SonarCloud analysis
   # sonarcloud-endpoint: 'sonarcloud.io'
 
@@ -78,8 +79,45 @@ steps:
   displayName: 'Setup database'
 
 - task: VSTest@3
+  displayName: 'Run tests - .NET 10'
+  inputs:
+    testAssemblyVer2: |
+      **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
+      !**\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.Common*Test.dll
+      !**\obj\**
+
+    runOnlyImpactedTests: false
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+    vsTestVersion: 'toolsInstaller'
+  timeoutInMinutes: 10
+  continueOnError: true
+
+  - task: VSTest@3
+  displayName: 'Run tests - .NET'
+  inputs:
+    testAssemblyVer2: |
+      **/OpenRiaServices.*Test.dll
+      !**/OpenRiaServices.Common*Test.dll
+      !**/net4*/OpenRiaServices.*Test.dll
+      !**/net10.0/OpenRiaServices.*Test.dll
+      !**/obj/**
+
+    runOnlyImpactedTests: false
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+    vsTestVersion: 'toolsInstaller'
+  timeoutInMinutes: 25
+  continueOnError: true
+
+- task: VSTest@3
   displayName: 'Run tests - .NET Framework'
-  enabled: false
   inputs:
     testAssemblyVer2: |
       **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
@@ -94,112 +132,6 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
-  timeoutInMinutes: 25
-# todo, START AspNetCoreWebsite.exe in background (before test) to enable these tests
-# Can we start process monitor to capture any file/registry access violations during the tests?
-
-- script:
-    set ASPNETCORE_ENVIRONMENT=Development
-    src\Test\AspNetCoreWebsite\bin\$(BuildConfiguration)\net10.0\AspNetCoreWebsite.exe --urls http://localhost:5247/
-  displayName: 'Start web server .NET 10'
-  timeoutInMinutes: 1
-  continueOnError: true
-
-
-# Insert before the "Run tests - .NET 10" task:
-- powershell: |
-    $procmonUrl = "https://live.sysinternals.com/Procmon.exe"
-    $procmonDir = "$(Agent.TempDirectory)\procmon"
-    $procmonExe = "$procmonDir\Procmon.exe"
-    $logPath = "$(Build.ArtifactStagingDirectory)\procmon.pml"
-
-    mkdir $procmonDir | Out-Null
-    Invoke-WebRequest -Uri $procmonUrl -OutFile $procmonExe
-
-    # Start Procmon in the background, capturing all events, auto-accept EULA, and save to log
-    Start-Process -FilePath $procmonExe -ArgumentList "/Minimized /Quiet /AcceptEula /Backingfile $logPath" -WindowStyle Hidden
-  displayName: 'Start Procmon to capture system activity'
-  timeoutInMinutes: 2
-
-- task: DotNetCoreCLI@2
-  displayName: 'Run tests - .NET 10'
-  inputs:
-    command: 'test'
-    projects: |
-      **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
-      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-      !**\obj\**
-    arguments: '--configuration $(BuildConfiguration) --no-build --settings src/test.runsettings --logger trx'
-    publishTestResults: true
-    testRunTitle: 'Run tests - .NET'
-  timeoutInMinutes: 25
-  # --collect:"Code Coverage"
-
-- task: VSTest@3
-  displayName: 'Run tests - .NET 10 (vstest - latest)'
-  inputs:
-    testAssemblyVer2: |
-      **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
-      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-      !**\obj\**
-
-    runOnlyImpactedTests: false
-    runInParallel: true
-    runSettingsFile: 'src\test.runsettings'
-    codeCoverageEnabled: true
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-    diagnosticsEnabled: true
-    vsTestVersion: 'toolsInstaller'
-  timeoutInMinutes: 5
-  continueOnError: true
-
-- task: VSTest@3
-  displayName: 'Run tests - .NET 10 (vstest no coverage)'
-  inputs:
-    testAssemblyVer2: |
-      **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
-      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-      !**\obj\**
-
-    runOnlyImpactedTests: false
-    runInParallel: true
-    runSettingsFile: 'src\test.runsettings'
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-  timeoutInMinutes: 5
-  continueOnError: true
-
-# Insert immediately after the "Run tests - .NET 10" task:
-- powershell: |
-    $procmonDir = "$(Agent.TempDirectory)\procmon"
-    $procmonExe = "$procmonDir\Procmon.exe"
-    $logPath = "$(Build.ArtifactStagingDirectory)\procmon.pml"
-
-    # Stop Procmon and flush the log
-    & $procmonExe /Terminate
-    Start-Sleep -Seconds 5
-    # Ensure the log file exists
-    if (!(Test-Path $logPath)) {
-      Write-Error "Procmon log not found at $logPath"
-    }
-  displayName: 'Stop Procmon and finalize log'
-  timeoutInMinutes: 2
-  condition: always()
-
-- task: DotNetCoreCLI@2
-  displayName: 'Run tests - .NET'
-  inputs:
-    command: 'test'
-    projects: |
-      **/OpenRiaServices.*Test.dll
-      !**/OpenRiaServices.Common*Test.dll
-      !**/net4*/OpenRiaServices.*Test.dll
-      !**/net10.0/OpenRiaServices.*Test.dll
-      !**/obj/**
-    arguments: '--configuration $(BuildConfiguration) --no-build --blame-crash --collect:"Code Coverage" --settings src/test.runsettings --logger trx'
-    publishTestResults: true
-    testRunTitle: 'Run tests - .NET'
   timeoutInMinutes: 25
 
 - task: SonarCloudAnalyze@3
