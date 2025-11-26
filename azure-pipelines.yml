@@ -94,9 +94,8 @@ steps:
     configuration: '$(BuildConfiguration)'
     vsTestVersion: 'toolsInstaller'
   timeoutInMinutes: 10
-  continueOnError: true
 
-  - task: VSTest@3
+- task: VSTest@3
   displayName: 'Run tests - .NET'
   inputs:
     testAssemblyVer2: |
@@ -114,7 +113,6 @@ steps:
     configuration: '$(BuildConfiguration)'
     vsTestVersion: 'toolsInstaller'
   timeoutInMinutes: 25
-  continueOnError: true
 
 - task: VSTest@3
   displayName: 'Run tests - .NET Framework'

@@ -30,13 +30,13 @@ namespace OpenRiaServices.Tools.Test.Utilities
             Assert.IsNotNull(instance, $"No dotnet SDK found (searched version <= {currentRuntime})");
 
             // Extract current runtime version
-            Assert.StartsWith(".NET ", currentRuntime);
+            StringAssert.StartsWith(".NET ", currentRuntime);
             Version runtimeVersion = Version.Parse(currentRuntime.AsSpan(5));
 
             Assert.IsTrue(runtimeVersion < instance.Version, $"Expected dotnet sdk to be at least {runtimeVersion}, but found {instance.Version}");
 #endif
 
-            Assert.IsNotNull(instance, $"MSBuildLocator failed to find msbuild");
+            Assert.IsNotNull(instance, "MSBuildLocator failed to find msbuild");
             // Register the most recent version of MSBuild
             MSBuildLocator.RegisterInstance(instance);
 
