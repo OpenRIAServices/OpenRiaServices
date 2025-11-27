@@ -1,0 +1,46 @@
+﻿OpenRiaServices.EntityFramework.DbContextExtensions
+OpenRiaServices.EntityFramework.DbDomainService<TContext>
+OpenRiaServices.EntityFramework.DbDomainService<TContext>.AttachAsModified<TEntity>(TEntity entity) -> void
+OpenRiaServices.EntityFramework.DbDomainService<TContext>.DbContext.get -> TContext
+OpenRiaServices.EntityFramework.DbDomainService<TContext>.DbDomainService() -> void
+OpenRiaServices.EntityFramework.DbDomainService<TContext>.DbDomainService(TContext dbContext) -> void
+OpenRiaServices.EntityFramework.DbDomainServiceDescriptionProviderAttribute
+OpenRiaServices.EntityFramework.DbDomainServiceDescriptionProviderAttribute.DbContextType.get -> System.Type
+OpenRiaServices.EntityFramework.DbDomainServiceDescriptionProviderAttribute.DbDomainServiceDescriptionProviderAttribute() -> void
+OpenRiaServices.EntityFramework.DbDomainServiceDescriptionProviderAttribute.DbDomainServiceDescriptionProviderAttribute(System.Type dbContextType) -> void
+OpenRiaServices.EntityFramework.DbResource
+OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>
+OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>.LinqToEntitiesDomainService() -> void
+OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>.ObjectContext.get -> TContext
+OpenRiaServices.EntityFramework.LinqToEntitiesDomainServiceDescriptionProviderAttribute
+OpenRiaServices.EntityFramework.LinqToEntitiesDomainServiceDescriptionProviderAttribute.LinqToEntitiesDomainServiceDescriptionProviderAttribute() -> void
+OpenRiaServices.EntityFramework.LinqToEntitiesDomainServiceDescriptionProviderAttribute.LinqToEntitiesDomainServiceDescriptionProviderAttribute(System.Type objectContextType) -> void
+OpenRiaServices.EntityFramework.LinqToEntitiesDomainServiceDescriptionProviderAttribute.ObjectContextType.get -> System.Type
+OpenRiaServices.EntityFramework.ObjectContextExtensions
+override OpenRiaServices.EntityFramework.DbDomainService<TContext>.CountAsync<T>(System.Linq.IQueryable<T> query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<int>
+override OpenRiaServices.EntityFramework.DbDomainService<TContext>.Dispose(bool disposing) -> void
+override OpenRiaServices.EntityFramework.DbDomainService<TContext>.EnumerateAsync<T>(System.Collections.IEnumerable enumerable, int estimatedResultCount, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<T>>
+override OpenRiaServices.EntityFramework.DbDomainService<TContext>.Initialize(OpenRiaServices.Server.DomainServiceContext context) -> void
+override OpenRiaServices.EntityFramework.DbDomainService<TContext>.PersistChangeSetAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<bool>
+override OpenRiaServices.EntityFramework.DbDomainServiceDescriptionProviderAttribute.CreateProvider(System.Type domainServiceType, OpenRiaServices.Server.DomainServiceDescriptionProvider parent) -> OpenRiaServices.Server.DomainServiceDescriptionProvider
+override OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>.CountAsync<T>(System.Linq.IQueryable<T> query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<int>
+override OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>.Dispose(bool disposing) -> void
+override OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>.EnumerateAsync<T>(System.Collections.IEnumerable enumerable, int estimatedResultCount, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<System.Collections.Generic.IReadOnlyCollection<T>>
+override OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>.Initialize(OpenRiaServices.Server.DomainServiceContext context) -> void
+override OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>.PersistChangeSetAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<bool>
+override OpenRiaServices.EntityFramework.LinqToEntitiesDomainServiceDescriptionProviderAttribute.CreateProvider(System.Type domainServiceType, OpenRiaServices.Server.DomainServiceDescriptionProvider parent) -> OpenRiaServices.Server.DomainServiceDescriptionProvider
+static OpenRiaServices.EntityFramework.DbContextExtensions.AttachAsModified<T>(this System.Data.Entity.IDbSet<T> dbSet, T current, T original, System.Data.Entity.DbContext dbContext) -> void
+static OpenRiaServices.EntityFramework.DbContextExtensions.AttachAsModified<T>(this System.Data.Entity.IDbSet<T> dbSet, T entity, System.Data.Entity.DbContext dbContext) -> void
+static OpenRiaServices.EntityFramework.DbResource.Culture.get -> System.Globalization.CultureInfo
+static OpenRiaServices.EntityFramework.DbResource.Culture.set -> void
+static OpenRiaServices.EntityFramework.DbResource.DefaultCtorNotFound.get -> string
+static OpenRiaServices.EntityFramework.DbResource.InvalidDbDomainServiceDescriptionProviderSpecification.get -> string
+static OpenRiaServices.EntityFramework.DbResource.MetadataWorkspaceNotFound.get -> string
+static OpenRiaServices.EntityFramework.DbResource.ObjectStateManagerNotFoundException.get -> string
+static OpenRiaServices.EntityFramework.DbResource.ResourceManager.get -> System.Resources.ResourceManager
+static OpenRiaServices.EntityFramework.ObjectContextExtensions.AttachAsModified<T>(this System.Data.Entity.Core.Objects.ObjectSet<T> objectSet, T current, T original) -> void
+static OpenRiaServices.EntityFramework.ObjectContextExtensions.AttachAsModified<T>(this System.Data.Entity.Core.Objects.ObjectSet<T> objectSet, T entity) -> void
+virtual OpenRiaServices.EntityFramework.DbDomainService<TContext>.CreateDbContext() -> TContext
+virtual OpenRiaServices.EntityFramework.DbDomainService<TContext>.ResolveConflicts(System.Collections.Generic.IEnumerable<System.Data.Entity.Infrastructure.DbEntityEntry> conflicts) -> bool
+virtual OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>.CreateObjectContext() -> TContext
+virtual OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<TContext>.ResolveConflicts(System.Collections.Generic.IEnumerable<System.Data.Entity.Core.Objects.ObjectStateEntry> conflicts) -> bool

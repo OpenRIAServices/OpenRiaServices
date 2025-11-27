@@ -1,0 +1,17 @@
+﻿OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory
+OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory.BinaryHttpDomainClientFactory(System.Uri serverBaseUri, System.Func<System.Net.Http.HttpClient> httpClientFactory) -> void
+OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory.BinaryHttpDomainClientFactory(System.Uri serverBaseUri, System.Net.Http.HttpMessageHandler messageHandler) -> void
+OpenRiaServices.Client.DomainServiceFault
+OpenRiaServices.Client.DomainServiceFault.DomainServiceFault() -> void
+OpenRiaServices.Client.DomainServiceFault.ErrorCode.get -> int
+OpenRiaServices.Client.DomainServiceFault.ErrorCode.set -> void
+OpenRiaServices.Client.DomainServiceFault.ErrorMessage.get -> string
+OpenRiaServices.Client.DomainServiceFault.ErrorMessage.set -> void
+OpenRiaServices.Client.DomainServiceFault.GetValidationErrors() -> System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Client.DomainServiceFault.IsDomainException.get -> bool
+OpenRiaServices.Client.DomainServiceFault.IsDomainException.set -> void
+OpenRiaServices.Client.DomainServiceFault.OperationErrors.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.ValidationResultInfo>
+OpenRiaServices.Client.DomainServiceFault.OperationErrors.set -> void
+OpenRiaServices.Client.DomainServiceFault.StackTrace.get -> string
+OpenRiaServices.Client.DomainServiceFault.StackTrace.set -> void
+override OpenRiaServices.Client.DomainClients.BinaryHttpDomainClientFactory.CreateDomainClientCore(System.Type serviceContract, System.Uri serviceUri, bool requiresSecureEndpoint) -> OpenRiaServices.Client.DomainClient
