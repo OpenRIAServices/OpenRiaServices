@@ -7,29 +7,29 @@ variables:
   Solution: 'src\RiaServices.sln'
   # Msbuild might create logs in the following directory in case some of the "tool" tests fail
   MSBUILDDEBUGPATH: $(Build.ArtifactStagingDirectory)
+  RunProcMonDuringTest: false
   # Define the following variable for the build pipeline in order to enable SonarCloud analysis
   # sonarcloud-endpoint: 'sonarcloud.io'
 
 steps:
 
-# Uncomment below to install dotnet runtime and SDK if they stop being preinstalled
-## install dotnet 6
-#- task: UseDotNet@2
-#  inputs:
-#    packageType: 'runtime'
-#    version: '6.0.x'
-
-## install dotnet 8 sdk
-#- task: UseDotNet@2
-#  inputs:
-#    packageType: 'sdk'
-#    version: '8.0.x'
+# Uncomment below to install dotnet runtime and SDK if they stop beeing preinstalled
+## install dotnet 8
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '8.0.x'
 
 ## install dotnet 10 sdk
-#- task: UseDotNet@2
-#  inputs:
-#    packageType: 'sdk'
-#    version: '10.0.x'
+- task: UseDotNet@2
+  inputs:
+    packageType: 'sdk'
+    version: '10.0.x'
+
+- task: VisualStudioTestPlatformInstaller@1
+  inputs:
+    packageFeedSelector: 'nugetOrg'
+    versionSelector: 'latestStable'
 
 - task: NuGetToolInstaller@1
   inputs:
@@ -79,13 +79,11 @@ steps:
   displayName: 'Setup database'
 
 - task: VSTest@3
-  displayName: 'Run tests (.NET Framework)'
+  displayName: 'Run tests - .NET 10'
   inputs:
     testAssemblyVer2: |
-      **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-      !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-      src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
+      **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
+      !**\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.Common*Test.dll
       !**\obj\**
 
     runOnlyImpactedTests: false
@@ -94,15 +92,36 @@ steps:
     codeCoverageEnabled: true
     platform: '$(BuildPlatform)'
     configuration: '$(BuildConfiguration)'
+    vsTestVersion: 'toolsInstaller'
+  timeoutInMinutes: 10
+
+- task: VSTest@3
+  displayName: 'Run tests - .NET'
+  inputs:
+    testAssemblyVer2: |
+      **/OpenRiaServices.*Test.dll
+      !**/OpenRiaServices.Common*Test.dll
+      !**/net4*/OpenRiaServices.*Test.dll
+      !**/net10.0/OpenRiaServices.*Test.dll
+      !**/obj/**
+
+    runOnlyImpactedTests: false
+    runInParallel: true
+    runSettingsFile: 'src\test.runsettings'
+    codeCoverageEnabled: true
+    platform: '$(BuildPlatform)'
+    configuration: '$(BuildConfiguration)'
+    vsTestVersion: 'toolsInstaller'
   timeoutInMinutes: 25
 
 - task: VSTest@3
-  displayName: 'Run tests (.NET)'
+  displayName: 'Run tests - .NET Framework'
   inputs:
     testAssemblyVer2: |
-      **\bin\$(BuildConfiguration)\*\OpenRiaServices.*Test.dll
+      **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+      !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
       !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-      !**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
+      src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
       !**\obj\**
 
     runOnlyImpactedTests: false
