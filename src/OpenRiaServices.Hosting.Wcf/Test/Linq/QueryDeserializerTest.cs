@@ -44,7 +44,7 @@ namespace System.Linq.Dynamic.UnitTests
                 new ServiceQueryPart("where", "it.Double.ToString() == String('a', 1000)")
             };
 
-            Assert.ThrowsException<ParseException>(() =>
+            Assert.ThrowsExactly<ParseException>(() =>
             {
                 QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts);
             }, string.Format(CultureInfo.CurrentCulture, System.Linq.Dynamic.Resource.MethodsAreInaccessible + " (at index 24)", typeof(String).Name));
@@ -68,7 +68,7 @@ namespace System.Linq.Dynamic.UnitTests
                 new ServiceQueryPart("where", String.Format("it.{0} == \"Whatever\"", memberToAccess))
             };
 
-            Assert.ThrowsException<InvalidOperationException>(() =>
+            Assert.ThrowsExactly<InvalidOperationException>(() =>
             {
                 QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts);
             }, string.Format(CultureInfo.CurrentCulture, System.Linq.Dynamic.Resource.UnknownPropertyOrField, memberToAccess, entityType.Name));
