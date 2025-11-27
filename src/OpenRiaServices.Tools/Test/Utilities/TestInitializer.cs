@@ -30,7 +30,7 @@ namespace OpenRiaServices.Tools.Test.Utilities
             Assert.IsNotNull(instance, $"No dotnet SDK found (searched version <= {currentRuntime})");
 
             // Extract current runtime version
-            StringAssert.StartsWith(".NET ", currentRuntime);
+            Assert.StartsWith(".NET ", currentRuntime);
             Version runtimeVersion = Version.Parse(currentRuntime.AsSpan(5));
 
             Assert.IsTrue(runtimeVersion < instance.Version, $"Expected dotnet sdk to be at least {runtimeVersion}, but found {instance.Version}");
