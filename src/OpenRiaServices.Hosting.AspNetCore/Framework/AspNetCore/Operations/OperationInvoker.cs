@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
 using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Hosting.Wcf.Behaviors;
@@ -302,13 +303,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             return WriteError(context, fault);
         }
 
-        protected static Task WriteError(HttpContext context, DomainServiceFault fault)
+        protected Task WriteError(HttpContext context, DomainServiceFault fault)
         {
             var ct = context.RequestAborted;
             if (ct.IsCancellationRequested)
                 return Task.CompletedTask;
 
-            var messageWriter = BinaryMessageWriter.Rent(isBinary: context.Request.ContentType != "application/xml");
+            bool isBinaryXml = UseBinaryResponse(context);
+            var messageWriter = BinaryMessageWriter.Rent(isBinary: isBinaryXml);
             try
             {
                 WriteFault(fault, messageWriter.XmlWriter);
@@ -318,7 +320,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
                 var response = context.Response;
                 response.Headers.CacheControl = "private, no-store";
-                response.Headers.ContentType = context.Request.ContentType ?? "application/msbin1";
+                response.Headers.ContentType = isBinaryXml ? "application/msbin1" : "application/xml";
                 response.ContentLength = bufferMemory.Length;
 
                 return bufferMemory.WriteTo(response, ct);
@@ -361,7 +363,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             if (ct.IsCancellationRequested)
                 return Task.CompletedTask;
 
-            var messageWriter = BinaryMessageWriter.Rent(isBinary: context.Request.ContentType != "application/xml");
+            bool isBinaryXml = UseBinaryResponse(context);
+            var messageWriter = BinaryMessageWriter.Rent(isBinary: isBinaryXml);
             try
             {
                 WriteResponse(messageWriter.XmlWriter, result);
@@ -370,7 +373,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 messageWriter = null;
 
                 var response = context.Response;
-                response.Headers.ContentType = context.Request.ContentType ?? "application/msbin1";
+                response.Headers.ContentType = isBinaryXml ? "application/msbin1" : "application/xml";
                 response.ContentLength = bufferMemory.Length;
                 response.Headers.CacheControl = "private, no-store";
 
@@ -381,6 +384,37 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 messageWriter?.Clear();
                 throw;
             }
+        }
+
+        private bool UseBinaryResponse(HttpContext context)
+        {
+            // Use binary xml unless content type
+            if (!Options.EnableTextXmlSerialization)
+            {
+                return true;
+            }
+
+            // Look at 
+            var accept = context.Request.Headers.Accept;
+            if (accept.Count == 1 && MediaTypeHeaderValue.TryParse(accept[0], out var acceptedType))
+            {
+                // Not strictly true, should  do invalid value if not msbin1 or xml
+                return acceptedType.MediaType != "application/xml";
+            }
+            //else if (accept.Count > 1 && MediaTypeHeaderValue.TryParseList(accept, out var acceptedTypeList))
+            //{
+            //    // Sort by priority or something ?
+            //}
+
+
+            // Should Content-Type override Accept header? if not null? and only fallback to accept header
+            // Use binary for everything which is not application/xml
+            return context.Request.ContentType != "application/xml";
+        }
+
+        protected bool IsBinaryRequest(HttpContext context)
+        {
+            return !Options.EnableTextXmlSerialization || context.Request.ContentType != "application/xml";
         }
 
         private void WriteResponse(XmlDictionaryWriter writer, object result)

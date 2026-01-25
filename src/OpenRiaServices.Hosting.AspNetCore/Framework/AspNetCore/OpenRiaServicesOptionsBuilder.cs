@@ -20,5 +20,12 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
         internal IServiceCollection Services { get; }
         // Add Options ? 
+
+
+        public OpenRiaServicesOptionsBuilder WithTextXmlSerialization()
+        {
+            Services.Configure<OpenRiaServicesOptions>(x => x.EnableTextXmlSerialization = true);
+            return this;
+        }
     }
 }

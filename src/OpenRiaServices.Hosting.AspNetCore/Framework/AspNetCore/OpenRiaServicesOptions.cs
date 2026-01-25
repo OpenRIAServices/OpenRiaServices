@@ -26,6 +26,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// </summary>
         public bool IncludeExceptionMessageInErrors { get; set; }
 
+        internal bool EnableTextXmlSerialization { get; set; }
+
         /* ************ SOME POSSIBLE FUTURE OPTIONS ************ 
          * 
          * int MaxReceiveSize / MaxRequestSize { get; set; }
