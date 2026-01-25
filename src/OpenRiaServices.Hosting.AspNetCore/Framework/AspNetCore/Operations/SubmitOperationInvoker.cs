@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 using System;
@@ -12,19 +13,18 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class SubmitOperationInvoker : OperationInvoker
     {
-        private readonly DataContractSerializer _parameterSerializer;
-
         public override string OperationName => "SubmitChanges";
         public override bool HasSideEffects => true;
 
-        public SubmitOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper, OpenRiaServicesOptions options)
-                : base(operation, DomainOperationType.Submit, serializationHelper, serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>)), options)
+        public SubmitOperationInvoker(DomainOperationEntry operation, RequestSerializer serializer, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Submit, serializer, options)
         {
-            _parameterSerializer = serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>));
         }
 
         public override async Task Invoke(HttpContext context)
         {
+            SetDefaultResponseHeaders(context);
+
             try
             {
                 DomainService domainService = CreateDomainService(context);
@@ -37,8 +37,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     return;
                 }
 
-                var (_, inputs) = await ReadParametersFromBodyAsync(context);
-                var changeSetEntries = (IEnumerable<ChangeSetEntry>)inputs[0];
+                var changeSetEntries = await _requestSerializer.ReadSubmitRequest(context);
 
                 IEnumerable<ChangeSetEntry> result;
                 try
@@ -71,19 +70,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             {
                 //Swallow OperationCanceledException and do nothing
             }
-        }
-
-        protected override object[] ReadParameters(System.Xml.XmlDictionaryReader reader)
-        {
-            reader.ReadStartElement("SubmitChanges");
-            if (!reader.IsStartElement("changeSet"))
-            {
-                throw new BadHttpRequestException("missing changeSet");
-            }
-
-            var changeSet = _parameterSerializer.ReadObject(reader, verifyObjectName: false);
-            reader.ReadEndElement();
-            return new object[] { changeSet };
         }
     }
 }

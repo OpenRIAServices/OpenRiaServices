@@ -13,6 +13,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using OpenRiaServices.Hosting.AspNetCore.Operations;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
 
 #nullable disable
@@ -77,11 +78,12 @@ namespace OpenRiaServices.Hosting.AspNetCore
         {
             var endpoints = new List<Endpoint>();
 
+            XmlDataContractSerializationProvider xmlSerializationProvider = new XmlDataContractSerializationProvider(_options);
+
             foreach (var (name, domainServiceBuilder) in _endpointBuilders)
             {
                 var domainService = domainServiceBuilder.Description;
-                var serializationHelper = new SerializationHelper(domainService);
-
+                
                 // We could consider using Add and Finally on domainServiceBuilder to copy metadata instead
                 // Consider adding additional metadata souch as route groups etc
                 List<object> additionalMetadata = new List<object>();
@@ -93,11 +95,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     if (operation.Operation == DomainOperation.Query)
                     {
                         invoker = (OperationInvoker)Activator.CreateInstance(typeof(QueryOperationInvoker<>).MakeGenericType(operation.AssociatedType),
-                            new object[] { operation, serializationHelper , _options });
+                            new object[] { operation, xmlSerializationProvider.GetRequestSerializer(domainService, operation), _options });
                     }
                     else if (operation.Operation == DomainOperation.Invoke)
                     {
-                        invoker = new InvokeOperationInvoker(operation, serializationHelper, _options);
+                        invoker = new InvokeOperationInvoker(operation, xmlSerializationProvider.GetRequestSerializer(domainService, operation), _options);
                     }
                     else // Submit related methods are not directly accessible
                         continue;
@@ -108,7 +110,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
                     typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
-                var submitOperationInvoker = new SubmitOperationInvoker(submit, serializationHelper, _options);
+                var submitOperationInvoker = new SubmitOperationInvoker(submit, xmlSerializationProvider.GetRequestSerializer(domainService, submit), _options);
                 AddEndpoints(endpoints, submitOperationInvoker, domainServiceBuilder, additionalMetadata);
             }
 

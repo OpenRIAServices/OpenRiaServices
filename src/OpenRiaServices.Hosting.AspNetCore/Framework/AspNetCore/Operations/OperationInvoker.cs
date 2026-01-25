@@ -6,95 +6,31 @@ using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Hosting.Wcf.Behaviors;
 using OpenRiaServices.Server;
 using System;
-using System.Buffers;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
 using System.Linq;
-using System.Net;
-using System.Runtime.Serialization;
 using System.Threading.Tasks;
-using System.Xml;
 
 #nullable disable
 
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
-    public abstract class SerializationProvider
-    {
-        public ICollection<string> SupportedMimeTypes { get; protected set; }
-
-        public abstract DataContractSerializer GetSerializer(Type type);
-    }
-
-    internal abstract class RequestSerializer
-    {
-        // TODO: public
-        public abstract object[] GetParametersFromUri(HttpContext context, DomainOperationEntry operationInvoker);
-        public abstract object[] ReadParametersFromBodyAsync(HttpContext context, DomainOperationEntry operationInvoker);
-
-        public abstract ServiceQuery GetServiceQueryFromParameters(HttpContext context);
-
-        public abstract Task WriteErrorAsync(HttpContext context, DomainServiceFault fault);
-        public abstract Task WriteResponseAsync(HttpContext context, object result);
-    }
-
-    internal sealed class BinaryXmlRequestSerializer : RequestSerializer
-    {
-        public override object[] GetParametersFromUri(HttpContext context, DomainOperationEntry operationInvoker)
-        {
-            throw new NotImplementedException();
-        }
-        public override object[] ReadParametersFromBodyAsync(HttpContext context, DomainOperationEntry operationInvoker)
-        {
-            throw new NotImplementedException();
-        }
-        public override ServiceQuery GetServiceQueryFromParameters(HttpContext context)
-        {
-            throw new NotImplementedException();
-        }
-        public override Task WriteErrorAsync(HttpContext context, DomainServiceFault fault)
-        {
-            throw new NotImplementedException();
-        }
-        public override Task WriteResponseAsync(HttpContext context, object result)
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-
     abstract class OperationInvoker
     {
         private static readonly WebHttpQueryStringConverter s_queryStringConverter = new();
-        private static readonly DataContractSerializer s_faultSerialiser = new DataContractSerializer(typeof(DomainServiceFault));
 
         protected readonly DomainOperationEntry _operation;
         private readonly DomainOperationType _operationType;
-        protected readonly SerializationHelper _serializationHelper;
-        private readonly DataContractSerializer _responseSerializer;
-        private readonly string _responseName;
-        private readonly string _resultName;
-        private const string MessageRootElementName = "MessageRoot";
-        private const string QueryOptionsListElementName = "QueryOptions";
-        private const string QueryOptionElementName = "QueryOption";
-        private const string QueryNameAttribute = "Name";
-        private const string QueryValueAttribute = "Value";
-        private const string QueryIncludeTotalCountOption = "includeTotalCount";
-        private const string InvalidContentMessage = "invalid content";
+        protected readonly RequestSerializer _requestSerializer;
 
         protected OperationInvoker(DomainOperationEntry operation, DomainOperationType operationType,
-            SerializationHelper serializationHelper,
-            DataContractSerializer responseSerializer,
+            RequestSerializer requestSerializer,
             OpenRiaServicesOptions options)
         {
             this._operation = operation;
             this._operationType = operationType;
-            this._serializationHelper = serializationHelper;
-            this._responseSerializer = responseSerializer;
+            _requestSerializer = requestSerializer;
             Options = options;
-            _responseName = OperationName + "Response";
-            _resultName = OperationName + "Result";
         }
 
         public virtual string OperationName => _operation.Name;
@@ -104,6 +40,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         public OpenRiaServicesOptions Options { get; }
 
         public abstract Task Invoke(HttpContext context);
+
+        protected static void SetDefaultResponseHeaders(HttpContext context)
+        {
+            context.Response.Headers.CacheControl = "private, no-store";
+        }
 
         protected object[] GetParametersFromUri(HttpContext context)
         {
@@ -121,205 +62,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
             return inputs;
         }
-
-        protected async Task<(ServiceQuery, object[])> ReadParametersFromBodyAsync(HttpContext context)
-        {
-            var request = context.Request;
-
-            int initialCapacity = request.ContentLength switch
-            {
-                long contentLength and >= 0 and <= int.MaxValue => Math.Min((int)contentLength, 4096),
-                null => 4096,
-                _ => throw new BadHttpRequestException("invalid lenght", (int)System.Net.HttpStatusCode.BadRequest)
-            };
-
-            // To prevent DOS attacks where an attacker can allocate arbitary large memory by setting content-length to a large value
-            // We only allocate a maximum of 4K directly
-            using var ms = new ArrayPoolStream(ArrayPool<byte>.Shared, maxBlockSize: 4 * 1024 * 1024);
-            ms.Reset(initialCapacity); // Initial capacity up to 4K
-
-            await request.BodyReader.CopyToAsync(ms).ConfigureAwait(false);
-            ArraySegment<byte> memory = ms.GetRentedArrayAndClear();
-
-            try
-            {
-                using var reader = BinaryMessageReader.Rent(memory, isBinary: IsBinaryRequest(context));
-                return ReadParametersFromBody(reader.XmlDictionaryReader);
-            }
-            finally
-            {
-                ArrayPool<byte>.Shared.Return(memory.Array);
-            }
-        }
-
-        private (ServiceQuery, object[]) ReadParametersFromBody(XmlDictionaryReader reader)
-        {
-            ServiceQuery serviceQuery = null;
-            object[] values;
-            reader.MoveToContent();
-
-            bool hasMessageRoot = reader.IsStartElement(MessageRootElementName);
-            // Check for QueryOptions which is part of message root
-            if (hasMessageRoot)
-            {
-                // Go to the <QueryOptions> node.
-                reader.Read();                                               // <MessageRoot>
-                reader.ReadStartElement(QueryOptionsListElementName);        // <QueryOptions>
-                serviceQuery = ReadServiceQuery(reader);                     // <QueryOption></QueryOption>
-                                                                             // Go to the starting node of the original message.
-                reader.ReadEndElement();                                     // </QueryOptions>
-            }
-
-            values = ReadParameters(reader);
-
-            if (hasMessageRoot)
-                reader.ReadEndElement();
-
-            // Verify at end 
-            if (reader.ReadState != ReadState.EndOfFile)
-                throw new BadHttpRequestException(InvalidContentMessage);
-
-            return (serviceQuery, values);
-        }
-
-        /// <summary>
-        /// Reads the query options from the given reader and returns the resulting service query.
-        /// It assumes that the reader is positioned on a stream containing the query options.
-        /// </summary>
-        /// <param name="reader">Reader to the stream containing the query options.</param>
-        /// <returns>Extracted service query.</returns>
-        internal static ServiceQuery ReadServiceQuery(XmlReader reader)
-        {
-            var serviceQueryParts = new List<ServiceQueryPart>();
-            bool includeTotalCount = false;
-            while (reader.IsStartElement(QueryOptionElementName))
-            {
-                string name = reader.GetAttribute(QueryNameAttribute);
-                string value = reader.GetAttribute(QueryValueAttribute);
-                if (name.Equals(QueryIncludeTotalCountOption, StringComparison.OrdinalIgnoreCase))
-                {
-                    bool queryOptionValue = false;
-                    if (bool.TryParse(value, out queryOptionValue))
-                    {
-                        includeTotalCount = queryOptionValue;
-                    }
-                }
-                else
-                {
-                    serviceQueryParts.Add(new ServiceQueryPart { QueryOperator = name, Expression = value });
-                }
-
-                ReadElement(reader);
-            }
-
-            var serviceQuery = new ServiceQuery()
-            {
-                QueryParts = serviceQueryParts,
-                IncludeTotalCount = includeTotalCount
-            };
-            return serviceQuery;
-        }
-
-        protected static void ReadElement(XmlReader reader)
-        {
-            if (reader.IsEmptyElement)
-            {
-                reader.Read();
-            }
-            else
-            {
-                reader.Read();
-                reader.ReadEndElement();
-            }
-        }
-
-        protected virtual object[] ReadParameters(XmlDictionaryReader reader)
-        {
-            if (reader.IsStartElement(_operation.Name))
-            {
-                reader.Read();
-
-                var parameters = _operation.Parameters;
-                object[] values = new object[parameters.Count];
-                for (int i = 0; i < parameters.Count; ++i)
-                {
-                    var parameter = parameters[i];
-                    if (!reader.IsStartElement(parameter.Name))
-                        throw new BadHttpRequestException(InvalidContentMessage);
-
-                    if (reader.HasAttributes && reader.GetAttribute("nil", "http://www.w3.org/2001/XMLSchema-instance") == "true")
-                    {
-                        values[i] = null;
-                        ReadElement(reader); // consume element
-                    }
-                    else
-                    {
-                        var serializer = _serializationHelper.GetSerializer(parameter.ParameterType);
-
-                        // XmlElemtnt returns the "ResultNode" unless we step into the contents
-                        bool isXElement = parameter.ParameterType == typeof(System.Xml.Linq.XElement);
-                        if (isXElement)
-                            reader.ReadStartElement();
-
-                        values[i] = serializer.ReadObject(reader, verifyObjectName: false);
-
-                        if (isXElement)
-                        {
-                            reader.ReadEndElement();
-                            reader.ReadEndElement();
-                        }
-                    }
-                }
-
-                reader.ReadEndElement(); // operation.Name
-                return values;
-            }
-            else
-            {
-                if (_operation.Parameters.Count == 0)
-                    return Array.Empty<object>();
-                else
-                    throw new InvalidOperationException();
-            }
-        }
-
-
-        /// <summary>
-        /// Verifies the reader is at node with LocalName equal to operationName + postfix.
-        /// If the reader is at any other node, then a <see cref="DomainOperationException"/> is thrown
-        /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <param name="operationName">Name of the operation.</param>
-        /// <param name="postfix">The postfix.</param>
-        /// <exception cref="DomainOperationException">If reader is not at the expected xml element</exception>
-        protected static void VerifyReaderIsAtNode(XmlDictionaryReader reader, string operationName, string postfix)
-        {
-            // localName should be operationName + postfix
-            if (!(reader.LocalName.Length == operationName.Length + postfix.Length
-                && reader.LocalName.StartsWith(operationName, StringComparison.Ordinal)
-                && reader.LocalName.EndsWith(postfix, StringComparison.Ordinal)))
-            {
-                throw new BadHttpRequestException(InvalidContentMessage);
-            }
-        }
-
-        protected Task WriteError(HttpContext context, IEnumerable<ValidationResult> validationErrors)
-        {
-            var errors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames)).ToList();
-
-            // Clear out the stacktrace if they should not be sent
-            if (!Options.IncludeExceptionStackTraceInErrors)
-            {
-                foreach (ValidationResultInfo error in errors)
-                {
-                    error.StackTrace = null;
-                }
-            }
-
-            context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
-            return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity });
-        }
-
 
         /// <summary>
         /// Transforms the specified exception as appropriate into a fault message that can be sent
@@ -349,132 +91,39 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         protected Task WriteError(HttpContext context, DomainServiceFault fault)
         {
-            var ct = context.RequestAborted;
-            if (ct.IsCancellationRequested)
-                return Task.CompletedTask;
-
-            bool isBinaryXml = UseBinaryResponse(context);
-            var messageWriter = BinaryMessageWriter.Rent(isBinary: isBinaryXml);
-            try
-            {
-                WriteFault(fault, messageWriter.XmlWriter);
-
-                using var bufferMemory = BinaryMessageWriter.Return(messageWriter);
-                messageWriter = null;
-
-                var response = context.Response;
-                response.Headers.CacheControl = "private, no-store";
-                response.Headers.ContentType = isBinaryXml ? "application/msbin1" : "application/xml";
-                response.ContentLength = bufferMemory.Length;
-
-                return bufferMemory.WriteTo(response, ct);
-            }
-            catch (Exception)
-            {
-                messageWriter?.Clear();
-                throw;
-            }
+            return _requestSerializer.WriteErrorAsync(context, fault, _operation);
         }
 
-        private static void WriteFault(DomainServiceFault fault, XmlDictionaryWriter writer)
+        protected Task WriteResponse(HttpContext context, object response)
         {
-            //<Fault xmlns="http://schemas.microsoft.com/ws/2005/05/envelope/none">
-            writer.WriteStartElement("Fault", "http://schemas.microsoft.com/ws/2005/05/envelope/none");
-            //<Code><Value>Sender</Value></Code>
-            writer.WriteStartElement("Code");
-            writer.WriteStartElement("Value");
-            writer.WriteString("Sender");
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-            //<Reason ><Text xml:lang="en-US">Access to operation 'GetRangeWithNotAuthorized' was denied.</Text></Reason>
-            writer.WriteStartElement("Reason");
-            writer.WriteStartElement("Text");
-            writer.WriteAttributeString("xml", "lang", null, CultureInfo.CurrentCulture.Name);
-            writer.WriteString(fault.ErrorMessage);
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-
-            writer.WriteStartElement("Detail");
-            s_faultSerialiser.WriteObject(writer, fault);
-            writer.WriteEndElement();
-            writer.WriteEndElement();
-            writer.WriteEndDocument();
+            return _requestSerializer.WriteResponseAsync(context, response, _operation);
         }
 
-        protected Task WriteResponse(HttpContext context, object result)
+        protected Task WriteResponse(HttpContext context, IEnumerable<ChangeSetEntry> response)
         {
-            var ct = context.RequestAborted;
-            if (ct.IsCancellationRequested)
-                return Task.CompletedTask;
-
-            bool isBinaryXml = UseBinaryResponse(context);
-            var messageWriter = BinaryMessageWriter.Rent(isBinary: isBinaryXml);
-            try
-            {
-                WriteResponse(messageWriter.XmlWriter, result);
-
-                using var bufferMemory = BinaryMessageWriter.Return(messageWriter);
-                messageWriter = null;
-
-                var response = context.Response;
-                response.Headers.ContentType = isBinaryXml ? "application/msbin1" : "application/xml";
-                response.ContentLength = bufferMemory.Length;
-                response.Headers.CacheControl = "private, no-store";
-
-                return bufferMemory.WriteTo(response, ct);
-            }
-            catch (Exception)
-            {
-                messageWriter?.Clear();
-                throw;
-            }
+            return _requestSerializer.WriteResponseAsync(context, response, _operation);
         }
 
-        private bool UseBinaryResponse(HttpContext context)
+        protected Task<(ServiceQuery, object[])> ReadParametersFromBodyAsync(HttpContext context)
+            => _requestSerializer.ReadParametersFromBodyAsync(context, _operation);
+
+        protected Task WriteError(HttpContext context, IEnumerable<ValidationResult> validationErrors)
         {
-            // Use binary xml unless content type
-            if (!Options.EnableTextXmlSerialization)
+            var errors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames)).ToList();
+
+            // Clear out the stacktrace if they should not be sent
+            if (!Options.IncludeExceptionStackTraceInErrors)
             {
-                return true;
+                foreach (ValidationResultInfo error in errors)
+                {
+                    error.StackTrace = null;
+                }
             }
 
-            // Look at 
-            var accept = context.Request.Headers.Accept;
-            if (accept.Count == 1 && MediaTypeHeaderValue.TryParse(accept[0], out var acceptedType))
-            {
-                // Not strictly true, should  do invalid value if not msbin1 or xml
-                return acceptedType.MediaType != "application/xml";
-            }
-            //else if (accept.Count > 1 && MediaTypeHeaderValue.TryParseList(accept, out var acceptedTypeList))
-            //{
-            //    // Sort by priority or something ?
-            //}
-
-
-            // Should Content-Type override Accept header? if not null? and only fallback to accept header
-            // Use binary for everything which is not application/xml
-            return context.Request.ContentType != "application/xml";
+            context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
+            return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity });
         }
 
-        protected bool IsBinaryRequest(HttpContext context)
-        {
-            return !Options.EnableTextXmlSerialization || context.Request.ContentType != "application/xml";
-        }
-
-        private void WriteResponse(XmlDictionaryWriter writer, object result)
-        {
-            // <GetQueryableRangeTaskResponse xmlns="http://tempuri.org/">
-            writer.WriteStartElement(_responseName, "http://tempuri.org/");
-            // <GetQueryableRangeTaskResult xmlns:a="DomainServices" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-            writer.WriteStartElement(_resultName);
-            //writer.WriteXmlnsAttribute("a", "DomainServices");
-            //writer.WriteXmlnsAttribute("i", "http://www.w3.org/2001/XMLSchema-instance");
-
-            _responseSerializer.WriteObjectContent(writer, result);
-
-            writer.WriteEndElement(); // ***Result
-            writer.WriteEndElement(); // ***Response
-        }
 
         protected DomainService CreateDomainService(HttpContext context)
         {

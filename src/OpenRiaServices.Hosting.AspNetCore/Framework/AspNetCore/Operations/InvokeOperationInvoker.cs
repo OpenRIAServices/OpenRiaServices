@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
 using System;
 using System.Threading.Tasks;
@@ -7,8 +8,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class InvokeOperationInvoker : OperationInvoker
     {
-        public InvokeOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper, OpenRiaServicesOptions options)
-                : base(operation, DomainOperationType.Invoke, serializationHelper, serializationHelper.GetSerializer(operation.ReturnType), options)
+        public InvokeOperationInvoker(DomainOperationEntry operation, RequestSerializer serializer, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Invoke, serializer, options)
         {
         }
 
@@ -16,6 +17,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         public override async Task Invoke(HttpContext context)
         {
+            SetDefaultResponseHeaders(context);
+
             try
             {
                 DomainService domainService = CreateDomainService(context);
