@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using DataTests.AdventureWorks.LTS;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading;
 using System.Diagnostics;
 using TestDomainServices;
@@ -13,6 +11,17 @@ namespace OpenRiaServices.Client.Test
 
     public static class TestHelperMethods
     {
+        public static DomainClient CreateCitiesDomainClient(Type[] entityTypes)
+            => CreateDomainClient<Cities.CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities, entityTypes);
+
+        public static DomainClient CreateDomainClient<TInterface>(Uri uri, Type[] entityTypes) where TInterface : class
+        {
+            var client = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TInterface), uri, requiresSecureEndpoint: false);
+            client.EntityTypes = entityTypes;
+            return client;
+        }
+
+#if !VBTests
         /// <summary>
         /// Perform a submit on the specified context using the DomainClient directy. This bypasses all context operations,
         /// validation, etc.
@@ -192,5 +201,7 @@ namespace OpenRiaServices.Client.Test
             }
         }
     }
-
+#else // VBTest
+}
+#endif
 }

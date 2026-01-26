@@ -24,17 +24,11 @@ This excludes usage by the Russian state, Russian state-owned companies, Russian
 - You allow anonymized telemetry to collected and sent during the preview releases to gather feedback about usage
 
 
-## Production Ready - "preview"
+## Sample
 
-The package is production ready, but does not yet contain all features planened for 1.0.
-Please look at TODO in project's folder for more details.
-    
-**Public API will change before 1.0.0 release**
-    
-There is no documentation yet, please see AspNetCoreWebsite project in repository for usage.
+There is no documentation except for this yet readme, please see AspNetCoreWebsite project in repository for usage.
 
 * For a sample see [WpfCore_AspNetCore in Samples repository](https://github.com/OpenRIAServices/Samples/tree/main/WpfCore_AspNetCore)
-
 
 
 ## Getting Started
@@ -59,24 +53,93 @@ https://github.com/OpenRIAServices/OpenRiaServices/blob/086ea8c8fcb115000749be6b
 
 5. Setup hosting integration
 
-Minimal program:
+Sample program:
 
 ```csharp
 using OpenRiaServices.Hosting.AspNetCore;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();
-builder.Services.AddTransient<CityDomainService>();
+
+// Register DomainServices in DI
+builder.Services.AddDomainService<CityDomainService>();
+// OR builder.Services.AddDomainServices(AppDomain.CurrentDomain.GetAssemblies());
 
 
 var app = builder.Build();
-app.MapOpenRiaServices(builder =>
-{
-    builder.AddDomainService<CityDomainService>();
-});
 
+// Map OpenRiaServices routes , you can optionally add a prefix such as "/Services"
+// This will automatically map all DomainServices that are registered in builder.Services
+// Using routes similar to $"{DomainServiceName}/{MethodName}"
+app.MapOpenRiaServices();
+// OR app.MapOpenRiaServices(builder => { builder.AddDomainService<CityDomainService>(); }); to specify exactly the DomainServices to map which works better with Trimming
 
 app.Run();
+```
+
+## Advanced
+
+### Configuring Hosting Options
+
+You can configure the hosting options by passing a callback to `AddOpenRiaServices` method.
+
+Options include:
+- `ExceptionHandler` - A delegate that can be used to handle exceptions that occur during the execution of a DomainService method.
+    - It allows customizing the error message, and error code that is sent to the client as well as the HTTP status code.
+- `IncludeExceptionMessageInErrors` - A boolean that determines if the exception message should be included in the error response.
+   - **WARNING**: Exposing this information might help a hacker. It is generally better to use the `ExceptionHandler` and 
+    ensuring that the message is not passed on to the client is "safe" and does not give to much information about the system to a potential hacker.
+- `IncludeExceptionStackTraceInErrors` - A boolean that determines if the exception stack trace should be included in the error response. 
+   - **WARNING**: This is considered INSECURE and is *NOT* *recommended for production use as it would gives an attacker detailed information about your system
+
+Example setup:
+```csharp
+builder.Services.AddOpenRiaServices(o => {
+    o.ExceptionHandler = (context, response) =>
+    {
+        // Pass all exceptions to client
+        response.ErrorMessage ??= context.Exception.Message;
+    };
+ 
+    // There is at least one test which test that checks that calls stacks of normal exceptions are passed to the client
+    // To get StackTrack of "normal" exceptions we need to pass them on to the user, as well as include stack traces
+    o.IncludeExceptionMessageInErrors = true;
+    o.IncludeExceptionStackTraceInErrors = true;
+});
+```
+
+### Specifying endpoint routes
+
+You can choose between 3 different approaches to how the endpoint routes are generated.
+You do this by adding the `DomainServiceEndpointRoutePattern` attribute to your assembly.
+   - If the attribute is defined in the assembly of a specific DomainService, then that will be used
+   - Otherwise if there is an attribute in the "startup" assembly then that will be used 
+     (since the code generation cannot know what project is the startup project, 
+    it will always treat the "LinkedServerProject" as the startup project)
+   
+The options are `WCF`, `FullName` and `ShortName`.
+ * `WCF` will generate the same routes as WCF RIA Services `Some-Namespace-TypeName.svc/binary/Method`
+    * This is the only option that works with the (obsolete) WCF based DomainClient
+ * `FullName` will generate routes with the full name of the DomainService `Some-Namespace-TypeName/Method`
+ * `Name` will generate routes with the short name of the DomainService `TypeName/Method`
+
+The default will be changed to `FullName` which is the same as in WCF RIA Services.
+```csharp
+[assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.WCF)]
+// or 
+[assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
+// or 
+[assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.Name)]
+```
+
+If you want to change the route for a specific DomainService or need to map a DomainService to multiple routes you can specify 
+a route directly when adding domainservices during the `MapOpenRiaServices` call.
+
+```csharp
+app.MapOpenRiaServices(builder =>
+{
+    builder.AddDomainService<Cities.CityDomainService>("Cities-CityDomainService.svc/binary");
+});
 ```
 
 ## Asp.Net Core integration
@@ -184,7 +247,7 @@ builder.Services.AddOutputCache(options =>
     options.AddBasePolicy(builder => builder.NoCache());
 });
 
-builder.Services.AddTransient<CacheTestDomainService>();
+builder.Services.AddDomainService<CacheTestDomainService>();
 
 var app = builder.Build();
 

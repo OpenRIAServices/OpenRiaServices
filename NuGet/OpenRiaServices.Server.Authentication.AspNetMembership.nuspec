@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Server.Authentication.AspNetMembership</id>
-    <version>5.0.0-preview1</version>
+    <version>5.6.0</version>
     <title>OpenRiaServices.Server Asp.Net Membership Authentication</title>
     <authors>OpenRIAServices</authors>
     <license type="expression">Apache-2.0</license>

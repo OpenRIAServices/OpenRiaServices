@@ -22,7 +22,6 @@
         }
 
 #>
-[System.ServiceModel.ServiceContract()]
 public interface <#= this.ContractInterfaceName #>
 <#+ 
 		this.GenerateOpeningBrace();
@@ -44,9 +43,6 @@ public interface <#= this.ContractInterfaceName #>
 	{
 #>
 [OpenRiaServices.Client.HasSideEffects(<#= DomainContextGenerator.OperationHasSideEffects(operation).ToString().ToLower() #>)]
-<#+
-		this.GenerateContractMethodAttributes(operation.Name);
-#>
 System.IAsyncResult Begin<#= operation.Name #>(
 <#+
 		foreach (DomainOperationParameter parameter in operation.Parameters)
@@ -67,21 +63,10 @@ System.AsyncCallback callback, object asyncState);
 	
 	private void GenerateContractSubmitChangesMethod()
 	{
-		this.GenerateContractMethodAttributes("SubmitChanges");
 #>
 IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
 IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result);			
 <#+
 	}
 	
-	private void GenerateContractMethodAttributes(string operationName)
-	{
-		string domainServiceName = this.DomainServiceDescription.DomainServiceType.Name;
-		string actionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultActionSchema, domainServiceName, operationName);
-		string replyActionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultReplyActionSchema, domainServiceName, operationName);
-		
-#>
-[OperationContract(AsyncPattern=true, Action="<#= actionString #>", ReplyAction="<#= replyActionString #>")]	
-<#+
-	}
 #>

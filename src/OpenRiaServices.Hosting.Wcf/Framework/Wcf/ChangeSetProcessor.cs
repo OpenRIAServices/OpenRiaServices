@@ -7,9 +7,9 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Server;
-using System.Web;
 using System.Threading.Tasks;
-using System.Threading;
+
+#nullable disable
 
 namespace OpenRiaServices.Hosting.Wcf
 {
@@ -35,7 +35,7 @@ namespace OpenRiaServices.Hosting.Wcf
 
             // Process the submit results and build the result list to be sent back
             // to the client
-            return GetSubmitResults(changeSet, domainService.GetDisableStackTraces());
+            return GetSubmitResults(changeSet, domainService.ServiceContext.GetDisableStackTraces());
         }
 
         /// <summary>

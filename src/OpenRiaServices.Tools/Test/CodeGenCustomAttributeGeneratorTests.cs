@@ -8,6 +8,7 @@ using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
+using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -503,6 +504,7 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("CustomAttributeGenerator generates full names correctly for attributes in VB.")]
+        [Ignore("See if we can use another attribute to verify thath the full name is correct, ServiceKnownTypeAttribute is no longer generated")]
         public void CodeGen_ServiceKnownTypeAttrGen_VB_FullNames()
         {            
             string generatedCode = TestHelper.GenerateCodeAssertSuccess("VB", new Type[] { typeof(DomainServiceWithCustomMethod) }, null, null, /* generateFullNames */ true);
@@ -511,6 +513,7 @@ namespace OpenRiaServices.Tools.Test
 
         [TestMethod]
         [Description("CustomAttributeGenerator generates full names correctly for types in attributes not shared on the client in VB.")]
+        [Ignore("See if we can use another attribute to verify thath the full name is correct, ServiceKnownTypeAttribute is no longer generated")]
         public void CodeGen_ServiceKnownTypeAttrGen_VB_NoFullNames()
         {
             string generatedCode = TestHelper.GenerateCodeAssertSuccess("VB", new Type[] { typeof(DomainServiceWithCustomMethod) }, null, null, /* generateFullNames */ false);

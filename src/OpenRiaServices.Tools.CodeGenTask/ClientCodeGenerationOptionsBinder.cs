@@ -15,13 +15,12 @@ public class ClientCodeGenerationOptionsBinder : BinderBase<ClientCodeGeneration
     private readonly Option<string> _clientRootNamespace;
     private readonly Option<string> _serverRootNamespace;
     private readonly Option<bool> _isApplicationContextGenerationEnabled;
-    private readonly Option<TargetPlatform> _clientProjectTargetPlatform;
     private readonly Option<bool> _useFullTypeNames;
 
     /// <summary>
     /// Constructor that sets all arguments
     /// </summary>
-    public ClientCodeGenerationOptionsBinder(Option<string> language, Option<string> clientFrameworkPath, Option<string> serverProjectPath, Option<string> clientProjectPath, Option<string> clientRootNamespace, Option<string> serverRootNamespace, Option<bool> isApplicationContextGenerationEnabled, Option<TargetPlatform> clientProjectTargetPlatform, Option<bool> useFullTypeNames)
+    public ClientCodeGenerationOptionsBinder(Option<string> language, Option<string> clientFrameworkPath, Option<string> serverProjectPath, Option<string> clientProjectPath, Option<string> clientRootNamespace, Option<string> serverRootNamespace, Option<bool> isApplicationContextGenerationEnabled, Option<bool> useFullTypeNames)
     {
         _language = language;
         _clientFrameworkPath = clientFrameworkPath;
@@ -30,7 +29,6 @@ public class ClientCodeGenerationOptionsBinder : BinderBase<ClientCodeGeneration
         _clientRootNamespace = clientRootNamespace;
         _serverRootNamespace = serverRootNamespace;
         _isApplicationContextGenerationEnabled = isApplicationContextGenerationEnabled;
-        _clientProjectTargetPlatform = clientProjectTargetPlatform;
         _useFullTypeNames = useFullTypeNames;
     }
 
@@ -48,7 +46,6 @@ public class ClientCodeGenerationOptionsBinder : BinderBase<ClientCodeGeneration
             ClientRootNamespace = bindingContext.ParseResult.GetValueForOption(_clientRootNamespace),
             ServerRootNamespace = bindingContext.ParseResult.GetValueForOption(_serverRootNamespace),
             IsApplicationContextGenerationEnabled = bindingContext.ParseResult.GetValueForOption(_isApplicationContextGenerationEnabled),
-            ClientProjectTargetPlatform = bindingContext.ParseResult.GetValueForOption(_clientProjectTargetPlatform),
             UseFullTypeNames = bindingContext.ParseResult.GetValueForOption(_useFullTypeNames),
         };
     }

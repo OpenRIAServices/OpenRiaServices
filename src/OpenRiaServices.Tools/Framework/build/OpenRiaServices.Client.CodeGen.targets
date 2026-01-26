@@ -13,7 +13,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 
   <PropertyGroup>
     <_OpenRiaTaskFramework>net472</_OpenRiaTaskFramework>
-    <_OpenRiaTaskFramework Condition=" '$(MSBuildRuntimeType)' == 'Core' ">net6.0</_OpenRiaTaskFramework>
+    <_OpenRiaTaskFramework Condition=" '$(MSBuildRuntimeType)' == 'Core' ">net8.0</_OpenRiaTaskFramework>
     
     <!-- Use SilverlightApplication if present, otherwise check if we are building an exe -->
     <OpenRiaGenerateApplicationContext Condition="'$(OpenRiaGenerateApplicationContext)' == '' and '$(SilverlightApplication)' != '' ">$(SilverlightApplication)</OpenRiaGenerateApplicationContext>

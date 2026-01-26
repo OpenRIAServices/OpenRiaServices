@@ -25,6 +25,7 @@ namespace OpenRiaServices.Client.Web.Test
     /// Tests <see cref="WebDomainClient&lt;TContract&gt;"/> members.
     /// </summary>
     [TestClass]
+    [Ignore("WebDomainClient is not supported")]
     public class WebDomainClientTests : UnitTestBase
     {
         private TimeSpan CancellationTestTimeout { get; } = Debugger.IsAttached ? TimeSpan.FromMinutes(1) : TimeSpan.FromSeconds(10);

@@ -22,7 +22,6 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
-Imports System.ServiceModel
 Imports System.Threading
 Imports System.Threading.Tasks
 
@@ -780,9 +779,6 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Service contract for the 'ComplexTypes_DomainService' DomainService.
         ''' </summary>
-        <ServiceContract(),  _
-         ServiceKnownType(GetType(Global.TestDomainServices.ComplexInheritance_Child)),  _
-         ServiceKnownType(GetType(TestDomainServices.ComplexInheritance_Child()))>  _
         Public Interface IComplexTypes_DomainServiceContract
             
             ''' <summary>
@@ -793,8 +789,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_DomainService/GetHighestChild", ReplyAction:="http://tempuri.org/ComplexTypes_DomainService/GetHighestChildResponse")>  _
+            <HasSideEffects(true)>  _
             Function BeginGetHighestChild(ByVal child As ComplexInheritance_Child, ByVal children() As ComplexInheritance_Child, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -811,8 +806,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_DomainService/GetInheritedMember", ReplyAction:="http://tempuri.org/ComplexTypes_DomainService/GetInheritedMemberResponse")>  _
+            <HasSideEffects(true)>  _
             Function BeginGetInheritedMember(ByVal child As ComplexInheritance_Child, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -828,8 +822,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_DomainService/GetStub", ReplyAction:="http://tempuri.org/ComplexTypes_DomainService/GetStubResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetStub(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -846,7 +839,6 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_DomainService/SubmitChanges", ReplyAction:="http://tempuri.org/ComplexTypes_DomainService/SubmitChangesResponse")>  _
             Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -1028,7 +1020,6 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Service contract for the 'ComplexTypes_InvokeOperationsOnly' DomainService.
         ''' </summary>
-        <ServiceContract()>  _
         Public Interface IComplexTypes_InvokeOperationsOnlyContract
             
             ''' <summary>
@@ -1037,9 +1028,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/InvokeGetInvalidAddress", ReplyAction:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/InvokeGetInvalidAddressRespo"& _ 
-                "nse")>  _
+            <HasSideEffects(true)>  _
             Function BeginInvokeGetInvalidAddress(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -1056,8 +1045,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/RoundtripAddress", ReplyAction:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/RoundtripAddressResponse")>  _
+            <HasSideEffects(true)>  _
             Function BeginRoundtripAddress(ByVal address As Address, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -1074,8 +1062,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/UpdateContact", ReplyAction:="http://tempuri.org/ComplexTypes_InvokeOperationsOnly/UpdateContactResponse")>  _
+            <HasSideEffects(true)>  _
             Function BeginUpdateContact(ByVal contact As ContactInfo, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -1252,8 +1239,6 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Service contract for the 'ComplexTypes_TestService' DomainService.
         ''' </summary>
-        <ServiceContract(),  _
-         ServiceKnownType(GetType(Global.TestDomainServices.Phone))>  _
         Public Interface IComplexTypes_TestServiceContract
             
             ''' <summary>
@@ -1262,8 +1247,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_TestService/GetParents", ReplyAction:="http://tempuri.org/ComplexTypes_TestService/GetParentsResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetParents(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -1280,8 +1264,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_TestService/ReturnHomeAddress", ReplyAction:="http://tempuri.org/ComplexTypes_TestService/ReturnHomeAddressResponse")>  _
+            <HasSideEffects(true)>  _
             Function BeginReturnHomeAddress(ByVal contact As ContactInfo, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -1298,8 +1281,7 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_TestService/RoundtripAddress", ReplyAction:="http://tempuri.org/ComplexTypes_TestService/RoundtripAddressResponse")>  _
+            <HasSideEffects(true)>  _
             Function BeginRoundtripAddress(ByVal address As Address, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -1316,7 +1298,6 @@ Namespace TestDomainServices
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/ComplexTypes_TestService/SubmitChanges", ReplyAction:="http://tempuri.org/ComplexTypes_TestService/SubmitChangesResponse")>  _
             Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>

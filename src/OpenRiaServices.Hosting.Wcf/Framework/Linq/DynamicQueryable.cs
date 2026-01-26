@@ -6,6 +6,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System;
 
+#nullable disable
+#pragma warning disable CA1859 // Change return type of method 'GenerateStringConcat' from 'System.Linq.Expressions.Expression' to 'System.Linq.Expressions.MethodCallExpression' for improved performance
+
 namespace System.Linq.Dynamic
 {
 #if NETFRAMEWORK

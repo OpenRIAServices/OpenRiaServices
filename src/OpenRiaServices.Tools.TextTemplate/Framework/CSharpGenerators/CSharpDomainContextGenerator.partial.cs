@@ -1,6 +1,7 @@
 namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
 {
     using System;
+    using System.Reflection;
     using OpenRiaServices.Server;
 
     /// <summary>
@@ -144,6 +145,24 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
                 returnTypeName = CodeGenUtilities.GetTypeName(CodeGenUtilities.TranslateType(operation.ReturnType));
             }
             return returnTypeName;
+        }
+
+        private string GetDomainServiceUri()
+        {
+            Type type = this.DomainServiceDescription.DomainServiceType;
+
+            // Lookup DomainServiceEndpointRoutePatternAttribute first in same assembly as DomainService
+            // Otherwise fallback to default
+            EndpointRoutePattern routePattern = SharedCodeGenUtilities.TryGetRoutePatternFromAssembly(type.Assembly)
+                ?? this.ClientCodeGenerator.Options.DefaultEndpointRoutePattern;
+
+            return routePattern switch
+            {
+                EndpointRoutePattern.Name => type.Name,
+                EndpointRoutePattern.WCF => type.FullName.Replace('.', '-') + ".svc",
+                EndpointRoutePattern.FullName => type.FullName.Replace('.', '-'),
+                _ => throw new NotImplementedException(),
+            };
         }
     }
 }

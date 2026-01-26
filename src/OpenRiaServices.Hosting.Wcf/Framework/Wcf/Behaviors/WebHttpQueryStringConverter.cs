@@ -9,6 +9,8 @@ using System.Windows.Browser;
 using System.Web;
 #endif
 
+#nullable disable
+
 #if SERVERFX
 namespace OpenRiaServices.Hosting.Wcf.Behaviors
 #else

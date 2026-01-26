@@ -22,7 +22,6 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
-Imports System.ServiceModel
 Imports System.Threading
 Imports System.Threading.Tasks
 
@@ -224,8 +223,6 @@ Namespace GlobalNamespaceTest
         ''' <summary>
         ''' Service contract for the 'GlobalNamespaceTest_DomainService' DomainService.
         ''' </summary>
-        <ServiceContract(),  _
-         ServiceKnownType(GetType(GlobalNamespaceTest_Enum))>  _
         Public Interface IGlobalNamespaceTest_DomainServiceContract
             
             ''' <summary>
@@ -234,8 +231,7 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntities", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/GetEntitiesResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetEntities(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -252,8 +248,7 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturn", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeReturnResponse")>  _
+            <HasSideEffects(true)>  _
             Function BeginInvokeReturn(ByVal enumParameter As GlobalNamespaceTest_Enum, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -270,8 +265,7 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoid", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/InvokeVoidResponse")>  _
+            <HasSideEffects(true)>  _
             Function BeginInvokeVoid(ByVal enumParameter As GlobalNamespaceTest_Enum, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -287,8 +281,7 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntities", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/ReadEntitiesResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginReadEntities(ByVal enumParameter As GlobalNamespaceTest_Enum, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -305,7 +298,6 @@ Namespace GlobalNamespaceTest
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChanges", ReplyAction:="http://tempuri.org/GlobalNamespaceTest_DomainService/SubmitChangesResponse")>  _
             Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>

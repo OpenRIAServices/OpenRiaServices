@@ -48,19 +48,19 @@ public sealed partial class <#= this.DomainContextTypeName #> : <#= baseType #>
 <#+
 	}
 	
-	/// <summary>
+    /// <summary>
     /// Generates the DomainContext class constructors.
     /// </summary>	
 	protected virtual void GenerateConstructors()
 	{
 		bool requiresSecureEndpoint = this.GetRequiresSecureEndpoint();
-		string relativeServiceUri = string.Format(CultureInfo.InvariantCulture, "{0}.svc", this.DomainServiceDescription.DomainServiceType.FullName.Replace('.', '-'));
+		string relativeServiceUri = GetDomainServiceUri();
 #>
 public <#= this.DomainContextTypeName #>() : 
 	this(new Uri("<#= relativeServiceUri #>", UriKind.Relative))
 {
 }
-		
+
 public <#= this.DomainContextTypeName #>(Uri serviceUri) : 
 	this(OpenRiaServices.Client.DomainContext.CreateDomainClient(typeof(<#= this.ContractInterfaceName #>), serviceUri, <#= requiresSecureEndpoint.ToString().ToLower() #>))
 {

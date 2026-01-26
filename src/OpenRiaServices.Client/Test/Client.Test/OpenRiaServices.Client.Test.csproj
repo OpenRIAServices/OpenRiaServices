@@ -1,22 +1,15 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <NoWarn>108</NoWarn>
-    <TargetFrameworks>net472;net6.0-windows;net8.0-windows</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0-windows</TargetFrameworks>
     <Version>1.0.0.0</Version>
     <UseWPF>true</UseWPF>
     <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
   </PropertyGroup>
-
-  <PropertyGroup Condition=" '$(TargetFramework)' != 'net472'">
-    <!-- Disable obsolete warning (primarily AssociationAttribute) -->
-    <NoWarn>$(NoWarn);CS0618</NoWarn>
-  </PropertyGroup>
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.3.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.3.1" />
-    <PackageReference Include="MSTest.Analyzers" Version="3.3.1">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.11.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.11.1" />
+    <PackageReference Include="MSTest.Analyzers" Version="3.11.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
@@ -29,7 +22,6 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Management" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
     <Reference Include="System.Web.Services" />    
     <Reference Include="WindowsBase" />
   </ItemGroup>

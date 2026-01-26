@@ -3,14 +3,13 @@
   <PropertyGroup>
     <TargetFrameworks>net472</TargetFrameworks>
     <DefineConstants>TRACE;DEBUG;VBTests</DefineConstants>
-    <NoWarn>108</NoWarn>
     <RootNamespace>OpenRiaServices.Client.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.3.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.3.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.11.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.11.1" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
     <Reference Include="Microsoft.VisualBasic" />
@@ -40,6 +39,7 @@
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\ServerSideAsyncTests.cs">
       <Link>Client.Test\Data\ServerSideAsyncTests.cs</Link>
     </Compile>
+    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\TestHelpers.cs" Link="TestHelpers.cs" />
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Main.cs" Link="Main.cs" />
 
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Utilities\UnitTestBaseExtensions.cs" Link="Client.Test\Utilities\UnitTestBaseExtensions.cs" />

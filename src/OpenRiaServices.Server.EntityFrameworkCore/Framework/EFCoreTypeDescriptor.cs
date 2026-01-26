@@ -19,7 +19,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         private readonly bool _keyIsEditable;
         private HashSet<string> _foreignKeyMembers;
 
-#if NETSTANDARD2_0
+#if NETFRAMEWORK
         private readonly IProperty _timestampProperty;
         private readonly IEntityType _entityType;
         public EFCoreTypeDescriptor(EFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
@@ -47,7 +47,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 // Editable(false)
                 _foreignKeyMembers = new HashSet<string>(entityType.GetNavigations()
                      .Where(n =>
-#if NETSTANDARD2_0
+#if NETFRAMEWORK
                      n.IsDependentToPrincipal()
 #else
                      n.IsOnDependent
@@ -76,7 +76,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         ///  /// <remarks>Since EF doesn't expose "timestamp" as a first class
         /// concept, we use the below criteria to infer this for ourselves.
         /// </remarks>
-#if NETSTANDARD2_0
+#if NETFRAMEWORK
         private static bool IsConcurrencyTimestamp(IProperty p)
         {
             return p.IsConcurrencyToken
@@ -146,7 +146,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                     {
                         case ValueGenerated.Never:
                             break;
-#if !NETSTANDARD2_0
+#if !!NET
                         case ValueGenerated.OnUpdateSometimes:
                             break;
 #endif
@@ -237,7 +237,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             // Add AssociationAttribute if required for the specified property
             if (_entityType.FindNavigation(pd.Name) is { } navigation)
             {
-#if NETSTANDARD2_0
+#if NETFRAMEWORK
                 bool isManyToMany = navigation.IsCollection() && navigation.FindInverse()?.IsCollection() == true;
                 bool addAssociationAttribute = !isManyToMany;
 #else

@@ -1,4 +1,56 @@
-# 5.4.4 / EF Core 3.1.0
+## AspNetCore - 1.3.1
+
+* **New Http status codes** returned
+   * Submit can now return 409 and 422 Unprocessable Entity (for conflicts and validation failure)
+   * Use 415 unsupported media type instead of 400 for unsupported content type
+
+# 5.6.0 / AspNetCore 1.3.0
+
+## AspNetCore 1.3.0 (#518)
+
+* **New Http status codes** returned
+   * 401 unauthorized, 403 forbidden and 422 Unprocessable Entity (for validation failure)
+   * IMPORTANT: **POSSIBLE BREAKING CHANGE**: this will not work with the obsolete wcf based domain client 
+* New Methods on `IServiceCollection` for Setup and registration of DomainServices
+    * AddOpenRiaServices now **accept a callback for configuring Options**
+        *  `AddOpenRiaServices(Action<OpenRiaServicesOptions> configure)`
+    * New helper methods for registering *DomainService*s
+        *  `AddDomainService<TDomainService>()`
+        *  `AddDomainService(typeof(DomainService))`
+        *  `AddDomainServices(params IEnumerable<Assembly>)`
+* Simplified `MapOpenRiaServices`
+     * Add `AddRegisteredDomainServices()` to "map" (add endpoints) for all registered domain services
+     * Added new overloads of `MapOpenRiaServices()` which do not require a callback, it will map app registered domain services
+     * `MapOpenRiaServices` now throws if there are no domain services registered
+* Added new OpenRiaServicesOptions for configuration openria services 
+    * Se [Readme](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.md#configuring-hosting-options) for a description of the settings
+* The `StatusCodes` property on exception will now be 403 when authorization fails but the user is logged in as an authenticated user (it was 401 before)
+* Add more nullability annotations to AspNetCore hosting
+
+
+## 5.6.0
+This is proably the last version with for **WCF based hosting**
+
+**BREAKING CHANGES**:
+- Drops support for .NET6 and .netstandard2.0
+- Stop shipping WCF based domainclient as part of OpenRiaServices.Client.Core nuget
+  The WebDomainClient has been depreciated since 2023
+  - code gen
+- **NOTE**: WCF based hosting is considered depreciated and will be removed in the near future
+
+**Client Improvements**
+* Handle exceptions when Exception StatusCode is 403 (Required for AspNetCore 1.3.0)
+* Set Accept header to "application/msbin1" (#521) for BinarHttpDomainClient
+* Client nugets no longer have a dependency on `System.ServiceModel`
+
+**General Improvements**
+* Update nuget package dependencies
+* Update to latest version of Mono.Cecil
+* Updated integration test to run on .NET 8 instead of .NET Framework
+* Updated E2E integration tests no longer use WCF based client
+
+
+# 5.5.0 / EF Core 3.1.0 / AspNetCore 1.2.0
 
 ### EF Core 3.1.0
 * Initial support for Owned Entities for one-to-one navigation properties (#500)
@@ -11,9 +63,29 @@
     * reduces code that needs to be written and works both with and without "OriginalEntity" (`RoundTripAttribute`)
 * Add package README to `OpenRiaServices.Server.EntityFrameworkCore`
 
+### AspNetCore 1.2.0
+* Add support for specifying endpoints routes (#508, issue: #507)
+  You can choose between 3 different approaches to how the endpoint routes are generated.
+  See [AspNetCore readme](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.md#specifying-endpoint-routes) for more details.
+    * `WCF` will generate the same routes as WCF RIA Services `Some-Namespace-TypeName.svc/binary/Method`
+    * `FullName` will generate routes with the full name of the DomainService `Some-Namespace-TypeName/Method`
+    * `Name` will generate routes with the short name of the DomainService `TypeName/Method`
+ 
 ### Code generation
 * Log whole Exceptions in DomainServiceCatalog instead of just message (#502), for better error messages on code generation failure
 * Call "dotnet CodeGenTask.dll" instead of "CodeGenTask.exe" #503
+* Support for the 3 different approaches to how the endpoint routes are generated for AspNetCore hosting (#508)
+* Replace obsolete AssociationAttribute with new EntityAssociationAttribute on client (#509)
+
+### Client
+* Replace obsolete AssociationAttribute with new EntityAssociationAttribute on client (#509)
+   * The client currently detect `AssociationAttribute` but it will be removed in future versions.
+   * Ensure you have the corresponding version of the Code generation
+
+
+### Client
+
+### AspNetCore 1.2.0
 
 # EF Core 3.0.0
 

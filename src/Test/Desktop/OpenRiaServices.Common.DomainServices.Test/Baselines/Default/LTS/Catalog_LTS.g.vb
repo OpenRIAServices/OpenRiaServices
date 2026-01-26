@@ -23,7 +23,6 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
-Imports System.ServiceModel
 Imports System.Threading.Tasks
 
 Namespace DataTests.AdventureWorks.LTS
@@ -324,7 +323,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Employee"/> entity.
         ''' </summary>
-        <EntityAssociation("Employee_Employee", New String() {"ManagerID"}, New String() {"EmployeeID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Employee_Employee", "ManagerID", "EmployeeID", IsForeignKey:=true)>  _
         Public Property Manager() As Employee
             Get
                 If (Me._manager Is Nothing) Then
@@ -450,7 +449,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="PurchaseOrder"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Employee_PurchaseOrder", New String() {"EmployeeID"}, New String() {"EmployeeID"})>  _
+        <EntityAssociation("Employee_PurchaseOrder", "EmployeeID", "EmployeeID")>  _
         Public ReadOnly Property PurchaseOrders() As EntityCollection(Of PurchaseOrder)
             Get
                 If (Me._purchaseOrders Is Nothing) Then
@@ -463,7 +462,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="Employee"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Employee_Employee", New String() {"EmployeeID"}, New String() {"ManagerID"})>  _
+        <EntityAssociation("Employee_Employee", "EmployeeID", "ManagerID")>  _
         Public ReadOnly Property Reports() As EntityCollection(Of Employee)
             Get
                 If (Me._reports Is Nothing) Then
@@ -1124,7 +1123,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Product_PurchaseOrderDetail", New String() {"ProductID"}, New String() {"ProductID"})>  _
+        <EntityAssociation("Product_PurchaseOrderDetail", "ProductID", "ProductID")>  _
         Public ReadOnly Property PurchaseOrderDetails() As EntityCollection(Of PurchaseOrderDetail)
             Get
                 If (Me._purchaseOrderDetails Is Nothing) Then
@@ -1495,7 +1494,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Employee"/> entity.
         ''' </summary>
-        <EntityAssociation("Employee_PurchaseOrder", New String() {"EmployeeID"}, New String() {"EmployeeID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Employee_PurchaseOrder", "EmployeeID", "EmployeeID", IsForeignKey:=true)>  _
         Public Property Employee() As Employee
             Get
                 If (Me._employee Is Nothing) Then
@@ -1620,7 +1619,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         ''' </summary>
-        <EntityAssociation("PurchaseOrder_PurchaseOrderDetail", New String() {"PurchaseOrderID"}, New String() {"PurchaseOrderID"})>  _
+        <EntityAssociation("PurchaseOrder_PurchaseOrderDetail", "PurchaseOrderID", "PurchaseOrderID")>  _
         Public ReadOnly Property PurchaseOrderDetails() As EntityCollection(Of PurchaseOrderDetail)
             Get
                 If (Me._purchaseOrderDetails Is Nothing) Then
@@ -2052,7 +2051,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Product"/> entity.
         ''' </summary>
-        <EntityAssociation("Product_PurchaseOrderDetail", New String() {"ProductID"}, New String() {"ProductID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Product_PurchaseOrderDetail", "ProductID", "ProductID", IsForeignKey:=true)>  _
         Public Property Product() As Product
             Get
                 If (Me._product Is Nothing) Then
@@ -2108,7 +2107,7 @@ Namespace DataTests.AdventureWorks.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="PurchaseOrder"/> entity.
         ''' </summary>
-        <EntityAssociation("PurchaseOrder_PurchaseOrderDetail", New String() {"PurchaseOrderID"}, New String() {"PurchaseOrderID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("PurchaseOrder_PurchaseOrderDetail", "PurchaseOrderID", "PurchaseOrderID", IsForeignKey:=true)>  _
         Public Property PurchaseOrder() As PurchaseOrder
             Get
                 If (Me._purchaseOrder Is Nothing) Then
@@ -2434,7 +2433,6 @@ Namespace TestDomainServices.LTS
         ''' <summary>
         ''' Service contract for the 'Catalog' DomainService.
         ''' </summary>
-        <ServiceContract()>  _
         Public Interface ICatalogContract
             
             ''' <summary>
@@ -2443,8 +2441,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetEmployees", ReplyAction:="http://tempuri.org/Catalog/GetEmployeesResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetEmployees(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2460,8 +2457,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetProducts", ReplyAction:="http://tempuri.org/Catalog/GetProductsResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProducts(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2478,8 +2474,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetProductsByCategory", ReplyAction:="http://tempuri.org/Catalog/GetProductsByCategoryResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductsByCategory(ByVal subCategoryID As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2495,8 +2490,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetProductsWithCaching", ReplyAction:="http://tempuri.org/Catalog/GetProductsWithCachingResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductsWithCaching(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2512,8 +2506,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetProductsWithCustomTotalCount", ReplyAction:="http://tempuri.org/Catalog/GetProductsWithCustomTotalCountResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductsWithCustomTotalCount(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2529,8 +2522,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/GetPurchaseOrders", ReplyAction:="http://tempuri.org/Catalog/GetPurchaseOrdersResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetPurchaseOrders(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2547,7 +2539,6 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Catalog/SubmitChanges", ReplyAction:="http://tempuri.org/Catalog/SubmitChangesResponse")>  _
             Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>

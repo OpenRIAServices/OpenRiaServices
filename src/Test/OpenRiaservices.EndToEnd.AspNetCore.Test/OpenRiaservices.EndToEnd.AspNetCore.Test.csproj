@@ -2,18 +2,16 @@
 
 
   <PropertyGroup>
-    <!-- Note NET6 has problem with some of the tests which tests instant cancellation -->
-    <TargetFrameworks>net472<!--;net6.0--></TargetFrameworks>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <ImplicitUsings>false</ImplicitUsings>
     <IsPackable>false</IsPackable>
-    <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW;ASPNETCORE</DefineConstants>
+    <DefineConstants>$(DefineConstants);ASPNETCORE</DefineConstants>
   </PropertyGroup>
 
-
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.3.1" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.3.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.11.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.11.1" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
@@ -48,11 +46,12 @@
       <Private>false</Private>
       <ExcludeAssets>All</ExcludeAssets>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <SetTargetFramework>TargetFramework=net8.0</SetTargetFramework>
+      <SetTargetFramework>TargetFramework=$(TargetFramework)</SetTargetFramework>
     </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\Data\DomainClients\CitiesMockDomainClient.cs" Link="Data\CitiesMockDomainClient.cs" />
     <Compile Include="..\OpenRiaServices.EndToEnd.Wcf.Test\**\*.cs" Exclude="..\OpenRiaServices.EndToEnd.Wcf.Test\Main.cs;..\OpenRiaServices.EndToEnd.Wcf.Test\bin\**;..\OpenRiaServices.EndToEnd.Wcf.Test\obj\**" LinkBase="Included" />
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\MessageUtilityTests.cs" />
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\WebDomainClientTests.cs" />

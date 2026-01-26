@@ -26,16 +26,33 @@ namespace OpenRiaServices.Client.Test
 
             StartWebServer();
 
-            DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, new HttpClientHandler()
+            var clientHandler = new HttpClientHandler()
             {
                 CookieContainer = new CookieContainer(),
                 UseCookies = true,
                 AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
-            });
+            };
 
-            // Note: Below gives errors when running (at least BinaryHttpDomainClientFactory) against AspNetCore
-            // It seems to cache results even with "private, no-store"
-            //HttpWebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.Default);
+            // Map enpoint names from WCF format to "FullName" format
+            // We do this since all DomainContext were generated usign old WCF format
+            Func<Uri, HttpClient> httpClientFactory = uri =>
+            {
+                HttpClient httpClient = new HttpClient(clientHandler, disposeHandler: false);
+
+                // Remove ".svc/binary" from the URI
+                const string toRemove = ".svc/binary/";
+                string uriString = uri.AbsoluteUri;
+
+                if (uriString.EndsWith(toRemove, StringComparison.Ordinal))
+                {
+                    uri = new Uri(uriString.Remove(uriString.Length - toRemove.Length));
+                }
+
+                httpClient.BaseAddress = uri;
+                return httpClient;
+            };
+
+            DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
         }
 
         [AssemblyCleanup]
@@ -49,17 +66,24 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
-        private static void StartWebServer([CallerFilePath]string filePaht = null)
+        private static void StartWebServer([CallerFilePath]string filePath = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
-            string projectPath = Path.GetDirectoryName(filePaht);
+            string projectPath = Path.GetDirectoryName(filePath);
+
 #if DEBUG
             string configuration = "Debug";
 #else
             string configuration = "Release";
 #endif
+
+#if NET10_0
+            string targetFramework = "net10.0";
+#else
             string targetFramework = "net8.0";
-            string webSitePath = Path.GetFullPath(Path.Combine(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
+#endif
+
+            string webSitePath = Path.GetFullPath(Path.Join(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));
             string processPath = webSitePath + ProcessName + ".exe";
 
             if (!Directory.Exists(webSitePath))
@@ -72,14 +96,19 @@ namespace OpenRiaServices.Client.Test
             if (websites.Any())
             {
                 Console.WriteLine("AssemblyInitialize: Webserver process was already started, not starting anything");
-                // Already running do nothing
+                // Already running. do nothing
             }
             else
             {
-                ProcessStartInfo startInfo = new(processPath, "--urls \"https://localhost:7045;http://localhost:5246\"");
+                var startInfo = new ProcessStartInfo
+                {
+                    FileName = processPath,
+                    UseShellExecute = false,
+                    WorkingDirectory = Path.GetFullPath(Path.Join(projectPath, @"../AspNetCoreWebsite/"))
+                };
+                startInfo.ArgumentList.Add("--urls");
+                startInfo.ArgumentList.Add(TestURIs.RootURI.ToString());
                 startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
-                startInfo.UseShellExecute = false;
-                startInfo.WorkingDirectory = Path.GetFullPath(Path.Combine(projectPath, @"../AspNetCoreWebsite/"));
                 s_aspNetCoreSite = Process.Start(startInfo);
 
                 Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
@@ -92,7 +121,7 @@ namespace OpenRiaServices.Client.Test
             {
                 try
                 {
-                    var res = httpClient.GetAsync("http://localhost:5246/").GetAwaiter().GetResult();
+                    var res = httpClient.GetAsync(TestURIs.RootURI).GetAwaiter().GetResult();
                     if (res.IsSuccessStatusCode)
                     {
                         Console.WriteLine("AssemblyInitialize: Webserver started");

@@ -505,7 +505,7 @@ namespace OpenRiaServices.Client
             {
                 return new DomainOperationException(serviceFault.ErrorMessage, OperationErrorStatus.NotSupported, serviceFault.ErrorCode, serviceFault.StackTrace);
             }
-            else if (serviceFault.ErrorCode == 401)
+            else if (serviceFault.ErrorCode is 401 or 403)
             {
                 return new DomainOperationException(serviceFault.ErrorMessage, OperationErrorStatus.Unauthorized, serviceFault.ErrorCode, serviceFault.StackTrace);
             }

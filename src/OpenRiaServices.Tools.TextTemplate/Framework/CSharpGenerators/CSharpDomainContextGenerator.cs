@@ -85,13 +85,13 @@ this.Write("\r\n");
 
 	}
 	
-	/// <summary>
+    /// <summary>
     /// Generates the DomainContext class constructors.
     /// </summary>	
 	protected virtual void GenerateConstructors()
 	{
 		bool requiresSecureEndpoint = this.GetRequiresSecureEndpoint();
-		string relativeServiceUri = string.Format(CultureInfo.InvariantCulture, "{0}.svc", this.DomainServiceDescription.DomainServiceType.FullName.Replace('.', '-'));
+		string relativeServiceUri = GetDomainServiceUri();
 
 this.Write("public ");
 
@@ -101,7 +101,7 @@ this.Write("() : \r\n\tthis(new Uri(\"");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(relativeServiceUri));
 
-this.Write("\", UriKind.Relative))\r\n{\r\n}\r\n\t\t\r\npublic ");
+this.Write("\", UriKind.Relative))\r\n{\r\n}\r\n\r\npublic ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.DomainContextTypeName));
 
@@ -681,7 +681,7 @@ this.Write(");\r\n");
         }
 
 
-this.Write("[System.ServiceModel.ServiceContract()]\r\npublic interface ");
+this.Write("public interface ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(this.ContractInterfaceName));
 
@@ -710,12 +710,7 @@ this.Write("[OpenRiaServices.Client.HasSideEffects(");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(DomainContextGenerator.OperationHasSideEffects(operation).ToString().ToLower()));
 
-this.Write(")]\r\n");
-
-
-		this.GenerateContractMethodAttributes(operation.Name);
-
-this.Write("System.IAsyncResult Begin");
+this.Write(")]\r\nSystem.IAsyncResult Begin");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(operation.Name));
 
@@ -757,7 +752,6 @@ this.Write("(System.IAsyncResult result);\r\n");
 	
 	private void GenerateContractSubmitChangesMethod()
 	{
-		this.GenerateContractMethodAttributes("SubmitChanges");
 
 this.Write("IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallb" +
         "ack callback, object asyncState);\r\nIEnumerable<ChangeSetEntry> EndSubmitChanges(" +
@@ -766,25 +760,6 @@ this.Write("IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSe
 
 	}
 	
-	private void GenerateContractMethodAttributes(string operationName)
-	{
-		string domainServiceName = this.DomainServiceDescription.DomainServiceType.Name;
-		string actionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultActionSchema, domainServiceName, operationName);
-		string replyActionString = string.Format(CultureInfo.InvariantCulture, DomainContextGenerator.DefaultReplyActionSchema, domainServiceName, operationName);
-		
-
-this.Write("[OperationContract(AsyncPattern=true, Action=\"");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(actionString));
-
-this.Write("\", ReplyAction=\"");
-
-this.Write(this.ToStringHelper.ToStringWithCulture(replyActionString));
-
-this.Write("\")]\t\r\n");
-
-
-	}
 
 
 

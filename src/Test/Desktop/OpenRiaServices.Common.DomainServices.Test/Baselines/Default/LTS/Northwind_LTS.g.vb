@@ -23,7 +23,6 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
-Imports System.ServiceModel
 Imports System.Threading.Tasks
 
 Namespace DataTests.Northwind.LTS
@@ -173,7 +172,7 @@ Namespace DataTests.Northwind.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="Product"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Category_Product", New String() {"CategoryID"}, New String() {"CategoryID"})>  _
+        <EntityAssociation("Category_Product", "CategoryID", "CategoryID")>  _
         Public ReadOnly Property Products() As EntityCollection(Of Product)
             Get
                 If (Me._products Is Nothing) Then
@@ -489,7 +488,7 @@ Namespace DataTests.Northwind.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="Order"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Customer_Order", New String() {"CustomerID"}, New String() {"CustomerID"})>  _
+        <EntityAssociation("Customer_Order", "CustomerID", "CustomerID")>  _
         Public ReadOnly Property Orders() As EntityCollection(Of Order)
             Get
                 If (Me._orders Is Nothing) Then
@@ -713,7 +712,7 @@ Namespace DataTests.Northwind.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Customer"/> entity.
         ''' </summary>
-        <EntityAssociation("Customer_Order", New String() {"CustomerID"}, New String() {"CustomerID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Customer_Order", "CustomerID", "CustomerID", IsForeignKey:=true)>  _
         Public Property Customer() As Customer
             Get
                 If (Me._customer Is Nothing) Then
@@ -835,7 +834,7 @@ Namespace DataTests.Northwind.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Order_Order_Detail", New String() {"OrderID"}, New String() {"OrderID"})>  _
+        <EntityAssociation("Order_Order_Detail", "OrderID", "OrderID")>  _
         Public ReadOnly Property Order_Details() As EntityCollection(Of Order_Detail)
             Get
                 If (Me._order_Details Is Nothing) Then
@@ -1207,7 +1206,7 @@ Namespace DataTests.Northwind.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Order"/> entity.
         ''' </summary>
-        <EntityAssociation("Order_Order_Detail", New String() {"OrderID"}, New String() {"OrderID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Order_Order_Detail", "OrderID", "OrderID", IsForeignKey:=true)>  _
         Public Property Order() As Order
             Get
                 If (Me._order Is Nothing) Then
@@ -1264,7 +1263,7 @@ Namespace DataTests.Northwind.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Product"/> entity.
         ''' </summary>
-        <EntityAssociation("Product_Order_Detail", New String() {"ProductID"}, New String() {"ProductID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Product_Order_Detail", "ProductID", "ProductID", IsForeignKey:=true)>  _
         Public Property Product() As Product
             Get
                 If (Me._product Is Nothing) Then
@@ -1497,7 +1496,7 @@ Namespace DataTests.Northwind.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Category"/> entity.
         ''' </summary>
-        <EntityAssociation("Category_Product", New String() {"CategoryID"}, New String() {"CategoryID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Category_Product", "CategoryID", "CategoryID", IsForeignKey:=true)>  _
         Public Property Category() As Category
             Get
                 If (Me._category Is Nothing) Then
@@ -1596,7 +1595,7 @@ Namespace DataTests.Northwind.LTS
         ''' <summary>
         ''' Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Product_Order_Detail", New String() {"ProductID"}, New String() {"ProductID"})>  _
+        <EntityAssociation("Product_Order_Detail", "ProductID", "ProductID")>  _
         Public ReadOnly Property Order_Details() As EntityCollection(Of Order_Detail)
             Get
                 If (Me._order_Details Is Nothing) Then
@@ -2118,7 +2117,7 @@ Namespace DataTests.Northwind.LTS
         ''' Gets the collection of associated <see cref="Territory"/> entity instances.
         ''' </summary>
         <Composition(),  _
-         EntityAssociation("Region_Territory", New String() {"RegionID"}, New String() {"RegionID"})>  _
+         EntityAssociation("Region_Territory", "RegionID", "RegionID")>  _
         Public ReadOnly Property Territories() As EntityCollection(Of Territory)
             Get
                 If (Me._territories Is Nothing) Then
@@ -2199,7 +2198,7 @@ Namespace DataTests.Northwind.LTS
         ''' <summary>
         ''' Gets or sets the associated <see cref="Region"/> entity.
         ''' </summary>
-        <EntityAssociation("Region_Territory", New String() {"RegionID"}, New String() {"RegionID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Region_Territory", "RegionID", "RegionID", IsForeignKey:=true)>  _
         Public Property Region() As Region
             Get
                 If (Me._region Is Nothing) Then
@@ -2528,7 +2527,6 @@ Namespace TestDomainServices.LTS
         ''' <summary>
         ''' Service contract for the 'Northwind' DomainService.
         ''' </summary>
-        <ServiceContract()>  _
         Public Interface INorthwindContract
             
             ''' <summary>
@@ -2537,8 +2535,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetCategories", ReplyAction:="http://tempuri.org/Northwind/GetCategoriesResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetCategories(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2554,8 +2551,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetCustomers", ReplyAction:="http://tempuri.org/Northwind/GetCustomersResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetCustomers(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2571,8 +2567,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction:="http://tempuri.org/Northwind/GetOrderDetailsResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetOrderDetails(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2588,8 +2583,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetOrders", ReplyAction:="http://tempuri.org/Northwind/GetOrdersResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetOrders(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2606,8 +2600,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetProductById", ReplyAction:="http://tempuri.org/Northwind/GetProductByIdResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2623,8 +2616,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetProductInfos", ReplyAction:="http://tempuri.org/Northwind/GetProductInfosResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProductInfos(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2640,8 +2632,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetProducts", ReplyAction:="http://tempuri.org/Northwind/GetProductsResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetProducts(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2658,8 +2649,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetRegionById", ReplyAction:="http://tempuri.org/Northwind/GetRegionByIdResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetRegionById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2675,8 +2665,7 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/GetRegions", ReplyAction:="http://tempuri.org/Northwind/GetRegionsResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetRegions(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -2693,7 +2682,6 @@ Namespace TestDomainServices.LTS
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/Northwind/SubmitChanges", ReplyAction:="http://tempuri.org/Northwind/SubmitChangesResponse")>  _
             Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>

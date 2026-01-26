@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 
@@ -129,7 +130,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <typeparam name="TEntity">The Entity type</typeparam>
         /// <param name="supportedOperations">The operations supported for the Entity type</param>
-        protected void CreateEntitySet<TEntity>(EntitySetOperations supportedOperations) where TEntity : Entity
+        protected void CreateEntitySet<[DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.All)] TEntity>(EntitySetOperations supportedOperations) where TEntity : Entity
         {
             EntitySet set = new EntitySet<TEntity>();
             this.AddEntitySet(set, supportedOperations);

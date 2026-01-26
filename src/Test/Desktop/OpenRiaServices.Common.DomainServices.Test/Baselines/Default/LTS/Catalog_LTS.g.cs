@@ -308,9 +308,7 @@ namespace DataTests.AdventureWorks.LTS
         /// <summary>
         /// Gets or sets the associated <see cref="Employee"/> entity.
         /// </summary>
-        [EntityAssociation("Employee_Employee", new string[] {
-                "ManagerID"}, new string[] {
-                "EmployeeID"}, IsForeignKey=true)]
+        [EntityAssociation("Employee_Employee", "ManagerID", "EmployeeID", IsForeignKey=true)]
         public Employee Manager
         {
             get
@@ -461,9 +459,7 @@ namespace DataTests.AdventureWorks.LTS
         /// <summary>
         /// Gets the collection of associated <see cref="PurchaseOrder"/> entity instances.
         /// </summary>
-        [EntityAssociation("Employee_PurchaseOrder", new string[] {
-                "EmployeeID"}, new string[] {
-                "EmployeeID"})]
+        [EntityAssociation("Employee_PurchaseOrder", "EmployeeID", "EmployeeID")]
         public EntityCollection<PurchaseOrder> PurchaseOrders
         {
             get
@@ -479,9 +475,7 @@ namespace DataTests.AdventureWorks.LTS
         /// <summary>
         /// Gets the collection of associated <see cref="Employee"/> entity instances.
         /// </summary>
-        [EntityAssociation("Employee_Employee", new string[] {
-                "EmployeeID"}, new string[] {
-                "ManagerID"})]
+        [EntityAssociation("Employee_Employee", "EmployeeID", "ManagerID")]
         public EntityCollection<Employee> Reports
         {
             get
@@ -1170,9 +1164,7 @@ namespace DataTests.AdventureWorks.LTS
         /// <summary>
         /// Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         /// </summary>
-        [EntityAssociation("Product_PurchaseOrderDetail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"})]
+        [EntityAssociation("Product_PurchaseOrderDetail", "ProductID", "ProductID")]
         public EntityCollection<PurchaseOrderDetail> PurchaseOrderDetails
         {
             get
@@ -1559,9 +1551,7 @@ namespace DataTests.AdventureWorks.LTS
         /// <summary>
         /// Gets or sets the associated <see cref="Employee"/> entity.
         /// </summary>
-        [EntityAssociation("Employee_PurchaseOrder", new string[] {
-                "EmployeeID"}, new string[] {
-                "EmployeeID"}, IsForeignKey=true)]
+        [EntityAssociation("Employee_PurchaseOrder", "EmployeeID", "EmployeeID", IsForeignKey=true)]
         public Employee Employee
         {
             get
@@ -1708,9 +1698,7 @@ namespace DataTests.AdventureWorks.LTS
         /// <summary>
         /// Gets the collection of associated <see cref="PurchaseOrderDetail"/> entity instances.
         /// </summary>
-        [EntityAssociation("PurchaseOrder_PurchaseOrderDetail", new string[] {
-                "PurchaseOrderID"}, new string[] {
-                "PurchaseOrderID"})]
+        [EntityAssociation("PurchaseOrder_PurchaseOrderDetail", "PurchaseOrderID", "PurchaseOrderID")]
         public EntityCollection<PurchaseOrderDetail> PurchaseOrderDetails
         {
             get
@@ -2167,9 +2155,7 @@ namespace DataTests.AdventureWorks.LTS
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [EntityAssociation("Product_PurchaseOrderDetail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"}, IsForeignKey=true)]
+        [EntityAssociation("Product_PurchaseOrderDetail", "ProductID", "ProductID", IsForeignKey=true)]
         public Product Product
         {
             get
@@ -2238,9 +2224,7 @@ namespace DataTests.AdventureWorks.LTS
         /// <summary>
         /// Gets or sets the associated <see cref="PurchaseOrder"/> entity.
         /// </summary>
-        [EntityAssociation("PurchaseOrder_PurchaseOrderDetail", new string[] {
-                "PurchaseOrderID"}, new string[] {
-                "PurchaseOrderID"}, IsForeignKey=true)]
+        [EntityAssociation("PurchaseOrder_PurchaseOrderDetail", "PurchaseOrderID", "PurchaseOrderID", IsForeignKey=true)]
         public PurchaseOrder PurchaseOrder
         {
             get
@@ -2464,7 +2448,6 @@ namespace TestDomainServices.LTS
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
-    using System.ServiceModel;
     using System.Threading.Tasks;
     using DataTests.AdventureWorks.LTS;
     using OpenRiaServices;
@@ -2624,7 +2607,6 @@ namespace TestDomainServices.LTS
         /// <summary>
         /// Service contract for the 'Catalog' DomainService.
         /// </summary>
-        [ServiceContract()]
         public interface ICatalogContract
         {
             
@@ -2635,7 +2617,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetEmployees", ReplyAction="http://tempuri.org/Catalog/GetEmployeesResponse")]
             IAsyncResult BeginGetEmployees(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2652,7 +2633,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetProducts", ReplyAction="http://tempuri.org/Catalog/GetProductsResponse")]
             IAsyncResult BeginGetProducts(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2670,7 +2650,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetProductsByCategory", ReplyAction="http://tempuri.org/Catalog/GetProductsByCategoryResponse")]
             IAsyncResult BeginGetProductsByCategory(int subCategoryID, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2687,7 +2666,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetProductsWithCaching", ReplyAction="http://tempuri.org/Catalog/GetProductsWithCachingResponse")]
             IAsyncResult BeginGetProductsWithCaching(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2704,7 +2682,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetProductsWithCustomTotalCount", ReplyAction="http://tempuri.org/Catalog/GetProductsWithCustomTotalCountResponse")]
             IAsyncResult BeginGetProductsWithCustomTotalCount(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2721,7 +2698,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/GetPurchaseOrders", ReplyAction="http://tempuri.org/Catalog/GetPurchaseOrdersResponse")]
             IAsyncResult BeginGetPurchaseOrders(AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -2738,7 +2714,6 @@ namespace TestDomainServices.LTS
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [OperationContract(AsyncPattern=true, Action="http://tempuri.org/Catalog/SubmitChanges", ReplyAction="http://tempuri.org/Catalog/SubmitChangesResponse")]
             IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
             
             /// <summary>

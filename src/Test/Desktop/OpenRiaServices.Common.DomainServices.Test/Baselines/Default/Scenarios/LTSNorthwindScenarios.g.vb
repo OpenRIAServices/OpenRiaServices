@@ -22,7 +22,6 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
-Imports System.ServiceModel
 Imports System.Threading.Tasks
 
 Namespace DataTests.Scenarios.LTS.Northwind
@@ -492,7 +491,6 @@ Namespace DataTests.Scenarios.LTS.Northwind
         ''' <summary>
         ''' Service contract for the 'LTS_NorthwindScenarios' DomainService.
         ''' </summary>
-        <ServiceContract()>  _
         Public Interface ILTS_NorthwindScenariosContract
             
             ''' <summary>
@@ -501,8 +499,7 @@ Namespace DataTests.Scenarios.LTS.Northwind
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/LTS_NorthwindScenarios/GetCustomer_Bug479436s", ReplyAction:="http://tempuri.org/LTS_NorthwindScenarios/GetCustomer_Bug479436sResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetCustomer_Bug479436s(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -518,8 +515,7 @@ Namespace DataTests.Scenarios.LTS.Northwind
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/LTS_NorthwindScenarios/GetOrder_Bug479436s", ReplyAction:="http://tempuri.org/LTS_NorthwindScenarios/GetOrder_Bug479436sResponse")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetOrder_Bug479436s(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -535,9 +531,7 @@ Namespace DataTests.Scenarios.LTS.Northwind
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false),  _
-             OperationContract(AsyncPattern:=true, Action:="http://tempuri.org/LTS_NorthwindScenarios/GetRequiredAttributeTestEntities", ReplyAction:="http://tempuri.org/LTS_NorthwindScenarios/GetRequiredAttributeTestEntitiesRespons"& _ 
-                "e")>  _
+            <HasSideEffects(false)>  _
             Function BeginGetRequiredAttributeTestEntities(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
@@ -670,7 +664,7 @@ Namespace DataTests.Scenarios.LTS.Northwind
         ''' <summary>
         ''' Gets or sets the associated <see cref="Customer_Bug479436"/> entity.
         ''' </summary>
-        <EntityAssociation("Customer_Bug479436_Order_Bug479436", New String() {"CustomerID"}, New String() {"CustomerID"}, IsForeignKey:=true)>  _
+        <EntityAssociation("Customer_Bug479436_Order_Bug479436", "CustomerID", "CustomerID", IsForeignKey:=true)>  _
         Public Property Customer() As Customer_Bug479436
             Get
                 If (Me._customer Is Nothing) Then

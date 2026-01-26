@@ -2,12 +2,12 @@
 extern alias SSmDsWeb;
 using System;
 using System.Linq;
-using Microsoft.Silverlight.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Silverlight.Testing;
 using System.Threading;
 using System.Threading.Tasks;
 using DataTests.AdventureWorks.LTS;
+using Microsoft.Silverlight.Testing;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.Client.Web.Test
 {
@@ -26,8 +26,7 @@ namespace OpenRiaServices.Client.Web.Test
         /// BeginQuery isn't strongly typed. This test exists to capture this scenario/issue.
         /// </summary>
         [TestMethod]
-        [Asynchronous]
-        public void TestMethodQueryMismatch()
+        public async Task TestMethodQueryMismatch()
         {
             var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
             dc.EntityTypes = new Type[] { typeof(Product), typeof(PurchaseOrder), typeof(PurchaseOrderDetail) };
@@ -35,24 +34,15 @@ namespace OpenRiaServices.Client.Web.Test
             var query = new EntityQuery<PurchaseOrder>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), Array.Empty<PurchaseOrder>().AsQueryable().Take(2));
             query.IncludeTotalCount = true;
 
-            var queryTask = dc.QueryAsync(query, CancellationToken.None);
+            var results = await dc.QueryAsync(query, CancellationToken.None);
 
-            EnqueueConditional(() => queryTask.IsCompleted);
-
-            EnqueueCallback(delegate
-            {
-                var queryResults = queryTask.Result;
-                Assert.AreEqual(2, queryResults.Entities.Concat(queryResults.IncludedEntities).Count());
-                Assert.AreEqual(504, queryResults.TotalCount);
-            });
-
-            EnqueueTestComplete();
+            Assert.AreEqual(2, results.Entities.Concat(results.IncludedEntities).Count());
+            Assert.AreEqual(504, results.TotalCount);
         }
 
 
         [TestMethod]
-        [Asynchronous]
-        public void TestQuery()
+        public async Task TestQuery()
         {
             var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
             dc.EntityTypes = new Type[] { typeof(Product) };
@@ -65,21 +55,10 @@ namespace OpenRiaServices.Client.Web.Test
             var entityQuery = new EntityQuery<Product>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), query);
             entityQuery.IncludeTotalCount = true;
 
-            var queryTask = dc.QueryAsync(entityQuery, CancellationToken.None);
+            var result = await dc.QueryAsync(entityQuery, CancellationToken.None);
 
-            EnqueueConditional(delegate
-            {
-                return queryTask.IsCompleted;
-            });
-            EnqueueCallback(delegate
-            {
-                var result = queryTask.Result;
-
-                Assert.AreEqual(79, result.Entities.Concat(result.IncludedEntities).Count());
-                Assert.AreEqual(result.Entities.Count(), result.TotalCount);
-            });
-
-            EnqueueTestComplete();
+            Assert.AreEqual(79, result.Entities.Concat(result.IncludedEntities).Count());
+            Assert.AreEqual(result.Entities.Count(), result.TotalCount);
         }
 
         [TestMethod]

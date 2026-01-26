@@ -16,36 +16,48 @@ namespace OpenRiaServices.Tools
         /// </summary>
         public AttributeDeclaration GetAttributeDeclaration(Attribute attribute)
         {
-            AttributeDeclaration attributeDeclaration = new AttributeDeclaration(typeof(EntityAssociationAttribute));
+            string name;
+            string[] thisKey, otherKey;
+            bool isForeignKey;
 
             if (attribute is EntityAssociationAttribute entityAssociation)
             {
-                attributeDeclaration.ConstructorArguments.Add(entityAssociation.Name);
-                attributeDeclaration.ConstructorArguments.Add((string[])entityAssociation.ThisKeyMembers);
-                attributeDeclaration.ConstructorArguments.Add((string[])entityAssociation.OtherKeyMembers);
-
-                if (entityAssociation.IsForeignKey)
-                {
-                    attributeDeclaration.NamedParameters.Add(nameof(EntityAssociationAttribute.IsForeignKey), true);
-                }
+                name = entityAssociation.Name;
+                thisKey = (string[])entityAssociation.ThisKeyMembers;
+                otherKey = (string[])entityAssociation.OtherKeyMembers;
+                isForeignKey = entityAssociation.IsForeignKey;
             }
             else if (attribute is AssociationAttribute associationAttribute)
             {
-                // [EntityAssociation( {true|false} )]
-                attributeDeclaration.ConstructorArguments.Add(associationAttribute.Name);
-                attributeDeclaration.ConstructorArguments.Add(associationAttribute.ThisKeyMembers.ToArray());
-                attributeDeclaration.ConstructorArguments.Add(associationAttribute.OtherKeyMembers.ToArray());
-
-                if (associationAttribute.IsForeignKey)
-                {
-                    attributeDeclaration.NamedParameters.Add(nameof(EntityAssociationAttribute.IsForeignKey), true);
-                }
+                name = associationAttribute.Name;
+                thisKey = associationAttribute.ThisKeyMembers.ToArray();
+                otherKey = associationAttribute.OtherKeyMembers.ToArray();
+                isForeignKey = associationAttribute.IsForeignKey;
             }
             else
             {
                 return null;
             }
 
+            // Generate the attribute declaration
+            // If there is only a single key member, we use string based constructor
+            AttributeDeclaration attributeDeclaration = new AttributeDeclaration(typeof(EntityAssociationAttribute));
+            attributeDeclaration.ConstructorArguments.Add(name);
+            if (thisKey.Length == 1 && otherKey.Length == 1)
+            {
+                attributeDeclaration.ConstructorArguments.Add(thisKey[0]);
+                attributeDeclaration.ConstructorArguments.Add(otherKey[0]);
+            }
+            else
+            {
+                attributeDeclaration.ConstructorArguments.Add(thisKey);
+                attributeDeclaration.ConstructorArguments.Add(otherKey);
+            }
+
+            if (isForeignKey)
+            {
+                attributeDeclaration.NamedParameters.Add(nameof(EntityAssociationAttribute.IsForeignKey), true);
+            }
             return attributeDeclaration;
         }
     }

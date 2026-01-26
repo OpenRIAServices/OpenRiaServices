@@ -29,24 +29,12 @@ namespace OpenRiaServices.Client.Test
 
             StartWebServer();
 
-#if NETFRAMEWORK
-#pragma warning disable CS0618 // Type or member is obsolete
-            DomainContext.DomainClientFactory = new Web.WebDomainClientFactory()
-            {
-                ServerBaseUri = TestURIs.RootURI,
-            };
-#pragma warning restore CS0618 // Type or member is obsolete
-
-            //// Uncomment below to run tests using BinaryHttpDomainClientFactory instead:
-            ///
-#else
             DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, new HttpClientHandler()
             {
                 CookieContainer = new CookieContainer(),
                 UseCookies = true,
                 AutomaticDecompression = DecompressionMethods.Deflate | DecompressionMethods.GZip,
             });
-#endif
 
             HttpWebRequest.DefaultCachePolicy = new System.Net.Cache.RequestCachePolicy(System.Net.Cache.RequestCacheLevel.Default);
         }

@@ -6,6 +6,8 @@ using System.Runtime.Serialization;
 using System.Security;
 using OpenRiaServices.Server;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.Wcf
 {
     internal class DomainServiceSerializationSurrogate

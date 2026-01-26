@@ -2,6 +2,8 @@
 using System.Buffers;
 using System.Xml;
 
+#nullable disable
+
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     /// <summary>

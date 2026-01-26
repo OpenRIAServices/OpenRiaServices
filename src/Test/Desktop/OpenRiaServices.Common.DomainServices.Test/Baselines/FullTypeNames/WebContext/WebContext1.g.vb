@@ -168,7 +168,6 @@ Namespace TestNamespace
         ''' <summary>
         ''' Service contract for the 'AuthenticationService1' DomainService.
         ''' </summary>
-        <Global.System.ServiceModel.ServiceContractAttribute()>  _
         Public Interface IAuthenticationService1Contract
             
             ''' <summary>
@@ -177,8 +176,7 @@ Namespace TestNamespace
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.Client.HasSideEffects(false),  _
-             Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/AuthenticationService1/GetUser", ReplyAction:="http://tempuri.org/AuthenticationService1/GetUserResponse")>  _
+            <Global.OpenRiaServices.Client.HasSideEffects(false)>  _
             Function BeginGetUser(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
@@ -198,8 +196,7 @@ Namespace TestNamespace
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
-             Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/AuthenticationService1/Login", ReplyAction:="http://tempuri.org/AuthenticationService1/LoginResponse")>  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true)>  _
             Function BeginLogin(ByVal userName As String, ByVal password As String, ByVal isPersistent As Boolean, ByVal customData As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
@@ -215,8 +212,7 @@ Namespace TestNamespace
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.Client.HasSideEffects(true),  _
-             Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/AuthenticationService1/Logout", ReplyAction:="http://tempuri.org/AuthenticationService1/LogoutResponse")>  _
+            <Global.OpenRiaServices.Client.HasSideEffects(true)>  _
             Function BeginLogout(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>
@@ -233,7 +229,6 @@ Namespace TestNamespace
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.System.ServiceModel.OperationContractAttribute(AsyncPattern:=true, Action:="http://tempuri.org/AuthenticationService1/SubmitChanges", ReplyAction:="http://tempuri.org/AuthenticationService1/SubmitChangesResponse")>  _
             Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
             
             ''' <summary>

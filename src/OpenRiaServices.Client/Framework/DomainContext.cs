@@ -4,13 +4,13 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
-using OpenRiaServices.Client.Data;
 
 namespace OpenRiaServices.Client
 {
@@ -68,7 +68,7 @@ namespace OpenRiaServices.Client
         ///  fall back to a "DefaultDomainClientFactory" with the same behaviour as in this function.
         /// </remarks>
         /// <returns>A domain client which can be used to access the service which the serviceContract reference</returns>
-        protected static DomainClient CreateDomainClient(Type serviceContract, Uri serviceUri, bool usesHttps)
+        protected static DomainClient CreateDomainClient([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type serviceContract, Uri serviceUri, bool usesHttps)
         {
             return DomainClientFactory.CreateDomainClient(serviceContract, serviceUri, usesHttps);
         }

@@ -163,9 +163,7 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets the collection of associated <see cref="Product"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", "CategoryID", "CategoryID")]
         public global::OpenRiaServices.Client.EntityCollection<global::DataTests.Northwind.LTS.Product> Products
         {
             get
@@ -497,9 +495,7 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets the collection of associated <see cref="Order"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", "CustomerID", "CustomerID")]
         public global::OpenRiaServices.Client.EntityCollection<global::DataTests.Northwind.LTS.Order> Orders
         {
             get
@@ -711,9 +707,7 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets or sets the associated <see cref="Customer"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", "CustomerID", "CustomerID", IsForeignKey=true)]
         public global::DataTests.Northwind.LTS.Customer Customer
         {
             get
@@ -861,9 +855,7 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", "OrderID", "OrderID")]
         public global::OpenRiaServices.Client.EntityCollection<global::DataTests.Northwind.LTS.Order_Detail> Order_Details
         {
             get
@@ -1278,9 +1270,7 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets or sets the associated <see cref="Order"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", "OrderID", "OrderID", IsForeignKey=true)]
         public global::DataTests.Northwind.LTS.Order Order
         {
             get
@@ -1350,9 +1340,7 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", "ProductID", "ProductID", IsForeignKey=true)]
         public global::DataTests.Northwind.LTS.Product Product
         {
             get
@@ -1578,9 +1566,7 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets or sets the associated <see cref="Category"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", "CategoryID", "CategoryID", IsForeignKey=true)]
         public global::DataTests.Northwind.LTS.Category Category
         {
             get
@@ -1700,9 +1686,7 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", "ProductID", "ProductID")]
         public global::OpenRiaServices.Client.EntityCollection<global::DataTests.Northwind.LTS.Order_Detail> Order_Details
         {
             get
@@ -2284,10 +2268,8 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets the collection of associated <see cref="Territory"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"})]
         [global::System.ComponentModel.DataAnnotations.CompositionAttribute()]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", "RegionID", "RegionID")]
         public global::OpenRiaServices.Client.EntityCollection<global::DataTests.Northwind.LTS.Territory> Territories
         {
             get
@@ -2368,9 +2350,7 @@ namespace DataTests.Northwind.LTS
         /// <summary>
         /// Gets or sets the associated <see cref="Region"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", "RegionID", "RegionID", IsForeignKey=true)]
         public global::DataTests.Northwind.LTS.Region Region
         {
             get
@@ -2660,9 +2640,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets the collection of associated <see cref="Product"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", "CategoryID", "CategoryID")]
         public global::OpenRiaServices.Client.EntityCollection<global::NorthwindModel.Product> Products
         {
             get
@@ -2994,9 +2972,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets the collection of associated <see cref="Order"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", "CustomerID", "CustomerID")]
         public global::OpenRiaServices.Client.EntityCollection<global::NorthwindModel.Order> Orders
         {
             get
@@ -3208,9 +3184,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Customer"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Customer_Order", new string[] {
-                "CustomerID"}, new string[] {
-                "CustomerID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Customer_Order", "CustomerID", "CustomerID", IsForeignKey=true)]
         public global::NorthwindModel.Customer Customer
         {
             get
@@ -3357,9 +3331,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", "OrderID", "OrderID")]
         public global::OpenRiaServices.Client.EntityCollection<global::NorthwindModel.Order_Detail> Order_Details
         {
             get
@@ -3774,9 +3746,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Order"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Order_Order_Detail", new string[] {
-                "OrderID"}, new string[] {
-                "OrderID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Order_Order_Detail", "OrderID", "OrderID", IsForeignKey=true)]
         public global::NorthwindModel.Order Order
         {
             get
@@ -3846,9 +3816,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Product"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", "ProductID", "ProductID", IsForeignKey=true)]
         public global::NorthwindModel.Product Product
         {
             get
@@ -4074,9 +4042,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Category"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Category_Product", new string[] {
-                "CategoryID"}, new string[] {
-                "CategoryID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Category_Product", "CategoryID", "CategoryID", IsForeignKey=true)]
         public global::NorthwindModel.Category Category
         {
             get
@@ -4196,9 +4162,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets the collection of associated <see cref="Order_Detail"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Product_Order_Detail", new string[] {
-                "ProductID"}, new string[] {
-                "ProductID"})]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Product_Order_Detail", "ProductID", "ProductID")]
         public global::OpenRiaServices.Client.EntityCollection<global::NorthwindModel.Order_Detail> Order_Details
         {
             get
@@ -4776,10 +4740,8 @@ namespace NorthwindModel
         /// <summary>
         /// Gets the collection of associated <see cref="Territory"/> entity instances.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"})]
         [global::System.ComponentModel.DataAnnotations.CompositionAttribute()]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", "RegionID", "RegionID")]
         public global::OpenRiaServices.Client.EntityCollection<global::NorthwindModel.Territory> Territories
         {
             get
@@ -4860,9 +4822,7 @@ namespace NorthwindModel
         /// <summary>
         /// Gets or sets the associated <see cref="Region"/> entity.
         /// </summary>
-        [global::OpenRiaServices.EntityAssociationAttribute("Region_Territory", new string[] {
-                "RegionID"}, new string[] {
-                "RegionID"}, IsForeignKey=true)]
+        [global::System.ComponentModel.DataAnnotations.EntityAssociationAttribute("Region_Territory", "RegionID", "RegionID", IsForeignKey=true)]
         public global::NorthwindModel.Region Region
         {
             get
@@ -5238,7 +5198,6 @@ namespace TestDomainServices.EF
         /// <summary>
         /// Service contract for the 'Northwind' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
         public interface INorthwindContract
         {
             
@@ -5249,7 +5208,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCategories", ReplyAction="http://tempuri.org/Northwind/GetCategoriesResponse")]
             global::System.IAsyncResult BeginGetCategories(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5266,7 +5224,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCustomers", ReplyAction="http://tempuri.org/Northwind/GetCustomersResponse")]
             global::System.IAsyncResult BeginGetCustomers(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5283,7 +5240,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction="http://tempuri.org/Northwind/GetOrderDetailsResponse")]
             global::System.IAsyncResult BeginGetOrderDetails(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5300,7 +5256,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrders", ReplyAction="http://tempuri.org/Northwind/GetOrdersResponse")]
             global::System.IAsyncResult BeginGetOrders(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5318,7 +5273,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductById", ReplyAction="http://tempuri.org/Northwind/GetProductByIdResponse")]
             global::System.IAsyncResult BeginGetProductById(int id, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5335,7 +5289,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductInfos", ReplyAction="http://tempuri.org/Northwind/GetProductInfosResponse")]
             global::System.IAsyncResult BeginGetProductInfos(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5352,7 +5305,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProducts", ReplyAction="http://tempuri.org/Northwind/GetProductsResponse")]
             global::System.IAsyncResult BeginGetProducts(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5370,7 +5322,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegionById", ReplyAction="http://tempuri.org/Northwind/GetRegionByIdResponse")]
             global::System.IAsyncResult BeginGetRegionById(int id, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5387,7 +5338,6 @@ namespace TestDomainServices.EF
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegions", ReplyAction="http://tempuri.org/Northwind/GetRegionsResponse")]
             global::System.IAsyncResult BeginGetRegions(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5404,7 +5354,6 @@ namespace TestDomainServices.EF
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/SubmitChanges", ReplyAction="http://tempuri.org/Northwind/SubmitChangesResponse")]
             global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5674,7 +5623,6 @@ namespace TestDomainServices.LTS
         /// <summary>
         /// Service contract for the 'Northwind' DomainService.
         /// </summary>
-        [global::System.ServiceModel.ServiceContractAttribute()]
         public interface INorthwindContract
         {
             
@@ -5685,7 +5633,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCategories", ReplyAction="http://tempuri.org/Northwind/GetCategoriesResponse")]
             global::System.IAsyncResult BeginGetCategories(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5702,7 +5649,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetCustomers", ReplyAction="http://tempuri.org/Northwind/GetCustomersResponse")]
             global::System.IAsyncResult BeginGetCustomers(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5719,7 +5665,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrderDetails", ReplyAction="http://tempuri.org/Northwind/GetOrderDetailsResponse")]
             global::System.IAsyncResult BeginGetOrderDetails(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5736,7 +5681,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetOrders", ReplyAction="http://tempuri.org/Northwind/GetOrdersResponse")]
             global::System.IAsyncResult BeginGetOrders(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5754,7 +5698,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductById", ReplyAction="http://tempuri.org/Northwind/GetProductByIdResponse")]
             global::System.IAsyncResult BeginGetProductById(int id, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5771,7 +5714,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProductInfos", ReplyAction="http://tempuri.org/Northwind/GetProductInfosResponse")]
             global::System.IAsyncResult BeginGetProductInfos(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5788,7 +5730,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetProducts", ReplyAction="http://tempuri.org/Northwind/GetProductsResponse")]
             global::System.IAsyncResult BeginGetProducts(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5806,7 +5747,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegionById", ReplyAction="http://tempuri.org/Northwind/GetRegionByIdResponse")]
             global::System.IAsyncResult BeginGetRegionById(int id, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5823,7 +5763,6 @@ namespace TestDomainServices.LTS
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [global::OpenRiaServices.Client.HasSideEffects(false)]
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/GetRegions", ReplyAction="http://tempuri.org/Northwind/GetRegionsResponse")]
             global::System.IAsyncResult BeginGetRegions(global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -5840,7 +5779,6 @@ namespace TestDomainServices.LTS
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::System.ServiceModel.OperationContractAttribute(AsyncPattern=true, Action="http://tempuri.org/Northwind/SubmitChanges", ReplyAction="http://tempuri.org/Northwind/SubmitChangesResponse")]
             global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
             
             /// <summary>

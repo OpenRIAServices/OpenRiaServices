@@ -1,8 +1,11 @@
-﻿namespace OpenRiaServices.Tools
+﻿using System;
+
+namespace OpenRiaServices.Tools
 {
     /// <summary>
     /// Target platform
     /// </summary>
+    [Obsolete("This enum is not used and will be removed in a future version")]
     public enum TargetPlatform
     {
         /// <summary>

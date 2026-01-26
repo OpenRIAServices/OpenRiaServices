@@ -24,6 +24,9 @@ namespace OpenRiaServices.Server
         /// Gets or sets a value indicating whether the <see cref="DomainService"/>
         /// may only be accessed using a secure endpoint.
         /// </summary>
+#if NET
+        [Obsolete("RequiresSecureEndpoint is not enforced by AspNetCore Hosting, please enforce it using standard AspNetCore practices instead https://learn.microsoft.com/en-us/aspnet/core/security/enforcing-ssl?")]
+#endif
         public bool RequiresSecureEndpoint { get; set; }
 
         #endregion
