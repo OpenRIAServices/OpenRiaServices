@@ -99,7 +99,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
             try
             {
-                using var reader = BinaryMessageReader.Rent(memory, isBinary: context.Request.ContentType != "application/xml");
+                using var reader = BinaryMessageReader.Rent(memory, isBinary: IsBinaryRequest(context));
                 return ReadParametersFromBody(reader.XmlDictionaryReader);
             }
             finally
