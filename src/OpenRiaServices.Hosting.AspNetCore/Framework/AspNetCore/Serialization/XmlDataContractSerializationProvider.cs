@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using OpenRiaServices.Server;
 using System;
 using System.Buffers;
@@ -13,12 +14,28 @@ using System.Xml;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
-    internal sealed class XmlDataContractSerializationProvider(OpenRiaServicesOptions Options) : SerializationProvider
+    internal static class MimeTypes
+    {
+        public const string BinaryXml = "application/msbin1";
+        public const string TextXml = "application/xml";
+    }
+
+    internal sealed class XmlDataContractSerializationProvider(OpenRiaServicesOptions Options) : ISerializationProvider
     {
         ConcurrentDictionary<(Type, string), XmlRequestSerializer> _serializers = new();
         Dictionary<Type, SerializationHelper> _perDomainServiceSerializationHelper = new Dictionary<Type, SerializationHelper>();
 
-        public override RequestSerializer GetRequestSerializer(DomainServiceDescription domainServiceDescription, DomainOperationEntry operation)
+        public bool CanRead(string contentType)
+        {
+            return contentType == MimeTypes.BinaryXml || (Options.EnableTextXmlSerialization && contentType == MimeTypes.TextXml);
+        }
+
+        public bool CanWrite(string contentType)
+        {
+            return contentType == MimeTypes.BinaryXml || (Options.EnableTextXmlSerialization && contentType == MimeTypes.TextXml);
+        }
+
+        public RequestSerializer GetRequestSerializer(DomainServiceDescription domainServiceDescription, DomainOperationEntry operation)
         {
             var key = (operation.DomainServiceType, operation.Name);
 
@@ -46,6 +63,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         internal sealed class XmlRequestSerializer : RequestSerializer
         {
             private static readonly DataContractSerializer s_faultSerialiser = new DataContractSerializer(typeof(DomainServiceFault));
+            private readonly OpenRiaServicesOptions _options;
             private readonly SerializationHelper _serializationHelper;
             private readonly DataContractSerializer _responseSerializer;
             private readonly DomainOperationEntry _operation;
@@ -57,11 +75,23 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             private const string QueryIncludeTotalCountOption = "includeTotalCount";
             private const string InvalidContentMessage = "invalid content";
 
+
             public XmlRequestSerializer(OpenRiaServicesOptions Options, SerializationHelper _serializationHelper, DataContractSerializer serializer, DomainOperationEntry domainOperationEntry)
             {
+                _options = Options;
                 this._serializationHelper = _serializationHelper;
                 this._responseSerializer = serializer;
                 _operation = domainOperationEntry;
+            }
+
+            public override bool CanRead(ReadOnlySpan<char> contentType)
+            {
+                return contentType == MimeTypes.BinaryXml || (_options.EnableTextXmlSerialization && contentType == MimeTypes.TextXml);
+            }
+
+            public override bool CanWrite(ReadOnlySpan<char> contentType)
+            {
+                return contentType == MimeTypes.BinaryXml || (_options.EnableTextXmlSerialization && contentType == MimeTypes.TextXml);
             }
 
             public override async Task<(ServiceQuery, object[])> ReadParametersFromBodyAsync(HttpContext context, DomainOperationEntry operation)
@@ -85,7 +115,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
                 try
                 {
-                    using var reader = BinaryMessageReader.Rent(memory, isBinary: context.Request.ContentType != "application/xml");
+                    using var reader = BinaryMessageReader.Rent(memory, isBinary: context.Request.ContentType != MimeTypes.TextXml);
                     return ReadQueryParametersFromBody(reader.XmlDictionaryReader, operation);
                 }
                 finally
@@ -259,7 +289,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 if (ct.IsCancellationRequested)
                     return Task.CompletedTask;
 
-                var messageWriter = BinaryMessageWriter.Rent(isBinary: context.Request.ContentType != "application/xml");
+                var messageWriter = BinaryMessageWriter.Rent(isBinary: context.Request.ContentType != MimeTypes.TextXml);
                 try
                 {
                     WriteFault(fault, messageWriter.XmlWriter);
@@ -268,7 +298,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     messageWriter = null;
 
                     var response = context.Response;
-                    response.Headers.ContentType = context.Request.ContentType ?? "application/msbin1";
+                    response.Headers.ContentType = context.Request.ContentType ?? MimeTypes.BinaryXml;
                     response.ContentLength = bufferMemory.Length;
 
                     return bufferMemory.WriteTo(response, ct);
@@ -311,7 +341,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 if (ct.IsCancellationRequested)
                     return Task.CompletedTask;
 
-                var messageWriter = BinaryMessageWriter.Rent(isBinary: context.Request.ContentType != "application/xml");
+                bool isBinary = UseBinaryResponse(context);
+                var messageWriter = BinaryMessageWriter.Rent(isBinary: isBinary);
                 try
                 {
                     WriteResponse(messageWriter.XmlWriter, result, operation);
@@ -320,7 +351,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     messageWriter = null;
 
                     var response = context.Response;
-                    response.Headers.ContentType = context.Request.ContentType ?? "application/msbin1";
+                    response.Headers.ContentType = isBinary ? MimeTypes.BinaryXml : MimeTypes.TextXml;
                     response.ContentLength = bufferMemory.Length;
                     // TODO: Move to invokers
                     response.Headers.CacheControl = "private, no-store";
@@ -334,6 +365,37 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 }
             }
 
+            private bool UseBinaryResponse(HttpContext context)
+            {
+                // Use binary xml unless content type
+                if (!_options.EnableTextXmlSerialization)
+                {
+                    return true;
+                }
+
+                // Look at 
+                var accept = context.Request.Headers.Accept;
+                if (accept.Count == 1 && MediaTypeHeaderValue.TryParse(accept[0], out var acceptedType))
+                {
+                    // Not strictly true, should  do invalid value if not msbin1 or xml
+                    if (acceptedType.MediaType == MimeTypes.BinaryXml)
+                        return true;
+                    else if (acceptedType.MediaType == MimeTypes.TextXml)
+                        return false;
+                }
+                else if (accept.Count > 1 && MediaTypeHeaderValue.TryParseList(accept, out var acceptedTypeList))
+                {
+                    //TODO: Sort by priority or something ? (use MediaTypeHeaderValueComparer)
+                    
+                    return true;
+                }
+                
+
+                // Should Content-Type override Accept header? if not null? and only fallback to accept header
+                // Use binary for everything which is not application/xml
+                return context.Request.ContentType != MimeTypes.TextXml;
+            }
+
             public override Task WriteSubmitResponse(HttpContext context, IEnumerable<ChangeSetEntry> result)
             {
                 return WriteResponseAsync(context, result, _operation);
@@ -344,7 +406,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 // TODO: Cache name+ reposone
 
                 // <GetQueryableRangeTaskResponse xmlns="http://tempuri.org/">
-                writer.WriteStartElement(operation.Name + "Response", "http://tempuri.org/");
+                writer.WriteStartElement(_operation.Name + "Response", "http://tempuri.org/");
                 // <GetQueryableRangeTaskResult xmlns:a="DomainServices" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
                 writer.WriteStartElement(operation.Name + "Result");
                 //writer.WriteXmlnsAttribute("a", "DomainServices");

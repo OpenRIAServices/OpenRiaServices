@@ -41,6 +41,33 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         public abstract Task Invoke(HttpContext context);
 
+        protected RequestSerializer TryGetSerializerForReading(HttpContext context)
+        {
+            if (_requestSerializer.CanRead(context.Request.Headers.ContentType.ToString()))
+                return _requestSerializer;
+
+            return null;
+        }
+
+        protected RequestSerializer GetSerializerForWrite(HttpContext context)
+        {
+            // Look att accept headers first, then content-type
+
+            var acceptHeader = context.Request.Headers.Accept;
+            if (acceptHeader.Count == 1 && MediaTypeHeaderValue.TryParse(acceptHeader[0], out var mediaType))
+            {
+                if (_requestSerializer.CanWrite(mediaType.MediaType.AsSpan()))
+                    return _requestSerializer;
+            }
+
+            if (_requestSerializer.CanWrite(context.Request.Headers.ContentType.ToString()))
+                return _requestSerializer;
+            
+            // Failed to find a match
+            // TODO: Fallback to default
+            return _requestSerializer;
+        }
+
         protected static void SetDefaultResponseHeaders(HttpContext context)
         {
             context.Response.Headers.CacheControl = "private, no-store";
@@ -70,7 +97,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         /// <param name="ex">The exception that was caught.</param>
         /// <param name="hideStackTrace">same as <see cref="HttpContext.IsCustomErrorEnabled"/> <c>true</c> means dont send stack traces</param>
         /// <returns>The exception to return.</returns>
-        protected Task WriteError(HttpContext context, Exception ex, DomainService domainService)
+        protected Task WriteError(RequestSerializer writer, HttpContext context, Exception ex, DomainService domainService)
         {
             // Unwrap any TargetInvocationExceptions to get the real exception.
             ex = ExceptionHandlingUtility.GetUnwrappedException(ex);
@@ -86,28 +113,15 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 exceptionHandler(new UnhandledExceptionContext(ex, domainService), new UnhandledExceptionResponse(fault, context));
             }
 
-            return WriteError(context, fault);
+            return WriteError(writer, context, fault);
         }
 
-        protected Task WriteError(HttpContext context, DomainServiceFault fault)
+        protected Task WriteError(RequestSerializer writer, HttpContext context, DomainServiceFault fault)
         {
-            return _requestSerializer.WriteErrorAsync(context, fault, _operation);
+            return writer.WriteErrorAsync(context, fault, _operation);
         }
 
-        protected Task WriteResponse(HttpContext context, object response)
-        {
-            return _requestSerializer.WriteResponseAsync(context, response, _operation);
-        }
-
-        protected Task WriteResponse(HttpContext context, IEnumerable<ChangeSetEntry> response)
-        {
-            return _requestSerializer.WriteResponseAsync(context, response, _operation);
-        }
-
-        protected Task<(ServiceQuery, object[])> ReadParametersFromBodyAsync(HttpContext context)
-            => _requestSerializer.ReadParametersFromBodyAsync(context, _operation);
-
-        protected Task WriteError(HttpContext context, IEnumerable<ValidationResult> validationErrors)
+        protected Task WriteError(RequestSerializer writer, HttpContext context, IEnumerable<ValidationResult> validationErrors)
         {
             var errors = validationErrors.Select(ve => new ValidationResultInfo(ve.ErrorMessage, ve.MemberNames)).ToList();
 
@@ -121,7 +135,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             }
 
             context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
-            return WriteError(context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity });
+            return WriteError(writer, context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity });
         }
 
 

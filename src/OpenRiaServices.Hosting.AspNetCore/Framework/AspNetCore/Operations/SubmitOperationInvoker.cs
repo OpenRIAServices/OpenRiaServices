@@ -30,14 +30,21 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 DomainService domainService = CreateDomainService(context);
                 // Assert post ?
 
-                if (context.Request.ContentType != "application/msbin1"
-                    && context.Request.ContentType != "application/xml")
+                var serializer = TryGetSerializerForReading(context);
+                if (serializer is null)
                 {
                     context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
                     return;
                 }
 
-                var changeSetEntries = await _requestSerializer.ReadSubmitRequest(context);
+                var writer = GetSerializerForWrite(context);
+                if (writer is null)
+                {
+                    context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
+                    return;
+                }
+
+                var changeSetEntries = await serializer.ReadSubmitRequest(context);
 
                 IEnumerable<ChangeSetEntry> result;
                 try
@@ -46,7 +53,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {
-                    await WriteError(context, ex, domainService);
+                    await WriteError(writer, context, ex, domainService);
                     return;
                 }
 
@@ -64,7 +71,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     }
                 }
 
-                await WriteResponse(context, result);
+                await writer.WriteResponseAsync(context, result, DomainOperation);
             }
             catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
             {

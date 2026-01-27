@@ -23,6 +23,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             {
                 DomainService domainService = CreateDomainService(context);
 
+                var writer = GetSerializerForWrite(context);
+                if (writer is null)
+                {
+                    context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
+                    return;
+                }
+
                 // consider using ArrayPool<object>.Shared in future for allocating parameters
                 object[] inputs;
                 if (context.Request.Method == "GET")
@@ -31,13 +38,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 else // POST
                 {
-                    if (context.Request.ContentType != "application/msbin1"
-                        && context.Request.ContentType != "application/xml")
+                    var serializer = TryGetSerializerForReading(context);
+                    if (serializer is null)
                     {
                         context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
                         return;
                     }
-                    (_, inputs) = await ReadParametersFromBodyAsync(context);
+
+                    (_, inputs) = await serializer.ReadParametersFromBodyAsync(context, DomainOperation);
                 }
 
                 ServiceInvokeResult invokeResult;
@@ -48,17 +56,17 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {
-                    await WriteError(context, ex, domainService);
+                    await WriteError(writer, context, ex, domainService);
                     return;
                 }
 
                 if (invokeResult.HasValidationErrors)
                 {
-                    await WriteError(context, invokeResult.ValidationErrors);
+                    await WriteError(writer, context, invokeResult.ValidationErrors);
                 }
                 else
                 {
-                    await WriteResponse(context, invokeResult.Result);
+                    await writer.WriteResponseAsync(context, invokeResult.Result, DomainOperation);
                 }
             }
             catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
