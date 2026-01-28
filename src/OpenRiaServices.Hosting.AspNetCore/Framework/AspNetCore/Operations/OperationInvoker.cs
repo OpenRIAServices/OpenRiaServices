@@ -11,8 +11,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-#nullable enable
-
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     abstract class OperationInvoker
@@ -43,9 +41,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         {
             get
             {
-                var result = _requestSerializers;
-                if (result is null)
+                return _requestSerializers ?? CreateSerializersArray();
+
+                // Separate creation to separate method to allow inlining of getter when value is set
+                RequestSerializer[] CreateSerializersArray()
                 {
+                    RequestSerializer[] result;
                     var providers = Options.SerializationProviders;
 
                     result = new RequestSerializer[providers.Length];
@@ -55,10 +56,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     }
 
                     _requestSerializers = result; // Compare Exchange
-                    //System.Threading.Interlocked.Exchange(ref _requestSerializers, result);
+                    return result;
                 }
-
-                return result;
             }
         }
 
@@ -80,33 +79,40 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         {
             // Look att accept headers first, then content-type
             var serializers = RequestSerializers;
-            var header = context.Request.Headers.Accept;
+            if (serializers.Length == 1)
+                return serializers[0];
 
-            // Handle only simple accept headers at the moment, since that is what domainclients are expected to use
-            if (header.Count == 1 && MediaTypeHeaderValue.TryParse(header[0], out var mediaType))
+            return DoContentNegotiation(context, serializers);
+
+            static RequestSerializer DoContentNegotiation(HttpContext context, RequestSerializer[] serializers)
             {
-                var mediaTypeSpan = mediaType.MediaType.AsSpan();
-                foreach (var serializer in serializers)
-                {
-                    if (serializer.CanWrite(mediaTypeSpan))
-                        return serializer;
-                }
-            }
+                var header = context.Request.Headers.Accept;
 
-            // Check Content-Type which is set on all POST requests
-            if (context.Request.Headers.ContentType.Count > 0)
-            {
-                string contentType = context.Request.Headers.ContentType.ToString();
-                foreach (var serializer in serializers)
+                // Handle only simple accept headers at the moment, since that is what domainclients are expected to use
+                if (header.Count == 1 && MediaTypeHeaderValue.TryParse(header[0], out var mediaType))
                 {
-                    if (serializer.CanRead(contentType))
-                        return serializer;
+                    var mediaTypeSpan = mediaType.MediaType.AsSpan();
+                    foreach (var serializer in serializers)
+                    {
+                        if (serializer.CanWrite(mediaTypeSpan))
+                            return serializer;
+                    }
                 }
-            }
-            
 
-            // Failed to find a match, fallback to the first one (default) for now
-            return serializers.First();
+                // Check Content-Type which is set on all POST requests
+                if (context.Request.Headers.ContentType.Count > 0)
+                {
+                    string contentType = context.Request.Headers.ContentType.ToString();
+                    foreach (var serializer in serializers)
+                    {
+                        if (serializer.CanRead(contentType))
+                            return serializer;
+                    }
+                }
+
+                // Failed to find a match, fallback to the first one (default) for now
+                return serializers.First();
+            }
         }
 
         protected static void SetDefaultResponseHeaders(HttpContext context)

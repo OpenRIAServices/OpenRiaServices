@@ -24,11 +24,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         public override async Task Invoke(HttpContext context)
         {
-            SetDefaultResponseHeaders(context);
-
             try
             {
-                DomainService domainService = CreateDomainService(context);
+                SetDefaultResponseHeaders(context);
 
                 var writer = GetSerializerForWrite(context);
                 if (writer is null)
@@ -58,6 +56,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     (serviceQuery, inputs) = await serializer.ReadParametersFromBodyAsync(context, DomainOperation);
                 }
 
+                DomainService domainService = CreateDomainService(context);
                 QueryResult<TEntity> result;
                 try
                 {
