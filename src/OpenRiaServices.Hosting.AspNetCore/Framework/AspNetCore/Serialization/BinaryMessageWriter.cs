@@ -3,8 +3,6 @@ using System.Buffers;
 using System.Text;
 using System.Xml;
 
-#nullable disable
-
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     /// <summary>
@@ -29,7 +27,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
         // Cache at most one writer per thread
         [ThreadStatic]
-        private static BinaryMessageWriter s_threadInstance;
+        private static BinaryMessageWriter? s_threadInstance;
 
         /// <summary>
         ///  Prevent creation from outside of this class
@@ -37,7 +35,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private BinaryMessageWriter()
         {
             _stream = new ArrayPoolStream(ArrayPool<byte>.Shared, MaxStreamAllocationSize);
-            _binaryWriter = XmlDictionaryWriter.CreateBinaryWriter(_stream);
+            _currentWriter = _binaryWriter = XmlDictionaryWriter.CreateBinaryWriter(_stream);
             _textWriter = XmlDictionaryWriter.CreateTextWriter(_stream);
         }
 

@@ -11,7 +11,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-#nullable disable
+#nullable enable
 
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
@@ -21,15 +21,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         protected readonly DomainOperationEntry _operation;
         private readonly DomainOperationType _operationType;
-        protected readonly RequestSerializer _requestSerializer;
+        private RequestSerializer[]? _requestSerializers;
 
-        protected OperationInvoker(DomainOperationEntry operation, DomainOperationType operationType,
-            RequestSerializer requestSerializer,
-            OpenRiaServicesOptions options)
+        protected OperationInvoker(DomainOperationEntry operation, DomainOperationType operationType, OpenRiaServicesOptions options)
         {
             this._operation = operation;
             this._operationType = operationType;
-            _requestSerializer = requestSerializer;
             Options = options;
         }
 
@@ -41,10 +38,40 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
         public abstract Task Invoke(HttpContext context);
 
-        protected RequestSerializer TryGetSerializerForReading(HttpContext context)
+
+        private RequestSerializer[] RequestSerializers
         {
-            if (_requestSerializer.CanRead(context.Request.Headers.ContentType.ToString()))
-                return _requestSerializer;
+            get
+            {
+                var result = _requestSerializers;
+                if (result is null)
+                {
+                    var providers = Options.SerializationProviders;
+
+                    result = new RequestSerializer[providers.Length];
+                    for (int i = 0; i < providers.Length; i++)
+                    {
+                        result[i] = providers[i].GetRequestSerializer(DomainOperation);
+                    }
+
+                    _requestSerializers = result; // Compare Exchange
+                    //System.Threading.Interlocked.Exchange(ref _requestSerializers, result);
+                }
+
+                return result;
+            }
+        }
+
+        protected RequestSerializer? TryGetSerializerForReading(HttpContext context)
+        {
+            var serializers = RequestSerializers;
+            string contentType = context.Request.Headers.ContentType.ToString();
+
+            foreach (var serializer in serializers)
+            {
+                if (serializer.CanRead(contentType))
+                    return serializer;
+            }
 
             return null;
         }
@@ -52,20 +79,34 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         protected RequestSerializer GetSerializerForWrite(HttpContext context)
         {
             // Look att accept headers first, then content-type
+            var serializers = RequestSerializers;
+            var header = context.Request.Headers.Accept;
 
-            var acceptHeader = context.Request.Headers.Accept;
-            if (acceptHeader.Count == 1 && MediaTypeHeaderValue.TryParse(acceptHeader[0], out var mediaType))
+            // Handle only simple accept headers at the moment, since that is what domainclients are expected to use
+            if (header.Count == 1 && MediaTypeHeaderValue.TryParse(header[0], out var mediaType))
             {
-                if (_requestSerializer.CanWrite(mediaType.MediaType.AsSpan()))
-                    return _requestSerializer;
+                var mediaTypeSpan = mediaType.MediaType.AsSpan();
+                foreach (var serializer in serializers)
+                {
+                    if (serializer.CanWrite(mediaTypeSpan))
+                        return serializer;
+                }
             }
 
-            if (_requestSerializer.CanWrite(context.Request.Headers.ContentType.ToString()))
-                return _requestSerializer;
+            // Check Content-Type which is set on all POST requests
+            if (context.Request.Headers.ContentType.Count > 0)
+            {
+                string contentType = context.Request.Headers.ContentType.ToString();
+                foreach (var serializer in serializers)
+                {
+                    if (serializer.CanRead(contentType))
+                        return serializer;
+                }
+            }
             
-            // Failed to find a match
-            // TODO: Fallback to default
-            return _requestSerializer;
+
+            // Failed to find a match, fallback to the first one (default) for now
+            return serializers.First();
         }
 
         protected static void SetDefaultResponseHeaders(HttpContext context)
@@ -73,17 +114,25 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             context.Response.Headers.CacheControl = "private, no-store";
         }
 
-        protected object[] GetParametersFromUri(HttpContext context)
+        protected object?[] GetParametersFromUri(HttpContext context)
         {
             var query = context.Request.Query;
             var parameters = _operation.Parameters;
-            var inputs = new object[parameters.Count];
+            var inputs = new object?[parameters.Count];
             for (int i = 0; i < parameters.Count; ++i)
             {
                 if (query.TryGetValue(parameters[i].Name, out var values))
                 {
-                    var value = Uri.UnescapeDataString(values.FirstOrDefault());
-                    inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
+                    string? value = values[0];
+                    if (value is not null)
+                    {
+                        value = Uri.UnescapeDataString(value);
+                        inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
+                    }
+                    else
+                    {
+                        inputs[i] = null;
+                    }
                 }
             }
 

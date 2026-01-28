@@ -1,6 +1,7 @@
 ﻿#nullable enable
 
 using System;
+using System.Linq;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace OpenRiaServices.Hosting.AspNetCore
@@ -21,10 +22,19 @@ namespace OpenRiaServices.Hosting.AspNetCore
         internal IServiceCollection Services { get; }
         // Add Options ? 
 
-
         public OpenRiaServicesOptionsBuilder WithTextXmlSerialization()
         {
-            Services.Configure<OpenRiaServicesOptions>(x => x.EnableTextXmlSerialization = true);
+            Services.Configure<OpenRiaServicesOptions>(options =>
+            {
+                Serialization.TextXmlSerializationProvider provider = new Serialization.TextXmlSerializationProvider();
+                if (options.SerializationProviders.OfType<Serialization.BinaryXmlSerializationProvider>().FirstOrDefault() is { } binaryProvider)
+                    provider._perDomainServiceSerializationHelper = binaryProvider._perDomainServiceSerializationHelper;
+                // use same cache for data contracts
+
+                // Add new provider last, position 0 is default
+                options.SerializationProviders = [.. options.SerializationProviders, provider];
+            });
+
             return this;
         }
     }

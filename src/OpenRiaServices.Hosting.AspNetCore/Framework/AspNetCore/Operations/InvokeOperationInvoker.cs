@@ -8,8 +8,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class InvokeOperationInvoker : OperationInvoker
     {
-        public InvokeOperationInvoker(DomainOperationEntry operation, RequestSerializer serializer, OpenRiaServicesOptions options)
-                : base(operation, DomainOperationType.Invoke, serializer, options)
+        public InvokeOperationInvoker(DomainOperationEntry operation, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Invoke, options)
         {
         }
 
@@ -31,7 +31,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
 
                 // consider using ArrayPool<object>.Shared in future for allocating parameters
-                object[] inputs;
+                object?[] inputs;
                 if (context.Request.Method == "GET")
                 {
                     inputs = GetParametersFromUri(context);

@@ -78,12 +78,15 @@ namespace OpenRiaServices.Hosting.AspNetCore
         {
             var endpoints = new List<Endpoint>();
 
-            XmlDataContractSerializationProvider xmlSerializationProvider = new XmlDataContractSerializationProvider(_options);
+            if (_options.SerializationProviders is null)
+                _options.SerializationProviders = [new BinaryXmlSerializationProvider()];
+            else if (_options.SerializationProviders.Length < 1)
+                throw new InvalidOperationException("No SerializationProviders specified");
 
             foreach (var (name, domainServiceBuilder) in _endpointBuilders)
             {
                 var domainService = domainServiceBuilder.Description;
-                
+
                 // We could consider using Add and Finally on domainServiceBuilder to copy metadata instead
                 // Consider adding additional metadata souch as route groups etc
                 List<object> additionalMetadata = new List<object>();
@@ -95,11 +98,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     if (operation.Operation == DomainOperation.Query)
                     {
                         invoker = (OperationInvoker)Activator.CreateInstance(typeof(QueryOperationInvoker<>).MakeGenericType(operation.AssociatedType),
-                            new object[] { operation, xmlSerializationProvider.GetRequestSerializer(domainService, operation), _options });
+                            new object[] { operation, _options });
                     }
                     else if (operation.Operation == DomainOperation.Invoke)
                     {
-                        invoker = new InvokeOperationInvoker(operation, xmlSerializationProvider.GetRequestSerializer(domainService, operation), _options);
+                        invoker = new InvokeOperationInvoker(operation, _options);
                     }
                     else // Submit related methods are not directly accessible
                         continue;
@@ -110,7 +113,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
                     typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
-                var submitOperationInvoker = new SubmitOperationInvoker(submit, xmlSerializationProvider.GetRequestSerializer(domainService, submit), _options);
+                var submitOperationInvoker = new SubmitOperationInvoker(submit, _options);
                 AddEndpoints(endpoints, submitOperationInvoker, domainServiceBuilder, additionalMetadata);
             }
 
@@ -162,7 +165,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
         private void AddEndpoints(List<Endpoint> endpoints, OperationInvoker invoker, DomainServiceEndpointBuilder domainServiceEndpointBuilder, List<object> additionalMetadata)
         {
-            foreach(string path in domainServiceEndpointBuilder.Paths)
+            foreach (string path in domainServiceEndpointBuilder.Paths)
             {
                 var route = RoutePatternFactory.Parse($"{Prefix}/{path}/{invoker.OperationName}");
                 endpoints.Add(BuildEndpoint(route, invoker, domainServiceEndpointBuilder, additionalMetadata));

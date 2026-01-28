@@ -15,8 +15,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class QueryOperationInvoker<TEntity> : OperationInvoker
     {
-        public QueryOperationInvoker(DomainOperationEntry operation, RequestSerializer serializer, OpenRiaServicesOptions options)
-                : base(operation, DomainOperationType.Query, serializer, options)
+        public QueryOperationInvoker(DomainOperationEntry operation, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Query, options)
         {
         }
 

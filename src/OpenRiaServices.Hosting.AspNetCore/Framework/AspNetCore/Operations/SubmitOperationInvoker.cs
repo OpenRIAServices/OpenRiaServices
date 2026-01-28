@@ -16,8 +16,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         public override string OperationName => "SubmitChanges";
         public override bool HasSideEffects => true;
 
-        public SubmitOperationInvoker(DomainOperationEntry operation, RequestSerializer serializer, OpenRiaServicesOptions options)
-                : base(operation, DomainOperationType.Submit, serializer, options)
+        public SubmitOperationInvoker(DomainOperationEntry operation, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Submit, options)
         {
         }
 

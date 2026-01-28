@@ -20,8 +20,10 @@ namespace OpenRiaServices.Hosting.AspNetCore;
 public class OperationInvokerTests
 {
     private static readonly DomainServiceDescription s_domainServiceDescription = DomainServiceDescription.GetDescription(typeof(OperationCanceledDomainService));
-    private static readonly OpenRiaServicesOptions s_options = new();
-
+    private static readonly OpenRiaServicesOptions s_options = new OpenRiaServicesOptions()
+    {
+        SerializationProviders = [new BinaryXmlSerializationProvider()]
+    };
 
     public enum SubmitType
     {
@@ -34,9 +36,9 @@ public class OperationInvokerTests
     public async Task TestInvoke_CancelAndReturn()
     {
         var operation = s_domainServiceDescription.GetInvokeOperation(nameof(OperationCanceledDomainService.Invoke_CancelAndReturn));
-        
-        var operationInvoker = new InvokeOperationInvoker(operation, GetSerializationHelper(), s_options);
-        
+
+        var operationInvoker = new InvokeOperationInvoker(operation, s_options);
+
         await InvokeAndAssertNoResponseIsWritten(operationInvoker);
     }
 
@@ -45,9 +47,9 @@ public class OperationInvokerTests
     public async Task TestInvoke_CancelAndAbort()
     {
         var operation = s_domainServiceDescription.GetInvokeOperation(nameof(OperationCanceledDomainService.Invoke_CancelAndAbort));
-        
-        var operationInvoker = new InvokeOperationInvoker(operation, GetSerializationHelper(), s_options);
-        
+
+        var operationInvoker = new InvokeOperationInvoker(operation, s_options);
+
         await InvokeAndAssertNoResponseIsWritten(operationInvoker);
     }
 
@@ -56,9 +58,9 @@ public class OperationInvokerTests
     public async Task TestQuery_CancelAndReturn()
     {
         var operation = s_domainServiceDescription.GetQueryMethod(nameof(OperationCanceledDomainService.Query_CancelAndReturn));
-        
-        var operationInvoker = new QueryOperationInvoker<City>(operation, GetSerializationHelper(), s_options);
-        
+
+        var operationInvoker = new QueryOperationInvoker<City>(operation, s_options);
+
         await InvokeAndAssertNoResponseIsWritten(operationInvoker);
     }
 
@@ -67,9 +69,9 @@ public class OperationInvokerTests
     public async Task TestQuery_CancelAndAbort()
     {
         var operation = s_domainServiceDescription.GetQueryMethod(nameof(OperationCanceledDomainService.Query_CancelAndAbort));
-        
-        var operationInvoker = new QueryOperationInvoker<City>(operation, GetSerializationHelper(), s_options);
-        
+
+        var operationInvoker = new QueryOperationInvoker<City>(operation, s_options);
+
         await InvokeAndAssertNoResponseIsWritten(operationInvoker);
     }
 
@@ -80,7 +82,7 @@ public class OperationInvokerTests
         var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(s_domainServiceDescription.DomainServiceType,
             typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
-        var operationInvoker = new SubmitOperationInvoker(submit, GetSerializationHelper(), s_options);
+        var operationInvoker = new SubmitOperationInvoker(submit, s_options);
 
         await InvokeAndAssertNoResponseIsWritten(operationInvoker, SubmitType.Cancel);
     }
@@ -92,12 +94,10 @@ public class OperationInvokerTests
         var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(s_domainServiceDescription.DomainServiceType,
             typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
-        var operationInvoker = new SubmitOperationInvoker(submit, GetSerializationHelper(), s_options);
+        var operationInvoker = new SubmitOperationInvoker(submit, s_options);
 
         await InvokeAndAssertNoResponseIsWritten(operationInvoker, SubmitType.CancelAndThrow);
     }
-
-    private static SerializationHelper GetSerializationHelper() => new (s_domainServiceDescription);
 
     private static async Task InvokeAndAssertNoResponseIsWritten(OperationInvoker operationInvoker)
     {
@@ -153,7 +153,7 @@ public class OperationInvokerTests
 
     public class OperationCanceledDomainService : DomainService
     {
-        public OperationCanceledDomainService(CancellationTokenSource cancellationTokenSource, SubmitType submitType) 
+        public OperationCanceledDomainService(CancellationTokenSource cancellationTokenSource, SubmitType submitType)
         {
             _cancellationTokenSource = cancellationTokenSource;
             _submitType = submitType;

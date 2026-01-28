@@ -15,7 +15,8 @@ using TestDomainServices.Testing;
 [assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices(o => {
+builder.Services.AddOpenRiaServices(o =>
+{
     // There is at least one test which test that checks that calls stacks of normal exceptions are passed to the client
     // To get StackTrack of "normal" exceptions we need to pass them on to the user, as well as include stack traces
     o.IncludeExceptionMessageInErrors = true;
@@ -26,7 +27,7 @@ builder.Services.AddOpenRiaServices(o => {
         // Can set breakpoint here to debug exceptions and check http return values
     };
 })
-    //.WithTextXmlSerialization()
+    .WithTextXmlSerialization()
 // Possible future extension point for configuring OpenRia Services
 //.WithBinaryXmlFormat(options => { ... MaxItemsInObjectGraph, XmlDictionaryReaderQuotas Writer/ReaderQuotas ... })
 //.WithBinaryXml(false)
@@ -60,7 +61,7 @@ app.MapOpenRiaServices(builder =>
 app.MapPost("/Services/TestServices.svc/CreateDatabase", context =>
 {
     DBImager.CreateNewDatabase(context.Request.Query["name"]);
-    context.Response.StatusCode = 200;    
+    context.Response.StatusCode = 200;
     return Task.CompletedTask;
 });
 app.MapPost("/Services/TestServices.svc/DropDatabase", context =>

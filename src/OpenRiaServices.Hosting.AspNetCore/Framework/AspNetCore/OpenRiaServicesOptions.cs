@@ -2,8 +2,6 @@
 using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
 
-#nullable enable
-
 namespace OpenRiaServices.Hosting.AspNetCore
 {
     public sealed class OpenRiaServicesOptions
@@ -30,7 +28,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         internal bool EnableTextXmlSerialization { get; set; }
 
         // TODO: Consider adding "wire formats here"
-        internal SerializationProvider[] SerializationProviders { get; set; } = [];
+        internal ISerializationProvider[] SerializationProviders { get; set; } = [new BinaryXmlSerializationProvider()];
 
         /* ************ SOME POSSIBLE FUTURE OPTIONS ************ 
          * 
