@@ -8,7 +8,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     internal interface ISerializationProvider
     {
-        public RequestSerializer GetRequestSerializer(DomainOperationEntry domainOperationEntry);
+        public RequestSerializer GetRequestSerializer(DomainOperationEntry operation);
     }
 
     internal abstract class RequestSerializer

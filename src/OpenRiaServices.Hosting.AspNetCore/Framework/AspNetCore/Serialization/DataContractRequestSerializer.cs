@@ -18,10 +18,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         }
 
         public override bool CanRead(ReadOnlySpan<char> contentType)
-            => MemoryExtensions.Equals(contentType, MimeTypes.TextXml, StringComparison.Ordinal);
+            => MemoryExtensions.StartsWith(contentType, MimeTypes.TextXml, StringComparison.Ordinal);
 
         public override bool CanWrite(ReadOnlySpan<char> contentType)
-            => MemoryExtensions.Equals(contentType, MimeTypes.TextXml, StringComparison.Ordinal);
+            => MemoryExtensions.StartsWith(contentType, MimeTypes.TextXml, StringComparison.Ordinal);
     }
 
     internal sealed class BinaryXmlDataContractRequestSerializer : DataContractRequestSerializer
@@ -253,7 +253,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
 
 
-            //TODO: Se if this can be merged above
+            //TODO: Se if this can be merged above, will have to change operation.Name to return SubmitChanges instead of Submit
             object?[] ReadSubmitRequest(System.Xml.XmlDictionaryReader reader)
             {
                 reader.ReadStartElement("SubmitChanges");
@@ -331,7 +331,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             var messageWriter = BinaryMessageWriter.Rent(IsBinary);
             try
             {
-                WriteResponse(messageWriter.XmlWriter, result, operation);
+                WriteResponse(messageWriter.XmlWriter, result);
 
                 using var bufferMemory = BinaryMessageWriter.Return(messageWriter);
                 messageWriter = null;
@@ -353,7 +353,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             return WriteResponseAsync(context, result, _operation);
         }
 
-        private void WriteResponse(XmlDictionaryWriter writer, object? result, DomainOperationEntry operation)
+        /// <summary>
+        /// Writes the actual response of a method
+        /// </summary>
+        private void WriteResponse(XmlDictionaryWriter writer, object? result)
         {
             // <GetQueryableRangeTaskResponse xmlns="http://tempuri.org/">
             writer.WriteStartElement(_responseName, "http://tempuri.org/");
@@ -365,7 +368,5 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             writer.WriteEndElement(); // ***Result
             writer.WriteEndElement(); // ***Response
         }
-
-
     }
 }

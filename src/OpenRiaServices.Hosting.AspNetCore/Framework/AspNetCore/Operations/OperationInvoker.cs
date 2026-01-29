@@ -33,6 +33,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         public DomainOperationEntry DomainOperation => _operation;
 
         public abstract bool HasSideEffects { get; }
+
         public OpenRiaServicesOptions Options { get; }
 
         public abstract Task Invoke(HttpContext context);
@@ -63,6 +64,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             }
         }
 
+        /// <summary>
+        /// Get matching serialzer for reading the contents of <paramref name="context"/>, or <see langword="null"/>
+        /// if no serialiser can read the format.
+        /// </summary>
         protected RequestSerializer? TryGetSerializerForReading(HttpContext context)
         {
             var serializers = RequestSerializers;
@@ -77,6 +82,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             return null;
         }
 
+        /// <summary>
+        /// Get serialzer to use for writing the response, based on client preferences.
+        /// </summary>
         protected RequestSerializer GetSerializerForWrite(HttpContext context)
         {
             // Look att accept headers first, then content-type
@@ -118,7 +126,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     string contentType = context.Request.Headers.ContentType.ToString();
                     foreach (var serializer in serializers)
                     {
-                        if (serializer.CanRead(contentType))
+                        if (serializer.CanWrite(contentType))
                             return serializer;
                     }
                 }

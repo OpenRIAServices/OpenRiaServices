@@ -110,6 +110,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     AddEndpoints(endpoints, invoker, domainServiceBuilder, additionalMetadata);
                 }
 
+                // Consider creating a specialised SubmitChangesOperationEntry instead that returns the correct name "SubmitChanges" instead
                 var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
                     typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
