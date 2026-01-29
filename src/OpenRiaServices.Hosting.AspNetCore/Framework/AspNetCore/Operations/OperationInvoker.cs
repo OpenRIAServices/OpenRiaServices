@@ -9,6 +9,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
@@ -44,6 +45,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 return _requestSerializers ?? CreateSerializersArray();
 
                 // Separate creation to separate method to allow inlining of getter when value is set
+                [MethodImpl(MethodImplOptions.NoInlining)]
                 RequestSerializer[] CreateSerializersArray()
                 {
                     RequestSerializer[] result;
@@ -96,6 +98,17 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     {
                         if (serializer.CanWrite(mediaTypeSpan))
                             return serializer;
+                    }
+                }
+                else if (header.Count > 0 && MediaTypeHeaderValue.TryParseList(header, out var mediaTypes)) // multiple accept headers
+                {
+                    foreach (var type in mediaTypes.OrderByDescending(x => x.Quality ?? 1.0))
+                    {
+                        foreach (var serializer in serializers)
+                        {
+                            if (serializer.CanWrite(type.MediaType))
+                                return serializer;
+                        }
                     }
                 }
 
@@ -192,7 +205,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             context.Response.StatusCode = StatusCodes.Status422UnprocessableEntity;
             return WriteError(writer, context, new DomainServiceFault { OperationErrors = errors, ErrorCode = StatusCodes.Status422UnprocessableEntity });
         }
-
 
         protected DomainService CreateDomainService(HttpContext context)
         {
