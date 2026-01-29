@@ -4,8 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using OpenRiaServices.Server;
 
-#nullable enable
-
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     internal interface ISerializationProvider
@@ -15,9 +13,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
     internal abstract class RequestSerializer
     {
-        // AspNetMVC also has HttpContext, object and actual contentType selected as part of API
-        // TODO: Consider content type to write API ?
-
         public abstract bool CanRead(ReadOnlySpan<char> contentType);
 
         public abstract bool CanWrite(ReadOnlySpan<char> contentType);

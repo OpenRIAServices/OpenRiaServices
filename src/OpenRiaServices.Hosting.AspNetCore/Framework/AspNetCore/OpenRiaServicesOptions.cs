@@ -27,7 +27,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
         internal bool EnableTextXmlSerialization { get; set; }
 
-        // TODO: Consider adding "wire formats here"
+        /// <summary>
+        /// List of all registered wire formats on descending order of priority. 
+        /// First one is the default used for responses (when client do not specify an matching format)
+        /// </summary>
         internal ISerializationProvider[] SerializationProviders { get; set; } = [new BinaryXmlSerializationProvider()];
 
         /* ************ SOME POSSIBLE FUTURE OPTIONS ************ 

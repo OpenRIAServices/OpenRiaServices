@@ -124,7 +124,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
 
                 // Failed to find a match, fallback to the first one (default) for now
-                return serializers.First();
+                return serializers[0];
             }
         }
 

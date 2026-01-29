@@ -359,8 +359,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             writer.WriteStartElement(_responseName, "http://tempuri.org/");
             // <GetQueryableRangeTaskResult xmlns:a="DomainServices" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
             writer.WriteStartElement(_resultName);
-            //writer.WriteXmlnsAttribute("a", "DomainServices");
-            //writer.WriteXmlnsAttribute("i", "http://www.w3.org/2001/XMLSchema-instance");
 
             _responseSerializer.WriteObjectContent(writer, result);
 
