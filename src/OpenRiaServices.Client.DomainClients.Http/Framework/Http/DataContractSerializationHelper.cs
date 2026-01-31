@@ -6,13 +6,13 @@ using System.Runtime.Serialization;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
-    internal class BinaryHttpDomainClientSerializationHelper
+    internal class DataContractSerializationHelper
     {       
         private readonly Dictionary<Type, DataContractSerializer> _serializerCache = new Dictionary<Type, DataContractSerializer>();
         private readonly Dictionary<string, MethodParameters> _methodParametersCache = new Dictionary<string, MethodParameters>();
         private readonly Type _serviceInterface;
 
-        public BinaryHttpDomainClientSerializationHelper(Type serviceInterface)
+        public DataContractSerializationHelper(Type serviceInterface)
         {
             _serviceInterface = serviceInterface;
         }
