@@ -53,6 +53,7 @@ namespace OpenRiaServices.Client.Test
             };
 
             DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
+            // DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
         }
 
         [AssemblyCleanup]
@@ -133,7 +134,7 @@ namespace OpenRiaServices.Client.Test
                     // Ignore error
                 }
 
-                if (s_aspNetCoreSite.HasExited)
+                if (s_aspNetCoreSite?.HasExited == true)
                     throw new Exception("Website stopped");
 
                 Thread.Sleep(TimeSpan.FromSeconds(1));

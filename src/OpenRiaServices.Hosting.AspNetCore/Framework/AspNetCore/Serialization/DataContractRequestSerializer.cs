@@ -207,8 +207,17 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             if (reader.IsStartElement(operation.Name))
             {
-                reader.Read();
+                if (operation.Parameters.Count == 0)
+                {
+                    bool isEmpty = reader.IsEmptyElement;
+                    reader.Read();
+                    // For TextXml we get an empty element here so we cannot call ReadEndElement below
+                    if (!isEmpty)
+                        reader.ReadEndElement();
+                    return [];
+                }
 
+                reader.Read();
                 var parameters = operation.Parameters;
                 object?[] values = new object?[parameters.Count];
                 for (int i = 0; i < parameters.Count; ++i)

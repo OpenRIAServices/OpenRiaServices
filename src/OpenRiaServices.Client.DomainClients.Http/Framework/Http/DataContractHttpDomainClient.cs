@@ -471,10 +471,14 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 reader.ReadStartElement("Reason");
                 while (reader.LocalName == "Text")
                 {
+                    bool isEmtpy = reader.IsEmptyElement;
+
                     var lang = reader.XmlLang;
                     reader.ReadStartElement("Text");
                     var text = reader.ReadContentAsString();
-                    reader.ReadEndElement();
+
+                    if (!isEmtpy)
+                        reader.ReadEndElement();
 
                     faultReasons.Add(new FaultReasonText(text, lang));
                 }
