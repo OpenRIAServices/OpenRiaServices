@@ -26,8 +26,14 @@ builder.Services.AddOpenRiaServices(o =>
     {
         // Can set breakpoint here to debug exceptions and check http return values
     };
+
+    // TODO: Choose a single setup pattern for adding serialization providers / wire formats
+    o.AddTextXmlSerializer();
+    // o.RemoveBinaryXmlSerializer() / RemoveDefaultSerializer()
+    // o.AddSerializationProvider(new CustomSerializationProvider(), defaultProvider: true);
 })
-    .WithTextXmlSerialization()
+
+//    .WithTextXmlSerialization()
 // Possible future extension point for configuring OpenRia Services
 //.WithBinaryXmlFormat(options => { ... MaxItemsInObjectGraph, XmlDictionaryReaderQuotas Writer/ReaderQuotas ... })
 //.WithBinaryXml(false)

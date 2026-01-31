@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
 
@@ -32,6 +33,55 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// First one is the default used for responses (when client do not specify an matching format)
         /// </summary>
         internal ISerializationProvider[] SerializationProviders { get; set; } = [new BinaryXmlSerializationProvider()];
+
+        /// <summary>
+        /// Adds a serialization provider to the list of supported formats.
+        /// </summary>
+        /// <param name="provider"></param>
+        /// <param name="defaultProvider"></param>
+        internal void AddSerializationProvider(ISerializationProvider provider, bool defaultProvider)
+        {
+            ArgumentNullException.ThrowIfNull(provider);
+
+            if (provider is DataContractSerializationProvider dataContractSerializationProvider
+                && SerializationProviders.OfType<DataContractSerializationProvider>().FirstOrDefault() is { } existingDcs)
+            {
+                // Share the DataContractCache between the two providers to avoid duplicate work
+                dataContractSerializationProvider._perDomainServiceDataContractCache = existingDcs._perDomainServiceDataContractCache;
+            }
+
+            if (defaultProvider)
+            {
+                SerializationProviders = [provider, .. SerializationProviders];
+            }
+            else
+            {
+                SerializationProviders = [.. SerializationProviders, provider];
+            }
+        }
+
+        /// <summary>
+        /// Enables Text based XML wire format (application/xml) in addition to built in binary XML (application/msbin1).
+        /// It does not change the default format.
+        /// </summary>
+        /// <remarks>Request should specify mime-type <c>application/xml</c> using <c>Content-Type</c> or <c>Accept</c> headers
+        /// </remarks>
+        /// <param name="defaultProvider">If <see langword="true"/> the Text XML provider will be the default for responses</param>
+        public void AddTextXmlSerializer(bool defaultProvider = false)
+        {
+            // Good parameter candidates for options to pass in would include 
+            // XmlDictionaryReaderQuotas, XmlDictionaryWriterQuotas (pass on to MessageReader, MessageWriter caches)
+
+            AddSerializationProvider(new TextXmlSerializationProvider(), defaultProvider);
+        }
+
+        /// <summary>
+        /// Removes the default Binary XML (application/msbin1) wire format.
+        /// </summary>
+        public void RemoveBinaryXmlSerializer()
+        {
+            SerializationProviders = [.. SerializationProviders.Where(sp => sp is not BinaryXmlSerializationProvider)];
+        }
 
         /* ************ SOME POSSIBLE FUTURE OPTIONS ************ 
          * 
