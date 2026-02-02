@@ -88,7 +88,7 @@ namespace OpenRiaServices.Tools.Test
             }
             catch (Exception ex)
             {
-                Assert.Fail("Exception occurred on Csharp compilation. \nError: {0}", ex);
+                Assert.Fail($"Exception occurred on Csharp compilation. \nError: {ex}");
                 // We will never get here since assert will throw
                 return null;
             }
@@ -148,7 +148,7 @@ namespace OpenRiaServices.Tools.Test
             }
             catch (Exception ex)
             {
-                Assert.Fail("Exception occurred invoking compiling VB sources. \nError: {0}", ex);
+                Assert.Fail($"Exception occurred invoking compiling VB sources. \nError: {ex}");
                 // We will never get here since assert will throw
                 return null;
             }
@@ -201,7 +201,7 @@ namespace OpenRiaServices.Tools.Test
                 var emitResult = compilation.Emit(memoryStream, null, documentationStream);
                 if (!emitResult.Success)
                 {
-                    Assert.Fail("Failed to compile assembly \r\n {0}", string.Join(" \r\n", emitResult.Diagnostics));
+                    Assert.Fail($"Failed to compile assembly \r\n {string.Join(" \r\n", emitResult.Diagnostics)}");
                 }
                 return memoryStream;
             }

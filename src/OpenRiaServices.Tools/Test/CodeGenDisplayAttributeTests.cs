@@ -1,9 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
-using OpenRiaServices.Server.Test.Utilities;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestDomainServices;
-using System;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Server.Test.Utilities;
+using TestDomainServices;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -18,7 +18,7 @@ namespace OpenRiaServices.Tools.Test
         public void CodeGen_Attribute_DisplayAttribute_Resourced()
         {
             MockSharedCodeService sts = TestHelper.CreateCommonMockSharedCodeService();
-            string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] {typeof(Mock_CG_DisplayAttr_Entity_Shared_ResourceType_DomainService)}, null, sts);
+            string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] { typeof(Mock_CG_DisplayAttr_Entity_Shared_ResourceType_DomainService) }, null, sts);
             TestHelper.AssertGeneratedCodeContains(generatedCode, @"[Display(Description=""Resource4"", Name=""Resource2"", Prompt=""Resource3"", ResourceType=typeof(Mock_CG_DisplayAttr_Shared_ResourceType), ShortName=""Resource1"")]");
             TestHelper.AssertGeneratedCodeContains(generatedCode, @"[Display(Description=""Literal4"", Name=""Literal2"", Prompt=""Literal3"", ShortName=""Literal1"")]");
         }
@@ -28,7 +28,7 @@ namespace OpenRiaServices.Tools.Test
         public void CodeGen_Attribute_DisplayAttribute_Resourced_DifferentNamespace()
         {
             MockSharedCodeService sts = TestHelper.CreateCommonMockSharedCodeService();
-            string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] {typeof(Mock_CG_DisplayAttr_Entity_Shared_ResourceType_DifferentNamespace_DomainService) }, null, sts);
+            string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] { typeof(Mock_CG_DisplayAttr_Entity_Shared_ResourceType_DifferentNamespace_DomainService) }, null, sts);
             TestHelper.AssertGeneratedCodeContains(generatedCode, @"[Display(Description=""Resource4"", Name=""Resource2"", Prompt=""Resource3"", ResourceType=typeof(Mock_CG_DisplayAttr_Shared_ResourceType_DifferentNamespace), ShortName=""Resource1"")]");
             TestHelper.AssertGeneratedCodeContains(generatedCode, @"[Display(Description=""Literal4"", Name=""Literal2"", Prompt=""Literal3"", ShortName=""Literal1"")]");
         }
@@ -98,10 +98,10 @@ namespace OpenRiaServices.Tools.Test
 
     internal class Mock_CG_DisplayAttr_Private_ResourceType
     {
-        public static string Resource1 { get { return "string1"; } }
-        public static string Resource2 { get { return "string2"; } }
-        public static string Resource3 { get { return "string3"; } }
-        public static string Resource4 { get { return "string4"; } }
+        private static string Resource1 { get { return "string1"; } }
+        private static string Resource2 { get { return "string2"; } }
+        private static string Resource3 { get { return "string3"; } }
+        private static string Resource4 { get { return "string4"; } }
     }
 
     public partial class Mock_CG_DisplayAttr_Entity_Unshared_ResourceType

@@ -20,18 +20,18 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.11.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.11.0" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.7.8" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.10.12" />
     <PackageReference Include="Microsoft.Build" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Framework" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Mono.Cecil" Version="0.11.6" />
     <PackageReference Include="System.Reflection.MetadataLoadContext" Version="9.0.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="3.6.3" />
-    <PackageReference Include="MSTest.TestFramework" Version="3.6.3" />
+    <PackageReference Include="MSTest.TestAdapter" Version="3.11.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="3.11.1" />
     <!-- Prevent accidental updgrade since 9.0 seems to add redundant parantheses around long strings split across lines -->
     <PackageReference Include="System.CodeDom" Version="8.0.0" />
   </ItemGroup>
@@ -64,14 +64,6 @@
     <ProjectReference Include="..\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="ServerClassLib\ServerClassLib.csproj" />
     <ProjectReference Include="T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="NotificationMethodGeneratorTestCodeSnippets.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="NotificationMethodGeneratorTests.xml">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="ClientClassLib2\**" />

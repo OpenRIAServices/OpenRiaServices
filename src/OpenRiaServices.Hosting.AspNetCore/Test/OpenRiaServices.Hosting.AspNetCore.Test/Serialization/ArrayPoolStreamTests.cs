@@ -174,7 +174,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 stream.Write(_input, 0, 2); // Write some into first buffer
 
                 shouldTrow = true;
-                Assert.ThrowsException<InsufficientMemoryException>(() =>
+                Assert.ThrowsExactly<InsufficientMemoryException>(() =>
                     stream.Write(_input, 2, 10)
                     );
             }
