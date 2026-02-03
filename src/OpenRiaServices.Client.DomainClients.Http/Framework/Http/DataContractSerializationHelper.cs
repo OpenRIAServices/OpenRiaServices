@@ -1,12 +1,11 @@
 ﻿using OpenRiaServices.Client.Internal;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Runtime.Serialization;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
-    internal class DataContractSerializationHelper
+    sealed class DataContractSerializationHelper
     {       
         private readonly Dictionary<Type, DataContractSerializer> _serializerCache = new Dictionary<Type, DataContractSerializer>();
         private readonly Dictionary<string, MethodParameters> _methodParametersCache = new Dictionary<string, MethodParameters>();

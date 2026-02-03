@@ -4,7 +4,7 @@ using System.Net.Http;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
-    internal sealed class BinaryHttpDomainClient : DataContractHttpDomainClient
+    sealed class BinaryHttpDomainClient : DataContractHttpDomainClient
     {
         internal const string MediaType = "application/msbin1";
 
@@ -12,20 +12,20 @@ namespace OpenRiaServices.Client.DomainClients.Http
         {
         }
 
-        protected override string ContentType => MediaType;
+        private protected override string ContentType => MediaType;
 
-        protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
+        private protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
         {
             return System.Xml.XmlDictionaryReader.CreateBinaryReader(stream, System.Xml.XmlDictionaryReaderQuotas.Max);
         }
 
-        protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
+        private protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
         {
             return System.Xml.XmlDictionaryWriter.CreateBinaryWriter(stream, null, null, ownsStream: false);
         }
     }
 
-    internal sealed class XmlHttpDomainClient : DataContractHttpDomainClient
+    sealed class XmlHttpDomainClient : DataContractHttpDomainClient
     {
         internal const string MediaType = "application/xml";
 
@@ -35,14 +35,14 @@ namespace OpenRiaServices.Client.DomainClients.Http
         {
         }
 
-        protected override string ContentType => MediaType;
+        private protected override string ContentType => MediaType;
 
-        protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
+        private protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
         {
             return System.Xml.XmlDictionaryReader.CreateTextReader(stream, System.Xml.XmlDictionaryReaderQuotas.Max);
         }
 
-        protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
+        private protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
         {
             return System.Xml.XmlDictionaryWriter.CreateTextWriter(stream, _encoding, ownsStream: false);
         }

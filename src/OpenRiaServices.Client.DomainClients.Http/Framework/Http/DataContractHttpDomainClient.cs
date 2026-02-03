@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
@@ -14,7 +15,11 @@ using System.Threading.Tasks;
 namespace OpenRiaServices.Client.DomainClients.Http
 {
     // Pass in HttpDomainClientFactory to ctor,
-    internal abstract class DataContractHttpDomainClient : DomainClient
+
+    /// <summary>
+    /// Base class for <see cref="DomainClient"/>s using <see cref="DataContractSerializer"/> serialization and talking to the server using <see cref="System.Net.Http.HttpClient"/>.
+    /// </summary>
+    abstract class DataContractHttpDomainClient : DomainClient
     {
         /// ResponseContentRead seems to give better results on .Net framework for local network with low latency and high bandwidth
         /// This is probably due to less kernel time
@@ -28,12 +33,17 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private readonly DataContractSerializationHelper _localCacheHelper;
 
+        /// <inheritdoc/>
         public override bool SupportsCancellation => true;
 
-        protected abstract string ContentType { get; }
+        /// <summary>
+        /// The mime/content type used for communication with the server.
+        /// </summary>
+        private protected abstract string ContentType { get; }
 
+        HttpClient HttpClient { get; set; }
 
-        public DataContractHttpDomainClient(HttpClient httpClient, Type serviceInterface)
+        private protected DataContractHttpDomainClient(HttpClient httpClient, Type serviceInterface)
         {
 
             HttpClient = httpClient;
@@ -47,12 +57,12 @@ namespace OpenRiaServices.Client.DomainClients.Http
             }
         }
 
-        protected abstract System.Xml.XmlDictionaryWriter CreateWriter(Stream stream);
-        protected abstract System.Xml.XmlDictionaryReader CreateReader(Stream stream);
+        private protected abstract System.Xml.XmlDictionaryWriter CreateWriter(Stream stream);
+        private protected abstract System.Xml.XmlDictionaryReader CreateReader(Stream stream);
 
-        HttpClient HttpClient { get; set; }
 
         #region Invoke/Query/Submit Methods
+
         protected override async Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
         {
             var response = await ExecuteRequestAsync(invokeArgs.OperationName, invokeArgs.HasSideEffects, invokeArgs.Parameters, queryOptions: null, cancellationToken: cancellationToken)
@@ -265,7 +275,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="queryOptions">The query options if any.</param>
         /// <param name="cancellationToken"></param>
         /// <returns>A task for the pending operation, or <c>null</c> if operation was not attempted</returns>
-        private Task<HttpResponseMessage> GetAsync(string operationName, IDictionary<string, object> parameters, IList<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
+        private Task<HttpResponseMessage> GetAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
             int i = 0;
             var uriBuilder = new StringBuilder(256);
@@ -339,7 +349,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 // It would make sens to one  check content type and only pase on msbin
                 if (!response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType != ContentType)
                 {
-                    var message = string.Format(Resources.DomainClient_UnexpectedHttpStatusCode, (int)response.StatusCode, response.StatusCode);
+                    var message = string.Format(CultureInfo.InvariantCulture, Resources.DomainClient_UnexpectedHttpStatusCode, (int)response.StatusCode, response.StatusCode);
 
                     if (response.StatusCode == HttpStatusCode.BadRequest)
                         throw new DomainOperationException(message, OperationErrorStatus.NotSupported, (int)response.StatusCode, null);
