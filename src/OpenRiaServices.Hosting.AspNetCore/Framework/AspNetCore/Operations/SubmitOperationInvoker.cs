@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 using System;
@@ -12,33 +13,50 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class SubmitOperationInvoker : OperationInvoker
     {
-        private readonly DataContractSerializer _parameterSerializer;
-
         public override string OperationName => "SubmitChanges";
         public override bool HasSideEffects => true;
 
-        public SubmitOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper, OpenRiaServicesOptions options)
-                : base(operation, DomainOperationType.Submit, serializationHelper, serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>)), options)
+        /// <summary>
+        /// Initializes a SubmitOperationInvoker configured to handle submit (SubmitChanges) operations for the given domain operation entry.
+        /// </summary>
+        /// <param name="operation">The domain operation entry that describes the submit operation to invoke.</param>
+        /// <param name="options">Hosting options that configure invoker behavior.</param>
+        public SubmitOperationInvoker(DomainOperationEntry operation, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Submit, options)
         {
-            _parameterSerializer = serializationHelper.GetSerializer(typeof(IEnumerable<ChangeSetEntry>));
         }
 
+        /// <summary>
+        /// Handles an incoming submit-changes request: reads the submitted change set, processes it against a DomainService, and writes the response.
+        /// </summary>
+        /// <param name="context">The HTTP context for the request and response.</param>
+        /// <returns>A task that completes when the request has been processed and the response written.</returns>
+        /// <remarks>
+        /// Sets HTTP status codes for invalid or unacceptable content types (415, 406) and for failed change entries (409 for conflicts, 422 for other errors). Operation cancellation is swallowed when the request is aborted.
+        /// </remarks>
         public override async Task Invoke(HttpContext context)
         {
             try
             {
-                DomainService domainService = CreateDomainService(context);
-                // Assert post ?
+                SetDefaultResponseHeaders(context);
 
-                if (context.Request.ContentType != "application/msbin1")
+                var serializer = TryGetSerializerForReading(context);
+                if (serializer is null)
                 {
                     context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
                     return;
                 }
 
-                var (_, inputs) = await ReadParametersFromBodyAsync(context);
-                var changeSetEntries = (IEnumerable<ChangeSetEntry>)inputs[0];
+                var writer = GetSerializerForWrite(context);
+                if (writer is null)
+                {
+                    context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
+                    return;
+                }
 
+                var changeSetEntries = await serializer.ReadSubmitRequest(context);
+
+                DomainService domainService = CreateDomainService(context);
                 IEnumerable<ChangeSetEntry> result;
                 try
                 {
@@ -46,7 +64,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {
-                    await WriteError(context, ex, domainService);
+                    await WriteError(writer, context, ex, domainService);
                     return;
                 }
 
@@ -64,25 +82,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     }
                 }
 
-                await WriteResponse(context, result);
+                await writer.WriteResponseAsync(context, result, DomainOperation);
             }
             catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
             {
                 //Swallow OperationCanceledException and do nothing
             }
-        }
-
-        protected override object[] ReadParameters(System.Xml.XmlDictionaryReader reader)
-        {
-            reader.ReadStartElement("SubmitChanges");
-            if (!reader.IsStartElement("changeSet"))
-            {
-                throw new BadHttpRequestException("missing changeSet");
-            }
-
-            var changeSet = _parameterSerializer.ReadObject(reader, verifyObjectName: false);
-            reader.ReadEndElement();
-            return new object[] { changeSet };
         }
     }
 }

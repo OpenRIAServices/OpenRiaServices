@@ -1,4 +1,4 @@
-﻿extern alias httpDomainClient;
+extern alias httpDomainClient;
 
 using System;
 using System.IO;
@@ -17,6 +17,13 @@ namespace OpenRiaServices.Client.Test
     {
         private static Process s_aspNetCoreSite;
 
+        /// <summary>
+        /// Initializes the test assembly: sets the current culture to en-US, ensures the test web server is running, and configures the DomainClientFactory used by tests.
+        /// </summary>
+        /// <param name="context">The MSTest context for the assembly initialization.</param>
+        /// <remarks>
+        /// Configures an HttpClientHandler with cookie support and automatic GZip/Deflate decompression, and supplies a factory that trims a trailing ".svc/binary/" from endpoint URIs before setting the HttpClient BaseAddress. The DomainClientFactory is set to use the binary HTTP domain client pointing at TestURIs.RootURI.
+        /// </remarks>
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)
         {
@@ -53,8 +60,12 @@ namespace OpenRiaServices.Client.Test
             };
 
             DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
+            // DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
         }
 
+        /// <summary>
+        /// Performs global teardown after all tests in the assembly by disposing the test database and stopping the test web server process if it is running.
+        /// </summary>
         [AssemblyCleanup]
         public static void AssemblyCleanup()
         {
@@ -66,6 +77,13 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
+        /// <summary>
+        /// Starts the AspNetCoreWebsite executable (if not already running) and waits for a successful HTTP response from the site's root endpoint.
+        /// </summary>
+        /// <param name="filePath">Caller source file path used to locate the AspNetCoreWebsite project folder; provided automatically by the <see cref="System.Runtime.CompilerServices.CallerFilePathAttribute"/>.</param>
+        /// <exception cref="System.IO.FileNotFoundException">Thrown when the website folder or executable cannot be found at the expected path.</exception>
+        /// <exception cref="System.Exception">Thrown if the started website process exits before the root endpoint responds successfully.</exception>
+        /// <exception cref="System.TimeoutException">Thrown if the root endpoint does not return a successful response within one minute.</exception>
         private static void StartWebServer([CallerFilePath]string filePath = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
@@ -133,7 +151,7 @@ namespace OpenRiaServices.Client.Test
                     // Ignore error
                 }
 
-                if (s_aspNetCoreSite.HasExited)
+                if (s_aspNetCoreSite?.HasExited == true)
                     throw new Exception("Website stopped");
 
                 Thread.Sleep(TimeSpan.FromSeconds(1));

@@ -1,8 +1,9 @@
-﻿// Licensed to the .NET Foundation under one or more agreements.
+// Licensed to the .NET Foundation under one or more agreements.
 // The .NET Foundation licenses this file to you under the MIT license.
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
@@ -12,6 +13,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using OpenRiaServices.Hosting.AspNetCore.Operations;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
 
 #nullable disable
@@ -72,14 +74,28 @@ namespace OpenRiaServices.Hosting.AspNetCore
         public string Prefix { get; internal set; }
         public IServiceCollection ServiceCollection { get; }
 
+        /// <summary>
+        /// Builds and returns the collection of endpoints for all configured domain services.
+        /// </summary>
+        /// <remarks>
+        /// Ensures <c>_options.SerializationProviders</c> is initialized (defaults to a <c>BinaryXmlSerializationProvider</c> when null)
+        /// and throws <see cref="InvalidOperationException"/> if the providers array is empty. For each domain service, this method
+        /// creates endpoints for Query and Invoke operations and a Submit endpoint, and copies applicable domain service attributes
+        /// into the endpoint metadata.
+        /// </remarks>
+        /// <returns>A list of Endpoint objects representing the built endpoints for the configured domain services.</returns>
         private List<Endpoint> BuildEndpoints()
         {
             var endpoints = new List<Endpoint>();
 
+            if (_options.SerializationProviders is null)
+                _options.SerializationProviders = [new BinaryXmlSerializationProvider()];
+            else if (_options.SerializationProviders.Length < 1)
+                throw new InvalidOperationException("No SerializationProviders specified");
+
             foreach (var (name, domainServiceBuilder) in _endpointBuilders)
             {
                 var domainService = domainServiceBuilder.Description;
-                var serializationHelper = new SerializationHelper(domainService);
 
                 // We could consider using Add and Finally on domainServiceBuilder to copy metadata instead
                 // Consider adding additional metadata souch as route groups etc
@@ -92,11 +108,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     if (operation.Operation == DomainOperation.Query)
                     {
                         invoker = (OperationInvoker)Activator.CreateInstance(typeof(QueryOperationInvoker<>).MakeGenericType(operation.AssociatedType),
-                            new object[] { operation, serializationHelper , _options });
+                            new object[] { operation, _options });
                     }
                     else if (operation.Operation == DomainOperation.Invoke)
                     {
-                        invoker = new InvokeOperationInvoker(operation, serializationHelper, _options);
+                        invoker = new InvokeOperationInvoker(operation, _options);
                     }
                     else // Submit related methods are not directly accessible
                         continue;
@@ -104,10 +120,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     AddEndpoints(endpoints, invoker, domainServiceBuilder, additionalMetadata);
                 }
 
+                // Consider creating a specialised SubmitChangesOperationEntry instead that returns the correct name "SubmitChanges" instead
                 var submit = new ReflectionDomainServiceDescriptionProvider.ReflectionDomainOperationEntry(domainService.DomainServiceType,
                     typeof(DomainService).GetMethod(nameof(DomainService.SubmitAsync)), DomainOperation.Custom);
 
-                var submitOperationInvoker = new SubmitOperationInvoker(submit, serializationHelper, _options);
+                var submitOperationInvoker = new SubmitOperationInvoker(submit, _options);
                 AddEndpoints(endpoints, submitOperationInvoker, domainServiceBuilder, additionalMetadata);
             }
 
@@ -157,9 +174,16 @@ namespace OpenRiaServices.Hosting.AspNetCore
             }
         }
 
+        /// <summary>
+        /// Adds an endpoint to the provided list for every path configured on the domain service by creating a route that combines the data source Prefix, the path, and the invoker's operation name, then building the endpoint with the given invoker and metadata.
+        /// </summary>
+        /// <param name="endpoints">The list to which constructed endpoints will be added.</param>
+        /// <param name="invoker">The operation invoker used as the request delegate and source of the operation name.</param>
+        /// <param name="domainServiceEndpointBuilder">The domain service builder that provides the configured paths and conventions.</param>
+        /// <param name="additionalMetadata">Additional metadata objects to include on each created endpoint.</param>
         private void AddEndpoints(List<Endpoint> endpoints, OperationInvoker invoker, DomainServiceEndpointBuilder domainServiceEndpointBuilder, List<object> additionalMetadata)
         {
-            foreach(string path in domainServiceEndpointBuilder.Paths)
+            foreach (string path in domainServiceEndpointBuilder.Paths)
             {
                 var route = RoutePatternFactory.Parse($"{Prefix}/{path}/{invoker.OperationName}");
                 endpoints.Add(BuildEndpoint(route, invoker, domainServiceEndpointBuilder, additionalMetadata));

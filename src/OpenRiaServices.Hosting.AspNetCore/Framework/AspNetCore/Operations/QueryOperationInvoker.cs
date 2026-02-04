@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 using System;
@@ -14,18 +15,41 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class QueryOperationInvoker<TEntity> : OperationInvoker
     {
-        public QueryOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper, OpenRiaServicesOptions options)
-                : base(operation, DomainOperationType.Query, serializationHelper, serializationHelper.GetSerializer(typeof(QueryResult<TEntity>)), options)
+        /// <summary>
+        /// Initializes a QueryOperationInvoker for the specified domain operation.
+        /// </summary>
+        /// <param name="operation">The domain operation entry that this invoker will execute.</param>
+        /// <param name="options">Hosting options that control runtime behavior for OpenRiaServices.</param>
+        public QueryOperationInvoker(DomainOperationEntry operation, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Query, options)
         {
         }
 
         public override bool HasSideEffects => ((QueryAttribute)DomainOperation.OperationAttribute).HasSideEffects;
 
+        /// <summary>
+        /// Invokes the domain query operation for the current HTTP request and writes the serialized response or validation/error payload.
+        /// </summary>
+        /// <remarks>
+        /// - For GET requests, parameters are taken from the URI and, if the operation is composable, a ServiceQuery is built from $-prefixed query parameters.
+        /// - For POST requests, parameters and an optional ServiceQuery are read from the request body; the method returns 415 if no suitable reader is available.
+        /// - If no serializer is available for writing the response the method sets 406 and returns.
+        /// - Executes the query via the QueryProcessor and writes either validation errors or the successful response using the selected writer.
+        /// - OperationCanceledException triggered by request cancellation is swallowed.
+        /// </remarks>
+        /// <returns>A task representing completion of the invocation.</returns>
         public override async Task Invoke(HttpContext context)
         {
             try
             {
-                DomainService domainService = CreateDomainService(context);
+                SetDefaultResponseHeaders(context);
+
+                var writer = GetSerializerForWrite(context);
+                if (writer is null)
+                {
+                    context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
+                    return;
+                }
 
                 object[] inputs;
                 ServiceQuery serviceQuery;
@@ -38,15 +62,17 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 else // POST
                 {
-                    if (context.Request.ContentType != "application/msbin1")
+                    var serializer = TryGetSerializerForReading(context);
+                    if (serializer is null)
                     {
                         context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
                         return;
                     }
 
-                    (serviceQuery, inputs) = await ReadParametersFromBodyAsync(context);
+                    (serviceQuery, inputs) = await serializer.ReadParametersFromBodyAsync(context, DomainOperation);
                 }
 
+                DomainService domainService = CreateDomainService(context);
                 QueryResult<TEntity> result;
                 try
                 {
@@ -54,14 +80,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {
-                    await WriteError(context, ex, domainService);
+                    await WriteError(writer, context, ex, domainService);
                     return;
                 }
 
                 if (result.ValidationErrors != null && result.ValidationErrors.Any())
-                    await WriteError(context, result.ValidationErrors);
+                    await WriteError(writer, context, result.ValidationErrors);
                 else
-                    await WriteResponse(context, result);
+                    await writer.WriteResponseAsync(context, result, DomainOperation);
             }
             catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
             {
