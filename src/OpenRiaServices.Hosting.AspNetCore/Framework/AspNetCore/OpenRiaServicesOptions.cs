@@ -37,8 +37,9 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <summary>
         /// Adds a serialization provider to the list of supported formats.
         /// </summary>
-        /// <param name="provider"></param>
-        /// <param name="defaultProvider"></param>
+        /// <param name="provider">The serialization provider to add.</param>
+        /// <param name="defaultProvider">If true, place the provider at highest priority so it becomes the default for responses; otherwise append it to the end of the priority list.</param>
+        /// <exception cref="ArgumentNullException">Thrown when <paramref name="provider"/> is null.</exception>
         internal void AddSerializationProvider(ISerializationProvider provider, bool defaultProvider)
         {
             ArgumentNullException.ThrowIfNull(provider);

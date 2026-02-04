@@ -41,7 +41,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     return;
                 }
 
-                var changeSetEntries = await serializer.ReadSubmitRequest(context);
+                var changeSetEntries = await serializer.ReadSubmitRequestAsync(context);
 
                 DomainService domainService = CreateDomainService(context);
                 IEnumerable<ChangeSetEntry> result;

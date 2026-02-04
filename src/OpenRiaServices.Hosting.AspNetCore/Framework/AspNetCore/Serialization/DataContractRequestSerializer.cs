@@ -111,7 +111,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
         }
 
-        public override async Task<IEnumerable<ChangeSetEntry>> ReadSubmitRequest(HttpContext context)
+        public override async Task<IEnumerable<ChangeSetEntry>> ReadSubmitRequestAsync(HttpContext context)
         {
             (_, var parameter) = await ReadParametersFromBodyAsync(context, _operation);
             return (IEnumerable<ChangeSetEntry>)parameter[0]!;
@@ -357,7 +357,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
         }
 
-        public override Task WriteSubmitResponse(HttpContext context, IEnumerable<ChangeSetEntry> result)
+        public override Task WriteSubmitResponseAsync(HttpContext context, IEnumerable<ChangeSetEntry> result)
         {
             return WriteResponseAsync(context, result, _operation);
         }

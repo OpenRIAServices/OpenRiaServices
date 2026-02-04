@@ -32,12 +32,19 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         public virtual string OperationName => _operation.Name;
         public DomainOperationEntry DomainOperation => _operation;
 
+        /// <summary>
+        /// Gets a value indicating whether evaluating this operation can have effects (by looking att <see cref="InvokeAttribute.HasSideEffects"/> or <see cref="QueryAttribute.HasSideEffects"/>)
+        /// </summary>
         public abstract bool HasSideEffects { get; }
 
         public OpenRiaServicesOptions Options { get; }
 
+        /// <summary>
+        /// Processes an HTTP request for the associated <see cref="DomainOperation"/> and writes the serialized result or errors to the response.
+        /// </summary>
+        /// <param name="context">The HTTP context for the incoming request and response.</param>
+        /// <returns>A Task that completes when the request has been processed and the response or error has been written.</returns>
         public abstract Task Invoke(HttpContext context);
-
 
         private RequestSerializer[] RequestSerializers
         {

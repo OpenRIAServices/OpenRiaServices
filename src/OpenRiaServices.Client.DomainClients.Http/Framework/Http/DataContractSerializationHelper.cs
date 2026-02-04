@@ -5,8 +5,11 @@ using System.Runtime.Serialization;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
+    /// <summary>
+    /// A <see cref="DataContractSerializer"/> cache per <see cref="DomainContext"/> (DomainService) type
+    /// </summary>
     sealed class DataContractSerializationHelper
-    {       
+    {
         private readonly Dictionary<Type, DataContractSerializer> _serializerCache = new Dictionary<Type, DataContractSerializer>();
         private readonly Dictionary<string, MethodParameters> _methodParametersCache = new Dictionary<string, MethodParameters>();
         private readonly Type _serviceInterface;
