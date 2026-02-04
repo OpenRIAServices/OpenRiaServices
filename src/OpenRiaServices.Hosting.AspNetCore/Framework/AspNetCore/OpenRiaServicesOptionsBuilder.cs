@@ -32,14 +32,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         {
             Services.Configure<OpenRiaServicesOptions>(options =>
             {
-                Serialization.TextXmlSerializationProvider provider = new Serialization.TextXmlSerializationProvider();
-
-                // use same cache for data contracts
-                if (options.SerializationProviders.OfType<Serialization.BinaryXmlSerializationProvider>().FirstOrDefault() is { } binaryProvider)
-                    provider._perDomainServiceDataContractCache = binaryProvider._perDomainServiceDataContractCache;
-
-                // Add new provider last, position 0 is default
-                options.SerializationProviders = [.. options.SerializationProviders, provider];
+                options.AddTextXmlSerializer();
             });
 
             return this;

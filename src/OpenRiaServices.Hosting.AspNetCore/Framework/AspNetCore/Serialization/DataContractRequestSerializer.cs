@@ -89,7 +89,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             {
                 long contentLength and >= 0 and <= int.MaxValue => Math.Min((int)contentLength, 4096),
                 null => 4096,
-                _ => throw new BadHttpRequestException("invalid lenght", (int)System.Net.HttpStatusCode.BadRequest)
+                _ => throw new BadHttpRequestException("invalid length", (int)System.Net.HttpStatusCode.BadRequest)
             };
 
             // To prevent DOS attacks where an attacker can allocate arbitary large memory by setting content-length to a large value
@@ -331,11 +331,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             writer.WriteEndDocument();
         }
 
-        public override Task WriteResponseAsync(HttpContext context, object? result, DomainOperationEntry operation)
+        public override async Task WriteResponseAsync(HttpContext context, object? result, DomainOperationEntry operation)
         {
             var ct = context.RequestAborted;
             if (ct.IsCancellationRequested)
-                return Task.CompletedTask;
+                return;
 
             var messageWriter = BinaryMessageWriter.Rent(IsBinary);
             try
@@ -348,7 +348,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 var response = context.Response;
                 response.Headers.ContentType = ContentType;
                 response.ContentLength = bufferMemory.Length;
-                return bufferMemory.WriteTo(response, ct);
+                await bufferMemory.WriteTo(response, ct);
             }
             catch (Exception)
             {

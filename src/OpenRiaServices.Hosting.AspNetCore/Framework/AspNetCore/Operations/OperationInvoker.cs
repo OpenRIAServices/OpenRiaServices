@@ -65,7 +65,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                         result[i] = providers[i].GetRequestSerializer(DomainOperation);
                     }
 
-                    _requestSerializers = result; // Compare Exchange
+                    System.Threading.Volatile.Write(ref _requestSerializers, result);
                     return result;
                 }
             }
