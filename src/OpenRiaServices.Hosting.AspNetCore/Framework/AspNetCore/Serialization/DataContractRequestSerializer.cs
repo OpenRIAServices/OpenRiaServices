@@ -235,7 +235,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     {
                         var serializer = _dataContractCache.GetSerializer(parameter.ParameterType);
 
-                        // XmlElemtnt returns the "ResultNode" unless we step into the contents
+                        // XmlElement returns the "ResultNode" unless we step into the contents
                         bool isXElement = parameter.ParameterType == typeof(System.Xml.Linq.XElement);
                         if (isXElement)
                             reader.ReadStartElement();
@@ -306,6 +306,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
         }
 
+        /// <summary>
+        /// Writes a SOAP-style Fault XML envelope for the specified DomainServiceFault into the provided XmlDictionaryWriter.
+        /// </summary>
+        /// <param name="fault">The DomainServiceFault containing the error message and detail to include in the fault payload.</param>
+        /// <param name="writer">The XmlDictionaryWriter used to write the Fault elements and serialized fault detail.</param>
         private static void WriteFault(DomainServiceFault fault, XmlDictionaryWriter writer)
         {
             //<Fault xmlns="http://schemas.microsoft.com/ws/2005/05/envelope/none">
@@ -331,6 +336,15 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             writer.WriteEndDocument();
         }
 
+
+        /// <summary>
+        /// Writes the given operation result into the HTTP response body
+        /// </summary>
+        /// <param name="context">The HTTP context whose response will be written to.</param>
+        /// <param name="result">The operation result to serialize into the response body; may be null.</param>
+        /// <param name="operation">The operation descriptor for which the response is being written.</param>
+        /// <returns>A task that completes when the response has been written to the HTTP response.</returns>
+        /// <remarks>If the request is already canceled, no output is written. The response's Content-Type and Content-Length are set by this method.</remarks>
         public override async Task WriteResponseAsync(HttpContext context, object? result, DomainOperationEntry operation)
         {
             var ct = context.RequestAborted;
@@ -357,13 +371,18 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
         }
 
+        /// <summary>
+        /// Writes the submit operation response for the given change set to the HTTP response.
+        /// </summary>
+        /// <param name="context">The current HTTP context.</param>
+        /// <param name="result">The change set entries to include in the submit response.</param>
         public override Task WriteSubmitResponseAsync(HttpContext context, IEnumerable<ChangeSetEntry> result)
         {
             return WriteResponseAsync(context, result, _operation);
         }
 
         /// <summary>
-        /// Writes the actual response of a method
+        /// Writes the XML response envelope for the current operation and serializes the provided result into the response body.
         /// </summary>
         private void WriteResponse(XmlDictionaryWriter writer, object? result)
         {

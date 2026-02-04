@@ -9,8 +9,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     internal interface ISerializationProvider
     {
         /// <summary>
-        /// Get <see cref="RequestSerializer "/> to be used for serialization (and deserialization) for the specified domain operation.
+        /// Get <see cref="RequestSerializer"/> to be used for serialization (and deserialization) for the specified domain operation.
         /// </summary>
+        /// <remarks>The method is thread safe, even when called concurrently for the same operation.</remarks>
         /// <param name="operation">The domain operation which the serializer should be able to handle.</param>
         public RequestSerializer GetRequestSerializer(DomainOperationEntry operation);
     }
@@ -25,10 +26,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         public abstract bool CanRead(ReadOnlySpan<char> contentType);
 
         /// <summary>
-        /// Determines whether the serializer can write requests with the specified format.
+        /// Determines whether the serializer can write responses with the specified format.
         /// </summary>
-        /// <param name="contentType">The content type to use (e.g., based on request's Accept (or Content-Type) header value(s).</param>
-        /// <returns><see langword="true"/> if the serializer can write requests with the given content type, otherwise <see langword="false"/>.</returns>
+        /// <param name="contentType">The content type to use (e.g., based on request's Accept or Content-Type header value(s)).</param>
+        /// <returns><see langword="true"/> if the serializer can write responses with the given content type, otherwise <see langword="false"/>.</returns>
         public abstract bool CanWrite(ReadOnlySpan<char> contentType);
 
         /// <summary>

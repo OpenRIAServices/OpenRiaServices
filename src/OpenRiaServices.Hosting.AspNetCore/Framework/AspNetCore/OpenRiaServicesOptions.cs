@@ -26,8 +26,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// </summary>
         public bool IncludeExceptionMessageInErrors { get; set; }
 
-        internal bool EnableTextXmlSerialization { get; set; }
-
         /// <summary>
         /// List of all registered wire formats on descending order of priority. 
         /// First one is the default used for responses (when client do not specify an matching format)

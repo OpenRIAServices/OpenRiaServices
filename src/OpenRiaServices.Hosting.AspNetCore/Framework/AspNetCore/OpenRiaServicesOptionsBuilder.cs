@@ -1,7 +1,4 @@
-﻿#nullable enable
-
-using System;
-using System.Linq;
+﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace OpenRiaServices.Hosting.AspNetCore

@@ -10,6 +10,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Operations
@@ -46,11 +47,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         /// <returns>A Task that completes when the request has been processed and the response or error has been written.</returns>
         public abstract Task Invoke(HttpContext context);
 
+        /// <summary>
+        /// All supported <see cref="RequestSerializer" />, cached on first access
+        /// </summary>
         private RequestSerializer[] RequestSerializers
         {
             get
             {
-                return _requestSerializers ?? CreateSerializersArray();
+                return Volatile.Read(ref _requestSerializers) ?? CreateSerializersArray();
 
                 // Separate creation to separate method to allow inlining of getter when value is set
                 [MethodImpl(MethodImplOptions.NoInlining)]
@@ -65,8 +69,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                         result[i] = providers[i].GetRequestSerializer(DomainOperation);
                     }
 
-                    System.Threading.Volatile.Write(ref _requestSerializers, result);
-                    return result;
+                    Interlocked.CompareExchange(ref _requestSerializers, result, null);
+                    return _requestSerializers;
                 }
             }
         }

@@ -33,6 +33,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     internal abstract class DataContractSerializationProvider() : ISerializationProvider
     {
         private readonly ConcurrentDictionary<(Type, string), DataContractRequestSerializer> _serializers = new();
+        // Cache of DataContractCache per DomainService type, **internal** as a quick hack to allow sharing between multiple providers
         internal ConcurrentDictionary<Type, DataContractCache> _perDomainServiceDataContractCache = new();
 
         /// <summary>
