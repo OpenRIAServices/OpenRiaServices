@@ -135,7 +135,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             // any exception from query parsing is thrown immediately and not wrapped in task
             async Task<QueryCompletedResult> QueryAsyncCoreContinuation()
             {
-                var response = await responseTask;
+                var response = await responseTask.ConfigureAwait(false);
                 IEnumerable<ValidationResult> validationErrors = null;
                 try
                 {
