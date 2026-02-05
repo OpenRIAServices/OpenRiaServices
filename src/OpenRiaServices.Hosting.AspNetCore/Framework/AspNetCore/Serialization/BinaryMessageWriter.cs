@@ -10,6 +10,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// to not have to allocated all memory used for the writer.
     /// It also adds some estimates of the buffer size needde
     /// </summary>
+#pragma warning disable CA1001 // (not disposable, but stream is disposable field). ArrayPoolStream does not need Dispose, and Return + Clear methods behaves similar to what Dispose would do
     internal sealed class BinaryMessageWriter
     {
         private readonly ArrayPoolStream _stream;
