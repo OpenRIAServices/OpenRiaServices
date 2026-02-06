@@ -427,6 +427,66 @@ namespace OpenRiaServices.Client.Test
             query2 = (IQueryable<EmployeeWithCharProperty>)RoundtripQuery(query1, emps.AsQueryable());
         }
 
+#if !NETFRAMEWORK
+        [TestMethod]
+        public void TestDateOnlyQuery()
+        {
+            EmployeeWithDateOnlyProperty[] employees = [ 
+                new() { Birthday = new DateOnly(2025, 1, 1) },
+                new() { Birthday = new DateOnly(2025, 3, 1) },
+                new() { Birthday = new DateOnly(2025, 5, 1) }
+            ];
+
+            Expression<Func<EmployeeWithDateOnlyProperty, bool>> predicate = p => p.Birthday < new DateOnly(2025, 4, 1);
+            
+            IQueryable<EmployeeWithDateOnlyProperty> query = employees.AsQueryable().Where(predicate);
+            
+            var result = query.ToList();
+            Assert.HasCount(2, result);
+        }
+
+        [TestMethod]
+        public void TestDateOnlyQuerySerializer()
+        {
+            Expression<Func<EmployeeWithDateOnlyProperty, bool>> predicate = p => p.Birthday < new DateOnly(2026, 4, 2);
+
+            IQueryable<EmployeeWithDateOnlyProperty> query = Array.Empty<EmployeeWithDateOnlyProperty>().AsQueryable().Where(predicate);
+
+            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
+
+            Assert.Contains("it.Birthday<04/02/2026", queryParts[0].Expression);
+        }
+
+        [TestMethod]
+        public void TestTimeOnlyQuery()
+        {
+            EmployeeWithTimeOnlyProperty[] employees = [
+                new() { ClockInTime = new TimeOnly(7, 45) },
+                new() { ClockInTime = new TimeOnly(6, 30) },
+                new() { ClockInTime = new TimeOnly(8, 15) }
+            ];
+
+            Expression<Func<EmployeeWithTimeOnlyProperty, bool>> predicate = p => p.ClockInTime < new TimeOnly(7, 50);
+
+            IQueryable<EmployeeWithTimeOnlyProperty> query = employees.AsQueryable().Where(predicate);
+
+            var result = query.ToList();
+            Assert.HasCount(2, result);
+        }
+
+        [TestMethod]
+        public void TestTimeOnlyQuerySerializer()
+        {
+            Expression<Func<EmployeeWithTimeOnlyProperty, bool>> predicate = p => p.ClockInTime < new TimeOnly(7, 45);
+
+            IQueryable<EmployeeWithTimeOnlyProperty> query = Array.Empty<EmployeeWithTimeOnlyProperty>().AsQueryable().Where(predicate);
+
+            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
+
+            Assert.Contains("it.ClockInTime<07:45", queryParts[0].Expression);
+        }
+#endif
+
         [TestMethod]
         public void TestEscapingInStrings()
         {
@@ -1198,7 +1258,38 @@ namespace OpenRiaServices.Client.Test
             set;
         }
     }
+#if !NETFRAMEWORK
+    public class EmployeeWithDateOnlyProperty
+    {
+        [Key]
+        public int Id
+        {
+            get;
+            set;
+        }
 
+        public DateOnly Birthday
+        {
+            get;
+            set;
+        }
+    }
+    public class EmployeeWithTimeOnlyProperty
+    {
+        [Key]
+        public int Id
+        {
+            get;
+            set;
+        }
+
+        public TimeOnly ClockInTime
+        {
+            get;
+            set;
+        }
+    }
+#endif
     public class EmployeeWithReservedNames
     {
         [Key]
