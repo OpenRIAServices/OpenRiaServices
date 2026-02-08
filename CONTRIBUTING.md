@@ -2,16 +2,16 @@
 
 For general contribution guidelines please look at the wiki at https://github.com/OpenRIAServices/OpenRiaServices/wiki/Contribution-Guidelines
 
-## General feedback or discussions
+# General feedback or discussions
 
 Create a new discussion at [GitHub](https://github.com/OpenRIAServices/OpenRiaServices/discussions)
 
-## I've found a bug or have a feature request
+# I've found a bug or have a feature request
 
 Feel free to post an issue [here on GitHub](https://github.com/OpenRIAServices/OpenRiaServices/). 
 Please have a look at the good bug filing template for asp.net  found at [https://github.com/aspnet/Home/wiki/Functional-bug-template](https://github.com/aspnet/Home/wiki/Functional-bug-template)
 
-## First steps in contributing code or other content
+# First steps in contributing code or other content
 
 Download the code, compile and have a look around.
 There are several [sample projects in Samples repository](https://github.com/OpenRIAServices/Samples) to play around with
@@ -23,19 +23,19 @@ What to contribute with:
 * The documentation is currently very sparse and lacking, please feel free to contribute.  You can always post issues with proposed documentation.
 * Not all tests currently run and some are non-trivial to get going, so any help in getting more tests passing or improving the getting started experience are welcome.
 
-### Code style
+# Code style
 
 Try to follow the existing coding style.
 Make sure that you can compile the project with your changes using release build without any new compilation warning.
 
 We generally try to follow [Microsoft .NET Framework Design Guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/)
 
-### Comments
+## Comments
 
 All new public, protected and internal methods should be documented, using standard "{{///}}" comments.
 Make sure that you can compile the project with your changes using release build without any new compilation warning.
 
-### Commit messages
+# Commit messages
 
 * Make sure that the first line always contains a short **descriptive** summary of the changes.
 * The remainting rows can be used to provide more details about the changes.
@@ -58,28 +58,28 @@ For multi part commits, it is a good idea to embed the issue number in the commi
  Commit detail 3
 ```
 
-### Tests
+# Tests
 
 Please take your time and add test for any new functionality added.
 
 
-## Debugging Open RIA Services Code Generation
+# Debugging Open RIA Services Code Generation
 
 If you need to debug the code generation process (for example, when troubleshooting code generation failures), follow these steps:
 
-### Prerequisites
+## Prerequisites
 
 - Visual Studio with debugger
 - Your OpenRiaServices source code compiled locally
 - PDB files generated alongside your assemblies (ensure Debug configuration is used)
 
-### Steps to Debug Code Generation
+## Steps to Debug Code Generation
 
-#### 1. Build OpenRiaServices Locally
+### 1. Build OpenRiaServices Locally
 
 Build the OpenRiaServices solution in Debug mode to generate assemblies with their corresponding PDB files. The PDB files are essential for the debugger to map the execution to your source code.
 
-#### 2. Copy Assemblies and PDB Files
+### 2. Copy Assemblies and PDB Files
 
 You need to replace the OpenRiaServices assemblies in your project with your locally built versions.
 The most reliable method is to replace files in NuGet package cache:
@@ -101,7 +101,7 @@ The most reliable method is to replace files in NuGet package cache:
 1. Remove the OpenRiaServices NuGet package references from your project
 2. Add direct assembly references to your locally built OpenRiaServices DLLs
 
-#### 3. Set Breakpoints
+### 3. Set Breakpoints
 
 Open the OpenRiaServices source code in Visual Studio and set breakpoints in the code generation logic you want to debug. Common places to set breakpoints:
 
@@ -110,7 +110,7 @@ Open the OpenRiaServices source code in Visual Studio and set breakpoints in the
 - Logging methods (especially in `ILoggingService` implementations)
 - T4 template processing code (if using text templating)
 
-#### 4. Attach Debugger
+### 4. Attach Debugger
 
 Code generation typically runs during the build process.
 
@@ -120,12 +120,12 @@ Code generation typically runs during the build process.
    - For Visual Studio builds: Attach to `devenv.exe` or the relevant build process
 3. **To make debugging a lot easier**, you can add `System.Diagnostics.Debugger.Launch()` in the code generation entry point to automatically prompt for debugger attachment
 
-#### 5. Trigger Code Generation
+### 5. Trigger Code Generation
 
 Rebuild your project to trigger code generation (you can delete the `obj` folder and do a normal build).
 If everything is set up correctly, your breakpoints should be hit.
 
-### Troubleshooting Tips
+## Troubleshooting Tips for code generation
 
 - **Breakpoints not hit**: Ensure PDB files are present alongside DLLs and that they match the DLL version. 
 Add  `System.Diagnostics.Debugger.Launch()` to the entry point.
@@ -134,7 +134,7 @@ Add  `System.Diagnostics.Debugger.Launch()` to the entry point.
 - **Check build output**: Look for warnings about PDB files not matching or not being found
 - **Multiple processes**: Build processes may spawn multiple MSBuild instances; you may need to attach to the correct child process
 
-### Additional Resources
+## Additional Resources
 
 - [Code Generation Settings](https://github.com/OpenRIAServices/OpenRiaServices/wiki/Code-Generation-Settings)
 
