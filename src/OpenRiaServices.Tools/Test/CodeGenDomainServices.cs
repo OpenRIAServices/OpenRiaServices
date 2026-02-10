@@ -499,7 +499,16 @@ namespace OpenRiaServices.Tools.Test
             options.AddSharedType(typeof(Cities.TimeZone));
             TestHelper.ValidateCodeGen(options);
         }
-
+#if NET
+        [DeploymentItem(@"Baselines\Default\People", "CG_People")]
+        [TestMethod]
+        [Description("Create client proxies for People domain service and compare to known good copy")]
+        public void TestPeopleClientProxies()
+        {
+            TestHelper.CodeGenValidationOptions options = new TestHelper.CodeGenValidationOptions(@"Default\People", "CG_People", "Person.g", typeof(People.PeopleDomainService), [], false);
+            TestHelper.ValidateCodeGen(options);
+        }
+#endif
         [DeploymentItem(@"Baselines\Default\Mocks", "CG_Mocks")]
         [DeploymentItem(@"Mocks\MockDomainServices.cs")]
         [DeploymentItem(@"Baselines\Default\Cities")]

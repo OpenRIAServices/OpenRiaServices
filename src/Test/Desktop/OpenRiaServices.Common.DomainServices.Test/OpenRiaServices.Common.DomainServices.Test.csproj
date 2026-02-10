@@ -315,6 +315,12 @@
     <Compile Update="Cities\CityDomainServiceHostFactory.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="People\PeopleDomainServiceHost.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
+    <Compile Update="People\PeopleDomainServiceHostFactory.cs">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Compile>
     <Compile Update="Cities\CityDomainService_AuthRequired.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -411,6 +417,12 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Baselines\Default\People\Person.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\People\Person.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Baselines\Default\Cities\Cities.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -633,6 +645,8 @@
     <!-- WCF related -->
     <Compile Remove="Cities\CityDomainServiceHost.cs" />
     <Compile Remove="Cities\CityDomainServiceHostFactory.cs" />
+    <Compile Remove="People\PeopleDomainServiceHost.cs" />
+    <Compile Remove="People\PeopleDomainServiceHostFactory.cs" />
 
 
     <Compile Remove="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
