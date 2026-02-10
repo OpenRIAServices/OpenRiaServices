@@ -378,18 +378,17 @@ namespace OpenRiaServices.Client.Test
                 new EmployeeWithReservedNames { Id = 1, @true = false, iif = false },
             }.AsQueryable();
 
+            AssertSerializedValue<EmployeeWithReservedNames>("it.true", e => e.@true);
+
             IQueryable<EmployeeWithReservedNames> q = entities.Where(e => e.@true);
-            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(q);
-            Assert.AreEqual("it.true", queryParts.Single().Expression);
             IQueryable<EmployeeWithReservedNames> q2 = (IQueryable<EmployeeWithReservedNames>)RoundtripQuery(q, entities);
             int c1 = q.Count();
             int c2 = q2.Count();
             Assert.AreEqual(1, c1);
             Assert.AreEqual(c1, c2);
 
+            AssertSerializedValue<EmployeeWithReservedNames>("it.iif", e => e.iif);
             q = entities.Where(e => e.iif);
-            queryParts = QuerySerializer.Serialize(q);
-            Assert.AreEqual("it.iif", queryParts.Single().Expression);
             q2 = (IQueryable<EmployeeWithReservedNames>)RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
@@ -438,23 +437,20 @@ namespace OpenRiaServices.Client.Test
             ];
 
             Expression<Func<EmployeeWithDateOnlyProperty, bool>> predicate = p => p.Birthday < new DateOnly(2025, 4, 1);
-            
-            IQueryable<EmployeeWithDateOnlyProperty> query = employees.AsQueryable().Where(predicate);
-            
-            var result = query.ToList();
-            Assert.HasCount(2, result);
+
+            var query = employees.AsQueryable().Where(predicate);
+            var roundTrippedResult = RoundtripQuery(query, employees).ToList();
+
+            CollectionAssert.AreEqual(query.ToList(), roundTrippedResult);
         }
 
         [TestMethod]
         public void TestDateOnlyQuerySerializer()
         {
-            Expression<Func<EmployeeWithDateOnlyProperty, bool>> predicate = p => p.Birthday < new DateOnly(2026, 4, 2);
+            AssertSerializedValue<EmployeeWithDateOnlyProperty>("(it.Birthday<DateOnly(2026,4,2))", p => p.Birthday < new DateOnly(2026, 4, 2));
 
-            IQueryable<EmployeeWithDateOnlyProperty> query = Array.Empty<EmployeeWithDateOnlyProperty>().AsQueryable().Where(predicate);
+            // TODO: Add some more test cases, including using different DateOnly methods/properties, and also test some cases with nullable DateOnly properties.
 
-            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
-
-            Assert.Contains("it.Birthday<04/02/2026", queryParts[0].Expression);
         }
 
         [TestMethod]
@@ -463,28 +459,27 @@ namespace OpenRiaServices.Client.Test
             EmployeeWithTimeOnlyProperty[] employees = [
                 new() { ClockInTime = new TimeOnly(7, 45) },
                 new() { ClockInTime = new TimeOnly(6, 30) },
+                new() { ClockInTime = new TimeOnly(7, 49, 59, 999, 999) },
+                new() { ClockInTime = new TimeOnly(7, 50) },
+                new() { ClockInTime = new TimeOnly(7, 50, 0,0,1) },
                 new() { ClockInTime = new TimeOnly(8, 15) }
             ];
 
             Expression<Func<EmployeeWithTimeOnlyProperty, bool>> predicate = p => p.ClockInTime < new TimeOnly(7, 50);
 
-            IQueryable<EmployeeWithTimeOnlyProperty> query = employees.AsQueryable().Where(predicate);
+            var query = employees.AsQueryable().Where(predicate);
+            var roundTrippedResult = RoundtripQuery(query, employees).ToList();
 
-            var result = query.ToList();
-            Assert.HasCount(2, result);
+            CollectionAssert.AreEqual(query.ToList(), roundTrippedResult);
         }
 
         [TestMethod]
         public void TestTimeOnlyQuerySerializer()
         {
-            Expression<Func<EmployeeWithTimeOnlyProperty, bool>> predicate = p => p.ClockInTime < new TimeOnly(7, 45);
-
-            IQueryable<EmployeeWithTimeOnlyProperty> query = Array.Empty<EmployeeWithTimeOnlyProperty>().AsQueryable().Where(predicate);
-
-            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
-
-            Assert.Contains("it.ClockInTime<07:45", queryParts[0].Expression);
+            AssertSerializedValue<EmployeeWithTimeOnlyProperty>("(it.ClockInTime<TimeOnly(279000000000))", p => p.ClockInTime < new TimeOnly(7, 45));
+            // TODO: Add some more test cases, including using different TimeOnly methods/properties and subtraction
         }
+
 #endif
 
         [TestMethod]
@@ -926,6 +921,12 @@ namespace OpenRiaServices.Client.Test
             return a;
         }
 
+        static void AssertSerializedValue<T>(string expected, Expression<Func<T, bool>> expression)
+        {
+            IQueryable<T> query = Array.Empty<T>().AsQueryable().Where(expression);
+            Assert.AreEqual(expected, QuerySerializer.Serialize(query).Single().Expression);
+        }
+
         [TestMethod]
         public void TestUnsupportedSequenceMethods()
         {
@@ -1194,12 +1195,12 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
-        private IQueryable RoundtripQuery(IQueryable query, IQueryable data)
+        private IQueryable<T> RoundtripQuery<T>(IQueryable query, IEnumerable<T> data)
         {
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
 
             DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(typeof(NorthwindDomainService));
-            return SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, data, TranslateQueryParts(queryParts));
+            return (IQueryable<T>)SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, data.AsQueryable(), TranslateQueryParts(queryParts));
         }
 
         private IQueryable RoundtripQuery(DomainServiceDescription domainServiceDescription, IQueryable query, IQueryable data)
