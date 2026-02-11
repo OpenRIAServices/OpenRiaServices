@@ -315,12 +315,6 @@
     <Compile Update="Cities\CityDomainServiceHostFactory.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="People\PeopleDomainServiceHost.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="People\PeopleDomainServiceHostFactory.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
     <Compile Update="Cities\CityDomainService_AuthRequired.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -633,8 +627,13 @@
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net472'">
-    <Compile Remove="net6.0\*" />
-    <None Include="net6.0\*" />
+    <!-- Remove .NET specific types (polyfills) -->
+    <Compile Remove="net\*" />
+    <None Include="net\*" />
+
+    <!-- Remove .NET specific types (DomainServices) -->
+    <Compile Remove="People/*" />
+    <None Include="People/*" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'!='net472'">
     <!-- Remove Linq To Sql (LTS) related -->
@@ -645,9 +644,6 @@
     <!-- WCF related -->
     <Compile Remove="Cities\CityDomainServiceHost.cs" />
     <Compile Remove="Cities\CityDomainServiceHostFactory.cs" />
-    <Compile Remove="People\PeopleDomainServiceHost.cs" />
-    <Compile Remove="People\PeopleDomainServiceHostFactory.cs" />
-
 
     <Compile Remove="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
     <!--  AuthenticationServices are added in AspNetCore website instead-->
