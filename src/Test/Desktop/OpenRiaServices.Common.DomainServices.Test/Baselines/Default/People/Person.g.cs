@@ -15,6 +15,7 @@ namespace People
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
     using System.Runtime.Serialization;
+    using System.Threading;
     using System.Threading.Tasks;
     using OpenRiaServices;
     using OpenRiaServices.Client;
@@ -87,6 +88,52 @@ namespace People
         }
         
         /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersonsByDate' query.
+        /// </summary>
+        /// <param name="date">The value for the 'date' parameter of the query.</param>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Person"/> entity instances.</returns>
+        public EntityQuery<Person> GetPersonsByDateQuery(DateOnly date)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("date", date);
+            this.ValidateMethod("GetPersonsByDateQuery", parameters);
+            return base.CreateQuery<Person>("GetPersonsByDate", parameters, false, true);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        /// </summary>
+        /// <param name="callback">Callback to invoke when the operation completes.</param>
+        /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<IEnumerable<DateOnly>> GetBirthdays(Action<InvokeOperation<IEnumerable<DateOnly>>> callback, object userState)
+        {
+            this.ValidateMethod("GetBirthdays", null);
+            return this.InvokeOperation<IEnumerable<DateOnly>>("GetBirthdays", typeof(IEnumerable<DateOnly>), null, true, callback, userState);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        /// </summary>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<IEnumerable<DateOnly>> GetBirthdays()
+        {
+            this.ValidateMethod("GetBirthdays", null);
+            return this.InvokeOperation<IEnumerable<DateOnly>>("GetBirthdays", typeof(IEnumerable<DateOnly>), null, true, null, null);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        /// </summary>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public System.Threading.Tasks.Task<InvokeResult<IEnumerable<DateOnly>>> GetBirthdaysAsync(CancellationToken cancellationToken = default(CancellationToken))
+        {
+            this.ValidateMethod("GetBirthdays", null);
+            return this.InvokeOperationAsync<IEnumerable<DateOnly>>("GetBirthdays", null, true, cancellationToken);
+        }
+        
+        /// <summary>
         /// Creates a new EntityContainer for this DomainContext's EntitySets.
         /// </summary>
         /// <returns>A new container instance.</returns>
@@ -100,6 +147,22 @@ namespace People
         /// </summary>
         public interface IPeopleDomainServiceContract
         {
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetBirthdays' operation.
+            /// </summary>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(true)]
+            IAsyncResult BeginGetBirthdays(AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetBirthdays'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetBirthdays'.</param>
+            /// <returns>The 'IEnumerable`1' returned from the 'GetBirthdays' operation.</returns>
+            IEnumerable<DateOnly> EndGetBirthdays(IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetPersons' operation.
@@ -116,6 +179,23 @@ namespace People
             /// <param name="result">The IAsyncResult returned from 'BeginGetPersons'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetPersons' operation.</returns>
             QueryResult<Person> EndGetPersons(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetPersonsByDate' operation.
+            /// </summary>
+            /// <param name="date">The value for the 'date' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(false)]
+            IAsyncResult BeginGetPersonsByDate(DateOnly date, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetPersonsByDate'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetPersonsByDate'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetPersonsByDate' operation.</returns>
+            QueryResult<Person> EndGetPersonsByDate(IAsyncResult result);
         }
         
         internal sealed class PeopleDomainContextEntityContainer : EntityContainer

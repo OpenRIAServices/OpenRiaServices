@@ -1,11 +1,9 @@
 ﻿#if NET
 
 using System;
-using System.CodeDom;
-using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Linq;
-using OpenRiaServices;
+using System.Threading.Tasks;
 using OpenRiaServices.Server;
 
 namespace People
@@ -25,6 +23,18 @@ namespace People
         public IQueryable<Person> GetPersons()
         {
             return this._people.AsQueryable<Person>();
+        }
+
+        [Query]
+        public IQueryable<Person> GetPersonsByDate(DateOnly date)
+        {
+            return this._people.Where(p => p.Birthday.Equals(date)).AsQueryable<Person>();
+        }
+
+        [Invoke]
+        public IEnumerable<DateOnly> GetBirthdays()
+        {
+            return this._people.Select(p => p.Birthday);
         }
     }
 }

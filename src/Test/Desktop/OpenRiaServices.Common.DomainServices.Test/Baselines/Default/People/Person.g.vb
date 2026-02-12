@@ -21,6 +21,7 @@ Imports System.ComponentModel
 Imports System.ComponentModel.DataAnnotations
 Imports System.Linq
 Imports System.Runtime.Serialization
+Imports System.Threading
 Imports System.Threading.Tasks
 
 Namespace People
@@ -86,6 +87,48 @@ Namespace People
         End Function
         
         ''' <summary>
+        ''' Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersonsByDate' query.
+        ''' </summary>
+        ''' <param name="date">The value for the 'date' parameter of the query.</param>
+        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Person"/> entity instances.</returns>
+        Public Function GetPersonsByDateQuery(ByVal [date] As DateOnly) As EntityQuery(Of Person)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("date", [date])
+            Me.ValidateMethod("GetPersonsByDateQuery", parameters)
+            Return MyBase.CreateQuery(Of Person)("GetPersonsByDate", parameters, false, true)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        ''' </summary>
+        ''' <param name="callback">Callback to invoke when the operation completes.</param>
+        ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetBirthdays(ByVal callback As Action(Of InvokeOperation(Of IEnumerable(Of DateOnly))), ByVal userState As Object) As InvokeOperation(Of IEnumerable(Of DateOnly))
+            Me.ValidateMethod("GetBirthdays", Nothing)
+            Return Me.InvokeOperation(Of IEnumerable(Of DateOnly))("GetBirthdays", GetType(IEnumerable(Of DateOnly)), Nothing, true, callback, userState)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        ''' </summary>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetBirthdays() As InvokeOperation(Of IEnumerable(Of DateOnly))
+            Me.ValidateMethod("GetBirthdays", Nothing)
+            Return Me.InvokeOperation(Of IEnumerable(Of DateOnly))("GetBirthdays", GetType(IEnumerable(Of DateOnly)), Nothing, true, Nothing, Nothing)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        ''' </summary>
+        ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Function GetBirthdaysAsync(Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of IEnumerable(Of DateOnly)))
+            Me.ValidateMethod("GetBirthdays", Nothing)
+            Return Me.InvokeOperationAsync(Of IEnumerable(Of DateOnly))("GetBirthdays", Nothing, true, cancellationToken)
+        End Function
+        
+        ''' <summary>
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
         ''' <returns>A new container instance.</returns>
@@ -97,6 +140,22 @@ Namespace People
         ''' Service contract for the 'PeopleDomainService' DomainService.
         ''' </summary>
         Public Interface IPeopleDomainServiceContract
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetBirthdays' operation.
+            ''' </summary>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(true)>  _
+            Function BeginGetBirthdays(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetBirthdays'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetBirthdays'.</param>
+            ''' <returns>The 'IEnumerable`1' returned from the 'GetBirthdays' operation.</returns>
+            Function EndGetBirthdays(ByVal result As IAsyncResult) As IEnumerable(Of DateOnly)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetPersons' operation.
@@ -113,6 +172,23 @@ Namespace People
             ''' <param name="result">The IAsyncResult returned from 'BeginGetPersons'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetPersons' operation.</returns>
             Function EndGetPersons(ByVal result As IAsyncResult) As QueryResult(Of Person)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetPersonsByDate' operation.
+            ''' </summary>
+            ''' <param name="date">The value for the 'date' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(false)>  _
+            Function BeginGetPersonsByDate(ByVal [date] As DateOnly, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetPersonsByDate'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetPersonsByDate'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetPersonsByDate' operation.</returns>
+            Function EndGetPersonsByDate(ByVal result As IAsyncResult) As QueryResult(Of Person)
         End Interface
         
         Friend NotInheritable Class PeopleDomainContextEntityContainer
