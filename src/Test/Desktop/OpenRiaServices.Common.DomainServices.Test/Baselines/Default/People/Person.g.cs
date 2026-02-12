@@ -23,6 +23,89 @@ namespace People
     
     
     /// <summary>
+    /// The 'Lifespan' class.
+    /// </summary>
+    [DataContract(Namespace="http://schemas.datacontract.org/2004/07/People")]
+    public sealed partial class Lifespan : ComplexObject
+    {
+        
+        private DateOnly _born;
+        
+        private Nullable<DateOnly> _dead;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnBornChanging(DateOnly value);
+        partial void OnBornChanged();
+        partial void OnDeadChanging(Nullable<DateOnly> value);
+        partial void OnDeadChanged();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Lifespan"/> class.
+        /// </summary>
+        public Lifespan()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Born' value.
+        /// </summary>
+        [DataMember()]
+        public DateOnly Born
+        {
+            get
+            {
+                return this._born;
+            }
+            set
+            {
+                if ((this._born != value))
+                {
+                    this.OnBornChanging(value);
+                    this.RaiseDataMemberChanging("Born");
+                    this.ValidateProperty("Born", value);
+                    this._born = value;
+                    this.RaiseDataMemberChanged("Born");
+                    this.OnBornChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Dead' value.
+        /// </summary>
+        [DataMember()]
+        public Nullable<DateOnly> Dead
+        {
+            get
+            {
+                return this._dead;
+            }
+            set
+            {
+                if ((this._dead != value))
+                {
+                    this.OnDeadChanging(value);
+                    this.RaiseDataMemberChanging("Dead");
+                    this.ValidateProperty("Dead", value);
+                    this._dead = value;
+                    this.RaiseDataMemberChanged("Dead");
+                    this.OnDeadChanged();
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// The DomainContext corresponding to the 'PeopleDomainService' DomainService.
     /// </summary>
     public sealed partial class PeopleDomainContext : DomainContext
@@ -88,49 +171,113 @@ namespace People
         }
         
         /// <summary>
-        /// Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersonsByDate' query.
+        /// Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersonsByFavouriteDay' query.
         /// </summary>
-        /// <param name="date">The value for the 'date' parameter of the query.</param>
+        /// <param name="favouriteDay">The value for the 'favouriteDay' parameter of the query.</param>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Person"/> entity instances.</returns>
-        public EntityQuery<Person> GetPersonsByDateQuery(DateOnly date)
+        public EntityQuery<Person> GetPersonsByFavouriteDayQuery(DateOnly favouriteDay)
         {
             Dictionary<string, object> parameters = new Dictionary<string, object>();
-            parameters.Add("date", date);
-            this.ValidateMethod("GetPersonsByDateQuery", parameters);
-            return base.CreateQuery<Person>("GetPersonsByDate", parameters, false, true);
+            parameters.Add("favouriteDay", favouriteDay);
+            this.ValidateMethod("GetPersonsByFavouriteDayQuery", parameters);
+            return base.CreateQuery<Person>("GetPersonsByFavouriteDay", parameters, false, true);
         }
         
         /// <summary>
-        /// Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        /// Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersonsByWeddingDay' query.
         /// </summary>
+        /// <param name="weddingDay">The value for the 'weddingDay' parameter of the query.</param>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Person"/> entity instances.</returns>
+        public EntityQuery<Person> GetPersonsByWeddingDayQuery(Nullable<DateOnly> weddingDay)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("weddingDay", weddingDay);
+            this.ValidateMethod("GetPersonsByWeddingDayQuery", parameters);
+            return base.CreateQuery<Person>("GetPersonsByWeddingDay", parameters, false, true);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetFavouriteDayByName' method of the DomainService.
+        /// </summary>
+        /// <param name="name">The value for the 'name' parameter of this action.</param>
         /// <param name="callback">Callback to invoke when the operation completes.</param>
         /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public InvokeOperation<IEnumerable<DateOnly>> GetBirthdays(Action<InvokeOperation<IEnumerable<DateOnly>>> callback, object userState)
+        public InvokeOperation<DateOnly> GetFavouriteDayByName(string name, Action<InvokeOperation<DateOnly>> callback, object userState)
         {
-            this.ValidateMethod("GetBirthdays", null);
-            return this.InvokeOperation<IEnumerable<DateOnly>>("GetBirthdays", typeof(IEnumerable<DateOnly>), null, true, callback, userState);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("name", name);
+            this.ValidateMethod("GetFavouriteDayByName", parameters);
+            return this.InvokeOperation<DateOnly>("GetFavouriteDayByName", typeof(DateOnly), parameters, true, callback, userState);
         }
         
         /// <summary>
-        /// Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        /// Asynchronously invokes the 'GetFavouriteDayByName' method of the DomainService.
         /// </summary>
+        /// <param name="name">The value for the 'name' parameter of this action.</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public InvokeOperation<IEnumerable<DateOnly>> GetBirthdays()
+        public InvokeOperation<DateOnly> GetFavouriteDayByName(string name)
         {
-            this.ValidateMethod("GetBirthdays", null);
-            return this.InvokeOperation<IEnumerable<DateOnly>>("GetBirthdays", typeof(IEnumerable<DateOnly>), null, true, null, null);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("name", name);
+            this.ValidateMethod("GetFavouriteDayByName", parameters);
+            return this.InvokeOperation<DateOnly>("GetFavouriteDayByName", typeof(DateOnly), parameters, true, null, null);
         }
         
         /// <summary>
-        /// Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        /// Asynchronously invokes the 'GetFavouriteDayByName' method of the DomainService.
         /// </summary>
+        /// <param name="name">The value for the 'name' parameter of this action.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        public System.Threading.Tasks.Task<InvokeResult<IEnumerable<DateOnly>>> GetBirthdaysAsync(CancellationToken cancellationToken = default(CancellationToken))
+        public System.Threading.Tasks.Task<InvokeResult<DateOnly>> GetFavouriteDayByNameAsync(string name, CancellationToken cancellationToken = default(CancellationToken))
         {
-            this.ValidateMethod("GetBirthdays", null);
-            return this.InvokeOperationAsync<IEnumerable<DateOnly>>("GetBirthdays", null, true, cancellationToken);
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("name", name);
+            this.ValidateMethod("GetFavouriteDayByName", parameters);
+            return this.InvokeOperationAsync<DateOnly>("GetFavouriteDayByName", parameters, true, cancellationToken);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetWeddingDayByName' method of the DomainService.
+        /// </summary>
+        /// <param name="name">The value for the 'name' parameter of this action.</param>
+        /// <param name="callback">Callback to invoke when the operation completes.</param>
+        /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<Nullable<DateOnly>> GetWeddingDayByName(string name, Action<InvokeOperation<Nullable<DateOnly>>> callback, object userState)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("name", name);
+            this.ValidateMethod("GetWeddingDayByName", parameters);
+            return this.InvokeOperation<Nullable<DateOnly>>("GetWeddingDayByName", typeof(Nullable<DateOnly>), parameters, true, callback, userState);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetWeddingDayByName' method of the DomainService.
+        /// </summary>
+        /// <param name="name">The value for the 'name' parameter of this action.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<Nullable<DateOnly>> GetWeddingDayByName(string name)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("name", name);
+            this.ValidateMethod("GetWeddingDayByName", parameters);
+            return this.InvokeOperation<Nullable<DateOnly>>("GetWeddingDayByName", typeof(Nullable<DateOnly>), parameters, true, null, null);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetWeddingDayByName' method of the DomainService.
+        /// </summary>
+        /// <param name="name">The value for the 'name' parameter of this action.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public System.Threading.Tasks.Task<InvokeResult<Nullable<DateOnly>>> GetWeddingDayByNameAsync(string name, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("name", name);
+            this.ValidateMethod("GetWeddingDayByName", parameters);
+            return this.InvokeOperationAsync<Nullable<DateOnly>>("GetWeddingDayByName", parameters, true, cancellationToken);
         }
         
         /// <summary>
@@ -149,20 +296,21 @@ namespace People
         {
             
             /// <summary>
-            /// Asynchronously invokes the 'GetBirthdays' operation.
+            /// Asynchronously invokes the 'GetFavouriteDayByName' operation.
             /// </summary>
+            /// <param name="name">The value for the 'name' parameter of this action.</param>
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(true)]
-            IAsyncResult BeginGetBirthdays(AsyncCallback callback, object asyncState);
+            IAsyncResult BeginGetFavouriteDayByName(string name, AsyncCallback callback, object asyncState);
             
             /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetBirthdays'.
+            /// Completes the asynchronous operation begun by 'BeginGetFavouriteDayByName'.
             /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetBirthdays'.</param>
-            /// <returns>The 'IEnumerable`1' returned from the 'GetBirthdays' operation.</returns>
-            IEnumerable<DateOnly> EndGetBirthdays(IAsyncResult result);
+            /// <param name="result">The IAsyncResult returned from 'BeginGetFavouriteDayByName'.</param>
+            /// <returns>The 'DateOnly' returned from the 'GetFavouriteDayByName' operation.</returns>
+            DateOnly EndGetFavouriteDayByName(IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetPersons' operation.
@@ -181,21 +329,55 @@ namespace People
             QueryResult<Person> EndGetPersons(IAsyncResult result);
             
             /// <summary>
-            /// Asynchronously invokes the 'GetPersonsByDate' operation.
+            /// Asynchronously invokes the 'GetPersonsByFavouriteDay' operation.
             /// </summary>
-            /// <param name="date">The value for the 'date' parameter of this action.</param>
+            /// <param name="favouriteDay">The value for the 'favouriteDay' parameter of this action.</param>
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
             [HasSideEffects(false)]
-            IAsyncResult BeginGetPersonsByDate(DateOnly date, AsyncCallback callback, object asyncState);
+            IAsyncResult BeginGetPersonsByFavouriteDay(DateOnly favouriteDay, AsyncCallback callback, object asyncState);
             
             /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetPersonsByDate'.
+            /// Completes the asynchronous operation begun by 'BeginGetPersonsByFavouriteDay'.
             /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetPersonsByDate'.</param>
-            /// <returns>The 'QueryResult' returned from the 'GetPersonsByDate' operation.</returns>
-            QueryResult<Person> EndGetPersonsByDate(IAsyncResult result);
+            /// <param name="result">The IAsyncResult returned from 'BeginGetPersonsByFavouriteDay'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetPersonsByFavouriteDay' operation.</returns>
+            QueryResult<Person> EndGetPersonsByFavouriteDay(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetPersonsByWeddingDay' operation.
+            /// </summary>
+            /// <param name="weddingDay">The value for the 'weddingDay' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(false)]
+            IAsyncResult BeginGetPersonsByWeddingDay(Nullable<DateOnly> weddingDay, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetPersonsByWeddingDay'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetPersonsByWeddingDay'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetPersonsByWeddingDay' operation.</returns>
+            QueryResult<Person> EndGetPersonsByWeddingDay(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetWeddingDayByName' operation.
+            /// </summary>
+            /// <param name="name">The value for the 'name' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(true)]
+            IAsyncResult BeginGetWeddingDayByName(string name, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetWeddingDayByName'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetWeddingDayByName'.</param>
+            /// <returns>The 'Nullable`1' returned from the 'GetWeddingDayByName' operation.</returns>
+            Nullable<DateOnly> EndGetWeddingDayByName(IAsyncResult result);
         }
         
         internal sealed class PeopleDomainContextEntityContainer : EntityContainer
@@ -215,9 +397,13 @@ namespace People
     public sealed partial class Person : Entity
     {
         
-        private DateOnly _birthday;
+        private DateOnly _favouriteDay;
+        
+        private Lifespan _lifespan;
         
         private string _name;
+        
+        private Nullable<DateOnly> _weddingDay;
         
         #region Extensibility Method Definitions
 
@@ -226,10 +412,14 @@ namespace People
         /// can be used for further object setup.
         /// </summary>
         partial void OnCreated();
-        partial void OnBirthdayChanging(DateOnly value);
-        partial void OnBirthdayChanged();
+        partial void OnFavouriteDayChanging(DateOnly value);
+        partial void OnFavouriteDayChanged();
+        partial void OnLifespanChanging(Lifespan value);
+        partial void OnLifespanChanged();
         partial void OnNameChanging(string value);
         partial void OnNameChanged();
+        partial void OnWeddingDayChanging(Nullable<DateOnly> value);
+        partial void OnWeddingDayChanged();
 
         #endregion
         
@@ -243,25 +433,50 @@ namespace People
         }
         
         /// <summary>
-        /// Gets or sets the 'Birthday' value.
+        /// Gets or sets the 'FavouriteDay' value.
         /// </summary>
         [DataMember()]
-        public DateOnly Birthday
+        public DateOnly FavouriteDay
         {
             get
             {
-                return this._birthday;
+                return this._favouriteDay;
             }
             set
             {
-                if ((this._birthday != value))
+                if ((this._favouriteDay != value))
                 {
-                    this.OnBirthdayChanging(value);
-                    this.RaiseDataMemberChanging("Birthday");
-                    this.ValidateProperty("Birthday", value);
-                    this._birthday = value;
-                    this.RaiseDataMemberChanged("Birthday");
-                    this.OnBirthdayChanged();
+                    this.OnFavouriteDayChanging(value);
+                    this.RaiseDataMemberChanging("FavouriteDay");
+                    this.ValidateProperty("FavouriteDay", value);
+                    this._favouriteDay = value;
+                    this.RaiseDataMemberChanged("FavouriteDay");
+                    this.OnFavouriteDayChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Lifespan' value.
+        /// </summary>
+        [DataMember()]
+        [Display(AutoGenerateField=false)]
+        public Lifespan Lifespan
+        {
+            get
+            {
+                return this._lifespan;
+            }
+            set
+            {
+                if ((this._lifespan != value))
+                {
+                    this.OnLifespanChanging(value);
+                    this.RaiseDataMemberChanging("Lifespan");
+                    this.ValidateProperty("Lifespan", value);
+                    this._lifespan = value;
+                    this.RaiseDataMemberChanged("Lifespan");
+                    this.OnLifespanChanged();
                 }
             }
         }
@@ -288,6 +503,30 @@ namespace People
                     this._name = value;
                     this.RaisePropertyChanged("Name");
                     this.OnNameChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'WeddingDay' value.
+        /// </summary>
+        [DataMember()]
+        public Nullable<DateOnly> WeddingDay
+        {
+            get
+            {
+                return this._weddingDay;
+            }
+            set
+            {
+                if ((this._weddingDay != value))
+                {
+                    this.OnWeddingDayChanging(value);
+                    this.RaiseDataMemberChanging("WeddingDay");
+                    this.ValidateProperty("WeddingDay", value);
+                    this._weddingDay = value;
+                    this.RaiseDataMemberChanged("WeddingDay");
+                    this.OnWeddingDayChanged();
                 }
             }
         }

@@ -27,6 +27,87 @@ Imports System.Threading.Tasks
 Namespace People
     
     ''' <summary>
+    ''' The 'Lifespan' class.
+    ''' </summary>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/People")>  _
+    Partial Public NotInheritable Class Lifespan
+        Inherits ComplexObject
+        
+        Private _born As DateOnly
+        
+        Private _dead As Nullable(Of DateOnly)
+        
+        #Region "Extensibility Method Definitions"
+
+        ''' <summary>
+        ''' This method is invoked from the constructor once initialization is complete and
+        ''' can be used for further object setup.
+        ''' </summary>
+        Private Partial Sub OnCreated()
+        End Sub
+        Private Partial Sub OnBornChanging(ByVal value As DateOnly)
+        End Sub
+        Private Partial Sub OnBornChanged()
+        End Sub
+        Private Partial Sub OnDeadChanging(ByVal value As Nullable(Of DateOnly))
+        End Sub
+        Private Partial Sub OnDeadChanged()
+        End Sub
+
+        #End Region
+        
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="Lifespan"/> class.
+        ''' </summary>
+        Public Sub New()
+            MyBase.New
+            Me.OnCreated
+        End Sub
+        
+        ''' <summary>
+        ''' Gets or sets the 'Born' value.
+        ''' </summary>
+        <DataMember()>  _
+        Public Property Born() As DateOnly
+            Get
+                Return Me._born
+            End Get
+            Set
+                If ((Me._born = value)  _
+                            = false) Then
+                    Me.OnBornChanging(value)
+                    Me.RaiseDataMemberChanging("Born")
+                    Me.ValidateProperty("Born", value)
+                    Me._born = value
+                    Me.RaiseDataMemberChanged("Born")
+                    Me.OnBornChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'Dead' value.
+        ''' </summary>
+        <DataMember()>  _
+        Public Property Dead() As Nullable(Of DateOnly)
+            Get
+                Return Me._dead
+            End Get
+            Set
+                If (Me._dead.Equals(value) = false) Then
+                    Me.OnDeadChanging(value)
+                    Me.RaiseDataMemberChanging("Dead")
+                    Me.ValidateProperty("Dead", value)
+                    Me._dead = value
+                    Me.RaiseDataMemberChanged("Dead")
+                    Me.OnDeadChanged
+                End If
+            End Set
+        End Property
+    End Class
+    
+    ''' <summary>
     ''' The DomainContext corresponding to the 'PeopleDomainService' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class PeopleDomainContext
@@ -87,45 +168,105 @@ Namespace People
         End Function
         
         ''' <summary>
-        ''' Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersonsByDate' query.
+        ''' Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersonsByFavouriteDay' query.
         ''' </summary>
-        ''' <param name="date">The value for the 'date' parameter of the query.</param>
+        ''' <param name="favouriteDay">The value for the 'favouriteDay' parameter of the query.</param>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Person"/> entity instances.</returns>
-        Public Function GetPersonsByDateQuery(ByVal [date] As DateOnly) As EntityQuery(Of Person)
+        Public Function GetPersonsByFavouriteDayQuery(ByVal favouriteDay As DateOnly) As EntityQuery(Of Person)
             Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
-            parameters.Add("date", [date])
-            Me.ValidateMethod("GetPersonsByDateQuery", parameters)
-            Return MyBase.CreateQuery(Of Person)("GetPersonsByDate", parameters, false, true)
+            parameters.Add("favouriteDay", favouriteDay)
+            Me.ValidateMethod("GetPersonsByFavouriteDayQuery", parameters)
+            Return MyBase.CreateQuery(Of Person)("GetPersonsByFavouriteDay", parameters, false, true)
         End Function
         
         ''' <summary>
-        ''' Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        ''' Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersonsByWeddingDay' query.
         ''' </summary>
+        ''' <param name="weddingDay">The value for the 'weddingDay' parameter of the query.</param>
+        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Person"/> entity instances.</returns>
+        Public Function GetPersonsByWeddingDayQuery(ByVal weddingDay As Nullable(Of DateOnly)) As EntityQuery(Of Person)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("weddingDay", weddingDay)
+            Me.ValidateMethod("GetPersonsByWeddingDayQuery", parameters)
+            Return MyBase.CreateQuery(Of Person)("GetPersonsByWeddingDay", parameters, false, true)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetFavouriteDayByName' method of the DomainService.
+        ''' </summary>
+        ''' <param name="name">The value for the 'name' parameter of this action.</param>
         ''' <param name="callback">Callback to invoke when the operation completes.</param>
         ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function GetBirthdays(ByVal callback As Action(Of InvokeOperation(Of IEnumerable(Of DateOnly))), ByVal userState As Object) As InvokeOperation(Of IEnumerable(Of DateOnly))
-            Me.ValidateMethod("GetBirthdays", Nothing)
-            Return Me.InvokeOperation(Of IEnumerable(Of DateOnly))("GetBirthdays", GetType(IEnumerable(Of DateOnly)), Nothing, true, callback, userState)
+        Public Overloads Function GetFavouriteDayByName(ByVal name As String, ByVal callback As Action(Of InvokeOperation(Of DateOnly)), ByVal userState As Object) As InvokeOperation(Of DateOnly)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("name", name)
+            Me.ValidateMethod("GetFavouriteDayByName", parameters)
+            Return Me.InvokeOperation(Of DateOnly)("GetFavouriteDayByName", GetType(DateOnly), parameters, true, callback, userState)
         End Function
         
         ''' <summary>
-        ''' Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        ''' Asynchronously invokes the 'GetFavouriteDayByName' method of the DomainService.
         ''' </summary>
+        ''' <param name="name">The value for the 'name' parameter of this action.</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Overloads Function GetBirthdays() As InvokeOperation(Of IEnumerable(Of DateOnly))
-            Me.ValidateMethod("GetBirthdays", Nothing)
-            Return Me.InvokeOperation(Of IEnumerable(Of DateOnly))("GetBirthdays", GetType(IEnumerable(Of DateOnly)), Nothing, true, Nothing, Nothing)
+        Public Overloads Function GetFavouriteDayByName(ByVal name As String) As InvokeOperation(Of DateOnly)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("name", name)
+            Me.ValidateMethod("GetFavouriteDayByName", parameters)
+            Return Me.InvokeOperation(Of DateOnly)("GetFavouriteDayByName", GetType(DateOnly), parameters, true, Nothing, Nothing)
         End Function
         
         ''' <summary>
-        ''' Asynchronously invokes the 'GetBirthdays' method of the DomainService.
+        ''' Asynchronously invokes the 'GetFavouriteDayByName' method of the DomainService.
         ''' </summary>
+        ''' <param name="name">The value for the 'name' parameter of this action.</param>
         ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
         ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
-        Public Function GetBirthdaysAsync(Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of IEnumerable(Of DateOnly)))
-            Me.ValidateMethod("GetBirthdays", Nothing)
-            Return Me.InvokeOperationAsync(Of IEnumerable(Of DateOnly))("GetBirthdays", Nothing, true, cancellationToken)
+        Public Function GetFavouriteDayByNameAsync(ByVal name As String, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of DateOnly))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("name", name)
+            Me.ValidateMethod("GetFavouriteDayByName", parameters)
+            Return Me.InvokeOperationAsync(Of DateOnly)("GetFavouriteDayByName", parameters, true, cancellationToken)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetWeddingDayByName' method of the DomainService.
+        ''' </summary>
+        ''' <param name="name">The value for the 'name' parameter of this action.</param>
+        ''' <param name="callback">Callback to invoke when the operation completes.</param>
+        ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetWeddingDayByName(ByVal name As String, ByVal callback As Action(Of InvokeOperation(Of Nullable(Of DateOnly))), ByVal userState As Object) As InvokeOperation(Of Nullable(Of DateOnly))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("name", name)
+            Me.ValidateMethod("GetWeddingDayByName", parameters)
+            Return Me.InvokeOperation(Of Nullable(Of DateOnly))("GetWeddingDayByName", GetType(Nullable(Of DateOnly)), parameters, true, callback, userState)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetWeddingDayByName' method of the DomainService.
+        ''' </summary>
+        ''' <param name="name">The value for the 'name' parameter of this action.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetWeddingDayByName(ByVal name As String) As InvokeOperation(Of Nullable(Of DateOnly))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("name", name)
+            Me.ValidateMethod("GetWeddingDayByName", parameters)
+            Return Me.InvokeOperation(Of Nullable(Of DateOnly))("GetWeddingDayByName", GetType(Nullable(Of DateOnly)), parameters, true, Nothing, Nothing)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetWeddingDayByName' method of the DomainService.
+        ''' </summary>
+        ''' <param name="name">The value for the 'name' parameter of this action.</param>
+        ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Function GetWeddingDayByNameAsync(ByVal name As String, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of Nullable(Of DateOnly)))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("name", name)
+            Me.ValidateMethod("GetWeddingDayByName", parameters)
+            Return Me.InvokeOperationAsync(Of Nullable(Of DateOnly))("GetWeddingDayByName", parameters, true, cancellationToken)
         End Function
         
         ''' <summary>
@@ -142,20 +283,21 @@ Namespace People
         Public Interface IPeopleDomainServiceContract
             
             ''' <summary>
-            ''' Asynchronously invokes the 'GetBirthdays' operation.
+            ''' Asynchronously invokes the 'GetFavouriteDayByName' operation.
             ''' </summary>
+            ''' <param name="name">The value for the 'name' parameter of this action.</param>
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <HasSideEffects(true)>  _
-            Function BeginGetBirthdays(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            Function BeginGetFavouriteDayByName(ByVal name As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetBirthdays'.
+            ''' Completes the asynchronous operation begun by 'BeginGetFavouriteDayByName'.
             ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetBirthdays'.</param>
-            ''' <returns>The 'IEnumerable`1' returned from the 'GetBirthdays' operation.</returns>
-            Function EndGetBirthdays(ByVal result As IAsyncResult) As IEnumerable(Of DateOnly)
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetFavouriteDayByName'.</param>
+            ''' <returns>The 'DateOnly' returned from the 'GetFavouriteDayByName' operation.</returns>
+            Function EndGetFavouriteDayByName(ByVal result As IAsyncResult) As DateOnly
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetPersons' operation.
@@ -174,21 +316,55 @@ Namespace People
             Function EndGetPersons(ByVal result As IAsyncResult) As QueryResult(Of Person)
             
             ''' <summary>
-            ''' Asynchronously invokes the 'GetPersonsByDate' operation.
+            ''' Asynchronously invokes the 'GetPersonsByFavouriteDay' operation.
             ''' </summary>
-            ''' <param name="date">The value for the 'date' parameter of this action.</param>
+            ''' <param name="favouriteDay">The value for the 'favouriteDay' parameter of this action.</param>
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <HasSideEffects(false)>  _
-            Function BeginGetPersonsByDate(ByVal [date] As DateOnly, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            Function BeginGetPersonsByFavouriteDay(ByVal favouriteDay As DateOnly, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
             
             ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetPersonsByDate'.
+            ''' Completes the asynchronous operation begun by 'BeginGetPersonsByFavouriteDay'.
             ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetPersonsByDate'.</param>
-            ''' <returns>The 'QueryResult' returned from the 'GetPersonsByDate' operation.</returns>
-            Function EndGetPersonsByDate(ByVal result As IAsyncResult) As QueryResult(Of Person)
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetPersonsByFavouriteDay'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetPersonsByFavouriteDay' operation.</returns>
+            Function EndGetPersonsByFavouriteDay(ByVal result As IAsyncResult) As QueryResult(Of Person)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetPersonsByWeddingDay' operation.
+            ''' </summary>
+            ''' <param name="weddingDay">The value for the 'weddingDay' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(false)>  _
+            Function BeginGetPersonsByWeddingDay(ByVal weddingDay As Nullable(Of DateOnly), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetPersonsByWeddingDay'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetPersonsByWeddingDay'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetPersonsByWeddingDay' operation.</returns>
+            Function EndGetPersonsByWeddingDay(ByVal result As IAsyncResult) As QueryResult(Of Person)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetWeddingDayByName' operation.
+            ''' </summary>
+            ''' <param name="name">The value for the 'name' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(true)>  _
+            Function BeginGetWeddingDayByName(ByVal name As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetWeddingDayByName'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetWeddingDayByName'.</param>
+            ''' <returns>The 'Nullable`1' returned from the 'GetWeddingDayByName' operation.</returns>
+            Function EndGetWeddingDayByName(ByVal result As IAsyncResult) As Nullable(Of DateOnly)
         End Interface
         
         Friend NotInheritable Class PeopleDomainContextEntityContainer
@@ -208,9 +384,13 @@ Namespace People
     Partial Public NotInheritable Class Person
         Inherits Entity
         
-        Private _birthday As DateOnly
+        Private _favouriteDay As DateOnly
+        
+        Private _lifespan As Lifespan
         
         Private _name As String
+        
+        Private _weddingDay As Nullable(Of DateOnly)
         
         #Region "Extensibility Method Definitions"
 
@@ -220,13 +400,21 @@ Namespace People
         ''' </summary>
         Private Partial Sub OnCreated()
         End Sub
-        Private Partial Sub OnBirthdayChanging(ByVal value As DateOnly)
+        Private Partial Sub OnFavouriteDayChanging(ByVal value As DateOnly)
         End Sub
-        Private Partial Sub OnBirthdayChanged()
+        Private Partial Sub OnFavouriteDayChanged()
+        End Sub
+        Private Partial Sub OnLifespanChanging(ByVal value As Lifespan)
+        End Sub
+        Private Partial Sub OnLifespanChanged()
         End Sub
         Private Partial Sub OnNameChanging(ByVal value As String)
         End Sub
         Private Partial Sub OnNameChanged()
+        End Sub
+        Private Partial Sub OnWeddingDayChanging(ByVal value As Nullable(Of DateOnly))
+        End Sub
+        Private Partial Sub OnWeddingDayChanged()
         End Sub
 
         #End Region
@@ -241,22 +429,43 @@ Namespace People
         End Sub
         
         ''' <summary>
-        ''' Gets or sets the 'Birthday' value.
+        ''' Gets or sets the 'FavouriteDay' value.
         ''' </summary>
         <DataMember()>  _
-        Public Property Birthday() As DateOnly
+        Public Property FavouriteDay() As DateOnly
             Get
-                Return Me._birthday
+                Return Me._favouriteDay
             End Get
             Set
-                If ((Me._birthday = value)  _
+                If ((Me._favouriteDay = value)  _
                             = false) Then
-                    Me.OnBirthdayChanging(value)
-                    Me.RaiseDataMemberChanging("Birthday")
-                    Me.ValidateProperty("Birthday", value)
-                    Me._birthday = value
-                    Me.RaiseDataMemberChanged("Birthday")
-                    Me.OnBirthdayChanged
+                    Me.OnFavouriteDayChanging(value)
+                    Me.RaiseDataMemberChanging("FavouriteDay")
+                    Me.ValidateProperty("FavouriteDay", value)
+                    Me._favouriteDay = value
+                    Me.RaiseDataMemberChanged("FavouriteDay")
+                    Me.OnFavouriteDayChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'Lifespan' value.
+        ''' </summary>
+        <DataMember(),  _
+         Display(AutoGenerateField:=false)>  _
+        Public Property Lifespan() As Lifespan
+            Get
+                Return Me._lifespan
+            End Get
+            Set
+                If (Object.Equals(Me._lifespan, value) = false) Then
+                    Me.OnLifespanChanging(value)
+                    Me.RaiseDataMemberChanging("Lifespan")
+                    Me.ValidateProperty("Lifespan", value)
+                    Me._lifespan = value
+                    Me.RaiseDataMemberChanged("Lifespan")
+                    Me.OnLifespanChanged
                 End If
             End Set
         End Property
@@ -279,6 +488,26 @@ Namespace People
                     Me._name = value
                     Me.RaisePropertyChanged("Name")
                     Me.OnNameChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'WeddingDay' value.
+        ''' </summary>
+        <DataMember()>  _
+        Public Property WeddingDay() As Nullable(Of DateOnly)
+            Get
+                Return Me._weddingDay
+            End Get
+            Set
+                If (Me._weddingDay.Equals(value) = false) Then
+                    Me.OnWeddingDayChanging(value)
+                    Me.RaiseDataMemberChanging("WeddingDay")
+                    Me.ValidateProperty("WeddingDay", value)
+                    Me._weddingDay = value
+                    Me.RaiseDataMemberChanged("WeddingDay")
+                    Me.OnWeddingDayChanged
                 End If
             End Set
         End Property
