@@ -111,6 +111,9 @@
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs" Link="Data\DomainClients\Test.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\People\Person.g.cs" Link="Data\DomainClients\Person.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>

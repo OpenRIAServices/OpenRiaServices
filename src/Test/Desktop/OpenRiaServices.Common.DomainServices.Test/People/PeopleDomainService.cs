@@ -16,7 +16,10 @@ namespace People
     [EnableClientAccess]
     public class PeopleDomainService : DomainService
     {
-        private readonly List<Person> _people = [];
+        private readonly List<Person> _people = [
+            new() { Name = "Erik", Birthday = new(1997, 1, 1) },
+            new() { Name = "Gustav", Birthday = new(1496, 5, 12) }
+            ];
 
         [Query]
         public IQueryable<Person> GetPersons()

@@ -63,4 +63,7 @@ public static class TestURIs
 
     // Server side async
     public static readonly Uri ServerSideAsync = new Uri("TestDomainServices-ServerSideAsyncDomainService.svc", UriKind.Relative);
+
+    // People
+    public static readonly Uri People = new Uri(RootURI, "People-PeopleDomainService.svc");
 }
