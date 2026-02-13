@@ -112,38 +112,24 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public void TestEnumHasFlags()
         {
-            EntityWithEnums [] entities = new EntityWithEnums[]
-            {
+            EntityWithEnums[] entities =
+            [
                 new EntityWithEnums() { Id = 1, EnumProp1 = QuerySerialisationEnum.A, EnumProp2 = QuerySerialisationEnum.None },
                 new EntityWithEnums() { Id = 2, EnumProp1 = QuerySerialisationEnum.A, EnumProp2 = QuerySerialisationEnum.A },
                 new EntityWithEnums() { Id = 3, EnumProp1 = QuerySerialisationEnum.B, EnumProp2 = QuerySerialisationEnum.A },
                 new EntityWithEnums() { Id = 4, EnumProp1 = QuerySerialisationEnum.A |QuerySerialisationEnum.B, EnumProp2 = QuerySerialisationEnum.A },
                 new EntityWithEnums() { Id = 5, EnumProp1 = QuerySerialisationEnum.B, EnumProp2 = QuerySerialisationEnum.B | QuerySerialisationEnum.A },
-            };
+            ];
 
             // Has flags against constant
-            IQueryable<EntityWithEnums> q1 = Array.Empty<EntityWithEnums>().AsQueryable();
-            q1 = q1.Where(p => p.EnumProp1.HasFlag(QuerySerialisationEnum.A));
-            IQueryable<EntityWithEnums> q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
-            CollectionAssert.AreEquivalent(q2.ToList(), new [] { entities[0], entities[1], entities[3],});
+            VerifyRoundtrip(q => q.Where(p => p.EnumProp1.HasFlag(QuerySerialisationEnum.A)), entities);
 
             // Has flags against integer constant
-            q1 = Array.Empty<EntityWithEnums>().AsQueryable();
-            q1 = q1.Where(p => p.EnumProp1.HasFlag((QuerySerialisationEnum)(2)));
-            q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
-            CollectionAssert.AreEquivalent(q2.ToList(), new[] { entities[2], entities[3], entities[4] });
+            VerifyRoundtrip(q => q.Where(p => p.EnumProp1.HasFlag((QuerySerialisationEnum)(2))), entities);
 
             //  Has flags against member constant
-            q1 = Array.Empty<EntityWithEnums>().AsQueryable();
-            q1 = q1.Where(p => p.EnumProp1.HasFlag(p.EnumProp2));
-            q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
-            CollectionAssert.AreEquivalent(q2.ToList(), entities.Where(e => e.EnumProp1.HasFlag(e.EnumProp2)).ToList());
-
-
-            q1 = Array.Empty<EntityWithEnums>().AsQueryable();
-            q1 = q1.Where(p => p.EnumProp2.HasFlag(p.EnumProp1));
-            q2 = (IQueryable<EntityWithEnums>)RoundtripQuery(q1, entities.AsQueryable());
-            CollectionAssert.AreEquivalent(q2.ToList(), entities.Where(e => e.EnumProp2.HasFlag(e.EnumProp1)).ToList());
+            VerifyRoundtrip(q => q.Where(p => p.EnumProp1.HasFlag(p.EnumProp2)), entities);
+            VerifyRoundtrip(q => q.Where(p => p.EnumProp2.HasFlag(p.EnumProp1)), entities);
         }
 
         [TestMethod]
@@ -157,48 +143,16 @@ namespace OpenRiaServices.Client.Test
             }.AsQueryable();
 
             // Where (item.Key + -1 = 0)
-            IQueryable<GenericEntity> q = (IQueryable<GenericEntity>)Expressions.AddAndNegateChecked(entities);
-            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(q);
-            Assert.AreEqual("((it.Key+-1)==0)", queryParts.Single().Expression);
-            IQueryable<GenericEntity> q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
-            int c1 = q.Count();
-            int c2 = q2.Count();
-            Assert.AreEqual(1, c1);
-            Assert.AreEqual(c1, c2);
-            Assert.AreEqual("Manager", q2.First().Title);
+            VerifyRoundtrip("((it.Key+-1)==0)", _ => Expressions.AddAndNegateChecked(entities), entities);
 
             // Where (item.Key - 1 = 0)
-            q = (IQueryable<GenericEntity>)Expressions.SubtractChecked(entities);
-            queryParts = QuerySerializer.Serialize(q);
-            Assert.AreEqual("((it.Key-1)==0)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
-            c1 = q.Count();
-            c2 = q2.Count();
-            Assert.AreEqual(1, c1);
-            Assert.AreEqual(c1, c2);
-            Assert.AreEqual("Manager", q2.First().Title);
+            VerifyRoundtrip("((it.Key-1)==0)", _ => Expressions.SubtractChecked(entities), entities);
 
             // Where (item.Key * 1 = 1)
-            q = (IQueryable<GenericEntity>)Expressions.MultiplyChecked(entities);
-            queryParts = QuerySerializer.Serialize(q);
-            Assert.AreEqual("((it.Key*1)==1)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
-            c1 = q.Count();
-            c2 = q2.Count();
-            Assert.AreEqual(1, c1);
-            Assert.AreEqual(c1, c2);
-            Assert.AreEqual("Manager", q2.First().Title);
+            VerifyRoundtrip("((it.Key*1)==1)", _ => Expressions.MultiplyChecked(entities), entities);
 
             // Where (CType(item.Key, Single) = 1)
-            q = (IQueryable<GenericEntity>)Expressions.ConvertChecked(entities);
-            queryParts = QuerySerializer.Serialize(q);
-            Assert.AreEqual("(it.Key==1F)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
-            c1 = q.Count();
-            c2 = q2.Count();
-            Assert.AreEqual(1, c1);
-            Assert.AreEqual(c1, c2);
-            Assert.AreEqual("Manager", q2.First().Title);
+            VerifyRoundtrip("(it.Key==1F)", _ => Expressions.ConvertChecked(entities), entities);
         }
 
         [TestMethod]
@@ -378,7 +332,7 @@ namespace OpenRiaServices.Client.Test
                 new EmployeeWithReservedNames { Id = 1, @true = false, iif = false },
             }.AsQueryable();
 
-            AssertSerializedValue<EmployeeWithReservedNames>("it.true", e => e.@true);
+            VerifySerialize<EmployeeWithReservedNames>("it.true", e => e.@true);
 
             IQueryable<EmployeeWithReservedNames> q = entities.Where(e => e.@true);
             IQueryable<EmployeeWithReservedNames> q2 = (IQueryable<EmployeeWithReservedNames>)RoundtripQuery(q, entities);
@@ -387,7 +341,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(1, c1);
             Assert.AreEqual(c1, c2);
 
-            AssertSerializedValue<EmployeeWithReservedNames>("it.iif", e => e.iif);
+            VerifySerialize<EmployeeWithReservedNames>("it.iif", e => e.iif);
             q = entities.Where(e => e.iif);
             q2 = (IQueryable<EmployeeWithReservedNames>)RoundtripQuery(q, entities);
             c1 = q.Count();
@@ -430,24 +384,19 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public void TestDateOnlyQuery()
         {
-            EmployeeWithDateOnlyProperty[] employees = [ 
+            EmployeeWithDateOnlyProperty[] employees = [
                 new() { Birthday = new DateOnly(2025, 1, 1) },
                 new() { Birthday = new DateOnly(2025, 3, 1) },
                 new() { Birthday = new DateOnly(2025, 5, 1) }
             ];
 
-            Expression<Func<EmployeeWithDateOnlyProperty, bool>> predicate = p => p.Birthday < new DateOnly(2025, 4, 1);
-
-            var query = employees.AsQueryable().Where(predicate);
-            var roundTrippedResult = RoundtripQuery(query, employees).ToList();
-
-            CollectionAssert.AreEqual(query.ToList(), roundTrippedResult);
+            VerifyRoundtrip("(it.Birthday<DateOnly(2025,4,1))", q => q.Where(p => p.Birthday < new DateOnly(2025, 4, 1)), employees);
         }
 
         [TestMethod]
         public void TestDateOnlyQuerySerializer()
         {
-            AssertSerializedValue<EmployeeWithDateOnlyProperty>("(it.Birthday<DateOnly(2026,4,2))", p => p.Birthday < new DateOnly(2026, 4, 2));
+            VerifySerialize<EmployeeWithDateOnlyProperty>("(it.Birthday<DateOnly(2026,4,2))", p => p.Birthday < new DateOnly(2026, 4, 2));
 
             // TODO: Add some more test cases, including using different DateOnly methods/properties, and also test some cases with nullable DateOnly properties.
 
@@ -465,18 +414,13 @@ namespace OpenRiaServices.Client.Test
                 new() { ClockInTime = new TimeOnly(8, 15) }
             ];
 
-            Expression<Func<EmployeeWithTimeOnlyProperty, bool>> predicate = p => p.ClockInTime < new TimeOnly(7, 50);
-
-            var query = employees.AsQueryable().Where(predicate);
-            var roundTrippedResult = RoundtripQuery(query, employees).ToList();
-
-            CollectionAssert.AreEqual(query.ToList(), roundTrippedResult);
+            VerifyRoundtrip("(it.ClockInTime<TimeOnly(282000000000))", q => q.Where(p => p.ClockInTime < new TimeOnly(7, 50)), employees);
         }
 
         [TestMethod]
         public void TestTimeOnlyQuerySerializer()
         {
-            AssertSerializedValue<EmployeeWithTimeOnlyProperty>("(it.ClockInTime<TimeOnly(279000000000))", p => p.ClockInTime < new TimeOnly(7, 45));
+            VerifySerialize<EmployeeWithTimeOnlyProperty>("(it.ClockInTime<TimeOnly(279000000000))", p => p.ClockInTime < new TimeOnly(7, 45));
             // TODO: Add some more test cases, including using different TimeOnly methods/properties and subtraction
         }
 
@@ -921,7 +865,7 @@ namespace OpenRiaServices.Client.Test
             return a;
         }
 
-        static void AssertSerializedValue<T>(string expected, Expression<Func<T, bool>> expression)
+        static void VerifySerialize<T>(string expected, Expression<Func<T, bool>> expression)
         {
             IQueryable<T> query = Array.Empty<T>().AsQueryable().Where(expression);
             Assert.AreEqual(expected, QuerySerializer.Serialize(query).Single().Expression);
@@ -1195,6 +1139,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
+
         private IQueryable<T> RoundtripQuery<T>(IQueryable query, IEnumerable<T> data)
         {
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
@@ -1208,6 +1153,26 @@ namespace OpenRiaServices.Client.Test
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
 
             return SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, data, TranslateQueryParts(queryParts));
+        }
+
+        private void VerifyRoundtrip<T>(string serialized, Func<IQueryable<T>, IQueryable<T>> queryFunc, IEnumerable<T> sampleData)
+        {
+            var query = queryFunc(sampleData.AsQueryable());
+
+            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
+
+            if (serialized is not null)
+                Assert.AreEqual(serialized, queryParts.Single().Expression);
+
+            DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(typeof(NorthwindDomainService));
+            var roundTrippedResult = (IQueryable<T>)SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, sampleData.AsQueryable(), TranslateQueryParts(queryParts));
+
+            CollectionAssert.AreEqual(query.ToList(), roundTrippedResult.ToList());
+        }
+
+        private void VerifyRoundtrip<T>(Func<IQueryable<T>, IQueryable<T>> queryFunc, IEnumerable<T> sampleData)
+        {
+            VerifyRoundtrip<T>((string)null, queryFunc, sampleData);
         }
 
         private List<WebRia::OpenRiaServices.Hosting.ServiceQueryPart> TranslateQueryParts(List<ServiceQueryPart> queryParts)
