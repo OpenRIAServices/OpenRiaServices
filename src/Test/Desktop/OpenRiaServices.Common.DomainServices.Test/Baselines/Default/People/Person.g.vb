@@ -231,6 +231,45 @@ Namespace People
         End Function
         
         ''' <summary>
+        ''' Asynchronously invokes the 'GetPersonLifespanByName' method of the DomainService.
+        ''' </summary>
+        ''' <param name="name">The value for the 'name' parameter of this action.</param>
+        ''' <param name="callback">Callback to invoke when the operation completes.</param>
+        ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetPersonLifespanByName(ByVal name As String, ByVal callback As Action(Of InvokeOperation(Of Lifespan)), ByVal userState As Object) As InvokeOperation(Of Lifespan)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("name", name)
+            Me.ValidateMethod("GetPersonLifespanByName", parameters)
+            Return Me.InvokeOperation(Of Lifespan)("GetPersonLifespanByName", GetType(Lifespan), parameters, true, callback, userState)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetPersonLifespanByName' method of the DomainService.
+        ''' </summary>
+        ''' <param name="name">The value for the 'name' parameter of this action.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetPersonLifespanByName(ByVal name As String) As InvokeOperation(Of Lifespan)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("name", name)
+            Me.ValidateMethod("GetPersonLifespanByName", parameters)
+            Return Me.InvokeOperation(Of Lifespan)("GetPersonLifespanByName", GetType(Lifespan), parameters, true, Nothing, Nothing)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetPersonLifespanByName' method of the DomainService.
+        ''' </summary>
+        ''' <param name="name">The value for the 'name' parameter of this action.</param>
+        ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Function GetPersonLifespanByNameAsync(ByVal name As String, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of Lifespan))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("name", name)
+            Me.ValidateMethod("GetPersonLifespanByName", parameters)
+            Return Me.InvokeOperationAsync(Of Lifespan)("GetPersonLifespanByName", parameters, true, cancellationToken)
+        End Function
+        
+        ''' <summary>
         ''' Asynchronously invokes the 'GetWeddingDayByName' method of the DomainService.
         ''' </summary>
         ''' <param name="name">The value for the 'name' parameter of this action.</param>
@@ -298,6 +337,23 @@ Namespace People
             ''' <param name="result">The IAsyncResult returned from 'BeginGetFavouriteDayByName'.</param>
             ''' <returns>The 'DateOnly' returned from the 'GetFavouriteDayByName' operation.</returns>
             Function EndGetFavouriteDayByName(ByVal result As IAsyncResult) As DateOnly
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetPersonLifespanByName' operation.
+            ''' </summary>
+            ''' <param name="name">The value for the 'name' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(true)>  _
+            Function BeginGetPersonLifespanByName(ByVal name As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetPersonLifespanByName'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetPersonLifespanByName'.</param>
+            ''' <returns>The 'Lifespan' returned from the 'GetPersonLifespanByName' operation.</returns>
+            Function EndGetPersonLifespanByName(ByVal result As IAsyncResult) As Lifespan
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetPersons' operation.

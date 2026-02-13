@@ -37,7 +37,7 @@ namespace People
         {
             return this._people.Where(p => p.WeddingDay.Equals(weddingDay)).AsQueryable<Person>();
         }
-        
+
         /*
         // DateOnly should be supported as method parameters (part of complex object)
         [Query]
@@ -61,14 +61,13 @@ namespace People
             return this._people.Single(p => p.Name.Equals(name)).WeddingDay;
         }
 
-        /*
         // DateOnly should be supported as return value (part of complex object)
         [Invoke]
         public Lifespan GetPersonLifespanByName(string name)
         {
             return this._people.Single(p => p.Name.Equals(name)).Lifespan;
         }
-        */
+
     }
 }
 #endif

@@ -239,6 +239,48 @@ namespace People
         }
         
         /// <summary>
+        /// Asynchronously invokes the 'GetPersonLifespanByName' method of the DomainService.
+        /// </summary>
+        /// <param name="name">The value for the 'name' parameter of this action.</param>
+        /// <param name="callback">Callback to invoke when the operation completes.</param>
+        /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<Lifespan> GetPersonLifespanByName(string name, Action<InvokeOperation<Lifespan>> callback, object userState)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("name", name);
+            this.ValidateMethod("GetPersonLifespanByName", parameters);
+            return this.InvokeOperation<Lifespan>("GetPersonLifespanByName", typeof(Lifespan), parameters, true, callback, userState);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetPersonLifespanByName' method of the DomainService.
+        /// </summary>
+        /// <param name="name">The value for the 'name' parameter of this action.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<Lifespan> GetPersonLifespanByName(string name)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("name", name);
+            this.ValidateMethod("GetPersonLifespanByName", parameters);
+            return this.InvokeOperation<Lifespan>("GetPersonLifespanByName", typeof(Lifespan), parameters, true, null, null);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetPersonLifespanByName' method of the DomainService.
+        /// </summary>
+        /// <param name="name">The value for the 'name' parameter of this action.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public System.Threading.Tasks.Task<InvokeResult<Lifespan>> GetPersonLifespanByNameAsync(string name, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("name", name);
+            this.ValidateMethod("GetPersonLifespanByName", parameters);
+            return this.InvokeOperationAsync<Lifespan>("GetPersonLifespanByName", parameters, true, cancellationToken);
+        }
+        
+        /// <summary>
         /// Asynchronously invokes the 'GetWeddingDayByName' method of the DomainService.
         /// </summary>
         /// <param name="name">The value for the 'name' parameter of this action.</param>
@@ -311,6 +353,23 @@ namespace People
             /// <param name="result">The IAsyncResult returned from 'BeginGetFavouriteDayByName'.</param>
             /// <returns>The 'DateOnly' returned from the 'GetFavouriteDayByName' operation.</returns>
             DateOnly EndGetFavouriteDayByName(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetPersonLifespanByName' operation.
+            /// </summary>
+            /// <param name="name">The value for the 'name' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(true)]
+            IAsyncResult BeginGetPersonLifespanByName(string name, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetPersonLifespanByName'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetPersonLifespanByName'.</param>
+            /// <returns>The 'Lifespan' returned from the 'GetPersonLifespanByName' operation.</returns>
+            Lifespan EndGetPersonLifespanByName(IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetPersons' operation.

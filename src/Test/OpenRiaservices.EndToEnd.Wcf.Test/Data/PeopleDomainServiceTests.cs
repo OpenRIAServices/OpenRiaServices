@@ -16,7 +16,7 @@ namespace OpenRiaServices.Client.Test
         {
             PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
             Assert.HasCount(0, domainContext.Persons);
-            
+
             await domainContext.Load(domainContext.GetPersonsQuery(), false);
             Assert.HasCount(2, domainContext.Persons);
 
@@ -81,12 +81,26 @@ namespace OpenRiaServices.Client.Test
         public async Task GetWeddingDayByNameTest()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
-            
+
             InvokeResult<DateOnly?> result1 = await domainContext.GetWeddingDayByNameAsync("Erik", System.Threading.CancellationToken.None);
             InvokeResult<DateOnly?> result2 = await domainContext.GetWeddingDayByNameAsync("Gustav", System.Threading.CancellationToken.None);
-            
+
             Assert.IsNull(result1.Value);
             Assert.AreEqual(new DateOnly(1531, 9, 24), result2.Value);
+        }
+
+        [TestMethod]
+        public async Task GetPersonLifespanByNameTest()
+        {
+            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+
+            InvokeResult<Lifespan> result1 = await domainContext.GetPersonLifespanByNameAsync("Erik", System.Threading.CancellationToken.None);
+            InvokeResult<Lifespan> result2 = await domainContext.GetPersonLifespanByNameAsync("Gustav", System.Threading.CancellationToken.None);
+
+            Assert.AreEqual(new DateOnly(1997, 1, 1), result1.Value.Born);
+            Assert.IsNull(result1.Value.Dead);
+            Assert.AreEqual(new DateOnly(1496, 5, 12), result2.Value.Born);
+            Assert.AreEqual(new DateOnly(1560, 9, 29), result2.Value.Dead);
         }
     }
 }
