@@ -209,6 +209,23 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(new(12, 0), result2.Value.EndTime);
             Assert.IsNull(result3.Value.EndTime);
         }
+
+
+        [TestMethod]
+        public async Task InvokeOperationTest()
+        {
+            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            InvokeOperation invoke = domainContext.GetStartTimeById(1);
+
+            await invoke;
+
+            Assert.IsNull(invoke.Error);
+            Assert.AreEqual("GetStartTimeById", invoke.OperationName);
+            Assert.HasCount(1, invoke.Parameters);
+            Assert.AreEqual(1, invoke.Parameters["id"]);
+            Assert.AreEqual(new TimeOnly(8, 0), invoke.Value);
+            Assert.AreEqual("my user state", invoke.UserState);
+        }
     }
 }
 #endif
