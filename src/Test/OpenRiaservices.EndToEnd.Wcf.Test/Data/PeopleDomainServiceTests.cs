@@ -1,7 +1,6 @@
 ﻿#if NET10_0_OR_GREATER
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using People;
@@ -23,8 +22,8 @@ namespace OpenRiaServices.Client.Test
             Person person1 = domainContext.Persons.Single(p => p.Name == "Erik");
             Person person2 = domainContext.Persons.Single(p => p.Name == "Gustav");
 
-            Assert.AreEqual(new DateOnly(1970, 1, 1), person1.FavouriteDay);
-            Assert.AreEqual(new DateOnly(1523, 6, 6), person2.FavouriteDay);
+            Assert.AreEqual(new(1970, 1, 1), person1.FavouriteDay);
+            Assert.AreEqual(new(1523, 6, 6), person2.FavouriteDay);
         }
 
         [TestMethod]
@@ -33,7 +32,7 @@ namespace OpenRiaServices.Client.Test
             PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
             Assert.HasCount(0, domainContext.Persons);
 
-            DateOnly favouriteDay = new DateOnly(1970, 1, 1);
+            DateOnly favouriteDay = new(1970, 1, 1);
             await domainContext.Load(domainContext.GetPersonsByFavouriteDayQuery(favouriteDay), false);
 
             Assert.HasCount(1, domainContext.Persons);
@@ -46,7 +45,7 @@ namespace OpenRiaServices.Client.Test
             PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
             Assert.HasCount(0, domainContext.Persons);
 
-            DateOnly? weddingDay = new DateOnly(1531, 9, 24);
+            DateOnly? weddingDay = new(1531, 9, 24);
             await domainContext.Load(domainContext.GetPersonsByWeddingDayQuery(weddingDay), false);
 
             Assert.HasCount(1, domainContext.Persons);
@@ -73,8 +72,8 @@ namespace OpenRiaServices.Client.Test
             PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
             InvokeResult<DateOnly> result1 = await domainContext.GetFavouriteDayByNameAsync("Erik", System.Threading.CancellationToken.None);
             InvokeResult<DateOnly> result2 = await domainContext.GetFavouriteDayByNameAsync("Gustav", System.Threading.CancellationToken.None);
-            Assert.AreEqual(new DateOnly(1970, 1, 1), result1.Value);
-            Assert.AreEqual(new DateOnly(1523, 6, 6), result2.Value);
+            Assert.AreEqual(new(1970, 1, 1), result1.Value);
+            Assert.AreEqual(new(1523, 6, 6), result2.Value);
         }
 
         [TestMethod]
@@ -86,7 +85,7 @@ namespace OpenRiaServices.Client.Test
             InvokeResult<DateOnly?> result2 = await domainContext.GetWeddingDayByNameAsync("Gustav", System.Threading.CancellationToken.None);
 
             Assert.IsNull(result1.Value);
-            Assert.AreEqual(new DateOnly(1531, 9, 24), result2.Value);
+            Assert.AreEqual(new(1531, 9, 24), result2.Value);
         }
 
         [TestMethod]
@@ -97,10 +96,118 @@ namespace OpenRiaServices.Client.Test
             InvokeResult<Lifespan> result1 = await domainContext.GetPersonLifespanByNameAsync("Erik", System.Threading.CancellationToken.None);
             InvokeResult<Lifespan> result2 = await domainContext.GetPersonLifespanByNameAsync("Gustav", System.Threading.CancellationToken.None);
 
-            Assert.AreEqual(new DateOnly(1997, 1, 1), result1.Value.Born);
+            Assert.AreEqual(new(1997, 1, 1), result1.Value.Born);
             Assert.IsNull(result1.Value.Dead);
-            Assert.AreEqual(new DateOnly(1496, 5, 12), result2.Value.Born);
-            Assert.AreEqual(new DateOnly(1560, 9, 29), result2.Value.Dead);
+            Assert.AreEqual(new(1496, 5, 12), result2.Value.Born);
+            Assert.AreEqual(new(1560, 9, 29), result2.Value.Dead);
+        }
+
+        [TestMethod]
+        public async Task GetWorkdaySchedulesQueryTest()
+        {
+            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            Assert.HasCount(0, domainContext.WorkdaySchedules);
+
+            await domainContext.Load(domainContext.GetWorkdaySchedulesQuery(), false);
+            Assert.HasCount(3, domainContext.WorkdaySchedules);
+
+            WorkdaySchedule schedule1 = domainContext.WorkdaySchedules.Single(p => p.Id == 1);
+            WorkdaySchedule schedule2 = domainContext.WorkdaySchedules.Single(p => p.Id == 2);
+            WorkdaySchedule schedule3 = domainContext.WorkdaySchedules.Single(p => p.Id == 3);
+
+            Assert.AreEqual(new(8, 0), schedule1.StartTime);
+            Assert.AreEqual(new(7, 45, 23, 555), schedule2.StartTime);
+            Assert.AreEqual(new(7, 10, 0), schedule3.StartTime);
+            Assert.AreEqual(new(17, 0), schedule1.EndTime);
+            Assert.AreEqual(new(16, 45, 23, 555), schedule2.EndTime);
+            Assert.IsNull(schedule3.EndTime);
+            Assert.AreEqual(new(12, 0), schedule1.LunchBreak.StartTime);
+            Assert.AreEqual(new(11, 30, 42), schedule2.LunchBreak.StartTime);
+            Assert.AreEqual(new(11, 0), schedule3.LunchBreak.StartTime);
+            Assert.AreEqual(new(13, 0), schedule1.LunchBreak.EndTime);
+            Assert.AreEqual(new(12, 0), schedule2.LunchBreak.EndTime);
+            Assert.IsNull(schedule3.LunchBreak.EndTime);
+        }
+
+        [TestMethod]
+        public async Task GetWorkdayScheduleByStartTimeQueryTest()
+        {
+            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            Assert.HasCount(0, domainContext.Persons);
+
+            TimeOnly startTime = new(8, 0);
+            await domainContext.Load(domainContext.GetWorkdayScheduleByStartTimeQuery(startTime), false);
+
+            Assert.HasCount(1, domainContext.WorkdaySchedules);
+            Assert.AreEqual(startTime, domainContext.WorkdaySchedules.Single().StartTime);
+        }
+
+        [TestMethod]
+        public async Task GetScheduleByNonNullEndTimeQueryTest()
+        {
+            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            Assert.HasCount(0, domainContext.Persons);
+
+            TimeOnly endTime = new(17, 0);
+            await domainContext.Load(domainContext.GetWorkdayScheduleByEndTimeQuery(endTime), false);
+
+            Assert.HasCount(1, domainContext.WorkdaySchedules);
+            Assert.AreEqual(endTime, domainContext.WorkdaySchedules.Single().EndTime);
+        }
+
+        [TestMethod]
+        public async Task GetScheduleByNullEndTimeQueryTest()
+        {
+            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            Assert.HasCount(0, domainContext.Persons);
+
+            TimeOnly? endTime = null;
+            await domainContext.Load(domainContext.GetWorkdayScheduleByEndTimeQuery(endTime), false);
+
+            Assert.HasCount(1, domainContext.WorkdaySchedules);
+            Assert.AreEqual(endTime, domainContext.WorkdaySchedules.Single().EndTime);
+            Assert.IsNull(domainContext.WorkdaySchedules.Single().EndTime);
+        }
+
+        [TestMethod]
+        public async Task GetStartTimeByIdTest()
+        {
+            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            InvokeResult<TimeOnly> result1 = await domainContext.GetStartTimeByIdAsync(1, System.Threading.CancellationToken.None);
+            InvokeResult<TimeOnly> result2 = await domainContext.GetStartTimeByIdAsync(2, System.Threading.CancellationToken.None);
+            InvokeResult<TimeOnly> result3 = await domainContext.GetStartTimeByIdAsync(3, System.Threading.CancellationToken.None);
+            Assert.AreEqual(new(8, 0), result1.Value);
+            Assert.AreEqual(new(7, 45, 23, 555), result2.Value);
+            Assert.AreEqual(new(7, 10, 0), result3.Value);
+        }
+
+        [TestMethod]
+        public async Task GetEndTimeByIdTest()
+        {
+            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            InvokeResult<TimeOnly?> result1 = await domainContext.GetEndTimeByIdAsync(1, System.Threading.CancellationToken.None);
+            InvokeResult<TimeOnly?> result2 = await domainContext.GetEndTimeByIdAsync(2, System.Threading.CancellationToken.None);
+            InvokeResult<TimeOnly?> result3 = await domainContext.GetEndTimeByIdAsync(3, System.Threading.CancellationToken.None);
+            Assert.AreEqual(new(17, 0), result1.Value);
+            Assert.AreEqual(new(16, 45, 23, 555), result2.Value);
+            Assert.IsNull(result3.Value);
+        }
+
+        [TestMethod]
+        public async Task GetLunchBreakByIdTest()
+        {
+            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+
+            InvokeResult<LunchBreak> result1 = await domainContext.GetLunchBreakByIdAsync(1, System.Threading.CancellationToken.None);
+            InvokeResult<LunchBreak> result2 = await domainContext.GetLunchBreakByIdAsync(2, System.Threading.CancellationToken.None);
+            InvokeResult<LunchBreak> result3 = await domainContext.GetLunchBreakByIdAsync(3, System.Threading.CancellationToken.None);
+
+            Assert.AreEqual(new(12, 0), result1.Value.StartTime);
+            Assert.AreEqual(new(11, 30, 42), result2.Value.StartTime);
+            Assert.AreEqual(new(11, 0), result3.Value.StartTime);
+            Assert.AreEqual(new(13, 0), result1.Value.EndTime);
+            Assert.AreEqual(new(12, 0), result2.Value.EndTime);
+            Assert.IsNull(result3.Value.EndTime);
         }
     }
 }

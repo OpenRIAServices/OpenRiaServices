@@ -108,6 +108,87 @@ Namespace People
     End Class
     
     ''' <summary>
+    ''' The 'LunchBreak' class.
+    ''' </summary>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/People")>  _
+    Partial Public NotInheritable Class LunchBreak
+        Inherits ComplexObject
+        
+        Private _endTime As Nullable(Of TimeOnly)
+        
+        Private _startTime As TimeOnly
+        
+        #Region "Extensibility Method Definitions"
+
+        ''' <summary>
+        ''' This method is invoked from the constructor once initialization is complete and
+        ''' can be used for further object setup.
+        ''' </summary>
+        Private Partial Sub OnCreated()
+        End Sub
+        Private Partial Sub OnEndTimeChanging(ByVal value As Nullable(Of TimeOnly))
+        End Sub
+        Private Partial Sub OnEndTimeChanged()
+        End Sub
+        Private Partial Sub OnStartTimeChanging(ByVal value As TimeOnly)
+        End Sub
+        Private Partial Sub OnStartTimeChanged()
+        End Sub
+
+        #End Region
+        
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="LunchBreak"/> class.
+        ''' </summary>
+        Public Sub New()
+            MyBase.New
+            Me.OnCreated
+        End Sub
+        
+        ''' <summary>
+        ''' Gets or sets the 'EndTime' value.
+        ''' </summary>
+        <DataMember()>  _
+        Public Property EndTime() As Nullable(Of TimeOnly)
+            Get
+                Return Me._endTime
+            End Get
+            Set
+                If (Me._endTime.Equals(value) = false) Then
+                    Me.OnEndTimeChanging(value)
+                    Me.RaiseDataMemberChanging("EndTime")
+                    Me.ValidateProperty("EndTime", value)
+                    Me._endTime = value
+                    Me.RaiseDataMemberChanged("EndTime")
+                    Me.OnEndTimeChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'StartTime' value.
+        ''' </summary>
+        <DataMember()>  _
+        Public Property StartTime() As TimeOnly
+            Get
+                Return Me._startTime
+            End Get
+            Set
+                If ((Me._startTime = value)  _
+                            = false) Then
+                    Me.OnStartTimeChanging(value)
+                    Me.RaiseDataMemberChanging("StartTime")
+                    Me.ValidateProperty("StartTime", value)
+                    Me._startTime = value
+                    Me.RaiseDataMemberChanged("StartTime")
+                    Me.OnStartTimeChanged
+                End If
+            End Set
+        End Property
+    End Class
+    
+    ''' <summary>
     ''' The DomainContext corresponding to the 'PeopleDomainService' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class PeopleDomainContext
@@ -159,6 +240,15 @@ Namespace People
         End Property
         
         ''' <summary>
+        ''' Gets the set of <see cref="WorkdaySchedule"/> entity instances that have been loaded into this <see cref="PeopleDomainContext"/> instance.
+        ''' </summary>
+        Public ReadOnly Property WorkdaySchedules() As EntitySet(Of WorkdaySchedule)
+            Get
+                Return MyBase.EntityContainer.GetEntitySet(Of WorkdaySchedule)
+            End Get
+        End Property
+        
+        ''' <summary>
         ''' Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersons' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="Person"/> entity instances.</returns>
@@ -189,6 +279,78 @@ Namespace People
             parameters.Add("weddingDay", weddingDay)
             Me.ValidateMethod("GetPersonsByWeddingDayQuery", parameters)
             Return MyBase.CreateQuery(Of Person)("GetPersonsByWeddingDay", parameters, false, true)
+        End Function
+        
+        ''' <summary>
+        ''' Gets an EntityQuery instance that can be used to load <see cref="WorkdaySchedule"/> entity instances using the 'GetWorkdayScheduleByEndTime' query.
+        ''' </summary>
+        ''' <param name="endTime">The value for the 'endTime' parameter of the query.</param>
+        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="WorkdaySchedule"/> entity instances.</returns>
+        Public Function GetWorkdayScheduleByEndTimeQuery(ByVal endTime As Nullable(Of TimeOnly)) As EntityQuery(Of WorkdaySchedule)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("endTime", endTime)
+            Me.ValidateMethod("GetWorkdayScheduleByEndTimeQuery", parameters)
+            Return MyBase.CreateQuery(Of WorkdaySchedule)("GetWorkdayScheduleByEndTime", parameters, false, true)
+        End Function
+        
+        ''' <summary>
+        ''' Gets an EntityQuery instance that can be used to load <see cref="WorkdaySchedule"/> entity instances using the 'GetWorkdayScheduleByStartTime' query.
+        ''' </summary>
+        ''' <param name="startTime">The value for the 'startTime' parameter of the query.</param>
+        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="WorkdaySchedule"/> entity instances.</returns>
+        Public Function GetWorkdayScheduleByStartTimeQuery(ByVal startTime As TimeOnly) As EntityQuery(Of WorkdaySchedule)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("startTime", startTime)
+            Me.ValidateMethod("GetWorkdayScheduleByStartTimeQuery", parameters)
+            Return MyBase.CreateQuery(Of WorkdaySchedule)("GetWorkdayScheduleByStartTime", parameters, false, true)
+        End Function
+        
+        ''' <summary>
+        ''' Gets an EntityQuery instance that can be used to load <see cref="WorkdaySchedule"/> entity instances using the 'GetWorkdaySchedules' query.
+        ''' </summary>
+        ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="WorkdaySchedule"/> entity instances.</returns>
+        Public Function GetWorkdaySchedulesQuery() As EntityQuery(Of WorkdaySchedule)
+            Me.ValidateMethod("GetWorkdaySchedulesQuery", Nothing)
+            Return MyBase.CreateQuery(Of WorkdaySchedule)("GetWorkdaySchedules", Nothing, false, true)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetEndTimeById' method of the DomainService.
+        ''' </summary>
+        ''' <param name="id">The value for the 'id' parameter of this action.</param>
+        ''' <param name="callback">Callback to invoke when the operation completes.</param>
+        ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetEndTimeById(ByVal id As Integer, ByVal callback As Action(Of InvokeOperation(Of Nullable(Of TimeOnly))), ByVal userState As Object) As InvokeOperation(Of Nullable(Of TimeOnly))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("id", id)
+            Me.ValidateMethod("GetEndTimeById", parameters)
+            Return Me.InvokeOperation(Of Nullable(Of TimeOnly))("GetEndTimeById", GetType(Nullable(Of TimeOnly)), parameters, true, callback, userState)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetEndTimeById' method of the DomainService.
+        ''' </summary>
+        ''' <param name="id">The value for the 'id' parameter of this action.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetEndTimeById(ByVal id As Integer) As InvokeOperation(Of Nullable(Of TimeOnly))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("id", id)
+            Me.ValidateMethod("GetEndTimeById", parameters)
+            Return Me.InvokeOperation(Of Nullable(Of TimeOnly))("GetEndTimeById", GetType(Nullable(Of TimeOnly)), parameters, true, Nothing, Nothing)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetEndTimeById' method of the DomainService.
+        ''' </summary>
+        ''' <param name="id">The value for the 'id' parameter of this action.</param>
+        ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Function GetEndTimeByIdAsync(ByVal id As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of Nullable(Of TimeOnly)))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("id", id)
+            Me.ValidateMethod("GetEndTimeById", parameters)
+            Return Me.InvokeOperationAsync(Of Nullable(Of TimeOnly))("GetEndTimeById", parameters, true, cancellationToken)
         End Function
         
         ''' <summary>
@@ -231,6 +393,45 @@ Namespace People
         End Function
         
         ''' <summary>
+        ''' Asynchronously invokes the 'GetLunchBreakById' method of the DomainService.
+        ''' </summary>
+        ''' <param name="id">The value for the 'id' parameter of this action.</param>
+        ''' <param name="callback">Callback to invoke when the operation completes.</param>
+        ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetLunchBreakById(ByVal id As Integer, ByVal callback As Action(Of InvokeOperation(Of LunchBreak)), ByVal userState As Object) As InvokeOperation(Of LunchBreak)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("id", id)
+            Me.ValidateMethod("GetLunchBreakById", parameters)
+            Return Me.InvokeOperation(Of LunchBreak)("GetLunchBreakById", GetType(LunchBreak), parameters, true, callback, userState)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetLunchBreakById' method of the DomainService.
+        ''' </summary>
+        ''' <param name="id">The value for the 'id' parameter of this action.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetLunchBreakById(ByVal id As Integer) As InvokeOperation(Of LunchBreak)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("id", id)
+            Me.ValidateMethod("GetLunchBreakById", parameters)
+            Return Me.InvokeOperation(Of LunchBreak)("GetLunchBreakById", GetType(LunchBreak), parameters, true, Nothing, Nothing)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetLunchBreakById' method of the DomainService.
+        ''' </summary>
+        ''' <param name="id">The value for the 'id' parameter of this action.</param>
+        ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Function GetLunchBreakByIdAsync(ByVal id As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of LunchBreak))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("id", id)
+            Me.ValidateMethod("GetLunchBreakById", parameters)
+            Return Me.InvokeOperationAsync(Of LunchBreak)("GetLunchBreakById", parameters, true, cancellationToken)
+        End Function
+        
+        ''' <summary>
         ''' Asynchronously invokes the 'GetPersonLifespanByName' method of the DomainService.
         ''' </summary>
         ''' <param name="name">The value for the 'name' parameter of this action.</param>
@@ -267,6 +468,45 @@ Namespace People
             parameters.Add("name", name)
             Me.ValidateMethod("GetPersonLifespanByName", parameters)
             Return Me.InvokeOperationAsync(Of Lifespan)("GetPersonLifespanByName", parameters, true, cancellationToken)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetStartTimeById' method of the DomainService.
+        ''' </summary>
+        ''' <param name="id">The value for the 'id' parameter of this action.</param>
+        ''' <param name="callback">Callback to invoke when the operation completes.</param>
+        ''' <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetStartTimeById(ByVal id As Integer, ByVal callback As Action(Of InvokeOperation(Of TimeOnly)), ByVal userState As Object) As InvokeOperation(Of TimeOnly)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("id", id)
+            Me.ValidateMethod("GetStartTimeById", parameters)
+            Return Me.InvokeOperation(Of TimeOnly)("GetStartTimeById", GetType(TimeOnly), parameters, true, callback, userState)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetStartTimeById' method of the DomainService.
+        ''' </summary>
+        ''' <param name="id">The value for the 'id' parameter of this action.</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Overloads Function GetStartTimeById(ByVal id As Integer) As InvokeOperation(Of TimeOnly)
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("id", id)
+            Me.ValidateMethod("GetStartTimeById", parameters)
+            Return Me.InvokeOperation(Of TimeOnly)("GetStartTimeById", GetType(TimeOnly), parameters, true, Nothing, Nothing)
+        End Function
+        
+        ''' <summary>
+        ''' Asynchronously invokes the 'GetStartTimeById' method of the DomainService.
+        ''' </summary>
+        ''' <param name="id">The value for the 'id' parameter of this action.</param>
+        ''' <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        ''' <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        Public Function GetStartTimeByIdAsync(ByVal id As Integer, Optional ByVal cancellationToken As CancellationToken = Nothing) As System.Threading.Tasks.Task(Of InvokeResult(Of TimeOnly))
+            Dim parameters As Dictionary(Of String, Object) = New Dictionary(Of String, Object)()
+            parameters.Add("id", id)
+            Me.ValidateMethod("GetStartTimeById", parameters)
+            Return Me.InvokeOperationAsync(Of TimeOnly)("GetStartTimeById", parameters, true, cancellationToken)
         End Function
         
         ''' <summary>
@@ -322,6 +562,23 @@ Namespace People
         Public Interface IPeopleDomainServiceContract
             
             ''' <summary>
+            ''' Asynchronously invokes the 'GetEndTimeById' operation.
+            ''' </summary>
+            ''' <param name="id">The value for the 'id' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(true)>  _
+            Function BeginGetEndTimeById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetEndTimeById'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetEndTimeById'.</param>
+            ''' <returns>The 'Nullable`1' returned from the 'GetEndTimeById' operation.</returns>
+            Function EndGetEndTimeById(ByVal result As IAsyncResult) As Nullable(Of TimeOnly)
+            
+            ''' <summary>
             ''' Asynchronously invokes the 'GetFavouriteDayByName' operation.
             ''' </summary>
             ''' <param name="name">The value for the 'name' parameter of this action.</param>
@@ -337,6 +594,23 @@ Namespace People
             ''' <param name="result">The IAsyncResult returned from 'BeginGetFavouriteDayByName'.</param>
             ''' <returns>The 'DateOnly' returned from the 'GetFavouriteDayByName' operation.</returns>
             Function EndGetFavouriteDayByName(ByVal result As IAsyncResult) As DateOnly
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetLunchBreakById' operation.
+            ''' </summary>
+            ''' <param name="id">The value for the 'id' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(true)>  _
+            Function BeginGetLunchBreakById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetLunchBreakById'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetLunchBreakById'.</param>
+            ''' <returns>The 'LunchBreak' returned from the 'GetLunchBreakById' operation.</returns>
+            Function EndGetLunchBreakById(ByVal result As IAsyncResult) As LunchBreak
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetPersonLifespanByName' operation.
@@ -406,6 +680,23 @@ Namespace People
             Function EndGetPersonsByWeddingDay(ByVal result As IAsyncResult) As QueryResult(Of Person)
             
             ''' <summary>
+            ''' Asynchronously invokes the 'GetStartTimeById' operation.
+            ''' </summary>
+            ''' <param name="id">The value for the 'id' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(true)>  _
+            Function BeginGetStartTimeById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetStartTimeById'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetStartTimeById'.</param>
+            ''' <returns>The 'TimeOnly' returned from the 'GetStartTimeById' operation.</returns>
+            Function EndGetStartTimeById(ByVal result As IAsyncResult) As TimeOnly
+            
+            ''' <summary>
             ''' Asynchronously invokes the 'GetWeddingDayByName' operation.
             ''' </summary>
             ''' <param name="name">The value for the 'name' parameter of this action.</param>
@@ -421,6 +712,56 @@ Namespace People
             ''' <param name="result">The IAsyncResult returned from 'BeginGetWeddingDayByName'.</param>
             ''' <returns>The 'Nullable`1' returned from the 'GetWeddingDayByName' operation.</returns>
             Function EndGetWeddingDayByName(ByVal result As IAsyncResult) As Nullable(Of DateOnly)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetWorkdayScheduleByEndTime' operation.
+            ''' </summary>
+            ''' <param name="endTime">The value for the 'endTime' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(false)>  _
+            Function BeginGetWorkdayScheduleByEndTime(ByVal endTime As Nullable(Of TimeOnly), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetWorkdayScheduleByEndTime'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetWorkdayScheduleByEndTime'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetWorkdayScheduleByEndTime' operation.</returns>
+            Function EndGetWorkdayScheduleByEndTime(ByVal result As IAsyncResult) As QueryResult(Of WorkdaySchedule)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetWorkdayScheduleByStartTime' operation.
+            ''' </summary>
+            ''' <param name="startTime">The value for the 'startTime' parameter of this action.</param>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(false)>  _
+            Function BeginGetWorkdayScheduleByStartTime(ByVal startTime As TimeOnly, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetWorkdayScheduleByStartTime'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetWorkdayScheduleByStartTime'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetWorkdayScheduleByStartTime' operation.</returns>
+            Function EndGetWorkdayScheduleByStartTime(ByVal result As IAsyncResult) As QueryResult(Of WorkdaySchedule)
+            
+            ''' <summary>
+            ''' Asynchronously invokes the 'GetWorkdaySchedules' operation.
+            ''' </summary>
+            ''' <param name="callback">Callback to invoke on completion.</param>
+            ''' <param name="asyncState">Optional state object.</param>
+            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            <HasSideEffects(false)>  _
+            Function BeginGetWorkdaySchedules(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
+            
+            ''' <summary>
+            ''' Completes the asynchronous operation begun by 'BeginGetWorkdaySchedules'.
+            ''' </summary>
+            ''' <param name="result">The IAsyncResult returned from 'BeginGetWorkdaySchedules'.</param>
+            ''' <returns>The 'QueryResult' returned from the 'GetWorkdaySchedules' operation.</returns>
+            Function EndGetWorkdaySchedules(ByVal result As IAsyncResult) As QueryResult(Of WorkdaySchedule)
         End Interface
         
         Friend NotInheritable Class PeopleDomainContextEntityContainer
@@ -429,6 +770,7 @@ Namespace People
             Public Sub New()
                 MyBase.New
                 Me.CreateEntitySet(Of Person)(EntitySetOperations.None)
+                Me.CreateEntitySet(Of WorkdaySchedule)(EntitySetOperations.None)
             End Sub
         End Class
     End Class
@@ -574,6 +916,151 @@ Namespace People
         ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
         Public Overrides Function GetIdentity() As Object
             Return Me._name
+        End Function
+    End Class
+    
+    ''' <summary>
+    ''' The 'WorkdaySchedule' entity class.
+    ''' </summary>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/People")>  _
+    Partial Public NotInheritable Class WorkdaySchedule
+        Inherits Entity
+        
+        Private _endTime As Nullable(Of TimeOnly)
+        
+        Private _id As Integer
+        
+        Private _lunchBreak As LunchBreak
+        
+        Private _startTime As TimeOnly
+        
+        #Region "Extensibility Method Definitions"
+
+        ''' <summary>
+        ''' This method is invoked from the constructor once initialization is complete and
+        ''' can be used for further object setup.
+        ''' </summary>
+        Private Partial Sub OnCreated()
+        End Sub
+        Private Partial Sub OnEndTimeChanging(ByVal value As Nullable(Of TimeOnly))
+        End Sub
+        Private Partial Sub OnEndTimeChanged()
+        End Sub
+        Private Partial Sub OnIdChanging(ByVal value As Integer)
+        End Sub
+        Private Partial Sub OnIdChanged()
+        End Sub
+        Private Partial Sub OnLunchBreakChanging(ByVal value As LunchBreak)
+        End Sub
+        Private Partial Sub OnLunchBreakChanged()
+        End Sub
+        Private Partial Sub OnStartTimeChanging(ByVal value As TimeOnly)
+        End Sub
+        Private Partial Sub OnStartTimeChanged()
+        End Sub
+
+        #End Region
+        
+        
+        ''' <summary>
+        ''' Initializes a new instance of the <see cref="WorkdaySchedule"/> class.
+        ''' </summary>
+        Public Sub New()
+            MyBase.New
+            Me.OnCreated
+        End Sub
+        
+        ''' <summary>
+        ''' Gets or sets the 'EndTime' value.
+        ''' </summary>
+        <DataMember()>  _
+        Public Property EndTime() As Nullable(Of TimeOnly)
+            Get
+                Return Me._endTime
+            End Get
+            Set
+                If (Me._endTime.Equals(value) = false) Then
+                    Me.OnEndTimeChanging(value)
+                    Me.RaiseDataMemberChanging("EndTime")
+                    Me.ValidateProperty("EndTime", value)
+                    Me._endTime = value
+                    Me.RaiseDataMemberChanged("EndTime")
+                    Me.OnEndTimeChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'Id' value.
+        ''' </summary>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
+        Public Property Id() As Integer
+            Get
+                Return Me._id
+            End Get
+            Set
+                If ((Me._id = value)  _
+                            = false) Then
+                    Me.OnIdChanging(value)
+                    Me.ValidateProperty("Id", value)
+                    Me._id = value
+                    Me.RaisePropertyChanged("Id")
+                    Me.OnIdChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'LunchBreak' value.
+        ''' </summary>
+        <DataMember(),  _
+         Display(AutoGenerateField:=false)>  _
+        Public Property LunchBreak() As LunchBreak
+            Get
+                Return Me._lunchBreak
+            End Get
+            Set
+                If (Object.Equals(Me._lunchBreak, value) = false) Then
+                    Me.OnLunchBreakChanging(value)
+                    Me.RaiseDataMemberChanging("LunchBreak")
+                    Me.ValidateProperty("LunchBreak", value)
+                    Me._lunchBreak = value
+                    Me.RaiseDataMemberChanged("LunchBreak")
+                    Me.OnLunchBreakChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Gets or sets the 'StartTime' value.
+        ''' </summary>
+        <DataMember()>  _
+        Public Property StartTime() As TimeOnly
+            Get
+                Return Me._startTime
+            End Get
+            Set
+                If ((Me._startTime = value)  _
+                            = false) Then
+                    Me.OnStartTimeChanging(value)
+                    Me.RaiseDataMemberChanging("StartTime")
+                    Me.ValidateProperty("StartTime", value)
+                    Me._startTime = value
+                    Me.RaiseDataMemberChanged("StartTime")
+                    Me.OnStartTimeChanged
+                End If
+            End Set
+        End Property
+        
+        ''' <summary>
+        ''' Computes a value from the key fields that uniquely identifies this entity instance.
+        ''' </summary>
+        ''' <returns>An object instance that uniquely identifies this entity instance.</returns>
+        Public Overrides Function GetIdentity() As Object
+            Return Me._id
         End Function
     End Class
 End Namespace

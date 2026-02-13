@@ -106,6 +106,89 @@ namespace People
     }
     
     /// <summary>
+    /// The 'LunchBreak' class.
+    /// </summary>
+    [DataContract(Namespace="http://schemas.datacontract.org/2004/07/People")]
+    public sealed partial class LunchBreak : ComplexObject
+    {
+        
+        private Nullable<TimeOnly> _endTime;
+        
+        private TimeOnly _startTime;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnEndTimeChanging(Nullable<TimeOnly> value);
+        partial void OnEndTimeChanged();
+        partial void OnStartTimeChanging(TimeOnly value);
+        partial void OnStartTimeChanged();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="LunchBreak"/> class.
+        /// </summary>
+        public LunchBreak()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'EndTime' value.
+        /// </summary>
+        [DataMember()]
+        public Nullable<TimeOnly> EndTime
+        {
+            get
+            {
+                return this._endTime;
+            }
+            set
+            {
+                if ((this._endTime != value))
+                {
+                    this.OnEndTimeChanging(value);
+                    this.RaiseDataMemberChanging("EndTime");
+                    this.ValidateProperty("EndTime", value);
+                    this._endTime = value;
+                    this.RaiseDataMemberChanged("EndTime");
+                    this.OnEndTimeChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'StartTime' value.
+        /// </summary>
+        [DataMember()]
+        public TimeOnly StartTime
+        {
+            get
+            {
+                return this._startTime;
+            }
+            set
+            {
+                if ((this._startTime != value))
+                {
+                    this.OnStartTimeChanging(value);
+                    this.RaiseDataMemberChanging("StartTime");
+                    this.ValidateProperty("StartTime", value);
+                    this._startTime = value;
+                    this.RaiseDataMemberChanged("StartTime");
+                    this.OnStartTimeChanged();
+                }
+            }
+        }
+    }
+    
+    /// <summary>
     /// The DomainContext corresponding to the 'PeopleDomainService' DomainService.
     /// </summary>
     public sealed partial class PeopleDomainContext : DomainContext
@@ -161,6 +244,17 @@ namespace People
         }
         
         /// <summary>
+        /// Gets the set of <see cref="WorkdaySchedule"/> entity instances that have been loaded into this <see cref="PeopleDomainContext"/> instance.
+        /// </summary>
+        public EntitySet<WorkdaySchedule> WorkdaySchedules
+        {
+            get
+            {
+                return base.EntityContainer.GetEntitySet<WorkdaySchedule>();
+            }
+        }
+        
+        /// <summary>
         /// Gets an EntityQuery instance that can be used to load <see cref="Person"/> entity instances using the 'GetPersons' query.
         /// </summary>
         /// <returns>An EntityQuery that can be loaded to retrieve <see cref="Person"/> entity instances.</returns>
@@ -194,6 +288,84 @@ namespace People
             parameters.Add("weddingDay", weddingDay);
             this.ValidateMethod("GetPersonsByWeddingDayQuery", parameters);
             return base.CreateQuery<Person>("GetPersonsByWeddingDay", parameters, false, true);
+        }
+        
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="WorkdaySchedule"/> entity instances using the 'GetWorkdayScheduleByEndTime' query.
+        /// </summary>
+        /// <param name="endTime">The value for the 'endTime' parameter of the query.</param>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="WorkdaySchedule"/> entity instances.</returns>
+        public EntityQuery<WorkdaySchedule> GetWorkdayScheduleByEndTimeQuery(Nullable<TimeOnly> endTime)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("endTime", endTime);
+            this.ValidateMethod("GetWorkdayScheduleByEndTimeQuery", parameters);
+            return base.CreateQuery<WorkdaySchedule>("GetWorkdayScheduleByEndTime", parameters, false, true);
+        }
+        
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="WorkdaySchedule"/> entity instances using the 'GetWorkdayScheduleByStartTime' query.
+        /// </summary>
+        /// <param name="startTime">The value for the 'startTime' parameter of the query.</param>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="WorkdaySchedule"/> entity instances.</returns>
+        public EntityQuery<WorkdaySchedule> GetWorkdayScheduleByStartTimeQuery(TimeOnly startTime)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("startTime", startTime);
+            this.ValidateMethod("GetWorkdayScheduleByStartTimeQuery", parameters);
+            return base.CreateQuery<WorkdaySchedule>("GetWorkdayScheduleByStartTime", parameters, false, true);
+        }
+        
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="WorkdaySchedule"/> entity instances using the 'GetWorkdaySchedules' query.
+        /// </summary>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="WorkdaySchedule"/> entity instances.</returns>
+        public EntityQuery<WorkdaySchedule> GetWorkdaySchedulesQuery()
+        {
+            this.ValidateMethod("GetWorkdaySchedulesQuery", null);
+            return base.CreateQuery<WorkdaySchedule>("GetWorkdaySchedules", null, false, true);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetEndTimeById' method of the DomainService.
+        /// </summary>
+        /// <param name="id">The value for the 'id' parameter of this action.</param>
+        /// <param name="callback">Callback to invoke when the operation completes.</param>
+        /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<Nullable<TimeOnly>> GetEndTimeById(int id, Action<InvokeOperation<Nullable<TimeOnly>>> callback, object userState)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", id);
+            this.ValidateMethod("GetEndTimeById", parameters);
+            return this.InvokeOperation<Nullable<TimeOnly>>("GetEndTimeById", typeof(Nullable<TimeOnly>), parameters, true, callback, userState);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetEndTimeById' method of the DomainService.
+        /// </summary>
+        /// <param name="id">The value for the 'id' parameter of this action.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<Nullable<TimeOnly>> GetEndTimeById(int id)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", id);
+            this.ValidateMethod("GetEndTimeById", parameters);
+            return this.InvokeOperation<Nullable<TimeOnly>>("GetEndTimeById", typeof(Nullable<TimeOnly>), parameters, true, null, null);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetEndTimeById' method of the DomainService.
+        /// </summary>
+        /// <param name="id">The value for the 'id' parameter of this action.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public System.Threading.Tasks.Task<InvokeResult<Nullable<TimeOnly>>> GetEndTimeByIdAsync(int id, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", id);
+            this.ValidateMethod("GetEndTimeById", parameters);
+            return this.InvokeOperationAsync<Nullable<TimeOnly>>("GetEndTimeById", parameters, true, cancellationToken);
         }
         
         /// <summary>
@@ -239,6 +411,48 @@ namespace People
         }
         
         /// <summary>
+        /// Asynchronously invokes the 'GetLunchBreakById' method of the DomainService.
+        /// </summary>
+        /// <param name="id">The value for the 'id' parameter of this action.</param>
+        /// <param name="callback">Callback to invoke when the operation completes.</param>
+        /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<LunchBreak> GetLunchBreakById(int id, Action<InvokeOperation<LunchBreak>> callback, object userState)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", id);
+            this.ValidateMethod("GetLunchBreakById", parameters);
+            return this.InvokeOperation<LunchBreak>("GetLunchBreakById", typeof(LunchBreak), parameters, true, callback, userState);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetLunchBreakById' method of the DomainService.
+        /// </summary>
+        /// <param name="id">The value for the 'id' parameter of this action.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<LunchBreak> GetLunchBreakById(int id)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", id);
+            this.ValidateMethod("GetLunchBreakById", parameters);
+            return this.InvokeOperation<LunchBreak>("GetLunchBreakById", typeof(LunchBreak), parameters, true, null, null);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetLunchBreakById' method of the DomainService.
+        /// </summary>
+        /// <param name="id">The value for the 'id' parameter of this action.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public System.Threading.Tasks.Task<InvokeResult<LunchBreak>> GetLunchBreakByIdAsync(int id, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", id);
+            this.ValidateMethod("GetLunchBreakById", parameters);
+            return this.InvokeOperationAsync<LunchBreak>("GetLunchBreakById", parameters, true, cancellationToken);
+        }
+        
+        /// <summary>
         /// Asynchronously invokes the 'GetPersonLifespanByName' method of the DomainService.
         /// </summary>
         /// <param name="name">The value for the 'name' parameter of this action.</param>
@@ -278,6 +492,48 @@ namespace People
             parameters.Add("name", name);
             this.ValidateMethod("GetPersonLifespanByName", parameters);
             return this.InvokeOperationAsync<Lifespan>("GetPersonLifespanByName", parameters, true, cancellationToken);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetStartTimeById' method of the DomainService.
+        /// </summary>
+        /// <param name="id">The value for the 'id' parameter of this action.</param>
+        /// <param name="callback">Callback to invoke when the operation completes.</param>
+        /// <param name="userState">Value to pass to the callback.  It can be <c>null</c>.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<TimeOnly> GetStartTimeById(int id, Action<InvokeOperation<TimeOnly>> callback, object userState)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", id);
+            this.ValidateMethod("GetStartTimeById", parameters);
+            return this.InvokeOperation<TimeOnly>("GetStartTimeById", typeof(TimeOnly), parameters, true, callback, userState);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetStartTimeById' method of the DomainService.
+        /// </summary>
+        /// <param name="id">The value for the 'id' parameter of this action.</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public InvokeOperation<TimeOnly> GetStartTimeById(int id)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", id);
+            this.ValidateMethod("GetStartTimeById", parameters);
+            return this.InvokeOperation<TimeOnly>("GetStartTimeById", typeof(TimeOnly), parameters, true, null, null);
+        }
+        
+        /// <summary>
+        /// Asynchronously invokes the 'GetStartTimeById' method of the DomainService.
+        /// </summary>
+        /// <param name="id">The value for the 'id' parameter of this action.</param>
+        /// <param name="cancellationToken">A cancellation token that can be used to cancel the work</param>
+        /// <returns>An operation instance that can be used to manage the asynchronous request.</returns>
+        public System.Threading.Tasks.Task<InvokeResult<TimeOnly>> GetStartTimeByIdAsync(int id, CancellationToken cancellationToken = default(CancellationToken))
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("id", id);
+            this.ValidateMethod("GetStartTimeById", parameters);
+            return this.InvokeOperationAsync<TimeOnly>("GetStartTimeById", parameters, true, cancellationToken);
         }
         
         /// <summary>
@@ -338,6 +594,23 @@ namespace People
         {
             
             /// <summary>
+            /// Asynchronously invokes the 'GetEndTimeById' operation.
+            /// </summary>
+            /// <param name="id">The value for the 'id' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(true)]
+            IAsyncResult BeginGetEndTimeById(int id, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetEndTimeById'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetEndTimeById'.</param>
+            /// <returns>The 'Nullable`1' returned from the 'GetEndTimeById' operation.</returns>
+            Nullable<TimeOnly> EndGetEndTimeById(IAsyncResult result);
+            
+            /// <summary>
             /// Asynchronously invokes the 'GetFavouriteDayByName' operation.
             /// </summary>
             /// <param name="name">The value for the 'name' parameter of this action.</param>
@@ -353,6 +626,23 @@ namespace People
             /// <param name="result">The IAsyncResult returned from 'BeginGetFavouriteDayByName'.</param>
             /// <returns>The 'DateOnly' returned from the 'GetFavouriteDayByName' operation.</returns>
             DateOnly EndGetFavouriteDayByName(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetLunchBreakById' operation.
+            /// </summary>
+            /// <param name="id">The value for the 'id' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(true)]
+            IAsyncResult BeginGetLunchBreakById(int id, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetLunchBreakById'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetLunchBreakById'.</param>
+            /// <returns>The 'LunchBreak' returned from the 'GetLunchBreakById' operation.</returns>
+            LunchBreak EndGetLunchBreakById(IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'GetPersonLifespanByName' operation.
@@ -422,6 +712,23 @@ namespace People
             QueryResult<Person> EndGetPersonsByWeddingDay(IAsyncResult result);
             
             /// <summary>
+            /// Asynchronously invokes the 'GetStartTimeById' operation.
+            /// </summary>
+            /// <param name="id">The value for the 'id' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(true)]
+            IAsyncResult BeginGetStartTimeById(int id, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetStartTimeById'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetStartTimeById'.</param>
+            /// <returns>The 'TimeOnly' returned from the 'GetStartTimeById' operation.</returns>
+            TimeOnly EndGetStartTimeById(IAsyncResult result);
+            
+            /// <summary>
             /// Asynchronously invokes the 'GetWeddingDayByName' operation.
             /// </summary>
             /// <param name="name">The value for the 'name' parameter of this action.</param>
@@ -437,6 +744,56 @@ namespace People
             /// <param name="result">The IAsyncResult returned from 'BeginGetWeddingDayByName'.</param>
             /// <returns>The 'Nullable`1' returned from the 'GetWeddingDayByName' operation.</returns>
             Nullable<DateOnly> EndGetWeddingDayByName(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetWorkdayScheduleByEndTime' operation.
+            /// </summary>
+            /// <param name="endTime">The value for the 'endTime' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(false)]
+            IAsyncResult BeginGetWorkdayScheduleByEndTime(Nullable<TimeOnly> endTime, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetWorkdayScheduleByEndTime'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetWorkdayScheduleByEndTime'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetWorkdayScheduleByEndTime' operation.</returns>
+            QueryResult<WorkdaySchedule> EndGetWorkdayScheduleByEndTime(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetWorkdayScheduleByStartTime' operation.
+            /// </summary>
+            /// <param name="startTime">The value for the 'startTime' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(false)]
+            IAsyncResult BeginGetWorkdayScheduleByStartTime(TimeOnly startTime, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetWorkdayScheduleByStartTime'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetWorkdayScheduleByStartTime'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetWorkdayScheduleByStartTime' operation.</returns>
+            QueryResult<WorkdaySchedule> EndGetWorkdayScheduleByStartTime(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetWorkdaySchedules' operation.
+            /// </summary>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(false)]
+            IAsyncResult BeginGetWorkdaySchedules(AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetWorkdaySchedules'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetWorkdaySchedules'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetWorkdaySchedules' operation.</returns>
+            QueryResult<WorkdaySchedule> EndGetWorkdaySchedules(IAsyncResult result);
         }
         
         internal sealed class PeopleDomainContextEntityContainer : EntityContainer
@@ -445,6 +802,7 @@ namespace People
             public PeopleDomainContextEntityContainer()
             {
                 this.CreateEntitySet<Person>(EntitySetOperations.None);
+                this.CreateEntitySet<WorkdaySchedule>(EntitySetOperations.None);
             }
         }
     }
@@ -597,6 +955,157 @@ namespace People
         public override object GetIdentity()
         {
             return this._name;
+        }
+    }
+    
+    /// <summary>
+    /// The 'WorkdaySchedule' entity class.
+    /// </summary>
+    [DataContract(Namespace="http://schemas.datacontract.org/2004/07/People")]
+    public sealed partial class WorkdaySchedule : Entity
+    {
+        
+        private Nullable<TimeOnly> _endTime;
+        
+        private int _id;
+        
+        private LunchBreak _lunchBreak;
+        
+        private TimeOnly _startTime;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnEndTimeChanging(Nullable<TimeOnly> value);
+        partial void OnEndTimeChanged();
+        partial void OnIdChanging(int value);
+        partial void OnIdChanged();
+        partial void OnLunchBreakChanging(LunchBreak value);
+        partial void OnLunchBreakChanged();
+        partial void OnStartTimeChanging(TimeOnly value);
+        partial void OnStartTimeChanged();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="WorkdaySchedule"/> class.
+        /// </summary>
+        public WorkdaySchedule()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'EndTime' value.
+        /// </summary>
+        [DataMember()]
+        public Nullable<TimeOnly> EndTime
+        {
+            get
+            {
+                return this._endTime;
+            }
+            set
+            {
+                if ((this._endTime != value))
+                {
+                    this.OnEndTimeChanging(value);
+                    this.RaiseDataMemberChanging("EndTime");
+                    this.ValidateProperty("EndTime", value);
+                    this._endTime = value;
+                    this.RaiseDataMemberChanged("EndTime");
+                    this.OnEndTimeChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Id' value.
+        /// </summary>
+        [DataMember()]
+        [Editable(false, AllowInitialValue=true)]
+        [Key()]
+        [RoundtripOriginal()]
+        public int Id
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((this._id != value))
+                {
+                    this.OnIdChanging(value);
+                    this.ValidateProperty("Id", value);
+                    this._id = value;
+                    this.RaisePropertyChanged("Id");
+                    this.OnIdChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'LunchBreak' value.
+        /// </summary>
+        [DataMember()]
+        [Display(AutoGenerateField=false)]
+        public LunchBreak LunchBreak
+        {
+            get
+            {
+                return this._lunchBreak;
+            }
+            set
+            {
+                if ((this._lunchBreak != value))
+                {
+                    this.OnLunchBreakChanging(value);
+                    this.RaiseDataMemberChanging("LunchBreak");
+                    this.ValidateProperty("LunchBreak", value);
+                    this._lunchBreak = value;
+                    this.RaiseDataMemberChanged("LunchBreak");
+                    this.OnLunchBreakChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'StartTime' value.
+        /// </summary>
+        [DataMember()]
+        public TimeOnly StartTime
+        {
+            get
+            {
+                return this._startTime;
+            }
+            set
+            {
+                if ((this._startTime != value))
+                {
+                    this.OnStartTimeChanging(value);
+                    this.RaiseDataMemberChanging("StartTime");
+                    this.ValidateProperty("StartTime", value);
+                    this._startTime = value;
+                    this.RaiseDataMemberChanged("StartTime");
+                    this.OnStartTimeChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._id;
         }
     }
 }
