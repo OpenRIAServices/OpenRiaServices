@@ -2,7 +2,6 @@
 
 using System;
 using System.ComponentModel.DataAnnotations;
-using Microsoft.EntityFrameworkCore;
 
 namespace People
 {
@@ -21,7 +20,6 @@ namespace People
         public Lifespan Lifespan { get; set; }
     }
 
-    [Owned]
     public class Lifespan
     {
         public DateOnly Born { get; set; }
