@@ -13,7 +13,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetPersonsQueryTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
 
             await domainContext.Load(domainContext.GetPersonsQuery(), false);
@@ -29,7 +29,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetPersonsByFavouriteDayQueryTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
 
             DateOnly favouriteDay = new(1970, 1, 1);
@@ -42,7 +42,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetPersonsByNonNullWeddingDayQueryTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
 
             DateOnly? weddingDay = new(1531, 9, 24);
@@ -55,7 +55,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetPersonsByNullWeddingDayQueryTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
 
             DateOnly? weddingDay = null;
@@ -69,7 +69,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetFavouriteDayByNameTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             InvokeResult<DateOnly> result1 = await domainContext.GetFavouriteDayByNameAsync("Erik", System.Threading.CancellationToken.None);
             InvokeResult<DateOnly> result2 = await domainContext.GetFavouriteDayByNameAsync("Gustav", System.Threading.CancellationToken.None);
             Assert.AreEqual(new(1970, 1, 1), result1.Value);
@@ -79,7 +79,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetWeddingDayByNameTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
 
             InvokeResult<DateOnly?> result1 = await domainContext.GetWeddingDayByNameAsync("Erik", System.Threading.CancellationToken.None);
             InvokeResult<DateOnly?> result2 = await domainContext.GetWeddingDayByNameAsync("Gustav", System.Threading.CancellationToken.None);
@@ -91,7 +91,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetPersonLifespanByNameTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
 
             InvokeResult<Lifespan> result1 = await domainContext.GetPersonLifespanByNameAsync("Erik", System.Threading.CancellationToken.None);
             InvokeResult<Lifespan> result2 = await domainContext.GetPersonLifespanByNameAsync("Gustav", System.Threading.CancellationToken.None);
@@ -105,7 +105,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetWorkdaySchedulesQueryTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.WorkdaySchedules);
 
             await domainContext.Load(domainContext.GetWorkdaySchedulesQuery(), false);
@@ -132,7 +132,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetWorkdayScheduleByStartTimeQueryTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
 
             TimeOnly startTime = new(8, 0);
@@ -145,7 +145,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetScheduleByNonNullEndTimeQueryTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
 
             TimeOnly endTime = new(17, 0);
@@ -158,7 +158,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetScheduleByNullEndTimeQueryTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
 
             TimeOnly? endTime = null;
@@ -172,7 +172,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetStartTimeByIdTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             InvokeResult<TimeOnly> result1 = await domainContext.GetStartTimeByIdAsync(1, System.Threading.CancellationToken.None);
             InvokeResult<TimeOnly> result2 = await domainContext.GetStartTimeByIdAsync(2, System.Threading.CancellationToken.None);
             InvokeResult<TimeOnly> result3 = await domainContext.GetStartTimeByIdAsync(3, System.Threading.CancellationToken.None);
@@ -184,7 +184,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetEndTimeByIdTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             InvokeResult<TimeOnly?> result1 = await domainContext.GetEndTimeByIdAsync(1, System.Threading.CancellationToken.None);
             InvokeResult<TimeOnly?> result2 = await domainContext.GetEndTimeByIdAsync(2, System.Threading.CancellationToken.None);
             InvokeResult<TimeOnly?> result3 = await domainContext.GetEndTimeByIdAsync(3, System.Threading.CancellationToken.None);
@@ -196,7 +196,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetLunchBreakByIdTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
 
             InvokeResult<LunchBreak> result1 = await domainContext.GetLunchBreakByIdAsync(1, System.Threading.CancellationToken.None);
             InvokeResult<LunchBreak> result2 = await domainContext.GetLunchBreakByIdAsync(2, System.Threading.CancellationToken.None);
@@ -210,11 +210,10 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(result3.Value.EndTime);
         }
 
-
         [TestMethod]
         public async Task InvokeOperationTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext(TestURIs.People);
+            PeopleDomainContext domainContext = new PeopleDomainContext();
             InvokeOperation invoke = domainContext.GetStartTimeById(1);
 
             await invoke;

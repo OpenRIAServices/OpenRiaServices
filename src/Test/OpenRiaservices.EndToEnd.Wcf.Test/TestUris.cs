@@ -7,11 +7,11 @@ public static class TestURIs
 #elif VBTests
     public static readonly Uri RootURI = new Uri("http://localhost:60000/");
 #elif ASPNETCORE
-    #if NET10_0
-        public static readonly Uri RootURI = new Uri("http://localhost:5247/");
-    #else
+#if NET10_0
+    public static readonly Uri RootURI = new Uri("http://localhost:5247/");
+#else
         public static readonly Uri RootURI = new Uri("http://localhost:5246/");
-    #endif
+#endif
 #else
     public static readonly Uri RootURI = new Uri("http://localhost:60002/");
 #endif
@@ -62,8 +62,5 @@ public static class TestURIs
     public static readonly Uri ComplexTypes_DomainService = new Uri("TestDomainServices-ComplexTypes_DomainService.svc", UriKind.Relative);
 
     // Server side async
-    public static readonly Uri ServerSideAsync = new Uri("TestDomainServices-ServerSideAsyncDomainService.svc", UriKind.Relative);
-
-    // People
-    public static readonly Uri People = new Uri(RootURI, "People-PeopleDomainService.svc");
+    public static readonly Uri ServerSideAsync = new Uri("TestDomainServices-ServerSideAsyncDomainService.svc", UriKind.Relative)
 }
