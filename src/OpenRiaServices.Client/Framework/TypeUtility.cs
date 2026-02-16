@@ -264,21 +264,6 @@ namespace OpenRiaServices
             {
                 return true;
             }
-            // We test by Type Name so our client framework assembly can avoid
-            // taking assembly references to System.Xml.Linq and NodaTime
-
-            switch (type.FullName)
-            {
-                case "System.Xml.Linq.XElement":
-                case "NodaTime.LocalDate":
-                case "NodaTime.LocalTime":
-                case "NodaTime.LocalDateTime":
-                case "NodaTime.OffsetDate":
-                case "NodaTime.OffsetTime":
-                    return true;
-                default:
-                    break;
-            }
 
             return false;
         }
