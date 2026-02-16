@@ -1,9 +1,8 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // LICENSE MIT https://github.com/microsoft/referencesource/blob/master/LICENSE.txt
 // Retreived from https://raw.githubusercontent.com/microsoft/referencesource/5697c29004a34d80acdaf5742d7e699022c64ecd/System.ServiceModel.Web/System/ServiceModel/Dispatcher/QueryStringConverter.cs
 //------------------------------------------------------------
-using OpenRiaServices;
 using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.ComponentModel;
@@ -11,6 +10,7 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
+using OpenRiaServices;
 
 #nullable disable
 
@@ -48,6 +48,8 @@ namespace System.ServiceModel.Dispatcher
                 typeof(Guid),
                 typeof(Uri),
                 typeof(DateTimeOffset),
+                typeof(DateOnly),
+                typeof(TimeOnly)
             });
         }
 
@@ -130,6 +132,14 @@ namespace System.ServiceModel.Dispatcher
                         else if (parameterType == typeof(DateTimeOffset))
                         {
                             return (parameter == null) ? default(DateTimeOffset) : DateTimeOffset.Parse(parameter, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind | DateTimeStyles.AllowWhiteSpaces);
+                        }
+                        else if (parameterType == typeof(DateOnly))
+                        {
+                            return (parameter == null) ? default(DateOnly) : DateOnly.Parse(parameter, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind | DateTimeStyles.AllowWhiteSpaces);
+                        }
+                        else if (parameterType == typeof(TimeOnly))
+                        {
+                            return (parameter == null) ? default(TimeOnly) : TimeOnly.Parse(parameter, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind | DateTimeStyles.AllowWhiteSpaces);
                         }
                         else if (parameterType == typeof(byte[]))
                         {
@@ -216,6 +226,14 @@ namespace System.ServiceModel.Dispatcher
                         else if (parameterType == typeof(DateTimeOffset))
                         {
                             return XmlConvert.ToString((DateTimeOffset)parameter);
+                        }
+                        else if (parameterType == typeof(DateOnly))
+                        {
+                            return ((DateOnly)parameter).ToString("o", CultureInfo.InvariantCulture);
+                        }
+                        else if (parameterType == typeof(TimeOnly))
+                        {
+                            return ((TimeOnly)parameter).ToString("o", CultureInfo.InvariantCulture);
                         }
                         else if (parameterType == typeof(byte[]))
                         {
