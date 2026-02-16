@@ -380,7 +380,7 @@ namespace OpenRiaServices.Client.Test
             query2 = (IQueryable<EmployeeWithCharProperty>)RoundtripQuery(query1, emps.AsQueryable());
         }
 
-#if !NETFRAMEWORK
+#if NET
         [TestMethod]
         public void TestDateOnlyQuery()
         {
@@ -1224,7 +1224,7 @@ namespace OpenRiaServices.Client.Test
             set;
         }
     }
-#if !NETFRAMEWORK
+#if NET
     public class EmployeeWithDateOnlyProperty
     {
         [Key]

@@ -1,4 +1,4 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 
@@ -94,7 +94,7 @@ namespace System.Linq.Dynamic
                         ArrayEqual(parameterTypes, new[] { typeof(Int32[]) }) ||
                         ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Boolean), typeof(Byte) });
                 }
-#if !NETFRAMEWORK
+#if NET
                 if (type == typeof(DateOnly))
                 {
                     return
@@ -875,7 +875,7 @@ namespace System.Linq.Dynamic
                     (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0);
                 }
 
-#if !NETFRAMEWORK
+#if NET
                 if (method.DeclaringType == typeof(DateOnly))
                 {
                     return
