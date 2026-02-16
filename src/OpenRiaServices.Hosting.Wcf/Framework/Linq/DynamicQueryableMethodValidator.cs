@@ -878,7 +878,47 @@ namespace System.Linq.Dynamic
 #if NET
                 if (method.DeclaringType == typeof(DateOnly))
                 {
-                    return
+                    return IsMemberAccessAllowedDateOnly(method, args, parameterTypes);
+                }
+
+                if (method.DeclaringType == typeof(TimeOnly))
+                {
+                    return IsMemberAccessAllowedTimeOnly(method, args, parameterTypes);
+                }
+#endif
+            }
+
+            return false;
+        }
+
+        private static int GetStringArgumentLength(ConstantExpression argument)
+        {
+            string stringArgument = argument.Value as string;
+            return stringArgument != null ? stringArgument.Length : 0;
+        }
+
+        private static bool ArrayEqual(Type[] a, Type[] b)
+        {
+            if (a.Length != b.Length)
+            {
+                return false;
+            }
+
+            for (int i = 0; i < a.Length; i++)
+            {
+                if (a[i] != b[i])
+                {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+#if NET
+        private static bool IsMemberAccessAllowedDateOnly(MethodBase method, Expression[] args, Type[] parameterTypes)
+        {
+            string methodName = method.Name;
+            return
                     (methodName.Equals("AddDays", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
                     (methodName.Equals("AddMonths", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
                     (methodName.Equals("AddYears", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
@@ -926,12 +966,12 @@ namespace System.Linq.Dynamic
                     (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })) ||
                     (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })) ||
                     (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) }));
-                }
+        }
 
-                if (method.DeclaringType == typeof(TimeOnly))
-                {
-                    return
-                    (methodName.Equals("Add", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan), typeof(Int32) })) ||
+        private static bool IsMemberAccessAllowedTimeOnly(MethodBase method, Expression[] args, Type[] parameterTypes)
+        {
+            string methodName = method.Name;
+            return (methodName.Equals("Add", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan), typeof(Int32) })) ||
                     (methodName.Equals("Add", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
                     (methodName.Equals("AddHours", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Int32) })) ||
                     (methodName.Equals("AddHours", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
@@ -984,34 +1024,7 @@ namespace System.Linq.Dynamic
                     (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string), typeof(TimeOnly) })) ||
                     (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly) })) ||
                     (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string[]), typeof(TimeOnly) }));
-                }
+        }
 #endif
-            }
-
-            return false;
-        }
-
-        private static int GetStringArgumentLength(ConstantExpression argument)
-        {
-            string stringArgument = argument.Value as string;
-            return stringArgument != null ? stringArgument.Length : 0;
-        }
-
-        private static bool ArrayEqual(Type[] a, Type[] b)
-        {
-            if (a.Length != b.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < a.Length; i++)
-            {
-                if (a[i] != b[i])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
     }
 }
