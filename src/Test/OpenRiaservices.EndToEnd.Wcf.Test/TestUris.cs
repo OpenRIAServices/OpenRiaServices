@@ -62,5 +62,5 @@ public static class TestURIs
     public static readonly Uri ComplexTypes_DomainService = new Uri("TestDomainServices-ComplexTypes_DomainService.svc", UriKind.Relative);
 
     // Server side async
-    public static readonly Uri ServerSideAsync = new Uri("TestDomainServices-ServerSideAsyncDomainService.svc", UriKind.Relative)
+    public static readonly Uri ServerSideAsync = new Uri("TestDomainServices-ServerSideAsyncDomainService.svc", UriKind.Relative);
 }
