@@ -919,9 +919,9 @@ namespace System.Linq.Dynamic
         {
             return method.Name switch
             {
-                "AddDays" => ArrayEqual(parameterTypes, [typeof(int)]),
-                "AddMonths" => ArrayEqual(parameterTypes, [typeof(int)]),
-                "AddYears" => ArrayEqual(parameterTypes, [typeof(int)]),
+                "AddDays" => true,
+                "AddMonths" => true,
+                "AddYears" => true,
                 "CompareTo" => ArrayEqual(parameterTypes, [typeof(DateOnly)])
                     || ArrayEqual(parameterTypes, [typeof(object)]),
                 "Deconstruct" => ArrayEqual(parameterTypes, [typeof(int), typeof(int), typeof(int)]),
@@ -974,12 +974,9 @@ namespace System.Linq.Dynamic
         {
             return method.Name switch
             {
-                "Add" => ArrayEqual(parameterTypes, [typeof(TimeSpan), typeof(int)])
-                    || ArrayEqual(parameterTypes, [typeof(TimeSpan)]),
-                "AddHours" => ArrayEqual(parameterTypes, [typeof(double), typeof(int)])
-                    || ArrayEqual(parameterTypes, [typeof(double)]),
-                "AddMinutes" => ArrayEqual(parameterTypes, [typeof(double), typeof(int)])
-                    || ArrayEqual(parameterTypes, [typeof(double)]),
+                "Add" => true,
+                "AddHours" => true,
+                "AddMinutes" => true,
                 "CompareTo" => ArrayEqual(parameterTypes, [typeof(object)])
                     || ArrayEqual(parameterTypes, [typeof(TimeOnly)]),
                 "Deconstruct" => ArrayEqual(parameterTypes, [typeof(int), typeof(int), typeof(int), typeof(int), typeof(int)])
