@@ -878,12 +878,12 @@ namespace System.Linq.Dynamic
 #if NET
                 if (method.DeclaringType == typeof(DateOnly))
                 {
-                    return IsMemberAccessAllowedDateOnly(method, args, parameterTypes);
+                    return IsMemberAccessAllowedDateOnly(method, parameterTypes);
                 }
 
                 if (method.DeclaringType == typeof(TimeOnly))
                 {
-                    return IsMemberAccessAllowedTimeOnly(method, args, parameterTypes);
+                    return IsMemberAccessAllowedTimeOnly(method, parameterTypes);
                 }
 #endif
             }
@@ -915,110 +915,110 @@ namespace System.Linq.Dynamic
         }
 
 #if NET
-        private static bool IsMemberAccessAllowedDateOnly(MethodBase method, Expression[] args, Type[] parameterTypes)
+        private static bool IsMemberAccessAllowedDateOnly(MethodBase method, Type[] parameterTypes)
         {
             return method.Name switch
             {
-                "AddDays" => ArrayEqual(parameterTypes, new[] { typeof(Int32) }),
-                "AddMonths" => ArrayEqual(parameterTypes, new[] { typeof(Int32) }),
-                "AddYears" => ArrayEqual(parameterTypes, new[] { typeof(Int32) }),
-                "CompareTo" => ArrayEqual(parameterTypes, new[] { typeof(DateOnly) }) || ArrayEqual(parameterTypes, new[] { typeof(Object) }),
-                "Deconstruct" => ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) }),
-                "Equals" => ArrayEqual(parameterTypes, new[] { typeof(DateOnly) }) || ArrayEqual(parameterTypes, new[] { typeof(Object) }),
-                "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(DateTime) }),
-                "FromDayNumber" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int32) }),
+                "AddDays" => ArrayEqual(parameterTypes, [typeof(Int32)]),
+                "AddMonths" => ArrayEqual(parameterTypes, [typeof(Int32)]),
+                "AddYears" => ArrayEqual(parameterTypes, [typeof(Int32)]),
+                "CompareTo" => ArrayEqual(parameterTypes, [typeof(DateOnly)]) || ArrayEqual(parameterTypes, [typeof(Object)]),
+                "Deconstruct" => ArrayEqual(parameterTypes, [typeof(Int32), typeof(Int32), typeof(Int32)]),
+                "Equals" => ArrayEqual(parameterTypes, [typeof(DateOnly)]) || ArrayEqual(parameterTypes, [typeof(Object)]),
+                "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(DateTime)]),
+                "FromDayNumber" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(Int32)]),
                 "GetHashCode" => parameterTypes.Length == 0,
-                "Parse" => method.IsStatic && (ArrayEqual(parameterTypes, new[] { typeof(String) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles) })),
-                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles) })),
-                "ToDateTime" => ArrayEqual(parameterTypes, new[] { typeof(TimeOnly) }) || ArrayEqual(parameterTypes, new[] { typeof(TimeOnly), typeof(DateTimeKind) }),
+                "Parse" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(String)])
+                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(IFormatProvider)])
+                    || ArrayEqual(parameterTypes, [typeof(String), typeof(IFormatProvider)])
+                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || ArrayEqual(parameterTypes, [typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles)])),
+                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(String), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || ArrayEqual(parameterTypes, [typeof(String), typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(String[])])
+                    || ArrayEqual(parameterTypes, [typeof(String), typeof(String[])])
+                    || ArrayEqual(parameterTypes, [typeof(String), typeof(String)])
+                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles)])),
+                "ToDateTime" => ArrayEqual(parameterTypes, [typeof(TimeOnly)]) || ArrayEqual(parameterTypes, [typeof(TimeOnly), typeof(DateTimeKind)]),
                 "ToLongDateString" => parameterTypes.Length == 0,
                 "ToShortDateString" => parameterTypes.Length == 0,
                 "ToString" => parameterTypes.Length == 0
-                    || ArrayEqual(parameterTypes, new[] { typeof(IFormatProvider) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(String) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider) }),
-                "TryFormat" => ArrayEqual(parameterTypes, new[] { typeof(Span<Byte>), typeof(Int32), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(Span<Char>), typeof(Int32), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider) }),
-                "TryParse" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateOnly) }),
-                "TryParseExact" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) }),
+                    || ArrayEqual(parameterTypes, [typeof(IFormatProvider)])
+                    || ArrayEqual(parameterTypes, [typeof(String)])
+                    || ArrayEqual(parameterTypes, [typeof(String), typeof(IFormatProvider)]),
+                "TryFormat" => ArrayEqual(parameterTypes, [typeof(Span<Byte>), typeof(Int32), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider)])
+                    || ArrayEqual(parameterTypes, [typeof(Span<Char>), typeof(Int32), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider)]),
+                "TryParse" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(String), typeof(IFormatProvider), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(String), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateOnly)]),
+                "TryParseExact" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(String), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(String), typeof(String), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(String), typeof(String[]), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(String), typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)]),
                 _ => false
             };
         }
 
-        private static bool IsMemberAccessAllowedTimeOnly(MethodBase method, Expression[] args, Type[] parameterTypes)
+        private static bool IsMemberAccessAllowedTimeOnly(MethodBase method, Type[] parameterTypes)
         {
             return method.Name switch
             {
-                "Add" => ArrayEqual(parameterTypes, new[] { typeof(TimeSpan), typeof(Int32) }) || ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) }),
-                "AddHours" => ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Int32) }) || ArrayEqual(parameterTypes, new[] { typeof(Double) }),
-                "AddMinutes" => ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Int32) }) || ArrayEqual(parameterTypes, new[] { typeof(Double) }),
-                "CompareTo" => ArrayEqual(parameterTypes, new[] { typeof(Object) }) || ArrayEqual(parameterTypes, new[] { typeof(TimeOnly) }),
-                "Deconstruct" => ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) }),
-                "Equals" => ArrayEqual(parameterTypes, new[] { typeof(Object) }) || ArrayEqual(parameterTypes, new[] { typeof(TimeOnly) }),
-                "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(DateTime) }),
-                "FromTimeSpan" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) }),
+                "Add" => ArrayEqual(parameterTypes, [typeof(TimeSpan), typeof(Int32)]) || ArrayEqual(parameterTypes, [typeof(TimeSpan)]),
+                "AddHours" => ArrayEqual(parameterTypes, [typeof(Double), typeof(Int32)]) || ArrayEqual(parameterTypes, [typeof(Double)]),
+                "AddMinutes" => ArrayEqual(parameterTypes, [typeof(Double), typeof(Int32)]) || ArrayEqual(parameterTypes, [typeof(Double)]),
+                "CompareTo" => ArrayEqual(parameterTypes, [typeof(Object)]) || ArrayEqual(parameterTypes, [typeof(TimeOnly)]),
+                "Deconstruct" => ArrayEqual(parameterTypes, [typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32)])
+                    || ArrayEqual(parameterTypes, [typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32)])
+                    || ArrayEqual(parameterTypes, [typeof(Int32), typeof(Int32), typeof(Int32)])
+                    || ArrayEqual(parameterTypes, [typeof(Int32), typeof(Int32)]),
+                "Equals" => ArrayEqual(parameterTypes, [typeof(Object)]) || ArrayEqual(parameterTypes, [typeof(TimeOnly)]),
+                "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(DateTime)]),
+                "FromTimeSpan" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(TimeSpan)]),
                 "GetHashCode" => parameterTypes.Length == 0,
-                "IsBetween" => ArrayEqual(parameterTypes, new[] { typeof(TimeOnly), typeof(TimeOnly) }),
-                "Parse" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(IFormatProvider) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(IFormatProvider) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string) }),
-                "ParseExact" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(string[]) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string[]) }),
+                "IsBetween" => ArrayEqual(parameterTypes, [typeof(TimeOnly), typeof(TimeOnly)]),
+                "Parse" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string)]),
+                "ParseExact" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[])])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(string)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(string[])]),
                 "ToLongTimeString" => parameterTypes.Length == 0,
                 "ToShortTimeString" => parameterTypes.Length == 0,
                 "ToString" => parameterTypes.Length == 0
-                    || ArrayEqual(parameterTypes, new[] { typeof(IFormatProvider) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(string), typeof(IFormatProvider) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(string) }),
+                    || ArrayEqual(parameterTypes, [typeof(IFormatProvider)])
+                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider)])
+                    || ArrayEqual(parameterTypes, [typeof(string)]),
                 "ToTimeSpan" => parameterTypes.Length == 0,
-                "TryFormat" => ArrayEqual(parameterTypes, new[] { typeof(Span<byte>), typeof(Int32), typeof(ReadOnlySpan<char>), typeof(IFormatProvider) })
-                    || ArrayEqual(parameterTypes, new[] { typeof(Span<char>), typeof(Int32), typeof(ReadOnlySpan<char>), typeof(IFormatProvider) }),
-                "TryParse" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(IFormatProvider), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(TimeOnly) }),
-                "TryParseExact" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<char>), typeof(string[]), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly) })
-                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(string), typeof(string[]), typeof(TimeOnly) }),
+                "TryFormat" => ArrayEqual(parameterTypes, [typeof(Span<byte>), typeof(Int32), typeof(ReadOnlySpan<char>), typeof(IFormatProvider)])
+                    || ArrayEqual(parameterTypes, [typeof(Span<char>), typeof(Int32), typeof(ReadOnlySpan<char>), typeof(IFormatProvider)]),
+                "TryParse" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(TimeOnly)]),
+                "TryParseExact" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[]), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(string), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
+                    || method.IsStatic && ArrayEqual(parameterTypes, [typeof(string), typeof(string[]), typeof(TimeOnly)]),
                 _ => false
             };
         }
