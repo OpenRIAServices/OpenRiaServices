@@ -917,55 +917,54 @@ namespace System.Linq.Dynamic
 #if NET
         private static bool IsMemberAccessAllowedDateOnly(MethodBase method, Expression[] args, Type[] parameterTypes)
         {
-            string methodName = method.Name;
-            return
-                    (methodName.Equals("AddDays", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("AddMonths", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("AddYears", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateOnly) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Object) })) ||
-                    (methodName.Equals("Deconstruct", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateOnly) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Object) })) ||
-                    (methodName.Equals("FromDateTime", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("FromDayNumber", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles) })) ||
-                    (methodName.Equals("ParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles) })) ||
-                    (methodName.Equals("ParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles) })) ||
-                    (methodName.Equals("ParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles) })) ||
-                    (methodName.Equals("ParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]) })) ||
-                    (methodName.Equals("ParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]) })) ||
-                    (methodName.Equals("ParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String) })) ||
-                    (methodName.Equals("ParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeOnly) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeOnly), typeof(DateTimeKind) })) ||
-                    (methodName.Equals("ToLongDateString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToShortDateString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(IFormatProvider) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider) })) ||
-                    (methodName.Equals("TryFormat", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Span<Byte>), typeof(Int32), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider) })) ||
-                    (methodName.Equals("TryFormat", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Span<Char>), typeof(Int32), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider) })) ||
-                    (methodName.Equals("TryParse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })) ||
-                    (methodName.Equals("TryParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) }));
+            return method.Name switch
+            {
+                "AddDays" => ArrayEqual(parameterTypes, new[] { typeof(Int32) }),
+                "AddMonths" => ArrayEqual(parameterTypes, new[] { typeof(Int32) }),
+                "AddYears" => ArrayEqual(parameterTypes, new[] { typeof(Int32) }),
+                "CompareTo" => ArrayEqual(parameterTypes, new[] { typeof(DateOnly) }) || ArrayEqual(parameterTypes, new[] { typeof(Object) }),
+                "Deconstruct" => ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) }),
+                "Equals" => ArrayEqual(parameterTypes, new[] { typeof(DateOnly) }) || ArrayEqual(parameterTypes, new[] { typeof(Object) }),
+                "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(DateTime) }),
+                "FromDayNumber" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int32) }),
+                "GetHashCode" => parameterTypes.Length == 0,
+                "Parse" => method.IsStatic && (ArrayEqual(parameterTypes, new[] { typeof(String) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles) })),
+                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles) })),
+                "ToDateTime" => ArrayEqual(parameterTypes, new[] { typeof(TimeOnly) }) || ArrayEqual(parameterTypes, new[] { typeof(TimeOnly), typeof(DateTimeKind) }),
+                "ToLongDateString" => parameterTypes.Length == 0,
+                "ToShortDateString" => parameterTypes.Length == 0,
+                "ToString" => parameterTypes.Length == 0
+                    || ArrayEqual(parameterTypes, new[] { typeof(IFormatProvider) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(String) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider) }),
+                "TryFormat" => ArrayEqual(parameterTypes, new[] { typeof(Span<Byte>), typeof(Int32), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider) })
+                    || ArrayEqual(parameterTypes, new[] { typeof(Span<Char>), typeof(Int32), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider) }),
+                "TryParse" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(IFormatProvider), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateOnly) }),
+                "TryParseExact" => method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String[]), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(ReadOnlySpan<Char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(ReadOnlySpan<Char>), typeof(String[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) })
+                    || method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly) }),
+                _ => false
+            };
         }
 
         private static bool IsMemberAccessAllowedTimeOnly(MethodBase method, Expression[] args, Type[] parameterTypes)
