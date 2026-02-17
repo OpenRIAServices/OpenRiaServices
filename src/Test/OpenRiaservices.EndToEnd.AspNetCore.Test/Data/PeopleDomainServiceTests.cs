@@ -16,7 +16,7 @@ namespace OpenRiaServices.Client.Test
             PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
 
-            await domainContext.Load(domainContext.GetPersonsQuery(), false);
+            await domainContext.Load(domainContext.GetPersonsQuery());
             Assert.HasCount(2, domainContext.Persons);
 
             Person person1 = domainContext.Persons.Single(p => p.Name == "Erik");
@@ -33,7 +33,7 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(0, domainContext.Persons);
 
             DateOnly favouriteDay = new(1970, 1, 1);
-            await domainContext.Load(domainContext.GetPersonsByFavouriteDayQuery(favouriteDay), false);
+            await domainContext.Load(domainContext.GetPersonsByFavouriteDayQuery(favouriteDay));
 
             Assert.HasCount(1, domainContext.Persons);
             Assert.AreEqual(favouriteDay, domainContext.Persons.Single().FavouriteDay);
@@ -46,7 +46,7 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(0, domainContext.Persons);
 
             DateOnly? weddingDay = new(1531, 9, 24);
-            await domainContext.Load(domainContext.GetPersonsByWeddingDayQuery(weddingDay), false);
+            await domainContext.Load(domainContext.GetPersonsByWeddingDayQuery(weddingDay));
 
             Assert.HasCount(1, domainContext.Persons);
             Assert.AreEqual(weddingDay, domainContext.Persons.Single().WeddingDay);
@@ -59,7 +59,7 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(0, domainContext.Persons);
 
             DateOnly? weddingDay = null;
-            await domainContext.Load(domainContext.GetPersonsByWeddingDayQuery(weddingDay), false);
+            await domainContext.Load(domainContext.GetPersonsByWeddingDayQuery(weddingDay));
 
             Assert.HasCount(1, domainContext.Persons);
             Assert.AreEqual(weddingDay, domainContext.Persons.Single().WeddingDay);
@@ -108,7 +108,7 @@ namespace OpenRiaServices.Client.Test
             PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.WorkdaySchedules);
 
-            await domainContext.Load(domainContext.GetWorkdaySchedulesQuery(), false);
+            await domainContext.Load(domainContext.GetWorkdaySchedulesQuery());
             Assert.HasCount(3, domainContext.WorkdaySchedules);
 
             WorkdaySchedule schedule1 = domainContext.WorkdaySchedules.Single(p => p.Id == 1);
@@ -136,7 +136,7 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(0, domainContext.Persons);
 
             TimeOnly startTime = new(8, 0);
-            await domainContext.Load(domainContext.GetWorkdayScheduleByStartTimeQuery(startTime), false);
+            await domainContext.Load(domainContext.GetWorkdayScheduleByStartTimeQuery(startTime));
 
             Assert.HasCount(1, domainContext.WorkdaySchedules);
             Assert.AreEqual(startTime, domainContext.WorkdaySchedules.Single().StartTime);
@@ -149,7 +149,7 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(0, domainContext.Persons);
 
             TimeOnly endTime = new(17, 0);
-            await domainContext.Load(domainContext.GetWorkdayScheduleByEndTimeQuery(endTime), false);
+            await domainContext.Load(domainContext.GetWorkdayScheduleByEndTimeQuery(endTime));
 
             Assert.HasCount(1, domainContext.WorkdaySchedules);
             Assert.AreEqual(endTime, domainContext.WorkdaySchedules.Single().EndTime);
@@ -162,7 +162,7 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(0, domainContext.Persons);
 
             TimeOnly? endTime = null;
-            await domainContext.Load(domainContext.GetWorkdayScheduleByEndTimeQuery(endTime), false);
+            await domainContext.Load(domainContext.GetWorkdayScheduleByEndTimeQuery(endTime));
 
             Assert.HasCount(1, domainContext.WorkdaySchedules);
             Assert.AreEqual(endTime, domainContext.WorkdaySchedules.Single().EndTime);
