@@ -930,42 +930,14 @@ namespace System.Linq.Dynamic
                 "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(DateTime)]),
                 "FromDayNumber" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(int)]),
                 "GetHashCode" => parameterTypes.Length == 0,
-                "Parse" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles)])),
-                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[])])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string[])])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles)])),
+                "Parse" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(string)]),
+                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string), typeof(string[])])
+                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string)])),
                 "ToDateTime" => ArrayEqual(parameterTypes, [typeof(TimeOnly)])
                     || ArrayEqual(parameterTypes, [typeof(TimeOnly), typeof(DateTimeKind)]),
                 "ToLongDateString" => parameterTypes.Length == 0,
                 "ToShortDateString" => parameterTypes.Length == 0,
-                "ToString" => parameterTypes.Length == 0
-                    || ArrayEqual(parameterTypes, [typeof(IFormatProvider)])
-                    || ArrayEqual(parameterTypes, [typeof(string)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider)]),
-                "TryFormat" => ArrayEqual(parameterTypes, [typeof(Span<byte>), typeof(int), typeof(ReadOnlySpan<char>), typeof(IFormatProvider)])
-                    || ArrayEqual(parameterTypes, [typeof(Span<char>), typeof(int), typeof(ReadOnlySpan<char>), typeof(IFormatProvider)]),
-                "TryParse" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateOnly)])),
-                "TryParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[]), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string[]), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(DateOnly)])),
+                "ToString" => parameterTypes.Length == 0 || ArrayEqual(parameterTypes, [typeof(string)]),
                 _ => false
             };
         }
@@ -989,41 +961,13 @@ namespace System.Linq.Dynamic
                 "FromTimeSpan" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(TimeSpan)]),
                 "GetHashCode" => parameterTypes.Length == 0,
                 "IsBetween" => ArrayEqual(parameterTypes, [typeof(TimeOnly), typeof(TimeOnly)]),
-                "Parse" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider)])
-                    || ArrayEqual(parameterTypes, [typeof(string)])),
-                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[])])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles)])
+                "Parse" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(string)]),
+                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string), typeof(string)])
                     || ArrayEqual(parameterTypes, [typeof(string), typeof(string[])])),
                 "ToLongTimeString" => parameterTypes.Length == 0,
                 "ToShortTimeString" => parameterTypes.Length == 0,
-                "ToString" => parameterTypes.Length == 0
-                    || ArrayEqual(parameterTypes, [typeof(IFormatProvider)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider)])
-                    || ArrayEqual(parameterTypes, [typeof(string)]),
+                "ToString" => parameterTypes.Length == 0 || ArrayEqual(parameterTypes, [typeof(string)]),
                 "ToTimeSpan" => parameterTypes.Length == 0,
-                "TryFormat" => ArrayEqual(parameterTypes, [typeof(Span<byte>), typeof(int), typeof(ReadOnlySpan<char>), typeof(IFormatProvider)])
-                    || ArrayEqual(parameterTypes, [typeof(Span<char>), typeof(int), typeof(ReadOnlySpan<char>), typeof(IFormatProvider)]),
-                "TryParse" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(IFormatProvider), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(TimeOnly)])),
-                "TryParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(ReadOnlySpan<char>), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(ReadOnlySpan<char>), typeof(string[]), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string[]), typeof(IFormatProvider), typeof(DateTimeStyles), typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string[]), typeof(TimeOnly)])),
                 _ => false
             };
         }
