@@ -46,6 +46,10 @@ namespace System.ServiceModel.Dispatcher
             this._defaultSupportedQueryStringTypes.Add(typeof(Guid));
             this._defaultSupportedQueryStringTypes.Add(typeof(Uri));
             this._defaultSupportedQueryStringTypes.Add(typeof(DateTimeOffset));
+#if NET
+            this._defaultSupportedQueryStringTypes.Add(typeof(DateOnly));
+            this._defaultSupportedQueryStringTypes.Add(typeof(TimeOnly));
+#endif
             this._typeConverterCache = new Dictionary<Type, TypeConverter>();
         }
 
@@ -129,6 +133,16 @@ namespace System.ServiceModel.Dispatcher
                         {
                             return XmlConvert.ToString((DateTimeOffset)parameter);
                         }
+#if NET
+                        else if (parameterType == typeof(DateOnly))
+                        {
+                            return ((DateOnly)parameter).ToString("o", CultureInfo.InvariantCulture);
+                        }
+                        else if (parameterType == typeof(TimeOnly))
+                        {
+                            return ((TimeOnly)parameter).ToString("o", CultureInfo.InvariantCulture);
+                        }
+#endif
                         else if (parameterType == typeof(byte[]))
                         {
                             return (parameter != null) ? Convert.ToBase64String((byte[])parameter, Base64FormattingOptions.None) : null;
