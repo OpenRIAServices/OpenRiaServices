@@ -1,9 +1,16 @@
 ﻿#if NET10_0_OR_GREATER
 
+extern alias httpDomainClient;
 using System;
+using System.Collections.Generic;
+using System.Diagnostics.Metrics;
 using System.Linq;
+using System.Net.Http;
+using System.Threading;
 using System.Threading.Tasks;
+using httpDomainClient::OpenRiaServices.Client.DomainClients;
 using People;
+using static People.PeopleDomainContext;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -42,7 +49,11 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task GetPersonsByNonNullWeddingDayQueryTest()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext();
+            var httpHandler = new RecordingHttpHandler(new HttpClientHandler());
+            var dc = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpHandler)
+                .CreateDomainClient(typeof(IPeopleDomainServiceContract), new Uri("People-PeopleDomainService", UriKind.Relative), false);
+
+            PeopleDomainContext domainContext = new PeopleDomainContext(dc);
             Assert.HasCount(0, domainContext.Persons);
 
             DateOnly? weddingDay = new(1531, 9, 24);
@@ -50,6 +61,9 @@ namespace OpenRiaServices.Client.Test
 
             Assert.HasCount(1, domainContext.Persons);
             Assert.AreEqual(weddingDay, domainContext.Persons.Single().WeddingDay);
+
+            // Assert
+            Assert.AreEqual("?weddingDay=1531-09-24", httpHandler.Requests.Single().RequestUri.Query);
         }
 
         [TestMethod]
@@ -224,6 +238,22 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(1, invoke.Parameters["id"]);
             Assert.AreEqual(new TimeOnly(8, 0), invoke.Value);
             //Assert.AreEqual("my user state", invoke.UserState);
+        }
+    }
+
+    class RecordingHttpHandler : DelegatingHandler
+    {
+        public List<HttpRequestMessage> Requests { get; } = new();
+
+        public RecordingHttpHandler(HttpMessageHandler inner)
+         : base(inner)
+        { }
+
+        protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+        {
+            Requests.Add(request);
+
+            return base.SendAsync(request, cancellationToken);
         }
     }
 }
