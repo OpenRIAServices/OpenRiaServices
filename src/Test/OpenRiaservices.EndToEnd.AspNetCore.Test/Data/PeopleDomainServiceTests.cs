@@ -3,7 +3,6 @@
 extern alias httpDomainClient;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Metrics;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
@@ -18,7 +17,7 @@ namespace OpenRiaServices.Client.Test
     public class PeopleDomainServiceTests
     {
         [TestMethod]
-        public async Task GetPersonsQueryTest()
+        public async Task TestDateOnlyProperty()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
@@ -34,7 +33,7 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task GetPersonsByFavouriteDayQueryTest()
+        public async Task TestDateOnlyParameter()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
@@ -47,7 +46,7 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task GetPersonsByNonNullWeddingDayQueryTest()
+        public async Task TestNullableDateOnlyParameter()
         {
             var httpHandler = new RecordingHttpHandler(new HttpClientHandler());
             var dc = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpHandler)
@@ -62,12 +61,11 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(1, domainContext.Persons);
             Assert.AreEqual(weddingDay, domainContext.Persons.Single().WeddingDay);
 
-            // Assert
             Assert.AreEqual("?weddingDay=1531-09-24", httpHandler.Requests.Single().RequestUri.Query);
         }
 
         [TestMethod]
-        public async Task GetPersonsByNullWeddingDayQueryTest()
+        public async Task TestNullableDateOnlyParameterWithNullValue()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
@@ -81,34 +79,34 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task GetFavouriteDayByNameTest()
+        public async Task TestDateOnlyReturnValue()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
-            InvokeResult<DateOnly> result1 = await domainContext.GetFavouriteDayByNameAsync("Erik", System.Threading.CancellationToken.None);
-            InvokeResult<DateOnly> result2 = await domainContext.GetFavouriteDayByNameAsync("Gustav", System.Threading.CancellationToken.None);
+            InvokeResult<DateOnly> result1 = await domainContext.GetFavouriteDayByNameAsync("Erik", CancellationToken.None);
+            InvokeResult<DateOnly> result2 = await domainContext.GetFavouriteDayByNameAsync("Gustav", CancellationToken.None);
             Assert.AreEqual(new(1970, 1, 1), result1.Value);
             Assert.AreEqual(new(1523, 6, 6), result2.Value);
         }
 
         [TestMethod]
-        public async Task GetWeddingDayByNameTest()
+        public async Task TestNullableDateOnlyReturnValue()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
 
-            InvokeResult<DateOnly?> result1 = await domainContext.GetWeddingDayByNameAsync("Erik", System.Threading.CancellationToken.None);
-            InvokeResult<DateOnly?> result2 = await domainContext.GetWeddingDayByNameAsync("Gustav", System.Threading.CancellationToken.None);
+            InvokeResult<DateOnly?> result1 = await domainContext.GetWeddingDayByNameAsync("Erik", CancellationToken.None);
+            InvokeResult<DateOnly?> result2 = await domainContext.GetWeddingDayByNameAsync("Gustav", CancellationToken.None);
 
             Assert.IsNull(result1.Value);
             Assert.AreEqual(new(1531, 9, 24), result2.Value);
         }
 
         [TestMethod]
-        public async Task GetPersonLifespanByNameTest()
+        public async Task TestComplexTypesWithDateOnlyProperty()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
 
-            InvokeResult<Lifespan> result1 = await domainContext.GetPersonLifespanByNameAsync("Erik", System.Threading.CancellationToken.None);
-            InvokeResult<Lifespan> result2 = await domainContext.GetPersonLifespanByNameAsync("Gustav", System.Threading.CancellationToken.None);
+            InvokeResult<Lifespan> result1 = await domainContext.GetPersonLifespanByNameAsync("Erik", CancellationToken.None);
+            InvokeResult<Lifespan> result2 = await domainContext.GetPersonLifespanByNameAsync("Gustav", CancellationToken.None);
 
             Assert.AreEqual(new(1997, 1, 1), result1.Value.Born);
             Assert.IsNull(result1.Value.Dead);
@@ -117,7 +115,7 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task GetWorkdaySchedulesQueryTest()
+        public async Task TestQueryWithTimeOnlyProperty()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.WorkdaySchedules);
@@ -144,7 +142,7 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task GetWorkdayScheduleByStartTimeQueryTest()
+        public async Task TestTimeOnlyParameter()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
@@ -157,12 +155,12 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task GetScheduleByNonNullEndTimeQueryTest()
+        public async Task TestNullableTimeOnlyParameter()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
 
-            TimeOnly endTime = new(17, 0);
+            TimeOnly? endTime = new(17, 0);
             await domainContext.Load(domainContext.GetWorkdayScheduleByEndTimeQuery(endTime));
 
             Assert.HasCount(1, domainContext.WorkdaySchedules);
@@ -170,7 +168,7 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task GetScheduleByNullEndTimeQueryTest()
+        public async Task TestNullableTimeOnlyParameterWithNullValue()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
             Assert.HasCount(0, domainContext.Persons);
@@ -184,37 +182,37 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task GetStartTimeByIdTest()
+        public async Task TestTimeOnlyReturnValue()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
-            InvokeResult<TimeOnly> result1 = await domainContext.GetStartTimeByIdAsync(1, System.Threading.CancellationToken.None);
-            InvokeResult<TimeOnly> result2 = await domainContext.GetStartTimeByIdAsync(2, System.Threading.CancellationToken.None);
-            InvokeResult<TimeOnly> result3 = await domainContext.GetStartTimeByIdAsync(3, System.Threading.CancellationToken.None);
+            InvokeResult<TimeOnly> result1 = await domainContext.GetStartTimeByIdAsync(1, CancellationToken.None);
+            InvokeResult<TimeOnly> result2 = await domainContext.GetStartTimeByIdAsync(2, CancellationToken.None);
+            InvokeResult<TimeOnly> result3 = await domainContext.GetStartTimeByIdAsync(3, CancellationToken.None);
             Assert.AreEqual(new(8, 0), result1.Value);
             Assert.AreEqual(new(7, 45, 23, 555), result2.Value);
             Assert.AreEqual(new(7, 10, 0), result3.Value);
         }
 
         [TestMethod]
-        public async Task GetEndTimeByIdTest()
+        public async Task TestNullableTimeOnlyReturnValue()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
-            InvokeResult<TimeOnly?> result1 = await domainContext.GetEndTimeByIdAsync(1, System.Threading.CancellationToken.None);
-            InvokeResult<TimeOnly?> result2 = await domainContext.GetEndTimeByIdAsync(2, System.Threading.CancellationToken.None);
-            InvokeResult<TimeOnly?> result3 = await domainContext.GetEndTimeByIdAsync(3, System.Threading.CancellationToken.None);
+            InvokeResult<TimeOnly?> result1 = await domainContext.GetEndTimeByIdAsync(1, CancellationToken.None);
+            InvokeResult<TimeOnly?> result2 = await domainContext.GetEndTimeByIdAsync(2, CancellationToken.None);
+            InvokeResult<TimeOnly?> result3 = await domainContext.GetEndTimeByIdAsync(3, CancellationToken.None);
             Assert.AreEqual(new(17, 0), result1.Value);
             Assert.AreEqual(new(16, 45, 23, 555), result2.Value);
             Assert.IsNull(result3.Value);
         }
 
         [TestMethod]
-        public async Task GetLunchBreakByIdTest()
+        public async Task TestComplexTypeWithTimeOnlyProperty()
         {
             PeopleDomainContext domainContext = new PeopleDomainContext();
 
-            InvokeResult<LunchBreak> result1 = await domainContext.GetLunchBreakByIdAsync(1, System.Threading.CancellationToken.None);
-            InvokeResult<LunchBreak> result2 = await domainContext.GetLunchBreakByIdAsync(2, System.Threading.CancellationToken.None);
-            InvokeResult<LunchBreak> result3 = await domainContext.GetLunchBreakByIdAsync(3, System.Threading.CancellationToken.None);
+            InvokeResult<LunchBreak> result1 = await domainContext.GetLunchBreakByIdAsync(1, CancellationToken.None);
+            InvokeResult<LunchBreak> result2 = await domainContext.GetLunchBreakByIdAsync(2, CancellationToken.None);
+            InvokeResult<LunchBreak> result3 = await domainContext.GetLunchBreakByIdAsync(3, CancellationToken.None);
 
             Assert.AreEqual(new(12, 0), result1.Value.StartTime);
             Assert.AreEqual(new(11, 30, 42), result2.Value.StartTime);
@@ -243,10 +241,10 @@ namespace OpenRiaServices.Client.Test
 
     class RecordingHttpHandler : DelegatingHandler
     {
-        public List<HttpRequestMessage> Requests { get; } = new();
+        public List<HttpRequestMessage> Requests { get; } = [];
 
         public RecordingHttpHandler(HttpMessageHandler inner)
-         : base(inner)
+            : base(inner)
         { }
 
         protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
