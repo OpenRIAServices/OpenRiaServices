@@ -70,7 +70,7 @@ namespace OpenRiaServices
         {
             typeof(string),
             typeof(decimal),
-#if NET6_0_OR_GREATER
+#if NET
             typeof(TimeOnly),
             typeof(DateOnly),
 #endif
