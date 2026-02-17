@@ -406,6 +406,14 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        public void TestDateOnlyEqualsQuery()
+        {
+            EmployeeWithDateOnlyProperty[] employees = [];
+
+            VerifyRoundtrip("it.Birthday.Equals(DateOnly(2015,5,15))", q => q.Where(p => p.Birthday.Equals(new DateOnly(2015, 5, 15))), employees);
+        }
+
+        [TestMethod]
         public void TestDateOnlyQuerySerializer()
         {
             VerifySerialize<EmployeeWithDateOnlyProperty>("(it.Birthday<DateOnly(2026,4,2))", p => p.Birthday < new DateOnly(2026, 4, 2));
@@ -436,6 +444,14 @@ namespace OpenRiaServices.Client.Test
             EmployeeWithTimeOnlyProperty[] employees = [];
 
             VerifyRoundtrip("(it.ClockInTime<TimeOnly(294000000000))", q => q.Where(p => p.ClockInTime < TimeOnly.FromDateTime(new DateTime(2025, 1, 1, 8, 10, 0, DateTimeKind.Unspecified))), employees);
+        }
+
+        [TestMethod]
+        public void TestTimeOnlyEqualsQuery()
+        {
+            EmployeeWithTimeOnlyProperty[] employees = [];
+
+            VerifyRoundtrip("it.ClockInTime.Equals(TimeOnly(611400000000))", q => q.Where(p => p.ClockInTime.Equals(new TimeOnly(16, 59))), employees);
         }
 
         [TestMethod]
