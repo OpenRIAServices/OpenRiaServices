@@ -135,11 +135,11 @@ namespace System.ServiceModel.Dispatcher
                         }
                         else if (parameterType == typeof(DateOnly))
                         {
-                            return (parameter == null) ? default(DateOnly) : DateOnly.Parse(parameter, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind | DateTimeStyles.AllowWhiteSpaces);
+                            return (parameter == null) ? default(DateOnly) : DateOnly.Parse(parameter, CultureInfo.InvariantCulture);
                         }
                         else if (parameterType == typeof(TimeOnly))
                         {
-                            return (parameter == null) ? default(TimeOnly) : TimeOnly.Parse(parameter, CultureInfo.InvariantCulture, DateTimeStyles.RoundtripKind | DateTimeStyles.AllowWhiteSpaces);
+                            return (parameter == null) ? default(TimeOnly) : TimeOnly.Parse(parameter, CultureInfo.InvariantCulture);
                         }
                         else if (parameterType == typeof(byte[]))
                         {
