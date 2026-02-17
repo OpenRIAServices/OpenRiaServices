@@ -1185,13 +1185,6 @@ namespace OpenRiaServices.Client.Test
             return (IQueryable<T>)SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, data.AsQueryable(), TranslateQueryParts(queryParts));
         }
 
-        private IQueryable RoundtripQuery(DomainServiceDescription domainServiceDescription, IQueryable query, IQueryable data)
-        {
-            List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
-
-            return SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, data, TranslateQueryParts(queryParts));
-        }
-
         private void VerifyRoundtrip<T>(string serialized, Func<IQueryable<T>, IQueryable<T>> queryFunc, IEnumerable<T> sampleData)
         {
             var query = queryFunc(sampleData.AsQueryable());
@@ -1204,7 +1197,7 @@ namespace OpenRiaServices.Client.Test
             DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(typeof(NorthwindDomainService));
             var roundTrippedResult = (IQueryable<T>)SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, sampleData.AsQueryable(), TranslateQueryParts(queryParts));
 
-            CollectionAssert.AreEqual(query.ToList(), roundTrippedResult.ToList());
+            CollectionAssert.AreEqual(query.ToList(), roundTrippedResult.ToList(), message: $"Roundtrip result was different for {serialized ?? string.Join("&", queryParts)}");
         }
 
         private void VerifyRoundtrip<T>(Func<IQueryable<T>, IQueryable<T>> queryFunc, IEnumerable<T> sampleData)
