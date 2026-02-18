@@ -387,7 +387,8 @@ namespace OpenRiaServices.Client.Test
             EmployeeWithDateOnlyProperty[] _employeesWithDate = [
                 new() { Birthday = new DateOnly(2025, 1, 1) },
                 new() { Birthday = new DateOnly(2025, 3, 1) },
-                new() { Birthday = new DateOnly(2025, 5, 1) }
+                new() { Birthday = new DateOnly(2025, 5, 1) },
+                new() { Birthday = new DateOnly(2015, 5, 15) }
             ];
 
             VerifyRoundtrip("(it.Birthday<DateOnly(2025,4,1))", q => q.Where(p => p.Birthday < new DateOnly(2025, 4, 1)), _employeesWithDate);
@@ -416,8 +417,9 @@ namespace OpenRiaServices.Client.Test
                 new() { ClockInTime = new TimeOnly(6, 30) },
                 new() { ClockInTime = new TimeOnly(7, 49, 59, 999, 999) },
                 new() { ClockInTime = new TimeOnly(7, 50) },
-                new() { ClockInTime = new TimeOnly(7, 50, 0,0,1) },
-                new() { ClockInTime = new TimeOnly(8, 15) }
+                new() { ClockInTime = new TimeOnly(7, 50, 0, 0, 1) },
+                new() { ClockInTime = new TimeOnly(8, 15) },
+                new() { ClockInTime = new TimeOnly(16, 59) }
             ];
 
             VerifyRoundtrip("(it.ClockInTime<TimeOnly(282000000000))", q => q.Where(p => p.ClockInTime < new TimeOnly(7, 50)), _employeesWithTime);
