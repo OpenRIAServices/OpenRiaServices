@@ -422,9 +422,9 @@ namespace OpenRiaServices.Client.Test
 
             VerifyRoundtrip("(it.ClockInTime<TimeOnly(282000000000))", q => q.Where(p => p.ClockInTime < new TimeOnly(7, 50)), _employeesWithTime);
 
-            VerifyRoundtrip("(it.ClockInTime<TimeOnly(285000000000))", q => q.Where(p => p.ClockInTime < new TimeOnly(7, 50).AddMinutes(5)), _employeesWithTime);
+            VerifyRoundtrip("(it.ClockInTime.AddMinutes(5D)<TimeOnly(282000000000))", q => q.Where(p => p.ClockInTime.AddMinutes(5) < new TimeOnly(7, 50)), _employeesWithTime);
 
-            VerifyRoundtrip("(it.ClockInTime<TimeOnly(294000000000))", q => q.Where(p => p.ClockInTime < TimeOnly.FromDateTime(new DateTime(2025, 1, 1, 8, 10, 0, DateTimeKind.Unspecified))), _employeesWithTime);
+            VerifyRoundtrip("(TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(it.ClockInTime.Second))<TimeOnly(100000000))", q => q.Where(p => TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(p.ClockInTime.Second)) < new TimeOnly(0, 0, 10)), _employeesWithTime);
 
             VerifyRoundtrip("it.ClockInTime.Equals(TimeOnly(611400000000))", q => q.Where(p => p.ClockInTime.Equals(new TimeOnly(16, 59))), _employeesWithTime);
         }
