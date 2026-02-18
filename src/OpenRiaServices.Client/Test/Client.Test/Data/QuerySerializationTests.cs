@@ -388,10 +388,11 @@ namespace OpenRiaServices.Client.Test
                 new() { Birthday = new DateOnly(2025, 1, 1) },
                 new() { Birthday = new DateOnly(2025, 3, 1) },
                 new() { Birthday = new DateOnly(2025, 5, 1) },
-                new() { Birthday = new DateOnly(2015, 5, 15) }
+                new() { Birthday = new DateOnly(2015, 5, 15) },
+                new() { Birthday = new DateOnly(1970, 1, 1) }
             ];
 
-            VerifyRoundtrip("(it.Birthday<DateOnly(2025,4,1))", q => q.Where(p => p.Birthday < new DateOnly(2025, 4, 1)), _employeesWithDate);
+            VerifyRoundtrip("(it.Birthday>DateOnly(2025,4,1))", q => q.Where(p => p.Birthday > new DateOnly(2025, 4, 1)), _employeesWithDate);
 
             VerifyRoundtrip("(it.Birthday<DateOnly(2025,4,4))", q => q.Where(p => p.Birthday < new DateOnly(2025, 4, 1).AddDays(3)), _employeesWithDate);
 
