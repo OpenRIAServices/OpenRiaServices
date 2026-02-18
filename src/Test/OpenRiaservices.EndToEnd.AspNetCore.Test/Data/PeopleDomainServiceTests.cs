@@ -48,7 +48,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task TestNullableDateOnlyParameter()
         {
-            var httpHandler = new RecordingHttpHandler(new HttpClientHandler());
+            using var httpHandler = new RecordingHttpHandler(new HttpClientHandler());
             var dc = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpHandler)
                 .CreateDomainClient(typeof(IPeopleDomainServiceContract), new Uri("People-PeopleDomainService", UriKind.Relative), false);
 
