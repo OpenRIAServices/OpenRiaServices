@@ -1229,7 +1229,9 @@ namespace OpenRiaServices.Client.Test
             set;
         }
     }
+
 #if NET
+
     public class EmployeeWithDateOnlyProperty
     {
         [Key]
@@ -1245,6 +1247,7 @@ namespace OpenRiaServices.Client.Test
             set;
         }
     }
+
     public class EmployeeWithTimeOnlyProperty
     {
         [Key]
@@ -1260,7 +1263,9 @@ namespace OpenRiaServices.Client.Test
             set;
         }
     }
+
 #endif
+
     public class EmployeeWithReservedNames
     {
         [Key]
