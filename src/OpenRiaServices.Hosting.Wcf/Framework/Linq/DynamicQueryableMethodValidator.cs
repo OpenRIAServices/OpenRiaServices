@@ -924,7 +924,6 @@ namespace System.Linq.Dynamic
                 "AddYears" => true,
                 "CompareTo" => ArrayEqual(parameterTypes, [typeof(DateOnly)])
                     || ArrayEqual(parameterTypes, [typeof(object)]),
-                "Deconstruct" => ArrayEqual(parameterTypes, [typeof(int), typeof(int), typeof(int)]),
                 "Equals" => ArrayEqual(parameterTypes, [typeof(DateOnly)])
                     || ArrayEqual(parameterTypes, [typeof(object)]),
                 "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(DateTime)]),
@@ -951,10 +950,6 @@ namespace System.Linq.Dynamic
                 "AddMinutes" => true,
                 "CompareTo" => ArrayEqual(parameterTypes, [typeof(object)])
                     || ArrayEqual(parameterTypes, [typeof(TimeOnly)]),
-                "Deconstruct" => ArrayEqual(parameterTypes, [typeof(int), typeof(int), typeof(int), typeof(int), typeof(int)])
-                    || ArrayEqual(parameterTypes, [typeof(int), typeof(int), typeof(int), typeof(int)])
-                    || ArrayEqual(parameterTypes, [typeof(int), typeof(int), typeof(int)])
-                    || ArrayEqual(parameterTypes, [typeof(int), typeof(int)]),
                 "Equals" => ArrayEqual(parameterTypes, [typeof(object)])
                     || ArrayEqual(parameterTypes, [typeof(TimeOnly)]),
                 "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(DateTime)]),
