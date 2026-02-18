@@ -394,9 +394,9 @@ namespace OpenRiaServices.Client.Test
 
             VerifyRoundtrip("(it.Birthday>DateOnly(2025,4,1))", q => q.Where(p => p.Birthday > new DateOnly(2025, 4, 1)), _employeesWithDate);
 
-            VerifyRoundtrip("(it.Birthday<DateOnly(2025,4,4))", q => q.Where(p => p.Birthday < new DateOnly(2025, 4, 1).AddDays(3)), _employeesWithDate);
+            VerifyRoundtrip("(it.Birthday.AddDays(3)<DateOnly(2025,2,1))", q => q.Where(p => p.Birthday.AddDays(3) < new DateOnly(2025, 2, 1)), _employeesWithDate);
 
-            VerifyRoundtrip("(it.Birthday<DateOnly(1999,9,4))", q => q.Where(p => p.Birthday < DateOnly.FromDayNumber(730000)), _employeesWithDate);
+            VerifyRoundtrip("(DateOnly.FromDayNumber(it.Birthday.DayNumber)<DateOnly(1999,9,4))", q => q.Where(p => DateOnly.FromDayNumber(p.Birthday.DayNumber) < new DateOnly(1999, 9, 4)), _employeesWithDate);
 
             VerifyRoundtrip("it.Birthday.Equals(DateOnly(2015,5,15))", q => q.Where(p => p.Birthday.Equals(new DateOnly(2015, 5, 15))), _employeesWithDate);
         }
@@ -405,9 +405,6 @@ namespace OpenRiaServices.Client.Test
         public void TestDateOnlyQuerySerializer()
         {
             VerifySerialize<EmployeeWithDateOnlyProperty>("(it.Birthday<DateOnly(2026,4,2))", p => p.Birthday < new DateOnly(2026, 4, 2));
-
-            // TODO: Add some more test cases, including using different DateOnly methods/properties, and also test some cases with nullable DateOnly properties.
-
         }
 
         [TestMethod]
@@ -436,7 +433,6 @@ namespace OpenRiaServices.Client.Test
         public void TestTimeOnlyQuerySerializer()
         {
             VerifySerialize<EmployeeWithTimeOnlyProperty>("(it.ClockInTime<TimeOnly(279000000000))", p => p.ClockInTime < new TimeOnly(7, 45));
-            // TODO: Add some more test cases, including using different TimeOnly methods/properties and subtraction
         }
 
 #endif
