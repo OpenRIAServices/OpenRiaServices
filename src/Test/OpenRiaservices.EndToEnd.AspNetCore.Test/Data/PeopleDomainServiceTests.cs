@@ -157,7 +157,11 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task TestNullableTimeOnlyParameter()
         {
-            PeopleDomainContext domainContext = new PeopleDomainContext();
+            using var httpHandler = new RecordingHttpHandler(new HttpClientHandler());
+            var dc = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpHandler)
+                .CreateDomainClient(typeof(IPeopleDomainServiceContract), new Uri("People-PeopleDomainService", UriKind.Relative), false);
+
+            PeopleDomainContext domainContext = new PeopleDomainContext(dc);
             Assert.HasCount(0, domainContext.Persons);
 
             TimeOnly? endTime = new(17, 0);
@@ -165,6 +169,8 @@ namespace OpenRiaServices.Client.Test
 
             Assert.HasCount(1, domainContext.WorkdaySchedules);
             Assert.AreEqual(endTime, domainContext.WorkdaySchedules.Single().EndTime);
+
+            Assert.AreEqual("?endTime=17%3A00%3A00.0000000", httpHandler.Requests.Single().RequestUri.Query);
         }
 
         [TestMethod]
