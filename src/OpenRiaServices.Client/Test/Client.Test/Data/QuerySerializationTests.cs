@@ -381,42 +381,21 @@ namespace OpenRiaServices.Client.Test
         }
 
 #if NET
-        readonly EmployeeWithDateOnlyProperty[] _employeesWithDate = [
+        [TestMethod]
+        public void TestDateOnlyQuery()
+        {
+            EmployeeWithDateOnlyProperty[] _employeesWithDate = [
                 new() { Birthday = new DateOnly(2025, 1, 1) },
                 new() { Birthday = new DateOnly(2025, 3, 1) },
                 new() { Birthday = new DateOnly(2025, 5, 1) }
             ];
 
-        readonly EmployeeWithTimeOnlyProperty[] _employeesWithTime = [
-                new() { ClockInTime = new TimeOnly(7, 45) },
-                new() { ClockInTime = new TimeOnly(6, 30) },
-                new() { ClockInTime = new TimeOnly(7, 49, 59, 999, 999) },
-                new() { ClockInTime = new TimeOnly(7, 50) },
-                new() { ClockInTime = new TimeOnly(7, 50, 0,0,1) },
-                new() { ClockInTime = new TimeOnly(8, 15) }
-            ];
-
-        [TestMethod]
-        public void TestDateOnlyQuery()
-        {
             VerifyRoundtrip("(it.Birthday<DateOnly(2025,4,1))", q => q.Where(p => p.Birthday < new DateOnly(2025, 4, 1)), _employeesWithDate);
-        }
 
-        [TestMethod]
-        public void TestDateOnlyAddDaysQuery()
-        {
             VerifyRoundtrip("(it.Birthday<DateOnly(2025,4,4))", q => q.Where(p => p.Birthday < new DateOnly(2025, 4, 1).AddDays(3)), _employeesWithDate);
-        }
 
-        [TestMethod]
-        public void TestDateOnlyFromDayNumberQuery()
-        {
             VerifyRoundtrip("(it.Birthday<DateOnly(1999,9,4))", q => q.Where(p => p.Birthday < DateOnly.FromDayNumber(730000)), _employeesWithDate);
-        }
 
-        [TestMethod]
-        public void TestDateOnlyEqualsQuery()
-        {
             VerifyRoundtrip("it.Birthday.Equals(DateOnly(2015,5,15))", q => q.Where(p => p.Birthday.Equals(new DateOnly(2015, 5, 15))), _employeesWithDate);
         }
 
@@ -432,24 +411,21 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public void TestTimeOnlyQuery()
         {
+            EmployeeWithTimeOnlyProperty[] _employeesWithTime = [
+                new() { ClockInTime = new TimeOnly(7, 45) },
+                new() { ClockInTime = new TimeOnly(6, 30) },
+                new() { ClockInTime = new TimeOnly(7, 49, 59, 999, 999) },
+                new() { ClockInTime = new TimeOnly(7, 50) },
+                new() { ClockInTime = new TimeOnly(7, 50, 0,0,1) },
+                new() { ClockInTime = new TimeOnly(8, 15) }
+            ];
+
             VerifyRoundtrip("(it.ClockInTime<TimeOnly(282000000000))", q => q.Where(p => p.ClockInTime < new TimeOnly(7, 50)), _employeesWithTime);
-        }
 
-        [TestMethod]
-        public void TestTimeOnlyAddMinutesQuery()
-        {
             VerifyRoundtrip("(it.ClockInTime<TimeOnly(285000000000))", q => q.Where(p => p.ClockInTime < new TimeOnly(7, 50).AddMinutes(5)), _employeesWithTime);
-        }
 
-        [TestMethod]
-        public void TestTimeOnlyFromDateTimeQuery()
-        {
             VerifyRoundtrip("(it.ClockInTime<TimeOnly(294000000000))", q => q.Where(p => p.ClockInTime < TimeOnly.FromDateTime(new DateTime(2025, 1, 1, 8, 10, 0, DateTimeKind.Unspecified))), _employeesWithTime);
-        }
 
-        [TestMethod]
-        public void TestTimeOnlyEqualsQuery()
-        {
             VerifyRoundtrip("it.ClockInTime.Equals(TimeOnly(611400000000))", q => q.Where(p => p.ClockInTime.Equals(new TimeOnly(16, 59))), _employeesWithTime);
         }
 
