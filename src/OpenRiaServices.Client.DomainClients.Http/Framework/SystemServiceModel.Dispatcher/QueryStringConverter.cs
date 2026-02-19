@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // LICENSE MIT https://github.com/microsoft/referencesource/blob/master/LICENSE.txt
 // Retreived from https://raw.githubusercontent.com/microsoft/referencesource/5697c29004a34d80acdaf5742d7e699022c64ecd/System.ServiceModel.Web/System/ServiceModel/Dispatcher/QueryStringConverter.cs
@@ -136,11 +136,11 @@ namespace System.ServiceModel.Dispatcher
 #if NET
                         else if (parameterType == typeof(DateOnly))
                         {
-                            return ((DateOnly)parameter).ToString("o", CultureInfo.InvariantCulture);
+                            return ((DateOnly)parameter).ToString("o", DateTimeFormatInfo.InvariantInfo);
                         }
                         else if (parameterType == typeof(TimeOnly))
                         {
-                            return ((TimeOnly)parameter).ToString("o", CultureInfo.InvariantCulture);
+                            return ((TimeOnly)parameter).ToString("o", DateTimeFormatInfo.InvariantInfo);
                         }
 #endif
                         else if (parameterType == typeof(byte[]))

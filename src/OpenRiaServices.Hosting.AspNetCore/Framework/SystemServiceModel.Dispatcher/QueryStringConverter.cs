@@ -135,11 +135,11 @@ namespace System.ServiceModel.Dispatcher
                         }
                         else if (parameterType == typeof(DateOnly))
                         {
-                            return (parameter == null) ? default(DateOnly) : DateOnly.Parse(parameter, CultureInfo.InvariantCulture);
+                            return (parameter == null) ? default(DateOnly) : DateOnly.ParseExact(parameter, "o", DateTimeFormatInfo.InvariantInfo);
                         }
                         else if (parameterType == typeof(TimeOnly))
                         {
-                            return (parameter == null) ? default(TimeOnly) : TimeOnly.Parse(parameter, CultureInfo.InvariantCulture);
+                            return (parameter == null) ? default(TimeOnly) : TimeOnly.ParseExact(parameter, "o", DateTimeFormatInfo.InvariantInfo);
                         }
                         else if (parameterType == typeof(byte[]))
                         {
@@ -229,11 +229,11 @@ namespace System.ServiceModel.Dispatcher
                         }
                         else if (parameterType == typeof(DateOnly))
                         {
-                            return ((DateOnly)parameter).ToString("o", CultureInfo.InvariantCulture);
+                            return ((DateOnly)parameter).ToString("o", DateTimeFormatInfo.InvariantInfo);
                         }
                         else if (parameterType == typeof(TimeOnly))
                         {
-                            return ((TimeOnly)parameter).ToString("o", CultureInfo.InvariantCulture);
+                            return ((TimeOnly)parameter).ToString("o", DateTimeFormatInfo.InvariantInfo);
                         }
                         else if (parameterType == typeof(byte[]))
                         {
