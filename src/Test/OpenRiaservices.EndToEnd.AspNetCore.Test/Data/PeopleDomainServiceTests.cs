@@ -237,7 +237,6 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(1, invoke.Parameters);
             Assert.AreEqual(1, invoke.Parameters["id"]);
             Assert.AreEqual(new TimeOnly(8, 0), invoke.Value);
-            //Assert.AreEqual("my user state", invoke.UserState);
         }
     }
 
