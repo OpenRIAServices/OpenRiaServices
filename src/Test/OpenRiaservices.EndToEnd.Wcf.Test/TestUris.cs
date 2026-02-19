@@ -10,7 +10,7 @@ public static class TestURIs
 #if NET10_0
     public static readonly Uri RootURI = new Uri("http://localhost:5247/");
 #else
-        public static readonly Uri RootURI = new Uri("http://localhost:5246/");
+    public static readonly Uri RootURI = new Uri("http://localhost:5246/");
 #endif
 #else
     public static readonly Uri RootURI = new Uri("http://localhost:60002/");
