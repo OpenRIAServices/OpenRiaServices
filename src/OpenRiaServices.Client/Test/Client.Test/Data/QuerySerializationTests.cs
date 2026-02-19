@@ -392,13 +392,17 @@ namespace OpenRiaServices.Client.Test
                 new() { Birthday = new DateOnly(1970, 1, 1) }
             ];
 
-            VerifyRoundtrip("(it.Birthday>DateOnly(2025,4,1))", q => q.Where(p => p.Birthday > new DateOnly(2025, 4, 1)), employeesWithDate);
+            VerifyRoundtrip("(it.Birthday>DateOnly(2025,4,1))",
+                q => q.Where(p => p.Birthday > new DateOnly(2025, 4, 1)), employeesWithDate);
 
-            VerifyRoundtrip("(it.Birthday.AddDays(3)<DateOnly(2025,2,1))", q => q.Where(p => p.Birthday.AddDays(3) < new DateOnly(2025, 2, 1)), employeesWithDate);
+            VerifyRoundtrip("(it.Birthday.AddDays(3)<DateOnly(2025,2,1))",
+                q => q.Where(p => p.Birthday.AddDays(3) < new DateOnly(2025, 2, 1)), employeesWithDate);
 
-            VerifyRoundtrip("(DateOnly.FromDayNumber(it.Birthday.DayNumber)<DateOnly(1999,9,4))", q => q.Where(p => DateOnly.FromDayNumber(p.Birthday.DayNumber) < new DateOnly(1999, 9, 4)), employeesWithDate);
+            VerifyRoundtrip("(DateOnly.FromDayNumber(it.Birthday.DayNumber)<DateOnly(1999,9,4))",
+                q => q.Where(p => DateOnly.FromDayNumber(p.Birthday.DayNumber) < new DateOnly(1999, 9, 4)), employeesWithDate);
 
-            VerifyRoundtrip("it.Birthday.Equals(DateOnly(2015,5,15))", q => q.Where(p => p.Birthday.Equals(new DateOnly(2015, 5, 15))), employeesWithDate);
+            VerifyRoundtrip("it.Birthday.Equals(DateOnly(2015,5,15))",
+                q => q.Where(p => p.Birthday.Equals(new DateOnly(2015, 5, 15))), employeesWithDate);
         }
 
         [TestMethod]
@@ -420,13 +424,17 @@ namespace OpenRiaServices.Client.Test
                 new() { ClockInTime = new TimeOnly(16, 59) }
             ];
 
-            VerifyRoundtrip("(it.ClockInTime<TimeOnly(282000000000))", q => q.Where(p => p.ClockInTime < new TimeOnly(7, 50)), employeesWithTime);
+            VerifyRoundtrip("(it.ClockInTime<TimeOnly(282000000000))",
+                q => q.Where(p => p.ClockInTime < new TimeOnly(7, 50)), employeesWithTime);
 
-            VerifyRoundtrip("(it.ClockInTime.AddMinutes(5D)<TimeOnly(282000000000))", q => q.Where(p => p.ClockInTime.AddMinutes(5) < new TimeOnly(7, 50)), employeesWithTime);
+            VerifyRoundtrip("(it.ClockInTime.AddMinutes(5D)<TimeOnly(282000000000))",
+                q => q.Where(p => p.ClockInTime.AddMinutes(5) < new TimeOnly(7, 50)), employeesWithTime);
 
-            VerifyRoundtrip("(TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(it.ClockInTime.Second))<TimeOnly(100000000))", q => q.Where(p => TimeOnly.FromTimeSpan(TimeSpan.FromSeconds(p.ClockInTime.Second)) < new TimeOnly(0, 0, 10)), employeesWithTime);
+            VerifyRoundtrip("(TimeOnly.FromTimeSpan(TimeSpan.FromTicks(it.ClockInTime.Ticks))==TimeOnly(297000000000))",
+                q => q.Where(p => TimeOnly.FromTimeSpan(TimeSpan.FromTicks(p.ClockInTime.Ticks)) == new TimeOnly(8, 15)), employeesWithTime);
 
-            VerifyRoundtrip("it.ClockInTime.Equals(TimeOnly(611400000000))", q => q.Where(p => p.ClockInTime.Equals(new TimeOnly(16, 59))), employeesWithTime);
+            VerifyRoundtrip("it.ClockInTime.Equals(TimeOnly(611400000000))",
+                q => q.Where(p => p.ClockInTime.Equals(new TimeOnly(16, 59))), employeesWithTime);
         }
 
         [TestMethod]
