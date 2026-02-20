@@ -48,7 +48,7 @@ namespace OpenRiaServices.Client.Web.Behaviors
 
             if (parameter == "null")
                 return null;
-
+        
             // Nullable types have historically not been handled explicitly
             // so they habe been serialized to json
             // some of them (which are not represented as text) can be parsed directly

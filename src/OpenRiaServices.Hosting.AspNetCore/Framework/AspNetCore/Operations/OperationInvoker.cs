@@ -69,8 +69,20 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             {
                 if (query.TryGetValue(parameters[i].Name, out var values))
                 {
-                    var value = Uri.UnescapeDataString(values.FirstOrDefault());
-                    inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
+                    try
+                    {
+                        var value = Uri.UnescapeDataString(values.FirstOrDefault());
+                        inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
+                    }
+                    catch (Exception ex)
+                    {
+                        throw new BadHttpRequestException($"Failed to parse parmeter {parameters[i].Name} from value '{values.FirstOrDefault()}'", ex);
+                    }
+                }
+                // TODO: Add TypeUtility can be null or similar ?
+                else if (parameters[i].ParameterType.IsValueType && !TypeUtility.IsNullableType(parameters[i].ParameterType))
+                {
+                    throw new BadHttpRequestException($"No value provided for parameter {parameters[i].Name}");
                 }
             }
 
@@ -100,6 +112,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             {
                 using var reader = BinaryMessageReader.Rent(memory);
                 return ReadParametersFromBody(reader.XmlDictionaryReader);
+            }
+            catch (Exception ex)
+            {
+                throw new BadHttpRequestException($"failed to read body: {ex.Message}", ex);
             }
             finally
             {
