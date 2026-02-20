@@ -94,6 +94,24 @@ namespace System.Linq.Dynamic
                         ArrayEqual(parameterTypes, new[] { typeof(Int32[]) }) ||
                         ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Boolean), typeof(Byte) });
                 }
+#if NET
+                if (type == typeof(DateOnly))
+                {
+                    return
+                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) }) ||
+                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Calendar) });
+                }
+
+                if (type == typeof(TimeOnly))
+                {
+                    return
+                        ArrayEqual(parameterTypes, new[] { typeof(Int64) }) ||
+                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) }) ||
+                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) }) ||
+                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) }) ||
+                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) });
+                }
+#endif
             }
             else
             {
@@ -856,6 +874,18 @@ namespace System.Linq.Dynamic
                     (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
                     (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0);
                 }
+
+#if NET
+                if (method.DeclaringType == typeof(DateOnly))
+                {
+                    return IsMemberAccessAllowedDateOnly(method, parameterTypes);
+                }
+
+                if (method.DeclaringType == typeof(TimeOnly))
+                {
+                    return IsMemberAccessAllowedTimeOnly(method, parameterTypes);
+                }
+#endif
             }
 
             return false;
@@ -883,5 +913,59 @@ namespace System.Linq.Dynamic
             }
             return true;
         }
+
+#if NET
+        private static bool IsMemberAccessAllowedDateOnly(MethodBase method, Type[] parameterTypes)
+        {
+            return method.Name switch
+            {
+                "AddDays" => true,
+                "AddMonths" => true,
+                "AddYears" => true,
+                "CompareTo" => ArrayEqual(parameterTypes, [typeof(DateOnly)])
+                    || ArrayEqual(parameterTypes, [typeof(object)]),
+                "Equals" => ArrayEqual(parameterTypes, [typeof(DateOnly)])
+                    || ArrayEqual(parameterTypes, [typeof(object)]),
+                "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(DateTime)]),
+                "FromDayNumber" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(int)]),
+                "GetHashCode" => parameterTypes.Length == 0,
+                "Parse" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(string)]),
+                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string), typeof(string[])])
+                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string)])),
+                "ToDateTime" => ArrayEqual(parameterTypes, [typeof(TimeOnly)])
+                    || ArrayEqual(parameterTypes, [typeof(TimeOnly), typeof(DateTimeKind)]),
+                "ToLongDateString" => parameterTypes.Length == 0,
+                "ToShortDateString" => parameterTypes.Length == 0,
+                "ToString" => parameterTypes.Length == 0 || ArrayEqual(parameterTypes, [typeof(string)]),
+                _ => false
+            };
+        }
+
+        private static bool IsMemberAccessAllowedTimeOnly(MethodBase method, Type[] parameterTypes)
+        {
+            return method.Name switch
+            {
+                "Add" => true,
+                "AddHours" => true,
+                "AddMinutes" => true,
+                "CompareTo" => ArrayEqual(parameterTypes, [typeof(object)])
+                    || ArrayEqual(parameterTypes, [typeof(TimeOnly)]),
+                "Equals" => ArrayEqual(parameterTypes, [typeof(object)])
+                    || ArrayEqual(parameterTypes, [typeof(TimeOnly)]),
+                "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(DateTime)]),
+                "FromTimeSpan" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(TimeSpan)]),
+                "GetHashCode" => parameterTypes.Length == 0,
+                "IsBetween" => ArrayEqual(parameterTypes, [typeof(TimeOnly), typeof(TimeOnly)]),
+                "Parse" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(string)]),
+                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string), typeof(string)])
+                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string[])])),
+                "ToLongTimeString" => parameterTypes.Length == 0,
+                "ToShortTimeString" => parameterTypes.Length == 0,
+                "ToString" => parameterTypes.Length == 0 || ArrayEqual(parameterTypes, [typeof(string)]),
+                "ToTimeSpan" => parameterTypes.Length == 0,
+                _ => false
+            };
+        }
+#endif
     }
 }

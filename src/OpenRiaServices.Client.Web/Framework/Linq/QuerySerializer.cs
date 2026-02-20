@@ -554,6 +554,16 @@ namespace OpenRiaServices.Client
                     TimeSpan ts = (TimeSpan)c;
                     this._currPartBuilder.AppendFormat(CultureInfo.InvariantCulture, "TimeSpan({0})", ts.Ticks);
                 }
+#if NET
+                else if (c is DateOnly dateOnly)
+                {
+                    this._currPartBuilder.Append(CultureInfo.InvariantCulture, $"DateOnly({dateOnly.Year},{dateOnly.Month},{dateOnly.Day})");
+                }
+                else if (c is TimeOnly timeOnly)
+                {
+                    this._currPartBuilder.Append(CultureInfo.InvariantCulture, $"TimeOnly({timeOnly.Ticks})");
+                }
+#endif
                 else if (valueType == typeof(Uri))
                 {
                     Uri uri = (Uri)c;

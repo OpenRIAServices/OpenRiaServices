@@ -209,12 +209,22 @@ namespace System.Linq.Dynamic
             void F(decimal? x, decimal? y);
         }
 
+        /// <summary>
+        /// Determine which types are allowed to have relational operations in querys.
+        /// This includes types that have custom implementations of the operators as well as types that are handled by special rules in the parser (e.g. string and char).
+        /// </summary>
         interface IRelationalSignatures : IArithmeticSignatures
         {
             void F(string x, string y);
             void F(char x, char y);
             void F(DateTime x, DateTime y);
             void F(TimeSpan x, TimeSpan y);
+#if NET
+            void F(DateOnly x, DateOnly y);
+            void F(TimeOnly x, TimeOnly y);
+            void F(DateOnly? x, DateOnly? y);
+            void F(TimeOnly? x, TimeOnly? y);
+#endif
             void F(char? x, char? y);
             void F(DateTime? x, DateTime? y);
             void F(TimeSpan? x, TimeSpan? y);
@@ -222,6 +232,9 @@ namespace System.Linq.Dynamic
             void F(DateTimeOffset? x, DateTimeOffset? y);
         }
 
+        /// <summary>
+        /// Types that support == and != operators but not relational operators.
+        /// </summary>
         interface IEqualitySignatures : IRelationalSignatures
         {
             void F(bool x, bool y);
@@ -246,6 +259,10 @@ namespace System.Linq.Dynamic
             void F(DateTime? x, DateTime? y);
             void F(DateTimeOffset x, DateTimeOffset y);
             void F(DateTimeOffset? x, DateTimeOffset? y);
+#if NET
+            void F(TimeOnly x, TimeOnly y); 
+            void F(TimeOnly? x, TimeOnly? y);
+#endif
         }
 
         interface INegationSignatures
@@ -318,6 +335,10 @@ namespace System.Linq.Dynamic
             typeof(Decimal),
             typeof(DateTime),
             typeof(DateTimeOffset),
+#if NET
+            typeof(DateOnly),
+            typeof(TimeOnly),
+#endif
             typeof(TimeSpan),
             typeof(Guid),
             typeof(Math),

@@ -1,4 +1,4 @@
-//------------------------------------------------------------
+﻿//------------------------------------------------------------
 // Copyright (c) Microsoft Corporation.  All rights reserved.
 // LICENSE MIT https://github.com/microsoft/referencesource/blob/master/LICENSE.txt
 // Retreived from https://raw.githubusercontent.com/microsoft/referencesource/5697c29004a34d80acdaf5742d7e699022c64ecd/System.ServiceModel.Web/System/ServiceModel/Dispatcher/QueryStringConverter.cs
@@ -46,6 +46,10 @@ namespace System.ServiceModel.Dispatcher
             this._defaultSupportedQueryStringTypes.Add(typeof(Guid));
             this._defaultSupportedQueryStringTypes.Add(typeof(Uri));
             this._defaultSupportedQueryStringTypes.Add(typeof(DateTimeOffset));
+#if NET
+            this._defaultSupportedQueryStringTypes.Add(typeof(DateOnly));
+            this._defaultSupportedQueryStringTypes.Add(typeof(TimeOnly));
+#endif
             this._typeConverterCache = new Dictionary<Type, TypeConverter>();
         }
 
@@ -129,6 +133,16 @@ namespace System.ServiceModel.Dispatcher
                         {
                             return XmlConvert.ToString((DateTimeOffset)parameter);
                         }
+#if NET
+                        else if (parameterType == typeof(DateOnly))
+                        {
+                            return ((DateOnly)parameter).ToString("o", DateTimeFormatInfo.InvariantInfo);
+                        }
+                        else if (parameterType == typeof(TimeOnly))
+                        {
+                            return ((TimeOnly)parameter).ToString("o", DateTimeFormatInfo.InvariantInfo);
+                        }
+#endif
                         else if (parameterType == typeof(byte[]))
                         {
                             return (parameter != null) ? Convert.ToBase64String((byte[])parameter, Base64FormattingOptions.None) : null;
