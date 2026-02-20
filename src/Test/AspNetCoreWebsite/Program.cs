@@ -56,17 +56,13 @@ app.MapOpenRiaServices(builder =>
    });
 
 // TestDatabase
-app.MapPost("/Services/TestServices.svc/CreateDatabase", context =>
+app.MapPost("/Services/TestServices.svc/CreateDatabase", (string name)=>
 {
-    DBImager.CreateNewDatabase(context.Request.Query["name"]);
-    context.Response.StatusCode = 200;    
-    return Task.CompletedTask;
+    DBImager.CreateNewDatabase(name);
 });
-app.MapPost("/Services/TestServices.svc/DropDatabase", context =>
+app.MapPost("/Services/TestServices.svc/DropDatabase", (string name)=>
 {
-    DBImager.CleanDB(context.Request.Query["name"]);
-    context.Response.StatusCode = 200;
-    return Task.CompletedTask;
+    DBImager.CleanDB(name);
 });
 
 
