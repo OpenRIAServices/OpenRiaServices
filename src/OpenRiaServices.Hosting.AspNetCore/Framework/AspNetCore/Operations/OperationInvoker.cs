@@ -74,9 +74,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                         var value = Uri.UnescapeDataString(values.FirstOrDefault());
                         inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
                     }
-                    catch (Exception ex)
+                    catch (Exception ex) when (!ExceptionHandlingUtility.IsFatal(ex))
                     {
-                        throw new BadHttpRequestException($"Failed to parse parmeter '{parameters[i].Name}' from value '{values.FirstOrDefault()}'", ex);
+                        throw new BadHttpRequestException($"Failed to parse parameter '{parameters[i].Name}' from value '{values.FirstOrDefault()}'", ex);
                     }
                 }
                 else if (parameters[i].IsOptional)
@@ -116,7 +116,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 using var reader = BinaryMessageReader.Rent(memory);
                 return ReadParametersFromBody(reader.XmlDictionaryReader);
             }
-            catch (Exception ex)
+            catch (Exception ex) when (ex is not BadHttpRequestException && !ExceptionHandlingUtility.IsFatal(ex))
             {
                 throw new BadHttpRequestException($"failed to read body: {ex.Message}", ex);
             }

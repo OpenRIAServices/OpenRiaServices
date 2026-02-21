@@ -30,7 +30,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         public async Task TestInvoke_MissingParameter_InvokeThrows()
         {
             var desc = DomainServiceDescription.GetDescription(typeof(BadRequestDomainService));
-            var operation = desc.GetInvokeOperation(nameof(BadRequestDomainService.RoundTrippInt));
+            var operation = desc.GetInvokeOperation(nameof(BadRequestDomainService.InvokeInt));
 
             var operationInvoker = new InvokeOperationInvoker(operation, new SerializationHelper(desc), s_options);
 
@@ -45,7 +45,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
             // Works if value is set
             await operationInvoker.Invoke(context);
-            Assert.IsNotNull(context.Response.StatusCode == 200);
+            Assert.AreEqual(StatusCodes.Status200OK, context.Response.StatusCode);
 
             // Missing value (empty string, or parameter name value)
             context.Request.QueryString = QueryString.FromUriComponent("?dummy=2");
@@ -69,7 +69,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
         [TestMethod]
         public async Task TestServer_Query_Get_InvalidParameters()
         {
-            //return null;
             using var host = await new HostBuilder()
             .ConfigureWebHost(webBuilder =>
             {
@@ -118,10 +117,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 var response = await responseTask;
                 Assert.AreEqual(System.Net.HttpStatusCode.BadRequest, response.StatusCode);
             }
-            catch (BadHttpRequestException)
+            catch (BadHttpRequestException ex)
             {
                 // Testserver will not catch BadHttpRequestException and convert it to Http status code 400
                 // so we catch the exception
+                Assert.AreEqual(StatusCodes.Status400BadRequest, ex.StatusCode, "Expected BadHttpRequestException with status 400");
             }
         }
 
@@ -129,7 +129,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         public class BadRequestDomainService : DomainService
         {
             [Invoke(HasSideEffects = false)]
-            public int RoundTrippInt(int value) => value;
+            public int InvokeInt(int value) => value;
 
             [Query(HasSideEffects = false, IsComposable = false)]
             public People.Person QueryDouble(double value) => new People.Person() { Name = value.ToString() };

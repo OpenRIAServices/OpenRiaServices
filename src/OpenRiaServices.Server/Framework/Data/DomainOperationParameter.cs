@@ -76,7 +76,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         public AttributeCollection Attributes { get; }
 
-        internal bool IsNullable => ParameterType.IsClass || TypeUtility.IsNullableType(ParameterType);
+        internal bool IsNullable => !ParameterType.IsValueType || TypeUtility.IsNullableType(ParameterType);
 
         /// <summary>
         /// <see langword="true"/> if parameter is optional,
