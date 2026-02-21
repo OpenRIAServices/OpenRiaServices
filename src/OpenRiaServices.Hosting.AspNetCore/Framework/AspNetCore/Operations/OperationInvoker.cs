@@ -76,13 +76,16 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     }
                     catch (Exception ex)
                     {
-                        throw new BadHttpRequestException($"Failed to parse parmeter {parameters[i].Name} from value '{values.FirstOrDefault()}'", ex);
+                        throw new BadHttpRequestException($"Failed to parse parmeter '{parameters[i].Name}' from value '{values.FirstOrDefault()}'", ex);
                     }
                 }
-                // TODO: Add TypeUtility can be null or similar ?
-                else if (parameters[i].ParameterType.IsValueType && !TypeUtility.IsNullableType(parameters[i].ParameterType))
+                else if (parameters[i].IsOptional)
                 {
-                    throw new BadHttpRequestException($"No value provided for parameter {parameters[i].Name}");
+                    inputs[i] = parameters[i].DefaultValue;
+                }
+                else // missing value for required parameter
+                {
+                    throw new BadHttpRequestException($"No value provided for parameter '{parameters[i].Name}'");
                 }
             }
 

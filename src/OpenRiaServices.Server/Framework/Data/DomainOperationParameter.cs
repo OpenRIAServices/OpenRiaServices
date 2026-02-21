@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Globalization;
+using System.Linq;
 
 namespace OpenRiaServices.Server
 {
@@ -9,10 +10,6 @@ namespace OpenRiaServices.Server
     /// </summary>
     public sealed class DomainOperationParameter
     {
-        private readonly string _name;
-        private readonly Type _parameterType;
-        private readonly AttributeCollection _attributes;
-        private readonly bool _isOut;
 
         /// <summary>
         /// Initializes a new instance of the DomainOperationParameter class
@@ -37,9 +34,9 @@ namespace OpenRiaServices.Server
                 throw new ArgumentNullException(nameof(attributes));
             }
 
-            this._name = name;
-            this._parameterType = parameterType;
-            this._attributes = attributes;
+            Name = name;
+            ParameterType = parameterType;
+            Attributes = attributes;
         }
 
         /// <summary>
@@ -52,52 +49,54 @@ namespace OpenRiaServices.Server
         public DomainOperationParameter(string name, Type parameterType, AttributeCollection attributes, bool isOut)
             : this(name, parameterType, attributes)
         {
-            this._isOut = isOut;
+            IsOut = isOut;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the DomainOperationParameter class
+        /// </summary>
+        public DomainOperationParameter(System.Reflection.ParameterInfo parameter)
+            : this(parameter.Name, parameter.ParameterType, new AttributeCollection(parameter.GetCustomAttributes(true).Cast<Attribute>().ToArray()), parameter.IsOut)
+        {
+
         }
 
         /// <summary>
         /// Gets the name of the parameter
         /// </summary>
-        public string Name
-        {
-            get
-            {
-                return this._name;
-            }
-        }
+        public string Name { get; }
 
         /// <summary>
         /// Gets the Type of the parameter
         /// </summary>
-        public Type ParameterType
-        {
-            get
-            {
-                return this._parameterType;
-            }
-        }
+        public Type ParameterType { get; }
 
         /// <summary>
         /// Gets the set of attributes for the parameter
         /// </summary>
-        public AttributeCollection Attributes
+        public AttributeCollection Attributes { get; }
+
+        internal bool IsNullable => ParameterType.IsClass || TypeUtility.IsNullableType(ParameterType);
+
+        /// <summary>
+        /// <see langword="true"/> if parameter is optional,
+        /// </summary>
+        internal bool IsOptional => IsNullable;
+
+        /// <summary>
+        /// Get the default value to use if parameter is not sent by client
+        /// </summary>
+        internal object DefaultValue => IsNullable ? null : ThrowInvalidOperation();
+
+        private static object ThrowInvalidOperation()
         {
-            get
-            {
-                return this._attributes;
-            }
+            throw new InvalidOperationException("no default value");
         }
 
         /// <summary>
         /// Gets a value indicating whether the parameter is an out parameter
         /// </summary>
-        public bool IsOut
-        {
-            get
-            {
-                return this._isOut;
-            }
-        }
+        public bool IsOut { get; }
 
         /// <summary>
         /// Returns a textual description of the parameter.
