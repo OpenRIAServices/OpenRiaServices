@@ -79,9 +79,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                         throw new BadHttpRequestException($"Failed to parse parameter '{parameters[i].Name}' from value '{values.FirstOrDefault()}'", ex);
                     }
                 }
-                else if (parameters[i].IsOptional)
+                else if (parameters[i].IsNullable) // Client omit null values from query string in order to send null
                 {
-                    inputs[i] = parameters[i].DefaultValue;
+                    inputs[i] = null;
                 }
                 else // missing value for required parameter
                 {

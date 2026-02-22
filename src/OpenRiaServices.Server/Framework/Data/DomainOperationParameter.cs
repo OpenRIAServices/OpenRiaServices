@@ -53,15 +53,6 @@ namespace OpenRiaServices.Server
         }
 
         /// <summary>
-        /// Initializes a new instance of the DomainOperationParameter class
-        /// </summary>
-        public DomainOperationParameter(System.Reflection.ParameterInfo parameter)
-            : this(parameter.Name, parameter.ParameterType, new AttributeCollection(parameter.GetCustomAttributes(true).Cast<Attribute>().ToArray()), parameter.IsOut)
-        {
-
-        }
-
-        /// <summary>
         /// Gets the name of the parameter
         /// </summary>
         public string Name { get; }
@@ -76,22 +67,10 @@ namespace OpenRiaServices.Server
         /// </summary>
         public AttributeCollection Attributes { get; }
 
+        /// <summary>
+        /// <see langword="true" /> if the parameter can have the value <see langword="null" />
+        /// </summary>
         internal bool IsNullable => !ParameterType.IsValueType || TypeUtility.IsNullableType(ParameterType);
-
-        /// <summary>
-        /// <see langword="true"/> if parameter is optional,
-        /// </summary>
-        internal bool IsOptional => IsNullable;
-
-        /// <summary>
-        /// Get the default value to use if parameter is not sent by client
-        /// </summary>
-        internal object DefaultValue => IsNullable ? null : ThrowInvalidOperation();
-
-        private static object ThrowInvalidOperation()
-        {
-            throw new InvalidOperationException("no default value");
-        }
 
         /// <summary>
         /// Gets a value indicating whether the parameter is an out parameter
