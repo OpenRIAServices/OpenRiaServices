@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Hosting.AspNetCore;
@@ -80,11 +81,11 @@ app.MapOpenRiaServices(builder =>
     });
 
 // TestDatabase
-app.MapPost("/Services/TestServices.svc/CreateDatabase", (string name) =>
+app.MapPost("/Services/TestServices.svc/CreateDatabase", ([FromQuery] string name) =>
 {
     DBImager.CreateNewDatabase(name);
 });
-app.MapPost("/Services/TestServices.svc/DropDatabase", (string name) =>
+app.MapPost("/Services/TestServices.svc/DropDatabase", ([FromQuery] string name) =>
 {
     DBImager.CleanDB(name);
 });
