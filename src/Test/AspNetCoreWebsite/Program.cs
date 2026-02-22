@@ -15,7 +15,8 @@ using TestDomainServices.Testing;
 [assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.FullName)]
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices(o => {
+builder.Services.AddOpenRiaServices(o =>
+{
     // There is at least one test which test that checks that calls stacks of normal exceptions are passed to the client
     // To get StackTrack of "normal" exceptions we need to pass them on to the user, as well as include stack traces
     o.IncludeExceptionMessageInErrors = true;
@@ -53,14 +54,37 @@ app.MapOpenRiaServices(builder =>
        // Add services with old endpoint structure to allow unit tests to work
        // REMARKS: The unit tests should be rewritten so this is not needed
        builder.AddDomainService<Cities.CityDomainService>("Cities-CityDomainService.svc/binary");
-   });
+   })
+    // Allow GET for rountrip methods, such as TestProvider_Scenarios.ReturnsNullableDecimal_Online
+    // This allows testing roundtrip using both GET (parameters in Uri) and POST (parameters in body)
+    // without changing existing tests
+    .Finally(builder =>
+    {
+        var metadata = builder.Metadata;
+        if (metadata.OfType<DomainOperationEntry>().FirstOrDefault() is { } operation
+            && operation.DomainServiceType == typeof(TestDomainServices.TestProvider_Scenarios)
+            && operation.Operation == DomainOperation.Invoke
+            && operation.Name.StartsWith("Returns")
+            && operation.Name.EndsWith("_Online"))
+        {
+
+            for (int i = 0; i < metadata.Count; ++i)
+            {
+                if (metadata[i] is HttpMethodMetadata)
+                {
+                    metadata[i] = new HttpMethodMetadata(["GET", "POST"]);
+                    break;
+                }
+            }
+        }
+    });
 
 // TestDatabase
-app.MapPost("/Services/TestServices.svc/CreateDatabase", (string name)=>
+app.MapPost("/Services/TestServices.svc/CreateDatabase", (string name) =>
 {
     DBImager.CreateNewDatabase(name);
 });
-app.MapPost("/Services/TestServices.svc/DropDatabase", (string name)=>
+app.MapPost("/Services/TestServices.svc/DropDatabase", (string name) =>
 {
     DBImager.CleanDB(name);
 });
