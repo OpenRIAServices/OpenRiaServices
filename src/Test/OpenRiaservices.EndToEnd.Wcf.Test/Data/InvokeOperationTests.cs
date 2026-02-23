@@ -810,7 +810,7 @@ namespace OpenRiaServices.Client.Test
 
         
         [TestMethod]
-        [Description("Verify invoke operation using different nullable return types and returning null values")]
+        [Description("Verify so that different string values round trip (in case we use one as null sentinel in query strings)")]
         public async Task InvokeOperationReturn_Strings_WithNull()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
