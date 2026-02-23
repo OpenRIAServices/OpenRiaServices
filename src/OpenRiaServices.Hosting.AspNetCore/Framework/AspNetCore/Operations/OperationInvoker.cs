@@ -69,8 +69,23 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             {
                 if (query.TryGetValue(parameters[i].Name, out var values))
                 {
-                    var value = Uri.UnescapeDataString(values.FirstOrDefault());
-                    inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
+                    try
+                    {
+                        var value = Uri.UnescapeDataString(values.FirstOrDefault());
+                        inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
+                    }
+                    catch (Exception ex) when (!ExceptionHandlingUtility.IsFatal(ex))
+                    {
+                        throw new BadHttpRequestException($"Failed to parse parameter '{parameters[i].Name}' from value '{values.FirstOrDefault()}'", ex);
+                    }
+                }
+                else if (parameters[i].IsNullable) // Client omit null values from query string in order to send null
+                {
+                    inputs[i] = null;
+                }
+                else // missing value for required parameter
+                {
+                    throw new BadHttpRequestException($"No value provided for parameter '{parameters[i].Name}'");
                 }
             }
 
@@ -100,6 +115,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             {
                 using var reader = BinaryMessageReader.Rent(memory);
                 return ReadParametersFromBody(reader.XmlDictionaryReader);
+            }
+            catch (Exception ex) when (ex is not BadHttpRequestException && !ExceptionHandlingUtility.IsFatal(ex))
+            {
+                throw new BadHttpRequestException($"failed to read body: {ex.Message}", ex);
             }
             finally
             {
