@@ -811,15 +811,17 @@ namespace OpenRiaServices.Client.Test
         
         [TestMethod]
         [Description("Verify so that different string values round trip (in case we use one as null sentinel in query strings)")]
-        public async Task InvokeOperationReturn_Strings_WithNull()
+        public async Task InvokeOperationReturn_Strings_RoundTrip()
         {
             TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
 
-            // execute tests with different types
+            // execute tests with different values 
             await VerifyRoundTripAsync<string>(provider.ReturnsString_OnlineAsync, null);
             await VerifyRoundTripAsync<string>(provider.ReturnsString_OnlineAsync, string.Empty);
             await VerifyRoundTripAsync<string>(provider.ReturnsString_OnlineAsync, "null");
             await VerifyRoundTripAsync<string>(provider.ReturnsString_OnlineAsync, "$null");
+
+            await VerifyRoundTripAsync<string>(provider.ReturnsString_OnlineAsync, "%escape me, %22 test & good 2520");
 
             async Task VerifyRoundTripAsync<T>(Func<T, System.Threading.CancellationToken, Task<InvokeResult<T>>> func, T value)
             {
