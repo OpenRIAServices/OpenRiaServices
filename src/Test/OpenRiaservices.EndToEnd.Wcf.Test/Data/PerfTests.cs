@@ -134,27 +134,6 @@ namespace OpenRiaServices.Client.Test
         }
         #endregion
 
-        #region Invoke tests.
-        [TestMethod]
-        [Asynchronous]
-        [PerfTest]
-        public void Invoke_RoundtripString()
-        {
-            TestProvider_Scenarios dc = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
-
-            string str = "Hello, World!";
-            InvokeOperation<string> io = dc.ReturnsString_Online(str);
-
-            this.EnqueueCompletion(() => io);
-            EnqueueCallback(delegate
-            {
-                TestHelperMethods.AssertOperationSuccess(io);
-                Assert.AreEqual(str, io.Value);
-            });
-            EnqueueTestComplete();
-        }
-        #endregion
-
         #region Submit tests.
         // Uncomment this test out to do lightweight perf measurement for the submit pipeline
         //[TestMethod]

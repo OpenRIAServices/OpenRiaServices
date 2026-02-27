@@ -4,6 +4,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cities;
@@ -807,6 +808,33 @@ namespace OpenRiaServices.Client.Test
             EnqueueTestComplete();
         }
 
+        
+        [TestMethod]
+        [Description("Verify so that different string values round trip (in case we use one as null sentinel in query strings)")]
+        public async Task InvokeOperationReturn_Strings_WithNull()
+        {
+            TestProvider_Scenarios provider = new TestProvider_Scenarios(TestURIs.TestProvider_Scenarios);
+
+            // execute tests with different types
+            await VerifyRoundTripAsync<string>(provider.ReturnsString_OnlineAsync, null);
+            await VerifyRoundTripAsync<string>(provider.ReturnsString_OnlineAsync, string.Empty);
+            await VerifyRoundTripAsync<string>(provider.ReturnsString_OnlineAsync, "null");
+            await VerifyRoundTripAsync<string>(provider.ReturnsString_OnlineAsync, "$null");
+
+            async Task VerifyRoundTripAsync<T>(Func<T, System.Threading.CancellationToken, Task<InvokeResult<T>>> func, T value)
+            {
+                InvokeResult<T> res = await func(value, CancellationToken.None);
+                Assert.AreEqual(value, res.Value, "Value did not round-trip");
+#if ASPNETCORE
+                Dictionary<string, object> parameters = new Dictionary<string, object>();
+                parameters.Add("value", value);
+                var getResult = await provider.DomainClient.InvokeAsync(new InvokeArgs("ReturnsString_Online", typeof(T), parameters, hasSideEffects: false), CancellationToken.None);
+
+                Assert.AreEqual(value, getResult.ReturnValue, "GET: value did not round-trip when passed in Uri");
+#endif
+            }
+        }
+
         [TestMethod]
         [Asynchronous]
         [Description("Verify invoke operation behavior with an invoke operation that has side effects.")]
@@ -857,6 +885,9 @@ namespace OpenRiaServices.Client.Test
         private void VerifyOnlineMethodReturn<T>(TestProvider_Scenarios provider, ReturnTestDelegate<T> testMethod, T inputValue)
         {
             InvokeOperation invoke = null;
+#if ASPNETCORE
+            Task<InvokeCompletedResult> getResult = null;
+#endif
 
             EnqueueCallback(delegate
             {
@@ -866,50 +897,75 @@ namespace OpenRiaServices.Client.Test
 
                 // call invoke operation with the input value
                 invoke = testMethod(inputValue, TestHelperMethods.DefaultOperationAction, null);
+
+#if ASPNETCORE
+                // do the same (try using GET) so parameters are in query string
+                Dictionary<string, object> parameters = new Dictionary<string, object>();
+                parameters.Add("value", inputValue);
+                getResult = provider.DomainClient.InvokeAsync(new InvokeArgs(invoke.OperationName, typeof(T), parameters, hasSideEffects: false), CancellationToken.None);
+#endif
             });
 
             // wait for invoke operation to return. 
             this.EnqueueCompletion(() => invoke);
-
+#if ASPNETCORE
+            this.EnqueueConditional(() => getResult.IsCompleted);
+#endif
             EnqueueCallback(delegate
             {
                 // verify invocation completed succesfully
                 Assert.IsNull(invoke.Error, string.Format("InvokeEventArgs.Error should be null.\r\nMessage: {0}\r\nStack Trace:\r\n{1}", invoke.Error != null ? invoke.Error.Message : string.Empty, invoke.Error != null ? invoke.Error.StackTrace : string.Empty));
                 Assert.IsFalse(invoke.ValidationErrors.Any());
 
+                AssertValuesAreEqual(inputValue, invoke.Value);
+
+#if ASPNETCORE
+                Console.WriteLine("Invoke (POST) was successfull");
+
+                InvokeCompletedResult invokeCompleted = getResult.GetAwaiter().GetResult();
+                Assert.HasCount(0, invokeCompleted.ValidationErrors);
+
+                AssertValuesAreEqual(inputValue, invokeCompleted.ReturnValue);
+#endif
+                Console.WriteLine("...Completed");
+            });
+
+
+            static void AssertValuesAreEqual(T inputValue, object returnValue)
+            {
                 // verify the inputValue is correctly round-tripped back as returnValue
                 if (inputValue == null)
                 {
-                    Assert.IsNull(invoke.Value);
+                    Assert.IsNull(returnValue);
                 }
                 else
                 {
                     if (TypeUtility.FindIEnumerable(typeof(T)) == null)
                     {
-                        Assert.AreEqual(inputValue.GetType(), invoke.Value.GetType());
+                        Assert.AreEqual(inputValue.GetType(), returnValue.GetType());
                     }
                     else
                     {
-                        Assert.AreEqual(TypeUtility.GetElementType(inputValue.GetType()), TypeUtility.GetElementType(invoke.Value.GetType()));
+                        Assert.AreEqual(TypeUtility.GetElementType(inputValue.GetType()), TypeUtility.GetElementType(returnValue.GetType()));
                     }
 
                     if (TypeUtility.GetNonNullableType(typeof(T)) == typeof(DateTime))
                     {
-                        DateTime returnedDate = (DateTime)invoke.Value;
+                        DateTime returnedDate = (DateTime)returnValue;
                         Assert.AreEqual(((DateTime)(object)inputValue).Kind, returnedDate.Kind);
                         Assert.AreEqual((DateTime)(object)inputValue, returnedDate);
                     }
                     else if (TypeUtility.GetNonNullableType(typeof(T)) == typeof(DateTimeOffset))
                     {
-                        DateTimeOffset returnedDate = (DateTimeOffset)invoke.Value;
+                        DateTimeOffset returnedDate = (DateTimeOffset)returnValue;
                         Assert.AreEqual(((DateTimeOffset)(object)inputValue).Offset.Ticks, returnedDate.Offset.Ticks);
                         Assert.AreEqual((DateTimeOffset)(object)inputValue, returnedDate);
                     }
                     else if (typeof(T) == typeof(byte[]))
                     {
                         // if T is byte[], we verify count matches as well as the elements matching
-                        Assert.AreEqual(typeof(byte[]), invoke.Value.GetType());
-                        byte[] returnedArray = invoke.Value as byte[];
+                        Assert.AreEqual(typeof(byte[]), returnValue.GetType());
+                        byte[] returnedArray = returnValue as byte[];
                         byte[] inputArray = inputValue as byte[];
 
                         Assert.AreEqual(inputArray.Length, returnedArray.Length);
@@ -921,18 +977,16 @@ namespace OpenRiaServices.Client.Test
                     else if (TypeUtility.IsPredefinedListType(typeof(T)))
                     {
                         IEnumerable<object> inputEnumerable = ((IEnumerable)inputValue).Cast<object>();
-                        IEnumerable<object> resultEnumerable = ((IEnumerable)invoke.Value).Cast<object>();
+                        IEnumerable<object> resultEnumerable = ((IEnumerable)returnValue).Cast<object>();
                         Assert.IsTrue(inputEnumerable.SequenceEqual(resultEnumerable));
                     }
                     else
                     {
-                        Assert.AreEqual(inputValue, invoke.Value);
+                        Assert.AreEqual(inputValue, returnValue);
                     }
                 }
-
-                Console.WriteLine("...Completed");
-            });
+            }
         }
-        #endregion
+#endregion
     }
 }

@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using OpenRiaServices.Hosting.AspNetCore;
@@ -61,20 +62,39 @@ app.MapOpenRiaServices(builder =>
        // Add services with old endpoint structure to allow unit tests to work
        // REMARKS: The unit tests should be rewritten so this is not needed
        builder.AddDomainService<Cities.CityDomainService>("Cities-CityDomainService.svc/binary");
-   });
+   })
+    // Allow GET for rountrip methods, such as TestProvider_Scenarios.ReturnsNullableDecimal_Online
+    // This allows testing roundtrip using both GET (parameters in Uri) and POST (parameters in body)
+    // without changing existing tests
+    .Finally(builder =>
+    {
+        var metadata = builder.Metadata;
+        if (metadata.OfType<DomainOperationEntry>().FirstOrDefault() is { } operation
+            && operation.DomainServiceType == typeof(TestDomainServices.TestProvider_Scenarios)
+            && operation.Operation == DomainOperation.Invoke
+            && operation.Name.StartsWith("Returns")
+            && operation.Name.EndsWith("_Online"))
+        {
+
+            for (int i = 0; i < metadata.Count; ++i)
+            {
+                if (metadata[i] is HttpMethodMetadata)
+                {
+                    metadata[i] = new HttpMethodMetadata(["GET", "POST"]);
+                    break;
+                }
+            }
+        }
+    });
 
 // TestDatabase
-app.MapPost("/Services/TestServices.svc/CreateDatabase", context =>
+app.MapPost("/Services/TestServices.svc/CreateDatabase", ([FromQuery] string name) =>
 {
-    DBImager.CreateNewDatabase(context.Request.Query["name"]);
-    context.Response.StatusCode = 200;
-    return Task.CompletedTask;
+    DBImager.CreateNewDatabase(name);
 });
-app.MapPost("/Services/TestServices.svc/DropDatabase", context =>
+app.MapPost("/Services/TestServices.svc/DropDatabase", ([FromQuery] string name) =>
 {
-    DBImager.CleanDB(context.Request.Query["name"]);
-    context.Response.StatusCode = 200;
-    return Task.CompletedTask;
+    DBImager.CleanDB(name);
 });
 
 

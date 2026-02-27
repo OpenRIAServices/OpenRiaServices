@@ -7,11 +7,11 @@ public static class TestURIs
 #elif VBTests
     public static readonly Uri RootURI = new Uri("http://localhost:60000/");
 #elif ASPNETCORE
-    #if NET10_0
-        public static readonly Uri RootURI = new Uri("http://localhost:5247/");
-    #else
-        public static readonly Uri RootURI = new Uri("http://localhost:5246/");
-    #endif
+#if NET10_0
+    public static readonly Uri RootURI = new Uri("http://localhost:5247/");
+#else
+    public static readonly Uri RootURI = new Uri("http://localhost:5246/");
+#endif
 #else
     public static readonly Uri RootURI = new Uri("http://localhost:60002/");
 #endif

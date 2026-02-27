@@ -105,6 +105,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 using var reader = BinaryMessageReader.Rent(memory, IsBinary);
                 return ReadQueryParametersFromBody(reader.XmlDictionaryReader, operation);
             }
+            catch (Exception ex) when (ex is not BadHttpRequestException && !ExceptionHandlingUtility.IsFatal(ex))
+            {
+                throw new BadHttpRequestException($"Failed to read body: {ex.Message}", ex);
+            }
             finally
             {
                 ArrayPool<byte>.Shared.Return(memory.Array!);

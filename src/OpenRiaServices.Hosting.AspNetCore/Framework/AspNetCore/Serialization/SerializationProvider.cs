@@ -37,6 +37,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// </summary>
         /// <param name="context">The <see cref="HttpContext" /> containing the request to read.</param>
         /// <param name="operation">Metadata for the domain operation that guides parameter deserialization.</param>
+        /// <exception cref="BadHttpRequestException">Should be raised on invalid requests</exception>
         public abstract Task<(ServiceQuery?, object?[])> ReadParametersFromBodyAsync(HttpContext context, DomainOperationEntry operation);
 
         /// <summary>

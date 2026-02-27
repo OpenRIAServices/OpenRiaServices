@@ -806,7 +806,8 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(10746, category.Picture.Length);
 
                 // now modify one of the Pictures
-                byte[] updatedPicture = category.Picture.Reverse().ToArray();
+                byte[] updatedPicture = category.Picture.ToArray();
+                updatedPicture[0] = (byte)(updatedPicture[0] + 1);
                 category.Picture = updatedPicture;
 
                 Assert.IsTrue(ctxt.EntityContainer.GetChanges().ModifiedEntities.Contains(category));

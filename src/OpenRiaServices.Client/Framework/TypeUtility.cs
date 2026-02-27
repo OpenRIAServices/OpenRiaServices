@@ -70,6 +70,10 @@ namespace OpenRiaServices
         {
             typeof(string),
             typeof(decimal),
+#if NET
+            typeof(TimeOnly),
+            typeof(DateOnly),
+#endif
             typeof(DateTime),
             typeof(DateTimeOffset),
             typeof(TimeSpan),
