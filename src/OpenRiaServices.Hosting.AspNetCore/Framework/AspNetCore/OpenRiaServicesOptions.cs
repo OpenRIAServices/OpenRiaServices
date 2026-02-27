@@ -66,7 +66,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <remarks>Request should specify mime-type <c>application/xml</c> using <c>Content-Type</c> or <c>Accept</c> headers
         /// </remarks>
         /// <param name="defaultProvider">If <see langword="true"/> the Text XML provider will be the default for responses</param>
-        public void AddTextXmlSerializer(bool defaultProvider = false)
+        internal void AddTextXmlSerializer(bool defaultProvider = false)
         {
             // Good parameter candidates for options to pass in would include 
             // XmlDictionaryReaderQuotas, XmlDictionaryWriterQuotas (pass on to MessageReader, MessageWriter caches)
@@ -77,7 +77,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <summary>
         /// Removes the default Binary XML (application/msbin1) wire format.
         /// </summary>
-        public void RemoveBinaryXmlSerializer()
+        internal void RemoveBinaryXmlSerializer()
         {
             SerializationProviders = [.. SerializationProviders.Where(sp => sp is not BinaryXmlSerializationProvider)];
         }
