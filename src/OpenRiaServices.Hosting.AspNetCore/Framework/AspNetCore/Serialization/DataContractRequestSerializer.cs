@@ -283,11 +283,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
         }
 
-        public override Task WriteErrorAsync(HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
+        public override async Task WriteErrorAsync(HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
         {
             var ct = context.RequestAborted;
             if (ct.IsCancellationRequested)
-                return Task.CompletedTask;
+                return;
 
             var messageWriter = BinaryMessageWriter.Rent(IsBinary);
             try
@@ -301,7 +301,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 response.Headers.ContentType = ContentType;
                 response.ContentLength = bufferMemory.Length;
 
-                return bufferMemory.WriteTo(response, ct);
+                await bufferMemory.WriteTo(response, ct);
             }
             catch (Exception)
             {
