@@ -159,11 +159,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             var inputs = new object?[parameters.Count];
             for (int i = 0; i < parameters.Count; ++i)
             {
-                if (query.TryGetValue(parameters[i].Name, out var values))
+                if (query.TryGetValue(parameters[i].Name, out var values)
+                    && values.FirstOrDefault() is string { } value)
                 {
                     try
                     {
-                        var value = Uri.UnescapeDataString(values.FirstOrDefault());
+                        value = Uri.UnescapeDataString(value);
                         inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
                     }
                     catch (Exception ex) when (!ExceptionHandlingUtility.IsFatal(ex))
