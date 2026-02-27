@@ -164,7 +164,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 {
                     try
                     {
-                        value = Uri.UnescapeDataString(value);
                         inputs[i] = s_queryStringConverter.ConvertStringToValue(value, parameters[i].ParameterType);
                     }
                     catch (Exception ex) when (!ExceptionHandlingUtility.IsFatal(ex))
