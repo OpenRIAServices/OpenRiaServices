@@ -65,7 +65,7 @@ namespace OpenRiaServices.Server
                     metaMember.RequiresValidation = pd.Attributes.OfType<ValidationAttribute>().Any();
                 }
                 
-                if (pd.Attributes[typeof(AssociationAttribute)] != null)
+                if (pd.Attributes[typeof(EntityAssociationAttribute)] != null)
                 {
                     if (pd.Attributes.OfType<IncludeAttribute>().Any(p => !p.IsProjection))
                     {
