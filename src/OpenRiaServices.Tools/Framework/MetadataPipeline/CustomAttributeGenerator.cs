@@ -67,8 +67,7 @@ namespace OpenRiaServices.Tools
             { typeof(RequiresAuthenticationAttribute), null },
             { typeof(RequiresRoleAttribute), null },
 
-            // Only pass on EntityAssociationAttribute and not old AssociationAttribute to the client
-            { typeof(AssociationAttribute), null },
+            // Pass on EntityAssociationAttribute
             { typeof(EntityAssociationAttribute), new EntityAssociationAttributeBuilder() },
         };
 

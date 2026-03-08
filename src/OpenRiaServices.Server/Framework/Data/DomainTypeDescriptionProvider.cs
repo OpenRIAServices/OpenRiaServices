@@ -47,14 +47,20 @@ namespace OpenRiaServices.Server
                 this._customTypeDescriptor = base.GetTypeDescriptor(type, instance);
 
                 // If any properties use the obsolete AssociationAttribute, wrap with AssociationTypeDescriptor
-                if (AssociationTypeDescriptor.ShouldRegister(this._customTypeDescriptor))
+                if (LegacyAssociationAttributeCompatTypeDescriptor.ShouldRegister(this._customTypeDescriptor))
                 {
-                    this._customTypeDescriptor = new AssociationTypeDescriptor(this._customTypeDescriptor);
+                    this._customTypeDescriptor = new LegacyAssociationAttributeCompatTypeDescriptor(this._customTypeDescriptor);
                 }
 
                 // EF, any other custom type descriptors provided through DomainServiceDescriptionProviders.
                 this._customTypeDescriptor = this._descriptionProvider.GetTypeDescriptor(type, this._customTypeDescriptor);
-                
+
+                // Add backwards compat in case any old type descriptor generates AssociationAttributes
+                if (LegacyAssociationAttributeCompatTypeDescriptor.ShouldRegister(this._customTypeDescriptor))
+                {
+                    this._customTypeDescriptor = new LegacyAssociationAttributeCompatTypeDescriptor(this._customTypeDescriptor);
+                }
+
                 // initialize FK members AFTER our type descriptors have chained
                 HashSet<string> foreignKeyMembers = this.GetForeignKeyMembers();
 

@@ -10,11 +10,11 @@ namespace OpenRiaServices.Server
     /// Custom TypeDescriptor that adds an inferred EntityAssociationAttribute for
     /// members that are annotated with the obsolete AssociationAttribute.
     /// </summary>
-    internal class AssociationTypeDescriptor : CustomTypeDescriptor
+    internal class LegacyAssociationAttributeCompatTypeDescriptor : CustomTypeDescriptor
     {
         private PropertyDescriptorCollection _properties;
 
-        public AssociationTypeDescriptor(ICustomTypeDescriptor parent)
+        public LegacyAssociationAttributeCompatTypeDescriptor(ICustomTypeDescriptor parent)
             : base(parent)
         {
         }
@@ -35,15 +35,25 @@ namespace OpenRiaServices.Server
                 {
                     // If the property has the obsolete AssociationAttribute, create an EntityAssociationAttribute
 #pragma warning disable CS0618 // Type or member is obsolete
-                    if (propDescriptor.Attributes[typeof(AssociationAttribute)] is AssociationAttribute associationAttribute
-                        && propDescriptor.Attributes[typeof(EntityAssociationAttribute)] is null)
+                    if (propDescriptor.Attributes[typeof(AssociationAttribute)] is not null)
                     {
-                        var entityAssoc = new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray())
+                        // Copy attributes but replace AssociationAttribute with EntityAssociationAttribute
+                        var newAttributes = new Attribute[propDescriptor.Attributes.Count];
+                        propDescriptor.Attributes.CopyTo(newAttributes, 0);
+                        for (int i = 0; i < newAttributes.Length; ++i)
                         {
-                            IsForeignKey = associationAttribute.IsForeignKey
-                        };
+                            if (newAttributes[i] is AssociationAttribute associationAttribute)
+                            {
+                                newAttributes[i] = new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray())
+                                {
+                                    IsForeignKey = associationAttribute.IsForeignKey
+                                };
+                                // AllowMultiple = false so break after we find an instance
+                                break;
+                            }
+                        }
 
-                        tempPropertyDescriptors.Add(new DomainPropertyDescriptor(propDescriptor, new Attribute[] { entityAssoc }));
+                        tempPropertyDescriptors.Add(DomainPropertyDescriptor.CreateWithExplicitAttributes(propDescriptor, newAttributes));
                         customDescriptorsCreated = true;
                     }
                     else
@@ -70,9 +80,8 @@ namespace OpenRiaServices.Server
         {
             foreach (PropertyDescriptor pd in descriptor.GetProperties())
             {
-#pragma warning disable CS0618 // Type or member is obsolete
-                if (pd.Attributes[typeof(AssociationAttribute)] is not null
-                    && pd.Attributes[typeof(EntityAssociationAttribute)] is null)
+#pragma warning disable CS0618 // Type or member is obsolete (AssociationAttribute)
+                if (pd.Attributes[typeof(AssociationAttribute)] is not null)
                 {
                     return true;
                 }
