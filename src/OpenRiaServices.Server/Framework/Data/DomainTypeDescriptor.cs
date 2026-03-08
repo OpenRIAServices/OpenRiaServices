@@ -102,18 +102,6 @@ namespace OpenRiaServices.Server
                 additionalAttributes.Add(new EditableAttribute(false) { AllowInitialValue = allowInitialValue });
             }
 
-            // Infer EntityAssociationAttribute if AssociationAttribute (which is obsolete in .NET) is present
-
-#pragma warning disable CS0618 // Type or member is obsolete
-            if (pd.Attributes[typeof(AssociationAttribute)] is AssociationAttribute associationAttribute)
-            {
-                // If the property is already marked with an IncludeAttribute, we don't want to add another one
-                additionalAttributes.Add(new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray())
-                {
-                    IsForeignKey = associationAttribute.IsForeignKey
-                });
-            }
-#pragma warning restore CS0618 // Type or member is obsolete
 
             return additionalAttributes.ToArray();
         }

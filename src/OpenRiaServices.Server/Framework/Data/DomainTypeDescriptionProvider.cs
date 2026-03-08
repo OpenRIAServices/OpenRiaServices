@@ -45,7 +45,13 @@ namespace OpenRiaServices.Server
             {
                 // CLR, buddy class type descriptors
                 this._customTypeDescriptor = base.GetTypeDescriptor(type, instance);
- 
+
+                // If any properties use the obsolete AssociationAttribute, wrap with AssociationTypeDescriptor
+                if (AssociationTypeDescriptor.ShouldRegister(this._customTypeDescriptor))
+                {
+                    this._customTypeDescriptor = new AssociationTypeDescriptor(this._customTypeDescriptor);
+                }
+
                 // EF, any other custom type descriptors provided through DomainServiceDescriptionProviders.
                 this._customTypeDescriptor = this._descriptionProvider.GetTypeDescriptor(type, this._customTypeDescriptor);
                 
