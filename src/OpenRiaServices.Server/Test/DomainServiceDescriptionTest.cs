@@ -25,14 +25,15 @@ using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.Server.TypeDescriptorExtensions;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.ChangeTracking;
+using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
+using Microsoft.EntityFrameworkCore.Metadata;
+using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
+
 
 namespace OpenRiaServices.Server.Test
 {
-    using System.Threading.Tasks;
-    using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
-    using Microsoft.EntityFrameworkCore.Metadata;
-    using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
-
     /// <summary>
     /// DomainServiceDescription tests
     /// </summary>
@@ -328,7 +329,7 @@ namespace OpenRiaServices.Server.Test
             Type entityType = typeof(DataTests.Scenarios.LTS.Northwind_ExternalMapping.Customer);
             Assert.IsTrue(dsd.EntityTypes.Contains(entityType));
             PropertyDescriptor pd = TypeDescriptor.GetProperties(entityType)["Orders"];
-            Assert.IsNotNull(pd.Attributes[typeof(AssociationAttribute)]);
+            Assert.IsNotNull(pd.Attributes[typeof(EntityAssociationAttribute)]);
         }
 
         [TestMethod]
@@ -382,7 +383,7 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(pd.Attributes[typeof(KeyAttribute)]);
 
             pd = TypeDescriptor.GetProperties(typeof(NorthwindPOCOModel.Product))["Category"];
-            AssociationAttribute assocAttrib = (AssociationAttribute)pd.Attributes[typeof(AssociationAttribute)];
+            EntityAssociationAttribute assocAttrib = (EntityAssociationAttribute)pd.Attributes[typeof(EntityAssociationAttribute)];
             Assert.IsNotNull(assocAttrib);
         }
 
@@ -469,7 +470,7 @@ namespace OpenRiaServices.Server.Test
 
             // Verify that key members that are also FK members do NOT get EditableAttribute
             pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["OrderID"];
-            AssociationAttribute assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<AssociationAttribute>().Single();
+            EntityAssociationAttribute assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<EntityAssociationAttribute>().Single();
             Assert.IsTrue(assoc.ThisKeyMembers.Contains("OrderID"));
             editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
             Assert.IsNull(editable);
@@ -485,7 +486,7 @@ namespace OpenRiaServices.Server.Test
 
             // Verify that key members that are also FK members do NOT get EditableAttribute
             pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Order_Detail))["OrderID"];
-            assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<AssociationAttribute>().Single();
+            assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<EntityAssociationAttribute>().Single();
             Assert.IsTrue(assoc.ThisKeyMembers.Contains("OrderID"));
             editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
             Assert.IsNull(editable);
@@ -2086,56 +2087,56 @@ namespace OpenRiaServices.Server.Test
             #region Verify bidirectional PurchaseOrder/PurchaseOrderDetail association
             // verify PurchaseOrder.PurchaseOrderDetails association
             Type entityType = d.EntityTypes.Single(p => p.Name == "PurchaseOrder");
-            AssociationAttribute expected = new AssociationAttribute(
+            EntityAssociationAttribute expected = new EntityAssociationAttribute(
                 "PurchaseOrder_PurchaseOrderDetail",
                 "PurchaseOrderID",
                 "PurchaseOrderID"
             );
             expected.IsForeignKey = false;
-            ValidateAssociationAttribute(entityType, "PurchaseOrderDetails", expected);
+            ValidateEntityAssociationAttribute(entityType, "PurchaseOrderDetails", expected);
 
             // verify PurchaseOrderDetail.PurchaseOrder association
             entityType = d.EntityTypes.Single(p => p.Name == "PurchaseOrderDetail");
-            expected = new AssociationAttribute(
+            expected = new EntityAssociationAttribute(
                 "PurchaseOrder_PurchaseOrderDetail",
                 "PurchaseOrderID",
                 "PurchaseOrderID"
             );
             expected.IsForeignKey = true;
-            ValidateAssociationAttribute(entityType, "PurchaseOrder", expected);
+            ValidateEntityAssociationAttribute(entityType, "PurchaseOrder", expected);
             #endregion
 
             #region Verify bidirectional Product/PurchaseOrderDetail association
             // verify Product.PurchaseOrderDetails association
             entityType = d.EntityTypes.Single(p => p.Name == "Product");
-            expected = new AssociationAttribute(
+            expected = new EntityAssociationAttribute(
                 "Product_PurchaseOrderDetail",
                 "ProductID",
                 "ProductID"
             );
             expected.IsForeignKey = false;
-            ValidateAssociationAttribute(entityType, "PurchaseOrderDetails", expected);
+            ValidateEntityAssociationAttribute(entityType, "PurchaseOrderDetails", expected);
 
             // verify PurchaseOrderDetail.Product association
             entityType = d.EntityTypes.Single(p => p.Name == "PurchaseOrderDetail");
-            expected = new AssociationAttribute(
+            expected = new EntityAssociationAttribute(
                 "Product_PurchaseOrderDetail",
                 "ProductID",
                 "ProductID"
             );
             expected.IsForeignKey = true;
-            ValidateAssociationAttribute(entityType, "Product", expected);
+            ValidateEntityAssociationAttribute(entityType, "Product", expected);
             #endregion
         }
 
-        private void ValidateAssociationAttribute(Type entityType, string associationMember, AssociationAttribute expected)
+        private void ValidateEntityAssociationAttribute(Type entityType, string associationMember, EntityAssociationAttribute expected)
         {
             IEnumerable<PropertyDescriptor> properties = TypeDescriptor.GetProperties(entityType).Cast<PropertyDescriptor>();
             PropertyDescriptor pd = properties.SingleOrDefault(p => p.Name == associationMember);
             Assert.IsNotNull(pd, "Entity type " + entityType.Name + " did not have a property descriptor '" + associationMember + "'");
             AttributeCollection attributes = pd.Attributes;
-            AssociationAttribute assoc = attributes.OfType<AssociationAttribute>().SingleOrDefault();
-            Assert.IsNotNull(assoc, "Entity type " + entityType.Name + " did not have an AssociationAttribute");
+            EntityAssociationAttribute assoc = attributes.OfType<EntityAssociationAttribute>().SingleOrDefault();
+            Assert.IsNotNull(assoc, "Entity type " + entityType.Name + " did not have an EntityAssociationAttribute");
             Assert.AreEqual(expected.Name, assoc.Name);
             Assert.AreEqual(expected.ThisKey, assoc.ThisKey);
             Assert.AreEqual(expected.OtherKey, assoc.OtherKey);
@@ -2460,7 +2461,7 @@ namespace OpenRiaServices.Server.Test
             Assert.IsFalse(d.EntityTypes.Contains(typeof(ValidAssociation_InvalidIsFK_OtherTypeNotExposed.B)));
 
             Type A = d.EntityTypes.Single(t => t.Name == "A");
-            Assert.IsTrue(TypeDescriptor.GetProperties(A)["B"].Attributes.OfType<AssociationAttribute>().Any());
+            Assert.IsTrue(TypeDescriptor.GetProperties(A)["B"].Attributes.OfType<EntityAssociationAttribute>().Any());
         }
 
         [TestMethod]
@@ -2471,7 +2472,7 @@ namespace OpenRiaServices.Server.Test
             Assert.IsFalse(d.EntityTypes.Contains(typeof(ValidAssociation_OtherKeyNotFound_OtherTypeNotExposed.B)));
 
             Type A = d.EntityTypes.Single(t => t.Name == "A");
-            Assert.IsTrue(TypeDescriptor.GetProperties(A)["B"].Attributes.OfType<AssociationAttribute>().Any());
+            Assert.IsTrue(TypeDescriptor.GetProperties(A)["B"].Attributes.OfType<EntityAssociationAttribute>().Any());
         }
         #endregion
 
@@ -2483,17 +2484,17 @@ namespace OpenRiaServices.Server.Test
             Assert.IsTrue(d.EntityTypes.Contains(typeof(ValidAssociation_InheritanceSelfRef.B)));
 
             PropertyDescriptorCollection a_properties = TypeDescriptor.GetProperties(d.EntityTypes.Single(t => t.Name == "A"));
-            Assert.IsNotNull(a_properties["A1"].Attributes.OfType<AssociationAttribute>().Single());
-            Assert.IsNotNull(a_properties["A2"].Attributes.OfType<AssociationAttribute>().Single());
-            Assert.IsNotNull(a_properties["B"].Attributes.OfType<AssociationAttribute>().Single());
+            Assert.IsNotNull(a_properties["A1"].Attributes.OfType<EntityAssociationAttribute>().Single());
+            Assert.IsNotNull(a_properties["A2"].Attributes.OfType<EntityAssociationAttribute>().Single());
+            Assert.IsNotNull(a_properties["B"].Attributes.OfType<EntityAssociationAttribute>().Single());
 
             PropertyDescriptorCollection b_properties = TypeDescriptor.GetProperties(d.EntityTypes.Single(t => t.Name == "B"));
-            Assert.IsNotNull(b_properties["A1"].Attributes.OfType<AssociationAttribute>().Single());
-            Assert.IsNotNull(b_properties["A2"].Attributes.OfType<AssociationAttribute>().Single());
-            Assert.IsNotNull(b_properties["A"].Attributes.OfType<AssociationAttribute>().Single());
-            Assert.IsNotNull(b_properties["B"].Attributes.OfType<AssociationAttribute>().Single());
-            Assert.IsNotNull(b_properties["B1"].Attributes.OfType<AssociationAttribute>().Single());
-            Assert.IsNotNull(b_properties["B2"].Attributes.OfType<AssociationAttribute>().Single());
+            Assert.IsNotNull(b_properties["A1"].Attributes.OfType<EntityAssociationAttribute>().Single());
+            Assert.IsNotNull(b_properties["A2"].Attributes.OfType<EntityAssociationAttribute>().Single());
+            Assert.IsNotNull(b_properties["A"].Attributes.OfType<EntityAssociationAttribute>().Single());
+            Assert.IsNotNull(b_properties["B"].Attributes.OfType<EntityAssociationAttribute>().Single());
+            Assert.IsNotNull(b_properties["B1"].Attributes.OfType<EntityAssociationAttribute>().Single());
+            Assert.IsNotNull(b_properties["B2"].Attributes.OfType<EntityAssociationAttribute>().Single());
         }
 
         [AttributeTestInheritAttribute]
@@ -2985,6 +2986,7 @@ namespace OpenRiaServices.Server.Test
 
     public class EFCorePocoEntity_IEntityChangeTracker : IChangeDetector
     {
+#if NETFRAMEWORK
         void IChangeDetector.DetectChanges(IStateManager stateManager)
         {
             throw new NotImplementedException();
@@ -3019,6 +3021,114 @@ namespace OpenRiaServices.Server.Test
         {
             get { throw new NotImplementedException(); }
         }
+#else
+        event EventHandler<DetectEntityChangesEventArgs> IChangeDetector.DetectingEntityChanges
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        event EventHandler<DetectChangesEventArgs> IChangeDetector.DetectingAllChanges
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        event EventHandler<DetectedEntityChangesEventArgs> IChangeDetector.DetectedEntityChanges
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        event EventHandler<DetectedChangesEventArgs> IChangeDetector.DetectedAllChanges
+        {
+            add
+            {
+                throw new NotImplementedException();
+            }
+
+            remove
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+        (EventHandler<DetectChangesEventArgs> DetectingAllChanges, EventHandler<DetectedChangesEventArgs> DetectedAllChanges, EventHandler<DetectEntityChangesEventArgs> DetectingEntityChanges, EventHandler<DetectedEntityChangesEventArgs> DetectedEntityChanges) IChangeDetector.CaptureEvents()
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.DetectChanges(IStateManager stateManager)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.DetectChanges(InternalEntityEntry entry)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.OnDetectedAllChanges(IStateManager stateManager, bool changesFound)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.OnDetectedEntityChanges(InternalEntityEntry internalEntityEntry, bool changesFound)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.OnDetectingAllChanges(IStateManager stateManager)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.OnDetectingEntityChanges(InternalEntityEntry internalEntityEntry)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.PropertyChanged(InternalEntityEntry entry, IPropertyBase propertyBase, bool setModified)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.PropertyChanging(InternalEntityEntry entry, IPropertyBase propertyBase)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.ResetState()
+        {
+            throw new NotImplementedException();
+        }
+
+        void IChangeDetector.SetEvents(EventHandler<DetectChangesEventArgs> detectingAllChanges, EventHandler<DetectedChangesEventArgs> detectedAllChanges, EventHandler<DetectEntityChangesEventArgs> detectingEntityChanges, EventHandler<DetectedEntityChangesEventArgs> detectedEntityChanges)
+        {
+            throw new NotImplementedException();
+        }
+#endif
     }
 
 
