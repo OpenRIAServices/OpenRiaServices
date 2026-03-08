@@ -1,0 +1,39 @@
+﻿abstract OpenRiaServices.Hosting.QueryResult.GetIncludedResults() -> System.Collections.Generic.IEnumerable<object>
+abstract OpenRiaServices.Hosting.QueryResult.GetRootResults() -> System.Collections.Generic.IEnumerable<object>
+OpenRiaServices.Hosting.AspNetCore.EndpointRouteBuilderExtensions
+OpenRiaServices.Hosting.AspNetCore.OpenRiaServicesConfigurationBuilder
+OpenRiaServices.Hosting.AspNetCore.OpenRiaServicesConfigurationBuilder.AddDomainService(System.Type type) -> Microsoft.AspNetCore.Builder.IEndpointConventionBuilder
+OpenRiaServices.Hosting.AspNetCore.OpenRiaServicesConfigurationBuilder.AddDomainService<T>() -> Microsoft.AspNetCore.Builder.IEndpointConventionBuilder
+OpenRiaServices.Hosting.DomainServiceFault
+OpenRiaServices.Hosting.DomainServiceFault.DomainServiceFault() -> void
+OpenRiaServices.Hosting.DomainServiceFault.ErrorCode.get -> int
+OpenRiaServices.Hosting.DomainServiceFault.ErrorCode.set -> void
+OpenRiaServices.Hosting.DomainServiceFault.ErrorMessage.get -> string
+OpenRiaServices.Hosting.DomainServiceFault.ErrorMessage.set -> void
+OpenRiaServices.Hosting.DomainServiceFault.GetValidationErrors() -> System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Hosting.DomainServiceFault.IsDomainException.get -> bool
+OpenRiaServices.Hosting.DomainServiceFault.IsDomainException.set -> void
+OpenRiaServices.Hosting.DomainServiceFault.OperationErrors.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Server.ValidationResultInfo>
+OpenRiaServices.Hosting.DomainServiceFault.OperationErrors.set -> void
+OpenRiaServices.Hosting.DomainServiceFault.StackTrace.get -> string
+OpenRiaServices.Hosting.DomainServiceFault.StackTrace.set -> void
+OpenRiaServices.Hosting.QueryResult
+OpenRiaServices.Hosting.QueryResult.QueryResult() -> void
+OpenRiaServices.Hosting.QueryResult.TotalCount.get -> int
+OpenRiaServices.Hosting.QueryResult.TotalCount.set -> void
+OpenRiaServices.Hosting.QueryResult<T>
+OpenRiaServices.Hosting.QueryResult<T>.IncludedResults.get -> System.Collections.Generic.IEnumerable<object>
+OpenRiaServices.Hosting.QueryResult<T>.IncludedResults.set -> void
+OpenRiaServices.Hosting.QueryResult<T>.QueryResult() -> void
+OpenRiaServices.Hosting.QueryResult<T>.QueryResult(System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> validationErrors) -> void
+OpenRiaServices.Hosting.QueryResult<T>.QueryResult(System.Collections.Generic.IEnumerable<T> results) -> void
+OpenRiaServices.Hosting.QueryResult<T>.QueryResult(System.Collections.Generic.IEnumerable<T> results, int totalCount) -> void
+OpenRiaServices.Hosting.QueryResult<T>.RootResults.get -> System.Collections.Generic.IEnumerable<T>
+OpenRiaServices.Hosting.QueryResult<T>.RootResults.set -> void
+OpenRiaServices.Hosting.QueryResult<T>.ValidationErrors.get -> System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult>
+override OpenRiaServices.Hosting.QueryResult<T>.GetIncludedResults() -> System.Collections.Generic.IEnumerable<object>
+override OpenRiaServices.Hosting.QueryResult<T>.GetRootResults() -> System.Collections.Generic.IEnumerable<object>
+static OpenRiaServices.Hosting.AspNetCore.EndpointRouteBuilderExtensions.AddOpenRiaServices(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) -> void
+static OpenRiaServices.Hosting.AspNetCore.EndpointRouteBuilderExtensions.AddOpenRiaServices<T>(this Microsoft.Extensions.DependencyInjection.IServiceCollection services) -> void
+static OpenRiaServices.Hosting.AspNetCore.EndpointRouteBuilderExtensions.MapOpenRiaServices(this Microsoft.AspNetCore.Routing.IEndpointRouteBuilder endpoints, string prefix, System.Action<OpenRiaServices.Hosting.AspNetCore.OpenRiaServicesConfigurationBuilder> configure) -> Microsoft.AspNetCore.Builder.IEndpointConventionBuilder
+static OpenRiaServices.Hosting.AspNetCore.EndpointRouteBuilderExtensions.MapOpenRiaServices(this Microsoft.AspNetCore.Routing.IEndpointRouteBuilder endpoints, System.Action<OpenRiaServices.Hosting.AspNetCore.OpenRiaServicesConfigurationBuilder> configure) -> Microsoft.AspNetCore.Builder.IEndpointConventionBuilder

@@ -69,7 +69,7 @@
   -->
   <ItemGroup Condition="'$(IsFrameworkProject)' == 'true'">
     <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All"/>
-
+    <PackageReference Include="Microsoft.CodeAnalysis.PublicApiAnalyzers" Version="3.3.4" PrivateAssets="all"  />
   </ItemGroup>
 
 </Project>
