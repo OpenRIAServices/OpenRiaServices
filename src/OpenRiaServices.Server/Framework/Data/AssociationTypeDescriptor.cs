@@ -35,7 +35,8 @@ namespace OpenRiaServices.Server
                 {
                     // If the property has the obsolete AssociationAttribute, create an EntityAssociationAttribute
 #pragma warning disable CS0618 // Type or member is obsolete
-                    if (propDescriptor.Attributes[typeof(AssociationAttribute)] is AssociationAttribute associationAttribute)
+                    if (propDescriptor.Attributes[typeof(AssociationAttribute)] is AssociationAttribute associationAttribute
+                        && propDescriptor.Attributes[typeof(EntityAssociationAttribute)] is null)
                     {
                         var entityAssoc = new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray())
                         {
@@ -70,7 +71,8 @@ namespace OpenRiaServices.Server
             foreach (PropertyDescriptor pd in descriptor.GetProperties())
             {
 #pragma warning disable CS0618 // Type or member is obsolete
-                if (pd.Attributes[typeof(AssociationAttribute)] != null)
+                if (pd.Attributes[typeof(AssociationAttribute)] is not null
+                    && pd.Attributes[typeof(EntityAssociationAttribute)] is null)
                 {
                     return true;
                 }
