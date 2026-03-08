@@ -306,8 +306,11 @@ namespace OpenRiaServices.Server
         {
             bool allowInitialValue;
 
-            return ShouldAddEditableFalseAttribute(pd, keyIsEditable, out allowInitialValue) ||
-                   ShouldAddRoundTripAttribute(pd, foreignKeyMembers.Contains(pd.Name));
+#pragma warning disable CS0618 // Type or member AssociationAttribute is obsolete
+            return ShouldAddEditableFalseAttribute(pd, keyIsEditable, out allowInitialValue)
+                   || ShouldAddRoundTripAttribute(pd, foreignKeyMembers.Contains(pd.Name))
+                   || pd.Attributes[typeof(AssociationAttribute)] is not null                   ;
+#pragma warning restore CS0618 // Type or member AssociationAttribute is obsolete
         }
     }
 }
