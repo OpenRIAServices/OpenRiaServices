@@ -58,12 +58,12 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         /// </summary>
         /// <param name="navigationProperty">The navigation property that corresponds to the association (it identifies the end points)</param>
         /// <returns>A new AssociationAttribute that describes the given navigation property association</returns>
-        internal static AssociationAttribute CreateAssociationAttribute(IReadOnlyNavigation navigationProperty)
+        internal static EntityAssociationAttribute CreateAssociationAttribute(IReadOnlyNavigation navigationProperty)
         {
             var fk = navigationProperty.ForeignKey;
 
-            string thisKey;
-            string otherKey;
+            string[] thisKey;
+            string[] otherKey;
             string name = fk.GetConstraintName();
 
 #if NETFRAMEWORK
@@ -92,9 +92,10 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 }
             }
 
-            var assocAttrib = new AssociationAttribute(name, thisKey, otherKey);
-            assocAttrib.IsForeignKey = IsForeignKey(navigationProperty);
-            return assocAttrib;
+            return new EntityAssociationAttribute(name, thisKey, otherKey)
+            {
+                IsForeignKey = IsForeignKey(navigationProperty)
+            };
         }
 
 #if NETFRAMEWORK
@@ -103,24 +104,15 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         private static bool IsForeignKey(IReadOnlyNavigation navigationProperty) => navigationProperty.IsOnDependent;
 #endif
 
-
         /// <summary>
-        /// Comma delimits the specified member name collection
+        ///  Formats the list of members into an array of strings
         /// </summary>
-        /// <param name="members">A collection of members.</param>
-        /// <returns>A comma delimited list of member names.</returns>
-        protected static string FormatMemberList(IEnumerable<IReadOnlyProperty> members)
+        protected static string[] FormatMemberList(IReadOnlyList<IReadOnlyProperty> members)
         {
-            string memberList = string.Empty;
-            foreach (var prop in members)
-            {
-                if (memberList.Length > 0)
-                {
-                    memberList += ",";
-                }
-                memberList += prop.Name;
-            }
-            return memberList;
+            string[] result = new string[members.Count];
+            for(int i=0; i < members.Count; ++i)
+                result[i] = members[i].Name;
+            return result;
         }
     }
 }

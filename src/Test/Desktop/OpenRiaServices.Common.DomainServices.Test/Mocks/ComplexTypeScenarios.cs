@@ -203,6 +203,12 @@ namespace TestDomainServices
         public ContactInfo ContactInfo { get; set; }
     }
 
+    public class ComplexType_Invalid_AssociationMember_DomainService : DomainService
+    {
+        [Invoke]
+        public void TestInvoke(ComplexType_Invalid_AssociationMember param) { }
+    }
+
     public class ComplexType_Invalid_Parent
     {
     }

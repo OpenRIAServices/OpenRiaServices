@@ -59,9 +59,8 @@ namespace OpenRiaServices.Tools.TextTemplate
             { typeof(EntityActionAttribute), null },
             { typeof(RequiresAuthenticationAttribute), null },
             { typeof(RequiresRoleAttribute), null },
-            // Translate all AssociationAttribute to EntityAssociationAttribute on the client
-            { typeof(AssociationAttribute), new EntityAssociationAttributeBuilder() },
-            //{ typeof(EntityAssociationAttribute), new EntityAssociationAttributeBuilder() },
+            // Pass on EntityAssociationAttribute
+            { typeof(EntityAssociationAttribute), new EntityAssociationAttributeBuilder() },
         };
 
         public static AttributeDeclaration GetAttributeDeclaration(Attribute attribute, ClientCodeGenerator textTemplateClientCodeGenerator, bool forcePropagation)
