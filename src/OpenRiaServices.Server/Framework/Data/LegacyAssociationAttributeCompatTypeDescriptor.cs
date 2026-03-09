@@ -24,15 +24,14 @@ namespace OpenRiaServices.Server
             if (this._properties == null)
             {
                 PropertyDescriptorCollection originalCollection = base.GetProperties();
-
-                // Cache early to avoid reentrancy issues
-                this._properties = originalCollection;
-
                 bool customDescriptorsCreated = false;
-                List<PropertyDescriptor> tempPropertyDescriptors = new List<PropertyDescriptor>();
+                PropertyDescriptor[] propertyDescriptors = new PropertyDescriptor[originalCollection.Count];
+                originalCollection.CopyTo(propertyDescriptors, 0);
 
-                foreach (PropertyDescriptor propDescriptor in originalCollection)
+                for (int idxProp = 0; idxProp < propertyDescriptors.Length; idxProp++)
                 {
+                    PropertyDescriptor propDescriptor = propertyDescriptors[idxProp];
+
                     // If the property has the obsolete AssociationAttribute, create an EntityAssociationAttribute
 #pragma warning disable CS0618 // Type or member is obsolete
                     if (propDescriptor.Attributes[typeof(AssociationAttribute)] is not null)
@@ -40,11 +39,12 @@ namespace OpenRiaServices.Server
                         // Copy attributes but replace AssociationAttribute with EntityAssociationAttribute
                         var newAttributes = new Attribute[propDescriptor.Attributes.Count];
                         propDescriptor.Attributes.CopyTo(newAttributes, 0);
-                        for (int i = 0; i < newAttributes.Length; ++i)
+
+                        for (int idxAttrib = 0; idxAttrib < newAttributes.Length; ++idxAttrib)
                         {
-                            if (newAttributes[i] is AssociationAttribute associationAttribute)
+                            if (newAttributes[idxAttrib] is AssociationAttribute associationAttribute)
                             {
-                                newAttributes[i] = new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray())
+                                newAttributes[idxAttrib] = new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray())
                                 {
                                     IsForeignKey = associationAttribute.IsForeignKey
                                 };
@@ -53,20 +53,13 @@ namespace OpenRiaServices.Server
                             }
                         }
 
-                        tempPropertyDescriptors.Add(DomainPropertyDescriptor.CreateWithExplicitAttributes(propDescriptor, newAttributes));
+                        propertyDescriptors[idxProp] = DomainPropertyDescriptor.CreateWithExplicitAttributes(propDescriptor, newAttributes);
                         customDescriptorsCreated = true;
                     }
-                    else
 #pragma warning restore CS0618 // Type or member is obsolete
-                    {
-                        tempPropertyDescriptors.Add(propDescriptor);
-                    }
                 }
 
-                if (customDescriptorsCreated)
-                {
-                    this._properties = new PropertyDescriptorCollection(tempPropertyDescriptors.ToArray(), true);
-                }
+                this._properties = customDescriptorsCreated ? new PropertyDescriptorCollection(propertyDescriptors, true) : originalCollection;
             }
 
             return this._properties;
