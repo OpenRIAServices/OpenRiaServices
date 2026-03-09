@@ -797,7 +797,7 @@ namespace OpenRiaServices.Server.Test
             // verify FK association : Order->Customer
             PropertyDescriptorCollection orderProps = TypeDescriptor.GetProperties(typeof(PocoOrder));
             attribs = orderProps["Customer"].Attributes;
-            AssociationAttribute assoc = attribs.OfType<AssociationAttribute>().SingleOrDefault();
+            EntityAssociationAttribute assoc = attribs.OfType<EntityAssociationAttribute>().SingleOrDefault();
             Assert.IsNotNull(assoc);
             Assert.AreEqual("PocoOrder_Customer", assoc.Name);
             Assert.AreEqual("CustomerID", assoc.ThisKey);
@@ -806,7 +806,7 @@ namespace OpenRiaServices.Server.Test
 
             // verify collection association : Customer->Order*
             attribs = custProps["Orders"].Attributes;
-            assoc = attribs.OfType<AssociationAttribute>().SingleOrDefault();
+            assoc = attribs.OfType<EntityAssociationAttribute>().SingleOrDefault();
             Assert.IsNotNull(assoc);
             Assert.AreEqual("PocoOrder_Customer", assoc.Name);
             Assert.AreEqual("ID", assoc.ThisKey);
@@ -816,7 +816,7 @@ namespace OpenRiaServices.Server.Test
             // verify FK association : Employee->Employee (Manager)
             PropertyDescriptorCollection employeeProps = TypeDescriptor.GetProperties(typeof(PocoEmployee));
             attribs = employeeProps["Manager"].Attributes;
-            assoc = attribs.OfType<AssociationAttribute>().SingleOrDefault();
+            assoc = attribs.OfType<EntityAssociationAttribute>().SingleOrDefault();
             Assert.IsNotNull(assoc);
             Assert.AreEqual("PocoEmployee_Manager", assoc.Name);
             Assert.AreEqual("ManagerID", assoc.ThisKey);
@@ -826,7 +826,7 @@ namespace OpenRiaServices.Server.Test
             // verify FK association : Employee->Employee (HiringManager)
             // This tests multiple FK associations of the same type
             attribs = employeeProps["HiringManager"].Attributes;
-            assoc = attribs.OfType<AssociationAttribute>().SingleOrDefault();
+            assoc = attribs.OfType<EntityAssociationAttribute>().SingleOrDefault();
             Assert.IsNotNull(assoc);
             Assert.AreEqual("PocoEmployee_HiringManager", assoc.Name);
             Assert.AreEqual("HiringManagerID", assoc.ThisKey);
@@ -835,7 +835,7 @@ namespace OpenRiaServices.Server.Test
 
             // verify collection association : Employee->Employee* (Reports)
             attribs = employeeProps["Reports"].Attributes;
-            assoc = attribs.OfType<AssociationAttribute>().SingleOrDefault();
+            assoc = attribs.OfType<EntityAssociationAttribute>().SingleOrDefault();
             Assert.IsNotNull(assoc);
             Assert.AreEqual("PocoEmployee_Manager", assoc.Name);
             Assert.AreEqual("ID", assoc.ThisKey);

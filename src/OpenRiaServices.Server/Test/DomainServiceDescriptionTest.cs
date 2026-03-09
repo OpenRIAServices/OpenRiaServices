@@ -186,7 +186,7 @@ namespace OpenRiaServices.Server.Test
             // association
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
-                DomainServiceDescription.ValidateComplexType(typeof(ComplexType_Invalid_AssociationMember));
+                DomainServiceDescription.GetDescription(typeof(ComplexType_Invalid_AssociationMember_DomainService));
             }, string.Format(Resource.InvalidComplexType_PropertyAttribute, "ContactInfo", "ComplexType_Invalid_AssociationMember", Resource.InvalidComplexType_AssociationMember));
 
             // composition

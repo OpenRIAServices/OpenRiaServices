@@ -1,7 +1,7 @@
 using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Globalization;
 using System.Linq;
 
 namespace OpenRiaServices.Server
@@ -44,6 +44,21 @@ namespace OpenRiaServices.Server
                         {
                             if (newAttributes[idxAttrib] is AssociationAttribute associationAttribute)
                             {
+                                string assocName = associationAttribute.Name;
+                                if (string.IsNullOrEmpty(assocName))
+                                {
+                                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidAssociation_NameCannotBeNullOrEmpty, propDescriptor.Name, propDescriptor.ComponentType));
+                                }
+                                // Accessing ThisKeyMembers or OtherKeyMembers throws NullReferenceException on .NET Framework if corresponsing key is null, so throw better exception
+                                if (string.IsNullOrEmpty(associationAttribute.ThisKey))
+                                {
+                                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidAssociation_StringCannotBeNullOrEmpty, assocName, propDescriptor.ComponentType, "ThisKey"));
+                                }
+                                if (string.IsNullOrEmpty(associationAttribute.OtherKey))
+                                {
+                                    throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidAssociation_StringCannotBeNullOrEmpty, assocName, propDescriptor.ComponentType, "OtherKey"));
+                                }
+
                                 newAttributes[idxAttrib] = new EntityAssociationAttribute(associationAttribute.Name, associationAttribute.ThisKeyMembers.ToArray(), associationAttribute.OtherKeyMembers.ToArray())
                                 {
                                     IsForeignKey = associationAttribute.IsForeignKey
