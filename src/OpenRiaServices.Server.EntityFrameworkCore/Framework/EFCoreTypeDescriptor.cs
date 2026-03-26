@@ -250,7 +250,12 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
 
                 if (addAssociationAttribute)
                 {
-                    if (pd.Attributes[typeof(EntityAssociationAttribute)] is null)
+                    // Check for both EntityAssociationAttribute and the obsolete AssociationAttribute
+                    // to prevent duplicates when using the legacy AssociationAttribute
+                    if (pd.Attributes[typeof(EntityAssociationAttribute)] is null
+#pragma warning disable CS0618 // Type or member is obsolete
+                        && pd.Attributes[typeof(AssociationAttribute)] is null)
+#pragma warning restore CS0618 // Type or member is obsolete
                         attributes.Add(EFCoreTypeDescriptionContext.CreateAssociationAttribute(navigation));
 #if NET
                     if (navigation.TargetEntityType.IsOwned() && pd.Attributes[typeof(CompositionAttribute)] is null)
