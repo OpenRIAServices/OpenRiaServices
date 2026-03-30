@@ -9,7 +9,7 @@
     <ContinuousIntegrationBuild Condition="'$(BUILD_BUILDID)' != '' and '$(IsFrameworkProject)' == 'true'">true</ContinuousIntegrationBuild>
 
     <!-- Use csharp 13.0 for all projects -->
-    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">13.0</LangVersion>
+    <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">14.0</LangVersion>
     <AnalysisMode Condition="'$(IsFrameworkProject)' == 'true'">Recommended</AnalysisMode>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
 
