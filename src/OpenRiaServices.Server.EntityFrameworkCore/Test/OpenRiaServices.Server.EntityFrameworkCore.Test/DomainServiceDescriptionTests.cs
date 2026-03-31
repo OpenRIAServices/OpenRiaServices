@@ -32,12 +32,10 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
             var employee = TypeDescriptor.GetProperties(typeof(OwnedTypes.Employee));
             Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.EmployeeId)]!.Attributes[typeof(KeyAttribute)]);
 
-#pragma warning disable CS0618 // Type or member is obsolete
-            Assert.IsNull(employee[nameof(OwnedTypes.Employee.ContactInfo)]!.Attributes[typeof(AssociationAttribute)]);
-            Assert.IsNull(employee[nameof(OwnedTypes.Employee.OwnedEntityWithBackNavigation)]!.Attributes[typeof(AssociationAttribute)]);
-            Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.OwnedEntityWithExplicitId)]!.Attributes[typeof(AssociationAttribute)]);
-            Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.OwnedEntityWithExplicitIdAndBackNavigation)]!.Attributes[typeof(AssociationAttribute)]);
-#pragma warning restore CS0618 // Type or member is obsolete
+            Assert.IsNull(employee[nameof(OwnedTypes.Employee.ContactInfo)]!.Attributes[typeof(EntityAssociationAttribute)]);
+            Assert.IsNull(employee[nameof(OwnedTypes.Employee.OwnedEntityWithBackNavigation)]!.Attributes[typeof(EntityAssociationAttribute)]);
+            Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.OwnedEntityWithExplicitId)]!.Attributes[typeof(EntityAssociationAttribute)]);
+            Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.OwnedEntityWithExplicitIdAndBackNavigation)]!.Attributes[typeof(EntityAssociationAttribute)]);
 
             //var contactInfoProperty = employee[nameof(OwnedTypes.Employee.ContactInfo)]!;
             //Assert.IsNotNull(contactInfoProperty.Attributes[typeof(RequiredAttribute)], "ComplexObject property should be required");
