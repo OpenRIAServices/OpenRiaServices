@@ -30,33 +30,38 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <remarks>Request should specify mime-type <c>application/xml</c> using <c>Content-Type</c> or <c>Accept</c> HTTP-headers
         /// </remarks>
         /// <param name="defaultProvider">If <see langword="true"/> the Xml provider will be the default for responses (when content type is not specified)</param>
-        public OpenRiaServicesOptionsBuilder AddXmlSerializer(bool defaultProvider = false)
+        public OpenRiaServicesOptionsBuilder AddXmlSerialization(bool defaultProvider = false)
         {
-            // When adding options it might make sense to resolve the provider using DI so allowing default options configuration
-            // Services.AddSingleton<Serialization.TextXmlSerializationProvider>();
-            // Services.AddOptions<OpenRiaServicesOptions>().Configure((OpenRiaServicesOptions opts, Serialization.TextXmlSerializationProvider provider)
-            // OR
-            // Services.Configure<XmlSerializationOptions>(callback)
-            // Services.AddOptions<OpenRiaServicesOptions>().Configure((OpenRiaServicesOptions opts, IOptions<XmlSerializationOptions> options)
-            Services.Configure<OpenRiaServicesOptions>(options =>
-            {
-                options.AddSerializationProvider(new Serialization.TextXmlSerializationProvider(), defaultProvider);
-            });
-
-            return this;
+            return AddSerializationProvider(new Serialization.TextXmlSerializationProvider(), defaultProvider);
         }
 
         /// <summary>
         /// Removes all registered <see cref="Serialization.ISerializationProvider" />s.
         /// <para>Useful for removing default serialization formats (application/msbin1).</para>
         /// </summary>
-        public OpenRiaServicesOptionsBuilder ClearSerializers()
+        public OpenRiaServicesOptionsBuilder ClearSerializationProviders()
         {
             Services.Configure<OpenRiaServicesOptions>(options =>
             {
                 options.ClearSerializationProviders();
             });
-            
+
+            return this;
+        }
+
+        private OpenRiaServicesOptionsBuilder AddSerializationProvider(Serialization.ISerializationProvider serializationProvider, bool defaultProvider)
+        {
+            // When adding options it might make sense to resolve the provider using DI so allowing default options configuration
+            //Services.AddSingleton<Serialization.TextXmlSerializationProvider>();
+            //Services.AddOptions<OpenRiaServicesOptions>().Configure((OpenRiaServicesOptions opts, Serialization.TextXmlSerializationProvider provider) => { });
+            // OR
+            // Services.Configure<XmlSerializationOptions>(callback)
+            // Services.AddOptions<OpenRiaServicesOptions>().Configure((OpenRiaServicesOptions opts, IOptions<XmlSerializationOptions> options)
+            Services.Configure<OpenRiaServicesOptions>(options =>
+            {
+                options.AddSerializationProvider(serializationProvider, defaultProvider);
+            });
+
             return this;
         }
     }

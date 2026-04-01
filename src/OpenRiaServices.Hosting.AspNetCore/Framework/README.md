@@ -108,6 +108,31 @@ builder.Services.AddOpenRiaServices(o => {
 });
 ```
 
+### Supporting different serialization formats (Text Xml)
+
+* Support for XML serialization was added in 1.4.0 as an alternative to binary serialization format (#546)
+  * Server can now intelligently handles both binary and XML content types based on client requests and configuration settings
+
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenRiaServices(o => { } )
+    .AddXmlSerialization()
+```
+
+You can remove default built in formats by calling `ClearSerializationProviders`.
+
+The following sample will only accept and return plain text based xml
+using MIME-type `application/xml`
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenRiaServices(o => { } )
+    .ClearSerializationProviders()
+    .AddXmlSerialization()
+```
+
+
 ### Specifying endpoint routes
 
 You can choose between 3 different approaches to how the endpoint routes are generated.

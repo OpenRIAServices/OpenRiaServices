@@ -78,10 +78,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         {
             var endpoints = new List<Endpoint>();
 
-            //if (_options.SerializationProviders is null)
-            //    _options.SerializationProviders = [new BinaryXmlSerializationProvider()];
-            //else
-                if (_options.SerializationProviders.Length < 1)
+            if (_options?.SerializationProviders.Length < 1)
                 throw new InvalidOperationException("No SerializationProviders specified");
 
             foreach (var (name, domainServiceBuilder) in _endpointBuilders)

@@ -11,7 +11,7 @@
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices(o => { } )
-    .AddXmlSerializer()
+    .AddXmlSerialization()
 ```
 
 **Fixed bug**
