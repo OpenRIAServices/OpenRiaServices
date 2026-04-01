@@ -30,7 +30,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// List of all registered wire formats on descending order of priority. 
         /// First one is the default used for responses (when client do not specify an matching format)
         /// </summary>
-        internal ISerializationProvider[] SerializationProviders { get; set; } = [new BinaryXmlSerializationProvider()];
+        internal ISerializationProvider[] SerializationProviders { get; private set; } = [new BinaryXmlSerializationProvider()];
 
         /// <summary>
         /// Adds a serialization provider to the list of supported formats.
@@ -60,26 +60,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
         }
 
         /// <summary>
-        /// Enables Text based XML wire format (application/xml) in addition to built in binary XML (application/msbin1).
-        /// It does not change the default format.
+        /// Remove all SerializationProviders, useful for removing default serialization proviers
         /// </summary>
-        /// <remarks>Request should specify mime-type <c>application/xml</c> using <c>Content-Type</c> or <c>Accept</c> headers
-        /// </remarks>
-        /// <param name="defaultProvider">If <see langword="true"/> the Text XML provider will be the default for responses</param>
-        internal void AddTextXmlSerializer(bool defaultProvider = false)
+        internal void ClearSerializationProviders()
         {
-            // Good parameter candidates for options to pass in would include 
-            // XmlDictionaryReaderQuotas, XmlDictionaryWriterQuotas (pass on to MessageReader, MessageWriter caches)
-
-            AddSerializationProvider(new TextXmlSerializationProvider(), defaultProvider);
-        }
-
-        /// <summary>
-        /// Removes the default Binary XML (application/msbin1) wire format.
-        /// </summary>
-        internal void RemoveBinaryXmlSerializer()
-        {
-            SerializationProviders = [.. SerializationProviders.Where(sp => sp is not BinaryXmlSerializationProvider)];
+            SerializationProviders = [];
         }
 
         /* ************ SOME POSSIBLE FUTURE OPTIONS ************ 
