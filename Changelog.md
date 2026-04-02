@@ -23,9 +23,20 @@
 
 ## Core libraries (5.7.0)
 
-**DateOnly and TimeOnly (#539, #540)**
-DateOnly and TimeOnly are now fully supported primitive type, but **REQUIRES .NET 10** runtime for serialisation.
+**Major Features**
 
+  * **DateOnly and TimeOnly (#539, #540)**
+
+    DateOnly and TimeOnly are now fully supported primitive type, but **REQUIRES .NET 10** runtime for serialisation.
+
+  * **XML Support**
+  
+    Added a new class `OpenRiaServices.Client.DomainClients.XmlHttpDomainClientFactory` that can be used to enable text-based XML communication with the server.
+
+    Sample usage:
+    ```csharp
+    DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(baseUri, httpClientFactory);
+    ```
 
 **Server**
 * `EntityAssociationAttribute` should now be used instead of `AssociationAttribute` (which is obsolete on .NET)
@@ -33,13 +44,6 @@ DateOnly and TimeOnly are now fully supported primitive type, but **REQUIRES .NE
 
 **Client**
 
-* XML Support
-Added a new class `OpenRiaServices.Client.DomainClients.XmlHttpDomainClientFactory` that can be used to enable text based XML communication with the server.
-
-  Sample usage:
-  ```csharp
-  DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(baseUri, httpClientFactory);
-  ```
 * Improves clients NotFound errors (will now use OperationErrorStatus.NotFound)
 * Fix handling of empty string, when returned from invoke method (POST), it was incorrectly converted to `null` on client
 
