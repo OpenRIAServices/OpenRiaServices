@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 using System;
@@ -14,8 +15,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 {
     class QueryOperationInvoker<TEntity> : OperationInvoker
     {
-        public QueryOperationInvoker(DomainOperationEntry operation, SerializationHelper serializationHelper, OpenRiaServicesOptions options)
-                : base(operation, DomainOperationType.Query, serializationHelper, serializationHelper.GetSerializer(typeof(QueryResult<TEntity>)), options)
+        public QueryOperationInvoker(DomainOperationEntry operation, OpenRiaServicesOptions options)
+                : base(operation, DomainOperationType.Query, options)
         {
         }
 
@@ -25,28 +26,37 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
         {
             try
             {
-                DomainService domainService = CreateDomainService(context);
+                SetDefaultResponseHeaders(context);
+
+                var writer = GetSerializerForWrite(context);
+                if (writer is null)
+                {
+                    context.Response.StatusCode = StatusCodes.Status406NotAcceptable;
+                    return;
+                }
 
                 object[] inputs;
                 ServiceQuery serviceQuery;
                 if (context.Request.Method == "GET")
                 {
-                    inputs = GetParametersFromUri(context);
+                    inputs = ReadParametersFromUri(context);
 
                     var queryAttribute = (QueryAttribute)_operation.OperationAttribute;
                     serviceQuery = queryAttribute.IsComposable ? GetServiceQuery(context.Request) : null;
                 }
                 else // POST
                 {
-                    if (context.Request.ContentType != "application/msbin1")
+                    var serializer = TryGetSerializerForReading(context);
+                    if (serializer is null)
                     {
                         context.Response.StatusCode = StatusCodes.Status415UnsupportedMediaType;
                         return;
                     }
 
-                    (serviceQuery, inputs) = await ReadParametersFromBodyAsync(context);
+                    (serviceQuery, inputs) = await serializer.ReadParametersFromBodyAsync(context, DomainOperation);
                 }
 
+                DomainService domainService = CreateDomainService(context);
                 QueryResult<TEntity> result;
                 try
                 {
@@ -54,14 +64,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {
-                    await WriteError(context, ex, domainService);
+                    await WriteError(writer, context, ex, domainService);
                     return;
                 }
 
                 if (result.ValidationErrors != null && result.ValidationErrors.Any())
-                    await WriteError(context, result.ValidationErrors);
+                    await WriteError(writer, context, result.ValidationErrors);
                 else
-                    await WriteResponse(context, result);
+                    await writer.WriteResponseAsync(context, result, DomainOperation);
             }
             catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
             {

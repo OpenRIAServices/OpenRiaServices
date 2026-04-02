@@ -30,11 +30,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
         public static OpenRiaServicesOptionsBuilder AddOpenRiaServices(this IServiceCollection services, Action<OpenRiaServicesOptions> configure)
         {
             ArgumentNullException.ThrowIfNull(services);
+            ArgumentNullException.ThrowIfNull(configure);
 
-            services.AddOpenRiaServices();
-            services.Configure(configure);
-
-            return new OpenRiaServicesOptionsBuilder(services);
+            services.Configure<OpenRiaServicesOptions>(configure);
+            return AddOpenRiaServices(services);
         }
 
         /// <summary>

@@ -1,4 +1,62 @@
-## AspNetCore - 1.3.1
+# 5.7.0 / AspNetCore 1.4.0 / EF Core 4.0.0
+
+## AspNetCore 1.4.0
+
+**New Features**
+* Fully tested on .NET 10
+* Return status code 400 (Bad Request) on parameter errors such as null when null is not allowed (#551, #546)
+* Added support for XML serialization as an alternative to binary serialization format (#546)
+  * Server can now intelligently handle both binary and XML content types
+ 
+    ```csharp
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Services.AddOpenRiaServices(o => { } )
+        .AddXmlSerialization();
+    ```
+
+**Bugfixes**
+* #553 - Buffer management bug for responses - small probability but HIGH SEVERITY bug
+* #552 - Incorrect decoding of string parameters
+
+## EF Core 4.0
+
+* Add .NET 10 target framework compiled against EF Core 10 (#549)
+
+## Core libraries (5.7.0)
+
+**Major Features**
+
+  * **DateOnly and TimeOnly (#539, #540)**
+
+    DateOnly and TimeOnly are now fully supported primitive type, but **REQUIRES .NET 10** runtime for serialisation.
+
+  * **XML Support**
+  
+    Added a new class `OpenRiaServices.Client.DomainClients.XmlHttpDomainClientFactory` that can be used to enable text-based XML communication with the server.
+
+    Sample usage:
+    ```csharp
+    DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(baseUri, httpClientFactory);
+    ```
+
+**Server**
+* `EntityAssociationAttribute` should now be used instead of `AssociationAttribute` (which is obsolete on .NET)
+    * While there is code for backwards compatibility, please update all code to use the new attribute since backwards compatibility may be removed in the future
+
+**Client**
+
+* Improves clients NotFound errors (will now use OperationErrorStatus.NotFound)
+* Fix handling of empty string, when returned from invoke method (POST), it was incorrectly converted to `null` on client
+
+**General Improvements**
+* Fixed typo in OutputCacheAttribute.cs (#528) by @icnocop
+* Replace ReaderWriterLockSlim with ConcurrentDictionary for improved perf in DataContractSurrogateGenerator (#529)
+* Updated some dependencies
+* Update CI pipelines - running VS 2026 and compiling using C#14
+* Running many tests on .NET 10
+
+
+# AspNetCore - 1.3.1
 
 * **New Http status codes** returned
    * Submit can now return 409 and 422 Unprocessable Entity (for conflicts and validation failure)
