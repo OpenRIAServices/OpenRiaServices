@@ -11,6 +11,7 @@ using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
@@ -59,8 +60,8 @@ namespace OpenRiaServices.Client.DomainClients.Http
             }
         }
 
-        private protected abstract System.Xml.XmlDictionaryWriter CreateWriter(Stream stream);
-        private protected abstract System.Xml.XmlDictionaryReader CreateReader(Stream stream);
+        private protected abstract XmlDictionaryWriter CreateWriter(Stream stream);
+        private protected abstract XmlDictionaryReader CreateReader(Stream stream);
 
 
         #region Invoke/Query/Submit Methods
@@ -346,9 +347,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             // Always dispose using finally block below  respnse or we can leak connections
             using (response)
             {
-                // TODO: OpenRia 5.0 returns different status codes
                 // Need to read content and parse it even if status code is not 200
-                // It would make sens to one  check content type and only pase on msbin
                 if (!response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType != ContentType)
                 {
                     var message = string.Format(CultureInfo.InvariantCulture, Resources.DomainClient_UnexpectedHttpStatusCode, (int)response.StatusCode, response.StatusCode);
@@ -357,6 +356,8 @@ namespace OpenRiaServices.Client.DomainClients.Http
                         throw new DomainOperationException(message, OperationErrorStatus.NotSupported, (int)response.StatusCode, null);
                     else if (response.StatusCode == HttpStatusCode.Unauthorized)
                         throw new DomainOperationException(message, OperationErrorStatus.Unauthorized, (int)response.StatusCode, null);
+                    else if (response.StatusCode == HttpStatusCode.NotFound)
+                        throw new DomainOperationException(message, OperationErrorStatus.NotFound, (int)response.StatusCode, null);
                     else
                         throw new DomainOperationException(message, OperationErrorStatus.ServerError, (int)response.StatusCode, null);
                 }
@@ -373,15 +374,18 @@ namespace OpenRiaServices.Client.DomainClients.Http
                     }
                     else
                     {
-                        // Validate that we are no on ****Response node
+                        // Validate that we are now on ****Response node
                         VerifyReaderIsAtNode(reader, operationName, "Response");
                         reader.ReadStartElement(); // Read to next which should be ****Result
 
-                        if (reader.NodeType == System.Xml.XmlNodeType.EndElement
-                            || reader.IsEmptyElement)
+                        if (reader.HasAttributes && reader.GetAttribute("nil", "http://www.w3.org/2001/XMLSchema-instance") == "true")
+                        {
+                            // Consume contents
+                            ReadElement(reader);
                             return null;
+                        }
 
-                        // Validate that we are no on ****Result node
+                        // Validate that we are now on ****Result node
                         VerifyReaderIsAtNode(reader, operationName, "Result");
 
                         var serializer = GetSerializer(returnType);
@@ -404,7 +408,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="operationName">Name of the operation.</param>
         /// <param name="postfix">The postfix.</param>
         /// <exception cref="DomainOperationException">If reader is not at the expected xml element</exception>
-        private static void VerifyReaderIsAtNode(System.Xml.XmlDictionaryReader reader, string operationName, string postfix)
+        private static void VerifyReaderIsAtNode(XmlDictionaryReader reader, string operationName, string postfix)
         {
             // localName should be operationName + postfix
             if (!(reader.LocalName.Length == operationName.Length + postfix.Length
@@ -451,7 +455,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="reader">The reader, which should start at the "Fault" element.</param>
         /// <param name="operationName">Name of the operation.</param>
         /// <returns>A FaultException with the details in the server reply</returns>
-        private static FaultException ReadFaultException(System.Xml.XmlDictionaryReader reader, string operationName)
+        private static FaultException ReadFaultException(XmlDictionaryReader reader, string operationName)
         {
             FaultCode faultCode = null;
             FaultReason faultReason = null;
@@ -530,6 +534,20 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <returns>A <see cref="DataContractSerializer"/> which can be used to serialize the type</returns>
         internal DataContractSerializer GetSerializer(Type type)
             => _localCacheHelper.GetSerializer(type, EntityTypes);
+
+
+        static void ReadElement(XmlDictionaryReader reader)
+        {
+            if (reader.IsEmptyElement)
+            {
+                reader.Read();
+            }
+            else
+            {
+                reader.Read();
+                reader.ReadEndElement();
+            }
+        }
 
         #endregion
     }

@@ -11,11 +11,11 @@
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices(o => { } )
-    .AddXmlSerialization()
+    .AddXmlSerialization();
 ```
 
 **Fixed bug**
-* #553 - HIGH SEVERITY: Buffer management bug for responses #553 
+* #553 - Buffer management bug for responses #553 - small probability but HIGH SEVERITY bug
 * #552 - Incorrect decoding of string parameters #552
 
 ## EF Core 4.0
@@ -26,18 +26,22 @@ builder.Services.AddOpenRiaServices(o => { } )
 **DateOnly and TimeOnly (#539, #540)**
 DateOnly and TimeOnly are now fully supported primitive type, but **REQUIRES .NET 10** runtime for serialisation.
 
-**XML Support**
-Added a new class  `OpenRiaServices.Client.DomainClients.XmlHttpDomainClientFactory` that can be used to enable text based XML communication with the server.
-
-Sample usage: 
-```csharp
- DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(baseUri, httpClientFactory);
-```
 
 **Server**
-* `EntityAssocationAttribute` should now be used instead of `AssociationAttribute` (which is obsolete on .NET)
+* `EntityAssociationAttribute` should now be used instead of `AssociationAttribute` (which is obsolete on .NET)
     * While there is code for backwards compatibility please update all code to use
 
+**Client**
+
+* XML Support
+Added a new class  `OpenRiaServices.Client.DomainClients.XmlHttpDomainClientFactory` that can be used to enable text based XML communication with the server.
+
+  Sample usage:
+ 
+  ```csharp
+  DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(baseUri, httpClientFactory);
+  ```
+* Improves clients NotFound errors (will now use OperationErrorStatus.NotFound)
 
 **General Improvements**
 * Fixed typo in OutputCacheAttribute.cs (#528) by @icnocop
@@ -45,7 +49,6 @@ Sample usage:
 * Updated some dependencies
 * Update CI pipelines - running VS 2026 and compiling using C#14
 * Running many tests on .NET 10
-
 
 
 # AspNetCore - 1.3.1

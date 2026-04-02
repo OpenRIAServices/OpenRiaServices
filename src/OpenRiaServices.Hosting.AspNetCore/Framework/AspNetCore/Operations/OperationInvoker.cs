@@ -168,7 +168,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     }
                     catch (Exception ex) when (!ExceptionHandlingUtility.IsFatal(ex))
                     {
-                        throw new BadHttpRequestException($"Failed to parse parameter '{parameters[i].Name}' from value '{values.FirstOrDefault()}'", ex);
+                        throw new BadHttpRequestException($"Failed to parse parameter '{parameters[i].Name}'", ex);
                     }
                 }
                 else if (parameters[i].IsNullable) // Client omit null values from query string in order to send null

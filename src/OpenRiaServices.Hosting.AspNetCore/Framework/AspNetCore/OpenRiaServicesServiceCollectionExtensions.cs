@@ -29,6 +29,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// </summary>
         public static OpenRiaServicesOptionsBuilder AddOpenRiaServices(this IServiceCollection services, Action<OpenRiaServicesOptions> configure)
         {
+            ArgumentNullException.ThrowIfNull(services);
             ArgumentNullException.ThrowIfNull(configure);
 
             services.Configure<OpenRiaServicesOptions>(configure);

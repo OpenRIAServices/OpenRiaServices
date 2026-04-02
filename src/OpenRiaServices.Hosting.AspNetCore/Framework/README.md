@@ -117,7 +117,7 @@ builder.Services.AddOpenRiaServices(o => {
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices(o => { } )
-    .AddXmlSerialization()
+    .AddXmlSerialization();
 ```
 
 You can remove default built in formats by calling `ClearSerializationProviders`.
@@ -129,7 +129,7 @@ using MIME-type `application/xml`
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices(o => { } )
     .ClearSerializationProviders()
-    .AddXmlSerialization()
+    .AddXmlSerialization();
 ```
 
 
