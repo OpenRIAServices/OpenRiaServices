@@ -416,7 +416,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             if (separator >= 0)
                 value = value[..separator];
 
-            return value.Equals(expected, StringComparison.Ordinal);
+            return value.Equals(expected, StringComparison.OrdinalIgnoreCase);
         }
     }
 }

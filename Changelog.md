@@ -6,13 +6,13 @@
 * Fully tested on .NET 10
 * Return statuscode 400: bad request on parameter errors (#551)
 * Added support for XML serialization as an alternative to binary serialization format (#546)
-  * Server can now intelligently handles both binary and XML content types based on client requests and configuration settings
+    * Server can now intelligently handles both binary and XML content types based on client requests and configuration settings
  
-```csharp
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices(o => { } )
-    .AddXmlSerialization();
-```
+    ```csharp
+    var builder = WebApplication.CreateBuilder(args);
+    builder.Services.AddOpenRiaServices(o => { } )
+        .AddXmlSerialization();
+    ```
 
 **Fixed bug**
 * #553 - Buffer management bug for responses #553 - small probability but HIGH SEVERITY bug
@@ -34,14 +34,14 @@ DateOnly and TimeOnly are now fully supported primitive type, but **REQUIRES .NE
 **Client**
 
 * XML Support
-Added a new class  `OpenRiaServices.Client.DomainClients.XmlHttpDomainClientFactory` that can be used to enable text based XML communication with the server.
+Added a new class `OpenRiaServices.Client.DomainClients.XmlHttpDomainClientFactory` that can be used to enable text based XML communication with the server.
 
   Sample usage:
- 
   ```csharp
   DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(baseUri, httpClientFactory);
   ```
 * Improves clients NotFound errors (will now use OperationErrorStatus.NotFound)
+* Fix handling of empty string, when returned from invoke method (POST), it was incorrectly converted to `null` on client
 
 **General Improvements**
 * Fixed typo in OutputCacheAttribute.cs (#528) by @icnocop
