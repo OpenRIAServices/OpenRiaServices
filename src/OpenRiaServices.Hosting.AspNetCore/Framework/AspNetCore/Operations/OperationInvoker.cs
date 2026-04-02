@@ -152,7 +152,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             context.Response.Headers.CacheControl = "private, no-store";
         }
 
-        protected object?[] GetParametersFromUri(HttpContext context)
+        protected object?[] ReadParametersFromUri(HttpContext context)
         {
             var query = context.Request.Query;
             var parameters = _operation.Parameters;

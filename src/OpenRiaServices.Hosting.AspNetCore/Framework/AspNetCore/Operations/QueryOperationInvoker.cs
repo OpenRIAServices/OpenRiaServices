@@ -39,7 +39,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 ServiceQuery serviceQuery;
                 if (context.Request.Method == "GET")
                 {
-                    inputs = GetParametersFromUri(context);
+                    inputs = ReadParametersFromUri(context);
 
                     var queryAttribute = (QueryAttribute)_operation.OperationAttribute;
                     serviceQuery = queryAttribute.IsComposable ? GetServiceQuery(context.Request) : null;

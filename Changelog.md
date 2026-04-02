@@ -14,11 +14,12 @@
         .AddXmlSerialization();
     ```
 
-**Fixed bug**
-* #553 - Buffer management bug for responses #553 - small probability but HIGH SEVERITY bug
-* #552 - Incorrect decoding of string parameters #552
+**Bugfixes**
+* #553 - Buffer management bug for responses - small probability but HIGH SEVERITY bug
+* #552 - Incorrect decoding of string parameters
 
 ## EF Core 4.0
+
 * Add .NET 10 target framework compiled against EF Core 10 (#549)
 
 ## Core libraries (5.7.0)
@@ -40,7 +41,7 @@
 
 **Server**
 * `EntityAssociationAttribute` should now be used instead of `AssociationAttribute` (which is obsolete on .NET)
-    * While there is code for backwards compatibility please update all code to use
+    * While there is code for backwards compatibility, please update all code to use the new attribute since backwards compatibility may be removed in the future
 
 **Client**
 

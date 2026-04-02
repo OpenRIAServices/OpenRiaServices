@@ -32,7 +32,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 object?[] inputs;
                 if (context.Request.Method == "GET")
                 {
-                    inputs = GetParametersFromUri(context);
+                    inputs = ReadParametersFromUri(context);
                 }
                 else // POST
                 {

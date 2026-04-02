@@ -230,10 +230,17 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     if (!reader.IsStartElement(parameter.Name))
                         throw new BadHttpRequestException(InvalidContentMessage);
 
-                    if (reader.HasAttributes && reader.GetAttribute("nil", "http://www.w3.org/2001/XMLSchema-instance") == "true")
+                    if (reader.GetAttribute("nil", "http://www.w3.org/2001/XMLSchema-instance") == "true")
                     {
-                        values[i] = null;
-                        ReadElement(reader); // consume element
+                        if (parameters[i].IsNullable)
+                        {
+                            values[i] = null;
+                            ReadElement(reader); // consume element
+                        }
+                        else // missing value for required parameter
+                        {
+                            throw new BadHttpRequestException($"Null value provided for parameter '{parameters[i].Name}'");
+                        }
                     }
                     else
                     {
