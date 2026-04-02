@@ -4,9 +4,9 @@
 
 **New Features**
 * Fully tested on .NET 10
-* Return statuscode 400: bad request on parameter errors (#551)
+* Return status code 400 (Bad Request) on parameter errors such as null when null is not allowed (#551, #546)
 * Added support for XML serialization as an alternative to binary serialization format (#546)
-    * Server can now intelligently handles both binary and XML content types based on client requests and configuration settings
+  * Server can now intelligently handle both binary and XML content types
  
     ```csharp
     var builder = WebApplication.CreateBuilder(args);
