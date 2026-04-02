@@ -389,7 +389,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
                         var serializer = GetSerializer(returnType);
 
-                        // XmlElemtnt returns the "ResultNode" unless we step into the contents
+                        // XmlElement returns the "ResultNode" unless we step into the contents
                         if (returnType == typeof(System.Xml.Linq.XElement))
                             reader.ReadStartElement();
 
