@@ -881,7 +881,7 @@ namespace OpenRiaServices.Client
                 throw new ArgumentNullException(nameof(returnType));
             }
 
-            InvokeArgs invokeArgs = new InvokeArgs(operationName, typeof(TValue), parameters, hasSideEffects);
+            InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
             return this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
                                     .ContinueWith((Task<InvokeCompletedResult> task, object state) =>
             {

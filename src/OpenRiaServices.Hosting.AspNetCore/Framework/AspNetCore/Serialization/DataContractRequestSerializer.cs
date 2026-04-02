@@ -404,8 +404,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// <summary>
         /// Determines whether the specified media type matches the expected media type, ignoring any parameters.
         /// </summary>
-        /// <remarks>This method trims any parameters from the media type before performing the comparison, ensuring that
-        /// only the main type is evaluated.</remarks>
         /// <param name="value">The media type to compare, represented as a read-only span of characters. This value may include parameters, which
         /// will be ignored in the comparison.</param>
         /// <param name="expected">The expected media type to match against. This string is compared in a case-insensitive manner.</param>
