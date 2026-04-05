@@ -20,7 +20,7 @@ namespace OpenRiaServices.Client
     /// Represents a collection of associated Entities.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> in the collection</typeparam>
-    public sealed class EntityCollection<TEntity> : IEntityCollection, IEntityCollection<TEntity>
+    public sealed class EntityCollection<TEntity> : IEntityCollection, IEntityCollection<TEntity>, IList
 #if HAS_COLLECTIONVIEW
         , ICollectionViewFactory
 #endif
@@ -1021,6 +1021,7 @@ namespace OpenRiaServices.Client
                 return IsSourceExternal;
             }
         }
+
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
             this.Load();
@@ -1045,6 +1046,62 @@ namespace OpenRiaServices.Client
             this.Load();
             foreach (var item in this.Entities.ToList())
                 Remove(item);
+        }
+
+        #endregion
+
+        #region IList
+        bool IList.IsFixedSize => false;
+
+        bool IList.IsReadOnly => this.IsSourceExternal;
+
+        bool ICollection.IsSynchronized => ((ICollection)_sourceSet).IsSynchronized;
+
+        object ICollection.SyncRoot => ((ICollection)_sourceSet).SyncRoot;
+
+        // TODO Load entities for all these operations
+        object IList.this[int index] { get => ((IList)Entities)[index]; set => Entities[index] = (TEntity)value; }
+
+        int IList.Add(object value)
+        {
+            Add((TEntity)value);
+            return Entities.Count - 1;
+        }
+
+        void IList.Clear()
+        {
+            throw new NotImplementedException();
+        }
+
+        bool IList.Contains(object value)
+        {
+            return value is TEntity entity && ((ICollection<TEntity>)this).Contains(entity);
+        }
+
+        int IList.IndexOf(object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            throw new NotImplementedException();
+        }
+
+        void IList.Remove(object value)
+        {
+            Remove((TEntity)value);
+        }
+
+        void IList.RemoveAt(int index)
+        {
+            throw new NotImplementedException();
+        }
+
+        void ICollection.CopyTo(Array array, int index)
+        {
+            this.Load();
+            ((ICollection)Entities).CopyTo(array, index);
         }
         #endregion
     }

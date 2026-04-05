@@ -18,7 +18,7 @@ namespace OpenRiaServices.Client
     /// <summary>
     /// Represents a collection of <see cref="Entity"/> instances.
     /// </summary>
-    public abstract class EntitySet : IEnumerable, ICollection, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
+    public abstract class EntitySet : IEnumerable, ICollection, IList, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
     {
         private readonly Dictionary<EntityAssociationAttribute, Action<Entity>> _associationUpdateCallbackMap = new();
         private readonly Type _entityType;
@@ -938,6 +938,43 @@ namespace OpenRiaServices.Client
         {
             this._list.CopyTo(array, index);
         }
+        #endregion
+
+        #region IList
+        bool IList.IsFixedSize => _list.IsFixedSize;
+
+        object IList.this[int index] { get => _list[index]; set => _list[index] = value; }
+
+        int IList.Add(object value)
+        {
+            return _list.Add(value);
+        }
+
+        bool IList.Contains(object value)
+        {
+            return _list.Contains(value);
+        }
+
+        int IList.IndexOf(object value)
+        {
+            return _list.IndexOf(value);
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            _list.Insert(index, value);
+        }
+
+        void IList.Remove(object value)
+        {
+            _list.Remove(value);
+        }
+
+        void IList.RemoveAt(int index)
+        {
+            _list.RemoveAt(index);
+        }
+
         #endregion
 
         #region INotifyCollectionChanged Members
