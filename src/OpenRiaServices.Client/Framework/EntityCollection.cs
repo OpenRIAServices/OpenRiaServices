@@ -376,7 +376,7 @@ namespace OpenRiaServices.Client
                 this.Entities.RemoveAt(index);
                 return true;
             }
-            Debug.Fail("Expected item to be part of Set")
+            Debug.Fail("Expected item to be part of Set");
             return false;
         }
 
@@ -647,6 +647,7 @@ namespace OpenRiaServices.Client
                 // no longer matches it should be removed.
                 else if (!this._entityPredicate(typedEntity) && this.TryRemoveEntity(typedEntity, out int idx))
                 {
+                    Debug.Assert(idx >= 0);
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Remove, typedEntity, idx);
                 }
             }
@@ -792,7 +793,7 @@ namespace OpenRiaServices.Client
         {
             get
             {
-                return this.Cast<Entity>();
+                return this;
             }
         }
 
