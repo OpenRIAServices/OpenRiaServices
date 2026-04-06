@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 
@@ -11,9 +10,9 @@ namespace OpenRiaServices.Client
     /// The result of a sucessfully completed load operation
     /// </summary>
     /// <typeparam name="TEntity">The type of the entity loaded.</typeparam>
-    public class LoadResult<TEntity> : IReadOnlyCollection<TEntity>, ICollection, ILoadResult where TEntity : Entity
+    public class LoadResult<TEntity> : IReadOnlyList<TEntity>, ICollection, ILoadResult where TEntity : Entity
     {
-        private readonly ReadOnlyCollection<TEntity> _loadedEntites;
+        private readonly Data.ReadOnlyObservableLoaderCollection<TEntity> _loadedEntites;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadResult{TEntity}" /> class.
@@ -78,6 +77,9 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <returns>The number top level Entities loaded.</returns>
         public int Count { get { return _loadedEntites.Count; } }
+
+        /// <inheritdoc cref="IReadOnlyList{TEntity}.this[int]"/>
+        public TEntity this[int index] => _loadedEntites[index];
 
         #region ICollection, IEnumerator implementations
         /// <summary>
