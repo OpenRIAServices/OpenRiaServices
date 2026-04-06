@@ -8,8 +8,6 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using OpenRiaServices.Client.Internal;
-using System.Diagnostics.Contracts;
-
 
 #if HAS_COLLECTIONVIEW
 using System.Windows.Data;
@@ -984,7 +982,7 @@ namespace OpenRiaServices.Client
 
         void IList.RemoveAt(int index)
         {
-            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "RemoteAt"));
+            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "RemoveAt"));
         }
 
         #endregion
@@ -1268,8 +1266,7 @@ namespace OpenRiaServices.Client
 #endif
         where TEntity : Entity
     {
-        private new List<TEntity> List => (List<TEntity>)List;
-
+        private new List<TEntity> List => (List<TEntity>)base.List;
         /// <summary>
         /// Initializes a new instance of the EntitySet class
         /// </summary>
