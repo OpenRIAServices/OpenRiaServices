@@ -947,12 +947,15 @@ namespace OpenRiaServices.Client
 
         int IList.Add(object value)
         {
-            return _list.Add(value);
+            int countBefore = Count;
+            Add((Entity)value);
+
+            return (Count == countBefore + 1) ? countBefore : -1;
         }
 
         bool IList.Contains(object value)
         {
-            return _list.Contains(value);
+            return value is Entity e && Contains(e);
         }
 
         int IList.IndexOf(object value)
@@ -962,17 +965,17 @@ namespace OpenRiaServices.Client
 
         void IList.Insert(int index, object value)
         {
-            _list.Insert(index, value);
+            throw new NotImplementedException();
         }
 
         void IList.Remove(object value)
         {
-            _list.Remove(value);
+            Remove((Entity)value);
         }
 
         void IList.RemoveAt(int index)
         {
-            _list.RemoveAt(index);
+            throw new NotImplementedException();
         }
 
         #endregion
