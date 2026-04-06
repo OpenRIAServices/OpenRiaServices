@@ -1016,7 +1016,7 @@ namespace OpenRiaServices.Client
         #endregion
 
         #region ICollection<TEntity>, IReadOnlyList<TEntity> Members
-        TEntity IReadOnlyList<TEntity>.this[int index] => Entities[index];
+        public TEntity this[int index] => Entities[index];
 
         bool ICollection<TEntity>.IsReadOnly
         {
