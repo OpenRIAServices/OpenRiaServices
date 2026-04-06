@@ -16,7 +16,7 @@ namespace OpenRiaServices.Client
     /// <typeparam name="TEntity">The type of the entity loaded.</typeparam>
     public class LoadResult<TEntity> : IEnumerable<TEntity>, ICollection, ILoadResult where TEntity : Entity
     {
-        private readonly ReadOnlyCollection<TEntity> _loadedEntites;
+        private readonly Data.ReadOnlyObservableLoaderCollection<TEntity> _loadedEntites;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadResult{TEntity}" /> class.
@@ -38,7 +38,7 @@ namespace OpenRiaServices.Client
         /// <param name="entities">Top level entities loaded.</param>
         /// <param name="allEntities">All entities loaded.</param>
         /// <param name="totalEntityCount">The total entity count.</param>
-        public LoadResult(EntityQuery<TEntity> query, LoadBehavior loadBehavior, IEnumerable<TEntity> entities, IReadOnlyCollection<Entity> allEntities, int totalEntityCount)
+        public LoadResult(EntityQuery<TEntity> query, LoadBehavior loadBehavior, IEnumerable<TEntity> entities, IReadOnlyList<Entity> allEntities, int totalEntityCount)
         {
             _loadedEntites = (entities as Data.ReadOnlyObservableLoaderCollection<TEntity>) ?? new Data.ReadOnlyObservableLoaderCollection<TEntity>(entities.ToList());
 
@@ -51,13 +51,13 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets all the top level entities loaded by the operation.
         /// </summary>
-        public IReadOnlyCollection<TEntity> Entities { get { return _loadedEntites; } }
+        public IReadOnlyList<TEntity> Entities { get { return _loadedEntites; } }
 
         /// <summary>
         ///  Gets all the entities loaded by the operation, including any
         /// entities referenced by the top level entities. 
         /// </summary>
-        public IReadOnlyCollection<Entity> AllEntities { get; private set; }
+        public IReadOnlyList<Entity> AllEntities { get; private set; }
 
         /// <summary>
         /// The <see cref="EntityQuery"/> for this load operation.
@@ -105,8 +105,7 @@ namespace OpenRiaServices.Client
         protected object SyncRoot { get { return ((ICollection)_loadedEntites).SyncRoot; } }
         object ICollection.SyncRoot { get { return this.SyncRoot; } }
 
-
-        IReadOnlyCollection<Entity> ILoadResult.Entities => this.Entities;
+        IReadOnlyList<Entity> ILoadResult.Entities => this.Entities;
 
         /// <summary>
         /// Returns an enumerator that iterates through the collection.

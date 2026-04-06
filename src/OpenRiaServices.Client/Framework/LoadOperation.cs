@@ -60,7 +60,7 @@ namespace OpenRiaServices.Client
         /// Gets all the top level entities loaded by the operation. The collection returned implements
         /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
         /// </summary>
-        public IReadOnlyCollection<Entity> Entities
+        public IReadOnlyList<Entity> Entities
         {
             get
             {
@@ -78,7 +78,7 @@ namespace OpenRiaServices.Client
         /// entities referenced by the top level entities. The collection returned implements
         /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
         /// </summary>
-        public IReadOnlyCollection<Entity> AllEntities
+        public IReadOnlyList<Entity> AllEntities
         {
             get
             {
@@ -232,7 +232,7 @@ namespace OpenRiaServices.Client
         /// entities referenced by the top level entities. The collection returned implements
         /// <see cref="System.Collections.Specialized.INotifyCollectionChanged"/>.
         /// </summary>
-        public new IReadOnlyCollection<TEntity> Entities
+        public new IReadOnlyList<TEntity> Entities
         {
             get
             {
