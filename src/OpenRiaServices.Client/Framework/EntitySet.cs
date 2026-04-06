@@ -8,6 +8,8 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using OpenRiaServices.Client.Internal;
+using System.Diagnostics.Contracts;
+
 
 #if HAS_COLLECTIONVIEW
 using System.Windows.Data;
@@ -481,7 +483,10 @@ namespace OpenRiaServices.Client
             this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, entity, idx);
         }
 
-        internal bool Contains(Entity entity)
+        /// <summary>Determines whether the <see cref="EntitySet"/> contains the specified entity.</summary>
+        /// <param name="entity">The element to locate in the <see cref="EntitySet"/> object.</param>
+        /// <returns>true if the <see cref="EntitySet"/> object contains the specified element; otherwise, false.</returns>
+        public bool Contains(Entity entity)
         {
             return this._set.Contains(entity);
         }
@@ -941,9 +946,13 @@ namespace OpenRiaServices.Client
         #endregion
 
         #region IList
-        bool IList.IsFixedSize => _list.IsFixedSize;
+        bool IList.IsFixedSize => false;
 
-        object IList.this[int index] { get => _list[index]; set => _list[index] = value; }
+        object IList.this[int index]
+        {
+            get => _list[index];
+            set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
+        }
 
         int IList.Add(object value)
         {
@@ -965,7 +974,7 @@ namespace OpenRiaServices.Client
 
         void IList.Insert(int index, object value)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Insert"));
         }
 
         void IList.Remove(object value)
@@ -975,7 +984,7 @@ namespace OpenRiaServices.Client
 
         void IList.RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "RemoteAt"));
         }
 
         #endregion
@@ -1395,7 +1404,8 @@ namespace OpenRiaServices.Client
             List.CopyTo(array, arrayIndex);
         }
 
-        bool ICollection<TEntity>.Contains(TEntity item)
+        /// <inheritdoc cref="EntitySet.Contains(Entity)"/>
+        public bool Contains(TEntity item)
         {
             return base.Contains(item);
         }
@@ -1489,7 +1499,7 @@ namespace OpenRiaServices.Client
 
             public int IndexOf(object value)
             {
-                return this.Source.List.IndexOf(value);
+                return ((IList)this.Source.List).IndexOf(value);
             }
 
             public void Insert(int index, object value)
@@ -1536,7 +1546,7 @@ namespace OpenRiaServices.Client
 
             public void CopyTo(Array array, int index)
             {
-                this.Source.List.CopyTo(array, index);
+                ((IList)this.Source.List).CopyTo(array, index);
             }
 
             public int Count
