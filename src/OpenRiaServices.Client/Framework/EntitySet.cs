@@ -946,6 +946,8 @@ namespace OpenRiaServices.Client
         #region IList
         bool IList.IsFixedSize => false;
 
+        bool IList.IsReadOnly => (_supportedOperations & (EntitySetOperations.Remove | EntitySetOperations.Add)) == 0;
+
         object IList.this[int index]
         {
             get => _list[index];
@@ -957,7 +959,12 @@ namespace OpenRiaServices.Client
             int countBefore = Count;
             Add((Entity)value);
 
-            return (Count == countBefore + 1) ? countBefore : -1;
+            if (Count == countBefore + 1)
+                return countBefore;
+            else if (Count == countBefore)
+                return -1;
+            else
+                return List.IndexOf(value);
         }
 
         bool IList.Contains(object value)
@@ -1388,13 +1395,6 @@ namespace OpenRiaServices.Client
             base.OnCollectionChanged(action, affectedObject, index);
         }
 
-        #region IEnumerable<TEntity> Members
-        IEnumerator<TEntity> IEnumerable<TEntity>.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-        #endregion
-
         #region ICollection<TEntity> Members
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
@@ -1402,7 +1402,7 @@ namespace OpenRiaServices.Client
         }
 
         /// <inheritdoc cref="EntitySet.Contains(Entity)"/>
-        public bool Contains(TEntity item)
+        public bool /*ICollection<TEntity>.*/Contains(TEntity item)
         {
             return base.Contains(item);
         }
@@ -1467,22 +1467,7 @@ namespace OpenRiaServices.Client
             #region IList
 
             public int Add(object value)
-            {
-                T entity = value as T;
-                if (entity == null)
-                {
-                    throw new ArgumentException(
-                        string.Format(CultureInfo.CurrentCulture, Resource.MustBeAnEntity, "value"),
-                        nameof(value));
-                }
-
-                int countBefore = this.Source.Count;
-                this.Source.Add(entity);
-
-                return this.Source.Count == countBefore + 1
-                    ? countBefore
-                    : ((List<T>)this.Source.List).IndexOf(entity, countBefore);
-            }
+                => ((IList)Source).Add(value);
 
             public void Clear()
             {
@@ -1500,20 +1485,11 @@ namespace OpenRiaServices.Client
             }
 
             public void Insert(int index, object value)
-            {
-                throw new NotSupportedException(
-                    string.Format(CultureInfo.CurrentCulture, Resource.IsNotSupported, "Insert"));
-            }
+                => ((IList)Source).Insert(index, value);
 
-            public bool IsFixedSize
-            {
-                get { return !(this.Source.CanAdd || this.Source.CanRemove); }
-            }
+            public bool IsFixedSize => ((IList)Source).IsFixedSize;
 
-            public bool IsReadOnly
-            {
-                get { return !(this.Source.CanAdd || this.Source.CanRemove); }
-            }
+            public bool IsReadOnly => ((IList)Source).IsReadOnly;
 
             public void Remove(object value)
             {
@@ -1525,7 +1501,7 @@ namespace OpenRiaServices.Client
 
             public void RemoveAt(int index)
             {
-                this.Remove(this[index]);
+                Source.Remove(Source.List[index]);
             }
 
             public object this[int index]
