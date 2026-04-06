@@ -1250,12 +1250,14 @@ namespace OpenRiaServices.Client
     /// Represents a collection of <see cref="Entity"/> instances, providing change tracking and other services.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> this set will contain</typeparam>
-    public sealed class EntitySet<TEntity> : EntitySet, IEntityCollection<TEntity>
+    public sealed class EntitySet<TEntity> : EntitySet, IEntityCollection<TEntity>, IReadOnlyList<TEntity>
 #if HAS_COLLECTIONVIEW
         , ICollectionViewFactory
 #endif
         where TEntity : Entity
     {
+        private new List<TEntity> List => (List<TEntity>)List;
+
         /// <summary>
         /// Initializes a new instance of the EntitySet class
         /// </summary>
@@ -1283,7 +1285,7 @@ namespace OpenRiaServices.Client
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resources.Cannot_Create_Abstract_Entity, typeof(TEntity)));
             }
-            TEntity entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
+            TEntity entity = Activator.CreateInstance<TEntity>();
             return entity;
         }
 
@@ -1303,7 +1305,7 @@ namespace OpenRiaServices.Client
         /// <returns>The enumerator</returns>
         public new IEnumerator<TEntity> GetEnumerator()
         {
-            return ((IList<TEntity>)List).GetEnumerator();
+            return List.GetEnumerator();
         }
 
         /// <summary>
@@ -1387,7 +1389,7 @@ namespace OpenRiaServices.Client
         #region ICollection<TEntity> Members
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
-            ((IList<TEntity>)List).CopyTo(array, arrayIndex);
+            List.CopyTo(array, arrayIndex);
         }
 
         bool ICollection<TEntity>.Contains(TEntity item)
@@ -1412,6 +1414,10 @@ namespace OpenRiaServices.Client
                     throw;
             }
         }
+        #endregion
+
+        #region IReadOnlyList<TEntity> Members
+        TEntity IReadOnlyList<TEntity>.this[int index] => List[index];
         #endregion
 
         #region ICollectionViewFactory

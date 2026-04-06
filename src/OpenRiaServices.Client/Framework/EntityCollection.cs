@@ -20,7 +20,7 @@ namespace OpenRiaServices.Client
     /// Represents a collection of associated Entities.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> in the collection</typeparam>
-    public sealed class EntityCollection<TEntity> : IEntityCollection, IEntityCollection<TEntity>, IList
+    public sealed class EntityCollection<TEntity> : IEntityCollection, IEntityCollection<TEntity>, IList, IReadOnlyList<TEntity>
 #if HAS_COLLECTIONVIEW
         , ICollectionViewFactory
 #endif
@@ -1012,7 +1012,9 @@ namespace OpenRiaServices.Client
 #endif
         #endregion
 
-        #region ICollection<TEntity> Members
+        #region ICollection<TEntity>, IReadOnlyList<TEntity> Members
+        TEntity IReadOnlyList<TEntity>.this[int index] => Entities[index];
+
         bool ICollection<TEntity>.IsReadOnly
         {
             get
@@ -1027,17 +1029,20 @@ namespace OpenRiaServices.Client
             this.Load();
             this.Entities.CopyTo(array, arrayIndex);
         }
+
         bool ICollection<TEntity>.Contains(TEntity item)
         {
             this.Load();
             return this.EntitiesHashSet.Contains(item);
         }
+
         bool ICollection<TEntity>.Remove(TEntity item)
         {
             bool removed = this.EntitiesHashSet.Contains(item);
             Remove(item);
             return removed;
         }
+
         /// <summary>
         /// Removes all items.
         /// </summary>
@@ -1050,7 +1055,7 @@ namespace OpenRiaServices.Client
 
         #endregion
 
-        #region IList
+        #region IList, ICollection
         bool IList.IsFixedSize => false;
 
         bool IList.IsReadOnly => this.IsSourceExternal;
@@ -1059,8 +1064,15 @@ namespace OpenRiaServices.Client
 
         object ICollection.SyncRoot => ((ICollection)_sourceSet).SyncRoot;
 
-        // TODO Load entities for all these operations
-        object IList.this[int index] { get => ((IList)Entities)[index]; set => Entities[index] = (TEntity)value; }
+        object IList.this[int index]
+        {
+            get
+            {
+                Load();
+                return Entities[index];
+            }
+            set => throw new NotImplementedException();
+        }
 
         int IList.Add(object value)
         {
@@ -1070,7 +1082,7 @@ namespace OpenRiaServices.Client
 
         void IList.Clear()
         {
-            throw new NotImplementedException();
+            ((ICollection<TEntity>)this).Clear();
         }
 
         bool IList.Contains(object value)
@@ -1080,7 +1092,11 @@ namespace OpenRiaServices.Client
 
         int IList.IndexOf(object value)
         {
-            throw new NotImplementedException();
+            if (value is not TEntity entity)
+                return -1;
+
+            Load();
+            return Entities.IndexOf(entity);
         }
 
         void IList.Insert(int index, object value)
@@ -1095,7 +1111,8 @@ namespace OpenRiaServices.Client
 
         void IList.RemoveAt(int index)
         {
-            throw new NotImplementedException();
+            TEntity entity = Entities[index];
+            Remove(entity);
         }
 
         void ICollection.CopyTo(Array array, int index)
