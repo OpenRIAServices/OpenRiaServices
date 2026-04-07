@@ -27,7 +27,7 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.1" />
-    <PackageReference Include="Microsoft.Build.Locator" Version="1.11.2" />
+    <PackageReference Include="Microsoft.Build.Locator" Version="1.10.12" />
     <PackageReference Include="Microsoft.Build" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Framework" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
