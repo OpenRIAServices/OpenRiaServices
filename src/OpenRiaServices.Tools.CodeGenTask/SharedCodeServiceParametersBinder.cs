@@ -8,7 +8,7 @@ namespace OpenRiaServices.Tools.CodeGenTask;
 /// <summary>
 /// Binder class for <see cref="SharedCodeServiceParameters"/>. Used to bind arguments to handlers
 /// </summary>
-internal class SharedCodeServiceParametersBinder : BinderBase<SharedCodeServiceParameters>
+internal sealed class SharedCodeServiceParametersBinder : BinderBase<SharedCodeServiceParameters>
 {
     private readonly Option<IEnumerable<string>> _sharedSourceFiles;
     private readonly Option<IEnumerable<string>> _symbolSearchPaths;
