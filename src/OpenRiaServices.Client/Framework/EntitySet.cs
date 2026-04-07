@@ -984,7 +984,15 @@ namespace OpenRiaServices.Client
 
         void IList.Remove(object value)
         {
-            Remove((Entity)value);
+            try
+            {
+                if (value is Entity entity)
+                    Remove(entity);
+            }
+            catch (InvalidOperationException ioe) when (ioe.Message == Resource.EntitySet_EntityNotInSet)
+            {
+                // Don't throw if item was not in the collection
+            }
         }
 
         void IList.RemoveAt(int index)

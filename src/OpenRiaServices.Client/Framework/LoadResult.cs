@@ -76,7 +76,7 @@ namespace OpenRiaServices.Client
         /// Gets the number of top level Entities loaded
         /// </summary>
         /// <returns>The number top level Entities loaded.</returns>
-        public int Count { get { return _loadedEntites.Count; } }
+        public int Count => _loadedEntites.Count;
 
         /// <inheritdoc cref="IReadOnlyList{TEntity}.this[int]"/>
         public TEntity this[int index] => _loadedEntites[index];

@@ -638,16 +638,14 @@ namespace OpenRiaServices.Client
                 {
                     // Add matching entity to our set. When adding, we use the stronger Filter to
                     // filter out New entities
-                    bool added = this.TryAddEntity(typedEntity);
-                    Debug.Assert(added);
-                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
+                    if (this.TryAddEntity(typedEntity))
+                        this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
                 }
                 // The entity is in our set but is no longer a match, so we need to remove it.
                 // Here we use the predicate directly, since even if the entity is New if it
                 // no longer matches it should be removed.
                 else if (!this._entityPredicate(typedEntity) && this.TryRemoveEntity(typedEntity, out int idx))
                 {
-                    Debug.Assert(idx >= 0);
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Remove, typedEntity, idx);
                 }
             }
@@ -1016,6 +1014,13 @@ namespace OpenRiaServices.Client
         #endregion
 
         #region ICollection<TEntity>, IReadOnlyList<TEntity> Members
+
+        /// <summary>
+        /// Gets the entity at the specified index in the collection.
+        /// </summary>
+        /// <remarks>**Important**: Make sure to check <see cref="Count"/> first to ensure the collection is initialized</remarks>
+        /// <param name="index">The zero-based index of the entity to retrieve.</param>
+        /// <returns>The entity located at the specified index.</returns>
         public TEntity this[int index] => Entities[index];
 
         bool ICollection<TEntity>.IsReadOnly
@@ -1071,13 +1076,10 @@ namespace OpenRiaServices.Client
 
         object ICollection.SyncRoot => ((ICollection)Entities).SyncRoot;
 
+        /// <inheritdoc cref="this[int]"/>
         object IList.this[int index]
         {
-            get
-            {
-                // We skip Load, since caller is expected to have called .Count which triggers load
-                return Entities[index];
-            }
+            get => this[index];
             set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
         }
 
@@ -1086,7 +1088,12 @@ namespace OpenRiaServices.Client
             int countBefore = this.Count;
             Add((TEntity)value);
 
-            return (this.Count == countBefore + 1) ? countBefore : -1;
+            if (this.Count == countBefore + 1)
+                return countBefore;
+            else if (this.Count == countBefore)
+                return -1;
+            else
+                return Entities.IndexOf((TEntity)value, countBefore);
         }
 
         void IList.Clear()
