@@ -1,5 +1,5 @@
 pool:
-  vmImage: 'windows-2025-vs2026'
+  vmImage: 'windows-2025'
 
 variables:
   BuildConfiguration: 'release'

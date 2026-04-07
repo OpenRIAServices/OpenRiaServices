@@ -679,7 +679,7 @@ namespace OpenRiaServices.Client.Test
         {
             Catalog catalog = CreateDomainContext();
 
-            IEnumerable<int> prodIds = [ 1, 2, 3, 4, 5 ];
+            int[] prodIds = new int[] { 1, 2, 3, 4, 5 };
             EntityQuery<Product> query = catalog.GetProductsQuery().Where(p => prodIds.Contains(p.ProductID));
 
             NotSupportedException expectedException = null;
