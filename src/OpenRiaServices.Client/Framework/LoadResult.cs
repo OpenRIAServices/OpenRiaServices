@@ -78,7 +78,11 @@ namespace OpenRiaServices.Client
         /// <returns>The number top level Entities loaded.</returns>
         public int Count => _loadedEntites.Count;
 
-        /// <inheritdoc cref="IReadOnlyList{TEntity}.this[int]"/>
+        /// <summary>
+        /// Gets the entity at the specified zero-based index.
+        /// </summary>
+        /// <param name="index">The zero-based index of the entity to retrieve.</param>
+        /// <returns>The entity located at the specified index.</returns>
         public TEntity this[int index] => _loadedEntites[index];
 
         #region ICollection, IEnumerator implementations

@@ -944,7 +944,7 @@ namespace OpenRiaServices.Client
         #endregion
 
         #region IList
-        bool IList.IsFixedSize => false;
+        bool IList.IsFixedSize => (_supportedOperations & (EntitySetOperations.Remove | EntitySetOperations.Add)) == 0;
 
         bool IList.IsReadOnly => (_supportedOperations & (EntitySetOperations.Remove | EntitySetOperations.Add)) == 0;
 

@@ -1068,7 +1068,7 @@ namespace OpenRiaServices.Client
         #endregion
 
         #region IList, ICollection
-        bool IList.IsFixedSize => false;
+        bool IList.IsFixedSize => this.IsSourceExternal;
 
         bool IList.IsReadOnly => this.IsSourceExternal;
 
