@@ -1,9 +1,0 @@
-{
-  "profiles": {
-    "OpenRiaServices.Tools.CodeGenTask": {
-      "commandName": "Project",
-      "commandLineArgs": "@C:\\Users\\crmdas\\AppData\\Local\\Temp\\openria-codegen-20240426-104447-077.tmp",
-      "workingDirectory": "C:\\dev\\net\\production\\Finance\\Client\\CRM.Finance.Client.Model\\"
-    }
-  }
-}
