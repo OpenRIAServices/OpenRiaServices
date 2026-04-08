@@ -28,23 +28,33 @@
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.1" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.10.12" />
-    <PackageReference Include="Microsoft.Build" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.8.43" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="9.0.0" />
+    <PackageReference Include="System.Collections.Immutable" Version="10.0.5" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="10.0.5" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.11.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.0.1" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.11.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.11.1" />
   </ItemGroup>
-
+  
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <!-- Reference latest build version to work with VS 2026, otherwise we get TypeLoad exceptions due to dependencies being to "old" -->
+    <PackageReference Include="Microsoft.Build" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Web" />
     <Reference Include="System.XML" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
+    <!-- 17.11.* is the last msbuild version supporting .net 8 -->
+    <PackageReference Include="Microsoft.Build" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
   </ItemGroup>
   
 </Project>
