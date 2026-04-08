@@ -8,7 +8,7 @@
     <Reference Include="mscorlib" />
     <Reference Include="system" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.0" />
+    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0'">
