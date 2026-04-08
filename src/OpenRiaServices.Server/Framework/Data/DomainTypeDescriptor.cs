@@ -102,6 +102,7 @@ namespace OpenRiaServices.Server
                 additionalAttributes.Add(new EditableAttribute(false) { AllowInitialValue = allowInitialValue });
             }
 
+
             return additionalAttributes.ToArray();
         }
 
@@ -229,7 +230,7 @@ namespace OpenRiaServices.Server
         /// <returns>True if RoundTripOriginalAttribute should be added, false otherwise.</returns>
         private static bool ShouldAddRoundTripAttribute(PropertyDescriptor pd, bool isFkMember)
         {
-            if (pd.Attributes[typeof(RoundtripOriginalAttribute)] != null || pd.Attributes[typeof(AssociationAttribute)] != null)
+            if (pd.Attributes[typeof(RoundtripOriginalAttribute)] != null || pd.Attributes[typeof(EntityAssociationAttribute)] != null)
             {
                 // already has the attribute or is an association 
                 return false;
@@ -291,10 +292,8 @@ namespace OpenRiaServices.Server
         /// <returns><c>true</c> if there are attributes to be inferred, <c>false</c> otherwise.</returns>
         private static bool ShouldInferAttributes(PropertyDescriptor pd, bool keyIsEditable, IEnumerable<string> foreignKeyMembers)
         {
-            bool allowInitialValue;
-
-            return ShouldAddEditableFalseAttribute(pd, keyIsEditable, out allowInitialValue) ||
-                   ShouldAddRoundTripAttribute(pd, foreignKeyMembers.Contains(pd.Name));
+            return ShouldAddEditableFalseAttribute(pd, keyIsEditable, out _)
+                   || ShouldAddRoundTripAttribute(pd, foreignKeyMembers.Contains(pd.Name));
         }
     }
 }

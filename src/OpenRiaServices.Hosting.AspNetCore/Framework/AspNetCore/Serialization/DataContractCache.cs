@@ -6,15 +6,15 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 
-namespace OpenRiaServices.Hosting.AspNetCore
+namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
-    internal class SerializationHelper
-    {       
+    internal class DataContractCache
+    {
         private readonly Dictionary<Type, DataContractSerializer> _serializerCache = new Dictionary<Type, DataContractSerializer>();
         private readonly DomainServiceDescription _domainServiceDescription;
         private readonly DomainServiceSerializationSurrogate _surrogateProvider;
 
-        public SerializationHelper(DomainServiceDescription domainServiceDescription)
+        public DataContractCache(DomainServiceDescription domainServiceDescription)
         {
             _domainServiceDescription = domainServiceDescription;
             _surrogateProvider = new DomainServiceSerializationSurrogate(domainServiceDescription);
@@ -39,7 +39,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     }
                     else if (type != typeof(IEnumerable<ChangeSetEntry>))
                     {
-                       // optionally we might consider only passing in EntityTypes as knowntypes for queries
+                        // optionally we might consider only passing in EntityTypes as knowntypes for queries
                         serializer = new DataContractSerializer(type, _surrogateProvider.SurrogateTypes);
                         serializer.SetSerializationSurrogateProvider(_surrogateProvider);
                     }

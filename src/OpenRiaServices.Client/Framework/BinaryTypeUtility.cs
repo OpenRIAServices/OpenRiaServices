@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace OpenRiaServices
 {
-    internal class BinaryTypeUtility
+    internal sealed class BinaryTypeUtility
     {
         private const string BinaryTypeFullName = "System.Data.Linq.Binary";
         private static Type binaryType;

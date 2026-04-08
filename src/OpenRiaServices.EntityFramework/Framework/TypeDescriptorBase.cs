@@ -39,7 +39,7 @@ namespace OpenRiaServices.Server
                 PropertyDescriptorCollection originalCollection = base.GetProperties();
 
                 bool customDescriptorsCreated = false;
-                List<PropertyDescriptor> tempPropertyDescriptors = new List<PropertyDescriptor>();
+                List<PropertyDescriptor> tempPropertyDescriptors = new List<PropertyDescriptor>(originalCollection.Count);
 
                 // for every property exposed by our parent, see if we have additional metadata to add
                 foreach (PropertyDescriptor propDescriptor in originalCollection)

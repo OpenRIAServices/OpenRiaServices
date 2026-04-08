@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Buffers;
+using System.Text;
 using System.Xml;
-
-#nullable disable
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
@@ -11,10 +10,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// to not have to allocated all memory used for the writer.
     /// It also adds some estimates of the buffer size needde
     /// </summary>
+#pragma warning disable CA1001 // (not disposable, but stream is disposable field). ArrayPoolStream does not need Dispose, and Return + Clear methods behaves similar to what Dispose would do
     internal sealed class BinaryMessageWriter
     {
-        private ArrayPoolStream _stream;
-        private XmlDictionaryWriter _writer;
+        private readonly ArrayPoolStream _stream;
+        private readonly XmlDictionaryWriter _binaryWriter;
+        private readonly XmlDictionaryWriter _textWriter;
+        private XmlDictionaryWriter _currentWriter;
 
         private const int MaxStreamAllocationSize = 4 * 1024 * 1024;
         // IMPORTANT: If this is changed then EstimateMessageSize should be changed as well
@@ -22,10 +24,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private const int InitialBufferSize = 16 * 1024;
         private readonly int[] _lastMessageLengths = new int[MessageLengthHistorySize] { InitialBufferSize, InitialBufferSize, InitialBufferSize, InitialBufferSize };
         private int _messageLengthIndex;
+        public static readonly Encoding UTF8Encoding = new UTF8Encoding(false);
 
         // Cache at most one writer per thread
         [ThreadStatic]
-        private static BinaryMessageWriter s_threadInstance;
+        private static BinaryMessageWriter? s_threadInstance;
 
         /// <summary>
         ///  Prevent creation from outside of this class
@@ -33,10 +36,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private BinaryMessageWriter()
         {
             _stream = new ArrayPoolStream(ArrayPool<byte>.Shared, MaxStreamAllocationSize);
-            _writer = XmlDictionaryWriter.CreateBinaryWriter(_stream);
+            _currentWriter = _binaryWriter = XmlDictionaryWriter.CreateBinaryWriter(_stream);
+            _textWriter = XmlDictionaryWriter.CreateTextWriter(_stream);
         }
 
-        public static BinaryMessageWriter Rent()
+        public static BinaryMessageWriter Rent(bool isBinary)
         {
             var messageWriter = s_threadInstance ?? new BinaryMessageWriter();
 
@@ -46,20 +50,26 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             // Allocate first buffer
             messageWriter._stream.Reset(messageWriter.EstimateMessageSize());
-
+            messageWriter._currentWriter = isBinary ? messageWriter._binaryWriter : messageWriter._textWriter;
             return messageWriter;
         }
 
         public static ArrayPoolStream.BufferMemory Return(BinaryMessageWriter binaryMessageWriter, bool reset = false)
         {
-            binaryMessageWriter._writer.Flush();
+            binaryMessageWriter._currentWriter.Flush();
             binaryMessageWriter.RecordMessageSize((int)binaryMessageWriter._stream.Length);
             var res = binaryMessageWriter._stream.GetBufferMemoryAndReset();
 
             if (reset)
             {
-                ((IXmlBinaryWriterInitializer)binaryMessageWriter.XmlWriter)
-                    .SetOutput(binaryMessageWriter._stream, null, null, false);
+                if (binaryMessageWriter._currentWriter is IXmlBinaryWriterInitializer binaryWriter)
+                {
+                    binaryWriter.SetOutput(binaryMessageWriter._stream, null, null, false);
+                }
+                else if (binaryMessageWriter._currentWriter is IXmlTextWriterInitializer textWriter)
+                {
+                    textWriter.SetOutput(binaryMessageWriter._stream, UTF8Encoding, false);
+                }
             }
 
             s_threadInstance = binaryMessageWriter;
@@ -89,6 +99,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             return Math.Max(max2, max1) + 256;
         }
 
-        public XmlDictionaryWriter XmlWriter => _writer;
+        public XmlDictionaryWriter XmlWriter => _currentWriter;
     }
 }

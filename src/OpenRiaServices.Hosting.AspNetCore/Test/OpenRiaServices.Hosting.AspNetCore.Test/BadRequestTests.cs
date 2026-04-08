@@ -30,9 +30,9 @@ namespace OpenRiaServices.Hosting.AspNetCore
         public async Task TestInvoke_MissingParameter_InvokeThrows()
         {
             var desc = DomainServiceDescription.GetDescription(typeof(BadRequestDomainService));
-            var operation = desc.GetInvokeOperation(nameof(BadRequestDomainService.InvokeInt));
+            var operation = desc.GetInvokeOperation(nameof(BadRequestDomainService.InvokeIntParam));
 
-            var operationInvoker = new InvokeOperationInvoker(operation, new SerializationHelper(desc), s_options);
+            var operationInvoker = new InvokeOperationInvoker(operation, s_options);
 
             var context = new DefaultHttpContext();
             context.Response.Body = new MemoryStream();
@@ -100,14 +100,14 @@ namespace OpenRiaServices.Hosting.AspNetCore
             var client = host.GetTestClient();
             client.BaseAddress = new Uri(client.BaseAddress, "BadRequestDomainService/");
 
-            var response = await client.GetAsync("QueryDouble?value=1.0");
+            var response = await client.GetAsync("QueryWithDoubleParam?value=1.0");
             response.EnsureSuccessStatusCode();
 
-            await AssertBadRequestAsync(client.GetAsync($"QueryDouble"));
-            await AssertBadRequestAsync(client.GetAsync($"QueryDouble?value=null"));
-            await AssertBadRequestAsync(client.GetAsync($"QueryDouble?value="));
-            await AssertBadRequestAsync(client.GetAsync($"QueryDouble?value=one"));
-            await AssertBadRequestAsync(client.GetAsync($"QueryDouble?value=1..2"));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam"));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=null"));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value="));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=one"));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=1..2"));
         }
 
         private static async Task AssertBadRequestAsync(Task<System.Net.Http.HttpResponseMessage> responseTask)
@@ -129,10 +129,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
         public class BadRequestDomainService : DomainService
         {
             [Invoke(HasSideEffects = false)]
-            public int InvokeInt(int value) => value;
+            public int InvokeIntParam(int value) => value;
 
             [Query(HasSideEffects = false, IsComposable = false)]
-            public People.Person QueryDouble(double value) => new People.Person() { Name = value.ToString() };
+            public People.Person QueryWithDoubleParam(double value) => new People.Person() { Name = value.ToString() };
         }
     }
 }

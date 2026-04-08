@@ -10,11 +10,37 @@ namespace OpenRiaServices.Server
     {
         private readonly PropertyDescriptor _base;
 
+        public override Type ComponentType => this._base.ComponentType;
+        public override string DisplayName => _base.DisplayName;
+        public override string Description => _base.Description;
+        public override bool IsReadOnly => this._base.IsReadOnly;
+        public override Type PropertyType => this._base.PropertyType;
+
+        /// <summary>
+        /// Similar to <see cref="DomainPropertyDescriptor(PropertyDescriptor, Attribute[])"/> but instead of adding merging attributes of <paramref name="pd"/>
+        /// and <paramref name="attribs"/>, the resulting description will have exaclty the attributes specified of <paramref name="attribs"/>
+        /// </summary>
+        private DomainPropertyDescriptor(string name, PropertyDescriptor pd, Attribute[] attribs)
+            : base(name, attribs)
+        {
+            this._base = pd;
+        }
+
         public DomainPropertyDescriptor(PropertyDescriptor pd, Attribute[] attribs)
             : base(pd, attribs)
         {
             this._base = pd;
         }
+
+        /// <summary>
+        /// Similar to <see cref="DomainPropertyDescriptor(PropertyDescriptor, Attribute[])"/> but instead of adding merging attributes of <paramref name="pd"/>
+        /// and <paramref name="attribs"/>, the resulting description will have exaclty the attributes specified of <paramref name="attribs"/>
+        /// </summary>
+        /// <param name="pd"></param>
+        /// <param name="attribs"></param>
+        /// <returns></returns>
+        public static DomainPropertyDescriptor CreateWithExplicitAttributes(PropertyDescriptor pd, Attribute[] attribs)
+            => new DomainPropertyDescriptor(pd.Name, pd, attribs);
 
         public override object GetValue(object component)
         {
@@ -39,30 +65,6 @@ namespace OpenRiaServices.Server
         public override void ResetValue(object component)
         {
             this._base.ResetValue(component);
-        }
-
-        public override Type ComponentType
-        {
-            get
-            {
-                return this._base.ComponentType;
-            }
-        }
-
-        public override bool IsReadOnly
-        {
-            get
-            {
-                return this._base.IsReadOnly;
-            }
-        }
-
-        public override Type PropertyType
-        {
-            get
-            {
-                return this._base.PropertyType;
-            }
         }
     }
 }

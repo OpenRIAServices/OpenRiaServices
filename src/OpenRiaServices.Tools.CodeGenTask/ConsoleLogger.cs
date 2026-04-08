@@ -5,7 +5,7 @@ using OpenRiaServices.Tools.Logging;
 
 namespace OpenRiaServices.Tools.CodeGenTask;
 
-class ConsoleLogger : ILoggingService
+sealed class ConsoleLogger : ILoggingService
 {
     public bool HasLoggedErrors { get; private set; }
 

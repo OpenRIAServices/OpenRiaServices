@@ -100,28 +100,28 @@ namespace OpenRiaServices.EntityFramework
         }
 
         /// <summary>
-        /// Creates an AssociationAttribute for the specified navigation property
+        /// Creates an EntityAssociationAttribute for the specified navigation property
         /// </summary>
         /// <param name="navigationProperty">The navigation property that corresponds to the association (it identifies the end points)</param>
-        /// <returns>A new AssociationAttribute that describes the given navigation property association</returns>
-        internal AssociationAttribute CreateAssociationAttribute(NavigationProperty navigationProperty)
+        /// <returns>A new EntityAssociationAttribute that describes the given navigation property association</returns>
+        internal EntityAssociationAttribute CreateEntityAssociationAttribute(NavigationProperty navigationProperty)
         {
             AssociationInfo assocInfo = this.GetAssociationInfo(navigationProperty);
             bool isForeignKey = navigationProperty.FromEndMember.Name == assocInfo.FKRole;
-            string thisKey;
-            string otherKey;
+            string[] thisKey;
+            string[] otherKey;
             if (isForeignKey)
             {
-                thisKey = FormatMemberList(assocInfo.ThisKey);
-                otherKey = FormatMemberList(assocInfo.OtherKey);
+                thisKey = assocInfo.ThisKey;
+                otherKey = assocInfo.OtherKey;
             }
             else
             {
-                otherKey = FormatMemberList(assocInfo.ThisKey);
-                thisKey = FormatMemberList(assocInfo.OtherKey);
+                otherKey = assocInfo.ThisKey;
+                thisKey = assocInfo.OtherKey;
             }
 
-            AssociationAttribute assocAttrib = new AssociationAttribute(assocInfo.Name, thisKey, otherKey);
+            EntityAssociationAttribute assocAttrib = new EntityAssociationAttribute(assocInfo.Name, thisKey, otherKey);
             assocAttrib.IsForeignKey = isForeignKey;
             return assocAttrib;
         }

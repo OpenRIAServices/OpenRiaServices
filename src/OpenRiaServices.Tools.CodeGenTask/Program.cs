@@ -1,8 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.CommandLine;
 using System.IO;
 using System.Linq;
-using System.CommandLine;
-using System.Collections.Generic;
+using OpenRiaServices.Tools.SharedTypes;
 
 namespace OpenRiaServices.Tools.CodeGenTask;
 
@@ -34,10 +35,7 @@ static class Program
 
         var codeGeneratorName = new Option<string>(name: "--codeGeneratorName") { };
 
-        var generatedFileName = new Option<string>(name: "--generatedFileName")
-        {
-            IsRequired = true
-        };
+        var generatedFileName = new Option<string>(name: "--generatedFileName");
 
         var loggingPipe = new Option<string>(name: "--loggingPipe");
 
@@ -61,23 +59,38 @@ static class Program
             loggingPipe,
         };
 
-        bool success = false;
+        rootCommand.SetAction(parseResult =>
+        {
+            var clientOptions = new ClientCodeGenerationOptions
+            {
+                Language = parseResult.GetRequiredValue(languageOption),
+                ClientFrameworkPath = parseResult.GetRequiredValue(clientFrameworkOption),
+                ServerProjectPath = parseResult.GetRequiredValue(serverProjectPathOption),
+                ClientProjectPath = parseResult.GetRequiredValue(clientProjectPathOption),
+                ClientRootNamespace = parseResult.GetValue(clientRootNamespaceOption),
+                ServerRootNamespace = parseResult.GetRequiredValue(serverRootNamespaceOption),
+                IsApplicationContextGenerationEnabled = parseResult.GetValue(isApplicationContextGenerationEnabledOption),
+                UseFullTypeNames = parseResult.GetValue(useFullTypeNamesOption),
+            };
 
-       rootCommand.SetHandler((clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, pipeName)
-            => success = RunCodeGenForNet6(clientCodeGenerationOptionValue, sharedCodeServiceParametersValue, codeGeneratorName, generatedFileName, pipeName),
-            new ClientCodeGenerationOptionsBinder(
-                languageOption, clientFrameworkOption, serverProjectPathOption, clientProjectPathOption, clientRootNamespaceOption, serverRootNamespaceOption,
-                isApplicationContextGenerationEnabledOption, useFullTypeNamesOption),
-            new SharedCodeServiceParametersBinder(sharedSourceFilesOption, symbolSearchPathsOption, serverAssembliesOption, clientAssembliesOption, clientAssemblyPathsNormalizedOption),
-            codeGeneratorName,
-            generatedFileName,
-            loggingPipe);
+            var sharedCodeServiceParametersValue = new SharedCodeServiceParameters
+            {
+                // TODO: should we use default names such as "--shared-source-files" 
+                SharedSourceFiles = parseResult.GetValue(sharedSourceFilesOption)?.ToArray() ?? [],
+                SymbolSearchPaths = parseResult.GetValue(symbolSearchPathsOption)?.ToArray() ?? [],
+                ServerAssemblies = parseResult.GetRequiredValue(serverAssembliesOption).ToArray(),
+                ClientAssemblies = parseResult.GetRequiredValue(clientAssembliesOption).ToArray(),
+                ClientAssemblyPathsNormalized = parseResult.GetValue(clientAssemblyPathsNormalizedOption)?.ToArray() ?? [],
+            };
 
-        rootCommand.Invoke(args);
-        if (success)
-            return 0;
-        else
-            return -1;
+            string codeGenName = parseResult.GetValue(codeGeneratorName);
+            string outFileName = parseResult.GetRequiredValue(generatedFileName);
+            string pipeName = parseResult.GetValue(loggingPipe);
+            bool success = RunCodeGenForNet6(clientOptions, sharedCodeServiceParametersValue, codeGenName, outFileName, pipeName);
+            return success ? 0 : -1;
+        });
+
+        return rootCommand.Parse(args).Invoke();
     }
 
     private static bool RunCodeGenForNet6(ClientCodeGenerationOptions clientCodeGenerationOption, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName, string generatedFileName, string loggingPipe)
