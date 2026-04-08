@@ -67,7 +67,7 @@ static class Program
                 ClientFrameworkPath = parseResult.GetRequiredValue(clientFrameworkOption),
                 ServerProjectPath = parseResult.GetRequiredValue(serverProjectPathOption),
                 ClientProjectPath = parseResult.GetRequiredValue(clientProjectPathOption),
-                ClientRootNamespace = parseResult.GetRequiredValue(clientRootNamespaceOption),
+                ClientRootNamespace = parseResult.GetValue(clientRootNamespaceOption),
                 ServerRootNamespace = parseResult.GetRequiredValue(serverRootNamespaceOption),
                 IsApplicationContextGenerationEnabled = parseResult.GetValue(isApplicationContextGenerationEnabledOption),
                 UseFullTypeNames = parseResult.GetValue(useFullTypeNamesOption),
@@ -76,18 +76,18 @@ static class Program
             var sharedCodeServiceParametersValue = new SharedCodeServiceParameters
             {
                 // TODO: should we use default names such as "--shared-source-files" 
-                SharedSourceFiles = parseResult.GetRequiredValue(sharedSourceFilesOption).ToArray(),
-                SymbolSearchPaths = parseResult.GetRequiredValue(symbolSearchPathsOption).ToArray(),
+                SharedSourceFiles = parseResult.GetValue(sharedSourceFilesOption)?.ToArray() ?? [],
+                SymbolSearchPaths = parseResult.GetValue(symbolSearchPathsOption)?.ToArray() ?? [],
                 ServerAssemblies = parseResult.GetRequiredValue(serverAssembliesOption).ToArray(),
                 ClientAssemblies = parseResult.GetRequiredValue(clientAssembliesOption).ToArray(),
-                ClientAssemblyPathsNormalized = parseResult.GetRequiredValue(clientAssemblyPathsNormalizedOption).ToArray(),
+                ClientAssemblyPathsNormalized = parseResult.GetValue(clientAssemblyPathsNormalizedOption)?.ToArray() ?? [],
             };
 
             string codeGenName = parseResult.GetValue(codeGeneratorName);
             string outFileName = parseResult.GetRequiredValue(generatedFileName);
             string pipeName = parseResult.GetValue(loggingPipe);
             bool success = RunCodeGenForNet6(clientOptions, sharedCodeServiceParametersValue, codeGenName, outFileName, pipeName);
-
+            return success ? 0 : -1;
         });
 
         return rootCommand.Parse(args).Invoke();
