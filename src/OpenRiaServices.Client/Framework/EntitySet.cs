@@ -18,7 +18,7 @@ namespace OpenRiaServices.Client
     /// <summary>
     /// Represents a collection of <see cref="Entity"/> instances.
     /// </summary>
-    public abstract class EntitySet : IEnumerable, ICollection, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
+    public abstract class EntitySet : IEnumerable, ICollection, IList, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
     {
         private readonly Dictionary<EntityAssociationAttribute, Action<Entity>> _associationUpdateCallbackMap = new();
         private readonly Type _entityType;
@@ -481,7 +481,10 @@ namespace OpenRiaServices.Client
             this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, entity, idx);
         }
 
-        internal bool Contains(Entity entity)
+        /// <summary>Determines whether the <see cref="EntitySet"/> contains the specified entity.</summary>
+        /// <param name="entity">The element to locate in the <see cref="EntitySet"/> object.</param>
+        /// <returns>true if the <see cref="EntitySet"/> object contains the specified element; otherwise, false.</returns>
+        public bool Contains(Entity entity)
         {
             return this._set.Contains(entity);
         }
@@ -940,6 +943,65 @@ namespace OpenRiaServices.Client
         }
         #endregion
 
+        #region IList
+        bool IList.IsFixedSize => (_supportedOperations & (EntitySetOperations.Remove | EntitySetOperations.Add)) == 0;
+
+        bool IList.IsReadOnly => (_supportedOperations & (EntitySetOperations.Remove | EntitySetOperations.Add)) == 0;
+
+        object IList.this[int index]
+        {
+            get => _list[index];
+            set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
+        }
+
+        int IList.Add(object value)
+        {
+            int countBefore = Count;
+            Add((Entity)value);
+
+            if (Count == countBefore + 1)
+                return countBefore;
+            else if (Count == countBefore)
+                return -1;
+            else
+                return List.IndexOf(value);
+        }
+
+        bool IList.Contains(object value)
+        {
+            return value is Entity e && Contains(e);
+        }
+
+        int IList.IndexOf(object value)
+        {
+            return _list.IndexOf(value);
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Insert"));
+        }
+
+        void IList.Remove(object value)
+        {
+            try
+            {
+                if (value is Entity entity)
+                    Remove(entity);
+            }
+            catch (InvalidOperationException ioe) when (ioe.Message == Resource.EntitySet_EntityNotInSet)
+            {
+                // Don't throw if item was not in the collection
+            }
+        }
+
+        void IList.RemoveAt(int index)
+        {
+            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "RemoveAt"));
+        }
+
+        #endregion
+
         #region INotifyCollectionChanged Members
 
         /// <summary>
@@ -1213,12 +1275,13 @@ namespace OpenRiaServices.Client
     /// Represents a collection of <see cref="Entity"/> instances, providing change tracking and other services.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> this set will contain</typeparam>
-    public sealed class EntitySet<TEntity> : EntitySet, IEntityCollection<TEntity>
+    public sealed class EntitySet<TEntity> : EntitySet, IEntityCollection<TEntity>, IReadOnlyList<TEntity>
 #if HAS_COLLECTIONVIEW
         , ICollectionViewFactory
 #endif
         where TEntity : Entity
     {
+        private new List<TEntity> List => (List<TEntity>)base.List;
         /// <summary>
         /// Initializes a new instance of the EntitySet class
         /// </summary>
@@ -1246,7 +1309,7 @@ namespace OpenRiaServices.Client
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resources.Cannot_Create_Abstract_Entity, typeof(TEntity)));
             }
-            TEntity entity = (TEntity)Activator.CreateInstance(typeof(TEntity));
+            TEntity entity = Activator.CreateInstance<TEntity>();
             return entity;
         }
 
@@ -1266,7 +1329,7 @@ namespace OpenRiaServices.Client
         /// <returns>The enumerator</returns>
         public new IEnumerator<TEntity> GetEnumerator()
         {
-            return ((IList<TEntity>)List).GetEnumerator();
+            return List.GetEnumerator();
         }
 
         /// <summary>
@@ -1340,20 +1403,14 @@ namespace OpenRiaServices.Client
             base.OnCollectionChanged(action, affectedObject, index);
         }
 
-        #region IEnumerable<TEntity> Members
-        IEnumerator<TEntity> IEnumerable<TEntity>.GetEnumerator()
-        {
-            return this.GetEnumerator();
-        }
-        #endregion
-
         #region ICollection<TEntity> Members
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
-            ((IList<TEntity>)List).CopyTo(array, arrayIndex);
+            List.CopyTo(array, arrayIndex);
         }
 
-        bool ICollection<TEntity>.Contains(TEntity item)
+        /// <inheritdoc cref="EntitySet.Contains(Entity)"/>
+        public bool /*ICollection<TEntity>.*/Contains(TEntity item)
         {
             return base.Contains(item);
         }
@@ -1375,6 +1432,10 @@ namespace OpenRiaServices.Client
                     throw;
             }
         }
+        #endregion
+
+        #region IReadOnlyList<TEntity> Members
+        TEntity IReadOnlyList<TEntity>.this[int index] => List[index];
         #endregion
 
         #region ICollectionViewFactory
@@ -1414,22 +1475,7 @@ namespace OpenRiaServices.Client
             #region IList
 
             public int Add(object value)
-            {
-                T entity = value as T;
-                if (entity == null)
-                {
-                    throw new ArgumentException(
-                        string.Format(CultureInfo.CurrentCulture, Resource.MustBeAnEntity, "value"),
-                        nameof(value));
-                }
-
-                int countBefore = this.Source.Count;
-                this.Source.Add(entity);
-
-                return this.Source.Count == countBefore + 1
-                    ? countBefore
-                    : ((List<T>)this.Source.List).IndexOf(entity, countBefore);
-            }
+                => ((IList)Source).Add(value);
 
             public void Clear()
             {
@@ -1443,24 +1489,15 @@ namespace OpenRiaServices.Client
 
             public int IndexOf(object value)
             {
-                return this.Source.List.IndexOf(value);
+                return ((IList)this.Source.List).IndexOf(value);
             }
 
             public void Insert(int index, object value)
-            {
-                throw new NotSupportedException(
-                    string.Format(CultureInfo.CurrentCulture, Resource.IsNotSupported, "Insert"));
-            }
+                => ((IList)Source).Insert(index, value);
 
-            public bool IsFixedSize
-            {
-                get { return !(this.Source.CanAdd || this.Source.CanRemove); }
-            }
+            public bool IsFixedSize => ((IList)Source).IsFixedSize;
 
-            public bool IsReadOnly
-            {
-                get { return !(this.Source.CanAdd || this.Source.CanRemove); }
-            }
+            public bool IsReadOnly => ((IList)Source).IsReadOnly;
 
             public void Remove(object value)
             {
@@ -1472,7 +1509,7 @@ namespace OpenRiaServices.Client
 
             public void RemoveAt(int index)
             {
-                this.Remove(this[index]);
+                Source.Remove(Source.List[index]);
             }
 
             public object this[int index]
@@ -1490,7 +1527,7 @@ namespace OpenRiaServices.Client
 
             public void CopyTo(Array array, int index)
             {
-                this.Source.List.CopyTo(array, index);
+                ((IList)this.Source.List).CopyTo(array, index);
             }
 
             public int Count

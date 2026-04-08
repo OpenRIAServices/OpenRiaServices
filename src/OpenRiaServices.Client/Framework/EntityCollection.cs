@@ -20,7 +20,7 @@ namespace OpenRiaServices.Client
     /// Represents a collection of associated Entities.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> in the collection</typeparam>
-    public sealed class EntityCollection<TEntity> : IEntityCollection, IEntityCollection<TEntity>
+    public sealed class EntityCollection<TEntity> : IEntityCollection, IEntityCollection<TEntity>, IList, IReadOnlyList<TEntity>
 #if HAS_COLLECTIONVIEW
         , ICollectionViewFactory
 #endif
@@ -311,7 +311,7 @@ namespace OpenRiaServices.Client
 
             if (idx != -1)
             {
-                if (this.RemoveEntity(entity))
+                if (this.RemoveEntity(entity, idx))
                 {
                     // If the entity was removed, raise a collection changed notification. Note that the Detach call above might
                     // have caused a dynamic removal behind the scenes resulting in the entity no longer being in the collection,
@@ -368,14 +368,32 @@ namespace OpenRiaServices.Client
             }
         }
 
-        private bool RemoveEntity(TEntity entity)
+        private bool RemoveEntity(TEntity entity, int index)
         {
             if (this.EntitiesHashSet.Remove(entity))
             {
-                bool isRemoved = this.Entities.Remove(entity);
-                Debug.Assert(isRemoved, "The entity should be present in both Entities and EntitiesHashSet");
+                Debug.Assert(object.ReferenceEquals(entity, Entities[index]));
+                this.Entities.RemoveAt(index);
                 return true;
             }
+            Debug.Fail("Expected item to be part of Set");
+            return false;
+        }
+
+        /// <summary>
+        /// Remove the entity if part of the collection and returns it's index through <paramref name="index"/>.(-1 if no removal)
+        /// </summary>
+        /// <param name="entity">entity to remove</param>
+        /// <param name="index">the index of the entity before removal, or -1 if not removed</param>
+        private bool TryRemoveEntity(TEntity entity, out int index)
+        {
+            if (this.EntitiesHashSet.Remove(entity))
+            {
+                index = this.Entities.IndexOf(entity);
+                this.Entities.RemoveAt(index);
+                return true;
+            }
+            index = -1;
             return false;
         }
 
@@ -620,17 +638,14 @@ namespace OpenRiaServices.Client
                 {
                     // Add matching entity to our set. When adding, we use the stronger Filter to
                     // filter out New entities
-                    bool added = this.TryAddEntity(typedEntity);
-                    Debug.Assert(added);
-                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
+                    if (this.TryAddEntity(typedEntity))
+                        this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
                 }
-                else if (containsEntity && !this._entityPredicate(typedEntity))
+                // The entity is in our set but is no longer a match, so we need to remove it.
+                // Here we use the predicate directly, since even if the entity is New if it
+                // no longer matches it should be removed.
+                else if (!this._entityPredicate(typedEntity) && this.TryRemoveEntity(typedEntity, out int idx))
                 {
-                    // The entity is in our set but is no longer a match, so we need to remove it.
-                    // Here we use the predicate directly, since even if the entity is New if it
-                    // no longer matches it should be removed.
-                    int idx = this.Entities.IndexOf(typedEntity);
-                    this.RemoveEntity(typedEntity);
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Remove, typedEntity, idx);
                 }
             }
@@ -648,14 +663,13 @@ namespace OpenRiaServices.Client
             if (this._parent.EntityState != EntityState.New &&
                 args.Action == NotifyCollectionChangedAction.Add)
             {
-                TEntity[] newEntities = args.NewItems.OfType<TEntity>().Where(this.Filter).ToArray();
-                if (newEntities.Length > 0)
+                List<TEntity> newEntities = args.NewItems.OfType<TEntity>().Where(this.Filter).ToList();
+                if (newEntities.Count > 0)
                 {
-                    int newStartingIdx = -1;
+                    int newStartingIdx = this.Entities.Count;
                     List<object> affectedEntities = new List<object>();
                     foreach (TEntity newEntity in newEntities)
                     {
-                        newStartingIdx = this.Entities.Count;
                         if (this.TryAddEntity(newEntity))
                         {
                             affectedEntities.Add(newEntity);
@@ -664,34 +678,21 @@ namespace OpenRiaServices.Client
 
                     if (affectedEntities.Count > 0)
                     {
-#if SILVERLIGHT
-                        // SL doesn't support the constructor taking a list of objects
-                        this.RaiseCollectionChangedNotification(args.Action, (TEntity)affectedEntities.Single(), newStartingIdx);
-#else
                         this.RaiseCollectionChangedNotification(args.Action, affectedEntities, newStartingIdx);
-#endif
                     }
                 }
             }
             else if (args.Action == NotifyCollectionChangedAction.Remove)
             {
                 // if the entity is in our cached collection, remove it
-                TEntity[] entitiesToRemove = args.OldItems.OfType<TEntity>().Where(p => this.EntitiesHashSet.Contains(p)).ToArray();
-                if (entitiesToRemove.Length > 0)
+                foreach (TEntity entityToRemove in args.OldItems.OfType<TEntity>())
                 {
-                    int oldStartingIdx = this.Entities.IndexOf(entitiesToRemove[0]);
-                    foreach (TEntity removedEntity in entitiesToRemove)
+                    // If entity was part of the collection and removed, raise an event
+                    if (this.TryRemoveEntity(entityToRemove, out int idx))
                     {
-                        this.RemoveEntity(removedEntity);
+                        // Should we do a single reset event if multiple entitites are removed ??
+                        this.RaiseCollectionChangedNotification(args.Action, entityToRemove, idx);
                     }
-
-#if SILVERLIGHT
-                    //// REVIEW: Should we instead send out a reset event?
-                    // SL doesn't support the constructor taking a list of objects
-                    this.RaiseCollectionChangedNotification(args.Action, entitiesToRemove.Single(), oldStartingIdx);
-#else
-                    this.RaiseCollectionChangedNotification(args.Action, entitiesToRemove, oldStartingIdx);
-#endif
                 }
             }
             else if (args.Action == NotifyCollectionChangedAction.Reset)
@@ -790,7 +791,7 @@ namespace OpenRiaServices.Client
         {
             get
             {
-                return this.Cast<Entity>();
+                return this;
             }
         }
 
@@ -1012,7 +1013,16 @@ namespace OpenRiaServices.Client
 #endif
         #endregion
 
-        #region ICollection<TEntity> Members
+        #region ICollection<TEntity>, IReadOnlyList<TEntity> Members
+
+        /// <summary>
+        /// Gets the entity at the specified index in the collection.
+        /// </summary>
+        /// <remarks>**Important**: Make sure to check <see cref="Count"/> first to ensure the collection is initialized</remarks>
+        /// <param name="index">The zero-based index of the entity to retrieve.</param>
+        /// <returns>The entity located at the specified index.</returns>
+        public TEntity this[int index] => Entities[index];
+
         bool ICollection<TEntity>.IsReadOnly
         {
             get
@@ -1021,22 +1031,30 @@ namespace OpenRiaServices.Client
                 return IsSourceExternal;
             }
         }
+
         void ICollection<TEntity>.CopyTo(TEntity[] array, int arrayIndex)
         {
             this.Load();
             this.Entities.CopyTo(array, arrayIndex);
         }
+
         bool ICollection<TEntity>.Contains(TEntity item)
         {
             this.Load();
             return this.EntitiesHashSet.Contains(item);
         }
+
         bool ICollection<TEntity>.Remove(TEntity item)
         {
-            bool removed = this.EntitiesHashSet.Contains(item);
-            Remove(item);
-            return removed;
+            this.Load();
+            if (this.EntitiesHashSet.Contains(item))
+            {
+                Remove(item);
+                return true;
+            }
+            return false;
         }
+
         /// <summary>
         /// Removes all items.
         /// </summary>
@@ -1045,6 +1063,77 @@ namespace OpenRiaServices.Client
             this.Load();
             foreach (var item in this.Entities.ToList())
                 Remove(item);
+        }
+
+        #endregion
+
+        #region IList, ICollection
+        bool IList.IsFixedSize => this.IsSourceExternal;
+
+        bool IList.IsReadOnly => this.IsSourceExternal;
+
+        bool ICollection.IsSynchronized => false;
+
+        object ICollection.SyncRoot => ((ICollection)Entities).SyncRoot;
+
+        /// <inheritdoc cref="this[int]"/>
+        object IList.this[int index]
+        {
+            get => this[index];
+            set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
+        }
+
+        int IList.Add(object value)
+        {
+            int countBefore = this.Count;
+            Add((TEntity)value);
+
+            if (this.Count == countBefore + 1)
+                return countBefore;
+            else if (this.Count == countBefore)
+                return -1;
+            else
+                return Entities.IndexOf((TEntity)value, countBefore);
+        }
+
+        void IList.Clear()
+        {
+            ((ICollection<TEntity>)this).Clear();
+        }
+
+        bool IList.Contains(object value)
+        {
+            return value is TEntity entity && ((ICollection<TEntity>)this).Contains(entity);
+        }
+
+        int IList.IndexOf(object value)
+        {
+            if (value is not TEntity entity)
+                return -1;
+
+            Load();
+            return Entities.IndexOf(entity);
+        }
+
+        void IList.Insert(int index, object value)
+        {
+            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Insert"));
+        }
+
+        void IList.Remove(object value)
+        {
+            Remove((TEntity)value);
+        }
+
+        void IList.RemoveAt(int index)
+        {
+            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "RemoveAt"));
+        }
+
+        void ICollection.CopyTo(Array array, int index)
+        {
+            this.Load();
+            ((ICollection)Entities).CopyTo(array, index);
         }
         #endregion
     }
