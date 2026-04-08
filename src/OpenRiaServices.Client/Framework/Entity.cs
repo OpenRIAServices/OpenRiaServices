@@ -223,7 +223,7 @@ namespace OpenRiaServices.Client
         {
             get
             {
-                return this.ValidationErrors.Any();
+                return this.ValidationErrors.Count != 0;
             }
         }
 

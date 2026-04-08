@@ -93,7 +93,7 @@ namespace OpenRiaServices.Client
         private protected new void SetError(Exception error)
         {
             if (error is DomainOperationException doe
-                && doe.ValidationErrors.Any())
+                && doe.ValidationErrors.Count != 0)
             {
                 this._validationErrors = doe.ValidationErrors;
                 this.RaisePropertyChanged(nameof(ValidationErrors));

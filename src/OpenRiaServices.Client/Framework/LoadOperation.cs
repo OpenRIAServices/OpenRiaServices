@@ -122,7 +122,7 @@ namespace OpenRiaServices.Client
         private protected new void SetError(Exception error)
         {
             if (error is DomainOperationException doe
-                && doe.ValidationErrors.Any())
+                && doe.ValidationErrors.Count != 0)
             {
                 this._validationErrors = doe.ValidationErrors;
                 this.RaisePropertyChanged(nameof(ValidationErrors));
@@ -286,7 +286,7 @@ namespace OpenRiaServices.Client
             // before calling base, we need to update any cached
             // observable collection results so the correct data
             // is accessible in the completion callback
-            if (result.Entities.Any())
+            if (result.Entities.Count != 0)
             {
                 this.UpdateResults(result);
             }
@@ -295,7 +295,7 @@ namespace OpenRiaServices.Client
 
             // raise our property events after all base property
             // events have been raised
-            if (result.Entities.Any())
+            if (result.Entities.Count != 0)
             {
                 this.RaisePropertyChanged(nameof(TotalEntityCount));
             }

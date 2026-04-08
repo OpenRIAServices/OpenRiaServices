@@ -587,7 +587,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify invocation completed succesfully
                 Assert.IsNull(invoke.Error);
-                Assert.IsFalse(invoke.ValidationErrors.Any());
+                Assert.IsFalse(invoke.ValidationErrors.Count != 0);
 
                 Assert.IsTrue(invoke.Value);
 
@@ -631,7 +631,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify invocation completed succesfully
                 Assert.IsNull(invoke.Error);
-                Assert.IsFalse(invoke.ValidationErrors.Any());
+                Assert.IsFalse(invoke.ValidationErrors.Count != 0);
 
                 Assert.IsTrue(invoke.Value);
             });
@@ -674,7 +674,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify invocation completed succesfully
                 Assert.IsNull(invoke.Error, "InvokeEventArgs.Error should be null");
-                Assert.IsFalse(invoke.ValidationErrors.Any());
+                Assert.IsFalse(invoke.ValidationErrors.Count != 0);
 
                 Assert.IsTrue(invoke.Value);
             });
@@ -917,7 +917,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify invocation completed succesfully
                 Assert.IsNull(invoke.Error, string.Format("InvokeEventArgs.Error should be null.\r\nMessage: {0}\r\nStack Trace:\r\n{1}", invoke.Error != null ? invoke.Error.Message : string.Empty, invoke.Error != null ? invoke.Error.StackTrace : string.Empty));
-                Assert.IsFalse(invoke.ValidationErrors.Any());
+                Assert.IsFalse(invoke.ValidationErrors.Count != 0);
 
                 AssertValuesAreEqual(inputValue, invoke.Value);
 

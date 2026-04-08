@@ -131,7 +131,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNull(asyncLoad.Exception, "Async load failed");
                 CollectionAssert.AreEquivalent(normalLoad.Entities.ToArray(), asyncLoad.Result);
 
-                Assert.IsTrue(normalLoad.Entities.Any(), "No entities loaded");
+                Assert.IsTrue(normalLoad.Entities.Count != 0, "No entities loaded");
                 Assert.AreEqual(normalLoad.TotalEntityCount, asyncLoad.Result.TotalEntityCount, "TotalEntityCount different");
             });
             this.EnqueueTestComplete();

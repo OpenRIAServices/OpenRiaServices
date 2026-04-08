@@ -374,7 +374,7 @@ namespace OpenRiaServices.Server.Authentication
             {
                 implementsLogout = false;
             }
-            if (doe.Parameters.Any())
+            if (doe.Parameters.Count != 0)
             {
                 implementsLogout = false;
             }
@@ -402,7 +402,7 @@ namespace OpenRiaServices.Server.Authentication
             {
                 implementsGetUser = false;
             }
-            if (doe.Parameters.Any())
+            if (doe.Parameters.Count != 0)
             {
                 implementsGetUser = false;
             }
