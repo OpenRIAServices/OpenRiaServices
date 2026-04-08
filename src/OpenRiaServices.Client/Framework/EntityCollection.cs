@@ -908,9 +908,8 @@ namespace OpenRiaServices.Client
                 }
 
                 this.Source.Remove(entity);
-                if (this._addedEntities.Contains(entity))
+                if (this._addedEntities.Remove(entity))
                 {
-                    this._addedEntities.Remove(entity);
                     // In case of Composition, the entity in the SourceSet
                     // may already be removed via this.Source.Remove above.
                     if (this.Source.SourceSet.Contains(entity))
