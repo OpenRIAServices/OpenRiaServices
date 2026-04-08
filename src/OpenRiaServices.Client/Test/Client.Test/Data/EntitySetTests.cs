@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Data;
 using Cities;
 using DataTests.Northwind.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -327,7 +328,7 @@ namespace OpenRiaServices.Client.Test
 #if HAS_COLLECTIONVIEW
         private ICollectionView GetICV(EntitySet entitySet)
         {
-            return ((ICollectionViewFactory)entitySet).CreateView();
+            return CollectionViewSource.GetDefaultView(entitySet);
         }
 
         private IEditableCollectionView GetIECV(EntitySet entitySet)

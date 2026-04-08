@@ -7,7 +7,6 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
-using System.Reflection;
 using OpenRiaServices.Client.Internal;
 
 #if HAS_COLLECTIONVIEW
@@ -814,8 +813,7 @@ namespace OpenRiaServices.Client
         /// <returns>A custom view for specialized sorting, filtering, grouping, and currency</returns>
         ICollectionView ICollectionViewFactory.CreateView()
         {
-            // We use the CollectionViewSource to obtain a ListCollectionView, a type internal to Silverlight
-            return new CollectionViewSource() { Source = new ListCollectionViewProxy<TEntity>(this) }.View;
+            return new ListCollectionView(new ListCollectionViewProxy<TEntity>(this));
         }
 
         /// <summary>

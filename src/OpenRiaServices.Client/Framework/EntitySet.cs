@@ -18,7 +18,7 @@ namespace OpenRiaServices.Client
     /// <summary>
     /// Represents a collection of <see cref="Entity"/> instances.
     /// </summary>
-    public abstract class EntitySet : IEnumerable, ICollection, IList, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
+    public abstract class EntitySet : IList, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
     {
         private readonly Dictionary<EntityAssociationAttribute, Action<Entity>> _associationUpdateCallbackMap = new();
         private readonly Type _entityType;
@@ -1444,148 +1444,10 @@ namespace OpenRiaServices.Client
         /// Returns a custom view for specialized sorting, filtering, grouping, and currency.
         /// </summary>
         /// <returns>A custom view for specialized sorting, filtering, grouping, and currency</returns>
+        [Obsolete("Consider removing in next major version, not implementing ICollectionViewFactory should give the same behaviour")]
         ICollectionView ICollectionViewFactory.CreateView()
         {
-            // We use the CollectionViewSource to obtain a ListCollectionView, a type internal to Silverlight
-            return new CollectionViewSource() { Source = new ListCollectionViewProxy<TEntity>(this) }.View;
-        }
-
-        /// <summary>
-        /// <see cref="IList"/> proxy that makes the <see cref="EntitySet"/> usable in the default collection views.
-        /// All operations implemented against the proxy are passed through to the source <see cref="EntitySet"/>.
-        /// </summary>
-        /// <remarks>
-        /// This proxy does not support a full set of list operations. However, the subset it does support
-        /// is sufficient for interaction with the ListCollectionView.
-        /// </remarks>
-        /// <typeparam name="T">The entity type of this proxy</typeparam>
-        private class ListCollectionViewProxy<T> : IList, IEnumerable<T>, INotifyCollectionChanged, ICollectionChangedListener where T : Entity
-        {
-            private readonly object _syncRoot = new object();
-            private readonly EntitySet<T> _source;
-            private readonly WeakCollectionChangedListener _weakCollectionChangedLister;
-
-            internal ListCollectionViewProxy(EntitySet<T> source)
-            {
-                this._source = source;
-                this._weakCollectionChangedLister =
-                    WeakCollectionChangedListener.CreateIfNecessary(this._source, this);
-            }
-
-            #region IList
-
-            public int Add(object value)
-                => ((IList)Source).Add(value);
-
-            public void Clear()
-            {
-                this.Source.Clear();
-            }
-
-            public bool Contains(object value)
-            {
-                return (value is Entity e) && this.Source.Contains(e);
-            }
-
-            public int IndexOf(object value)
-            {
-                return ((IList)this.Source.List).IndexOf(value);
-            }
-
-            public void Insert(int index, object value)
-                => ((IList)Source).Insert(index, value);
-
-            public bool IsFixedSize => ((IList)Source).IsFixedSize;
-
-            public bool IsReadOnly => ((IList)Source).IsReadOnly;
-
-            public void Remove(object value)
-            {
-                if (value is T entity)
-                {
-                    this.Source.Remove(entity);
-                }
-            }
-
-            public void RemoveAt(int index)
-            {
-                Source.Remove(Source.List[index]);
-            }
-
-            public object this[int index]
-            {
-                get
-                {
-                    return this.Source.List[index];
-                }
-                set
-                {
-                    throw new NotSupportedException(
-                        string.Format(CultureInfo.CurrentCulture, Resource.IsNotSupported, "Indexed setting"));
-                }
-            }
-
-            public void CopyTo(Array array, int index)
-            {
-                ((IList)this.Source.List).CopyTo(array, index);
-            }
-
-            public int Count
-            {
-                get { return this.Source.Count; }
-            }
-
-            public bool IsSynchronized
-            {
-                get { return false; }
-            }
-
-            public object SyncRoot
-            {
-                get { return this._syncRoot; }
-            }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                return this.Source.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return this.GetEnumerator();
-            }
-
-            private EntitySet<T> Source
-            {
-                get { return this._source; }
-            }
-
-            #endregion
-
-            #region INotifyCollectionChanged
-
-            public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-            private void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-            {
-                this.CollectionChanged?.Invoke(this, e);
-            }
-
-            private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-            {
-                this.OnCollectionChanged(e);
-            }
-
-            #endregion
-
-            #region ICollectionChangedListener
-
-            void ICollectionChangedListener.OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-            {
-                this.OnSourceCollectionChanged(sender, e);
-            }
-
-            #endregion
+            return new ListCollectionView(this);
         }
 #endif
         #endregion
