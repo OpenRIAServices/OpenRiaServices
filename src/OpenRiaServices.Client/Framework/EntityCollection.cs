@@ -263,7 +263,7 @@ namespace OpenRiaServices.Client
 
                 // we may have to check for containment once more, since the EntitySet.Add calls
                 // above can cause a dynamic add to this EntityCollection behind the scenes
-                if (TryAddEntity(entity) || addedToSet)
+                if (TryAddEntityToCollection(entity) || addedToSet)
                 {
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, this.Entities.Count - 1);
                 }
@@ -315,7 +315,7 @@ namespace OpenRiaServices.Client
 
             if (idx != -1)
             {
-                if (this.RemoveEntity(entity, idx))
+                if (this.RemoveEntityFromCollection(entity, idx))
                 {
                     // If the entity was removed, raise a collection changed notification. Note that the Detach call above might
                     // have caused a dynamic removal behind the scenes resulting in the entity no longer being in the collection,
@@ -353,7 +353,7 @@ namespace OpenRiaServices.Client
         /// should be done through this method.
         /// </summary>
         /// <param name="entity">The <see cref="Entity"/>to add.</param>
-        private bool TryAddEntity(TEntity entity)
+        private bool TryAddEntityToCollection(TEntity entity)
         {
             if (this.EntitiesHashSet.Add(entity))
             {
@@ -372,7 +372,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-        private bool RemoveEntity(TEntity entity, int index)
+        private bool RemoveEntityFromCollection(TEntity entity, int index)
         {
             if (this.EntitiesHashSet.Remove(entity))
             {
@@ -389,7 +389,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="entity">entity to remove</param>
         /// <param name="index">the index of the entity before removal, or -1 if not removed</param>
-        private bool TryRemoveEntity(TEntity entity, out int index)
+        private bool TryRemoveEntityFromCollection(TEntity entity, out int index)
         {
             if (this.EntitiesHashSet.Remove(entity))
             {
@@ -458,7 +458,7 @@ namespace OpenRiaServices.Client
             EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
             foreach (TEntity entity in set.OfType<TEntity>().Where(this.Filter))
             {
-                this.TryAddEntity(entity);
+                this.TryAddEntityToCollection(entity);
             }
 
             // once we've loaded entities, we're caching them, so we need to update
@@ -642,13 +642,13 @@ namespace OpenRiaServices.Client
                 {
                     // Add matching entity to our set. When adding, we use the stronger Filter to
                     // filter out New entities
-                    if (this.TryAddEntity(typedEntity))
+                    if (this.TryAddEntityToCollection(typedEntity))
                         this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
                 }
                 // The entity is in our set but is no longer a match, so we need to remove it.
                 // Here we use the predicate directly, since even if the entity is New if it
                 // no longer matches it should be removed.
-                else if (!this._entityPredicate(typedEntity) && this.TryRemoveEntity(typedEntity, out int idx))
+                else if (!this._entityPredicate(typedEntity) && this.TryRemoveEntityFromCollection(typedEntity, out int idx))
                 {
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Remove, typedEntity, idx);
                 }
@@ -674,7 +674,7 @@ namespace OpenRiaServices.Client
                     List<object> affectedEntities = new List<object>();
                     foreach (TEntity newEntity in newEntities)
                     {
-                        if (this.TryAddEntity(newEntity))
+                        if (this.TryAddEntityToCollection(newEntity))
                         {
                             affectedEntities.Add(newEntity);
                         }
@@ -692,7 +692,7 @@ namespace OpenRiaServices.Client
                 foreach (TEntity entityToRemove in args.OldItems.OfType<TEntity>())
                 {
                     // If entity was part of the collection and removed, raise an event
-                    if (this.TryRemoveEntity(entityToRemove, out int idx))
+                    if (this.TryRemoveEntityFromCollection(entityToRemove, out int idx))
                     {
                         // Should we do a single reset event if multiple entitites are removed ??
                         this.RaiseCollectionChangedNotification(args.Action, entityToRemove, idx);
@@ -911,17 +911,19 @@ namespace OpenRiaServices.Client
         int IList.Add(object value)
         {
             int countBefore = this.Count;
-            Add((TEntity)value);
+            TEntity entity = (TEntity)value;
+            Add(entity);
+
+            if (this.Count == countBefore)
+                return -1;
 
             _addedEntities ??= [];
-            _addedEntities.Add((TEntity)value);
+            _addedEntities.Add(entity);
 
             if (this.Count == countBefore + 1)
                 return countBefore;
-            else if (this.Count == countBefore)
-                return -1;
             else
-                return Entities.IndexOf((TEntity)value, countBefore);
+                return Entities.IndexOf(entity, countBefore);
         }
 
         void IList.Clear()
