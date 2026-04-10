@@ -570,13 +570,13 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(property);
             var requiredAttribute = (RequiredAttribute) property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
+            Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredStringOverride"];
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, true);
+            Assert.AreEqual<bool>(true, requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredInt32"];
             Assert.IsNotNull(property);
@@ -601,13 +601,13 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
+            Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredStringOverride"];
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, true);
+            Assert.AreEqual<bool>(true, requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredInt32"];
             Assert.IsNotNull(property);
@@ -618,7 +618,7 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
+            Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
 
             property = properties["OptionalString"];
             Assert.IsNotNull(property);

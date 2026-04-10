@@ -21,7 +21,7 @@ namespace OpenRiaServices.Tools.Test
 
             Type dbSetType = DbContextUtilities.LoadTypeFromAssembly(typeof(DbContext).Assembly, typeof(DbSet<>).FullName);
             Assert.IsNotNull(dbSetType);
-            Assert.AreEqual(dbSetType, typeof(DbSet<>));
+            Assert.AreEqual(typeof(DbSet<>), dbSetType);
         }
 
         [TestMethod]

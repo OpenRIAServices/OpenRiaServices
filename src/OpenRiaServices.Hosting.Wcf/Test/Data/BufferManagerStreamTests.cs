@@ -180,7 +180,7 @@ namespace OpenRiaServices.Hosting.Test.Data
                 initialOffset = 1;
                 stream.Reset(manager, initialOffset, 4);
 
-                Assert.AreEqual(stream.Position, 0, "Position should be 0 after reset");
+                Assert.AreEqual(0, stream.Position, "Position should be 0 after reset");
 
                 byte[] otherInput = new byte[] { 3, 2, 1 };
                 stream.Write(otherInput, 0, otherInput.Length);
@@ -207,7 +207,7 @@ namespace OpenRiaServices.Hosting.Test.Data
 
         private void VerifyBufferContents(ArraySegment<byte> buffer, int expectedOffset, ArraySegment<byte> expectedContents)
         {
-            Assert.AreEqual(buffer.Offset, expectedOffset, "Wrong offset");
+            Assert.AreEqual(expectedOffset, buffer.Offset, "Wrong offset");
             Assert.HasCount(buffer.Count, expectedContents, "Wrong count");
 
             for (int i = 0; i < expectedContents.Count; ++i)

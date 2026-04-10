@@ -1880,7 +1880,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.IsNotNull(error, "[RequiresUser(\"mathew\")] attribute should have raised a DomainOperationException");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
-            Assert.AreEqual(error.Message, "Only one user is authorized for this query, and it isn't you.");
+            Assert.AreEqual("Only one user is authorized for this query, and it isn't you.", error.Message);
         }
 
         [TestMethod]

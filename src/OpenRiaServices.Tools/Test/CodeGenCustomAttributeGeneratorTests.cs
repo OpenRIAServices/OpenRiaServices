@@ -468,7 +468,7 @@ namespace OpenRiaServices.Tools.Test
                 //Check if the default constructor was used
                 CustomAttributeData cad = cads1[0];
                 IList<CustomAttributeTypedArgument> ctr1args = cad.ConstructorArguments;
-                Assert.AreEqual(ctr1args.Count, 0);
+                Assert.AreEqual(0, ctr1args.Count);
 
                 MemberInfo[] prop2 = clientEntityType.GetMember("Prop2");
                 IList<CustomAttributeData> cads2 = AssemblyGenerator.GetCustomAttributeData(prop2[0], typeof(System.ComponentModel.DataAnnotations.Mock_CG_Attr_Gen_TestAttrib2));
@@ -476,9 +476,9 @@ namespace OpenRiaServices.Tools.Test
                 cad = cads2[0];
                 //Check if the constructor with one int param was used
                 IList<CustomAttributeTypedArgument> ctr2args = cad.ConstructorArguments;
-                Assert.AreEqual(ctr2args.Count, 1);
+                Assert.AreEqual(1, ctr2args.Count);
                 Assert.AreEqual(ctr2args[0].ArgumentType.FullName, typeof(int).FullName);
-                Assert.AreEqual(ctr2args[0].Value, 0);
+                Assert.AreEqual(0, ctr2args[0].Value);
 
                 MemberInfo[] prop3 = clientEntityType.GetMember("Prop3");
                 IList<CustomAttributeData> cads3 = AssemblyGenerator.GetCustomAttributeData(prop3[0], typeof(System.ComponentModel.DataAnnotations.Mock_CG_Attr_Gen_TestAttrib3));
@@ -486,9 +486,9 @@ namespace OpenRiaServices.Tools.Test
                 cad = cads3[0];
                 // Check if the ctor with one string param was used
                 IList<CustomAttributeTypedArgument> ctr3args = cad.ConstructorArguments;
-                Assert.AreEqual(ctr3args.Count, 1);
+                Assert.AreEqual(1, ctr3args.Count);
                 Assert.AreEqual(ctr3args[0].ArgumentType.FullName, typeof(string).FullName);
-                Assert.AreEqual(ctr3args[0].Value, null);
+                Assert.AreEqual(null, ctr3args[0].Value);
 
                 MemberInfo[] prop4 = clientEntityType.GetMember("Prop4");
                 IList<CustomAttributeData> cads4 = AssemblyGenerator.GetCustomAttributeData(prop4[0], typeof(System.ComponentModel.DataAnnotations.Mock_CG_Attr_Gen_TestAttrib4));
@@ -496,9 +496,9 @@ namespace OpenRiaServices.Tools.Test
                 cad = cads4[0];
                 // Check if the first ctor was used
                 IList<CustomAttributeTypedArgument> ctr4args = cad.ConstructorArguments;
-                Assert.AreEqual(ctr4args.Count, 1);
+                Assert.AreEqual(1, ctr4args.Count);
                 Assert.AreEqual(ctr4args[0].ArgumentType.FullName, typeof(int).FullName);
-                Assert.AreEqual(ctr4args[0].Value, 0);
+                Assert.AreEqual(0, ctr4args[0].Value);
             }            
         }
 

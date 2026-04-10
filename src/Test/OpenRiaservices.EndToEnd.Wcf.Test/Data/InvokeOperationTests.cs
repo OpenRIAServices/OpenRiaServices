@@ -205,7 +205,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(invoke.Value, "Echo: hello");
+                Assert.AreEqual("Echo: hello", invoke.Value);
                 Assert.IsNull(invoke.UserState);
             });
 
@@ -481,7 +481,7 @@ namespace OpenRiaServices.Client.Test
             {
                 IEnumerable<TestEntityForInvokeOperations> result = invoke.Value;
                 Assert.IsNotNull(result);
-                Assert.AreEqual(result.Count(), 3);
+                Assert.AreEqual(3, result.Count());
 
                 TestEntityForInvokeOperations[] resultArray = result.ToArray();
                 for (int i = 0; i < 3; i++)
@@ -507,7 +507,7 @@ namespace OpenRiaServices.Client.Test
 
             var result = (await ctxt.InvokeOpWithIEnumerableParamAsync(args)).Value;
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Count(), 3);
+            Assert.AreEqual(3, result.Count());
 
             TestEntityForInvokeOperations[] resultArray = result.ToArray();
             var list = args.ToList();
@@ -541,7 +541,7 @@ namespace OpenRiaServices.Client.Test
             {
                 IEnumerable<TestEntityForInvokeOperations> result = invoke.Value;
                 Assert.IsNotNull(result);
-                Assert.AreEqual(result.Count(), 3);
+                Assert.AreEqual(3, result.Count());
 
                 TestEntityForInvokeOperations[] resultArray = result.ToArray();
                 for (int i = 0; i < 3; i++)

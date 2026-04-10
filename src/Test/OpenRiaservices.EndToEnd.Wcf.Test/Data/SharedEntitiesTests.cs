@@ -48,11 +48,11 @@ namespace OpenRiaServices.Client.Test
                     EntityY y = (EntityY)x;
                     Assert.IsNotNull(y.EntityZ, "y.EntityZ should be set");
                     Assert.AreEqual(y.IdZ, y.EntityZ.Id, "y.IdZ should reflect EntityZ.Id");
-                    Assert.AreNotEqual(y.IdZ, 0, "y.IdZ should not be 0");
+                    Assert.AreNotEqual(0, y.IdZ, "y.IdZ should not be 0");
                     // When Y is serialized DCS serializes X' properties then Y's properties.
                     // If the surrogates were loaded correctly, X' ZProp should be read before Y's IdZ.
                     // If surrogates were not loaded correctly, ZProp would not be set.
-                    Assert.AreNotEqual(x.ZProp, 0, "x.ZProp cannot be zero.");
+                    Assert.AreNotEqual(0, x.ZProp, "x.ZProp cannot be zero.");
                 });
 
             this.EnqueueTestComplete();
