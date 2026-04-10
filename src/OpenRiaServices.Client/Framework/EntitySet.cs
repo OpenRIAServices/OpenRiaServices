@@ -997,7 +997,7 @@ namespace OpenRiaServices.Client
 
         void IList.RemoveAt(int index)
         {
-            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "RemoveAt"));
+            Remove((Entity)_list[index]);
         }
 
         #endregion
@@ -1444,10 +1444,9 @@ namespace OpenRiaServices.Client
         /// Returns a custom view for specialized sorting, filtering, grouping, and currency.
         /// </summary>
         /// <returns>A custom view for specialized sorting, filtering, grouping, and currency</returns>
-        [Obsolete("Consider removing in next major version, not implementing ICollectionViewFactory should give the same behaviour")]
         ICollectionView ICollectionViewFactory.CreateView()
         {
-            return new ListCollectionView(this);
+            return new NonLeakingListCollectionView(this);
         }
 #endif
         #endregion

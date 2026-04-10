@@ -9,9 +9,6 @@ using System.Globalization;
 using System.Linq;
 using OpenRiaServices.Client.Internal;
 
-#if HAS_COLLECTIONVIEW
-using System.Windows.Data;
-#endif
 
 namespace OpenRiaServices.Client
 {
@@ -39,6 +36,14 @@ namespace OpenRiaServices.Client
         private TEntity _detachingEntity;
         private bool _entitiesLoaded;
         private bool _entitiesAdded;
+
+        /// <summary>
+        /// NOTE: This list is only used when Adding or Removing items through the IList interface
+        /// Entities removed from an EntityCollection aren't typically removed from the source EntitySet.
+        /// However, we need to track entities added through the view and manually remove them from the
+        /// source EntitySet to achieve correct AddNew/CancelNew behavior.
+        /// </summary>
+        private List<TEntity> _addedEntities;
 
         private EntityAssociationAttribute AssocAttribute => _metaMember.AssociationAttribute;
         private bool IsComposition => _metaMember.IsComposition;
@@ -813,199 +818,7 @@ namespace OpenRiaServices.Client
         /// <returns>A custom view for specialized sorting, filtering, grouping, and currency</returns>
         ICollectionView ICollectionViewFactory.CreateView()
         {
-            return new ListCollectionView(new ListCollectionViewProxy<TEntity>(this));
-        }
-
-        /// <summary>
-        /// <see cref="IList"/> proxy that makes the <see cref="EntityCollection{T}"/> usable in the default
-        /// collection views. All operations implemented against the proxy are passed through to the source
-        /// <see cref="EntityCollection{T}"/>.
-        /// </summary>
-        /// <remarks>
-        /// This proxy does not support a full set of list operations. However, the subset it does support
-        /// is sufficient for interaction with the ListCollectionView.
-        /// </remarks>
-        /// <typeparam name="T">The entity type of this proxy</typeparam>
-        internal class ListCollectionViewProxy<T> : IList, IEnumerable<T>, INotifyCollectionChanged, ICollectionChangedListener where T : Entity
-        {
-            private readonly object _syncRoot = new object();
-            private readonly EntityCollection<T> _source;
-            private readonly WeakCollectionChangedListener _weakCollectionChangedLister;
-            // Entities removed from an EntityCollection aren't typically removed from the source EntitySet.
-            // However, we need to track entities added through the view and manually remove them from the
-            // source EntitySet to achieve correct AddNew/CancelNew behavior.
-            private readonly List<T> _addedEntities = new List<T>();
-
-            internal ListCollectionViewProxy(EntityCollection<T> source)
-            {
-                this._source = source;
-                this._weakCollectionChangedLister =
-                    WeakCollectionChangedListener.CreateIfNecessary(this._source, this);
-            }
-
-            #region IList
-
-            public int Add(object value)
-            {
-                T entity = value as T;
-                if (entity == null)
-                {
-                    throw new ArgumentException(
-                        string.Format(CultureInfo.CurrentCulture, Resource.MustBeAnEntity, "value"),
-                        nameof(value));
-                }
-
-                this._addedEntities.Add(entity);
-                int countBefore = this.Source.Count;
-                this.Source.Add(entity);
-
-                return this.Source.Entities.IndexOf(entity, countBefore);
-            }
-
-            public void Clear()
-            {
-                throw new NotSupportedException(
-                    string.Format(CultureInfo.CurrentCulture, Resource.IsNotSupported, "Clear"));
-            }
-
-            public bool Contains(object value)
-            {
-                return this.Source.EntitiesHashSet.Contains(value);
-            }
-
-            public int IndexOf(object value)
-            {
-                return ((IList)this.Source.Entities).IndexOf(value);
-            }
-
-            public void Insert(int index, object value)
-            {
-                throw new NotSupportedException(
-                    string.Format(CultureInfo.CurrentCulture, Resource.IsNotSupported, "Insert"));
-            }
-
-            // Always returning false for these two will create scenarios where Add or Remove ends up
-            // throwing an exception because it is not actually a supported operation. However, there
-            // are too many edge cases where type-based inference would fail. Always returning false
-            // (to indicate CanAddNew and CanRemove should be true) provides a better experience by
-            // allowing the developer to customize the Add and Remove options in the UI.
-            public bool IsFixedSize
-            {
-                get { return false; }
-            }
-
-            public bool IsReadOnly
-            {
-                get { return false; }
-            }
-
-            public void Remove(object value)
-            {
-                T entity = value as T;
-                if (entity == null)
-                {
-                    return;
-                }
-
-                this.Source.Remove(entity);
-                if (this._addedEntities.Remove(entity))
-                {
-                    // In case of Composition, the entity in the SourceSet
-                    // may already be removed via this.Source.Remove above.
-                    if (this.Source.SourceSet.Contains(entity))
-                    {
-                        this.Source.SourceSet.Remove(entity);
-                    }
-                }
-            }
-
-            public void RemoveAt(int index)
-            {
-                this.Remove(this[index]);
-            }
-
-            public object this[int index]
-            {
-                get
-                {
-                    if ((index < 0) || (index >= this.Source.Count))
-                    {
-                        // We run into this scenario when the association reference is changed during an
-                        // AddNew. The scenario is not supported, but we're trying to improve the error
-                        // message. Instead of throwing an ArgumentOutOfRangeException, we'll simply return
-                        // null and allow the view to inform us the added item is not at the requested index.
-                        return null;
-                    }
-                    return this.Source.Entities[index];
-                }
-                set
-                {
-                    throw new NotSupportedException(
-                        string.Format(CultureInfo.CurrentCulture, Resource.IsNotSupported, "Indexed setting"));
-                }
-            }
-
-            public void CopyTo(Array array, int index)
-            {
-                ((IList)this.Source.Entities).CopyTo(array, index);
-            }
-
-            public int Count
-            {
-                get { return this.Source.Count; }
-            }
-
-            public bool IsSynchronized
-            {
-                get { return false; }
-            }
-
-            public object SyncRoot
-            {
-                get { return this._syncRoot; }
-            }
-
-            public IEnumerator<T> GetEnumerator()
-            {
-                return this.Source.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return this.GetEnumerator();
-            }
-
-            private EntityCollection<T> Source
-            {
-                get { return this._source; }
-            }
-
-            #endregion
-
-            #region INotifyCollectionChanged
-
-            public event NotifyCollectionChangedEventHandler CollectionChanged;
-
-            private void OnCollectionChanged(NotifyCollectionChangedEventArgs e)
-            {
-                this.CollectionChanged?.Invoke(this, e);
-            }
-
-            private void OnSourceCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-            {
-                this.OnCollectionChanged(e);
-            }
-
-            #endregion
-
-            #region ICollectionChangedListener
-
-            void ICollectionChangedListener.OnCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
-            {
-                this.OnSourceCollectionChanged(sender, e);
-            }
-
-            #endregion
+            return new NonLeakingListCollectionView(this);
         }
 #endif
         #endregion
@@ -1076,7 +889,22 @@ namespace OpenRiaServices.Client
         /// <inheritdoc cref="this[int]"/>
         object IList.this[int index]
         {
-            get => this[index];
+            get
+            {
+                var list = Entities;
+                if (((uint)index) < (uint)list.Count)
+                {
+                    return list[index];
+                }
+                else
+                {
+                    // We run into this scenario when the association reference is changed during an
+                    // AddNew. The scenario is not supported, but we're trying to improve the error
+                    // message. Instead of throwing an ArgumentOutOfRangeException, we'll simply return
+                    // null and allow the view to inform us the added item is not at the requested index.
+                    return null;
+                }
+            }
             set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
         }
 
@@ -1084,6 +912,9 @@ namespace OpenRiaServices.Client
         {
             int countBefore = this.Count;
             Add((TEntity)value);
+
+            _addedEntities ??= [];
+            _addedEntities.Add((TEntity)value);
 
             if (this.Count == countBefore + 1)
                 return countBefore;
@@ -1119,12 +950,29 @@ namespace OpenRiaServices.Client
 
         void IList.Remove(object value)
         {
-            Remove((TEntity)value);
+            TEntity entity = value as TEntity;
+            if (entity == null)
+            {
+                return;
+            }
+
+            this.Remove(entity);
+            if (this._addedEntities?.Remove(entity) == true)
+            {
+                // In case of Composition, the entity in the SourceSet
+                // may already be removed via this.Source.Remove above.
+                if (SourceSet.Contains(entity))
+                {
+                    this.SourceSet.Remove(entity);
+                }
+            }
         }
 
         void IList.RemoveAt(int index)
         {
-            throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "RemoveAt"));
+            // Need to call into IList variant of remove to handle _addedEntities
+            IList This = (IList)this;
+            This.Remove(This[index]);
         }
 
         void ICollection.CopyTo(Array array, int index)
