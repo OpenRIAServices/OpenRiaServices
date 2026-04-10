@@ -968,8 +968,7 @@ namespace OpenRiaServices.Client
         void IList.RemoveAt(int index)
         {
             // Need to call into IList variant of remove to handle _addedEntities
-            IList This = this;
-            This.Remove(This[index]);
+            ((IList)this).Remove(this[index]);
         }
 
         void ICollection.CopyTo(Array array, int index)
