@@ -429,6 +429,19 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The entity to remove.</param>
         public void Remove(Entity entity)
         {
+            if (!TryRemove(entity))
+                throw new InvalidOperationException(Resource.EntitySet_EntityNotInSet);
+        }
+
+        /// <summary>
+        /// Removes the specified entity from the set.
+        /// </summary>
+        /// <remarks>
+        /// If the entity is the root of a compositional hierarchy, all child entities will also be removed.
+        /// </remarks>
+        /// <param name="entity">The entity to remove.</param>
+        private protected bool TryRemove(Entity entity)
+        {
             this.EnsureEntityType(entity);
 
             // Recursively remove any children
@@ -448,12 +461,10 @@ namespace OpenRiaServices.Client
             int idx = -1;
             if (entity.EntitySet == this)
             {
-                idx = this._list.IndexOf(entity);
+                idx = _list.IndexOf(entity);
             }
             if (idx == -1)
-            {
-                throw new InvalidOperationException(Resource.EntitySet_EntityNotInSet);
-            }
+                return false;
 
             if (entity.EntitySet != null && entity.IsInferred)
             {
@@ -479,6 +490,7 @@ namespace OpenRiaServices.Client
             this._list.RemoveAt(idx);
             this._set.Remove(entity);
             this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, entity, idx);
+            return true;
         }
 
         /// <summary>Determines whether the <see cref="EntitySet"/> contains the specified entity.</summary>
@@ -984,15 +996,8 @@ namespace OpenRiaServices.Client
 
         void IList.Remove(object value)
         {
-            try
-            {
-                if (value is Entity entity)
-                    Remove(entity);
-            }
-            catch (InvalidOperationException ioe) when (ioe.Message == Resource.EntitySet_EntityNotInSet)
-            {
-                // Don't throw if item was not in the collection
-            }
+            if (value is Entity entity)
+                TryRemove(entity);
         }
 
         void IList.RemoveAt(int index)
@@ -1417,20 +1422,7 @@ namespace OpenRiaServices.Client
 
         bool ICollection<TEntity>.Remove(TEntity item)
         {
-            try
-            {
-                // Ordinary remove throws on error, so if it did not then we can return true
-                Remove(item);
-                return true;
-            }
-            catch (InvalidOperationException ioe)
-            {
-                // If the entiy was not part of the set return false
-                if (ioe.Message == Resource.EntitySet_EntityNotInSet)
-                    return false;
-                else
-                    throw;
-            }
+            return base.TryRemove(item);
         }
         #endregion
 
