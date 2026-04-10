@@ -766,7 +766,7 @@ namespace OpenRiaServices.Tools.Test
                 string[] contents = File.ReadAllLines(riaFilesListPath);
                 for (int i = 1; i < contents.Length; i++)
                 {
-                    Assert.IsTrue(!Path.IsPathRooted(contents[i]), "Expect relative path to be stored");
+                    Assert.IsFalse(Path.IsPathRooted(contents[i]), "Expect relative path to be stored");
                 }
 
                 // Now -- code gen a 2nd time after a tiny delay to get newer time stamps if write
@@ -816,7 +816,7 @@ namespace OpenRiaServices.Tools.Test
                 contents = File.ReadAllLines(riaFilesListPath);
                 for (int i = 1; i < contents.Length; i++)
                 {
-                    Assert.IsTrue(!Path.IsPathRooted(contents[i]), "Expect relative path to be stored");
+                    Assert.IsFalse(Path.IsPathRooted(contents[i]), "Expect relative path to be stored");
                 }
             }
             finally

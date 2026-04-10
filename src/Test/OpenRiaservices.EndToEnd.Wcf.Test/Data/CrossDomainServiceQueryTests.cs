@@ -138,8 +138,8 @@ namespace OpenRiaServices.Client.Test
                 foreach (DataTests.Northwind.LTS.Product product in ctxt.Products)
                 {
                     // All rows except product 1 should have references to supplier and category
-                    Assert.IsTrue(!string.IsNullOrEmpty(product.SupplierName), "Supplier not loaded");
-                    Assert.IsTrue(!string.IsNullOrEmpty(product.CategoryName), "Category not loaded");
+                    Assert.IsFalse(string.IsNullOrEmpty(product.SupplierName), "Supplier not loaded");
+                    Assert.IsFalse(string.IsNullOrEmpty(product.CategoryName), "Category not loaded");
                 }
             });
 
