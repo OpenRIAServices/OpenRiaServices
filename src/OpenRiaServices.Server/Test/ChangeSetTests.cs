@@ -151,7 +151,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(3, childChanges.Count());
             foreach (Child c in childChanges)
             {
-                Assert.IsTrue(unmodifiedChildren.Contains(c));
+                Assert.Contains(c, unmodifiedChildren);
             }
 
             // verify inserted children
@@ -159,7 +159,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(2, childChanges.Count());
             foreach (Child c in childChanges)
             {
-                Assert.IsTrue(newChildren.Contains(c));
+                Assert.Contains(c, newChildren);
             }
 
             // verify deleted children
@@ -167,7 +167,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(2, childChanges.Count());
             foreach (Child c in childChanges)
             {
-                Assert.IsTrue(removedChildren.Contains(c));
+                Assert.Contains(c, removedChildren);
             }
 
             // verify modified children
@@ -175,7 +175,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(2, childChanges.Count());
             foreach (Child c in childChanges)
             {
-                Assert.IsTrue(currentEditedChildren.Contains(c));
+                Assert.Contains(c, currentEditedChildren);
             }
 
             // verify overload that returns all - should return all unmodified
@@ -188,16 +188,16 @@ namespace OpenRiaServices.Server.Test
                 switch (operationType)
                 {
                     case ChangeOperation.None:
-                        Assert.IsTrue(unmodifiedChildren.Contains(c));
+                        Assert.Contains(c, unmodifiedChildren);
                         break;
                     case ChangeOperation.Insert:
-                        Assert.IsTrue(newChildren.Contains(c));
+                        Assert.Contains(c, newChildren);
                         break;
                     case ChangeOperation.Update:
-                        Assert.IsTrue(currentEditedChildren.Contains(c));
+                        Assert.Contains(c, currentEditedChildren);
                         break;
                     case ChangeOperation.Delete:
-                        Assert.IsTrue(removedChildren.Contains(c));
+                        Assert.Contains(c, removedChildren);
                         break;
                 };
             }

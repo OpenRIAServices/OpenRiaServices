@@ -621,13 +621,13 @@ namespace OpenRiaServices.Client.Test
             // the repro case
             Guid g3 = Guid.NewGuid();
             IQueryable<Employee> query = (IQueryable<Employee>)RoundtripQuery(employees.AsQueryable().Where(p => p.rowguid != g3), employees.AsQueryable());
-            Assert.AreEqual(2, query.ToArray().Length);
+            Assert.HasCount(2, query.ToArray());
 
             query = (IQueryable<Employee>)RoundtripQuery(employees.AsQueryable().Where(p => p.rowguid == g1), employees.AsQueryable());
-            Assert.AreEqual(1, query.ToArray().Length);
+            Assert.HasCount(1, query.ToArray());
 
             query = (IQueryable<Employee>)RoundtripQuery(employees.AsQueryable().Where(p => p.rowguid == g2), employees.AsQueryable());
-            Assert.AreEqual(1, query.ToArray().Length);
+            Assert.HasCount(1, query.ToArray());
         }
 
         [TestMethod]
@@ -673,17 +673,17 @@ namespace OpenRiaServices.Client.Test
             });
             bool flag = true;
             IQueryable<PurchaseOrder> result = (IQueryable<PurchaseOrder>)RoundtripQuery(pos.AsQueryable().Where(p => flag), pos.AsQueryable());
-            Assert.IsTrue(result.Expression.ToString().Contains("Where(Param_0 => True)"));
-            Assert.AreEqual(1, result.ToArray().Length);
+            Assert.Contains("Where(Param_0 => True)", result.Expression.ToString());
+            Assert.HasCount(1, result.ToArray());
 
             result = (IQueryable<PurchaseOrder>)RoundtripQuery(pos.AsQueryable().Where(p => true), pos.AsQueryable());
-            Assert.IsTrue(result.Expression.ToString().Contains("Where(Param_0 => True)"));
-            Assert.AreEqual(1, result.ToArray().Length);
+            Assert.Contains("Where(Param_0 => True)", result.Expression.ToString());
+            Assert.HasCount(1, result.ToArray());
 
             Expression<Func<PurchaseOrder, bool>> expr = t => true;
             result = (IQueryable<PurchaseOrder>)RoundtripQuery(pos.AsQueryable().Where(expr), pos.AsQueryable());
-            Assert.IsTrue(result.Expression.ToString().Contains("Where(Param_0 => True)"));
-            Assert.AreEqual(1, result.ToArray().Length);
+            Assert.Contains("Where(Param_0 => True)", result.Expression.ToString());
+            Assert.HasCount(1, result.ToArray());
         }
 
         [TestMethod]
@@ -793,16 +793,16 @@ namespace OpenRiaServices.Client.Test
             Expression<Func<PurchaseOrder, bool>> predicate = p => p.OrderDate < new DateTime(2002, 3, 3);
             IQueryable<PurchaseOrder> query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
-            Assert.IsTrue(queryParts[0].Expression.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString())));
+            Assert.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString()), queryParts[0].Expression);
             IQueryable<PurchaseOrder> resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
-            Assert.IsTrue(resultQuery.ToString().Contains(string.Format("DateTime({0}, {1})", dt.Ticks, dt.Kind.ToString())));
+            Assert.Contains(string.Format("DateTime({0}, {1})", dt.Ticks, dt.Kind.ToString()), resultQuery.ToString());
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
             // Test member access of DateTime (funcletized local accessor)
             predicate = p => dt > p.OrderDate;
             query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
-            Assert.IsTrue(queryParts[0].Expression.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString())));
+            Assert.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString()), queryParts[0].Expression);
             resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
@@ -810,7 +810,7 @@ namespace OpenRiaServices.Client.Test
             predicate = p => p.OrderDate < DateTime.Now;
             query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
-            Assert.IsTrue(queryParts[0].Expression.Contains("DateTime.Now"));
+            Assert.Contains("DateTime.Now", queryParts[0].Expression);
             resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
@@ -819,9 +819,9 @@ namespace OpenRiaServices.Client.Test
             predicate = p => p.OrderDate < dt;
             query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
-            Assert.IsTrue(queryParts[0].Expression.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString())));
+            Assert.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString()), queryParts[0].Expression);
             resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
-            Assert.IsTrue(resultQuery.ToString().Contains(string.Format("DateTime({0}, {1})", dt.Ticks, dt.Kind.ToString())));
+            Assert.Contains(string.Format("DateTime({0}, {1})", dt.Ticks, dt.Kind.ToString()), resultQuery.ToString());
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
             // Verify that the DayOfWeek enumeration can be used. It is evaluated locally to an int,
@@ -829,9 +829,9 @@ namespace OpenRiaServices.Client.Test
             predicate = p => p.OrderDate.DayOfWeek == DayOfWeek.Sunday;
             query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
-            Assert.IsTrue(queryParts[0].Expression.Contains("OrderDate.DayOfWeek==0"));
+            Assert.Contains("OrderDate.DayOfWeek==0", queryParts[0].Expression);
             resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
-            Assert.IsTrue(resultQuery.Count() > 0);
+            Assert.IsGreaterThan(0, resultQuery.Count());
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
             // TODO : currently DateTime constructions involving non-local expressions
@@ -916,20 +916,20 @@ namespace OpenRiaServices.Client.Test
         public void TestQuery_VerifyQueryNotEvaluatedLocally()
         {
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(Array.Empty<PurchaseOrder>().AsQueryable().Take(2));
-            Assert.AreEqual(1, queryParts.Count);
+            Assert.HasCount(1, queryParts);
 
             // make sure that local IQueryables other than the root are evaluated locally
             int[] ints = new int[] { 1, 2 };
             IQueryable<int> intsQueryable = ints.AsQueryable();
             queryParts = QuerySerializer.Serialize(Array.Empty<PurchaseOrder>().AsQueryable().Where(p => p.PurchaseOrderID > intsQueryable.Count()).Take(intsQueryable.Count()));
-            Assert.AreEqual(2, queryParts.Count);
+            Assert.HasCount(2, queryParts);
 
             queryParts = QuerySerializer.Serialize(ProdQuery(5).Where(p => p.PurchaseOrderID > intsQueryable.Count()).Take(intsQueryable.Count()));
-            Assert.AreEqual(2, queryParts.Count);
+            Assert.HasCount(2, queryParts);
 
             // verify query with no query operators is handled properly
             queryParts = QuerySerializer.Serialize(Array.Empty<PurchaseOrder>().AsQueryable());
-            Assert.AreEqual(0, queryParts.Count);
+            Assert.IsEmpty(queryParts);
         }
 
         private IQueryable<PurchaseOrder> ProdQuery(int x)
@@ -1113,7 +1113,7 @@ namespace OpenRiaServices.Client.Test
                      select p;
 
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query1);
-            Assert.AreEqual(4, queryParts.Count);
+            Assert.HasCount(4, queryParts);
         }
 
         [TestMethod]

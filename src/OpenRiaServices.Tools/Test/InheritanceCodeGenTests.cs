@@ -145,7 +145,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsTrue(entitySetType.Name.StartsWith("EntitySet", StringComparison.Ordinal), "EntitySet should have been of type EntitySet<>");
 
                     Type[] genericArgs = entitySetType.GetGenericArguments();
-                    Assert.AreEqual(1, genericArgs.Length, "Expected EntitySet to have 1 generic arg");
+                    Assert.HasCount(1, genericArgs, "Expected EntitySet to have 1 generic arg");
                     Assert.AreEqual(rootType, genericArgs[0], "Expected EntitySet generic arg to be root type");
 
                     // validate query root for root entity
@@ -157,7 +157,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsTrue(rootQueryType.Name.StartsWith("EntityQuery", StringComparison.Ordinal), "Root query should have been of type EntityQuery<>");
 
                     genericArgs = rootQueryType.GetGenericArguments();
-                    Assert.AreEqual(1, genericArgs.Length, "Expected root query to have 1 generic arg");
+                    Assert.HasCount(1, genericArgs, "Expected root query to have 1 generic arg");
                     Assert.AreEqual(rootType, genericArgs[0], "Expected root query generic arg to be root type");
 
                     // validate query root for derived entity
@@ -169,7 +169,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsTrue(derivedQueryType.Name.StartsWith("EntityQuery", StringComparison.Ordinal), "Derived query should have been of type EntityQuery<>");
 
                     genericArgs = derivedQueryType.GetGenericArguments();
-                    Assert.AreEqual(1, genericArgs.Length, "Expected root query to have 1 generic arg");
+                    Assert.HasCount(1, genericArgs, "Expected root query to have 1 generic arg");
                     Assert.AreEqual(derivedType, genericArgs[0], "Expected root query generic arg to be derived type");
 
                     // -------------------------------------
@@ -508,7 +508,7 @@ namespace OpenRiaServices.Tools.Test
                     PropertyInfo pInfo = derivedType.GetProperty("Targets");
                     Assert.IsNotNull(pInfo, "Expected 'Targets' property on derived type");
                     Type propType = pInfo.PropertyType;
-                    Assert.IsTrue(propType.Name.StartsWith("EntityCollection"), "Expected 'Targets' property to be EntityCollection, not " + propType.Name);
+                    Assert.StartsWith("EntityCollection", propType.Name, "Expected 'Targets' property to be EntityCollection, not " + propType.Name);
                     Assert.IsTrue(propType.IsGenericType, "Expected 'Targets' property to be generic");
                     Type genericType = propType.GetGenericArguments()[0];
                     Assert.AreEqual(targetType, genericType, "'Targets' property should have been of type " + targetType + ", not " + genericType);
@@ -614,7 +614,7 @@ namespace OpenRiaServices.Tools.Test
                     pInfo = targetType.GetProperty("Sources");
                     Assert.IsNotNull(pInfo, "Expected 'Sources' property on target type");
                     propType = pInfo.PropertyType;
-                    Assert.IsTrue(propType.Name.StartsWith("EntityCollection"), "Expected 'Sources' property to be EntityCollection, not " + propType.Name);
+                    Assert.StartsWith("EntityCollection", propType.Name, "Expected 'Sources' property to be EntityCollection, not " + propType.Name);
                     Assert.IsTrue(propType.IsGenericType, "Expected 'Sources' property to be generic");
                     Type genericType = propType.GetGenericArguments()[0];
                     Assert.AreEqual(derivedType, genericType, "'Sources' property should have been of type " + derivedType + ", not " + genericType);
@@ -933,10 +933,10 @@ namespace OpenRiaServices.Tools.Test
 
                     Type entityListType = pInfo.PropertyType;
                     Assert.IsTrue(entityListType.IsGenericType, "EntitySet should have been generic type");
-                    Assert.IsTrue(entityListType.Name.StartsWith("EntitySet"), "EntitySet should have been of type EntitySet<>");
+                    Assert.StartsWith("EntitySet", entityListType.Name, "EntitySet should have been of type EntitySet<>");
 
                     Type[] genericArgs = entityListType.GetGenericArguments();
-                    Assert.AreEqual(1, genericArgs.Length, "Expected EntitySet to have 1 generic arg");
+                    Assert.HasCount(1, genericArgs, "Expected EntitySet to have 1 generic arg");
                     Assert.AreEqual(rootType, genericArgs[0], "Expected EntitySet generic arg to be root type");
 
                     // validate query root for root entity
@@ -945,10 +945,10 @@ namespace OpenRiaServices.Tools.Test
 
                     Type rootQueryType = mInfo.ReturnType;
                     Assert.IsTrue(rootQueryType.IsGenericType, "Root query should have been generic type");
-                    Assert.IsTrue(rootQueryType.Name.StartsWith("EntityQuery"), "Root query should have been of type EntityQuery<>");
+                    Assert.StartsWith("EntityQuery", rootQueryType.Name, "Root query should have been of type EntityQuery<>");
 
                     genericArgs = rootQueryType.GetGenericArguments();
-                    Assert.AreEqual(1, genericArgs.Length, "Expected root query to have 1 generic arg");
+                    Assert.HasCount(1, genericArgs, "Expected root query to have 1 generic arg");
                     Assert.AreEqual(rootType, genericArgs[0], "Expected root query generic arg to be root type");
 
                     // validate query root for derived 1 entity
@@ -957,10 +957,10 @@ namespace OpenRiaServices.Tools.Test
 
                     Type derived1QueryType = mInfo.ReturnType;
                     Assert.IsTrue(derived1QueryType.IsGenericType, "Derived query should have been generic type");
-                    Assert.IsTrue(derived1QueryType.Name.StartsWith("EntityQuery"), "Derived query should have been of type EntityQuery<>");
+                    Assert.StartsWith("EntityQuery", derived1QueryType.Name, "Derived query should have been of type EntityQuery<>");
 
                     genericArgs = derived1QueryType.GetGenericArguments();
-                    Assert.AreEqual(1, genericArgs.Length, "Expected root query to have 1 generic arg");
+                    Assert.HasCount(1, genericArgs, "Expected root query to have 1 generic arg");
                     Assert.AreEqual(derived1Type, genericArgs[0], "Expected root query generic arg to be derived type");
 
                     // validate query root for derived 1 entity
@@ -969,10 +969,10 @@ namespace OpenRiaServices.Tools.Test
 
                     Type derived2QueryType = mInfo.ReturnType;
                     Assert.IsTrue(derived2QueryType.IsGenericType, "Derived query should have been generic type");
-                    Assert.IsTrue(derived2QueryType.Name.StartsWith("EntityQuery"), "Derived query should have been of type EntityQuery<>");
+                    Assert.StartsWith("EntityQuery", derived2QueryType.Name, "Derived query should have been of type EntityQuery<>");
 
                     genericArgs = derived2QueryType.GetGenericArguments();
-                    Assert.AreEqual(1, genericArgs.Length, "Expected root query to have 1 generic arg");
+                    Assert.HasCount(1, genericArgs, "Expected root query to have 1 generic arg");
                     Assert.AreEqual(derived2Type, genericArgs[0], "Expected root query generic arg to be derived type");
 
                     // -------------------------------
@@ -1134,7 +1134,7 @@ namespace OpenRiaServices.Tools.Test
 
                     // There is only one root entity -- validate this
                     Type[] rootTypes = dsd.RootEntityTypes.ToArray();
-                    Assert.AreEqual(1, rootTypes.Length, "Expected only one root type");
+                    Assert.HasCount(1, rootTypes, "Expected only one root type");
 
                     // Verify we can determine all the derived types via the hierarchy alone
                     Type[] expectedDeriveds = new Type[]
@@ -1155,20 +1155,20 @@ namespace OpenRiaServices.Tools.Test
 
                     // Get all the derived types from the root
                     List<Type> derivedTypes = dsd.GetEntityDerivedTypes(typeof(Inherit_Abstract_Root)).ToList();
-                    Assert.AreEqual(expectedDeriveds.Length, derivedTypes.Count, "Expected this many derived types from root");
+                    Assert.HasCount(expectedDeriveds.Length, derivedTypes, "Expected this many derived types from root");
 
                     for (int i = 0; i < expectedDeriveds.Length; ++i)
                     {
                         Type derivedType = expectedDeriveds[i];
                         Type baseType = expectedBases[i];
-                        Assert.IsTrue(derivedTypes.Contains(derivedType), "Did not find " + derivedType + " in list of derived types");
+                        Assert.Contains(derivedType, derivedTypes, "Did not find " + derivedType + " in list of derived types");
                         Assert.AreEqual(baseType, dsd.GetEntityBaseType(derivedType), "Expected " + baseType + " to be base of " + derivedType);
                         Assert.AreEqual(typeof(Inherit_Abstract_Root), dsd.GetRootEntityType(derivedType), "Wrong root type");
                     }
 
                     // Now verify the known type hierarchy -- should have one entry per entity
                     Dictionary<Type, HashSet<Type>> knownTypes = dsd.EntityKnownTypes;
-                    Assert.AreEqual(5, knownTypes.Count, "Expected this many entities in known type hash");
+                    Assert.HasCount(5, knownTypes, "Expected this many entities in known type hash");
 
                     // Validate all entity types have an entry
                     Assert.IsTrue(knownTypes.ContainsKey(typeof(Inherit_Abstract_Root)), "Did not find root in hash");
@@ -1179,11 +1179,11 @@ namespace OpenRiaServices.Tools.Test
 
                     // Verify the root rolled up all the known types from all deriveds
                     List<Type> allKnownTypes = knownTypes[typeof(Inherit_Abstract_Root)].ToList();
-                    Assert.AreEqual(expectedDeriveds.Length, allKnownTypes.Count, "Expected root's list of known types to include all deriveds");
+                    Assert.HasCount(expectedDeriveds.Length, allKnownTypes, "Expected root's list of known types to include all deriveds");
 
                     foreach (Type expected in expectedDeriveds)
                     {
-                        Assert.IsTrue(allKnownTypes.Contains(expected), "Did not find " + expected + " in list of known types");
+                        Assert.Contains(expected, allKnownTypes, "Did not find " + expected + " in list of known types");
                     }
                 }
             }
@@ -1777,7 +1777,7 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsTrue(mInfo.IsPublic, "Expected method " + methodName + " to be public");
             Assert.AreEqual(typeof(void).FullName, mInfo.ReturnType.FullName, "Expected " + methodName + " to return void");
             ParameterInfo[] pInfos = mInfo.GetParameters();
-            Assert.AreEqual(parameters.Length, pInfos.Length, "Expected " + parameters.Length + " parameters for " + methodName);
+            Assert.HasCount(parameters.Length, pInfos, "Expected " + parameters.Length + " parameters for " + methodName);
             for (int i = 0; i < parameters.Length; ++i)
             {
                 Assert.AreEqual(parameters[i].FullName, pInfos[i].ParameterType.FullName, "Expected parameter " + i + " for " + methodName + " to be of type " + parameters[i].Name);
@@ -1826,7 +1826,7 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsTrue(mInfo.IsPublic, "Expected method " + methodName + " to be public");
             Assert.AreEqual(typeof(void).FullName, mInfo.ReturnType.FullName, "Expected " + methodName + " to return void");
             pInfos = mInfo.GetParameters();
-            Assert.AreEqual(parameters.Length + 1, pInfos.Length, "Expected " + (parameters.Length + 1) + " parameters for " + methodName);
+            Assert.HasCount(parameters.Length + 1, pInfos, "Expected " + (parameters.Length + 1) + " parameters for " + methodName);
             Assert.AreEqual(entityType.FullName, pInfos[0].ParameterType.FullName, "Expected " + methodName + " on " + domainContextType.Name + " to have entity " + entityType + " as the first param");
             for (int i = 0; i < parameters.Length; ++i)
             {

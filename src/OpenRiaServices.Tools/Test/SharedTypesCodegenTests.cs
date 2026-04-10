@@ -67,11 +67,11 @@ namespace OpenRiaServices.Tools.Test
 
                 if (sharedFilesMode == OpenRiaSharedFilesMode.Copy)
                 {
-                    Assert.AreEqual(1 + expectedSharedFiles.Length, outputFiles.Length);
+                    Assert.HasCount(1 + expectedSharedFiles.Length, outputFiles);
                 }
                 else
                 {
-                    Assert.AreEqual(1, outputFiles.Length);
+                    Assert.HasCount(1, outputFiles);
                 }
 
                 string generatedFile = CodeGenHelper.GetOutputFile(outputFiles, expectedGeneratedCodeFile);

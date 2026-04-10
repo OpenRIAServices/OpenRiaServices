@@ -26,7 +26,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(soe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, soe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, soe.Status, "ctor(msg, status) failed status");
-            Assert.IsFalse(soe.ValidationErrors.Count != 0, "default validationErrors should be empty");
+            Assert.IsEmpty(soe.ValidationErrors, "default validationErrors should be empty");
 
             // ctor(changeSet, message, innerException)
             var ioe = new InvalidOperationException("ioe");
@@ -37,7 +37,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(soe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, soe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.ServerError, soe.Status, "Default status s/b ServerError");
-            Assert.IsFalse(soe.ValidationErrors.Count != 0, "default validationErrors should be empty");
+            Assert.IsEmpty(soe.ValidationErrors, "default validationErrors should be empty");
 
             // ctor(changeSet, message, doe)
             var doe2 = new DomainOperationException("message", OperationErrorStatus.Unauthorized, 5, "stackTrace");
@@ -48,7 +48,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("stackTrace", soe.StackTrace, "StackTrace failed");
             Assert.AreEqual(5, soe.ErrorCode, "Error code failed");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, soe.Status, "ctor(msg, status) failed status");
-            Assert.IsFalse(soe.ValidationErrors.Count != 0, "default validationErrors should be empty");
+            Assert.IsEmpty(soe.ValidationErrors, "default validationErrors should be empty");
         }
     }
 }

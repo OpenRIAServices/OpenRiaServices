@@ -148,17 +148,17 @@ namespace OpenRiaServices.Client.Authentication.Test
 
         protected override async Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
-            Assert.AreEqual(0, changeSet.AddedEntities.Count,
+            Assert.IsEmpty(changeSet.AddedEntities,
                 "Change set should not contained added entities.");
             Assert.IsFalse(changeSet.IsEmpty,
                 "Change set should not be empty.");
-            Assert.AreEqual(1, changeSet.ModifiedEntities.Count,
+            Assert.HasCount(1, changeSet.ModifiedEntities,
                 "Change set should contain a single modified entity.");
-            Assert.AreEqual(0, changeSet.RemovedEntities.Count,
+            Assert.IsEmpty(changeSet.RemovedEntities,
                 "Change set should not contained removed entities.");
 
             ChangeSetEntry[] submitOperations = changeSet.GetChangeSetEntries().ToArray();
-            Assert.AreEqual(1, submitOperations.Length,
+            Assert.HasCount(1, submitOperations,
                 "A single submit operation is expected.");
 
      

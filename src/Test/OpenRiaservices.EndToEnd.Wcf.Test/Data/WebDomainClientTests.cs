@@ -258,7 +258,7 @@ namespace OpenRiaServices.Client.Web.Test
                 // Expect a 'Not Found'
                 Assert.IsInstanceOfType(error, typeof(DomainOperationException));
                 Assert.IsInstanceOfType(error.InnerException, typeof(CommunicationException));
-                StringAssert.Contains(error.InnerException.InnerException?.Message, "404");
+                Assert.Contains("404", error.InnerException.InnerException?.Message);
 
                 this.CreateDomainContext(WebDomainClientTests.GenerateUriBase(2067)); // --> 2084, one over the max length
                 ExceptionHelper.ExpectException<InvalidOperationException>(() =>
@@ -336,7 +336,7 @@ namespace OpenRiaServices.Client.Web.Test
                 Assert.IsInstanceOfType(error, typeof(DomainOperationException));
                 Assert.IsInstanceOfType(error.InnerException, typeof(CommunicationException));
                 var webException = error.InnerException.InnerException as System.Net.WebException;
-                StringAssert.Contains(webException?.Message, "404");
+                Assert.Contains("404", webException?.Message);
 
                 this.CreateDomainContext(WebDomainClientTests.GenerateUriBase(2072)); // --> 2084, one over the max length
                 ExceptionHelper.ExpectException<InvalidOperationException>(() =>

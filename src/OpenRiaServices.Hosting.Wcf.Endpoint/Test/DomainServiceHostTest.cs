@@ -23,7 +23,7 @@ namespace OpenRiaServices.Hosting.UnitTests
             DomainServiceHost host = this.CreateHost<DomainServiceHost>();
             var eps = host.Description.Endpoints;
 
-            Assert.AreEqual(2, eps.Count, "Unexpected amount of endpoints.");
+            Assert.HasCount(2, eps, "Unexpected amount of endpoints.");
 
             // REST w/ binary endpoint.
             Assert.IsTrue(eps.Any(ep => ep.Address.Uri.OriginalString.EndsWith("/binary")));
@@ -31,7 +31,7 @@ namespace OpenRiaServices.Hosting.UnitTests
             // REST w/ JSON endpoint.
             Assert.IsTrue(eps.Any(ep => ep.Address.Uri.OriginalString.EndsWith("/json")));
 
-            Assert.AreEqual(1, CustomJsonEndpointFactory.LastParameters.Count, "Incorrect number of parameters were retrieved from config.");
+            Assert.HasCount(1, CustomJsonEndpointFactory.LastParameters, "Incorrect number of parameters were retrieved from config.");
         }
 
         private T CreateHost<T>() where T : DomainServiceHost

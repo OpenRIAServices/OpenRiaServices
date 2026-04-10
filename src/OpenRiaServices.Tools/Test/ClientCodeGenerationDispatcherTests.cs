@@ -58,7 +58,7 @@ namespace OpenRiaServices.Tools.Test
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, MockCodeGenerator.GeneratorName);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");
-                Assert.AreEqual(generator.GetType(), typeof(MockCodeGenerator), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
+                Assert.AreEqual(typeof(MockCodeGenerator), generator.GetType(), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
 
                 string generatedCode = generator.GenerateCode(host, Enumerable.Empty<DomainServiceDescription>(), options);
 
@@ -86,7 +86,7 @@ namespace OpenRiaServices.Tools.Test
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, MockGSharpCodeGeneratorDerived.GeneratorName);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");
-                Assert.AreEqual(generator.GetType(), typeof(MockGSharpCodeGeneratorDerived), "dispatcher found " + generator.GetType() + " but should have found MockGSharpCodeGeneratorDerived");
+                Assert.AreEqual(typeof(MockGSharpCodeGeneratorDerived), generator.GetType(), "dispatcher found " + generator.GetType() + " but should have found MockGSharpCodeGeneratorDerived");
 
                 string generatedCode = generator.GenerateCode(host, Enumerable.Empty<DomainServiceDescription>(), options);
 
@@ -114,7 +114,7 @@ namespace OpenRiaServices.Tools.Test
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, MockCodeGenerator.GeneratorName);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");
-                Assert.AreEqual(generator.GetType(), typeof(MockCodeGenerator), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
+                Assert.AreEqual(typeof(MockCodeGenerator), generator.GetType(), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
 
                 // Setting this option makes our custom code generator emit the packet below to test LogWarning
                 MockCodeGenerator.LogWarningsFull = true;
@@ -145,7 +145,7 @@ namespace OpenRiaServices.Tools.Test
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, MockCodeGenerator.GeneratorName);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");
-                Assert.AreEqual(generator.GetType(), typeof(MockCodeGenerator), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
+                Assert.AreEqual(typeof(MockCodeGenerator), generator.GetType(), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
 
                 // The following option makes the custom generator invoke LogError with full file info that
                 // matches the packet below.
@@ -210,7 +210,7 @@ namespace OpenRiaServices.Tools.Test
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, /*generatorName*/ null);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");
-                Assert.AreEqual(generator.GetType(), typeof(MockCodeGenerator), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
+                Assert.AreEqual(typeof(MockCodeGenerator), generator.GetType(), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
 
                 string generatedCode = generator.GenerateCode(host, Enumerable.Empty<DomainServiceDescription>(), options);
 
@@ -241,7 +241,7 @@ namespace OpenRiaServices.Tools.Test
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, MockCodeGenerator.GeneratorName);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");
-                Assert.AreEqual(generator.GetType(), typeof(MockCodeGenerator), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
+                Assert.AreEqual(typeof(MockCodeGenerator), generator.GetType(), "dispatcher found " + generator.GetType() + " but should have found MockCodeGenerator");
 
                 string generatedCode = generator.GenerateCode(host, Enumerable.Empty<DomainServiceDescription>(), options);
 
@@ -275,7 +275,7 @@ namespace OpenRiaServices.Tools.Test
                 string generatedCode = generator.GenerateCode(host, new DomainServiceDescription[] { dsd }, options);
 
                 Assert.IsFalse(string.IsNullOrEmpty(generatedCode), "expected code to have been generated");
-                Assert.IsTrue(generatedCode.Contains("public sealed partial class DispatcherDomainContext : DomainContext"), "Expected generated code to contain public sealed partial class DispatcherDomainContext : DomainContext");
+                Assert.Contains("public sealed partial class DispatcherDomainContext : DomainContext", generatedCode, "Expected generated code to contain public sealed partial class DispatcherDomainContext : DomainContext");
             }
         }
 
@@ -299,7 +299,7 @@ namespace OpenRiaServices.Tools.Test
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, null);
                 Assert.IsNotNull(generator, "the dispatcher did not find any code generator");
-                Assert.AreEqual(generator.GetType(), typeof(T4DomainServiceClientCodeGenerator), "dispatcher found " + generator.GetType() + " but should have found T4DomainServiceClientProxyGenerator");
+                Assert.AreEqual(typeof(T4DomainServiceClientCodeGenerator), generator.GetType(), "dispatcher found " + generator.GetType() + " but should have found T4DomainServiceClientProxyGenerator");
 
                 DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(DispatcherDomainService));
                 string generatedCode = generator.GenerateCode(host, new DomainServiceDescription[] { dsd }, options);
@@ -330,7 +330,7 @@ namespace OpenRiaServices.Tools.Test
 
                 IDomainServiceClientCodeGenerator generator = dispatcher.FindCodeGenerator(host, options, compositionAssemblies, typeof(T4DomainServiceClientCodeGenerator).AssemblyQualifiedName);
                 Assert.IsNotNull(generator, "the dispatcher did not find the code generator");
-                Assert.AreEqual(generator.GetType(), typeof(T4DomainServiceClientCodeGenerator), "dispatcher found " + generator.GetType() + " but should have found T4DomainServiceClientProxyGenerator");
+                Assert.AreEqual(typeof(T4DomainServiceClientCodeGenerator), generator.GetType(), "dispatcher found " + generator.GetType() + " but should have found T4DomainServiceClientProxyGenerator");
 
                 string generatedCode = generator.GenerateCode(host, Enumerable.Empty<DomainServiceDescription>(), options);
 

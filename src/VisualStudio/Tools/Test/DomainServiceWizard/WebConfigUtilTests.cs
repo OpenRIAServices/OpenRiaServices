@@ -136,7 +136,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 
                 XAttribute attr = xelem.Attribute("validateIntegratedModeConfiguration");
                 Assert.IsNotNull(attr, "system.webServer validateIntegratedMode attribute was null");
-                Assert.AreEqual(attr.Value, "false", "validateIntegrateModel value was incorrect");
+                Assert.AreEqual("false", attr.Value, "validateIntegrateModel value was incorrect");
             }
         }
 

@@ -264,7 +264,7 @@ namespace OpenRiaServices.Client.Test
 
                 region = ctxt.Regions.First();
                 initialTerritoryCount = region.Territories.Count;
-                Assert.IsTrue(initialTerritoryCount > 4);
+                Assert.IsGreaterThan(4, initialTerritoryCount);
 
                 // modify a couple of existing entities
                 Territory[] territories = region.Territories.ToArray();
@@ -398,7 +398,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => submitOperation);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(null, submitOperation.Error, "submit should be successfull");
+                Assert.IsNull(submitOperation.Error, "submit should be successfull");
 
                 Load(ctxt.GetRegionsQuery().Where(r => r.RegionID == savedRegion.RegionID));
             });
@@ -417,7 +417,7 @@ namespace OpenRiaServices.Client.Test
                 ctxt.Regions.Remove(region);
                 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(1 + territoryCount, cs.RemovedEntities.Count);
+                Assert.HasCount(1 + territoryCount, cs.RemovedEntities);
                 Assert.IsTrue(cs.AddedEntities.Count == 0 && cs.ModifiedEntities.Count == 0);
 
                 SubmitChanges();
@@ -488,7 +488,7 @@ namespace OpenRiaServices.Client.Test
                 ctxt.Regions.Add(region);
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(4, cs.AddedEntities.Count);
+                Assert.HasCount(4, cs.AddedEntities);
                 Assert.IsTrue(cs.RemovedEntities.Count == 0 && cs.ModifiedEntities.Count == 0);
 
                 SubmitChanges();
@@ -604,8 +604,8 @@ namespace OpenRiaServices.Client.Test
                 order.Customer = newCust;
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.IsTrue(cs.AddedEntities.Contains(newCust));
-                Assert.IsTrue(cs.ModifiedEntities.Contains(order));
+                Assert.Contains(newCust, cs.AddedEntities);
+                Assert.Contains(order, cs.ModifiedEntities);
 
                 SubmitChanges();
             });
@@ -667,8 +667,8 @@ namespace OpenRiaServices.Client.Test
                 // and execute a domain Method call on it
                 newProduct.DiscontinueProduct();
 
-                Assert.AreEqual(1, ctxt.EntityContainer.GetChanges().ModifiedEntities.Count);
-                Assert.AreEqual(0, ctxt.EntityContainer.GetChanges().AddedEntities.Count);
+                Assert.HasCount(1, ctxt.EntityContainer.GetChanges().ModifiedEntities);
+                Assert.IsEmpty(ctxt.EntityContainer.GetChanges().AddedEntities);
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
@@ -803,14 +803,14 @@ namespace OpenRiaServices.Client.Test
                 AssertSuccess();
 
                 Category category = ctxt.Categories.Single();
-                Assert.AreEqual(10746, category.Picture.Length);
+                Assert.HasCount(10746, category.Picture);
 
                 // now modify one of the Pictures
                 byte[] updatedPicture = category.Picture.ToArray();
                 updatedPicture[0] = (byte)(updatedPicture[0] + 1);
                 category.Picture = updatedPicture;
 
-                Assert.IsTrue(ctxt.EntityContainer.GetChanges().ModifiedEntities.Contains(category));
+                Assert.Contains(category, ctxt.EntityContainer.GetChanges().ModifiedEntities);
 
                 SubmitChanges();
             });
@@ -862,7 +862,7 @@ namespace OpenRiaServices.Client.Test
                 order = ctxt.Orders.Single();
                 int numDetails = order.Order_Details.Count;
 
-                Assert.IsTrue(numDetails >= 1, "no order details");  // make sure we have details to delete
+                Assert.IsGreaterThanOrEqualTo(1, numDetails, "no order details");  // make sure we have details to delete
 
                 // now do the delete
                 foreach (Order_Detail detail in order.Order_Details)
@@ -873,7 +873,7 @@ namespace OpenRiaServices.Client.Test
                 ctxt.Orders.Remove(order);
 
                 EntityChangeSet changeSet = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(numDetails+1, changeSet.RemovedEntities.Count);
+                Assert.HasCount(numDetails+1, changeSet.RemovedEntities);
 
                 SubmitChanges();
             });
@@ -954,8 +954,8 @@ namespace OpenRiaServices.Client.Test
                 ctxt.Order_Details.Add(newDetail);
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(prevDetailCount + 1, cs.ModifiedEntities.Count);
-                Assert.AreEqual(1, cs.AddedEntities.Count);
+                Assert.HasCount(prevDetailCount + 1, cs.ModifiedEntities);
+                Assert.HasCount(1, cs.AddedEntities);
 
                 SubmitChanges();
             });
@@ -1056,11 +1056,11 @@ namespace OpenRiaServices.Client.Test
 
                 // verify the changeset is as expected
                 EntityChangeSet changeSet = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(5, changeSet.AddedEntities.Count);
-                Assert.IsTrue(changeSet.AddedEntities.Contains(order));
+                Assert.HasCount(5, changeSet.AddedEntities);
+                Assert.Contains(order, changeSet.AddedEntities);
                 foreach (Order_Detail detail in order.Order_Details)
                 {
-                    Assert.IsTrue(changeSet.AddedEntities.Contains(detail));
+                    Assert.Contains(detail, changeSet.AddedEntities);
                 }
 
                 SubmitChanges();
@@ -1091,7 +1091,7 @@ namespace OpenRiaServices.Client.Test
                 ctxt.Orders.Remove(order);
                 ctxt.Customers.Remove(cust);
 
-                Assert.AreEqual(5, ctxt.EntityContainer.GetChanges().RemovedEntities.Count);
+                Assert.HasCount(5, ctxt.EntityContainer.GetChanges().RemovedEntities);
                 SubmitChanges();
             });
             EnqueueConditional(delegate
@@ -1241,7 +1241,7 @@ namespace OpenRiaServices.Client.Test
                     foreach (var entity in SubmitOperation.EntitiesInError)
                         Console.WriteLine($"entity {entity.ToString()} has validation errors {string.Join(", ", entity.ValidationErrors.Select(e => $"{e.MemberNames}:{e.ErrorMessage}"))}");
                 }
-                Assert.AreEqual(null, SubmitOperation.Error, "submit should not have any error");
+                Assert.IsNull(SubmitOperation.Error, "submit should not have any error");
                 Assert.IsFalse(SubmitOperation.IsComplete, "submit should not be complete");
                 Assert.IsTrue(ctxt.IsSubmitting, "IsSubmitting should be true");
 
@@ -1261,7 +1261,7 @@ namespace OpenRiaServices.Client.Test
                 {
                     exception = ex;
                 }
-                Assert.AreNotEqual(null, exception, "Trying to change a property on a readonly entity should throw exception");
+                Assert.IsNotNull(exception, "Trying to change a property on a readonly entity should throw exception");
             });
             EnqueueConditional(delegate
             {
@@ -1833,8 +1833,8 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(nw1.Customers.Count > 0);
-                Assert.IsTrue(nw2.Customers.Count > 0);
+                Assert.IsGreaterThan(0, nw1.Customers.Count);
+                Assert.IsGreaterThan(0, nw2.Customers.Count);
                 Customer[] customers = nw1.Customers.ToArray();
                 customers[0].Address = nw1address;
                 so1 = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
@@ -1853,7 +1853,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error.Message);
                 Entity[] entitiesInConflict = so2.EntitiesInError.ToArray();
-                Assert.AreEqual(2, so2.ChangeSet.ModifiedEntities.Count);
+                Assert.HasCount(2, so2.ChangeSet.ModifiedEntities);
                 Customer customerInConflict = (Customer)entitiesInConflict[0];
                 EntityConflict conflict = customerInConflict.EntityConflict;
                 Assert.AreEqual(nw1address, conflict.StoreEntity.ExtractState()["Address"]);
@@ -1861,7 +1861,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(nw2addressOriginal, conflict.OriginalEntity.ExtractState()["Address"]);
                 Assert.AreEqual(nw2address, customerInConflict.Address);
                 Assert.AreEqual(nw2address2, ((Customer)so2.ChangeSet.ModifiedEntities[1]).Address);
-                Assert.AreEqual(1, entitiesInConflict.Length);
+                Assert.HasCount(1, entitiesInConflict);
                 Assert.AreEqual(1, conflict.PropertyNames.Count());
 
                 // resolve all the conflicts and resubmit
@@ -1920,8 +1920,8 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(nw1.Order_Details.Count > 0);
-                Assert.IsTrue(nw2.Order_Details.Count > 0);
+                Assert.IsGreaterThan(0, nw1.Order_Details.Count);
+                Assert.IsGreaterThan(0, nw2.Order_Details.Count);
                 Order_Detail detail1 = nw1.Order_Details.First();
                 Order_Detail detail2 = nw2.Order_Details.First();
                 Assert.AreEqual(detail1.OrderID, detail2.OrderID, "Unexpected OrderID.");
@@ -1942,8 +1942,8 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error?.Message);
                 Entity[] entitiesInConflict = so2.EntitiesInError.ToArray();
-                Assert.AreEqual(1, so2.ChangeSet.RemovedEntities.Count, "Unexpected amount of removed entities.");
-                Assert.AreEqual(1, entitiesInConflict.Length, "Unexpected amount of entities in conflict.");
+                Assert.HasCount(1, so2.ChangeSet.RemovedEntities, "Unexpected amount of removed entities.");
+                Assert.HasCount(1, entitiesInConflict, "Unexpected amount of entities in conflict.");
                 EntityConflict conflict = entitiesInConflict[0].EntityConflict;
                 Assert.AreEqual(1, conflict.PropertyNames.Count(), "Unexpected amount of property names in conflict.");
                 string conflictMember = conflict.PropertyNames.Single();
@@ -1983,7 +1983,7 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(nw.Order_Details.Count > 0);
+                Assert.IsGreaterThan(0, nw.Order_Details.Count);
 
                 detail = nw.Order_Details.First();
 
@@ -2041,8 +2041,8 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(nw1.Order_Details.Count > 0);
-                Assert.IsTrue(nw2.Order_Details.Count > 0);
+                Assert.IsGreaterThan(0, nw1.Order_Details.Count);
+                Assert.IsGreaterThan(0, nw2.Order_Details.Count);
                 Order_Detail detail1 = nw1.Order_Details.First();
                 Order_Detail detail2 = nw2.Order_Details.First();
                 Assert.AreEqual(detail1.OrderID, detail2.OrderID);
@@ -2062,8 +2062,8 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so2.Error.Message);
                 Entity[] entitiesInConflict = so2.EntitiesInError.ToArray();
-                Assert.AreEqual(1, so2.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(1, entitiesInConflict.Length);
+                Assert.HasCount(1, so2.ChangeSet.ModifiedEntities);
+                Assert.HasCount(1, entitiesInConflict);
                 Assert.IsTrue(entitiesInConflict[0].EntityConflict.IsDeleted);
             });
             EnqueueTestComplete();
@@ -2104,8 +2104,8 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(nw1.Products.Count > 0);
-                Assert.IsTrue(nw2.Products.Count > 0);
+                Assert.IsGreaterThan(0, nw1.Products.Count);
+                Assert.IsGreaterThan(0, nw2.Products.Count);
                 Product[] products = nw1.Products.ToArray();
                 origUnitPrice = products[0].UnitPrice ?? 0;
                 nw1NewUnitPrice = origUnitPrice + 1;
@@ -2260,8 +2260,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count > 0);
-                    Assert.IsTrue(nw2.Products.Count > 0);
+                    Assert.IsGreaterThan(0, nw1.Products.Count);
+                    Assert.IsGreaterThan(0, nw2.Products.Count);
                     Product[] products = nw1.Products.ToArray();
                     origUnitPrice0 = products[0].UnitPrice ?? 0;
                     nw1NewUnitPrice0 = origUnitPrice0 + 1;
@@ -2326,8 +2326,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count > 0);
-                    Assert.IsTrue(nw2.Products.Count > 0);
+                    Assert.IsGreaterThan(0, nw1.Products.Count);
+                    Assert.IsGreaterThan(0, nw2.Products.Count);
                     Product[] products = nw1.Products.ToArray();
                     origUnitPrice0 = products[0].UnitPrice ?? 0;
                     nw1NewUnitPrice0 = origUnitPrice0 + 1;
@@ -2393,8 +2393,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count > 0);
-                    Assert.IsTrue(nw2.Products.Count > 0);
+                    Assert.IsGreaterThan(0, nw1.Products.Count);
+                    Assert.IsGreaterThan(0, nw2.Products.Count);
                     Product[] products = nw1.Products.ToArray();
                     origUnitPrice0 = products[0].UnitPrice ?? 0;
                     nw1NewUnitPrice0 = origUnitPrice0 + 1;
@@ -2461,8 +2461,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count > 0);
-                    Assert.IsTrue(nw2.Products.Count > 0);
+                    Assert.IsGreaterThan(0, nw1.Products.Count);
+                    Assert.IsGreaterThan(0, nw2.Products.Count);
                     Product[] products = nw1.Products.ToArray();
                     origUnitPrice0 = products[0].UnitPrice ?? 0;
                     nw1NewUnitPrice0 = origUnitPrice0 + 1;
@@ -2641,8 +2641,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count > 0);
-                    Assert.IsTrue(nw2.Products.Count > 0);
+                    Assert.IsGreaterThan(0, nw1.Products.Count);
+                    Assert.IsGreaterThan(0, nw2.Products.Count);
                     Product product = nw1.Products.First();
                     origUnitPrice0 = product.UnitPrice ?? 0;
                     nw1NewUnitPrice0 = origUnitPrice0 + 1;
@@ -2835,8 +2835,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count > 0);
-                    Assert.IsTrue(nw2.Products.Count > 0);
+                    Assert.IsGreaterThan(0, nw1.Products.Count);
+                    Assert.IsGreaterThan(0, nw2.Products.Count);
                     Product product = nw1.Products.First();
                     origUnitPrice0 = product.UnitPrice ?? 0;
                     nw1NewUnitPrice0 = origUnitPrice0 + 1;
@@ -3035,8 +3035,8 @@ namespace OpenRiaServices.Client.Test
                 TestHelperMethods.AssertOperationSuccess(nw1load);
                 TestHelperMethods.AssertOperationSuccess(nw2load);
 
-                Assert.IsTrue(nw1.Products.Count > 0);
-                Assert.IsTrue(nw2.Products.Count > 0);
+                Assert.IsGreaterThan(0, nw1.Products.Count);
+                Assert.IsGreaterThan(0, nw2.Products.Count);
 
                 product1 = nw1.Products.First(p => p.Order_Details.Count == 0);
                 product2 = nw2.Products.First(p => p.Order_Details.Count == 0);
@@ -3057,7 +3057,7 @@ namespace OpenRiaServices.Client.Test
                 {
                     nw1.Order_Details.Remove(detail);
                 }
-                Assert.IsTrue(nw1.Order_Details.Count == 0);
+                Assert.AreEqual(0, nw1.Order_Details.Count);
                 nw1.Products.Remove(product1);
                 so = nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });
@@ -3109,8 +3109,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count >= 3);
-                    Assert.IsTrue(nw2.Products.Count >= 3);
+                    Assert.IsGreaterThanOrEqualTo(3, nw1.Products.Count);
+                    Assert.IsGreaterThanOrEqualTo(3, nw2.Products.Count);
 
                     Product[] products = nw1.Products.ToArray();
                     for (int i = 0; i < 3; i++)
@@ -3248,8 +3248,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count >= 2);
-                    Assert.IsTrue(nw2.Products.Count >= 2);
+                    Assert.IsGreaterThanOrEqualTo(2, nw1.Products.Count);
+                    Assert.IsGreaterThanOrEqualTo(2, nw2.Products.Count);
 
                     Product[] products = nw1.Products.ToArray();
                     for (int i = 0; i < 2; i++)
@@ -3294,7 +3294,7 @@ namespace OpenRiaServices.Client.Test
                     // its resolve method is called. Hence the conflict is resolved successfully the first round. When resubmit
                     // is called, the Product1's conflicts are generated. So client and store values should not be updated 
                     // even for Product0.
-                    Assert.AreEqual(null, products[0].EntityConflict, "Expected no entity conflict on product[0]");
+                    Assert.IsNull(products[0].EntityConflict, "Expected no entity conflict on product[0]");
                 }
                 else
                 {
@@ -3358,8 +3358,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count >= 2);
-                    Assert.IsTrue(nw2.Products.Count >= 2);
+                    Assert.IsGreaterThanOrEqualTo(2, nw1.Products.Count);
+                    Assert.IsGreaterThanOrEqualTo(2, nw2.Products.Count);
 
                     Product[] products = nw1.Products.ToArray();
                     for (int i = 0; i < 2; i++)
@@ -3479,8 +3479,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count >= 2);
-                    Assert.IsTrue(nw2.Products.Count >= 2);
+                    Assert.IsGreaterThanOrEqualTo(2, nw1.Products.Count);
+                    Assert.IsGreaterThanOrEqualTo(2, nw2.Products.Count);
 
                     Product[] products = nw1.Products.ToArray();
                     for (int i = 0; i < 2; i++)
@@ -3517,7 +3517,7 @@ namespace OpenRiaServices.Client.Test
                 // returned
                 Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
                 DomainOperationException ex = so.Error as DomainOperationException;
-                Assert.IsTrue(ex.Message.Contains("testing"));
+                Assert.Contains("testing", ex.Message);
             });
 
             this.ResolveTestHelper_ReloadAndVerify(
@@ -3554,8 +3554,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count >= 2);
-                    Assert.IsTrue(nw2.Products.Count >= 2);
+                    Assert.IsGreaterThanOrEqualTo(2, nw1.Products.Count);
+                    Assert.IsGreaterThanOrEqualTo(2, nw2.Products.Count);
 
                     Product[] products = nw1.Products.ToArray();
                     for (int i = 0; i < 2; i++)
@@ -3601,7 +3601,7 @@ namespace OpenRiaServices.Client.Test
 
                     // validation error should not be reported through Product1. Only conflicts errors are observed.
                     Assert.AreEqual(OperationErrorStatus.Conflicts, ex.Status);
-                    Assert.AreEqual(0, products[1].ValidationErrors.Count);
+                    Assert.IsEmpty(products[1].ValidationErrors);
 
                     // the conflicts returned are from the resubmit
                     Assert.IsNull(products[0].EntityConflict);
@@ -3615,7 +3615,7 @@ namespace OpenRiaServices.Client.Test
                     // When resolving the second product the exception is thrown,
                     // so conflicts aren't reported - the exception is
                     Assert.IsTrue(so.HasError);
-                    Assert.IsTrue(so.Error.Message.Contains("testing"));
+                    Assert.Contains("testing", so.Error.Message);
                 }
 
                 // client values of Products should not change
@@ -3658,8 +3658,8 @@ namespace OpenRiaServices.Client.Test
                 delegate
                 {
                     // test logic on nw1 data context
-                    Assert.IsTrue(nw1.Products.Count >= 2);
-                    Assert.IsTrue(nw2.Products.Count >= 2);
+                    Assert.IsGreaterThanOrEqualTo(2, nw1.Products.Count);
+                    Assert.IsGreaterThanOrEqualTo(2, nw2.Products.Count);
 
                     Product[] products = nw1.Products.ToArray();
                     for (int i = 0; i < 2; i++)
@@ -4335,8 +4335,8 @@ TestContext testContext
             });
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(nw1.Order_Details.Count > 0);
-                Assert.IsTrue(nw2.Order_Details.Count > 0);
+                Assert.IsGreaterThan(0, nw1.Order_Details.Count);
+                Assert.IsGreaterThan(0, nw2.Order_Details.Count);
                 Order_Detail detail1 = nw1.Order_Details.First();
                 Order_Detail detail2 = nw2.Order_Details.First();
                 Assert.AreEqual(detail1.OrderID, detail2.OrderID);
@@ -4356,8 +4356,8 @@ TestContext testContext
             {
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error?.Message);
                 Entity[] entitiesInConflict = so.EntitiesInError.ToArray();
-                Assert.AreEqual(1, so.ChangeSet.RemovedEntities.Count);
-                Assert.AreEqual(1, entitiesInConflict.Length);
+                Assert.HasCount(1, so.ChangeSet.RemovedEntities);
+                Assert.HasCount(1, entitiesInConflict);
                 Assert.IsTrue(entitiesInConflict[0].EntityConflict.IsDeleted);
                 ExceptionHelper.ExpectInvalidOperationException(delegate
                 {
@@ -4639,7 +4639,7 @@ TestContext testContext
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
-                Assert.IsTrue(ts.ValueB.Contains("ServerUpdated"));
+                Assert.Contains("ServerUpdated", ts.ValueB);
             });
 
             EnqueueTestComplete();
@@ -4680,7 +4680,7 @@ TestContext testContext
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(so);
-                Assert.IsTrue(ts.ValueB.Contains("ServerUpdated"));
+                Assert.Contains("ServerUpdated", ts.ValueB);
             });
 
             EnqueueTestComplete();
@@ -4826,8 +4826,8 @@ TestContext testContext
             ctxt.Ds.Add(d);
 
             EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-            Assert.IsTrue(cs.AddedEntities.Contains(c));
-            Assert.IsTrue(cs.AddedEntities.Contains(d));
+            Assert.Contains(c, cs.AddedEntities);
+            Assert.Contains(d, cs.AddedEntities);
         }
 
         [TestMethod]
@@ -4993,9 +4993,9 @@ TestContext testContext
             order2.Customer = cust1;
 
             EntityChangeSet cs = entities.GetChanges();
-            Assert.AreEqual(3, cs.ModifiedEntities.Count);
-            Assert.IsTrue(cs.ModifiedEntities.Contains(order1));
-            Assert.IsTrue(cs.ModifiedEntities.Contains(order2));
+            Assert.HasCount(3, cs.ModifiedEntities);
+            Assert.Contains(order1, cs.ModifiedEntities);
+            Assert.Contains(order2, cs.ModifiedEntities);
         }
 
         [TestMethod]
@@ -5020,7 +5020,7 @@ TestContext testContext
 
                 // now update the value
                 entity.XElem = XElement.Parse("<FooBar>We likes to party party</FooBar>");
-                Assert.IsTrue(ctxt.EntityContainer.GetChanges().ModifiedEntities.Contains(entity));
+                Assert.Contains(entity, ctxt.EntityContainer.GetChanges().ModifiedEntities);
 
                 SubmitChanges();
             });
@@ -5073,9 +5073,9 @@ TestContext testContext
                 Assert.IsFalse(so.IsCanceled);
 
                 Assert.AreEqual(0, so.EntitiesInError.Count());
-                Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
+                Assert.IsEmpty(so.ChangeSet.AddedEntities);
+                Assert.IsEmpty(so.ChangeSet.RemovedEntities);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
 
                 Assert.AreSame(customer, so.ChangeSet.ModifiedEntities.First());
 
@@ -5119,10 +5119,10 @@ TestContext testContext
                 Assert.IsFalse(so.IsCanceled);
 
                 Assert.AreEqual(1, so.EntitiesInError.Count());
-                Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(1, customer.ValidationErrors.Count);
+                Assert.IsEmpty(so.ChangeSet.AddedEntities);
+                Assert.IsEmpty(so.ChangeSet.RemovedEntities);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
+                Assert.HasCount(1, customer.ValidationErrors);
 
                 Assert.AreSame(customer, so.EntitiesInError.First());
                 Assert.AreSame(customer, so.ChangeSet.ModifiedEntities.First());
@@ -5167,10 +5167,10 @@ TestContext testContext
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Validation, so.Error.Message);
                 Assert.IsFalse(so.IsCanceled);
                 Assert.AreEqual(1, so.EntitiesInError.Count());
-                Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(1, customer.ValidationErrors.Count);
+                Assert.IsEmpty(so.ChangeSet.AddedEntities);
+                Assert.IsEmpty(so.ChangeSet.RemovedEntities);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
+                Assert.HasCount(1, customer.ValidationErrors);
 
                 Assert.AreSame(customer, so.EntitiesInError.First());
                 Assert.AreSame(customer, so.ChangeSet.ModifiedEntities.First());
@@ -5215,10 +5215,10 @@ TestContext testContext
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Validation, so.Error.Message);
                 Assert.IsFalse(so.IsCanceled);
                 Assert.AreEqual(1, so.EntitiesInError.Count());
-                Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(2, customer.ValidationErrors.Count);
+                Assert.IsEmpty(so.ChangeSet.AddedEntities);
+                Assert.IsEmpty(so.ChangeSet.RemovedEntities);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
+                Assert.HasCount(2, customer.ValidationErrors);
 
                 Assert.AreSame(customer, so.EntitiesInError.First());
                 Assert.AreSame(customer, so.ChangeSet.ModifiedEntities.First());

@@ -98,7 +98,7 @@ namespace OpenRiaServices.Tools.Test
 
                 ITaskItem[] generatedFiles = task.OutputFiles.ToArray();
                 Assert.IsNotNull(generatedFiles);
-                Assert.AreEqual(0, generatedFiles.Length);
+                Assert.IsEmpty(generatedFiles);
 
                 string expectedWarning = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_No_Input_Assemblies, Path.GetFileName(task.ServerProjectPath));
                 MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
@@ -126,7 +126,7 @@ namespace OpenRiaServices.Tools.Test
 
                 ITaskItem[] generatedFiles = task.OutputFiles.ToArray();
                 Assert.IsNotNull(generatedFiles);
-                Assert.AreEqual(0, generatedFiles.Length);
+                Assert.IsEmpty(generatedFiles);
 
                 string expectedWarning = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_No_Input_Assemblies, Path.GetFileName(task.ServerProjectPath));
                 MockBuildEngine mockBuildEngine = task.BuildEngine as MockBuildEngine;
@@ -332,7 +332,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 string[] files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(sharedFilesMode == OpenRiaSharedFilesMode.Copy ? 3 : 1, files.Length, "Code gen should have generated 3 code files");
+                Assert.HasCount(sharedFilesMode == OpenRiaSharedFilesMode.Copy ? 3 : 1, files, "Code gen should have generated 3 code files");
 
                 string generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
@@ -359,13 +359,13 @@ namespace OpenRiaServices.Tools.Test
                 foreach (string file in files)
                     generatedFiles += (file + Environment.NewLine);
 
-                Assert.AreEqual(5, files.Length, "Code gen should have generated this many ancillary files but instead saw:" + Environment.NewLine + generatedFiles);
+                Assert.HasCount(5, files, "Code gen should have generated this many ancillary files but instead saw:" + Environment.NewLine + generatedFiles);
 
                 // ----------------------------------------------
                 // Validate task.GeneratedFiles
                 // ----------------------------------------------
                 string[] generatedFilesFromTask = task.GeneratedFiles.Select<ITaskItem, string>(i => i.ItemSpec).ToArray();
-                Assert.AreEqual(1, generatedFilesFromTask.Length, "Expected one generated file");
+                Assert.HasCount(1, generatedFilesFromTask, "Expected one generated file");
                 Assert.AreEqual(generatedFile, generatedFilesFromTask[0], "Expected generated file");
 
                 // ----------------------------------------------
@@ -375,7 +375,7 @@ namespace OpenRiaServices.Tools.Test
                 string mockProjectPath = Path.Combine(generatedCodeOutputFolder, "Mock");
                 if (sharedFilesMode == OpenRiaSharedFilesMode.Copy)
                 {
-                    Assert.AreEqual(expectedServerNamedSharedFiles.Length + expectedServer2NamedSharedFiles.Length, copiedFilesFromTask.Length, "Unexpected number of copied files");
+                    Assert.HasCount(expectedServerNamedSharedFiles.Length + expectedServer2NamedSharedFiles.Length, copiedFilesFromTask, "Unexpected number of copied files");
                     TestHelper.AssertContainsAtLeastTheseFiles(copiedFilesFromTask, mockProjectPath, CreateOpenRiaClientFilesTaskTests.expectedServerNamedSharedFiles);
                     mockProjectPath = Path.Combine(Path.Combine(generatedCodeOutputFolder, "ServerClassLib2"), "Mock");
                     TestHelper.AssertContainsAtLeastTheseFiles(copiedFilesFromTask, mockProjectPath, expectedServer2NamedSharedFiles);
@@ -416,7 +416,7 @@ namespace OpenRiaServices.Tools.Test
                 {
                     refListContents = t1.ReadToEnd();
                 }
-                Assert.IsTrue(refListContents.Contains("DataAnnotations.dll"), "Expected to see DataAnnotations in client ref list but saw " + refListContents);
+                Assert.Contains("DataAnnotations.dll", refListContents, "Expected to see DataAnnotations in client ref list but saw " + refListContents);
 
                 // Repeat for server references
                 refList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaServerRefs.txt");
@@ -428,7 +428,7 @@ namespace OpenRiaServices.Tools.Test
                 {
                     refListContents = t1.ReadToEnd();
                 }
-                Assert.IsTrue(refListContents.Contains("DataAnnotations.dll"), "Expected to see DataAnnotations in server ref list but saw " + refListContents);
+                Assert.Contains("DataAnnotations.dll", refListContents, "Expected to see DataAnnotations in server ref list but saw " + refListContents);
 
                 // ---------------------------------------------
                 // RiaSourceFiles.txt should have been generated
@@ -441,9 +441,9 @@ namespace OpenRiaServices.Tools.Test
                 {
                     sourceFileListContents = t1.ReadToEnd();
                 }
-                Assert.IsTrue(sourceFileListContents.Contains(task.ServerProjectPath));
-                Assert.IsTrue(sourceFileListContents.Contains("TestEntity.shared.cs"), "Expected file list to have TestEntity.shared.cs but instead had " + fileListContents);
-                Assert.IsTrue(sourceFileListContents.Contains("ServerClassLib2.shared.cs"), "Expected file list to have ServerClassLib2.shared.cs but instead had " + fileListContents);
+                Assert.Contains(task.ServerProjectPath, sourceFileListContents);
+                Assert.Contains("TestEntity.shared.cs", sourceFileListContents, "Expected file list to have TestEntity.shared.cs but instead had " + fileListContents);
+                Assert.Contains("ServerClassLib2.shared.cs", sourceFileListContents, "Expected file list to have ServerClassLib2.shared.cs but instead had " + fileListContents);
 
                 // ---------------------------------------------
                 // RiaLinks.txt should have been generated
@@ -497,7 +497,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 string[] files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(1, files.Length, "Code gen should have generated 1 code file");
+                Assert.HasCount(1, files, "Code gen should have generated 1 code file");
 
                 string generatedFile = Path.Combine(generatedCodeOutputFolder, "TestWap.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
@@ -567,14 +567,14 @@ namespace OpenRiaServices.Tools.Test
                 string[] sharedFiles = task.SharedFiles.ToArray().Select<ITaskItem, string>(i => i.ItemSpec).ToArray();
                 TestHelper.AssertContainsAtLeastTheseFiles(sharedFiles, task.ServerProjectPath, expectedServerNamedSharedFiles);
                 TestHelper.AssertContainsAtLeastTheseFiles(sharedFiles, server2ProjectPath, expectedServer2NamedSharedFiles);
-                Assert.AreEqual(expectedServer2NamedSharedFiles.Length + expectedServerNamedSharedFiles.Length, sharedFiles.Length, "Unexpected number of shared files");
+                Assert.HasCount(expectedServer2NamedSharedFiles.Length + expectedServerNamedSharedFiles.Length, sharedFiles, "Unexpected number of shared files");
 
                 // --------------------------------------------------
                 // Validate internal task.GetCommonFiles is accurate
                 // --------------------------------------------------
                 List<string> commonFiles = new List<string>(task.GetSharedAndLinkedFiles());
 
-                Assert.AreEqual(expectedServerSharedFiles.Length + expectedClientLinkedFiles.Length + expectedServer2NamedSharedFiles.Length, commonFiles.Count);
+                Assert.HasCount(expectedServerSharedFiles.Length + expectedClientLinkedFiles.Length + expectedServer2NamedSharedFiles.Length, commonFiles);
 
                 // Should have detected both the *.shared.cs as well as ones in the server but linked from the client
                 TestHelper.AssertContainsAtLeastTheseFiles(commonFiles, task.ServerProjectPath, expectedServerSharedFiles);
@@ -622,7 +622,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 string[] files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(expectedNumberOfFiles, files.Length, "Code gen should have generated 3 code files");
+                Assert.HasCount(expectedNumberOfFiles, files, "Code gen should have generated 3 code files");
 
                 string generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
@@ -666,7 +666,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(expectedNumberOfFiles, files.Length, "Code gen should have generated 3 code files");
+                Assert.HasCount(expectedNumberOfFiles, files, "Code gen should have generated 3 code files");
 
                 generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
@@ -732,7 +732,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 string[] files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(expectedNumberOfFiles, files.Length, "Code gen should have generated 3 code files");
+                Assert.HasCount(expectedNumberOfFiles, files, "Code gen should have generated 3 code files");
 
                 string generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
@@ -766,7 +766,7 @@ namespace OpenRiaServices.Tools.Test
                 string[] contents = File.ReadAllLines(riaFilesListPath);
                 for (int i = 1; i < contents.Length; i++)
                 {
-                    Assert.IsTrue(!Path.IsPathRooted(contents[i]), "Expect relative path to be stored");
+                    Assert.IsFalse(Path.IsPathRooted(contents[i]), "Expect relative path to be stored");
                 }
 
                 // Now -- code gen a 2nd time after a tiny delay to get newer time stamps if write
@@ -783,7 +783,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(expectedNumberOfFiles, files.Length, "Code gen should have generated 3 code files");
+                Assert.HasCount(expectedNumberOfFiles, files, "Code gen should have generated 3 code files");
 
                 generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
@@ -816,7 +816,7 @@ namespace OpenRiaServices.Tools.Test
                 contents = File.ReadAllLines(riaFilesListPath);
                 for (int i = 1; i < contents.Length; i++)
                 {
-                    Assert.IsTrue(!Path.IsPathRooted(contents[i]), "Expect relative path to be stored");
+                    Assert.IsFalse(Path.IsPathRooted(contents[i]), "Expect relative path to be stored");
                 }
             }
             finally
@@ -855,7 +855,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 string[] files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(expectedNumberOfFiles, files.Length, "Code gen should have generated 3 code files");
+                Assert.HasCount(expectedNumberOfFiles, files, "Code gen should have generated 3 code files");
 
                 string generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
@@ -900,7 +900,7 @@ namespace OpenRiaServices.Tools.Test
                 Assert.IsTrue(Directory.Exists(generatedCodeOutputFolder), "Expected task to have created " + generatedCodeOutputFolder);
 
                 files = Directory.GetFiles(generatedCodeOutputFolder);
-                Assert.AreEqual(expectedNumberOfFiles, files.Length, "Code gen should have generated 3 code files");
+                Assert.HasCount(expectedNumberOfFiles, files, "Code gen should have generated 3 code files");
 
                 generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
                 Assert.IsTrue(File.Exists(generatedFile), "Expected task to have generated " + generatedFile);
@@ -1128,7 +1128,7 @@ namespace OpenRiaServices.Tools.Test
             // Verify default generated code path is computed
             string path = task.GeneratedCodePath;
             Assert.IsNotNull(path);
-            Assert.IsTrue(path.Length > 0);
+            Assert.IsGreaterThan(0, path.Length);
             Assert.AreEqual(RiaClientFilesTask.GeneratedCodeFolderName, Path.GetFileName(path));
             Assert.IsTrue(Path.IsPathRooted(path), "Generated code path must be full path");
             Assert.AreEqual(Path.GetDirectoryName(task.ClientProjectPath), Path.GetDirectoryName(path), "Generated code path must be relative to project");
@@ -1137,7 +1137,7 @@ namespace OpenRiaServices.Tools.Test
             task.GeneratedCodePath = "foo";
             path = task.GeneratedCodePath;
             Assert.IsNotNull(path);
-            Assert.IsTrue(path.Length > 0);
+            Assert.IsGreaterThan(0, path.Length);
             Assert.AreEqual("foo", Path.GetFileName(path));
             Assert.IsTrue(Path.IsPathRooted(path), "Generated code path must be full path");
             Assert.AreEqual(Path.GetFullPath(path), path, "Generated code path should have been full path");

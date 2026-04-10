@@ -25,8 +25,8 @@ namespace OpenRiaServices.Client.Test.IntegrationTests
             // Parse metadata in order to validate it
             var description = System.Web.Services.Description.ServiceDescription.Read(contentStream);
             Assert.AreEqual("AuthenticationService1", description.Name);
-            Assert.AreEqual(1, description.Services.Count);
-            Assert.AreEqual(12, description.Messages.Count);
+            Assert.HasCount(1, description.Services);
+            Assert.HasCount(12, description.Messages);
         }
     }
 }

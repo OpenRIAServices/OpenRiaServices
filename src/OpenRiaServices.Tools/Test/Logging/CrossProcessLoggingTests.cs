@@ -101,21 +101,21 @@ namespace OpenRiaServices.Tools.Test
 
             string errorMessage = destination.ErrorMessages.Single();
 
-            StringAssert.Contains(errorMessage, ex.StackTrace);
+            Assert.Contains(ex.StackTrace, errorMessage);
 
             // Exception Type and message should be logged for all exceptions in the hierarchy
             foreach (var exception in allExceptions) 
             {
-                StringAssert.Contains(errorMessage, exception.Message);
-                StringAssert.Contains(errorMessage, exception.GetType().Name);
+                Assert.Contains(exception.Message, errorMessage);
+                Assert.Contains(exception.GetType().Name, errorMessage);
 
                 if (ex is ArgumentException ae)
-                    StringAssert.Contains(errorMessage, ae.ParamName);
+                    Assert.Contains(ae.ParamName, errorMessage);
             }
 
             foreach(var type in typeLoadClasses)
             {
-                StringAssert.Contains(errorMessage, type.FullName);
+                Assert.Contains(type.FullName, errorMessage);
             }
         }
     }

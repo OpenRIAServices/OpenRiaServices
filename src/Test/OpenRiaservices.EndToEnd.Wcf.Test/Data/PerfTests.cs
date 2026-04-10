@@ -33,7 +33,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count == 0);
+                Assert.IsEmpty(lo.Entities);
             });
             EnqueueTestComplete();
         }
@@ -52,7 +52,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count == 0);
+                Assert.IsEmpty(lo.Entities);
             });
             EnqueueTestComplete();
         }
@@ -71,7 +71,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count == 50);
+                Assert.AreEqual(50, lo.Entities.Count);
             });
             EnqueueTestComplete();
         }
@@ -90,7 +90,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count > 0);
+                Assert.IsNotEmpty(lo.Entities);
             });
             EnqueueTestComplete();
         }
@@ -109,7 +109,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count == 50);
+                Assert.AreEqual(50, lo.Entities.Count);
             });
             EnqueueTestComplete();
         }
@@ -128,7 +128,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.IsTrue(lo.Entities.Count == 500);
+                Assert.AreEqual(500, lo.Entities.Count);
             });
             EnqueueTestComplete();
         }

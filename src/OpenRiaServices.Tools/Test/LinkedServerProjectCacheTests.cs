@@ -61,7 +61,7 @@ namespace OpenRiaServices.Tools.Test
                 {
                     // First access allocates empty instance
                     Assert.IsNotNull(cache.LinkedServerProjectsByProject, "Expected non null dictionary after ctor");
-                    Assert.AreEqual(0, cache.LinkedServerProjectsByProject.Count, "Expected empty cache");
+                    Assert.IsEmpty(cache.LinkedServerProjectsByProject, "Expected empty cache");
 
                     // Null indexer parameter throws on sets
                     ExceptionHelper.ExpectArgumentNullExceptionStandard((() => cache[null] = "x"), "projectPath");
@@ -79,7 +79,7 @@ namespace OpenRiaServices.Tools.Test
                     // Nulls are permitted
                     cache["proj3"] = null;
 
-                    Assert.AreEqual(3, cache.LinkedServerProjectsByProject.Count, "Expected this many entries in cache");
+                    Assert.HasCount(3, cache.LinkedServerProjectsByProject, "Expected this many entries in cache");
 
                     Assert.AreEqual("proj1.Web", cache["proj1"]);
                     Assert.AreEqual("proj2.Web", cache["proj2"]);
@@ -87,7 +87,7 @@ namespace OpenRiaServices.Tools.Test
 
                     // Cache is case insensitive.  Should overwrite entry differing only in case
                     cache["PrOj1"] = "PrOj1.wEb";
-                    Assert.AreEqual(3, cache.LinkedServerProjectsByProject.Count, "Key differing only in case should have overwritten existing one");
+                    Assert.HasCount(3, cache.LinkedServerProjectsByProject, "Key differing only in case should have overwritten existing one");
                     Assert.AreEqual("PrOj1.wEb", cache["PrOj1"]);
                 }
                 finally
@@ -117,20 +117,20 @@ namespace OpenRiaServices.Tools.Test
                     cache["p3"] = "w3";
                     cache["p4"] = string.Empty;
 
-                    Assert.AreEqual(4, cache.LinkedServerProjectsByProject.Count, "Should have had this many items in cache");
+                    Assert.HasCount(4, cache.LinkedServerProjectsByProject, "Should have had this many items in cache");
 
                     List<string> projectRefs = cache.ProjectReferences.ToList();
-                    Assert.AreEqual(4, projectRefs.Count, "Expected to have this many project references in cache");
+                    Assert.HasCount(4, projectRefs, "Expected to have this many project references in cache");
 
-                    Assert.IsTrue(projectRefs.Contains("p1"), "expected p1 to be in list of project refs");
-                    Assert.IsTrue(projectRefs.Contains("p2"), "expected p2 to be in list of project refs");
-                    Assert.IsTrue(projectRefs.Contains("p3"), "expected p3 to be in list of project refs");
-                    Assert.IsTrue(projectRefs.Contains("p4"), "expected p4 to be in list of project refs");
+                    Assert.Contains("p1", projectRefs, "expected p1 to be in list of project refs");
+                    Assert.Contains("p2", projectRefs, "expected p2 to be in list of project refs");
+                    Assert.Contains("p3", projectRefs, "expected p3 to be in list of project refs");
+                    Assert.Contains("p4", projectRefs, "expected p4 to be in list of project refs");
 
                     List<string> riaLinks = cache.LinkedServerProjects.ToList();
-                    Assert.AreEqual(2, riaLinks.Count, "Expected this many project references to have RIA Links");
-                    Assert.IsTrue(riaLinks.Contains("w1"), "expected p1 to be in list of RIA links");
-                    Assert.IsTrue(riaLinks.Contains("w3"), "expected p3 to be in list of RIA links");
+                    Assert.HasCount(2, riaLinks, "Expected this many project references to have RIA Links");
+                    Assert.Contains("w1", riaLinks, "expected p1 to be in list of RIA links");
+                    Assert.Contains("w3", riaLinks, "expected p3 to be in list of RIA links");
                 }
                 finally
                 {
@@ -180,20 +180,20 @@ namespace OpenRiaServices.Tools.Test
                     cache = new LinkedServerProjectCache(projectFile, historyFile, logger, projectFileReader);
 
                     // The following methods and properties will lazy load the cache
-                    Assert.AreEqual(4, cache.LinkedServerProjectsByProject.Count, "Should have had this many items in cache");
+                    Assert.HasCount(4, cache.LinkedServerProjectsByProject, "Should have had this many items in cache");
 
                     List<string> projectRefs = cache.ProjectReferences.ToList();
-                    Assert.AreEqual(4, projectRefs.Count, "Expected to have this many project references in cache");
+                    Assert.HasCount(4, projectRefs, "Expected to have this many project references in cache");
 
-                    Assert.IsTrue(projectRefs.Contains(p1), "expected p1 to be in list of project refs");
-                    Assert.IsTrue(projectRefs.Contains(p2), "expected p2 to be in list of project refs");
-                    Assert.IsTrue(projectRefs.Contains(p3), "expected p3 to be in list of project refs");
-                    Assert.IsTrue(projectRefs.Contains(p4), "expected p4 to be in list of project refs");
+                    Assert.Contains(p1, projectRefs, "expected p1 to be in list of project refs");
+                    Assert.Contains(p2, projectRefs, "expected p2 to be in list of project refs");
+                    Assert.Contains(p3, projectRefs, "expected p3 to be in list of project refs");
+                    Assert.Contains(p4, projectRefs, "expected p4 to be in list of project refs");
 
                     List<string> riaLinks = cache.LinkedServerProjects.ToList();
-                    Assert.AreEqual(2, riaLinks.Count, "Expected this many project references to have RIA Links");
-                    Assert.IsTrue(riaLinks.Contains(w1), "expected w1 to be in list of RIA links");
-                    Assert.IsTrue(riaLinks.Contains(w3), "expected w3 to be in list of RIA links");
+                    Assert.HasCount(2, riaLinks, "Expected this many project references to have RIA Links");
+                    Assert.Contains(w1, riaLinks, "expected w1 to be in list of RIA links");
+                    Assert.Contains(w3, riaLinks, "expected w3 to be in list of RIA links");
                 }
                 finally
                 {
@@ -260,26 +260,26 @@ namespace OpenRiaServices.Tools.Test
 
                     // Validate we see our 3 project references
                     List<string> projectRefs = cache.ProjectReferences.ToList();
-                    Assert.AreEqual(3, projectRefs.Count, "Expected this many project references");
-                    Assert.IsTrue(projectRefs.Contains(refProject1), "Expected ref project 1 in project references.");
-                    Assert.IsTrue(projectRefs.Contains(refProject2), "Expected ref project 2 in project references.");
-                    Assert.IsTrue(projectRefs.Contains(refProject3), "Expected ref project 3 in project references.");
+                    Assert.HasCount(3, projectRefs, "Expected this many project references");
+                    Assert.Contains(refProject1, projectRefs, "Expected ref project 1 in project references.");
+                    Assert.Contains(refProject2, projectRefs, "Expected ref project 2 in project references.");
+                    Assert.Contains(refProject3, projectRefs, "Expected ref project 3 in project references.");
 
                     // Validate that we extracted the RIA Links for those project references
                     List<string> riaLinks = cache.LinkedServerProjects.ToList();
-                    Assert.AreEqual(2, riaLinks.Count, "Expected to find 2 RIA links");
-                    Assert.IsTrue(riaLinks.Contains(serverProject1), "Expected server project 1 RIA link");
-                    Assert.IsTrue(riaLinks.Contains(serverProject2), "Expected server project 2 RIA link");
+                    Assert.HasCount(2, riaLinks, "Expected to find 2 RIA links");
+                    Assert.Contains(serverProject1, riaLinks, "Expected server project 1 RIA link");
+                    Assert.Contains(serverProject2, riaLinks, "Expected server project 2 RIA link");
 
                     // Validate that we can ask for the source of each RIA Link target
                     List<string> sources = cache.GetLinkedServerProjectSources(serverProject1).ToList();
-                    Assert.AreEqual(1, sources.Count, "Expected 1 source to for RIA link to server project 1");
-                    Assert.IsTrue(sources.Contains(refProject1), "Expected refProject 1 to be shown as RIA Link source 1");
+                    Assert.HasCount(1, sources, "Expected 1 source to for RIA link to server project 1");
+                    Assert.Contains(refProject1, sources, "Expected refProject 1 to be shown as RIA Link source 1");
 
                     sources = cache.GetLinkedServerProjectSources(serverProject2).ToList();
-                    Assert.AreEqual(2, sources.Count, "Expected 2 sources to for RIA link to server project 2");
-                    Assert.IsTrue(sources.Contains(refProject2), "Expected refProject 2 to be shown as RIA Link source 2");
-                    Assert.IsTrue(sources.Contains(refProject3), "Expected refProject 2 to be shown as RIA Link source 2");
+                    Assert.HasCount(2, sources, "Expected 2 sources to for RIA link to server project 2");
+                    Assert.Contains(refProject2, sources, "Expected refProject 2 to be shown as RIA Link source 2");
+                    Assert.Contains(refProject3, sources, "Expected refProject 2 to be shown as RIA Link source 2");
                 }
                 finally
                 {

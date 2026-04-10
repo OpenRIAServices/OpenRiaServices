@@ -36,7 +36,7 @@ namespace OpenRiaServices.Tools.Test
 
                 int[] fileIds = ssf.GetSharedFileIds(CodeMemberKey.CreateTypeKey(typeof(TestEntity)));
                 Assert.IsNotNull(fileIds, "Expected TestEntity to have non-null file ID's because it is shared");
-                Assert.AreEqual(2, fileIds.Length, "Expected TestEntity to be found in exactly 2 files");
+                Assert.HasCount(2, fileIds, "Expected TestEntity to be found in exactly 2 files");
                 foreach (int i in fileIds)
                 {
                     string file = filenameMap[i];
@@ -45,8 +45,8 @@ namespace OpenRiaServices.Tools.Test
 
                 fileIds = ssf.GetSharedFileIds(CodeMemberKey.CreateTypeKey(typeof(TestValidator)));
                 Assert.IsNotNull(fileIds, "Expected TestValidator to have non-null file ID's because it is shared");
-                Assert.AreEqual(1, fileIds.Length, "Expected TestValidator to be found in exactly one file");
-                Assert.IsTrue(filenameMap[fileIds[0]].Contains("TestValidator.linked.cs"), "expected this to be the sole shared file for TestValidator");
+                Assert.HasCount(1, fileIds, "Expected TestValidator to be found in exactly one file");
+                Assert.Contains("TestValidator.linked.cs", filenameMap[fileIds[0]], "expected this to be the sole shared file for TestValidator");
 
                 fileIds = ssf.GetSharedFileIds(CodeMemberKey.CreateTypeKey(typeof(DomainService)));
                 Assert.IsNull(fileIds, "Expected DomainService to have no shared file ids");
@@ -74,13 +74,13 @@ namespace OpenRiaServices.Tools.Test
 
                 int[] fileIds = ssf.GetSharedFileIds(CodeMemberKey.CreateMethodKey(typeof(TestValidator).GetMethod("IsValid")));
                 Assert.IsNotNull(fileIds, "Expected TestValidator.IsValid to have non-null file ID's because it is shared");
-                Assert.AreEqual(1, fileIds.Length, "Expected TestValidator.IsValid to be found in exactly one file");
-                Assert.IsTrue(filenameMap[fileIds[0]].Contains("TestValidator.linked.cs"), "Expected TestValidator.IsValid to be in TestValidator.linked.cs");
+                Assert.HasCount(1, fileIds, "Expected TestValidator.IsValid to be found in exactly one file");
+                Assert.Contains("TestValidator.linked.cs", filenameMap[fileIds[0]], "Expected TestValidator.IsValid to be in TestValidator.linked.cs");
 
                 fileIds = ssf.GetSharedFileIds(CodeMemberKey.CreateMethodKey(typeof(TestEntity).GetMethod("ServerAndClientMethod")));
                 Assert.IsNotNull(fileIds, "Expected TestEntity.ServerAndClientMethod to have non-null file ID's because it is shared");
-                Assert.AreEqual(1, fileIds.Length, "Expected TestEntity.ServerAndClientMethod to be found in exactly one file");
-                Assert.IsTrue(filenameMap[fileIds[0]].Contains("TestEntity.linked.cs"), "Expected TestEntity.ServerAndClientMethod to be in TestEntity.linked.cs");
+                Assert.HasCount(1, fileIds, "Expected TestEntity.ServerAndClientMethod to be found in exactly one file");
+                Assert.Contains("TestEntity.linked.cs", filenameMap[fileIds[0]], "Expected TestEntity.ServerAndClientMethod to be in TestEntity.linked.cs");
 
                 fileIds = ssf.GetSharedFileIds(CodeMemberKey.CreateMethodKey(typeof(TestEntity).GetMethod("ServerMethod")));
                 Assert.IsNull(fileIds, "Expected TestEntity.ServerMethod to have null file ids");

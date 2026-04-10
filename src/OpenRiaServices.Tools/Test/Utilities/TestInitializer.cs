@@ -11,7 +11,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace OpenRiaServices.Tools.Test.Utilities
 {
     [TestClass]
-    public sealed class TestInitializer
+    public static class TestInitializer
     {
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext testContext)

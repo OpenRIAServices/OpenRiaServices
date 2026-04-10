@@ -124,7 +124,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(2, action.Parameters.Count());
             Assert.AreEqual("Param1", action.Parameters.ElementAt(0) as string);
             string[] param2 = action.Parameters.ElementAt(1) as string[];
-            Assert.AreEqual(2, param2.Length);
+            Assert.HasCount(2, param2);
         }
 
         [TestMethod]
@@ -156,29 +156,29 @@ namespace OpenRiaServices.Client.Test
             EnqueueConditional(() => propChanged.Contains("HasValidationErrors"));
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(1, _cities[0].ValidationErrors.Count);
+                Assert.HasCount(1, _cities[0].ValidationErrors);
                 propChanged.Clear();
 
                 // set Errors to another list with 2 errors, verify change notification is not raised on HasValidationErrors because the flag does not change
                 _cities[0].ValidationResultCollection.ReplaceErrors(listWithTwoErrors);
-                Assert.AreEqual(2, _cities[0].ValidationErrors.Count);
+                Assert.HasCount(2, _cities[0].ValidationErrors);
             });
 
             EnqueueDelay(2000);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(0, propChanged.Count);
+                Assert.IsEmpty(propChanged);
                 propChanged.Clear();
 
                 // clear the reference collection assigned to Errors, verify no changes occur to the ValidationErrors property
                 listWithTwoErrors.Clear();
-                Assert.AreEqual(2, _cities[0].ValidationErrors.Count);
+                Assert.HasCount(2, _cities[0].ValidationErrors);
             });
 
             EnqueueDelay(2000);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(0, propChanged.Count);
+                Assert.IsEmpty(propChanged);
                 propChanged.Clear();
 
                 // set ValidationErrors to null after setting it to a valid collection, verify HasValidationErrors is updated and change notification is raised
@@ -189,7 +189,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueConditional(() => propChanged.Contains("HasValidationErrors"));
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(0, _cities[0].ValidationErrors.Count);
+                Assert.IsEmpty(_cities[0].ValidationErrors);
             });
 
             EnqueueTestComplete();
@@ -304,7 +304,7 @@ namespace OpenRiaServices.Client.Test
             _cities[1].ZoneID += 1;
             Assert.AreEqual(EntityState.Modified, _cities[1].EntityState);
             Assert.IsTrue(_cities[1].CanInvokeAction(_assignCityZone.Name));
-            Assert.IsTrue(_cities[1].EntityState == EntityState.Modified);
+            Assert.AreEqual(EntityState.Modified, _cities[1].EntityState);
             _cities[1].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray());
             Assert.AreEqual(1, _cities[1].EntityActions.Count());
             Assert.AreEqual(_assignCityZone.Name, _cities[1].EntityActions.Single().Name);
@@ -473,7 +473,7 @@ namespace OpenRiaServices.Client.Test
             {
                 var submitResults = submitTask.GetAwaiter().GetResult();
 
-                Assert.AreEqual(1, submitResults.Results.Count);
+                Assert.HasCount(1, submitResults.Results);
                 Assert.AreEqual(1, submitResults.Results.Where(e => e.Operation == EntityOperationType.Update).Count());
 
                 // REVIEW: Do we really need the operation data back from the server?
@@ -589,9 +589,9 @@ namespace OpenRiaServices.Client.Test
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
             _cities[2].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
             changeset = container.GetChanges();
-            Assert.IsTrue(changeset.AddedEntities.Count == 0);
-            Assert.IsTrue(changeset.ModifiedEntities.Count == 2);
-            Assert.IsTrue(changeset.RemovedEntities.Count == 0);
+            Assert.IsEmpty(changeset.AddedEntities);
+            Assert.AreEqual(2, changeset.ModifiedEntities.Count);
+            Assert.IsEmpty(changeset.RemovedEntities);
 
             Assert.AreEqual<string>(_assignCityZone.Name, changeset.ModifiedEntities[0].EntityActions.Single().Name);
             Assert.AreEqual<string>(_assignCityZone.Name, changeset.ModifiedEntities[1].EntityActions.Single().Name);
@@ -617,10 +617,10 @@ namespace OpenRiaServices.Client.Test
             // invoke then delete the entity. Verify the ModifiedEntities are updated
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
             Assert.AreEqual(1, _cities[0].EntityActions.Count());
-            Assert.AreEqual(1, container.GetChanges().ModifiedEntities.Count);
+            Assert.HasCount(1, container.GetChanges().ModifiedEntities);
 
             container.GetEntitySet<City>().Remove(_cities[0]);
-            Assert.AreEqual(0, container.GetChanges().ModifiedEntities.Count);
+            Assert.IsEmpty(container.GetChanges().ModifiedEntities);
         }
 
         [TestMethod]
@@ -635,10 +635,10 @@ namespace OpenRiaServices.Client.Test
             // invoke then delete the entity. Verify the ModifiedEntities are updated
             _cities[0].InvokeAction(_assignCityZone.Name, _assignCityZone.Parameters.ToArray<object>());
             Assert.AreEqual(1, _cities[0].EntityActions.Count());
-            Assert.AreEqual(1, container.GetChanges().ModifiedEntities.Count);
+            Assert.HasCount(1, container.GetChanges().ModifiedEntities);
 
             container.GetEntitySet<City>().Detach(_cities[0]);
-            Assert.AreEqual(0, container.GetChanges().ModifiedEntities.Count);
+            Assert.IsEmpty(container.GetChanges().ModifiedEntities);
         }
         #endregion
 
@@ -674,8 +674,8 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsFalse(city.CanAssignCityZone);
                 Assert.IsTrue(city.IsAssignCityZoneInvoked);
 
-                Assert.IsTrue(propChanged.Contains("CanAssignCityZone"));
-                Assert.IsTrue(propChanged.Contains("IsAssignCityZoneInvoked"));
+                Assert.Contains("CanAssignCityZone", propChanged);
+                Assert.Contains("IsAssignCityZoneInvoked", propChanged);
                 propChanged.Clear();
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
@@ -688,8 +688,8 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsTrue(city.CanAssignCityZone);
                 Assert.IsFalse(city.IsAssignCityZoneInvoked);
 
-                Assert.IsTrue(propChanged.Contains("CanAssignCityZone"));
-                Assert.IsTrue(propChanged.Contains("IsAssignCityZoneInvoked"));
+                Assert.Contains("CanAssignCityZone", propChanged);
+                Assert.Contains("IsAssignCityZoneInvoked", propChanged);
             });
             EnqueueTestComplete();
         }
@@ -742,32 +742,32 @@ namespace OpenRiaServices.Client.Test
             EnqueueConditional(() => propChanged.Count > 0);
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(propChanged.Contains("CanAssignCityZone"));
-                Assert.IsTrue(propChanged.Contains("IsAssignCityZoneInvoked"));
-                Assert.IsFalse(propChanged.Contains("CanAutoAssignCityZone"));
+                Assert.Contains("CanAssignCityZone", propChanged);
+                Assert.Contains("IsAssignCityZoneInvoked", propChanged);
+                Assert.DoesNotContain("CanAutoAssignCityZone", propChanged);
                 propChanged.Clear();
 
                 Assert.IsTrue(lastRootCity.CanAutoAssignCityZone);
                 lastRootCity.AutoAssignCityZone();
 
                 changeset = citiesProvider.EntityContainer.GetChanges();
-                Assert.AreEqual(2, changeset.ModifiedEntities.Count);
+                Assert.HasCount(2, changeset.ModifiedEntities);
 
                 so = citiesProvider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
 
-                Assert.AreEqual(2, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
+                Assert.HasCount(2, so.ChangeSet.ModifiedEntities);
+                Assert.IsEmpty(so.ChangeSet.AddedEntities);
+                Assert.IsEmpty(so.ChangeSet.RemovedEntities);
             });
             // wait for submit to complete, then verify invoked entities in changeset
             this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
-                Assert.AreEqual(2, so.ChangeSet.ModifiedEntities.Count);
+                Assert.HasCount(2, so.ChangeSet.ModifiedEntities);
 
                 // verify we got the property change notification for the city entity as a result of autosync
-                Assert.AreEqual(9, propChanged.Count);
+                Assert.HasCount(9, propChanged);
                 Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneName"));
                 Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneID"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAssignCityZone"));
@@ -849,9 +849,9 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsFalse(newCity.CanAssignCityZoneIfAuthorized);
                 Assert.IsFalse(newCity.CanAutoAssignCityZone);
 
-                Assert.AreEqual(3, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(1, so.ChangeSet.AddedEntities.Count);
-                Assert.AreEqual(2, so.ChangeSet.RemovedEntities.Count);
+                Assert.HasCount(3, so.ChangeSet.ModifiedEntities);
+                Assert.HasCount(1, so.ChangeSet.AddedEntities);
+                Assert.HasCount(2, so.ChangeSet.RemovedEntities);
             });
             this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
@@ -862,7 +862,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsTrue(newCity.CanAssignCityZone);
 
                 // verify we got property change notifications for the new city entity (guard property should be reverted once SubmitChanges is called)
-                Assert.AreEqual(10, propChanged_addedCity.Count);
+                Assert.HasCount(10, propChanged_addedCity);
                 Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "ZoneName"));
                 Assert.AreEqual(1, propChanged_addedCity.Count(prop => prop == "ZoneID"));
                 Assert.AreEqual(2, propChanged_addedCity.Count(prop => prop == "CanAssignCityZone"));
@@ -966,7 +966,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsTrue(submitOp.HasError, "Expected errors.");
                 Assert.AreEqual(1, submitOp.EntitiesInError.Count(), "Expected 1 Zip entity in error.");
                 Assert.AreEqual(submitOp.EntitiesInError.Single(), zip, "Expected 1 Zip entity in error.");
-                Assert.AreEqual(1, zip.ValidationErrors.Count, "Expected 1 validation error on Zip entity.");
+                Assert.HasCount(1, zip.ValidationErrors, "Expected 1 validation error on Zip entity.");
 
                 // Verify entity state
                 Assert.IsFalse(zip.IsReadOnly, "Zip should not be in a read-only state.");
@@ -1073,11 +1073,11 @@ namespace OpenRiaServices.Client.Test
                 }
             };
 
-            Assert.AreEqual(0, propChanged.Count);
+            Assert.IsEmpty(propChanged);
 
             cities.Cities.Attach(city);
 
-            Assert.AreEqual(3, propChanged.Count, "Saw these property changes: " + string.Join(",", propChanged.ToArray()));
+            Assert.HasCount(3, propChanged, "Saw these property changes: " + string.Join(",", propChanged.ToArray()));
         }
 
         [TestMethod]
@@ -1214,7 +1214,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
+                Assert.HasCount(3, lo.Entities, "Entities count should be 3");
                 changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
                 valuesObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1269,7 +1269,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
+                Assert.HasCount(3, lo.Entities, "Entities count should be 3");
                 changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
                 valuesObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1296,13 +1296,13 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(valuesObj.DecimalProp, changedObj.DecimalProp);
                 Assert.AreEqual(valuesObj.UriProp, changedObj.UriProp);
                 Assert.AreEqual(valuesObj.GuidProp, changedObj.GuidProp);
-                Assert.AreEqual(valuesObj.ByteArrayProp.Length, changedObj.ByteArrayProp.Length);
+                Assert.HasCount(valuesObj.ByteArrayProp.Length, changedObj.ByteArrayProp);
                 Assert.AreEqual(123, changedObj.BinaryProp[2]);
-                Assert.AreEqual(valuesObj.BinaryProp.Length, changedObj.BinaryProp.Length);
+                Assert.HasCount(valuesObj.BinaryProp.Length, changedObj.BinaryProp);
                 //Assert.AreEqual(valuesObj.XElementProp.Value, changedObj.XElementProp.Value);
                 //Assert.AreEqual("<someElement>element text</someElement>", changedObj.XElementProp.ToString());
                 Assert.AreEqual(valuesObj.EnumProp, changedObj.EnumProp);
-                Assert.AreEqual(valuesObj.DictionaryStringProp.Count, changedObj.DictionaryStringProp.Count);
+                Assert.HasCount(valuesObj.DictionaryStringProp.Count, changedObj.DictionaryStringProp);
                 Assert.IsTrue(valuesObj.DictionaryStringProp.Keys.SequenceEqual(changedObj.DictionaryStringProp.Keys));
                 Assert.AreEqual(valuesObj.DateTimeOffsetProp, changedObj.DateTimeOffsetProp);
             });
@@ -1327,7 +1327,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
+                Assert.HasCount(3, lo.Entities, "Entities count should be 3");
                 changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
                 valuesObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1383,7 +1383,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
+                Assert.HasCount(3, lo.Entities, "Entities count should be 3");
                 changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
                 valuesObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1431,7 +1431,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(3, lo.Entities.Count, "Entities count should be 3");
+                Assert.HasCount(3, lo.Entities, "Entities count should be 3");
                 obj1 = provider.MixedTypes.Single(t => t.ID == "MixedType_Min");
                 obj2 = provider.MixedTypes.Single(t => t.ID == "MixedType_Other");
 
@@ -1512,7 +1512,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // Verify we loaded OK
                 this.AssertCompletedWithoutErrors(loadOp);
-                Assert.AreEqual(1, loadOp.Entities.Count, "Expected to load 1 entity.");
+                Assert.HasCount(1, loadOp.Entities, "Expected to load 1 entity.");
 
                 // Retrieve an editable entity
                 MockEntity1 entity = ctx.MockEntity1s.First();
@@ -1569,7 +1569,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // Verify we loaded OK
                 this.AssertCompletedWithoutErrors(loadOp);
-                Assert.AreEqual(1, loadOp.Entities.Count, "Expected to load 1 entity.");
+                Assert.HasCount(1, loadOp.Entities, "Expected to load 1 entity.");
 
                 // Retrieve an editable entity
                 MockEntity1 entity = ctx.MockEntity1s.First();
@@ -1623,7 +1623,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // Verify we loaded OK
                 this.AssertCompletedWithoutErrors(loadOp);
-                Assert.AreEqual(1, loadOp.Entities.Count, "Expected to load 1 entity.");
+                Assert.HasCount(1, loadOp.Entities, "Expected to load 1 entity.");
 
                 // Retrieve an editable entity
                 MockEntity2 entity = ctx.MockEntity2s.First();
@@ -2140,9 +2140,9 @@ namespace OpenRiaServices.Client.Test
                             Assert.IsTrue(submitOp.HasError, "Client call: Submit should have failed.");
 
                             // The client should fail validation of only the argument's property.
-                            Assert.AreEqual(1, entity.ValidationErrors.Count, "Client call: Entity should have an error.");
-                            Assert.AreEqual(0, entity.CommonProperty.ValidationErrors.Count, "Client call: Validation error was pushed down to property.");
-                            Assert.AreEqual(0, entity.CommonArray[0].ValidationErrors.Count, "Client call: Validation error was pushed down to array.");
+                            Assert.HasCount(1, entity.ValidationErrors, "Client call: Entity should have an error.");
+                            Assert.IsEmpty(entity.CommonProperty.ValidationErrors, "Client call: Validation error was pushed down to property.");
+                            Assert.IsEmpty(entity.CommonArray[0].ValidationErrors, "Client call: Validation error was pushed down to array.");
 
                             // Reset the validator and get the result from the server.
                             DynamicTestValidator.Reset();
@@ -2157,10 +2157,10 @@ namespace OpenRiaServices.Client.Test
                             // The server should fail validation of all MockEntity4 types.
                             IEnumerable<ValidationResult> expectedServerValidationResults = CustomMethodTests.GetExpectedErrors(methodName);
                             UnitTestHelper.AssertValidationResultsAreEqual(expectedServerValidationResults, entity.ValidationResultCollection);
-                            Assert.AreEqual(1, entity.CommonProperty.ValidationErrors.Count, "Server call: Validation error was pushed down to property.");
+                            Assert.HasCount(1, entity.CommonProperty.ValidationErrors, "Server call: Validation error was pushed down to property.");
 
                             // Errors cannot get pushed to arrays.
-                            Assert.AreEqual(0, entity.CommonArray[0].ValidationErrors.Count, "Server call: Validation error was pushed down to array.");
+                            Assert.IsEmpty(entity.CommonArray[0].ValidationErrors, "Server call: Validation error was pushed down to array.");
                         });
                 };
 
@@ -2347,8 +2347,8 @@ namespace OpenRiaServices.Client.Test
 
                 Assert.AreEqual(4.0m, calc.Value);
 
-                Assert.IsTrue(1 <= propChanged.Count(p => p == "CanAddTwice"), "Property changes for CanAddTwice");
-                Assert.IsTrue(1 <= propChanged.Count(p => p == "IsAddTwiceInvoked"), "Property changes for CanAddTwice");
+                Assert.IsLessThanOrEqualTo(propChanged.Count(p => p == "CanAddTwice"), 1, "Property changes for CanAddTwice");
+                Assert.IsLessThanOrEqualTo(propChanged.Count(p => p == "IsAddTwiceInvoked"), 1, "Property changes for CanAddTwice");
             });
             EnqueueTestComplete();
         }

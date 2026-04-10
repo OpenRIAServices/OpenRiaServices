@@ -68,7 +68,7 @@ namespace OpenRiaServices.Tools.Test
         {
             if (TestHelper.AreNotNull(t1, t2))
             {
-                Assert.AreEqual(t1.Length, t2.Length);
+                Assert.HasCount(t1.Length, t2);
                 foreach (Type type1 in t1)
                 {
                     Type type2 = t2.First(e => e.FullName == type1.FullName);
@@ -86,7 +86,7 @@ namespace OpenRiaServices.Tools.Test
         {
             if (TestHelper.AreNotNull(fieldInfo1, fieldInfo2))
             {
-                Assert.AreEqual(fieldInfo1.Length, fieldInfo2.Length);
+                Assert.HasCount(fieldInfo1.Length, fieldInfo2);
                 foreach (FieldInfo field1 in fieldInfo1)
                 {
                     FieldInfo field2 = fieldInfo2.First(f => f.Name == field1.Name);
@@ -99,15 +99,15 @@ namespace OpenRiaServices.Tools.Test
         {
             if (TestHelper.AreNotNull(attributes1, attributes2))
             {
-                Assert.AreEqual(attributes1.Count, attributes2.Count);
+                Assert.HasCount(attributes1.Count, attributes2);
 
                 foreach (CustomAttributeData attr1 in attributes1)
                 {
                     CustomAttributeData attr2 = attributes2.First(a => TestHelper.AreTypesEqual(a.AttributeType, attr1.AttributeType));
                     Assert.IsNotNull(attr2, $"Could not find an attribute matching '{attr1}' in t4 codegen generated assembly");
 
-                    Assert.AreEqual(attr1.ConstructorArguments.Count, attr2.ConstructorArguments.Count);
-                    Assert.AreEqual(attr1.NamedArguments.Count, attr2.NamedArguments.Count);
+                    Assert.HasCount(attr1.ConstructorArguments.Count, attr2.ConstructorArguments);
+                    Assert.HasCount(attr1.NamedArguments.Count, attr2.NamedArguments);
                 }
             }
         }
@@ -116,7 +116,7 @@ namespace OpenRiaServices.Tools.Test
         {
             if (TestHelper.AreNotNull(properties1, properties2))
             {
-                Assert.AreEqual(properties1.Length, properties2.Length);
+                Assert.HasCount(properties1.Length, properties2);
                 foreach (PropertyInfo prop1 in properties1)
                 {
                     PropertyInfo prop2 = properties2.First(p => p.Name == prop1.Name);
@@ -131,7 +131,7 @@ namespace OpenRiaServices.Tools.Test
         {
             if (TestHelper.AreNotNull(methods1, methods2))
             {
-                Assert.AreEqual(methods1.Length, methods2.Length);
+                Assert.HasCount(methods1.Length, methods2);
                 foreach (MethodInfo method1 in methods1)
                 {
                     MethodInfo method2 = GetMatchingMethod(methods2, method1);

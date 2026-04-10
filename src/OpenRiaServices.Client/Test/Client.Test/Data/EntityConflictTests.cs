@@ -72,7 +72,7 @@ namespace OpenRiaServices.Client.Test
         public void EntityConflict_IsDeleted()
         {
             EntityConflict entityConflict = new EntityConflict(new MockEntity(), null, null, true);
-            Assert.AreEqual(true, entityConflict.IsDeleted, "Expected 'IsDeleted' to be true.");
+            Assert.IsTrue(entityConflict.IsDeleted, "Expected 'IsDeleted' to be true.");
             ExceptionHelper.ExpectInvalidOperationException(
                 () => entityConflict.PropertyNames.ToArray() /* touch 'PropertyNames' to get an exception */,
                 Resource.EntityConflict_IsDeleteConflict);
@@ -105,7 +105,7 @@ namespace OpenRiaServices.Client.Test
             string[] propertyNames = new[] { "Property1", "Property2" };
             EntityConflict entityConflict = new EntityConflict(new MockEntity(), new MockEntity(), propertyNames, false);
 
-            Assert.AreEqual(false, entityConflict.IsDeleted, "Expected 'IsDeleted' to be false.");
+            Assert.IsFalse(entityConflict.IsDeleted, "Expected 'IsDeleted' to be false.");
             Assert.IsNotNull(entityConflict.PropertyNames, "Expected 'PropertyNames' to not be null.");
             Assert.AreEqual(2, entityConflict.PropertyNames.Count(), "Expected 2 properties in 'PropertyNames'.");
 

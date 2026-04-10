@@ -43,7 +43,7 @@ namespace OpenRiaServices.Client.Test
                           where c.CountyName == "Lucas"
                           select c;
             List<ServiceQueryPart> parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(1, parts.Count);
+            Assert.HasCount(1, parts);
             Assert.AreEqual("where", parts[0].QueryOperator);
             Assert.AreEqual("(it.CountyName==\"Lucas\")", parts[0].Expression);
             Assert.AreSame(typeof(City), citiesQuery.EntityType);
@@ -54,7 +54,7 @@ namespace OpenRiaServices.Client.Test
                           orderby c.Name, c.StateName
                           select c;
             parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(1, parts.Count);
+            Assert.HasCount(1, parts);
             Assert.AreEqual("orderby", parts[0].QueryOperator);
             Assert.AreEqual("it.Name, it.StateName", parts[0].Expression);
 
@@ -64,7 +64,7 @@ namespace OpenRiaServices.Client.Test
                           orderby c.Name descending, c.StateName descending
                           select c;
             parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(1, parts.Count);
+            Assert.HasCount(1, parts);
             Assert.AreEqual("orderby", parts[0].QueryOperator);
             Assert.AreEqual("it.Name desc, it.StateName desc", parts[0].Expression);
 
@@ -72,7 +72,7 @@ namespace OpenRiaServices.Client.Test
             citiesQuery = new EntityQuery<City>(_testClient, "GetCities", null, false, true);
             citiesQuery = citiesQuery.Skip(20).Take(10);
             parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(2, parts.Count);
+            Assert.HasCount(2, parts);
             Assert.AreEqual("skip", parts[0].QueryOperator);
             Assert.AreEqual("20", parts[0].Expression);
             Assert.AreEqual("take", parts[1].QueryOperator);
@@ -86,7 +86,7 @@ namespace OpenRiaServices.Client.Test
                  select c
                  ).Skip(20).Take(10);
             parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(4, parts.Count);
+            Assert.HasCount(4, parts);
         }
 
         [TestMethod]
@@ -96,7 +96,7 @@ namespace OpenRiaServices.Client.Test
             EntityQuery<City> citiesQuery = new EntityQuery<City>(_testClient, "GetCities", null, false, true);
             citiesQuery = citiesQuery.Where(c => c.CountyName == "Lucas");
             List<ServiceQueryPart> parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(1, parts.Count);
+            Assert.HasCount(1, parts);
             Assert.AreEqual("where", parts[0].QueryOperator);
             Assert.AreEqual("(it.CountyName==\"Lucas\")", parts[0].Expression);
 
@@ -104,7 +104,7 @@ namespace OpenRiaServices.Client.Test
             citiesQuery = new EntityQuery<City>(_testClient, "GetCities", null, false, true);
             citiesQuery = citiesQuery.OrderBy(c => c.Name).ThenBy(c => c.StateName);
             parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(1, parts.Count);
+            Assert.HasCount(1, parts);
             Assert.AreEqual("orderby", parts[0].QueryOperator);
             Assert.AreEqual("it.Name, it.StateName", parts[0].Expression);
 
@@ -112,7 +112,7 @@ namespace OpenRiaServices.Client.Test
             citiesQuery = new EntityQuery<City>(_testClient, "GetCities", null, false, true);
             citiesQuery = citiesQuery.OrderByDescending(c => c.Name).ThenByDescending(c => c.StateName);
             parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(1, parts.Count);
+            Assert.HasCount(1, parts);
             Assert.AreEqual("orderby", parts[0].QueryOperator);
             Assert.AreEqual("it.Name desc, it.StateName desc", parts[0].Expression);
 
@@ -120,7 +120,7 @@ namespace OpenRiaServices.Client.Test
             citiesQuery = new EntityQuery<City>(_testClient, "GetCities", null, false, true);
             citiesQuery = citiesQuery.Skip(20).Take(10);
             parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(2, parts.Count);
+            Assert.HasCount(2, parts);
             Assert.AreEqual("skip", parts[0].QueryOperator);
             Assert.AreEqual("20", parts[0].Expression);
             Assert.AreEqual("take", parts[1].QueryOperator);
@@ -133,7 +133,7 @@ namespace OpenRiaServices.Client.Test
                  .Skip(20)
                  .Take(10);
             parts = QuerySerializer.Serialize(citiesQuery.Query);
-            Assert.AreEqual(4, parts.Count);
+            Assert.HasCount(4, parts);
         }
 
         [TestMethod]
@@ -232,9 +232,9 @@ namespace OpenRiaServices.Client.Test
 
             // Test IsComposable property
             citiesQuery = new EntityQuery<City>(_testClient, "GetCities", null, false, true);
-            Assert.AreEqual(true, citiesQuery.IsComposable);
+            Assert.IsTrue(citiesQuery.IsComposable);
             citiesQuery = new EntityQuery<City>(_testClient, "GetCities", null, false, false);
-            Assert.AreEqual(false, citiesQuery.IsComposable);
+            Assert.IsFalse(citiesQuery.IsComposable);
 
             // Test Parameters property
             Dictionary<string, object> parameters = new Dictionary<string, object>

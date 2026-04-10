@@ -9,7 +9,7 @@ using httpDomainClient::OpenRiaServices.Client.DomainClients;
 namespace OpenRiaServices.Client.Test
 {
     [TestClass()]
-    public sealed class Main
+    public static class Main
     {
         [AssemblyInitialize()]
         public static void AssemblyInit(TestContext context)

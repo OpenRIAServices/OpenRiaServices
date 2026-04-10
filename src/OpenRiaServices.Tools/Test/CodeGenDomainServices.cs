@@ -643,8 +643,8 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.AssertCodeGenFailure(generatedCode, logger, error);
 
             // Validate error list
-            Assert.AreEqual(1, logger.ErrorMessages.Count);
-            Assert.AreEqual(0, logger.WarningMessages.Count);
+            Assert.HasCount(1, logger.ErrorMessages);
+            Assert.IsEmpty(logger.WarningMessages);
         }
 
         [TestMethod]
@@ -659,8 +659,8 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.AssertCodeGenFailure(generatedCode, logger, error);
 
             // Validate error list
-            Assert.AreEqual(1, logger.ErrorMessages.Count);
-            Assert.AreEqual(0, logger.WarningMessages.Count);
+            Assert.HasCount(1, logger.ErrorMessages);
+            Assert.IsEmpty(logger.WarningMessages);
         }
 
         [TestMethod]

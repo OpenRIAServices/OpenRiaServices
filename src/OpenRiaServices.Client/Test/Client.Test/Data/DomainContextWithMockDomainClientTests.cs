@@ -144,7 +144,7 @@ namespace OpenRiaServices.Client.Test
                 string.Format(Resource.DomainContext_InvokeOperationFailed, "Echo", exception.Message));
 
             // verify the exception properties
-            Assert.AreEqual(null, ex.InnerException);
+            Assert.IsNull(ex.InnerException);
             Assert.AreEqual(ex.StackTrace, exception.StackTrace);
             Assert.AreEqual(ex.Status, exception.Status);
             Assert.AreEqual(ex.ErrorCode, exception.ErrorCode);
@@ -289,7 +289,7 @@ namespace OpenRiaServices.Client.Test
             tcs.SetResult(new QueryCompletedResult(new[] { city }, Array.Empty<Entity>(), -1, Array.Empty<ValidationResult>()));
 
             var result = await loadTask;
-            Assert.AreEqual(1, result.Entities.Count);
+            Assert.HasCount(1, result.Entities);
             Assert.AreSame(city, result.Entities.First());
         }
 
@@ -471,7 +471,7 @@ namespace OpenRiaServices.Client.Test
             // verify the exception properties
             Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Validation, submitEx.Message);
             Assert.AreEqual(OperationErrorStatus.ValidationFailed, submitEx.Status);
-            Assert.AreEqual(1, submitEx.EntitiesInError.Count);
+            Assert.HasCount(1, submitEx.EntitiesInError);
             Assert.AreEqual(entry.ClientEntity, submitEx.EntitiesInError.First());
 
             // now test again with conflicts
@@ -486,7 +486,7 @@ namespace OpenRiaServices.Client.Test
             // verify the exception properties
             Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, submitEx.Message);
             Assert.AreEqual(OperationErrorStatus.Conflicts, submitEx.Status);
-            Assert.AreEqual(1, submitEx.EntitiesInError.Count);
+            Assert.HasCount(1, submitEx.EntitiesInError);
             Assert.AreEqual(entry.ClientEntity, submitEx.EntitiesInError.First());
         }
     }

@@ -37,9 +37,9 @@ namespace OpenRiaServices.Client.Test
 
                 // verify we propagate the top level exception message as well
                 // as the inner exception message (to one level deep)
-                Assert.IsTrue(lo.Error.Message.Contains("Not implemented yet."));
-                Assert.IsTrue(lo.Error.Message.Contains("InnerException1"));
-                Assert.IsFalse(lo.Error.Message.Contains("InnerException2"));
+                Assert.Contains("Not implemented yet.", lo.Error.Message);
+                Assert.Contains("InnerException1", lo.Error.Message);
+                Assert.DoesNotContain("InnerException2", lo.Error.Message);
             });
 
             EnqueueTestComplete();
@@ -116,14 +116,14 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsTrue(vr.MemberNames.Contains("CountyName"));
 
                 // verify the Entity.ValidationErrors collection is populated as expected
-                Assert.IsTrue(propChanged[0].Contains("HasValidationErrors"));
-                Assert.IsTrue(propChanged[1].Contains("HasValidationErrors"));
+                Assert.Contains("HasValidationErrors", propChanged[0]);
+                Assert.Contains("HasValidationErrors", propChanged[1]);
 
                 // verify entities are not auto-synced back to the client because there were errors
-                Assert.IsFalse(propChanged[2].Contains("Code"));
-                Assert.IsFalse(propChanged[2].Contains("FourDigit"));
-                Assert.IsFalse(propChanged[2].Contains("HasValidationErrors"));
-                Assert.AreEqual(0, zips[2].ValidationErrors.Count);
+                Assert.DoesNotContain("Code", propChanged[2]);
+                Assert.DoesNotContain("FourDigit", propChanged[2]);
+                Assert.DoesNotContain("HasValidationErrors", propChanged[2]);
+                Assert.IsEmpty(zips[2].ValidationErrors);
                 Assert.AreEqual(refZip, zips[2].Code);
             });
 
@@ -197,14 +197,14 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(0, vr.MemberNames.Count());
 
                 // verify the Entity.ValidationErrors collection is populated as expected
-                Assert.IsTrue(propChanged[0].Contains("HasValidationErrors"));
-                Assert.IsTrue(propChanged[1].Contains("HasValidationErrors"));
+                Assert.Contains("HasValidationErrors", propChanged[0]);
+                Assert.Contains("HasValidationErrors", propChanged[1]);
 
                 // verify entities are not auto-synced back to the client because there were errors
-                Assert.IsFalse(propChanged[2].Contains("Code"));
-                Assert.IsFalse(propChanged[2].Contains("FourDigit"));
-                Assert.IsFalse(propChanged[2].Contains("HasValidationErrors"));
-                Assert.AreEqual(0, zips[2].ValidationErrors.Count);
+                Assert.DoesNotContain("Code", propChanged[2]);
+                Assert.DoesNotContain("FourDigit", propChanged[2]);
+                Assert.DoesNotContain("HasValidationErrors", propChanged[2]);
+                Assert.IsEmpty(zips[2].ValidationErrors);
                 Assert.AreEqual(refZip, zips[2].Code);
             });
 
@@ -253,7 +253,7 @@ namespace OpenRiaServices.Client.Test
 
                 // Call RejectChanges and verify ValidationErrors collection is cleared
                 citiesProvider.RejectChanges();
-                Assert.IsFalse(zip.ValidationErrors.Count != 0);
+                Assert.IsEmpty(zip.ValidationErrors);
 
                 // Invoke domain method that does not throw on same entity
                 zip.ReassignZipCode(1, true);
@@ -267,7 +267,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Zip zip = citiesProvider.Zips.First();
                 Assert.IsNull(so.Error);
-                Assert.IsFalse(zip.ValidationErrors.Count != 0);
+                Assert.IsEmpty(zip.ValidationErrors);
                 Assert.AreEqual(refZip + 1, zip.Code);
             });
 
@@ -457,8 +457,8 @@ namespace OpenRiaServices.Client.Test
                 UnitTestHelper.AssertListContains<ValidationResult>(errors, (e => e.ErrorMessage == "The CityName field is required."));
                 UnitTestHelper.AssertListContains<ValidationResult>(errors, (e => e.ErrorMessage == "The StateName field is required."));
 
-                Assert.AreEqual(0, deletedCity.ValidationErrors.Count, "The deleted city shouldn't have any validation errors");
-                Assert.AreEqual(0, validZip.ValidationErrors.Count, "The valid city shouldn't have any validation errors");
+                Assert.IsEmpty(deletedCity.ValidationErrors, "The deleted city shouldn't have any validation errors");
+                Assert.IsEmpty(validZip.ValidationErrors, "The valid city shouldn't have any validation errors");
             });
 
             EnqueueTestComplete();
@@ -479,7 +479,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsNull(lo.Error);
-                Assert.IsTrue(lo.Entities.Count > 0);
+                Assert.IsNotEmpty(lo.Entities);
                 A entity = provider.As.First();
                 entity.BID1++;
                 so = provider.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
@@ -490,7 +490,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNotNull(so.Error);
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Validation, so.Error.Message);
                 Assert.IsNotNull(so.ChangeSet);
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
             });
             EnqueueTestComplete();
         }
@@ -529,7 +529,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNotNull(so.Error);
                 Assert.AreEqual(string.Format(Resource.DomainContext_SubmitOperationFailed, "One or more associated objects were passed for collection property 'Items' on type 'Cart', but the target collection is null."), so.Error.Message);
                 Assert.IsNotNull(so.ChangeSet);
-                Assert.AreEqual(3, so.ChangeSet.AddedEntities.Count);
+                Assert.HasCount(3, so.ChangeSet.AddedEntities);
             });
             EnqueueTestComplete();
         }

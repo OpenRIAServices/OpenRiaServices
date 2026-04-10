@@ -463,7 +463,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(lo.Error);
-                Assert.IsTrue(lo.Error.Message.Contains("Load operation failed"));
+                Assert.Contains("Load operation failed", lo.Error.Message);
             });
 
             // now test an empty name (just the service path is specified w/o a DomainService name)
@@ -476,7 +476,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(lo.Error);
-                Assert.IsTrue(lo.Error.Message.Contains("Load operation failed"));
+                Assert.Contains("Load operation failed", lo.Error.Message);
             });
 
             EnqueueTestComplete();

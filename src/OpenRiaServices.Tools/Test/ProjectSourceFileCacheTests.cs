@@ -59,7 +59,7 @@ namespace OpenRiaServices.Tools.Test
 
                 // First access allocates empty instance
                 Assert.IsNotNull(cache.SourceFilesByProject);
-                Assert.AreEqual(0, cache.SourceFilesByProject.Count, "Expected empty cache");
+                Assert.IsEmpty(cache.SourceFilesByProject, "Expected empty cache");
 
                 // Indexer setter can be called
                 cache["proj"] = new string[] { "a", "b", "c" };
@@ -77,7 +77,7 @@ namespace OpenRiaServices.Tools.Test
 
                 // Cache is case insensitive.  Should overwrite entry differing only in case
                 cache["PrOj"] = new string[] { "d", "e" };
-                Assert.AreEqual(1, cache.SourceFilesByProject.Count, "Key differing only in case should have overwritten existing one");
+                Assert.HasCount(1, cache.SourceFilesByProject, "Key differing only in case should have overwritten existing one");
                 files = cache["PrOj"];
                 Assert.IsNotNull(files);
 
@@ -297,7 +297,7 @@ namespace OpenRiaServices.Tools.Test
                     ProjectSourceFileCache cache = new ProjectSourceFileCache(serverProjectPath, breadCrumbFile, logger, projectFileReader);
 
                     // Initially, it will not have loaded anything
-                    Assert.AreEqual(0, cache.SourceFilesByProject.Count);
+                    Assert.IsEmpty(cache.SourceFilesByProject);
 
                     // -------------------------------------------------------------
                     // Validate cache is loaded correctly from .csproj files
@@ -337,7 +337,7 @@ namespace OpenRiaServices.Tools.Test
                     Assert.IsFalse(cache.IsFileCacheCurrent, "Failed load from file should have marked cache as *not* current with file.");
 
                     // Cache should still be empty
-                    Assert.AreEqual(0, cache.SourceFilesByProject.Count);
+                    Assert.IsEmpty(cache.SourceFilesByProject);
 
                     // -------------------------------------------------------------
                     // Validate cache loaded in presence of out-of-date breadcrumb
@@ -380,7 +380,7 @@ namespace OpenRiaServices.Tools.Test
 
             IEnumerable<string> serverFiles = cache.GetSourceFilesInProject(serverProjectPath);
             Assert.IsNotNull(serverFiles);
-            Assert.IsTrue(serverFiles.Count() >= expectedServerFiles.Length);
+            Assert.IsGreaterThanOrEqualTo(expectedServerFiles.Length, serverFiles.Count());
             foreach (string file in expectedServerFiles)
             {
                 string expectedFile = Path.Combine(Path.GetDirectoryName(serverProjectPath), file);
@@ -389,7 +389,7 @@ namespace OpenRiaServices.Tools.Test
 
             IEnumerable<string> server2Files = cache.GetSourceFilesInProject(server2ProjectPath);
             Assert.IsNotNull(server2Files);
-            Assert.IsTrue(server2Files.Count() >= expectedServer2Files.Length);
+            Assert.IsGreaterThanOrEqualTo(expectedServer2Files.Length, server2Files.Count());
             foreach (string file in expectedServer2Files)
             {
                 string expectedFile = Path.Combine(Path.GetDirectoryName(server2ProjectPath), file);

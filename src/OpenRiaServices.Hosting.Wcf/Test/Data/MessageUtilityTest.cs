@@ -25,9 +25,9 @@ namespace OpenRiaServices.Hosting.Test.Data
             Assert.IsNotNull(serviceQuery);
             Assert.AreEqual(2, serviceQuery.QueryParts.Count());
             ServiceQueryPart[] parts = serviceQuery.QueryParts.ToArray();
-            Assert.AreEqual(parts[0].ToString(), @"where=(it.City.StartsWith(""R"")&&(it.AddressID<400))");
-            Assert.AreEqual(parts[1].ToString(), "orderby=it.AddressId");
-            Assert.AreEqual(true, serviceQuery.IncludeTotalCount);
+            Assert.AreEqual(@"where=(it.City.StartsWith(""R"")&&(it.AddressID<400))", parts[0].ToString());
+            Assert.AreEqual("orderby=it.AddressId", parts[1].ToString());
+            Assert.IsTrue(serviceQuery.IncludeTotalCount);
             Assert.AreEqual(2, serviceQuery.QueryParts.Count());
 
             XmlDictionaryReader reader = MessageUtilityTest.CreateReaderFromMessage(message);
@@ -48,7 +48,7 @@ namespace OpenRiaServices.Hosting.Test.Data
             ServiceQuery serviceQuery = MessageUtility.GetServiceQuery(ref message);
 
             // no service query
-            Assert.AreEqual(null, serviceQuery, "service query not null");
+            Assert.IsNull(serviceQuery, "service query not null");
 
             // the message did not change, it should compare
             XmlDictionaryReader reader = MessageUtilityTest.CreateReaderFromMessage(message);
@@ -118,7 +118,7 @@ namespace OpenRiaServices.Hosting.Test.Data
   <name>TestName</name>
 </GetCustomers>";
 
-            Assert.AreEqual(xDoc.ToString(), expectedMessageBody);
+            Assert.AreEqual(expectedMessageBody, xDoc.ToString());
         }
     }
 }

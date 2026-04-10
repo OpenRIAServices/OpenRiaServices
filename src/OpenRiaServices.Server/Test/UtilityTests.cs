@@ -60,14 +60,14 @@ namespace OpenRiaServices.Server.Test
             // Verify that the member names have been transformed into full paths
             ValidationResult result = results.Single(q => q.ErrorMessage == "ContactInfo-ContactInfo");
             string[] memberNames = result.MemberNames.ToArray();
-            Assert.AreEqual(2, memberNames.Length);
+            Assert.HasCount(2, memberNames);
             Assert.IsTrue(memberNames.Contains("ContactInfo.Name"));
             Assert.IsTrue(memberNames.Contains("ContactInfo.PrimaryPhone"));
 
             // here we expect member names to be transformed into full paths
             result = results.Single(q => q.ErrorMessage == "Phone-TypeLevel");
             memberNames = result.MemberNames.ToArray();
-            Assert.AreEqual(2, memberNames.Length);
+            Assert.HasCount(2, memberNames);
             Assert.IsTrue(memberNames.Contains("ContactInfo.PrimaryPhone.AreaCode"));
             Assert.IsTrue(memberNames.Contains("ContactInfo.PrimaryPhone.Number"));
         }
@@ -124,7 +124,7 @@ namespace OpenRiaServices.Server.Test
             DynamicTestValidator.Monitor(true);
             results = new List<ValidationResult>();
             isValid = ValidationUtilities.TryValidateObject(entity, validationContext, results);
-            Assert.AreEqual(3, DynamicTestValidator.ValidationCalls.Count);
+            Assert.HasCount(3, DynamicTestValidator.ValidationCalls);
             Assert.IsNotNull(DynamicTestValidator.ValidationCalls.Single(v => v.MemberName == null && v.ObjectType == typeof(ContactInfo)));
             Assert.IsNotNull(DynamicTestValidator.ValidationCalls.Single(v => v.MemberName == "ContactInfo" && v.ObjectType == typeof(ComplexType_Parent)));
             Assert.IsNotNull(DynamicTestValidator.ValidationCalls.Single(v => v.MemberName == null && v.ObjectType == typeof(Phone)));
@@ -147,7 +147,7 @@ namespace OpenRiaServices.Server.Test
             validationContext = ValidationUtilities.CreateValidationContext(parent, null);
             results = new List<ValidationResult>();
             isValid = ValidationUtilities.TryValidateObject(parent, validationContext, results);
-            Assert.AreEqual(2, results.Count);
+            Assert.HasCount(2, results);
             result = results.Single(p => p.MemberNames.Single() == "ComplexType_Recursive.P3().P4");
             Assert.AreEqual("The field P4 must be between 0 and 5.", result.ErrorMessage);
             result = results.Single(p => p.MemberNames.Single() == "ComplexType_Recursive.P3().P3().P4");

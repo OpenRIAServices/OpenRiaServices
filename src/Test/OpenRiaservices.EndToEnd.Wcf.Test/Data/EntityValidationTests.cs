@@ -107,7 +107,7 @@ namespace OpenRiaServices.Client.Test
             entity.ReadWriteProperty = null;
 
             // With INotifyDataErrorInfo validation, the property will get set, even though it's invalid
-            Assert.AreEqual<string>(null, entity.ReadWriteProperty, "The value should have been set");
+            Assert.IsNull(entity.ReadWriteProperty, "The value should have been set");
             Assert.IsTrue(actualErrors.SequenceEqual(new string[] { "ReadWriteProperty" }), "The list of errors received");
 
             // Verify that we have the expected validation error for the property
@@ -493,7 +493,7 @@ namespace OpenRiaServices.Client.Test
             entity.OnlyObjectValidation = string.Empty;
 
             Assert.IsFalse(entity.HasValidationErrors, "No errors should be detected");
-            Assert.AreEqual(0, actualChanges.Count, "No errors should be detected");
+            Assert.IsEmpty(actualChanges, "No errors should be detected");
 
             // Force object level validation
             IEditableObject editableObject = entity;
@@ -501,18 +501,18 @@ namespace OpenRiaServices.Client.Test
             editableObject.EndEdit();
 
             Assert.IsTrue(entity.HasValidationErrors, "Erros should be detected");
-            Assert.AreEqual(1, entity.ValidationErrors.Count);
+            Assert.HasCount(1, entity.ValidationErrors);
 
             var actualError = entity.ValidationErrors.First();
             Assert.AreEqual("Required", actualError.ErrorMessage);
             CollectionAssert.AreEqual(new[] { nameof(MockEntity_ObjectValidation.OnlyObjectValidation) }, actualError.MemberNames.ToList(), "membernames");
 
-            Assert.AreEqual(1, actualChanges.Count, "1 errors should be detected");
+            Assert.HasCount(1, actualChanges, "1 errors should be detected");
 
             // Setting property will remove object level validation
             entity.OnlyObjectValidation = null;
             Assert.IsFalse(entity.HasValidationErrors, "Errors should have been removed");
-            Assert.AreEqual(2, actualChanges.Count, "change notification should have happened when clearing error");
+            Assert.HasCount(2, actualChanges, "change notification should have happened when clearing error");
         }
 
         [TestMethod]
@@ -574,14 +574,14 @@ namespace OpenRiaServices.Client.Test
                 editableCity.BeginEdit();
                 city.Name = null;
                 editableCity.EndEdit();
-                Assert.AreEqual<int>(1, city.ValidationErrors.Count, "We should have a validation error after the first EndEdit");
+                Assert.HasCount(1, city.ValidationErrors, "We should have a validation error after the first EndEdit");
                 Assert.IsTrue(city.HasValidationErrors, "HasValidationErrors after the first EndEdit");
 
                 // Revert the changes so that it doesn't have property-level validation errors anymore
                 editableCity.BeginEdit();
                 city.Name = originalName;
                 editableCity.EndEdit();
-                Assert.AreEqual<int>(0, city.ValidationErrors.Count, "ValidationErrors should be cleared after the second EndEdit");
+                Assert.IsEmpty(city.ValidationErrors, "ValidationErrors should be cleared after the second EndEdit");
                 Assert.IsFalse(city.HasValidationErrors, "HasValidationErrors after the second EndEdit");
             });
 
@@ -609,7 +609,7 @@ namespace OpenRiaServices.Client.Test
                 city.MakeEntityValidationFail = true;
                 editableCity.EndEdit();
                 Assert.AreEqual<int>(1, city.ValidateCityCallCount, "Our entity-level validation should have been called");
-                Assert.AreEqual<int>(1, city.ValidationErrors.Count, "We should have a validation error after the first EndEdit");
+                Assert.HasCount(1, city.ValidationErrors, "We should have a validation error after the first EndEdit");
                 Assert.IsTrue(city.HasValidationErrors, "HasValidationErrors after the first EndEdit");
 
                 // Make the entity have no entity-level errors
@@ -618,7 +618,7 @@ namespace OpenRiaServices.Client.Test
                 city.ValidateCityCallCount = 0; // reset the call count
                 editableCity.EndEdit();
                 Assert.AreEqual<int>(1, city.ValidateCityCallCount, "Our entity-level validation should have been called");
-                Assert.AreEqual<int>(0, city.ValidationErrors.Count, "ValidationErrors should be cleared after the second EndEdit");
+                Assert.IsEmpty(city.ValidationErrors, "ValidationErrors should be cleared after the second EndEdit");
                 Assert.IsFalse(city.HasValidationErrors, "HasValidationErrors after the second EndEdit");
             });
 
@@ -666,14 +666,14 @@ namespace OpenRiaServices.Client.Test
                 string customPropertyError = "Property-level error that was added manually";
                 city.ValidationErrors.Add(new ValidationResult(customPropertyError, new string[] { "ZoneID", "CountyName" }));
 
-                Assert.AreEqual<int>(2, city.ValidationErrors.Count, "Error count before editing");
+                Assert.HasCount(2, city.ValidationErrors, "Error count before editing");
 
                 // Edit the city, making changes that will replace the property errors for ZoneID and CountyName (because it was tied to the ZoneID member too)
                 // with new errors, leaving the entity-level error in place.
                 editableCity.BeginEdit();
                 city.ZoneID = -1; // Out of range
                 city.ZoneName = Cities.CityPropertyValidator.InvalidZoneName;
-                Assert.AreEqual<int>(3, city.ValidationErrors.Count, "Error count before CancelEdit");
+                Assert.HasCount(3, city.ValidationErrors, "Error count before CancelEdit");
 
                 INotifyDataErrorInfo notifier = (INotifyDataErrorInfo)city;
                 List<Tuple<string, IEnumerable<ValidationResult>>> errorNotifications = new List<Tuple<string, IEnumerable<ValidationResult>>>();
@@ -695,7 +695,7 @@ namespace OpenRiaServices.Client.Test
 
                 editableCity.CancelEdit();
                 // Verify our validation errors count reverted back to the 2 errors we had before editing
-                Assert.AreEqual<int>(2, city.ValidationErrors.Count, "Error count after CancelEdit");
+                Assert.HasCount(2, city.ValidationErrors, "Error count after CancelEdit");
 
                 // Verify the entity-level error that we manually added still shows up
                 Assert.AreEqual<string>(customEntityError, city.ValidationErrors.Single(e => e.MemberNames.Count() == 0 || (e.MemberNames.Count() == 1 && string.IsNullOrEmpty(e.MemberNames.Single()))).ErrorMessage, "ErrorMessage after CancelEdit");
@@ -705,7 +705,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual<string>(customPropertyError, city.ValidationErrors.Single(e => e.MemberNames.Contains("CountyName")).ErrorMessage, "ErrorMessage for CountyName after CancelEdit");
 
                 // Verify that we got the 6 expected notifications from INotifyDataErrorInfo
-                Assert.AreEqual<int>(6, errorNotifications.Count, "Error notification count");
+                Assert.HasCount(6, errorNotifications, "Error notification count");
 
                 // Two notifications for Name and null (clearing, and adding), and one for StateName (cleared) and CountyName (added)
                 Assert.AreEqual<int>(2, errorNotifications.Count(e => e.Item1 == "ZoneID"), "Count of ZoneID notifications");
@@ -749,14 +749,14 @@ namespace OpenRiaServices.Client.Test
             string customPropertyError = "Property-level error that was added manually";
             city.ValidationErrors.Add(new ValidationResult(customPropertyError, new string[] { "ZoneID", "CountyName" }));
 
-            Assert.AreEqual<int>(2, city.ValidationErrors.Count, "Error count before editing");
+            Assert.HasCount(2, city.ValidationErrors, "Error count before editing");
 
             // Edit the city, making changes that will replace the property errors for Name and CountyName (because it was tied to the Name member too)
             // with new errors, leaving the entity-level error in place.
             editableCity.BeginEdit();
             city.ZoneID = -1; // Out of range
             city.ZoneName = Cities.CityPropertyValidator.InvalidZoneName;
-            Assert.AreEqual<int>(3, city.ValidationErrors.Count, "Error count before CancelEdit");
+            Assert.HasCount(3, city.ValidationErrors, "Error count before CancelEdit");
 
             INotifyDataErrorInfo notifier = (INotifyDataErrorInfo)city;
             List<Tuple<string, IEnumerable<ValidationResult>>> errorNotifications = new List<Tuple<string, IEnumerable<ValidationResult>>>();
@@ -773,7 +773,7 @@ namespace OpenRiaServices.Client.Test
 
             editableCity.CancelEdit();
             // Verify our validation errors count reverted back to the 2 errors we had before editing
-            Assert.AreEqual<int>(2, city.ValidationErrors.Count, "Error count after CancelEdit");
+            Assert.HasCount(2, city.ValidationErrors, "Error count after CancelEdit");
 
             // Verify the entity-level error that we manually added still shows up
             Assert.AreEqual<string>(customEntityError, city.ValidationErrors.Single(e => e.MemberNames.Count() == 0 || (e.MemberNames.Count() == 1 && string.IsNullOrEmpty(e.MemberNames.Single()))).ErrorMessage, "ErrorMessage after CancelEdit");
@@ -783,7 +783,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual<string>(customPropertyError, city.ValidationErrors.Single(e => e.MemberNames.Contains("CountyName")).ErrorMessage, "ErrorMessage for CountyName after CancelEdit");
 
             // Verify that we got the 4 expected notifications from INotifyDataErrorInfo
-            Assert.AreEqual<int>(4, errorNotifications.Count, "Error notification count");
+            Assert.HasCount(4, errorNotifications, "Error notification count");
 
             // One of which should have been for Name, one for StateName, one for CountyName, and one for the entity-level error
             Assert.AreEqual<int>(1, errorNotifications.Count(e => e.Item1 == "ZoneID"), "Count of Name notifications");

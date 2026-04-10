@@ -239,7 +239,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             Assert.IsNotNull(result);
             Assert.IsTrue(MockDomainService.QueryReturnValue.SequenceEqual(result));
             Assert.AreEqual("GetEntities", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(0, this.OperationInvokedArgs.Parameters.Count);
+            Assert.IsEmpty(this.OperationInvokedArgs.Parameters);
         }
 
         [TestMethod]
@@ -258,7 +258,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             Assert.AreEqual("GetEntitiesWithParams", this.OperationInvokedArgs.Name);
 
             // Verify parameters
-            Assert.AreEqual(4, this.OperationInvokedArgs.Parameters.Count);
+            Assert.HasCount(4, this.OperationInvokedArgs.Parameters);
             Assert.AreEqual("123", this.OperationInvokedArgs.Parameters["param1"]);
             Assert.AreEqual(499, this.OperationInvokedArgs.Parameters["param2"]);
             Assert.AreEqual((long)501, this.OperationInvokedArgs.Parameters["param3"]);
@@ -278,7 +278,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             Assert.IsNotNull(result);
             Assert.AreSame(MockDomainService.QueryReturnValue.First(), result);
             Assert.AreEqual("GetSingletonEntity", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(0, this.OperationInvokedArgs.Parameters.Count);
+            Assert.IsEmpty(this.OperationInvokedArgs.Parameters);
         }
 
         [TestMethod]
@@ -296,7 +296,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             Assert.AreEqual("GetSingletonEntityWithParams", this.OperationInvokedArgs.Name);
 
             // Verify parameters
-            Assert.AreEqual(4, this.OperationInvokedArgs.Parameters.Count);
+            Assert.HasCount(4, this.OperationInvokedArgs.Parameters);
             Assert.AreEqual("param1", this.OperationInvokedArgs.Parameters["param1"]);
             Assert.AreEqual(2, this.OperationInvokedArgs.Parameters["param2"]);
             Assert.AreEqual((long)3, this.OperationInvokedArgs.Parameters["param3"]);
@@ -335,7 +335,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             proxy.UpdateEntity(entity);
             Assert.IsNotNull(this.OperationInvokedArgs);
             Assert.AreEqual("UpdateEntity", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(1, this.OperationInvokedArgs.Parameters.Count);
+            Assert.HasCount(1, this.OperationInvokedArgs.Parameters);
             Assert.AreSame(entity, this.OperationInvokedArgs.Parameters.Values.Single());
         }
 
@@ -369,7 +369,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             proxy.DeleteEntity(entity);
             Assert.IsNotNull(this.OperationInvokedArgs);
             Assert.AreEqual("DeleteEntity", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(1, this.OperationInvokedArgs.Parameters.Count);
+            Assert.HasCount(1, this.OperationInvokedArgs.Parameters);
             Assert.AreSame(entity, this.OperationInvokedArgs.Parameters.Values.Single());
         }
 
@@ -403,7 +403,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             proxy.InsertEntity(entity);
             Assert.IsNotNull(this.OperationInvokedArgs);
             Assert.AreEqual("InsertEntity", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(1, this.OperationInvokedArgs.Parameters.Count);
+            Assert.HasCount(1, this.OperationInvokedArgs.Parameters);
             Assert.AreSame(entity, this.OperationInvokedArgs.Parameters.Values.Single());
         }
 
@@ -441,7 +441,7 @@ namespace OpenRiaServices.Hosting.Local.Test
 
             Assert.IsNotNull(this.OperationInvokedArgs);
             Assert.AreEqual("CustomMethod", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(1, this.OperationInvokedArgs.Parameters.Count);
+            Assert.HasCount(1, this.OperationInvokedArgs.Parameters);
             Assert.AreSame(entity, this.OperationInvokedArgs.Parameters["entity"]);
         }
 
@@ -457,11 +457,11 @@ namespace OpenRiaServices.Hosting.Local.Test
 
             Assert.IsNotNull(this.OperationInvokedArgs);
             Assert.AreEqual("CustomMethodWithParams", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(5, this.OperationInvokedArgs.Parameters.Count);
+            Assert.HasCount(5, this.OperationInvokedArgs.Parameters);
             Assert.AreSame(entity, this.OperationInvokedArgs.Parameters["entity"]);
             Assert.AreEqual((long)123, this.OperationInvokedArgs.Parameters["param1"]);
             Assert.AreEqual("123", string.Join("", (string[])this.OperationInvokedArgs.Parameters["param2"]));
-            Assert.AreEqual(null, this.OperationInvokedArgs.Parameters["param3"]);
+            Assert.IsNull(this.OperationInvokedArgs.Parameters["param3"]);
             Assert.AreEqual("http://param4", ((Uri)this.OperationInvokedArgs.Parameters["param4"]).OriginalString);
         }
 
@@ -499,7 +499,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             Assert.AreEqual(123, result);
 
             Assert.AreEqual("InvokeOperation", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(0, this.OperationInvokedArgs.Parameters.Count);
+            Assert.IsEmpty(this.OperationInvokedArgs.Parameters);
         }
 
         [TestMethod]
@@ -514,11 +514,11 @@ namespace OpenRiaServices.Hosting.Local.Test
             Assert.AreEqual("123", result);
 
             Assert.AreEqual("InvokeOperationWithParams", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(4, this.OperationInvokedArgs.Parameters.Count);
+            Assert.HasCount(4, this.OperationInvokedArgs.Parameters);
             Assert.AreEqual((long)123, this.OperationInvokedArgs.Parameters["param1"]);
             Assert.AreEqual("abc", string.Join("", (string[])this.OperationInvokedArgs.Parameters["param2"]));
-            Assert.AreEqual(null, this.OperationInvokedArgs.Parameters["param3"]);
-            Assert.AreEqual(null, this.OperationInvokedArgs.Parameters["param4"]);
+            Assert.IsNull(this.OperationInvokedArgs.Parameters["param3"]);
+            Assert.IsNull(this.OperationInvokedArgs.Parameters["param4"]);
         }
 
         #endregion // Invoke Operation Tests
@@ -535,7 +535,7 @@ namespace OpenRiaServices.Hosting.Local.Test
 
             DomainServiceProxy.AssociateOriginal<object>(proxy, current, original);
 
-            Assert.AreEqual(1, proxy.CurrentOriginalEntityMap.Count);
+            Assert.HasCount(1, proxy.CurrentOriginalEntityMap);
             Assert.AreSame(current, proxy.CurrentOriginalEntityMap.Keys.Single());
             Assert.AreSame(original, proxy.CurrentOriginalEntityMap.Values.Single());
         }
@@ -623,7 +623,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             proxy.UpdateEntity(entity);
             Assert.IsNotNull(this.OperationInvokedArgs);
             Assert.AreEqual("UpdateEntity", this.OperationInvokedArgs.Name);
-            Assert.AreEqual(1, this.OperationInvokedArgs.Parameters.Count);
+            Assert.HasCount(1, this.OperationInvokedArgs.Parameters);
             Assert.AreSame(entity, this.OperationInvokedArgs.Parameters.Values.Single());
             Assert.AreEqual("OriginalEntity", entity.Name);
         }
@@ -653,7 +653,7 @@ namespace OpenRiaServices.Hosting.Local.Test
 
                 proxy.Dispose();
 
-                Assert.AreEqual(3, args.Count);
+                Assert.HasCount(3, args);
                 Assert.AreEqual("Dispose", args[0].Name);
                 Assert.AreEqual("Dispose", args[1].Name);
                 Assert.AreEqual("Dispose", args[2].Name);

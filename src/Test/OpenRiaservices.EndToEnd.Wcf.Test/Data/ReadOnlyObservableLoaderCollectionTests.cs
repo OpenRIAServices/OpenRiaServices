@@ -23,8 +23,8 @@ namespace OpenRiaServices.Client.Test
 
             collection.Reset(new[] { "A", "B", "C" });
 
-            Assert.AreEqual(1, collectionChanges.Count, "Only 1 collection change should be raised on reset");
-            Assert.AreEqual(1, propertyChanges.Count, "Only 1 property change should be raised on reset");
+            Assert.HasCount(1, collectionChanges, "Only 1 collection change should be raised on reset");
+            Assert.HasCount(1, propertyChanges, "Only 1 property change should be raised on reset");
 
             Assert.AreEqual(NotifyCollectionChangedAction.Reset, collectionChanges[0].Action);
             Assert.AreEqual(nameof(collection.Count), propertyChanges[0].PropertyName);
@@ -32,8 +32,8 @@ namespace OpenRiaServices.Client.Test
 
             collection.Reset(new[] { "D", "E" });
 
-            Assert.AreEqual(2, collectionChanges.Count, "1 addition collection change should be raised on reset");
-            Assert.AreEqual(2, propertyChanges.Count, "1 extra property change should be raised on reset");
+            Assert.HasCount(2, collectionChanges, "1 addition collection change should be raised on reset");
+            Assert.HasCount(2, propertyChanges, "1 extra property change should be raised on reset");
 
             Assert.AreEqual(NotifyCollectionChangedAction.Reset, collectionChanges[0].Action);
             Assert.AreEqual(nameof(collection.Count), propertyChanges[0].PropertyName);

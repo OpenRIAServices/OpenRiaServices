@@ -296,7 +296,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 // Always get the default, but will have 2 if specified a type
                 int expectedCount = contextType == null ? 1 : 2;
 
-                Assert.AreEqual(expectedCount, model.ContextViewModels.Count, "Expected this many view models");
+                Assert.HasCount(expectedCount, model.ContextViewModels, "Expected this many view models");
 
                 ContextViewModel expectedViewModel = contextType == null ? model.ContextViewModels[0] : model.ContextViewModels[1];
                 Assert.AreEqual(expectedViewModel, model.CurrentContextViewModel, "current not as expected");

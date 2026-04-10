@@ -122,13 +122,13 @@ namespace OpenRiaServices.Client.Test
             {
                 var city = new City() { ZoneID = i };
 
-                Assert.IsFalse(list.Contains(city));
+                Assert.DoesNotContain(city, list);
                 int idx = list.Add(city);
 
                 Assert.AreEqual(i, idx);
                 Assert.AreSame(city, list[idx]);
                 Assert.AreSame(city, entityCollection[idx]);
-                Assert.IsTrue(list.Contains(city));
+                Assert.Contains(city, list);
                 Assert.IsTrue(entityCollection.Contains(city));
             }
         }

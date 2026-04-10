@@ -18,14 +18,14 @@ namespace OpenRiaServices.Tools.Test
         {
             string normalizedGenerated = TestHelper.NormalizeWhitespace(generatedCode);
             string normalizedExpected = TestHelper.NormalizeWhitespace(expected);
-            Assert.IsTrue(normalizedGenerated.IndexOf(normalizedExpected) >= 0, "Expected <" + expected + "> but saw\r\n<" + generatedCode + ">");
+            Assert.IsGreaterThanOrEqualTo(0, normalizedGenerated.IndexOf(normalizedExpected), "Expected <" + expected + "> but saw\r\n<" + generatedCode + ">");
         }
 
         public static void AssertNotGenerated(string generatedCode, string notExpected)
         {
             string normalizedGenerated = TestHelper.NormalizeWhitespace(generatedCode);
             string normalizedNotExpected = TestHelper.NormalizeWhitespace(notExpected);
-            Assert.IsTrue(normalizedGenerated.IndexOf(normalizedNotExpected, StringComparison.Ordinal) < 0, "Did not expect <" + notExpected + ">");
+            Assert.IsLessThan(0, normalizedGenerated.IndexOf(normalizedNotExpected, StringComparison.Ordinal), "Did not expect <" + notExpected + ">");
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace OpenRiaServices.Tools.Test
         /// <param name="shortNames">collection of file short names that must be in list</param>
         public static void AssertContainsOnlyFiles(List<string> files, string projectPath, string[] shortNames)
         {
-            Assert.AreEqual(shortNames.Length, files.Count);
+            Assert.HasCount(shortNames.Length, files);
             AssertContainsFiles(files, projectPath, shortNames);
         }
 

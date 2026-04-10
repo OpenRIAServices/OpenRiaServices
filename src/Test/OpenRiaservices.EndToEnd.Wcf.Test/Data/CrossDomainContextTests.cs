@@ -136,7 +136,7 @@ namespace OpenRiaServices.Client.Test
                 () =>
                 {
                     // The customer data can change over time, but it should always be >0 for testing.
-                    Assert.IsTrue(this.CustomerDomainService.MockCustomers.Count > 0);
+                    Assert.IsGreaterThan(0, this.CustomerDomainService.MockCustomers.Count);
 
                     foreach (var customer in this.CustomerDomainService.MockCustomers)
                     {
@@ -168,7 +168,7 @@ namespace OpenRiaServices.Client.Test
                 () =>
                 {
                     // The customer data can change over time, but it should always be >0 for testing.
-                    Assert.IsTrue(this.CustomerDomainService.MockCustomers.Count > 0);
+                    Assert.IsGreaterThan(0, this.CustomerDomainService.MockCustomers.Count);
 
                     foreach (var customer in this.CustomerDomainService.MockCustomers)
                     {
@@ -203,7 +203,7 @@ namespace OpenRiaServices.Client.Test
                 () =>
                 {
                     // The customer data can change over time, but it should always be >0 for testing.
-                    Assert.IsTrue(this.CustomerDomainService.MockCustomers.Count > 0);
+                    Assert.IsGreaterThan(0, this.CustomerDomainService.MockCustomers.Count);
 
                     foreach (var customer in this.CustomerDomainService.MockCustomers)
                     {
@@ -234,7 +234,7 @@ namespace OpenRiaServices.Client.Test
                 () =>
                 {
                     // The customer data can change over time, but it should always be >0 for testing.
-                    Assert.IsTrue(this.CustomerDomainService.MockCustomers.Count > 0);
+                    Assert.IsGreaterThan(0, this.CustomerDomainService.MockCustomers.Count);
 
                     foreach (var customer in this.CustomerDomainService.MockCustomers)
                     {
@@ -264,7 +264,7 @@ namespace OpenRiaServices.Client.Test
                 () =>
                 {
                     MockCustomer cust = this.CustomerDomainService.MockCustomers.First();
-                    Assert.IsTrue(cust.City != null);
+                    Assert.IsNotNull(cust.City);
 
                     int count = 0;
                     cust.PropertyChanged += (s, e) =>
@@ -285,8 +285,8 @@ namespace OpenRiaServices.Client.Test
                     // set to null and validate results
                     count = 0;
                     cust.City = null;
-                    Assert.AreEqual(null, cust.CityName);
-                    Assert.AreEqual(null, cust.StateName);
+                    Assert.IsNull(cust.CityName);
+                    Assert.IsNull(cust.StateName);
                     Assert.AreEqual(1, count);
                 });
 
@@ -311,7 +311,7 @@ namespace OpenRiaServices.Client.Test
                 () =>
                 {
                     // The customer data can change over time, but it should always be >0 for testing.
-                    Assert.IsTrue(this.CustomerDomainService.MockCustomers.Count > 0);
+                    Assert.IsGreaterThan(0, this.CustomerDomainService.MockCustomers.Count);
 
                     foreach (var customer in this.CustomerDomainService.MockCustomers)
                     {
@@ -337,7 +337,7 @@ namespace OpenRiaServices.Client.Test
                 () =>
                 {
                     // The customer data can change over time, but it should always be >0 for testing.
-                    Assert.IsTrue(this.CustomerDomainService.MockCustomers.Count > 0);
+                    Assert.IsGreaterThan(0, this.CustomerDomainService.MockCustomers.Count);
 
                     foreach (var customer in this.CustomerDomainService.MockCustomers)
                     {

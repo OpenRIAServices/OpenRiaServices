@@ -158,7 +158,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the exception properties
             Assert.AreSame(ex, syncCtx.LastException, "Exception should have been thrown on SynchronizationContext");
-            Assert.AreEqual(false, lo.IsErrorHandled);
+            Assert.IsFalse(lo.IsErrorHandled);
 
             // now test again with validation errors
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
@@ -172,7 +172,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the exception properties
             Assert.AreSame(ex, syncCtx.LastException, "Exception should have been thrown on SynchronizationContext");
-            Assert.AreEqual(false, lo.IsErrorHandled);
+            Assert.IsFalse(lo.IsErrorHandled);
             CollectionAssert.AreEqual(validationErrors, (ICollection)lo.ValidationErrors);
         }
 
@@ -198,7 +198,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the exception properties
             Assert.AreSame(ex, syncCtx.LastException);
-            Assert.AreEqual(false, invoke.IsErrorHandled);
+            Assert.IsFalse(invoke.IsErrorHandled);
 
             // now test again with validation errors
             ValidationResult[] validationErrors = new ValidationResult[] { new ValidationResult("Foo", new string[] { "Bar" }) };
@@ -241,7 +241,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the exception properties
             Assert.AreSame(ex, syncCtx.LastException);
-            Assert.AreEqual(false, submit.IsErrorHandled);
+            Assert.IsFalse(submit.IsErrorHandled);
         }
 
         [TestMethod]
@@ -262,8 +262,8 @@ namespace OpenRiaServices.Client.Test
 
                 try
                 {
-                    Assert.AreEqual(11, op.AllEntities.Count);
-                    Assert.AreEqual(11, op.Entities.Count);
+                    Assert.HasCount(11, op.AllEntities);
+                    Assert.HasCount(11, op.Entities);
                 }
                 catch (Exception e)
                 {
@@ -288,8 +288,8 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNull(callbackException);
                 Assert.IsNull(lo.Error);
 
-                Assert.AreEqual(11, lo.AllEntities.Count);
-                Assert.AreEqual(11, lo.Entities.Count);
+                Assert.HasCount(11, lo.AllEntities);
+                Assert.HasCount(11, lo.Entities);
             });
             EnqueueTestComplete();
         }
@@ -344,7 +344,7 @@ namespace OpenRiaServices.Client.Test
                 }
                 catch (Exception ex)
                 {
-                    Assert.IsTrue(ex.StackTrace.StartsWith("   at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+                    Assert.StartsWith("   at OpenRiaServices.Client.Test.OperationTests", ex.StackTrace, "Stacktrace not preserved.");
 
                     throw;
                 }
@@ -358,7 +358,7 @@ namespace OpenRiaServices.Client.Test
                 }
                 catch (Exception ex)
                 {
-                    Assert.IsTrue(ex.StackTrace.StartsWith("   at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+                    Assert.StartsWith("   at OpenRiaServices.Client.Test.OperationTests", ex.StackTrace, "Stacktrace not preserved.");
 
                     throw;
                 }
@@ -418,7 +418,7 @@ namespace OpenRiaServices.Client.Test
 
                 Assert.IsInstanceOfType(syncCtx.LastException, typeof(InvalidOperationException));
                 Assert.AreEqual(Message, syncCtx.LastException.Message);
-                Assert.IsTrue(syncCtx.LastException.StackTrace.StartsWith("   at OpenRiaServices.Client.Test.OperationTests"), "Stacktrace not preserved.");
+                Assert.StartsWith("   at OpenRiaServices.Client.Test.OperationTests", syncCtx.LastException.StackTrace, "Stacktrace not preserved.");
                 Assert.IsNull(operation.Error, "Submit should not have error because of callback");
             }
         }

@@ -312,7 +312,7 @@ namespace OpenRiaServices.Tools.Test
                     if (paramDecl != "")
                     {
                         string[] args = paramDecl.Split(',');
-                        Assert.AreEqual(2, args.Length, "Params definition file not in the correct format!");
+                        Assert.HasCount(2, args, "Params definition file not in the correct format!");
                         CodeParameterDeclarationExpression codeParam = new CodeParameterDeclarationExpression(args[0], args[1]);
                         parameters.Add(codeParam);
                     }

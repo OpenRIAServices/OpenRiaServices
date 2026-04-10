@@ -52,7 +52,7 @@ namespace OpenRiaServices.Hosting.Test.Data
                 stream.Write(_input, 0, 2);
 
                 var buffer = VerifyStreamContents(stream, offset, 2, manager);
-                Assert.AreEqual(1, manager.Allocated.Count, "Should only have allocated a single buffer");
+                Assert.HasCount(1, manager.Allocated, "Should only have allocated a single buffer");
                 Assert.AreSame(manager.Allocated[0], buffer.Array, "Should reuse initial array");
             }
         }
@@ -69,7 +69,7 @@ namespace OpenRiaServices.Hosting.Test.Data
             {
                 stream.Write(_input, 0, minBufferSize);
                 var buffer = VerifyStreamContents(stream, initialOffset, minBufferSize, manager);
-                Assert.AreEqual(1, manager.Allocated.Count, "Should only have allocated a single buffer");
+                Assert.HasCount(1, manager.Allocated, "Should only have allocated a single buffer");
                 Assert.AreSame(manager.Allocated[0], buffer.Array, "Should reuse initial array");
             }
         }
@@ -93,7 +93,7 @@ namespace OpenRiaServices.Hosting.Test.Data
             {
                 stream.Write(_input, 0, 40);
                 VerifyStreamContents(stream, offset, 40, manager);
-                Assert.IsTrue(manager.Allocated.Count > 2, "Multiple buffers should have been used");
+                Assert.IsGreaterThan(2, manager.Allocated.Count, "Multiple buffers should have been used");
             }
         }
 
@@ -109,14 +109,14 @@ namespace OpenRiaServices.Hosting.Test.Data
                 // Fill first and second buffers full
                 stream.Write(_input, 0, initalBufferSize);
                 stream.Write(_input, initalBufferSize, buffer2Size);
-                Assert.AreEqual(buffer2Size, manager.Allocated[1].Length, "This test assumed allocation size was wrong");
+                Assert.HasCount(buffer2Size, manager.Allocated[1], "This test assumed allocation size was wrong");
 
                 // Write next one up just a little so that everyhing should fit in the 3rd
                 int streamOffsetLastBuffer = (int)stream.Position;
                 stream.Write(_input, streamOffsetLastBuffer, streamOffsetLastBuffer);
 
-                Assert.AreEqual(3, manager.Allocated.Count, "Test assumes 3 buffers");
-                Assert.AreEqual((int)stream.Position, manager.Allocated[2].Length, "This test assumes allocation size is enough");
+                Assert.HasCount(3, manager.Allocated, "Test assumes 3 buffers");
+                Assert.HasCount((int)stream.Position, manager.Allocated[2], "This test assumes allocation size is enough");
 
                 var buffer = VerifyStreamContents(stream, initialOffset, streamOffsetLastBuffer * 2, manager);
                 Assert.AreSame(manager.Allocated[2], buffer.Array);
@@ -137,7 +137,7 @@ namespace OpenRiaServices.Hosting.Test.Data
                 stream.Write(_input, 6, manager.Allocated[1].Length); // Write past buffer into next one
 
                 VerifyStreamContents(stream, initialOffset, 6 + manager.Allocated[1].Length, manager);
-                Assert.IsTrue(manager.Allocated.Count > 2, "Multiple buffers should have been used");
+                Assert.IsGreaterThan(2, manager.Allocated.Count, "Multiple buffers should have been used");
             }
         }
 
@@ -180,7 +180,7 @@ namespace OpenRiaServices.Hosting.Test.Data
                 initialOffset = 1;
                 stream.Reset(manager, initialOffset, 4);
 
-                Assert.AreEqual(stream.Position, 0, "Position should be 0 after reset");
+                Assert.AreEqual(0, stream.Position, "Position should be 0 after reset");
 
                 byte[] otherInput = new byte[] { 3, 2, 1 };
                 stream.Write(otherInput, 0, otherInput.Length);
@@ -207,8 +207,8 @@ namespace OpenRiaServices.Hosting.Test.Data
 
         private void VerifyBufferContents(ArraySegment<byte> buffer, int expectedOffset, ArraySegment<byte> expectedContents)
         {
-            Assert.AreEqual(buffer.Offset, expectedOffset, "Wrong offset");
-            Assert.AreEqual(buffer.Count, expectedContents.Count, "Wrong count");
+            Assert.AreEqual(expectedOffset, buffer.Offset, "Wrong offset");
+            Assert.HasCount(buffer.Count, expectedContents, "Wrong count");
 
             for (int i = 0; i < expectedContents.Count; ++i)
             {
@@ -272,7 +272,7 @@ namespace OpenRiaServices.Hosting.Test.Data
 
             public void AssertEverythingIsReturned()
             {
-                Assert.AreEqual(0, _rented.Count, "Not all buffers were returned");
+                Assert.IsEmpty(_rented, "Not all buffers were returned");
             }
         }
     }

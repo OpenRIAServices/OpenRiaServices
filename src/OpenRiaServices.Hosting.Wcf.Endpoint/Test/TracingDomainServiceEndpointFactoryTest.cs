@@ -35,16 +35,16 @@ namespace OpenRiaServices.Hosting.Local.Test
             target.Name = "tracing";
             target.Parameters["maxEntries"] = "123";
             IEnumerable<ServiceEndpoint> actual = target.CreateEndpoints(null, sh, null);
-            Assert.IsTrue(123 == InMemoryTraceListener.MaxEntries);
+            Assert.AreEqual(123, InMemoryTraceListener.MaxEntries);
             Assert.IsNotNull(actual);
             ServiceEndpoint[] endpoints = actual.ToArray();
-            Assert.IsTrue(endpoints.Length == 2);
-            Assert.IsTrue(endpoints[0].Address.Uri.OriginalString == "http://foo.com/bar/tracing");
+            Assert.AreEqual(2, endpoints.Length);
+            Assert.AreEqual("http://foo.com/bar/tracing", endpoints[0].Address.Uri.OriginalString);
             Assert.IsInstanceOfType(endpoints[0].Binding, typeof(WebHttpBinding));
-            Assert.IsTrue(((WebHttpBinding)(endpoints[0].Binding)).Security.Mode == WebHttpSecurityMode.None);
-            Assert.IsTrue(endpoints[1].Address.Uri.OriginalString == "https://foo.com/bar/tracing");
+            Assert.AreEqual(WebHttpSecurityMode.None, ((WebHttpBinding)(endpoints[0].Binding)).Security.Mode);
+            Assert.AreEqual("https://foo.com/bar/tracing", endpoints[1].Address.Uri.OriginalString);
             Assert.IsInstanceOfType(endpoints[1].Binding, typeof(WebHttpBinding));
-            Assert.IsTrue(((WebHttpBinding)(endpoints[1].Binding)).Security.Mode == WebHttpSecurityMode.Transport);
+            Assert.AreEqual(WebHttpSecurityMode.Transport, ((WebHttpBinding)(endpoints[1].Binding)).Security.Mode);
         }
 
         public class MyEntity

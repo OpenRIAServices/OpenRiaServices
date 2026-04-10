@@ -79,7 +79,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(typeof(DomainOperationException), io.Error.GetType());
                 Assert.AreEqual(OperationErrorStatus.ValidationFailed, ((DomainOperationException)io.Error).Status);
                 Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "InvokeOperationWithParamValidation"), io.Error.Message);
-                Assert.AreEqual(1, io.ValidationErrors.Count,
+                Assert.HasCount(1, io.ValidationErrors,
                     "There should be 1 validation error.");
                 ValidationResult error = io.ValidationErrors.Single();
                 Assert.AreEqual("Server validation exception thrown!", error.ErrorMessage);
@@ -129,7 +129,7 @@ namespace OpenRiaServices.Client.Test
             InvokeOperation invoke = ctxt.ThrowOnlineException(TestHelperMethods.DefaultOperationAction, null);
 
             // verify that all operation properties can be accessed before completion
-            Assert.AreEqual(0, invoke.ValidationErrors.Count);
+            Assert.IsEmpty(invoke.ValidationErrors);
             Assert.IsNull(invoke.Value);
 
             this.EnqueueCompletion(() => invoke);
@@ -165,7 +165,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsFalse(invoke.HasError);
                 Assert.AreEqual("Echo: hello", invoke.Value);
 
-                Assert.AreEqual(3, notifications.Count);
+                Assert.HasCount(3, notifications);
                 Assert.AreEqual("IsComplete", notifications[0]);
                 Assert.AreEqual("CanCancel", notifications[1]);
                 Assert.AreEqual("Value", notifications[2]);
@@ -191,7 +191,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.IsNull(invoke.Error);
                 Assert.AreEqual("Echo", invoke.OperationName);
-                Assert.AreEqual(1, invoke.Parameters.Count);
+                Assert.HasCount(1, invoke.Parameters);
                 Assert.AreSame("hello", invoke.Parameters["msg"]);
                 Assert.AreEqual("Echo: hello", invoke.Value);
                 Assert.AreEqual("my user state", invoke.UserState);
@@ -205,7 +205,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(invoke.Value, "Echo: hello");
+                Assert.AreEqual("Echo: hello", invoke.Value);
                 Assert.IsNull(invoke.UserState);
             });
 
@@ -332,10 +332,10 @@ namespace OpenRiaServices.Client.Test
             {
                 // 8 because "hello".Length (5) + 2 + true (1) = 8.
                 Assert.AreEqual("VariousParameterTypes", invoke.OperationName);
-                Assert.AreEqual(3, invoke.Parameters.Count);
+                Assert.HasCount(3, invoke.Parameters);
                 Assert.AreEqual("hello", invoke.Parameters["str"]);
                 Assert.AreEqual(2, invoke.Parameters["integer"]);
-                Assert.AreEqual(true, invoke.Parameters["boolean"]);
+                Assert.IsTrue((bool?)invoke.Parameters["boolean"]);
                 Assert.AreEqual(8, (int)invoke.Value);
             });
             EnqueueTestComplete();
@@ -481,7 +481,7 @@ namespace OpenRiaServices.Client.Test
             {
                 IEnumerable<TestEntityForInvokeOperations> result = invoke.Value;
                 Assert.IsNotNull(result);
-                Assert.AreEqual(result.Count(), 3);
+                Assert.AreEqual(3, result.Count());
 
                 TestEntityForInvokeOperations[] resultArray = result.ToArray();
                 for (int i = 0; i < 3; i++)
@@ -507,7 +507,7 @@ namespace OpenRiaServices.Client.Test
 
             var result = (await ctxt.InvokeOpWithIEnumerableParamAsync(args)).Value;
             Assert.IsNotNull(result);
-            Assert.AreEqual(result.Count(), 3);
+            Assert.AreEqual(3, result.Count());
 
             TestEntityForInvokeOperations[] resultArray = result.ToArray();
             var list = args.ToList();
@@ -541,7 +541,7 @@ namespace OpenRiaServices.Client.Test
             {
                 IEnumerable<TestEntityForInvokeOperations> result = invoke.Value;
                 Assert.IsNotNull(result);
-                Assert.AreEqual(result.Count(), 3);
+                Assert.AreEqual(3, result.Count());
 
                 TestEntityForInvokeOperations[] resultArray = result.ToArray();
                 for (int i = 0; i < 3; i++)
@@ -587,7 +587,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify invocation completed succesfully
                 Assert.IsNull(invoke.Error);
-                Assert.IsFalse(invoke.ValidationErrors.Count != 0);
+                Assert.IsEmpty(invoke.ValidationErrors);
 
                 Assert.IsTrue(invoke.Value);
 
@@ -631,7 +631,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify invocation completed succesfully
                 Assert.IsNull(invoke.Error);
-                Assert.IsFalse(invoke.ValidationErrors.Count != 0);
+                Assert.IsEmpty(invoke.ValidationErrors);
 
                 Assert.IsTrue(invoke.Value);
             });
@@ -674,7 +674,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify invocation completed succesfully
                 Assert.IsNull(invoke.Error, "InvokeEventArgs.Error should be null");
-                Assert.IsFalse(invoke.ValidationErrors.Count != 0);
+                Assert.IsEmpty(invoke.ValidationErrors);
 
                 Assert.IsTrue(invoke.Value);
             });
@@ -917,7 +917,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify invocation completed succesfully
                 Assert.IsNull(invoke.Error, string.Format("InvokeEventArgs.Error should be null.\r\nMessage: {0}\r\nStack Trace:\r\n{1}", invoke.Error != null ? invoke.Error.Message : string.Empty, invoke.Error != null ? invoke.Error.StackTrace : string.Empty));
-                Assert.IsFalse(invoke.ValidationErrors.Count != 0);
+                Assert.IsEmpty(invoke.ValidationErrors);
 
                 AssertValuesAreEqual(inputValue, invoke.Value);
 
@@ -970,7 +970,7 @@ namespace OpenRiaServices.Client.Test
                         byte[] returnedArray = returnValue as byte[];
                         byte[] inputArray = inputValue as byte[];
 
-                        Assert.AreEqual(inputArray.Length, returnedArray.Length);
+                        Assert.HasCount(inputArray.Length, returnedArray);
                         for (int i = 0; i < returnedArray.Length; i++)
                         {
                             Assert.AreEqual(inputArray[i], returnedArray[i], string.Format("array elements {0} should be equal", i));

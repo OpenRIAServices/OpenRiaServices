@@ -207,7 +207,7 @@ namespace OpenRiaServices.Client.Test
                     "Actions should be equal after adding an entity.");
                 Assert.IsNotNull(eventArgs.NewItems,
                     "NewItems should not be null after adding an entity.");
-                Assert.AreEqual(1, eventArgs.NewItems.Count,
+                Assert.HasCount(1, eventArgs.NewItems,
                     "NewItems count should be 1 after adding an entity.");
                 Assert.AreEqual(city, eventArgs.NewItems[0],
                     "The new items should be equal.");
@@ -232,7 +232,7 @@ namespace OpenRiaServices.Client.Test
                     "Actions should be equal after removing  an entity.");
                 Assert.IsNotNull(eventArgs.OldItems,
                     "OldItems should not be null after removing  an entity.");
-                Assert.AreEqual(1, eventArgs.OldItems.Count,
+                Assert.HasCount(1, eventArgs.OldItems,
                     "OldItems count should be 1 after removing  an entity.");
                 Assert.AreEqual(city, eventArgs.OldItems[0],
                     "The old items should be equal.");

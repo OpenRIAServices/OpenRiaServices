@@ -60,7 +60,7 @@ namespace OpenRiaServices.Server.Test
             
             List<ValidationResult> results = new List<ValidationResult>();
             ValidationUtilities.TryValidateObject(p, vc, results);
-            Assert.AreEqual(0, results.Count);
+            Assert.IsEmpty(results);
 
             // The underlying cause was our projection member descriptor was returning null for
             // non-nullable value types.
@@ -216,7 +216,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(ComplexTypes_TestService));
 
             // verify the attribute doesn't exist on the actual property
-            Assert.IsTrue(typeof(Phone).GetProperty("AreaCode").GetCustomAttributes(typeof(StringLengthAttribute), false).Length == 0);
+            Assert.IsEmpty(typeof(Phone).GetProperty("AreaCode").GetCustomAttributes(typeof(StringLengthAttribute), false));
 
             // verify via property descriptor
             StringLengthAttribute sla = (StringLengthAttribute)TypeDescriptor.GetProperties(typeof(Phone))["AreaCode"].Attributes[typeof(StringLengthAttribute)];
@@ -293,12 +293,12 @@ namespace OpenRiaServices.Server.Test
 
             foreach (Type entityType in dsd.EntityTypes)
             {
-                Assert.IsTrue(entityTypes.Contains(entityType), string.Format("", "DSD exposes EntityType {0}, but the DS does not expose it", entityType.Name));;
+                Assert.Contains(entityType, entityTypes, string.Format("", "DSD exposes EntityType {0}, but the DS does not expose it", entityType.Name));;
             }
 
             foreach (Type complexType in dsd.ComplexTypes)
             {
-                Assert.IsTrue(complexTypes.Contains(complexType), string.Format("", "DSD exposes ComplexType {0}, but the DS does not expose it", complexType.Name)); ;
+                Assert.Contains(complexType, complexTypes, string.Format("", "DSD exposes ComplexType {0}, but the DS does not expose it", complexType.Name)); ;
             }
         }
 
@@ -570,13 +570,13 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(property);
             var requiredAttribute = (RequiredAttribute) property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
+            Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredStringOverride"];
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, true);
+            Assert.AreEqual<bool>(true, requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredInt32"];
             Assert.IsNotNull(property);
@@ -601,13 +601,13 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
+            Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredStringOverride"];
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, true);
+            Assert.AreEqual<bool>(true, requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredInt32"];
             Assert.IsNotNull(property);
@@ -618,7 +618,7 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(requiredAttribute.AllowEmptyStrings, false);
+            Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
 
             property = properties["OptionalString"];
             Assert.IsNotNull(property);
@@ -1004,12 +1004,12 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(SingletonQueryMethod_ValidScenarios));
             DomainOperationEntry entry = description.GetQueryMethod("GetCityByName");
             Assert.IsNotNull(entry);
-            Assert.AreEqual(false, ((QueryAttribute)entry.OperationAttribute).IsComposable);
+            Assert.IsFalse(((QueryAttribute)entry.OperationAttribute).IsComposable);
 
             // verify explicitly attributed singleton query method
             entry = description.GetQueryMethod("GetStateByName");
             Assert.IsNotNull(entry);
-            Assert.AreEqual(false, ((QueryAttribute)entry.OperationAttribute).IsComposable);
+            Assert.IsFalse(((QueryAttribute)entry.OperationAttribute).IsComposable);
 
             // verify that attempting to mark a singleton returning query method
             // as composable results in an exception
@@ -1027,7 +1027,7 @@ namespace OpenRiaServices.Server.Test
             // test false positives
             description = DomainServiceDescription.GetDescription(typeof(SingletonQueryMethod_FalsePositives));
             DomainOperationEntry[] entries = description.DomainOperationEntries.ToArray();
-            Assert.AreEqual(2, entries.Length);
+            Assert.HasCount(2, entries);
             Assert.AreEqual(DomainOperation.Invoke, entries[0].Operation);
             Assert.AreEqual(DomainOperation.Invoke, entries[1].Operation);
         }
@@ -1038,7 +1038,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(SimpleDomainService_InvokeOperations));
             DomainOperationEntry[] operations = description.DomainOperationEntries.ToArray();
 
-            Assert.AreEqual(8, operations.Length);
+            Assert.HasCount(8, operations);
 
             Assert.IsNotNull(description.GetInvokeOperation("GetString"));
             Assert.IsNotNull(description.GetInvokeOperation("GetStringArray"));
@@ -1097,17 +1097,17 @@ namespace OpenRiaServices.Server.Test
 
             // Valid question about root should return 2 derived types
             Type[] derivedTypes = description.GetEntityDerivedTypes(typeof(Mock_CG_BaseEntity)).ToArray();
-            Assert.AreEqual(2, derivedTypes.Length, "Should be 2 derived types");
+            Assert.HasCount(2, derivedTypes, "Should be 2 derived types");
             Assert.IsTrue(derivedTypes.Contains(typeof(Mock_CG_DerivedEntity)), "derived types did not include Mock_CG_DerivedEntity");
             Assert.IsTrue(derivedTypes.Contains(typeof(Mock_CG_DerivedDerivedEntity)), "derived types did not include Mock_CG_DerivedEntity");
 
             // Valid question about middle entity should return 1 derived
             derivedTypes = description.GetEntityDerivedTypes(typeof(Mock_CG_DerivedEntity)).ToArray();
-            Assert.AreEqual(1, derivedTypes.Length, "Should be 1 derived type");
+            Assert.HasCount(1, derivedTypes, "Should be 1 derived type");
             Assert.IsTrue(derivedTypes.Contains(typeof(Mock_CG_DerivedDerivedEntity)), "derived types did not include Mock_CG_DerivedEntity");
 
             derivedTypes = description.GetEntityDerivedTypes(typeof(Mock_CG_DerivedDerivedEntity)).ToArray();
-            Assert.AreEqual(0, derivedTypes.Length, "Should be no derived type");
+            Assert.IsEmpty(derivedTypes, "Should be no derived type");
         }
 
         /// <summary>
@@ -1120,7 +1120,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(DSDTestServiceB));
             DomainOperationEntry[] operations = description.DomainOperationEntries.ToArray();
 
-            Assert.AreEqual(6, operations.Length);
+            Assert.HasCount(6, operations);
             Assert.AreEqual(6, description.EntityTypes.Count());
 
             // verify that the operations added at each level are present,
@@ -1157,7 +1157,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(DSDTestService_CUDFields));
             DomainOperationEntry[] operations = description.DomainOperationEntries.ToArray();
 
-            Assert.AreEqual(8, operations.Length);
+            Assert.HasCount(8, operations);
             Assert.AreEqual(4, description.EntityTypes.Count());
 
             // verify State virtual CRUD methods
@@ -1196,7 +1196,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(DSDTestService_AutoCrud_ReflExtensions));
             DomainOperationEntry[] operations = description.DomainOperationEntries.ToArray();
 
-            Assert.AreEqual(10, operations.Length);
+            Assert.HasCount(10, operations);
             Assert.AreEqual(4, description.EntityTypes.Count());
 
             // verify custom method
@@ -1328,7 +1328,7 @@ namespace OpenRiaServices.Server.Test
             }
             else
             {
-                Assert.IsTrue(attributes.Count == 0);
+                Assert.IsEmpty(attributes);
             }
         }
 
@@ -1368,20 +1368,20 @@ namespace OpenRiaServices.Server.Test
             // Verify that the Type level attributes applied to both the Type
             // itself as well as the buddy class are still returned
             attribs = TypeDescriptor.GetAttributes(typeof(AttributeTest)).OfType<Attribute>().ToArray();
-            Assert.AreEqual(2, attribs.Length);
+            Assert.HasCount(2, attribs);
             Assert.AreEqual(1, attribs.OfType<MetadataTypeAttribute>().Count());
             Assert.AreEqual(1, attribs.OfType<DisplayColumnAttribute>().Count());
 
             // Verify that we don't inherit attributes with Inherit=false as their attribute usage.
             attribs = TheTypeDescriptorExtensions.Attributes(typeof(AttributeTestTypeDerived)).OfType<Attribute>().ToArray();
-            Assert.AreEqual(1, attribs.Length);
+            Assert.HasCount(1, attribs);
             Assert.AreEqual(1, attribs.OfType<AttributeTestInheritAttribute>().Count());
             Assert.AreEqual(0, attribs.OfType<AttributeTestNonInheritAttribute>().Count());
 
             // Verify that we get back attributes with Inherit=false when the attribute was 
             // put on the type we're reflecting on.
             attribs = TheTypeDescriptorExtensions.Attributes(typeof(AttributeTestTypeBase)).OfType<Attribute>().ToArray();
-            Assert.AreEqual(2, attribs.Length);
+            Assert.HasCount(2, attribs);
             Assert.AreEqual(1, attribs.OfType<AttributeTestInheritAttribute>().Count());
             Assert.AreEqual(1, attribs.OfType<AttributeTestNonInheritAttribute>().Count());
         }
@@ -1508,7 +1508,7 @@ namespace OpenRiaServices.Server.Test
         public void DomainServiceDescription_InterfaceAttributes()
         {
             var d = DomainServiceDescription.GetDescription(typeof(InterfaceInheritanceDomainService));
-            Assert.IsTrue(d.DomainOperationEntries.Count() > 0, "Expected to find DomainOperationEntries.");
+            Assert.IsGreaterThan(0, d.DomainOperationEntries.Count(), "Expected to find DomainOperationEntries.");
 
             // Step 1: Verify attributes at type level.
             //
@@ -1887,7 +1887,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(supplier.CompanyName, supplierName.GetValue(product));
             Assert.AreEqual(typeof(string), supplierName.PropertyType);
             Assert.AreEqual(typeof(DataTests.Northwind.LTS.Product), supplierName.ComponentType);
-            Assert.AreEqual(false, supplierName.CanResetValue(product));
+            Assert.IsFalse(supplierName.CanResetValue(product));
             Assert.IsTrue(supplierName.IsReadOnly);
             Assert.IsTrue(supplierName.ShouldSerializeValue(product));
 
@@ -1911,7 +1911,7 @@ namespace OpenRiaServices.Server.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.IsTrue(expectedException.Message.Contains(Resource.InvalidMemberProjection_EmptyPath));
+            Assert.Contains(Resource.InvalidMemberProjection_EmptyPath, expectedException.Message);
 
             expectedException = null;
             try
@@ -1923,7 +1923,7 @@ namespace OpenRiaServices.Server.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            Assert.IsTrue(expectedException.Message.Contains(Resource.InvalidMemberProjection_EmptyMemberName));
+            Assert.Contains(Resource.InvalidMemberProjection_EmptyMemberName, expectedException.Message);
 
             expectedException = null;
             try

@@ -26,7 +26,7 @@ namespace OpenRiaServices.Hosting.Test
             List<ValidationResult> output = new List<ValidationResult>();
             isValid = ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithoutAttributes", context, parameters, output);
             Assert.IsTrue(isValid);
-            Assert.AreEqual(0, output.Count);
+            Assert.IsEmpty(output);
         }
 
         [TestMethod]
@@ -43,7 +43,7 @@ namespace OpenRiaServices.Hosting.Test
             List<ValidationResult> output = new List<ValidationResult>();
             isValid = ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, parameters, output);
             Assert.IsTrue(isValid);
-            Assert.AreEqual(0, output.Count);
+            Assert.IsEmpty(output);
         }
 
         [TestMethod]
@@ -60,7 +60,7 @@ namespace OpenRiaServices.Hosting.Test
             List<ValidationResult> output = new List<ValidationResult>();
             isValid = ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithNoParameters", context, parameters, output);
             Assert.IsTrue(isValid);
-            Assert.AreEqual(0, output.Count);
+            Assert.IsEmpty(output);
         }
 
         [TestMethod]
@@ -82,7 +82,7 @@ namespace OpenRiaServices.Hosting.Test
             List<ValidationResult> output = new List<ValidationResult>();
             bool isValid = ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, parameters, output);
             Assert.IsFalse(isValid);
-            Assert.AreEqual(1, output.Count);
+            Assert.HasCount(1, output);
             UnitTestHelper.AssertListContains(output, message);    // hyphen means it came from default formatter
         }
 
@@ -122,7 +122,7 @@ namespace OpenRiaServices.Hosting.Test
             List<ValidationResult> output = new List<ValidationResult>();
             bool isValid = ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithParameters", context, parameters, output);
             Assert.IsFalse(isValid);
-            Assert.AreEqual(1, output.Count);
+            Assert.HasCount(1, output);
             UnitTestHelper.AssertListContains(output, message);
         }
 
@@ -143,7 +143,7 @@ namespace OpenRiaServices.Hosting.Test
             List<ValidationResult> output = new List<ValidationResult>();
             bool isValid = ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithRequiredNullableParameter", context, parameters, output);
             Assert.IsFalse(isValid);
-            Assert.AreEqual(1, output.Count);
+            Assert.HasCount(1, output);
             UnitTestHelper.AssertListContains(output, message);
         }
 
@@ -217,7 +217,7 @@ namespace OpenRiaServices.Hosting.Test
             }, "-Display Name MethodWithNoParametersAndDisplayAttribute");
 
             bool result = ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithNoParametersAndDisplayAttribute", context, null, results);
-            Assert.AreEqual(1, results.Count);
+            Assert.HasCount(1, results);
             Assert.AreEqual("-Display Name MethodWithNoParametersAndDisplayAttribute", results[0].ErrorMessage);
         }
 
@@ -236,7 +236,7 @@ namespace OpenRiaServices.Hosting.Test
             }, "-MethodWithNoParameters");
 
             bool result = ValidationUtilities.TryValidateCustomUpdateMethodCall("MethodWithNoParameters", context, null, results);
-            Assert.AreEqual(1, results.Count);
+            Assert.HasCount(1, results);
             Assert.AreEqual("-MethodWithNoParameters", results[0].ErrorMessage);
         }
 
@@ -253,7 +253,7 @@ namespace OpenRiaServices.Hosting.Test
             bool result = ValidationUtilities.TryValidateObject(entity, validationContext, validationResults);
             Assert.IsFalse(result,
                 "Validation should fail.");
-            Assert.AreEqual(1, validationResults.Count,
+            Assert.HasCount(1, validationResults,
                 "There should be 1 validation error");
 
             Assert.AreEqual("Value contains an invalid string", validationResults[0].ErrorMessage,
@@ -276,7 +276,7 @@ namespace OpenRiaServices.Hosting.Test
             bool result = ValidationUtilities.TryValidateObject(entity, validationContext, validationResults);
             Assert.IsFalse(result,
                 "Validation should fail.");
-            Assert.AreEqual(1, validationResults.Count,
+            Assert.HasCount(1, validationResults,
                 "There should be 1 validation error");
             Assert.AreEqual("IValidatableObject Invalid Value", validationResults[0].ErrorMessage,
                 "The validation error message is wrong");
