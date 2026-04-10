@@ -165,7 +165,7 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the <see cref="DomainClientResult.TotalEntityCount"/> property is required.
+        /// Gets or sets a value indicating whether the <see cref="ILoadResult.TotalEntityCount"/> property should be set on result.
         /// </summary>
         public bool IncludeTotalCount
         {

@@ -253,7 +253,7 @@ namespace OpenRiaServices.Client.Test
 
                 // Call RejectChanges and verify ValidationErrors collection is cleared
                 citiesProvider.RejectChanges();
-                Assert.IsFalse(zip.ValidationErrors.Any());
+                Assert.IsFalse(zip.ValidationErrors.Count != 0);
 
                 // Invoke domain method that does not throw on same entity
                 zip.ReassignZipCode(1, true);
@@ -267,7 +267,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Zip zip = citiesProvider.Zips.First();
                 Assert.IsNull(so.Error);
-                Assert.IsFalse(zip.ValidationErrors.Any());
+                Assert.IsFalse(zip.ValidationErrors.Count != 0);
                 Assert.AreEqual(refZip + 1, zip.Code);
             });
 

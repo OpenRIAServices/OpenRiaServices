@@ -314,7 +314,7 @@ namespace OpenRiaServices.Client.Test
 
                 this.SubmitOperation = domainContext.SubmitChanges();
 
-                Assert.IsTrue(!newCity.ValidationErrors.Any(), "There should not be any errors after valid submission");
+                Assert.IsTrue(newCity.ValidationErrors.Count == 0, "There should not be any errors after valid submission");
                 Assert.IsTrue(actualErrors.OrderBy(s => s).SequenceEqual(new string[] { null, "MakeBelieveProperty" }.OrderBy(s => s)), "We should have received notifications that the entity-level and property-level erros were cleared");
             });
 
@@ -348,7 +348,7 @@ namespace OpenRiaServices.Client.Test
             await domainContext.SubmitChangesAsync();
 
             Assert.IsFalse(newCity.HasValidationErrors, "Entity should not have any validation errors");
-            Assert.IsFalse(newCity.ValidationErrors.Any());
+            Assert.IsFalse(newCity.ValidationErrors.Count != 0);
         }
 
         private void BeginSubmitCityData(Action<SubmitOperation> callback)

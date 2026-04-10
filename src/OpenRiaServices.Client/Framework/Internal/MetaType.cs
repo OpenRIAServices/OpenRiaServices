@@ -110,7 +110,7 @@ namespace OpenRiaServices.Client.Internal
             this.Type = type;
 
             _validationAttributes = new ReadOnlyCollection<ValidationAttribute>(this.Type.GetCustomAttributes(typeof(ValidationAttribute), true).OfType<ValidationAttribute>().ToArray());
-            _requiresObjectValidation = _validationAttributes.Any() || typeof(IValidatableObject).IsAssignableFrom(type);
+            _requiresObjectValidation = _validationAttributes.Count != 0 || typeof(IValidatableObject).IsAssignableFrom(type);
             _requiresValidation = _requiresValidation || _requiresObjectValidation;
 
             // for identity purposes, we need to make sure values are always ordered

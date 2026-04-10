@@ -23,7 +23,7 @@ namespace OpenRiaServices.Client
             return ExtractState(o, new HashSet<object>());
         }
 
-        private static IDictionary<string, object> ExtractState(object o, HashSet<object> visited)
+        private static Dictionary<string, object> ExtractState(object o, HashSet<object> visited)
         {
             MetaType metaType = MetaType.GetMetaType(o.GetType());
             Dictionary<string, object> extractedState = new Dictionary<string, object>();

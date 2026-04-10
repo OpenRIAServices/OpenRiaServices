@@ -1619,7 +1619,7 @@ namespace OpenRiaServices.Server
         private void ValidateDefaultQuery(DomainOperationEntry method)
         {
             // Default queries may not declare any parameters
-            if (method.Parameters.Any())
+            if (method.Parameters.Count != 0)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_DefaultQuery_Cannot_Have_Params, method.Name));
             }

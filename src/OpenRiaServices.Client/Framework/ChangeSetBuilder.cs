@@ -157,7 +157,7 @@ namespace OpenRiaServices.Client
             public UnmodifiedOperationAdder(List<ChangeSetEntry> changeSetEntries)
             {
                 this._changeSetEntries = changeSetEntries;
-                if (this._changeSetEntries.Any())
+                if (this._changeSetEntries.Count != 0)
                 {
                     this._id = this._changeSetEntries.Max(p => p.Id) + 1;
                 }

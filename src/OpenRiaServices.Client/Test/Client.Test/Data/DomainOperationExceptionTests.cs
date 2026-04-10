@@ -20,7 +20,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.ServerError, doe.Status, "Default status s/b ServerError");
-            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
+            Assert.IsFalse(doe.ValidationErrors.Count != 0, "default validationErrors should be empty");
 
             // ctor(message)
             doe = new DomainOperationException("message");
@@ -29,7 +29,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.ServerError, doe.Status, "Default status s/b ServerError");
-            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
+            Assert.IsFalse(doe.ValidationErrors.Count != 0, "default validationErrors should be empty");
 
             // ctor(message, status)
             doe = new DomainOperationException("message", OperationErrorStatus.Unauthorized);
@@ -38,7 +38,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, doe.Status, "ctor(msg, status) failed status");
-            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
+            Assert.IsFalse(doe.ValidationErrors.Count != 0, "default validationErrors should be empty");
 
             // ctor(message, status, errCode)
             doe = new DomainOperationException("message", OperationErrorStatus.Unauthorized, 5);
@@ -47,7 +47,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(5, doe.ErrorCode, "Error code failed");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, doe.Status, "ctor(msg, status) failed status");
-            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
+            Assert.IsFalse(doe.ValidationErrors.Count != 0, "default validationErrors should be empty");
 
             // ctor(message, status, errCode, stackTrace)
             doe = new DomainOperationException("message", OperationErrorStatus.Unauthorized, 5, "stackTrace");
@@ -56,7 +56,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("stackTrace", doe.StackTrace, "StackTrace failed");
             Assert.AreEqual(5, doe.ErrorCode, "Error code failed");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, doe.Status, "ctor(msg, status) failed status");
-            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
+            Assert.IsFalse(doe.ValidationErrors.Count != 0, "default validationErrors should be empty");
 
             // ctor(message, innerException)
             InvalidOperationException ioe = new InvalidOperationException("ioe");
@@ -66,7 +66,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.ServerError, doe.Status, "Default status s/b ServerError");
-            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
+            Assert.IsFalse(doe.ValidationErrors.Count != 0, "default validationErrors should be empty");
 
             // ctor(message, doe)
             DomainOperationException doe2 = new DomainOperationException("message", OperationErrorStatus.Unauthorized, 5, "stackTrace");
@@ -76,7 +76,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("stackTrace", doe.StackTrace, "StackTrace failed");
             Assert.AreEqual(5, doe.ErrorCode, "Error code failed");
             Assert.AreEqual(OperationErrorStatus.Unauthorized, doe.Status, "ctor(msg, status) failed status");
-            Assert.IsFalse(doe.ValidationErrors.Any(), "default validationErrors should be empty");
+            Assert.IsFalse(doe.ValidationErrors.Count != 0, "default validationErrors should be empty");
 
             // ctor(message, validationerrors)
             var validationErrors = new List<ValidationResult>() {new ValidationResult("validation message")};
