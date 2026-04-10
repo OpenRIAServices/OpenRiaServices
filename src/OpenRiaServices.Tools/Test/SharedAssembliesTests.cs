@@ -84,12 +84,12 @@ namespace OpenRiaServices.Tools.Test
                 // We should detect properties from derived types
                 sharedTypeLocation = GetSharedPropertyLocation(sa, "ServerClassLib.TestDomainSharedContext", "ValidationContext");
                 Assert.IsNotNull(sharedTypeLocation, "Expected to detect properties from base classes (DomainContext.ValidationContext)");
-                StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.Client");
+                Assert.Contains("OpenRiaServices.Client", sharedTypeLocation);
 
                 // We should not detect internal properties
                 sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.Client.Entity", "ValidationErrors");
                 Assert.IsNotNull(sharedTypeLocation, "Should detect properties in other assemblies");
-                StringAssert.Contains(sharedTypeLocation, "OpenRiaServices.Client");
+                Assert.Contains("OpenRiaServices.Client", sharedTypeLocation);
 
                 sharedTypeLocation = GetSharedPropertyLocation(sa, "OpenRiaServices.Client.Entity", "ParentAssociation");
                 Assert.IsNull(sharedTypeLocation, "Expected to not detect internal properties");
