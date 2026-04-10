@@ -25,12 +25,6 @@ namespace OpenRiaServices.Client
             }
         }
 
-        protected override void OnCollectionChanged(NotifyCollectionChangedEventArgs args)
-        {
-            // we need to override this method to avoid ListCollectionView holding a strong reference to the EntityCollection through the event handler, which would cause a memory leak since ListCollectionView doesn't unsubscribe from the event.
-            base.OnCollectionChanged(args);
-        }
-
         bool IWeakEventListener.ReceiveWeakEvent(Type managerType, object sender, EventArgs e)
         {
             if (e is NotifyCollectionChangedEventArgs collectionChangedEventArgs)

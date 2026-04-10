@@ -16,7 +16,7 @@ namespace OpenRiaServices.Client.Test
     public partial class EntityCollectionTests
     {
         /// <summary>
-        /// Verify that EntityCollection works as intended with <see cref="ItemsSourceView"/> and <see cref="IEditableCollectionView"/> so
+        /// Verify that EntityCollection works as intended with <see cref="ItemsSourceView"/> and <see cref="DataGridCollectionView"/> so
         /// it works as intended with WPF bindings.
         /// </summary>
         [TestClass]

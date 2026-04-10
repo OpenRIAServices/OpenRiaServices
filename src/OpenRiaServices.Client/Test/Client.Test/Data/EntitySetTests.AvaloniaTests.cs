@@ -253,11 +253,6 @@ namespace OpenRiaServices.Client.Test
                 GC.Collect();
                 Assert.IsFalse(weakRef.IsAlive);
             }
-
-            private ItemsSourceView GetICV(EntitySet entitySet)
-            {
-                return ItemsSourceView.GetOrCreate(entitySet);
-            }
         }
     }
 }

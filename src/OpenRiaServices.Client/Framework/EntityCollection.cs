@@ -957,21 +957,18 @@ namespace OpenRiaServices.Client
             }
 
             this.Remove(entity);
-            if (this._addedEntities?.Remove(entity) == true)
+            if (this._addedEntities?.Remove(entity) == true
+                // In case of Composition, the entity in the SourceSet may already be removed via this.Remove above.
+                && SourceSet?.Contains(entity) == true)
             {
-                // In case of Composition, the entity in the SourceSet
-                // may already be removed via this.Source.Remove above.
-                if (SourceSet.Contains(entity))
-                {
-                    this.SourceSet.Remove(entity);
-                }
+                this.SourceSet.Remove(entity);
             }
         }
 
         void IList.RemoveAt(int index)
         {
             // Need to call into IList variant of remove to handle _addedEntities
-            IList This = (IList)this;
+            IList This = this;
             This.Remove(This[index]);
         }
 
@@ -983,3 +980,4 @@ namespace OpenRiaServices.Client
         #endregion
     }
 }
+
