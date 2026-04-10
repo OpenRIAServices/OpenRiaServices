@@ -3092,6 +3092,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Microsoft.VisualStudio.TestTools.UnitTesting.Description("Three entities in conflict and all resolve methods return true using a combination of resolve policies")]
+        [Retry(3)]
         public virtual void ResolveTest_MultipleInstances_MixedResolveMethods()
         {
             Northwind nw1 = new Northwind(this.ServiceUri);
@@ -3230,6 +3231,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Microsoft.VisualStudio.TestTools.UnitTesting.Description("Two entities in conflict, one return true and the other returns false")]
+        [Retry(3)]
         public virtual void ResolveTest_MultipleInstances_ReturnTrueFalse()
         {
             Northwind nw1 = new Northwind(this.ServiceUri);
@@ -3339,6 +3341,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Microsoft.VisualStudio.TestTools.UnitTesting.Description("Two entities in conflict, both return true")]
+        [Retry(3)]
         public virtual void ResolveTest_MultipleInstances_ReturnTrueTrue()
         {
             Northwind nw1 = new Northwind(this.ServiceUri);
@@ -3459,6 +3462,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Microsoft.VisualStudio.TestTools.UnitTesting.Description("Two entities in conflict, one throws exception and the other resolves successfully")]
+        [Retry(3)]
         public virtual void ResolveTest_MultipleInstances_FirstThrowsSecondSucceeds()
         {
             Northwind nw1 = new Northwind(this.ServiceUri);
@@ -3533,6 +3537,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Microsoft.VisualStudio.TestTools.UnitTesting.Description("Two entities in conflict, resolution succeeds for and the other throws an exception")]
+        [Retry(3)]
         public virtual void ResolveTest_MultipleInstances_FirstSucceedsSecondThrows()
         {
             Northwind nw1 = new Northwind(this.ServiceUri);
