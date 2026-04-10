@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 namespace OpenRiaServices.Client.Test
 {
     [TestClass()]
-    public sealed class Main
+    public static class Main
     {
         private static Process s_aspNetCoreSite;
 
