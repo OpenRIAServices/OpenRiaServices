@@ -444,12 +444,6 @@ namespace OpenRiaServices.Client
         {
             this.EnsureEntityType(entity);
 
-            // Recursively remove any children
-            if (entity.MetaType.HasComposition)
-            {
-                CompositionalChildRemover.RemoveChildren(entity);
-            }
-
             if (entity.EntityState != EntityState.New)
             {
                 // removing a new entity from the set is not considered
@@ -465,6 +459,12 @@ namespace OpenRiaServices.Client
             }
             if (idx == -1)
                 return false;
+
+            // Recursively remove any children
+            if (entity.MetaType.HasComposition)
+            {
+                CompositionalChildRemover.RemoveChildren(entity);
+            }
 
             if (entity.EntitySet != null && entity.IsInferred)
             {
