@@ -67,7 +67,7 @@ namespace OpenRiaServices.Server.Test
 
             // check that the domain services have invoked the domain method correctly by checking the internal variables set
             Assert.AreEqual<string>("ProcessCity_", myTestProvider.Invoked);
-            Assert.AreEqual<int>(3, myTestProvider.InputData.Length);
+            Assert.HasCount(3, myTestProvider.InputData);
             Assert.AreEqual<byte>(123, myTestProvider.InputData[2]);
         }
 
@@ -100,7 +100,7 @@ namespace OpenRiaServices.Server.Test
 
             // check that the domain services have invoked the domain method correctly by checking the internal variables set
             Assert.AreEqual<string>("ProcessCounty_ProcessCity_", myTestProvider.Invoked);
-            Assert.AreEqual<int>(2, myTestProvider.InputData.Length);
+            Assert.HasCount(2, myTestProvider.InputData);
         }
 
         [TestMethod]

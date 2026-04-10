@@ -162,30 +162,30 @@ namespace OpenRiaServices.Client.Test
             p1.ContactInfo.PrimaryPhone.AreaCode = "Invalid";
             TestHelperMethods.EnableValidation(p1, true);
             Assert.IsFalse(ec.GetChanges().Validate(null));
-            Assert.AreEqual(2, p1.ValidationErrors.Count);
-            Assert.AreEqual(2, p1.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.HasCount(2, p1.ValidationErrors);
+            Assert.HasCount(2, p1.ContactInfo.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.PrimaryPhone.ValidationErrors);
             p1.ValidationErrors.Clear();
-            Assert.AreEqual(0, p1.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.IsEmpty(p1.ContactInfo.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.PrimaryPhone.ValidationErrors);
 
             // Clear from a CT instance in the hierarchy - expect errors for that child
             // to be cleared and all affected errors should also be cleared from the parent(s)
             // up the hierarchy
             Assert.IsFalse(ec.GetChanges().Validate(null));
-            Assert.AreEqual(2, p1.ValidationErrors.Count);
-            Assert.AreEqual(2, p1.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.HasCount(2, p1.ValidationErrors);
+            Assert.HasCount(2, p1.ContactInfo.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.PrimaryPhone.ValidationErrors);
             p1.ContactInfo.HomeAddress.ValidationErrors.Clear();
-            Assert.AreEqual(1, p1.ValidationErrors.Count);
+            Assert.HasCount(1, p1.ValidationErrors);
             Assert.AreEqual("ContactInfo.PrimaryPhone.AreaCode", p1.ValidationErrors.Single().MemberNames.Single());
-            Assert.AreEqual(1, p1.ContactInfo.ValidationErrors.Count);
+            Assert.HasCount(1, p1.ContactInfo.ValidationErrors);
             Assert.AreEqual("PrimaryPhone.AreaCode", p1.ContactInfo.ValidationErrors.Single().MemberNames.Single());
-            Assert.AreEqual(0, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.IsEmpty(p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.PrimaryPhone.ValidationErrors);
             Assert.AreEqual("AreaCode", p1.ContactInfo.PrimaryPhone.ValidationErrors.Single().MemberNames.Single());
 
             // Next we'll test that when validation errors are cleared on a root instance, results are cleared
@@ -231,26 +231,26 @@ namespace OpenRiaServices.Client.Test
             p1.ContactInfo = contact;
             ec.LoadEntities(new Entity[] { p1 });
 
-            Assert.AreEqual(0, p1.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.IsEmpty(p1.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.PrimaryPhone.ValidationErrors);
 
             ValidationResult stateError = new ValidationResult("Invalid State!", new string[] { "State" });
             p1.ContactInfo.HomeAddress.ValidationErrors.Add(stateError);
 
-            Assert.AreEqual(1, p1.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.HasCount(1, p1.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.PrimaryPhone.ValidationErrors);
 
-            Assert.AreEqual(1, p1.ValidationErrors.Count);
+            Assert.HasCount(1, p1.ValidationErrors);
             Assert.AreEqual("ContactInfo.HomeAddress.State", p1.ValidationErrors.Single().MemberNames.Single());
-            Assert.AreEqual(1, p1.ContactInfo.ValidationErrors.Count);
+            Assert.HasCount(1, p1.ContactInfo.ValidationErrors);
             Assert.AreEqual("HomeAddress.State", p1.ContactInfo.ValidationErrors.Single().MemberNames.Single());
-            Assert.AreEqual(1, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
+            Assert.HasCount(1, p1.ContactInfo.HomeAddress.ValidationErrors);
             Assert.AreEqual("State", p1.ContactInfo.HomeAddress.ValidationErrors.Single().MemberNames.Single());
-            Assert.AreEqual(0, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.IsEmpty(p1.ContactInfo.PrimaryPhone.ValidationErrors);
         }
 
         /// <summary>
@@ -273,36 +273,36 @@ namespace OpenRiaServices.Client.Test
             p1.ContactInfo.PrimaryPhone.AreaCode = "Invalid";
             TestHelperMethods.EnableValidation(p1, true);
             Assert.IsFalse(ec.GetChanges().Validate(null));
-            Assert.AreEqual(2, p1.ValidationErrors.Count);
-            Assert.AreEqual(2, p1.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.HasCount(2, p1.ValidationErrors);
+            Assert.HasCount(2, p1.ContactInfo.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.PrimaryPhone.ValidationErrors);
 
             // attempt to remove an item not in the collection - expect no change
             ValidationResult result = new ValidationResult("DNE", new string[] { "DNE" });
             p1.ContactInfo.PrimaryPhone.ValidationErrors.Remove(result);
-            Assert.AreEqual(2, p1.ValidationErrors.Count);
-            Assert.AreEqual(2, p1.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.HasCount(2, p1.ValidationErrors);
+            Assert.HasCount(2, p1.ContactInfo.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.PrimaryPhone.ValidationErrors);
 
             // remove an error
             result = p1.ContactInfo.PrimaryPhone.ValidationErrors.Single();
             p1.ContactInfo.PrimaryPhone.ValidationErrors.Remove(result);
 
-            Assert.AreEqual(1, p1.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(1, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.HasCount(1, p1.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.ValidationErrors);
+            Assert.HasCount(1, p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.PrimaryPhone.ValidationErrors);
 
             // remove the last error
             result = p1.ContactInfo.HomeAddress.ValidationErrors.Single();
             p1.ContactInfo.HomeAddress.ValidationErrors.Remove(result);
 
-            Assert.AreEqual(0, p1.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.HomeAddress.ValidationErrors.Count);
-            Assert.AreEqual(0, p1.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.IsEmpty(p1.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.HomeAddress.ValidationErrors);
+            Assert.IsEmpty(p1.ContactInfo.PrimaryPhone.ValidationErrors);
         }
 
         /// <summary>
@@ -503,7 +503,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(lo.HasError);
-                Assert.AreEqual(3, lo.Entities.Count);
+                Assert.HasCount(3, lo.Entities);
 
                 ComplexType_Parent p = ctxt.ComplexType_Parents.First();
                 Assert.IsNotNull(p.ContactInfo);
@@ -622,7 +622,7 @@ namespace OpenRiaServices.Client.Test
 
                 ComplexType_Parent parent = ctxt.ComplexType_Parents.Single(p => p.ContactInfo.Name == "Mathew");
                 Assert.AreEqual("Updated", parent.ContactInfo.HomeAddress.AddressLine2);
-                Assert.AreEqual(null, parent.ContactInfo.PrimaryPhone);
+                Assert.IsNull(parent.ContactInfo.PrimaryPhone);
 
                 parent = ctxt.ComplexType_Parents.Single(p => p.ContactInfo.Name == "Amy");
                 Assert.AreEqual("Updated", parent.ContactInfo.HomeAddress.AddressLine2);
@@ -851,7 +851,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the nested CT collection was extracted as collection instance (not a state dictionary)
             List<ComplexType_Recursive> ctCollection = (List<ComplexType_Recursive>)state["P2"];
-            Assert.AreEqual(3, ctCollection.Count);
+            Assert.HasCount(3, ctCollection);
             Assert.AreEqual("2", ctCollection[0].P1);
             Assert.AreEqual("3", ctCollection[1].P1);
             Assert.AreEqual("4", ctCollection[2].P1);
@@ -861,7 +861,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("1", ctState["P1"]);
             Assert.AreEqual("1_P2", ((IDictionary<string, object>)ctState["P2"])["P1"]);
             ctCollection = (List<ComplexType_Recursive>)ctState["P3"];
-            Assert.AreEqual(3, ctCollection.Count);
+            Assert.HasCount(3, ctCollection);
             Assert.AreEqual("1_P3_1", ctCollection[0].P1);
             Assert.AreEqual("1_P3_2", ctCollection[1].P1);
             Assert.AreEqual("1_P3_3", ctCollection[2].P1);
@@ -1143,7 +1143,7 @@ namespace OpenRiaServices.Client.Test
             ValidationUtilities.ApplyValidationErrors(p, errors);
 
             Assert.IsTrue(p.HasValidationErrors);
-            Assert.AreEqual(4, p.ValidationErrors.Count);
+            Assert.HasCount(4, p.ValidationErrors);
             ValidationResult result = p.ValidationErrors.Single(q => q.MemberNames.Single() == "ContactInfo");
             Assert.AreEqual("ContactInfo", result.ErrorMessage);
             result = p.ValidationErrors.Single(q => q.MemberNames.Single() == "ContactInfo.Name");
@@ -1154,7 +1154,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("ContactInfo.HomeAddress.State", result.ErrorMessage);
 
             Assert.IsTrue(p.ContactInfo.HasValidationErrors);
-            Assert.AreEqual(3, p.ContactInfo.ValidationErrors.Count);
+            Assert.HasCount(3, p.ContactInfo.ValidationErrors);
             Assert.IsNull(p.ContactInfo.ValidationErrors.SingleOrDefault(q => q.MemberNames.Contains("ContactInfo")), "The ContactInfo error should not be pushed down to the Contact instance.");
             result = p.ContactInfo.ValidationErrors.Single(q => q.MemberNames.Single() == "Name");
             Assert.AreEqual("ContactInfo.Name", result.ErrorMessage);
@@ -1164,14 +1164,14 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("ContactInfo.HomeAddress.State", result.ErrorMessage);
 
             Assert.IsTrue(p.ContactInfo.HomeAddress.HasValidationErrors);
-            Assert.AreEqual(2, p.ContactInfo.HomeAddress.ValidationErrors.Count);
+            Assert.HasCount(2, p.ContactInfo.HomeAddress.ValidationErrors);
             result = p.ContactInfo.HomeAddress.ValidationErrors.Single(q => q.MemberNames.Single() == "City");
             Assert.AreEqual("ContactInfo.HomeAddress.City", result.ErrorMessage);
             result = p.ContactInfo.HomeAddress.ValidationErrors.Single(q => q.MemberNames.Single() == "State");
             Assert.AreEqual("ContactInfo.HomeAddress.State", result.ErrorMessage);
 
             Assert.IsFalse(p.ContactInfo.PrimaryPhone.HasValidationErrors);
-            Assert.AreEqual(0, p.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.IsEmpty(p.ContactInfo.PrimaryPhone.ValidationErrors);
         }
 
         /// <summary>
@@ -1201,14 +1201,14 @@ namespace OpenRiaServices.Client.Test
             // We expect the member name for the type level error coming from Parent.ContactInfo to be
             // formatted "ContactInfo."
             Assert.IsTrue(p.HasValidationErrors);
-            Assert.AreEqual(1, p.ValidationErrors.Count);
+            Assert.HasCount(1, p.ValidationErrors);
             ValidationResult result = p.ValidationErrors.Single(q => q.ErrorMessage == "Invalid-TypeLevel");
             Assert.AreEqual("ContactInfo.", result.MemberNames.Single());
 
             // On the actual source object for the type level error, the member names collection should be
             // empty, as it was originally
             Assert.IsTrue(p.ContactInfo.HasValidationErrors);
-            Assert.AreEqual(1, p.ValidationErrors.Count);
+            Assert.HasCount(1, p.ValidationErrors);
             result = p.ContactInfo.ValidationErrors.Single(q => q.ErrorMessage == "Invalid-TypeLevel");
             Assert.AreEqual(0, result.MemberNames.Count());
         }
@@ -1282,7 +1282,7 @@ namespace OpenRiaServices.Client.Test
             contact.ValidationErrors.Add(new ValidationResult("Invalid State", new string[] { "HomeAddress.State" }));
             contact.ValidationErrors.Add(new ValidationResult("Invalid AreaCode", new string[] { "PrimaryPhone.AreaCode" }));
             Assert.IsTrue(contact.HasValidationErrors);
-            Assert.AreEqual(2, contact.ValidationErrors.Count);
+            Assert.HasCount(2, contact.ValidationErrors);
 
             // Add an event handler that does validation - this simulates user authored
             // property setter validation
@@ -1299,7 +1299,7 @@ namespace OpenRiaServices.Client.Test
             // are synced in
             parent.ContactInfo = contact;
             Assert.IsTrue(parent.HasValidationErrors);
-            Assert.AreEqual(3, parent.ValidationErrors.Count);
+            Assert.HasCount(3, parent.ValidationErrors);
             Assert.IsNotNull(parent.ValidationErrors.Single(p => p.MemberNames.Contains("ContactInfo")));
             Assert.IsNotNull(parent.ValidationErrors.Single(p => p.MemberNames.Contains("ContactInfo.HomeAddress.State")));
             Assert.IsNotNull(parent.ValidationErrors.Single(p => p.MemberNames.Contains("ContactInfo.PrimaryPhone.AreaCode")));
@@ -1307,7 +1307,7 @@ namespace OpenRiaServices.Client.Test
             // assign to null - expect that the nested validation errors are cleared, but the
             // property level error added above should remain.
             parent.ContactInfo = null;
-            Assert.AreEqual(1, parent.ValidationErrors.Count);
+            Assert.HasCount(1, parent.ValidationErrors);
             Assert.IsNotNull(parent.ValidationErrors.SingleOrDefault(p => p.MemberNames.Contains("ContactInfo")));
 
             // Verify with ComplexObject parent
@@ -1331,14 +1331,14 @@ namespace OpenRiaServices.Client.Test
             // are synced in
             contact.PrimaryPhone = phone;
             Assert.IsTrue(contact.HasValidationErrors);
-            Assert.AreEqual(2, contact.ValidationErrors.Count);
+            Assert.HasCount(2, contact.ValidationErrors);
             Assert.IsNotNull(contact.ValidationErrors.Single(p => p.MemberNames.Contains("PrimaryPhone")));
             Assert.IsNotNull(contact.ValidationErrors.Single(p => p.MemberNames.Contains("PrimaryPhone.AreaCode")));
 
             // assign to null - expect that the nested validation errors are cleared, but the
             // property level error added above should remain.
             contact.PrimaryPhone = null;
-            Assert.AreEqual(1, contact.ValidationErrors.Count);
+            Assert.HasCount(1, contact.ValidationErrors);
             Assert.IsNotNull(contact.ValidationErrors.SingleOrDefault(p => p.MemberNames.Contains("PrimaryPhone")));
         }
 
@@ -1365,7 +1365,7 @@ namespace OpenRiaServices.Client.Test
             es.Remove(p);
             p.ContactInfo.HomeAddress.State = "OH";
             ((IRevertibleChangeTracking)ec).AcceptChanges();
-            Assert.AreEqual(0, p.ValidationErrors.Count);
+            Assert.IsEmpty(p.ValidationErrors);
             Verify_ComplexType_Validation(p);
 
             // now validate for a new Detached entity (validation should still be performed)
@@ -1422,9 +1422,9 @@ namespace OpenRiaServices.Client.Test
             Assert.IsFalse(p.HasValidationErrors);
             Assert.IsFalse(p.ContactInfo.HasValidationErrors);
             Assert.IsFalse(p.ContactInfo.HomeAddress.HasValidationErrors);
-            Assert.AreEqual(0, p.ValidationErrors.Count);
-            Assert.AreEqual(0, p.ContactInfo.ValidationErrors.Count);
-            Assert.AreEqual(0, p.ContactInfo.HomeAddress.ValidationErrors.Count);
+            Assert.IsEmpty(p.ValidationErrors);
+            Assert.IsEmpty(p.ContactInfo.ValidationErrors);
+            Assert.IsEmpty(p.ContactInfo.HomeAddress.ValidationErrors);
         }
 
         [TestMethod]
@@ -1447,32 +1447,32 @@ namespace OpenRiaServices.Client.Test
             ValidationUtilities.ApplyValidationErrors(p, errors);
 
             Assert.IsTrue(p.HasValidationErrors);
-            Assert.AreEqual(6, p.ValidationErrors.Count);
+            Assert.HasCount(6, p.ValidationErrors);
 
             Assert.IsTrue(p.ContactInfo.HasValidationErrors);
-            Assert.AreEqual(5, p.ContactInfo.ValidationErrors.Count);
+            Assert.HasCount(5, p.ContactInfo.ValidationErrors);
             Assert.IsNull(p.ContactInfo.ValidationErrors.SingleOrDefault(q => q.MemberNames.Contains("ContactInfo")), "The ContactInfo error should not be pushed down to the Contact instance.");
 
             Assert.IsTrue(p.ContactInfo.HomeAddress.HasValidationErrors);
-            Assert.AreEqual(2, p.ContactInfo.HomeAddress.ValidationErrors.Count);
+            Assert.HasCount(2, p.ContactInfo.HomeAddress.ValidationErrors);
 
             Assert.IsTrue(p.ContactInfo.PrimaryPhone.HasValidationErrors);
-            Assert.AreEqual(2, p.ContactInfo.PrimaryPhone.ValidationErrors.Count);
+            Assert.HasCount(2, p.ContactInfo.PrimaryPhone.ValidationErrors);
 
             // set the phone CT member to null. We expect all dependent errors up the
             // hierarchy leading to that instance to be removed.
             p.ContactInfo.PrimaryPhone = null;
 
             Assert.IsTrue(p.HasValidationErrors);
-            Assert.AreEqual(4, p.ValidationErrors.Count);
+            Assert.HasCount(4, p.ValidationErrors);
             Assert.IsFalse(p.ValidationErrors.SelectMany(q => q.MemberNames).Any(q => q.Contains("Phone")));
 
             Assert.IsTrue(p.ContactInfo.HasValidationErrors);
-            Assert.AreEqual(3, p.ContactInfo.ValidationErrors.Count);
+            Assert.HasCount(3, p.ContactInfo.ValidationErrors);
             Assert.IsFalse(p.ContactInfo.ValidationErrors.SelectMany(q => q.MemberNames).Any(q => q.Contains("Phone")));
 
             Assert.IsTrue(p.ContactInfo.HomeAddress.HasValidationErrors);
-            Assert.AreEqual(2, p.ContactInfo.HomeAddress.ValidationErrors.Count);
+            Assert.HasCount(2, p.ContactInfo.HomeAddress.ValidationErrors);
         }
 
         /// <summary>
@@ -1497,20 +1497,20 @@ namespace OpenRiaServices.Client.Test
             TestHelperMethods.EnableValidation(p, true);
 
             EntityChangeSet cs = ec.GetChanges();
-            Assert.AreEqual(0, p.ValidationErrors.Count);
+            Assert.IsEmpty(p.ValidationErrors);
             cs.Validate(ec.ValidationContext);
             ValidationResult[] results = p.ValidationErrors.ToArray();
-            Assert.AreEqual(1, results.Length);
+            Assert.HasCount(1, results);
             Assert.AreEqual("ContactInfo.PrimaryPhone.Number", results[0].MemberNames.Single());
 
             p.ValidationErrors.Clear();
             TestHelperMethods.EnableValidation(p, false);
             p.ContactInfo.PrimaryPhone = new Phone();
             TestHelperMethods.EnableValidation(p, true);
-            Assert.AreEqual(0, p.ValidationErrors.Count);
+            Assert.IsEmpty(p.ValidationErrors);
             cs.Validate(ec.ValidationContext);
             results = p.ValidationErrors.ToArray();
-            Assert.AreEqual(2, results.Length);
+            Assert.HasCount(2, results);
             IEnumerable<string> invalidMembers = results.SelectMany(q => q.MemberNames);
             Assert.IsTrue(invalidMembers.Contains("ContactInfo.PrimaryPhone.AreaCode"));
             Assert.IsTrue(invalidMembers.Contains("ContactInfo.PrimaryPhone.Number"));
@@ -1542,7 +1542,7 @@ namespace OpenRiaServices.Client.Test
             // verify custom validation was called at CT type and property levels. Note in this case the type level
             // validation for the ContactInfo instance will not be run, since type level validation only
             // runs if there are no property level errors.
-            Assert.AreEqual(2, DynamicTestValidator.ValidationCalls.Count);
+            Assert.HasCount(2, DynamicTestValidator.ValidationCalls);
             Assert.IsNotNull(DynamicTestValidator.ValidationCalls.Single(v => v.MemberName == "ContactInfo" && v.ObjectType == typeof(ComplexType_Parent)));
             Assert.IsNotNull(DynamicTestValidator.ValidationCalls.Single(v => v.MemberName == null && v.ObjectType == typeof(Phone)));
 
@@ -1560,7 +1560,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(isValid);
 
             // verify custom validation was called at CT type and property levels
-            Assert.AreEqual(3, DynamicTestValidator.ValidationCalls.Count);
+            Assert.HasCount(3, DynamicTestValidator.ValidationCalls);
             Assert.IsNotNull(DynamicTestValidator.ValidationCalls.Single(v => v.MemberName == null && v.ObjectType == typeof(ContactInfo)));
             Assert.IsNotNull(DynamicTestValidator.ValidationCalls.Single(v => v.MemberName == "ContactInfo" && v.ObjectType == typeof(ComplexType_Parent)));
             Assert.IsNotNull(DynamicTestValidator.ValidationCalls.Single(v => v.MemberName == null && v.ObjectType == typeof(Phone)));
@@ -1596,7 +1596,7 @@ namespace OpenRiaServices.Client.Test
             cs = ec.GetChanges();
             isValid = cs.Validate(null);
             Assert.IsFalse(isValid);
-            Assert.AreEqual(3, p2.ValidationErrors.Count);
+            Assert.HasCount(3, p2.ValidationErrors);
             result = p2.ValidationErrors.Single(e => e.MemberNames.Single() == "P1.P3().P4");
             Assert.AreEqual("The field P4 must be between 0 and 5.", result.ErrorMessage);
             result = p2.ValidationErrors.Single(e => e.MemberNames.Single() == "P2().P4");
@@ -1636,20 +1636,20 @@ namespace OpenRiaServices.Client.Test
             // First test the type level validation done. We don't expect the ContactInfo type level validation to be run,
             // since the contact instance has property validation errors. We expect path information to be appended
             // to the member names.
-            Assert.AreEqual(2, p.ValidationErrors.Count);
+            Assert.HasCount(2, p.ValidationErrors);
             
             // Property level CT validation : Ensure that paths are correctly appended to the
             // member names specified.
             ValidationResult result = p.ValidationErrors.Single(q => q.ErrorMessage == "ContactInfo-ContactInfo");
             string[] memberNames = result.MemberNames.ToArray();
-            Assert.AreEqual(2, memberNames.Length);
+            Assert.HasCount(2, memberNames);
             Assert.IsTrue(memberNames.Contains("ContactInfo.Name"));
             Assert.IsTrue(memberNames.Contains("ContactInfo.PrimaryPhone"));
 
             // Tpye level CT validation : again, we expect member names to be transformed into full paths
             result = p.ValidationErrors.Single(q => q.ErrorMessage == "Phone-TypeLevel");
             memberNames = result.MemberNames.ToArray();
-            Assert.AreEqual(2, memberNames.Length);
+            Assert.HasCount(2, memberNames);
             Assert.IsTrue(memberNames.Contains("ContactInfo.PrimaryPhone.AreaCode"));
             Assert.IsTrue(memberNames.Contains("ContactInfo.PrimaryPhone.Number"));
 
@@ -1659,10 +1659,10 @@ namespace OpenRiaServices.Client.Test
             isValid = cs.Validate(null);
             Assert.IsFalse(isValid);
 
-            Assert.AreEqual(1, p.ValidationErrors.Count);
+            Assert.HasCount(1, p.ValidationErrors);
             result = p.ValidationErrors.Single(q => q.ErrorMessage == "ContactInfo-TypeLevel");
             memberNames = result.MemberNames.ToArray();
-            Assert.AreEqual(2, memberNames.Length);
+            Assert.HasCount(2, memberNames);
             Assert.IsTrue(memberNames.Contains("ContactInfo.Name"));
             Assert.IsTrue(memberNames.Contains("ContactInfo.PrimaryPhone"));
         }
@@ -1683,7 +1683,7 @@ namespace OpenRiaServices.Client.Test
             // This is the validation method that will be reused below for both calls
             Action<Dictionary<ComplexType_Parent, ValidationResult[]>> checkResults = (r) =>
                 {
-                    Assert.AreEqual(1, r.Count);
+                    Assert.HasCount(1, r);
                     var item = r.Single(p => p.Key.ID == 1);
                     ComplexType_Parent entity = item.Key;
                     ValidationResult result = item.Value.Single();
@@ -2065,7 +2065,7 @@ namespace OpenRiaServices.Client.Test
             ((INotifyDataErrorInfo)p1.ContactInfo).ErrorsChanged -= handler;
             ((INotifyDataErrorInfo)p1.ContactInfo.HomeAddress).ErrorsChanged -= handler;
             p1.ContactInfo.HomeAddress.State = "Invalid2";
-            Assert.AreEqual(0, changedProperties.Count);
+            Assert.IsEmpty(changedProperties);
         }
 
         /// <summary>
@@ -2152,9 +2152,9 @@ namespace OpenRiaServices.Client.Test
             // when the instance is cleared out, the validation errors should be removed
             p.ContactInfo.HomeAddress = null;
             Assert.IsFalse(p.HasValidationErrors);
-            Assert.AreEqual(0, p.ValidationErrors.Count);
+            Assert.IsEmpty(p.ValidationErrors);
             Assert.IsFalse(p.ContactInfo.HasValidationErrors);
-            Assert.AreEqual(0, p.ContactInfo.ValidationErrors.Count);
+            Assert.IsEmpty(p.ContactInfo.ValidationErrors);
         }
     }
 

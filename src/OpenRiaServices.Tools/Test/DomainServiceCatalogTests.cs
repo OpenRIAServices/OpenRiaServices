@@ -94,7 +94,7 @@ namespace OpenRiaServices.Tools.Test
             DomainServiceCatalog dsc = new DomainServiceCatalog(assemblies, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
-            Assert.IsTrue(descriptions.Count >= expectedDomainServices);
+            Assert.IsGreaterThanOrEqualTo(expectedDomainServices, descriptions.Count);
         }
 
         [TestMethod]
@@ -106,9 +106,9 @@ namespace OpenRiaServices.Tools.Test
             DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
-            Assert.AreEqual(0, descriptions.Count);
-            Assert.AreEqual(0, logger.ErrorMessages.Count);
-            Assert.AreEqual(0, logger.WarningMessages.Count);
+            Assert.IsEmpty(descriptions);
+            Assert.IsEmpty(logger.ErrorMessages);
+            Assert.IsEmpty(logger.WarningMessages);
 
             string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, string.Empty).TrimEnd();
             Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage, StringComparison.Ordinal)));
@@ -129,7 +129,7 @@ namespace OpenRiaServices.Tools.Test
             string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, String.Empty).TrimEnd();
             Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage, StringComparison.Ordinal)));
 
-            Assert.IsTrue(descriptions.Count > 0);
+            Assert.IsNotEmpty(descriptions);
         }
 
         [TestMethod]
@@ -144,9 +144,9 @@ namespace OpenRiaServices.Tools.Test
             DomainServiceCatalog dsc = new DomainServiceCatalog(new string[] { assemblyFileName }, logger);
             ICollection<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions);
-            Assert.AreEqual(0, descriptions.Count);
-            Assert.AreEqual(0, logger.ErrorMessages.Count);
-            Assert.AreEqual(0, logger.WarningMessages.Count);
+            Assert.IsEmpty(descriptions);
+            Assert.IsEmpty(logger.ErrorMessages);
+            Assert.IsEmpty(logger.WarningMessages);
 
             // Need to synthesize exactly the same message we'd expect from failed assembly load
             string exceptionMessage = null;

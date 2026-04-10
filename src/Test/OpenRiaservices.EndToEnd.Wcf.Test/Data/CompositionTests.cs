@@ -261,10 +261,10 @@ namespace OpenRiaServices.Client.Test
             child.Value += "x";
 
             EntityChangeSet cs = container.GetChanges();
-            Assert.AreEqual(2, cs.ModifiedEntities.Count);
+            Assert.HasCount(2, cs.ModifiedEntities);
 
             List<ChangeSetEntry> entries = ChangeSetBuilder.Build(cs);
-            Assert.AreEqual(4, entries.Count);
+            Assert.HasCount(4, entries);
         }
 
         [TestMethod]
@@ -585,7 +585,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.AreEqual(66, lo.AllEntities.Count);
+                Assert.HasCount(66, lo.AllEntities);
 
                 Assert.AreEqual(3, ctxt.Parents.Count);
                 foreach(Parent p in ctxt.Parents)
@@ -616,7 +616,7 @@ namespace OpenRiaServices.Client.Test
             ctxt.Parents.Add(parent);
 
             EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-            Assert.AreEqual(1 + 3 + 9 + 9, cs.AddedEntities.Count);
+            Assert.HasCount(1 + 3 + 9 + 9, cs.AddedEntities);
 
             SubmitOperation so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
 
@@ -688,13 +688,13 @@ namespace OpenRiaServices.Client.Test
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
                 Assert.IsTrue(cs.AddedEntities.Count == 2 && cs.ModifiedEntities.Count == 4 && cs.RemovedEntities.Count == 1);
-                Assert.IsTrue(cs.AddedEntities.Contains(newChild));
-                Assert.IsTrue(cs.AddedEntities.Contains(newGc));
-                Assert.IsTrue(cs.ModifiedEntities.Contains(parent));
-                Assert.IsTrue(cs.ModifiedEntities.Contains(existingChild));
-                Assert.IsTrue(cs.ModifiedEntities.Contains(existingGrandChild));
-                Assert.IsTrue(cs.ModifiedEntities.Contains(updatedGrandChild));
-                Assert.IsTrue(cs.RemovedEntities.Contains(deletedGreatGrandChild));
+                Assert.Contains(newChild, cs.AddedEntities);
+                Assert.Contains(newGc, cs.AddedEntities);
+                Assert.Contains(parent, cs.ModifiedEntities);
+                Assert.Contains(existingChild, cs.ModifiedEntities);
+                Assert.Contains(existingGrandChild, cs.ModifiedEntities);
+                Assert.Contains(updatedGrandChild, cs.ModifiedEntities);
+                Assert.Contains(deletedGreatGrandChild, cs.RemovedEntities);
 
                 // direct test verifying that we create the correct set of
                 // ChangeSetEntries to send to the server
@@ -753,7 +753,7 @@ namespace OpenRiaServices.Client.Test
                 ctxt.Parents.Remove(parent);
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(1 + 3 + 9 + 9, cs.RemovedEntities.Count);
+                Assert.HasCount(1 + 3 + 9 + 9, cs.RemovedEntities);
 
                 so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             });         
@@ -850,7 +850,7 @@ namespace OpenRiaServices.Client.Test
             ctxt.Parents.Remove(parent);
             int totalCount = 1 + 3 + 9 + 9;
             EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-            Assert.AreEqual(totalCount, cs.RemovedEntities.Count);
+            Assert.HasCount(totalCount, cs.RemovedEntities);
             Assert.AreEqual(EntityState.Deleted, parent.EntityState);
 
             List<Entity> removedEntities = new List<Entity>(cs.RemovedEntities.Cast<Entity>());
@@ -1170,7 +1170,7 @@ namespace OpenRiaServices.Client.Test
             ctxt.Parents.Remove(parent);
             int totalCount = 1 + 3 + 9 + 9;
             EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-            Assert.AreEqual(totalCount, cs.RemovedEntities.Count);
+            Assert.HasCount(totalCount, cs.RemovedEntities);
             Assert.AreEqual(EntityState.Deleted, parent.EntityState);
 
             // To reject all child changes by calling reject on the parent,
@@ -1340,12 +1340,12 @@ namespace OpenRiaServices.Client.Test
         /// </summary>
         private static void VerifyHierarchy(Parent parent)
         {
-            Assert.IsTrue(parent.Children.Count > 0);
+            Assert.IsGreaterThan(0, parent.Children.Count);
             foreach (Child c in parent.Children)
             {
                 Assert.AreSame(parent, c.Parent);
 
-                Assert.IsTrue(c.Children.Count > 0);
+                Assert.IsGreaterThan(0, c.Children.Count);
                 foreach (GrandChild gc in c.Children)
                 {
                     Assert.AreSame(c, gc.Parent);
@@ -1412,7 +1412,7 @@ namespace OpenRiaServices.Client.Test
 
                                 // should never be any deleted entities in the current associations
                                 // set
-                                Assert.IsTrue(childOperation.Operation != EntityOperationType.Delete);
+                                Assert.AreNotEqual(EntityOperationType.Delete, childOperation.Operation);
 
                                 // ensure that all non-new entities in the current association
                                 // set are also present in the original set
@@ -1431,7 +1431,7 @@ namespace OpenRiaServices.Client.Test
 
                                 // shouldn't be any new entities in the original
                                 // associations set
-                                Assert.IsTrue(childOperation.Operation != EntityOperationType.Insert);
+                                Assert.AreNotEqual(EntityOperationType.Insert, childOperation.Operation);
                             }
                         }
                     }

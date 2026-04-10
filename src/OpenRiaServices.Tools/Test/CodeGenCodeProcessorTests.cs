@@ -323,7 +323,7 @@ namespace OpenRiaServices.Tools.Test
         public CodeProcessor_ExamineTypeMapping(CodeDomProvider codeDomProvider) : base(codeDomProvider) { }
         public override void ProcessGeneratedCode(DomainServiceDescription domainServiceDescription, CodeCompileUnit codeCompileUnit, IDictionary<Type, CodeTypeDeclaration> typeMapping)
         {
-            Assert.AreEqual(2, typeMapping.Count);
+            Assert.HasCount(2, typeMapping);
             Assert.AreEqual(typeof(TEntity).Name, typeMapping[typeof(TEntity)].Name);
             if (domainServiceDescription.DomainServiceType == typeof(TestProvider_ExamineTypeMapping1))
             {

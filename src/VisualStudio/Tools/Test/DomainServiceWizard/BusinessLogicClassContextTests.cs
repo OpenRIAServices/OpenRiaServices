@@ -98,10 +98,10 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         public void BusinessLogicClass_Context_Inheritance()
         {
             LinqToSqlContext ltsContext = new LinqToSqlContext(typeof(DataModels.ScenarioModels.DataContextInheritanceScenarios));
-            Assert.IsTrue(ltsContext.Entities.Count() > 0);
+            Assert.IsGreaterThan(0, ltsContext.Entities.Count());
 
             LinqToEntitiesContext lteContext = new LinqToEntitiesContext(typeof(DataModels.ScenarioModels.ObjectContextInheritanceScenarios));
-            Assert.IsTrue(lteContext.Entities.Count() > 0);
+            Assert.IsGreaterThan(0, lteContext.Entities.Count());
         }
 
         [TestMethod]

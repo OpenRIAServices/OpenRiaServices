@@ -94,7 +94,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsFalse(ec.HasValues);
 
             EntityChangeSet cs = entities.GetChanges();
-            Assert.AreEqual(2, cs.ModifiedEntities.Count);
+            Assert.HasCount(2, cs.ModifiedEntities);
 
             // after computing the changeset, no association members
             // should have been loaded
@@ -292,21 +292,21 @@ namespace OpenRiaServices.Client.Test
             // the expected inferred Adds
             order1.Order_Details.Add(newDetail1);
             cs = ec.GetChanges();
-            Assert.AreEqual(4, cs.AddedEntities.Count);
-            Assert.IsTrue(cs.AddedEntities.Contains(newDetail1));  // the entity added directly
-            Assert.IsTrue(cs.AddedEntities.Contains(newProduct1)); // inferred via Detail.Product ER
-            Assert.IsTrue(cs.AddedEntities.Contains(newCategory)); // inferred via Product.Category ER
-            Assert.IsTrue(cs.AddedEntities.Contains(newProduct2)); // inferred via Category.Products EC
+            Assert.HasCount(4, cs.AddedEntities);
+            Assert.Contains(newDetail1, cs.AddedEntities);  // the entity added directly
+            Assert.Contains(newProduct1, cs.AddedEntities); // inferred via Detail.Product ER
+            Assert.Contains(newCategory, cs.AddedEntities); // inferred via Product.Category ER
+            Assert.Contains(newProduct2, cs.AddedEntities); // inferred via Category.Products EC
 
             // verify that inferred Adds can be state transitioned via subsequent
             // calls to Attach
             ec.GetEntitySet<Product>().Attach(newProduct2);
             newProduct2.ProductName += "x";
             cs = ec.GetChanges();
-            Assert.AreEqual(3, cs.AddedEntities.Count);
-            Assert.AreEqual(1, cs.ModifiedEntities.Count);
-            Assert.IsFalse(cs.AddedEntities.Contains(newProduct2));
-            Assert.IsTrue(cs.ModifiedEntities.Contains(newProduct2));
+            Assert.HasCount(3, cs.AddedEntities);
+            Assert.HasCount(1, cs.ModifiedEntities);
+            Assert.DoesNotContain(newProduct2, cs.AddedEntities);
+            Assert.Contains(newProduct2, cs.ModifiedEntities);
 
             // verify that duplicate references aren't added when an
             // inferred entity is attached
@@ -359,20 +359,20 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(cs.IsEmpty);
             detail1.Product = newProduct1;
             cs = ec.GetChanges();
-            Assert.AreEqual(3, cs.AddedEntities.Count);
-            Assert.IsTrue(cs.AddedEntities.Contains(newProduct1)); // the entity set directly
-            Assert.IsTrue(cs.AddedEntities.Contains(newCategory)); // inferred via Product.Category ER
-            Assert.IsTrue(cs.AddedEntities.Contains(newProduct2)); // inferred via Category.Products EC
+            Assert.HasCount(3, cs.AddedEntities);
+            Assert.Contains(newProduct1, cs.AddedEntities); // the entity set directly
+            Assert.Contains(newCategory, cs.AddedEntities); // inferred via Product.Category ER
+            Assert.Contains(newProduct2, cs.AddedEntities); // inferred via Category.Products EC
 
             // verify that inferred Adds can be state transitioned via subsequent
             // calls to Attach
             ec.GetEntitySet<Product>().Attach(newProduct2);
             newProduct2.ProductName += "x";
             cs = ec.GetChanges();
-            Assert.AreEqual(2, cs.AddedEntities.Count);
-            Assert.AreEqual(2, cs.ModifiedEntities.Count);
-            Assert.IsFalse(cs.AddedEntities.Contains(newProduct2));
-            Assert.IsTrue(cs.ModifiedEntities.Contains(newProduct2));
+            Assert.HasCount(2, cs.AddedEntities);
+            Assert.HasCount(2, cs.ModifiedEntities);
+            Assert.DoesNotContain(newProduct2, cs.AddedEntities);
+            Assert.Contains(newProduct2, cs.ModifiedEntities);
         }
 
         /// <summary>
@@ -415,12 +415,12 @@ namespace OpenRiaServices.Client.Test
             // to be infer added
             ordersSet.Add(order);
             EntityChangeSet cs = ec.GetChanges();
-            Assert.AreEqual(5, cs.AddedEntities.Count);
-            Assert.IsTrue(cs.AddedEntities.Contains(order));
-            Assert.IsTrue(cs.AddedEntities.Contains(detail1));
-            Assert.IsTrue(cs.AddedEntities.Contains(detail2));
-            Assert.IsTrue(cs.AddedEntities.Contains(product1));
-            Assert.IsTrue(cs.AddedEntities.Contains(product2));
+            Assert.HasCount(5, cs.AddedEntities);
+            Assert.Contains(order, cs.AddedEntities);
+            Assert.Contains(detail1, cs.AddedEntities);
+            Assert.Contains(detail2, cs.AddedEntities);
+            Assert.Contains(product1, cs.AddedEntities);
+            Assert.Contains(product2, cs.AddedEntities);
 
             // the root entity wasn't infer added, so it can't be Attached
             InvalidOperationException expectedException = null;
@@ -438,9 +438,9 @@ namespace OpenRiaServices.Client.Test
             ec.GetEntitySet<Product>().Attach(product1);
             product1.ProductName += "x";
             cs = ec.GetChanges();
-            Assert.AreEqual(4, cs.AddedEntities.Count);
-            Assert.IsFalse(cs.AddedEntities.Contains(product1));
-            Assert.IsTrue(cs.ModifiedEntities.Contains(product1));
+            Assert.HasCount(4, cs.AddedEntities);
+            Assert.DoesNotContain(product1, cs.AddedEntities);
+            Assert.Contains(product1, cs.ModifiedEntities);
 
             // verify that after an inferred Add has been Attached, it can't be
             // reattached
@@ -600,7 +600,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(prod.HasChanges);
             Assert.IsTrue(prod.IsEditing);
             EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-            Assert.AreEqual(1, cs.ModifiedEntities.Count);
+            Assert.HasCount(1, cs.ModifiedEntities);
 
             // however, attempting to call submit will result in
             // an exception
@@ -613,7 +613,7 @@ namespace OpenRiaServices.Client.Test
             eo.EndEdit();
             Assert.IsFalse(prod.IsEditing);
             cs = ctxt.EntityContainer.GetChanges();
-            Assert.AreEqual(1, cs.ModifiedEntities.Count);
+            Assert.HasCount(1, cs.ModifiedEntities);
         }
 
         [TestMethod]
@@ -664,7 +664,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the changeset
             EntityChangeSet changeSet = entities.GetChanges();
-            Assert.AreEqual(5, changeSet.RemovedEntities.Count);
+            Assert.HasCount(5, changeSet.RemovedEntities);
 
             // build the operation list and verify it
             List<ChangeSetEntry> operations = ChangeSetBuilder.Build(changeSet);
@@ -720,8 +720,8 @@ namespace OpenRiaServices.Client.Test
             p2.Category = newCat2;
 
             EntityChangeSet cs = ec.GetChanges();
-            Assert.AreEqual(2, cs.AddedEntities.Count);
-            Assert.AreEqual(2, cs.ModifiedEntities.Count);
+            Assert.HasCount(2, cs.AddedEntities);
+            Assert.HasCount(2, cs.ModifiedEntities);
 
             List<ChangeSetEntry> entries = ChangeSetBuilder.Build(cs);
             ChangeSetEntry entry = entries.Single(p => p.Entity == p1);

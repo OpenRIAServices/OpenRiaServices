@@ -103,7 +103,7 @@ public class OperationInvokerTests
     {
         var context = GetHttpContext();
         await operationInvoker.Invoke(context);
-        Assert.IsTrue(context.Response.ContentLength is null, "A response should not have been written");
+        Assert.IsNull(context.Response.ContentLength, "A response should not have been written");
     }
 
     private static async Task InvokeAndAssertNoResponseIsWritten(SubmitOperationInvoker operationInvoker, SubmitType submitType)
@@ -113,7 +113,7 @@ public class OperationInvokerTests
         context.Request.Method = "POST";
         context.Request.Body = bytes;
         await operationInvoker.Invoke(context);
-        Assert.IsTrue(context.Response.ContentLength is null, "A response should not have been written");
+        Assert.IsNull(context.Response.ContentLength, "A response should not have been written");
     }
 
     private static HttpContext GetHttpContext(SubmitType submitType = SubmitType.Cancel)

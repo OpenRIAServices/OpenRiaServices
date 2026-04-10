@@ -37,7 +37,7 @@ namespace OpenRiaServices.Client.Test
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
                 // 3 parents, each with 4 children
-                Assert.AreEqual(15, lo.AllEntities.Count, "Unexpected number of entities in hierarchy");
+                Assert.HasCount(15, lo.AllEntities, "Unexpected number of entities in hierarchy");
 
                 Assert.AreEqual(3, ctxt.CI_Parents.Count, "Expected this many total parent entities");
                 
@@ -79,10 +79,10 @@ namespace OpenRiaServices.Client.Test
                 existingChild.Age++; ;
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.IsTrue(cs.ModifiedEntities.Count == 2, "wrong modified count");
-                Assert.IsTrue(cs.RemovedEntities.Count == 0, "wrong removed count");
-                Assert.IsTrue(cs.ModifiedEntities.Contains(parent));
-                Assert.IsTrue(cs.ModifiedEntities.Contains(existingChild));
+                Assert.AreEqual(2, cs.ModifiedEntities.Count, "wrong modified count");
+                Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
+                Assert.Contains(parent, cs.ModifiedEntities);
+                Assert.Contains(existingChild, cs.ModifiedEntities);
 
                 // verify that original associations are set up correctly
                 IEnumerable<ChangeSetEntry> entityOps = ChangeSetBuilder.Build(cs);
@@ -127,10 +127,10 @@ namespace OpenRiaServices.Client.Test
                 existingChild.Age++; ;
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.IsTrue(cs.ModifiedEntities.Count == 2, "wrong modified count");
-                Assert.IsTrue(cs.RemovedEntities.Count == 0, "wrong removed count");
-                Assert.IsTrue(cs.ModifiedEntities.Contains(parent));
-                Assert.IsTrue(cs.ModifiedEntities.Contains(existingChild));
+                Assert.AreEqual(2, cs.ModifiedEntities.Count, "wrong modified count");
+                Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
+                Assert.Contains(parent, cs.ModifiedEntities);
+                Assert.Contains(existingChild, cs.ModifiedEntities);
 
                 // verify that original associations are set up correctly
                 IEnumerable<ChangeSetEntry> entityOps = ChangeSetBuilder.Build(cs);
@@ -173,10 +173,10 @@ namespace OpenRiaServices.Client.Test
                 existingChild.Age++; ;
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.IsTrue(cs.ModifiedEntities.Count == 2, "wrong modified count");
-                Assert.IsTrue(cs.RemovedEntities.Count == 0, "wrong removed count");
-                Assert.IsTrue(cs.ModifiedEntities.Contains(parent));
-                Assert.IsTrue(cs.ModifiedEntities.Contains(existingChild));
+                Assert.AreEqual(2, cs.ModifiedEntities.Count, "wrong modified count");
+                Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
+                Assert.Contains(parent, cs.ModifiedEntities);
+                Assert.Contains(existingChild, cs.ModifiedEntities);
 
                 // verify that original associations are set up correctly
                 IEnumerable<ChangeSetEntry> entityOps = ChangeSetBuilder.Build(cs);
@@ -219,10 +219,10 @@ namespace OpenRiaServices.Client.Test
                 existingChild.Age++; ;
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.IsTrue(cs.ModifiedEntities.Count == 2, "wrong modified count");
-                Assert.IsTrue(cs.RemovedEntities.Count == 0, "wrong removed count");
-                Assert.IsTrue(cs.ModifiedEntities.Contains(parent));
-                Assert.IsTrue(cs.ModifiedEntities.Contains(existingChild));
+                Assert.AreEqual(2, cs.ModifiedEntities.Count, "wrong modified count");
+                Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
+                Assert.Contains(parent, cs.ModifiedEntities);
+                Assert.Contains(existingChild, cs.ModifiedEntities);
 
                 // verify that original associations are set up correctly
                 IEnumerable<ChangeSetEntry> entityOps = ChangeSetBuilder.Build(cs);
@@ -266,11 +266,11 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreSame(parent, ((Entity)newChild).Parent);
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.IsTrue(cs.ModifiedEntities.Count == 1, "wrong modified count");
-                Assert.IsTrue(cs.AddedEntities.Count == 1, "wrong added count");
-                Assert.IsTrue(cs.RemovedEntities.Count == 0, "wrong removed count");
-                Assert.IsTrue(cs.ModifiedEntities.Contains(parent));
-                Assert.IsTrue(cs.AddedEntities.Contains(newChild));
+                Assert.AreEqual(1, cs.ModifiedEntities.Count, "wrong modified count");
+                Assert.AreEqual(1, cs.AddedEntities.Count, "wrong added count");
+                Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
+                Assert.Contains(parent, cs.ModifiedEntities);
+                Assert.Contains(newChild, cs.AddedEntities);
 
                 // verify that original associations are set up correctly
                 IEnumerable<ChangeSetEntry> entityOps = ChangeSetBuilder.Build(cs);
@@ -314,7 +314,7 @@ namespace OpenRiaServices.Client.Test
         /// </summary>
         private static void VerifyHierarchy(CI_Parent parent)
         {
-            Assert.IsTrue(parent.Children.Count > 0);
+            Assert.IsGreaterThan(0, parent.Children.Count);
             foreach (CI_Child c in parent.Children)
             {
                 Assert.AreSame(parent, c.Parent);
@@ -376,7 +376,7 @@ namespace OpenRiaServices.Client.Test
 
                                 // should never be any deleted entities in the current associations
                                 // set
-                                Assert.IsTrue(childOperation.Operation != EntityOperationType.Delete);
+                                Assert.AreNotEqual(EntityOperationType.Delete, childOperation.Operation);
 
                                 // ensure that all non-new entities in the current association
                                 // set are also present in the original set
@@ -395,7 +395,7 @@ namespace OpenRiaServices.Client.Test
 
                                 // shouldn't be any new entities in the original
                                 // associations set
-                                Assert.IsTrue(childOperation.Operation != EntityOperationType.Insert);
+                                Assert.AreNotEqual(EntityOperationType.Insert, childOperation.Operation);
                             }
                         }
                     }

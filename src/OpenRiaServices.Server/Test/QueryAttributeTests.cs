@@ -64,7 +64,7 @@ namespace OpenRiaServices.Server.Test
         public void QueryAttribute_No_New_Properties()
         {
             PropertyInfo[] properties = typeof(QueryAttribute).GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly);
-            Assert.AreEqual(4, properties.Length, "QueryAttribute has a new property not covered by unit tests.");
+            Assert.HasCount(4, properties, "QueryAttribute has a new property not covered by unit tests.");
         }
         #endregion // QueryAttribute ctor and properties
 
@@ -78,7 +78,7 @@ namespace OpenRiaServices.Server.Test
             DomainOperationEntry[] does = dsd.DomainOperationEntries.ToArray();
 
             // This DSD defines 2 defaults plus 2 non-defaults
-            Assert.AreEqual(4, does.Length, "Expected this many valid query methods");
+            Assert.HasCount(4, does, "Expected this many valid query methods");
 
             // validate the Linq query we recommend OData use to extract the default queries
             IEnumerable<DomainOperationEntry> defaultQueries = dsd.DomainOperationEntries

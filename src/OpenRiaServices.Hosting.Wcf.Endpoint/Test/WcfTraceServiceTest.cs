@@ -21,7 +21,7 @@ namespace OpenRiaServices.Hosting.Local.Test
         {
             SyndicationFeed actual = WcfTraceService.CreateTraceSyndicationFeed();
             Assert.IsNotNull(actual);
-            Assert.IsTrue(actual.Title.Text == "WCF RIA Service Traces");
+            Assert.AreEqual("WCF RIA Service Traces", actual.Title.Text);
         }
 
         [TestMethod()]
@@ -30,7 +30,7 @@ namespace OpenRiaServices.Hosting.Local.Test
             Stream actual = WcfTraceService.CreateTraceXml();
             Assert.IsNotNull(actual);
             XElement root = XElement.Load(actual);
-            Assert.IsTrue(root.Name.LocalName == "Traces");
+            Assert.AreEqual("Traces", root.Name.LocalName);
         }
 
         [TestMethod()]
@@ -50,7 +50,7 @@ namespace OpenRiaServices.Hosting.Local.Test
         {
             SyndicationItem actual = WcfTraceService.CreateTraceSyndicationItem(this.CreateSampleTraceEntry());
             Assert.IsNotNull(actual);
-            Assert.IsTrue(actual.Title.Text == "Information: Security Impersonation succeeded at the server.");
+            Assert.AreEqual("Information: Security Impersonation succeeded at the server.", actual.Title.Text);
             Assert.IsTrue(actual.PublishDate == new DateTimeOffset(634052379151696992, TimeSpan.Zero));
             Assert.IsTrue(actual.LastUpdatedTime == actual.PublishDate);
         }

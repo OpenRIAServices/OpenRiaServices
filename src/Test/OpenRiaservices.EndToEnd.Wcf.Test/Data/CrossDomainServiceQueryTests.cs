@@ -132,7 +132,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => lo);
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(null, lo.Error, "Load should succeed without error");
+                Assert.IsNull(lo.Error, "Load should succeed without error");
                 Assert.AreNotEqual(0, ctxt.Products.Count);
 
                 foreach (DataTests.Northwind.LTS.Product product in ctxt.Products)
@@ -163,7 +163,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 List<PurchaseOrder> orders = catalog.PurchaseOrders.ToList();
-                Assert.IsTrue(orders.Count > 0);
+                Assert.IsNotEmpty(orders);
                 PurchaseOrder order = orders.First();
                 PurchaseOrderDetail detail = order.PurchaseOrderDetails.First();
                 Product product = detail.Product;
@@ -186,7 +186,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 List<Product> products = catalog.Products.ToList();
-                Assert.IsTrue(products.Count == 504);
+                Assert.AreEqual(504, products.Count);
             });
             EnqueueTestComplete();
         }
@@ -224,7 +224,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(totalCountWithoutPaging, LoadOperation.TotalEntityCount);
-                Assert.AreEqual(4, LoadOperation.Entities.Count);
+                Assert.HasCount(4, LoadOperation.Entities);
             });
             EnqueueTestComplete();
         }
@@ -262,7 +262,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(totalCountWithoutPaging, LoadOperation.TotalEntityCount);
-                Assert.AreEqual(4, LoadOperation.Entities.Count);
+                Assert.HasCount(4, LoadOperation.Entities);
             });
             EnqueueTestComplete();
         }
@@ -286,7 +286,7 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(LoadOperation.TotalEntityCount, LoadOperation.Entities.Count);
+                Assert.HasCount(LoadOperation.TotalEntityCount, LoadOperation.Entities);
             });
             EnqueueTestComplete();
         }
@@ -305,7 +305,7 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.AreEqual(LoadOperation.TotalEntityCount, LoadOperation.Entities.Count);
+                Assert.HasCount(LoadOperation.TotalEntityCount, LoadOperation.Entities);
             });
             EnqueueTestComplete();
         }
@@ -322,7 +322,7 @@ namespace OpenRiaServices.Client.Test
                         .Skip(2)
                         .Take(4);
 
-            Assert.AreEqual<bool>(false, query.IncludeTotalCount);
+            Assert.IsFalse(query.IncludeTotalCount);
 
             Load(query);
             EnqueueConditional(delegate
@@ -347,7 +347,7 @@ namespace OpenRiaServices.Client.Test
                          select p)
                         .Take(4);
 
-            Assert.AreEqual<bool>(false, query.IncludeTotalCount);
+            Assert.IsFalse(query.IncludeTotalCount);
 
             Load(query);
             EnqueueConditional(delegate
@@ -372,7 +372,7 @@ namespace OpenRiaServices.Client.Test
                          orderby p.Weight ascending
                          select p);
 
-            Assert.AreEqual<bool>(false, query.IncludeTotalCount);
+            Assert.IsFalse(query.IncludeTotalCount);
 
             Load(query);
 
@@ -395,7 +395,7 @@ namespace OpenRiaServices.Client.Test
 
             var query = catalog.GetProductsQuery();
 
-            Assert.AreEqual<bool>(false, query.IncludeTotalCount);
+            Assert.IsFalse(query.IncludeTotalCount);
 
             Load(query);
 
@@ -405,7 +405,7 @@ namespace OpenRiaServices.Client.Test
             });
             EnqueueCallback(delegate
             {
-                Assert.AreEqual<int>(LoadOperation.TotalEntityCount, LoadOperation.Entities.Count);
+                Assert.HasCount(LoadOperation.TotalEntityCount, LoadOperation.Entities);
             });
             EnqueueTestComplete();
         }
@@ -430,7 +430,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(6, LoadOperation.TotalEntityCount);
-                Assert.AreEqual(4, LoadOperation.Entities.Count);
+                Assert.HasCount(4, LoadOperation.Entities);
             });
             EnqueueTestComplete();
         }
@@ -465,7 +465,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.AreEqual(totalCountWithoutPaging, LoadOperation.TotalEntityCount);
-                Assert.AreEqual(4, LoadOperation.Entities.Count);
+                Assert.HasCount(4, LoadOperation.Entities);
             });
             EnqueueTestComplete();
         }
@@ -489,9 +489,9 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 List<PurchaseOrder> orders = catalog.PurchaseOrders.ToList();
-                Assert.IsTrue(orders.Count > 0);
+                Assert.IsNotEmpty(orders);
                 PurchaseOrder order = orders.First();
-                Assert.IsTrue(order.PurchaseOrderDetails.Count > 0);
+                Assert.IsGreaterThan(0, order.PurchaseOrderDetails.Count);
             });
 
             EnqueueTestComplete();
@@ -566,8 +566,8 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(lo1.HasError || lo2.HasError);
-                Assert.IsTrue(catalog.Employees.Count > 0, "catalog.Employees.Count should be greater than 0");
-                Assert.IsTrue(catalog.PurchaseOrders.Count > 0, "catalog.PurchaseOrders.Count should be greater than 0");
+                Assert.IsGreaterThan(0, catalog.Employees.Count, "catalog.Employees.Count should be greater than 0");
+                Assert.IsGreaterThan(0, catalog.PurchaseOrders.Count, "catalog.PurchaseOrders.Count should be greater than 0");
             });
             EnqueueTestComplete();
         }
@@ -620,8 +620,8 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsFalse(lo1.HasError || lo2.HasError);
-                Assert.IsTrue(catalog.Employees.Count > 0, "catalog.Employees.Count should be greater than 0");
-                Assert.IsTrue(catalog.PurchaseOrders.Count > 0, "catalog.PurchaseOrders.Count should be greater than 0");
+                Assert.IsGreaterThan(0, catalog.Employees.Count, "catalog.Employees.Count should be greater than 0");
+                Assert.IsGreaterThan(0, catalog.PurchaseOrders.Count, "catalog.PurchaseOrders.Count should be greater than 0");
             });
             EnqueueTestComplete();
         }

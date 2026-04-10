@@ -58,7 +58,7 @@ namespace OpenRiaServices.Hosting.UnitTests
             DomainServiceHost host = this.CreateHost<DomainServiceHost>();
             var eps = host.Description.Endpoints;
 
-            Assert.AreEqual(1, eps.Count, "Unexpected amount of endpoints.");
+            Assert.HasCount(1, eps, "Unexpected amount of endpoints.");
 
             // REST w/ binary endpoint.
             Assert.IsTrue(eps.Any(ep => ep.Address.Uri.OriginalString.EndsWith("/binary")));
@@ -72,7 +72,7 @@ namespace OpenRiaServices.Hosting.UnitTests
                 new Uri("http://localhost/MySecureDomainService.svc"),
                 new Uri("https://localhost/MySecureDomainService.svc")
             });
-            Assert.AreEqual(1, host.BaseAddresses.Count);
+            Assert.HasCount(1, host.BaseAddresses);
             Assert.AreEqual(Uri.UriSchemeHttps, host.BaseAddresses[0].Scheme);
         }
 

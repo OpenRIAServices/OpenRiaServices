@@ -62,7 +62,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify List.Contains uses our implementation of IEquatable.Equals
             List<ValidationResultInfo> errors = new List<ValidationResultInfo>() { error1, error3, error4 };
-            Assert.IsTrue(errors.Contains(error2));
+            Assert.Contains(error2, errors);
         }
     }
 }

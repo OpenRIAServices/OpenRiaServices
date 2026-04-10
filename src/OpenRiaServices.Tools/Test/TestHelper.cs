@@ -768,7 +768,7 @@ namespace OpenRiaServices.Tools.Test
 
             ConsoleLogger consoleLogger = logger as ConsoleLogger;
             string errors = consoleLogger == null ? "" : consoleLogger.Errors;
-            Assert.IsTrue(generatedCode.Length > 0, "No code was generated: " + errors);
+            Assert.IsGreaterThan(0, generatedCode.Length, "No code was generated: " + errors);
 
             // Dump the generated code into a file for comparison
             bool isCSharp = options.Language.Equals("C#", StringComparison.InvariantCultureIgnoreCase);

@@ -74,7 +74,7 @@ namespace OpenRiaServices.Client.Test
             custs.Remove(cust);
 
             EntityChangeSet cs = ec.GetChanges();
-            Assert.AreEqual(1, cs.RemovedEntities.Count);
+            Assert.HasCount(1, cs.RemovedEntities);
 
             bool changeEventRaised = false;
             ((INotifyCollectionChanged)custs).CollectionChanged += (s, e) =>
@@ -91,7 +91,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(cust.EntitySet);
             Assert.IsNull(cust.LastSet);
             cs = ec.GetChanges();
-            Assert.AreEqual(0, cs.RemovedEntities.Count);
+            Assert.IsEmpty(cs.RemovedEntities);
             Assert.IsFalse(changeEventRaised);
         }
 
@@ -118,7 +118,7 @@ namespace OpenRiaServices.Client.Test
             orders.Add(order);
 
             // force the reference to cache and verify it is null
-            Assert.AreEqual(null, order.Customer);
+            Assert.IsNull(order.Customer);
 
             bool receivedChangeNotification = false;
             order.PropertyChanged += (s,e) =>
@@ -295,7 +295,7 @@ namespace OpenRiaServices.Client.Test
             city.ZipCodes.Add(zip);
             citiesSet.Add(city);
 
-            Assert.AreEqual(2, ec.GetChanges().AddedEntities.Count);
+            Assert.HasCount(2, ec.GetChanges().AddedEntities);
 
             city.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
             {
@@ -712,7 +712,7 @@ namespace OpenRiaServices.Client.Test
             o1.PurchaseOrderDetails.Add(newDetail);
             o2.PurchaseOrderDetails.Add(newDetail);
             ((IEditableObject)newDetail).EndEdit();
-            Assert.AreEqual(3, notifications.Count);
+            Assert.HasCount(3, notifications);
             Assert.AreEqual("Order1_Add", notifications[0]);
             Assert.AreEqual("Order1_Remove", notifications[1]);
             Assert.AreEqual("Order2_Add", notifications[2]);
@@ -725,7 +725,7 @@ namespace OpenRiaServices.Client.Test
             newDetail = new PurchaseOrderDetail();
             o1.PurchaseOrderDetails.Add(newDetail);
             o2.PurchaseOrderDetails.Add(newDetail);
-            Assert.AreEqual(3, notifications.Count);
+            Assert.HasCount(3, notifications);
             Assert.AreEqual("Order1_Add", notifications[0]);
             Assert.AreEqual("Order1_Remove", notifications[1]);
             Assert.AreEqual("Order2_Add", notifications[2]);
@@ -740,7 +740,7 @@ namespace OpenRiaServices.Client.Test
             o1.PurchaseOrderDetails.Add(newDetail);
             newDetail.PurchaseOrderID = o2.PurchaseOrderID;
             o2.PurchaseOrderDetails.Add(newDetail);
-            Assert.AreEqual(3, notifications.Count);
+            Assert.HasCount(3, notifications);
             Assert.AreEqual("Order1_Add", notifications[0]);
             Assert.AreEqual("Order1_Remove", notifications[1]);
             Assert.AreEqual("Order2_Add", notifications[2]);
@@ -760,7 +760,7 @@ namespace OpenRiaServices.Client.Test
             newDetail.PurchaseOrderID = o2.PurchaseOrderID;
             o2.PurchaseOrderDetails.Add(newDetail);
             ((IEditableObject)newDetail).EndEdit();
-            Assert.AreEqual(3, notifications.Count);
+            Assert.HasCount(3, notifications);
             Assert.AreEqual("Order1_Add", notifications[0]);
             Assert.AreEqual("Order2_Add", notifications[1]);
             Assert.AreEqual("Order1_Remove", notifications[2]);
@@ -777,7 +777,7 @@ namespace OpenRiaServices.Client.Test
             newDetail.PurchaseOrderID = o2.PurchaseOrderID;
             o2.PurchaseOrderDetails.Add(newDetail);
             ((IEditableObject)newDetail).CancelEdit();
-            Assert.AreEqual(4, notifications.Count);
+            Assert.HasCount(4, notifications);
             Assert.AreEqual("Order1_Add", notifications[0]);
             Assert.AreEqual("Order2_Add", notifications[1]);
             Assert.AreEqual("Order1_Remove", notifications[2]);
@@ -792,7 +792,7 @@ namespace OpenRiaServices.Client.Test
             ((IEditableObject)removeDetail).BeginEdit();
             o1.PurchaseOrderDetails.Remove(removeDetail);
             ((IEditableObject)removeDetail).CancelEdit();
-            Assert.AreEqual(2, notifications.Count);
+            Assert.HasCount(2, notifications);
             Assert.AreEqual("Order1_Remove", notifications[0]);
             Assert.AreEqual("Order1_Add", notifications[1]);
             Assert.IsTrue(o1.PurchaseOrderDetails.Contains(removeDetail));
@@ -1037,9 +1037,9 @@ namespace OpenRiaServices.Client.Test
             Assert.AreSame(d2New, c2.D_Ref1);
 
             EntityChangeSet changeSet = ec.GetChanges();
-            Assert.AreEqual(2, changeSet.AddedEntities.Count);
-            Assert.AreEqual(2, changeSet.ModifiedEntities.Count);
-            Assert.AreEqual(2, changeSet.RemovedEntities.Count);
+            Assert.HasCount(2, changeSet.AddedEntities);
+            Assert.HasCount(2, changeSet.ModifiedEntities);
+            Assert.HasCount(2, changeSet.RemovedEntities);
 
             // here's a simpler repro
             ec.Clear();
@@ -1112,7 +1112,7 @@ namespace OpenRiaServices.Client.Test
             ec.PurchaseOrderDetails.Remove(d);
 
             // the detached detail should no longer show up in the collection
-            Assert.IsTrue(p.PurchaseOrderDetails.Count == 0);
+            Assert.AreEqual(0, p.PurchaseOrderDetails.Count);
 
             // verify same thing if collection is cached first - 
             // in the above test, the collection is not yet cached.
@@ -1123,7 +1123,7 @@ namespace OpenRiaServices.Client.Test
             int count = p.PurchaseOrderDetails.Count; // force the collection to cache
             ec.PurchaseOrderDetails.Add(d);
             ec.PurchaseOrderDetails.Remove(d);
-            Assert.IsTrue(p.PurchaseOrderDetails.Count == 0);
+            Assert.AreEqual(0, p.PurchaseOrderDetails.Count);
         }
 
         [TestMethod]
@@ -1140,7 +1140,7 @@ namespace OpenRiaServices.Client.Test
 
             // Remove the detail and verify that it no longer shows up in the collection
             ec.PurchaseOrderDetails.Remove(d);
-            Assert.IsTrue(p.PurchaseOrderDetails.Count == 0);
+            Assert.AreEqual(0, p.PurchaseOrderDetails.Count);
 
             // verify same thing if collection is cached first - 
             // in the above test, the collection is not yet cached.
@@ -1152,7 +1152,7 @@ namespace OpenRiaServices.Client.Test
             ((IChangeTracking)ec).AcceptChanges();
             int count = p.PurchaseOrderDetails.Count; // force the collection to cache
             ec.PurchaseOrderDetails.Remove(d);
-            Assert.IsTrue(p.PurchaseOrderDetails.Count == 0);
+            Assert.AreEqual(0, p.PurchaseOrderDetails.Count);
         }
 
         [TestMethod]
@@ -1301,14 +1301,14 @@ namespace OpenRiaServices.Client.Test
         public void EntityContainer_EntitySets()
         {
             TestEntityContainer ec = new TestEntityContainer();
-            Assert.AreEqual(5, ec.EntitySets.Count);
+            Assert.HasCount(5, ec.EntitySets);
 
             // verify that external entity sets aren't included in
             // the collection
             Cities.CityDomainContext cities = new Cities.CityDomainContext(TestURIs.Cities);
             EntityContainer citiesContainer = cities.EntityContainer;
             ec.AddReference(citiesContainer.GetEntitySet(typeof(Cities.City)));
-            Assert.AreEqual(5, ec.EntitySets.Count);
+            Assert.HasCount(5, ec.EntitySets);
             Assert.IsFalse(ec.EntitySets.Any(p => p.EntityType == typeof(Cities.City)));
         }
 
@@ -1899,7 +1899,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.AreEqual(0, state.Counties.Count);
 
-            Assert.AreEqual(1, collectionChangedArgs.Count);
+            Assert.HasCount(1, collectionChangedArgs);
             Assert.AreEqual(NotifyCollectionChangedAction.Reset, collectionChangedArgs.Single().Action);
         }
 
@@ -1988,7 +1988,7 @@ namespace OpenRiaServices.Client.Test
             ec.Employees.Detach(e1);
             ec.Employees.Detach(e2);
             o4.EmployeeID = e1.EmployeeID;
-            Assert.AreEqual(0, ordersChangedArgs.Count);
+            Assert.IsEmpty(ordersChangedArgs);
             Assert.AreEqual(2, e1.PurchaseOrders.Count);
             Assert.AreEqual(2, e2.PurchaseOrders.Count);
 
@@ -2016,7 +2016,7 @@ namespace OpenRiaServices.Client.Test
                 EmployeeID = 4,
                 ManagerID = e1.EmployeeID
             };
-            Assert.AreEqual(0, reportsChangedArgs.Count);  // don't expect any until the reports are attached
+            Assert.IsEmpty(reportsChangedArgs);  // don't expect any until the reports are attached
             ec.LoadEntities(new Employee[] { report1, report2 });
             args = reportsChangedArgs[0];
             Assert.AreEqual(NotifyCollectionChangedAction.Add, args.Action);
@@ -2136,7 +2136,7 @@ namespace OpenRiaServices.Client.Test
             notifications = 0;
             order2.ApplyState(new Dictionary<string, object> { { "PurchaseOrderID", 3 } });
             Assert.AreEqual(1, notifications);
-            Assert.AreEqual(null, detail.PurchaseOrder);
+            Assert.IsNull(detail.PurchaseOrder);
         }
 
         /// <summary>
@@ -2729,11 +2729,11 @@ namespace OpenRiaServices.Client.Test
 
             // verify the changeset is as expected
             EntityChangeSet changeSet = ec.GetChanges();
-            Assert.AreEqual(4, changeSet.AddedEntities.Count);
-            Assert.IsTrue(changeSet.AddedEntities.Contains(order));
+            Assert.HasCount(4, changeSet.AddedEntities);
+            Assert.Contains(order, changeSet.AddedEntities);
             foreach (PurchaseOrderDetail detail in order.PurchaseOrderDetails)
             {
-                Assert.IsTrue(changeSet.AddedEntities.Contains(detail));
+                Assert.Contains(detail, changeSet.AddedEntities);
             }
 
             ((IRevertibleChangeTracking)ec).RejectChanges();
@@ -2765,7 +2765,7 @@ namespace OpenRiaServices.Client.Test
             changeSet = ec.GetChanges();
             Assert.IsFalse(changeSet.IsEmpty);
 
-            Assert.AreEqual(1, changeSet.ModifiedEntities.Count);
+            Assert.HasCount(1, changeSet.ModifiedEntities);
             Assert.AreEqual(obj, changeSet.ModifiedEntities[0]);
         }
 
@@ -2801,9 +2801,9 @@ namespace OpenRiaServices.Client.Test
             prodSet.Add(newProd2);
 
             EntityChangeSet changeSet = ec.GetChanges();
-            Assert.AreEqual(1, changeSet.ModifiedEntities.Count);
-            Assert.AreEqual(2, changeSet.AddedEntities.Count);
-            Assert.AreEqual(1, changeSet.RemovedEntities.Count);
+            Assert.HasCount(1, changeSet.ModifiedEntities);
+            Assert.HasCount(2, changeSet.AddedEntities);
+            Assert.HasCount(1, changeSet.RemovedEntities);
 
             ((IRevertibleChangeTracking)ec).AcceptChanges();
 
@@ -2820,12 +2820,12 @@ namespace OpenRiaServices.Client.Test
             // verify that the new entities is now being tracked
             newProd1.Color += "x";
             Assert.AreEqual(EntityState.Modified, newProd1.EntityState);
-            Assert.IsTrue(ec.GetChanges().ModifiedEntities.Contains(newProd1));
+            Assert.Contains(newProd1, ec.GetChanges().ModifiedEntities);
 
             // verify that the other entities are still being tracked
             modifiedProd.Color += "x";
             Assert.AreEqual(EntityState.Modified, modifiedProd.EntityState);
-            Assert.IsTrue(ec.GetChanges().ModifiedEntities.Contains(modifiedProd));
+            Assert.Contains(modifiedProd, ec.GetChanges().ModifiedEntities);
 
             ((IRevertibleChangeTracking)ec).RejectChanges();
             Assert.IsTrue(ec.GetChanges().IsEmpty);
@@ -2859,7 +2859,7 @@ namespace OpenRiaServices.Client.Test
             // verify that the cached set is empty before it is forced to load
 #if !SILVERLIGHT // can't do private reflection in SL
             IList cachedEntities = (IList)order.PurchaseOrderDetails.GetType().GetProperty("Entities", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(order.PurchaseOrderDetails, null);
-            Assert.AreEqual(0, cachedEntities.Count);
+            Assert.IsEmpty(cachedEntities);
 #endif
 
             // this first call to Count will force the collection to load
@@ -2868,7 +2868,7 @@ namespace OpenRiaServices.Client.Test
 #if !SILVERLIGHT
             // verify that the cached set is now loaded
             cachedEntities = (IList)order.PurchaseOrderDetails.GetType().GetProperty("Entities", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(order.PurchaseOrderDetails, null);
-            Assert.AreEqual(20, cachedEntities.Count);
+            Assert.HasCount(20, cachedEntities);
 #endif
 
             // verify that whenever new entities are added to the source EntitySet
@@ -2877,7 +2877,7 @@ namespace OpenRiaServices.Client.Test
             ec.PurchaseOrderDetails.LoadEntity(detail);
             Assert.AreEqual(21, order.PurchaseOrderDetails.Count);
 #if !SILVERLIGHT
-            Assert.AreEqual(21, cachedEntities.Count);
+            Assert.HasCount(21, cachedEntities);
 #endif
 
             // verify that whenever entities are removed to the source EntitySet,
@@ -2885,7 +2885,7 @@ namespace OpenRiaServices.Client.Test
             ec.PurchaseOrderDetails.Remove(detail);
             Assert.AreEqual(20, order.PurchaseOrderDetails.Count);
 #if !SILVERLIGHT
-            Assert.AreEqual(20, cachedEntities.Count);
+            Assert.HasCount(20, cachedEntities);
 #endif
 
             // verify that when the source EntitySet is cleared,
@@ -2893,7 +2893,7 @@ namespace OpenRiaServices.Client.Test
             ec.PurchaseOrderDetails.Clear();
 #if !SILVERLIGHT
             cachedEntities = (IList)order.PurchaseOrderDetails.GetType().GetProperty("Entities", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(order.PurchaseOrderDetails, null);
-            Assert.AreEqual(0, cachedEntities.Count);
+            Assert.IsEmpty(cachedEntities);
 #endif
             Assert.AreEqual(0, order.PurchaseOrderDetails.Count);
         }
@@ -3270,7 +3270,7 @@ namespace OpenRiaServices.Client.Test
             product.Class = "SN";
             product.Color = "Purple";
             EntityChangeSet changeSet = ec.GetChanges();
-            Assert.IsTrue(changeSet.ModifiedEntities.Contains(product));
+            Assert.Contains(product, changeSet.ModifiedEntities);
 
             // test CancelEdit
             IDictionary<string, object> snapshot = product.ExtractState();
@@ -3283,7 +3283,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the entity is still in the changeset
             changeSet = ec.GetChanges();
-            Assert.IsTrue(changeSet.ModifiedEntities.Contains(product));
+            Assert.Contains(product, changeSet.ModifiedEntities);
 
             // test EndEdit and verify changes are accepted
             editableProduct.BeginEdit();
@@ -3301,7 +3301,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the entity is still in the changeset
             changeSet = ec.GetChanges();
-            Assert.IsTrue(changeSet.ModifiedEntities.Contains(product));
+            Assert.Contains(product, changeSet.ModifiedEntities);
         }
 
         /// <summary>
@@ -3607,7 +3607,7 @@ namespace OpenRiaServices.Client.Test
 
             EntityChangeSet changeSet = ec.GetChanges();
             Assert.IsTrue(changeSet.ModifiedEntities.Count == 0 && changeSet.AddedEntities.Count == 1 && changeSet.RemovedEntities.Count == 0);
-            Assert.IsTrue(changeSet.AddedEntities.Contains(newProduct));
+            Assert.Contains(newProduct, changeSet.AddedEntities);
 
             // the Add must be reverted through the EntitySet
             ((IRevertibleChangeTracking)products).RejectChanges();
@@ -3676,8 +3676,8 @@ namespace OpenRiaServices.Client.Test
 
             EntityChangeSet changeSet = ctxt.EntityContainer.GetChanges();
             Assert.IsTrue(changeSet.ModifiedEntities.Count == 0 && changeSet.AddedEntities.Count == 2 && changeSet.RemovedEntities.Count == 0);
-            Assert.IsTrue(changeSet.AddedEntities.Contains(newOrder1));
-            Assert.IsTrue(changeSet.AddedEntities.Contains(newOrder2));
+            Assert.Contains(newOrder1, changeSet.AddedEntities);
+            Assert.Contains(newOrder2, changeSet.AddedEntities);
 
             // Modify some entities
             Product[] products = ctxt.Products.ToArray();
@@ -3701,11 +3701,11 @@ namespace OpenRiaServices.Client.Test
 
             changeSet = ctxt.EntityContainer.GetChanges();
             Assert.IsTrue(changeSet.ModifiedEntities.Count == 2 && changeSet.AddedEntities.Count == 2 && changeSet.RemovedEntities.Count == 3);
-            Assert.IsTrue(changeSet.ModifiedEntities.Contains(modifiedProduct1));
-            Assert.IsTrue(changeSet.ModifiedEntities.Contains(modifiedProduct2));
-            Assert.IsTrue(changeSet.RemovedEntities.Contains(removedProduct1));
-            Assert.IsTrue(changeSet.RemovedEntities.Contains(removedProduct2));
-            Assert.IsTrue(changeSet.RemovedEntities.Contains(modifiedProduct3));
+            Assert.Contains(modifiedProduct1, changeSet.ModifiedEntities);
+            Assert.Contains(modifiedProduct2, changeSet.ModifiedEntities);
+            Assert.Contains(removedProduct1, changeSet.RemovedEntities);
+            Assert.Contains(removedProduct2, changeSet.RemovedEntities);
+            Assert.Contains(modifiedProduct3, changeSet.RemovedEntities);
 
             ctxt.RejectChanges();
 
@@ -3814,7 +3814,7 @@ namespace OpenRiaServices.Client.Test
             products.Detach(product);
             Assert.AreEqual(EntityState.Detached, product.EntityState);
             Assert.IsFalse(products.Contains(product));
-            Assert.AreEqual(null, product.EntitySet);
+            Assert.IsNull(product.EntitySet);
 
             // verify that if the entity is reattached, it's state
             // is reset
@@ -3825,7 +3825,7 @@ namespace OpenRiaServices.Client.Test
             product.Name += "x";
             Assert.AreEqual(EntityState.Modified, product.EntityState);
             EntityChangeSet changeSet = ec.GetChanges();
-            Assert.IsTrue(changeSet.ModifiedEntities.Contains(product));
+            Assert.Contains(product, changeSet.ModifiedEntities);
 
             // detach once more
             products.Detach(product);
@@ -4062,9 +4062,9 @@ namespace OpenRiaServices.Client.Test
 
             // get the changeset and verify
             EntityChangeSet changeSet = ec.GetChanges();
-            Assert.AreEqual(2, changeSet.ModifiedEntities.Count);
-            Assert.IsTrue(changeSet.ModifiedEntities.Contains(modifiedProduct));
-            Assert.IsTrue(changeSet.ModifiedEntities.Contains(modifiedProduct2));
+            Assert.HasCount(2, changeSet.ModifiedEntities);
+            Assert.Contains(modifiedProduct, changeSet.ModifiedEntities);
+            Assert.Contains(modifiedProduct2, changeSet.ModifiedEntities);
             Assert.AreSame(newProduct, changeSet.AddedEntities.Single());
             Assert.AreSame(removedProduct, changeSet.RemovedEntities.Single());
 
@@ -4388,7 +4388,7 @@ namespace OpenRiaServices.Client.Test
         public void TestLoadContainer()
         {
             TestEntityContainer ec = new TestEntityContainer();
-            Assert.AreEqual(5, ec.EntitySets.Count);
+            Assert.HasCount(5, ec.EntitySets);
 
             ec.LoadEntities(BaselineTestData.Products);
             EntitySet<Product> products = ec.GetEntitySet<Product>();
@@ -4447,7 +4447,7 @@ namespace OpenRiaServices.Client.Test
             products.Attach(prod);
             prod.Name += "x";
             EntityChangeSet changeSet = ec.GetChanges();
-            Assert.IsTrue(changeSet.ModifiedEntities.Contains(prod));
+            Assert.Contains(prod, changeSet.ModifiedEntities);
             ec.Clear();
             changeSet = ec.GetChanges();
             Assert.IsTrue(changeSet.IsEmpty);

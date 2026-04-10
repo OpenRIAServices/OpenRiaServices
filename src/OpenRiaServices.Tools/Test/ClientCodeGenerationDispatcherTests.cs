@@ -275,7 +275,7 @@ namespace OpenRiaServices.Tools.Test
                 string generatedCode = generator.GenerateCode(host, new DomainServiceDescription[] { dsd }, options);
 
                 Assert.IsFalse(string.IsNullOrEmpty(generatedCode), "expected code to have been generated");
-                Assert.IsTrue(generatedCode.Contains("public sealed partial class DispatcherDomainContext : DomainContext"), "Expected generated code to contain public sealed partial class DispatcherDomainContext : DomainContext");
+                Assert.Contains("public sealed partial class DispatcherDomainContext : DomainContext", generatedCode, "Expected generated code to contain public sealed partial class DispatcherDomainContext : DomainContext");
             }
         }
 

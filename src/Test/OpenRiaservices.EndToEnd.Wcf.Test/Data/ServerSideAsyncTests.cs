@@ -74,7 +74,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCallback(() =>
             {
                 Assert.IsNull(invokeNullOp.Error);
-                Assert.AreEqual(null, invokeNullOp.Value);
+                Assert.IsNull(invokeNullOp.Value);
             });
             this.EnqueueTestComplete();
         }
@@ -131,7 +131,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNull(asyncLoad.Exception, "Async load failed");
                 CollectionAssert.AreEquivalent(normalLoad.Entities.ToArray(), asyncLoad.Result);
 
-                Assert.IsTrue(normalLoad.Entities.Count != 0, "No entities loaded");
+                Assert.IsNotEmpty(normalLoad.Entities, "No entities loaded");
                 Assert.AreEqual(normalLoad.TotalEntityCount, asyncLoad.Result.TotalEntityCount, "TotalEntityCount different");
             });
             this.EnqueueTestComplete();

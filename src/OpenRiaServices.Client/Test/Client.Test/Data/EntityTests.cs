@@ -377,7 +377,7 @@ namespace OpenRiaServices.Client.Test
 
             // End the edit transaction, which performs property and entity-level validation
             editableCity.EndEdit();
-            Assert.AreEqual<int>(1, city.ValidationErrors.Count, "After EndEdit");
+            Assert.HasCount(1, city.ValidationErrors, "After EndEdit");
             Assert.AreEqual<int>(1, city.ValidationErrors.Single().MemberNames.Count(), "MemberNames count after EndEdit");
             Assert.AreEqual<string>(expectedMember, city.ValidationErrors.Single().MemberNames.Single(), "Member name after EndEdit");
             Assert.AreEqual<string>(expectedError, city.ValidationErrors.Single().ErrorMessage, "ErrorMessage after EndEdit");
@@ -402,7 +402,7 @@ namespace OpenRiaServices.Client.Test
 
             // End the edit transaction, which performs property and entity-level validation
             editableCity.EndEdit();
-            Assert.AreEqual<int>(1, city.ValidationErrors.Count, "After EndEdit");
+            Assert.HasCount(1, city.ValidationErrors, "After EndEdit");
             Assert.AreEqual<int>(1, city.ValidationErrors.Single().MemberNames.Count(), "MemberNames count after EndEdit");
             Assert.AreEqual<string>(expectedMember, city.ValidationErrors.Single().MemberNames.Single(), "Member name after EndEdit");
             Assert.AreEqual<string>(expectedError, city.ValidationErrors.Single().ErrorMessage, "ErrorMessage after EndEdit");
@@ -430,10 +430,10 @@ namespace OpenRiaServices.Client.Test
 
             ((IEditableObject)invalidEntity).EndEdit();
 
-            Assert.AreEqual<int>(1, actualErrors.Count, "There should have been a single ErrorsChanged event");
+            Assert.HasCount(1, actualErrors, "There should have been a single ErrorsChanged event");
 
             Tuple<string, IEnumerable<ValidationResult>> error = actualErrors[0];
-            Assert.AreEqual<string>(null, error.Item1, "The error should have been an entity-level error (null PropertyName)");
+            Assert.IsNull(error.Item1, "The error should have been an entity-level error (null PropertyName)");
 
             Assert.AreEqual<int>(1, error.Item2.Count(), "There should have been a single error at the time of the event");
             Assert.AreEqual<string>(expectedError, error.Item2.First().ErrorMessage, "The error message of the single error didn't match the expectation");
@@ -449,7 +449,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("1", validEntity.ID1);
             Assert.AreEqual("2", validEntity.ID2);
 
-            Assert.AreEqual<int>(0, actualErrors.Count, "There should not have been any errors during the valid EndEdit()");
+            Assert.IsEmpty(actualErrors, "There should not have been any errors during the valid EndEdit()");
         }
 
         [TestMethod]
@@ -895,7 +895,7 @@ namespace OpenRiaServices.Client.Test
         {
             MockEntity_Indexer entity = new MockEntity_Indexer { Data = "Foo", Key = 10 };
             IDictionary<string, object> stateInfo = entity.ExtractState();
-            Assert.IsTrue(stateInfo.Count == 2, "Expected only 2 properties to be returned");
+            Assert.AreEqual(2, stateInfo.Count, "Expected only 2 properties to be returned");
             Assert.IsTrue(stateInfo["Data"] != null && stateInfo["Key"] != null, "The state returned should only contain the Data and Key properties");
         }        
 

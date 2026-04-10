@@ -32,7 +32,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 
                     Assert.IsFalse(model.IsMetadataClassGenerationRequested, "Expect IsMetadataClassGenerationRequested to default to false");
 
-                    Assert.AreEqual(1, model.ContextViewModels.Count, "Expected default context");
+                    Assert.HasCount(1, model.ContextViewModels, "Expected default context");
                     Assert.IsNotNull(model.CurrentContextViewModel, "Expected non-null context");
                     Assert.AreEqual("<empty Domain Service class>", model.CurrentContextViewModel.Name, "Wrong name for default context");
                 }
@@ -56,7 +56,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                     ContextViewModel context = model.CurrentContextViewModel;
                     Assert.IsNotNull(context, "null context");
                     Assert.IsNotNull(model.ContextViewModels, "null context view models");
-                    Assert.AreEqual(2, model.ContextViewModels.Count, "Expected 2 contexts");
+                    Assert.HasCount(2, model.ContextViewModels, "Expected 2 contexts");
                     Assert.AreEqual("NorthwindDataContext (LINQ to SQL)", model.CurrentContextViewModel.Name, "Current context had wrong name");
                 }
             }
@@ -88,7 +88,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                     ContextViewModel context = model.CurrentContextViewModel;
                     Assert.IsNotNull(context, "null context");
                     Assert.IsNotNull(model.ContextViewModels, "null context view models");
-                    Assert.AreEqual(contextTypes.Length + 1, model.ContextViewModels.Count, "Expected this many contexts");
+                    Assert.HasCount(contextTypes.Length + 1, model.ContextViewModels, "Expected this many contexts");
 
                     // Verify the first is the empty one
                     Assert.AreEqual("<empty Domain Service class>", model.ContextViewModels[0].Name, "Empty context should have been first");
@@ -98,7 +98,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                     {
                         string name1 = model.ContextViewModels[i - 1].Name;
                         string name2 = model.ContextViewModels[i].Name;
-                        Assert.IsTrue(string.Compare(name1, name2, StringComparison.OrdinalIgnoreCase) < 0, "Expected " + name1 + " to collate less than " + name2);
+                        Assert.IsLessThan(0, string.Compare(name1, name2, StringComparison.OrdinalIgnoreCase), "Expected " + name1 + " to collate less than " + name2);
                     }
 
                     // Cycle through each context to force it to load its entities
@@ -131,7 +131,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 {
                     ContextViewModel currentViewModel = model.CurrentContextViewModel;
                     Assert.IsNotNull(currentViewModel);
-                    Assert.IsTrue(currentViewModel.Entities.Count() > 0);
+                    Assert.IsGreaterThan(0, currentViewModel.Entities.Count());
 
                     // Verify we still cannot generate metadata classes even with a current context (until one entity is selected)
                     Assert.IsFalse(model.IsMetadataClassGenerationRequested, "Expect IsMetadataClassGenerationRequested to remain false until include an entity");
@@ -320,7 +320,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 
                     // As a side-effect, the entities should also have changed
                     List<EntityViewModel> entities = new List<EntityViewModel>(model.CurrentContextViewModel.Entities);
-                    Assert.IsTrue(entities.Count > 0, "Expected current entities to be set");
+                    Assert.IsNotEmpty(entities, "Expected current entities to be set");
                     EntityViewModel entity = entities[0];
 
                     // The list of entities must be sorted
@@ -422,12 +422,12 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 }
             }
 
-            Assert.AreEqual(validTypes.Length, actualTypes.Count, "Invalid types in resulting list!");
+            Assert.HasCount(validTypes.Length, actualTypes, "Invalid types in resulting list!");
 
             // The list of contexts must be sorted
             foreach (Type validType in validTypes)
             {
-                Assert.IsTrue(actualTypes.Contains(validType), "Valid type missing from resulting list!");
+                Assert.Contains(validType, actualTypes, "Valid type missing from resulting list!");
             }
         }
 

@@ -84,21 +84,21 @@ namespace OpenRiaServices.Tools.Test
 
                 // SharedClass is shared because it is linked
                 shareKind = sts.GetTypeShareKind(typeof(SharedClass).AssemblyQualifiedName);
-                Assert.IsTrue(shareKind == CodeMemberShareKind.SharedBySource, "Expected SharedClass type to be shared in source");
+                Assert.AreEqual(CodeMemberShareKind.SharedBySource, shareKind, "Expected SharedClass type to be shared in source");
 
                 // DomainService exists only in the server and is not shared
                 shareKind = sts.GetTypeShareKind(typeof(DomainService).AssemblyQualifiedName);
-                Assert.IsTrue(shareKind == CodeMemberShareKind.NotShared, "Expected DomainService type not to be shared");
+                Assert.AreEqual(CodeMemberShareKind.NotShared, shareKind, "Expected DomainService type not to be shared");
 
                 // TestValidatorServer exists only on the server and is not shared
                 shareKind = sts.GetTypeShareKind(typeof(TestValidatorServer).AssemblyQualifiedName);
-                Assert.IsTrue(shareKind == CodeMemberShareKind.NotShared, "Expected TestValidatorServer type not to be shared");
+                Assert.AreEqual(CodeMemberShareKind.NotShared, shareKind, "Expected TestValidatorServer type not to be shared");
 
                 // CodelessType exists on both server and client, but lacks all user code necessary
                 // to determine whether it is shared.  Because it compiles into both projects, it should
                 // be considered shared by finding the type in both assemblies
                 shareKind = sts.GetTypeShareKind(typeof(CodelessType).AssemblyQualifiedName);
-                Assert.IsTrue(shareKind == CodeMemberShareKind.SharedByReference, "Expected CodelessType type to be shared in assembly");
+                Assert.AreEqual(CodeMemberShareKind.SharedByReference, shareKind, "Expected CodelessType type to be shared in assembly");
             }
         }
 

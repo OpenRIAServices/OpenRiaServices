@@ -117,7 +117,7 @@ namespace OpenRiaServices.Server.Test
             var invokeResult = await provider.InvokeAsync(new InvokeDescription(operationEntry, new object[] { string.Empty, 2, false }), CancellationToken.None);
             Assert.IsNull(invokeResult.Result);
             Assert.IsNotNull(invokeResult.ValidationErrors);
-            Assert.AreEqual(1, invokeResult.ValidationErrors.Count);
+            Assert.HasCount(1, invokeResult.ValidationErrors);
             Assert.AreEqual("The str field is required.", invokeResult.ValidationErrors.ElementAt(0).ErrorMessage);
         }
 
@@ -134,7 +134,7 @@ namespace OpenRiaServices.Server.Test
             var invokeResult = await provider.InvokeAsync(new InvokeDescription(operationEntry, new object[] { inputA }), CancellationToken.None);
             Assert.IsNull(invokeResult.Result, "Should have validation errors instead");
             Assert.IsNotNull(invokeResult.ValidationErrors, "Should have validation errors");
-            Assert.AreEqual(1, invokeResult.ValidationErrors.Count);
+            Assert.HasCount(1, invokeResult.ValidationErrors);
             Assert.AreEqual("The RequiredString field is required.", invokeResult.ValidationErrors.First().ErrorMessage);
         }
 
@@ -151,7 +151,7 @@ namespace OpenRiaServices.Server.Test
 
             var invokeResult = await provider.InvokeAsync(new InvokeDescription(operationEntry, new object[] { address }), CancellationToken.None);
             Assert.IsNotNull(invokeResult.ValidationErrors, "Should have validation errors");
-            Assert.AreEqual(2, invokeResult.ValidationErrors.Count);
+            Assert.HasCount(2, invokeResult.ValidationErrors);
             Assert.AreEqual("The field State must be a string with a maximum length of 2.", invokeResult.ValidationErrors.ElementAt(0).ErrorMessage);
             Assert.AreEqual("The field Zip must be a string with a maximum length of 5.", invokeResult.ValidationErrors.ElementAt(1).ErrorMessage);         
 
@@ -170,7 +170,7 @@ namespace OpenRiaServices.Server.Test
             var invokeResult = await provider.InvokeAsync(new InvokeDescription(throwValidationExceptionMethod, Array.Empty<object>()), CancellationToken.None);
             Assert.IsNull(invokeResult.Result);
             Assert.IsNotNull(invokeResult.ValidationErrors);
-            Assert.AreEqual(1, invokeResult.ValidationErrors.Count);
+            Assert.HasCount(1, invokeResult.ValidationErrors);
             Assert.AreEqual("Validation error.", invokeResult.ValidationErrors.ElementAt(0).ErrorMessage);
         }
     }

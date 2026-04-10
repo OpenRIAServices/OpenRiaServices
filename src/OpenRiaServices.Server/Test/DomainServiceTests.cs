@@ -452,7 +452,7 @@ namespace OpenRiaServices.Server.Test
             ds.Initialize(dsc);
             var invokeResult = await ds.InvokeAsync(new InvokeDescription(operation, new object[] { 10 }), CancellationToken.None);
             Assert.IsNotNull(invokeResult.ValidationErrors);
-            Assert.AreEqual(1, invokeResult.ValidationErrors.Count);
+            Assert.HasCount(1, invokeResult.ValidationErrors);
             Assert.IsNull(ds.LastError);
         }
 
@@ -772,7 +772,7 @@ namespace OpenRiaServices.Server.Test
 
             // Verify TDPA is in effect
             Attribute[] testAttribs = propB.Attributes.OfType<TestAttributeA>().Where(p => p.Tag == "tdpa_int").ToArray();
-            Assert.AreEqual(1, testAttribs.Length);
+            Assert.HasCount(1, testAttribs);
 
             // Verify TDPB is in effect
             DataTypeAttribute dataTypeAttribute = props["Date"].Attributes.OfType<DataTypeAttribute>().SingleOrDefault();
@@ -802,7 +802,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("PocoOrder_Customer", assoc.Name);
             Assert.AreEqual("CustomerID", assoc.ThisKey);
             Assert.AreEqual("ID", assoc.OtherKey);
-            Assert.AreEqual(true, assoc.IsForeignKey);
+            Assert.IsTrue(assoc.IsForeignKey);
 
             // verify collection association : Customer->Order*
             attribs = custProps["Orders"].Attributes;
@@ -811,7 +811,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("PocoOrder_Customer", assoc.Name);
             Assert.AreEqual("ID", assoc.ThisKey);
             Assert.AreEqual("CustomerID", assoc.OtherKey);
-            Assert.AreEqual(false, assoc.IsForeignKey);
+            Assert.IsFalse(assoc.IsForeignKey);
 
             // verify FK association : Employee->Employee (Manager)
             PropertyDescriptorCollection employeeProps = TypeDescriptor.GetProperties(typeof(PocoEmployee));
@@ -821,7 +821,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("PocoEmployee_Manager", assoc.Name);
             Assert.AreEqual("ManagerID", assoc.ThisKey);
             Assert.AreEqual("ID", assoc.OtherKey);
-            Assert.AreEqual(true, assoc.IsForeignKey);
+            Assert.IsTrue(assoc.IsForeignKey);
 
             // verify FK association : Employee->Employee (HiringManager)
             // This tests multiple FK associations of the same type
@@ -831,7 +831,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("PocoEmployee_HiringManager", assoc.Name);
             Assert.AreEqual("HiringManagerID", assoc.ThisKey);
             Assert.AreEqual("ID", assoc.OtherKey);
-            Assert.AreEqual(true, assoc.IsForeignKey);
+            Assert.IsTrue(assoc.IsForeignKey);
 
             // verify collection association : Employee->Employee* (Reports)
             attribs = employeeProps["Reports"].Attributes;
@@ -840,7 +840,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("PocoEmployee_Manager", assoc.Name);
             Assert.AreEqual("ID", assoc.ThisKey);
             Assert.AreEqual("ManagerID", assoc.OtherKey);
-            Assert.AreEqual(false, assoc.IsForeignKey);
+            Assert.IsFalse(assoc.IsForeignKey);
         }
 
         [TestMethod]
@@ -859,15 +859,15 @@ namespace OpenRiaServices.Server.Test
 
             // verify that buddy metadata is there
             TestAttributeA[] testAttribs = propA.Attributes.OfType<TestAttributeA>().Where(p => p.Tag == "mdx").ToArray();
-            Assert.AreEqual(1, testAttribs.Length);
+            Assert.HasCount(1, testAttribs);
             testAttribs = propB.Attributes.OfType<TestAttributeA>().Where(p => p.Tag == "mdx").ToArray();
-            Assert.AreEqual(1, testAttribs.Length);
+            Assert.HasCount(1, testAttribs);
 
             // verify that custom TDP metadata is there for TDPA
             testAttribs = propA.Attributes.OfType<TestAttributeA>().Where(p => p.Tag == "tdpa_int").ToArray();
-            Assert.AreEqual(0, testAttribs.Length);
+            Assert.IsEmpty(testAttribs);
             testAttribs = propB.Attributes.OfType<TestAttributeA>().Where(p => p.Tag == "tdpa_int").ToArray();
-            Assert.AreEqual(1, testAttribs.Length);
+            Assert.HasCount(1, testAttribs);
 
             // verify that custom TDP metadata is there for TDPB
             DataTypeAttribute dataTypeAttribute = props["Date"].Attributes.OfType<DataTypeAttribute>().SingleOrDefault();
@@ -971,8 +971,8 @@ namespace OpenRiaServices.Server.Test
             // pass an update and a custom update, and make sure the custom update is processed.
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { updateOperation, customUpdateOperation }, domainServiceDescription, null);
             Assert.IsFalse(success);
-            Assert.AreEqual(null, updateOperation.ValidationErrors);
-            Assert.AreNotEqual(null, customUpdateOperation.ValidationErrors);
+            Assert.IsNull(updateOperation.ValidationErrors);
+            Assert.IsNotNull(customUpdateOperation.ValidationErrors);
             IEnumerable<string> errorMessages = customUpdateOperation.ValidationErrors.Select(e => e.Message);
             UnitTestHelper.AssertListContains(errorMessages, "The CityName field is required.");
         }

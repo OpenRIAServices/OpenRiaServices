@@ -30,7 +30,7 @@ namespace OpenRiaServices.Hosting.Local.Test
         {
             string name = "foo";
             InMemoryTraceListener target = new InMemoryTraceListener(name);
-            Assert.IsTrue(target.Name == name);
+            Assert.AreEqual(name, target.Name);
         }
 
         /// <summary>
@@ -53,12 +53,12 @@ namespace OpenRiaServices.Hosting.Local.Test
             target.WriteLine("<TraceRecord xmlns=\"http://schemas.microsoft.com/2004/10/E2ETraceEvent/TraceRecord\" Severity=\"Information\"><TraceIdentifier>http://msdn.microsoft.com/en-US/library/System.ServiceModel.Security.SecurityImpersonationSuccess.aspx</TraceIdentifier><Description>Security Impersonation succeeded at the server.</Description><AppDomain>/LM/W3SVC/1/ROOT/riatracing-1-129141143812693125</AppDomain><ExtendedData xmlns=\"http://schemas.microsoft.com/2006/08/ServiceModel/SecurityImpersonationTraceRecord\"><OperationAction>http://tempuri.org/WcfTraceService/GetTrace</OperationAction><OperationName>GetTrace</OperationName></ExtendedData></TraceRecord>");
             actual = InMemoryTraceListener.GetEntries();
             Assert.IsNotNull(actual);
-            Assert.IsTrue(actual.Length == 3);
+            Assert.AreEqual(3, actual.Length);
             int lastEntryCode = 4;
             foreach (XElement entry in actual)
             {
                 int currentEntryCode = Int32.Parse(entry.Descendants().First(x => x.Name.LocalName == "Code").Value);
-                Assert.IsTrue(currentEntryCode < lastEntryCode);
+                Assert.IsLessThan(lastEntryCode, currentEntryCode);
                 lastEntryCode = currentEntryCode;
             }
         }
@@ -71,7 +71,7 @@ namespace OpenRiaServices.Hosting.Local.Test
         public void MaxEntriesTest()
         {
             InMemoryTraceListener.MaxEntries = 500;
-            Assert.IsTrue(InMemoryTraceListener.MaxEntries == 500);
+            Assert.AreEqual(500, InMemoryTraceListener.MaxEntries);
             try
             {
                 InMemoryTraceListener.MaxEntries = -1;

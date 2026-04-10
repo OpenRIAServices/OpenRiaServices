@@ -171,14 +171,14 @@ namespace OpenRiaServices.Tools.Test
             MethodInfo methodInfo = domainContextType.GetMethod("GetEntityWithEnumQuery");
             Assert.IsNotNull(methodInfo, "Expected to find query method called GetEntityWithEnumQuery");
             ParameterInfo[] parameters = methodInfo.GetParameters();
-            Assert.AreEqual(1, parameters.Length, "Expected query method to have 1 parameter");
+            Assert.HasCount(1, parameters, "Expected query method to have 1 parameter");
             this.ValidateGeneratedEnumReference(clientEnumType, parameters[0].ParameterType, /* expectNullable */ false);
 
             // Nullable form of query
             methodInfo = domainContextType.GetMethod("GetEntityWithNullableEnumQuery");
             Assert.IsNotNull(methodInfo, "Expected to find query method called GetEntityWithNullableEnumQuery");
             parameters = methodInfo.GetParameters();
-            Assert.AreEqual(1, parameters.Length, "Expected query method to have 1 parameter");
+            Assert.HasCount(1, parameters, "Expected query method to have 1 parameter");
             this.ValidateGeneratedEnumReference(clientEnumType, parameters[0].ParameterType, /* expectNullable */ true);
 
             // -------------------
@@ -192,14 +192,14 @@ namespace OpenRiaServices.Tools.Test
             methodInfo = domainContextType.GetMethod("EnumNamedUpate");
             Assert.IsNotNull(methodInfo, "Expected to find named update method called EnumNamedUpdate");
             parameters = methodInfo.GetParameters();
-            Assert.AreEqual(2, parameters.Length, "Expected named update method to have 2 parameters");
+            Assert.HasCount(2, parameters, "Expected named update method to have 2 parameters");
             this.ValidateGeneratedEnumReference(clientEnumType, parameters[1].ParameterType, /* expectNullable */ false);
 
             // Nullable form of named update method should have been generated
             methodInfo = domainContextType.GetMethod("EnumNamedUpateNullable");
             Assert.IsNotNull(methodInfo, "Expected to find named update method called EnumNamedUpdateNullable");
             parameters = methodInfo.GetParameters();
-            Assert.AreEqual(2, parameters.Length, "Expected named update method to have 2 parameters");
+            Assert.HasCount(2, parameters, "Expected named update method to have 2 parameters");
             this.ValidateGeneratedEnumReference(clientEnumType, parameters[1].ParameterType, /* expectNullable */ true);
 
             // -------------------
@@ -409,7 +409,7 @@ namespace OpenRiaServices.Tools.Test
             if (serverDCAttr != null)
             {
                 IList<CustomAttributeData> cads = AssemblyGenerator.GetCustomAttributeData(clientEnumType, typeof(DataContractAttribute));
-                Assert.AreEqual(1, cads.Count, "Expected DataContract on " + clientEnumType);
+                Assert.HasCount(1, cads, "Expected DataContract on " + clientEnumType);
                 CustomAttributeData cad = cads[0];
                 string serverAttrName = serverDCAttr.Name;
                 string serverAttrNamespace = serverDCAttr.Namespace;
@@ -422,7 +422,7 @@ namespace OpenRiaServices.Tools.Test
 
             string[] serverMemberNames = Enum.GetNames(serverEnumType);
             string[] clientMemberNames = Enum.GetNames(clientEnumType);
-            Assert.AreEqual(serverMemberNames.Length, clientMemberNames.Length, "Different number of fields generated");
+            Assert.HasCount(serverMemberNames.Length, clientMemberNames, "Different number of fields generated");
 
             Array.Sort(serverMemberNames);
             Array.Sort(clientMemberNames);
@@ -445,7 +445,7 @@ namespace OpenRiaServices.Tools.Test
                 if (enumMemberAttr != null)
                 {
                     IList<CustomAttributeData> cads = AssemblyGenerator.GetCustomAttributeData(clientFieldInfo, typeof(EnumMemberAttribute));
-                    Assert.AreEqual(1, cads.Count, "Expected EnumMember on " + clientEnumType + "." + clientMemberNames[i]);
+                    Assert.HasCount(1, cads, "Expected EnumMember on " + clientEnumType + "." + clientMemberNames[i]);
                     CustomAttributeData cad = cads[0];
                     string clientValue = null;
                     AssemblyGenerator.TryGetCustomAttributeValue<string>(cad, "Value", out clientValue);
@@ -459,7 +459,7 @@ namespace OpenRiaServices.Tools.Test
                 if (displayAttr != null)
                 {
                     IList<CustomAttributeData> cads = AssemblyGenerator.GetCustomAttributeData(clientFieldInfo, typeof(DisplayAttribute));
-                    Assert.AreEqual(1, cads.Count, "Expected [Display] on " + clientEnumType + "." + clientMemberNames[i]);
+                    Assert.HasCount(1, cads, "Expected [Display] on " + clientEnumType + "." + clientMemberNames[i]);
                     CustomAttributeData cad = cads[0];
                     string clientValue = null;
                     AssemblyGenerator.TryGetCustomAttributeValue<string>(cad, "Name", out clientValue);
@@ -473,7 +473,7 @@ namespace OpenRiaServices.Tools.Test
                 if (descriptionAttr != null)
                 {
                     IList<CustomAttributeData> cads = AssemblyGenerator.GetCustomAttributeData(clientFieldInfo, typeof(ComponentModelDescriptionAttribute));
-                    Assert.AreEqual(1, cads.Count, "Expected [Description] on " + clientEnumType + "." + clientMemberNames[i]);
+                    Assert.HasCount(1, cads, "Expected [Description] on " + clientEnumType + "." + clientMemberNames[i]);
                     CustomAttributeData cad = cads[0];
                     string clientValue = null;
                     AssemblyGenerator.TryGetCustomAttributeValue<string>(cad, "Description", out clientValue);
@@ -487,7 +487,7 @@ namespace OpenRiaServices.Tools.Test
                 if (serverOnlyAttr != null)
                 {
                     IList<CustomAttributeData> cads = AssemblyGenerator.GetCustomAttributeData(clientFieldInfo, typeof(ServerOnlyAttribute));
-                    Assert.AreEqual(0, cads.Count, "Expected [ServerOnlyAttribute] *not* to be generated on " + clientEnumType + "." + clientMemberNames[i]);
+                    Assert.IsEmpty(cads, "Expected [ServerOnlyAttribute] *not* to be generated on " + clientEnumType + "." + clientMemberNames[i]);
                 }
             }
 

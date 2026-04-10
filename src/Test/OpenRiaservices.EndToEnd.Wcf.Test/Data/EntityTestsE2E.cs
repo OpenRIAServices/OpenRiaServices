@@ -35,7 +35,7 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => load);
             this.EnqueueCallback(() =>
             {
-                Assert.AreEqual(null, load.Error);
+                Assert.IsNull(load.Error);
 
                 Employee parent, child;
                 parent = container.GetEntitySet<Employee>().OrderByDescending(e => e.Reports.Count).First();

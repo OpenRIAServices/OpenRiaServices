@@ -161,16 +161,16 @@ namespace OpenRiaServices.Client.Test
             EnqueueConditional(() => propChanged.Count > 0);
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(propChanged.Contains("CanAssignCityZone"));
+                Assert.Contains("CanAssignCityZone", propChanged);
                 propChanged.Clear();
 
                 changeset = citiesProvider.EntityContainer.GetChanges();
-                Assert.AreEqual(1, changeset.ModifiedEntities.Count);
+                Assert.HasCount(1, changeset.ModifiedEntities);
                 so = citiesProvider.SubmitChanges();
 
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
+                Assert.IsEmpty(so.ChangeSet.AddedEntities);
+                Assert.IsEmpty(so.ChangeSet.RemovedEntities);
             });
             // wait for submit to complete, then verify invokedEntities in changeset
             this.EnqueueCompletion(() => so);
@@ -180,9 +180,9 @@ namespace OpenRiaServices.Client.Test
                 {
                     Assert.Fail(so.Error.Message);
                 }
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
                 // verify we got the property change notification for the city entity as a result of autosync
-                Assert.AreEqual(14, propChanged.Count, "Received different property notifications than expected:\r\n" + string.Join(",", propChanged.ToArray()));
+                Assert.HasCount(14, propChanged, "Received different property notifications than expected:\r\n" + string.Join(",", propChanged.ToArray()));
                 Assert.AreEqual(1, propChanged.Count(prop => prop == "EditHistory"));
                 Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneName"));
                 Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneID"));
@@ -257,27 +257,27 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(propChanged.Contains("CanSetCityInfo"));
+                Assert.Contains("CanSetCityInfo", propChanged);
                 propChanged.Clear();
 
                 changeset = citiesProvider.EntityContainer.GetChanges();
-                Assert.AreEqual(1, changeset.ModifiedEntities.Count);
+                Assert.HasCount(1, changeset.ModifiedEntities);
 
                 so = citiesProvider.SubmitChanges();
 
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
+                Assert.IsEmpty(so.ChangeSet.AddedEntities);
+                Assert.IsEmpty(so.ChangeSet.RemovedEntities);
              });
             // wait for submit to complete, then verify invokedEntities in changeset
             this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
 
                 // verify we got the property change notification for the city entity as a result of autosync
-                Assert.AreEqual(14, propChanged.Count, "Received different property notifications than expected:\r\n" + string.Join(",", propChanged.ToArray()));
+                Assert.HasCount(14, propChanged, "Received different property notifications than expected:\r\n" + string.Join(",", propChanged.ToArray()));
                 Assert.AreEqual(1, propChanged.Count(prop => prop =="EditHistory"));
                 Assert.AreEqual(1, propChanged.Count(prop => prop =="Info"));
                 Assert.AreEqual(1, propChanged.Count(prop => prop =="LastUpdated"));
@@ -292,7 +292,7 @@ namespace OpenRiaServices.Client.Test
                 CityWithInfo newCityWithInfo = citiesProvider.Cities.OfType<CityWithInfo>().SingleOrDefault<CityWithInfo>(c => (c.Info.Equals( "new city info")));
                 Assert.IsNotNull(newCityWithInfo, "Did not find modified CityWithInfo after the submit");
                 Assert.AreNotEqual(newCityWithInfo.LastUpdated, priorLastUpdated, "Expected lastUpdated to be modified by submit");
-                Assert.IsTrue(newCityWithInfo.EditHistory.Contains("info=new city info"), "EditHistory was" + newCityWithInfo.EditHistory);
+                Assert.Contains("info=new city info", newCityWithInfo.EditHistory, "EditHistory was" + newCityWithInfo.EditHistory);
             });
 
             EnqueueTestComplete();
@@ -354,27 +354,27 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueCallback(delegate
             {
-                Assert.IsTrue(propChanged.Contains("CanTouchHistory"));
+                Assert.Contains("CanTouchHistory", propChanged);
                 propChanged.Clear();
 
                 changeset = citiesProvider.EntityContainer.GetChanges();
-                Assert.AreEqual(1, changeset.ModifiedEntities.Count);
+                Assert.HasCount(1, changeset.ModifiedEntities);
 
                 so = citiesProvider.SubmitChanges();
 
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.AddedEntities.Count);
-                Assert.AreEqual(0, so.ChangeSet.RemovedEntities.Count);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
+                Assert.IsEmpty(so.ChangeSet.AddedEntities);
+                Assert.IsEmpty(so.ChangeSet.RemovedEntities);
             });
             // wait for submit to complete, then verify invokedEntities in changeset
             this.EnqueueCompletion(() => so);
             EnqueueCallback(delegate
             {
                 Assert.IsNull(so.Error);
-                Assert.AreEqual(1, so.ChangeSet.ModifiedEntities.Count);
+                Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
 
                 // verify we got the property change notification for the city entity as a result of autosync
-                Assert.AreEqual(13, propChanged.Count, "Received different property notifications than expected:\r\n" + string.Join(",", propChanged.ToArray()));
+                Assert.HasCount(13, propChanged, "Received different property notifications than expected:\r\n" + string.Join(",", propChanged.ToArray()));
                 Assert.AreEqual(1, propChanged.Count(prop => prop =="EditHistory"));
                 Assert.AreEqual(1, propChanged.Count(prop => prop =="LastUpdated"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanAssignCityZone"));
@@ -388,7 +388,7 @@ namespace OpenRiaServices.Client.Test
                 CityWithInfo newCityWithInfo = citiesProvider.Cities.OfType<CityWithInfo>().SingleOrDefault<CityWithInfo>(c => (c.EditHistory.Contains("touch")));
                 Assert.IsNotNull(newCityWithInfo, "Did not find modified CityWithInfo after the submit");
                 Assert.AreNotEqual(newCityWithInfo.LastUpdated, priorLastUpdated, "Expected lastUpdated to be modified by submit");
-                Assert.IsTrue(newCityWithInfo.EditHistory.Contains("touch=xxx"), "EditHistory was" + newCityWithInfo.EditHistory);
+                Assert.Contains("touch=xxx", newCityWithInfo.EditHistory, "EditHistory was" + newCityWithInfo.EditHistory);
             });
 
             EnqueueTestComplete();
@@ -433,7 +433,7 @@ namespace OpenRiaServices.Client.Test
                 // verify entities are auto-synced back to the client as a result of the domain method execution on server
                 CityWithInfo newCity = citiesContext.Cities.OfType<CityWithInfo>().SingleOrDefault<CityWithInfo>(c => (c.Name == "CocoaVille"));
                 Assert.IsNotNull(newCity, "Did not find modified City after the submit");
-                Assert.IsTrue(newCity.EditHistory.Contains("insert"), "EditHistory was" + newCity.EditHistory);
+                Assert.Contains("insert", newCity.EditHistory, "EditHistory was" + newCity.EditHistory);
             });
 
             EnqueueTestComplete();
@@ -464,7 +464,7 @@ namespace OpenRiaServices.Client.Test
 
                 cityWithInfo = citiesContext.Cities.OfType<CityWithInfo>().FirstOrDefault();
                 Assert.IsNotNull(cityWithInfo, "expected to find at least one CityWithInfo entity");
-                Assert.IsFalse(cityWithInfo.EditHistory.Contains("update"), "Did not expect edit history to be set yet.");
+                Assert.DoesNotContain("update", cityWithInfo.EditHistory, "Did not expect edit history to be set yet.");
 
                 originalName = cityWithInfo.Name;
                 originalStateName = cityWithInfo.StateName;
@@ -489,7 +489,7 @@ namespace OpenRiaServices.Client.Test
                                                        c.StateName == originalStateName && 
                                                        c.CountyName == originalCountyName));
                 Assert.IsNotNull(updatedCity, "Did not find modified City after the submit");
-                Assert.IsTrue(updatedCity.EditHistory.Contains("update"), "EditHistory was" + updatedCity.EditHistory);
+                Assert.Contains("update", updatedCity.EditHistory, "EditHistory was" + updatedCity.EditHistory);
                 Assert.AreEqual("inserted new info", updatedCity.Info, "Updated Info did not get applied");
             });
 
@@ -540,7 +540,7 @@ namespace OpenRiaServices.Client.Test
 
                 cityWithInfo = citiesContext.Cities.OfType<CityWithInfo>().FirstOrDefault();
                 Assert.IsNotNull(cityWithInfo, "expected to find at least one CityWithInfo entity");
-                Assert.IsFalse(cityWithInfo.EditHistory.Contains("update"), "Did not expect edit history to be set yet.");
+                Assert.DoesNotContain("update", cityWithInfo.EditHistory, "Did not expect edit history to be set yet.");
 
                 originalName = cityWithInfo.Name;
                 originalStateName = cityWithInfo.StateName;
@@ -589,7 +589,7 @@ namespace OpenRiaServices.Client.Test
                                                        c.StateName == originalStateName &&
                                                        c.CountyName == originalCountyName));
                 Assert.IsNotNull(deletedCity, "Expected to find deleted City in the tombstone list");
-                Assert.IsTrue(deletedCity.EditHistory.Contains("delete"), "Expected edit history to show delete but it only shows: " + deletedCity.EditHistory);
+                Assert.Contains("delete", deletedCity.EditHistory, "Expected edit history to show delete but it only shows: " + deletedCity.EditHistory);
             });
 
             EnqueueTestComplete();

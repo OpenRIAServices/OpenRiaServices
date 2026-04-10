@@ -383,11 +383,11 @@ namespace OpenRiaServices.Server.Test
             // it is marked [Exclude]
             DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Catalog));
             PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(DataTests.AdventureWorks.LTS.Product)).Cast<PropertyDescriptor>().Single(p => p.Name == "SafetyStockLevel");
-            Assert.IsTrue(pd.Attributes.OfType<ExcludeAttribute>().Count() == 1);
+            Assert.AreEqual(1, pd.Attributes.OfType<ExcludeAttribute>().Count());
 
             // verify that the serialized response doesn't contain excluded data
-            Assert.IsTrue(soap.Contains("ProductID"));  // make sure we got at least one product
-            Assert.IsFalse(soap.Contains("SafetyStockLevel"));
+            Assert.Contains("ProductID", soap);  // make sure we got at least one product
+            Assert.DoesNotContain("SafetyStockLevel", soap);
         }
 
         [TestMethod]
@@ -399,7 +399,7 @@ namespace OpenRiaServices.Server.Test
             Exception lastError = null;
 
             string soap = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
-            Assert.IsTrue(soap.Contains("ProductID"));  // make sure we got at least one product
+            Assert.Contains("ProductID", soap);  // make sure we got at least one product
 
             for (int i = 0; i < numberOfThreads; i++)
             {
@@ -408,7 +408,7 @@ namespace OpenRiaServices.Server.Test
                     try
                     {
                         string soap2 = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
-                        Assert.IsTrue(soap2.Contains("ProductID"));  // make sure we got at least one product
+                        Assert.Contains("ProductID", soap2);  // make sure we got at least one product
                     }
                     catch (Exception ex)
                     {
@@ -457,7 +457,7 @@ namespace OpenRiaServices.Server.Test
                     try
                     {
                         string soap = RequestDirect(typeof(TestDomainServices.EF.Catalog), "GetProducts", null);
-                        Assert.IsTrue(soap.Contains("ProductID"));  // make sure we got at least one product
+                        Assert.Contains("ProductID", soap);  // make sure we got at least one product
                     }
                     catch (Exception ex)
                     {
@@ -538,7 +538,7 @@ namespace OpenRiaServices.Server.Test
                 string soap = RequestDirect(serviceType, "GetOrders", queryParameters);
                 after = DateTime.Now;
 
-                Assert.IsTrue(soap.Contains("<ResultCount>500</ResultCount>"));
+                Assert.Contains("<ResultCount>500</ResultCount>", soap);
 
                 diff = after - before;
                 times.Add(diff.TotalSeconds);

@@ -54,7 +54,7 @@ namespace OpenRiaServices.Tools.Test
 
                 if (sharedFilesMode == OpenRiaSharedFilesMode.Copy)
                 {
-                    Assert.AreEqual(3, files.Length, "Code gen should have generated 3 code files");
+                    Assert.HasCount(3, files, "Code gen should have generated 3 code files");
 
                     string copiedFile = Path.Combine(generatedCodeOutputFolder, "TestEntity.shared.cs");
                     Assert.IsTrue(File.Exists(copiedFile), "Expected task to have copied " + copiedFile);
@@ -64,7 +64,7 @@ namespace OpenRiaServices.Tools.Test
                 }
                 else
                 {
-                    Assert.AreEqual(1, files.Length, "Code gen should have generated 1 code files");
+                    Assert.HasCount(1, files, "Code gen should have generated 1 code files");
                 }
 
                 string generatedFile = Path.Combine(generatedCodeOutputFolder, "ServerClassLib.g.cs");
@@ -78,7 +78,7 @@ namespace OpenRiaServices.Tools.Test
                 foreach (string file in files)
                     generatedFiles += (file + Environment.NewLine);
 
-                Assert.AreEqual(5, files.Length, "Code gen should have generated this many ancillary files but instead saw:" + Environment.NewLine + generatedFiles);
+                Assert.HasCount(5, files, "Code gen should have generated this many ancillary files but instead saw:" + Environment.NewLine + generatedFiles);
 
                 string fileList = Path.Combine(outputFolder, "ClientClassLib.OpenRiaFiles.txt");
                 Assert.IsTrue(File.Exists(fileList), "Expected code gen to have created " + fileList + " but saw:" +

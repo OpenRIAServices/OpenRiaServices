@@ -72,7 +72,7 @@ namespace OpenRiaServices.Tools.Test
             using (SourceFileLocationService locationService = new SourceFileLocationService(new[] { new PdbSourceFileProviderFactory(/*symbolSearchPath*/ null, logger) }, filenameMap))
             {
                 List<string> files = new List<string>(locationService.GetFilesForType(typeof(TestEntity)));
-                Assert.AreEqual(4, files.Count);
+                Assert.HasCount(4, files);
 
                 CodeGenHelper.AssertContainsFiles(files, serverProjectPath, new string[] { "TestEntity.cs", "TestEntity.shared.cs", "TestEntity.linked.cs" });
                 CodeGenHelper.AssertContainsFiles(files, clientProjectPath, new string[] { "TestEntity.reverse.linked.cs" });

@@ -184,7 +184,7 @@ namespace OpenRiaServices.Hosting.UnitTests
                     property.SetValue(obj, value, null);
 
                     DbGeometry returnValue = (DbGeometry)property.GetValue(obj, null);
-                    Assert.IsTrue(returnValue == value, "Value wasn't updated.");
+                    Assert.AreEqual(value, returnValue, "Value wasn't updated.");
                 });
         }
 

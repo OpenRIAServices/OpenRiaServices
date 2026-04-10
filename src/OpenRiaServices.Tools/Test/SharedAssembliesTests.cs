@@ -41,11 +41,11 @@ namespace OpenRiaServices.Tools.Test
 
                 string sharedTypeLocation = GetSharedTypeLocation(sa, typeof(TestEntity));
                 Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
-                Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
+                Assert.Contains("ClientClassLib", sharedTypeLocation, "Expected to find type in client class lib");
 
                 sharedTypeLocation = GetSharedTypeLocation(sa, typeof(TestValidator));
                 Assert.IsNotNull(sharedTypeLocation, "Expected TestValidator type to be shared");
-                Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
+                Assert.Contains("ClientClassLib", sharedTypeLocation, "Expected to find type in client class lib");
 
                 sharedTypeLocation = GetSharedTypeLocation(sa, typeof(DomainService));
                 Assert.IsNull(sharedTypeLocation, "Expected DomainService type not to be shared");
@@ -72,11 +72,11 @@ namespace OpenRiaServices.Tools.Test
             {
                 string sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.ClientAndServerValue));
                 Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
-                Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
+                Assert.Contains("ClientClassLib", sharedTypeLocation, "Expected to find type in client class lib");
 
                 sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.ServerAndClientValue));
                 Assert.IsNotNull(sharedTypeLocation, "Expected TestEntity type to be shared");
-                Assert.IsTrue(sharedTypeLocation.Contains("ClientClassLib"), "Expected to find type in client class lib");
+                Assert.Contains("ClientClassLib", sharedTypeLocation, "Expected to find type in client class lib");
 
                 sharedTypeLocation = GetSharedPropertyLocation(sa, typeof(TestEntity), nameof(TestEntity.TheValue));
                 Assert.IsNull(sharedTypeLocation, "Expected TestEntity.TheValue type to not be shared");
@@ -116,11 +116,11 @@ namespace OpenRiaServices.Tools.Test
             {
                 var sharedMethodLocation = GetSharedMethodLocation(sa, typeof(TestValidator), "IsValid", new[] { typeof(TestEntity), typeof(ValidationContext) });
                 Assert.IsNotNull(sharedMethodLocation, "Expected TestValidator.IsValid to be shared");
-                Assert.IsTrue(sharedMethodLocation.Contains("ClientClassLib"), "Expected to find method in client class lib");
+                Assert.Contains("ClientClassLib", sharedMethodLocation, "Expected to find method in client class lib");
 
                 sharedMethodLocation = GetSharedMethodLocation(sa, typeof(TestEntity), "ServerAndClientMethod", Type.EmptyTypes);
                 Assert.IsNotNull(sharedMethodLocation, "Expected TestEntity.ServerAndClientMethod to be shared");
-                Assert.IsTrue(sharedMethodLocation.Contains("ClientClassLib"), "Expected to find method in client class lib");
+                Assert.Contains("ClientClassLib", sharedMethodLocation, "Expected to find method in client class lib");
 
                 sharedMethodLocation = GetSharedMethodLocation(sa, typeof(TestValidator), "ServertMethod", Type.EmptyTypes);
                 Assert.IsNull(sharedMethodLocation, "Expected TestValidator.ServerMethod not to be shared");

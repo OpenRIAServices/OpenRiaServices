@@ -68,7 +68,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 model.Initialize(bld);
 
                 ContextData[] contextDataItems = model.GetContextDataItems();
-                Assert.AreEqual(1, contextDataItems.Length, "Expected default context");
+                Assert.HasCount(1, contextDataItems, "Expected default context");
 
                 string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resources.BusinessLogicClass_InvalidContextType, typeof(string).FullName);
                 Assert.AreEqual(expectedMessage, logMessage, "logger was not called");
@@ -119,7 +119,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 
                 // Asking for context should attempt to load assembly and log the result
                 ContextData[] contextDataItems = model.GetContextDataItems();
-                Assert.AreEqual(1, contextDataItems.Length, "Expected default context");
+                Assert.HasCount(1, contextDataItems, "Expected default context");
                 Assert.AreEqual(expectedMessage, logMessage, "logger was not called");
             }
         }
