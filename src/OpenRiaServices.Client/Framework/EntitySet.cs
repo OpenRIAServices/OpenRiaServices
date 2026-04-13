@@ -13,6 +13,8 @@ using OpenRiaServices.Client.Internal;
 using System.Windows.Data;
 #endif
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -20,7 +22,7 @@ namespace OpenRiaServices.Client
     /// </summary>
     public abstract class EntitySet : IList, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
     {
-        private readonly Dictionary<EntityAssociationAttribute, Action<Entity>> _associationUpdateCallbackMap = new();
+        private readonly Dictionary<EntityAssociationAttribute, Action<Entity>?> _associationUpdateCallbackMap = new();
         private readonly Type _entityType;
         private EntityContainer _entityContainer;
         private EntitySetOperations _supportedOperations;
@@ -30,14 +32,14 @@ namespace OpenRiaServices.Client
         private readonly HashSet<Entity> _set = new();
         private readonly Dictionary<object, Entity> _identityCache = new();
         private readonly HashSet<Entity> _interestingEntities = new();
-        private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
+        private NotifyCollectionChangedEventHandler? _collectionChangedEventHandler;
 
         /// <summary>
         /// Internal constructor since we're not opening up public extensibility scenarios,
         /// we only support our framework derived class.
         /// </summary>
         /// <param name="entityType">The type of <see cref="Entity"/> the set will contain</param>
-        internal EntitySet(Type entityType)
+        private protected EntitySet(Type entityType)
         {
             if (entityType == null)
             {
@@ -49,6 +51,9 @@ namespace OpenRiaServices.Client
             }
 
             this._entityType = entityType;
+            // These are set in initialize, and are always called directly after ctor
+            _entityContainer = null!;
+            _list = null!;
         }
 
         /// <summary>
@@ -261,7 +266,7 @@ namespace OpenRiaServices.Client
         {
             System.Diagnostics.Debug.Assert(container != null, "EntityContainer must not be null");
 
-            this._entityContainer = container;
+            this._entityContainer = container!;
             this._supportedOperations = operationsToSupport;
 
             this._list = this.CreateList();
@@ -290,10 +295,10 @@ namespace OpenRiaServices.Client
             // cause _associationUpdateCallbackMap to be modified. We only want to notify the current set
             // of callbacks anyways.
             bool entityChangesAccepted = (this.CanEdit || this.CanAdd) && (propertyName == "EntityState") && entity.EntityState == EntityState.Unmodified;
-            IEnumerable<Action<Entity>> callbacks = this._associationUpdateCallbackMap.Where(p => p.Value != null && (entityChangesAccepted || p.Key.OtherKeyMembers.Contains(propertyName))).Select(p => p.Value).ToArray();
-            foreach (Action<Entity> callback in callbacks)
+            IEnumerable<Action<Entity>?> callbacks = this._associationUpdateCallbackMap.Where(p => p.Value != null && (entityChangesAccepted || p.Key.OtherKeyMembers.Contains(propertyName))).Select(p => p.Value).ToArray();
+            foreach (Action<Entity>? callback in callbacks)
             {
-                callback(entity);
+                callback?.Invoke(entity);
             }
         }
 
@@ -307,14 +312,14 @@ namespace OpenRiaServices.Client
         /// <param name="register">True if the callback is being registered, false if it is being unregistered</param>
         internal void RegisterAssociationCallback(EntityAssociationAttribute association, Action<Entity> callback, bool register)
         {
-            this._associationUpdateCallbackMap.TryGetValue(association, out Action<Entity> del);
+            this._associationUpdateCallbackMap.TryGetValue(association, out Action<Entity>? del);
             if (register)
             {
                 this._associationUpdateCallbackMap[association] = (Action<Entity>)Delegate.Combine(del, callback);
             }
             else
             {
-                this._associationUpdateCallbackMap[association] = (Action<Entity>)Delegate.Remove(del, callback);
+                this._associationUpdateCallbackMap[association] = (Action<Entity>?)Delegate.Remove(del, callback);
             }
         }
 
@@ -394,7 +399,7 @@ namespace OpenRiaServices.Client
                 //   state transition scenarios)
                 object identity = entity.GetIdentity();
                 if (identity != null
-                    && this._identityCache.TryGetValue(identity, out Entity cachedEntity)
+                    && this._identityCache.TryGetValue(identity, out Entity? cachedEntity)
                     && cachedEntity.EntityState != EntityState.Deleted
                     && !object.ReferenceEquals(entity, cachedEntity))
                 {
@@ -740,8 +745,7 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
             }
 
-            Entity cachedEntity;
-            this._identityCache.TryGetValue(identity, out cachedEntity);
+            this._identityCache.TryGetValue(identity, out Entity? cachedEntity);
             if (cachedEntity == null)
             {
                 // add the entity to the cache
@@ -829,7 +833,7 @@ namespace OpenRiaServices.Client
         {
             object identity = entity.GetIdentity();
 
-            Entity cachedEntity;
+            Entity? cachedEntity;
             if (identity == null || !this._identityCache.TryGetValue(identity, out cachedEntity) || cachedEntity != entity)
             {
                 // Entity's identity has changed since it was added to the cache. Do an instance based lookup to find it.
@@ -855,10 +859,10 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="keyValues">The key values specified in the correct member order</param>
         /// <returns>The entity if found, null otherwise</returns>
-        internal Entity GetEntityByKey(object[] keyValues)
+        internal Entity? GetEntityByKey(object[] keyValues)
         {
-            Entity entity = null;
-            object identity = null;
+            Entity? entity;
+            object? identity;
 
             if (keyValues.Length == 1)
             {
@@ -917,19 +921,13 @@ namespace OpenRiaServices.Client
             var handler = this._collectionChangedEventHandler;
             if (handler != null)
             {
-                NotifyCollectionChangedEventArgs args = null;
-                if (action == NotifyCollectionChangedAction.Add)
+                NotifyCollectionChangedEventArgs args = action switch
                 {
-                    args = new NotifyCollectionChangedEventArgs(action, affectedObject, index);
-                }
-                else if (action == NotifyCollectionChangedAction.Remove)
-                {
-                    args = new NotifyCollectionChangedEventArgs(action, affectedObject, index);
-                }
-                else if (action == NotifyCollectionChangedAction.Reset)
-                {
-                    args = new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset);
-                }
+                    NotifyCollectionChangedAction.Add => new NotifyCollectionChangedEventArgs(action, affectedObject, index),
+                    NotifyCollectionChangedAction.Remove => new NotifyCollectionChangedEventArgs(action, affectedObject, index),
+                    NotifyCollectionChangedAction.Reset => new NotifyCollectionChangedEventArgs(NotifyCollectionChangedAction.Reset),
+                    _ => throw new NotImplementedException(),
+                };
                 handler(this, args);
             }
 
@@ -960,16 +958,16 @@ namespace OpenRiaServices.Client
 
         bool IList.IsReadOnly => (_supportedOperations & (EntitySetOperations.Remove | EntitySetOperations.Add)) == 0;
 
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get => _list[index];
             set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
         }
 
-        int IList.Add(object value)
+        int IList.Add(object? value)
         {
             int countBefore = Count;
-            Add((Entity)value);
+            Add((Entity)value!);
 
             if (Count == countBefore + 1)
                 return countBefore;
@@ -979,22 +977,22 @@ namespace OpenRiaServices.Client
                 return List.IndexOf(value);
         }
 
-        bool IList.Contains(object value)
+        bool IList.Contains(object? value)
         {
             return value is Entity e && Contains(e);
         }
 
-        int IList.IndexOf(object value)
+        int IList.IndexOf(object? value)
         {
             return _list.IndexOf(value);
         }
 
-        void IList.Insert(int index, object value)
+        void IList.Insert(int index, object? value)
         {
             throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Insert"));
         }
 
-        void IList.Remove(object value)
+        void IList.Remove(object? value)
         {
             if (value is Entity entity)
                 TryRemove(entity);
@@ -1002,7 +1000,7 @@ namespace OpenRiaServices.Client
 
         void IList.RemoveAt(int index)
         {
-            Remove((Entity)_list[index]);
+            Remove((Entity)_list[index]!);
         }
 
         #endregion
@@ -1012,15 +1010,15 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Event raised when the collection has changed, or the collection is reset.
         /// </summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged
+        public event NotifyCollectionChangedEventHandler? CollectionChanged
         {
             add
             {
-                this._collectionChangedEventHandler = (NotifyCollectionChangedEventHandler)Delegate.Combine(this._collectionChangedEventHandler, value);
+                this._collectionChangedEventHandler = (NotifyCollectionChangedEventHandler?)Delegate.Combine(this._collectionChangedEventHandler, value);
             }
             remove
             {
-                this._collectionChangedEventHandler = (NotifyCollectionChangedEventHandler)Delegate.Remove(this._collectionChangedEventHandler, value);
+                this._collectionChangedEventHandler = (NotifyCollectionChangedEventHandler?)Delegate.Remove(this._collectionChangedEventHandler, value);
             }
         }
 
@@ -1056,7 +1054,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Event raised when a property has changed.
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Raises the PropertyChanged event for the specified property
@@ -1142,7 +1140,7 @@ namespace OpenRiaServices.Client
                 base.Visit(entity);
             }
 
-            protected override void VisitEntityCollection(IEntityCollection entityCollection, MetaMember member)
+            protected override void VisitEntityCollection(IEntityCollection? entityCollection, MetaMember member)
             {
                 if (entityCollection != null && entityCollection.HasValues)
                 {
@@ -1153,7 +1151,7 @@ namespace OpenRiaServices.Client
                 }
             }
 
-            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
+            protected override void VisitEntityRef(IEntityRef? entityRef, Entity parent, MetaMember member)
             {
                 // only visit the Entity if the value has been assigned
                 // or loaded - we don't want to cause deferred loads.
@@ -1192,11 +1190,11 @@ namespace OpenRiaServices.Client
                 }
             }
 
-            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
+            protected override void VisitEntityRef(IEntityRef? entityRef, Entity parent, MetaMember member)
             {
                 if (member.IsComposition)
                 {
-                    Entity child = null;
+                    Entity? child = null;
                     if (entityRef == null)
                     {
                         // If the EntityRef hasn't been accesssed before, it might
@@ -1250,11 +1248,11 @@ namespace OpenRiaServices.Client
                 }
             }
 
-            protected override void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
+            protected override void VisitEntityRef(IEntityRef? entityRef, Entity parent, MetaMember member)
             {
                 if (member.IsComposition)
                 {
-                    Entity child = null;
+                    Entity? child = null;
                     if (entityRef == null)
                     {
                         // If the EntityRef hasn't been accessed before, it might
@@ -1321,12 +1319,12 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Event raised whenever an <see cref="Entity"/> is added to this collection
         /// </summary>
-        public event EventHandler<EntityCollectionChangedEventArgs<TEntity>> EntityAdded;
+        public event EventHandler<EntityCollectionChangedEventArgs<TEntity>>? EntityAdded;
 
         /// <summary>
         /// Event raised whenever an <see cref="Entity"/> is removed to this collection
         /// </summary>
-        public event EventHandler<EntityCollectionChangedEventArgs<TEntity>> EntityRemoved;
+        public event EventHandler<EntityCollectionChangedEventArgs<TEntity>>? EntityRemoved;
 
         /// <summary>
         /// Returns an enumerator
@@ -1365,7 +1363,9 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <remarks><paramref name="entity"/> needs to be of type <typeparamref name="TEntity"/>, and cannot be a subclass.</remarks>
         /// <param name="entity">The entity to add</param>
+#pragma warning disable CA1725 // Parameter names should match base declaration: We don't want to make breaking changes to public API
         public void Add(TEntity entity)
+#pragma warning restore CA1725 // Parameter names should match base declaration
         {
             base.Add(entity);
         }

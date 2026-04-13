@@ -1,8 +1,7 @@
 ﻿using System;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Reflection;
 using OpenRiaServices.Client.Internal;
+
+#nullable enable
 
 namespace OpenRiaServices.Client
 {
@@ -33,7 +32,7 @@ namespace OpenRiaServices.Client
                 {
                     // Access the EntityRef - might be null if the ref hasn't been
                     // accessed yet
-                    IEntityRef entityRef = entity.GetEntityRef(association.Name);
+                    IEntityRef? entityRef = entity.GetEntityRef(association.Name);
                     this.VisitEntityRef(entityRef, entity, association);
                 }
             }
@@ -54,7 +53,7 @@ namespace OpenRiaServices.Client
         /// <param name="entityRef">The EntityRef to visit.</param>
         /// <param name="parent">The parent of the reference member</param>
         /// <param name="member">The <see cref="MetaMember"/> for the reference member</param>
-        protected virtual void VisitEntityRef(IEntityRef entityRef, Entity parent, MetaMember member)
+        protected virtual void VisitEntityRef(IEntityRef? entityRef, Entity parent, MetaMember member)
         {
         }
     }
