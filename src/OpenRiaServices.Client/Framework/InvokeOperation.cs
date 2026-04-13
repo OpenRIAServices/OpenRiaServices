@@ -5,6 +5,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -12,9 +14,9 @@ namespace OpenRiaServices.Client
     /// </summary>
     public class InvokeOperation : OperationBase, IInvokeResult
     {
-        private IDictionary<string, object> _parameters;
-        private IReadOnlyCollection<ValidationResult> _validationErrors;
-        private readonly Action<InvokeOperation> _completeAction;
+        private IDictionary<string, object>? _parameters;
+        private IReadOnlyCollection<ValidationResult>? _validationErrors;
+        private readonly Action<InvokeOperation>? _completeAction;
 
         /// <summary>
         /// Initializes a new instance of the InvokeOperation class
@@ -25,9 +27,9 @@ namespace OpenRiaServices.Client
         /// <param name="completeAction">Optional action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
         /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
-        internal InvokeOperation(string operationName, IDictionary<string, object> parameters,
-            Action<InvokeOperation> completeAction, object userState,
-            CancellationTokenSource cancellationTokenSource)
+        internal InvokeOperation(string operationName, IDictionary<string, object>? parameters,
+            Action<InvokeOperation>? completeAction, object? userState,
+            CancellationTokenSource? cancellationTokenSource)
             : base(userState, cancellationTokenSource)
         {
             if (string.IsNullOrEmpty(operationName))
@@ -62,12 +64,12 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// The <see cref="IInvokeResult"/> for this operation.
         /// </summary>
-        private protected new IInvokeResult Result => (IInvokeResult)base.Result;
+        private protected new IInvokeResult? Result => (IInvokeResult?)base.Result;
 
         /// <summary>
         /// Gets the return value for the invoke operation.
         /// </summary>
-        public object Value => Result?.Value;
+        public object? Value => Result?.Value;
 
         /// <summary>
         /// Gets the validation errors.
@@ -132,7 +134,7 @@ namespace OpenRiaServices.Client
     /// <typeparam name="TValue">The Type of the invoke return value.</typeparam>
     public sealed class InvokeOperation<TValue> : InvokeOperation
     {
-        private readonly Action<InvokeOperation<TValue>> _completeAction;
+        private readonly Action<InvokeOperation<TValue>>? _completeAction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="InvokeOperation"/> class.
@@ -143,10 +145,10 @@ namespace OpenRiaServices.Client
         /// <param name="userState">Optional user state for the operation.</param>
         /// <param name="invokeResultTask">Task which, when completed, will Complete the operation and set either <see cref="Value"/>, cancelled or error</param>
         /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
-        public InvokeOperation(string operationName, IDictionary<string, object> parameters,
-            Action<InvokeOperation<TValue>> completeAction, object userState,
+        public InvokeOperation(string operationName, IDictionary<string, object>? parameters,
+            Action<InvokeOperation<TValue>>? completeAction, object? userState,
             Task<InvokeResult<TValue>> invokeResultTask,
-            CancellationTokenSource cancellationTokenSource)
+            CancellationTokenSource? cancellationTokenSource)
             : base(operationName, parameters, /* completeAction */ null, /* userState */ userState, /* supportCancellation */ cancellationTokenSource)
         {
             this._completeAction = completeAction;
@@ -157,7 +159,7 @@ namespace OpenRiaServices.Client
             {
                 invokeResultTask.ContinueWith(static (loadTask, state) =>
                 {
-                    ((InvokeOperation<TValue>)state).CompleteTask(loadTask);
+                    ((InvokeOperation<TValue>)state!).CompleteTask(loadTask);
                 }
                 , (object)this
                 , CancellationToken.None
@@ -169,7 +171,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the return value for the invoke operation.
         /// </summary>
-        public new TValue Value
+        public new TValue? Value
         {
             get
             {
@@ -184,7 +186,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// The <see cref="IInvokeResult"/> for this operation.
         /// </summary>
-        private new InvokeResult<TValue> Result => (InvokeResult<TValue>)base.Result;
+        private new InvokeResult<TValue>? Result => (InvokeResult<TValue>?)base.Result;
 
         /// <summary>
         /// Invoke the completion callback.

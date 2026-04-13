@@ -33,7 +33,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="userState">Optional user state.</param>
         /// <param name="supportCancellation"><c>true</c> to setup cancellationTokenSource and use that to handle cancellation</param>
-        protected OperationBase(object userState, bool supportCancellation)
+        protected OperationBase(object? userState, bool supportCancellation)
             : this(userState, supportCancellation ? new CancellationTokenSource() : null)
         {
         }
@@ -43,7 +43,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="userState">Optional user state.</param>
         /// <param name="cancellationTokenSource">cancellationTokenSource to use for cancellation</param>
-        protected OperationBase(object userState, CancellationTokenSource? cancellationTokenSource)
+        protected OperationBase(object? userState, CancellationTokenSource? cancellationTokenSource)
         {
             this._userState = userState;
             this._cancellationTokenSource = cancellationTokenSource;
@@ -227,7 +227,7 @@ namespace OpenRiaServices.Client
         /// Successfully completes the operation.
         /// </summary>
         /// <param name="result">The operation result.</param>
-        protected void Complete(object result)
+        protected void Complete(object? result)
         {
             this.EnsureNotCompleted();
 
