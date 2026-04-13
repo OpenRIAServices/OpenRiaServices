@@ -5,11 +5,13 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     public abstract partial class Entity : INotifyDataErrorInfo
     {
-        private EventHandler<DataErrorsChangedEventArgs> _validationErrorsChanged;
+        private EventHandler<DataErrorsChangedEventArgs>? _validationErrorsChanged;
 
         /// <summary>
         /// Raises the event whenever validation errors have changed for a property.
@@ -23,7 +25,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Explicitly implement the <see cref="INotifyDataErrorInfo.ErrorsChanged"/> event.
         /// </summary>
-        event EventHandler<DataErrorsChangedEventArgs> INotifyDataErrorInfo.ErrorsChanged
+        event EventHandler<DataErrorsChangedEventArgs>? INotifyDataErrorInfo.ErrorsChanged
         {
             add { this._validationErrorsChanged += value; }
             remove { this._validationErrorsChanged -= value; }
@@ -42,7 +44,7 @@ namespace OpenRiaServices.Client
         /// or entity-level errors when <paramref name="propertyName"/> is
         /// <c>null</c> or empty.
         /// </returns>
-        IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
+        IEnumerable INotifyDataErrorInfo.GetErrors(string? propertyName)
         {
             IEnumerable<ValidationResult> results;
 

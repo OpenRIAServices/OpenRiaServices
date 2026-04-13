@@ -7,6 +7,8 @@ using System.Runtime.ExceptionServices;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -14,15 +16,15 @@ namespace OpenRiaServices.Client
     /// </summary>
     public abstract class OperationBase : INotifyPropertyChanged
     {
-        private object _result;
-        private Exception _error;
+        private object? _result;
+        private Exception? _error;
         private bool _canceled;
         private bool _completed;
-        private readonly object _userState;
-        private PropertyChangedEventHandler _propChangedHandler;
-        private EventHandler _completedEventHandler;
+        private readonly object? _userState;
+        private PropertyChangedEventHandler? _propChangedHandler;
+        private EventHandler? _completedEventHandler;
         private bool _isErrorHandled;
-        private readonly CancellationTokenSource _cancellationTokenSource;
+        private readonly CancellationTokenSource? _cancellationTokenSource;
 
         private protected static TaskScheduler CurrentSynchronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
 
@@ -41,7 +43,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="userState">Optional user state.</param>
         /// <param name="cancellationTokenSource">cancellationTokenSource to use for cancellation</param>
-        protected OperationBase(object userState, CancellationTokenSource cancellationTokenSource)
+        protected OperationBase(object userState, CancellationTokenSource? cancellationTokenSource)
         {
             this._userState = userState;
             this._cancellationTokenSource = cancellationTokenSource;
@@ -68,12 +70,12 @@ namespace OpenRiaServices.Client
                 }
                 else
                 {
-                    this._completedEventHandler = (EventHandler)Delegate.Combine(this._completedEventHandler, value);
+                    this._completedEventHandler = (EventHandler?)Delegate.Combine(this._completedEventHandler, value);
                 }
             }
             remove
             {
-                this._completedEventHandler = (EventHandler)Delegate.Remove(this._completedEventHandler, value);
+                this._completedEventHandler = (EventHandler?)Delegate.Remove(this._completedEventHandler, value);
             }
         }
 
@@ -124,12 +126,13 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the operation error if the operation failed.
         /// </summary>
-        public Exception Error => this._error;
+        public Exception? Error => this._error;
 
         /// <summary>
         /// Gets a value indicating whether the operation has failed. If
         /// true, inspect the Error property for details.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(Error))]
         public bool HasError => this._error != null;
 
         /// <summary>
@@ -140,12 +143,12 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the result of the async operation.
         /// </summary>
-        private protected object Result => this._result;
+        private protected object? Result => this._result;
 
         /// <summary>
         /// Gets the optional user state for this operation.
         /// </summary>
-        public object UserState => this._userState;
+        public object? UserState => this._userState;
 
         /// <summary>
         /// For an operation where <see cref="HasError"/> is <c>true</c>, this method marks the error as handled.
@@ -332,7 +335,7 @@ namespace OpenRiaServices.Client
                 if (SynchronizationContext.Current is { } syncCtx)
                 {
                     // Capture exception and rethrow with original stack trace
-                    syncCtx.Send(static (object state) => ((ExceptionDispatchInfo)state).Throw(), ExceptionDispatchInfo.Capture(error));
+                    syncCtx.Send(static (object? state) => ((ExceptionDispatchInfo)state!).Throw(), ExceptionDispatchInfo.Capture(error));
                 }
                 else
                 {
@@ -383,9 +386,9 @@ namespace OpenRiaServices.Client
             catch (Exception ex) when (SynchronizationContext.Current is { } syncCtx)
             {
                 // Capture exception and rethrow with original stack trace
-                syncCtx.Send(static (object state) =>
+                syncCtx.Send(static (object? state) =>
                 {
-                    ((ExceptionDispatchInfo)state).Throw();
+                    ((ExceptionDispatchInfo)state!).Throw();
                 }, ExceptionDispatchInfo.Capture(ex));
             }
         }
@@ -418,15 +421,15 @@ namespace OpenRiaServices.Client
 
         #region INotifyPropertyChanged Members
 
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        event PropertyChangedEventHandler? INotifyPropertyChanged.PropertyChanged
         {
             add
             {
-                this._propChangedHandler = (PropertyChangedEventHandler)Delegate.Combine(this._propChangedHandler, value);
+                this._propChangedHandler = (PropertyChangedEventHandler?)Delegate.Combine(this._propChangedHandler, value);
             }
             remove
             {
-                this._propChangedHandler = (PropertyChangedEventHandler)Delegate.Remove(this._propChangedHandler, value);
+                this._propChangedHandler = (PropertyChangedEventHandler?)Delegate.Remove(this._propChangedHandler, value);
             }
         }
 

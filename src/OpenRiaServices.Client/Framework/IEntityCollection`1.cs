@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -18,11 +20,11 @@ namespace OpenRiaServices.Client
         /// <summary>
         ///   Event raised whenever an <see cref="Entity"/> is added to this collection
         /// </summary>
-        event EventHandler<EntityCollectionChangedEventArgs<TEntity>> EntityAdded;
+        event EventHandler<EntityCollectionChangedEventArgs<TEntity>>? EntityAdded;
 
         /// <summary>
         ///   Event raised whenever an  <see cref="Entity"/> is removed from this collection
         /// </summary>
-        event EventHandler<EntityCollectionChangedEventArgs<TEntity>> EntityRemoved;
+        event EventHandler<EntityCollectionChangedEventArgs<TEntity>>? EntityRemoved;
     }
 }
