@@ -486,7 +486,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The property changed event arguments.</param>
-        private void ParentEntityPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ParentEntityPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             // Reset the loaded entities as needed.
             if (this._entitiesLoaded && this.AssocAttribute.ThisKeyMembers.Contains(e.PropertyName))
