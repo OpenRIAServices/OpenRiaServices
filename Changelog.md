@@ -1,3 +1,27 @@
+# 5.8.0
+
+This release gives some ❤️ to AvaloniaUI and other frameworks which use IList for data binding.
+
+### Client
+
+* Improved support for data binding of `EntitySet` and `EntityCollection`
+    * Now works with AvaloniaUI and frameworks which use IList for data binding
+        * Added AvaloniaUI specific tests to ensure data-binding works as expected 
+    * Improved performance for WPF (with less overhead)
+* New public API (for `EntitySet` and `EntityCollection`)
+    * Make `Contains(entity)` public
+    * Add public indexer for `EntityCollection`
+    * Add `IList` interface to `EntityCollection` and `EntitySet`
+    * Add `IReadOnlyList<T>` interface to `EntityCollection` and `EntitySet` and `LoadResult`
+    * Add `IList<T>` interface to `EntityCollection`
+* Nullability annotations for `EntitySet` and `EntityCollection`
+
+**Other**
+* Fixed build pipeline problems after updating to VS 2016
+* Analyzer fixes
+    * Fix CA1860: Prefer comparing 'Count' to 0 rather than using 'Any()'
+    * Fix MSTEST****: varius test related 
+
 # 5.7.0 / AspNetCore 1.4.0 / EF Core 4.0.0
 
 ## AspNetCore 1.4.0

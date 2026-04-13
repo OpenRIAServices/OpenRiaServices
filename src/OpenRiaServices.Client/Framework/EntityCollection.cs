@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using OpenRiaServices.Client.Internal;
 
+#nullable enable
 
 namespace OpenRiaServices.Client
 {
@@ -16,24 +17,24 @@ namespace OpenRiaServices.Client
     /// Represents a collection of associated Entities.
     /// </summary>
     /// <typeparam name="TEntity">The type of <see cref="Entity"/> in the collection</typeparam>
-    public sealed class EntityCollection<TEntity> : IEntityCollection, IEntityCollection<TEntity>, IList, IReadOnlyList<TEntity>
+    public sealed class EntityCollection<TEntity> : IEntityCollection, IEntityCollection<TEntity>, IList, IReadOnlyList<TEntity>, IList<TEntity>
 #if HAS_COLLECTIONVIEW
         , ICollectionViewFactory
 #endif
         where TEntity : Entity
     {
-        private readonly Action<TEntity> _attachAction;
-        private readonly Action<TEntity> _detachAction;
+        private readonly Action<TEntity>? _attachAction;
+        private readonly Action<TEntity>? _detachAction;
         private readonly Entity _parent;
         private readonly MetaMember _metaMember;
-        private EntitySet _sourceSet;
+        private EntitySet? _sourceSet;
         private readonly Func<TEntity, bool> _entityPredicate;
-        private List<TEntity> _entities;
-        private HashSet<TEntity> _entitiesHashSet;
-        private NotifyCollectionChangedEventHandler _collectionChangedEventHandler;
-        private PropertyChangedEventHandler _propertyChangedEventHandler;
-        private TEntity _attachingEntity;
-        private TEntity _detachingEntity;
+        private List<TEntity>? _entities;
+        private HashSet<TEntity>? _entitiesHashSet;
+        private NotifyCollectionChangedEventHandler? _collectionChangedEventHandler;
+        private PropertyChangedEventHandler? _propertyChangedEventHandler;
+        private TEntity? _attachingEntity;
+        private TEntity? _detachingEntity;
         private bool _entitiesLoaded;
         private bool _entitiesAdded;
 
@@ -43,7 +44,7 @@ namespace OpenRiaServices.Client
         /// However, we need to track entities added through the view and manually remove them from the
         /// source EntitySet to achieve correct AddNew/CancelNew behavior.
         /// </summary>
-        private List<TEntity> _addedEntities;
+        private List<TEntity>? _addedEntities;
 
         private EntityAssociationAttribute AssocAttribute => _metaMember.AssociationAttribute;
         private bool IsComposition => _metaMember.IsComposition;
@@ -133,12 +134,12 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Event raised whenever an <see cref="Entity"/> is added to this collection
         /// </summary>
-        public event EventHandler<EntityCollectionChangedEventArgs<TEntity>> EntityAdded;
+        public event EventHandler<EntityCollectionChangedEventArgs<TEntity>>? EntityAdded;
 
         /// <summary>
         /// Event raised whenever an <see cref="Entity"/> is removed from this collection
         /// </summary>
-        public event EventHandler<EntityCollectionChangedEventArgs<TEntity>> EntityRemoved;
+        public event EventHandler<EntityCollectionChangedEventArgs<TEntity>>? EntityRemoved;
 
         /// <summary>
         /// Gets the internal list of entities, creating it if it is null.
@@ -197,7 +198,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-        private EntitySet SourceSet
+        private EntitySet? SourceSet
         {
             get
             {
@@ -409,7 +410,7 @@ namespace OpenRiaServices.Client
         {
             if (this._attachAction != null)
             {
-                TEntity prev = this._attachingEntity;
+                TEntity? prev = this._attachingEntity;
                 this._attachingEntity = entity;
                 try
                 {
@@ -430,7 +431,7 @@ namespace OpenRiaServices.Client
         {
             if (this._detachAction != null)
             {
-                TEntity prev = this._detachingEntity;
+                TEntity? prev = this._detachingEntity;
                 this._detachingEntity = entity;
                 try
                 {
@@ -485,7 +486,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The property changed event arguments.</param>
-        private void ParentEntityPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ParentEntityPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             // Reset the loaded entities as needed.
             if (this._entitiesLoaded && this.AssocAttribute.ThisKeyMembers.Contains(e.PropertyName))
@@ -520,15 +521,15 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Event raised whenever the contents of the collection changes
         /// </summary>
-        public event NotifyCollectionChangedEventHandler CollectionChanged
+        public event NotifyCollectionChangedEventHandler? CollectionChanged
         {
             add
             {
-                this._collectionChangedEventHandler = (NotifyCollectionChangedEventHandler)Delegate.Combine(this._collectionChangedEventHandler, value);
+                this._collectionChangedEventHandler = (NotifyCollectionChangedEventHandler?)Delegate.Combine(this._collectionChangedEventHandler, value);
             }
             remove
             {
-                this._collectionChangedEventHandler = (NotifyCollectionChangedEventHandler)Delegate.Remove(this._collectionChangedEventHandler, value);
+                this._collectionChangedEventHandler = (NotifyCollectionChangedEventHandler?)Delegate.Remove(this._collectionChangedEventHandler, value);
             }
         }
 
@@ -536,15 +537,15 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Event raised whenever a property on this collection changes
         /// </summary>
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        event PropertyChangedEventHandler? INotifyPropertyChanged.PropertyChanged
         {
             add
             {
-                this._propertyChangedEventHandler = (PropertyChangedEventHandler)Delegate.Combine(this._propertyChangedEventHandler, value);
+                this._propertyChangedEventHandler = (PropertyChangedEventHandler?)Delegate.Combine(this._propertyChangedEventHandler, value);
             }
             remove
             {
-                this._propertyChangedEventHandler = (PropertyChangedEventHandler)Delegate.Remove(this._propertyChangedEventHandler, value);
+                this._propertyChangedEventHandler = (PropertyChangedEventHandler?)Delegate.Remove(this._propertyChangedEventHandler, value);
             }
         }
 
@@ -628,7 +629,7 @@ namespace OpenRiaServices.Client
                 return;
             }
 
-            TEntity typedEntity = entity as TEntity;
+            TEntity? typedEntity = entity as TEntity;
             if (typedEntity != null && this._entitiesLoaded)
             {
                 bool containsEntity = this.EntitiesHashSet.Contains(typedEntity);
@@ -662,10 +663,11 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="sender">The caller who raised the collection changed event.</param>
         /// <param name="args">The collection changed event arguments.</param>
-        private void SourceSet_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        private void SourceSet_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             if (this._parent.EntityState != EntityState.New &&
-                args.Action == NotifyCollectionChangedAction.Add)
+                args.Action == NotifyCollectionChangedAction.Add
+                && args.NewItems is not null)
             {
                 List<TEntity> newEntities = args.NewItems.OfType<TEntity>().Where(this.Filter).ToList();
                 if (newEntities.Count > 0)
@@ -686,7 +688,8 @@ namespace OpenRiaServices.Client
                     }
                 }
             }
-            else if (args.Action == NotifyCollectionChangedAction.Remove)
+            else if (args.Action == NotifyCollectionChangedAction.Remove
+                && args.OldItems is not null)
             {
                 // if the entity is in our cached collection, remove it
                 foreach (TEntity entityToRemove in args.OldItems.OfType<TEntity>())
@@ -770,7 +773,7 @@ namespace OpenRiaServices.Client
                 }
             }
 
-            this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Reset, (IList)null, -1);
+            this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Reset, (IList)null!, -1);
         }
         #endregion
 
@@ -886,8 +889,14 @@ namespace OpenRiaServices.Client
 
         object ICollection.SyncRoot => ((ICollection)Entities).SyncRoot;
 
+        TEntity IList<TEntity>.this[int index]
+        {
+            get => this[index];
+            set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
+        }
+
         /// <inheritdoc cref="this[int]"/>
-        object IList.this[int index]
+        object? IList.this[int index]
         {
             get
             {
@@ -908,10 +917,12 @@ namespace OpenRiaServices.Client
             set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
         }
 
-        int IList.Add(object value)
+        int IList.Add(object? value)
         {
             int countBefore = this.Count;
-            TEntity entity = (TEntity)value;
+
+            // Add performs null check, so skip here
+            TEntity entity = (TEntity)value!;
             Add(entity);
 
             if (this.Count == countBefore)
@@ -931,12 +942,12 @@ namespace OpenRiaServices.Client
             ((ICollection<TEntity>)this).Clear();
         }
 
-        bool IList.Contains(object value)
+        bool IList.Contains(object? value)
         {
             return value is TEntity entity && ((ICollection<TEntity>)this).Contains(entity);
         }
 
-        int IList.IndexOf(object value)
+        int IList.IndexOf(object? value)
         {
             if (value is not TEntity entity)
                 return -1;
@@ -945,14 +956,14 @@ namespace OpenRiaServices.Client
             return Entities.IndexOf(entity);
         }
 
-        void IList.Insert(int index, object value)
+        void IList.Insert(int index, object? value)
         {
             throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Insert"));
         }
 
-        void IList.Remove(object value)
+        void IList.Remove(object? value)
         {
-            TEntity entity = value as TEntity;
+            TEntity? entity = value as TEntity;
             if (entity == null)
             {
                 return;
@@ -978,6 +989,17 @@ namespace OpenRiaServices.Client
             this.Load();
             ((ICollection)Entities).CopyTo(array, index);
         }
+
+        int IList<TEntity>.IndexOf(TEntity item)
+        {
+            this.Load();
+            return Entities.IndexOf(item);
+        }
+        void IList<TEntity>.Insert(int index, TEntity item)
+            => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Insert"));
+
+        void IList<TEntity>.RemoveAt(int index)
+            => Remove(this[index]);
         #endregion
     }
 }
