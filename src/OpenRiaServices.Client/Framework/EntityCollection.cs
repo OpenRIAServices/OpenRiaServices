@@ -920,6 +920,8 @@ namespace OpenRiaServices.Client
         int IList.Add(object? value)
         {
             int countBefore = this.Count;
+
+            // Add performs null check, so skip here
             TEntity entity = (TEntity)value!;
             Add(entity);
 
@@ -989,8 +991,10 @@ namespace OpenRiaServices.Client
         }
 
         int IList<TEntity>.IndexOf(TEntity item)
-            => Entities.IndexOf(item);
-
+        {
+            this.Load();
+            return Entities.IndexOf(item);
+        }
         void IList<TEntity>.Insert(int index, TEntity item)
             => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Insert"));
 
