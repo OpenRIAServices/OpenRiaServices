@@ -4,6 +4,8 @@ using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -11,14 +13,12 @@ namespace OpenRiaServices.Client
     /// </summary>
     public class InvokeCompletedResult
     {
-        private readonly object _returnValue;
-        private readonly ReadOnlyCollection<ValidationResult> _validationErrors;
 
         /// <summary>
         /// Initializes a new instance of the InvokeCompletedResult class
         /// </summary>
         /// <param name="returnValue">The value returned from the server.</param>
-        public InvokeCompletedResult(object returnValue)
+        public InvokeCompletedResult(object? returnValue)
             : this(returnValue, Array.Empty<ValidationResult>())
         {
         }
@@ -28,37 +28,25 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="returnValue">The value returned from the server.</param>
         /// <param name="validationErrors">A collection of validation errors.</param>
-        public InvokeCompletedResult(object returnValue, IEnumerable<ValidationResult> validationErrors)
+        public InvokeCompletedResult(object? returnValue, IEnumerable<ValidationResult> validationErrors)
         {
             if (validationErrors == null)
             {
                 throw new ArgumentNullException(nameof(validationErrors));
             }
 
-            this._returnValue = returnValue;
-            this._validationErrors = validationErrors.ToList().AsReadOnly();
+            ReturnValue = returnValue;
+            ValidationErrors = validationErrors.ToList().AsReadOnly();
         }
 
         /// <summary>
         /// Gets the validation errors.
         /// </summary>
-        public IReadOnlyCollection<ValidationResult> ValidationErrors
-        {
-            get
-            {
-                return this._validationErrors;
-            }
-        }
+        public IReadOnlyCollection<ValidationResult> ValidationErrors { get; }
 
         /// <summary>
         /// Gets the value returned from the server.
         /// </summary>
-        public object ReturnValue
-        {
-            get
-            {
-                return this._returnValue;
-            }
-        }
+        public object? ReturnValue { get; }
     }
 }
