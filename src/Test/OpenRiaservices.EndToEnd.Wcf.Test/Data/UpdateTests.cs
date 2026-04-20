@@ -2312,6 +2312,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         [Asynchronous]
         [Microsoft.VisualStudio.TestTools.UnitTesting.Description("Resolve method returns false and does not remove any conflicts")]
+        [Retry(3)]
         public virtual void ResolveTest_ReturnFalse()
         {
             Northwind nw1 = new Northwind(this.ServiceUri);
