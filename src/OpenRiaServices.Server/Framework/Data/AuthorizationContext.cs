@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text;
 
+#nullable enable
+
 using DataAnnotationsResources = OpenRiaServices.Server.Resource;
 
 namespace System.ComponentModel.DataAnnotations
@@ -34,12 +36,12 @@ namespace System.ComponentModel.DataAnnotations
     /// </remarks>
     public sealed class AuthorizationContext : IServiceProvider, IDisposable
     {
-        private object _instance;
-        private string _operation;
-        private string _operationType;
-        private Dictionary<object, object> _items;
-        private readonly IServiceProvider _parentServiceProvider;
-        private ServiceContainer _serviceContainer;
+        private object? _instance;
+        private string? _operation;
+        private string? _operationType;
+        private Dictionary<object, object?>? _items;
+        private readonly IServiceProvider? _parentServiceProvider;
+        private ServiceContainer? _serviceContainer;
 
         /// <summary>
         /// Initalizes a new instance of the <see cref="AuthorizationContext"/> class that can be used as a template.
@@ -62,7 +64,7 @@ namespace System.ComponentModel.DataAnnotations
         /// </remarks>
         /// <param name="serviceProvider">Optional parent <see cref="IServiceProvider"/> to which calls to
         /// <see cref="GetService"/> can be delegated.</param>
-        public AuthorizationContext(IServiceProvider serviceProvider)
+        public AuthorizationContext(IServiceProvider? serviceProvider)
         {
             this._parentServiceProvider = serviceProvider;
         }
@@ -80,7 +82,7 @@ namespace System.ComponentModel.DataAnnotations
         /// new dictionary, preventing consumers from modifying the original dictionary.
         /// </param>
         /// <exception cref="ArgumentNullException">When <paramref name="operation"/> or <paramref name="operationType"/> is <c>null</c> or empty.</exception>
-        public AuthorizationContext(object instance, string operation, string operationType, IServiceProvider serviceProvider, IDictionary<object, object> items) : this(serviceProvider)
+        public AuthorizationContext(object instance, string operation, string operationType, IServiceProvider? serviceProvider, IDictionary<object, object?>? items) : this(serviceProvider)
         {
             this.Setup(instance, operation, operationType, items);
         }
@@ -144,7 +146,7 @@ namespace System.ComponentModel.DataAnnotations
         /// else is acceptable, they should allow the authorization request.
         /// </para>
         /// </value>
-        public object Instance
+        public object? Instance
         {
             get
             {
@@ -159,13 +161,13 @@ namespace System.ComponentModel.DataAnnotations
         /// </summary>
         /// <value>This property will never return <c>null</c>, but the dictionary may be empty.  Changes made
         /// to items in this dictionary will never affect the original dictionary specified in the constructor.</value>
-        public IDictionary<object, object> Items
+        public IDictionary<object, object?> Items
         {
             get
             {
                 if (this._items == null)
                 {
-                    this._items = new Dictionary<object, object>();
+                    this._items = new Dictionary<object, object?>();
                 }
                 return this._items;
             }
@@ -197,7 +199,7 @@ namespace System.ComponentModel.DataAnnotations
             {
                 // This value is unconditionally off limits for a "template" AuthorizationContext
                 this.EnsureNotTemplate();
-                return this._operationType;
+                return this._operationType!; // _operation and _operationType are always set together, so we can be sure that if _operation is not null, then _operationType is not null either
             }
         }
 
@@ -205,6 +207,9 @@ namespace System.ComponentModel.DataAnnotations
         /// Helper method that throws <see cref="InvalidOperationException"/> if the current
         /// instance is only a template.
         /// </summary>
+#pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
+        [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_operation))]
+#pragma warning restore CS3016 // Arrays as attribute arguments is not CLS-compliant
         private void EnsureNotTemplate()
         {
             if (this._operation == null)
@@ -220,7 +225,7 @@ namespace System.ComponentModel.DataAnnotations
         /// <param name="operation">Required operation name.</param>
         /// <param name="operationType">Required operation type.</param>
         /// <param name="items">Optional name/value pairs.</param>
-        private void Setup(object instance, string operation, string operationType, IDictionary<object, object> items)
+        private void Setup(object instance, string operation, string operationType, IDictionary<object, object?>? items)
         {
             // The instance will be null in situations such as query methods, so it is optional
             this._instance = instance;
@@ -242,7 +247,7 @@ namespace System.ComponentModel.DataAnnotations
             // Snapshot the dictionary if provided, else create lazily on demand
             if (items != null && items.Count != 0)
             {
-                this._items = new Dictionary<object, object>(items);
+                this._items = new Dictionary<object, object?>(items);
             }
         }
 
@@ -256,7 +261,7 @@ namespace System.ComponentModel.DataAnnotations
             // Developer remarks: this Dispose is adequate.  We do not implement the full Dispose
             // pattern because this class is (a) sealed, and (b) has no finalizer.
             // This method is idempotent.
-            ServiceContainer serviceContainer = this._serviceContainer;
+            ServiceContainer? serviceContainer = this._serviceContainer;
             this._serviceContainer = null;
             if (serviceContainer != null)
             {
@@ -275,7 +280,7 @@ namespace System.ComponentModel.DataAnnotations
         /// </remarks>
         /// <param name="serviceType">The type of the service needed.</param>
         /// <returns>An instance of that service or null if it is not available.</returns>
-        public object GetService(Type serviceType)
+        public object? GetService(Type serviceType)
         {
             // Request for service container creates one if it does not already exist.
             if (serviceType == typeof(IServiceContainer))
@@ -287,7 +292,7 @@ namespace System.ComponentModel.DataAnnotations
             // asked for it in the past (which created one).  By default, there is no service container.
             if (this._serviceContainer != null)
             {
-                object service = this._serviceContainer.GetService(serviceType);
+                object? service = this._serviceContainer.GetService(serviceType);
                 if (service != null)
                 {
                     return service;

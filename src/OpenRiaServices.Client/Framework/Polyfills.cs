@@ -1,12 +1,40 @@
 ﻿#if !NET
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
+#nullable enable
+
+namespace System
+{
+    /// <summary>
+    /// Helper methods to allow "newer" .NET methods on older frameworks
+    /// </summary>
+    internal static class Polyfills
+    {
+        extension(ArgumentNullException)
+        {
+            public static void ThrowIfNull([NotNull] object? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+            {
+                if (argument is null)
+                    throw new ArgumentNullException(paramName);
+            }
+        }
+
+        [DoesNotReturn]
+        private static void ThrowArgumentNullException(string? paramName)
+        {
+            throw new ArgumentNullException(paramName);
+        }
+    }
+}
 
 namespace System.Collections.Generic
 {
     /// <summary>
     /// Helper methods to allow "newer" .NET methods on older frameworks
     /// </summary>
-    static class Polyfills
+    internal static class Polyfills
     {
         public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
         {
@@ -23,6 +51,20 @@ namespace System.Collections.Generic
                 return false;
             }
         }
+    }
+}
+
+namespace System.Runtime.CompilerServices
+{
+    [System.AttributeUsage(System.AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
+    internal sealed class CallerArgumentExpressionAttribute : Attribute
+    {
+        public CallerArgumentExpressionAttribute(string parameterName)
+        {
+            ParameterName = parameterName;
+        }
+
+        public string ParameterName { get; private set; }
     }
 }
 
@@ -182,5 +224,17 @@ namespace System.Diagnostics.CodeAnalysis
         /// <summary>Gets field or property member names.</summary>
         public string[] Members { get; }
     }
+
+    /// <summary>
+    /// Specifies that an output is not null even if the corresponding type allows it. Specifies that an input argument was not null when the call returns.
+    /// </summary>
+    [System.AttributeUsage(System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.Property | System.AttributeTargets.ReturnValue, Inherited = false)]
+    internal sealed class NotNullAttribute : Attribute { }
+
+    /// <summary>
+    /// Specifies that a method will never return under any circumstance.
+    /// </summary>
+    [System.AttributeUsage(System.AttributeTargets.Method, Inherited = false)]
+    internal sealed class DoesNotReturnAttribute : Attribute { }
 }
 #endif

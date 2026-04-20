@@ -3,6 +3,8 @@ using System.Reflection;
 using System.Security.Principal;
 using DataAnnotationsResources = OpenRiaServices.Server.Resource;
 
+#nullable enable
+
 namespace System.ComponentModel.DataAnnotations
 {
     /// <summary>
@@ -19,9 +21,9 @@ namespace System.ComponentModel.DataAnnotations
     /// </remarks>
     public abstract class AuthorizationAttribute : Attribute
     {
-        private Func<string> _errorMessageAccessor;
-        private string _errorMessage;
-        private Type _resourceType;
+        private Func<string>? _errorMessageAccessor;
+        private string? _errorMessage;
+        private Type? _resourceType;
 
         /// <summary>
         /// Determines whether the given <paramref name="principal"/> is authorized to perform a specific operation
@@ -96,7 +98,7 @@ namespace System.ComponentModel.DataAnnotations
         /// the mechanism that allows localization of error messages.  If <see cref="ResourceType"/> is null, this value
         /// is assumed to be a literal non-localized error message that can be used verbatim.
         /// </value>
-        public string ErrorMessage
+        public string? ErrorMessage
         {
             get
             {
@@ -116,7 +118,7 @@ namespace System.ComponentModel.DataAnnotations
         /// But if it is not null, <see cref="ErrorMessage"/> is treated as the name of a static property within
         /// the specified <see cref="Type"/> that can be retrieved to yield the actual error message.
         /// </value>
-        public Type ResourceType
+        public Type? ResourceType
         {
             get
             {
@@ -153,7 +155,7 @@ namespace System.ComponentModel.DataAnnotations
         {
             // Create and cache an accessor for this.
             // We guarantee a non-null accessor or an InvalidOperationException if the properties are incorrect to create one.
-            string message = this.ErrorMessageAccessor();
+            string? message = this.ErrorMessageAccessor();
 
             // Optionally include the operation if the string contains {0} formatting information
             return string.Format(CultureInfo.CurrentCulture, message, operation);
@@ -171,12 +173,13 @@ namespace System.ComponentModel.DataAnnotations
             if (this.ResourceType == null)
             {
                 // An empty ErrorMessage returns a default message
-                if (string.IsNullOrEmpty(this.ErrorMessage))
+                string? errorMessage = this.ErrorMessage;
+                if (string.IsNullOrEmpty(errorMessage))
                 {
                     return () => DataAnnotationsResources.AuthorizationAttribute_Default_Message;
                 }
                 // Else returns the non-empty ErrorMessage
-                return () => this.ErrorMessage;
+                return () => errorMessage!;
             }
 
             // If there is a ResourceType, validate and return Reflection-based property getter
@@ -198,14 +201,14 @@ namespace System.ComponentModel.DataAnnotations
             if (string.IsNullOrEmpty(this.ErrorMessage))
             {
                 throw new InvalidOperationException(String.Format(CultureInfo.CurrentCulture,
-                      DataAnnotationsResources.AuthorizationAttribute_Requires_ErrorMessage, this.GetType().FullName, this.ResourceType.FullName));
+                      DataAnnotationsResources.AuthorizationAttribute_Requires_ErrorMessage, this.GetType().FullName, this.ResourceType!.FullName));
             }
 
             // Find the static public/internal property identified by ErrorMessage
-            PropertyInfo property = this.ResourceType.GetProperty(this.ErrorMessage, BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
+            PropertyInfo? property = this.ResourceType!.GetProperty(this.ErrorMessage, BindingFlags.Public | BindingFlags.Static | BindingFlags.NonPublic);
             if (property != null)
             {
-                MethodInfo propertyGetter = property.GetGetMethod(true /*nonPublic*/);
+                MethodInfo? propertyGetter = property.GetGetMethod(true /*nonPublic*/);
                 // We only support internal and public properties
                 if (propertyGetter == null || (!propertyGetter.IsAssembly && !propertyGetter.IsPublic))
                 {
@@ -226,7 +229,7 @@ namespace System.ComponentModel.DataAnnotations
             }
 
             // Looks good, give them a func that will eval dynamically in case it changes
-            return () => (string)property.GetValue(null, null);
+            return () => (string)property.GetValue(null, null)!;
         }
         #endregion
     }

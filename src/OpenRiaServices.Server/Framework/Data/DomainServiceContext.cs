@@ -5,6 +5,8 @@ using System.Globalization;
 using System.Security.Principal;
 using System.Threading;
 
+#nullable enable
+
 namespace OpenRiaServices.Server
 {
     /// <summary>
@@ -21,7 +23,7 @@ namespace OpenRiaServices.Server
         /// <param name="user">The user calling the operation.</param>
         /// <param name="operationType">The type of operation that is being executed.</param>
         /// <param name="cancellationToken"></param>
-        public DomainServiceContext(IServiceProvider serviceProvider, IPrincipal user, DomainOperationType operationType, CancellationToken cancellationToken = default)
+        public DomainServiceContext(IServiceProvider serviceProvider, IPrincipal? user, DomainOperationType operationType, CancellationToken cancellationToken = default)
         {
             if (serviceProvider == null)
             {
@@ -38,14 +40,14 @@ namespace OpenRiaServices.Server
         /// </summary>
         [Obsolete("Use other constructor accepting a User, this will be removed in a future version")]
         public DomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
-            : this(serviceProvider, (IPrincipal)serviceProvider.GetService(typeof(IPrincipal)), operationType)
+            : this(serviceProvider, (IPrincipal?)serviceProvider.GetService(typeof(IPrincipal)), operationType)
         {
         }
 
         /// <summary>
         /// Gets the operation that is being executed.
         /// </summary>
-        public DomainOperationEntry Operation { get; internal set; }
+        public DomainOperationEntry? Operation { get; internal set; }
 
         /// <summary>
         /// Gets the type of operation that is being executed.
@@ -55,7 +57,7 @@ namespace OpenRiaServices.Server
         /// <summary>
         /// The user for this context instance.
         /// </summary>
-        public IPrincipal User { get; }
+        public IPrincipal? User { get; }
 
         /// <summary>
         /// <see cref="CancellationToken"/> which may be used by hosting layer to request cancellation.
@@ -71,9 +73,9 @@ namespace OpenRiaServices.Server
         /// </summary>
         /// <param name="serviceType">The type of the service needed.</param>
         /// <returns>An instance of that service or null if it is not available.</returns>
-        public virtual object GetService(Type serviceType)
+        public virtual object? GetService(Type serviceType)
         {
-            return this._serviceProvider?.GetService(serviceType);
+            return this._serviceProvider.GetService(serviceType);
         }
 
         #endregion
