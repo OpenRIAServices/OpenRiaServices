@@ -87,18 +87,19 @@ namespace OpenRiaServices.Client
             this.ErrorCode = errorCode;
         }
 
-#if !SILVERLIGHT
         /// <summary>
         /// Constructor that takes serialization info
         /// </summary>
         /// <param name="info">The serialization info</param>
         /// <param name="context">The streaming context used for serialization</param>
+#if NET8_0_OR_GREATER
+        [Obsolete(DiagnosticId = "SYSLIB0051")] // https://learn.microsoft.com/sv-se/dotnet/fundamentals/syslib-diagnostics/syslib0051
+#endif
         private DomainException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             this.ErrorCode = info.GetInt32("ErrorCode");
         }
-#endif //!SILVERLIGHT
 
 #if !SERVERFX
         /// <summary>
