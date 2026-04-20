@@ -694,7 +694,7 @@ namespace OpenRiaServices.Server
                                         Resource.DomainService_MultipleEntityActionsNotAllowedFor,
                                         operation.Entity.GetType().Name,
                                         action.Key));
-                    }
+                            }
                         }
 
                         if (customMethodOperation.RequiresValidation)
