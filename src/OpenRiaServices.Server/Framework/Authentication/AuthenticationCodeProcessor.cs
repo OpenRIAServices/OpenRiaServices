@@ -316,7 +316,7 @@ namespace OpenRiaServices.Server.Authentication
             if (!implementsLogin || !implementsLogout || !implementsGetUser || !implementsUpdateUser)
             {
                 throw new InvalidOperationException(string.Format(
-                    CultureInfo.InstalledUICulture,
+                    CultureInfo.InvariantCulture,
                     Resources.ApplicationServices_MustBeIAuthImpl,
                     authenticationServiceDescription.DomainServiceType.Name));
             }
@@ -474,14 +474,14 @@ namespace OpenRiaServices.Server.Authentication
                             if (!SerializationUtility.IsSerializableDataMember(property))
                             {
                                 throw new InvalidOperationException(string.Format(
-                                    CultureInfo.InstalledUICulture,
+                                    CultureInfo.InvariantCulture,
                                     Resources.ApplicationServices_MustBeSerializable,
                                     property.Name, user.Name));
                             }
                             if (property.Attributes[typeof(KeyAttribute)] == null)
                             {
                                 throw new InvalidOperationException(string.Format(
-                                    CultureInfo.InstalledUICulture,
+                                    CultureInfo.InvariantCulture,
                                     Resources.ApplicationServices_NameMustBeAKey,
                                     user.Name));
                             }
@@ -503,7 +503,7 @@ namespace OpenRiaServices.Server.Authentication
                             if (!SerializationUtility.IsSerializableDataMember(property))
                             {
                                 throw new InvalidOperationException(string.Format(
-                                    CultureInfo.InstalledUICulture,
+                                    CultureInfo.InvariantCulture,
                                     Resources.ApplicationServices_MustBeSerializable,
                                     property.Name, user.Name));
                             }
@@ -523,7 +523,7 @@ namespace OpenRiaServices.Server.Authentication
             if (!implementsName || !implementsRoles)
             {
                 throw new InvalidOperationException(string.Format(
-                    CultureInfo.InstalledUICulture,
+                    CultureInfo.InvariantCulture,
                     Resources.ApplicationServices_MustBeIUser,
                     user.Name));
             }

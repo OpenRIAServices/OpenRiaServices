@@ -690,10 +690,11 @@ namespace OpenRiaServices.Server
                             else if (((EntityActionAttribute)customMethodOperation.OperationAttribute).AllowMultipleInvocations == false)
                             {
                                 throw new InvalidOperationException(
-                                    string.Format(Resource.DomainService_MultipleEntityActionsNotAllowedFor,
-                                                operation.Entity.GetType().Name,
-                                                action.Key));
-                            }
+                                    string.Format(CultureInfo.InvariantCulture,
+                                        Resource.DomainService_MultipleEntityActionsNotAllowedFor,
+                                        operation.Entity.GetType().Name,
+                                        action.Key));
+                    }
                         }
 
                         if (customMethodOperation.RequiresValidation)

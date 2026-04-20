@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
@@ -210,7 +211,7 @@ namespace OpenRiaServices.Server
                     var parameter = parameters[i];
 
                     if (parameter.ParameterType.IsByRef || parameter.ParameterType.IsPointer)
-                        throw new InvalidOperationException(string.Format(Resource.InvalidDomainOperationEntry_ParamMustBeByVal, method.Name, parameter.Name));
+                        throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, Resource.InvalidDomainOperationEntry_ParamMustBeByVal, method.Name, parameter.Name));
 
                     if (parameter.ParameterType == typeof(CancellationToken))
                     {
