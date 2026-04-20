@@ -82,7 +82,7 @@ namespace System.ComponentModel.DataAnnotations
         /// new dictionary, preventing consumers from modifying the original dictionary.
         /// </param>
         /// <exception cref="ArgumentNullException">When <paramref name="operation"/> or <paramref name="operationType"/> is <c>null</c> or empty.</exception>
-        public AuthorizationContext(object instance, string operation, string operationType, IServiceProvider? serviceProvider, IDictionary<object, object?>? items) : this(serviceProvider)
+        public AuthorizationContext(object? instance, string operation, string operationType, IServiceProvider? serviceProvider, IDictionary<object, object?>? items) : this(serviceProvider)
         {
             this.Setup(instance, operation, operationType, items);
         }
@@ -100,7 +100,7 @@ namespace System.ComponentModel.DataAnnotations
         /// <param name="authorizationContext">An existing <see cref="AuthorizationContext"/> to use as a template.</param>
         /// <exception cref="ArgumentNullException">When <paramref name="operation"/> or <paramref name="operationType"/> is <c>null</c> or empty
         /// or <paramref name="authorizationContext"/> is <c>null</c>.</exception>
-        public AuthorizationContext(object instance, string operation, string operationType, AuthorizationContext authorizationContext)
+        public AuthorizationContext(object? instance, string operation, string operationType, AuthorizationContext authorizationContext)
             : this((IServiceProvider) authorizationContext)
         {
             if (authorizationContext == null)
@@ -225,7 +225,7 @@ namespace System.ComponentModel.DataAnnotations
         /// <param name="operation">Required operation name.</param>
         /// <param name="operationType">Required operation type.</param>
         /// <param name="items">Optional name/value pairs.</param>
-        private void Setup(object instance, string operation, string operationType, IDictionary<object, object?>? items)
+        private void Setup(object? instance, string operation, string operationType, IDictionary<object, object?>? items)
         {
             // The instance will be null in situations such as query methods, so it is optional
             this._instance = instance;

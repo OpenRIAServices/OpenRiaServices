@@ -23,13 +23,14 @@ namespace OpenRiaServices.Client
 {
     internal static class ValidationUtilities
     {
+#nullable enable
         /// <summary>
         /// Creates a new <see cref="ValidationContext"/> for the current object instance.
         /// </summary>
         /// <param name="instance">The object instance being validated.</param>
         /// <param name="parentContext">Optional context to inherit from.  May be null.</param>
         /// <returns>A new validation context.</returns>
-        internal static ValidationContext CreateValidationContext(object instance, ValidationContext parentContext)
+        internal static ValidationContext CreateValidationContext(object instance, ValidationContext? parentContext)
         {
             if (instance == null)
             {
@@ -39,6 +40,7 @@ namespace OpenRiaServices.Client
             ValidationContext context = new ValidationContext(instance, parentContext, parentContext != null ? parentContext.Items : null);
             return context;
         }
+#nullable restore
 
         /// <summary>
         /// Internal helper method for getting a method from an object instance that matches

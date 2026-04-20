@@ -3,6 +3,8 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 
+#nullable enable
+
 namespace OpenRiaServices.Server
 {
     /// <summary>

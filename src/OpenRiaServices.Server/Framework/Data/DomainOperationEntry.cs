@@ -9,6 +9,8 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenRiaServices.Server
 {
     /// <summary>
@@ -17,9 +19,9 @@ namespace OpenRiaServices.Server
     public abstract class DomainOperationEntry
     {
         private readonly string _methodName;
-        private Attribute _operationAttribute;
+        private Attribute? _operationAttribute;
         private AttributeCollection _attributes;
-        private Type _associatedType;
+        private Type? _associatedType;
         private readonly Type _actualReturnType;
         private readonly Type _domainServiceType;
         private LazyBool _requiresValidation;
@@ -232,6 +234,7 @@ namespace OpenRiaServices.Server
         /// Based on the operation type specified, create the default corresponding attribute
         /// if it hasn't been specified explicitly, and add it to the attributes collection.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_operationAttribute))]
         private void InitializeOperationAttribute()
         {
             if (this._operationAttribute != null)
@@ -294,7 +297,7 @@ namespace OpenRiaServices.Server
                     }
                     break;
                 default:
-                    break;
+                    throw new NotImplementedException(Operation.ToString());
             }
 
             if (attributeCreated)
@@ -365,7 +368,7 @@ namespace OpenRiaServices.Server
         /// this will be the element type of the return type (or the singleton return Type),
         /// and for all other methods this will be the Type of the first method parameter.
         /// </summary>
-        public Type AssociatedType
+        public Type? AssociatedType
         {
             get
             {
