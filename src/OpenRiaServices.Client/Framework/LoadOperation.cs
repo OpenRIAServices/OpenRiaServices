@@ -9,6 +9,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.Client.Data;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -16,10 +18,10 @@ namespace OpenRiaServices.Client
     /// </summary>
     public abstract class LoadOperation : OperationBase, ILoadResult
     {
-        private ReadOnlyObservableLoaderCollection<Entity> _entities;
-        private ReadOnlyObservableLoaderCollection<Entity> _allEntities;
+        private ReadOnlyObservableLoaderCollection<Entity>? _entities;
+        private ReadOnlyObservableLoaderCollection<Entity>? _allEntities;
 
-        private IReadOnlyCollection<ValidationResult> _validationErrors;
+        private IReadOnlyCollection<ValidationResult>? _validationErrors;
         private readonly LoadBehavior _loadBehavior;
         private readonly EntityQuery _query;
 
@@ -30,7 +32,7 @@ namespace OpenRiaServices.Client
         /// <param name="loadBehavior"><see cref="LoadBehavior"/> to use for the load operation.</param>
         /// <param name="userState">Optional user state for the operation.</param>
         /// <param name="cancellationTokenSource"><c>non null</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
-        private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object userState, CancellationTokenSource cancellationTokenSource)
+        private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object? userState, CancellationTokenSource? cancellationTokenSource)
             : base(userState, cancellationTokenSource)
         {
             if (query == null)
@@ -44,7 +46,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// The <see cref="ILoadResult"/> for this operation.
         /// </summary>
-        private protected new ILoadResult Result => (ILoadResult)base.Result;
+        private protected new ILoadResult? Result => (ILoadResult?)base.Result;
 
         /// <summary>
         /// The <see cref="EntityQuery"/> for this load operation.
@@ -164,8 +166,8 @@ namespace OpenRiaServices.Client
     public sealed class LoadOperation<TEntity> : LoadOperation
         where TEntity : Entity
     {
-        private ReadOnlyObservableLoaderCollection<TEntity> _entities;
-        private readonly Action<LoadOperation<TEntity>> _completeAction;
+        private ReadOnlyObservableLoaderCollection<TEntity>? _entities;
+        private readonly Action<LoadOperation<TEntity>>? _completeAction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="LoadOperation"/> class.
@@ -176,7 +178,7 @@ namespace OpenRiaServices.Client
         /// <param name="userState">Optional user state for the operation.</param>
         /// <param name="supportCancellation"><c>true</c> to enable <see cref="OperationBase.CancellationToken"/> to be cancelled when <see cref="OperationBase.Cancel"/> is called</param>
         internal LoadOperation(EntityQuery<TEntity> query, LoadBehavior loadBehavior,
-            Action<LoadOperation<TEntity>> completeAction, object userState,
+            Action<LoadOperation<TEntity>>? completeAction, object? userState,
             bool supportCancellation)
             : base(query, loadBehavior, userState, supportCancellation ? new CancellationTokenSource() : null)
         {
@@ -194,10 +196,10 @@ namespace OpenRiaServices.Client
         /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
         public LoadOperation(EntityQuery<TEntity> query,
         LoadBehavior loadBehavior,
-            Action<LoadOperation<TEntity>> completeAction,
-            object userState,
+            Action<LoadOperation<TEntity>>? completeAction,
+            object? userState,
             Task<LoadResult<TEntity>> loadResultTask,
-            CancellationTokenSource cancellationTokenSource)
+            CancellationTokenSource? cancellationTokenSource)
             : base(query, loadBehavior, userState, cancellationTokenSource)
         {
             if (loadResultTask == null)
@@ -213,7 +215,7 @@ namespace OpenRiaServices.Client
             {
                 loadResultTask.ContinueWith(static (task, state) =>
                 {
-                    ((LoadOperation<TEntity>)state).CompleteTask(task);
+                    ((LoadOperation<TEntity>)state!).CompleteTask(task);
                 }
                 , (object)this
                 , CancellationToken.None
@@ -270,7 +272,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// The <see cref="LoadResult{TEntity}"/> for this operation.
         /// </summary>
-        private new LoadResult<TEntity> Result => (LoadResult<TEntity>)base.Result;
+        private new LoadResult<TEntity>? Result => (LoadResult<TEntity>?)base.Result;
 
         /// <summary>
         /// Successfully completes the load operation with the specified result.

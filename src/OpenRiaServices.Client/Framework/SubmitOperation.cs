@@ -26,7 +26,7 @@ namespace OpenRiaServices.Client
         /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
         public SubmitOperation(EntityChangeSet changeSet,
             Action<SubmitOperation>? completeAction, object? userState,
-            Task<SubmitResult> sumitResultTask, CancellationTokenSource cancellationTokenSource)
+            Task<SubmitResult> sumitResultTask, CancellationTokenSource? cancellationTokenSource)
             : base(userState, cancellationTokenSource)
         {
             if (changeSet == null)
