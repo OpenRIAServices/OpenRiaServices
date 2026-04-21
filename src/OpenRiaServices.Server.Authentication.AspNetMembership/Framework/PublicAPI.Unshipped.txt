@@ -1,0 +1,27 @@
+﻿OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>
+OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.AuthenticationBase() -> void
+OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.GetUser() -> T
+OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.Login(string userName, string password, bool isPersistent, string customData) -> T
+OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.Logout() -> T
+OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.UpdateUser(T user) -> void
+OpenRiaServices.Server.Authentication.AspNetMembership.ProfileUsageAttribute
+OpenRiaServices.Server.Authentication.AspNetMembership.ProfileUsageAttribute.Alias.get -> string
+OpenRiaServices.Server.Authentication.AspNetMembership.ProfileUsageAttribute.Alias.set -> void
+OpenRiaServices.Server.Authentication.AspNetMembership.ProfileUsageAttribute.IsExcluded.get -> bool
+OpenRiaServices.Server.Authentication.AspNetMembership.ProfileUsageAttribute.IsExcluded.set -> void
+OpenRiaServices.Server.Authentication.AspNetMembership.ProfileUsageAttribute.ProfileUsageAttribute() -> void
+OpenRiaServices.Server.Authentication.AspNetMembership.UserBase
+OpenRiaServices.Server.Authentication.AspNetMembership.UserBase.IsAuthenticated.get -> bool
+OpenRiaServices.Server.Authentication.AspNetMembership.UserBase.IsInRole(string role) -> bool
+OpenRiaServices.Server.Authentication.AspNetMembership.UserBase.Name.get -> string
+OpenRiaServices.Server.Authentication.AspNetMembership.UserBase.Name.set -> void
+OpenRiaServices.Server.Authentication.AspNetMembership.UserBase.Roles.get -> System.Collections.Generic.IEnumerable<string>
+OpenRiaServices.Server.Authentication.AspNetMembership.UserBase.Roles.set -> void
+OpenRiaServices.Server.Authentication.AspNetMembership.UserBase.UserBase() -> void
+virtual OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.ClearAuthenticationToken() -> void
+virtual OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.CreateUser() -> T
+virtual OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.GetAnonymousUser() -> T
+virtual OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.GetAuthenticatedUser(System.Security.Principal.IPrincipal principal) -> T
+virtual OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.IssueAuthenticationToken(System.Security.Principal.IPrincipal principal, bool isPersistent) -> void
+virtual OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.UpdateUserCore(T user) -> void
+virtual OpenRiaServices.Server.Authentication.AspNetMembership.AuthenticationBase<T>.ValidateUser(string userName, string password) -> bool
