@@ -17,8 +17,16 @@ namespace System
             public static void ThrowIfNull([NotNull] object? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
             {
                 if (argument is null)
-                    throw new ArgumentNullException(paramName);
+                    ThrowArgumentNullException(paramName);
             }
+
+#pragma warning disable CS8777 // Parameter must have a non-null value when exiting.
+            public static void ThrowIfNullOrEmpty([NotNull] string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+            {
+                if (string.IsNullOrEmpty(argument))
+                    ThrowArgumentNullException(paramName);
+            }
+#pragma warning restore CS8777 // Parameter must have a non-null value when exiting.
         }
 
         [DoesNotReturn]

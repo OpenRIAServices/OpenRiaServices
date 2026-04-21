@@ -31,7 +31,7 @@ namespace OpenRiaServices.Client
         /// if the method takes no parameters.</param>
         /// <param name="hasSideEffects">True if the query has side-effects, false otherwise.</param>
         /// <param name="isComposable">True if the query supports composition, false otherwise.</param>
-        internal EntityQuery(DomainClient domainClient, string queryName, Type entityType, IDictionary<string, object>? parameters, bool hasSideEffects, bool isComposable)
+        private protected EntityQuery(DomainClient domainClient, string queryName, Type entityType, IDictionary<string, object>? parameters, bool hasSideEffects, bool isComposable)
         {
             if (domainClient == null)
             {

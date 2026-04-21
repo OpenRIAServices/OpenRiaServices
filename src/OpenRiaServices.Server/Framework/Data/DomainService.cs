@@ -663,12 +663,11 @@ namespace OpenRiaServices.Server
                     {
                         var action = operation.EntityActions[i];
 
-                        DomainOperationEntry? customMethodOperation = null!;
+                        DomainOperationEntry? customMethodOperation = null;
                         bool alreadyInvoked = invokedActions != null && invokedActions.TryGetValue(action.Key, out customMethodOperation);
 
-
                         // ResolveOperations has already validated that the custom method exists, so we know this won't return null
-                        customMethodOperation ??= domainServiceDescription.GetCustomMethod(operation.Entity.GetType(), action.Key)!;
+                        customMethodOperation ??= domainServiceDescription.GetCustomMethod(operation.Entity.GetType(), action.Key);
 
                         // Of more that one action is queued check for multiple invocations, this way we don't have to allocate
                         // a dictionary unless necessary

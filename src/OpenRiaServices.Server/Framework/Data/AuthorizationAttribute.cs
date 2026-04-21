@@ -155,7 +155,7 @@ namespace System.ComponentModel.DataAnnotations
         {
             // Create and cache an accessor for this.
             // We guarantee a non-null accessor or an InvalidOperationException if the properties are incorrect to create one.
-            string? message = this.ErrorMessageAccessor();
+            string message = this.ErrorMessageAccessor();
 
             // Optionally include the operation if the string contains {0} formatting information
             return string.Format(CultureInfo.CurrentCulture, message, operation);
