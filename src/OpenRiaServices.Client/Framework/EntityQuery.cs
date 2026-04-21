@@ -195,7 +195,7 @@ namespace OpenRiaServices.Client
         {
         }
 
-        /// <inheritdoc cref="EntityQuery.Query">
+        /// <inheritdoc cref="EntityQuery.Query"/>
         internal new IQueryable<TEntity>? Query
         {
             get
