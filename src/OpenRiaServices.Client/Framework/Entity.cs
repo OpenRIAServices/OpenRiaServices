@@ -1954,37 +1954,49 @@ namespace OpenRiaServices.Client.EntityExtensions
 {
     public static class EntityExtensions
     {
+        /// <inheritdoc cref="Entity.ExtractState"/>
         public static IDictionary<string, object> ExtractState(this Entity targetEntity)
         {
             return targetEntity.ExtractState();
         }
+
+        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object})"/>
         public static void ExtractState(this Entity targetEntity, IDictionary<string, object> entityStateToApply)
         {
             targetEntity.ApplyState(entityStateToApply);
         }
+
+        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object}, LoadBehavior)"/>
         public static void ExtractState(this Entity targetEntity, IDictionary<string, object> entityStateToApply, LoadBehavior loadBehavior)
         {
             targetEntity.ApplyState(entityStateToApply, loadBehavior);
         }
 
+        /// <inheritdoc cref="Entity.UpdateOriginalValues(Entity)"/>
         public static void UpdateOriginalValues(this Entity targetEntity, Entity entity)
         {
             targetEntity.UpdateOriginalValues(entity);
         }
+
+        /// <inheritdoc cref="Entity.UpdateOriginalValues(IDictionary{string, object})"/>
         public static void UpdateOriginalValues(this Entity targetEntity, IDictionary<string, object> entityStateToApply)
         {
             targetEntity.UpdateOriginalValues(entityStateToApply);
         }
+
+        /// <inheritdoc cref="Entity.Merge(Entity, LoadBehavior)"/>
         public static void Merge(this Entity targetEntity, Entity otherEntity, LoadBehavior loadBehavior)
         {
             targetEntity.Merge(otherEntity, loadBehavior);
         }
 
+        /// <inheritdoc cref="Entity.Merge(IDictionary{string, object}, LoadBehavior)"/>
         public static void Merge(this Entity targetEntity, IDictionary<string, object> otherState, LoadBehavior loadBehavior)
         {
             targetEntity.Merge(otherState, loadBehavior);
         }
 
+        /// <inheritdoc cref="Entity.EntitySet"/>
         public static EntitySet<TEntity> GetEntitySet<TEntity>(this TEntity entity) where TEntity : Entity
         {
             return entity.EntitySet as EntitySet<TEntity>;
