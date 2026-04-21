@@ -234,7 +234,6 @@ namespace OpenRiaServices.Server
         /// Based on the operation type specified, create the default corresponding attribute
         /// if it hasn't been specified explicitly, and add it to the attributes collection.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_operationAttribute))]
         private void InitializeOperationAttribute()
         {
             if (this._operationAttribute != null)
@@ -297,18 +296,19 @@ namespace OpenRiaServices.Server
                     }
                     break;
                 default:
-                    throw new NotImplementedException(Operation.ToString());
+                    // We get here during ReflectionDomainServiceDescriptionProvider.ClassifyDomainOperation before DomainOperation is set
+                    break;
             }
 
             if (attributeCreated)
             {
                 if (this._attributes == null)
                 {
-                    this._attributes = new AttributeCollection(this._operationAttribute);
+                    this._attributes = new AttributeCollection(this._operationAttribute!);
                 }
                 else
                 {
-                    this._attributes = AttributeCollection.FromExisting(this._attributes, this._operationAttribute);
+                    this._attributes = AttributeCollection.FromExisting(this._attributes, this._operationAttribute!);
                 }
             }
         }
