@@ -18,7 +18,7 @@ namespace OpenRiaServices.Client
         /// <param name="parameters">Optional parameters to the operation. Specify null
         /// if the method takes no parameters.</param>
         /// <param name="hasSideEffects">True if the operation has side-effects, false otherwise.</param>
-        public InvokeArgs(string operationName, Type returnType, IDictionary<string, object>? parameters, bool hasSideEffects)
+        public InvokeArgs(string operationName, Type returnType, IDictionary<string, object?>? parameters, bool hasSideEffects)
         {
             if (string.IsNullOrEmpty(operationName))
             {
@@ -49,7 +49,7 @@ namespace OpenRiaServices.Client
         /// Optional parameters required by the operation. Returns null
         /// if the method takes no parameters.
         /// </summary>
-        public IDictionary<string, object>? Parameters { get; }
+        public IDictionary<string, object?>? Parameters { get; }
 
         /// <summary>
         /// Gets a value indicating whether the operation has side-effects.

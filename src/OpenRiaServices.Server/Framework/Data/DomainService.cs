@@ -442,7 +442,7 @@ namespace OpenRiaServices.Server
                 this.ServiceContext.Operation = invokeDescription.Method;
                 try
                 {
-                    object returnValue = await invokeDescription.Method.InvokeAsync(this, invokeDescription.ParameterValues, cancellationToken)
+                    object? returnValue = await invokeDescription.Method.InvokeAsync(this, invokeDescription.ParameterValues, cancellationToken)
                         .ConfigureAwait(false);
 
                     return new ServiceInvokeResult(returnValue);

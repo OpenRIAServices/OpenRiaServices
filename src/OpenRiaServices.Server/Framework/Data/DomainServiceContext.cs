@@ -23,12 +23,10 @@ namespace OpenRiaServices.Server
         /// <param name="user">The user calling the operation.</param>
         /// <param name="operationType">The type of operation that is being executed.</param>
         /// <param name="cancellationToken"></param>
-        public DomainServiceContext(IServiceProvider serviceProvider, IPrincipal? user, DomainOperationType operationType, CancellationToken cancellationToken = default)
+        public DomainServiceContext(IServiceProvider serviceProvider, IPrincipal user, DomainOperationType operationType, CancellationToken cancellationToken = default)
         {
-            if (serviceProvider == null)
-            {
-                throw new ArgumentNullException(nameof(serviceProvider));
-            }
+            ArgumentNullException.ThrowIfNull(serviceProvider);
+
             this._serviceProvider = serviceProvider;
             this.OperationType = operationType;
             this.User = user;
@@ -40,7 +38,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         [Obsolete("Use other constructor accepting a User, this will be removed in a future version")]
         public DomainServiceContext(IServiceProvider serviceProvider, DomainOperationType operationType)
-            : this(serviceProvider, (IPrincipal?)serviceProvider.GetService(typeof(IPrincipal)), operationType)
+            : this(serviceProvider, (IPrincipal)serviceProvider.GetService(typeof(IPrincipal))!, operationType)
         {
         }
 
@@ -57,7 +55,7 @@ namespace OpenRiaServices.Server
         /// <summary>
         /// The user for this context instance.
         /// </summary>
-        public IPrincipal? User { get; }
+        public IPrincipal User { get; }
 
         /// <summary>
         /// <see cref="CancellationToken"/> which may be used by hosting layer to request cancellation.

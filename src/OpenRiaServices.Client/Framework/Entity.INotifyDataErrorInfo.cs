@@ -53,7 +53,7 @@ namespace OpenRiaServices.Client
                 // If the property name is null or empty, then we want to include errors
                 // where the member names array is empty, or where the member names array
                 // contains a null or empty string.
-                results = this.ValidationErrors.Where(e => !e.MemberNames.Any() || e.MemberNames.Contains(propertyName));
+                results = this.ValidationErrors.Where(e => !e.MemberNames.Any() || e.MemberNames.Any(string.IsNullOrEmpty));
             }
             else
             {

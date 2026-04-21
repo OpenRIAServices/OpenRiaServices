@@ -407,7 +407,6 @@ namespace OpenRiaServices.Client
         /// Gets a value indicating whether this EntityRef has been loaded or
         /// has had a value assigned to it.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(Entity))]
         bool IEntityRef.HasValue
         {
             get
@@ -453,7 +452,6 @@ namespace OpenRiaServices.Client
         /// Gets a value indicating whether this EntityRef has been loaded or
         /// has had a value assigned to it.
         /// </summary>
-        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(Entity))]
         bool HasValue
         {
             get;

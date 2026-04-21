@@ -199,7 +199,7 @@ namespace System.ComponentModel.DataAnnotations
             {
                 // This value is unconditionally off limits for a "template" AuthorizationContext
                 this.EnsureNotTemplate();
-                return this._operationType!; // _operation and _operationType are always set together, so we can be sure that if _operation is not null, then _operationType is not null either
+                return this._operationType;
             }
         }
 
@@ -208,15 +208,18 @@ namespace System.ComponentModel.DataAnnotations
         /// instance is only a template.
         /// </summary>
 #pragma warning disable CS3016 // Arrays as attribute arguments is not CLS-compliant
-        [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_operation))]
-#pragma warning restore CS3016 // Arrays as attribute arguments is not CLS-compliant
+#pragma warning disable CS8774 // _operation and _operationType are always set together, so we can be sure that if _operation is not null, then _operationType is not null either
+        [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_operation), nameof(_operationType))]
         private void EnsureNotTemplate()
+
         {
             if (this._operation == null)
             {
                 throw new InvalidOperationException(DataAnnotationsResources.AuthorizationContext_Template_Only);
             }
         }
+#pragma warning restore CS8774 // Member must have a non-null value when exiting.
+#pragma warning restore CS3016 // Arrays as attribute arguments is not CLS-compliant
 
         /// <summary>
         /// Helper method to initialize some ctor parameters

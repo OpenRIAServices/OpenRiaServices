@@ -14,7 +14,7 @@ namespace OpenRiaServices.Client
     {
         private readonly string _queryName;
         private readonly Type _entityType;
-        private readonly IDictionary<string, object>? _parameters;
+        private readonly IDictionary<string, object?>? _parameters;
         private readonly bool _hasSideEffects;
         private readonly bool _isComposable;
         private bool _includeTotalCount;
@@ -31,7 +31,7 @@ namespace OpenRiaServices.Client
         /// if the method takes no parameters.</param>
         /// <param name="hasSideEffects">True if the query has side-effects, false otherwise.</param>
         /// <param name="isComposable">True if the query supports composition, false otherwise.</param>
-        private protected EntityQuery(DomainClient domainClient, string queryName, Type entityType, IDictionary<string, object>? parameters, bool hasSideEffects, bool isComposable)
+        private protected EntityQuery(DomainClient domainClient, string queryName, Type entityType, IDictionary<string, object?>? parameters, bool hasSideEffects, bool isComposable)
         {
             if (domainClient == null)
             {
@@ -106,7 +106,7 @@ namespace OpenRiaServices.Client
         /// Optional parameters required by the query method. Returns null
         /// if the method takes no parameters.
         /// </summary>
-        public IDictionary<string, object>? Parameters
+        public IDictionary<string, object?>? Parameters
         {
             get
             {
@@ -185,7 +185,7 @@ namespace OpenRiaServices.Client
     /// <typeparam name="TEntity">The entity type.</typeparam>
     public sealed class EntityQuery<TEntity> : EntityQuery where TEntity : Entity
     {
-        internal EntityQuery(DomainClient domainClient, string queryName, IDictionary<string, object> parameters, bool hasSideEffects, bool isComposable)
+        internal EntityQuery(DomainClient domainClient, string queryName, IDictionary<string, object?> parameters, bool hasSideEffects, bool isComposable)
             : base(domainClient, queryName, typeof(TEntity), parameters, hasSideEffects, isComposable)
         {
         }

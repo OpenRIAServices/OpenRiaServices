@@ -356,7 +356,7 @@ namespace OpenRiaServices.Server
         /// <param name="parameters">The parameters to pass to the method.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to signal cancellation of this operation</param>
         /// <returns>The return value of the invoked method.</returns>
-        public abstract ValueTask<object> InvokeAsync(DomainService domainService, object[] parameters, CancellationToken cancellationToken);
+        public abstract ValueTask<object?> InvokeAsync(DomainService domainService, object[] parameters, CancellationToken cancellationToken);
 
         /// <summary>
         /// Gets the type of domain operation implemented by the method.
@@ -410,7 +410,7 @@ namespace OpenRiaServices.Server
         /// <param name="totalCount">The total number of rows for the input query without any paging applied to it.</param>
         /// <param name="cancellationToken">A cancellation token that can be used to signal cancellation of this operation</param>
         /// <returns>The return value of the invoked method.</returns>
-        internal ValueTask<object> InvokeAsync(DomainService domainService, object[] parameters, out int totalCount, CancellationToken cancellationToken)
+        internal ValueTask<object?> InvokeAsync(DomainService domainService, object[] parameters, out int totalCount, CancellationToken cancellationToken)
         {
             if (this.HasOutCountParameter)
             {
@@ -418,13 +418,13 @@ namespace OpenRiaServices.Server
                 parameters.CopyTo(parametersWithCount, 0);
                 parametersWithCount[parameters.Length] = 0;
 
-                ValueTask<object> invokeTask = this.InvokeAsync(domainService, parametersWithCount, cancellationToken);
+                ValueTask<object?> invokeTask = this.InvokeAsync(domainService, parametersWithCount, cancellationToken);
 
                 // Cant use await since method has out parameter so we need to block
-                object result = invokeTask.IsCompleted ? invokeTask.GetAwaiter().GetResult() : invokeTask.AsTask().GetAwaiter().GetResult();
+                object? result = invokeTask.IsCompleted ? invokeTask.GetAwaiter().GetResult() : invokeTask.AsTask().GetAwaiter().GetResult();
 
                 totalCount = (int)parametersWithCount[parameters.Length];
-                return new ValueTask<object>(result);
+                return new ValueTask<object?>(result);
             }
             else
             {

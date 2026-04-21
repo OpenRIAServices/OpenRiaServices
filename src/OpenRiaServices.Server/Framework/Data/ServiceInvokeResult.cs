@@ -3,6 +3,8 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+#nullable enable
+
 namespace OpenRiaServices.Server
 {
     /// <summary>
@@ -15,7 +17,7 @@ namespace OpenRiaServices.Server
         /// Create a <see cref="ServiceInvokeResult"/> with the result of an successfully invoked Invoke operation
         /// </summary>
         /// <param name="result">the result from the invoked operation (or <c>null</c> if it was a void method)</param>
-        public ServiceInvokeResult(object result)
+        public ServiceInvokeResult(object? result)
         {
             Result = result;
             ValidationErrors = null;
@@ -39,17 +41,18 @@ namespace OpenRiaServices.Server
         /// <summary>
         /// The result of the invocation, or <c>null</c> if <see cref="HasValidationErrors"/> is true
         /// </summary>
-        public object Result { get; }
+        public object? Result { get; }
 
         /// <summary>
         /// <c>true</c> if the query unsuccessfull and <see cref="ValidationErrors"/> contains the errors.
         /// <c>false</c> means that the query was successfull with results in <see cref="Result"/>
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(ValidationErrors))]
         public bool HasValidationErrors => ValidationErrors != null;
 
         /// <summary>
         /// Gets the validation erros if any, or <c>null</c> if there were no validation errors.
         /// </summary>
-        public IReadOnlyCollection<ValidationResult> ValidationErrors { get; }
+        public IReadOnlyCollection<ValidationResult>? ValidationErrors { get; }
     }
 }
