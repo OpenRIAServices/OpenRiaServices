@@ -185,7 +185,7 @@ namespace OpenRiaServices.Client
     /// <typeparam name="TEntity">The entity type.</typeparam>
     public sealed class EntityQuery<TEntity> : EntityQuery where TEntity : Entity
     {
-        internal EntityQuery(DomainClient domainClient, string queryName, IDictionary<string, object?> parameters, bool hasSideEffects, bool isComposable)
+        internal EntityQuery(DomainClient domainClient, string queryName, IDictionary<string, object?>? parameters, bool hasSideEffects, bool isComposable)
             : base(domainClient, queryName, typeof(TEntity), parameters, hasSideEffects, isComposable)
         {
         }
@@ -195,6 +195,7 @@ namespace OpenRiaServices.Client
         {
         }
 
+        /// <inheritdoc cref="EntityQuery.Query">
         internal new IQueryable<TEntity>? Query
         {
             get

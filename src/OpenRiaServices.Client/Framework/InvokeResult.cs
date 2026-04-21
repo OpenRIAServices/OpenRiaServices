@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -9,7 +11,7 @@ namespace OpenRiaServices.Client
     /// </summary>
     interface IInvokeResult
     {
-        object Value { get; }
+        object? Value { get; }
     }
 
     /// <summary>
@@ -17,7 +19,7 @@ namespace OpenRiaServices.Client
     /// </summary>
     public class InvokeResult : IInvokeResult
     {
-        object IInvokeResult.Value => null;
+        object? IInvokeResult.Value => null;
     }
 
     /// <summary>
@@ -42,16 +44,16 @@ namespace OpenRiaServices.Client
         /// <value>
         /// The value.
         /// </value>
-        public T Value => _value;
+        public T? Value => _value;
 
-        object IInvokeResult.Value => _value;
+        object? IInvokeResult.Value => _value;
 
         /// <summary>
         /// Implicit conversion to <typeparamref name="T"/> so that <see cref="Value"/> does not need to be used
         /// in most cases.
         /// </summary>
         /// <param name="invokeResult"></param>
-        public static implicit operator T(InvokeResult<T> invokeResult)
+        public static implicit operator T?(InvokeResult<T> invokeResult)
         {
             return invokeResult.Value;
         }

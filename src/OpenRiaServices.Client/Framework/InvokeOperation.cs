@@ -14,7 +14,7 @@ namespace OpenRiaServices.Client
     /// </summary>
     public class InvokeOperation : OperationBase, IInvokeResult
     {
-        private IDictionary<string, object>? _parameters;
+        private IDictionary<string, object?>? _parameters;
         private IReadOnlyCollection<ValidationResult>? _validationErrors;
         private readonly Action<InvokeOperation>? _completeAction;
 
@@ -27,7 +27,7 @@ namespace OpenRiaServices.Client
         /// <param name="completeAction">Optional action to execute when the operation completes.</param>
         /// <param name="userState">Optional user state for the operation.</param>
         /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
-        internal InvokeOperation(string operationName, IDictionary<string, object>? parameters,
+        internal InvokeOperation(string operationName, IDictionary<string, object?>? parameters,
             Action<InvokeOperation>? completeAction, object? userState,
             CancellationTokenSource? cancellationTokenSource)
             : base(userState, cancellationTokenSource)
@@ -49,13 +49,13 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the collection of parameters to the operation.
         /// </summary>
-        public IDictionary<string, object> Parameters
+        public IDictionary<string, object?> Parameters
         {
             get
             {
                 if (this._parameters == null)
                 {
-                    this._parameters = new Dictionary<string, object>();
+                    this._parameters = new Dictionary<string, object?>();
                 }
                 return this._parameters;
             }
@@ -145,7 +145,7 @@ namespace OpenRiaServices.Client
         /// <param name="userState">Optional user state for the operation.</param>
         /// <param name="invokeResultTask">Task which, when completed, will Complete the operation and set either <see cref="Value"/>, cancelled or error</param>
         /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
-        public InvokeOperation(string operationName, IDictionary<string, object>? parameters,
+        public InvokeOperation(string operationName, IDictionary<string, object?>? parameters,
             Action<InvokeOperation<TValue>>? completeAction, object? userState,
             Task<InvokeResult<TValue>> invokeResultTask,
             CancellationTokenSource? cancellationTokenSource)
