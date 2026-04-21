@@ -186,7 +186,7 @@ namespace OpenRiaServices.Server
                 context.Items[typeof(Type)] = domainOperationEntry.AssociatedType;
 
                 // The principal is retrieved through the DomainServiceContext as a service
-                IPrincipal? principal = this.ServiceContext != null ? this.ServiceContext.User : null;
+                IPrincipal? principal = this.ServiceContext.User;
 
                 // Null principal is denied before going any further -- it is contractually required for the
                 // authorization attributes.
