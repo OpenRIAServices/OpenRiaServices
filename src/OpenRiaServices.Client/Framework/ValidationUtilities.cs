@@ -40,7 +40,6 @@ namespace OpenRiaServices.Client
             ValidationContext context = new ValidationContext(instance, parentContext, parentContext != null ? parentContext.Items : null);
             return context;
         }
-#nullable restore
 
         /// <summary>
         /// Internal helper method for getting a method from an object instance that matches
@@ -51,7 +50,7 @@ namespace OpenRiaServices.Client
         /// <param name="parameters">The parameter values to be passed to the method</param>
         /// <returns>A <see cref="MethodInfo"/> from an object instance that matches
         /// the specified parameters.</returns>
-        internal static MethodInfo GetMethod(object instance, string methodName, object[] parameters)
+        internal static MethodInfo GetMethod(object instance, string methodName, object?[]? parameters)
         {
             Type instanceType = instance.GetType();
             MethodInfo[] candidates = instanceType.GetMethods()
@@ -68,7 +67,7 @@ namespace OpenRiaServices.Client
                 else
                 {
                     // convert parameter types into a string of this format e.g. ('string', null, 'int')
-                    string[] parameterTypes = parameters.Select(p => ((p == null) ? "null" : string.Format(CultureInfo.InvariantCulture, "'{0}'", p.GetType().ToString()))).ToArray();
+                    string[] parameterTypes = parameters!.Select(p => ((p == null) ? "null" : string.Format(CultureInfo.InvariantCulture, "'{0}'", p.GetType().ToString()))).ToArray();
                     throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound, instanceType, methodName, parameterLength, string.Join(", ", parameterTypes)));
                 }
             }
@@ -80,7 +79,7 @@ namespace OpenRiaServices.Client
             return candidates[0];
         }
 
-        internal static bool IsBindable(Type[] parameterTypes, object[] parameters)
+        internal static bool IsBindable(Type[] parameterTypes, object?[]? parameters)
         {
             int parameterLength = (parameters == null) ? 0 : parameters.Length;
             if (parameterTypes.Length != parameterLength)
@@ -90,7 +89,7 @@ namespace OpenRiaServices.Client
 
             for (int i = 0; i < parameterLength; i++)
             {
-                if (parameters[i] == null)
+                if (parameters![i] == null)
                 {
                     if (!TypeUtility.IsNullableType(parameterTypes[i])
                         && parameterTypes[i].IsValueType)
@@ -113,7 +112,7 @@ namespace OpenRiaServices.Client
         /// <param name="method">The method to validate the set of parameters against.</param>
         /// <param name="parameters">The set of parameters to check.</param>
         /// <returns><c>true</c> if the set of parameters can be passed to the specified method.</returns>
-        internal static bool IsBindable(MethodInfo method, object[] parameters)
+        internal static bool IsBindable(MethodInfo method, object?[]? parameters)
         {
             return IsBindable(method.GetParameters().Select(p => p.ParameterType).ToArray(), parameters);
         }
@@ -124,7 +123,7 @@ namespace OpenRiaServices.Client
         /// <param name="validationResults">The validation results</param>
         /// <param name="memberPath">The member path to append</param>
         /// <returns>The updated validation results</returns>
-        internal static IEnumerable<ValidationResult> ApplyMemberPath(IEnumerable<ValidationResult> validationResults, string memberPath)
+        internal static IEnumerable<ValidationResult> ApplyMemberPath(IEnumerable<ValidationResult> validationResults, string? memberPath)
         {
             if (string.IsNullOrEmpty(memberPath))
             {
@@ -141,7 +140,7 @@ namespace OpenRiaServices.Client
         /// <param name="validationResult">The validation result</param>
         /// <param name="memberPath">The member path to append</param>
         /// <returns>The updated validation result</returns>
-        internal static ValidationResult ApplyMemberPath(ValidationResult validationResult, string memberPath)
+        internal static ValidationResult ApplyMemberPath(ValidationResult validationResult, string? memberPath)
         {
             if (string.IsNullOrEmpty(memberPath))
             {
@@ -168,7 +167,7 @@ namespace OpenRiaServices.Client
 
             return new ValidationResult(validationResult.ErrorMessage, memberNames);
         }
-
+#nullable restore
         /// <summary>
         /// Validate the specified object an any complex members or collections recursively.
         /// </summary>

@@ -8,11 +8,13 @@ using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     public abstract partial class ComplexObject : INotifyDataErrorInfo
     {
-        private EventHandler<DataErrorsChangedEventArgs> _errorsChangedHandler;
+        private EventHandler<DataErrorsChangedEventArgs>? _errorsChangedHandler;
         /// <summary>
         /// Raises the event whenever validation errors have changed for a property.
         /// </summary>
@@ -24,7 +26,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Explicitly implement the <see cref="INotifyDataErrorInfo.ErrorsChanged"/> event.
         /// </summary>
-        event EventHandler<DataErrorsChangedEventArgs> INotifyDataErrorInfo.ErrorsChanged
+        event EventHandler<DataErrorsChangedEventArgs>? INotifyDataErrorInfo.ErrorsChanged
         {
             add { this._errorsChangedHandler += value; }
             remove { this._errorsChangedHandler -= value; }
@@ -42,7 +44,7 @@ namespace OpenRiaServices.Client
         /// or type-level errors when <paramref name="propertyName"/> is
         /// <c>null</c> or empty.
         /// </returns>
-        IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
+        IEnumerable INotifyDataErrorInfo.GetErrors(string? propertyName)
         {
             IEnumerable<ValidationResult> results;
             if (string.IsNullOrEmpty(propertyName))

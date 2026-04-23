@@ -397,7 +397,7 @@ namespace OpenRiaServices.Client
                 // - scenarios where an entity is removed and a new entity with the same identity is added
                 // - scenarios where the entity instance itself is the one already cached (for infer attach
                 //   state transition scenarios)
-                object identity = entity.GetIdentity();
+                object? identity = entity.GetIdentity();
                 if (identity != null
                     && this._identityCache.TryGetValue(identity, out Entity? cachedEntity)
                     && cachedEntity.EntityState != EntityState.Deleted
@@ -626,7 +626,7 @@ namespace OpenRiaServices.Client
 
             // Throw if the entity identity is null or we already have
             // an entity cached with the same identity.
-            object identity = entity.GetIdentity();
+            object? identity = entity.GetIdentity();
             if (identity == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
@@ -739,7 +739,7 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(Resource.EntitySet_EntityAlreadyAttached);
             }
 
-            object identity = entity.GetIdentity();
+            object? identity = entity.GetIdentity();
             if (identity == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
@@ -812,7 +812,7 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The entity to add</param>
         internal void AddToCache(Entity entity)
         {
-            object identity = entity.GetIdentity();
+            object? identity = entity.GetIdentity();
             if (identity == null)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
@@ -831,7 +831,7 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The entity to remove.</param>
         internal void RemoveFromCache(Entity entity)
         {
-            object identity = entity.GetIdentity();
+            object? identity = entity.GetIdentity();
 
             Entity? cachedEntity;
             if (identity == null || !this._identityCache.TryGetValue(identity, out cachedEntity) || cachedEntity != entity)
@@ -1200,7 +1200,7 @@ namespace OpenRiaServices.Client
                         // If the EntityRef hasn't been accesssed before, it might
                         // not be initialized yet. In this case we need to access
                         // the property directly.
-                        child = (Entity)member.GetValue(parent);
+                        child = (Entity?)member.GetValue(parent);
                     }
                     else
                     {
@@ -1258,7 +1258,7 @@ namespace OpenRiaServices.Client
                         // If the EntityRef hasn't been accessed before, it might
                         // not be initialized yet. In this case we need to access
                         // the property directly.
-                        child = (Entity)member.GetValue(parent);
+                        child = (Entity?)member.GetValue(parent);
                     }
                     else
                     {
