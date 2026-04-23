@@ -16,8 +16,6 @@ namespace OpenRiaServices.Client
         /// <param name="changeSet">The changeset which was submitted.</param>
         public SubmitResult(EntityChangeSet changeSet)
         {
-            ArgumentNullException.ThrowIfNull(changeSet);
-
             ChangeSet = changeSet;
         }
 

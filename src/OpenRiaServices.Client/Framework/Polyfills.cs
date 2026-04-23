@@ -14,6 +14,7 @@ namespace System
     {
         extension(ArgumentNullException)
         {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static void ThrowIfNull([NotNull] object? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
             {
                 if (argument is null)
@@ -21,6 +22,7 @@ namespace System
             }
 
 #pragma warning disable CS8777 // Parameter must have a non-null value when exiting.
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static void ThrowIfNullOrEmpty([NotNull] string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
             {
                 if (string.IsNullOrEmpty(argument))

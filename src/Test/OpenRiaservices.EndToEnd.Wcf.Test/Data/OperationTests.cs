@@ -354,7 +354,8 @@ namespace OpenRiaServices.Client.Test
             {
                 try
                 {
-                    var submit = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, Task.FromResult(new SubmitResult(null)), null);
+                    var changeSet = cities.EntityContainer.GetChanges();
+                    var submit = new SubmitOperation(changeSet, soCallback, null, Task.FromResult(new SubmitResult(changeSet)), null);
                 }
                 catch (Exception ex)
                 {
@@ -378,7 +379,7 @@ namespace OpenRiaServices.Client.Test
 
             var submitTaskSource = new TaskCompletionSource<SubmitResult>(TaskCreationOptions.RunContinuationsAsynchronously);
             var submitOperation = new SubmitOperation(cities.EntityContainer.GetChanges(), soCallback, null, submitTaskSource.Task, null);
-            await AssertExceptionIsCorrectlyRaisedOnSyncContext(submitOperation, submitTaskSource, new SubmitResult(null));
+            await AssertExceptionIsCorrectlyRaisedOnSyncContext(submitOperation, submitTaskSource, new SubmitResult(cities.EntityContainer.GetChanges()));
 
             // verify cancellation callbacks for all fx operation types
             var noCompleteLoad = new TaskCompletionSource<LoadResult<City>>();
