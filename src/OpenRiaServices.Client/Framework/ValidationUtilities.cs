@@ -67,7 +67,7 @@ namespace OpenRiaServices.Client
                 else
                 {
                     // convert parameter types into a string of this format e.g. ('string', null, 'int')
-                    string[] parameterTypes = parameters!.Select(p => ((p == null) ? "null" : string.Format(CultureInfo.InvariantCulture, "'{0}'", p.GetType().ToString()))).ToArray();
+                    string[] parameterTypes = parameters!.Select(p => ((p == null) ? "null" : string.Format(CultureInfo.InvariantCulture, "'{0}'", p.GetType()))).ToArray();
                     throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound, instanceType, methodName, parameterLength, string.Join(", ", parameterTypes)));
                 }
             }

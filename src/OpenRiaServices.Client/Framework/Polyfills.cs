@@ -20,15 +20,16 @@ namespace System
                 if (argument is null)
                     ThrowArgumentNullException(paramName);
             }
+        }
 
-#pragma warning disable CS8777 // Parameter must have a non-null value when exiting.
+        extension(ArgumentException)
+        {
             [MethodImpl(MethodImplOptions.AggressiveInlining)]
             public static void ThrowIfNullOrEmpty([NotNull] string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
             {
-                if (string.IsNullOrEmpty(argument))
+                if (argument is null || argument.Length == 0)
                     ThrowArgumentNullException(paramName);
             }
-#pragma warning restore CS8777 // Parameter must have a non-null value when exiting.
         }
 
         [DoesNotReturn]

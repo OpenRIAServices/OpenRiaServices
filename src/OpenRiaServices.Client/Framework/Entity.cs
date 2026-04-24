@@ -1971,20 +1971,20 @@ namespace OpenRiaServices.Client.EntityExtensions
             targetEntity.ApplyState(entityStateToApply);
         }
 
-        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object}, LoadBehavior)"/>
+        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object?}, LoadBehavior)"/>
         [Obsolete("Use ApplyState to instead.")]
         public static void ExtractState(this Entity targetEntity, IDictionary<string, object?> entityStateToApply, LoadBehavior loadBehavior)
         {
             targetEntity.ApplyState(entityStateToApply, loadBehavior);
         }
 
-        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object})"/>
+        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object?})"/>
         public static void ApplyState(this Entity targetEntity, IDictionary<string, object?> entityStateToApply)
         {
             targetEntity.ApplyState(entityStateToApply);
         }
 
-        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object}, LoadBehavior)"/>
+        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object?}, LoadBehavior)"/>
         public static void ApplyState(this Entity targetEntity, IDictionary<string, object?> entityStateToApply, LoadBehavior loadBehavior)
         {
             targetEntity.ApplyState(entityStateToApply, loadBehavior);
@@ -1996,7 +1996,7 @@ namespace OpenRiaServices.Client.EntityExtensions
             targetEntity.UpdateOriginalValues(entity);
         }
 
-        /// <inheritdoc cref="Entity.UpdateOriginalValues(IDictionary{string, object})"/>
+        /// <inheritdoc cref="Entity.UpdateOriginalValues(IDictionary{string, object?})"/>
         public static void UpdateOriginalValues(this Entity targetEntity, IDictionary<string, object?> entityStateToApply)
         {
             targetEntity.UpdateOriginalValues(entityStateToApply);

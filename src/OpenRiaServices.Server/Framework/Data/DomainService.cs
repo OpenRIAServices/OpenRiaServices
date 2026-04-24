@@ -173,7 +173,7 @@ namespace OpenRiaServices.Server
 
             // Formulate an AuthorizationContext from the optional template provided by the user
             AuthorizationContext? contextTemplate = this.AuthorizationContext;
-            AuthorizationResult? result = null;
+            AuthorizationResult result;
 
             // If the developer specified a template, we will clone from it and use it as the IServiceProvider.
             // If the user did not, we create a new instance and use the ServiceContext as the IServiceProvider.
@@ -575,18 +575,14 @@ namespace OpenRiaServices.Server
         /// </returns>
         private static AuthorizationResult EvaluateAuthorization(IEnumerable<AuthorizationAttribute> attributes, IPrincipal principal, AuthorizationContext authorizationContext)
         {
-            System.Diagnostics.Debug.Assert(attributes != null, "Authorization attributes cannot be null");
-            System.Diagnostics.Debug.Assert(principal != null, "Principal cannot be null");
-            System.Diagnostics.Debug.Assert(authorizationContext != null, "AuthorizationContext cannot be null");
-
             // 2 passes.
             // Pass 1 does [RequiresAuthentication] so we ensure it is always first.  The idea is that if it is present, that is the most informative.
             // Pass 2 does the rest
-            foreach (AuthorizationAttribute attribute in attributes!)
+            foreach (AuthorizationAttribute attribute in attributes)
             {
                 if (attribute is RequiresAuthenticationAttribute)
                 {
-                    AuthorizationResult result = attribute.Authorize(principal!, authorizationContext!);
+                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext!);
                     if (result != AuthorizationResult.Allowed)
                     {
                         return result;
@@ -600,7 +596,7 @@ namespace OpenRiaServices.Server
             {
                 if (!(attribute is RequiresAuthenticationAttribute))
                 {
-                    AuthorizationResult result = attribute.Authorize(principal!, authorizationContext!);
+                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext!);
                     if (result != AuthorizationResult.Allowed)
                     {
                         return result;
