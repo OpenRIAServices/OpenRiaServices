@@ -12,6 +12,8 @@ using System.Runtime.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -29,16 +31,16 @@ namespace OpenRiaServices.Client
                     typeof(bool),
                     typeof(Type),
                     typeof(CancellationToken)
-                });
+                })!;
 
         private int _activeLoadCount;
         private readonly DomainClient _domainClient;
-        private EntityContainer _entityContainer;
-        private ValidationContext _validationContext;
+        private EntityContainer? _entityContainer;
+        private ValidationContext? _validationContext;
         private bool _isSubmitting;
         private readonly Dictionary<string, bool> _requiresValidationMap = new Dictionary<string, bool>();
         private readonly object _syncRoot = new object();
-        private static IDomainClientFactory s_domainClientFactory;
+        private static IDomainClientFactory? s_domainClientFactory;
 
         private static TaskScheduler CurrrentSynchronizationContextTaskScheduler => SynchronizationContext.Current != null ? TaskScheduler.FromCurrentSynchronizationContext() : TaskScheduler.Default;
 
@@ -98,7 +100,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Event raised whenever a <see cref="DomainContext"/> property changes
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         /// <summary>
         /// Gets the <see cref="DomainClient"/> for this context
@@ -187,7 +189,7 @@ namespace OpenRiaServices.Client
         /// making these services and items available to each
         /// <see cref="ValidationAttribute"/> involved in validation.
         /// </value>
-        public ValidationContext ValidationContext
+        public ValidationContext? ValidationContext
         {
             get
             {
@@ -258,10 +260,10 @@ namespace OpenRiaServices.Client
         /// <param name="userState">Optional user state to associate with the operation.
         /// </param>
         /// <returns>The <see cref="SubmitOperation"/>.</returns>
-        public virtual SubmitOperation SubmitChanges(Action<SubmitOperation> callback, object userState)
+        public virtual SubmitOperation SubmitChanges(Action<SubmitOperation>? callback, object? userState)
         {
             EntityChangeSet changeSet = this.EntityContainer.GetChanges();
-            CancellationTokenSource cts = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
+            CancellationTokenSource? cts = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
 
             var submitTask = SubmitChangesAsync(cts?.Token ?? CancellationToken.None);
             return new SubmitOperation(changeSet, callback, userState, submitTask, cts);
@@ -398,7 +400,7 @@ namespace OpenRiaServices.Client
         /// <param name="isComposable">True if the query supports composition, false otherwise.</param>
         /// <returns>The query.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        protected EntityQuery<TEntity> CreateQuery<TEntity>(string queryName, IDictionary<string, object> parameters, bool hasSideEffects, bool isComposable) where TEntity : Entity
+        protected EntityQuery<TEntity> CreateQuery<TEntity>(string queryName, IDictionary<string, object?>? parameters, bool hasSideEffects, bool isComposable) where TEntity : Entity
         {
             return new EntityQuery<TEntity>(this.DomainClient, queryName, parameters, hasSideEffects, isComposable);
         }
@@ -443,7 +445,7 @@ namespace OpenRiaServices.Client
         /// <returns>The load operation.</returns>
         public LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, bool throwOnError) where TEntity : Entity
         {
-            Action<LoadOperation<TEntity>> callback = null;
+            Action<LoadOperation<TEntity>>? callback = null;
             if (!throwOnError)
             {
                 callback = (op) =>
@@ -466,7 +468,7 @@ namespace OpenRiaServices.Client
         /// <param name="callback">Optional callback to be called when the load operation completes.</param>
         /// <param name="userState">Optional user state.</param>
         /// <returns>The load operation.</returns>
-        public LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, Action<LoadOperation<TEntity>> callback, object userState) where TEntity : Entity
+        public LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, Action<LoadOperation<TEntity>>? callback, object? userState) where TEntity : Entity
         {
             return this.Load<TEntity>(query, LoadBehavior.KeepCurrent, callback, userState);
         }
@@ -480,9 +482,9 @@ namespace OpenRiaServices.Client
         /// <param name="callback">Optional callback to be called when the load operation completes.</param>
         /// <param name="userState">Optional user state.</param>
         /// <returns>The load operation.</returns>
-        public virtual LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, Action<LoadOperation<TEntity>> callback, object userState) where TEntity : Entity
+        public virtual LoadOperation<TEntity> Load<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, Action<LoadOperation<TEntity>>? callback, object? userState) where TEntity : Entity
         {
-            CancellationTokenSource cts = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
+            CancellationTokenSource? cts = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
 
             var loadResult = LoadAsync(query, loadBehavior, cts?.Token ?? CancellationToken.None);
             return new LoadOperation<TEntity>(query, loadBehavior, callback, userState, loadResult, cts);
@@ -497,17 +499,17 @@ namespace OpenRiaServices.Client
         /// <param name="userState">Optional user state.</param>
         /// <returns>The load operation.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public LoadOperation Load(EntityQuery query, LoadBehavior loadBehavior, Action<LoadOperation> callback, object userState)
+        public LoadOperation Load(EntityQuery query, LoadBehavior loadBehavior, Action<LoadOperation>? callback, object? userState)
         {
             // Get MethodInfo for Load<TEntity>(EntityQuery<TEntity>, LoadBehavior, Action<LoadOperation<TEntity>>, object, LoadOperation<TEntity>)
-            var method = new Func<EntityQuery<Entity>, LoadBehavior, Action<LoadOperation<Entity>>, object, LoadOperation<Entity>>(this.Load);
+            var method = new Func<EntityQuery<Entity>, LoadBehavior, Action<LoadOperation<Entity>>?, object?, LoadOperation<Entity>>(this.Load);
             var loadMethod = method.Method.GetGenericMethodDefinition();
 
             try
             {
                 return (LoadOperation)loadMethod
                     .MakeGenericMethod(query.EntityType)
-                    .Invoke(this, new object[] { query, loadBehavior, callback, userState });
+                    .Invoke(this, [query, loadBehavior, callback, userState])!;
             }
             catch (TargetInvocationException tie)
             {
@@ -586,12 +588,12 @@ namespace OpenRiaServices.Client
 
             async Task<LoadResult<TEntity>> LoadAsyncImplementation(Task<QueryCompletedResult> queryCompletedResult)
             {
-                IReadOnlyCollection<Entity> loadedEntities = null;
-                IReadOnlyCollection<Entity> loadedIncludedEntities = null;
-                List<Entity> allLoadedEntities = null;
+                IReadOnlyCollection<Entity> loadedEntities;
+                IReadOnlyCollection<Entity> loadedIncludedEntities;
+                Entity[] allLoadedEntities;
                 int totalCount;
 
-                QueryCompletedResult results = null;
+                QueryCompletedResult? results = null;
                 try
                 {
                     // The task is known to be completed so this will never block
@@ -603,14 +605,12 @@ namespace OpenRiaServices.Client
                         loadedIncludedEntities = this.EntityContainer.LoadEntities(results.IncludedEntities, loadBehavior);
                     }
 
-                    allLoadedEntities = new List<Entity>(loadedEntities.Count + loadedIncludedEntities.Count);
-                    allLoadedEntities.AddRange(loadedEntities);
-                    allLoadedEntities.AddRange(loadedIncludedEntities);
+                    allLoadedEntities = [.. loadedEntities, .. loadedIncludedEntities];
                     totalCount = results.TotalCount;
                 }
                 catch (Exception ex) when (!(ex is DomainException || ex is OperationCanceledException || ex.IsFatal()))
                 {
-                    string message = string.Format(Resource.DomainContext_LoadOperationFailed, query.QueryName, ex.Message);
+                    string message = string.Format(CultureInfo.InvariantCulture, Resource.DomainContext_LoadOperationFailed, query.QueryName, ex.Message);
 
                     throw ex is DomainOperationException domainOperationException
                         ? new DomainOperationException(message, domainOperationException)
@@ -623,7 +623,7 @@ namespace OpenRiaServices.Client
 
                 if (results.ValidationErrors.Any())
                 {
-                    string message = string.Format(Resource.DomainContext_LoadOperationFailed_Validation, query.QueryName);
+                    string message = string.Format(CultureInfo.InvariantCulture, Resource.DomainContext_LoadOperationFailed_Validation, query.QueryName);
                     throw new DomainOperationException(message, results.ValidationErrors);
                 }
                 else
@@ -697,10 +697,8 @@ namespace OpenRiaServices.Client
         private static void AddEntityErrors(Entity failedEntity, IEnumerable<ValidationResultInfo> errors, Dictionary<Entity, List<ValidationResult>> entityErrorMap)
         {
             // We need to accumulate all the errors on an entity in the entityErrorMap Entity.ValidationErrors are IEnumerable. 
-            Debug.Assert(failedEntity != null, "failedEntity should not be null");
 
-            List<ValidationResult> entityErrors;
-            if (!entityErrorMap.TryGetValue(failedEntity, out entityErrors))
+            if (!entityErrorMap.TryGetValue(failedEntity, out List<ValidationResult>? entityErrors))
             {
                 entityErrors = errors.Select(e => new ValidationResult(e.Message, e.SourceMemberNames)).ToList();
                 entityErrorMap[failedEntity] = entityErrors;
@@ -713,7 +711,7 @@ namespace OpenRiaServices.Client
                 foreach (ValidationResultInfo operationError in errors)
                 {
                     ValidationResult validationResult = new ValidationResult(operationError.Message, operationError.SourceMemberNames);
-                    if (!entityErrors.Contains<ValidationResult>(validationResult, new ValidationResultEqualityComparer()))
+                    if (!entityErrors.Contains<ValidationResult>(validationResult, ValidationResultEqualityComparer.Instance))
                     {
                         entityErrors.Add(validationResult);
                     }
@@ -743,7 +741,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="sender">The EntityContainer</param>
         /// <param name="e">The event args</param>
-        private void EntityContainerPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void EntityContainerPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(HasChanges))
             {
@@ -765,9 +763,9 @@ namespace OpenRiaServices.Client
         /// <param name="userState">Optional user state for the operation.</param>
         /// <returns>The invoke operation.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public virtual InvokeOperation<TValue> InvokeOperation<TValue>(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation<TValue>> callback, object userState)
+        public virtual InvokeOperation<TValue> InvokeOperation<TValue>(string operationName, Type returnType, IDictionary<string, object?>? parameters, bool hasSideEffects, Action<InvokeOperation<TValue>>? callback, object? userState)
         {
-            CancellationTokenSource cts = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
+            CancellationTokenSource? cts = DomainClient.SupportsCancellation ? new CancellationTokenSource() : null;
 
             var invokeResult = InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, returnType, cts?.Token ?? CancellationToken.None);
 
@@ -786,7 +784,7 @@ namespace OpenRiaServices.Client
         /// <param name="userState">Optional user state for the operation.</param>
         /// <returns>The invoke operation.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public InvokeOperation InvokeOperation(string operationName, Type returnType, IDictionary<string, object> parameters, bool hasSideEffects, Action<InvokeOperation> callback, object userState)
+        public InvokeOperation InvokeOperation(string operationName, Type returnType, IDictionary<string, object?>? parameters, bool hasSideEffects, Action<InvokeOperation>? callback, object? userState)
         {
             // We only expect void types for generated code
             // Use InvokeOperation<object> return type for these
@@ -800,7 +798,7 @@ namespace OpenRiaServices.Client
                 {
                     return (InvokeOperation)s_invokeOperationAsync
                         .MakeGenericMethod(returnType)
-                        .Invoke(this, new object[] { operationName, returnType, parameters, hasSideEffects, callback, userState });
+                        .Invoke(this, [operationName, returnType, parameters, hasSideEffects, callback, userState])!;
                 }
                 catch (TargetInvocationException tie)
                 {
@@ -824,7 +822,7 @@ namespace OpenRiaServices.Client
         /// <returns>The invoke operation.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Task<InvokeResult> InvokeOperationAsync(string operationName,
-            IDictionary<string, object> parameters, bool hasSideEffects,
+            IDictionary<string, object?>? parameters, bool hasSideEffects,
             CancellationToken cancellationToken)
         {
             // Do not do use await since parameter validation are not thrown instantly
@@ -849,7 +847,7 @@ namespace OpenRiaServices.Client
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>The invoke operation.</returns>
         public Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
-            IDictionary<string, object> parameters, bool hasSideEffects,
+            IDictionary<string, object?>? parameters, bool hasSideEffects,
             CancellationToken cancellationToken)
         {
             return InvokeOperationAsync<TValue>(operationName, parameters, hasSideEffects, typeof(TValue), cancellationToken);
@@ -867,7 +865,7 @@ namespace OpenRiaServices.Client
         /// <param name="cancellationToken">cancellation token</param>
         /// <returns>The invoke operation.</returns>
         protected virtual Task<InvokeResult<TValue>> InvokeOperationAsync<TValue>(string operationName,
-            IDictionary<string, object> parameters, bool hasSideEffects,
+            IDictionary<string, object?>? parameters, bool hasSideEffects,
             Type returnType,
             CancellationToken cancellationToken)
         {
@@ -883,17 +881,17 @@ namespace OpenRiaServices.Client
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
             return this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)
-                                    .ContinueWith((Task<InvokeCompletedResult> task, object state) =>
+                                    .ContinueWith((Task<InvokeCompletedResult> task, object? state) =>
             {
                 InvokeCompletedResult results;
-                string operation = (string)state;
+                string operation = (string)state!;
                 try
                 {
                     results = task.GetAwaiter().GetResult();
                 }
                 catch (Exception ex) when (!(ex is DomainException || ex.IsFatal()))
                 {
-                    string message = string.Format(Resource.DomainContext_InvokeOperationFailed, operation, ex.Message);
+                    string message = string.Format(CultureInfo.InvariantCulture, Resource.DomainContext_InvokeOperationFailed, operation, ex.Message);
 
                     throw ex is DomainOperationException domainOperationException
                         ? new DomainOperationException(message, domainOperationException)
@@ -902,11 +900,11 @@ namespace OpenRiaServices.Client
 
                 if (results.ValidationErrors.Count == 0)
                 {
-                    return new InvokeResult<TValue>((TValue)results.ReturnValue);
+                    return new InvokeResult<TValue>((TValue?)results.ReturnValue!);
                 }
                 else
                 {
-                    string message = string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, operation);
+                    string message = string.Format(CultureInfo.InvariantCulture, Resource.DomainContext_InvokeOperationFailed_Validation, operation);
                     throw new DomainOperationException(message, results.ValidationErrors);
                 }
             }
@@ -954,14 +952,14 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="methodName">The method to validate.</param>
         /// <param name="parameters">The parameters to the method.</param>
-        protected void ValidateMethod(string methodName, IDictionary<string, object> parameters)
+        protected void ValidateMethod(string methodName, IDictionary<string, object?>? parameters)
         {
             if (string.IsNullOrEmpty(methodName))
             {
                 throw new ArgumentNullException(nameof(methodName));
             }
 
-            object[] paramValues = parameters != null ? parameters.Values.ToArray() : Array.Empty<object>();
+            object?[] paramValues = parameters != null ? parameters.Values.ToArray() : Array.Empty<object>();
             if (!this.MethodRequiresValidation(methodName, paramValues))
             {
                 // method validation is expensive, so skip it if we can
@@ -979,7 +977,7 @@ namespace OpenRiaServices.Client
         /// <param name="changeSet">The change-set to validate.</param>
         /// <param name="validationContext">The ValidationContext to use.</param>
         /// <returns>True if the change-set is valid, false otherwise.</returns>
-        private bool ValidateChangeSet(EntityChangeSet changeSet, ValidationContext validationContext)
+        private bool ValidateChangeSet(EntityChangeSet changeSet, ValidationContext? validationContext)
         {
             if (!changeSet.Validate(validationContext))
             {
@@ -999,13 +997,7 @@ namespace OpenRiaServices.Client
 
                         // DomainContext custom methods always differ from the entity version because
                         // the first param is the entity. Ensure the entity is the first param in the list.
-                        object[] parameters = new object[customMethod.Parameters.Count() + 1];
-                        parameters[0] = entity;
-                        int i = 1;
-                        foreach (var parameter in customMethod.Parameters)
-                        {
-                            parameters[i++] = parameter;
-                        }
+                        object?[] parameters = [entity, ..customMethod.Parameters];
 
                         // Validate the method exists.
                         ValidationUtilities.GetMethod(this, customMethod.Name, parameters);
@@ -1028,7 +1020,7 @@ namespace OpenRiaServices.Client
         /// <param name="methodName">The method to check</param>
         /// <param name="paramValues">The parameter values</param>
         /// <returns>True if the method requires validation, false otherwise.</returns>
-        private bool MethodRequiresValidation(string methodName, object[] paramValues)
+        private bool MethodRequiresValidation(string methodName, object?[] paramValues)
         {
             lock(this._syncRoot)
             {

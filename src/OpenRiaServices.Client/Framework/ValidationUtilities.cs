@@ -91,13 +91,13 @@ namespace OpenRiaServices.Client
             {
                 if (parameters![i] == null)
                 {
-                    if (!TypeUtility.IsNullableType(parameterTypes[i])
-                        && parameterTypes[i].IsValueType)
+                    if (parameterTypes[i].IsValueType
+                        && !TypeUtility.IsNullableType(parameterTypes[i]))
                     {
                         return false;
                     }
                 }
-                else if (!parameterTypes[i].IsAssignableFrom(parameters[i].GetType()))
+                else if (!parameterTypes[i].IsAssignableFrom(parameters[i]!.GetType()))
                 {
                     return false;
                 }
@@ -751,6 +751,8 @@ namespace OpenRiaServices.Client
 #if !SERVERFX
     internal class ValidationResultEqualityComparer : EqualityComparer<ValidationResult>
     {
+        public static ValidationResultEqualityComparer Instance { get; } = new ValidationResultEqualityComparer();
+
         public override bool Equals(ValidationResult left, ValidationResult right)
         {
             if (left.ErrorMessage.Equals(right.ErrorMessage, StringComparison.Ordinal) && left.MemberNames.SequenceEqual(right.MemberNames))

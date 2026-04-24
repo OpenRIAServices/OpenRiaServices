@@ -601,6 +601,7 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <inheritdoc cref="Entity.IsMergingState"/>
         protected internal bool IsMergingState { get; set; }
 
         /// <summary>
@@ -784,7 +785,7 @@ namespace OpenRiaServices.Client
 
                     // search (by value) for the item in our parents error collection
                     ICollection<ValidationResult> resultCollection = GetValidationResults(this._complexObject._parent);
-                    ValidationResultEqualityComparer comparer = new ValidationResultEqualityComparer();
+                    ValidationResultEqualityComparer comparer = ValidationResultEqualityComparer.Instance;
                     var existing = resultCollection.FirstOrDefault(p => comparer.Equals(p, item));
 
                     if (existing != null)
@@ -827,7 +828,7 @@ namespace OpenRiaServices.Client
             {
                 this._complexObject.RaisePropertyChanged(nameof(HasValidationErrors));
             }
-            protected override void OnPropertyErrorsChanged(string propertyName)
+            protected override void OnPropertyErrorsChanged(string? propertyName)
             {
                 this._complexObject.RaiseValidationErrorsChanged(propertyName);
             }

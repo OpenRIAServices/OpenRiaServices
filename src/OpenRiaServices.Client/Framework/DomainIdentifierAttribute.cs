@@ -1,5 +1,7 @@
 ﻿using System;
 
+#nullable enable
+
 namespace OpenRiaServices
 {
 #if !SERVERFX
@@ -63,7 +65,7 @@ namespace OpenRiaServices
         /// <summary>
         /// Gets or sets the <see cref="CodeProcessor"/> type
         /// </summary>
-        public Type CodeProcessor
+        public Type? CodeProcessor
         {
             get;
             set;

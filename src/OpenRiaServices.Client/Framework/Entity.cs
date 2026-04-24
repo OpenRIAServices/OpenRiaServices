@@ -1470,7 +1470,7 @@ namespace OpenRiaServices.Client
 
             var customMethodInfo = MetaType.GetEntityAction(actionName);
             if (customMethodInfo == null)
-                throw new InvalidOperationException(string.Format(Resource.Entity_NoEntityActionWithName, actionName));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, Resource.Entity_NoEntityActionWithName, actionName));
 
             // record invocation on the entity, which does proper state transition and raising property changed events
             InvokeActionCore(new EntityAction(actionName, parameters), customMethodInfo);
@@ -1942,7 +1942,7 @@ namespace OpenRiaServices.Client
                 this._entity.RaisePropertyChanged(nameof(HasValidationErrors));
             }
 
-            protected override void OnPropertyErrorsChanged(string propertyName)
+            protected override void OnPropertyErrorsChanged(string? propertyName)
             {
                 this._entity.RaiseValidationErrorsChanged(propertyName);
             }

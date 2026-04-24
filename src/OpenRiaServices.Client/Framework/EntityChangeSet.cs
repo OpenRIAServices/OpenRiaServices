@@ -169,7 +169,7 @@ namespace OpenRiaServices.Client
                 if (validationResults.Count > 0)
                 {
                     // replace the validation errors for the entity
-                    IEnumerable<ValidationResult> entityErrors = validationResults.Select(err => new ValidationResult(err.ErrorMessage, err.MemberNames)).Distinct(new ValidationResultEqualityComparer()).ToList().AsReadOnly();
+                    IEnumerable<ValidationResult> entityErrors = validationResults.Select(err => new ValidationResult(err.ErrorMessage, err.MemberNames)).Distinct(ValidationResultEqualityComparer.Instance).ToList().AsReadOnly();
                     ValidationUtilities.ApplyValidationErrors(entity, entityErrors);
                     success = false;
                 }

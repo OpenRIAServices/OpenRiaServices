@@ -5,6 +5,8 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using OpenRiaServices.Client.Internal;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -18,9 +20,9 @@ namespace OpenRiaServices.Client
 
         private readonly List<ValidationResult> _results;
         private bool _hasErrors;
-        private IEnumerable<string> _propertiesInError;
-        private readonly object _parent;
-        private readonly MetaType _parentMetaType;
+        private IEnumerable<string?> _propertiesInError;
+        private readonly object? _parent;
+        private readonly MetaType? _parentMetaType;
 
         #endregion Member Fields
 
@@ -30,11 +32,11 @@ namespace OpenRiaServices.Client
         /// Initializes a new instance of the <see cref="ValidationResultCollection"/> class.
         /// </summary>
         /// <param name="parent">The parent instance hosting this collection.</param>
-        internal ValidationResultCollection(object parent)
+        internal ValidationResultCollection(object? parent)
         {
             this._results = new List<ValidationResult>();
             this._hasErrors = false;
-            this._propertiesInError = Enumerable.Empty<string>();
+            this._propertiesInError = [];
             this._parent = parent;
 
             if (this._parent != null)
@@ -78,12 +80,12 @@ namespace OpenRiaServices.Client
 
             if (this.Count > 0)
             {
-            // First determine the set of affected member names. We have to take nested member paths
-            // into account.
+                // First determine the set of affected member names. We have to take nested member paths
+                // into account.
                 affectedMembers.AddRange(this.SelectMany(p => p.MemberNames)
-                .Where(p => (p != null) 
+                .Where(p => (p != null)
                     && p.StartsWith(propertyName, StringComparison.Ordinal)
-                    // name is exact name propertyName , or contains '.' after property name
+                        // name is exact name propertyName , or contains '.' after property name
                         && (p.Length > propertyName.Length && p[propertyName.Length] == '.')));
 
                 removedErrors = _results.RemoveAll(r => r.MemberNames.Any(member => affectedMembers.Contains(member)));
@@ -97,7 +99,7 @@ namespace OpenRiaServices.Client
 
                 // Force the properties of the new results to receive notifications, ensuring that the
                 // affected members are included in that list
-                this.OnCollectionChanged(GetPropertiesInError(newResults).Concat(affectedMembers));
+                this.OnCollectionChanged([..GetPropertiesInError(newResults), ..affectedMembers]);
             }
         }
 
@@ -108,14 +110,14 @@ namespace OpenRiaServices.Client
         /// The properties directly affected by this change.  Error change notifications will always
         /// be raised for these properties.
         /// </param>
-        private void OnCollectionChanged(IEnumerable<string> propertiesAffected)
+        private void OnCollectionChanged(IEnumerable<string?> propertiesAffected)
         {
             bool origHasErrors = this._hasErrors;
-            IEnumerable<string> origPropertiesInError = this._propertiesInError;
+            IEnumerable<string?> origPropertiesInError = this._propertiesInError;
 
             // Determine our new state
             this._hasErrors = (this.Count > 0);
-            this._propertiesInError = new HashSet<string>(GetPropertiesInError(this)); // HashSet is used to make properties distinct
+            this._propertiesInError = new HashSet<string?>(GetPropertiesInError(this)); // HashSet is used to make properties distinct
 
             // Call the notification method if the 'HasErrors' bit has changed
             if (this._hasErrors != origHasErrors)
@@ -126,12 +128,12 @@ namespace OpenRiaServices.Client
             // Get the combined list of properties affected.  
             // SymmetricExceptWith - to get properties in error but aren't any longer or those newly in error
             // add all affected by the change
-            HashSet<string> allPropertiesAffected = new HashSet<string>(origPropertiesInError);
+            HashSet<string?> allPropertiesAffected = new(origPropertiesInError);
             allPropertiesAffected.SymmetricExceptWith(_propertiesInError);
             allPropertiesAffected.UnionWith(propertiesAffected);
 
             // For each property affected, call the errors changed method
-            foreach (string propertyName in allPropertiesAffected)
+            foreach (string? propertyName in allPropertiesAffected)
             {
                 this.OnPropertyErrorsChanged(propertyName);
             }
@@ -145,22 +147,19 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <returns>A list of properties in error. This list is not guaranteed to be distinct.</returns>
         /// <param name="errors">The errors to scan for the list of properties.</param>
-        private static IEnumerable<string> GetPropertiesInError(IEnumerable<ValidationResult> errors)
+        private static List<string?> GetPropertiesInError(IEnumerable<ValidationResult>? errors)
         {
-            IEnumerable<string> propertiesInError = Enumerable.Empty<string>();
+            if (errors is null || !errors.Any())
+                return [];
 
-            if (errors != null)
+            var propertiesInError = new List<string?>(errors.SelectMany(e => e.MemberNames));
+            if (errors.Any(e => !e.MemberNames.Any()))
             {
-                propertiesInError = errors.SelectMany(e => e.MemberNames);
-
-                if (errors.Any(e => !e.MemberNames.Any()))
-                {
-                    propertiesInError = propertiesInError.Concat(new string[] { null });
-                }
+                propertiesInError.Add(null);
             }
 
             // Be sure to enumerate the results to prevent delayed execution!
-            return propertiesInError.ToArray();
+            return propertiesInError;
         }
 
         /// <summary>
@@ -184,7 +183,7 @@ namespace OpenRiaServices.Client
         /// property has changed. Overrides do not need to call base.
         /// </summary>
         /// <param name="propertyName">The name of the property whose validation results have changed</param>
-        protected virtual void OnPropertyErrorsChanged(string propertyName)
+        protected virtual void OnPropertyErrorsChanged(string? propertyName)
         {
         }
 
@@ -203,7 +202,7 @@ namespace OpenRiaServices.Client
                 throw new ArgumentNullException(nameof(item));
             }
 
-            IEnumerable<string> propertiesAffected = item.MemberNames;
+            IEnumerable<string?> propertiesAffected = item.MemberNames;
 
             // If there are no members affected, then force the entity-level
             // change event to occur.  Otherwise, notifications will be raised
@@ -211,7 +210,7 @@ namespace OpenRiaServices.Client
             // include null/empty members for entity-level errors.
             if (!propertiesAffected.Any())
             {
-                propertiesAffected = new string[] { null };
+                propertiesAffected = [null];
             }
 
             this._results.Add(item);
@@ -237,7 +236,7 @@ namespace OpenRiaServices.Client
                 this._results.Clear();
 
                 // There are no properties directly affected by this action, so use an empty enumerable
-                this.OnCollectionChanged(Enumerable.Empty<string>());
+                this.OnCollectionChanged([]);
             }
         }
 
@@ -247,7 +246,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         protected virtual void OnClear()
         {
-            if (this._parent == null || !this._parentMetaType.HasComplexMembers)
+            if (this._parent == null || !this._parentMetaType!.HasComplexMembers)
             {
                 return;
             }
@@ -325,7 +324,7 @@ namespace OpenRiaServices.Client
                 throw new ArgumentNullException(nameof(item));
             }
 
-            IEnumerable<string> propertiesAffected = item.MemberNames;
+            IEnumerable<string?> propertiesAffected = item.MemberNames;
 
             if (this._results.Remove(item))
             {
@@ -335,7 +334,7 @@ namespace OpenRiaServices.Client
                 // include null/empty members for entity-level errors.
                 if (!propertiesAffected.Any())
                 {
-                    propertiesAffected = new string[] { null };
+                    propertiesAffected = [null];
                 }
 
                 this.OnRemove(item);
@@ -348,7 +347,7 @@ namespace OpenRiaServices.Client
         }
 
         protected virtual void OnRemove(ValidationResult item)
-        { 
+        {
         }
 
         #endregion
