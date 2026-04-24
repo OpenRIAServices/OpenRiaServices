@@ -116,7 +116,8 @@ dotnet_diagnostic.VSTHRD010.severity = suggestion
 dotnet_diagnostic.CA1510.severity = none
 # CA1863: Cache a 'CompositeFormat' for repeated use in this formatting operation
 dotnet_diagnostic.CA1863.severity = none
-
+dotnet_diagnostic.CA1826.severity = warning
+dotnet_code_quality.CA1826.exclude_ordefault_methods = true
 
 ############################### 
 # C# Coding Conventions       # 

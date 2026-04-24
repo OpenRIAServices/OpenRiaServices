@@ -23,13 +23,14 @@ namespace OpenRiaServices.Client
 {
     internal static class ValidationUtilities
     {
+#nullable enable
         /// <summary>
         /// Creates a new <see cref="ValidationContext"/> for the current object instance.
         /// </summary>
         /// <param name="instance">The object instance being validated.</param>
         /// <param name="parentContext">Optional context to inherit from.  May be null.</param>
         /// <returns>A new validation context.</returns>
-        internal static ValidationContext CreateValidationContext(object instance, ValidationContext parentContext)
+        internal static ValidationContext CreateValidationContext(object instance, ValidationContext? parentContext)
         {
             if (instance == null)
             {
@@ -49,7 +50,7 @@ namespace OpenRiaServices.Client
         /// <param name="parameters">The parameter values to be passed to the method</param>
         /// <returns>A <see cref="MethodInfo"/> from an object instance that matches
         /// the specified parameters.</returns>
-        internal static MethodInfo GetMethod(object instance, string methodName, object[] parameters)
+        internal static MethodInfo GetMethod(object instance, string methodName, object?[]? parameters)
         {
             Type instanceType = instance.GetType();
             MethodInfo[] candidates = instanceType.GetMethods()
@@ -66,7 +67,7 @@ namespace OpenRiaServices.Client
                 else
                 {
                     // convert parameter types into a string of this format e.g. ('string', null, 'int')
-                    string[] parameterTypes = parameters.Select(p => ((p == null) ? "null" : string.Format(CultureInfo.InvariantCulture, "'{0}'", p.GetType().ToString()))).ToArray();
+                    string[] parameterTypes = parameters!.Select(p => ((p == null) ? "null" : string.Format(CultureInfo.InvariantCulture, "'{0}'", p.GetType()))).ToArray();
                     throw new MissingMethodException(string.Format(CultureInfo.CurrentCulture, DataResource.ValidationUtilities_MethodNotFound, instanceType, methodName, parameterLength, string.Join(", ", parameterTypes)));
                 }
             }
@@ -78,7 +79,7 @@ namespace OpenRiaServices.Client
             return candidates[0];
         }
 
-        internal static bool IsBindable(Type[] parameterTypes, object[] parameters)
+        internal static bool IsBindable(Type[] parameterTypes, object?[]? parameters)
         {
             int parameterLength = (parameters == null) ? 0 : parameters.Length;
             if (parameterTypes.Length != parameterLength)
@@ -88,15 +89,15 @@ namespace OpenRiaServices.Client
 
             for (int i = 0; i < parameterLength; i++)
             {
-                if (parameters[i] == null)
+                if (parameters![i] == null)
                 {
-                    if (!TypeUtility.IsNullableType(parameterTypes[i])
-                        && parameterTypes[i].IsValueType)
+                    if (parameterTypes[i].IsValueType
+                        && !TypeUtility.IsNullableType(parameterTypes[i]))
                     {
                         return false;
                     }
                 }
-                else if (!parameterTypes[i].IsAssignableFrom(parameters[i].GetType()))
+                else if (!parameterTypes[i].IsAssignableFrom(parameters[i]!.GetType()))
                 {
                     return false;
                 }
@@ -111,7 +112,7 @@ namespace OpenRiaServices.Client
         /// <param name="method">The method to validate the set of parameters against.</param>
         /// <param name="parameters">The set of parameters to check.</param>
         /// <returns><c>true</c> if the set of parameters can be passed to the specified method.</returns>
-        internal static bool IsBindable(MethodInfo method, object[] parameters)
+        internal static bool IsBindable(MethodInfo method, object?[]? parameters)
         {
             return IsBindable(method.GetParameters().Select(p => p.ParameterType).ToArray(), parameters);
         }
@@ -122,7 +123,7 @@ namespace OpenRiaServices.Client
         /// <param name="validationResults">The validation results</param>
         /// <param name="memberPath">The member path to append</param>
         /// <returns>The updated validation results</returns>
-        internal static IEnumerable<ValidationResult> ApplyMemberPath(IEnumerable<ValidationResult> validationResults, string memberPath)
+        internal static IEnumerable<ValidationResult> ApplyMemberPath(IEnumerable<ValidationResult> validationResults, string? memberPath)
         {
             if (string.IsNullOrEmpty(memberPath))
             {
@@ -139,7 +140,7 @@ namespace OpenRiaServices.Client
         /// <param name="validationResult">The validation result</param>
         /// <param name="memberPath">The member path to append</param>
         /// <returns>The updated validation result</returns>
-        internal static ValidationResult ApplyMemberPath(ValidationResult validationResult, string memberPath)
+        internal static ValidationResult ApplyMemberPath(ValidationResult validationResult, string? memberPath)
         {
             if (string.IsNullOrEmpty(memberPath))
             {
@@ -166,7 +167,7 @@ namespace OpenRiaServices.Client
 
             return new ValidationResult(validationResult.ErrorMessage, memberNames);
         }
-
+#nullable restore
         /// <summary>
         /// Validate the specified object an any complex members or collections recursively.
         /// </summary>
@@ -750,6 +751,8 @@ namespace OpenRiaServices.Client
 #if !SERVERFX
     internal class ValidationResultEqualityComparer : EqualityComparer<ValidationResult>
     {
+        public static ValidationResultEqualityComparer Instance { get; } = new ValidationResultEqualityComparer();
+
         public override bool Equals(ValidationResult left, ValidationResult right)
         {
             if (left.ErrorMessage.Equals(right.ErrorMessage, StringComparison.Ordinal) && left.MemberNames.SequenceEqual(right.MemberNames))

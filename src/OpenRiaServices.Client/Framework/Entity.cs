@@ -11,6 +11,8 @@ using System.Reflection;
 using System.Runtime.Serialization;
 using OpenRiaServices.Client.Internal;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -19,17 +21,17 @@ namespace OpenRiaServices.Client
     [DataContract]
     public abstract partial class Entity : IEditableObject, INotifyPropertyChanged, IRevertibleChangeTracking
     {
-        private Action _setChangedCallback;
-        private EditSession _editSession;
-        private List<EntityAction> _customMethodInvocations;
-        private EntityConflict _conflict;
-        private EntitySet _lastSet;
-        private EntitySet _entitySet;
+        private Action? _setChangedCallback;
+        private EditSession? _editSession;
+        private List<EntityAction>? _customMethodInvocations;
+        private EntityConflict? _conflict;
+        private EntitySet? _lastSet;
+        private EntitySet? _entitySet;
         private EntityState _entityState = EntityState.Detached;
-        private IDictionary<string, object> _originalValues;
-        private Dictionary<string, IEntityRef> _entityRefs;
-        private PropertyChangedEventHandler _propChangedHandler;
-        private EntityValidationResultCollection _validationErrors;
+        private IDictionary<string, object?>? _originalValues;
+        private Dictionary<string, IEntityRef>? _entityRefs;
+        private PropertyChangedEventHandler? _propChangedHandler;
+        private EntityValidationResultCollection? _validationErrors;
         private bool _isApplyingState;
         private bool _isDeserializing;
         private bool _isInferred;
@@ -37,11 +39,11 @@ namespace OpenRiaServices.Client
         private bool _isSubmitting;
 
         private bool _trackChanges;
-        private Entity _parent;
-        private EntityAssociationAttribute _parentAssociation;
+        private Entity? _parent;
+        private EntityAssociationAttribute? _parentAssociation;
         private bool _hasChildChanges;
-        private Dictionary<string, ComplexObject> _trackedInstances;
-        private MetaType _metaType;
+        private Dictionary<string, ComplexObject>? _trackedInstances;
+        private MetaType? _metaType;
 
         /// <summary>
         /// "EntityState"
@@ -75,7 +77,7 @@ namespace OpenRiaServices.Client
         /// Gets the parent of this entity, if this entity is part of
         /// a composition relationship.
         /// </summary>
-        internal Entity Parent
+        internal Entity? Parent
         {
             get
             {
@@ -86,7 +88,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the parent association for this entity.
         /// </summary>
-        internal EntityAssociationAttribute ParentAssociation
+        internal EntityAssociationAttribute? ParentAssociation
         {
             get
             {
@@ -141,7 +143,7 @@ namespace OpenRiaServices.Client
         /// operation. Returns null if there are no conflicts.
         /// </summary>
         [Display(AutoGenerateField = false)]
-        public EntityConflict EntityConflict
+        public EntityConflict? EntityConflict
         {
             get
             {
@@ -162,6 +164,7 @@ namespace OpenRiaServices.Client
         /// edit session in progress for this entity. This is the case when
         /// BeginEdit has been called, but EndEdit/CancelEdit have not.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(_editSession))]
         internal bool IsEditing
         {
             get
@@ -247,7 +250,7 @@ namespace OpenRiaServices.Client
                     this.RaisePropertyChanged(EntityStatePropertyName);
 
                     // track or untrack this Entity as required
-                    EntitySet entitySet = this.LastSet;
+                    EntitySet? entitySet = this.LastSet;
                     if (entitySet != null)
                     {
                         bool isInteresting = this._entityState is not EntityState.Unmodified
@@ -346,7 +349,7 @@ namespace OpenRiaServices.Client
         /// Gets the <see cref="EntitySet"/> this <see cref="Entity"/> is a member of. The value will be null
         /// if the entity is Detached or has been removed from the set.
         /// </summary>
-        protected internal EntitySet EntitySet
+        protected internal EntitySet? EntitySet
         {
             get
             {
@@ -396,7 +399,7 @@ namespace OpenRiaServices.Client
         /// this member, however in some cases (e.g. for deleted entities)
         /// EntitySet will be null and we need to get back to the set.
         /// </summary>
-        internal EntitySet LastSet
+        internal EntitySet? LastSet
         {
             get
             {
@@ -408,7 +411,7 @@ namespace OpenRiaServices.Client
         /// Gets or sets the custom method invocation on this entity (if any)
         /// while bypassing lots of the validation (this is only used by the old tests)
         /// </summary>
-        internal EntityAction CustomMethodInvocation
+        internal EntityAction? CustomMethodInvocation
         {
             set
             {
@@ -467,7 +470,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the original values of this Entity's properties before modification
         /// </summary>
-        internal IDictionary<string, object> OriginalValues
+        internal IDictionary<string, object?>? OriginalValues
         {
             get
             {
@@ -621,14 +624,14 @@ namespace OpenRiaServices.Client
         /// Gets the original state for this entity.
         /// </summary>
         /// <returns>The entity in its original state if the entity has had property modifications, null otherwise.</returns>
-        public Entity GetOriginal()
+        public Entity? GetOriginal()
         {
             if (this.OriginalValues == null)
             {
                 return null;
             }
 
-            Entity original = (Entity)Activator.CreateInstance(this.GetType());
+            Entity original = (Entity)Activator.CreateInstance(this.GetType())!;
             original.ApplyState(this.OriginalValues);
             return original;
         }
@@ -684,7 +687,7 @@ namespace OpenRiaServices.Client
                 return;
             }
 
-            EntitySet entitySet = this.LastSet;
+            EntitySet? entitySet = this.LastSet;
 
             // Accept any child changes. Note, we must accept child changes before setting our own
             // state to Unmodified. This avoids a situation where we get notifications from child
@@ -758,7 +761,7 @@ namespace OpenRiaServices.Client
                 return;
             }
 
-            EntitySet entitySet = this.LastSet;
+            EntitySet? entitySet = this.LastSet;
 
             // Reject any child changes. Note, we must reject child changes before setting our own
             // state to Unmodified. This avoids a situation where we get notifications from child
@@ -869,7 +872,7 @@ namespace OpenRiaServices.Client
             this.EntityState = EntityState.Detached;
         }
 
-        internal IDictionary<string, object> ExtractState()
+        internal IDictionary<string, object?> ExtractState()
         {
             return ObjectStateUtility.ExtractState(this);
         }
@@ -909,10 +912,10 @@ namespace OpenRiaServices.Client
         /// store values.
         /// </summary>
         /// <param name="entityStateToApply">IDictionary with the new original state.</param>
-        internal void UpdateOriginalValues(IDictionary<string, object> entityStateToApply)
+        internal void UpdateOriginalValues(IDictionary<string, object?> entityStateToApply)
         {
             Debug.Assert(this._originalValues != null, "Should only call UpdateOriginalValues if the entity has original values.");
-            this._originalValues = new Dictionary<string, object>(entityStateToApply);
+            this._originalValues = new Dictionary<string, object?>(entityStateToApply);
         }
 
         /// <summary>
@@ -924,9 +927,9 @@ namespace OpenRiaServices.Client
         /// yet, null is returned.</param>
         /// <returns>The <see cref="IEntityRef"/> if the reference has been initialized,
         /// null otherwise.</returns>
-        internal IEntityRef GetEntityRef(string memberName)
+        internal IEntityRef? GetEntityRef(string memberName)
         {
-            IEntityRef entityRef = null;
+            IEntityRef? entityRef = null;
             this.EntityRefs.TryGetValue(memberName, out entityRef);
             return entityRef;
         }
@@ -936,12 +939,12 @@ namespace OpenRiaServices.Client
         /// merge strategy and normal change tracking.
         /// </summary>
         /// <param name="entityStateToApply">The state to apply</param>
-        internal void ApplyState(IDictionary<string, object> entityStateToApply)
+        internal void ApplyState(IDictionary<string, object?> entityStateToApply)
         {
             this.ApplyState(entityStateToApply, LoadBehavior.RefreshCurrent);
         }
 
-        internal void ApplyState(IDictionary<string, object> entityStateToApply, LoadBehavior loadBehavior)
+        internal void ApplyState(IDictionary<string, object?> entityStateToApply, LoadBehavior loadBehavior)
         {
             if (loadBehavior == LoadBehavior.KeepCurrent)
             {
@@ -997,7 +1000,7 @@ namespace OpenRiaServices.Client
                 return;
             }
 
-            IDictionary<string, object> otherState = otherEntity.ExtractState();
+            IDictionary<string, object?> otherState = otherEntity.ExtractState();
             Merge(otherState, loadBehavior);
         }
 
@@ -1008,7 +1011,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="otherState">The property values to merge into the current instance</param>
         /// <param name="loadBehavior">The load behavior to use</param>
-        internal void Merge(IDictionary<string, object> otherState, LoadBehavior loadBehavior)
+        internal void Merge(IDictionary<string, object?> otherState, LoadBehavior loadBehavior)
         {
             if (loadBehavior == LoadBehavior.KeepCurrent)
             {
@@ -1118,15 +1121,13 @@ namespace OpenRiaServices.Client
             // First check if the parent has an existing instance attached for this
             // property and detach if necessary.
             string memberName = metaMember.Name;
-            ComplexObject prevInstance = null;
-            if (this.TrackedInstances.TryGetValue(memberName, out prevInstance))
+            if (this.TrackedInstances.TryGetValue(memberName, out ComplexObject? prevInstance))
             {
                 prevInstance.Detach();
                 this.TrackedInstances.Remove(memberName);
             }
 
-            ComplexObject newInstance = (ComplexObject)metaMember.GetValue(this);
-            if (newInstance != null)
+            if (metaMember.GetValue(this) is ComplexObject newInstance)
             {
                 // Attach to the new instance
                 newInstance.Attach(this, memberName, this.OnDataMemberChanging, this.OnDataMemberChanged, this.OnMemberValidationChanged);
@@ -1198,7 +1199,7 @@ namespace OpenRiaServices.Client
 
         private void OnDataMemberChanging()
         {
-            EntitySet set = this.LastSet;
+            EntitySet? set = this.LastSet;
             if (set != null)
             {
                 // During merge operations, we want to suspend change tracking
@@ -1235,7 +1236,7 @@ namespace OpenRiaServices.Client
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="propertyName"/> is <c>null</c> or empty.</exception>
         /// <exception cref="InvalidOperationException"> is thrown if this property is marked with <see cref="EditableAttribute"/> 
         /// configured to prevent editing.</exception>
-        protected void ValidateProperty(string propertyName, object value)
+        protected void ValidateProperty(string propertyName, object? value)
         {
             if (string.IsNullOrEmpty(propertyName))
             {
@@ -1308,7 +1309,7 @@ namespace OpenRiaServices.Client
         /// </param>
         /// <param name="value">The value to test. It may be <c>null</c> if <c>null</c> is valid for the given property.</param>
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="validationContext"/> is <c>null</c>.</exception>
-        protected virtual void ValidateProperty(ValidationContext validationContext, object value)
+        protected virtual void ValidateProperty(ValidationContext validationContext, object? value)
         {
             if (validationContext == null)
             {
@@ -1335,7 +1336,7 @@ namespace OpenRiaServices.Client
         {
             // Get the validation context from the entity container if available,
             // otherwise create a new context.
-            ValidationContext parentContext = null;
+            ValidationContext? parentContext = null;
 
             if (this.EntitySet != null && this.EntitySet.EntityContainer != null)
             {
@@ -1435,7 +1436,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="actionName">The name of the action to invoke</param>
         /// <param name="parameters">The parameters values to invoke the specified action with</param>
-        protected internal void InvokeAction(string actionName, params object[] parameters)
+        protected internal void InvokeAction(string actionName, params object?[] parameters)
         {
             if (string.IsNullOrEmpty(actionName))
             {
@@ -1469,7 +1470,7 @@ namespace OpenRiaServices.Client
 
             var customMethodInfo = MetaType.GetEntityAction(actionName);
             if (customMethodInfo == null)
-                throw new InvalidOperationException(string.Format(Resource.Entity_NoEntityActionWithName, actionName));
+                throw new InvalidOperationException(string.Format(CultureInfo.InvariantCulture, Resource.Entity_NoEntityActionWithName, actionName));
 
             // record invocation on the entity, which does proper state transition and raising property changed events
             InvokeActionCore(new EntityAction(actionName, parameters), customMethodInfo);
@@ -1542,12 +1543,12 @@ namespace OpenRiaServices.Client
             if (!removed)
                 throw new ArgumentException(Resource.Entity_UndoInvokeOnlyForInvokedActions);
 
-            var customUpdate = MetaType.GetEntityAction(action.Name);
-            Debug.Assert(customUpdate != null, "EntityAction have valid name since it is part of EntityActions");
+            // Will not be null since action was part of _customMethodInvocations, where only valid actions are added
+            EntityActionAttribute customUpdate = MetaType.GetEntityAction(action.Name);
             RaisePropertyChanged(customUpdate.CanInvokePropertyName);
 
             // If no additional invocations are recorded, then raise an update
-            if (!_customMethodInvocations.Any(item => item.Name == action.Name))
+            if (!_customMethodInvocations!.Any(item => item.Name == action.Name))
                 RaisePropertyChanged(customUpdate.IsInvokedPropertyName);
         }
 
@@ -1604,7 +1605,7 @@ namespace OpenRiaServices.Client
         /// does not yet have an identity, null will be returned.
         /// </summary>
         /// <returns>The identity for this entity</returns>
-        public virtual object GetIdentity()
+        public virtual object? GetIdentity()
         {
             var keyMembers = this.MetaType.KeyMembers;
 
@@ -1619,7 +1620,7 @@ namespace OpenRiaServices.Client
             object[] keyValues = new object[keyMembers.Count];
             for (int i = 0; i < keyMembers.Count; i++)
             {
-                object keyValue = keyMembers[i].GetValue(this);
+                object? keyValue = keyMembers[i].GetValue(this);
                 if (keyValue == null)
                 {
                     return null;
@@ -1641,8 +1642,8 @@ namespace OpenRiaServices.Client
 
             if (keyMembers.Count == 1)
             {
-                object keyValue = keyMembers[0].GetValue(this);
-                keyText = keyValue != null ? keyValue.ToString() : "null";
+                object? keyValue = keyMembers[0].GetValue(this);
+                keyText = keyValue?.ToString() ?? "null";
             }
             else
             {
@@ -1653,8 +1654,8 @@ namespace OpenRiaServices.Client
                     {
                         sb.Append(',');
                     }
-                    object keyValue = keyMember.GetValue(this);
-                    sb.Append(keyValue != null ? keyValue.ToString() : "null");
+                    object? keyValue = keyMember.GetValue(this);
+                    sb.Append(keyValue?.ToString() ?? "null");
                 }
                 keyText = keyMembers.Count > 1 ? "{" + sb.ToString() + "}" : sb.ToString();
             }
@@ -1676,15 +1677,15 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Event raised whenever an <see cref="Entity"/> property has changed
         /// </summary>
-        public event PropertyChangedEventHandler PropertyChanged
+        public event PropertyChangedEventHandler? PropertyChanged
         {
             add
             {
-                this._propChangedHandler = (PropertyChangedEventHandler)Delegate.Combine(this._propChangedHandler, value);
+                this._propChangedHandler = (PropertyChangedEventHandler?)Delegate.Combine(this._propChangedHandler, value);
             }
             remove
             {
-                this._propChangedHandler = (PropertyChangedEventHandler)Delegate.Remove(this._propChangedHandler, value);
+                this._propChangedHandler = (PropertyChangedEventHandler?)Delegate.Remove(this._propChangedHandler, value);
             }
         }
         #endregion
@@ -1810,8 +1811,8 @@ namespace OpenRiaServices.Client
         {
             private readonly Entity _entity;
             private readonly EntityState _lastState;
-            private IDictionary<string, object> _snapshot;
-            private readonly EntityAction[] _customMethodInvocations;
+            private IDictionary<string, object?>? _snapshot;
+            private readonly EntityAction[]? _customMethodInvocations;
             private readonly ValidationResult[] _validationErrors;
             private readonly List<string> _modifiedProperties;
 
@@ -1941,7 +1942,7 @@ namespace OpenRiaServices.Client
                 this._entity.RaisePropertyChanged(nameof(HasValidationErrors));
             }
 
-            protected override void OnPropertyErrorsChanged(string propertyName)
+            protected override void OnPropertyErrorsChanged(string? propertyName)
             {
                 this._entity.RaiseValidationErrorsChanged(propertyName);
             }
@@ -1952,40 +1953,69 @@ namespace OpenRiaServices.Client
 
 namespace OpenRiaServices.Client.EntityExtensions
 {
+    /// <summary>
+    /// Allow access to advanced entity state management capabilities such as ExtractState, ApplyState, Merge, and UpdateOriginalValues through extension methods on Entity.
+    /// </summary>
     public static class EntityExtensions
     {
-        public static IDictionary<string, object> ExtractState(this Entity targetEntity)
+        /// <inheritdoc cref="Entity.ExtractState"/>
+        public static IDictionary<string, object?> ExtractState(this Entity targetEntity)
         {
             return targetEntity.ExtractState();
         }
-        public static void ExtractState(this Entity targetEntity, IDictionary<string, object> entityStateToApply)
+
+        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object?})"/>
+        [Obsolete("Use ApplyState to instead.")]
+        public static void ExtractState(this Entity targetEntity, IDictionary<string, object?> entityStateToApply)
         {
             targetEntity.ApplyState(entityStateToApply);
         }
-        public static void ExtractState(this Entity targetEntity, IDictionary<string, object> entityStateToApply, LoadBehavior loadBehavior)
+
+        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object?}, LoadBehavior)"/>
+        [Obsolete("Use ApplyState to instead.")]
+        public static void ExtractState(this Entity targetEntity, IDictionary<string, object?> entityStateToApply, LoadBehavior loadBehavior)
         {
             targetEntity.ApplyState(entityStateToApply, loadBehavior);
         }
 
+        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object?})"/>
+        public static void ApplyState(this Entity targetEntity, IDictionary<string, object?> entityStateToApply)
+        {
+            targetEntity.ApplyState(entityStateToApply);
+        }
+
+        /// <inheritdoc cref="Entity.ApplyState(IDictionary{string, object?}, LoadBehavior)"/>
+        public static void ApplyState(this Entity targetEntity, IDictionary<string, object?> entityStateToApply, LoadBehavior loadBehavior)
+        {
+            targetEntity.ApplyState(entityStateToApply, loadBehavior);
+        }
+
+        /// <inheritdoc cref="Entity.UpdateOriginalValues(Entity)"/>
         public static void UpdateOriginalValues(this Entity targetEntity, Entity entity)
         {
             targetEntity.UpdateOriginalValues(entity);
         }
-        public static void UpdateOriginalValues(this Entity targetEntity, IDictionary<string, object> entityStateToApply)
+
+        /// <inheritdoc cref="Entity.UpdateOriginalValues(IDictionary{string, object?})"/>
+        public static void UpdateOriginalValues(this Entity targetEntity, IDictionary<string, object?> entityStateToApply)
         {
             targetEntity.UpdateOriginalValues(entityStateToApply);
         }
+
+        /// <inheritdoc cref="Entity.Merge(Entity, LoadBehavior)"/>
         public static void Merge(this Entity targetEntity, Entity otherEntity, LoadBehavior loadBehavior)
         {
             targetEntity.Merge(otherEntity, loadBehavior);
         }
 
-        public static void Merge(this Entity targetEntity, IDictionary<string, object> otherState, LoadBehavior loadBehavior)
+        /// <inheritdoc cref="Entity.Merge(IDictionary{string, object?}, LoadBehavior)"/>
+        public static void Merge(this Entity targetEntity, IDictionary<string, object?> otherState, LoadBehavior loadBehavior)
         {
             targetEntity.Merge(otherState, loadBehavior);
         }
 
-        public static EntitySet<TEntity> GetEntitySet<TEntity>(this TEntity entity) where TEntity : Entity
+        /// <inheritdoc cref="Entity.EntitySet"/>
+        public static EntitySet<TEntity>? GetEntitySet<TEntity>(this TEntity entity) where TEntity : Entity
         {
             return entity.EntitySet as EntitySet<TEntity>;
         }

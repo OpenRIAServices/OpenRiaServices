@@ -1,12 +1,51 @@
 ﻿#if !NET
 using System;
+using System.Diagnostics.CodeAnalysis;
+using System.Runtime.CompilerServices;
+
+#nullable enable
+
+namespace System
+{
+    /// <summary>
+    /// Helper methods to allow "newer" .NET methods on older frameworks
+    /// </summary>
+    internal static class Polyfills
+    {
+        extension(ArgumentNullException)
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static void ThrowIfNull([NotNull] object? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+            {
+                if (argument is null)
+                    ThrowArgumentNullException(paramName);
+            }
+        }
+
+        extension(ArgumentException)
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static void ThrowIfNullOrEmpty([NotNull] string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
+            {
+                if (argument is null || argument.Length == 0)
+                    ThrowArgumentNullException(paramName);
+            }
+        }
+
+        [DoesNotReturn]
+        private static void ThrowArgumentNullException(string? paramName)
+        {
+            throw new ArgumentNullException(paramName);
+        }
+    }
+}
 
 namespace System.Collections.Generic
 {
     /// <summary>
     /// Helper methods to allow "newer" .NET methods on older frameworks
     /// </summary>
-    static class Polyfills
+    internal static class Polyfills
     {
         public static bool TryAdd<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue value)
         {
@@ -23,6 +62,20 @@ namespace System.Collections.Generic
                 return false;
             }
         }
+    }
+}
+
+namespace System.Runtime.CompilerServices
+{
+    [System.AttributeUsage(System.AttributeTargets.Parameter, AllowMultiple = false, Inherited = false)]
+    internal sealed class CallerArgumentExpressionAttribute : Attribute
+    {
+        public CallerArgumentExpressionAttribute(string parameterName)
+        {
+            ParameterName = parameterName;
+        }
+
+        public string ParameterName { get; private set; }
     }
 }
 
@@ -125,5 +178,74 @@ namespace System.Diagnostics.CodeAnalysis
         //     specifies the type of dynamically accessed members.
         public DynamicallyAccessedMemberTypes MemberTypes { get; }
     }
+
+    /// <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values when returning with the specified return value condition.</summary>
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
+    internal sealed class MemberNotNullWhenAttribute : Attribute
+    {
+        /// <summary>Initializes the attribute with the specified return value condition and a field or property member.</summary>
+        /// <param name="returnValue">
+        /// The return value condition. If the method returns this value, the associated field or property member will not be null.
+        /// </param>
+        /// <param name="member">
+        /// The field or property member that is promised to be not-null.
+        /// </param>
+        public MemberNotNullWhenAttribute(bool returnValue, string member)
+        {
+            ReturnValue = returnValue;
+            Members = [member];
+        }
+
+        /// <summary>Initializes the attribute with the specified return value condition and list of field and property members.</summary>
+        /// <param name="returnValue">
+        /// The return value condition. If the method returns this value, the associated field and property members will not be null.
+        /// </param>
+        /// <param name="members">
+        /// The list of field and property members that are promised to be not-null.
+        /// </param>
+        public MemberNotNullWhenAttribute(bool returnValue, params string[] members)
+        {
+            ReturnValue = returnValue;
+            Members = members;
+        }
+
+        /// <summary>Gets the return value condition.</summary>
+        public bool ReturnValue { get; }
+
+        /// <summary>Gets field or property member names.</summary>
+        public string[] Members { get; }
+    }
+
+    /// <summary>Specifies that the method or property will ensure that the listed field and property members have not-null values.</summary>
+    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Property, Inherited = false, AllowMultiple = true)]
+    internal sealed class MemberNotNullAttribute : Attribute
+    {
+        /// <summary>Initializes the attribute with a field or property member.</summary>
+        /// <param name="member">
+        /// The field or property member that is promised to be not-null.
+        /// </param>
+        public MemberNotNullAttribute(string member) => Members = [member];
+
+        /// <summary>Initializes the attribute with the list of field and property members.</summary>
+        /// <param name="members">
+        /// The list of field and property members that are promised to be not-null.
+        /// </param>
+        public MemberNotNullAttribute(params string[] members) => Members = members;
+
+        /// <summary>Gets field or property member names.</summary>
+        public string[] Members { get; }
+    }
+
+    /// <summary>
+    /// Specifies that an output is not null even if the corresponding type allows it. Specifies that an input argument was not null when the call returns.
+    /// </summary>
+    [System.AttributeUsage(System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.Property | System.AttributeTargets.ReturnValue, Inherited = false)]
+    internal sealed class NotNullAttribute : Attribute { }
+
+    /// <summary>
+    /// Specifies that a method will never return under any circumstance.
+    /// </summary>
+    [System.AttributeUsage(System.AttributeTargets.Method, Inherited = false)]
+    internal sealed class DoesNotReturnAttribute : Attribute { }
 }
 #endif

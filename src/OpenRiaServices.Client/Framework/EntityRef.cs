@@ -9,6 +9,8 @@ using System.Linq;
 using System.Reflection;
 using OpenRiaServices.Client.Internal;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -19,9 +21,9 @@ namespace OpenRiaServices.Client
     {
         private readonly Entity _parent;
         private readonly MetaMember _metaMember;
-        private EntitySet _sourceSet;
+        private EntitySet? _sourceSet;
         private readonly Func<TEntity, bool> _entityPredicate;
-        private TEntity _entity;
+        private TEntity? _entity;
         private bool _hasAssignedEntity;
         private bool _hasLoadedEntity;
 
@@ -75,7 +77,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets or sets the associated <see cref="Entity"/>
         /// </summary>
-        public TEntity Entity
+        public TEntity? Entity
         {
             get
             {
@@ -143,13 +145,13 @@ namespace OpenRiaServices.Client
                     {
                         value.SetParent(this._parent, this.AssocAttribute);
                     }
-                    else
+                    else // value == null => _entity is not null, since entityChanged == true
                     {
                         // when a composed entity is removed from its EntityRef,
                         // its inferred as a delete
-                        if (this._sourceSet != null && this._sourceSet.IsAttached(this._entity))
+                        if (this._sourceSet != null && this._sourceSet.IsAttached(this._entity!))
                         {
-                            this._sourceSet.Remove(this._entity);
+                            this._sourceSet.Remove(this._entity!);
                         }
                     }
 
@@ -167,7 +169,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-        private EntitySet SourceSet
+        private EntitySet? SourceSet
         {
             get
             {
@@ -184,7 +186,7 @@ namespace OpenRiaServices.Client
         /// All internal assignments should be made through this method.
         /// </summary>
         /// <param name="value">The new entity instance</param>
-        private void SetValue(TEntity value)
+        private void SetValue(TEntity? value)
         {
             if (this._entity != value)
             {
@@ -221,12 +223,12 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="entities">The collection of entities to search.</param>
         /// <returns>The entity or null.</returns>
-        private TEntity GetSingleMatch(IEnumerable entities)
+        private TEntity? GetSingleMatch(IEnumerable entities)
         {
             IEnumerable<TEntity> enumerable = (entities as ICollection<TEntity>)
                 ?? entities.OfType<TEntity>();
 
-            TEntity entity = null;
+            TEntity? entity = null;
             foreach (TEntity currEntity in enumerable.Where(this.Filter))
             {
                 if (entity != null)
@@ -282,12 +284,12 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="args">The collection changed event arguments.</param>
-        private void SourceSet_CollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
+        private void SourceSet_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
             if (args.Action == NotifyCollectionChangedAction.Add
                 && this._parent.EntityState != EntityState.New)
             {
-                TEntity newEntity = this.GetSingleMatch(args.NewItems);
+                TEntity? newEntity = this.GetSingleMatch(args.NewItems!);
                 if ((newEntity != null) && (newEntity != this._entity))
                 {
                     // if the referenced Entity has been added to the source EntitySet,
@@ -297,7 +299,7 @@ namespace OpenRiaServices.Client
             }
             else if (args.Action == NotifyCollectionChangedAction.Remove)
             {
-                if (this._entity != null && args.OldItems.Contains(this._entity))
+                if (this._entity != null && args.OldItems!.Contains(this._entity))
                 {
                     // if the referenced Entity has been removed from the source EntitySet,
                     // we need to clear out our cached reference and raise the notification
@@ -331,7 +333,7 @@ namespace OpenRiaServices.Client
                 return;
             }
 
-            TEntity typedEntity = entity as TEntity;
+            TEntity? typedEntity = entity as TEntity;
 
             if (typedEntity != null && (this._hasLoadedEntity || this._hasAssignedEntity))
             {
@@ -371,7 +373,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="sender">The event sender.</param>
         /// <param name="e">The property changed event arguments.</param>
-        private void ParentEntityPropertyChanged(object sender, PropertyChangedEventArgs e)
+        private void ParentEntityPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
             // only need to reset if we have a cached value
             if (!this._hasLoadedEntity && !this._hasAssignedEntity)
@@ -413,7 +415,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-        Entity IEntityRef.Entity
+        Entity? IEntityRef.Entity
         {
             get
             {
@@ -459,7 +461,7 @@ namespace OpenRiaServices.Client
         /// Gets the referenced entity loading it if it hasn't been loaded yet.
         /// To avoid the deferred load, inspect the HasValue property first.
         /// </summary>
-        Entity Entity
+        Entity? Entity
         {
             get;
         }

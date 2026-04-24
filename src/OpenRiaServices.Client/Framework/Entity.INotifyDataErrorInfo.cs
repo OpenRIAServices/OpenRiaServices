@@ -5,17 +5,19 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     public abstract partial class Entity : INotifyDataErrorInfo
     {
-        private EventHandler<DataErrorsChangedEventArgs> _validationErrorsChanged;
+        private EventHandler<DataErrorsChangedEventArgs>? _validationErrorsChanged;
 
         /// <summary>
         /// Raises the event whenever validation errors have changed for a property.
         /// </summary>
         /// <param name="propertyName">The property whose errors have changed.</param>
-        private void RaiseValidationErrorsChanged(string propertyName)
+        private void RaiseValidationErrorsChanged(string? propertyName)
         {
             this._validationErrorsChanged?.Invoke(this, new DataErrorsChangedEventArgs(propertyName));
         }
@@ -23,7 +25,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Explicitly implement the <see cref="INotifyDataErrorInfo.ErrorsChanged"/> event.
         /// </summary>
-        event EventHandler<DataErrorsChangedEventArgs> INotifyDataErrorInfo.ErrorsChanged
+        event EventHandler<DataErrorsChangedEventArgs>? INotifyDataErrorInfo.ErrorsChanged
         {
             add { this._validationErrorsChanged += value; }
             remove { this._validationErrorsChanged -= value; }
@@ -42,7 +44,7 @@ namespace OpenRiaServices.Client
         /// or entity-level errors when <paramref name="propertyName"/> is
         /// <c>null</c> or empty.
         /// </returns>
-        IEnumerable INotifyDataErrorInfo.GetErrors(string propertyName)
+        IEnumerable INotifyDataErrorInfo.GetErrors(string? propertyName)
         {
             IEnumerable<ValidationResult> results;
 
@@ -51,7 +53,7 @@ namespace OpenRiaServices.Client
                 // If the property name is null or empty, then we want to include errors
                 // where the member names array is empty, or where the member names array
                 // contains a null or empty string.
-                results = this.ValidationErrors.Where(e => !e.MemberNames.Any() || e.MemberNames.Contains(propertyName));
+                results = this.ValidationErrors.Where(e => !e.MemberNames.Any() || e.MemberNames.Any(string.IsNullOrEmpty));
             }
             else
             {

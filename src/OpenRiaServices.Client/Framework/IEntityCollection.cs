@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>

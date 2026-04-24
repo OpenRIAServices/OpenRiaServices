@@ -9,6 +9,8 @@ using System.Linq;
 using System.Runtime.Serialization;
 using OpenRiaServices.Client.Internal;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -17,17 +19,17 @@ namespace OpenRiaServices.Client
     [DataContract]
     public abstract partial class ComplexObject : INotifyPropertyChanged, IEditableObject
     {
-        private PropertyChangedEventHandler _propChangedHandler;
-        private ComplexObjectValidationResultCollection _validationErrors;
-        private Dictionary<string, ComplexObject> _trackedInstances;
-        private Action _onDataMemberChanging;
-        private Action _onDataMemberChanged;
-        private Action<string, IEnumerable<ValidationResult>> _onMemberValidationChanged;
-        private EditSession _editSession;
-        private object _parent;
-        private string _parentPropertyName;
+        private PropertyChangedEventHandler? _propChangedHandler;
+        private ComplexObjectValidationResultCollection? _validationErrors;
+        private Dictionary<string, ComplexObject>? _trackedInstances;
+        private Action? _onDataMemberChanging;
+        private Action? _onDataMemberChanged;
+        private Action<string, IEnumerable<ValidationResult>>? _onMemberValidationChanged;
+        private EditSession? _editSession;
+        private object? _parent;
+        private string? _parentPropertyName;
         private bool _isDeserializing;
-        private MetaType _metaType;
+        private MetaType? _metaType;
 
         /// <summary>
         /// Gets the map of child ComplexObject instances currently being
@@ -49,14 +51,14 @@ namespace OpenRiaServices.Client
         /// Gets the parent entity if this complex type instance is hosted
         /// by an entity. May return null.
         /// </summary>
-        private Entity Entity
+        private Entity? Entity
         {
             get
             {
-                object currParent = this._parent;
+                object? currParent = this._parent;
                 while (currParent != null)
                 {
-                    Entity entity = currParent as Entity;
+                    Entity? entity = currParent as Entity;
                     if (entity != null)
                     {
                         return entity;
@@ -90,6 +92,11 @@ namespace OpenRiaServices.Client
         /// Gets a value indicating whether this complex type instance is currently
         /// attached to a parent.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(_parent))]
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(_parentPropertyName))]
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(_onDataMemberChanging))]
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(_onDataMemberChanged))]
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(_onMemberValidationChanged))]
         internal bool IsAttached
         {
             get
@@ -206,7 +213,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Event raised whenever a <see cref="ComplexObject"/> property has changed.
         /// </summary>
-        event PropertyChangedEventHandler INotifyPropertyChanged.PropertyChanged
+        event PropertyChangedEventHandler? INotifyPropertyChanged.PropertyChanged
         {
             add { this._propChangedHandler += value; }
             remove { this._propChangedHandler -= value; }
@@ -278,7 +285,7 @@ namespace OpenRiaServices.Client
             // First check if the parent has an existing instance attached for this
             // property and detach if necessary.
             string memberName = metaMember.Name;
-            ComplexObject prevInstance = null;
+            ComplexObject? prevInstance = null;
             if (this.TrackedInstances.TryGetValue(memberName, out prevInstance))
             {
                 prevInstance.Detach();
@@ -366,7 +373,7 @@ namespace OpenRiaServices.Client
             this.NotifyParentMemberValidationChanged(propertyName, validationResults);
         }
 
-        private void NotifyParentMemberValidationChanged(string propertyName, IEnumerable<ValidationResult> validationResults)
+        private void NotifyParentMemberValidationChanged(string? propertyName, IEnumerable<ValidationResult> validationResults)
         {
             if (this.IsAttached)
             {
@@ -406,7 +413,7 @@ namespace OpenRiaServices.Client
             // if this instance is currently being deserialized, or if it is hosted by an
             // entity that is being deserialized or is having state applied to it, skip
             // validation
-            Entity rootEntity = this.Entity;
+            Entity? rootEntity = this.Entity;
             if (this.IsDeserializing || (rootEntity != null && (rootEntity.IsDeserializing || rootEntity.IsApplyingState)))
             {
                 return;
@@ -440,7 +447,7 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.Property_Is_ReadOnly, propertyName));
             }
 
-            ComplexObject complexObject = value as ComplexObject;
+            ComplexObject? complexObject = value as ComplexObject;
             if (complexObject != null && complexObject.IsAttached)
             {
                 throw new InvalidOperationException(Resource.ComplexType_InstancesCannotBeShared);
@@ -482,7 +489,7 @@ namespace OpenRiaServices.Client
             Validator.TryValidateProperty(value, validationContext, validationResults);
 
             // Process the validation the errors for this property
-            this.OnMemberValidationChanged(validationContext.MemberName, validationResults);
+            this.OnMemberValidationChanged(validationContext.MemberName!, validationResults);
         }
 
         /// <summary>
@@ -498,8 +505,8 @@ namespace OpenRiaServices.Client
         {
             // Get the validation context from the entity container if available,
             // otherwise create a new context.
-            ValidationContext parentContext = null;
-            Entity rootEntity = this.Entity;
+            ValidationContext? parentContext = null;
+            Entity? rootEntity = this.Entity;
             if (rootEntity != null && rootEntity.EntitySet != null && rootEntity.EntitySet.EntityContainer != null)
             {
                 parentContext = rootEntity.EntitySet.EntityContainer.ValidationContext;
@@ -540,7 +547,7 @@ namespace OpenRiaServices.Client
             // Walk up the containment chain searching for this instance.
             // If found, setting the parent of this instance to the candidate
             // would result in a cycle.
-            object currParent = candidateParent;
+            object? currParent = candidateParent;
             while (currParent != null)
             {
                 if (currParent == this)
@@ -548,8 +555,7 @@ namespace OpenRiaServices.Client
                     throw new InvalidOperationException(Resource.CyclicReferenceError);
                 }
 
-                ComplexObject complexParent = currParent as ComplexObject;
-                if (complexParent != null)
+                if (currParent is ComplexObject complexParent)
                 {
                     currParent = complexParent._parent;
                 }
@@ -586,6 +592,7 @@ namespace OpenRiaServices.Client
         /// edit session in progress for this instance. This is the case when
         /// BeginEdit has been called, but EndEdit/CancelEdit have not.
         /// </summary>
+        [System.Diagnostics.CodeAnalysis.MemberNotNullWhen(true, nameof(_editSession))]
         internal bool IsEditing
         {
             get
@@ -594,6 +601,7 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <inheritdoc cref="Entity.IsMergingState"/>
         protected internal bool IsMergingState { get; set; }
 
         /// <summary>
@@ -681,7 +689,7 @@ namespace OpenRiaServices.Client
         private class EditSession
         {
             private readonly ComplexObject _instance;
-            private IDictionary<string, object> _snapshot;
+            private IDictionary<string, object?>? _snapshot;
             private readonly ValidationResult[] _validationErrors;
 
             private EditSession(ComplexObject instance)
@@ -777,19 +785,19 @@ namespace OpenRiaServices.Client
 
                     // search (by value) for the item in our parents error collection
                     ICollection<ValidationResult> resultCollection = GetValidationResults(this._complexObject._parent);
-                    ValidationResultEqualityComparer comparer = new ValidationResultEqualityComparer();
-                    item = resultCollection.FirstOrDefault(p => comparer.Equals(p, item));
+                    ValidationResultEqualityComparer comparer = ValidationResultEqualityComparer.Instance;
+                    var existing = resultCollection.FirstOrDefault(p => comparer.Equals(p, item));
 
-                    if (item != null)
+                    if (existing != null)
                     {
-                        resultCollection.Remove(item);
+                        resultCollection.Remove(existing);
                     }
                 }
             }
 
             private static ICollection<ValidationResult> GetValidationResults(object parent)
             {
-                ComplexObject complexParent = parent as ComplexObject;
+                ComplexObject? complexParent = parent as ComplexObject;
                 if (complexParent != null)
                 {
                     return complexParent.ValidationErrors;
@@ -820,7 +828,7 @@ namespace OpenRiaServices.Client
             {
                 this._complexObject.RaisePropertyChanged(nameof(HasValidationErrors));
             }
-            protected override void OnPropertyErrorsChanged(string propertyName)
+            protected override void OnPropertyErrorsChanged(string? propertyName)
             {
                 this._complexObject.RaiseValidationErrorsChanged(propertyName);
             }

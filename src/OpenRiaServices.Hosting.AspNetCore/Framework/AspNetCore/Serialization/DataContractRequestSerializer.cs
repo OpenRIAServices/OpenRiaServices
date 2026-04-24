@@ -61,7 +61,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         {
             Type actualReturnType = operation.Operation switch
             {
-                DomainOperation.Query => typeof(QueryResult<>).MakeGenericType(operation.AssociatedType),
+                DomainOperation.Query => typeof(QueryResult<>).MakeGenericType(operation.AssociatedType!),
                 DomainOperation.Invoke => operation.ReturnType,
                 DomainOperation.Custom when operation.Name == "Submit" => typeof(IEnumerable<ChangeSetEntry>),
                 _ => throw new NotSupportedException()

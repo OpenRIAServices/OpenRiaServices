@@ -1,4 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+
+#nullable enable
 
 namespace OpenRiaServices.Client
 {
@@ -7,22 +10,31 @@ namespace OpenRiaServices.Client
     /// </summary>
     public class EntityAction
     {
-        private readonly List<object> _parameters;
+        private readonly object?[] _parameters;
 
         /// <summary>
         /// Initializes a new instance of the EntityAction class
         /// </summary>
         /// <param name="name">Name of the entity action</param>
         /// <param name="parameters">The parameters to pass to the entity action</param>
-        public EntityAction(string name, params object[] parameters)
+        public EntityAction(string name, params object?[] parameters)
         {
             this.Name = name;
-            this._parameters = new List<object>();
-            if (parameters != null)
-            {
-                this._parameters.AddRange(parameters);
-            }
+            this._parameters = (parameters is not null) ? [.. parameters] : [];
         }
+
+#if NET
+        /// <summary>
+        /// Initializes a new instance of the EntityAction class
+        /// </summary>
+        /// <param name="name">Name of the entity action</param>
+        /// <param name="parameters">The parameters to pass to the entity action</param>
+        public EntityAction(string name, params ReadOnlySpan<object?> parameters)
+        {
+            this.Name = name;
+            this._parameters = parameters.Length > 0 ? [.. parameters] : [];
+        }
+#endif
 
         /// <summary>
         /// Gets the name of the entity action
@@ -36,7 +48,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Gets the parameters to pass to the entity action
         /// </summary>
-        public IEnumerable<object> Parameters
+        public IEnumerable<object?> Parameters
         {
             get
             {
@@ -51,7 +63,7 @@ namespace OpenRiaServices.Client
         {
             get
             {
-                return (this._parameters.Count > 0);
+                return (this._parameters.Length > 0);
             }
         }
     }

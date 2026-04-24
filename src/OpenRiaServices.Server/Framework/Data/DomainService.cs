@@ -11,6 +11,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using DataAnnotationsResources = OpenRiaServices.Server.Resource;
 
+#nullable enable
+
 namespace OpenRiaServices.Server
 {
     /// <summary>
@@ -24,12 +26,12 @@ namespace OpenRiaServices.Server
         internal const int TotalCountUndefined = -1;
         private const int TotalCountEqualsResultSetCount = -2;
 
-        private static IDomainServiceFactory s_domainServiceFactory;
+        private static IDomainServiceFactory? s_domainServiceFactory;
 
-        private ChangeSet _changeSet;
-        private DomainServiceContext _serviceContext;
-        private DomainServiceDescription _serviceDescription;
-        private ValidationContext _validationContext;
+        private ChangeSet? _changeSet;
+        private DomainServiceContext? _serviceContext;
+        private DomainServiceDescription? _serviceDescription;
+        private ValidationContext? _validationContext;
         #endregion // Fields
 
         /// <summary>
@@ -68,16 +70,7 @@ namespace OpenRiaServices.Server
         /// Gets the <see cref="DomainServiceDescription"/> for this <see cref="DomainService"/>.
         /// </summary>
         protected DomainServiceDescription ServiceDescription
-        {
-            get
-            {
-                if (this._serviceDescription == null)
-                {
-                    this._serviceDescription = DomainServiceDescription.GetDescription(this.GetType());
-                }
-                return this._serviceDescription;
-            }
-        }
+            => this._serviceDescription ??= DomainServiceDescription.GetDescription(this.GetType());
 
         /// <summary>
         /// Gets the active <see cref="DomainServiceContext"/> for this <see cref="DomainService"/>.
@@ -102,7 +95,7 @@ namespace OpenRiaServices.Server
         /// making these services and items available to each
         /// <see cref="ValidationAttribute"/> involved in validation.
         /// </value>
-        protected ValidationContext ValidationContext
+        protected ValidationContext? ValidationContext
         {
             get { return this._validationContext; }
             set { this._validationContext = value; }
@@ -137,7 +130,7 @@ namespace OpenRiaServices.Server
         /// value set in this property must be disposed explicitly by the developer.
         /// </para>
         /// </value>
-        protected AuthorizationContext AuthorizationContext { get; set; }
+        protected AuthorizationContext? AuthorizationContext { get; set; }
 
         /// <summary>
         /// Requests authorization for the given <paramref name="domainOperationEntry"/>.
@@ -151,7 +144,7 @@ namespace OpenRiaServices.Server
         /// <returns>The results of authorization.  <see cref="AuthorizationResult.Allowed"/> indicates the
         /// authorization request is allowed.  Any other value indicates it was denied.
         /// </returns>
-        public AuthorizationResult IsAuthorized(DomainOperationEntry domainOperationEntry, object entity)
+        public AuthorizationResult IsAuthorized(DomainOperationEntry domainOperationEntry, object? entity)
         {
             if (domainOperationEntry == null)
             {
@@ -179,8 +172,8 @@ namespace OpenRiaServices.Server
             string operationType = domainOperationEntry.OperationType;
 
             // Formulate an AuthorizationContext from the optional template provided by the user
-            AuthorizationContext contextTemplate = this.AuthorizationContext;
-            AuthorizationResult result = null;
+            AuthorizationContext? contextTemplate = this.AuthorizationContext;
+            AuthorizationResult result;
 
             // If the developer specified a template, we will clone from it and use it as the IServiceProvider.
             // If the user did not, we create a new instance and use the ServiceContext as the IServiceProvider.
@@ -193,7 +186,7 @@ namespace OpenRiaServices.Server
                 context.Items[typeof(Type)] = domainOperationEntry.AssociatedType;
 
                 // The principal is retrieved through the DomainServiceContext as a service
-                IPrincipal principal = this.ServiceContext != null ? this.ServiceContext.User : null;
+                IPrincipal? principal = this.ServiceContext.User;
 
                 // Null principal is denied before going any further -- it is contractually required for the
                 // authorization attributes.
@@ -228,7 +221,7 @@ namespace OpenRiaServices.Server
         /// <summary>
         /// Gets the current <see cref="ChangeSet"/>. Returns null if no change operations are being performed.
         /// </summary>
-        protected ChangeSet ChangeSet
+        protected ChangeSet? ChangeSet
         {
             get
             {
@@ -270,9 +263,9 @@ namespace OpenRiaServices.Server
         /// <returns>The query results. May be null if there are no query results.</returns>
         public async virtual ValueTask<ServiceQueryResult<T>> QueryAsync<T>(QueryDescription queryDescription, CancellationToken cancellationToken)
         {
-            IEnumerable enumerableResult = null;
-            IReadOnlyCollection<T> enumeratedResult = null;
-            List<ValidationResult> validationErrorList = null;
+            IEnumerable? enumerableResult = null;
+            IReadOnlyCollection<T>? enumeratedResult = null;
+            List<ValidationResult>? validationErrorList = null;
             int totalCount;
 
             try
@@ -299,7 +292,7 @@ namespace OpenRiaServices.Server
                     return new ServiceQueryResult<T>(validationErrorList);
                 }
 
-                object result = null;
+                object? result = null;
 
                 this.ServiceContext.Operation = queryDescription.Method;
                 try
@@ -449,7 +442,7 @@ namespace OpenRiaServices.Server
                 this.ServiceContext.Operation = invokeDescription.Method;
                 try
                 {
-                    object returnValue = await invokeDescription.Method.InvokeAsync(this, invokeDescription.ParameterValues, cancellationToken)
+                    object? returnValue = await invokeDescription.Method.InvokeAsync(this, invokeDescription.ParameterValues, cancellationToken)
                         .ConfigureAwait(false);
 
                     return new ServiceInvokeResult(returnValue);
@@ -582,10 +575,6 @@ namespace OpenRiaServices.Server
         /// </returns>
         private static AuthorizationResult EvaluateAuthorization(IEnumerable<AuthorizationAttribute> attributes, IPrincipal principal, AuthorizationContext authorizationContext)
         {
-            System.Diagnostics.Debug.Assert(attributes != null, "Authorization attributes cannot be null");
-            System.Diagnostics.Debug.Assert(principal != null, "Principal cannot be null");
-            System.Diagnostics.Debug.Assert(authorizationContext != null, "AuthorizationContext cannot be null");
-
             // 2 passes.
             // Pass 1 does [RequiresAuthentication] so we ensure it is always first.  The idea is that if it is present, that is the most informative.
             // Pass 2 does the rest
@@ -593,7 +582,7 @@ namespace OpenRiaServices.Server
             {
                 if (attribute is RequiresAuthenticationAttribute)
                 {
-                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext);
+                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext!);
                     if (result != AuthorizationResult.Allowed)
                     {
                         return result;
@@ -607,7 +596,7 @@ namespace OpenRiaServices.Server
             {
                 if (!(attribute is RequiresAuthenticationAttribute))
                 {
-                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext);
+                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext!);
                     if (result != AuthorizationResult.Allowed)
                     {
                         return result;
@@ -626,7 +615,7 @@ namespace OpenRiaServices.Server
         /// <param name="domainServiceDescription">The <see cref="DomainServiceDescription"/> for the operation being validated.</param>
         /// <param name="validationContextRoot">An optional <see cref="ValidationContext"/> to use for services and items, or <c>null</c>.</param>
         /// <returns><c>true</c> if all the operations in the specified list are valid.</returns>
-        internal static bool ValidateOperations(IEnumerable<ChangeSetEntry> operations, DomainServiceDescription domainServiceDescription, ValidationContext validationContextRoot)
+        internal static bool ValidateOperations(IEnumerable<ChangeSetEntry> operations, DomainServiceDescription domainServiceDescription, ValidationContext? validationContextRoot)
         {
             bool success = true;
             IEnumerable<ChangeSetEntry> operationsToValidate = operations.Where(
@@ -665,16 +654,16 @@ namespace OpenRiaServices.Server
                 // if the entity has a custom method invocation, validate the all method calls
                 if (hasCustomMethod)
                 {
-                    Dictionary<string, DomainOperationEntry> invokedActions = null;
-                    for (int i = 0; i < operation.EntityActions.Count; ++i)
+                    Dictionary<string, DomainOperationEntry>? invokedActions = null;
+                    for (int i = 0; i < operation.EntityActions!.Count; ++i)
                     {
                         var action = operation.EntityActions[i];
 
-                        DomainOperationEntry customMethodOperation = null;
+                        DomainOperationEntry? customMethodOperation = null;
                         bool alreadyInvoked = invokedActions != null && invokedActions.TryGetValue(action.Key, out customMethodOperation);
 
-                        if (!alreadyInvoked) // equivalent to (customMethodOperation != null)
-                            customMethodOperation = domainServiceDescription.GetCustomMethod(operation.Entity.GetType(), action.Key);
+                        // ResolveOperations has already validated that the custom method exists, so we know this won't return null
+                        customMethodOperation ??= domainServiceDescription.GetCustomMethod(operation.Entity.GetType(), action.Key);
 
                         // Of more that one action is queued check for multiple invocations, this way we don't have to allocate
                         // a dictionary unless necessary
@@ -744,7 +733,7 @@ namespace OpenRiaServices.Server
         /// <returns>True if the <see cref="ChangeSet"/> is authorized, false otherwise.</returns>
         protected virtual bool AuthorizeChangeSet()
         {
-            foreach (ChangeSetEntry op in this.ChangeSet.ChangeSetEntries)
+            foreach (ChangeSetEntry op in this.ChangeSet!.ChangeSetEntries)
             {
                 object entity = op.Entity;
 
@@ -777,7 +766,7 @@ namespace OpenRiaServices.Server
         protected virtual ValueTask<bool> ValidateChangeSetAsync(CancellationToken cancellationToken)
         {
             // Perform validation on the each of the operations.
-            var result = ValidateOperations(this.ChangeSet.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
+            var result = ValidateOperations(this.ChangeSet!.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
             return new ValueTask<bool>(result);
         }
 
@@ -792,7 +781,7 @@ namespace OpenRiaServices.Server
             await this.InvokeCustomOperations()
                 .ConfigureAwait(false);
 
-            return !this.ChangeSet.HasError;
+            return !this.ChangeSet!.HasError;
         }
 
         /// <summary>
@@ -820,11 +809,11 @@ namespace OpenRiaServices.Server
         private void ResolveOperations()
         {
             // Resolve and set the DomainOperationEntry for each operation in the changeset
-            foreach (ChangeSetEntry changeSetEntry in this.ChangeSet.ChangeSetEntries)
+            foreach (ChangeSetEntry changeSetEntry in this.ChangeSet!.ChangeSetEntries)
             {
                 // resolve the DomainOperationEntry
                 Type entityType = changeSetEntry.Entity.GetType();
-                DomainOperationEntry domainOperationEntry = null;
+                DomainOperationEntry? domainOperationEntry = null;
                 if (changeSetEntry.Operation == DomainOperation.Insert ||
                     changeSetEntry.Operation == DomainOperation.Update ||
                     changeSetEntry.Operation == DomainOperation.Delete)
@@ -1010,12 +999,12 @@ namespace OpenRiaServices.Server
                 if (e.Value != null && e.ValidationResult != null)
                 {
                     IEnumerable<ChangeSetEntry> updateOperations =
-                        this.ChangeSet.ChangeSetEntries.Where(
+                        this.ChangeSet!.ChangeSetEntries.Where(
                             p => p.Operation == DomainOperation.Insert ||
                                  p.Operation == DomainOperation.Update ||
                                  p.Operation == DomainOperation.Delete);
 
-                    ChangeSetEntry operation = updateOperations.SingleOrDefault(p => object.ReferenceEquals(p.Entity, e.Value));
+                    ChangeSetEntry? operation = updateOperations.FirstOrDefault(p => object.ReferenceEquals(p.Entity, e.Value));
                     if (operation != null)
                     {
                         ValidationResultInfo error = new ValidationResultInfo(e.ValidationResult.ErrorMessage, e.ValidationResult.MemberNames);
@@ -1029,13 +1018,14 @@ namespace OpenRiaServices.Server
                 }
             }
 
-            return !this.ChangeSet.HasError;
+            return !this.ChangeSet!.HasError;
         }
 
         /// <summary>
         /// Ensures the <see cref="DomainService"/> has been initialized properly.
         /// </summary>
         /// <exception cref="InvalidOperationException">if this service instance hasn't been initialized.</exception>
+        [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_serviceContext))]
         private void EnsureInitialized()
         {
             if (this._serviceContext == null)
@@ -1050,7 +1040,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         /// <param name="domainOperationEntry">The <see cref="DomainOperationEntry"/> to validate.</param>
         /// <param name="entity">The optional entity instance being authorized.</param>
-        private void ValidateMethodPermissions(DomainOperationEntry domainOperationEntry, object entity)
+        private void ValidateMethodPermissions(DomainOperationEntry domainOperationEntry, object? entity)
         {
             AuthorizationResult result = this.IsAuthorized(domainOperationEntry, entity);
             if (result != AuthorizationResult.Allowed)
@@ -1065,7 +1055,7 @@ namespace OpenRiaServices.Server
         private async Task InvokeCudOperationsAsync()
         {
             object[] parameters = new object[1];
-            foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries
+            foreach (ChangeSetEntry operation in this.ChangeSet!.ChangeSetEntries
                 .Where(op => op.Operation == DomainOperation.Insert ||
                              op.Operation == DomainOperation.Update ||
                              op.Operation == DomainOperation.Delete))
@@ -1107,7 +1097,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         private async Task InvokeCustomOperations()
         {
-            foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Any()))
+            foreach (ChangeSetEntry operation in this.ChangeSet!.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Any()))
             {
                 foreach (var entityAction in operation.EntityActions)
                 {
@@ -1138,11 +1128,11 @@ namespace OpenRiaServices.Server
         /// <param name="parameters">The parameters to invoke domain operation entry with.</param>
         /// <param name="operation">The <see cref="ChangeSetEntry"/> object associated with the domain operation entry for logging errors (if any).</param>
         /// <returns>The result of the <see cref="DomainOperationEntry"/>.</returns>
-        private async ValueTask<object> InvokeDomainOperationEntryAsync(DomainOperationEntry domainOperationEntry, object[] parameters, ChangeSetEntry operation)
+        private async ValueTask<object?> InvokeDomainOperationEntryAsync(DomainOperationEntry domainOperationEntry, object[] parameters, ChangeSetEntry operation)
         {
             // invoke the domain operation entry and catch continuable errors if any
             this.ServiceContext.Operation = domainOperationEntry;
-            string stackTrace = null;
+            string? stackTrace = null;
             try
             {
                 try
@@ -1187,7 +1177,7 @@ namespace OpenRiaServices.Server
                 this.ServiceContext.Operation = null;
             }
 
-            return new ValueTask<object>((object)null);
+            return new ValueTask<object?>((object?)null);
         }
 
         /// <summary>
@@ -1318,10 +1308,10 @@ namespace OpenRiaServices.Server
                         nameof(domainServiceType));
                 }
 
-                DomainService domainService = null;
+                DomainService? domainService = null;
                 try
                 {
-                    domainService = (DomainService)Activator.CreateInstance(domainServiceType);
+                    domainService = (DomainService)Activator.CreateInstance(domainServiceType)!;
                 }
                 catch (TargetInvocationException ex)
                 {

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -8,15 +10,13 @@ namespace OpenRiaServices.Client
     /// </summary>
     public class SubmitResult
     {
-        private readonly EntityChangeSet _changeSet;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="SubmitResult"/> class.
         /// </summary>
         /// <param name="changeSet">The changeset which was submitted.</param>
         public SubmitResult(EntityChangeSet changeSet)
         {
-            _changeSet = changeSet;
+            ChangeSet = changeSet;
         }
 
         /// <summary>
@@ -25,6 +25,6 @@ namespace OpenRiaServices.Client
         /// <value>
         /// The changeset which was submitted.
         /// </value>
-        public EntityChangeSet ChangeSet { get { return _changeSet; } }
+        public EntityChangeSet ChangeSet { get; }
     }
 }

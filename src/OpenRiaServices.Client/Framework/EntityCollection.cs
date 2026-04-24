@@ -194,7 +194,7 @@ namespace OpenRiaServices.Client
         {
             get
             {
-                return this.SourceSet != null && this.SourceSet.EntityContainer != this._parent.EntitySet.EntityContainer;
+                return this.SourceSet != null && this.SourceSet.EntityContainer != this._parent.EntitySet!.EntityContainer;
             }
         }
 
@@ -278,7 +278,7 @@ namespace OpenRiaServices.Client
 
             if (this.IsComposition)
             {
-                entity.Parent.OnChildUpdate();
+                entity.Parent!.OnChildUpdate();
             }
         }
 
@@ -334,7 +334,7 @@ namespace OpenRiaServices.Client
                     this._sourceSet.Remove(entity);
                 }
 
-                entity.Parent.OnChildUpdate();
+                entity.Parent!.OnChildUpdate();
             }
         }
 

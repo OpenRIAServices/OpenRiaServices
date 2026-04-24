@@ -15,9 +15,16 @@ This release gives some ❤️ to AvaloniaUI and other frameworks which use ILis
     * Add `IReadOnlyList<T>` interface to `EntityCollection` and `EntitySet` and `LoadResult`
     * Add `IList<T>` interface to `EntityCollection`
 * Nullability annotations for `EntitySet` and `EntityCollection`
+* Nullability annotations for many parts of the most used public API
 
-**Other**
-* Fixed build pipeline problems after updating to VS 2016
+### Server
+
+* Added Nullability annotations for a few core types of public API
+
+### Other
+
+* Fixed build pipeline problems after updating to VS 2026
+* Improved polyfills to allow modernization of the codebase
 * Analyzer fixes
     * Fix CA1860: Prefer comparing 'Count' to 0 rather than using 'Any()'
     * Fix MSTEST****: varius test related 

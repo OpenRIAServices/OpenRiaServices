@@ -1,12 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+
+#nullable enable
 
 namespace OpenRiaServices.Client
 {
-    using System.Collections.Generic;
-    using System.Globalization;
-    using System.Linq;
-    using System.Linq.Expressions;
-
     /// <summary>
     /// Class representing a query method invocation. LINQ query operators can
     /// also be applied to the query.
@@ -15,11 +14,11 @@ namespace OpenRiaServices.Client
     {
         private readonly string _queryName;
         private readonly Type _entityType;
-        private readonly IDictionary<string, object> _parameters;
+        private readonly IDictionary<string, object?>? _parameters;
         private readonly bool _hasSideEffects;
         private readonly bool _isComposable;
         private bool _includeTotalCount;
-        private IQueryable _query;
+        private IQueryable? _query;
         private readonly DomainClient _domainClient;
 
         /// <summary>
@@ -32,7 +31,7 @@ namespace OpenRiaServices.Client
         /// if the method takes no parameters.</param>
         /// <param name="hasSideEffects">True if the query has side-effects, false otherwise.</param>
         /// <param name="isComposable">True if the query supports composition, false otherwise.</param>
-        internal EntityQuery(DomainClient domainClient, string queryName, Type entityType, IDictionary<string, object> parameters, bool hasSideEffects, bool isComposable)
+        private protected EntityQuery(DomainClient domainClient, string queryName, Type entityType, IDictionary<string, object?>? parameters, bool hasSideEffects, bool isComposable)
         {
             if (domainClient == null)
             {
@@ -107,7 +106,7 @@ namespace OpenRiaServices.Client
         /// Optional parameters required by the query method. Returns null
         /// if the method takes no parameters.
         /// </summary>
-        public IDictionary<string, object> Parameters
+        public IDictionary<string, object?>? Parameters
         {
             get
             {
@@ -141,7 +140,7 @@ namespace OpenRiaServices.Client
         /// Gets the underlying <see cref="IQueryable"/> for the query. Returns
         /// null if no query exists.
         /// </summary>
-        public IQueryable Query
+        public IQueryable? Query
         {
             get
             {
@@ -186,7 +185,7 @@ namespace OpenRiaServices.Client
     /// <typeparam name="TEntity">The entity type.</typeparam>
     public sealed class EntityQuery<TEntity> : EntityQuery where TEntity : Entity
     {
-        internal EntityQuery(DomainClient domainClient, string queryName, IDictionary<string, object> parameters, bool hasSideEffects, bool isComposable)
+        internal EntityQuery(DomainClient domainClient, string queryName, IDictionary<string, object?>? parameters, bool hasSideEffects, bool isComposable)
             : base(domainClient, queryName, typeof(TEntity), parameters, hasSideEffects, isComposable)
         {
         }
@@ -196,11 +195,13 @@ namespace OpenRiaServices.Client
         {
         }
 
-        internal new IQueryable<TEntity> Query
+        /// <inheritdoc cref="EntityQuery.Query" />
+        /// <inheritdoc cref="EntityQuery.Query"/>
+        internal new IQueryable<TEntity>? Query
         {
             get
             {
-                return (IQueryable<TEntity>)base.Query;
+                return (IQueryable<TEntity>?)base.Query;
             }
             set
             {

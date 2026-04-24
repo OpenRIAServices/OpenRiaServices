@@ -4,6 +4,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
+#nullable enable
+
 namespace OpenRiaServices.Client
 {
     /// <summary>
@@ -12,7 +14,7 @@ namespace OpenRiaServices.Client
     public sealed class SubmitOperation : OperationBase
     {
         private readonly EntityChangeSet _changeSet;
-        private readonly Action<SubmitOperation> _completeAction;
+        private readonly Action<SubmitOperation>? _completeAction;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SubmitOperation"/> class.
@@ -23,14 +25,15 @@ namespace OpenRiaServices.Client
         /// <param name="sumitResultTask">Task which, when completed, will Complete the operation and set result, cancelled or error</param>
         /// <param name="cancellationTokenSource"><see cref="CancellationTokenSource"/> which will be used to request cancellation if <see cref="OperationBase.Cancel()"/> is called, if <c>null</c> then cancellation will not be possible</param>
         public SubmitOperation(EntityChangeSet changeSet,
-            Action<SubmitOperation> completeAction, object userState,
-            Task<SubmitResult> sumitResultTask, CancellationTokenSource cancellationTokenSource)
+            Action<SubmitOperation>? completeAction, object? userState,
+            Task<SubmitResult> sumitResultTask, CancellationTokenSource? cancellationTokenSource)
             : base(userState, cancellationTokenSource)
         {
             if (changeSet == null)
             {
                 throw new ArgumentNullException(nameof(changeSet));
             }
+
             this._completeAction = completeAction;
             this._changeSet = changeSet;
 
@@ -40,7 +43,7 @@ namespace OpenRiaServices.Client
             {
                 sumitResultTask.ContinueWith(static (task, state) =>
                 {
-                    var operation = (SubmitOperation)state;
+                    var operation = (SubmitOperation)state!;
                     operation.CompleteTask(task);
                 }
                 , (object)this

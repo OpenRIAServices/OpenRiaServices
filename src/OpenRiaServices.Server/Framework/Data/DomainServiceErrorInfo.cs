@@ -1,5 +1,7 @@
 ﻿using System;
 
+#nullable enable
+
 namespace OpenRiaServices.Server
 {
     /// <summary>
@@ -16,6 +18,8 @@ namespace OpenRiaServices.Server
         /// <param name="exception">The exception that occurred.</param>
         public DomainServiceErrorInfo(Exception exception)
         {
+            ArgumentNullException.ThrowIfNull(exception);
+
             this._exception = exception;
         }
 
@@ -30,10 +34,7 @@ namespace OpenRiaServices.Server
             }
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
 
                 this._exception = value;
             }
