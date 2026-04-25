@@ -1088,10 +1088,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that has changed</param>
         protected void RaiseDataMemberChanged(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             this.OnDataMemberChanged();
 
@@ -1183,10 +1180,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that is changing</param>
         protected void RaiseDataMemberChanging(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             this.OnDataMemberChanging();
 
@@ -1238,10 +1232,7 @@ namespace OpenRiaServices.Client
         /// configured to prevent editing.</exception>
         protected void ValidateProperty(string propertyName, object? value)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             if (this.IsDeserializing || this.IsApplyingState)
             {

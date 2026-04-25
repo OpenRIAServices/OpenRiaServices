@@ -904,10 +904,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The property to raise the event for</param>
         protected void RaisePropertyChanged(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
             this.PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
@@ -938,10 +935,7 @@ namespace OpenRiaServices.Client
         /// <param name="parameters">The parameters to the method.</param>
         protected void ValidateMethod(string methodName, IDictionary<string, object?>? parameters)
         {
-            if (string.IsNullOrEmpty(methodName))
-            {
-                throw new ArgumentNullException(nameof(methodName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(methodName);
 
             object?[] paramValues = parameters != null ? parameters.Values.ToArray() : Array.Empty<object>();
             if (!this.MethodRequiresValidation(methodName, paramValues))

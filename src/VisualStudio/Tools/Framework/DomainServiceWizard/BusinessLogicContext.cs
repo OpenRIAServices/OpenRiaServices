@@ -336,14 +336,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             {
                 throw new ArgumentNullException("codeGenContext");
             }
-            if (string.IsNullOrEmpty(className))
-            {
-                throw new ArgumentNullException("className");
-            }
-            if (string.IsNullOrEmpty(namespaceName))
-            {
-                throw new ArgumentNullException("namespaceName");
-            }
+            ArgumentException.ThrowIfNullOrEmpty(className);
+            ArgumentException.ThrowIfNullOrEmpty(namespaceName);
 
             // namespace XXX { }
             CodeNamespace ns = codeGenContext.GetOrGenNamespace(namespaceName);

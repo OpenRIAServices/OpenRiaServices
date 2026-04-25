@@ -59,10 +59,7 @@ namespace OpenRiaServices.Client
         public EntityCollection(Entity parent, string memberName, Func<TEntity, bool> entityPredicate)
         {
             ArgumentNullException.ThrowIfNull(parent);
-            if (string.IsNullOrEmpty(memberName))
-            {
-                throw new ArgumentNullException(nameof(memberName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(memberName);
             ArgumentNullException.ThrowIfNull(entityPredicate);
 
             this._parent = parent;

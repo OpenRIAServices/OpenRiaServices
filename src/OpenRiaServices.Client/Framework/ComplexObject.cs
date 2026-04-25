@@ -168,10 +168,7 @@ namespace OpenRiaServices.Client
         internal void Attach(object parent, string propertyName, Action onDataMemberChanging, Action onDataMemberChanged, Action<string, IEnumerable<ValidationResult>> onMemberValidationChanged)
         {
             ArgumentNullException.ThrowIfNull(parent);
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
             ArgumentNullException.ThrowIfNull(onDataMemberChanging);
             ArgumentNullException.ThrowIfNull(onDataMemberChanged);
             ArgumentNullException.ThrowIfNull(onMemberValidationChanged);
@@ -215,10 +212,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that has changed</param>
         protected void RaisePropertyChanged(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             OnPropertyChanged(propertyName);
         }
@@ -240,10 +234,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that has changed</param>
         protected void RaiseDataMemberChanged(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             // Note, RaiseDataMemberChanged is called on every property update. We need to avoid as
             // much overhead as possible.
@@ -309,10 +300,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that is changing</param>
         protected void RaiseDataMemberChanging(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             this.OnDataMemberChanging();
         }
@@ -393,10 +381,7 @@ namespace OpenRiaServices.Client
         /// configured to prevent editing.</exception>
         protected void ValidateProperty(string propertyName, object value)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             // if this instance is currently being deserialized, or if it is hosted by an
             // entity that is being deserialized or is having state applied to it, skip

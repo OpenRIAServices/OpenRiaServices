@@ -127,10 +127,7 @@ namespace OpenRiaServices.Client.Authentication
         /// </exception>
         protected void RaisePropertyChanged(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
             this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 

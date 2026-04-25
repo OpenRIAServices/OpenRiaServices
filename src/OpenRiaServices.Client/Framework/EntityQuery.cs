@@ -34,10 +34,7 @@ namespace OpenRiaServices.Client
         private protected EntityQuery(DomainClient domainClient, string queryName, Type entityType, IDictionary<string, object?>? parameters, bool hasSideEffects, bool isComposable)
         {
             ArgumentNullException.ThrowIfNull(domainClient);
-            if (string.IsNullOrEmpty(queryName))
-            {
-                throw new ArgumentNullException(nameof(queryName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(queryName);
             ArgumentNullException.ThrowIfNull(entityType);
             this._domainClient = domainClient;
             this._queryName = queryName;

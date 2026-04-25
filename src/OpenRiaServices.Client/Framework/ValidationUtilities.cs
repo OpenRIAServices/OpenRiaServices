@@ -601,10 +601,7 @@ namespace OpenRiaServices.Client
             ValidationContext validationContext, object[] parameters,
             List<ValidationResult> validationResults, bool performTypeValidation)
         {
-            if (string.IsNullOrEmpty(methodName))
-            {
-                throw new ArgumentNullException(nameof(methodName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(methodName);
 
             ArgumentNullException.ThrowIfNull(validationContext);
 

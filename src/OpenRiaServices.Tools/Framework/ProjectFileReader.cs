@@ -76,10 +76,7 @@ namespace OpenRiaServices.Tools
         /// <returns>The project instance or null if it does not exist</returns>
         internal Project LoadProject(string projectPath)
         {
-            if (string.IsNullOrEmpty(projectPath))
-            {
-                throw new ArgumentNullException(nameof(projectPath));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(projectPath);
 
             if (!File.Exists(projectPath))
             {

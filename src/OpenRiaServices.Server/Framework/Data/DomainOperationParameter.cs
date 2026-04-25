@@ -21,10 +21,7 @@ namespace OpenRiaServices.Server
         /// <param name="attributes">The set of attributes for the parameter</param>
         public DomainOperationParameter(string name, Type parameterType, AttributeCollection attributes)
         {
-            if (string.IsNullOrEmpty(name))
-            {
-                throw new ArgumentNullException(nameof(name));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(name);
 
             ArgumentNullException.ThrowIfNull(parameterType);
 

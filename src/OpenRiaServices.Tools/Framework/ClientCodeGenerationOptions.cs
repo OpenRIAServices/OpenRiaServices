@@ -27,10 +27,7 @@ namespace OpenRiaServices.Tools
             }
             set
             {
-                if (string.IsNullOrEmpty(value))
-                {
-                    throw new ArgumentNullException(nameof(value), Resource.Null_Language_Property);
-                }
+                ArgumentException.ThrowIfNullOrEmpty(value);
                 this._language = value;
             }
         }

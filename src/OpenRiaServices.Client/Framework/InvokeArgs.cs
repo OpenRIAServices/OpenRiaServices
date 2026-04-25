@@ -20,10 +20,7 @@ namespace OpenRiaServices.Client
         /// <param name="hasSideEffects">True if the operation has side-effects, false otherwise.</param>
         public InvokeArgs(string operationName, Type returnType, IDictionary<string, object?>? parameters, bool hasSideEffects)
         {
-            if (string.IsNullOrEmpty(operationName))
-            {
-                throw new ArgumentNullException(nameof(operationName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(operationName);
             ArgumentNullException.ThrowIfNull(returnType);
 
             OperationName = operationName;

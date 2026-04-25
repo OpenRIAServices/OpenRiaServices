@@ -32,10 +32,7 @@ namespace OpenRiaServices.Client
             CancellationTokenSource? cancellationTokenSource)
             : base(userState, cancellationTokenSource)
         {
-            if (string.IsNullOrEmpty(operationName))
-            {
-                throw new ArgumentNullException(nameof(operationName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(operationName);
             this.OperationName = operationName;
             this._parameters = parameters;
             this._completeAction = completeAction;
