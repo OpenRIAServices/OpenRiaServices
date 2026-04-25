@@ -54,10 +54,7 @@ namespace OpenRiaServices.LinqToSql
         /// <returns>The description provider.</returns>
         public override DomainServiceDescriptionProvider CreateProvider(Type domainServiceType, DomainServiceDescriptionProvider parent)
         {
-            if (domainServiceType == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceType));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceType);
 
             if (this._dataContextType == null)
             {

@@ -332,10 +332,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="namespaceName">The namespace to use for the generated code.  It cannot be empty.</param>
         protected void GenerateBusinessLogicClass(CodeGenContext codeGenContext, string className, string namespaceName)
         {
-            if (codeGenContext == null)
-            {
-                throw new ArgumentNullException("codeGenContext");
-            }
+            ArgumentNullException.ThrowIfNull(codeGenContext);
             ArgumentException.ThrowIfNullOrEmpty(className);
             ArgumentException.ThrowIfNullOrEmpty(namespaceName);
 

@@ -66,15 +66,9 @@ namespace OpenRiaServices.Hosting.Local
         /// <returns>Returns a <see cref="DomainService"/> proxy type.</returns>
         public static Type Generate(Type domainServiceContract, Type domainService)
         {
-            if (domainServiceContract == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceContract));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceContract);
 
-            if (domainService == null)
-            {
-                throw new ArgumentNullException(nameof(domainService));
-            }
+            ArgumentNullException.ThrowIfNull(domainService);
 
             // Verify 'domainServiceContract' is actually a public interface.
             if (!domainServiceContract.IsInterface || (!domainServiceContract.IsPublic && !domainServiceContract.IsNestedPublic))

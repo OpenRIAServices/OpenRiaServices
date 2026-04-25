@@ -641,10 +641,7 @@ namespace OpenRiaServices.Server
         public IEnumerable<TEntity> GetAssociatedEntities<TEntity, TStoreEntity>(TStoreEntity storeEntity)
             where TEntity : class
         {
-            if (storeEntity == null)
-            {
-                throw new ArgumentNullException(nameof(storeEntity));
-            }
+            ArgumentNullException.ThrowIfNull(storeEntity);
 
             List<AssociatedEntityInfo> associatedModels = null;
             if (this.AssociatedStoreEntities.TryGetValue(storeEntity, out associatedModels))

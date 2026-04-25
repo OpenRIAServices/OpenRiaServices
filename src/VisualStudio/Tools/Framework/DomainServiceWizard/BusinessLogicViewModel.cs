@@ -48,16 +48,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         public BusinessLogicViewModel(string projectDirectory, string className, string language, string rootNamespace, string assemblyName, IEnumerable<Type> contextTypes, IVsHelp help)
         {
             ArgumentException.ThrowIfNullOrEmpty(projectDirectory);
-
             ArgumentException.ThrowIfNullOrEmpty(className);
-
             ArgumentException.ThrowIfNullOrEmpty(language);
-
-            if (contextTypes == null)
-            {
-                throw new ArgumentNullException("contextTypes");
-            }
-
+            ArgumentNullException.ThrowIfNull(contextTypes);
             ArgumentException.ThrowIfNullOrEmpty(assemblyName);
 
             this._projectDirectory = projectDirectory;

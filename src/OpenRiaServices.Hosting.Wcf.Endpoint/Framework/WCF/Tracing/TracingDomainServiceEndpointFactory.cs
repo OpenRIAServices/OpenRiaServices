@@ -36,10 +36,7 @@ namespace OpenRiaServices.Hosting.Wcf.Tracing
         /// <returns>The collection of endpoints.</returns>
         public override IEnumerable<ServiceEndpoint> CreateEndpoints(DomainServiceDescription description, DomainServiceHost serviceHost, ContractDescription contractDescription)
         {
-            if (serviceHost == null)
-            {
-                throw new ArgumentNullException(nameof(serviceHost));
-            }
+            ArgumentNullException.ThrowIfNull(serviceHost);
 
             if (this.Parameters["maxEntries"] != null)
             {
@@ -96,10 +93,7 @@ namespace OpenRiaServices.Hosting.Wcf.Tracing
 
             public void ApplyDispatchBehavior(ServiceEndpoint endpoint, EndpointDispatcher endpointDispatcher)
             {
-                if (endpointDispatcher == null)
-                {
-                    throw new ArgumentNullException(nameof(endpointDispatcher));
-                }
+                ArgumentNullException.ThrowIfNull(endpointDispatcher);
 
                 endpointDispatcher.DispatchRuntime.SynchronizationContext = null;
                 endpointDispatcher.DispatchRuntime.ConcurrencyMode = ConcurrencyMode.Single;

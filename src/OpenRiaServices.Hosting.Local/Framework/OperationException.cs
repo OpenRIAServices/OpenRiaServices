@@ -59,10 +59,7 @@ namespace OpenRiaServices.Hosting.Local
         internal OperationException(string message, ValidationResultInfo operationError)
             : this(message, new[] { operationError })
         {
-            if (operationError == null)
-            {
-                throw new ArgumentNullException(nameof(operationError));
-            }
+            ArgumentNullException.ThrowIfNull(operationError);
         }
 
         /// <summary>
@@ -74,10 +71,7 @@ namespace OpenRiaServices.Hosting.Local
         internal OperationException(string message, IEnumerable<ValidationResultInfo> operationErrors)
             : base(message)
         {
-            if (operationErrors == null)
-            {
-                throw new ArgumentNullException(nameof(operationErrors));
-            }
+            ArgumentNullException.ThrowIfNull(operationErrors);
 
             this._data.OperationErrors = operationErrors.ToArray();
 

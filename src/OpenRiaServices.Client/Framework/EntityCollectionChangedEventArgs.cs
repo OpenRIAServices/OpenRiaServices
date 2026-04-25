@@ -19,10 +19,7 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The affected <see cref="Entity"/></param>
         public EntityCollectionChangedEventArgs(TEntity entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             this._entity = entity;
         }

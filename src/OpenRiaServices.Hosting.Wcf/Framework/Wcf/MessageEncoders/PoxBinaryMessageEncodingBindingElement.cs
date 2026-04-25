@@ -53,14 +53,8 @@ namespace OpenRiaServices.Client.Web
             }
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
-                else
-                {
-                    value.CopyTo(this._readerQuotas);
-                }
+                ArgumentNullException.ThrowIfNull(value);
+                value.CopyTo(this._readerQuotas);
             }
         }
 #endif
@@ -93,20 +87,14 @@ namespace OpenRiaServices.Client.Web
 #if NETFRAMEWORK
         public override IChannelListener<TChannel> BuildChannelListener<TChannel>(BindingContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
             context.BindingParameters.Add(this);
             return context.BuildInnerChannelListener<TChannel>();
         }
 
         public override bool CanBuildChannelListener<TChannel>(BindingContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return context.CanBuildInnerChannelListener<TChannel>();
         }

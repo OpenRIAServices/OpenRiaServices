@@ -29,14 +29,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         public GeneratedCode(string sourceCode, IEnumerable<string> references)
         {
             // Empty is allowed, null is not
-            if (sourceCode == null)
-            {
-                throw new ArgumentNullException("sourceCode");
-            }
-            if (references == null)
-            {
-                throw new ArgumentNullException("references");
-            }
+            ArgumentNullException.ThrowIfNull(sourceCode);
+            ArgumentNullException.ThrowIfNull(references);
             this._sourceCode = sourceCode;
             this._references = references;
         }

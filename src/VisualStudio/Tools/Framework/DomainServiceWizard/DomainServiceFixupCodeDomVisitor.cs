@@ -21,10 +21,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="context">The current <see cref="CodeGenContext"/> context.</param>
         public DomainServiceFixupCodeDomVisitor(CodeGenContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException("context");
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             this._context = context;
         }
