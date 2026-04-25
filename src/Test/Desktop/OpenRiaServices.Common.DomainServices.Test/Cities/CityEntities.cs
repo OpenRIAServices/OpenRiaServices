@@ -82,7 +82,7 @@ namespace Cities
         [StringLength(32)]
         public string Info { get; set; }
 
-        [Association("CityWithInfo_ZipWithInfo", "Name, CountyName, StateName", "CityName,  CountyName, StateName")]
+        [EntityAssociation("CityWithInfo_ZipWithInfo", ["Name", "CountyName", "StateName"], ["CityName", "CountyName", "StateName"])]
         public List<ZipWithInfo> ZipCodesWithInfo { get; set; }
     }
 
@@ -132,7 +132,7 @@ namespace Cities
         [RoundtripOriginal]
         public string FullName { get; set; }
 
-        [Association("State_County", "Name", "StateName")]
+        [EntityAssociation("State_County", "Name", "StateName")]
         [CustomValidation(typeof(CountiesValidator), "AreCountiesValid")]
         public List<County> Counties { get; set; }
     }
