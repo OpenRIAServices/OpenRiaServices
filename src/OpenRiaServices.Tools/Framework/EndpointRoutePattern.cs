@@ -5,7 +5,7 @@
 namespace OpenRiaServices.Tools
 {
     /// <summary>
-    /// IMPORTANT: THIS IS AN EXACT copy of <see cref="Server.EndpointRoutePattern"/> where all values are identical.
+    /// IMPORTANT: THIS IS AN EXACT copy of <c>Server.EndpointRoutePattern</c> where all values are identical.
     /// We don't use the server version in the options because we don't want to load in the Server assembly until a bit later
     /// after the options are created.
     /// </summary>

@@ -61,6 +61,7 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Polyfills.cs" />
     <Compile Include="..\..\..\OpenRiaServices.Tools\Framework\CodeDomVisitor.cs" Link="DomainServiceWizard\CodeDomVisitor.cs" />
     <Compile Include="..\..\..\OpenRiaServices.Tools\Framework\DbContextUtilities.cs" Link="DomainServiceWizard\DbContextUtilities.cs" />
     <Compile Include="..\..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="DomainServiceWizard\TypeUtility.cs" />

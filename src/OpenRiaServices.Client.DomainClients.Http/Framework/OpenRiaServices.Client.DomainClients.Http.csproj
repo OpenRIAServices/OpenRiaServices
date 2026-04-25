@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>net472;netstandard2.0;net8.0</TargetFrameworks>
+    <TargetFrameworks>net472;net8.0</TargetFrameworks>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RootNamespace>OpenRiaServices.Client.DomainClients</RootNamespace>
     <NeutralLanguage>en</NeutralLanguage>
@@ -22,6 +22,7 @@
     <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Polyfills.cs" />
     <Compile Update="Http\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>

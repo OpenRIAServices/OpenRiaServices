@@ -12,6 +12,7 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Polyfills.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
     <Compile Update="DbResource.Designer.cs">
       <AutoGen>True</AutoGen>

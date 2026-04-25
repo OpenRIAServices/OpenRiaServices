@@ -13,7 +13,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='net472'" Version="3.1.24" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='net472'" Version="3.1.24" />
-    <PackageReference Include="Microsoft.Data.SqlClient" Condition="'$(TargetFramework)'=='net472'" Version="5.2.2" />
+    <PackageReference Include="Microsoft.Data.SqlClient" Condition="'$(TargetFramework)'=='net472'" Version="7.0.1" />
     
     <PackageReference Include="Microsoft.EntityFrameworkCore" Condition="'$(TargetFramework)'=='net8.0'" Version="8.0.*" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Condition="'$(TargetFramework)'=='net8.0'" Version="8.0.*" />
@@ -24,6 +24,7 @@
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Polyfills.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\DbDomainService.cs" Link="DbDomainService.cs" />
     <Compile Include="..\..\OpenRiaServices.EntityFramework\Framework\DbDomainServiceDescriptionProviderAttribute.cs" Link="DbDomainService.cs" />
