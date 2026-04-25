@@ -16,10 +16,7 @@ namespace OpenRiaServices.Client.Authentication
         /// </exception>
         internal AuthenticationEventArgs(IPrincipal user)
         {
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(user);
             this.User = user;
         }
 

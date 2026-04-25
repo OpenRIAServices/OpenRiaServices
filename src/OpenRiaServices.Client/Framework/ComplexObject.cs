@@ -167,26 +167,14 @@ namespace OpenRiaServices.Client
         /// <param name="onMemberValidationChanged">The callback to call when validation has changed for a property.</param>
         internal void Attach(object parent, string propertyName, Action onDataMemberChanging, Action onDataMemberChanged, Action<string, IEnumerable<ValidationResult>> onMemberValidationChanged)
         {
-            if (parent == null)
-            {
-                throw new ArgumentNullException(nameof(parent));
-            }
+            ArgumentNullException.ThrowIfNull(parent);
             if (string.IsNullOrEmpty(propertyName))
             {
                 throw new ArgumentNullException(nameof(propertyName));
             }
-            if (onDataMemberChanging == null)
-            {
-                throw new ArgumentNullException(nameof(onDataMemberChanging));
-            }
-            if (onDataMemberChanged == null)
-            {
-                throw new ArgumentNullException(nameof(onDataMemberChanged));
-            }
-            if (onMemberValidationChanged == null)
-            {
-                throw new ArgumentNullException(nameof(onMemberValidationChanged));
-            }
+            ArgumentNullException.ThrowIfNull(onDataMemberChanging);
+            ArgumentNullException.ThrowIfNull(onDataMemberChanged);
+            ArgumentNullException.ThrowIfNull(onMemberValidationChanged);
             Debug.Assert(typeof(Entity).IsAssignableFrom(parent.GetType()) || typeof(ComplexObject).IsAssignableFrom(parent.GetType()), "Parent must be an Entity or ComplexObject.");
 
             this.CheckForCycles(parent);
@@ -480,10 +468,7 @@ namespace OpenRiaServices.Client
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="validationContext"/> is <c>null</c>.</exception>
         protected virtual void ValidateProperty(ValidationContext validationContext, object value)
         {
-            if (validationContext == null)
-            {
-                throw new ArgumentNullException(nameof(validationContext));
-            }
+            ArgumentNullException.ThrowIfNull(validationContext);
 
             List<ValidationResult> validationResults = new List<ValidationResult>();
             Validator.TryValidateProperty(value, validationContext, validationResults);

@@ -49,15 +49,9 @@ namespace OpenRiaServices.Tools
                 throw new ArgumentNullException(nameof(historyFilePath));
             }
 
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
+            ArgumentNullException.ThrowIfNull(logger);
 
-            if (projectFileReader == null)
-            {
-                throw new ArgumentNullException(nameof(projectFileReader));
-            }
+            ArgumentNullException.ThrowIfNull(projectFileReader);
 
             this._rootProjectPath = rootProjectPath;
             this._historyFilePath = historyFilePath;

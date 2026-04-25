@@ -58,18 +58,12 @@ namespace OpenRiaServices.Client
         /// which are members of this collection.</param>
         public EntityCollection(Entity parent, string memberName, Func<TEntity, bool> entityPredicate)
         {
-            if (parent == null)
-            {
-                throw new ArgumentNullException(nameof(parent));
-            }
+            ArgumentNullException.ThrowIfNull(parent);
             if (string.IsNullOrEmpty(memberName))
             {
                 throw new ArgumentNullException(nameof(memberName));
             }
-            if (entityPredicate == null)
-            {
-                throw new ArgumentNullException(nameof(entityPredicate));
-            }
+            ArgumentNullException.ThrowIfNull(entityPredicate);
 
             this._parent = parent;
             this._entityPredicate = entityPredicate;
@@ -105,14 +99,8 @@ namespace OpenRiaServices.Client
         public EntityCollection(Entity parent, string memberName, Func<TEntity, bool> entityPredicate, Action<TEntity> attachAction, Action<TEntity> detachAction)
             : this(parent, memberName, entityPredicate)
         {
-            if (attachAction == null)
-            {
-                throw new ArgumentNullException(nameof(attachAction));
-            }
-            if (detachAction == null)
-            {
-                throw new ArgumentNullException(nameof(detachAction));
-            }
+            ArgumentNullException.ThrowIfNull(attachAction);
+            ArgumentNullException.ThrowIfNull(detachAction);
 
             this._attachAction = attachAction;
             this._detachAction = detachAction;
@@ -217,10 +205,7 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The entity to add</param>
         public void Add(TEntity entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             if (this.IsSourceExternal)
             {
@@ -288,10 +273,7 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The entity to remove</param>
         public void Remove(TEntity entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             if (entity == this._detachingEntity)
             {

@@ -803,10 +803,7 @@ namespace OpenRiaServices.Tools
         /// <returns>A collection of comment statements that matches the input resource</returns>
         internal static CodeCommentStatementCollection GetDocComments(string resourceComment, bool isCSharp)
         {
-            if (resourceComment == null)
-            {
-                throw new ArgumentNullException(nameof(resourceComment));
-            }
+            ArgumentNullException.ThrowIfNull(resourceComment);
 
             CodeCommentStatementCollection commentCollection = new CodeCommentStatementCollection();
             foreach (string comment in resourceComment.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))

@@ -15,10 +15,7 @@ namespace OpenRiaServices.Tools
         /// <param name="codeCompileUnit">The <see cref="CodeCompileUnit"/> to visit.</param>
         public void Visit(CodeCompileUnit codeCompileUnit)
         {
-            if (codeCompileUnit == null)
-            {
-                throw new ArgumentNullException(nameof(codeCompileUnit));
-            }
+            ArgumentNullException.ThrowIfNull(codeCompileUnit);
 
             this.VisitBase(codeCompileUnit);
         }

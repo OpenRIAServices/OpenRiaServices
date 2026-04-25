@@ -150,10 +150,7 @@ namespace OpenRiaServices.Client.Authentication
         {
             this.Initialize();
 
-            if (parameters == null)
-            {
-                throw new ArgumentNullException(nameof(parameters));
-            }
+            ArgumentNullException.ThrowIfNull(parameters);
 
             EntityQuery query;
 

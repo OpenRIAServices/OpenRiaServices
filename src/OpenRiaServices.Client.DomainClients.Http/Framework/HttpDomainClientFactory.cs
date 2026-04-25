@@ -31,8 +31,7 @@ namespace OpenRiaServices.Client.DomainClients
         private protected HttpDomainClientFactory(Uri serverBaseUri, Func<HttpClient> httpClientFactory)
         {
             base.ServerBaseUri = serverBaseUri;
-            if (httpClientFactory is null)
-                throw new ArgumentNullException(nameof(httpClientFactory));
+            ArgumentNullException.ThrowIfNull(httpClientFactory);
 
             this._httpClientFactory = (Uri uri) =>
             {

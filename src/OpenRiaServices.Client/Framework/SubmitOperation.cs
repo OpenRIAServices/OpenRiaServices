@@ -29,10 +29,7 @@ namespace OpenRiaServices.Client
             Task<SubmitResult> sumitResultTask, CancellationTokenSource? cancellationTokenSource)
             : base(userState, cancellationTokenSource)
         {
-            if (changeSet == null)
-            {
-                throw new ArgumentNullException(nameof(changeSet));
-            }
+            ArgumentNullException.ThrowIfNull(changeSet);
 
             this._completeAction = completeAction;
             this._changeSet = changeSet;

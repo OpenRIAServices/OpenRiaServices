@@ -22,18 +22,9 @@ namespace OpenRiaServices.EntityFramework
         /// <param name="original">The original entity state</param>
         public static void AttachAsModified<T>(this ObjectSet<T> objectSet, T current, T original) where T : class
         {
-            if (objectSet == null)
-            {
-                throw new ArgumentNullException(nameof(objectSet));
-            }
-            if (current == null)
-            {
-                throw new ArgumentNullException(nameof(current));
-            }
-            if (original == null)
-            {
-                throw new ArgumentNullException(nameof(original));
-            }
+            ArgumentNullException.ThrowIfNull(objectSet);
+            ArgumentNullException.ThrowIfNull(current);
+            ArgumentNullException.ThrowIfNull(original);
 
             // Attach the entity if it is not already attached, or if it is already
             // attached, transition to Modified
@@ -67,14 +58,8 @@ namespace OpenRiaServices.EntityFramework
         /// <param name="entity">The current entity state</param>
         public static void AttachAsModified<T>(this ObjectSet<T> objectSet, T entity) where T : class
         {
-            if (objectSet == null)
-            {
-                throw new ArgumentNullException(nameof(objectSet));
-            }
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(objectSet);
+            ArgumentNullException.ThrowIfNull(entity);
 
             ObjectContext context = objectSet.Context;
             EntityState currState = ObjectContextUtilities.GetEntityState(context, entity);

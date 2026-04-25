@@ -38,15 +38,9 @@ namespace OpenRiaServices.Client
         /// <param name="sourceMemberNames">A collection of the names of the members the error originated from.</param>
         public ValidationResultInfo(string message, IEnumerable<string> sourceMemberNames)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            ArgumentNullException.ThrowIfNull(message);
 
-            if (sourceMemberNames == null)
-            {
-                throw new ArgumentNullException(nameof(sourceMemberNames));
-            }
+            ArgumentNullException.ThrowIfNull(sourceMemberNames);
 
             this._message = message;
             this._sourceMemberNames = sourceMemberNames;
@@ -62,15 +56,9 @@ namespace OpenRiaServices.Client
         /// <param name="sourceMemberNames">A collection of the names of the members the error originated from.</param>
         public ValidationResultInfo(string message, int errorCode, string stackTrace, IEnumerable<string> sourceMemberNames)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            ArgumentNullException.ThrowIfNull(message);
 
-            if (sourceMemberNames == null)
-            {
-                throw new ArgumentNullException(nameof(sourceMemberNames));
-            }
+            ArgumentNullException.ThrowIfNull(sourceMemberNames);
 
             this._message = message;
             this._errorCode = errorCode;

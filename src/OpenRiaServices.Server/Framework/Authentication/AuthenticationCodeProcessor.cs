@@ -249,10 +249,7 @@ namespace OpenRiaServices.Server.Authentication
         /// <returns>A collection of comment statements that matches the input resource</returns>
         internal static CodeCommentStatementCollection GetDocComments(string resourceComment)
         {
-            if (resourceComment == null)
-            {
-                throw new ArgumentNullException(nameof(resourceComment));
-            }
+            ArgumentNullException.ThrowIfNull(resourceComment);
 
             var commentCollection = new CodeCommentStatementCollection();
             foreach (string comment in resourceComment.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))

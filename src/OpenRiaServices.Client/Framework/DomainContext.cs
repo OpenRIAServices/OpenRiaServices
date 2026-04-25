@@ -50,10 +50,7 @@ namespace OpenRiaServices.Client
         /// <param name="domainClient">The <see cref="DomainClient"/> instance this <see cref="DomainContext"/> should use</param>
         protected DomainContext(DomainClient domainClient)
         {
-            if (domainClient == null)
-            {
-                throw new ArgumentNullException(nameof(domainClient));
-            }
+            ArgumentNullException.ThrowIfNull(domainClient);
 
             this._domainClient = domainClient;
         }
@@ -91,8 +88,7 @@ namespace OpenRiaServices.Client
             }
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
                 s_domainClientFactory = value;
             }
         }
@@ -221,15 +217,9 @@ namespace OpenRiaServices.Client
         /// <param name="domainContext">A <see cref="DomainContext"/> to register as an external reference.</param>
         public void AddReference(Type entityType, DomainContext domainContext)
         {
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
 
-            if (domainContext == null)
-            {
-                throw new ArgumentNullException(nameof(domainContext));
-            }
+            ArgumentNullException.ThrowIfNull(domainContext);
 
             EntitySet entitySet = domainContext.EntityContainer.GetEntitySet(entityType);
             this.EntityContainer.AddReference(entitySet);
@@ -562,10 +552,7 @@ namespace OpenRiaServices.Client
         public virtual Task<LoadResult<TEntity>> LoadAsync<TEntity>(EntityQuery<TEntity> query, LoadBehavior loadBehavior, CancellationToken cancellationToken)
                 where TEntity : Entity
         {
-            if (query == null)
-            {
-                throw new ArgumentNullException(nameof(query));
-            }
+            ArgumentNullException.ThrowIfNull(query);
 
             // verify the specified query was created by this DomainContext
             if (this.DomainClient != query.DomainClient)
@@ -874,10 +861,7 @@ namespace OpenRiaServices.Client
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Parameter_NullOrEmpty, "operationName"));
             }
 
-            if (returnType is null)
-            {
-                throw new ArgumentNullException(nameof(returnType));
-            }
+            ArgumentNullException.ThrowIfNull(returnType);
 
             InvokeArgs invokeArgs = new InvokeArgs(operationName, returnType, parameters, hasSideEffects);
             return this.DomainClient.InvokeAsync(invokeArgs, cancellationToken)

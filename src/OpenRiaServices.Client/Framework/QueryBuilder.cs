@@ -66,10 +66,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public QueryBuilder<T> OrderBy<TKey>(Expression<Func<T, TKey>> keySelector)
         {
-            if (keySelector == null)
-            {
-                throw new ArgumentNullException(nameof(keySelector));
-            }
+            ArgumentNullException.ThrowIfNull(keySelector);
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
             Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
@@ -102,10 +99,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public QueryBuilder<T> OrderByDescending<TKey>(Expression<Func<T, TKey>> keySelector)
         {
-            if (keySelector == null)
-            {
-                throw new ArgumentNullException(nameof(keySelector));
-            }
+            ArgumentNullException.ThrowIfNull(keySelector);
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
             Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
@@ -138,10 +132,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public QueryBuilder<T> Select(Expression<Func<T, T>> selector)
         {
-            if (selector == null)
-            {
-                throw new ArgumentNullException(nameof(selector));
-            }
+            ArgumentNullException.ThrowIfNull(selector);
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
             Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
@@ -228,10 +219,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public QueryBuilder<T> ThenBy<TKey>(Expression<Func<T, TKey>> keySelector)
         {
-            if (keySelector == null)
-            {
-                throw new ArgumentNullException(nameof(keySelector));
-            }
+            ArgumentNullException.ThrowIfNull(keySelector);
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
             Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
@@ -264,10 +252,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public QueryBuilder<T> ThenByDescending<TKey>(Expression<Func<T, TKey>> keySelector)
         {
-            if (keySelector == null)
-            {
-                throw new ArgumentNullException(nameof(keySelector));
-            }
+            ArgumentNullException.ThrowIfNull(keySelector);
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
             Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
@@ -299,10 +284,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public QueryBuilder<T> Where(Expression<Func<T, bool>> predicate)
         {
-            if (predicate == null)
-            {
-                throw new ArgumentNullException(nameof(predicate));
-            }
+            ArgumentNullException.ThrowIfNull(predicate);
 
             Func<EntityQuery<T>, EntityQuery<T>> entityQueryReplay = _entityQueryReplay;
             Func<IQueryable<T>, IQueryable<T>> queryableReplay = _queryableReplay;
@@ -338,10 +320,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public EntityQuery<T> ApplyTo(EntityQuery<T> entityQuery)
         {
-            if (entityQuery == null)
-            {
-                throw new ArgumentNullException(nameof(entityQuery));
-            }
+            ArgumentNullException.ThrowIfNull(entityQuery);
 
             entityQuery.IncludeTotalCount = RequestTotalItemCount;
             if (_entityQueryReplay != null)
@@ -361,10 +340,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public IEnumerable<T> ApplyTo(IEnumerable<T> enumerable)
         {
-            if (enumerable == null)
-            {
-                throw new ArgumentNullException(nameof(enumerable));
-            }
+            ArgumentNullException.ThrowIfNull(enumerable);
 
             return ApplyTo(enumerable.AsQueryable());
         }
@@ -379,10 +355,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public IQueryable<T> ApplyTo(IQueryable<T> queryable)
         {
-            if (queryable == null)
-            {
-                throw new ArgumentNullException(nameof(queryable));
-            }
+            ArgumentNullException.ThrowIfNull(queryable);
 
             if (_queryableReplay != null)
             {
@@ -401,10 +374,7 @@ namespace OpenRiaServices.Client
         /// </exception>
         public ObservableCollection<T> ApplyTo(ObservableCollection<T> collection)
         {
-            if (collection == null)
-            {
-                throw new ArgumentNullException(nameof(collection));
-            }
+            ArgumentNullException.ThrowIfNull(collection);
 
             return new ObservableCollection<T>(ApplyTo((IEnumerable<T>)collection));
         }

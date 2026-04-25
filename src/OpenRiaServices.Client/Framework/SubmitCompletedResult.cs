@@ -21,14 +21,8 @@ namespace OpenRiaServices.Client
         /// DomainService for the submit operation.</param>
         public SubmitCompletedResult(EntityChangeSet changeSet, IEnumerable<ChangeSetEntry> operationResults)
         {
-            if (changeSet == null)
-            {
-                throw new ArgumentNullException(nameof(changeSet));
-            }
-            if (operationResults == null)
-            {
-                throw new ArgumentNullException(nameof(operationResults));
-            }
+            ArgumentNullException.ThrowIfNull(changeSet);
+            ArgumentNullException.ThrowIfNull(operationResults);
 
             this._changeSet = changeSet;
             this._operationResults =new ReadOnlyCollection<ChangeSetEntry>(operationResults.ToList());

@@ -24,10 +24,7 @@ namespace OpenRiaServices.Tools
         /// <param name="logger">The <see cref="ILogger"/> to use for warnings and errors.</param>
         internal ProjectFileReader(ILogger logger)
         {
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
+            ArgumentNullException.ThrowIfNull(logger);
 
             this._logger = logger;
         }

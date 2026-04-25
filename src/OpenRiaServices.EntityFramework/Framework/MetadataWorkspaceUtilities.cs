@@ -217,20 +217,11 @@ namespace System.Data.Mapping
 
             public MetadataWorkspaceInfo(string csdlPath, string mslPath, string ssdlPath)
             {
-                if (csdlPath == null)
-                {
-                    throw new ArgumentNullException(nameof(csdlPath));
-                }
+                ArgumentNullException.ThrowIfNull(csdlPath);
 
-                if (mslPath == null)
-                {
-                    throw new ArgumentNullException(nameof(mslPath));
-                }
+                ArgumentNullException.ThrowIfNull(mslPath);
 
-                if (ssdlPath == null)
-                {
-                    throw new ArgumentNullException(nameof(ssdlPath));
-                }
+                ArgumentNullException.ThrowIfNull(ssdlPath);
 
                 this.Csdl = csdlPath;
                 this.Msl = mslPath;

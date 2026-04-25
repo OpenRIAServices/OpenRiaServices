@@ -62,10 +62,7 @@ namespace System.Linq.Dynamic
 
             private PostProcessor(DomainServiceDescription domainServiceDescription)
             {
-                if (domainServiceDescription == null)
-                {
-                    throw new ArgumentNullException(nameof(domainServiceDescription));
-                }
+                ArgumentNullException.ThrowIfNull(domainServiceDescription);
 
                 this.domainServiceDescription = domainServiceDescription;
             }

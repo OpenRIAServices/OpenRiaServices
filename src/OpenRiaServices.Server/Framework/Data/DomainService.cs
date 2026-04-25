@@ -146,10 +146,7 @@ namespace OpenRiaServices.Server
         /// </returns>
         public AuthorizationResult IsAuthorized(DomainOperationEntry domainOperationEntry, object? entity)
         {
-            if (domainOperationEntry == null)
-            {
-                throw new ArgumentNullException(nameof(domainOperationEntry));
-            }
+            ArgumentNullException.ThrowIfNull(domainOperationEntry);
 
             // A null entity is not permitted in a Submit.
             // Queries are always null.
@@ -239,10 +236,7 @@ namespace OpenRiaServices.Server
         /// instance. Overrides must call the base method.</param>
         public virtual void Initialize(DomainServiceContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             if (this._serviceContext != null)
             {
@@ -270,10 +264,7 @@ namespace OpenRiaServices.Server
 
             try
             {
-                if (queryDescription == null)
-                {
-                    throw new ArgumentNullException(nameof(queryDescription));
-                }
+                ArgumentNullException.ThrowIfNull(queryDescription);
 
                 this.EnsureInitialized();
                 this.CheckOperationType(DomainOperationType.Query);
@@ -421,10 +412,7 @@ namespace OpenRiaServices.Server
         {
             try
             {
-                if (invokeDescription == null)
-                {
-                    throw new ArgumentNullException(nameof(invokeDescription));
-                }
+                ArgumentNullException.ThrowIfNull(invokeDescription);
 
                 this.EnsureInitialized();
                 this.CheckOperationType(DomainOperationType.Invoke);
@@ -499,10 +487,7 @@ namespace OpenRiaServices.Server
         {
             try
             {
-                if (changeSet == null)
-                {
-                    throw new ArgumentNullException(nameof(changeSet));
-                }
+                ArgumentNullException.ThrowIfNull(changeSet);
                 this._changeSet = changeSet;
 
                 this.EnsureInitialized();
@@ -582,7 +567,7 @@ namespace OpenRiaServices.Server
             {
                 if (attribute is RequiresAuthenticationAttribute)
                 {
-                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext!);
+                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext);
                     if (result != AuthorizationResult.Allowed)
                     {
                         return result;
@@ -596,7 +581,7 @@ namespace OpenRiaServices.Server
             {
                 if (!(attribute is RequiresAuthenticationAttribute))
                 {
-                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext!);
+                    AuthorizationResult result = attribute.Authorize(principal, authorizationContext);
                     if (result != AuthorizationResult.Allowed)
                     {
                         return result;
@@ -1333,10 +1318,7 @@ namespace OpenRiaServices.Server
             /// <param name="domainService">A <see cref="DomainService"/> instance to release.</param>
             public void ReleaseDomainService(DomainService domainService)
             {
-                if (domainService == null)
-                {
-                    throw new ArgumentNullException(nameof(domainService));
-                }
+                ArgumentNullException.ThrowIfNull(domainService);
                 domainService.Dispose();
             }
         }

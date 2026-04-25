@@ -40,8 +40,7 @@ namespace OpenRiaServices.Client
             }
             set
             {
-                if (value == null)
-                    throw new ArgumentNullException(nameof(value));
+                ArgumentNullException.ThrowIfNull(value);
                 if (!value.IsAbsoluteUri)
                     throw new ArgumentException("ServiceBaseUri must be absolute", nameof(value));
 
@@ -63,10 +62,8 @@ namespace OpenRiaServices.Client
         /// <returns>A <see cref="DomainClient"/> to use when communicating with the service</returns>
         public DomainClient CreateDomainClient([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type serviceContract, Uri serviceUri, bool requiresSecureEndpoint)
         {
-            if (serviceContract == null)
-                throw new ArgumentNullException(nameof(serviceContract));
-            if (serviceUri == null)
-                throw new ArgumentNullException(nameof(serviceUri));
+            ArgumentNullException.ThrowIfNull(serviceContract);
+            ArgumentNullException.ThrowIfNull(serviceUri);
             if (!serviceContract.IsInterface)
                 throw new ArgumentException(Resource.DomainClientFactory_ServiceContractMustBeAnInterface, nameof(serviceContract));
 

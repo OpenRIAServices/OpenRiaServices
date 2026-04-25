@@ -27,15 +27,9 @@ namespace OpenRiaServices.Tools
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="assembliesToLoad"/> or <paramref name="logger"/> is null.</exception>
         public DomainServiceCatalog(IEnumerable<string> assembliesToLoad, ILogger logger)
         {
-            if (assembliesToLoad == null)
-            {
-                throw new ArgumentNullException(nameof(assembliesToLoad));
-            }
+            ArgumentNullException.ThrowIfNull(assembliesToLoad);
 
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
+            ArgumentNullException.ThrowIfNull(logger);
 
             this._logger = logger;
 
@@ -54,15 +48,9 @@ namespace OpenRiaServices.Tools
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="domainServiceType"/> or <paramref name="logger"/> is null.</exception>
         public DomainServiceCatalog(Type domainServiceType, ILogger logger)
         {
-            if (domainServiceType == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceType));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceType);
 
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
+            ArgumentNullException.ThrowIfNull(logger);
 
             this._logger = logger;
 
@@ -77,15 +65,9 @@ namespace OpenRiaServices.Tools
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="domainServiceTypes"/> or <paramref name="logger"/> is null.</exception>
         public DomainServiceCatalog(IEnumerable<Type> domainServiceTypes, ILogger logger)
         {
-            if (domainServiceTypes == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceTypes));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceTypes);
 
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
+            ArgumentNullException.ThrowIfNull(logger);
 
             this._logger = logger;
 

@@ -27,10 +27,7 @@ namespace OpenRiaServices.Tools.SharedTypes
         /// <param name="logger">Optional logger to use to report errors or warnings</param>
         public SharedAssemblies(IEnumerable<string> assemblyFileNames, IEnumerable<string> assemblySearchPaths, ILogger logger)
         {
-            if (assemblyFileNames == null)
-            {
-                throw new ArgumentNullException(nameof(assemblyFileNames));
-            }
+            ArgumentNullException.ThrowIfNull(assemblyFileNames);
             _logger = logger;
             _sharedTypeByName = new Dictionary<string, TypeInfo>(StringComparer.Ordinal);
             _resolver = new CustomAssemblyResolver(assemblySearchPaths ?? Enumerable.Empty<string>());

@@ -48,10 +48,7 @@ namespace OpenRiaServices.Server
         /// <param name="domainServiceType">The Type of the DomainService</param>
         internal DomainServiceDescription(Type domainServiceType)
         {
-            if (domainServiceType == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceType));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceType);
 
             this._domainServiceType = domainServiceType;
             this._createSerializationType = (Type type) => this.CreateSerializationType(type);
@@ -63,10 +60,7 @@ namespace OpenRiaServices.Server
         /// <param name="baseDescription">The base <see cref="DomainServiceDescription"/></param>
         internal DomainServiceDescription(DomainServiceDescription baseDescription)
         {
-            if (baseDescription == null)
-            {
-                throw new ArgumentNullException(nameof(baseDescription));
-            }
+            ArgumentNullException.ThrowIfNull(baseDescription);
 
             this._domainServiceType = baseDescription._domainServiceType;
             this._attributes = baseDescription._attributes;
@@ -201,10 +195,7 @@ namespace OpenRiaServices.Server
         {
             this.CheckInvalidUpdate();
 
-            if (operation == null)
-            {
-                throw new ArgumentNullException(nameof(operation));
-            }
+            ArgumentNullException.ThrowIfNull(operation);
 
             if (operation.DomainServiceType != this.DomainServiceType)
             {
@@ -267,10 +258,7 @@ namespace OpenRiaServices.Server
         {
             this.EnsureInitialized();
 
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
             if (string.IsNullOrEmpty(methodName))
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.DomainOperationEntry_ArgumentCannotBeNullOrEmpty, "methodName"));
@@ -304,10 +292,7 @@ namespace OpenRiaServices.Server
         {
             this.EnsureInitialized();
 
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
 
             Dictionary<string, DomainOperationEntry> entityCustomMethods = null;
             if (this._customMethods.TryGetValue(entityType, out entityCustomMethods))
@@ -329,10 +314,7 @@ namespace OpenRiaServices.Server
         {
             this.EnsureInitialized();
 
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
             if ((operation != DomainOperation.Insert) &&
                 (operation != DomainOperation.Update) &&
                 (operation != DomainOperation.Delete))
@@ -367,10 +349,7 @@ namespace OpenRiaServices.Server
         {
             this.EnsureInitialized();
 
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
 
             List<PropertyDescriptor> assocList = null;
             if (this._compositionMap.TryGetValue(entityType, out assocList))
@@ -431,10 +410,7 @@ namespace OpenRiaServices.Server
         /// has no base types.</returns>
         public Type GetRootEntityType(Type entityType)
         {
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
 
             EnsureInitialized();
             Type rootType = null;
@@ -464,10 +440,7 @@ namespace OpenRiaServices.Server
         /// <paramref name="entityType"/> had no visible base types.</returns>
         public Type GetEntityBaseType(Type entityType)
         {
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
 
             EnsureInitialized();
             Type baseType = entityType.BaseType;
@@ -489,10 +462,7 @@ namespace OpenRiaServices.Server
         /// <returns>The description for the specified <see cref="DomainService"/> type</returns>
         public static DomainServiceDescription GetDescription(Type domainServiceType)
         {
-            if (domainServiceType == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceType));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceType);
 
             if (domainServiceType.IsAbstract
                 || domainServiceType.IsGenericType
@@ -1929,10 +1899,7 @@ namespace OpenRiaServices.Server
         /// <returns><c>True</c> if the operation is supported, <c>false</c> otherwise.</returns>
         public bool IsOperationSupported(Type entityType, DomainOperation operationType)
         {
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
 
             if (operationType != DomainOperation.Insert &&
                 operationType != DomainOperation.Update &&

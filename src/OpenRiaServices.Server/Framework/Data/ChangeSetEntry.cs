@@ -39,10 +39,7 @@ namespace OpenRiaServices.Server
         /// <param name="operation">The operation to be performed</param>
         public ChangeSetEntry(int id, object entity, object originalEntity, DomainOperation operation)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             this._id = id;
             this._entity = entity;

@@ -21,18 +21,9 @@ namespace OpenRiaServices.Client
             ReadOnlyCollection<Entity> modifiedEntities,
             ReadOnlyCollection<Entity> removedEntities)
         {
-            if (addedEntities == null)
-            {
-                throw new ArgumentNullException(nameof(addedEntities));
-            }
-            if (modifiedEntities == null)
-            {
-                throw new ArgumentNullException(nameof(modifiedEntities));
-            }
-            if (removedEntities == null)
-            {
-                throw new ArgumentNullException(nameof(removedEntities));
-            }
+            ArgumentNullException.ThrowIfNull(addedEntities);
+            ArgumentNullException.ThrowIfNull(modifiedEntities);
+            ArgumentNullException.ThrowIfNull(removedEntities);
 
             this._addedEntities = addedEntities;
             this._removedEntities = removedEntities;

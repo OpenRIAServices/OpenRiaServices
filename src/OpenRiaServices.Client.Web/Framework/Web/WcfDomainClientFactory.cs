@@ -40,8 +40,7 @@ namespace OpenRiaServices.Client.Web
         /// E.g  "binary", "soap"</param>
         protected WcfDomainClientFactory(string endpointSuffix)
         {
-            if (endpointSuffix == null)
-                throw new ArgumentNullException(nameof(endpointSuffix));
+            ArgumentNullException.ThrowIfNull(endpointSuffix);
 
             _createInstanceMethod = typeof(WcfDomainClientFactory).GetMethod(nameof(CreateInstance), BindingFlags.NonPublic | BindingFlags.Instance);
 

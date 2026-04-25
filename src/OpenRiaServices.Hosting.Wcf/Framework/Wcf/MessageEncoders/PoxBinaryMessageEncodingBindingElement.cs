@@ -77,10 +77,7 @@ namespace OpenRiaServices.Client.Web
 
         public override IChannelFactory<TChannel> BuildChannelFactory<TChannel>(BindingContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             context.BindingParameters.Add(this);
             return context.BuildInnerChannelFactory<TChannel>();
@@ -88,10 +85,7 @@ namespace OpenRiaServices.Client.Web
 
         public override bool CanBuildChannelFactory<TChannel>(BindingContext context)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
+            ArgumentNullException.ThrowIfNull(context);
 
             return context.CanBuildInnerChannelFactory<TChannel>();
         }
@@ -126,10 +120,7 @@ namespace OpenRiaServices.Client.Web
 
             public PoxBinaryMessageEncoderFactory(XmlDictionaryReaderQuotas readerQuotas)
             {
-                if (readerQuotas == null)
-                {
-                    throw new ArgumentNullException(nameof(readerQuotas));
-                }
+                ArgumentNullException.ThrowIfNull(readerQuotas);
                 this._readerQuotas = readerQuotas;
             }
 
@@ -165,14 +156,8 @@ namespace OpenRiaServices.Client.Web
 
             public PoxBinaryMessageEncoder(MessageVersion messageVersion, XmlDictionaryReaderQuotas readerQuotas)
             {
-                if (messageVersion == null)
-                {
-                    throw new ArgumentNullException(nameof(messageVersion));
-                }
-                if (readerQuotas == null)
-                {
-                    throw new ArgumentNullException(nameof(readerQuotas));
-                }
+                ArgumentNullException.ThrowIfNull(messageVersion);
+                ArgumentNullException.ThrowIfNull(readerQuotas);
                 this._readerQuotas = readerQuotas;
                 this._messageVersion = messageVersion;
             }
@@ -203,10 +188,7 @@ namespace OpenRiaServices.Client.Web
 
             public override Message ReadMessage(ArraySegment<byte> buffer, BufferManager bufferManager, string contentType)
             {
-                if (bufferManager == null)
-                {
-                    throw new ArgumentNullException(nameof(bufferManager));
-                }
+                ArgumentNullException.ThrowIfNull(bufferManager);
 
                 ThrowIfIncorrectContentType(contentType);
 #if !SILVERLIGHT
@@ -219,10 +201,7 @@ namespace OpenRiaServices.Client.Web
 
             public override Message ReadMessage(Stream stream, int maxSizeOfHeaders, string contentType)
             {
-                if (stream == null)
-                {
-                    throw new ArgumentNullException(nameof(stream));
-                }
+                ArgumentNullException.ThrowIfNull(stream);
 
                 ThrowIfIncorrectContentType(contentType);
 
@@ -235,11 +214,9 @@ namespace OpenRiaServices.Client.Web
 
             public override ArraySegment<byte> WriteMessage(Message message, int maxMessageSize, BufferManager bufferManager, int messageOffset)
             {
-                if (message == null)
-                    throw new ArgumentNullException(nameof(message));
+                ArgumentNullException.ThrowIfNull(message);
 
-                if (bufferManager == null)
-                    throw new ArgumentNullException(nameof(bufferManager));
+                ArgumentNullException.ThrowIfNull(bufferManager);
 
                 if (maxMessageSize < 0)
                     throw new ArgumentOutOfRangeException(nameof(maxMessageSize));
@@ -251,15 +228,9 @@ namespace OpenRiaServices.Client.Web
 
             public override void WriteMessage(Message message, Stream stream)
             {
-                if (message == null)
-                {
-                    throw new ArgumentNullException(nameof(message));
-                }
+                ArgumentNullException.ThrowIfNull(message);
 
-                if (stream == null)
-                {
-                    throw new ArgumentNullException(nameof(stream));
-                }
+                ArgumentNullException.ThrowIfNull(stream);
 
                 this.ThrowIfInvalidMessageVersion(message);
 
@@ -650,10 +621,7 @@ namespace OpenRiaServices.Client.Web
                     /// <exception cref="ObjectDisposedException" />
                     public override void WriteMessage(Stream stream)
                     {
-                        if (stream == null)
-                        {
-                            throw new ArgumentNullException(nameof(stream));
-                        }
+                        ArgumentNullException.ThrowIfNull(stream);
 
                         lock (this.ThisLock)
                         {

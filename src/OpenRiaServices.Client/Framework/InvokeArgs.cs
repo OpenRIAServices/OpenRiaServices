@@ -24,10 +24,7 @@ namespace OpenRiaServices.Client
             {
                 throw new ArgumentNullException(nameof(operationName));
             }
-            if (returnType == null)
-            {
-                throw new ArgumentNullException(nameof(returnType));
-            }
+            ArgumentNullException.ThrowIfNull(returnType);
 
             OperationName = operationName;
             ReturnType = returnType;

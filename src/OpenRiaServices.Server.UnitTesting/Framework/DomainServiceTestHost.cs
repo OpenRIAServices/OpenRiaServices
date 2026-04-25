@@ -107,14 +107,8 @@ namespace OpenRiaServices.Server.UnitTesting
         /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
         private DomainServiceTestHost(IDomainServiceFactory factory, IServiceProvider serviceProvider, IPrincipal user)
         {
-            if (serviceProvider == null)
-            {
-                throw new ArgumentNullException(nameof(serviceProvider));
-            }
-            if (user == null)
-            {
-                throw new ArgumentNullException(nameof(user));
-            }
+            ArgumentNullException.ThrowIfNull(serviceProvider);
+            ArgumentNullException.ThrowIfNull(user);
 
             this._factory = factory;
             this._serviceProvider = serviceProvider;
@@ -139,10 +133,7 @@ namespace OpenRiaServices.Server.UnitTesting
 
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
                 this._factory = value;
             }
         }
@@ -165,10 +156,7 @@ namespace OpenRiaServices.Server.UnitTesting
 
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
                 this._serviceProvider = value;
             }
         }
@@ -182,10 +170,7 @@ namespace OpenRiaServices.Server.UnitTesting
             get => _user;
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
                 this._user = value;
             }
         }
@@ -1171,10 +1156,7 @@ namespace OpenRiaServices.Server.UnitTesting
 
             public DomainServiceFactory(Func<TDomainService> createDomainService)
             {
-                if (createDomainService == null)
-                {
-                    throw new ArgumentNullException(nameof(createDomainService));
-                }
+                ArgumentNullException.ThrowIfNull(createDomainService);
                 this._createDomainService = createDomainService;
             }
 

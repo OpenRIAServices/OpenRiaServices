@@ -46,8 +46,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private protected DataContractHttpDomainClient(HttpClient httpClient, Type serviceInterface)
         {
-            if (serviceInterface is null)
-                throw new ArgumentNullException(nameof(serviceInterface));
+            ArgumentNullException.ThrowIfNull(serviceInterface);
 
             HttpClient = httpClient;
             lock (s_globalCacheHelpers)

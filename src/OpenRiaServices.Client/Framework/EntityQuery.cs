@@ -33,18 +33,12 @@ namespace OpenRiaServices.Client
         /// <param name="isComposable">True if the query supports composition, false otherwise.</param>
         private protected EntityQuery(DomainClient domainClient, string queryName, Type entityType, IDictionary<string, object?>? parameters, bool hasSideEffects, bool isComposable)
         {
-            if (domainClient == null)
-            {
-                throw new ArgumentNullException(nameof(domainClient));
-            }
+            ArgumentNullException.ThrowIfNull(domainClient);
             if (string.IsNullOrEmpty(queryName))
             {
                 throw new ArgumentNullException(nameof(queryName));
             }
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
             this._domainClient = domainClient;
             this._queryName = queryName;
             this._entityType = entityType;
@@ -62,14 +56,8 @@ namespace OpenRiaServices.Client
         /// <param name="query">The new query.</param>
         internal EntityQuery(EntityQuery baseQuery, IQueryable query)
         {
-            if (baseQuery == null)
-            {
-                throw new ArgumentNullException(nameof(baseQuery));
-            }
-            if (query == null)
-            {
-                throw new ArgumentNullException(nameof(query));
-            }
+            ArgumentNullException.ThrowIfNull(baseQuery);
+            ArgumentNullException.ThrowIfNull(query);
             this._domainClient = baseQuery._domainClient;
             this._queryName = baseQuery._queryName;
             this._entityType = baseQuery._entityType;
@@ -195,7 +183,6 @@ namespace OpenRiaServices.Client
         {
         }
 
-        /// <inheritdoc cref="EntityQuery.Query" />
         /// <inheritdoc cref="EntityQuery.Query"/>
         internal new IQueryable<TEntity>? Query
         {

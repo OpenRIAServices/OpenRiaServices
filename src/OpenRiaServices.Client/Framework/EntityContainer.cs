@@ -88,10 +88,7 @@ namespace OpenRiaServices.Client
         /// <param name="entitySet">A <see cref="EntitySet"/> to register as an external reference.</param>
         public void AddReference(EntitySet entitySet)
         {
-            if (entitySet == null)
-            {
-                throw new ArgumentNullException(nameof(entitySet));
-            }
+            ArgumentNullException.ThrowIfNull(entitySet);
 
             Type entityType = entitySet.EntityType;
             if (this._entitySets.ContainsKey(entityType) 
@@ -376,10 +373,7 @@ namespace OpenRiaServices.Client
         /// are already cached locally, the return set will contain the cached instances.</returns>
         public IReadOnlyCollection<Entity> LoadEntities(IEnumerable<Entity> entities, LoadBehavior loadBehavior)
         {
-            if (entities == null)
-            {
-                throw new ArgumentNullException(nameof(entities));
-            }
+            ArgumentNullException.ThrowIfNull(entities);
 
             // group the entities by type, and load each group into it's entity
             // list (ensuring we don't modify the relative ordering of each sequence 

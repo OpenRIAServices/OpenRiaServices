@@ -25,18 +25,9 @@ namespace OpenRiaServices.Client
         /// <param name="validationErrors">A collection of validation errors.</param>
         public QueryCompletedResult(IEnumerable<Entity> entities, IEnumerable<Entity> includedEntities, int totalCount, IEnumerable<ValidationResult> validationErrors)
         {
-            if (entities == null)
-            {
-                throw new ArgumentNullException(nameof(entities));
-            }
-            if (includedEntities == null)
-            {
-                throw new ArgumentNullException(nameof(includedEntities));
-            }
-            if (validationErrors == null)
-            {
-                throw new ArgumentNullException(nameof(validationErrors));
-            }
+            ArgumentNullException.ThrowIfNull(entities);
+            ArgumentNullException.ThrowIfNull(includedEntities);
+            ArgumentNullException.ThrowIfNull(validationErrors);
 
             this._entities = entities.ToList().AsReadOnly();
             this._includedEntities = includedEntities.ToList().AsReadOnly();

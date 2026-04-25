@@ -30,10 +30,7 @@ namespace OpenRiaServices.Client
         /// <param name="validationErrors">A collection of validation errors.</param>
         public InvokeCompletedResult(object? returnValue, IEnumerable<ValidationResult> validationErrors)
         {
-            if (validationErrors == null)
-            {
-                throw new ArgumentNullException(nameof(validationErrors));
-            }
+            ArgumentNullException.ThrowIfNull(validationErrors);
 
             ReturnValue = returnValue;
             ValidationErrors = validationErrors.ToList().AsReadOnly();

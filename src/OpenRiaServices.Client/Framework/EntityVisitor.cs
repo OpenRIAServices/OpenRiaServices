@@ -17,10 +17,7 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The entity to visit</param>
         public virtual void Visit(Entity entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             foreach (MetaMember association in entity.MetaType.AssociationMembers)
             {

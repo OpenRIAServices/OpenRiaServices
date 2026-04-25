@@ -10,18 +10,9 @@ namespace OpenRiaServices.Server.UnitTesting
 
         public OperationContext(DomainServiceContext domainServiceContext, DomainService domainService, DomainServiceDescription domainServiceDescription)
         {
-            if (domainServiceContext == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceContext));
-            }
-            if (domainService == null)
-            {
-                throw new ArgumentNullException(nameof(domainService));
-            }
-            if (domainServiceDescription == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceDescription));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceContext);
+            ArgumentNullException.ThrowIfNull(domainService);
+            ArgumentNullException.ThrowIfNull(domainServiceDescription);
 
             this._domainServiceContext = domainServiceContext;
             this._domainService = domainService;

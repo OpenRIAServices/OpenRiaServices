@@ -195,10 +195,7 @@ namespace OpenRiaServices.Tools.TextTemplate
 
         private static ICustomAttributeBuilder GetCustomAttributeBuilder(Type attributeType)
         {
-            if (attributeType == null)
-            {
-                throw new ArgumentNullException(nameof(attributeType));
-            }
+            ArgumentNullException.ThrowIfNull(attributeType);
 
             ICustomAttributeBuilder cab = null;
 

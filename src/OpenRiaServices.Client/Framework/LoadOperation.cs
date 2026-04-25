@@ -35,10 +35,7 @@ namespace OpenRiaServices.Client
         private protected LoadOperation(EntityQuery query, LoadBehavior loadBehavior, object? userState, CancellationTokenSource? cancellationTokenSource)
             : base(userState, cancellationTokenSource)
         {
-            if (query == null)
-            {
-                throw new ArgumentNullException(nameof(query));
-            }
+            ArgumentNullException.ThrowIfNull(query);
             this._query = query;
             this._loadBehavior = loadBehavior;
         }
@@ -139,10 +136,7 @@ namespace OpenRiaServices.Client
         /// <param name="result">The results of the completed load operation.</param>
         private protected virtual void UpdateResults(ILoadResult result)
         {
-            if (result == null)
-            {
-                throw new ArgumentNullException(nameof(result));
-            }
+            ArgumentNullException.ThrowIfNull(result);
 
             // if the Entities property has been examined, update the backing
             // observable collection
@@ -202,10 +196,7 @@ namespace OpenRiaServices.Client
             CancellationTokenSource? cancellationTokenSource)
             : base(query, loadBehavior, userState, cancellationTokenSource)
         {
-            if (loadResultTask == null)
-            {
-                throw new ArgumentNullException(nameof(loadResultTask));
-            }
+            ArgumentNullException.ThrowIfNull(loadResultTask);
 
             this._completeAction = completeAction;
 
@@ -280,10 +271,7 @@ namespace OpenRiaServices.Client
         /// <param name="result">The result.</param>
         private void SetResult(LoadResult<TEntity> result)
         {
-            if (result == null)
-            {
-                throw new ArgumentNullException(nameof(result));
-            }
+            ArgumentNullException.ThrowIfNull(result);
 
             // before calling base, we need to update any cached
             // observable collection results so the correct data

@@ -60,10 +60,7 @@
         /// </returns>
         public IEnumerable<string> GetFilesForType(Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
 
             //  Get the list of members for this type
             IEnumerable<MemberInfo> memberInfos = this.GetMembersForType(type);
@@ -84,10 +81,7 @@
         /// <returns>The full path of the source file or null if it cannot be determined.</returns>
         public string GetFileForMember(MemberInfo memberInfo)
         {
-            if (memberInfo == null)
-            {
-                throw new ArgumentNullException(nameof(memberInfo));
-            }
+            ArgumentNullException.ThrowIfNull(memberInfo);
 
             // Either load the members or retrieve them from the cache.
             // In either case, this memberInfo should be in the cache after the call.

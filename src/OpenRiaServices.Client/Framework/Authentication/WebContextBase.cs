@@ -101,10 +101,7 @@ namespace OpenRiaServices.Client.Authentication
             }
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
                 if (this._started)
                 {
                     throw new InvalidOperationException(Resources.WebContext_CannotModifyAuthentication);

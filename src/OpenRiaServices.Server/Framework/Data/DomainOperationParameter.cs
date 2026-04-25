@@ -26,15 +26,9 @@ namespace OpenRiaServices.Server
                 throw new ArgumentNullException(nameof(name));
             }
 
-            if (parameterType == null)
-            {
-                throw new ArgumentNullException(nameof(parameterType));
-            }
+            ArgumentNullException.ThrowIfNull(parameterType);
 
-            if (attributes == null)
-            {
-                throw new ArgumentNullException(nameof(attributes));
-            }
+            ArgumentNullException.ThrowIfNull(attributes);
 
             Name = name;
             ParameterType = parameterType;

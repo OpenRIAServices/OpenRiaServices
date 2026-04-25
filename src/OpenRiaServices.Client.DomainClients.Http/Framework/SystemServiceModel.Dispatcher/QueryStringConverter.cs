@@ -70,10 +70,7 @@ namespace System.ServiceModel.Dispatcher
 
         public virtual string ConvertValueToString(object parameter, Type parameterType)
         {
-            if (parameterType == null)
-            {
-                throw new ArgumentNullException(nameof(parameterType));
-            }
+            ArgumentNullException.ThrowIfNull(parameterType);
             if (parameterType.IsValueType && parameter == null)
             {
                 throw new ArgumentNullException(nameof(parameter));

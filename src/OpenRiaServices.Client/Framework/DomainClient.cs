@@ -78,10 +78,7 @@ namespace OpenRiaServices.Client
         /// <returns>The results returned by the submit request.</returns>
         public Task<SubmitCompletedResult> SubmitAsync(EntityChangeSet changeSet, CancellationToken cancellationToken)
         {
-            if (changeSet == null)
-            {
-                throw new ArgumentNullException(nameof(changeSet));
-            }
+            ArgumentNullException.ThrowIfNull(changeSet);
 
             if (changeSet.IsEmpty)
             {
