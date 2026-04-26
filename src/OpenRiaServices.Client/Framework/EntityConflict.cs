@@ -37,7 +37,6 @@ namespace OpenRiaServices.Client
             if (!isDeleted)
             {
                 ArgumentNullException.ThrowIfNull(storeEntity);
-
                 ArgumentNullException.ThrowIfNull(propertyNames);
 
                 this._storeEntity = storeEntity;
