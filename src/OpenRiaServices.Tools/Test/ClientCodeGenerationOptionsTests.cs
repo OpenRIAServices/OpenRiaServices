@@ -33,8 +33,8 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsFalse(options.UseFullTypeNames);
 
             // Null languge throws
-            ExceptionHelper.ExpectArgumentNullException(() => options.Language = null, Resource.Null_Language_Property, "value");
-            ExceptionHelper.ExpectArgumentNullException(() => options.Language = string.Empty, Resource.Null_Language_Property, "value");
+            ExceptionHelper.ExpectArgumentNullException(() => options.Language = null, "value");
+            ExceptionHelper.ExpectEmptyStringArgumentException(() => options.Language = string.Empty, "value");
 
             // Now test a range of values for each property
             foreach (string language in new string[] { "C#", "VB", "notALanguage" })

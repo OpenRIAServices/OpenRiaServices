@@ -253,10 +253,7 @@ namespace OpenRiaServices.Client.Test
         {
             WebException e = ExpectExceptionHelper<WebException>(del);
 
-#if !SILVERLIGHT // Message is set to "" in Silverlight in some cases
             Assert.AreEqual(message, e.Message);
-#endif
-
             Assert.AreEqual(webExceptionStatus, e.Status);
             return e;
         }
@@ -268,10 +265,11 @@ namespace OpenRiaServices.Client.Test
             return e;
         }
 
-        internal static void ExpectEmptyStringArgumentException(Action value, string paramName)
+        public static void ExpectEmptyStringArgumentException(Action value, string paramName)
         {
             var ex = Assert.ThrowsExactly<ArgumentException>(value);
             Assert.AreEqual(paramName, ex.ParamName);
+            Assert.Contains("The value cannot be an empty string.", ex.Message);
         }
     }
 }

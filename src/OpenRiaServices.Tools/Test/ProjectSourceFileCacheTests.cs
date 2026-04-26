@@ -30,11 +30,11 @@ namespace OpenRiaServices.Tools.Test
             {
                 // Null/empty server project throws
                 ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new ProjectSourceFileCache(null, "breadCrumb", logger, projectFileReader), "rootProjectPath");
-                ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new ProjectSourceFileCache(string.Empty, "breadCrumb", logger, projectFileReader), "rootProjectPath");
+                ExceptionHelper.ExpectEmptyStringArgumentException(() => cache = new ProjectSourceFileCache(string.Empty, "breadCrumb", logger, projectFileReader), "rootProjectPath");
 
                 // Null/empty bread crumb file throws
                 ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new ProjectSourceFileCache("proj", null, logger, projectFileReader), "historyFilePath");
-                ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new ProjectSourceFileCache("proj", string.Empty, logger, projectFileReader), "historyFilePath");
+                ExceptionHelper.ExpectEmptyStringArgumentException(() => cache = new ProjectSourceFileCache("proj", string.Empty, logger, projectFileReader), "historyFilePath");
 
                 // Null logger throws
                 ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new ProjectSourceFileCache("proj", "breadCrumb", null, projectFileReader), "logger");
@@ -92,11 +92,11 @@ namespace OpenRiaServices.Tools.Test
 
                 // ArgNull exception on null/empty index setter
                 ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache[null] = new string[] { "a" }, "projectPath");
-                ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache[string.Empty] = new string[] { "a" }, "projectPath");
+                ExceptionHelper.ExpectEmptyStringArgumentException(() => cache[string.Empty] = new string[] { "a" }, "projectPath");
 
                 // ArgNull exception on null/empty index getter
                 ExceptionHelper.ExpectArgumentNullExceptionStandard(() => files = cache[null], "projectPath");
-                ExceptionHelper.ExpectArgumentNullExceptionStandard(() => files = cache[string.Empty], "projectPath");
+                ExceptionHelper.ExpectEmptyStringArgumentException(() => files = cache[string.Empty], "projectPath");
             }
         }
 

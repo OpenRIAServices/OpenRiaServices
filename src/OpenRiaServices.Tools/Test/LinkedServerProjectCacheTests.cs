@@ -29,11 +29,11 @@ namespace OpenRiaServices.Tools.Test
             {
                 // Null project  file throws
                 ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new LinkedServerProjectCache(null, "breadCrumb", logger, projectFileReader), "rootProjectPath");
-                ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new LinkedServerProjectCache(String.Empty, "breadCrumb", logger, projectFileReader), "rootProjectPath");
+                ExceptionHelper.ExpectEmptyStringArgumentException(() => cache = new LinkedServerProjectCache(string.Empty, "breadCrumb", logger, projectFileReader), "rootProjectPath");
 
                 // Null logger throws
                 ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new LinkedServerProjectCache("proj", null, logger, projectFileReader), "historyFilePath");
-                ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new LinkedServerProjectCache("proj", String.Empty, logger, projectFileReader), "historyFilePath");
+                ExceptionHelper.ExpectEmptyStringArgumentException(() => cache = new LinkedServerProjectCache("proj", string.Empty, logger, projectFileReader), "historyFilePath");
 
                 // Null logger throws
                 ExceptionHelper.ExpectArgumentNullExceptionStandard(() => cache = new LinkedServerProjectCache("proj", "breadCrumb", null, projectFileReader), "logger");
@@ -65,12 +65,12 @@ namespace OpenRiaServices.Tools.Test
 
                     // Null indexer parameter throws on sets
                     ExceptionHelper.ExpectArgumentNullExceptionStandard((() => cache[null] = "x"), "projectPath");
-                    ExceptionHelper.ExpectArgumentNullExceptionStandard((() => cache[string.Empty] = "x"), "projectPath");
+                    ExceptionHelper.ExpectEmptyStringArgumentException((() => cache[string.Empty] = "x"), "projectPath");
 
                     // Null indexer parameter throws on gets
                     string unused;
                     ExceptionHelper.ExpectArgumentNullExceptionStandard((() => unused = cache[null]), "projectPath");
-                    ExceptionHelper.ExpectArgumentNullExceptionStandard((() => unused = cache[string.Empty]), "projectPath");
+                    ExceptionHelper.ExpectEmptyStringArgumentException((() => unused = cache[string.Empty]), "projectPath");
 
                     // Indexer setter can be called with valid values
                     cache["proj1"] = "proj1.Web";
