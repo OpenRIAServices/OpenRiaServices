@@ -50,8 +50,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
             ArgumentException.ThrowIfNullOrEmpty(projectDirectory);
             ArgumentException.ThrowIfNullOrEmpty(className);
             ArgumentException.ThrowIfNullOrEmpty(language);
-            ArgumentNullException.ThrowIfNull(contextTypes);
             ArgumentException.ThrowIfNullOrEmpty(assemblyName);
+            ArgumentNullException.ThrowIfNull(contextTypes);
 
             this._projectDirectory = projectDirectory;
             this._className = className;

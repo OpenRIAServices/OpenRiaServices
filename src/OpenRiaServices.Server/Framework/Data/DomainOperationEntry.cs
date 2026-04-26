@@ -38,11 +38,11 @@ namespace OpenRiaServices.Server
         /// <param name="attributes">The method level attributes for the operation</param>  
         protected DomainOperationEntry(Type domainServiceType, string name, DomainOperation operation, Type returnType, IEnumerable<DomainOperationParameter> parameters, AttributeCollection attributes)
         {
+            ArgumentNullException.ThrowIfNull(domainServiceType);
             ArgumentException.ThrowIfNullOrEmpty(name);
             ArgumentNullException.ThrowIfNull(returnType);
             ArgumentNullException.ThrowIfNull(parameters);
             ArgumentNullException.ThrowIfNull(attributes);
-            ArgumentNullException.ThrowIfNull(domainServiceType);
 
             if (operation == DomainOperation.None)
             {
