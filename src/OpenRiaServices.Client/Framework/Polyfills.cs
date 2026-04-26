@@ -28,7 +28,9 @@ namespace System
             public static void ThrowIfNullOrEmpty([NotNull] string? argument, [CallerArgumentExpression(nameof(argument))] string? paramName = null)
             {
                 if (argument is null || argument.Length == 0)
-                    ThrowArgumentNullException(paramName);
+                {
+                    ThrowStringNullOrEmptyException(argument, paramName);
+                }
             }
         }
 
@@ -36,6 +38,13 @@ namespace System
         private static void ThrowArgumentNullException(string? paramName)
         {
             throw new ArgumentNullException(paramName);
+        }
+
+        [DoesNotReturn]
+        private static void ThrowStringNullOrEmptyException(string? argument, string? paramName)
+        {
+            ArgumentNullException.ThrowIfNull(argument, paramName);
+            throw new ArgumentException(paramName, "The value cannot be an empty string.");
         }
     }
 }
