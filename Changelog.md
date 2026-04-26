@@ -23,6 +23,8 @@ This release gives some ❤️ to AvaloniaUI and other frameworks which use ILis
 
 ### Other
 
+* Changed parameter validation to use `ArgumentNullException.ThrowIfNull` for better performance and more consistent exception messages
+  * **IMPORTANT**: This is a breaking change if you expect `ArgumentNullException` thrown by OpenRiaServices for empty strings
 * Fixed build pipeline problems after updating to VS 2026
 * Improved polyfills to allow modernization of the codebase
 * Analyzer fixes
