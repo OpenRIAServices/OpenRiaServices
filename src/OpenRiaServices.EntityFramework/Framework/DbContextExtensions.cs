@@ -23,22 +23,10 @@ namespace OpenRiaServices.EntityFramework
         /// <param name="dbContext">The corresponding <see cref="DbContext"/></param>
         public static void AttachAsModified<T>(this IDbSet<T> dbSet, T current, T original, DbContext dbContext) where T : class
         {
-            if (dbSet == null)
-            {
-                throw new ArgumentNullException(nameof(dbSet));
-            }
-            if (current == null)
-            {
-                throw new ArgumentNullException(nameof(current));
-            }
-            if (original == null)
-            {
-                throw new ArgumentNullException(nameof(original));
-            }
-            if (dbContext == null)
-            {
-                throw new ArgumentNullException(nameof(dbContext));
-            }
+            ArgumentNullException.ThrowIfNull(dbSet);
+            ArgumentNullException.ThrowIfNull(current);
+            ArgumentNullException.ThrowIfNull(original);
+            ArgumentNullException.ThrowIfNull(dbContext);
 
             DbEntityEntry<T> entityEntry = dbContext.Entry(current);
             if (entityEntry.State == EntityState.Detached)
@@ -72,18 +60,9 @@ namespace OpenRiaServices.EntityFramework
         /// <param name="dbContext">The coresponding <see cref="DbContext"/></param>
         public static void AttachAsModified<T>(this IDbSet<T> dbSet, T entity, DbContext dbContext) where T : class
         {
-            if (dbSet == null)
-            {
-                throw new ArgumentNullException(nameof(dbSet));
-            }
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-            if (dbContext == null)
-            {
-                throw new ArgumentNullException(nameof(dbContext));
-            }
+            ArgumentNullException.ThrowIfNull(dbSet);
+            ArgumentNullException.ThrowIfNull(entity);
+            ArgumentNullException.ThrowIfNull(dbContext);
 
             DbEntityEntry<T> entityEntry = dbContext.Entry(entity);
             if (entityEntry.State == EntityState.Detached)

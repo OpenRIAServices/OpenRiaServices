@@ -32,10 +32,7 @@ namespace OpenRiaServices.Client
         /// <returns>A new validation context.</returns>
         internal static ValidationContext CreateValidationContext(object instance, ValidationContext? parentContext)
         {
-            if (instance == null)
-            {
-                throw new ArgumentNullException(nameof(instance));
-            }
+            ArgumentNullException.ThrowIfNull(instance);
 
             ValidationContext context = new ValidationContext(instance, parentContext, parentContext != null ? parentContext.Items : null);
             return context;
@@ -604,15 +601,9 @@ namespace OpenRiaServices.Client
             ValidationContext validationContext, object[] parameters,
             List<ValidationResult> validationResults, bool performTypeValidation)
         {
-            if (string.IsNullOrEmpty(methodName))
-            {
-                throw new ArgumentNullException(nameof(methodName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(methodName);
 
-            if (validationContext == null)
-            {
-                throw new ArgumentNullException(nameof(validationContext));
-            }
+            ArgumentNullException.ThrowIfNull(validationContext);
 
             if (validationContext.ObjectInstance == null)
             {

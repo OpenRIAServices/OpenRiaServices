@@ -17,14 +17,8 @@ namespace OpenRiaServices.Tools.Validation
     {
         public void Validate(string[] assemblies, ILoggingService logger)
         {
-            if (assemblies == null)
-            {
-                throw new ArgumentNullException(nameof(assemblies));
-            }
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
+            ArgumentNullException.ThrowIfNull(assemblies);
+            ArgumentNullException.ThrowIfNull(logger);
 
             // Just creating an instance of the DomainServiceCatalog will locate all the DomainServices in the specified
             // assemblies and use their corresponding DomainServiceDescriptions to identify and report errors. These

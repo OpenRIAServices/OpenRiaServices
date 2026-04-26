@@ -183,7 +183,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 BusinessLogicViewModel model = new BusinessLogicViewModel(null, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "projectDirectory");
 
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
+            ExceptionHelper.ExpectEmptyStringArgumentException(delegate
             {
                 BusinessLogicViewModel model = new BusinessLogicViewModel(string.Empty, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "projectDirectory");
@@ -194,7 +194,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", null, "C#", "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "className");
 
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
+            ExceptionHelper.ExpectEmptyStringArgumentException(delegate
             {
                 BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", string.Empty, "C#", "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "className");
@@ -205,7 +205,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", null, "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "language");
 
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
+            ExceptionHelper.ExpectEmptyStringArgumentException(delegate
             {
                 BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", string.Empty, "ARootNamespace", "AnAssemblyName", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "language");
@@ -216,7 +216,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", "C#", "ARootNamespace", null, Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "assemblyName");
 
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(delegate
+            ExceptionHelper.ExpectEmptyStringArgumentException(delegate
             {
                 BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "AClassName", "C#", "ARootNamespace", "", Array.Empty<Type>(), /* IVsHelp object */ null);
             }, "assemblyName");

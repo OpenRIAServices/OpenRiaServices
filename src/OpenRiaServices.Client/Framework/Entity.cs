@@ -1088,10 +1088,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that has changed</param>
         protected void RaiseDataMemberChanged(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             this.OnDataMemberChanged();
 
@@ -1183,10 +1180,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that is changing</param>
         protected void RaiseDataMemberChanging(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             this.OnDataMemberChanging();
 
@@ -1238,10 +1232,7 @@ namespace OpenRiaServices.Client
         /// configured to prevent editing.</exception>
         protected void ValidateProperty(string propertyName, object? value)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             if (this.IsDeserializing || this.IsApplyingState)
             {
@@ -1311,10 +1302,7 @@ namespace OpenRiaServices.Client
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="validationContext"/> is <c>null</c>.</exception>
         protected virtual void ValidateProperty(ValidationContext validationContext, object? value)
         {
-            if (validationContext == null)
-            {
-                throw new ArgumentNullException(nameof(validationContext));
-            }
+            ArgumentNullException.ThrowIfNull(validationContext);
 
             List<ValidationResult> validationResults = new List<ValidationResult>();
             Validator.TryValidateProperty(value, validationContext, validationResults);
@@ -1532,8 +1520,7 @@ namespace OpenRiaServices.Client
         /// <exception cref="System.ArgumentException">If the action does not belong to this Entity's<see cref="EntityActions" /></exception>
         private void UndoAction(EntityAction action, bool throwIfSubmitting)
         {
-            if (action == null)
-                throw new ArgumentNullException(nameof(action));
+            ArgumentNullException.ThrowIfNull(action);
 
             // verify that the action can currently be invoked
             if (throwIfSubmitting && this.IsSubmitting)

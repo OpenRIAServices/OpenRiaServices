@@ -45,10 +45,7 @@ namespace OpenRiaServices.Client
         /// <returns>The entity key</returns>
         public static EntityKey Create(params object[] keyValues)
         {
-            if (keyValues == null)
-            {
-                throw new ArgumentNullException(nameof(keyValues));
-            }
+            ArgumentNullException.ThrowIfNull(keyValues);
 
             int keyLength = keyValues.Length;
             if (keyLength == 0)
@@ -120,10 +117,7 @@ namespace OpenRiaServices.Client
         /// <param name="value">The key value to format</param>
         internal static void FormatKeyValue<T>(StringBuilder sb, T value)
         {
-            if (sb == null)
-            {
-                throw new ArgumentNullException(nameof(sb));
-            }
+            ArgumentNullException.ThrowIfNull(sb);
             if (value == null)
             {
                 throw new ArgumentNullException(Resource.EntityKey_CannotBeNull);
@@ -202,10 +196,7 @@ namespace OpenRiaServices.Client
         /// <returns>True if the keys are equal</returns>
         public bool Equals(EntityKey<T> other)
         {
-            if (other == null)
-            {
-                throw new ArgumentNullException(nameof(other));
-            }
+            ArgumentNullException.ThrowIfNull(other);
             return EqualityComparer<T>.Default.Equals(this._v, other._v);
         }
 
@@ -277,10 +268,7 @@ namespace OpenRiaServices.Client
         /// <returns>True if the keys are equal</returns>
         public bool Equals(EntityKey<T1, T2> other)
         {
-            if (other == null)
-            {
-                throw new ArgumentNullException(nameof(other));
-            }
+            ArgumentNullException.ThrowIfNull(other);
             return EqualityComparer<T1>.Default.Equals(this._v1, other._v1) &&
                    EqualityComparer<T2>.Default.Equals(this._v2, other._v2);
         }

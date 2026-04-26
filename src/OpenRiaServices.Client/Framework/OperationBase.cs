@@ -300,10 +300,7 @@ namespace OpenRiaServices.Client
         /// <param name="error">The error.</param>
         protected void SetError(Exception error)
         {
-            if (error == null)
-            {
-                throw new ArgumentNullException(nameof(error));
-            }
+            ArgumentNullException.ThrowIfNull(error);
 
             this.EnsureNotCompleted();
 

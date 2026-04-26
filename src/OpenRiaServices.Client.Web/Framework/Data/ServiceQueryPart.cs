@@ -35,14 +35,8 @@ namespace OpenRiaServices.Client
         /// <param name="expression">The query expression</param>
         public ServiceQueryPart(string queryOperator, string expression)
         {
-            if (queryOperator == null)
-            {
-                throw new ArgumentNullException(nameof(queryOperator));
-            }
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            ArgumentNullException.ThrowIfNull(queryOperator);
+            ArgumentNullException.ThrowIfNull(expression);
 
             if (queryOperator != "where" && queryOperator != "orderby" &&
                queryOperator != "skip" && queryOperator != "take")

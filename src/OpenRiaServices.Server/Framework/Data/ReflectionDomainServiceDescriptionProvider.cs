@@ -400,10 +400,7 @@ namespace OpenRiaServices.Server
             public ReflectionDomainOperationEntry(Type domainServiceType, MethodInfo methodInfo, DomainOperation operation)
                 : base(domainServiceType, methodInfo.Name, operation, methodInfo.ReturnType, GetMethodParameters(methodInfo), GetAttributeCollection(methodInfo))
             {
-                if (methodInfo == null)
-                {
-                    throw new ArgumentNullException(nameof(methodInfo));
-                }
+                ArgumentNullException.ThrowIfNull(methodInfo);
 
                 // Generic methods aren’t supported, and will be caught during DomainServiceDescription validation.
                 if (!methodInfo.IsGenericMethodDefinition)

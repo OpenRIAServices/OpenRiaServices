@@ -15,6 +15,7 @@
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Polyfills.cs" />
     <Compile Condition=" '$(RunCodeAnalysis)' != 'true' " Remove="GlobalSuppressions.cs" />
     <Compile Update="Resource.Designer.cs">
       <AutoGen>True</AutoGen>

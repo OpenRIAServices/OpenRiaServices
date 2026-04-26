@@ -476,10 +476,7 @@ namespace OpenRiaServices.Tools
         /// <returns>A string representing the safe type name.</returns>
         private static string GetSafeTypeName(string typeFullName, string containingNamespace, bool userType)
         {
-            if (string.IsNullOrEmpty(typeFullName))
-            {
-                throw new ArgumentNullException(nameof(typeFullName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(typeFullName);
 
             string typeName = typeFullName;
             string typeNamespace = string.Empty;
@@ -803,10 +800,7 @@ namespace OpenRiaServices.Tools
         /// <returns>A collection of comment statements that matches the input resource</returns>
         internal static CodeCommentStatementCollection GetDocComments(string resourceComment, bool isCSharp)
         {
-            if (resourceComment == null)
-            {
-                throw new ArgumentNullException(nameof(resourceComment));
-            }
+            ArgumentNullException.ThrowIfNull(resourceComment);
 
             CodeCommentStatementCollection commentCollection = new CodeCommentStatementCollection();
             foreach (string comment in resourceComment.Split(new string[] { Environment.NewLine }, StringSplitOptions.None))
@@ -828,10 +822,7 @@ namespace OpenRiaServices.Tools
         /// reference error.</returns>
         private static bool RegisterTypeName(string typeNamespace, string typeName, string containingNamespace)
         {
-            if (string.IsNullOrEmpty(typeName))
-            {
-                throw new ArgumentNullException(nameof(typeName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(typeName);
 
             if (isVisualBasic || (containingNamespace == null))
             {

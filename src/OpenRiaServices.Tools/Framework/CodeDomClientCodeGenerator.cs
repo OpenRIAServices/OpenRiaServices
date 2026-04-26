@@ -71,20 +71,11 @@ namespace OpenRiaServices.Tools
 
         internal void Initialize(ICodeGenerationHost host, IEnumerable<DomainServiceDescription> descriptions, ClientCodeGenerationOptions options)
         {
-            if (host == null)
-            {
-                throw new ArgumentNullException(nameof(host));
-            }
+            ArgumentNullException.ThrowIfNull(host);
 
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            ArgumentNullException.ThrowIfNull(options);
 
-            if (descriptions == null)
-            {
-                throw new ArgumentNullException(nameof(descriptions));
-            }
+            ArgumentNullException.ThrowIfNull(descriptions);
 
             // Initialize all the instance variables
             this._host = host;
@@ -551,10 +542,7 @@ namespace OpenRiaServices.Tools
         private static void ValidateOptions(ClientCodeGenerationOptions clientProxyCodeGenerationOptions)
         {
             // A null is not acceptable
-            if (clientProxyCodeGenerationOptions == null)
-            {
-                throw new ArgumentNullException(nameof(clientProxyCodeGenerationOptions));
-            }
+            ArgumentNullException.ThrowIfNull(clientProxyCodeGenerationOptions);
 
             // The language property may not be null.
             if (String.IsNullOrEmpty(clientProxyCodeGenerationOptions.Language))

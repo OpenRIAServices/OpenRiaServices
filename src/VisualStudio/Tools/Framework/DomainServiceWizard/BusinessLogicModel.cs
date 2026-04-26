@@ -42,10 +42,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="logger">Callback to invoke to report errors during processing.</param>
         public BusinessLogicModel(Action<string> logger)
         {
-            if (logger == null)
-            {
-                throw new ArgumentNullException("logger");
-            }
+            ArgumentNullException.ThrowIfNull(logger);
             this._logger = logger;
         }
 

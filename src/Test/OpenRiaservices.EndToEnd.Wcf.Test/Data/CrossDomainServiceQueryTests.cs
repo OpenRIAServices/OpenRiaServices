@@ -6,6 +6,7 @@ using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices.LTS;
 using OpenRiaServices.Silverlight.Testing;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -15,9 +16,7 @@ namespace OpenRiaServices.Client.Test
     /// Note: we're using the same generated client for both EF and LTS tests, varying only the
     /// provider string that the tests use.
     /// </summary>
-#if !SILVERLIGHT
     [TestClass]
-#endif
     public abstract class CrossDomainServiceQueryTests : DomainContextTestBase<Catalog>
     {
         public CrossDomainServiceQueryTests(Uri serviceUri, ProviderType providerType)
@@ -436,38 +435,17 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        [Asynchronous]
-        public void TestLoad_CustomTotalCount()
+        public async Task TestLoad_CustomTotalCount()
         {
             Catalog catalog = CreateDomainContext();
-            int totalCountWithoutPaging = 0;
             var query = catalog.GetProductsWithCustomTotalCountQuery();
 
-            Load(query);
+            var loadResult = await catalog.LoadAsync(query);
+            catalog.Products.Clear();
 
-            EnqueueConditional(delegate
-            {
-                return IsLoadComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                totalCountWithoutPaging = LoadOperation.TotalEntityCount;
-                catalog.Products.Clear();
-            });
-            EnqueueCallback(delegate
-            {
-                Load(query.OrderBy(p => p.ProductID).Skip(2).Take(4));
-            });
-            EnqueueConditional(delegate
-            {
-                return IsLoadComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.AreEqual(totalCountWithoutPaging, LoadOperation.TotalEntityCount);
-                Assert.HasCount(4, LoadOperation.Entities);
-            });
-            EnqueueTestComplete();
+            var loadWithPagingResult = await catalog.LoadAsync(query.OrderBy(p => p.ProductID).Skip(2).Take(3));
+            Assert.AreEqual(loadResult.TotalEntityCount, loadWithPagingResult.TotalEntityCount);
+            Assert.HasCount(3, loadWithPagingResult.Entities);
         }
 
         [TestMethod]

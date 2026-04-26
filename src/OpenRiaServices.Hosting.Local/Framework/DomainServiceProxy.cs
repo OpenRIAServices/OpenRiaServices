@@ -123,10 +123,7 @@ namespace OpenRiaServices.Hosting.Local
             where TDomainServiceContract : IDisposable
             where TDomainService : DomainService
         {
-            if (domainServiceContext == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceContext));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceContext);
 
             // Get or create the proxy type
             Type proxyType = DomainServiceProxy.GetProxyType<TDomainServiceContract, TDomainService>();
@@ -245,20 +242,11 @@ namespace OpenRiaServices.Hosting.Local
         public static void AssociateOriginal<TEntity>(object domainServiceProxy, TEntity current, TEntity original)
             where TEntity : new()
         {
-            if (domainServiceProxy == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceProxy));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceProxy);
 
-            if (current == null)
-            {
-                throw new ArgumentNullException(nameof(current));
-            }
+            ArgumentNullException.ThrowIfNull(current);
 
-            if (original == null)
-            {
-                throw new ArgumentNullException(nameof(original));
-            }
+            ArgumentNullException.ThrowIfNull(original);
 
             PropertyInfo currentOriginalProp = domainServiceProxy.GetType().GetProperty("CurrentOriginalEntityMap", BindingFlags.Public | BindingFlags.Instance);
 
@@ -296,10 +284,7 @@ namespace OpenRiaServices.Hosting.Local
             /// <param name="httpContextBase">The <see cref="HttpContextBase"/>.</param>
             public HttpContextBaseServiceProvider(HttpContextBase httpContextBase)
             {
-                if (httpContextBase == null)
-                {
-                    throw new ArgumentNullException(nameof(httpContextBase));
-                }
+                ArgumentNullException.ThrowIfNull(httpContextBase);
 
                 this._httpContextBase = httpContextBase;
             }
@@ -312,10 +297,7 @@ namespace OpenRiaServices.Hosting.Local
             /// service object of type serviceType.</returns>
             public object GetService(Type serviceType)
             {
-                if (serviceType == null)
-                {
-                    throw new ArgumentNullException(nameof(serviceType));
-                }
+                ArgumentNullException.ThrowIfNull(serviceType);
 
                 if (serviceType == typeof(IPrincipal))
                 {

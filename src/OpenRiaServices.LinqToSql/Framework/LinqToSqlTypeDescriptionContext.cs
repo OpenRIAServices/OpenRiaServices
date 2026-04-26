@@ -23,10 +23,7 @@ namespace OpenRiaServices.LinqToSql
         /// <param name="dataContextType">The DataContext type</param>
         public LinqToSqlTypeDescriptionContext(Type dataContextType)
         {
-            if (dataContextType == null)
-            {
-                throw new ArgumentNullException(nameof(dataContextType));
-            }
+            ArgumentNullException.ThrowIfNull(dataContextType);
 
             System.Data.Linq.DataContext dataContext = null;
             try

@@ -695,10 +695,7 @@ namespace OpenRiaServices.Tools
         /// <returns>The input <paramref name="path"/> without any trailing slashes</returns>
         internal static string NormalizeFolderPath(string path)
         {
-            if (path == null)
-            {
-                throw new ArgumentNullException(nameof(path));
-            }
+            ArgumentNullException.ThrowIfNull(path);
 
             // Empty paths are not accepted by Path.GetFullPath
             if (path.Length > 0)

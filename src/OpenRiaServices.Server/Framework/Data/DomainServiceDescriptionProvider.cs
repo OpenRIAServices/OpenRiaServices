@@ -26,10 +26,7 @@ namespace OpenRiaServices.Server
         /// <param name="parent">The existing parent description provider. May be null.</param>
         protected DomainServiceDescriptionProvider(Type domainServiceType, DomainServiceDescriptionProvider parent)
         {
-            if (domainServiceType == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceType));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceType);
 
             this._domainServiceType = domainServiceType;
             this._parentDescriptionProvider = parent;
@@ -77,14 +74,8 @@ namespace OpenRiaServices.Server
         /// <returns>The <see cref="TypeDescriptor"/> for the specified Type.</returns>
         public virtual ICustomTypeDescriptor GetTypeDescriptor(Type type, ICustomTypeDescriptor parent)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
-            if (parent == null)
-            {
-                throw new ArgumentNullException(nameof(parent));
-            }
+            ArgumentNullException.ThrowIfNull(type);
+            ArgumentNullException.ThrowIfNull(parent);
 
             if (this._parentDescriptionProvider != null)
             {
@@ -106,10 +97,7 @@ namespace OpenRiaServices.Server
         /// <c>false</c> otherwise.</returns>
         public virtual bool LookupIsEntityType(Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
 
             return false;
         }
@@ -123,10 +111,7 @@ namespace OpenRiaServices.Server
         /// <returns>The operation attributes.</returns>
         public virtual AttributeCollection GetOperationAttributes(DomainOperationEntry operation)
         {
-            if (operation == null)
-            {
-                throw new ArgumentNullException(nameof(operation));
-            }
+            ArgumentNullException.ThrowIfNull(operation);
 
             if (this._parentDescriptionProvider != null)
             {
@@ -145,10 +130,7 @@ namespace OpenRiaServices.Server
         /// <returns>Returns <c>true</c> if the <see cref="Type"/> is an entity, <c>false</c> otherwise.</returns>
         protected internal bool IsEntityType(Type type)
         {
-            if (type == null)
-            {
-                throw new ArgumentNullException(nameof(type));
-            }
+            ArgumentNullException.ThrowIfNull(type);
 
             if (this._isEntityTypeFunc != null)
             {
@@ -184,10 +166,7 @@ namespace OpenRiaServices.Server
         /// <returns>A new description based on the base description.</returns>
         protected DomainServiceDescription CreateDescription(DomainServiceDescription baseDescription)
         {
-            if (baseDescription == null)
-            {
-                throw new ArgumentNullException(nameof(baseDescription));
-            }
+            ArgumentNullException.ThrowIfNull(baseDescription);
             return new DomainServiceDescription(baseDescription);
         }
     }   

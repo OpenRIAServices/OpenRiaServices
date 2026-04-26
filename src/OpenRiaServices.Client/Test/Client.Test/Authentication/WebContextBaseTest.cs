@@ -238,7 +238,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             ExceptionHelper.ExpectArgumentNullException(
                 () => context.RaisePropertyChangedMock(null), "propertyName");
-            ExceptionHelper.ExpectArgumentNullException(
+            ExceptionHelper.ExpectEmptyStringArgumentException(
                 () => context.RaisePropertyChangedMock(string.Empty), "propertyName");
 
             propertyName = "Property 1";

@@ -29,10 +29,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         /// <param name="contextType">The ObjectContext Type</param>
         public EFCoreTypeDescriptionContext(Type contextType)
         {
-            if (contextType == null)
-            {
-                throw new ArgumentNullException(nameof(contextType));
-            }
+            ArgumentNullException.ThrowIfNull(contextType);
             _contextType = contextType;
         }
 

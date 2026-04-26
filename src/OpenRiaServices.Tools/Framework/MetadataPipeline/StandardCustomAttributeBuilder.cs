@@ -23,10 +23,7 @@ namespace OpenRiaServices.Tools
         /// <returns>A <see cref="AttributeDeclaration"/> representing the <paramref name="attribute"/>.</returns>
         public virtual AttributeDeclaration GetAttributeDeclaration(Attribute attribute)
         {
-            if (attribute == null)
-            {
-                throw new ArgumentNullException(nameof(attribute));
-            }
+            ArgumentNullException.ThrowIfNull(attribute);
 
             Type attributeType = attribute.GetType();
             AttributeDeclaration attributeDeclaration = new AttributeDeclaration(attributeType);

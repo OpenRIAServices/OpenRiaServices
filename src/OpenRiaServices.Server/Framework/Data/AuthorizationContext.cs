@@ -103,10 +103,7 @@ namespace System.ComponentModel.DataAnnotations
         public AuthorizationContext(object? instance, string operation, string operationType, AuthorizationContext authorizationContext)
             : this((IServiceProvider) authorizationContext)
         {
-            if (authorizationContext == null)
-            {
-                throw new ArgumentNullException(nameof(authorizationContext));
-            }
+            ArgumentNullException.ThrowIfNull(authorizationContext);
 
             // We use the _items field rather than the property to preserve the lazy instantiation semantics if it's null
             this.Setup(instance, operation, operationType, authorizationContext._items);
@@ -234,17 +231,11 @@ namespace System.ComponentModel.DataAnnotations
             this._instance = instance;
 
             // Operation is required
-            if (string.IsNullOrEmpty(operation))
-            {
-                throw new ArgumentNullException(nameof(operation));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(operation);
             this._operation = operation;
 
             // OperationType is required
-            if (string.IsNullOrEmpty(operationType))
-            {
-                throw new ArgumentNullException(nameof(operationType));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(operationType);
             this._operationType = operationType;
 
             // Snapshot the dictionary if provided, else create lazily on demand

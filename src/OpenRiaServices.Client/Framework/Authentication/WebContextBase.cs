@@ -101,10 +101,7 @@ namespace OpenRiaServices.Client.Authentication
             }
             set
             {
-                if (value == null)
-                {
-                    throw new ArgumentNullException(nameof(value));
-                }
+                ArgumentNullException.ThrowIfNull(value);
                 if (this._started)
                 {
                     throw new InvalidOperationException(Resources.WebContext_CannotModifyAuthentication);
@@ -130,10 +127,7 @@ namespace OpenRiaServices.Client.Authentication
         /// </exception>
         protected void RaisePropertyChanged(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
             this._propertyChangedEventHandler?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 

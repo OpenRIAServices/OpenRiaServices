@@ -41,10 +41,7 @@ namespace OpenRiaServices.Client
         /// <param name="entityType">The type of <see cref="Entity"/> the set will contain</param>
         private protected EntitySet(Type entityType)
         {
-            if (entityType == null)
-            {
-                throw new ArgumentNullException(nameof(entityType));
-            }
+            ArgumentNullException.ThrowIfNull(entityType);
             if (!typeof(Entity).IsAssignableFrom(entityType))
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.Type_Not_Entity, entityType), nameof(entityType));
@@ -243,10 +240,7 @@ namespace OpenRiaServices.Client
 
         private void EnsureEntityType(object entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
             if (!this._entityType.IsAssignableFrom(entity.GetType()))
             {
                 throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.EntitySet_Wrong_Type, this._entityType, entity.GetType()), nameof(entity));
@@ -666,10 +660,7 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The entity to detach</param>
         public void Detach(Entity entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             this.EnsureEntityType(entity);
 
@@ -1085,18 +1076,9 @@ namespace OpenRiaServices.Client
 
             public static void Infer(EntityContainer container, Entity entity, Action<EntitySet, Entity> action)
             {
-                if (container == null)
-                {
-                    throw new ArgumentNullException(nameof(container));
-                }
-                if (entity == null)
-                {
-                    throw new ArgumentNullException(nameof(entity));
-                }
-                if (action == null)
-                {
-                    throw new ArgumentNullException(nameof(action));
-                }
+                ArgumentNullException.ThrowIfNull(container);
+                ArgumentNullException.ThrowIfNull(entity);
+                ArgumentNullException.ThrowIfNull(action);
 
                 new AddAttachInferrer(container, action).Visit(entity);
             }

@@ -47,30 +47,11 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="help">The help object used to display help on pressing F1.</param>
         public BusinessLogicViewModel(string projectDirectory, string className, string language, string rootNamespace, string assemblyName, IEnumerable<Type> contextTypes, IVsHelp help)
         {
-            if (string.IsNullOrEmpty(projectDirectory))
-            {
-                throw new ArgumentNullException("projectDirectory");
-            }
-
-            if (string.IsNullOrEmpty(className))
-            {
-                throw new ArgumentNullException("className");
-            }
-
-            if (string.IsNullOrEmpty(language))
-            {
-                throw new ArgumentNullException("language");
-            }
-
-            if (contextTypes == null)
-            {
-                throw new ArgumentNullException("contextTypes");
-            }
-
-            if (string.IsNullOrEmpty(assemblyName))
-            {
-                throw new ArgumentNullException("assemblyName");
-            }
+            ArgumentException.ThrowIfNullOrEmpty(projectDirectory);
+            ArgumentException.ThrowIfNullOrEmpty(className);
+            ArgumentException.ThrowIfNullOrEmpty(language);
+            ArgumentException.ThrowIfNullOrEmpty(assemblyName);
+            ArgumentNullException.ThrowIfNull(contextTypes);
 
             this._projectDirectory = projectDirectory;
             this._className = className;

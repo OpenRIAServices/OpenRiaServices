@@ -22,10 +22,7 @@ namespace OpenRiaServices.Server
         /// <param name="domainOperationEntry">The query operation to be processed</param>
         public QueryDescription(DomainOperationEntry domainOperationEntry)
         {
-            if (domainOperationEntry == null)
-            {
-                throw new ArgumentNullException(nameof(domainOperationEntry));
-            }
+            ArgumentNullException.ThrowIfNull(domainOperationEntry);
             if (domainOperationEntry.Operation != DomainOperation.Query)
             {
                 throw new ArgumentOutOfRangeException(nameof(domainOperationEntry));
@@ -42,10 +39,7 @@ namespace OpenRiaServices.Server
         /// <param name="parameterValues">Parameter values for the method if it requires any</param>
         public QueryDescription(DomainOperationEntry domainOperationEntry, object[] parameterValues) : this(domainOperationEntry)
         {
-            if (parameterValues == null)
-            {
-                throw new ArgumentNullException(nameof(parameterValues));
-            }
+            ArgumentNullException.ThrowIfNull(parameterValues);
 
             this._parameterValues = parameterValues;
         }

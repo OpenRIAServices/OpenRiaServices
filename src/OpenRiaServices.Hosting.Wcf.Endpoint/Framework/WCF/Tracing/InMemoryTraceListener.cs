@@ -57,10 +57,7 @@ namespace OpenRiaServices.Hosting.Wcf.Tracing
         /// <param name="message">Message to trace.</param>
         public override void Write(string message)
         {
-            if (message == null)
-            {
-                throw new ArgumentNullException(nameof(message));
-            }
+            ArgumentNullException.ThrowIfNull(message);
 
             currentEntry = currentEntry == null ? message : currentEntry + message;
         }

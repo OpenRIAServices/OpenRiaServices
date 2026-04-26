@@ -46,14 +46,8 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
         /// is not mapped.</returns>
         public static StructuralType GetEdmType(MetadataWorkspace workspace, Type clrType)
         {
-            if (workspace == null)
-            {
-                throw new ArgumentNullException(nameof(workspace));
-            }
-            if (clrType == null)
-            {
-                throw new ArgumentNullException(nameof(clrType));
-            }
+            ArgumentNullException.ThrowIfNull(workspace);
+            ArgumentNullException.ThrowIfNull(clrType);
 
             if (clrType.IsPrimitive || clrType == typeof(object))
             {
@@ -100,14 +94,8 @@ using ConcurrencyMode = System.Data.Metadata.Edm.ConcurrencyMode;
         /// <returns>The current <see cref="EntityState"/> of the specified entity</returns>
         public static EntityState GetEntityState(ObjectContext context, object entity)
         {
-            if (context == null)
-            {
-                throw new ArgumentNullException(nameof(context));
-            }
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(context);
+            ArgumentNullException.ThrowIfNull(entity);
 
             ObjectStateEntry stateEntry = null;
             if (!context.ObjectStateManager.TryGetObjectStateEntry(entity, out stateEntry))

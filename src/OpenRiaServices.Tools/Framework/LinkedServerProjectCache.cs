@@ -33,25 +33,13 @@ namespace OpenRiaServices.Tools
         /// <param name="projectFileReader">Instance to use to read the project files.</param>
         internal LinkedServerProjectCache(string rootProjectPath, string historyFilePath, ILogger logger, ProjectFileReader projectFileReader)
         {
-            if (string.IsNullOrEmpty(rootProjectPath))
-            {
-                throw new ArgumentNullException(nameof(rootProjectPath));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(rootProjectPath);
 
-            if (string.IsNullOrEmpty(historyFilePath))
-            {
-                throw new ArgumentNullException(nameof(historyFilePath));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(historyFilePath);
 
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
+            ArgumentNullException.ThrowIfNull(logger);
 
-            if (projectFileReader == null)
-            {
-                throw new ArgumentNullException(nameof(projectFileReader));
-            }
+            ArgumentNullException.ThrowIfNull(projectFileReader);
 
             this._rootProjectPath = rootProjectPath;
             this._historyFilePath = historyFilePath;
@@ -118,20 +106,14 @@ namespace OpenRiaServices.Tools
         {
             get
             {
-                if (string.IsNullOrEmpty(projectPath))
-                {
-                    throw new ArgumentNullException(nameof(projectPath));
-                }
+                ArgumentException.ThrowIfNullOrEmpty(projectPath);
                 string result = null;
                 this.LinkedServerProjectsByProject.TryGetValue(projectPath, out result);
                 return result;
             }
             set
             {
-                if (string.IsNullOrEmpty(projectPath))
-                {
-                    throw new ArgumentNullException(nameof(projectPath));
-                }
+                ArgumentException.ThrowIfNullOrEmpty(projectPath);
                 this.LinkedServerProjectsByProject[projectPath] = value;
                 this.IsFileCacheCurrent = false;
             }

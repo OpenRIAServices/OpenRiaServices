@@ -16,10 +16,7 @@ namespace OpenRiaServices.LinqToSql
         /// <returns>True if the entity is currently attached, false otherwise</returns>
         public static bool IsAttached(this ITable table, object entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             // Only way currently to determine if an entity is attached
             // is to see if original state is null

@@ -20,10 +20,7 @@ namespace OpenRiaServices.Tools
         /// <param name="options">The current <see cref="ClientCodeGenerationOptions"/> options.</param>
         public ClientProxyFixupCodeDomVisitor(ClientCodeGenerationOptions options)
         {
-            if (options == null)
-            {
-                throw new ArgumentNullException(nameof(options));
-            }
+            ArgumentNullException.ThrowIfNull(options);
 
             this._options = options;
             this._isCSharp = (this._options.Language == "C#");

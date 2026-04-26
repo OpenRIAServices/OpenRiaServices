@@ -183,10 +183,7 @@ namespace OpenRiaServices.Tools
 
             public TaskLoggingHelperLoggingService(TaskLoggingHelper log)
             {
-                if (log == null)
-                {
-                    throw new ArgumentNullException(nameof(log));
-                }
+                ArgumentNullException.ThrowIfNull(log);
 
                 this._log = log;
             }

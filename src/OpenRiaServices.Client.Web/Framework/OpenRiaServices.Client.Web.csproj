@@ -20,6 +20,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Compile Include="..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Polyfills.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs">
       <Link>Utilities\BinaryTypeUtility.cs</Link>
     </Compile>

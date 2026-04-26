@@ -21,14 +21,8 @@ namespace OpenRiaServices.Client
         /// <returns>The composed query.</returns>
         public static EntityQuery<TEntity> OrderBy<TEntity, TKey>(this EntityQuery<TEntity> source, Expression<Func<TEntity, TKey>> keySelector) where TEntity : Entity
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            if (keySelector == null)
-            {
-                throw new ArgumentNullException(nameof(keySelector));
-            }
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(keySelector);
             if (!source.IsComposable)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityQuery_NotComposable, typeof(TEntity).Name, source.QueryName));
@@ -46,14 +40,8 @@ namespace OpenRiaServices.Client
         /// <returns>The composed query.</returns>
         public static EntityQuery<TEntity> OrderByDescending<TEntity, TKey>(this EntityQuery<TEntity> source, Expression<Func<TEntity, TKey>> keySelector) where TEntity : Entity
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            if (keySelector == null)
-            {
-                throw new ArgumentNullException(nameof(keySelector));
-            }
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(keySelector);
             if (!source.IsComposable)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityQuery_NotComposable, typeof(TEntity).Name, source.QueryName));
@@ -70,10 +58,7 @@ namespace OpenRiaServices.Client
         /// <returns>The composed query.</returns>
         public static EntityQuery<TEntity> Skip<TEntity>(this EntityQuery<TEntity> source, int count) where TEntity : Entity
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            ArgumentNullException.ThrowIfNull(source);
             if (!source.IsComposable)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityQuery_NotComposable, typeof(TEntity).Name, source.QueryName));
@@ -90,10 +75,7 @@ namespace OpenRiaServices.Client
         /// <returns>The composed query.</returns>
         public static EntityQuery<TEntity> Take<TEntity>(this EntityQuery<TEntity> source, int count) where TEntity : Entity
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
+            ArgumentNullException.ThrowIfNull(source);
             if (!source.IsComposable)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityQuery_NotComposable, typeof(TEntity).Name, source.QueryName));
@@ -111,14 +93,8 @@ namespace OpenRiaServices.Client
         /// <returns>The composed query.</returns>
         public static EntityQuery<TEntity> ThenBy<TEntity, TKey>(this EntityQuery<TEntity> source, Expression<Func<TEntity, TKey>> keySelector) where TEntity : Entity
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            if (keySelector == null)
-            {
-                throw new ArgumentNullException(nameof(keySelector));
-            }
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(keySelector);
             if (!source.IsComposable)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityQuery_NotComposable, typeof(TEntity).Name, source.QueryName));
@@ -136,14 +112,8 @@ namespace OpenRiaServices.Client
         /// <returns>The composed query.</returns>
         public static EntityQuery<TEntity> ThenByDescending<TEntity, TKey>(this EntityQuery<TEntity> source, Expression<Func<TEntity, TKey>> keySelector) where TEntity : Entity
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            if (keySelector == null)
-            {
-                throw new ArgumentNullException(nameof(keySelector));
-            }
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(keySelector);
             if (!source.IsComposable)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityQuery_NotComposable, typeof(TEntity).Name, source.QueryName));
@@ -160,14 +130,8 @@ namespace OpenRiaServices.Client
         /// <returns>The composed query.</returns>
         public static EntityQuery<TEntity> Where<TEntity>(this EntityQuery<TEntity> source, Expression<Func<TEntity, bool>> predicate) where TEntity : Entity
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            if (predicate == null)
-            {
-                throw new ArgumentNullException(nameof(predicate));
-            }
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(predicate);
             if (!source.IsComposable)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityQuery_NotComposable, typeof(TEntity).Name, source.QueryName));
@@ -185,14 +149,8 @@ namespace OpenRiaServices.Client
         /// <returns>The composed query.</returns>
         public static EntityQuery<TEntity> Select<TEntity>(this EntityQuery<TEntity> source, Expression<Func<TEntity, TEntity>> selector) where TEntity : Entity
         {
-            if (source == null)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-            if (selector == null)
-            {
-                throw new ArgumentNullException(nameof(selector));
-            }
+            ArgumentNullException.ThrowIfNull(source);
+            ArgumentNullException.ThrowIfNull(selector);
             return new EntityQuery<TEntity>(source, Queryable.Select<TEntity, TEntity>(source.QueryRoot, selector));
         }
     }

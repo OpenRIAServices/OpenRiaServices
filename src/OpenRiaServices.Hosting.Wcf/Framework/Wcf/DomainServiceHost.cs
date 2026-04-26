@@ -35,15 +35,8 @@ namespace OpenRiaServices.Hosting.Wcf
         /// </param>
         public DomainServiceHost(Type domainServiceType, params Uri[] baseAddresses)
         {
-            if (domainServiceType == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceType));
-            }
-
-            if (baseAddresses == null)
-            {
-                throw new ArgumentNullException(nameof(baseAddresses));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceType);
+            ArgumentNullException.ThrowIfNull(baseAddresses);
 
             EnableClientAccessAttribute att = (EnableClientAccessAttribute)TypeDescriptor.GetAttributes(domainServiceType)[typeof(EnableClientAccessAttribute)];
 
@@ -71,10 +64,7 @@ namespace OpenRiaServices.Hosting.Wcf
         [Obsolete("Resolve services from DomainService.ServiceContext instead")]
         public object GetService(Type serviceType)
         {
-            if (serviceType == null)
-            {
-                throw new ArgumentNullException(nameof(serviceType));
-            }
+            ArgumentNullException.ThrowIfNull(serviceType);
 
             if (serviceType == typeof(IPrincipal))
             {

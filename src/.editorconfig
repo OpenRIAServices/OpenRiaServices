@@ -112,8 +112,6 @@ tab_width = 4
 dotnet_diagnostic.VSTHRD010.severity = suggestion
 
 ## These suggestions does not make sense as long as we multitarget with old frameworks
-# CA1510: Use 'ArgumentNullException.ThrowIfNull' instead of explicitly throwing a new exception instance
-dotnet_diagnostic.CA1510.severity = none
 # CA1863: Cache a 'CompositeFormat' for repeated use in this formatting operation
 dotnet_diagnostic.CA1863.severity = none
 dotnet_diagnostic.CA1826.severity = warning

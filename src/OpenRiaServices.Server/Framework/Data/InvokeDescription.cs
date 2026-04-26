@@ -18,10 +18,7 @@ namespace OpenRiaServices.Server
         /// <param name="parameterValues">The parameter values for the method if it requires any.</param>
         public InvokeDescription(DomainOperationEntry domainOperationEntry, object[] parameterValues)
         {
-            if (domainOperationEntry == null)
-            {
-                throw new ArgumentNullException(nameof(domainOperationEntry));
-            }
+            ArgumentNullException.ThrowIfNull(domainOperationEntry);
 
             this._domainOperationEntry = domainOperationEntry;
             this._parameterValues = parameterValues;

@@ -42,10 +42,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="configuration">The configuration to use.</param>
         public WebConfigUtil(System.Configuration.Configuration configuration)
         {
-            if (configuration == null)
-            {
-                throw new ArgumentNullException("configuration");
-            }
+            ArgumentNullException.ThrowIfNull(configuration);
             this._configuration = configuration;
         }
 

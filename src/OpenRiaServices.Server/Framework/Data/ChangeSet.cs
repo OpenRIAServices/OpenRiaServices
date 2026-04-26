@@ -29,10 +29,7 @@ namespace OpenRiaServices.Server
         /// <exception cref="ArgumentNullException">if <paramref name="changeSetEntries"/> is null.</exception>
         public ChangeSet(IEnumerable<ChangeSetEntry> changeSetEntries)
         {
-            if (changeSetEntries == null)
-            {
-                throw new ArgumentNullException(nameof(changeSetEntries));
-            }
+            ArgumentNullException.ThrowIfNull(changeSetEntries);
 
             // ensure the changeset is valid
             ValidateChangeSetEntries(changeSetEntries);
@@ -245,15 +242,9 @@ namespace OpenRiaServices.Server
         /// the <see cref="ChangeSet"/>'s <see cref="ChangeSetEntry"/> items.</exception>
         public void Replace<TEntity>(TEntity clientEntity, TEntity returnedEntity) where TEntity : class
         {
-            if (clientEntity == null)
-            {
-                throw new ArgumentNullException(nameof(clientEntity));
-            }
+            ArgumentNullException.ThrowIfNull(clientEntity);
 
-            if (returnedEntity == null)
-            {
-                throw new ArgumentNullException(nameof(returnedEntity));
-            }
+            ArgumentNullException.ThrowIfNull(returnedEntity);
 
             Type clientEntityType = clientEntity.GetType();
             Type returnedEntityType = returnedEntity.GetType();
@@ -289,10 +280,7 @@ namespace OpenRiaServices.Server
         /// <exception cref="ArgumentException">if <paramref name="clientEntity"/> is not in the change set.</exception>
         public TEntity GetOriginal<TEntity>(TEntity clientEntity) where TEntity : class
         {
-            if (clientEntity == null)
-            {
-                throw new ArgumentNullException(nameof(clientEntity));
-            }
+            ArgumentNullException.ThrowIfNull(clientEntity);
 
             ChangeSetEntry entry = this._changeSetEntries.FirstOrDefault(p => object.ReferenceEquals(p.Entity, clientEntity));
             if (entry == null)
@@ -317,10 +305,7 @@ namespace OpenRiaServices.Server
         /// <returns>The <see cref="ChangeOperation"/> for the specified object.</returns>
         public ChangeOperation GetChangeOperation(object entity)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
 
             // Rather than error for objects not in the changeset,
             // we need to return 'None', since this method can be
@@ -368,14 +353,8 @@ namespace OpenRiaServices.Server
 
         private IEnumerable GetAssociatedChangesInternal(object entity, LambdaExpression expression, ChangeOperation? operationType)
         {
-            if (entity == null)
-            {
-                throw new ArgumentNullException(nameof(entity));
-            }
-            if (expression == null)
-            {
-                throw new ArgumentNullException(nameof(expression));
-            }
+            ArgumentNullException.ThrowIfNull(entity);
+            ArgumentNullException.ThrowIfNull(expression);
 
             this.VerifyExistsInChangeset(entity);
 
@@ -628,20 +607,11 @@ namespace OpenRiaServices.Server
             where TEntity : class
             where TStoreEntity : class
         {
-            if (clientEntity == null)
-            {
-                throw new ArgumentNullException(nameof(clientEntity));
-            }
+            ArgumentNullException.ThrowIfNull(clientEntity);
 
-            if (storeEntity == null)
-            {
-                throw new ArgumentNullException(nameof(storeEntity));
-            }
+            ArgumentNullException.ThrowIfNull(storeEntity);
 
-            if (storeToClientTransform == null)
-            {
-                throw new ArgumentNullException(nameof(storeToClientTransform));
-            }
+            ArgumentNullException.ThrowIfNull(storeToClientTransform);
 
             // Verify the provided client entity exists in our changeset
             this.VerifyExistsInChangeset(clientEntity);
@@ -671,10 +641,7 @@ namespace OpenRiaServices.Server
         public IEnumerable<TEntity> GetAssociatedEntities<TEntity, TStoreEntity>(TStoreEntity storeEntity)
             where TEntity : class
         {
-            if (storeEntity == null)
-            {
-                throw new ArgumentNullException(nameof(storeEntity));
-            }
+            ArgumentNullException.ThrowIfNull(storeEntity);
 
             List<AssociatedEntityInfo> associatedModels = null;
             if (this.AssociatedStoreEntities.TryGetValue(storeEntity, out associatedModels))
@@ -732,15 +699,9 @@ namespace OpenRiaServices.Server
             /// <param name="entityTransform">The entity transform.</param>
             public AssociatedEntityInfo(object clientEntity, Action entityTransform)
             {
-                if (clientEntity == null)
-                {
-                    throw new ArgumentNullException(nameof(clientEntity));
-                }
+                ArgumentNullException.ThrowIfNull(clientEntity);
 
-                if (entityTransform == null)
-                {
-                    throw new ArgumentNullException(nameof(entityTransform));
-                }
+                ArgumentNullException.ThrowIfNull(entityTransform);
 
                 this._clientEntity = clientEntity;
                 this._entityTransform = entityTransform;

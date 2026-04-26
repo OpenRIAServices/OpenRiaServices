@@ -23,10 +23,7 @@ namespace OpenRiaServices.Server
         /// <param name="codeDomProvider">The <see cref="CodeDomProvider"/> used during <see cref="DomainService"/> code generation.</param>
         protected CodeProcessor(CodeDomProvider codeDomProvider)
         {
-            if (codeDomProvider == null)
-            {
-                throw new ArgumentNullException(nameof(codeDomProvider));
-            }
+            ArgumentNullException.ThrowIfNull(codeDomProvider);
 
             this._codeDomProvider = codeDomProvider;
         }

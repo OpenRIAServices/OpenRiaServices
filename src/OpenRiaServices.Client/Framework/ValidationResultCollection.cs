@@ -197,10 +197,7 @@ namespace OpenRiaServices.Client
         /// <param name="item">The item to be added.</param>
         public void Add(ValidationResult item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             IEnumerable<string?> propertiesAffected = item.MemberNames;
 
@@ -319,10 +316,7 @@ namespace OpenRiaServices.Client
         /// <returns><c>true</c> if the removal was successful, otherwise <c>false</c>.</returns>
         public bool Remove(ValidationResult item)
         {
-            if (item == null)
-            {
-                throw new ArgumentNullException(nameof(item));
-            }
+            ArgumentNullException.ThrowIfNull(item);
 
             IEnumerable<string?> propertiesAffected = item.MemberNames;
 

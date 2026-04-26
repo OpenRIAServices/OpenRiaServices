@@ -167,26 +167,11 @@ namespace OpenRiaServices.Client
         /// <param name="onMemberValidationChanged">The callback to call when validation has changed for a property.</param>
         internal void Attach(object parent, string propertyName, Action onDataMemberChanging, Action onDataMemberChanged, Action<string, IEnumerable<ValidationResult>> onMemberValidationChanged)
         {
-            if (parent == null)
-            {
-                throw new ArgumentNullException(nameof(parent));
-            }
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
-            if (onDataMemberChanging == null)
-            {
-                throw new ArgumentNullException(nameof(onDataMemberChanging));
-            }
-            if (onDataMemberChanged == null)
-            {
-                throw new ArgumentNullException(nameof(onDataMemberChanged));
-            }
-            if (onMemberValidationChanged == null)
-            {
-                throw new ArgumentNullException(nameof(onMemberValidationChanged));
-            }
+            ArgumentNullException.ThrowIfNull(parent);
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
+            ArgumentNullException.ThrowIfNull(onDataMemberChanging);
+            ArgumentNullException.ThrowIfNull(onDataMemberChanged);
+            ArgumentNullException.ThrowIfNull(onMemberValidationChanged);
             Debug.Assert(typeof(Entity).IsAssignableFrom(parent.GetType()) || typeof(ComplexObject).IsAssignableFrom(parent.GetType()), "Parent must be an Entity or ComplexObject.");
 
             this.CheckForCycles(parent);
@@ -227,10 +212,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that has changed</param>
         protected void RaisePropertyChanged(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             OnPropertyChanged(propertyName);
         }
@@ -252,10 +234,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that has changed</param>
         protected void RaiseDataMemberChanged(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             // Note, RaiseDataMemberChanged is called on every property update. We need to avoid as
             // much overhead as possible.
@@ -321,10 +300,7 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that is changing</param>
         protected void RaiseDataMemberChanging(string propertyName)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             this.OnDataMemberChanging();
         }
@@ -405,10 +381,7 @@ namespace OpenRiaServices.Client
         /// configured to prevent editing.</exception>
         protected void ValidateProperty(string propertyName, object value)
         {
-            if (string.IsNullOrEmpty(propertyName))
-            {
-                throw new ArgumentNullException(nameof(propertyName));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(propertyName);
 
             // if this instance is currently being deserialized, or if it is hosted by an
             // entity that is being deserialized or is having state applied to it, skip
@@ -480,10 +453,7 @@ namespace OpenRiaServices.Client
         /// <exception cref="ArgumentNullException"> is thrown if <paramref name="validationContext"/> is <c>null</c>.</exception>
         protected virtual void ValidateProperty(ValidationContext validationContext, object value)
         {
-            if (validationContext == null)
-            {
-                throw new ArgumentNullException(nameof(validationContext));
-            }
+            ArgumentNullException.ThrowIfNull(validationContext);
 
             List<ValidationResult> validationResults = new List<ValidationResult>();
             Validator.TryValidateProperty(value, validationContext, validationResults);

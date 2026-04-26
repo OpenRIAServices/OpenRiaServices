@@ -18,10 +18,7 @@ namespace OpenRiaServices.Server
         public DomainTypeDescriptionProvider(Type type, DomainServiceDescriptionProvider descriptionProvider)
             : base(TypeDescriptor.GetProvider(type))
         {
-            if (descriptionProvider == null)
-            {
-                throw new ArgumentNullException(nameof(descriptionProvider));
-            }
+            ArgumentNullException.ThrowIfNull(descriptionProvider);
 
             this._type = type;
             this._descriptionProvider = descriptionProvider;

@@ -24,10 +24,7 @@ namespace OpenRiaServices.Tools
         /// <param name="logger">The <see cref="ILogger"/> to use for warnings and errors.</param>
         internal ProjectFileReader(ILogger logger)
         {
-            if (logger == null)
-            {
-                throw new ArgumentNullException(nameof(logger));
-            }
+            ArgumentNullException.ThrowIfNull(logger);
 
             this._logger = logger;
         }
@@ -79,10 +76,7 @@ namespace OpenRiaServices.Tools
         /// <returns>The project instance or null if it does not exist</returns>
         internal Project LoadProject(string projectPath)
         {
-            if (string.IsNullOrEmpty(projectPath))
-            {
-                throw new ArgumentNullException(nameof(projectPath));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(projectPath);
 
             if (!File.Exists(projectPath))
             {

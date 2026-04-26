@@ -77,13 +77,9 @@ namespace OpenRiaServices.Client
         /// </exception>
         public WebDomainClient(Uri serviceUri, bool usesHttps, WcfDomainClientFactory domainClientFactory)
         {
-            if (serviceUri == null)
-            {
-                throw new ArgumentNullException(nameof(serviceUri));
-            }
+            ArgumentNullException.ThrowIfNull(serviceUri);
 
-            if (domainClientFactory == null)
-                throw new ArgumentNullException(nameof(domainClientFactory));
+            ArgumentNullException.ThrowIfNull(domainClientFactory);
 
 #if !SILVERLIGHT
             if (!serviceUri.IsAbsoluteUri)

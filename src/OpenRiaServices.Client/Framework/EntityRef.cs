@@ -39,18 +39,9 @@ namespace OpenRiaServices.Client
         /// <param name="entityPredicate">The function used to filter the associated entity.</param>
         public EntityRef(Entity parent, string memberName, Func<TEntity, bool> entityPredicate)
         {
-            if (parent == null)
-            {
-                throw new ArgumentNullException(nameof(parent));
-            }
-            if (string.IsNullOrEmpty(memberName))
-            {
-                throw new ArgumentNullException(nameof(memberName));
-            }
-            if (entityPredicate == null)
-            {
-                throw new ArgumentNullException(nameof(entityPredicate));
-            }
+            ArgumentNullException.ThrowIfNull(parent);
+            ArgumentException.ThrowIfNullOrEmpty(memberName);
+            ArgumentNullException.ThrowIfNull(entityPredicate);
 
             this._parent = parent;
             this._entityPredicate = entityPredicate;

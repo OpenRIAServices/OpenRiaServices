@@ -42,14 +42,8 @@ namespace System.ComponentModel.DataAnnotations
         /// </returns>
         public AuthorizationResult Authorize(IPrincipal principal, AuthorizationContext authorizationContext)
         {
-            if (principal == null)
-            {
-                throw new ArgumentNullException(nameof(principal));
-            }
-            if (authorizationContext == null)
-            {
-                throw new ArgumentNullException(nameof(authorizationContext));
-            }
+            ArgumentNullException.ThrowIfNull(principal);
+            ArgumentNullException.ThrowIfNull(authorizationContext);
             return this.IsAuthorized(principal, authorizationContext);
         }
 

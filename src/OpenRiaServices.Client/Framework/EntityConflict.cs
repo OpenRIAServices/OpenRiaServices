@@ -30,25 +30,15 @@ namespace OpenRiaServices.Client
         /// is null.</exception>
         internal EntityConflict(Entity currentEntity, Entity storeEntity, IEnumerable<string> propertyNames, bool isDeleted)
         {
-            if (currentEntity == null)
-            {
-                throw new ArgumentNullException(nameof(currentEntity));
-            }
+            ArgumentNullException.ThrowIfNull(currentEntity);
             this._currentEntity = currentEntity;
             this._isDeleted = isDeleted;
 
             if (!isDeleted)
             {
-                if (storeEntity == null)
-                {
-                    throw new ArgumentNullException(nameof(storeEntity));
-                }
+                ArgumentNullException.ThrowIfNull(storeEntity);
+                ArgumentNullException.ThrowIfNull(propertyNames);
 
-                if (propertyNames == null)
-                {
-                    throw new ArgumentNullException(nameof(propertyNames));
-                }
-                
                 this._storeEntity = storeEntity;
                 this._propertyNames = new ReadOnlyCollection<string>(propertyNames.ToList());
             }

@@ -55,10 +55,7 @@ namespace OpenRiaServices.Client
         /// <param name="source">The source collection used to populate this list</param>
         public EntityList(EntitySet<T> entitySet, IEnumerable<T> source)
         {
-            if (entitySet == null)
-            {
-                throw new ArgumentNullException(nameof(entitySet));
-            }
+            ArgumentNullException.ThrowIfNull(entitySet);
 
             _entitySet = entitySet;
             _weakCollectionChangedLister =

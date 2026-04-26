@@ -29,8 +29,7 @@ namespace OpenRiaServices.Server
         /// <param name="validationErrors">the validation errors, should <c>never</c> be modified after beeing passed in</param>
         public ServiceQueryResult(IReadOnlyCollection<ValidationResult> validationErrors)
         {
-            if (validationErrors == null)
-                throw new ArgumentNullException(nameof(validationErrors));
+            ArgumentNullException.ThrowIfNull(validationErrors);
             if (validationErrors.Count == 0)
                 throw new ArgumentException(Resource.ValidationErrorsCannotBeEmpty, nameof(validationErrors));
 

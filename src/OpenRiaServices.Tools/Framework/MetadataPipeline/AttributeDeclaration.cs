@@ -23,10 +23,7 @@ namespace OpenRiaServices.Tools
         /// <param name="attributeType">The <see cref="Attribute"/> <see cref="Type"/> to represent. Cannot be null.</param>
         public AttributeDeclaration(Type attributeType)
         {
-            if (attributeType == null)
-            {
-                throw new ArgumentNullException(nameof(attributeType));
-            }
+            ArgumentNullException.ThrowIfNull(attributeType);
 
             this._attributeType = attributeType;
             this._errors = new List<string>();

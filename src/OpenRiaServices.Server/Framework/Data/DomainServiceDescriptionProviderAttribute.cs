@@ -18,10 +18,7 @@ namespace OpenRiaServices.Server
         /// <param name="domainServiceDescriptionProviderType">The <see cref="DomainServiceDescriptionProvider"/> type</param>
         public DomainServiceDescriptionProviderAttribute(Type domainServiceDescriptionProviderType)
         {
-            if (domainServiceDescriptionProviderType == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceDescriptionProviderType));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceDescriptionProviderType);
 
             this._domainServiceDescriptionProviderType = domainServiceDescriptionProviderType;
         }
@@ -57,10 +54,7 @@ namespace OpenRiaServices.Server
         /// <returns>The description provider</returns>
         public virtual DomainServiceDescriptionProvider CreateProvider(Type domainServiceType, DomainServiceDescriptionProvider parent)
         {
-            if (domainServiceType == null)
-            {
-                throw new ArgumentNullException(nameof(domainServiceType));
-            }
+            ArgumentNullException.ThrowIfNull(domainServiceType);
 
             if (!typeof(DomainService).IsAssignableFrom(domainServiceType))
             {
