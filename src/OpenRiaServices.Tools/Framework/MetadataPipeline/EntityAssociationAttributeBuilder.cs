@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -17,14 +18,14 @@ namespace OpenRiaServices.Tools
         public AttributeDeclaration GetAttributeDeclaration(Attribute attribute)
         {
             string name;
-            string[] thisKey, otherKey;
+            IReadOnlyList<string> thisKey, otherKey;
             bool isForeignKey;
 
             if (attribute is EntityAssociationAttribute entityAssociation)
             {
                 name = entityAssociation.Name;
-                thisKey = (string[])entityAssociation.ThisKeyMembers;
-                otherKey = (string[])entityAssociation.OtherKeyMembers;
+                thisKey = entityAssociation.ThisKeyMembers;
+                otherKey = entityAssociation.OtherKeyMembers;
                 isForeignKey = entityAssociation.IsForeignKey;
             }
             else if (attribute is AssociationAttribute associationAttribute)
@@ -43,7 +44,7 @@ namespace OpenRiaServices.Tools
             // If there is only a single key member, we use string based constructor
             AttributeDeclaration attributeDeclaration = new AttributeDeclaration(typeof(EntityAssociationAttribute));
             attributeDeclaration.ConstructorArguments.Add(name);
-            if (thisKey.Length == 1 && otherKey.Length == 1)
+            if (thisKey.Count == 1 && otherKey.Count == 1)
             {
                 attributeDeclaration.ConstructorArguments.Add(thisKey[0]);
                 attributeDeclaration.ConstructorArguments.Add(otherKey[0]);
