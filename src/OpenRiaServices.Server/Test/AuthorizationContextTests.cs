@@ -53,11 +53,11 @@ namespace OpenRiaServices.Server.Test
         {
             // Operation param cannot be null or empty
             ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new AuthorizationContext(/*instance*/ null, /*operation*/ null, "operationType", /*serviceProvider*/ null, items: null), "operation");
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new AuthorizationContext(/*instance*/ null, /*operation*/ string.Empty, "operationType", /*serviceProvider*/ null, items: null), "operation");
+            ExceptionHelper.ExpectEmptyStringArgumentException(() => new AuthorizationContext(/*instance*/ null, /*operation*/ string.Empty, "operationType", /*serviceProvider*/ null, items: null), "operation");
 
             // Operation param cannot be null or empty
             ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new AuthorizationContext(/*instance*/ null, "operation", /*operationType*/ null, /*serviceProvider*/ null, items: null), "operationType");
-            ExceptionHelper.ExpectArgumentNullExceptionStandard(() => new AuthorizationContext(/*instance*/ null, "operation", /*operationType*/ string.Empty, /*serviceProvider*/ null, items: null), "operationType");
+            ExceptionHelper.ExpectEmptyStringArgumentException(() => new AuthorizationContext(/*instance*/ null, "operation", /*operationType*/ string.Empty, /*serviceProvider*/ null, items: null), "operationType");
 
             string instance = "mockEntity";   // type is only required to be object
             string operation = "testOp";
