@@ -44,7 +44,7 @@ namespace System
         private static void ThrowStringNullOrEmptyException(string? argument, string? paramName)
         {
             ArgumentNullException.ThrowIfNull(argument, paramName);
-            throw new ArgumentException(paramName, "The value cannot be an empty string.");
+            throw new ArgumentException("The value cannot be an empty string.", paramName: paramName);
         }
     }
 }

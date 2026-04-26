@@ -195,7 +195,7 @@ namespace OpenRiaServices.Client.Test
                 EntityQuery<City> citiesQuery = new EntityQuery<City>(_testClient, null, parameters, false, true);
             }, "queryName");
 
-            ExceptionHelper.ExpectArgumentNullException(delegate
+            ExceptionHelper.ExpectEmptyStringArgumentException(delegate
             {
                 EntityQuery<City> citiesQuery = new EntityQuery<City>(_testClient, string.Empty, parameters, false, true);
             }, "queryName");

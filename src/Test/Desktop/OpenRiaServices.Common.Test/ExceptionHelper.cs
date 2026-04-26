@@ -267,5 +267,11 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(message, e.Message);
             return e;
         }
+
+        internal static void ExpectEmptyStringArgumentException(Action value, string paramName)
+        {
+            var ex = Assert.ThrowsExactly<ArgumentException>(value);
+            Assert.AreEqual(paramName, ex.ParamName);
+        }
     }
 }
