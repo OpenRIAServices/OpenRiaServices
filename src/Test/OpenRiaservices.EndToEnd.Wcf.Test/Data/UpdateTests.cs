@@ -456,7 +456,6 @@ namespace OpenRiaServices.Client.Test
         public void CompositionInsert()
         {
             Northwind ctxt = CreateDomainContext();
-            List<Territory> inserted = new List<Territory>();
             int newRegionId = GetUniqueRegionID();
 
             EnqueueConditional(delegate
