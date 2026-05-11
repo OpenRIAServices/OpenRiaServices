@@ -49,6 +49,60 @@ namespace OpenRiaServices.Server.Test
         }
 
         /// <summary>
+        /// Verify that accessing ChangeSet before SubmitAsync throws InvalidOperationException.
+        /// </summary>
+        [TestMethod]
+        public void ChangeSet_ThrowsBeforeInitialization()
+        {
+            var ds = new ChangeSetAccessorDomainService();
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+            ds.Initialize(dsc);
+
+            ExceptionHelper.ExpectInvalidOperationException(
+                () => { var _ = ds.GetChangeSet(); },
+                Resource.DomainService_ChangeSetNotInitialized);
+        }
+
+        /// <summary>
+        /// Verify that accessing ChangeSet before Initialize and SubmitAsync throws InvalidOperationException.
+        /// </summary>
+        [TestMethod]
+        public void ChangeSet_ThrowsBeforeInitializationAndSubmit()
+        {
+            var ds = new ChangeSetAccessorDomainService();
+
+            ExceptionHelper.ExpectInvalidOperationException(
+                () => { var _ = ds.GetChangeSet(); },
+                Resource.DomainService_ChangeSetNotInitialized);
+        }
+
+        /// <summary>
+        /// Verify that ChangeSet is accessible during SubmitAsync after initialization.
+        /// </summary>
+        [TestMethod]
+        public async Task ChangeSet_AccessibleAfterSubmitAsync()
+        {
+            var ds = new ChangeSetAccessorDomainService();
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+            ds.Initialize(dsc);
+
+            City city = new City
+            {
+                Name = "TestCity",
+                CountyName = "TestCounty",
+                StateName = "WA"
+            };
+
+            ChangeSetEntry insertEntry = new ChangeSetEntry(1, city, null, DomainOperation.Insert);
+            ChangeSet cs = new ChangeSet(new[] { insertEntry });
+
+            bool result = await ds.SubmitAsync(cs, CancellationToken.None);
+
+            Assert.IsTrue(result);
+            Assert.IsTrue(ds.ChangeSetWasAccessibleDuringSubmit, "ChangeSet should be accessible during SubmitAsync.");
+        }
+
+        /// <summary>
         /// Verify that both DAL providers support accessing their respective
         /// contexts in the constructor.
         /// </summary>
@@ -2478,6 +2532,26 @@ namespace OpenRiaServices.Server.Test
     {
         [CustomValidation(typeof(AlwaysFailValidator), "Validate")]
         public int IntProp { get; set; }
+    }
+    public class ChangeSetAccessorDomainService : DomainService
+    {
+        public bool ChangeSetWasAccessibleDuringSubmit { get; private set; }
+
+        public ChangeSet GetChangeSet() => ChangeSet;
+
+        [Query]
+        public IQueryable<City> GetCities() => Array.Empty<City>().AsQueryable();
+
+        public void InsertCity(City city)
+        {
+        }
+
+        protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
+        {
+            // Verify ChangeSet is accessible during the submit pipeline
+            ChangeSetWasAccessibleDuringSubmit = ChangeSet != null;
+            return new ValueTask<bool>(true);
+        }
     }
     #endregion // Mock DomainService Types
 }
