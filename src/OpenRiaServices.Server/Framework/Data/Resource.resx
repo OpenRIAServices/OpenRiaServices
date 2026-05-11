@@ -213,6 +213,9 @@
   <data name="DomainService_AlreadyInitialized" xml:space="preserve">
     <value>This DomainService has already been initialized.</value>
   </data>
+  <data name="DomainService_ChangeSetNotInitialized" xml:space="preserve">
+    <value>ChangeSet has not been initialized.</value>
+  </data>
   <data name="DomainService_DuplicateCUDMethod" xml:space="preserve">
     <value>The domain operation entry named '{0}' provides redundant functionality. Another method named '{1}' already exists.</value>
   </data>
