@@ -16,6 +16,7 @@ This release gives some ❤️ to AvaloniaUI and other frameworks which use ILis
     * Add `IList<T>` interface to `EntityCollection`
 * Nullability annotations for `EntitySet` and `EntityCollection`
 * Nullability annotations for many parts of the most used public API
+* ChangeSet now throws an `InvalidOperationException` if accessed outside of a submit operation, eg. in the cases where `ChangeSet` previously would have returned `null`.
 
 ### Server
 
