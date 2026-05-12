@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -216,15 +217,27 @@ namespace OpenRiaServices.Server
         }
 
         /// <summary>
-        /// Gets the current <see cref="ChangeSet"/>. Returns null if no change operations are being performed.
+        /// Gets the current <see cref="ChangeSet"/>. Throws if no change operations are being performed.
         /// </summary>
-        protected ChangeSet? ChangeSet
+        /// <exception cref="InvalidOperationException">Thrown if no change operations are being performed.</exception>
+
+        protected ChangeSet ChangeSet
         {
             get
             {
+                if (this._changeSet == null)
+                    ThrowChangeSetNotInitialized();
+
                 return this._changeSet;
+
+                [DoesNotReturn]
+                [System.Diagnostics.StackTraceHidden]
+                static void ThrowChangeSetNotInitialized() =>
+                    throw new InvalidOperationException(
+                        Resource.DomainService_ChangeSetNotInitialized);
             }
         }
+
 
         #endregion // Properties
 
@@ -718,7 +731,7 @@ namespace OpenRiaServices.Server
         /// <returns>True if the <see cref="ChangeSet"/> is authorized, false otherwise.</returns>
         protected virtual bool AuthorizeChangeSet()
         {
-            foreach (ChangeSetEntry op in this.ChangeSet!.ChangeSetEntries)
+            foreach (ChangeSetEntry op in this.ChangeSet.ChangeSetEntries)
             {
                 object entity = op.Entity;
 
@@ -751,7 +764,7 @@ namespace OpenRiaServices.Server
         protected virtual ValueTask<bool> ValidateChangeSetAsync(CancellationToken cancellationToken)
         {
             // Perform validation on the each of the operations.
-            var result = ValidateOperations(this.ChangeSet!.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
+            var result = ValidateOperations(this.ChangeSet.ChangeSetEntries, this.ServiceDescription, this.ValidationContext);
             return new ValueTask<bool>(result);
         }
 
@@ -766,7 +779,7 @@ namespace OpenRiaServices.Server
             await this.InvokeCustomOperations()
                 .ConfigureAwait(false);
 
-            return !this.ChangeSet!.HasError;
+            return !this.ChangeSet.HasError;
         }
 
         /// <summary>
@@ -794,7 +807,7 @@ namespace OpenRiaServices.Server
         private void ResolveOperations()
         {
             // Resolve and set the DomainOperationEntry for each operation in the changeset
-            foreach (ChangeSetEntry changeSetEntry in this.ChangeSet!.ChangeSetEntries)
+            foreach (ChangeSetEntry changeSetEntry in this.ChangeSet.ChangeSetEntries)
             {
                 // resolve the DomainOperationEntry
                 Type entityType = changeSetEntry.Entity.GetType();
@@ -984,7 +997,7 @@ namespace OpenRiaServices.Server
                 if (e.Value != null && e.ValidationResult != null)
                 {
                     IEnumerable<ChangeSetEntry> updateOperations =
-                        this.ChangeSet!.ChangeSetEntries.Where(
+                        this.ChangeSet.ChangeSetEntries.Where(
                             p => p.Operation == DomainOperation.Insert ||
                                  p.Operation == DomainOperation.Update ||
                                  p.Operation == DomainOperation.Delete);
@@ -1003,7 +1016,7 @@ namespace OpenRiaServices.Server
                 }
             }
 
-            return !this.ChangeSet!.HasError;
+            return !this.ChangeSet.HasError;
         }
 
         /// <summary>
@@ -1040,7 +1053,7 @@ namespace OpenRiaServices.Server
         private async Task InvokeCudOperationsAsync()
         {
             object[] parameters = new object[1];
-            foreach (ChangeSetEntry operation in this.ChangeSet!.ChangeSetEntries
+            foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries
                 .Where(op => op.Operation == DomainOperation.Insert ||
                              op.Operation == DomainOperation.Update ||
                              op.Operation == DomainOperation.Delete))
@@ -1082,7 +1095,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         private async Task InvokeCustomOperations()
         {
-            foreach (ChangeSetEntry operation in this.ChangeSet!.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Any()))
+            foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Any()))
             {
                 foreach (var entityAction in operation.EntityActions)
                 {

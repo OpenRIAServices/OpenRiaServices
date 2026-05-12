@@ -19,6 +19,7 @@ This release gives some ❤️ to AvaloniaUI and other frameworks which use ILis
 
 ### Server
 
+* ChangeSet now throws an `InvalidOperationException` if accessed outside a submit operation, where `ChangeSet` previously returned `null`.
 * Added Nullability annotations for a few core types of public API
 
 ### Other
