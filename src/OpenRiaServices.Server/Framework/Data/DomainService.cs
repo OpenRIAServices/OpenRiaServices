@@ -224,15 +224,25 @@ namespace OpenRiaServices.Server
         {
             get
             {
-                if (this._changeSet == null)
-                    ThrowChangeSetNotInitialized(this.ServiceContext.OperationType);
+protected ChangeSet ChangeSet
+{
+    get
+    {
+        if (this._changeSet == null)
+            ThrowChangeSetNotInitialized(this._serviceContext?.OperationType);
 
-                return this._changeSet;
+        return this._changeSet;
 
-                [DoesNotReturn]
-                [System.Diagnostics.StackTraceHidden]
-                static void ThrowChangeSetNotInitialized(DomainOperationType serviceOperationType) =>
-                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainService_ChangeSetNotInitialized, serviceOperationType));
+        [DoesNotReturn]
+        [System.Diagnostics.StackTraceHidden]
+        static void ThrowChangeSetNotInitialized(DomainOperationType? serviceOperationType) =>
+            throw new InvalidOperationException(
+                string.Format(
+                    CultureInfo.CurrentCulture,
+                    Resource.DomainService_ChangeSetNotInitialized,
+                    serviceOperationType?.ToString() ?? "Unknown"));
+    }
+}
             }
         }
 
