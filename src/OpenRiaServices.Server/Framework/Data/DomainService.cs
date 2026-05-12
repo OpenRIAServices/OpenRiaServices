@@ -220,31 +220,26 @@ namespace OpenRiaServices.Server
         /// Gets the current <see cref="ChangeSet"/>. Throws if no change operations are being performed.
         /// </summary>
         /// <exception cref="InvalidOperationException">Thrown if no change operations are being performed.</exception>
+
         protected ChangeSet ChangeSet
         {
             get
             {
-protected ChangeSet ChangeSet
-{
-    get
-    {
-        if (this._changeSet == null)
-            ThrowChangeSetNotInitialized(this._serviceContext?.OperationType);
+                if (this._changeSet == null)
+                    ThrowChangeSetNotInitialized();
 
-        return this._changeSet;
+                return this._changeSet;
 
-        [DoesNotReturn]
-        [System.Diagnostics.StackTraceHidden]
-        static void ThrowChangeSetNotInitialized(DomainOperationType? serviceOperationType) =>
-            throw new InvalidOperationException(
-                string.Format(
-                    CultureInfo.CurrentCulture,
-                    Resource.DomainService_ChangeSetNotInitialized,
-                    serviceOperationType?.ToString() ?? "Unknown"));
-    }
-}
+                [DoesNotReturn]
+                [System.Diagnostics.StackTraceHidden]
+                static void ThrowChangeSetNotInitialized() =>
+                    throw new InvalidOperationException(
+                        string.Format(
+                            CultureInfo.CurrentCulture,
+                            Resource.DomainService_ChangeSetNotInitialized));
             }
         }
+
 
         #endregion // Properties
 

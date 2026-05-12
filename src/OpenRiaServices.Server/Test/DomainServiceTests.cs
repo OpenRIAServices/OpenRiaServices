@@ -7,18 +7,18 @@ using System.Data.Linq;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading;
+using System.Threading.Tasks;
+using System.Xml.Linq;
+using Cities;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.EntityFramework;
 using OpenRiaServices.Hosting.Wcf;
-using System.Xml.Linq;
-using Cities;
 using OpenRiaServices.LinqToSql;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestDomainServices;
-using System.Threading.Tasks;
-using System.Threading;
-using OpenRiaServices.Server.UnitTesting;
 using OpenRiaServices.Server.EntityFrameworkCore;
+using OpenRiaServices.Server.UnitTesting;
+using TestDomainServices;
 
 namespace OpenRiaServices.Server.Test
 {
@@ -52,10 +52,10 @@ namespace OpenRiaServices.Server.Test
         /// Verify that accessing ChangeSet before SubmitAsync throws InvalidOperationException.
         /// </summary>
         [TestMethod]
-        public void ChangeSet_ThrowsBeforeInitialization()
+        public void ChangeSet_ThrowsBeforeSubmitAsync()
         {
             var ds = new ChangeSetAccessorDomainService();
-            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
+            DomainServiceContext dsc = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Invoke);
             ds.Initialize(dsc);
 
             ExceptionHelper.ExpectInvalidOperationException(
@@ -222,7 +222,7 @@ namespace OpenRiaServices.Server.Test
             DomainOperationEntry queryOperation = desc.GetQueryMethod("GetCities");
             QueryDescription query = new QueryDescription(queryOperation, Array.Empty<object>(), /* includeTotalCount */ true, Array.Empty<Zip>().AsQueryable().Where(z => z.Code == 98052));
 
-            ExceptionHelper.ExpectArgumentException(() =>  
+            ExceptionHelper.ExpectArgumentException(() =>
                 ds.QueryAsync<City>(query, CancellationToken.None).GetAwaiter().GetResult()
             , "Expression of type 'System.Linq.EnumerableQuery`1[Cities.City]' cannot be used for parameter of type 'System.Linq.IQueryable`1[Cities.Zip]' of method 'System.Linq.IQueryable`1[Cities.Zip] Where[Zip](System.Linq.IQueryable`1[Cities.Zip], System.Linq.Expressions.Expression`1[System.Func`2[Cities.Zip,System.Boolean]])'");
         }
@@ -404,7 +404,7 @@ namespace OpenRiaServices.Server.Test
             ds.Initialize(dsc);
             query = new QueryDescription(queryOperation, new object[] { 50 });
             var queryResult = await ds.QueryAsync<City>(query, CancellationToken.None);
-            
+
             Assert.IsTrue(queryResult.HasValidationErrors, "Should have validation errors");
             Assert.AreEqual(1, queryResult.ValidationErrors.Count());
             Assert.IsNull(ds.LastError);
@@ -618,7 +618,7 @@ namespace OpenRiaServices.Server.Test
             // Ensure metadata (TypeDescriptors) are initialised
             DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Northwind));
 
-            var expectedChangedProperties = new []
+            var expectedChangedProperties = new[]
             {
                 "CategoryName",
                 "Description",
@@ -645,7 +645,7 @@ namespace OpenRiaServices.Server.Test
 
             var currentEntry = ctx.ObjectStateManager.GetObjectStateEntry(current);
             string[] actualChangedProperties = currentEntry.GetModifiedProperties().ToArray();
-            
+
             CollectionAssert.AreEquivalent(expectedChangedProperties, actualChangedProperties);
         }
 
@@ -715,7 +715,7 @@ namespace OpenRiaServices.Server.Test
             DbContextExtensions.AttachAsModified(catalog.DbContext.Products, current, original, catalog.DbContext);
 
             var currentEntry = catalog.DbContext.Entry(current);
-            
+
             string[] actualNotChangedProperties = currentEntry.CurrentValues.PropertyNames.Where(p => !currentEntry.Property(p).IsModified).ToArray();
 
             CollectionAssert.AreEquivalent(expectedNotChangedProperties, actualNotChangedProperties);
@@ -2181,7 +2181,8 @@ namespace OpenRiaServices.Server.Test
         public TestDomainService_OverloadTests()
         {
             // initialize with a test user
-            Initialize(new DomainServiceContext(new MockDataService(), new MockUser("mathew") {
+            Initialize(new DomainServiceContext(new MockDataService(), new MockUser("mathew")
+            {
                 IsAuthenticated = true
             }, DomainOperationType.Submit));
         }
@@ -2515,7 +2516,8 @@ namespace OpenRiaServices.Server.Test
         public void UpdateEntity(DomainServiceInsertCustom_Entity entity) { }
         [EntityAction]
         public void UpdateEntityWithInt(DomainServiceInsertCustom_Entity entity,
-            [CustomValidation(typeof(AlwaysFailValidator), "Validate")] int i) { }
+            [CustomValidation(typeof(AlwaysFailValidator), "Validate")] int i)
+        { }
         [EntityAction]
         public void UpdateEntityWithObject(DomainServiceInsertCustom_Entity entity, DomainServiceInsertCustom_Validated_Object obj) { }
         [EntityAction]
@@ -2549,7 +2551,8 @@ namespace OpenRiaServices.Server.Test
         protected override ValueTask<bool> PersistChangeSetAsync(CancellationToken cancellationToken)
         {
             // Verify ChangeSet is accessible during the submit pipeline
-            ChangeSetWasAccessibleDuringSubmit = ChangeSet != null;
+            _ = ChangeSet;
+            ChangeSetWasAccessibleDuringSubmit = true;
             return new ValueTask<bool>(true);
         }
     }
