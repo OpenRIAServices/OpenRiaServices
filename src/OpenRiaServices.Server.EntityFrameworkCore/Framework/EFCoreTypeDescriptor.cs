@@ -184,7 +184,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                     && !databaseGenerated
                     && pd.Attributes[typeof(RequiredAttribute)] == null)
                 {
-                    attributes.Add(new RequiredAttribute());
+                    attributes.Add(new RequiredAttribute() { AllowEmptyStrings = (property.ClrType == typeof(string)) });
                 }
 
                 bool isStringType = pd.PropertyType == typeof(string) || pd.PropertyType == typeof(char[]);

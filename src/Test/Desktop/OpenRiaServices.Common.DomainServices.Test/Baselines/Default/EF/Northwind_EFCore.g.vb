@@ -108,7 +108,7 @@ Namespace EFCoreModels.Northwind
         ''' Gets or sets the 'CategoryName' value.
         ''' </summary>
         <DataMember(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          StringLength(15)>  _
         Public Property CategoryName() As String
             Get
@@ -346,7 +346,7 @@ Namespace EFCoreModels.Northwind
         ''' </summary>
         <ConcurrencyCheck(),  _
          DataMember(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          RoundtripOriginal(),  _
          StringLength(40)>  _
         Public Property CompanyName() As String
@@ -441,7 +441,7 @@ Namespace EFCoreModels.Northwind
          DataMember(),  _
          Editable(false, AllowInitialValue:=true),  _
          Key(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          RoundtripOriginal(),  _
          StringLength(15)>  _
         Public Property CustomerID() As String
@@ -1629,7 +1629,7 @@ Namespace EFCoreModels.Northwind
         ''' </summary>
         <ConcurrencyCheck(),  _
          DataMember(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          RoundtripOriginal(),  _
          StringLength(40)>  _
         Public Property ProductName() As String
@@ -2064,7 +2064,7 @@ Namespace EFCoreModels.Northwind
         ''' Gets or sets the 'RegionDescription' value.
         ''' </summary>
         <DataMember(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          StringLength(50)>  _
         Public Property RegionDescription() As String
             Get
@@ -2246,7 +2246,7 @@ Namespace EFCoreModels.Northwind
         ''' Gets or sets the 'TerritoryDescription' value.
         ''' </summary>
         <DataMember(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          StringLength(50)>  _
         Public Property TerritoryDescription() As String
             Get
@@ -2270,7 +2270,7 @@ Namespace EFCoreModels.Northwind
         <DataMember(),  _
          Editable(false, AllowInitialValue:=true),  _
          Key(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          RoundtripOriginal(),  _
          StringLength(20)>  _
         Public Property TerritoryID() As String
