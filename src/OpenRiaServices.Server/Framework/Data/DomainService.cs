@@ -234,9 +234,7 @@ namespace OpenRiaServices.Server
                 [System.Diagnostics.StackTraceHidden]
                 static void ThrowChangeSetNotInitialized() =>
                     throw new InvalidOperationException(
-                        string.Format(
-                            CultureInfo.CurrentCulture,
-                            Resource.DomainService_ChangeSetNotInitialized));
+                        Resource.DomainService_ChangeSetNotInitialized);
             }
         }
 
