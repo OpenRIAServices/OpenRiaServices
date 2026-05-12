@@ -232,7 +232,7 @@ namespace OpenRiaServices.Server {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ChangeSet has not been initialized..
+        ///   Looks up a localized string similar to The ChangeSet of this DomainService is only initialized during a &apos;Submit&apos; operation, so it cannot be accessed during an operation of type &apos;{0}&apos;..
         /// </summary>
         internal static string DomainService_ChangeSetNotInitialized {
             get {

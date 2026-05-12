@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -216,14 +217,22 @@ namespace OpenRiaServices.Server
         }
 
         /// <summary>
-        /// Gets the current <see cref="ChangeSet"/>. Returns null if no change operations are being performed.
+        /// Gets the current <see cref="ChangeSet"/>. Throws if no change operations are being performed.
         /// </summary>
+        /// <exception cref="InvalidOperationException">Thrown if no change operations are being performed.</exception>
         protected ChangeSet ChangeSet
         {
             get
             {
-                EnsureChangeSetInitialized();
+                if (this._changeSet == null)
+                    ThrowChangeSetNotInitialized(this.ServiceContext.OperationType);
+
                 return this._changeSet;
+
+                [DoesNotReturn]
+                [System.Diagnostics.StackTraceHidden]
+                static void ThrowChangeSetNotInitialized(DomainOperationType serviceOperationType) =>
+                    throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainService_ChangeSetNotInitialized, serviceOperationType));
             }
         }
 
@@ -1017,19 +1026,6 @@ namespace OpenRiaServices.Server
             if (this._serviceContext == null)
             {
                 throw new InvalidOperationException(Resource.DomainService_NotInitialized);
-            }
-        }
-
-        /// <summary>
-        /// Ensures the <see cref="ChangeSet"/> has been initialized properly.
-        /// </summary>
-        /// <exception cref="InvalidOperationException">if the <see cref="_changeSet"/> instance hasn't been initialized.</exception>
-        [System.Diagnostics.CodeAnalysis.MemberNotNull(nameof(_changeSet))]
-        private void EnsureChangeSetInitialized()
-        {
-            if (this._changeSet == null)
-            {
-                throw new InvalidOperationException(Resource.DomainService_ChangeSetNotInitialized);
             }
         }
 

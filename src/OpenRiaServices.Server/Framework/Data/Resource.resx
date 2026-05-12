@@ -214,7 +214,7 @@
     <value>This DomainService has already been initialized.</value>
   </data>
   <data name="DomainService_ChangeSetNotInitialized" xml:space="preserve">
-    <value>ChangeSet has not been initialized.</value>
+    <value>The ChangeSet of this DomainService is only initialized during a 'Submit' operation, so it cannot be accessed during an operation of type '{0}'.</value>
   </data>
   <data name="DomainService_DuplicateCUDMethod" xml:space="preserve">
     <value>The domain operation entry named '{0}' provides redundant functionality. Another method named '{1}' already exists.</value>
