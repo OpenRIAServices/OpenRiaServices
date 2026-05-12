@@ -1,3 +1,7 @@
+# EF Core 4.1.0
+
+* Generate `[Required(AllowEmptyStrings=true)]` instead of `[Required]` on client for non nullable string properties
+
 # 5.8.0
 
 This release gives some ❤️ to AvaloniaUI and other frameworks which use IList for data binding.
