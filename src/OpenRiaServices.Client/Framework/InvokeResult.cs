@@ -11,6 +11,9 @@ namespace OpenRiaServices.Client
     /// </summary>
     interface IInvokeResult
     {
+        /// <summary>
+        /// Get the value returned by the Invoke operation, if any.  If the Invoke operation does not return a value, this will be null.
+        /// </summary>
         object? Value { get; }
     }
 
@@ -27,15 +30,13 @@ namespace OpenRiaServices.Client
     /// </summary>
     public class InvokeResult<T> : InvokeResult, IInvokeResult
     {
-        private readonly T _value;
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InvokeResult{T}"/> class.
         /// </summary>
         /// <param name="value">The value.</param>
         public InvokeResult(T value)
         {
-            _value = value;
+            Value = value;
         }
 
         /// <summary>
@@ -44,16 +45,16 @@ namespace OpenRiaServices.Client
         /// <value>
         /// The value.
         /// </value>
-        public T? Value => _value;
+        public T Value { get; }
 
-        object? IInvokeResult.Value => _value;
+        object? IInvokeResult.Value => Value;
 
         /// <summary>
         /// Implicit conversion to <typeparamref name="T"/> so that <see cref="Value"/> does not need to be used
         /// in most cases.
         /// </summary>
         /// <param name="invokeResult"></param>
-        public static implicit operator T?(InvokeResult<T> invokeResult)
+        public static implicit operator T(InvokeResult<T> invokeResult)
         {
             return invokeResult.Value;
         }
