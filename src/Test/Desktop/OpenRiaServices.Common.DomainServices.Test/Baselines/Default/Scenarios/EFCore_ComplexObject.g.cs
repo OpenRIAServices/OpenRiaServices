@@ -59,7 +59,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// Gets or sets the 'AddressLine' value.
         /// </summary>
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [StringLength(100)]
         public string AddressLine
         {
@@ -85,7 +85,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// Gets or sets the 'City' value.
         /// </summary>
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [StringLength(50)]
         public string City
         {
@@ -171,7 +171,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// Gets or sets the 'HomePhone' value.
         /// </summary>
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [StringLength(24)]
         public string HomePhone
         {
@@ -421,7 +421,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// Gets or sets the 'Description' value.
         /// </summary>
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         public string Description
         {
             get
@@ -481,7 +481,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// Gets or sets the 'Description' value.
         /// </summary>
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         public string Description
         {
             get
@@ -578,7 +578,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         /// Gets or sets the 'Description' value.
         /// </summary>
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         public string Description
         {
             get

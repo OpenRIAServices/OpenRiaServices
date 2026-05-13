@@ -96,7 +96,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the 'CategoryName' value.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.RequiredAttribute(),  _
+        <Global.System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings:=true),  _
          Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(15),  _
          Global.System.Runtime.Serialization.DataMemberAttribute()>  _
         Public Property CategoryName() As String
@@ -334,7 +334,7 @@ Namespace EFCoreModels.Northwind
         ''' Gets or sets the 'CompanyName' value.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute(),  _
-         Global.System.ComponentModel.DataAnnotations.RequiredAttribute(),  _
+         Global.System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings:=true),  _
          Global.System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute(),  _
          Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(40),  _
          Global.System.Runtime.Serialization.DataMemberAttribute()>  _
@@ -429,7 +429,7 @@ Namespace EFCoreModels.Northwind
         <Global.System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute(),  _
          Global.System.ComponentModel.DataAnnotations.EditableAttribute(false, AllowInitialValue:=true),  _
          Global.System.ComponentModel.DataAnnotations.KeyAttribute(),  _
-         Global.System.ComponentModel.DataAnnotations.RequiredAttribute(),  _
+         Global.System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings:=true),  _
          Global.System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute(),  _
          Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(15),  _
          Global.System.Runtime.Serialization.DataMemberAttribute()>  _
@@ -1617,7 +1617,7 @@ Namespace EFCoreModels.Northwind
         ''' Gets or sets the 'ProductName' value.
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.ConcurrencyCheckAttribute(),  _
-         Global.System.ComponentModel.DataAnnotations.RequiredAttribute(),  _
+         Global.System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings:=true),  _
          Global.System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute(),  _
          Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(40),  _
          Global.System.Runtime.Serialization.DataMemberAttribute()>  _
@@ -2052,7 +2052,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the 'RegionDescription' value.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.RequiredAttribute(),  _
+        <Global.System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings:=true),  _
          Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(50),  _
          Global.System.Runtime.Serialization.DataMemberAttribute()>  _
         Public Property RegionDescription() As String
@@ -2234,7 +2234,7 @@ Namespace EFCoreModels.Northwind
         ''' <summary>
         ''' Gets or sets the 'TerritoryDescription' value.
         ''' </summary>
-        <Global.System.ComponentModel.DataAnnotations.RequiredAttribute(),  _
+        <Global.System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings:=true),  _
          Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(50),  _
          Global.System.Runtime.Serialization.DataMemberAttribute()>  _
         Public Property TerritoryDescription() As String
@@ -2258,7 +2258,7 @@ Namespace EFCoreModels.Northwind
         ''' </summary>
         <Global.System.ComponentModel.DataAnnotations.EditableAttribute(false, AllowInitialValue:=true),  _
          Global.System.ComponentModel.DataAnnotations.KeyAttribute(),  _
-         Global.System.ComponentModel.DataAnnotations.RequiredAttribute(),  _
+         Global.System.ComponentModel.DataAnnotations.RequiredAttribute(AllowEmptyStrings:=true),  _
          Global.System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute(),  _
          Global.System.ComponentModel.DataAnnotations.StringLengthAttribute(20),  _
          Global.System.Runtime.Serialization.DataMemberAttribute()>  _

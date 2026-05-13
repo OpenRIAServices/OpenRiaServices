@@ -69,7 +69,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         ''' Gets or sets the 'AddressLine' value.
         ''' </summary>
         <DataMember(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          StringLength(100)>  _
         Public Property AddressLine() As String
             Get
@@ -91,7 +91,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         ''' Gets or sets the 'City' value.
         ''' </summary>
         <DataMember(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          StringLength(50)>  _
         Public Property City() As String
             Get
@@ -174,7 +174,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         ''' Gets or sets the 'HomePhone' value.
         ''' </summary>
         <DataMember(),  _
-         Required(),  _
+         Required(AllowEmptyStrings:=true),  _
          StringLength(24)>  _
         Public Property HomePhone() As String
             Get
@@ -406,7 +406,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         ''' Gets or sets the 'Description' value.
         ''' </summary>
         <DataMember(),  _
-         Required()>  _
+         Required(AllowEmptyStrings:=true)>  _
         Public Property Description() As String
             Get
                 Return Me._description
@@ -467,7 +467,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         ''' Gets or sets the 'Description' value.
         ''' </summary>
         <DataMember(),  _
-         Required()>  _
+         Required(AllowEmptyStrings:=true)>  _
         Public Property Description() As String
             Get
                 Return Me._description
@@ -561,7 +561,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         ''' Gets or sets the 'Description' value.
         ''' </summary>
         <DataMember(),  _
-         Required()>  _
+         Required(AllowEmptyStrings:=true)>  _
         Public Property Description() As String
             Get
                 Return Me._description

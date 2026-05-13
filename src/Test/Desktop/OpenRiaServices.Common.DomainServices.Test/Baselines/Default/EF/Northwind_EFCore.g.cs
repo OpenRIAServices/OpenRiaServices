@@ -97,7 +97,7 @@ namespace EFCoreModels.Northwind
         /// Gets or sets the 'CategoryName' value.
         /// </summary>
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [StringLength(15)]
         public string CategoryName
         {
@@ -339,7 +339,7 @@ namespace EFCoreModels.Northwind
         /// </summary>
         [ConcurrencyCheck()]
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [RoundtripOriginal()]
         [StringLength(40)]
         public string CompanyName
@@ -450,7 +450,7 @@ namespace EFCoreModels.Northwind
         [DataMember()]
         [Editable(false, AllowInitialValue=true)]
         [Key()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [RoundtripOriginal()]
         [StringLength(15)]
         public string CustomerID
@@ -1736,7 +1736,7 @@ namespace EFCoreModels.Northwind
         /// </summary>
         [ConcurrencyCheck()]
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [RoundtripOriginal()]
         [StringLength(40)]
         public string ProductName
@@ -2219,7 +2219,7 @@ namespace EFCoreModels.Northwind
         /// Gets or sets the 'RegionDescription' value.
         /// </summary>
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [StringLength(50)]
         public string RegionDescription
         {
@@ -2421,7 +2421,7 @@ namespace EFCoreModels.Northwind
         /// Gets or sets the 'TerritoryDescription' value.
         /// </summary>
         [DataMember()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [StringLength(50)]
         public string TerritoryDescription
         {
@@ -2449,7 +2449,7 @@ namespace EFCoreModels.Northwind
         [DataMember()]
         [Editable(false, AllowInitialValue=true)]
         [Key()]
-        [Required()]
+        [Required(AllowEmptyStrings=true)]
         [RoundtripOriginal()]
         [StringLength(20)]
         public string TerritoryID
