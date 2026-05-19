@@ -234,7 +234,7 @@ public class SerializationOptionsTests
             .StartAsync();
     }
 
-    /// <summary>Asserts that a request results in HTTP 400 Bad Request (handles TestServer propagating BadHttpRequestException).</summary>
+    /// <summary>Asserts that a request results in HTTP 400 Bad Request (handles TestServer propagating the BadHttpRequestException).</summary>
     private static async Task AssertBadRequestAsync(Task<HttpResponseMessage> responseTask)
     {
         try

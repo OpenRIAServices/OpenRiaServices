@@ -134,7 +134,7 @@ builder.Services.AddOpenRiaServices(o => { } )
 
 ### Configuring serializer security quotas
 
-You can configure reader quotas to limit resource consumption and mitigate denial-of-service attacks.
+You can configure reader quotas to limit resource consumption and mitigate denial-of-service (DoS) attacks.
 By default all quotas are set to their maximum values to preserve backward compatibility.
 
 **Configure XML serialization quotas:**
