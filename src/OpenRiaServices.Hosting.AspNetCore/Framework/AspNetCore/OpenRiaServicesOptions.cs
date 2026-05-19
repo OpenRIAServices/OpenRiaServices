@@ -46,7 +46,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 && SerializationProviders.OfType<DataContractSerializationProvider>().FirstOrDefault() is { } existingDcs)
             {
                 // Share the DataContractCache between the two providers to avoid duplicate work
-                dataContractSerializationProvider._perDomainServiceDataContractCache = existingDcs._perDomainServiceDataContractCache;
+                dataContractSerializationProvider.CopyDataContractCacheFrom(existingDcs);
             }
 
             if (defaultProvider)

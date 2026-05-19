@@ -75,7 +75,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     if (providers[i] is Serialization.BinaryXmlSerializationProvider oldProvider)
                     {
                         // Transfer the shared DataContractCache so existing metadata is reused
-                        newProvider._perDomainServiceDataContractCache = oldProvider._perDomainServiceDataContractCache;
+                        newProvider.CopyDataContractCacheFrom(oldProvider);
                         providers[i] = newProvider;
                         replaced = true;
                         break;

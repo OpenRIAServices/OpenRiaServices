@@ -70,6 +70,16 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         }
 
         /// <summary>
+        /// Transfers the shared <see cref="DataContractCache"/> from <paramref name="source"/> to this instance,
+        /// so that multiple providers reuse the same per-domain-service metadata and avoid duplicate work.
+        /// </summary>
+        /// <param name="source">The provider whose data contract cache should be adopted by this instance.</param>
+        internal void CopyDataContractCacheFrom(DataContractSerializationProvider source)
+        {
+            _perDomainServiceDataContractCache = source._perDomainServiceDataContractCache;
+        }
+
+        /// <summary>
         /// Override in derived classes to create a DataContractRequestSerializer for the specified domain operation using the provided data contract cache.
         /// </summary>
         /// <param name="operation">The domain operation entry that identifies the domain service operation and its metadata used to configure the serializer.</param>

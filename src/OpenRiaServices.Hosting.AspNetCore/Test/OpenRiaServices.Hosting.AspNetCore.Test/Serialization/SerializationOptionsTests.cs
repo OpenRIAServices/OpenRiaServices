@@ -234,20 +234,6 @@ public class SerializationOptionsTests
             .StartAsync();
     }
 
-    private static HttpClient CreateBinaryClient(IHost host)
-    {
-        var client = host.GetTestClient();
-        client.BaseAddress = new Uri(client.BaseAddress!, "SerializationTestDomainService/");
-        return client;
-    }
-
-    private static HttpClient CreateXmlClient(IHost host)
-    {
-        var client = host.GetTestClient();
-        client.BaseAddress = new Uri(client.BaseAddress!, "SerializationTestDomainService/");
-        return client;
-    }
-
     /// <summary>Asserts that a request results in HTTP 400 Bad Request (handles TestServer propagating BadHttpRequestException).</summary>
     private static async Task AssertBadRequestAsync(Task<HttpResponseMessage> responseTask)
     {
