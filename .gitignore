@@ -145,3 +145,5 @@ $RECYCLE.BIN/
 .DS_Store
 *.nupkg
 *.binlog
+src/snk
+src/Test/Desktop/OpenRiaServices.Common.DomainServices.Test/DataModels/ScenarioModels/northwind.map
