@@ -8,6 +8,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     internal sealed class BinaryXmlSerializationProvider : DataContractSerializationProvider
     {
+        private readonly BinaryDataContractSerializerOptions _options;
+
+        public BinaryXmlSerializationProvider(BinaryDataContractSerializerOptions? options = null)
+        {
+            _options = options ?? new BinaryDataContractSerializerOptions();
+        }
+
         /// <summary>
         /// Creates a Binary-XML DataContract based serializer for the specified domain operation.
         /// </summary>
@@ -15,11 +22,18 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// <param name="dataContractCache">The data contract cache containing type metadata used by the serializer.</param>
         /// <returns>A <see cref="BinaryXmlDataContractRequestSerializer"/> configured for the given operation and data contract cache.</returns>
         protected override DataContractRequestSerializer CreateOperationRequestSerialiser(DomainOperationEntry operation, DataContractCache dataContractCache)
-            => new BinaryXmlDataContractRequestSerializer(operation, dataContractCache);
+            => new BinaryXmlDataContractRequestSerializer(operation, dataContractCache, _options);
     }
 
     internal sealed class TextXmlSerializationProvider : DataContractSerializationProvider
     {
+        private readonly XmlDataContractSerializerOptions _options;
+
+        public TextXmlSerializationProvider(XmlDataContractSerializerOptions? options = null)
+        {
+            _options = options ?? new XmlDataContractSerializerOptions();
+        }
+
         /// <summary>
         /// Creates a (Text) XML DataContract based serializer for the specified domain operation.
         /// </summary>
@@ -27,7 +41,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// <param name="dataContractCache">The data contract metadata cache for the operation's domain service type.</param>
         /// <returns>A <see cref="DataContractRequestSerializer"/> that serializes request payloads using text XML.</returns>
         protected override DataContractRequestSerializer CreateOperationRequestSerialiser(DomainOperationEntry operation, DataContractCache dataContractCache)
-            => new TextXmlDataContractRequestSerializer(operation, dataContractCache);
+            => new TextXmlDataContractRequestSerializer(operation, dataContractCache, _options);
     }
 
     internal abstract class DataContractSerializationProvider() : ISerializationProvider

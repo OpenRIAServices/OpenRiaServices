@@ -132,6 +132,42 @@ builder.Services.AddOpenRiaServices(o => { } )
     .AddXmlSerialization();
 ```
 
+### Configuring serializer security quotas
+
+You can configure reader quotas to limit resource consumption and mitigate denial-of-service attacks.
+By default all quotas are set to their maximum values to preserve backward compatibility.
+
+**Configure XML serialization quotas:**
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenRiaServices()
+    .AddXmlSerialization(options =>
+    {
+        options.ReaderQuotas = new System.Xml.XmlDictionaryReaderQuotas
+        {
+            MaxStringContentLength = 1024 * 1024, // 1 MB
+            MaxArrayLength = 65536,
+            MaxDepth = 32,
+        };
+    });
+```
+
+**Configure binary XML serialization quotas (for the default binary provider):**
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenRiaServices()
+    .ConfigureBinarySerialization(options =>
+    {
+        options.ReaderQuotas = new System.Xml.XmlDictionaryReaderQuotas
+        {
+            MaxStringContentLength = 1024 * 1024, // 1 MB
+            MaxArrayLength = 65536,
+            MaxDepth = 32,
+        };
+    });
+```
 
 ### Specifying endpoint routes
 

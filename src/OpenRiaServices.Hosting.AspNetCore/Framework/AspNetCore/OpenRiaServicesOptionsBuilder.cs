@@ -32,7 +32,63 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <param name="defaultProvider">If <see langword="true"/> the Xml provider will be the default for responses (when content type is not specified)</param>
         public OpenRiaServicesOptionsBuilder AddXmlSerialization(bool defaultProvider = false)
         {
-            return AddSerializationProvider(new Serialization.TextXmlSerializationProvider(), defaultProvider);
+            return AddXmlSerialization(configure: null, defaultProvider);
+        }
+
+        /// <summary>
+        /// Enables text based XML wire format (application/xml) in addition to built in binary Xml (application/msbin1),
+        /// with options configurable via a callback.
+        /// </summary>
+        /// <remarks>Request should specify mime-type <c>application/xml</c> using <c>Content-Type</c> or <c>Accept</c> HTTP-headers.
+        /// </remarks>
+        /// <param name="configure">An optional callback to configure <see cref="Serialization.XmlDataContractSerializerOptions"/>.</param>
+        /// <param name="defaultProvider">If <see langword="true"/> the Xml provider will be the default for responses (when content type is not specified)</param>
+        public OpenRiaServicesOptionsBuilder AddXmlSerialization(Action<Serialization.XmlDataContractSerializerOptions>? configure, bool defaultProvider = false)
+        {
+            var options = new Serialization.XmlDataContractSerializerOptions();
+            configure?.Invoke(options);
+            return AddSerializationProvider(new Serialization.TextXmlSerializationProvider(options), defaultProvider);
+        }
+
+        /// <summary>
+        /// Configures the default binary XML (<c>application/msbin1</c>) serialization provider.
+        /// </summary>
+        /// <remarks>
+        /// Use this to restrict reader quotas and mitigate denial-of-service risks for binary requests.
+        /// </remarks>
+        /// <param name="configure">A callback to configure <see cref="Serialization.BinaryDataContractSerializerOptions"/>.</param>
+        public OpenRiaServicesOptionsBuilder ConfigureBinarySerialization(Action<Serialization.BinaryDataContractSerializerOptions> configure)
+        {
+            ArgumentNullException.ThrowIfNull(configure);
+
+            var options = new Serialization.BinaryDataContractSerializerOptions();
+            configure(options);
+
+            Services.Configure<OpenRiaServicesOptions>(openRiaOptions =>
+            {
+                var providers = openRiaOptions.SerializationProviders;
+                var newProvider = new Serialization.BinaryXmlSerializationProvider(options);
+                bool replaced = false;
+
+                for (int i = 0; i < providers.Length; i++)
+                {
+                    if (providers[i] is Serialization.BinaryXmlSerializationProvider oldProvider)
+                    {
+                        // Transfer the shared DataContractCache so existing metadata is reused
+                        newProvider._perDomainServiceDataContractCache = oldProvider._perDomainServiceDataContractCache;
+                        providers[i] = newProvider;
+                        replaced = true;
+                        break;
+                    }
+                }
+
+                if (!replaced)
+                {
+                    openRiaOptions.AddSerializationProvider(newProvider, defaultProvider: true);
+                }
+            });
+
+            return this;
         }
 
         /// <summary>
