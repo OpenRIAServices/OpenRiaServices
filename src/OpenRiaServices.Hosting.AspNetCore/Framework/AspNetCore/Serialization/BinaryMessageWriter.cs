@@ -40,7 +40,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             _textWriter = XmlDictionaryWriter.CreateTextWriter(_stream);
         }
 
-        public static BinaryMessageWriter Rent(bool isBinary)
+        public static BinaryMessageWriter Rent(bool isBinary, IXmlDictionary? dictionary = null)
         {
             var messageWriter = s_threadInstance ?? new BinaryMessageWriter();
 
@@ -50,7 +50,18 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             // Allocate first buffer
             messageWriter._stream.Reset(messageWriter.EstimateMessageSize());
-            messageWriter._currentWriter = isBinary ? messageWriter._binaryWriter : messageWriter._textWriter;
+
+            if (isBinary)
+            {
+                // Reinitialize the binary writer to apply current dictionary settings and ensure clean state
+                ((IXmlBinaryWriterInitializer)messageWriter._binaryWriter).SetOutput(messageWriter._stream, dictionary, session: null, ownsStream: false);
+                messageWriter._currentWriter = messageWriter._binaryWriter;
+            }
+            else
+            {
+                messageWriter._currentWriter = messageWriter._textWriter;
+            }
+
             return messageWriter;
         }
 

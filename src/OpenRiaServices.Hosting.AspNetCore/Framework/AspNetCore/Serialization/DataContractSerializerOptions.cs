@@ -17,6 +17,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         public XmlDictionaryReaderQuotas ReaderQuotas { get; set; } = CreateMaxQuotas();
 
         /// <summary>
+        /// Gets or sets the XML dictionary used for binary format compression.
+        /// Exposed publicly on <see cref="BinaryDataContractSerializerOptions"/> only.
+        /// </summary>
+        internal IXmlDictionary? Dictionary { get; set; }
+
+        /// <summary>
         /// Creates a new mutable <see cref="XmlDictionaryReaderQuotas"/> with all quotas set to their maximum values.
         /// </summary>
         private static XmlDictionaryReaderQuotas CreateMaxQuotas()
@@ -32,6 +38,19 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// </summary>
     public sealed class BinaryDataContractSerializerOptions : DataContractSerializerOptions
     {
+        /// <summary>
+        /// Gets or sets the XML dictionary used for binary format compression when reading and writing.
+        /// </summary>
+        /// <remarks>
+        /// When set, the same dictionary is applied to both the <see cref="System.Xml.XmlDictionaryReader"/>
+        /// and the <see cref="System.Xml.XmlDictionaryWriter"/> to enable consistent compression of element
+        /// and attribute names. Client and server must share the same dictionary.
+        /// </remarks>
+        public new IXmlDictionary? Dictionary
+        {
+            get => base.Dictionary;
+            set => base.Dictionary = value;
+        }
     }
 
     /// <summary>
