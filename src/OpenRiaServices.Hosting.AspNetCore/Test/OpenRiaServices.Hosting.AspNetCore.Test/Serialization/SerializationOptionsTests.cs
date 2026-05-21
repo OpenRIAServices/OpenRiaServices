@@ -84,16 +84,11 @@ public class SerializationOptionsTests
 
         // A request with a string param longer than 10 chars should fail
         var longString = new string('a', 100);
-        var requestBytes = BuildBinaryInvokeRequest("EchoString", "value", longString);
-        var content = new ByteArrayContent(requestBytes);
-        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/msbin1");
+        using var tooLongContent = BuildBinaryInvokeRequest("EchoString", "value", longString);
+        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", tooLongContent), "The maximum string content length quota (10) has been exceeded");
 
-        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", content), "The maximum string content length quota (10) has been exceeded");
-
-        requestBytes = BuildBinaryInvokeRequest("EchoString", "value", "hello");
-        content = new ByteArrayContent(requestBytes);
-        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/msbin1");
-        var response = await client.PostAsync("SerializationTestDomainService/EchoString", content);
+        using var shortContent = BuildBinaryInvokeRequest("EchoString", "value", "hello");
+        var response = await client.PostAsync("SerializationTestDomainService/EchoString", shortContent);
         Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode,
             "Request within quota should succeed");
     }
@@ -113,9 +108,7 @@ public class SerializationOptionsTests
 
         var client = host.GetTestClient();
         var longString = new string('a', 100);
-        var requestBytes = BuildXmlInvokeRequest("EchoString", "value", longString);
-        var content = new ByteArrayContent(requestBytes);
-        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/xml");
+        using var content = BuildXmlInvokeRequest("EchoString", "value", longString);
 
         await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", content), "The maximum string content length quota (10) has been exceeded");
     }
@@ -176,7 +169,7 @@ public class SerializationOptionsTests
     }
 
     /// <summary>Builds a binary-XML POST body for an invoke operation with one string parameter.</summary>
-    private static byte[] BuildBinaryInvokeRequest(string operationName, string paramName, string paramValue)
+    private static ByteArrayContent BuildBinaryInvokeRequest(string operationName, string paramName, string paramValue)
     {
         using var ms = new MemoryStream();
         using var writer = XmlDictionaryWriter.CreateBinaryWriter(ms, dictionary: null, session: null, ownsStream: false);
@@ -186,11 +179,13 @@ public class SerializationOptionsTests
         writer.WriteEndElement();
         writer.WriteEndElement();
         writer.Flush();
-        return ms.ToArray();
+        var content = new ByteArrayContent(ms.ToArray());
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/msbin1");
+        return content;
     }
 
     /// <summary>Builds a plain-XML POST body for an invoke operation with one string parameter.</summary>
-    private static byte[] BuildXmlInvokeRequest(string operationName, string paramName, string paramValue)
+    private static ByteArrayContent BuildXmlInvokeRequest(string operationName, string paramName, string paramValue)
     {
         using var ms = new MemoryStream();
         var settings = new XmlWriterSettings { Encoding = new UTF8Encoding(false), CloseOutput = false };
@@ -201,7 +196,9 @@ public class SerializationOptionsTests
         writer.WriteEndElement();
         writer.WriteEndElement();
         writer.Flush();
-        return ms.ToArray();
+        var content = new ByteArrayContent(ms.ToArray());
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/xml");
+        return content;
     }
 
     // -------------------------------------------------------------------------
