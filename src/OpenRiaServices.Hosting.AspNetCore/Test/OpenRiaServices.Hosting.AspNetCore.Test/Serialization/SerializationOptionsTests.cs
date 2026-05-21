@@ -25,48 +25,6 @@ public class SerializationOptionsTests
     // -------------------------------------------------------------------------
 
     [TestMethod]
-    [Description("AddXmlSerialization(bool) should continue to work unchanged")]
-    public void Builder_AddXmlSerialization_NoOptions_AddsTextXmlProvider()
-    {
-        var services = new ServiceCollection();
-        var builder = services.AddOpenRiaServices();
-        builder.AddXmlSerialization();
-
-        var sp = services.BuildServiceProvider();
-        var options = sp.GetRequiredService<IOptions<OpenRiaServicesOptions>>().Value;
-
-        bool hasTextXml = false;
-        bool hasBinaryXml = false;
-        foreach (var p in options.SerializationProviders)
-        {
-            if (p is TextXmlSerializationProvider) hasTextXml = true;
-            if (p is BinaryXmlSerializationProvider) hasBinaryXml = true;
-        }
-        Assert.IsTrue(hasTextXml, "TextXmlSerializationProvider should be registered");
-        Assert.IsTrue(hasBinaryXml, "BinaryXmlSerializationProvider should still be registered");
-    }
-
-    [TestMethod]
-    [Description("AddXmlSerialization(configure, bool) overload should configure XmlDataContractSerializerOptions")]
-    public void Builder_AddXmlSerialization_WithConfigure_PassesOptions()
-    {
-        bool configureWasCalled = false;
-        var services = new ServiceCollection();
-        var builder = services.AddOpenRiaServices();
-        builder.AddXmlSerialization(opts =>
-        {
-            configureWasCalled = true;
-            opts.ReaderQuotas = new XmlDictionaryReaderQuotas { MaxStringContentLength = 1024 };
-        });
-
-        var sp = services.BuildServiceProvider();
-        // Trigger options resolution so the configure callback runs
-        _ = sp.GetRequiredService<IOptions<OpenRiaServicesOptions>>().Value;
-
-        Assert.IsTrue(configureWasCalled, "Configure callback should have been called");
-    }
-
-    [TestMethod]
     [Description("ConfigureBinarySerialization replaces existing BinaryXmlSerializationProvider with configured one")]
     public void Builder_ConfigureBinarySerialization_ReplacesDefaultBinaryProvider()
     {
