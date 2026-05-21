@@ -2,6 +2,8 @@
 using System.Diagnostics.CodeAnalysis;
 using System.Reflection;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore
@@ -21,6 +23,13 @@ namespace OpenRiaServices.Hosting.AspNetCore
             services.AddSingleton<OpenRiaServicesEndpointDataSource>();
             services.AddSingleton(services);
 
+            services.AddOptions<OpenRiaServicesOptions>()
+                .Configure((OpenRiaServicesOptions options, IOptions<BinaryDataContractSerializerOptions> binaryOptions) =>
+                {
+                    // Default to using the Binary XML serializer if no serialization providers were added.
+                    options.SerializationProviders = [new BinaryXmlSerializationProvider(binaryOptions.Value)];
+                });
+
             return new OpenRiaServicesOptionsBuilder(services);
         }
 
@@ -32,8 +41,11 @@ namespace OpenRiaServices.Hosting.AspNetCore
             ArgumentNullException.ThrowIfNull(services);
             ArgumentNullException.ThrowIfNull(configure);
 
+            
+            var builder = AddOpenRiaServices(services);
+            // Run user supplied configuration after the default configuration so that we have already added a default serialization provider
             services.Configure<OpenRiaServicesOptions>(configure);
-            return AddOpenRiaServices(services);
+            return builder;
         }
 
         /// <summary>

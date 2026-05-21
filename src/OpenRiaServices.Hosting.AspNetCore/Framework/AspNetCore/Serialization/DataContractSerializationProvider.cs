@@ -29,9 +29,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     {
         private readonly XmlDataContractSerializerOptions _options;
 
-        public TextXmlSerializationProvider(XmlDataContractSerializerOptions? options = null)
+        public TextXmlSerializationProvider(XmlDataContractSerializerOptions options)
         {
-            _options = options ?? new XmlDataContractSerializerOptions();
+            ArgumentNullException.ThrowIfNull(options);
+
+            _options = options;
         }
 
         /// <summary>

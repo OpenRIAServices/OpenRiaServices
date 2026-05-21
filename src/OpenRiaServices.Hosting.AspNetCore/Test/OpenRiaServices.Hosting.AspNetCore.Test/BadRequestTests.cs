@@ -23,7 +23,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
     [TestClass]
     public class BadRequestTests
     {
-        private static readonly OpenRiaServicesOptions s_options = new();
+        private static readonly OpenRiaServicesOptions s_options = new() { SerializationProviders = [new Serialization.BinaryXmlSerializationProvider()] };
 
         [TestMethod]
         [Description("Invoke operation: Missing parameter when calling InvokeOperationInvoker should throw BadHttpRequestException when invoked directly")]
@@ -54,7 +54,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
             context.Request.QueryString = QueryString.FromUriComponent("?value=");
             await Assert.ThrowsExactlyAsync<BadHttpRequestException>(async () => await operationInvoker.Invoke(context));
-            
+
             // Wrong format
             context.Request.QueryString = QueryString.FromUriComponent("?value=two");
             var invalidFormatEx = await Assert.ThrowsExactlyAsync<BadHttpRequestException>(async () => await operationInvoker.Invoke(context));

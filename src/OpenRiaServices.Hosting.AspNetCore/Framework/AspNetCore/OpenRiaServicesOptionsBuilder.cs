@@ -1,5 +1,6 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace OpenRiaServices.Hosting.AspNetCore
 {
@@ -45,9 +46,16 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <param name="defaultProvider">If <see langword="true"/> the Xml provider will be the default for responses (when content type is not specified)</param>
         public OpenRiaServicesOptionsBuilder AddXmlSerialization(Action<Serialization.XmlDataContractSerializerOptions>? configure, bool defaultProvider = false)
         {
-            var options = new Serialization.XmlDataContractSerializerOptions();
-            configure?.Invoke(options);
-            return AddSerializationProvider(new Serialization.TextXmlSerializationProvider(options), defaultProvider);
+            if (configure is not null)
+                Services.Configure(configure);
+
+            Services.AddOptions<OpenRiaServicesOptions>()
+                .Configure((OpenRiaServicesOptions options, IOptions<Serialization.XmlDataContractSerializerOptions> serializationOptions) =>
+                {
+                    options.AddSerializationProvider(new Serialization.TextXmlSerializationProvider(serializationOptions.Value), defaultProvider);
+                });
+
+            return this;
         }
 
         /// <summary>
@@ -61,32 +69,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         {
             ArgumentNullException.ThrowIfNull(configure);
 
-            var options = new Serialization.BinaryDataContractSerializerOptions();
-            configure(options);
-
-            Services.Configure<OpenRiaServicesOptions>(openRiaOptions =>
-            {
-                var providers = openRiaOptions.SerializationProviders;
-                var newProvider = new Serialization.BinaryXmlSerializationProvider(options);
-                bool replaced = false;
-
-                for (int i = 0; i < providers.Length; i++)
-                {
-                    if (providers[i] is Serialization.BinaryXmlSerializationProvider oldProvider)
-                    {
-                        // Transfer the shared DataContractCache so existing metadata is reused
-                        newProvider.CopyDataContractCacheFrom(oldProvider);
-                        providers[i] = newProvider;
-                        replaced = true;
-                        break;
-                    }
-                }
-
-                if (!replaced)
-                {
-                    openRiaOptions.AddSerializationProvider(newProvider, defaultProvider: true);
-                }
-            });
+            Services.Configure<Serialization.BinaryDataContractSerializerOptions>(configure);
 
             return this;
         }
@@ -100,22 +83,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
             Services.Configure<OpenRiaServicesOptions>(options =>
             {
                 options.ClearSerializationProviders();
-            });
-
-            return this;
-        }
-
-        private OpenRiaServicesOptionsBuilder AddSerializationProvider(Serialization.ISerializationProvider serializationProvider, bool defaultProvider)
-        {
-            // When adding options it might make sense to resolve the provider using DI so allowing default options configuration
-            //Services.AddSingleton<Serialization.TextXmlSerializationProvider>();
-            //Services.AddOptions<OpenRiaServicesOptions>().Configure((OpenRiaServicesOptions opts, Serialization.TextXmlSerializationProvider provider) => { });
-            // OR
-            // Services.Configure<XmlSerializationOptions>(callback)
-            // Services.AddOptions<OpenRiaServicesOptions>().Configure((OpenRiaServicesOptions opts, IOptions<XmlSerializationOptions> options)
-            Services.Configure<OpenRiaServicesOptions>(options =>
-            {
-                options.AddSerializationProvider(serializationProvider, defaultProvider);
             });
 
             return this;
