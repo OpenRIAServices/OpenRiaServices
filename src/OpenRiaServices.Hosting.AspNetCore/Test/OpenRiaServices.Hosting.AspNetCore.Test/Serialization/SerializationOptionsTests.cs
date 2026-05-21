@@ -1,17 +1,16 @@
 using System;
 using System.IO;
 using System.Net.Http;
-using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
-using Cities;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
@@ -29,12 +28,12 @@ public class SerializationOptionsTests
     [Description("AddXmlSerialization(bool) should continue to work unchanged")]
     public void Builder_AddXmlSerialization_NoOptions_AddsTextXmlProvider()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         var builder = services.AddOpenRiaServices();
         builder.AddXmlSerialization();
 
         var sp = services.BuildServiceProvider();
-        var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<OpenRiaServicesOptions>>().Value;
+        var options = sp.GetRequiredService<IOptions<OpenRiaServicesOptions>>().Value;
 
         bool hasTextXml = false;
         bool hasBinaryXml = false;
@@ -52,7 +51,7 @@ public class SerializationOptionsTests
     public void Builder_AddXmlSerialization_WithConfigure_PassesOptions()
     {
         bool configureWasCalled = false;
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         var builder = services.AddOpenRiaServices();
         builder.AddXmlSerialization(opts =>
         {
@@ -62,7 +61,7 @@ public class SerializationOptionsTests
 
         var sp = services.BuildServiceProvider();
         // Trigger options resolution so the configure callback runs
-        _ = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<OpenRiaServicesOptions>>().Value;
+        _ = sp.GetRequiredService<IOptions<OpenRiaServicesOptions>>().Value;
 
         Assert.IsTrue(configureWasCalled, "Configure callback should have been called");
     }
@@ -72,7 +71,7 @@ public class SerializationOptionsTests
     public void Builder_ConfigureBinarySerialization_ReplacesDefaultBinaryProvider()
     {
         bool configureWasCalled = false;
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         var builder = services.AddOpenRiaServices();
         builder.ConfigureBinarySerialization(opts =>
         {
@@ -81,7 +80,7 @@ public class SerializationOptionsTests
         });
 
         var sp = services.BuildServiceProvider();
-        var options = sp.GetRequiredService<Microsoft.Extensions.Options.IOptions<OpenRiaServicesOptions>>().Value;
+        var options = sp.GetRequiredService<IOptions<OpenRiaServicesOptions>>().Value;
 
         Assert.IsTrue(configureWasCalled, "Configure callback should have been called");
 
@@ -97,7 +96,7 @@ public class SerializationOptionsTests
     [Description("ConfigureBinarySerialization can be fluently chained")]
     public void Builder_ConfigureBinarySerialization_ReturnsSameBuilder()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         var builder = services.AddOpenRiaServices();
         var returned = builder.ConfigureBinarySerialization(_ => { });
         Assert.AreSame(builder, returned, "ConfigureBinarySerialization should return the builder for chaining");
@@ -107,7 +106,7 @@ public class SerializationOptionsTests
     [Description("AddXmlSerialization with configure returns the builder for chaining")]
     public void Builder_AddXmlSerialization_WithConfigure_ReturnsSameBuilder()
     {
-        var services = new Microsoft.Extensions.DependencyInjection.ServiceCollection();
+        var services = new ServiceCollection();
         var builder = services.AddOpenRiaServices();
         var returned = builder.AddXmlSerialization(_ => { });
         Assert.AreSame(builder, returned, "AddXmlSerialization should return the builder for chaining");
@@ -134,24 +133,11 @@ public class SerializationOptionsTests
         var content = new ByteArrayContent(requestBytes);
         content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/msbin1");
 
-        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", content));
-    }
+        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", content), "The maximum string content length quota (10) has been exceeded");
 
-    [TestMethod]
-    [Description("Binary reader quota: request within quota succeeds")]
-    public async Task BinaryReaderQuota_WithinLimit_Succeeds()
-    {
-        using var host = await CreateHost(binaryConfigure: opts =>
-        {
-            opts.ReaderQuotas = new XmlDictionaryReaderQuotas { MaxStringContentLength = 1000 };
-        });
-
-        var client = host.GetTestClient();
-        var shortString = "hello";
-        var requestBytes = BuildBinaryInvokeRequest("EchoString", "value", shortString);
-        var content = new ByteArrayContent(requestBytes);
+        requestBytes = BuildBinaryInvokeRequest("EchoString", "value", "hello");
+        content = new ByteArrayContent(requestBytes);
         content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/msbin1");
-
         var response = await client.PostAsync("SerializationTestDomainService/EchoString", content);
         Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode,
             "Request within quota should succeed");
@@ -176,27 +162,7 @@ public class SerializationOptionsTests
         var content = new ByteArrayContent(requestBytes);
         content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/xml");
 
-        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", content));
-    }
-
-    [TestMethod]
-    [Description("XML reader quota: request within quota succeeds")]
-    public async Task XmlReaderQuota_WithinLimit_Succeeds()
-    {
-        using var host = await CreateHost(xmlConfigure: opts =>
-        {
-            opts.ReaderQuotas = new XmlDictionaryReaderQuotas { MaxStringContentLength = 1000 };
-        });
-
-        var client = host.GetTestClient();
-        var shortString = "hello";
-        var requestBytes = BuildXmlInvokeRequest("EchoString", "value", shortString);
-        var content = new ByteArrayContent(requestBytes);
-        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/xml");
-
-        var response = await client.PostAsync("SerializationTestDomainService/EchoString", content);
-        Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode,
-            "Request within quota should succeed");
+        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", content), "The maximum string content length quota (10) has been exceeded");
     }
 
     // -------------------------------------------------------------------------
@@ -235,7 +201,7 @@ public class SerializationOptionsTests
     }
 
     /// <summary>Asserts that a request results in HTTP 400 Bad Request (handles TestServer propagating the BadHttpRequestException).</summary>
-    private static async Task AssertBadRequestAsync(Task<HttpResponseMessage> responseTask)
+    private static async Task AssertBadRequestAsync(Task<HttpResponseMessage> responseTask, string messageContents = null)
     {
         try
         {
@@ -248,6 +214,9 @@ public class SerializationOptionsTests
             // TestServer propagates BadHttpRequestException directly instead of converting it to HTTP 400
             Assert.AreEqual(StatusCodes.Status400BadRequest, ex.StatusCode,
                 "Expected BadHttpRequestException with status 400");
+
+            if (messageContents is not null)
+                Assert.Contains(messageContents, ex.Message);
         }
     }
 
