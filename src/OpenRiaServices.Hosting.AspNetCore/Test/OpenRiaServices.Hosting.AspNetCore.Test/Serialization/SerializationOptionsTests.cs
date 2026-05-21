@@ -1,5 +1,6 @@
 using System;
 using System.IO;
+using System.Linq;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
@@ -42,11 +43,7 @@ public class SerializationOptionsTests
 
         Assert.IsTrue(configureWasCalled, "Configure callback should have been called");
 
-        int binaryCount = 0;
-        foreach (var p in options.SerializationProviders)
-        {
-            if (p is BinaryXmlSerializationProvider) binaryCount++;
-        }
+        int binaryCount = options.SerializationProviders.Count(p => p is BinaryXmlSerializationProvider);
         Assert.AreEqual(1, binaryCount, "Should still have exactly one BinaryXmlSerializationProvider");
     }
 
