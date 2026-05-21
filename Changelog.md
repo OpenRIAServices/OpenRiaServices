@@ -1,3 +1,13 @@
+# AspNetCore 1.5.0
+
+* Allow configuring Serializer security settings
+
+You can configure reader quotas to limit resource consumption and mitigate denial-of-service (DoS) attacks.
+By default all quotas are set to their maximum values to preserve backward compatibility.
+
+See [AspNetCore README](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.md#configuring-serializer-settings) for more details and sample code.
+
+
 # EF Core 4.1.0
 
 * Generate `[Required(AllowEmptyStrings=true)]` instead of `[Required]` on client for non nullable string properties
