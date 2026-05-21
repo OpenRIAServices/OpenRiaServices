@@ -29,7 +29,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
         {
-            return XmlDictionaryReader.CreateBinaryReader(stream, _readerQuotas);
+            return XmlDictionaryReader.CreateBinaryReader(stream, _dictionary, _readerQuotas);
         }
 
         private protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
