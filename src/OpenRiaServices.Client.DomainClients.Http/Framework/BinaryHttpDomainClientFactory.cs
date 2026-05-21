@@ -1,5 +1,6 @@
-﻿using System;
+using System;
 using System.Net.Http;
+using System.Xml;
 using OpenRiaServices.Client.DomainClients.Http;
 
 namespace OpenRiaServices.Client.DomainClients
@@ -11,6 +12,16 @@ namespace OpenRiaServices.Client.DomainClients
     public class BinaryHttpDomainClientFactory
         : HttpDomainClientFactory
     {
+        /// <summary>
+        /// Gets or sets the quotas used by <see cref="XmlDictionaryReader"/> when reading responses.
+        /// </summary>
+        public XmlDictionaryReaderQuotas ReaderQuotas { get; set; } = CreateMaxQuotas();
+
+        /// <summary>
+        /// Gets or sets the shared dictionary used for binary XML reader/writer compression.
+        /// </summary>
+        public IXmlDictionary? Dictionary { get; set; }
+
         /// <inheritdoc />
         public BinaryHttpDomainClientFactory(Uri serverBaseUri, HttpMessageHandler messageHandler)
             : base(serverBaseUri, messageHandler)
@@ -34,7 +45,14 @@ namespace OpenRiaServices.Client.DomainClients
         {
             HttpClient httpClient = CreateHttpClient(serviceUri, BinaryHttpDomainClient.MediaType);
 
-            return new BinaryHttpDomainClient(httpClient, serviceContract);
+            return new BinaryHttpDomainClient(httpClient, serviceContract, ReaderQuotas, Dictionary);
+        }
+
+        private static XmlDictionaryReaderQuotas CreateMaxQuotas()
+        {
+            var quotas = new XmlDictionaryReaderQuotas();
+            XmlDictionaryReaderQuotas.Max.CopyTo(quotas);
+            return quotas;
         }
     }
 }
