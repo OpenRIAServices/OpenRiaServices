@@ -25,6 +25,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         private readonly List<Action<EndpointBuilder>> _conventions = new();
         private readonly List<Action<EndpointBuilder>> _finallyConventions = new();
         private readonly HttpMethodMetadata _getOrPost = new(new[] { "GET", "POST" });
+        private readonly HttpMethodMetadata _getPostOrQuery = new(new[] { "GET", "POST", "QUERY" });
         private readonly HttpMethodMetadata _postOnly = new(new[] { "POST" });
 
         private readonly HashSet<string> _paths = new();
@@ -181,7 +182,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 DisplayName = $"{invoker.DomainOperation.DomainServiceType.Name}.{invoker.OperationName}"
             };
 
-            endpointBuilder.Metadata.Add(invoker.HasSideEffects ? _postOnly : _getOrPost);
+            endpointBuilder.Metadata.Add(invoker.HasSideEffects ? _postOnly : _getPostOrQuery);
             endpointBuilder.Metadata.Add(invoker.DomainOperation);
 
             // Copy all AspNetCore Authorization attributes

@@ -26,7 +26,7 @@ namespace OpenRiaServices.Client.DomainClients
         {
             HttpClient httpClient = CreateHttpClient(serviceUri, XmlHttpDomainClient.MediaType);
 
-            return new XmlHttpDomainClient(httpClient, serviceContract);
+            return new XmlHttpDomainClient(httpClient, serviceContract, MaxUriLength, UseQueryHttpMethod);
         }
     }
 }

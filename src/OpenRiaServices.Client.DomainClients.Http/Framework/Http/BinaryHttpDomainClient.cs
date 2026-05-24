@@ -13,7 +13,8 @@ namespace OpenRiaServices.Client.DomainClients.Http
     {
         internal const string MediaType = "application/msbin1";
 
-        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface) : base(httpClient, serviceInterface)
+        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, int maxUriLength = 2048, bool useQueryHttpMethod = false) 
+            : base(httpClient, serviceInterface, maxUriLength, useQueryHttpMethod)
         {
         }
 

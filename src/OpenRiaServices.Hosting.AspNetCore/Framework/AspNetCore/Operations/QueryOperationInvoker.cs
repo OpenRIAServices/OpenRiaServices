@@ -44,7 +44,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     var queryAttribute = (QueryAttribute)_operation.OperationAttribute;
                     serviceQuery = queryAttribute.IsComposable ? GetServiceQuery(context.Request) : null;
                 }
-                else // POST
+                else // POST or QUERY
                 {
                     var serializer = TryGetSerializerForReading(context);
                     if (serializer is null)

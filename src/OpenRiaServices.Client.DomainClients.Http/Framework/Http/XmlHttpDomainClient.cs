@@ -14,7 +14,8 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private readonly System.Text.Encoding _encoding = new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
 
-        public XmlHttpDomainClient(HttpClient httpClient, Type serviceInterface) : base(httpClient, serviceInterface)
+        public XmlHttpDomainClient(HttpClient httpClient, Type serviceInterface, int maxUriLength = 2048, bool useQueryHttpMethod = false) 
+            : base(httpClient, serviceInterface, maxUriLength, useQueryHttpMethod)
         {
         }
 
