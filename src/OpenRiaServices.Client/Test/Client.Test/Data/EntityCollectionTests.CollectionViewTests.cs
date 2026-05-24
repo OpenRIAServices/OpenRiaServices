@@ -275,7 +275,11 @@ namespace OpenRiaServices.Client.Test
                 EntityCollection<City> entityCollection = CreateEntityCollection();
                 IList list = (IList)entityCollection;
 
+                Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[-1]);
                 Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[0]);
+
+                entityCollection.Add(CreateLocalCity("Out-of-range"));
+                Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[list.Count]);
             }
 
             [TestMethod]
@@ -286,7 +290,7 @@ namespace OpenRiaServices.Client.Test
                 ICollectionView view = this.GetICV(entityCollection);
                 ConfigureView(view);
 
-                City city = CreateLocalCity("Maple Valley");
+                City city = CreateLocalCity("Snoqualmie");
                 entityCollection.Add(city);
 
                 Assert.IsTrue(view.Contains(city),
@@ -334,7 +338,7 @@ namespace OpenRiaServices.Client.Test
             private static void ConfigureView(ICollectionView view)
             {
                 view.SortDescriptions.Add(new SortDescription(nameof(City.Name), ListSortDirection.Ascending));
-                view.Filter = o => ((City)o!).Name!.Length > 0;
+                view.Filter = o => ((City)o!).Name!.StartsWith("S", StringComparison.Ordinal);
                 view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(City.CountyName)));
             }
 
