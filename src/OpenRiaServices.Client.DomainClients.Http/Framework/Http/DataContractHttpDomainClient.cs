@@ -346,14 +346,14 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
             var uri = uriBuilder.ToString();
 
-            // Switch to POST/QUERY if uri becomes to long based on configured max uri length
+            // Switch to POST/QUERY if uri becomes too long based on configured max uri length
             // we can do so by returning the special null task s_skipGetUsePostInstead
             // * https://docs.microsoft.com/en-us/iis/configuration/system.webserver/security/requestfiltering/requestlimits/
             // * https://docs.microsoft.com/en-us/dotnet/api/system.web.configuration.httpruntimesection.maxurllength?view=netframework-4.8#system-web-configuration-httpruntimesection-maxurllength
             // - default maximum query string length in IIS is 2048 bytes
-            // - MaxUrlLength is 260 per default, but we dont check it since POST will get same lenght
+            // - MaxUrlLength is 260 per default, but we dont check it since POST will get same length
             // - maxUrl defaults to 4096 bytes, but we assume it will not be an issue since we limit the query string length
-            if (uri.Length - operationName.Length > _maxUriLength) // uri contains query + operationName, so subract operationName to only get query string length
+            if (uri.Length - operationName.Length > _maxUriLength) // uri contains query + operationName, so subtract operationName to only get query string length
                 return s_skipGetUsePostInstead;
 
             return HttpClient.GetAsync(uri, DefaultHttpCompletionOption, cancellationToken);
