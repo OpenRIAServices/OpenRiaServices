@@ -246,9 +246,17 @@ namespace OpenRiaServices.Client
 
                 // we may have to check for containment once more, since the EntitySet.Add calls
                 // above can cause a dynamic add to this EntityCollection behind the scenes
-                if (TryAddEntityToCollection(entity) || addedToSet)
+                if (TryAddEntityToCollection(entity, out int idx))
                 {
-                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, this.Entities.Count - 1);
+                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, idx);
+                }
+                else if (addedToSet)
+                {
+                    idx = this.Entities.IndexOf(entity);
+                    if (idx >= 0)
+                    {
+                        this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, idx);
+                    }
                 }
 
                 this._entitiesAdded = true;
@@ -334,10 +342,14 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="entity">The <see cref="Entity"/>to add.</param>
         private bool TryAddEntityToCollection(TEntity entity)
+            => this.TryAddEntityToCollection(entity, out _);
+
+        private bool TryAddEntityToCollection(TEntity entity, out int index)
         {
             if (this.EntitiesHashSet.Add(entity))
             {
                 this.Entities.Add(entity);
+                index = this.Entities.Count - 1;
 
                 if (this.IsComposition)
                 {
@@ -348,6 +360,7 @@ namespace OpenRiaServices.Client
             }
             else
             {
+                index = this.Entities.IndexOf(entity);
                 return false;
             }
         }
@@ -623,8 +636,8 @@ namespace OpenRiaServices.Client
                 {
                     // Add matching entity to our set. When adding, we use the stronger Filter to
                     // filter out New entities
-                    if (this.TryAddEntityToCollection(typedEntity))
-                        this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
+                    if (this.TryAddEntityToCollection(typedEntity, out int idx))
+                        this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, idx);
                 }
                 // The entity is in our set but is no longer a match, so we need to remove it.
                 // Here we use the predicate directly, since even if the entity is New if it
