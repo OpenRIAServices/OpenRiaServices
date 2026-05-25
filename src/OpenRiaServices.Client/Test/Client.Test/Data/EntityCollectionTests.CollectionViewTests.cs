@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows.Data;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
@@ -265,6 +266,80 @@ namespace OpenRiaServices.Client.Test
                 WeakReference weakRef = CreateCollectionViewWeakRef(entityCollection);
                 System.GC.Collect();
                 Assert.IsFalse(weakRef.IsAlive);
+            }
+
+            [TestMethod]
+            [Description("Tests that IList indexer throws for out-of-range accesses.")]
+            public void IList_Indexer_OutOfRange_Throws()
+            {
+                EntityCollection<City> entityCollection = CreateEntityCollection();
+                IList list = (IList)entityCollection;
+
+                Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[-1]);
+                Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[0]);
+
+                entityCollection.Add(CreateLocalCity("Out-of-range"));
+                Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[list.Count]);
+            }
+
+            [TestMethod]
+            [Description("Tests Add under sorted/filtered/grouped view does not fail.")]
+            public void ICVF_SortedFilteredGrouped_Add()
+            {
+                EntityCollection<City> entityCollection = CreateEntityCollection();
+                ICollectionView view = this.GetICV(entityCollection);
+                ConfigureView(view);
+
+                City city = CreateLocalCity("Snoqualmie");
+                entityCollection.Add(city);
+
+                Assert.IsTrue(view.Contains(city),
+                    "View should contain entity after Add.");
+            }
+
+            [TestMethod]
+            [Description("Tests Remove under sorted/filtered/grouped view does not fail.")]
+            public void ICVF_SortedFilteredGrouped_Remove()
+            {
+                EntitySet<City> entitySet;
+                EntityCollection<City> entityCollection = CreateEntityCollection(out entitySet);
+                ICollectionView view = this.GetICV(entityCollection);
+                ConfigureView(view);
+
+                City city = CreateLocalCity("Sammamish");
+                entityCollection.Add(city);
+                Assert.IsTrue(view.Contains(city),
+                    "View should contain entity before Remove.");
+
+                entitySet.Remove(city);
+
+                Assert.IsFalse(view.Contains(city),
+                    "View should not contain entity after Remove.");
+            }
+
+            [TestMethod]
+            [Description("Tests Clear under sorted/filtered/grouped view does not fail.")]
+            public void ICVF_SortedFilteredGrouped_Clear()
+            {
+                EntitySet<City> entitySet;
+                EntityCollection<City> entityCollection = CreateEntityCollection(out entitySet);
+                ICollectionView view = this.GetICV(entityCollection);
+                ConfigureView(view);
+
+                entityCollection.Add(CreateLocalCity("A"));
+                entityCollection.Add(CreateLocalCity("B"));
+
+                entitySet.Clear();
+
+                Assert.IsTrue(view.IsEmpty,
+                    "View should be empty after Clear.");
+            }
+
+            private static void ConfigureView(ICollectionView view)
+            {
+                view.SortDescriptions.Add(new SortDescription(nameof(City.Name), ListSortDirection.Ascending));
+                view.Filter = o => ((City)o!).Name!.StartsWith("S", StringComparison.Ordinal);
+                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(City.CountyName)));
             }
 
             private ICollectionView GetICV(EntityCollection<City> entityCollection)
