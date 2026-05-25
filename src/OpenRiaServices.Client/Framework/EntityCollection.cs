@@ -252,7 +252,7 @@ namespace OpenRiaServices.Client
                 }
                 else if (addedToSet)
                 {
-                    idx = this.Entities.IndexOf(entity);
+                    idx = this.Entities.LastIndexOf(entity);
                     if (idx >= 0)
                     {
                         this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, idx);
@@ -341,9 +341,7 @@ namespace OpenRiaServices.Client
         /// should be done through this method.
         /// </summary>
         /// <param name="entity">The <see cref="Entity"/>to add.</param>
-        private bool TryAddEntityToCollection(TEntity entity)
-            => this.TryAddEntityToCollection(entity, out _);
-
+        /// <param name="index">the index of the entity in the collection after addition, or -1 if not added.</param>
         private bool TryAddEntityToCollection(TEntity entity, out int index)
         {
             if (this.EntitiesHashSet.Add(entity))
@@ -360,7 +358,7 @@ namespace OpenRiaServices.Client
             }
             else
             {
-                index = this.Entities.IndexOf(entity);
+                index = -1;
                 return false;
             }
         }
@@ -451,7 +449,7 @@ namespace OpenRiaServices.Client
             EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
             foreach (TEntity entity in set.OfType<TEntity>().Where(this.Filter))
             {
-                this.TryAddEntityToCollection(entity);
+                this.TryAddEntityToCollection(entity, out _);
             }
 
             // once we've loaded entities, we're caching them, so we need to update
@@ -574,19 +572,18 @@ namespace OpenRiaServices.Client
                 // entities have been added or loaded
                 if (this._entitiesAdded || this._entitiesLoaded)
                 {
-                    EntitySet sourceSet = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
-                    if (!ReferenceEquals(this._sourceSet, sourceSet))
+                    if (this._sourceSet != null)
                     {
-                        if (this._sourceSet != null)
-                        {
-                            ((INotifyCollectionChanged)this._sourceSet).CollectionChanged -= this.SourceSet_CollectionChanged;
-                            this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, false);
-                        }
-
-                        this._sourceSet = sourceSet;
-                        ((INotifyCollectionChanged)this._sourceSet).CollectionChanged += this.SourceSet_CollectionChanged;
-                        this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, true);
+                        // Make sure we unsubscribe from any sets we may have already subscribed to (e.g. in case 
+                        // of inferred adds). If we didn't already subscribe, this will be a no-op.
+                        ((INotifyCollectionChanged)this._sourceSet).CollectionChanged -= this.SourceSet_CollectionChanged;
+                        this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, false);
                     }
+
+                    // subscribe to the source set CollectionChanged event
+                    this._sourceSet = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
+                    ((INotifyCollectionChanged)this._sourceSet).CollectionChanged += this.SourceSet_CollectionChanged;
+                    this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, true);
                 }
             }
             else if (this._parent.EntitySet == null && this._sourceSet != null)
@@ -666,12 +663,24 @@ namespace OpenRiaServices.Client
                 if (newEntities.Count > 0)
                 {
                     int newStartingIdx = this.Entities.Count;
+                    int lastInserted = newStartingIdx - 1;
+
                     List<object> affectedEntities = new List<object>();
                     foreach (TEntity newEntity in newEntities)
                     {
-                        if (this.TryAddEntityToCollection(newEntity))
+                        if (this.TryAddEntityToCollection(newEntity, out int idx))
                         {
-                            affectedEntities.Add(newEntity);
+                            if (lastInserted == idx - 1)
+                            {
+                                affectedEntities.Add(newEntity);
+                            }
+                            else
+                            {
+                                this.RaiseCollectionChangedNotification(args.Action, affectedEntities, newStartingIdx);
+                                affectedEntities = [newEntity];
+                                newStartingIdx = idx;
+                                lastInserted = idx;
+                            }
                         }
                     }
 
