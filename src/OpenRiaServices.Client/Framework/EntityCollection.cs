@@ -561,18 +561,19 @@ namespace OpenRiaServices.Client
                 // entities have been added or loaded
                 if (this._entitiesAdded || this._entitiesLoaded)
                 {
-                    if (this._sourceSet != null)
+                    EntitySet sourceSet = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
+                    if (!ReferenceEquals(this._sourceSet, sourceSet))
                     {
-                        // Make sure we unsubscribe from any sets we may have already subscribed to (e.g. in case 
-                        // of inferred adds). If we didn't already subscribe, this will be a no-op.
-                        ((INotifyCollectionChanged)this._sourceSet).CollectionChanged -= this.SourceSet_CollectionChanged;
-                        this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, false);
-                    }
+                        if (this._sourceSet != null)
+                        {
+                            ((INotifyCollectionChanged)this._sourceSet).CollectionChanged -= this.SourceSet_CollectionChanged;
+                            this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, false);
+                        }
 
-                    // subscribe to the source set CollectionChanged event
-                    this._sourceSet = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
-                    ((INotifyCollectionChanged)this._sourceSet).CollectionChanged += this.SourceSet_CollectionChanged;
-                    this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, true);
+                        this._sourceSet = sourceSet;
+                        ((INotifyCollectionChanged)this._sourceSet).CollectionChanged += this.SourceSet_CollectionChanged;
+                        this._sourceSet.RegisterAssociationCallback(this.AssocAttribute, this.OnEntityAssociationUpdated, true);
+                    }
                 }
             }
             else if (this._parent.EntitySet == null && this._sourceSet != null)
