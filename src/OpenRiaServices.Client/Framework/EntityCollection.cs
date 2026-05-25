@@ -877,22 +877,7 @@ namespace OpenRiaServices.Client
         /// <inheritdoc cref="this[int]"/>
         object? IList.this[int index]
         {
-            get
-            {
-                var list = Entities;
-                if (((uint)index) < (uint)list.Count)
-                {
-                    return list[index];
-                }
-                else
-                {
-                    // We run into this scenario when the association reference is changed during an
-                    // AddNew. The scenario is not supported, but we're trying to improve the error
-                    // message. Instead of throwing an ArgumentOutOfRangeException, we'll simply return
-                    // null and allow the view to inform us the added item is not at the requested index.
-                    return null;
-                }
-            }
+            get => Entities[index];
             set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
         }
 
@@ -982,4 +967,3 @@ namespace OpenRiaServices.Client
         #endregion
     }
 }
-
