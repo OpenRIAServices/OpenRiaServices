@@ -87,8 +87,4 @@
     </EmbeddedResource>
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="AspNetCore\Serialization\MessagePack\" />
-  </ItemGroup>
-
 </Project>
