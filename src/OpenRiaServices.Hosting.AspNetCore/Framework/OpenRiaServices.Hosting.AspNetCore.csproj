@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Nerdbank.MessagePack" Version="1.2.4" />
   </ItemGroup>
 
   <ItemGroup>
@@ -84,6 +85,10 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <CustomToolNamespace>OpenRiaServices.Hosting.Wcf</CustomToolNamespace>
     </EmbeddedResource>
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="AspNetCore\Serialization\MessagePack\" />
   </ItemGroup>
 
 </Project>
