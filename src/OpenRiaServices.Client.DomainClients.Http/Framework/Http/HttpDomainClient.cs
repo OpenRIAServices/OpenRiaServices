@@ -1,17 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Globalization;
-using System.IO;
 using System.Linq;
-using System.Net;
 using System.Net.Http;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using System.Xml;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
@@ -26,28 +21,28 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// - response headers read should theoretically give lower latency since result can be
         /// deserialized as content is received
         private const HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
-        private static readonly DataContractSerializer s_faultSerializer = new DataContractSerializer(typeof(DomainServiceFault));
-        private static readonly Task<HttpResponseMessage> s_skipGetUsePostInstead = Task.FromResult<HttpResponseMessage>(null);
+        private static readonly Task<HttpResponseMessage> s_mustSendQueryInBody = Task.FromResult<HttpResponseMessage>(null);
+
+        private readonly OpenRiaServices.Client.DomainClients.HttpDomainClientFactory _factory;
 
         /// <inheritdoc/>
         public override bool SupportsCancellation => true;
 
-        /// <summary>
-        /// The mime/content type used for communication with the server.
-        /// </summary>
-        private protected abstract string ContentType { get; }
-
         private protected HttpClient HttpClient { get; }
 
-        private protected HttpDomainClient(HttpClient httpClient)
+        private protected HttpDomainClient(HttpClient httpClient, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory)
         {
+            ArgumentNullException.ThrowIfNull(httpClient);
+            ArgumentNullException.ThrowIfNull(factory);
+
             HttpClient = httpClient;
+            _factory = factory;
         }
 
-        private protected abstract XmlDictionaryWriter CreateWriter(Stream stream);
-        private protected abstract XmlDictionaryReader CreateReader(Stream stream);
-        private protected abstract MethodParameters GetMethodParameters(string methodName);
-        private protected abstract DataContractSerializer GetSerializer(Type type);
+        private protected abstract Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken);
+        private protected abstract Task<HttpResponseMessage> QueryAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken);
+        private protected abstract string GetParameterValueAsString(string operationName, string parameterName, object parameterValue);
+        private protected abstract Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType);
 
         #region Invoke/Query/Submit Methods
 
@@ -173,89 +168,20 @@ namespace OpenRiaServices.Client.DomainClients.Http
              List<ServiceQueryPart> queryOptions,
              CancellationToken cancellationToken)
         {
-            Task<HttpResponseMessage> response = s_skipGetUsePostInstead;
+            if (hasSideEffects)
+                return PostAsync(operationName, parameters, queryOptions, cancellationToken);
 
-            if (!hasSideEffects)
+            var response = GetAsync(operationName, parameters, queryOptions, cancellationToken);
+            // GET returned the sentinel value, meaning the query string is too long - fall back to POST or QUERY
+            if (ReferenceEquals(response, s_mustSendQueryInBody))
             {
-                response = GetAsync(operationName, parameters, queryOptions, cancellationToken);
-            }
-            // It is a POST, or GET returned null (maybe due to too large request uri)
-            if (ReferenceEquals(response, s_skipGetUsePostInstead))
-            {
-                response = PostAsync(operationName, parameters, queryOptions, cancellationToken);
+                response = _factory.UseQueryHttpMethod
+                    ? QueryAsync(operationName, parameters, queryOptions, cancellationToken)
+                    : PostAsync(operationName, parameters, queryOptions, cancellationToken);
             }
 
             return response;
         }
-
-        /// <summary>
-        /// Initiates a POST request for the given operation and return the server response (as a task).
-        /// </summary>
-        /// <param name="operationName">Name of operation</param>
-        /// <param name="parameters">The parameters to the server method, or <c>null</c> if no parameters.</param>
-        /// <param name="queryOptions">The query options if any.</param>
-        /// <param name="cancellationToken"></param>
-        private Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
-        {
-            var request = new HttpRequestMessage(HttpMethod.Post, operationName);
-
-            using (var ms = new MemoryStream())
-            using (var writer = CreateWriter(ms))
-            {
-                // Write message
-                var rootNamespace = "http://tempuri.org/";
-                writer.WriteStartDocument();
-
-                bool hasQueryOptions = queryOptions != null && queryOptions.Count > 0;
-
-                if (hasQueryOptions)
-                {
-                    writer.WriteStartElement("MessageRoot");
-                    writer.WriteStartElement("QueryOptions");
-                    foreach (var queryOption in queryOptions)
-                    {
-                        writer.WriteStartElement("QueryOption");
-                        writer.WriteAttributeString("Name", queryOption.QueryOperator);
-                        writer.WriteAttributeString("Value", queryOption.Expression);
-                        writer.WriteEndElement();
-                    }
-                    writer.WriteEndElement();
-                }
-                writer.WriteStartElement(operationName, rootNamespace); // <OperationName>
-
-                // Write all parameters
-                if (parameters != null && parameters.Count > 0)
-                {
-                    MethodParameters methodParameter = GetMethodParameters(operationName);
-                    foreach (var param in parameters)
-                    {
-                        writer.WriteStartElement(param.Key);  // <ParameterName>
-                        if (param.Value != null)
-                        {
-                            var parameterType = methodParameter.GetTypeForMethodParameter(param.Key);
-                            var serializer = GetSerializer(parameterType);
-                            serializer.WriteObjectContent(writer, param.Value);
-                        }
-                        else
-                        {
-                            // Null input
-                            writer.WriteAttributeString("i", "nil", "http://www.w3.org/2001/XMLSchema-instance", "true");
-                        }
-                        writer.WriteEndElement();            // </ParameterName>
-                    }
-                }
-
-                writer.WriteEndDocument(); // </OperationName> and </MessageRoot> if present
-                writer.Flush();
-
-                ms.TryGetBuffer(out ArraySegment<byte> buffer);
-                request.Content = new ByteArrayContent(buffer.Array, buffer.Offset, buffer.Count);
-                request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(ContentType);
-            }
-
-            return HttpClient.SendAsync(request, DefaultHttpCompletionOption, cancellationToken);
-        }
-
 
         /// <summary>
         /// Initiates a GET request for the given operation and return the server response (as a task).
@@ -274,7 +200,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
             // Parameters
             if (parameters != null && parameters.Count > 0)
             {
-                var methodParameters = GetMethodParameters(operationName);
                 foreach (var param in parameters)
                 {
                     if (param.Value != null)
@@ -282,8 +207,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                         uriBuilder.Append(i++ == 0 ? '?' : '&');
                         uriBuilder.Append(Uri.EscapeDataString(param.Key));
                         uriBuilder.Append('=');
-                        var parameterType = methodParameters.GetTypeForMethodParameter(param.Key);
-                        var value = WebQueryStringConverter.ConvertValueToString(param.Value, parameterType);
+                        var value = GetParameterValueAsString(operationName, param.Key, param.Value);
                         uriBuilder.Append(Uri.EscapeDataString(value));
                     }
                 }
@@ -304,108 +228,20 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
             var uri = uriBuilder.ToString();
 
-            // Switch to POST if uri becomes to long based on default IIS hosting settings
-            // we can do so by returning the special null task s_skipGetUsePostInstead
+            // Switch to POST/QUERY if uri becomes too long based on configured max query string length
+            // we can do so by returning the special null task s_mustSendQueryInBody
             // * https://docs.microsoft.com/en-us/iis/configuration/system.webserver/security/requestfiltering/requestlimits/
             // * https://docs.microsoft.com/en-us/dotnet/api/system.web.configuration.httpruntimesection.maxurllength?view=netframework-4.8#system-web-configuration-httpruntimesection-maxurllength
             // - default maximum query string length in IIS is 2048 bytes
             // - MaxUrlLength is 260 per default, but we don't check it since POST will get same length
             // - maxUrl defaults to 4096 bytes, but we assume it will not be an issue since we limit the query string length
-            if (uri.Length - operationName.Length > 2048) // uri contains query + operationName, so subtract operationName to only get query string length
-                return s_skipGetUsePostInstead;
+            var maxQueryStringLength = _factory.MaxQueryStringLength;
+            if (uri.Length - operationName.Length > maxQueryStringLength) // uri contains query + operationName, so subtract operationName to only get query string length
+                return s_mustSendQueryInBody;
 
             return HttpClient.GetAsync(uri, DefaultHttpCompletionOption, cancellationToken);
         }
         #endregion
-
-        #region Private methods for reading responses
-
-        /// <summary>
-        /// Reads a response from the service and converts it to the specified return type.
-        /// </summary>
-        /// <param name="response">the <see cref="HttpResponseMessage"/> to deserialize</param>
-        /// <param name="operationName">name of operation invoked, used to verify returned xml</param>
-        /// <param name="returnType">Type which should be returned.</param>
-        /// <returns></returns>
-        /// <exception cref="DomainOperationException">On server errors which did not produce expected output</exception>
-        /// <exception cref="FaultException{DomainServiceFault}">If server returned a DomainServiceFault</exception>
-        private async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType)
-        {
-            // Always dispose using finally block below response or we can leak connections
-            using (response)
-            {
-                // Need to read content and parse it even if status code is not 200
-                if (!response.IsSuccessStatusCode && response.Content.Headers.ContentType?.MediaType != ContentType)
-                {
-                    var message = string.Format(CultureInfo.InvariantCulture, Resources.DomainClient_UnexpectedHttpStatusCode, (int)response.StatusCode, response.StatusCode);
-
-                    if (response.StatusCode == HttpStatusCode.BadRequest)
-                        throw new DomainOperationException(message, OperationErrorStatus.NotSupported, (int)response.StatusCode, null);
-                    else if (response.StatusCode == HttpStatusCode.Unauthorized)
-                        throw new DomainOperationException(message, OperationErrorStatus.Unauthorized, (int)response.StatusCode, null);
-                    else if (response.StatusCode == HttpStatusCode.NotFound)
-                        throw new DomainOperationException(message, OperationErrorStatus.NotFound, (int)response.StatusCode, null);
-                    else
-                        throw new DomainOperationException(message, OperationErrorStatus.ServerError, (int)response.StatusCode, null);
-                }
-
-                using (var stream = await response.Content.ReadAsStreamAsync())
-                using (var reader = CreateReader(stream))
-                {
-                    reader.Read();
-
-                    // Domain Fault
-                    if (reader.LocalName == "Fault")
-                    {
-                        throw ReadFaultException(reader, operationName);
-                    }
-                    else
-                    {
-                        // Validate that we are now on ****Response node
-                        VerifyReaderIsAtNode(reader, operationName, "Response");
-                        reader.ReadStartElement(); // Read to next which should be ****Result
-
-                        if (returnType == typeof(void)
-                          || (reader.GetAttribute("nil", "http://www.w3.org/2001/XMLSchema-instance") == "true"))
-                        {
-                            return null;
-                        }
-
-                        // Validate that we are now on ****Result node
-                        VerifyReaderIsAtNode(reader, operationName, "Result");
-
-                        var serializer = GetSerializer(returnType);
-
-                        // XmlElement returns the "ResultNode" unless we step into the contents
-                        if (returnType == typeof(System.Xml.Linq.XElement))
-                            reader.ReadStartElement();
-
-                        return serializer.ReadObject(reader, verifyObjectName: false);
-                    }
-                }
-            }
-        }
-
-        /// <summary>
-        /// Verifies the reader is at node with LocalName equal to operationName + postfix.
-        /// If the reader is at any other node, then a <see cref="DomainOperationException"/> is thrown
-        /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <param name="operationName">Name of the operation.</param>
-        /// <param name="postfix">The postfix.</param>
-        /// <exception cref="DomainOperationException">If reader is not at the expected xml element</exception>
-        private static void VerifyReaderIsAtNode(XmlDictionaryReader reader, string operationName, string postfix)
-        {
-            // localName should be operationName + postfix
-            if (!(reader.LocalName.Length == operationName.Length + postfix.Length
-                 && reader.LocalName.StartsWith(operationName, StringComparison.Ordinal)
-                 && reader.LocalName.EndsWith(postfix, StringComparison.Ordinal)))
-            {
-                throw new DomainOperationException(
-                     string.Format(Resources.DomainClient_UnexpectedResultContent, operationName + postfix, reader.LocalName)
-                     , OperationErrorStatus.ServerError, 0, null);
-            }
-        }
 
         /// <summary>
         /// Constructs an exception based on a service fault.
@@ -434,72 +270,5 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 return new DomainOperationException(serviceFault.ErrorMessage, OperationErrorStatus.ServerError, serviceFault.ErrorCode, serviceFault.StackTrace);
             }
         }
-
-        /// <summary>
-        /// Reads a Fault reply from the service.
-        /// </summary>
-        /// <param name="reader">The reader, which should start at the "Fault" element.</param>
-        /// <param name="operationName">Name of the operation.</param>
-        /// <returns>A FaultException with the details in the server reply</returns>
-        private static FaultException ReadFaultException(XmlDictionaryReader reader, string operationName)
-        {
-            FaultCode faultCode = null;
-            FaultReason faultReason = null;
-            var faultReasons = new List<FaultReasonText>();
-            FaultCode subCode = null;
-
-            reader.ReadStartElement("Fault"); // <Fault>
-
-            if (reader.IsStartElement("Code"))
-            {
-                reader.ReadStartElement("Code");  // <Code>
-                reader.ReadStartElement("Value"); // <Value>
-                var code = reader.ReadContentAsString();
-                reader.ReadEndElement(); // </Value>
-                if (reader.IsStartElement("Subcode"))
-                {
-                    reader.ReadStartElement();
-                    reader.ReadStartElement("Value");
-                    subCode = new FaultCode(reader.ReadContentAsString());
-                    reader.ReadEndElement(); // </Value>
-                    reader.ReadEndElement(); // </Subcode>
-                }
-                reader.ReadEndElement(); // </Code>
-                faultCode = new FaultCode(code, subCode);
-            }
-
-            if (reader.IsStartElement("Reason"))
-            {
-                reader.ReadStartElement("Reason");
-                while (reader.LocalName == "Text")
-                {
-                    bool isEmpty = reader.IsEmptyElement;
-
-                    var lang = reader.XmlLang;
-                    reader.ReadStartElement("Text");
-                    var text = reader.ReadContentAsString();
-
-                    if (!isEmpty)
-                        reader.ReadEndElement();
-
-                    faultReasons.Add(new FaultReasonText(text, lang));
-                }
-                reader.ReadEndElement(); // </Reason>
-                faultReason = new FaultReason(faultReasons);
-            }
-
-            if (reader.IsStartElement("Detail"))
-            {
-                reader.ReadStartElement("Detail"); // <Detail>
-                var fault = (DomainServiceFault)s_faultSerializer.ReadObject(reader);
-                reader.ReadEndElement(); // </ Detail>
-                return new FaultException<DomainServiceFault>(fault, faultReason, faultCode, operationName);
-            }
-            else
-            {
-                return new FaultException(faultReason, faultCode, operationName);
-            }
-        }
-        #endregion
     }
 }
