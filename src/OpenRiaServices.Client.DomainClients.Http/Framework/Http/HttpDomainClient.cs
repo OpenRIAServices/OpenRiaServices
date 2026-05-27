@@ -23,7 +23,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// ResponseContentRead seems to give better results on .Net framework for local network with low latency and high bandwidth
         /// This is probably due to less kernel time
         /// It would be good to do measurements on .net core as well as over the internet
-        /// - response headers read should teoretically give lower latency since result can be
+        /// - response headers read should theoretically give lower latency since result can be
         /// deserialized as content is received
         private const HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
         private static readonly DataContractSerializer s_faultSerializer = new DataContractSerializer(typeof(DomainServiceFault));
@@ -189,7 +189,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         }
 
         /// <summary>
-        /// Initiates a POST request for the given operation and return the server respose (as a task).
+        /// Initiates a POST request for the given operation and return the server response (as a task).
         /// </summary>
         /// <param name="operationName">Name of operation</param>
         /// <param name="parameters">The parameters to the server method, or <c>null</c> if no parameters.</param>
@@ -258,7 +258,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
 
         /// <summary>
-        /// Initiates a GET request for the given operation and return the server respose (as a task).
+        /// Initiates a GET request for the given operation and return the server response (as a task).
         /// </summary>
         /// <param name="operationName">Name of operation</param>
         /// <param name="parameters">The parameters to the server method, or <c>null</c> if no parameters.</param>
@@ -309,9 +309,9 @@ namespace OpenRiaServices.Client.DomainClients.Http
             // * https://docs.microsoft.com/en-us/iis/configuration/system.webserver/security/requestfiltering/requestlimits/
             // * https://docs.microsoft.com/en-us/dotnet/api/system.web.configuration.httpruntimesection.maxurllength?view=netframework-4.8#system-web-configuration-httpruntimesection-maxurllength
             // - default maximum query string length in IIS is 2048 bytes
-            // - MaxUrlLength is 260 per default, but we dont check it since POST will get same lenght
+            // - MaxUrlLength is 260 per default, but we don't check it since POST will get same length
             // - maxUrl defaults to 4096 bytes, but we assume it will not be an issue since we limit the query string length
-            if (uri.Length - operationName.Length > 2048) // uri contains query + operationName, so subract operationName to only get query string length
+            if (uri.Length - operationName.Length > 2048) // uri contains query + operationName, so subtract operationName to only get query string length
                 return s_skipGetUsePostInstead;
 
             return HttpClient.GetAsync(uri, DefaultHttpCompletionOption, cancellationToken);
@@ -331,7 +331,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <exception cref="FaultException{DomainServiceFault}">If server returned a DomainServiceFault</exception>
         private async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType)
         {
-            // Always dispose using finally block below  respnse or we can leak connections
+            // Always dispose using finally block below response or we can leak connections
             using (response)
             {
                 // Need to read content and parse it even if status code is not 200
