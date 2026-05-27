@@ -12,7 +12,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     internal sealed class TextXmlDataContractRequestSerializer : DataContractRequestSerializer
     {
-        public TextXmlDataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, XmlDataContractSerializerOptions options)
+        public TextXmlDataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, XmlSerializationOptions options)
             : base(operation, dataContractCache, isBinary: false, options)
         {
         }
@@ -26,7 +26,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
     internal sealed class BinaryXmlDataContractRequestSerializer : DataContractRequestSerializer
     {
-        public BinaryXmlDataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, BinaryDataContractSerializerOptions options)
+        public BinaryXmlDataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, BinarySerializationOptions options)
             : base(operation, dataContractCache, isBinary: true, options)
         {
         }
@@ -59,7 +59,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private bool IsBinary { get; }
         private string ContentType => IsBinary ? MimeTypes.BinaryXml : MimeTypes.TextXml;
 
-        protected DataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, bool isBinary, DataContractSerializerOptions options)
+        protected DataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, bool isBinary, SerializationOptions options)
         {
             Type actualReturnType = operation.Operation switch
             {

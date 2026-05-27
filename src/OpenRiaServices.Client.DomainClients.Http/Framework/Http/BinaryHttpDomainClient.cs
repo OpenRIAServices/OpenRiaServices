@@ -14,9 +14,9 @@ namespace OpenRiaServices.Client.DomainClients.Http
     {
         internal const string MediaType = "application/msbin1";
         private readonly XmlDictionaryReaderQuotas _readerQuotas;
-        private readonly IXmlDictionary? _dictionary;
+        private readonly IXmlDictionary _dictionary;
 
-        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, XmlDictionaryReaderQuotas readerQuotas, IXmlDictionary? dictionary)
+        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, XmlDictionaryReaderQuotas readerQuotas, IXmlDictionary dictionary)
             : base(httpClient, serviceInterface)
         {
             ArgumentNullException.ThrowIfNull(readerQuotas);

@@ -8,11 +8,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     internal sealed class BinaryXmlSerializationProvider : DataContractSerializationProvider
     {
-        private readonly BinaryDataContractSerializerOptions _options;
+        private readonly BinarySerializationOptions _options;
 
-        public BinaryXmlSerializationProvider(BinaryDataContractSerializerOptions? options = null)
+        public BinaryXmlSerializationProvider(BinarySerializationOptions? options = null)
         {
-            _options = options ?? new BinaryDataContractSerializerOptions();
+            _options = options ?? new BinarySerializationOptions();
         }
 
         /// <summary>
@@ -27,9 +27,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
     internal sealed class TextXmlSerializationProvider : DataContractSerializationProvider
     {
-        private readonly XmlDataContractSerializerOptions _options;
+        private readonly XmlSerializationOptions _options;
 
-        public TextXmlSerializationProvider(XmlDataContractSerializerOptions options)
+        public TextXmlSerializationProvider(XmlSerializationOptions options)
         {
             ArgumentNullException.ThrowIfNull(options);
 

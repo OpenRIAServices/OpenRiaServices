@@ -42,15 +42,15 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// </summary>
         /// <remarks>Request should specify mime-type <c>application/xml</c> using <c>Content-Type</c> or <c>Accept</c> HTTP-headers.
         /// </remarks>
-        /// <param name="configure">An optional callback to configure <see cref="Serialization.XmlDataContractSerializerOptions"/>.</param>
+        /// <param name="configure">An optional callback to configure <see cref="XmlSerializationOptions"/>.</param>
         /// <param name="defaultProvider">If <see langword="true"/> the Xml provider will be the default for responses (when content type is not specified)</param>
-        public OpenRiaServicesOptionsBuilder AddXmlSerialization(Action<Serialization.XmlDataContractSerializerOptions>? configure, bool defaultProvider = false)
+        public OpenRiaServicesOptionsBuilder AddXmlSerialization(Action<XmlSerializationOptions>? configure, bool defaultProvider = false)
         {
             if (configure is not null)
                 Services.Configure(configure);
 
             Services.AddOptions<OpenRiaServicesOptions>()
-                .Configure((OpenRiaServicesOptions options, IOptions<Serialization.XmlDataContractSerializerOptions> serializationOptions) =>
+                .Configure((OpenRiaServicesOptions options, IOptions<XmlSerializationOptions> serializationOptions) =>
                 {
                     options.AddSerializationProvider(new Serialization.TextXmlSerializationProvider(serializationOptions.Value), defaultProvider);
                 });
@@ -64,12 +64,12 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// <remarks>
         /// Use this to restrict reader quotas and mitigate denial-of-service risks for binary requests.
         /// </remarks>
-        /// <param name="configure">A callback to configure <see cref="Serialization.BinaryDataContractSerializerOptions"/>.</param>
-        public OpenRiaServicesOptionsBuilder ConfigureBinarySerialization(Action<Serialization.BinaryDataContractSerializerOptions> configure)
+        /// <param name="configure">A callback to configure <see cref="BinarySerializationOptions"/>.</param>
+        public OpenRiaServicesOptionsBuilder ConfigureBinarySerialization(Action<BinarySerializationOptions> configure)
         {
             ArgumentNullException.ThrowIfNull(configure);
 
-            Services.Configure<Serialization.BinaryDataContractSerializerOptions>(configure);
+            Services.Configure<BinarySerializationOptions>(configure);
 
             return this;
         }

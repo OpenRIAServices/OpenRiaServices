@@ -13,7 +13,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore;
@@ -118,8 +117,8 @@ public class SerializationOptionsTests
     // -------------------------------------------------------------------------
 
     private static async Task<IHost> CreateHost(
-        Action<BinaryDataContractSerializerOptions> binaryConfigure = null,
-        Action<XmlDataContractSerializerOptions> xmlConfigure = null)
+        Action<BinarySerializationOptions> binaryConfigure = null,
+        Action<XmlSerializationOptions> xmlConfigure = null)
     {
         return await new HostBuilder()
             .ConfigureWebHost(webBuilder =>

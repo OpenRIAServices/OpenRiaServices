@@ -20,7 +20,7 @@ namespace OpenRiaServices.Client.DomainClients
         /// <summary>
         /// Gets or sets the shared dictionary used for binary XML reader/writer compression.
         /// </summary>
-        public IXmlDictionary? Dictionary { get; set; }
+        public IXmlDictionary Dictionary { get; set; }
 
         /// <inheritdoc />
         public BinaryHttpDomainClientFactory(Uri serverBaseUri, HttpMessageHandler messageHandler)
