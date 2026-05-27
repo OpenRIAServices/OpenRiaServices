@@ -273,7 +273,7 @@ namespace OpenRiaServices.Client.Test
             public void IList_Indexer_OutOfRange_Throws()
             {
                 EntityCollection<City> entityCollection = CreateEntityCollection();
-                IList list = (IList)entityCollection;
+                IList list = entityCollection;
 
                 Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[-1]);
                 Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[0]);
