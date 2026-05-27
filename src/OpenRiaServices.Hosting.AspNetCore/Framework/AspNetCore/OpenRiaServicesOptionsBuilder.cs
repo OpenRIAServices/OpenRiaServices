@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 
 namespace OpenRiaServices.Hosting.AspNetCore
 {
@@ -52,7 +53,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             Services.AddOptions<OpenRiaServicesOptions>()
                 .Configure((OpenRiaServicesOptions options, IOptions<XmlSerializationOptions> serializationOptions) =>
                 {
-                    options.AddSerializationProvider(new Serialization.TextXmlSerializationProvider(serializationOptions.Value), defaultProvider);
+                    options.AddSerializationProvider(new TextXmlSerializationProvider(serializationOptions.Value), defaultProvider);
                 });
 
             return this;
@@ -75,7 +76,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         }
 
         /// <summary>
-        /// Removes all registered <see cref="Serialization.ISerializationProvider" />s.
+        /// Removes all registered <see cref="ISerializationProvider" />s.
         /// <para>Useful for removing default serialization formats (application/msbin1).</para>
         /// </summary>
         public OpenRiaServicesOptionsBuilder ClearSerializationProviders()
