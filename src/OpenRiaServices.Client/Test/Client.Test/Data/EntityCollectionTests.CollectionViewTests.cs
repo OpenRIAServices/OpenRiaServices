@@ -338,8 +338,7 @@ namespace OpenRiaServices.Client.Test
             [Description("Tests source set remove under sorted view does not throw.")]
             public void SortedView_SourceSetRemove_DoesNotThrowNRE()
             {
-                EntitySet<City> entitySet = null;
-                EntityCollection<City> entityCollection = CreateEntityCollection(out entitySet);
+                EntityCollection<City> entityCollection = CreateEntityCollection(out EntitySet<City> entitySet);
                 City city = CreateLocalCity("Sammamish");
                 entityCollection.Add(city);
 
