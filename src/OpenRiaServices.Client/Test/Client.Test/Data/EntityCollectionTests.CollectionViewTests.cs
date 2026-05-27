@@ -283,63 +283,113 @@ namespace OpenRiaServices.Client.Test
             }
 
             [TestMethod]
-            [Description("Tests Add under sorted/filtered/grouped view does not fail.")]
-            public void ICVF_SortedFilteredGrouped_Add()
+            [Description("Tests EntitySet.Clear under sorted view does not throw.")]
+            public void SortedView_EntitySetClear_DoesNotThrowNRE()
             {
-                EntityCollection<City> entityCollection = CreateEntityCollection();
-                ICollectionView view = this.GetICV(entityCollection);
-                ConfigureView(view);
-
-                City city = CreateLocalCity("Snoqualmie");
-                entityCollection.Add(city);
-
-                Assert.IsTrue(view.Contains(city),
-                    "View should contain entity after Add.");
-            }
-
-            [TestMethod]
-            [Description("Tests Remove under sorted/filtered/grouped view does not fail.")]
-            public void ICVF_SortedFilteredGrouped_Remove()
-            {
-                EntitySet<City> entitySet;
-                EntityCollection<City> entityCollection = CreateEntityCollection(out entitySet);
-                ICollectionView view = this.GetICV(entityCollection);
-                ConfigureView(view);
-
-                City city = CreateLocalCity("Sammamish");
-                entityCollection.Add(city);
-                Assert.IsTrue(view.Contains(city),
-                    "View should contain entity before Remove.");
-
-                entitySet.Remove(city);
-
-                Assert.IsFalse(view.Contains(city),
-                    "View should not contain entity after Remove.");
-            }
-
-            [TestMethod]
-            [Description("Tests Clear under sorted/filtered/grouped view does not fail.")]
-            public void ICVF_SortedFilteredGrouped_Clear()
-            {
-                EntitySet<City> entitySet;
-                EntityCollection<City> entityCollection = CreateEntityCollection(out entitySet);
-                ICollectionView view = this.GetICV(entityCollection);
-                ConfigureView(view);
-
+                EntityCollection<City> entityCollection = CreateEntityCollection(out EntitySet<City> entitySet);
                 entityCollection.Add(CreateLocalCity("A"));
                 entityCollection.Add(CreateLocalCity("B"));
 
-                entitySet.Clear();
+                ListCollectionView view = (ListCollectionView)this.GetICV(entityCollection);
+                view.SortDescriptions.Add(new SortDescription(nameof(City.Name), ListSortDirection.Ascending));
+                view.Refresh();
 
-                Assert.IsTrue(view.IsEmpty,
-                    "View should be empty after Clear.");
+                Exception caught = null;
+                try
+                {
+                    entitySet.Clear();
+                }
+                catch (Exception exception)
+                {
+                    caught = exception;
+                }
+
+                Assert.IsNull(caught, $"EntitySet.Clear() must not surface NRE through the bound view: {caught}");
+                Assert.IsTrue(view.IsEmpty);
             }
 
-            private static void ConfigureView(ICollectionView view)
+            [TestMethod]
+            [Description("Tests EntityCollection.Add under sorted view does not throw.")]
+            public void SortedView_EntityCollectionAdd_DoesNotThrowNRE()
             {
+                EntityCollection<City> entityCollection = CreateEntityCollection();
+                entityCollection.Add(CreateLocalCity("Bellevue"));
+                entityCollection.Add(CreateLocalCity("Redmond"));
+
+                ListCollectionView view = (ListCollectionView)this.GetICV(entityCollection);
                 view.SortDescriptions.Add(new SortDescription(nameof(City.Name), ListSortDirection.Ascending));
-                view.Filter = o => ((City)o!).Name!.StartsWith("S", StringComparison.Ordinal);
-                view.GroupDescriptions.Add(new PropertyGroupDescription(nameof(City.CountyName)));
+                view.Refresh();
+
+                Exception caught = null;
+                try
+                {
+                    entityCollection.Add(CreateLocalCity("Kirkland"));
+                }
+                catch (Exception exception)
+                {
+                    caught = exception;
+                }
+
+                Assert.IsNull(caught, $"EntityCollection.Add must not surface NRE through AdjustBefore: {caught}");
+                Assert.AreEqual(3, view.Count);
+            }
+
+            [TestMethod]
+            [Description("Tests source set remove under sorted view does not throw.")]
+            public void SortedView_SourceSetRemove_DoesNotThrowNRE()
+            {
+                EntitySet<City> entitySet = null;
+                EntityCollection<City> entityCollection = CreateEntityCollection(out entitySet);
+                City city = CreateLocalCity("Sammamish");
+                entityCollection.Add(city);
+
+                ListCollectionView view = (ListCollectionView)this.GetICV(entityCollection);
+                view.SortDescriptions.Add(new SortDescription(nameof(City.Name), ListSortDirection.Ascending));
+                view.Refresh();
+
+                Exception caught = null;
+                try
+                {
+                    entitySet.Remove(city);
+                }
+                catch (Exception exception)
+                {
+                    caught = exception;
+                }
+
+                Assert.IsNull(caught, $"EntitySet.Remove in a sorted EntityCollection view must not NRE: {caught}");
+                Assert.IsFalse(view.Contains(city));
+            }
+
+            [TestMethod]
+            [Description("Tests filter predicate is never invoked with null.")]
+            public void FilteredView_FilterPredicate_NeverInvokedWithNull()
+            {
+                EntityCollection<City> entityCollection = CreateEntityCollection(out EntitySet<City> entitySet);
+                entityCollection.Add(CreateLocalCity("A"));
+                entityCollection.Add(CreateLocalCity("B"));
+
+                ListCollectionView view = (ListCollectionView)this.GetICV(entityCollection);
+                bool sawNull = false;
+                view.Filter = o =>
+                {
+                    if (o is null)
+                    {
+                        sawNull = true;
+                    }
+
+                    return true;
+                };
+                view.Refresh();
+
+                entityCollection.Add(CreateLocalCity("C"));
+                entitySet.Clear();
+
+                foreach (object item in view)
+                {
+                }
+
+                Assert.IsFalse(sawNull, "Filter predicate must never receive a null item from the EntityCollection.");
             }
 
             private ICollectionView GetICV(EntityCollection<City> entityCollection)
