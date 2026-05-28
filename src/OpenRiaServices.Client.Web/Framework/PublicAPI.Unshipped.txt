@@ -1,0 +1,37 @@
+﻿abstract OpenRiaServices.Client.Web.WcfDomainClientFactory.CreateBinding(System.Uri endpoint, bool requiresSecureEndpoint) -> System.ServiceModel.Channels.Binding
+OpenRiaServices.Client.DomainServiceFault
+OpenRiaServices.Client.DomainServiceFault.DomainServiceFault() -> void
+OpenRiaServices.Client.DomainServiceFault.ErrorCode.get -> int
+OpenRiaServices.Client.DomainServiceFault.ErrorCode.set -> void
+OpenRiaServices.Client.DomainServiceFault.ErrorMessage.get -> string
+OpenRiaServices.Client.DomainServiceFault.ErrorMessage.set -> void
+OpenRiaServices.Client.DomainServiceFault.GetValidationErrors() -> System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Client.DomainServiceFault.IsDomainException.get -> bool
+OpenRiaServices.Client.DomainServiceFault.IsDomainException.set -> void
+OpenRiaServices.Client.DomainServiceFault.OperationErrors.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.ValidationResultInfo>
+OpenRiaServices.Client.DomainServiceFault.OperationErrors.set -> void
+OpenRiaServices.Client.DomainServiceFault.StackTrace.get -> string
+OpenRiaServices.Client.DomainServiceFault.StackTrace.set -> void
+OpenRiaServices.Client.Web.Internal.WcfEndpointBehavior
+OpenRiaServices.Client.Web.Internal.WcfEndpointBehavior.WcfEndpointBehavior(OpenRiaServices.Client.Web.WcfDomainClientFactory factory) -> void
+OpenRiaServices.Client.Web.SoapDomainClientFactory
+OpenRiaServices.Client.Web.SoapDomainClientFactory.SoapDomainClientFactory() -> void
+OpenRiaServices.Client.Web.WcfDomainClientFactory
+OpenRiaServices.Client.Web.WcfDomainClientFactory.CookieContainer.get -> System.Net.CookieContainer
+OpenRiaServices.Client.Web.WcfDomainClientFactory.CookieContainer.set -> void
+OpenRiaServices.Client.Web.WcfDomainClientFactory.WcfDomainClientFactory(string endpointSuffix) -> void
+OpenRiaServices.Client.WebDomainClient<TContract>
+OpenRiaServices.Client.WebDomainClient<TContract>.ChannelFactory.get -> System.ServiceModel.ChannelFactory<TContract>
+OpenRiaServices.Client.WebDomainClient<TContract>.ServiceUri.get -> System.Uri
+OpenRiaServices.Client.WebDomainClient<TContract>.UsesHttps.get -> bool
+OpenRiaServices.Client.WebDomainClient<TContract>.WebDomainClient(System.Uri serviceUri, bool usesHttps, OpenRiaServices.Client.Web.WcfDomainClientFactory domainClientFactory) -> void
+override OpenRiaServices.Client.Web.SoapDomainClientFactory.CreateBinding(System.Uri endpoint, bool requiresSecureEndpoint) -> System.ServiceModel.Channels.Binding
+override OpenRiaServices.Client.Web.SoapDomainClientFactory.CreateChannelFactory<TContract>(System.Uri endpoint, bool requiresSecureEndpoint) -> System.ServiceModel.ChannelFactory<TContract>
+override OpenRiaServices.Client.Web.WcfDomainClientFactory.CreateDomainClientCore(System.Type serviceContract, System.Uri serviceUri, bool requiresSecureEndpoint) -> OpenRiaServices.Client.DomainClient
+override OpenRiaServices.Client.WebDomainClient<TContract>.InvokeAsyncCore(OpenRiaServices.Client.InvokeArgs invokeArgs, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.InvokeCompletedResult>
+override OpenRiaServices.Client.WebDomainClient<TContract>.QueryAsyncCore(OpenRiaServices.Client.EntityQuery query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.QueryCompletedResult>
+override OpenRiaServices.Client.WebDomainClient<TContract>.SubmitAsyncCore(OpenRiaServices.Client.EntityChangeSet changeSet, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.SubmitCompletedResult>
+override OpenRiaServices.Client.WebDomainClient<TContract>.SupportsCancellation.get -> bool
+virtual OpenRiaServices.Client.Web.WcfDomainClientFactory.CreateChannelFactory<TContract>(System.Uri endpoint, bool requiresSecureEndpoint) -> System.ServiceModel.ChannelFactory<TContract>
+virtual OpenRiaServices.Client.Web.WcfDomainClientFactory.CreateEndpointAddress(System.Uri endpoint, bool requiresSecureEndpoint) -> System.ServiceModel.EndpointAddress
+virtual OpenRiaServices.Client.WebDomainClient<TContract>.CallServiceOperation<TResult>(TContract channel, string operationName, System.Collections.Generic.IDictionary<string, object> parameters, System.Func<object, System.IAsyncResult, TResult> callback, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<TResult>

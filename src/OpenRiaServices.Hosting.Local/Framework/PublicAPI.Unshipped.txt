@@ -1,0 +1,7 @@
+﻿OpenRiaServices.Hosting.Local.DomainServiceProxy
+OpenRiaServices.Hosting.Local.OperationException
+OpenRiaServices.Hosting.Local.OperationException.OperationErrors.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Server.ValidationResultInfo>
+static OpenRiaServices.Hosting.Local.DomainServiceProxy.AssociateOriginal<TEntity>(object domainServiceProxy, TEntity current, TEntity original) -> void
+static OpenRiaServices.Hosting.Local.DomainServiceProxy.Create<TDomainServiceContract, TDomainService>() -> TDomainServiceContract
+static OpenRiaServices.Hosting.Local.DomainServiceProxy.Create<TDomainServiceContract, TDomainService>(OpenRiaServices.Server.DomainServiceContext domainServiceContext) -> TDomainServiceContract
+static OpenRiaServices.Hosting.Local.DomainServiceProxy.Create<TDomainServiceContract, TDomainService>(System.Web.HttpContextBase httpContext) -> TDomainServiceContract

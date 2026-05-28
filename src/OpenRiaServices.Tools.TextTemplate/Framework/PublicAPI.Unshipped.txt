@@ -1,0 +1,153 @@
+﻿abstract OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.ComplexObjectGenerator.get -> OpenRiaServices.Tools.TextTemplate.ComplexObjectGenerator
+abstract OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.DomainContextGenerator.get -> OpenRiaServices.Tools.TextTemplate.DomainContextGenerator
+abstract OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.EntityGenerator.get -> OpenRiaServices.Tools.TextTemplate.EntityGenerator
+abstract OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.EnumGenerator.get -> OpenRiaServices.Tools.TextTemplate.EnumGenerator
+abstract OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.GenerateCode() -> string
+abstract OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.WebContextGenerator.get -> OpenRiaServices.Tools.TextTemplate.WebContextGenerator
+abstract OpenRiaServices.Tools.TextTemplate.DataContractProxyGenerator.GenerateDataContractProxy() -> string
+abstract OpenRiaServices.Tools.TextTemplate.DomainContextGenerator.GenerateDomainContextClass() -> string
+abstract OpenRiaServices.Tools.TextTemplate.EnumGenerator.GenerateEnums() -> string
+abstract OpenRiaServices.Tools.TextTemplate.WebContextGenerator.GenerateWebContextClass() -> string
+OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator
+OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.ClientCodeGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.CodeGenerationHost.get -> OpenRiaServices.Tools.ICodeGenerationHost
+OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.DomainServiceDescriptions.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Server.DomainServiceDescription>
+OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.GenerateCode(OpenRiaServices.Tools.ICodeGenerationHost codeGenerationHost, System.Collections.Generic.IEnumerable<OpenRiaServices.Server.DomainServiceDescription> domainServiceDescriptions, OpenRiaServices.Tools.ClientCodeGenerationOptions options) -> string
+OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.Options.get -> OpenRiaServices.Tools.ClientCodeGenerationOptions
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplate
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplate.CodeGeneratorTextTemplate() -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.ClearIndent() -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.CodeGeneratorTextTemplateBase() -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.CurrentIndent.get -> string
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.Error(string message) -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.Errors.get -> System.CodeDom.Compiler.CompilerErrorCollection
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.GenerationEnvironment.get -> System.Text.StringBuilder
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.GenerationEnvironment.set -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.PopIndent() -> string
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.PushIndent(string indent) -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.ToStringHelper.get -> OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.ToStringInstanceHelper
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.ToStringInstanceHelper
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.ToStringInstanceHelper.FormatProvider.get -> System.IFormatProvider
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.ToStringInstanceHelper.FormatProvider.set -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.ToStringInstanceHelper.ToStringInstanceHelper() -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.ToStringInstanceHelper.ToStringWithCulture(object objectToConvert) -> string
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.Warning(string message) -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.Write(string format, params object[] args) -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.Write(string textToAppend) -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.WriteLine(string format, params object[] args) -> void
+OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.WriteLine(string textToAppend) -> void
+OpenRiaServices.Tools.TextTemplate.ComplexObjectGenerator
+OpenRiaServices.Tools.TextTemplate.ComplexObjectGenerator.ComplexObjectGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.ComplexObjectGenerator.DomainServiceDescription.get -> OpenRiaServices.Server.DomainServiceDescription
+OpenRiaServices.Tools.TextTemplate.ComplexObjectGenerator.Generate(System.Type complexObjectType, OpenRiaServices.Server.DomainServiceDescription domainServiceDescription, OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator clientCodeGenerator) -> string
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator.CSharpClientCodeGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.CSharpComplexObjectGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.CSharpDomainContextGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateServiceContractInterface() -> void
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.CSharpEntityGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEnumGenerator
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEnumGenerator.CSharpEnumGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator
+OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator.CSharpWebContextGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.DataContractProxyGenerator
+OpenRiaServices.Tools.TextTemplate.DataContractProxyGenerator.ClientCodeGenerator.get -> OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator
+OpenRiaServices.Tools.TextTemplate.DataContractProxyGenerator.ClientCodeGenerator.set -> void
+OpenRiaServices.Tools.TextTemplate.DataContractProxyGenerator.DataContractProxyGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.DataContractProxyGenerator.Type.get -> System.Type
+OpenRiaServices.Tools.TextTemplate.DataContractProxyGenerator.Type.set -> void
+OpenRiaServices.Tools.TextTemplate.DomainContextGenerator
+OpenRiaServices.Tools.TextTemplate.DomainContextGenerator.ClientCodeGenerator.get -> OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator
+OpenRiaServices.Tools.TextTemplate.DomainContextGenerator.DomainContextGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.DomainContextGenerator.DomainServiceDescription.get -> OpenRiaServices.Server.DomainServiceDescription
+OpenRiaServices.Tools.TextTemplate.DomainContextGenerator.Generate(OpenRiaServices.Server.DomainServiceDescription domainServiceDescription, OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator clientCodeGenerator) -> string
+OpenRiaServices.Tools.TextTemplate.EntityGenerator
+OpenRiaServices.Tools.TextTemplate.EntityGenerator.DomainServiceDescriptions.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Server.DomainServiceDescription>
+OpenRiaServices.Tools.TextTemplate.EntityGenerator.EntityGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.EntityGenerator.Generate(System.Type entityType, System.Collections.Generic.IEnumerable<OpenRiaServices.Server.DomainServiceDescription> domainServiceDescriptions, OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator clientCodeGenerator) -> string
+OpenRiaServices.Tools.TextTemplate.EnumGenerator
+OpenRiaServices.Tools.TextTemplate.EnumGenerator.ClientCodeGenerator.get -> OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator
+OpenRiaServices.Tools.TextTemplate.EnumGenerator.EnumGenerator() -> void
+OpenRiaServices.Tools.TextTemplate.EnumGenerator.EnumsToGenerate.get -> System.Collections.Generic.HashSet<System.Type>
+OpenRiaServices.Tools.TextTemplate.EnumGenerator.GenerateEnums(System.Collections.Generic.HashSet<System.Type> enumsToGenerate, OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator clientCodeGenerator) -> string
+OpenRiaServices.Tools.TextTemplate.WebContextGenerator
+OpenRiaServices.Tools.TextTemplate.WebContextGenerator.ClientCodeGenerator.get -> OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator
+OpenRiaServices.Tools.TextTemplate.WebContextGenerator.DomainServiceDescriptions.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Server.DomainServiceDescription>
+OpenRiaServices.Tools.TextTemplate.WebContextGenerator.Generate(System.Collections.Generic.IEnumerable<OpenRiaServices.Server.DomainServiceDescription> domainServiceDescriptions, OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator clientCodeGenerator) -> string
+OpenRiaServices.Tools.TextTemplate.WebContextGenerator.WebContextGenerator() -> void
+override OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.ComplexObjectGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator.ComplexObjectGenerator.get -> OpenRiaServices.Tools.TextTemplate.ComplexObjectGenerator
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator.DomainContextGenerator.get -> OpenRiaServices.Tools.TextTemplate.DomainContextGenerator
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator.EntityGenerator.get -> OpenRiaServices.Tools.TextTemplate.EntityGenerator
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator.EnumGenerator.get -> OpenRiaServices.Tools.TextTemplate.EnumGenerator
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator.GenerateCode() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpClientCodeGenerator.WebContextGenerator.get -> OpenRiaServices.Tools.TextTemplate.WebContextGenerator
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.GenerateDataContractProxy() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateDomainContextClass() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateDataContractProxy() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEnumGenerator.GenerateEnums() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEnumGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator.GenerateWebContextClass() -> string
+override OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.DataContractProxyGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.DomainContextGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.EntityGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.EnumGenerator.TransformText() -> string
+override OpenRiaServices.Tools.TextTemplate.WebContextGenerator.TransformText() -> string
+virtual OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplate.TransformText() -> string
+virtual OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.Session.get -> System.Collections.Generic.IDictionary<string, object>
+virtual OpenRiaServices.Tools.TextTemplate.CodeGeneratorTextTemplateBase.Session.set -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes, bool forcePropagation) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.GenerateBody() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.GenerateClassDeclaration() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.GenerateConstructor() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.GenerateNotificationMethods() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.GenerateProperties() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpComplexObjectGenerator.GenerateProperty(System.ComponentModel.PropertyDescriptor propertyDescriptor) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes, bool forcePropagation) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateBody() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateClassDeclaration() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateConstructors() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateCustomMethod(OpenRiaServices.Server.DomainOperationEntry domainMethod) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateCustomMethods() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateEntityContainer() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateEntitySet(System.Type entityType) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateEntitySets() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateExtensibilityMethods() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateInvokeOperation(OpenRiaServices.Server.DomainOperationEntry domainOperationEntry, bool generateCallback) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateInvokeOperation(OpenRiaServices.Server.DomainOperationEntry domainOperationEntry, OpenRiaServices.Tools.InvokeKind invokeKind) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateInvokeOperations() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateQueryMethod(OpenRiaServices.Server.DomainOperationEntry domainOperationEntry) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpDomainContextGenerator.GenerateQueryMethods() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateAssociation(System.ComponentModel.PropertyDescriptor pd) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes, bool forcePropagation) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateBody() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateClassDeclaration() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateConstructor() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateCustomMethods() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateExtensibilityMethods() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateGetIdentityMethod() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateNotificationMethods() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateProperties() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEntityGenerator.GenerateProperty(System.ComponentModel.PropertyDescriptor propertyDescriptor) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEnumGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEnumGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes, bool forcePropagation) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpEnumGenerator.GenerateEnum(System.Type enumType) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator.GenerateAttributes(System.Collections.Generic.IEnumerable<System.Attribute> attributes, bool forcePropagation) -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator.GenerateBody() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator.GenerateClassDeclaration() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator.GenerateExtensibilityMethods() -> void
+virtual OpenRiaServices.Tools.TextTemplate.CSharpGenerators.CSharpWebContextGenerator.GenerateProperties() -> void

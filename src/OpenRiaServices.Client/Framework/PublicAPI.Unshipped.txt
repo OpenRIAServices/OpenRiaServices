@@ -1,0 +1,614 @@
+﻿abstract OpenRiaServices.Client.Authentication.AuthenticationService.CreateDefaultUser() -> System.Security.Principal.IPrincipal
+abstract OpenRiaServices.Client.Authentication.AuthenticationService.LoadUserAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.Authentication.LoadUserResult>
+abstract OpenRiaServices.Client.Authentication.AuthenticationService.LoginAsync(OpenRiaServices.Client.Authentication.LoginParameters parameters, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.Authentication.LoginResult>
+abstract OpenRiaServices.Client.Authentication.AuthenticationService.LogoutAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.Authentication.LogoutResult>
+abstract OpenRiaServices.Client.Authentication.AuthenticationService.SaveUserAsync(System.Security.Principal.IPrincipal user, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.Authentication.SaveUserResult>
+abstract OpenRiaServices.Client.DomainClient.InvokeAsyncCore(OpenRiaServices.Client.InvokeArgs invokeArgs, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.InvokeCompletedResult>
+abstract OpenRiaServices.Client.DomainClient.QueryAsyncCore(OpenRiaServices.Client.EntityQuery query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.QueryCompletedResult>
+abstract OpenRiaServices.Client.DomainClientFactory.CreateDomainClientCore(System.Type serviceContract, System.Uri serviceUri, bool requiresSecureEndpoint) -> OpenRiaServices.Client.DomainClient
+abstract OpenRiaServices.Client.DomainContext.CreateEntityContainer() -> OpenRiaServices.Client.EntityContainer
+abstract OpenRiaServices.Client.OperationBase.InvokeCompleteAction() -> void
+abstract OpenRiaServices.Client.QueryResult.GetIncludedResults() -> System.Collections.Generic.IEnumerable<object>
+abstract OpenRiaServices.Client.QueryResult.GetRootResults() -> System.Collections.Generic.IEnumerable<object>
+OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase
+OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase.AuthenticationDomainContextBase(OpenRiaServices.Client.DomainClient domainClient) -> void
+OpenRiaServices.Client.Authentication.AuthenticationEventArgs
+OpenRiaServices.Client.Authentication.AuthenticationEventArgs.User.get -> System.Security.Principal.IPrincipal
+OpenRiaServices.Client.Authentication.AuthenticationOperation
+OpenRiaServices.Client.Authentication.AuthenticationOperation.User.get -> System.Security.Principal.IPrincipal
+OpenRiaServices.Client.Authentication.AuthenticationResult
+OpenRiaServices.Client.Authentication.AuthenticationResult.User.get -> System.Security.Principal.IPrincipal
+OpenRiaServices.Client.Authentication.AuthenticationService
+OpenRiaServices.Client.Authentication.AuthenticationService.AuthenticationService() -> void
+OpenRiaServices.Client.Authentication.AuthenticationService.IsBusy.get -> bool
+OpenRiaServices.Client.Authentication.AuthenticationService.IsLoadingUser.get -> bool
+OpenRiaServices.Client.Authentication.AuthenticationService.IsLoggingIn.get -> bool
+OpenRiaServices.Client.Authentication.AuthenticationService.IsLoggingOut.get -> bool
+OpenRiaServices.Client.Authentication.AuthenticationService.IsSavingUser.get -> bool
+OpenRiaServices.Client.Authentication.AuthenticationService.LoadUser() -> OpenRiaServices.Client.Authentication.LoadUserOperation
+OpenRiaServices.Client.Authentication.AuthenticationService.LoadUser(System.Action<OpenRiaServices.Client.Authentication.LoadUserOperation> completeAction, object userState) -> OpenRiaServices.Client.Authentication.LoadUserOperation
+OpenRiaServices.Client.Authentication.AuthenticationService.LoggedIn -> System.EventHandler<OpenRiaServices.Client.Authentication.AuthenticationEventArgs>
+OpenRiaServices.Client.Authentication.AuthenticationService.LoggedOut -> System.EventHandler<OpenRiaServices.Client.Authentication.AuthenticationEventArgs>
+OpenRiaServices.Client.Authentication.AuthenticationService.Login(OpenRiaServices.Client.Authentication.LoginParameters parameters) -> OpenRiaServices.Client.Authentication.LoginOperation
+OpenRiaServices.Client.Authentication.AuthenticationService.Login(OpenRiaServices.Client.Authentication.LoginParameters parameters, System.Action<OpenRiaServices.Client.Authentication.LoginOperation> completeAction, object userState) -> OpenRiaServices.Client.Authentication.LoginOperation
+OpenRiaServices.Client.Authentication.AuthenticationService.Login(string userName, string password) -> OpenRiaServices.Client.Authentication.LoginOperation
+OpenRiaServices.Client.Authentication.AuthenticationService.Logout(bool throwOnError) -> OpenRiaServices.Client.Authentication.LogoutOperation
+OpenRiaServices.Client.Authentication.AuthenticationService.Logout(System.Action<OpenRiaServices.Client.Authentication.LogoutOperation> completeAction, object userState) -> OpenRiaServices.Client.Authentication.LogoutOperation
+OpenRiaServices.Client.Authentication.AuthenticationService.RaisePropertyChanged(string propertyName) -> void
+OpenRiaServices.Client.Authentication.AuthenticationService.SaveUser(bool throwOnError) -> OpenRiaServices.Client.Authentication.SaveUserOperation
+OpenRiaServices.Client.Authentication.AuthenticationService.SaveUser(System.Action<OpenRiaServices.Client.Authentication.SaveUserOperation> completeAction, object userState) -> OpenRiaServices.Client.Authentication.SaveUserOperation
+OpenRiaServices.Client.Authentication.AuthenticationService.User.get -> System.Security.Principal.IPrincipal
+OpenRiaServices.Client.Authentication.FormsAuthentication
+OpenRiaServices.Client.Authentication.FormsAuthentication.FormsAuthentication() -> void
+OpenRiaServices.Client.Authentication.LoadUserOperation
+OpenRiaServices.Client.Authentication.LoadUserResult
+OpenRiaServices.Client.Authentication.LoadUserResult.LoadUserResult(System.Security.Principal.IPrincipal user) -> void
+OpenRiaServices.Client.Authentication.LoginOperation
+OpenRiaServices.Client.Authentication.LoginOperation.LoginParameters.get -> OpenRiaServices.Client.Authentication.LoginParameters
+OpenRiaServices.Client.Authentication.LoginOperation.LoginSuccess.get -> bool
+OpenRiaServices.Client.Authentication.LoginParameters
+OpenRiaServices.Client.Authentication.LoginParameters.CustomData.get -> string
+OpenRiaServices.Client.Authentication.LoginParameters.IsPersistent.get -> bool
+OpenRiaServices.Client.Authentication.LoginParameters.LoginParameters() -> void
+OpenRiaServices.Client.Authentication.LoginParameters.LoginParameters(string userName, string password) -> void
+OpenRiaServices.Client.Authentication.LoginParameters.LoginParameters(string userName, string password, bool isPersistent, string customData) -> void
+OpenRiaServices.Client.Authentication.LoginParameters.Password.get -> string
+OpenRiaServices.Client.Authentication.LoginParameters.UserName.get -> string
+OpenRiaServices.Client.Authentication.LoginResult
+OpenRiaServices.Client.Authentication.LoginResult.LoginResult(System.Security.Principal.IPrincipal user, bool loginSuccess) -> void
+OpenRiaServices.Client.Authentication.LoginResult.LoginSuccess.get -> bool
+OpenRiaServices.Client.Authentication.LogoutOperation
+OpenRiaServices.Client.Authentication.LogoutResult
+OpenRiaServices.Client.Authentication.LogoutResult.LogoutResult(System.Security.Principal.IPrincipal user) -> void
+OpenRiaServices.Client.Authentication.SaveUserOperation
+OpenRiaServices.Client.Authentication.SaveUserResult
+OpenRiaServices.Client.Authentication.SaveUserResult.SaveUserResult(System.Security.Principal.IPrincipal user) -> void
+OpenRiaServices.Client.Authentication.WebAuthenticationService
+OpenRiaServices.Client.Authentication.WebAuthenticationService.DomainContext.get -> OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase
+OpenRiaServices.Client.Authentication.WebAuthenticationService.DomainContext.set -> void
+OpenRiaServices.Client.Authentication.WebAuthenticationService.DomainContextType.get -> string
+OpenRiaServices.Client.Authentication.WebAuthenticationService.DomainContextType.set -> void
+OpenRiaServices.Client.Authentication.WebContextBase
+OpenRiaServices.Client.Authentication.WebContextBase.Authentication.get -> OpenRiaServices.Client.Authentication.AuthenticationService
+OpenRiaServices.Client.Authentication.WebContextBase.Authentication.set -> void
+OpenRiaServices.Client.Authentication.WebContextBase.RaisePropertyChanged(string propertyName) -> void
+OpenRiaServices.Client.Authentication.WebContextBase.User.get -> System.Security.Principal.IPrincipal
+OpenRiaServices.Client.Authentication.WebContextBase.WebContextBase() -> void
+OpenRiaServices.Client.Authentication.WindowsAuthentication
+OpenRiaServices.Client.Authentication.WindowsAuthentication.WindowsAuthentication() -> void
+OpenRiaServices.Client.ChangeSetEntry
+OpenRiaServices.Client.ChangeSetEntry.Associations.get -> System.Collections.Generic.IDictionary<string, int[]>
+OpenRiaServices.Client.ChangeSetEntry.Associations.set -> void
+OpenRiaServices.Client.ChangeSetEntry.ChangeSetEntry(OpenRiaServices.Client.Entity entity, int id, OpenRiaServices.Client.EntityOperationType operationType) -> void
+OpenRiaServices.Client.ChangeSetEntry.ClientEntity.get -> OpenRiaServices.Client.Entity
+OpenRiaServices.Client.ChangeSetEntry.ClientEntity.set -> void
+OpenRiaServices.Client.ChangeSetEntry.ConflictMembers.get -> System.Collections.Generic.IEnumerable<string>
+OpenRiaServices.Client.ChangeSetEntry.ConflictMembers.set -> void
+OpenRiaServices.Client.ChangeSetEntry.Entity.get -> OpenRiaServices.Client.Entity
+OpenRiaServices.Client.ChangeSetEntry.Entity.set -> void
+OpenRiaServices.Client.ChangeSetEntry.EntityActions.get -> System.Collections.Generic.IList<OpenRiaServices.Serialization.KeyValue<string, object[]>>
+OpenRiaServices.Client.ChangeSetEntry.EntityActions.set -> void
+OpenRiaServices.Client.ChangeSetEntry.HasConflict.get -> bool
+OpenRiaServices.Client.ChangeSetEntry.HasMemberChanges.get -> bool
+OpenRiaServices.Client.ChangeSetEntry.HasMemberChanges.set -> void
+OpenRiaServices.Client.ChangeSetEntry.Id.get -> int
+OpenRiaServices.Client.ChangeSetEntry.Id.set -> void
+OpenRiaServices.Client.ChangeSetEntry.IsDeleteConflict.get -> bool
+OpenRiaServices.Client.ChangeSetEntry.IsDeleteConflict.set -> void
+OpenRiaServices.Client.ChangeSetEntry.Operation.get -> OpenRiaServices.Client.EntityOperationType
+OpenRiaServices.Client.ChangeSetEntry.Operation.set -> void
+OpenRiaServices.Client.ChangeSetEntry.OriginalAssociations.get -> System.Collections.Generic.IDictionary<string, int[]>
+OpenRiaServices.Client.ChangeSetEntry.OriginalAssociations.set -> void
+OpenRiaServices.Client.ChangeSetEntry.OriginalEntity.get -> OpenRiaServices.Client.Entity
+OpenRiaServices.Client.ChangeSetEntry.OriginalEntity.set -> void
+OpenRiaServices.Client.ChangeSetEntry.StoreEntity.get -> OpenRiaServices.Client.Entity
+OpenRiaServices.Client.ChangeSetEntry.StoreEntity.set -> void
+OpenRiaServices.Client.ChangeSetEntry.ValidationErrors.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.ValidationResultInfo>
+OpenRiaServices.Client.ChangeSetEntry.ValidationErrors.set -> void
+OpenRiaServices.Client.ComplexObject
+OpenRiaServices.Client.ComplexObject.BeginEdit() -> void
+OpenRiaServices.Client.ComplexObject.CancelEdit() -> void
+OpenRiaServices.Client.ComplexObject.ComplexObject() -> void
+OpenRiaServices.Client.ComplexObject.EndEdit() -> void
+OpenRiaServices.Client.ComplexObject.HasValidationErrors.get -> bool
+OpenRiaServices.Client.ComplexObject.IsDeserializing.get -> bool
+OpenRiaServices.Client.ComplexObject.IsMergingState.get -> bool
+OpenRiaServices.Client.ComplexObject.IsMergingState.set -> void
+OpenRiaServices.Client.ComplexObject.OnDeserialized(System.Runtime.Serialization.StreamingContext context) -> void
+OpenRiaServices.Client.ComplexObject.OnDeserializing(System.Runtime.Serialization.StreamingContext context) -> void
+OpenRiaServices.Client.ComplexObject.RaiseDataMemberChanged(string propertyName) -> void
+OpenRiaServices.Client.ComplexObject.RaiseDataMemberChanging(string propertyName) -> void
+OpenRiaServices.Client.ComplexObject.RaisePropertyChanged(string propertyName) -> void
+OpenRiaServices.Client.ComplexObject.ValidateProperty(string propertyName, object value) -> void
+OpenRiaServices.Client.ComplexObject.ValidationErrors.get -> System.Collections.Generic.ICollection<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Client.DomainClient
+OpenRiaServices.Client.DomainClient.DomainClient() -> void
+OpenRiaServices.Client.DomainClient.EntityTypes.get -> System.Collections.Generic.IEnumerable<System.Type>
+OpenRiaServices.Client.DomainClient.EntityTypes.set -> void
+OpenRiaServices.Client.DomainClient.InvokeAsync(OpenRiaServices.Client.InvokeArgs invokeArgs, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.InvokeCompletedResult>
+OpenRiaServices.Client.DomainClient.QueryAsync(OpenRiaServices.Client.EntityQuery query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.QueryCompletedResult>
+OpenRiaServices.Client.DomainClient.SubmitAsync(OpenRiaServices.Client.EntityChangeSet changeSet, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.SubmitCompletedResult>
+OpenRiaServices.Client.DomainClientFactory
+OpenRiaServices.Client.DomainClientFactory.CreateDomainClient(System.Type serviceContract, System.Uri serviceUri, bool requiresSecureEndpoint) -> OpenRiaServices.Client.DomainClient
+OpenRiaServices.Client.DomainClientFactory.DomainClientFactory() -> void
+OpenRiaServices.Client.DomainClientFactory.ServerBaseUri.get -> System.Uri
+OpenRiaServices.Client.DomainClientFactory.ServerBaseUri.set -> void
+OpenRiaServices.Client.DomainContext
+OpenRiaServices.Client.DomainContext.AddReference(System.Type entityType, OpenRiaServices.Client.DomainContext domainContext) -> void
+OpenRiaServices.Client.DomainContext.CreateQuery<TEntity>(string queryName, System.Collections.Generic.IDictionary<string, object> parameters, bool hasSideEffects, bool isComposable) -> OpenRiaServices.Client.EntityQuery<TEntity>
+OpenRiaServices.Client.DomainContext.DomainClient.get -> OpenRiaServices.Client.DomainClient
+OpenRiaServices.Client.DomainContext.DomainContext(OpenRiaServices.Client.DomainClient domainClient) -> void
+OpenRiaServices.Client.DomainContext.EntityContainer.get -> OpenRiaServices.Client.EntityContainer
+OpenRiaServices.Client.DomainContext.HasChanges.get -> bool
+OpenRiaServices.Client.DomainContext.InvokeOperation(string operationName, System.Type returnType, System.Collections.Generic.IDictionary<string, object> parameters, bool hasSideEffects, System.Action<OpenRiaServices.Client.InvokeOperation> callback, object userState) -> OpenRiaServices.Client.InvokeOperation
+OpenRiaServices.Client.DomainContext.InvokeOperationAsync(string operationName, System.Collections.Generic.IDictionary<string, object> parameters, bool hasSideEffects, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.InvokeResult>
+OpenRiaServices.Client.DomainContext.InvokeOperationAsync<TValue>(string operationName, System.Collections.Generic.IDictionary<string, object> parameters, bool hasSideEffects, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.InvokeResult<TValue>>
+OpenRiaServices.Client.DomainContext.IsLoading.get -> bool
+OpenRiaServices.Client.DomainContext.IsSubmitting.get -> bool
+OpenRiaServices.Client.DomainContext.Load(OpenRiaServices.Client.EntityQuery query, OpenRiaServices.Client.LoadBehavior loadBehavior, System.Action<OpenRiaServices.Client.LoadOperation> callback, object userState) -> OpenRiaServices.Client.LoadOperation
+OpenRiaServices.Client.DomainContext.Load<TEntity>(OpenRiaServices.Client.EntityQuery<TEntity> query) -> OpenRiaServices.Client.LoadOperation<TEntity>
+OpenRiaServices.Client.DomainContext.Load<TEntity>(OpenRiaServices.Client.EntityQuery<TEntity> query, bool throwOnError) -> OpenRiaServices.Client.LoadOperation<TEntity>
+OpenRiaServices.Client.DomainContext.Load<TEntity>(OpenRiaServices.Client.EntityQuery<TEntity> query, OpenRiaServices.Client.LoadBehavior loadBehavior, bool throwOnError) -> OpenRiaServices.Client.LoadOperation<TEntity>
+OpenRiaServices.Client.DomainContext.Load<TEntity>(OpenRiaServices.Client.EntityQuery<TEntity> query, System.Action<OpenRiaServices.Client.LoadOperation<TEntity>> callback, object userState) -> OpenRiaServices.Client.LoadOperation<TEntity>
+OpenRiaServices.Client.DomainContext.LoadAsync<TEntity>(OpenRiaServices.Client.EntityQuery<TEntity> query) -> System.Threading.Tasks.Task<OpenRiaServices.Client.LoadResult<TEntity>>
+OpenRiaServices.Client.DomainContext.LoadAsync<TEntity>(OpenRiaServices.Client.EntityQuery<TEntity> query, OpenRiaServices.Client.LoadBehavior loadBehavior) -> System.Threading.Tasks.Task<OpenRiaServices.Client.LoadResult<TEntity>>
+OpenRiaServices.Client.DomainContext.LoadAsync<TEntity>(OpenRiaServices.Client.EntityQuery<TEntity> query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.LoadResult<TEntity>>
+OpenRiaServices.Client.DomainContext.PropertyChanged -> System.ComponentModel.PropertyChangedEventHandler
+OpenRiaServices.Client.DomainContext.RaisePropertyChanged(string propertyName) -> void
+OpenRiaServices.Client.DomainContext.RejectChanges() -> void
+OpenRiaServices.Client.DomainContext.SubmitChanges() -> OpenRiaServices.Client.SubmitOperation
+OpenRiaServices.Client.DomainContext.SubmitChangesAsync() -> System.Threading.Tasks.Task<OpenRiaServices.Client.SubmitResult>
+OpenRiaServices.Client.DomainContext.SubmitChangesAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.SubmitResult>
+OpenRiaServices.Client.DomainContext.ValidateMethod(string methodName, System.Collections.Generic.IDictionary<string, object> parameters) -> void
+OpenRiaServices.Client.DomainContext.ValidationContext.get -> System.ComponentModel.DataAnnotations.ValidationContext
+OpenRiaServices.Client.DomainContext.ValidationContext.set -> void
+OpenRiaServices.Client.DomainException
+OpenRiaServices.Client.DomainException.DomainException() -> void
+OpenRiaServices.Client.DomainException.DomainException(string message) -> void
+OpenRiaServices.Client.DomainException.DomainException(string message, int errorCode) -> void
+OpenRiaServices.Client.DomainException.DomainException(string message, int errorCode, string stackTrace) -> void
+OpenRiaServices.Client.DomainException.DomainException(string message, int errorCode, System.Exception innerException) -> void
+OpenRiaServices.Client.DomainException.DomainException(string message, System.Exception innerException) -> void
+OpenRiaServices.Client.DomainException.ErrorCode.get -> int
+OpenRiaServices.Client.DomainException.ErrorCode.set -> void
+OpenRiaServices.Client.DomainOperationException
+OpenRiaServices.Client.DomainOperationException.DomainOperationException() -> void
+OpenRiaServices.Client.DomainOperationException.DomainOperationException(string message) -> void
+OpenRiaServices.Client.DomainOperationException.DomainOperationException(string message, OpenRiaServices.Client.OperationErrorStatus status) -> void
+OpenRiaServices.Client.DomainOperationException.DomainOperationException(string message, OpenRiaServices.Client.OperationErrorStatus status, int errorCode) -> void
+OpenRiaServices.Client.DomainOperationException.DomainOperationException(string message, OpenRiaServices.Client.OperationErrorStatus status, int errorCode, string stackTrace) -> void
+OpenRiaServices.Client.DomainOperationException.DomainOperationException(string message, OpenRiaServices.Client.OperationErrorStatus status, int errorCode, string stackTrace, System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> validationErrors) -> void
+OpenRiaServices.Client.DomainOperationException.DomainOperationException(string message, System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> validationErrors) -> void
+OpenRiaServices.Client.DomainOperationException.DomainOperationException(string message, System.Exception innerException) -> void
+OpenRiaServices.Client.DomainOperationException.DomainOperationException(string message, System.Exception innerException, OpenRiaServices.Client.OperationErrorStatus status, int errorCode, string stackTrace, System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> validationErrors) -> void
+OpenRiaServices.Client.DomainOperationException.ErrorCode.get -> int
+OpenRiaServices.Client.DomainOperationException.ErrorCode.set -> void
+OpenRiaServices.Client.DomainOperationException.Status.get -> OpenRiaServices.Client.OperationErrorStatus
+OpenRiaServices.Client.DomainOperationException.Status.set -> void
+OpenRiaServices.Client.DomainOperationException.ValidationErrors.get -> System.Collections.Generic.IReadOnlyCollection<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Client.Entity
+OpenRiaServices.Client.Entity.AcceptChanges() -> void
+OpenRiaServices.Client.Entity.BeginEdit() -> void
+OpenRiaServices.Client.Entity.CancelEdit() -> void
+OpenRiaServices.Client.Entity.CanInvokeAction(string name) -> bool
+OpenRiaServices.Client.Entity.EndEdit() -> void
+OpenRiaServices.Client.Entity.Entity() -> void
+OpenRiaServices.Client.Entity.EntityActions.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.EntityAction>
+OpenRiaServices.Client.Entity.EntityConflict.get -> OpenRiaServices.Client.EntityConflict
+OpenRiaServices.Client.Entity.EntitySet.get -> OpenRiaServices.Client.EntitySet
+OpenRiaServices.Client.Entity.EntityState.get -> OpenRiaServices.Client.EntityState
+OpenRiaServices.Client.Entity.GetOriginal() -> OpenRiaServices.Client.Entity
+OpenRiaServices.Client.Entity.HasChanges.get -> bool
+OpenRiaServices.Client.Entity.HasValidationErrors.get -> bool
+OpenRiaServices.Client.Entity.InvokeAction(string actionName, params object[] parameters) -> void
+OpenRiaServices.Client.Entity.IsActionInvoked(string name) -> bool
+OpenRiaServices.Client.Entity.IsDeserializing.get -> bool
+OpenRiaServices.Client.Entity.IsMergingState.get -> bool
+OpenRiaServices.Client.Entity.IsReadOnly.get -> bool
+OpenRiaServices.Client.Entity.OnDeserialized(System.Runtime.Serialization.StreamingContext context) -> void
+OpenRiaServices.Client.Entity.OnDeserializing(System.Runtime.Serialization.StreamingContext context) -> void
+OpenRiaServices.Client.Entity.PropertyChanged -> System.ComponentModel.PropertyChangedEventHandler
+OpenRiaServices.Client.Entity.RaiseDataMemberChanged(string propertyName) -> void
+OpenRiaServices.Client.Entity.RaiseDataMemberChanging(string propertyName) -> void
+OpenRiaServices.Client.Entity.RaisePropertyChanged(string propertyName) -> void
+OpenRiaServices.Client.Entity.RejectChanges() -> void
+OpenRiaServices.Client.Entity.UndoAction(OpenRiaServices.Client.EntityAction action) -> void
+OpenRiaServices.Client.Entity.ValidateProperty(string propertyName, object value) -> void
+OpenRiaServices.Client.Entity.ValidationErrors.get -> System.Collections.Generic.ICollection<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Client.EntityAction
+OpenRiaServices.Client.EntityAction.EntityAction(string name, params object[] parameters) -> void
+OpenRiaServices.Client.EntityAction.HasParameters.get -> bool
+OpenRiaServices.Client.EntityAction.Name.get -> string
+OpenRiaServices.Client.EntityAction.Parameters.get -> System.Collections.Generic.IEnumerable<object>
+OpenRiaServices.Client.EntityActionAttribute
+OpenRiaServices.Client.EntityActionAttribute.AllowMultipleInvocations.get -> bool
+OpenRiaServices.Client.EntityActionAttribute.AllowMultipleInvocations.set -> void
+OpenRiaServices.Client.EntityActionAttribute.CanInvokePropertyName.get -> string
+OpenRiaServices.Client.EntityActionAttribute.CanInvokePropertyName.set -> void
+OpenRiaServices.Client.EntityActionAttribute.EntityActionAttribute(string name) -> void
+OpenRiaServices.Client.EntityActionAttribute.EntityActionAttribute(string name, bool allowMultipleInvocations) -> void
+OpenRiaServices.Client.EntityActionAttribute.IsInvokedPropertyName.get -> string
+OpenRiaServices.Client.EntityActionAttribute.IsInvokedPropertyName.set -> void
+OpenRiaServices.Client.EntityActionAttribute.Name.get -> string
+OpenRiaServices.Client.EntityChangeSet
+OpenRiaServices.Client.EntityChangeSet.AddedEntities.get -> System.Collections.ObjectModel.ReadOnlyCollection<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.EntityChangeSet.GetChangeSetEntries() -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.ChangeSetEntry>
+OpenRiaServices.Client.EntityChangeSet.IsEmpty.get -> bool
+OpenRiaServices.Client.EntityChangeSet.ModifiedEntities.get -> System.Collections.ObjectModel.ReadOnlyCollection<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.EntityChangeSet.RemovedEntities.get -> System.Collections.ObjectModel.ReadOnlyCollection<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.EntityCollection<TEntity>
+OpenRiaServices.Client.EntityCollection<TEntity>.Add(TEntity entity) -> void
+OpenRiaServices.Client.EntityCollection<TEntity>.CollectionChanged -> System.Collections.Specialized.NotifyCollectionChangedEventHandler
+OpenRiaServices.Client.EntityCollection<TEntity>.Count.get -> int
+OpenRiaServices.Client.EntityCollection<TEntity>.EntityAdded -> System.EventHandler<OpenRiaServices.Client.EntityCollectionChangedEventArgs<TEntity>>
+OpenRiaServices.Client.EntityCollection<TEntity>.EntityCollection(OpenRiaServices.Client.Entity parent, string memberName, System.Func<TEntity, bool> entityPredicate) -> void
+OpenRiaServices.Client.EntityCollection<TEntity>.EntityCollection(OpenRiaServices.Client.Entity parent, string memberName, System.Func<TEntity, bool> entityPredicate, System.Action<TEntity> attachAction, System.Action<TEntity> detachAction) -> void
+OpenRiaServices.Client.EntityCollection<TEntity>.EntityRemoved -> System.EventHandler<OpenRiaServices.Client.EntityCollectionChangedEventArgs<TEntity>>
+OpenRiaServices.Client.EntityCollection<TEntity>.GetEnumerator() -> System.Collections.Generic.IEnumerator<TEntity>
+OpenRiaServices.Client.EntityCollection<TEntity>.Remove(TEntity entity) -> void
+OpenRiaServices.Client.EntityCollectionChangedEventArgs<TEntity>
+OpenRiaServices.Client.EntityCollectionChangedEventArgs<TEntity>.Entity.get -> TEntity
+OpenRiaServices.Client.EntityCollectionChangedEventArgs<TEntity>.EntityCollectionChangedEventArgs(TEntity entity) -> void
+OpenRiaServices.Client.EntityConflict
+OpenRiaServices.Client.EntityConflict.CurrentEntity.get -> OpenRiaServices.Client.Entity
+OpenRiaServices.Client.EntityConflict.IsDeleted.get -> bool
+OpenRiaServices.Client.EntityConflict.OriginalEntity.get -> OpenRiaServices.Client.Entity
+OpenRiaServices.Client.EntityConflict.PropertyNames.get -> System.Collections.Generic.IEnumerable<string>
+OpenRiaServices.Client.EntityConflict.Resolve() -> void
+OpenRiaServices.Client.EntityConflict.StoreEntity.get -> OpenRiaServices.Client.Entity
+OpenRiaServices.Client.EntityContainer
+OpenRiaServices.Client.EntityContainer.AcceptChanges() -> void
+OpenRiaServices.Client.EntityContainer.AddReference(OpenRiaServices.Client.EntitySet entitySet) -> void
+OpenRiaServices.Client.EntityContainer.Clear() -> void
+OpenRiaServices.Client.EntityContainer.CreateEntitySet<TEntity>() -> void
+OpenRiaServices.Client.EntityContainer.CreateEntitySet<TEntity>(OpenRiaServices.Client.EntitySetOperations supportedOperations) -> void
+OpenRiaServices.Client.EntityContainer.EntityContainer() -> void
+OpenRiaServices.Client.EntityContainer.EntitySets.get -> System.Collections.Generic.IReadOnlyCollection<OpenRiaServices.Client.EntitySet>
+OpenRiaServices.Client.EntityContainer.GetChanges() -> OpenRiaServices.Client.EntityChangeSet
+OpenRiaServices.Client.EntityContainer.GetEntitySet(System.Type entityType) -> OpenRiaServices.Client.EntitySet
+OpenRiaServices.Client.EntityContainer.GetEntitySet<TEntity>() -> OpenRiaServices.Client.EntitySet<TEntity>
+OpenRiaServices.Client.EntityContainer.HasChanges.get -> bool
+OpenRiaServices.Client.EntityContainer.LoadEntities(System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Entity> entities) -> System.Collections.Generic.IReadOnlyCollection<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.EntityContainer.LoadEntities(System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Entity> entities, OpenRiaServices.Client.LoadBehavior loadBehavior) -> System.Collections.Generic.IReadOnlyCollection<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.EntityContainer.PropertyChanged -> System.ComponentModel.PropertyChangedEventHandler
+OpenRiaServices.Client.EntityContainer.RaisePropertyChanged(string propertyName) -> void
+OpenRiaServices.Client.EntityContainer.RejectChanges() -> void
+OpenRiaServices.Client.EntityContainer.TryGetEntitySet(System.Type entityType, out OpenRiaServices.Client.EntitySet entitySet) -> bool
+OpenRiaServices.Client.EntityExtensions.EntityExtensions
+OpenRiaServices.Client.EntityKey
+OpenRiaServices.Client.EntityKey.EntityKey() -> void
+OpenRiaServices.Client.EntityList<T>
+OpenRiaServices.Client.EntityList<T>.EntityList(OpenRiaServices.Client.EntitySet<T> entitySet) -> void
+OpenRiaServices.Client.EntityList<T>.EntityList(OpenRiaServices.Client.EntitySet<T> entitySet, System.Collections.Generic.IEnumerable<T> source) -> void
+OpenRiaServices.Client.EntityList<T>.EntitySet.get -> OpenRiaServices.Client.EntitySet<T>
+OpenRiaServices.Client.EntityList<T>.Source.get -> System.Collections.Generic.IEnumerable<T>
+OpenRiaServices.Client.EntityList<T>.Source.set -> void
+OpenRiaServices.Client.EntityOperationType
+OpenRiaServices.Client.EntityOperationType.Delete = 4 -> OpenRiaServices.Client.EntityOperationType
+OpenRiaServices.Client.EntityOperationType.Insert = 2 -> OpenRiaServices.Client.EntityOperationType
+OpenRiaServices.Client.EntityOperationType.None = 0 -> OpenRiaServices.Client.EntityOperationType
+OpenRiaServices.Client.EntityOperationType.Update = 3 -> OpenRiaServices.Client.EntityOperationType
+OpenRiaServices.Client.EntityQuery
+OpenRiaServices.Client.EntityQuery.DomainClient.get -> OpenRiaServices.Client.DomainClient
+OpenRiaServices.Client.EntityQuery.EntityType.get -> System.Type
+OpenRiaServices.Client.EntityQuery.HasSideEffects.get -> bool
+OpenRiaServices.Client.EntityQuery.IncludeTotalCount.get -> bool
+OpenRiaServices.Client.EntityQuery.IncludeTotalCount.set -> void
+OpenRiaServices.Client.EntityQuery.IsComposable.get -> bool
+OpenRiaServices.Client.EntityQuery.Parameters.get -> System.Collections.Generic.IDictionary<string, object>
+OpenRiaServices.Client.EntityQuery.Query.get -> System.Linq.IQueryable
+OpenRiaServices.Client.EntityQuery.QueryName.get -> string
+OpenRiaServices.Client.EntityQuery<TEntity>
+OpenRiaServices.Client.EntityQueryable
+OpenRiaServices.Client.EntityRef<TEntity>
+OpenRiaServices.Client.EntityRef<TEntity>.Entity.get -> TEntity
+OpenRiaServices.Client.EntityRef<TEntity>.Entity.set -> void
+OpenRiaServices.Client.EntityRef<TEntity>.EntityRef(OpenRiaServices.Client.Entity parent, string memberName, System.Func<TEntity, bool> entityPredicate) -> void
+OpenRiaServices.Client.EntitySet
+OpenRiaServices.Client.EntitySet.Add(OpenRiaServices.Client.Entity entity) -> void
+OpenRiaServices.Client.EntitySet.Attach(OpenRiaServices.Client.Entity entity) -> void
+OpenRiaServices.Client.EntitySet.CanAdd.get -> bool
+OpenRiaServices.Client.EntitySet.CanEdit.get -> bool
+OpenRiaServices.Client.EntitySet.CanRemove.get -> bool
+OpenRiaServices.Client.EntitySet.Clear() -> void
+OpenRiaServices.Client.EntitySet.CollectionChanged -> System.Collections.Specialized.NotifyCollectionChangedEventHandler
+OpenRiaServices.Client.EntitySet.Count.get -> int
+OpenRiaServices.Client.EntitySet.Detach(OpenRiaServices.Client.Entity entity) -> void
+OpenRiaServices.Client.EntitySet.EntityContainer.get -> OpenRiaServices.Client.EntityContainer
+OpenRiaServices.Client.EntitySet.EntityType.get -> System.Type
+OpenRiaServices.Client.EntitySet.GetEnumerator() -> System.Collections.IEnumerator
+OpenRiaServices.Client.EntitySet.HasChanges.get -> bool
+OpenRiaServices.Client.EntitySet.IsReadOnly.get -> bool
+OpenRiaServices.Client.EntitySet.PropertyChanged -> System.ComponentModel.PropertyChangedEventHandler
+OpenRiaServices.Client.EntitySet.Remove(OpenRiaServices.Client.Entity entity) -> void
+OpenRiaServices.Client.EntitySet<TEntity>
+OpenRiaServices.Client.EntitySet<TEntity>.Add(TEntity entity) -> void
+OpenRiaServices.Client.EntitySet<TEntity>.Attach(TEntity entity) -> void
+OpenRiaServices.Client.EntitySet<TEntity>.Detach(TEntity entity) -> void
+OpenRiaServices.Client.EntitySet<TEntity>.EntityAdded -> System.EventHandler<OpenRiaServices.Client.EntityCollectionChangedEventArgs<TEntity>>
+OpenRiaServices.Client.EntitySet<TEntity>.EntityRemoved -> System.EventHandler<OpenRiaServices.Client.EntityCollectionChangedEventArgs<TEntity>>
+OpenRiaServices.Client.EntitySet<TEntity>.EntitySet() -> void
+OpenRiaServices.Client.EntitySet<TEntity>.GetEnumerator() -> System.Collections.Generic.IEnumerator<TEntity>
+OpenRiaServices.Client.EntitySet<TEntity>.Remove(TEntity entity) -> void
+OpenRiaServices.Client.EntitySetOperations
+OpenRiaServices.Client.EntitySetOperations.Add = 1 -> OpenRiaServices.Client.EntitySetOperations
+OpenRiaServices.Client.EntitySetOperations.All = OpenRiaServices.Client.EntitySetOperations.Add | OpenRiaServices.Client.EntitySetOperations.Edit | OpenRiaServices.Client.EntitySetOperations.Remove -> OpenRiaServices.Client.EntitySetOperations
+OpenRiaServices.Client.EntitySetOperations.Edit = 2 -> OpenRiaServices.Client.EntitySetOperations
+OpenRiaServices.Client.EntitySetOperations.None = 0 -> OpenRiaServices.Client.EntitySetOperations
+OpenRiaServices.Client.EntitySetOperations.Remove = 4 -> OpenRiaServices.Client.EntitySetOperations
+OpenRiaServices.Client.EntityState
+OpenRiaServices.Client.EntityState.Deleted = 4 -> OpenRiaServices.Client.EntityState
+OpenRiaServices.Client.EntityState.Detached = 0 -> OpenRiaServices.Client.EntityState
+OpenRiaServices.Client.EntityState.Modified = 2 -> OpenRiaServices.Client.EntityState
+OpenRiaServices.Client.EntityState.New = 3 -> OpenRiaServices.Client.EntityState
+OpenRiaServices.Client.EntityState.Unmodified = 1 -> OpenRiaServices.Client.EntityState
+OpenRiaServices.Client.HasSideEffectsAttribute
+OpenRiaServices.Client.HasSideEffectsAttribute.HasSideEffects.get -> bool
+OpenRiaServices.Client.HasSideEffectsAttribute.HasSideEffectsAttribute() -> void
+OpenRiaServices.Client.HasSideEffectsAttribute.HasSideEffectsAttribute(bool hasSideEffects) -> void
+OpenRiaServices.Client.IDomainClientFactory
+OpenRiaServices.Client.IDomainClientFactory.CreateDomainClient(System.Type serviceContract, System.Uri serviceUri, bool requiresSecureEndpoint) -> OpenRiaServices.Client.DomainClient
+OpenRiaServices.Client.IEntityCollection<TEntity>
+OpenRiaServices.Client.IEntityCollection<TEntity>.EntityAdded -> System.EventHandler<OpenRiaServices.Client.EntityCollectionChangedEventArgs<TEntity>>
+OpenRiaServices.Client.IEntityCollection<TEntity>.EntityRemoved -> System.EventHandler<OpenRiaServices.Client.EntityCollectionChangedEventArgs<TEntity>>
+OpenRiaServices.Client.Internal.MetaMember
+OpenRiaServices.Client.Internal.MetaMember.AssociationAttribute.get -> OpenRiaServices.EntityAssociationAttribute
+OpenRiaServices.Client.Internal.MetaMember.EditableAttribute.get -> System.ComponentModel.DataAnnotations.EditableAttribute
+OpenRiaServices.Client.Internal.MetaMember.GetValue(object instance) -> object
+OpenRiaServices.Client.Internal.MetaMember.IsAssociationMember.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.IsCollection.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.IsComplex.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.IsComposition.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.IsDataMember.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.IsExternalReference.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.IsKeyMember.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.IsMergable.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.IsRoundtripMember.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.MetaType.get -> OpenRiaServices.Client.Internal.MetaType
+OpenRiaServices.Client.Internal.MetaMember.Name.get -> string
+OpenRiaServices.Client.Internal.MetaMember.PropertyType.get -> System.Type
+OpenRiaServices.Client.Internal.MetaMember.RequiresValidation.get -> bool
+OpenRiaServices.Client.Internal.MetaMember.SetValue(object instance, object value) -> void
+OpenRiaServices.Client.Internal.MetaType
+OpenRiaServices.Client.Internal.MetaType.AssociationMembers.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Internal.MetaMember>
+OpenRiaServices.Client.Internal.MetaType.ChildTypes.get -> System.Collections.Generic.IEnumerable<System.Type>
+OpenRiaServices.Client.Internal.MetaType.DataMembers.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Internal.MetaMember>
+OpenRiaServices.Client.Internal.MetaType.GetEntityAction(string name) -> OpenRiaServices.Client.EntityActionAttribute
+OpenRiaServices.Client.Internal.MetaType.GetEntityActions() -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.EntityActionAttribute>
+OpenRiaServices.Client.Internal.MetaType.HasComplexMembers.get -> bool
+OpenRiaServices.Client.Internal.MetaType.HasComposition.get -> bool
+OpenRiaServices.Client.Internal.MetaType.IsComplex.get -> bool
+OpenRiaServices.Client.Internal.MetaType.KeyMembers.get -> System.Collections.ObjectModel.ReadOnlyCollection<OpenRiaServices.Client.Internal.MetaMember>
+OpenRiaServices.Client.Internal.MetaType.Members.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Internal.MetaMember>
+OpenRiaServices.Client.Internal.MetaType.RequiresValidation.get -> bool
+OpenRiaServices.Client.Internal.MetaType.ShouldRoundtripOriginal.get -> bool
+OpenRiaServices.Client.Internal.MetaType.this[string memberName].get -> OpenRiaServices.Client.Internal.MetaMember
+OpenRiaServices.Client.Internal.MetaType.Type.get -> System.Type
+OpenRiaServices.Client.Internal.MetaType.ValidationAttributes.get -> System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationAttribute>
+OpenRiaServices.Client.Internal.MetaType.VersionMember.get -> OpenRiaServices.Client.Internal.MetaMember
+OpenRiaServices.Client.InvokeArgs
+OpenRiaServices.Client.InvokeArgs.HasSideEffects.get -> bool
+OpenRiaServices.Client.InvokeArgs.InvokeArgs(string operationName, System.Type returnType, System.Collections.Generic.IDictionary<string, object> parameters, bool hasSideEffects) -> void
+OpenRiaServices.Client.InvokeArgs.OperationName.get -> string
+OpenRiaServices.Client.InvokeArgs.Parameters.get -> System.Collections.Generic.IDictionary<string, object>
+OpenRiaServices.Client.InvokeArgs.ReturnType.get -> System.Type
+OpenRiaServices.Client.InvokeCompletedResult
+OpenRiaServices.Client.InvokeCompletedResult.InvokeCompletedResult(object returnValue) -> void
+OpenRiaServices.Client.InvokeCompletedResult.InvokeCompletedResult(object returnValue, System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> validationErrors) -> void
+OpenRiaServices.Client.InvokeCompletedResult.ReturnValue.get -> object
+OpenRiaServices.Client.InvokeCompletedResult.ValidationErrors.get -> System.Collections.Generic.IReadOnlyCollection<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Client.InvokeOperation
+OpenRiaServices.Client.InvokeOperation.OperationName.get -> string
+OpenRiaServices.Client.InvokeOperation.Parameters.get -> System.Collections.Generic.IDictionary<string, object>
+OpenRiaServices.Client.InvokeOperation.ValidationErrors.get -> System.Collections.Generic.IReadOnlyCollection<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Client.InvokeOperation.Value.get -> object
+OpenRiaServices.Client.InvokeOperation<TValue>
+OpenRiaServices.Client.InvokeOperation<TValue>.InvokeOperation(string operationName, System.Collections.Generic.IDictionary<string, object> parameters, System.Action<OpenRiaServices.Client.InvokeOperation<TValue>> completeAction, object userState, System.Threading.Tasks.Task<OpenRiaServices.Client.InvokeResult<TValue>> invokeResultTask, System.Threading.CancellationTokenSource cancellationTokenSource) -> void
+OpenRiaServices.Client.InvokeOperation<TValue>.Value.get -> TValue
+OpenRiaServices.Client.InvokeResult
+OpenRiaServices.Client.InvokeResult.InvokeResult() -> void
+OpenRiaServices.Client.InvokeResult<T>
+OpenRiaServices.Client.InvokeResult<T>.InvokeResult(T value) -> void
+OpenRiaServices.Client.InvokeResult<T>.Value.get -> T
+OpenRiaServices.Client.LoadBehavior
+OpenRiaServices.Client.LoadBehavior.KeepCurrent = 1 -> OpenRiaServices.Client.LoadBehavior
+OpenRiaServices.Client.LoadBehavior.MergeIntoCurrent = 0 -> OpenRiaServices.Client.LoadBehavior
+OpenRiaServices.Client.LoadBehavior.RefreshCurrent = 2 -> OpenRiaServices.Client.LoadBehavior
+OpenRiaServices.Client.LoadOperation
+OpenRiaServices.Client.LoadOperation.AllEntities.get -> System.Collections.Generic.IReadOnlyCollection<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.LoadOperation.Entities.get -> System.Collections.Generic.IReadOnlyCollection<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.LoadOperation.EntityQuery.get -> OpenRiaServices.Client.EntityQuery
+OpenRiaServices.Client.LoadOperation.LoadBehavior.get -> OpenRiaServices.Client.LoadBehavior
+OpenRiaServices.Client.LoadOperation.TotalEntityCount.get -> int
+OpenRiaServices.Client.LoadOperation.ValidationErrors.get -> System.Collections.Generic.IReadOnlyCollection<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Client.LoadOperation<TEntity>
+OpenRiaServices.Client.LoadOperation<TEntity>.Entities.get -> System.Collections.Generic.IReadOnlyCollection<TEntity>
+OpenRiaServices.Client.LoadOperation<TEntity>.EntityQuery.get -> OpenRiaServices.Client.EntityQuery<TEntity>
+OpenRiaServices.Client.LoadOperation<TEntity>.LoadOperation(OpenRiaServices.Client.EntityQuery<TEntity> query, OpenRiaServices.Client.LoadBehavior loadBehavior, System.Action<OpenRiaServices.Client.LoadOperation<TEntity>> completeAction, object userState, System.Threading.Tasks.Task<OpenRiaServices.Client.LoadResult<TEntity>> loadResultTask, System.Threading.CancellationTokenSource cancellationTokenSource) -> void
+OpenRiaServices.Client.LoadResult<TEntity>
+OpenRiaServices.Client.LoadResult<TEntity>.AllEntities.get -> System.Collections.Generic.IReadOnlyCollection<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.LoadResult<TEntity>.CopyTo(System.Array array, int index) -> void
+OpenRiaServices.Client.LoadResult<TEntity>.Count.get -> int
+OpenRiaServices.Client.LoadResult<TEntity>.Entities.get -> System.Collections.Generic.IReadOnlyCollection<TEntity>
+OpenRiaServices.Client.LoadResult<TEntity>.EntityQuery.get -> OpenRiaServices.Client.EntityQuery<TEntity>
+OpenRiaServices.Client.LoadResult<TEntity>.GetEnumerator() -> System.Collections.Generic.IEnumerator<TEntity>
+OpenRiaServices.Client.LoadResult<TEntity>.IsSynchronized.get -> bool
+OpenRiaServices.Client.LoadResult<TEntity>.LoadBehavior.get -> OpenRiaServices.Client.LoadBehavior
+OpenRiaServices.Client.LoadResult<TEntity>.LoadResult(OpenRiaServices.Client.EntityQuery<TEntity> query, OpenRiaServices.Client.LoadBehavior loadBehavior, System.Collections.Generic.IEnumerable<TEntity> entities, System.Collections.Generic.IReadOnlyCollection<OpenRiaServices.Client.Entity> allEntities, int totalEntityCount) -> void
+OpenRiaServices.Client.LoadResult<TEntity>.LoadResult(OpenRiaServices.Client.LoadOperation<TEntity> loadOperation) -> void
+OpenRiaServices.Client.LoadResult<TEntity>.SyncRoot.get -> object
+OpenRiaServices.Client.LoadResult<TEntity>.TotalEntityCount.get -> int
+OpenRiaServices.Client.OperationBase
+OpenRiaServices.Client.OperationBase.CanCancel.get -> bool
+OpenRiaServices.Client.OperationBase.Cancel() -> void
+OpenRiaServices.Client.OperationBase.Complete(object result) -> void
+OpenRiaServices.Client.OperationBase.Completed -> System.EventHandler
+OpenRiaServices.Client.OperationBase.Error.get -> System.Exception
+OpenRiaServices.Client.OperationBase.HasError.get -> bool
+OpenRiaServices.Client.OperationBase.IsCanceled.get -> bool
+OpenRiaServices.Client.OperationBase.IsCancellationRequested.get -> bool
+OpenRiaServices.Client.OperationBase.IsComplete.get -> bool
+OpenRiaServices.Client.OperationBase.IsErrorHandled.get -> bool
+OpenRiaServices.Client.OperationBase.MarkErrorAsHandled() -> void
+OpenRiaServices.Client.OperationBase.OperationBase(object userState, bool supportCancellation) -> void
+OpenRiaServices.Client.OperationBase.OperationBase(object userState, System.Threading.CancellationTokenSource cancellationTokenSource) -> void
+OpenRiaServices.Client.OperationBase.RaisePropertyChanged(string propertyName) -> void
+OpenRiaServices.Client.OperationBase.SetCancelled() -> void
+OpenRiaServices.Client.OperationBase.SetError(System.Exception error) -> void
+OpenRiaServices.Client.OperationBase.SupportsCancellation.get -> bool
+OpenRiaServices.Client.OperationBase.UserState.get -> object
+OpenRiaServices.Client.OperationErrorStatus
+OpenRiaServices.Client.OperationErrorStatus.Conflicts = 5 -> OpenRiaServices.Client.OperationErrorStatus
+OpenRiaServices.Client.OperationErrorStatus.NotFound = 0 -> OpenRiaServices.Client.OperationErrorStatus
+OpenRiaServices.Client.OperationErrorStatus.NotSupported = 2 -> OpenRiaServices.Client.OperationErrorStatus
+OpenRiaServices.Client.OperationErrorStatus.ServerError = 1 -> OpenRiaServices.Client.OperationErrorStatus
+OpenRiaServices.Client.OperationErrorStatus.Unauthorized = 3 -> OpenRiaServices.Client.OperationErrorStatus
+OpenRiaServices.Client.OperationErrorStatus.ValidationFailed = 4 -> OpenRiaServices.Client.OperationErrorStatus
+OpenRiaServices.Client.QueryBuilder<T>
+OpenRiaServices.Client.QueryBuilder<T>.ApplyTo(OpenRiaServices.Client.EntityQuery<T> entityQuery) -> OpenRiaServices.Client.EntityQuery<T>
+OpenRiaServices.Client.QueryBuilder<T>.ApplyTo(System.Collections.Generic.IEnumerable<T> enumerable) -> System.Collections.Generic.IEnumerable<T>
+OpenRiaServices.Client.QueryBuilder<T>.ApplyTo(System.Collections.ObjectModel.ObservableCollection<T> collection) -> System.Collections.ObjectModel.ObservableCollection<T>
+OpenRiaServices.Client.QueryBuilder<T>.ApplyTo(System.Linq.IQueryable<T> queryable) -> System.Linq.IQueryable<T>
+OpenRiaServices.Client.QueryBuilder<T>.OrderBy<TKey>(System.Linq.Expressions.Expression<System.Func<T, TKey>> keySelector) -> OpenRiaServices.Client.QueryBuilder<T>
+OpenRiaServices.Client.QueryBuilder<T>.OrderByDescending<TKey>(System.Linq.Expressions.Expression<System.Func<T, TKey>> keySelector) -> OpenRiaServices.Client.QueryBuilder<T>
+OpenRiaServices.Client.QueryBuilder<T>.QueryBuilder() -> void
+OpenRiaServices.Client.QueryBuilder<T>.QueryBuilder(bool requestTotalItemCount) -> void
+OpenRiaServices.Client.QueryBuilder<T>.RequestTotalItemCount.get -> bool
+OpenRiaServices.Client.QueryBuilder<T>.RequestTotalItemCount.set -> void
+OpenRiaServices.Client.QueryBuilder<T>.Select(System.Linq.Expressions.Expression<System.Func<T, T>> selector) -> OpenRiaServices.Client.QueryBuilder<T>
+OpenRiaServices.Client.QueryBuilder<T>.Skip(int count) -> OpenRiaServices.Client.QueryBuilder<T>
+OpenRiaServices.Client.QueryBuilder<T>.Take(int count) -> OpenRiaServices.Client.QueryBuilder<T>
+OpenRiaServices.Client.QueryBuilder<T>.ThenBy<TKey>(System.Linq.Expressions.Expression<System.Func<T, TKey>> keySelector) -> OpenRiaServices.Client.QueryBuilder<T>
+OpenRiaServices.Client.QueryBuilder<T>.ThenByDescending<TKey>(System.Linq.Expressions.Expression<System.Func<T, TKey>> keySelector) -> OpenRiaServices.Client.QueryBuilder<T>
+OpenRiaServices.Client.QueryBuilder<T>.Where(System.Linq.Expressions.Expression<System.Func<T, bool>> predicate) -> OpenRiaServices.Client.QueryBuilder<T>
+OpenRiaServices.Client.QueryCompletedResult
+OpenRiaServices.Client.QueryCompletedResult.Entities.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.QueryCompletedResult.IncludedEntities.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.QueryCompletedResult.QueryCompletedResult(System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Entity> entities, System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Entity> includedEntities, int totalCount, System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> validationErrors) -> void
+OpenRiaServices.Client.QueryCompletedResult.TotalCount.get -> int
+OpenRiaServices.Client.QueryCompletedResult.ValidationErrors.get -> System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Client.QueryResult
+OpenRiaServices.Client.QueryResult.QueryResult() -> void
+OpenRiaServices.Client.QueryResult.TotalCount.get -> int
+OpenRiaServices.Client.QueryResult.TotalCount.set -> void
+OpenRiaServices.Client.QueryResult<T>
+OpenRiaServices.Client.QueryResult<T>.IncludedResults.get -> System.Collections.Generic.IEnumerable<object>
+OpenRiaServices.Client.QueryResult<T>.IncludedResults.set -> void
+OpenRiaServices.Client.QueryResult<T>.QueryResult() -> void
+OpenRiaServices.Client.QueryResult<T>.QueryResult(System.Collections.Generic.IEnumerable<T> results) -> void
+OpenRiaServices.Client.QueryResult<T>.QueryResult(System.Collections.Generic.IEnumerable<T> results, int totalCount) -> void
+OpenRiaServices.Client.QueryResult<T>.RootResults.get -> System.Collections.Generic.IEnumerable<T>
+OpenRiaServices.Client.QueryResult<T>.RootResults.set -> void
+OpenRiaServices.Client.SubmitCompletedResult
+OpenRiaServices.Client.SubmitCompletedResult.ChangeSet.get -> OpenRiaServices.Client.EntityChangeSet
+OpenRiaServices.Client.SubmitCompletedResult.Results.get -> System.Collections.Generic.IReadOnlyCollection<OpenRiaServices.Client.ChangeSetEntry>
+OpenRiaServices.Client.SubmitCompletedResult.SubmitCompletedResult(OpenRiaServices.Client.EntityChangeSet changeSet, System.Collections.Generic.IEnumerable<OpenRiaServices.Client.ChangeSetEntry> operationResults) -> void
+OpenRiaServices.Client.SubmitOperation
+OpenRiaServices.Client.SubmitOperation.ChangeSet.get -> OpenRiaServices.Client.EntityChangeSet
+OpenRiaServices.Client.SubmitOperation.EntitiesInError.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.SubmitOperation.SubmitOperation(OpenRiaServices.Client.EntityChangeSet changeSet, System.Action<OpenRiaServices.Client.SubmitOperation> completeAction, object userState, System.Threading.Tasks.Task<OpenRiaServices.Client.SubmitResult> sumitResultTask, System.Threading.CancellationTokenSource cancellationTokenSource) -> void
+OpenRiaServices.Client.SubmitOperationException
+OpenRiaServices.Client.SubmitOperationException.ChangeSet.get -> OpenRiaServices.Client.EntityChangeSet
+OpenRiaServices.Client.SubmitOperationException.EntitiesInError.get -> System.Collections.Generic.IReadOnlyCollection<OpenRiaServices.Client.Entity>
+OpenRiaServices.Client.SubmitOperationException.SubmitOperationException(OpenRiaServices.Client.EntityChangeSet changeSet, string message, OpenRiaServices.Client.OperationErrorStatus status) -> void
+OpenRiaServices.Client.SubmitOperationException.SubmitOperationException(OpenRiaServices.Client.EntityChangeSet changeSet, string message, System.Exception innerException) -> void
+OpenRiaServices.Client.SubmitResult
+OpenRiaServices.Client.SubmitResult.ChangeSet.get -> OpenRiaServices.Client.EntityChangeSet
+OpenRiaServices.Client.SubmitResult.SubmitResult(OpenRiaServices.Client.EntityChangeSet changeSet) -> void
+OpenRiaServices.Client.ValidationResultInfo
+OpenRiaServices.Client.ValidationResultInfo.Equals(OpenRiaServices.Client.ValidationResultInfo other) -> bool
+OpenRiaServices.Client.ValidationResultInfo.ErrorCode.get -> int
+OpenRiaServices.Client.ValidationResultInfo.ErrorCode.set -> void
+OpenRiaServices.Client.ValidationResultInfo.Message.get -> string
+OpenRiaServices.Client.ValidationResultInfo.Message.set -> void
+OpenRiaServices.Client.ValidationResultInfo.SourceMemberNames.get -> System.Collections.Generic.IEnumerable<string>
+OpenRiaServices.Client.ValidationResultInfo.SourceMemberNames.set -> void
+OpenRiaServices.Client.ValidationResultInfo.StackTrace.get -> string
+OpenRiaServices.Client.ValidationResultInfo.StackTrace.set -> void
+OpenRiaServices.Client.ValidationResultInfo.ValidationResultInfo() -> void
+OpenRiaServices.Client.ValidationResultInfo.ValidationResultInfo(string message, int errorCode, string stackTrace, System.Collections.Generic.IEnumerable<string> sourceMemberNames) -> void
+OpenRiaServices.Client.ValidationResultInfo.ValidationResultInfo(string message, System.Collections.Generic.IEnumerable<string> sourceMemberNames) -> void
+OpenRiaServices.DomainIdentifierAttribute
+OpenRiaServices.DomainIdentifierAttribute.DomainIdentifierAttribute(string name) -> void
+OpenRiaServices.DomainIdentifierAttribute.IsApplicationService.get -> bool
+OpenRiaServices.DomainIdentifierAttribute.IsApplicationService.set -> void
+OpenRiaServices.DomainIdentifierAttribute.Name.get -> string
+OpenRiaServices.EntityAssociationAttribute
+OpenRiaServices.EntityAssociationAttribute.EntityAssociationAttribute(string name, string[] thisKey, string[] otherKey) -> void
+OpenRiaServices.EntityAssociationAttribute.IsForeignKey.get -> bool
+OpenRiaServices.EntityAssociationAttribute.IsForeignKey.set -> void
+OpenRiaServices.EntityAssociationAttribute.Name.get -> string
+OpenRiaServices.EntityAssociationAttribute.OtherKey.get -> string
+OpenRiaServices.EntityAssociationAttribute.OtherKeyMembers.get -> System.Collections.Generic.IReadOnlyCollection<string>
+OpenRiaServices.EntityAssociationAttribute.ThisKey.get -> string
+OpenRiaServices.EntityAssociationAttribute.ThisKeyMembers.get -> System.Collections.Generic.IReadOnlyCollection<string>
+OpenRiaServices.ExternalReferenceAttribute
+OpenRiaServices.ExternalReferenceAttribute.ExternalReferenceAttribute() -> void
+OpenRiaServices.Serialization.KeyValue<TKey, TValue>
+OpenRiaServices.Serialization.KeyValue<TKey, TValue>.Key.get -> TKey
+OpenRiaServices.Serialization.KeyValue<TKey, TValue>.Key.set -> void
+OpenRiaServices.Serialization.KeyValue<TKey, TValue>.KeyValue() -> void
+OpenRiaServices.Serialization.KeyValue<TKey, TValue>.KeyValue(TKey key, TValue value) -> void
+OpenRiaServices.Serialization.KeyValue<TKey, TValue>.Value.get -> TValue
+OpenRiaServices.Serialization.KeyValue<TKey, TValue>.Value.set -> void
+override OpenRiaServices.Client.Authentication.WindowsAuthentication.LoginAsync(OpenRiaServices.Client.Authentication.LoginParameters parameters, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.Authentication.LoginResult>
+override OpenRiaServices.Client.Authentication.WindowsAuthentication.LogoutAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.Authentication.LogoutResult>
+override OpenRiaServices.Client.DomainException.StackTrace.get -> string
+override OpenRiaServices.Client.DomainOperationException.StackTrace.get -> string
+override OpenRiaServices.Client.Entity.ToString() -> string
+override OpenRiaServices.Client.EntityChangeSet.ToString() -> string
+override OpenRiaServices.Client.EntityCollection<TEntity>.ToString() -> string
+override OpenRiaServices.Client.EntityKey.ToString() -> string
+override OpenRiaServices.Client.EntityList<T>.InsertItem(int index, T item) -> void
+override OpenRiaServices.Client.EntityList<T>.RemoveItem(int index) -> void
+override OpenRiaServices.Client.QueryResult<T>.GetIncludedResults() -> System.Collections.Generic.IEnumerable<object>
+override OpenRiaServices.Client.QueryResult<T>.GetRootResults() -> System.Collections.Generic.IEnumerable<object>
+override OpenRiaServices.Client.ValidationResultInfo.Equals(object obj) -> bool
+override OpenRiaServices.Client.ValidationResultInfo.GetHashCode() -> int
+override OpenRiaServices.Client.ValidationResultInfo.ToString() -> string
+override OpenRiaServices.DomainIdentifierAttribute.TypeId.get -> object
+static OpenRiaServices.Client.Authentication.WebContextBase.Current.get -> OpenRiaServices.Client.Authentication.WebContextBase
+static OpenRiaServices.Client.DomainContext.CreateDomainClient(System.Type serviceContract, System.Uri serviceUri, bool usesHttps) -> OpenRiaServices.Client.DomainClient
+static OpenRiaServices.Client.DomainContext.DomainClientFactory.get -> OpenRiaServices.Client.IDomainClientFactory
+static OpenRiaServices.Client.DomainContext.DomainClientFactory.set -> void
+static OpenRiaServices.Client.EntityExtensions.EntityExtensions.ExtractState(this OpenRiaServices.Client.Entity targetEntity) -> System.Collections.Generic.IDictionary<string, object>
+static OpenRiaServices.Client.EntityExtensions.EntityExtensions.ExtractState(this OpenRiaServices.Client.Entity targetEntity, System.Collections.Generic.IDictionary<string, object> entityStateToApply) -> void
+static OpenRiaServices.Client.EntityExtensions.EntityExtensions.ExtractState(this OpenRiaServices.Client.Entity targetEntity, System.Collections.Generic.IDictionary<string, object> entityStateToApply, OpenRiaServices.Client.LoadBehavior loadBehavior) -> void
+static OpenRiaServices.Client.EntityExtensions.EntityExtensions.GetEntitySet<TEntity>(this TEntity entity) -> OpenRiaServices.Client.EntitySet<TEntity>
+static OpenRiaServices.Client.EntityExtensions.EntityExtensions.Merge(this OpenRiaServices.Client.Entity targetEntity, OpenRiaServices.Client.Entity otherEntity, OpenRiaServices.Client.LoadBehavior loadBehavior) -> void
+static OpenRiaServices.Client.EntityExtensions.EntityExtensions.Merge(this OpenRiaServices.Client.Entity targetEntity, System.Collections.Generic.IDictionary<string, object> otherState, OpenRiaServices.Client.LoadBehavior loadBehavior) -> void
+static OpenRiaServices.Client.EntityExtensions.EntityExtensions.UpdateOriginalValues(this OpenRiaServices.Client.Entity targetEntity, OpenRiaServices.Client.Entity entity) -> void
+static OpenRiaServices.Client.EntityExtensions.EntityExtensions.UpdateOriginalValues(this OpenRiaServices.Client.Entity targetEntity, System.Collections.Generic.IDictionary<string, object> entityStateToApply) -> void
+static OpenRiaServices.Client.EntityKey.Create(params object[] keyValues) -> OpenRiaServices.Client.EntityKey
+static OpenRiaServices.Client.EntityKey.Create<T1, T2, T3>(T1 v1, T2 v2, T3 v3) -> OpenRiaServices.Client.EntityKey
+static OpenRiaServices.Client.EntityKey.Create<T1, T2>(T1 v1, T2 v2) -> OpenRiaServices.Client.EntityKey
+static OpenRiaServices.Client.EntityQueryable.OrderBy<TEntity, TKey>(this OpenRiaServices.Client.EntityQuery<TEntity> source, System.Linq.Expressions.Expression<System.Func<TEntity, TKey>> keySelector) -> OpenRiaServices.Client.EntityQuery<TEntity>
+static OpenRiaServices.Client.EntityQueryable.OrderByDescending<TEntity, TKey>(this OpenRiaServices.Client.EntityQuery<TEntity> source, System.Linq.Expressions.Expression<System.Func<TEntity, TKey>> keySelector) -> OpenRiaServices.Client.EntityQuery<TEntity>
+static OpenRiaServices.Client.EntityQueryable.Select<TEntity>(this OpenRiaServices.Client.EntityQuery<TEntity> source, System.Linq.Expressions.Expression<System.Func<TEntity, TEntity>> selector) -> OpenRiaServices.Client.EntityQuery<TEntity>
+static OpenRiaServices.Client.EntityQueryable.Skip<TEntity>(this OpenRiaServices.Client.EntityQuery<TEntity> source, int count) -> OpenRiaServices.Client.EntityQuery<TEntity>
+static OpenRiaServices.Client.EntityQueryable.Take<TEntity>(this OpenRiaServices.Client.EntityQuery<TEntity> source, int count) -> OpenRiaServices.Client.EntityQuery<TEntity>
+static OpenRiaServices.Client.EntityQueryable.ThenBy<TEntity, TKey>(this OpenRiaServices.Client.EntityQuery<TEntity> source, System.Linq.Expressions.Expression<System.Func<TEntity, TKey>> keySelector) -> OpenRiaServices.Client.EntityQuery<TEntity>
+static OpenRiaServices.Client.EntityQueryable.ThenByDescending<TEntity, TKey>(this OpenRiaServices.Client.EntityQuery<TEntity> source, System.Linq.Expressions.Expression<System.Func<TEntity, TKey>> keySelector) -> OpenRiaServices.Client.EntityQuery<TEntity>
+static OpenRiaServices.Client.EntityQueryable.Where<TEntity>(this OpenRiaServices.Client.EntityQuery<TEntity> source, System.Linq.Expressions.Expression<System.Func<TEntity, bool>> predicate) -> OpenRiaServices.Client.EntityQuery<TEntity>
+static OpenRiaServices.Client.Internal.MetaType.GetMetaType(System.Type type) -> OpenRiaServices.Client.Internal.MetaType
+static OpenRiaServices.Client.InvokeResult<T>.implicit operator T(OpenRiaServices.Client.InvokeResult<T> invokeResult) -> T
+System.ComponentModel.DataAnnotations.CompositionAttribute
+System.ComponentModel.DataAnnotations.CompositionAttribute.CompositionAttribute() -> void
+System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute
+System.ComponentModel.DataAnnotations.RoundtripOriginalAttribute.RoundtripOriginalAttribute() -> void
+virtual OpenRiaServices.Client.Authentication.AuthenticationService.SupportsCancellation.get -> bool
+virtual OpenRiaServices.Client.ComplexObject.OnPropertyChanged(string propertyName) -> void
+virtual OpenRiaServices.Client.ComplexObject.ValidateProperty(System.ComponentModel.DataAnnotations.ValidationContext validationContext, object value) -> void
+virtual OpenRiaServices.Client.DomainClient.SubmitAsyncCore(OpenRiaServices.Client.EntityChangeSet changeSet, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.SubmitCompletedResult>
+virtual OpenRiaServices.Client.DomainClient.SupportsCancellation.get -> bool
+virtual OpenRiaServices.Client.DomainClientFactory.ComposeAbsoluteUri(System.Uri serviceUri) -> System.Uri
+virtual OpenRiaServices.Client.DomainContext.InvokeOperation<TValue>(string operationName, System.Type returnType, System.Collections.Generic.IDictionary<string, object> parameters, bool hasSideEffects, System.Action<OpenRiaServices.Client.InvokeOperation<TValue>> callback, object userState) -> OpenRiaServices.Client.InvokeOperation<TValue>
+virtual OpenRiaServices.Client.DomainContext.InvokeOperationAsync<TValue>(string operationName, System.Collections.Generic.IDictionary<string, object> parameters, bool hasSideEffects, System.Type returnType, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.InvokeResult<TValue>>
+virtual OpenRiaServices.Client.DomainContext.Load<TEntity>(OpenRiaServices.Client.EntityQuery<TEntity> query, OpenRiaServices.Client.LoadBehavior loadBehavior, System.Action<OpenRiaServices.Client.LoadOperation<TEntity>> callback, object userState) -> OpenRiaServices.Client.LoadOperation<TEntity>
+virtual OpenRiaServices.Client.DomainContext.LoadAsync<TEntity>(OpenRiaServices.Client.EntityQuery<TEntity> query, OpenRiaServices.Client.LoadBehavior loadBehavior, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.LoadResult<TEntity>>
+virtual OpenRiaServices.Client.DomainContext.SubmitChanges(System.Action<OpenRiaServices.Client.SubmitOperation> callback, object userState) -> OpenRiaServices.Client.SubmitOperation
+virtual OpenRiaServices.Client.DomainContext.SubmitChangesAsync(OpenRiaServices.Client.EntityChangeSet changeSet, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.Task<OpenRiaServices.Client.SubmitResult>
+virtual OpenRiaServices.Client.Entity.GetIdentity() -> object
+virtual OpenRiaServices.Client.Entity.OnLoaded(bool isInitialLoad) -> void
+virtual OpenRiaServices.Client.Entity.OnPropertyChanged(string propertyName) -> void
+virtual OpenRiaServices.Client.Entity.ValidateProperty(System.ComponentModel.DataAnnotations.ValidationContext validationContext, object value) -> void
