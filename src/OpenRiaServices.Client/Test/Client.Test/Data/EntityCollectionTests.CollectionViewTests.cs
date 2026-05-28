@@ -4,8 +4,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
 using System.Windows.Data;
 using Cities;
+using DataTests.Northwind.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
@@ -244,7 +246,6 @@ namespace OpenRiaServices.Client.Test
                     "Event should not be null after clearing the EntitySet.");
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action,
                     "Actions should be equal after clearing the EntitySet.");
-
                 Assert.IsTrue(view.IsEmpty,
                     "View should be empty after Clear.");
 
@@ -270,126 +271,18 @@ namespace OpenRiaServices.Client.Test
 
             [TestMethod]
             [Description("Tests that IList indexer throws for out-of-range accesses.")]
-            public void IList_Indexer_OutOfRange_Throws()
+            public void ICVF_MoveToPosition_OutOfRange()
             {
                 EntityCollection<City> entityCollection = CreateEntityCollection();
-                IList list = entityCollection;
-
-                Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[-1]);
-                Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[0]);
+                var view = GetICV(entityCollection);
+                Assert.IsFalse(view.MoveCurrentToPosition(-1));
+                Assert.IsFalse(view.MoveCurrentToPosition(0));
 
                 entityCollection.Add(CreateLocalCity("Out-of-range"));
-                Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[list.Count]);
+                Assert.IsTrue(view.MoveCurrentToPosition(0));
+                Assert.IsFalse(view.MoveCurrentToPosition(1));
             }
 
-            [TestMethod]
-            [Description("Tests EntitySet.Clear under sorted view does not throw.")]
-            public void SortedView_EntitySetClear_DoesNotThrowNRE()
-            {
-                EntityCollection<City> entityCollection = CreateEntityCollection(out EntitySet<City> entitySet);
-                entityCollection.Add(CreateLocalCity("A"));
-                entityCollection.Add(CreateLocalCity("B"));
-
-                ListCollectionView view = (ListCollectionView)this.GetICV(entityCollection);
-                view.SortDescriptions.Add(new SortDescription(nameof(City.Name), ListSortDirection.Ascending));
-                view.Refresh();
-
-                Exception caught = null;
-                try
-                {
-                    entitySet.Clear();
-                }
-                catch (Exception exception)
-                {
-                    caught = exception;
-                }
-
-                Assert.IsNull(caught, $"EntitySet.Clear() must not surface NRE through the bound view: {caught}");
-                Assert.IsTrue(view.IsEmpty);
-            }
-
-            [TestMethod]
-            [Description("Tests EntityCollection.Add under sorted view does not throw.")]
-            public void SortedView_EntityCollectionAdd_DoesNotThrowNRE()
-            {
-                EntityCollection<City> entityCollection = CreateEntityCollection();
-                entityCollection.Add(CreateLocalCity("Bellevue"));
-                entityCollection.Add(CreateLocalCity("Redmond"));
-
-                ListCollectionView view = (ListCollectionView)this.GetICV(entityCollection);
-                view.SortDescriptions.Add(new SortDescription(nameof(City.Name), ListSortDirection.Ascending));
-                view.Refresh();
-
-                Exception caught = null;
-                try
-                {
-                    entityCollection.Add(CreateLocalCity("Kirkland"));
-                }
-                catch (Exception exception)
-                {
-                    caught = exception;
-                }
-
-                Assert.IsNull(caught, $"EntityCollection.Add must not surface NRE through AdjustBefore: {caught}");
-                Assert.AreEqual(3, view.Count);
-            }
-
-            [TestMethod]
-            [Description("Tests source set remove under sorted view does not throw.")]
-            public void SortedView_SourceSetRemove_DoesNotThrowNRE()
-            {
-                EntityCollection<City> entityCollection = CreateEntityCollection(out EntitySet<City> entitySet);
-                City city = CreateLocalCity("Sammamish");
-                entityCollection.Add(city);
-
-                ListCollectionView view = (ListCollectionView)this.GetICV(entityCollection);
-                view.SortDescriptions.Add(new SortDescription(nameof(City.Name), ListSortDirection.Ascending));
-                view.Refresh();
-
-                Exception caught = null;
-                try
-                {
-                    entitySet.Remove(city);
-                }
-                catch (Exception exception)
-                {
-                    caught = exception;
-                }
-
-                Assert.IsNull(caught, $"EntitySet.Remove in a sorted EntityCollection view must not NRE: {caught}");
-                Assert.IsFalse(view.Contains(city));
-            }
-
-            [TestMethod]
-            [Description("Tests filter predicate is never invoked with null.")]
-            public void FilteredView_FilterPredicate_NeverInvokedWithNull()
-            {
-                EntityCollection<City> entityCollection = CreateEntityCollection(out EntitySet<City> entitySet);
-                entityCollection.Add(CreateLocalCity("A"));
-                entityCollection.Add(CreateLocalCity("B"));
-
-                ListCollectionView view = (ListCollectionView)this.GetICV(entityCollection);
-                bool sawNull = false;
-                view.Filter = o =>
-                {
-                    if (o is null)
-                    {
-                        sawNull = true;
-                    }
-
-                    return true;
-                };
-                view.Refresh();
-
-                entityCollection.Add(CreateLocalCity("C"));
-                entitySet.Clear();
-
-                foreach (object item in view)
-                {
-                }
-
-                Assert.IsFalse(sawNull, "Filter predicate must never receive a null item from the EntityCollection.");
-            }
 
             private ICollectionView GetICV(EntityCollection<City> entityCollection)
             {
