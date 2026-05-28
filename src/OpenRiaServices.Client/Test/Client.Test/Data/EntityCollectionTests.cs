@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.ComponentModel;
 using System.Linq;
 using Cities;
@@ -132,6 +133,21 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsTrue(entityCollection.Contains(city));
             }
         }
+
+        [TestMethod]
+        [Description("Tests that IList indexer throws for out-of-range accesses.")]
+        public void IList_Indexer_OutOfRange_Throws()
+        {
+            EntityCollection<City> entityCollection = CreateEntityCollection();
+            IList list = entityCollection;
+
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[-1]);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[0]);
+
+            entityCollection.Add(CreateLocalCity("Out-of-range"));
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => _ = list[1]);
+        }
+
 
         private static EntityCollection<City> CreateEntityCollection()
         {

@@ -32,7 +32,7 @@
     <PackageReference Include="System.Reflection.MetadataLoadContext" Version="10.0.5" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.11.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.4.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.11.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.11.1" />
   </ItemGroup>
