@@ -32,7 +32,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             {
                 if (!s_globalCacheHelpers.TryGetValue(serviceInterface, out _localCacheHelper))
                 {
-                    _localCacheHelper = new DataContractSerializationHelper(serviceInterface);
+                    _localCacheHelper = new DataContractSerializationHelper();
                     s_globalCacheHelpers.Add(serviceInterface, _localCacheHelper);
                 }
             }

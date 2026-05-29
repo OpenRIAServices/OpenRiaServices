@@ -11,11 +11,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
     sealed class DataContractSerializationHelper
     {
         private readonly Dictionary<Type, DataContractSerializer> _serializerCache = new Dictionary<Type, DataContractSerializer>();
-        public DataContractSerializationHelper(Type serviceInterface)
-        {
-            ArgumentNullException.ThrowIfNull(serviceInterface);
-        }
-
         /// <summary>
         /// Gets a <see cref="DataContractSerializer"/> which can be used to serialized the specified type.
         /// The serializers are cached for performance reasons.
