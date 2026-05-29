@@ -1,5 +1,4 @@
 using Microsoft.AspNetCore.Http;
-using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 using System;
 using System.Buffers;
