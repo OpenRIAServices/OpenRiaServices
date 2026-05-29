@@ -59,7 +59,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private bool IsBinary { get; }
         private string ContentType => IsBinary ? MimeTypes.BinaryXml : MimeTypes.TextXml;
 
-        protected DataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, bool isBinary, DataContractSerializationOptions options)
+        protected DataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, bool isBinary, IDataContractSerializationOptions options)
         {
             Type actualReturnType = operation.Operation switch
             {

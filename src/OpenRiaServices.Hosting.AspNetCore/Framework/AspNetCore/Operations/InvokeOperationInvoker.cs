@@ -34,7 +34,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 {
                     inputs = ReadParametersFromUri(context);
                 }
-                else // POST
+                else // POST or QUERY
                 {
                     var serializer = TryGetSerializerForReading(context);
                     if (serializer is null)

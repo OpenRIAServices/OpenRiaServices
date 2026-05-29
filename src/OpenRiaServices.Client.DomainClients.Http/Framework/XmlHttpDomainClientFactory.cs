@@ -31,7 +31,7 @@ namespace OpenRiaServices.Client.DomainClients
         {
             HttpClient httpClient = CreateHttpClient(serviceUri, XmlHttpDomainClient.MediaType);
 
-            return new XmlHttpDomainClient(httpClient, serviceContract, ReaderQuotas);
+            return new XmlHttpDomainClient(httpClient, serviceContract, this);
         }
 
         private static XmlDictionaryReaderQuotas CreateMaxQuotas()

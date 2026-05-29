@@ -12,6 +12,28 @@ namespace OpenRiaServices.Client.DomainClients
         private readonly Func<Uri, HttpClient> _httpClientFactory;
 
         /// <summary>
+        /// Gets or sets the maximum query string length (in characters) before a GET request is automatically
+        /// converted to a POST (or QUERY if <see cref="UseQueryHttpMethod"/> is enabled) request.
+        /// </summary>
+        /// <remarks>
+        /// The default value is 2048, matching the default IIS query string length limit.
+        /// Increase this value if your server is configured to allow longer query strings.
+        /// </remarks>
+        public int MaxQueryStringLength { get; set; } = 2048;
+
+        /// <summary>
+        /// Gets or sets a value indicating whether the QUERY HTTP method should be used instead of POST
+        /// when the request query string becomes too long (exceeds <see cref="MaxQueryStringLength"/>).
+        /// </summary>
+        /// <remarks>
+        /// The QUERY HTTP method is a safe, idempotent method that allows sending a request body,
+        /// making it suitable for read operations with complex query parameters that exceed URI length limits.
+        /// When enabled, the server must also support the QUERY method (requires compatible server hosting configuration).
+        /// Defaults to <see langword="false" />.
+        /// </remarks>
+        public bool UseQueryHttpMethod { get; set; }
+
+        /// <summary>
         /// Create a <see cref="HttpDomainClientFactory"/> where all requests share a single <see cref="HttpMessageHandler"/>
         /// <para>IMPORTANT: To handle DNS updates you need to configure <c>System.Net.ServicePointManager.ConnectionLeaseTimeout</c> on .Net framework</para>
         /// </summary>

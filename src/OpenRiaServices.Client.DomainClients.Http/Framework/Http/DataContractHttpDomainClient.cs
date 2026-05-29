@@ -15,8 +15,6 @@ using System.Xml;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
-    // Pass in HttpDomainClientFactory to ctor,
-
     /// <summary>
     /// Base class for <see cref="DomainClient"/>s using <see cref="DataContractSerializer"/> serialization and talking to the server using <see cref="System.Net.Http.HttpClient"/>.
     /// </summary>
@@ -29,10 +27,12 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// deserialized as content is received
         private const HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
         private static readonly DataContractSerializer s_faultSerializer = new DataContractSerializer(typeof(DomainServiceFault));
-        private static readonly Task<HttpResponseMessage> s_skipGetUsePostInstead = Task.FromResult<HttpResponseMessage>(null);
+        private static readonly Task<HttpResponseMessage> s_mustSendQueryInBody = Task.FromResult<HttpResponseMessage>(null);
+        private static readonly HttpMethod s_queryMethod = new HttpMethod("QUERY");
         private static readonly Dictionary<Type, DataContractSerializationHelper> s_globalCacheHelpers = new Dictionary<Type, DataContractSerializationHelper>();
 
         private readonly DataContractSerializationHelper _localCacheHelper;
+        private readonly OpenRiaServices.Client.DomainClients.HttpDomainClientFactory _factory;
 
         /// <inheritdoc/>
         public override bool SupportsCancellation => true;
@@ -44,11 +44,13 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         HttpClient HttpClient { get; set; }
 
-        private protected DataContractHttpDomainClient(HttpClient httpClient, Type serviceInterface)
+        private protected DataContractHttpDomainClient(HttpClient httpClient, Type serviceInterface, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory)
         {
             ArgumentNullException.ThrowIfNull(serviceInterface);
+            ArgumentNullException.ThrowIfNull(factory);
 
             HttpClient = httpClient;
+            _factory = factory;
             lock (s_globalCacheHelpers)
             {
                 if (!s_globalCacheHelpers.TryGetValue(serviceInterface, out _localCacheHelper))
@@ -187,16 +189,16 @@ namespace OpenRiaServices.Client.DomainClients.Http
              List<ServiceQueryPart> queryOptions,
              CancellationToken cancellationToken)
         {
-            Task<HttpResponseMessage> response = s_skipGetUsePostInstead;
+            if (hasSideEffects)
+                return PostAsync(operationName, parameters, queryOptions, cancellationToken);
 
-            if (!hasSideEffects)
+            var response = GetAsync(operationName, parameters, queryOptions, cancellationToken);
+            // GET returned the sentinel value, meaning the query string is too long - fall back to POST or QUERY
+            if (ReferenceEquals(response, s_mustSendQueryInBody))
             {
-                response = GetAsync(operationName, parameters, queryOptions, cancellationToken);
-            }
-            // It is a POST, or GET returned null (maybe due to too large request uri)
-            if (ReferenceEquals(response, s_skipGetUsePostInstead))
-            {
-                response = PostAsync(operationName, parameters, queryOptions, cancellationToken);
+                response = _factory?.UseQueryHttpMethod == true
+                    ? QueryAsync(operationName, parameters, queryOptions, cancellationToken)
+                    : PostAsync(operationName, parameters, queryOptions, cancellationToken);
             }
 
             return response;
@@ -211,7 +213,30 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="cancellationToken"></param>
         private Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
-            var request = new HttpRequestMessage(HttpMethod.Post, operationName);
+            return SendWithBodyAsync(HttpMethod.Post, operationName, parameters, queryOptions, cancellationToken);
+        }
+
+        /// <summary>
+        /// Initiates a QUERY request for the given operation and returns the server response (as a task).
+        /// The QUERY method is a safe, idempotent HTTP method that allows a request body,
+        /// suitable for read operations with complex query parameters that exceed URI length limits.
+        /// </summary>
+        /// <param name="operationName">Name of operation</param>
+        /// <param name="parameters">The parameters to the server method, or <c>null</c> if no parameters.</param>
+        /// <param name="queryOptions">The query options if any.</param>
+        /// <param name="cancellationToken"></param>
+        private Task<HttpResponseMessage> QueryAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
+        {
+            return SendWithBodyAsync(s_queryMethod, operationName, parameters, queryOptions, cancellationToken);
+        }
+
+        /// <summary>
+        /// Sends an HTTP request with a body for the given operation.
+        /// Used by both POST and QUERY methods.
+        /// </summary>
+        private async Task<HttpResponseMessage> SendWithBodyAsync(HttpMethod method, string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
+        {
+            using var request = new HttpRequestMessage(method, operationName);
 
             using (var ms = new MemoryStream())
             using (var writer = CreateWriter(ms))
@@ -265,7 +290,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(ContentType);
             }
 
-            return HttpClient.SendAsync(request, DefaultHttpCompletionOption, cancellationToken);
+            return await HttpClient.SendAsync(request, DefaultHttpCompletionOption, cancellationToken);
         }
 
 
@@ -316,15 +341,16 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
             var uri = uriBuilder.ToString();
 
-            // Switch to POST if uri becomes to long based on default IIS hosting settings
-            // we can do so by returning the special null task s_skipGetUsePostInstead
+            // Switch to POST/QUERY if uri becomes too long based on configured max query string length
+            // we can do so by returning the special null task s_mustSendQueryInBody
             // * https://docs.microsoft.com/en-us/iis/configuration/system.webserver/security/requestfiltering/requestlimits/
             // * https://docs.microsoft.com/en-us/dotnet/api/system.web.configuration.httpruntimesection.maxurllength?view=netframework-4.8#system-web-configuration-httpruntimesection-maxurllength
             // - default maximum query string length in IIS is 2048 bytes
-            // - MaxUrlLength is 260 per default, but we dont check it since POST will get same lenght
+            // - MaxUrlLength is 260 per default, but we dont check it since POST will get same length
             // - maxUrl defaults to 4096 bytes, but we assume it will not be an issue since we limit the query string length
-            if (uri.Length - operationName.Length > 2048) // uri contains query + operationName, so subract operationName to only get query string length
-                return s_skipGetUsePostInstead;
+            var maxQueryStringLength = _factory.MaxQueryStringLength;
+            if (uri.Length - operationName.Length > maxQueryStringLength) // uri contains query + operationName, so subtract operationName to only get query string length
+                return s_mustSendQueryInBody;
 
             return HttpClient.GetAsync(uri, DefaultHttpCompletionOption, cancellationToken);
         }

@@ -7,6 +7,28 @@ By default all quotas are set to their maximum values to preserve backward compa
 
 See [AspNetCore README](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.md#configuring-serializer-settings) for more details and sample code.
 
+* Added QUERY HTTP method support for non-side-effect operations (Query and non-mutating Invoke)
+  * Non-side-effect operations now accept `GET`, `POST`, and `QUERY` requests (previously `GET` and `POST` only)
+  * Side-effect operations remain `POST`-only
+
+## Client (`OpenRiaServices.Client.DomainClients.Http`)
+
+* Added `MaxQueryStringLength` setting to `HttpDomainClientFactory` (default `2048`)
+  * Controls the query string length threshold at which GET requests are automatically promoted to POST or QUERY
+  * Previously this threshold was hardcoded
+* Added `UseQueryHttpMethod` setting to `HttpDomainClientFactory` (default `false`)
+  * When enabled, GET requests exceeding `MaxQueryStringLength` are promoted to QUERY instead of POST
+  * QUERY is a safe, idempotent HTTP method that carries a request body — suitable for read operations with large query parameters
+  * Requires the server to support the QUERY method (i.e. using compatible `OpenRiaServices.Hosting.AspNetCore`)
+
+```csharp
+DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(baseUri, handler)
+{
+    MaxQueryStringLength = 4096,     // allow longer query strings before falling back
+    UseQueryHttpMethod = true,       // use QUERY instead of POST on fallback
+};
+```
+
 
 # EF Core 4.1.0
 

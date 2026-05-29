@@ -16,21 +16,21 @@ namespace OpenRiaServices.Client.DomainClients.Http
         private readonly System.Text.Encoding _encoding = new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
         private readonly XmlDictionaryReaderQuotas _readerQuotas;
 
-        public XmlHttpDomainClient(HttpClient httpClient, Type serviceInterface, XmlDictionaryReaderQuotas readerQuotas)
-            : base(httpClient, serviceInterface)
+        public XmlHttpDomainClient(HttpClient httpClient, Type serviceInterface, HttpDomainClientFactory factory)
+            : base(httpClient, serviceInterface, factory)
         {
-            ArgumentNullException.ThrowIfNull(readerQuotas);
-            _readerQuotas = CreateQuotasCopy(readerQuotas);
+            var xmlFactory = (XmlHttpDomainClientFactory)factory;
+            _readerQuotas = CreateQuotasCopy(xmlFactory.ReaderQuotas);
         }
 
         private protected override string ContentType => MediaType;
 
-        private protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
+        private protected override XmlDictionaryReader CreateReader(Stream stream)
         {
             return XmlDictionaryReader.CreateTextReader(stream, _readerQuotas);
         }
 
-        private protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
+        private protected override XmlDictionaryWriter CreateWriter(Stream stream)
         {
             return XmlDictionaryWriter.CreateTextWriter(stream, _encoding, ownsStream: false);
         }
