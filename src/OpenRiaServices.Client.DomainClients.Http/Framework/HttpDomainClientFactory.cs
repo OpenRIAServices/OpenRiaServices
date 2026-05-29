@@ -19,11 +19,11 @@ namespace OpenRiaServices.Client.DomainClients
         /// The default value is 2048, matching the default IIS query string length limit.
         /// Increase this value if your server is configured to allow longer query strings.
         /// </remarks>
-        public int MaxUriLength { get; set; } = 2048;
+        public int MaxQueryStringLength { get; set; } = 2048;
 
         /// <summary>
         /// Gets or sets a value indicating whether the QUERY HTTP method should be used instead of POST
-        /// when the request URI or query string becomes too long (exceeds <see cref="MaxUriLength"/>).
+        /// when the request query string becomes too long (exceeds <see cref="MaxQueryStringLength"/>).
         /// </summary>
         /// <remarks>
         /// The QUERY HTTP method is a safe, idempotent method that allows sending a request body,

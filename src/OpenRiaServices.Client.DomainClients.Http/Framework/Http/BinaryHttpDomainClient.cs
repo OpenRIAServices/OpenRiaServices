@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net.Http;
 using System.Runtime.Serialization;
+using System.Xml;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
@@ -12,10 +13,15 @@ namespace OpenRiaServices.Client.DomainClients.Http
     sealed class BinaryHttpDomainClient : DataContractHttpDomainClient
     {
         internal const string MediaType = "application/msbin1";
+        private readonly XmlDictionaryReaderQuotas _readerQuotas;
+        private readonly IXmlDictionary _dictionary;
 
-        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, int maxUriLength = 2048, bool useQueryHttpMethod = false) 
-            : base(httpClient, serviceInterface, maxUriLength, useQueryHttpMethod)
+        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory, XmlDictionaryReaderQuotas readerQuotas, IXmlDictionary dictionary)
+            : base(httpClient, serviceInterface, factory)
         {
+            ArgumentNullException.ThrowIfNull(readerQuotas);
+            _readerQuotas = CreateQuotasCopy(readerQuotas);
+            _dictionary = dictionary;
         }
 
         private protected override string ContentType => MediaType;
@@ -23,12 +29,19 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
         {
-            return System.Xml.XmlDictionaryReader.CreateBinaryReader(stream, System.Xml.XmlDictionaryReaderQuotas.Max);
+            return XmlDictionaryReader.CreateBinaryReader(stream, _dictionary, _readerQuotas);
         }
 
         private protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
         {
-            return System.Xml.XmlDictionaryWriter.CreateBinaryWriter(stream, null, null, ownsStream: false);
+            return XmlDictionaryWriter.CreateBinaryWriter(stream, _dictionary, null, ownsStream: false);
+        }
+
+        private static XmlDictionaryReaderQuotas CreateQuotasCopy(XmlDictionaryReaderQuotas source)
+        {
+            var copy = new XmlDictionaryReaderQuotas();
+            source.CopyTo(copy);
+            return copy;
         }
     }
 }

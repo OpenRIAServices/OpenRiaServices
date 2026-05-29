@@ -12,8 +12,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     internal sealed class TextXmlDataContractRequestSerializer : DataContractRequestSerializer
     {
-        public TextXmlDataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache)
-            : base(operation, dataContractCache, isBinary: false)
+        public TextXmlDataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, XmlSerializationOptions options)
+            : base(operation, dataContractCache, isBinary: false, options)
         {
         }
 
@@ -26,8 +26,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
     internal sealed class BinaryXmlDataContractRequestSerializer : DataContractRequestSerializer
     {
-        public BinaryXmlDataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache)
-            : base(operation, dataContractCache, isBinary: true)
+        public BinaryXmlDataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, BinarySerializationOptions options)
+            : base(operation, dataContractCache, isBinary: true, options)
         {
         }
 
@@ -46,6 +46,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private readonly DomainOperationEntry _operation;
         private readonly string _responseName;
         private readonly string _resultName;
+        private readonly XmlDictionaryReaderQuotas _readerQuotas;
+        private readonly IXmlDictionary? _dictionary;
         private const string MessageRootElementName = "MessageRoot";
         private const string QueryOptionsListElementName = "QueryOptions";
         private const string QueryOptionElementName = "QueryOption";
@@ -57,7 +59,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private bool IsBinary { get; }
         private string ContentType => IsBinary ? MimeTypes.BinaryXml : MimeTypes.TextXml;
 
-        protected DataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, bool isBinary)
+        protected DataContractRequestSerializer(DomainOperationEntry operation, DataContractCache dataContractCache, bool isBinary, IDataContractSerializationOptions options)
         {
             Type actualReturnType = operation.Operation switch
             {
@@ -73,6 +75,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             this._responseName = operation.Name + "Response";
             this._resultName = operation.Name + "Result";
             this._responseSerializer = dataContractCache.GetSerializer(actualReturnType);
+            this._readerQuotas = options.ReaderQuotas;
+            this._dictionary = isBinary ? options.Dictionary : null;
 
             if (operation.Operation == DomainOperation.Custom)
             {
@@ -102,7 +106,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             try
             {
-                using var reader = BinaryMessageReader.Rent(memory, IsBinary);
+                using var reader = BinaryMessageReader.Rent(memory, IsBinary, _readerQuotas, _dictionary);
                 return ReadQueryParametersFromBody(reader.XmlDictionaryReader, operation);
             }
             catch (Exception ex) when (ex is not BadHttpRequestException && !ExceptionHandlingUtility.IsFatal(ex))
@@ -296,7 +300,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             if (ct.IsCancellationRequested)
                 return;
 
-            var messageWriter = BinaryMessageWriter.Rent(IsBinary);
+            var messageWriter = BinaryMessageWriter.Rent(IsBinary, _dictionary);
             try
             {
                 WriteFault(fault, messageWriter.XmlWriter);
@@ -362,7 +366,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             if (ct.IsCancellationRequested)
                 return;
 
-            var messageWriter = BinaryMessageWriter.Rent(IsBinary);
+            var messageWriter = BinaryMessageWriter.Rent(IsBinary, _dictionary);
             try
             {
                 WriteResponse(messageWriter.XmlWriter, result);

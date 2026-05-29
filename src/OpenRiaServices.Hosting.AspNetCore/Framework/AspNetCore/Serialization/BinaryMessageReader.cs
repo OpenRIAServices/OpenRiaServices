@@ -24,7 +24,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             _currentReader = _binaryReader = XmlDictionaryReader.CreateBinaryReader(Array.Empty<byte>(), XmlDictionaryReaderQuotas.Max);
         }
 
-        public static BinaryMessageReader Rent(ArraySegment<byte> bytes, bool isBinary)
+        public static BinaryMessageReader Rent(ArraySegment<byte> bytes, bool isBinary, XmlDictionaryReaderQuotas quotas, IXmlDictionary? dictionary = null)
         {
             var messageReader = s_threadInstance ?? new BinaryMessageReader();
 
@@ -34,15 +34,15 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             if (isBinary)
             {
-                ((IXmlBinaryReaderInitializer)messageReader._binaryReader).SetInput(bytes.Array!, bytes.Offset, bytes.Count, dictionary: null, XmlDictionaryReaderQuotas.Max, null, null);
+                ((IXmlBinaryReaderInitializer)messageReader._binaryReader).SetInput(bytes.Array!, bytes.Offset, bytes.Count, dictionary: dictionary, quotas, null, null);
                 messageReader._currentReader = messageReader._binaryReader;
             }
             else
             {
                 if (messageReader._textReader is IXmlTextReaderInitializer textReader)
-                    textReader.SetInput(bytes.Array!, bytes.Offset, bytes.Count, encoding: null, XmlDictionaryReaderQuotas.Max, null);
+                    textReader.SetInput(bytes.Array!, bytes.Offset, bytes.Count, encoding: null, quotas, null);
                 else
-                    messageReader._textReader = XmlDictionaryReader.CreateTextReader(bytes.Array!, bytes.Offset, bytes.Count, XmlDictionaryReaderQuotas.Max);
+                    messageReader._textReader = XmlDictionaryReader.CreateTextReader(bytes.Array!, bytes.Offset, bytes.Count, quotas);
 
                 messageReader._currentReader = messageReader._textReader;
             }
