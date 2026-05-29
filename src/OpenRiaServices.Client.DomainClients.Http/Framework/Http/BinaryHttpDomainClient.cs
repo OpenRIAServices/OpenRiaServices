@@ -16,12 +16,12 @@ namespace OpenRiaServices.Client.DomainClients.Http
         private readonly XmlDictionaryReaderQuotas _readerQuotas;
         private readonly IXmlDictionary _dictionary;
 
-        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory, XmlDictionaryReaderQuotas readerQuotas, IXmlDictionary dictionary)
+        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory)
             : base(httpClient, serviceInterface, factory)
         {
-            ArgumentNullException.ThrowIfNull(readerQuotas);
-            _readerQuotas = CreateQuotasCopy(readerQuotas);
-            _dictionary = dictionary;
+            var binaryFactory = (BinaryHttpDomainClientFactory)factory;
+            _readerQuotas = CreateQuotasCopy(binaryFactory.ReaderQuotas);
+            _dictionary = binaryFactory.Dictionary;
         }
 
         private protected override string ContentType => MediaType;

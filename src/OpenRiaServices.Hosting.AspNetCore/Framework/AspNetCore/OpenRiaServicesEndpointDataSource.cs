@@ -24,7 +24,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
     {
         private readonly List<Action<EndpointBuilder>> _conventions = new();
         private readonly List<Action<EndpointBuilder>> _finallyConventions = new();
-        private readonly HttpMethodMetadata _getOrPost = new(new[] { "GET", "POST" });
         private readonly HttpMethodMetadata _getPostOrQuery = new(new[] { "GET", "POST", "QUERY" });
         private readonly HttpMethodMetadata _postOnly = new(new[] { "POST" });
 

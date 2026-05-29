@@ -47,6 +47,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         private protected DataContractHttpDomainClient(HttpClient httpClient, Type serviceInterface, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory)
         {
             ArgumentNullException.ThrowIfNull(serviceInterface);
+            ArgumentNullException.ThrowIfNull(factory);
 
             HttpClient = httpClient;
             _factory = factory;
@@ -233,9 +234,9 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// Sends an HTTP request with a body for the given operation.
         /// Used by both POST and QUERY methods.
         /// </summary>
-        private Task<HttpResponseMessage> SendWithBodyAsync(HttpMethod method, string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
+        private async Task<HttpResponseMessage> SendWithBodyAsync(HttpMethod method, string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
-            var request = new HttpRequestMessage(method, operationName);
+            using var request = new HttpRequestMessage(method, operationName);
 
             using (var ms = new MemoryStream())
             using (var writer = CreateWriter(ms))
@@ -289,7 +290,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(ContentType);
             }
 
-            return HttpClient.SendAsync(request, DefaultHttpCompletionOption, cancellationToken);
+            return await HttpClient.SendAsync(request, DefaultHttpCompletionOption, cancellationToken);
         }
 
 
@@ -347,7 +348,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             // - default maximum query string length in IIS is 2048 bytes
             // - MaxUrlLength is 260 per default, but we dont check it since POST will get same length
             // - maxUrl defaults to 4096 bytes, but we assume it will not be an issue since we limit the query string length
-            var maxQueryStringLength = _factory?.MaxQueryStringLength ?? 2048;
+            var maxQueryStringLength = _factory.MaxQueryStringLength;
             if (uri.Length - operationName.Length > maxQueryStringLength) // uri contains query + operationName, so subtract operationName to only get query string length
                 return s_mustSendQueryInBody;
 
