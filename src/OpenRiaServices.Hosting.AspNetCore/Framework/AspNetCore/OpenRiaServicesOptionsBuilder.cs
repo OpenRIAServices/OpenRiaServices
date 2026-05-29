@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 
 namespace OpenRiaServices.Hosting.AspNetCore
 {
