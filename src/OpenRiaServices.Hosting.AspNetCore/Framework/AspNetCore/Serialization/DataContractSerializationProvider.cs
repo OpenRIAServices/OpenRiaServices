@@ -2,6 +2,7 @@ using OpenRiaServices.Server;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using OpenRiaServices.Hosting.AspNetCore;
 
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization

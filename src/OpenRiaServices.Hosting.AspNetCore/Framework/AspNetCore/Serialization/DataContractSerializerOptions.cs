@@ -1,6 +1,6 @@
 using System.Xml;
 
-namespace OpenRiaServices.Hosting.AspNetCore.Serialization
+namespace OpenRiaServices.Hosting.AspNetCore
 {
     /// <summary>
     /// Base options class for DataContract-based serializers used by OpenRIA Services.
