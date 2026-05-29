@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore;
