@@ -246,9 +246,17 @@ namespace OpenRiaServices.Client
 
                 // we may have to check for containment once more, since the EntitySet.Add calls
                 // above can cause a dynamic add to this EntityCollection behind the scenes
-                if (TryAddEntityToCollection(entity) || addedToSet)
+                if (TryAddEntityToCollection(entity, out int idx))
                 {
-                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, this.Entities.Count - 1);
+                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, idx);
+                }
+                else if (addedToSet)
+                {
+                    idx = this.Entities.LastIndexOf(entity);
+                    if (idx >= 0)
+                    {
+                        this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, entity, idx);
+                    }
                 }
 
                 this._entitiesAdded = true;
@@ -333,11 +341,13 @@ namespace OpenRiaServices.Client
         /// should be done through this method.
         /// </summary>
         /// <param name="entity">The <see cref="Entity"/>to add.</param>
-        private bool TryAddEntityToCollection(TEntity entity)
+        /// <param name="index">the index of the entity in the collection after addition, or -1 if not added.</param>
+        private bool TryAddEntityToCollection(TEntity entity, out int index)
         {
             if (this.EntitiesHashSet.Add(entity))
             {
                 this.Entities.Add(entity);
+                index = this.Entities.Count - 1;
 
                 if (this.IsComposition)
                 {
@@ -348,6 +358,7 @@ namespace OpenRiaServices.Client
             }
             else
             {
+                index = -1;
                 return false;
             }
         }
@@ -438,7 +449,7 @@ namespace OpenRiaServices.Client
             EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
             foreach (TEntity entity in set.OfType<TEntity>().Where(this.Filter))
             {
-                this.TryAddEntityToCollection(entity);
+                this.TryAddEntityToCollection(entity, out _);
             }
 
             // once we've loaded entities, we're caching them, so we need to update
@@ -622,8 +633,8 @@ namespace OpenRiaServices.Client
                 {
                     // Add matching entity to our set. When adding, we use the stronger Filter to
                     // filter out New entities
-                    if (this.TryAddEntityToCollection(typedEntity))
-                        this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, this.Entities.Count - 1);
+                    if (this.TryAddEntityToCollection(typedEntity, out int idx))
+                        this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Add, typedEntity, idx);
                 }
                 // The entity is in our set but is no longer a match, so we need to remove it.
                 // Here we use the predicate directly, since even if the entity is New if it
@@ -652,12 +663,24 @@ namespace OpenRiaServices.Client
                 if (newEntities.Count > 0)
                 {
                     int newStartingIdx = this.Entities.Count;
+                    int lastInserted = newStartingIdx - 1;
+
                     List<object> affectedEntities = new List<object>();
                     foreach (TEntity newEntity in newEntities)
                     {
-                        if (this.TryAddEntityToCollection(newEntity))
+                        if (this.TryAddEntityToCollection(newEntity, out int idx))
                         {
-                            affectedEntities.Add(newEntity);
+                            if (lastInserted == idx - 1)
+                            {
+                                affectedEntities.Add(newEntity);
+                            }
+                            else
+                            {
+                                this.RaiseCollectionChangedNotification(args.Action, affectedEntities, newStartingIdx);
+                                affectedEntities = [newEntity];
+                                newStartingIdx = idx;
+                                lastInserted = idx;
+                            }
                         }
                     }
 
@@ -877,22 +900,7 @@ namespace OpenRiaServices.Client
         /// <inheritdoc cref="this[int]"/>
         object? IList.this[int index]
         {
-            get
-            {
-                var list = Entities;
-                if (((uint)index) < (uint)list.Count)
-                {
-                    return list[index];
-                }
-                else
-                {
-                    // We run into this scenario when the association reference is changed during an
-                    // AddNew. The scenario is not supported, but we're trying to improve the error
-                    // message. Instead of throwing an ArgumentOutOfRangeException, we'll simply return
-                    // null and allow the view to inform us the added item is not at the requested index.
-                    return null;
-                }
-            }
+            get => Entities[index];
             set => throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, Resource.IsNotSupported, "Index setter"));
         }
 
@@ -982,4 +990,3 @@ namespace OpenRiaServices.Client
         #endregion
     }
 }
-

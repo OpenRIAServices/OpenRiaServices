@@ -4,7 +4,10 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Threading;
+using System.Windows.Data;
 using Cities;
+using DataTests.Northwind.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
@@ -243,7 +246,6 @@ namespace OpenRiaServices.Client.Test
                     "Event should not be null after clearing the EntitySet.");
                 Assert.AreEqual(NotifyCollectionChangedAction.Reset, eventArgs.Action,
                     "Actions should be equal after clearing the EntitySet.");
-
                 Assert.IsTrue(view.IsEmpty,
                     "View should be empty after Clear.");
 
@@ -266,6 +268,21 @@ namespace OpenRiaServices.Client.Test
                 System.GC.Collect();
                 Assert.IsFalse(weakRef.IsAlive);
             }
+
+            [TestMethod]
+            [Description("Tests that IList indexer throws for out-of-range accesses.")]
+            public void ICVF_MoveToPosition_OutOfRange()
+            {
+                EntityCollection<City> entityCollection = CreateEntityCollection();
+                var view = GetICV(entityCollection);
+                Assert.IsFalse(view.MoveCurrentToPosition(-1));
+                Assert.IsFalse(view.MoveCurrentToPosition(0));
+
+                entityCollection.Add(CreateLocalCity("Out-of-range"));
+                Assert.IsTrue(view.MoveCurrentToPosition(0));
+                Assert.IsFalse(view.MoveCurrentToPosition(1));
+            }
+
 
             private ICollectionView GetICV(EntityCollection<City> entityCollection)
             {

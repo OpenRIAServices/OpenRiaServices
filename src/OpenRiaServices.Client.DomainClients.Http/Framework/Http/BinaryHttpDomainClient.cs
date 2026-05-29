@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net.Http;
 using System.Runtime.Serialization;
+using System.Xml;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
@@ -12,22 +13,33 @@ namespace OpenRiaServices.Client.DomainClients.Http
     sealed class BinaryHttpDomainClient : DataContractHttpDomainClient
     {
         internal const string MediaType = "application/msbin1";
+        private readonly XmlDictionaryReaderQuotas _readerQuotas;
+        private readonly IXmlDictionary _dictionary;
 
-        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface) : base(httpClient, serviceInterface)
+        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, BinaryHttpDomainClientFactory factory)
+            : base(httpClient, serviceInterface, factory)
         {
+            _readerQuotas = CreateQuotasCopy(factory.ReaderQuotas);
+            _dictionary = factory.Dictionary;
         }
 
         private protected override string ContentType => MediaType;
 
-
-        private protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
+        private protected override XmlDictionaryReader CreateReader(Stream stream)
         {
-            return System.Xml.XmlDictionaryReader.CreateBinaryReader(stream, System.Xml.XmlDictionaryReaderQuotas.Max);
+            return XmlDictionaryReader.CreateBinaryReader(stream, _dictionary, _readerQuotas);
         }
 
-        private protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
+        private protected override XmlDictionaryWriter CreateWriter(Stream stream)
         {
-            return System.Xml.XmlDictionaryWriter.CreateBinaryWriter(stream, null, null, ownsStream: false);
+            return XmlDictionaryWriter.CreateBinaryWriter(stream, _dictionary, null, ownsStream: false);
+        }
+
+        private static XmlDictionaryReaderQuotas CreateQuotasCopy(XmlDictionaryReaderQuotas source)
+        {
+            var copy = new XmlDictionaryReaderQuotas();
+            source.CopyTo(copy);
+            return copy;
         }
     }
 }

@@ -2,6 +2,7 @@
 using System.IO;
 using System.Net.Http;
 using System.Runtime.Serialization;
+using System.Xml;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
@@ -13,21 +14,32 @@ namespace OpenRiaServices.Client.DomainClients.Http
         internal const string MediaType = "application/xml";
 
         private readonly System.Text.Encoding _encoding = new System.Text.UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+        private readonly XmlDictionaryReaderQuotas _readerQuotas;
 
-        public XmlHttpDomainClient(HttpClient httpClient, Type serviceInterface) : base(httpClient, serviceInterface)
+        public XmlHttpDomainClient(HttpClient httpClient, Type serviceInterface, HttpDomainClientFactory factory)
+            : base(httpClient, serviceInterface, factory)
         {
+            var xmlFactory = (XmlHttpDomainClientFactory)factory;
+            _readerQuotas = CreateQuotasCopy(xmlFactory.ReaderQuotas);
         }
 
         private protected override string ContentType => MediaType;
 
-        private protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
+        private protected override XmlDictionaryReader CreateReader(Stream stream)
         {
-            return System.Xml.XmlDictionaryReader.CreateTextReader(stream, System.Xml.XmlDictionaryReaderQuotas.Max);
+            return XmlDictionaryReader.CreateTextReader(stream, _readerQuotas);
         }
 
-        private protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
+        private protected override XmlDictionaryWriter CreateWriter(Stream stream)
         {
-            return System.Xml.XmlDictionaryWriter.CreateTextWriter(stream, _encoding, ownsStream: false);
+            return XmlDictionaryWriter.CreateTextWriter(stream, _encoding, ownsStream: false);
+        }
+
+        private static XmlDictionaryReaderQuotas CreateQuotasCopy(XmlDictionaryReaderQuotas source)
+        {
+            var copy = new XmlDictionaryReaderQuotas();
+            source.CopyTo(copy);
+            return copy;
         }
     }
 }

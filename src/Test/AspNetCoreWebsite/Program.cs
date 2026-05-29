@@ -75,9 +75,9 @@ app.MapOpenRiaServices(builder =>
 
             for (int i = 0; i < metadata.Count; ++i)
             {
-                if (metadata[i] is HttpMethodMetadata)
+                if (metadata[i] is HttpMethodMetadata { HttpMethods.Count: 1 })
                 {
-                    metadata[i] = new HttpMethodMetadata(["GET", "POST"]);
+                    metadata[i] = new HttpMethodMetadata(["GET", "POST", "QUERY"]);
                     break;
                 }
             }
