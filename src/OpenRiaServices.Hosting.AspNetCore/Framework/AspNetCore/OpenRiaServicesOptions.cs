@@ -30,7 +30,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// List of all registered wire formats on descending order of priority. 
         /// First one is the default used for responses (when client do not specify an matching format)
         /// </summary>
-        internal ISerializationProvider[] SerializationProviders { get; set; } = [new BinaryXmlSerializationProvider()];
+        internal ISerializationProvider[] SerializationProviders { get; set; } = [];
 
         /// <summary>
         /// Adds a serialization provider to the list of supported formats.
@@ -46,7 +46,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 && SerializationProviders.OfType<DataContractSerializationProvider>().FirstOrDefault() is { } existingDcs)
             {
                 // Share the DataContractCache between the two providers to avoid duplicate work
-                dataContractSerializationProvider._perDomainServiceDataContractCache = existingDcs._perDomainServiceDataContractCache;
+                dataContractSerializationProvider.CopyDataContractCacheFrom(existingDcs);
             }
 
             if (defaultProvider)
