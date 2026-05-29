@@ -41,7 +41,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
             ArgumentNullException.ThrowIfNull(services);
             ArgumentNullException.ThrowIfNull(configure);
 
-            
             var builder = AddOpenRiaServices(services);
             // Run user supplied configuration after the default configuration so that we have already added a default serialization provider
             services.Configure<OpenRiaServicesOptions>(configure);

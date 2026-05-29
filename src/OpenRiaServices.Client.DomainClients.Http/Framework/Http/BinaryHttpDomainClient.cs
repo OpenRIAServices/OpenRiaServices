@@ -16,23 +16,21 @@ namespace OpenRiaServices.Client.DomainClients.Http
         private readonly XmlDictionaryReaderQuotas _readerQuotas;
         private readonly IXmlDictionary _dictionary;
 
-        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory)
+        public BinaryHttpDomainClient(HttpClient httpClient, Type serviceInterface, BinaryHttpDomainClientFactory factory)
             : base(httpClient, serviceInterface, factory)
         {
-            var binaryFactory = (BinaryHttpDomainClientFactory)factory;
-            _readerQuotas = CreateQuotasCopy(binaryFactory.ReaderQuotas);
-            _dictionary = binaryFactory.Dictionary;
+            _readerQuotas = CreateQuotasCopy(factory.ReaderQuotas);
+            _dictionary = factory.Dictionary;
         }
 
         private protected override string ContentType => MediaType;
 
-
-        private protected override System.Xml.XmlDictionaryReader CreateReader(Stream stream)
+        private protected override XmlDictionaryReader CreateReader(Stream stream)
         {
             return XmlDictionaryReader.CreateBinaryReader(stream, _dictionary, _readerQuotas);
         }
 
-        private protected override System.Xml.XmlDictionaryWriter CreateWriter(Stream stream)
+        private protected override XmlDictionaryWriter CreateWriter(Stream stream)
         {
             return XmlDictionaryWriter.CreateBinaryWriter(stream, _dictionary, null, ownsStream: false);
         }

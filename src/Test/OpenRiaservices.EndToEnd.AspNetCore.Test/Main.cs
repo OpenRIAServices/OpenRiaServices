@@ -52,7 +52,10 @@ namespace OpenRiaServices.Client.Test
                 return httpClient;
             };
 
-            DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
+            DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory)
+            {
+                UseQueryHttpMethod = true,
+            };
             // DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
         }
 
@@ -67,7 +70,7 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
-        private static void StartWebServer([CallerFilePath]string filePath = null)
+        private static void StartWebServer([CallerFilePath] string filePath = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
             string projectPath = Path.GetDirectoryName(filePath);
