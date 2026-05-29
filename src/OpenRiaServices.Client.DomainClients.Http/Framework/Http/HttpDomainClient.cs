@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
@@ -22,27 +23,41 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// deserialized as content is received
         private const HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
         private static readonly Task<HttpResponseMessage> s_mustSendQueryInBody = Task.FromResult<HttpResponseMessage>(null);
+        private static readonly ConcurrentDictionary<(Type serviceInterface, string operationName), MethodParameters> s_methodParametersCache = new ConcurrentDictionary<(Type serviceInterface, string operationName), MethodParameters>();
 
         private readonly OpenRiaServices.Client.DomainClients.HttpDomainClientFactory _factory;
+        private readonly Type _serviceInterface;
 
         /// <inheritdoc/>
         public override bool SupportsCancellation => true;
 
         private protected HttpClient HttpClient { get; }
 
-        private protected HttpDomainClient(HttpClient httpClient, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory)
+        private protected HttpDomainClient(HttpClient httpClient, Type serviceInterface, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory)
         {
             ArgumentNullException.ThrowIfNull(httpClient);
+            ArgumentNullException.ThrowIfNull(serviceInterface);
             ArgumentNullException.ThrowIfNull(factory);
 
             HttpClient = httpClient;
+            _serviceInterface = serviceInterface;
             _factory = factory;
         }
 
         private protected abstract Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken);
         private protected abstract Task<HttpResponseMessage> QueryAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken);
-        private protected abstract string GetParameterValueAsString(string operationName, string parameterName, object parameterValue);
         private protected abstract Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType);
+
+        private protected MethodParameters GetMethodParameters(string operationName)
+        {
+            return s_methodParametersCache.GetOrAdd((_serviceInterface, operationName), static key => new MethodParameters(key.serviceInterface, key.operationName));
+        }
+
+        private protected string GetParameterValueAsString(string operationName, string parameterName, object parameterValue)
+        {
+            var parameterType = GetMethodParameters(operationName).GetTypeForMethodParameter(parameterName);
+            return WebQueryStringConverter.ConvertValueToString(parameterValue, parameterType);
+        }
 
         #region Invoke/Query/Submit Methods
 

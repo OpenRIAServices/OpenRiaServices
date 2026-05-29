@@ -24,7 +24,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         private readonly DataContractSerializationHelper _localCacheHelper;
 
         private protected DataContractHttpDomainClient(HttpClient httpClient, Type serviceInterface, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory)
-            : base(httpClient, factory)
+            : base(httpClient, serviceInterface, factory)
         {
             ArgumentNullException.ThrowIfNull(serviceInterface);
 
@@ -45,12 +45,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private protected abstract XmlDictionaryWriter CreateWriter(Stream stream);
         private protected abstract XmlDictionaryReader CreateReader(Stream stream);
-
-        private protected override string GetParameterValueAsString(string operationName, string parameterName, object parameterValue)
-        {
-            var parameterType = GetMethodParameters(operationName).GetTypeForMethodParameter(parameterName);
-            return WebQueryStringConverter.ConvertValueToString(parameterValue, parameterType);
-        }
 
         /// <summary>
         /// Initiates a POST request for the given operation and return the server response (as a task).
@@ -285,14 +279,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 return new FaultException(faultReason, faultCode, operationName);
             }
         }
-
-        /// <summary>
-        /// Get parameter names and types for method
-        /// </summary>
-        /// <param name="methodName">The name of the method</param>
-        /// <returns>MethodParameters object containing the method parameters</returns>
-        private MethodParameters GetMethodParameters(string methodName)
-             => _localCacheHelper.GetParametersForMethod(methodName);
 
         /// <summary>
         /// Gets a <see cref="DataContractSerializer"/> which can be used to serialized the specified type.
