@@ -5,7 +5,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// <summary>
     /// Base options class for DataContract-based serializers used by OpenRIA Services.
     /// </summary>
-    public class SerializationOptions
+    public class DataContractSerializationOptions
     {
         /// <summary>
         /// Gets or sets the quotas applied to <see cref="XmlDictionaryReader"/> instances during deserialization.
@@ -36,7 +36,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// <summary>
     /// Options for the binary XML (<c>application/msbin1</c>) DataContract serializer.
     /// </summary>
-    public sealed class BinarySerializationOptions : SerializationOptions
+    public sealed class BinarySerializationOptions : DataContractSerializationOptions
     {
         /// <summary>
         /// Gets or sets the XML dictionary used for binary format compression when reading and writing.
@@ -45,6 +45,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// When set, the same dictionary is applied to both the <see cref="System.Xml.XmlDictionaryReader"/>
         /// and the <see cref="System.Xml.XmlDictionaryWriter"/> to enable consistent compression of element
         /// and attribute names. Client and server must share the same dictionary.
+        /// <para>See <see cref="XmlDictionary"/> for additional information.</para>
         /// </remarks>
         public new IXmlDictionary? Dictionary
         {
@@ -56,7 +57,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     /// <summary>
     /// Options for the text XML (<c>application/xml</c>) DataContract serializer.
     /// </summary>
-    public sealed class XmlSerializationOptions : SerializationOptions
+    public sealed class XmlSerializationOptions : DataContractSerializationOptions
     {
     }
 }
