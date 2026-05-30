@@ -11,32 +11,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
     sealed class DataContractSerializationHelper
     {
         private readonly Dictionary<Type, DataContractSerializer> _serializerCache = new Dictionary<Type, DataContractSerializer>();
-        private readonly Dictionary<string, MethodParameters> _methodParametersCache = new Dictionary<string, MethodParameters>();
-        private readonly Type _serviceInterface;
-
-        public DataContractSerializationHelper(Type serviceInterface)
-        {
-            _serviceInterface = serviceInterface;
-        }
-
-        /// <summary>
-        /// Get parameter names and types for method
-        /// </summary>
-        /// <param name="operationName">The name of the method</param>
-        /// <returns>MethodParameters object containing the method parameters</returns>
-        internal MethodParameters GetParametersForMethod(string operationName)
-        {
-            lock (_methodParametersCache)
-            {
-                if (!_methodParametersCache.TryGetValue(operationName, out var methodParameters))
-                {
-                    methodParameters = new MethodParameters(_serviceInterface, operationName);
-                    _methodParametersCache.Add(operationName, methodParameters);
-                }
-                return methodParameters;
-            }
-        }
-
         /// <summary>
         /// Gets a <see cref="DataContractSerializer"/> which can be used to serialized the specified type.
         /// The serializers are cached for performance reasons.
