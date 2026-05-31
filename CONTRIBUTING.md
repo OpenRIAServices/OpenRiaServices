@@ -62,6 +62,18 @@ For multi part commits, it is a good idea to embed the issue number in the commi
 
 Please take your time and add test for any new functionality added.
 
+# Changelog and documentation updates
+
+Please update documentation as part of the same change whenever you add a feature or make a notable behavior change.
+
+In particular:
+
+- Record notable changes in `D:\a\OpenRiaServices\OpenRiaServices\Changelog.md`.
+- Follow the existing changelog structure, which is based on Keep a Changelog style release notes.
+- Keep Semantic Versioning in mind when documenting changes. Packages such as AspNetCore and EntityFrameworkCore use explicit `major.minor.patch` versioning, so changelog text should make the impact of the change clear.
+- Update the most relevant project `README.md` when adding or changing a feature, especially for getting started, setup, usage instructions, and compatibility notes.
+- When documenting a new feature, explain how it is used and, when relevant, why or when the feature should be used.
+
 
 # Debugging Open RIA Services Code Generation
 
@@ -137,4 +149,3 @@ Add  `System.Diagnostics.Debugger.Launch()` to the entry point.
 ## Additional Resources
 
 - [Code Generation Settings](https://github.com/OpenRIAServices/OpenRiaServices/wiki/Code-Generation-Settings)
-
