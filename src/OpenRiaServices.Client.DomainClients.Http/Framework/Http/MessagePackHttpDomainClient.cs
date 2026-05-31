@@ -22,12 +22,13 @@ namespace OpenRiaServices.Client.DomainClients.Http
     {
         internal const string MediaType = "application/vnd.msgpack";
         private static readonly HttpMethod s_queryMethod = new("QUERY");
-        private readonly MessagePackSerializer _serializer = new();
+        private readonly MessagePackSerializer _serializer;
         private readonly ITypeShapeProvider _typeShapeProvider = ReflectionTypeShapeProvider.Default;
 
         public MessagePackHttpDomainClient(HttpClient httpClient, Type serviceInterface, MessagePackHttpDomainClientFactory factory)
             : base(httpClient, serviceInterface, factory)
         {
+            _serializer = AddMethodParametersConverter(new MessagePackSerializer());
         }
 
         private protected override Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
@@ -39,12 +40,14 @@ namespace OpenRiaServices.Client.DomainClients.Http
         private async Task<HttpResponseMessage> SendWithBodyAsync(HttpMethod method, string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
             using var request = new HttpRequestMessage(method, operationName);
-            var envelope = CreateRequestEnvelope(method, operationName, parameters, queryOptions);
+            MethodParameters methodParameters = GetMethodParameters(operationName);
+            var envelope = CreateRequestEnvelope(method, operationName, methodParameters, parameters, queryOptions);
+            MessagePackSerializer operationSerializer = CreateOperationSerializer(_serializer, methodParameters);
 
             using var stream = new MemoryStream();
             // TODO: If possible, replace this buffering with a custom HttpContent override of SerializeToStream
             // so the request payload can be serialized asynchronously directly to the outgoing request stream.
-            await _serializer.SerializeObjectAsync(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken).ConfigureAwait(false);
+            await operationSerializer.SerializeObjectAsync(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken).ConfigureAwait(false);
 
             var bytes = stream.ToArray();
             request.Content = new ByteArrayContent(bytes);
@@ -53,7 +56,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
         }
 
-        private MessagePackRequestEnvelopeBase CreateRequestEnvelope(HttpMethod method, string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
+        private MessagePackRequestEnvelopeBase CreateRequestEnvelope(HttpMethod method, string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
         {
             MessagePackRequestEnvelopeBase result = method == s_queryMethod
                 ? new MessagePackQueryRequestEnvelope()
@@ -62,18 +65,10 @@ namespace OpenRiaServices.Client.DomainClients.Http
                     : new MessagePackInvokeRequestEnvelope();
             if (parameters is not null && parameters.Count > 0)
             {
-                MethodParameters methodParameters = GetMethodParameters(operationName);
                 foreach (var param in parameters)
                 {
-                    if (param.Value is null)
-                    {
-                        result.Parameters.Values[param.Key] = null;
-                    }
-                    else
-                    {
-                        var parameterType = methodParameters.GetTypeForMethodParameter(param.Key);
-                        result.Parameters.Values[param.Key] = SerializeValue(param.Value, parameterType);
-                    }
+                    methodParameters.GetTypeForMethodParameter(param.Key);
+                    result.Parameters.Values[param.Key] = param.Value;
                 }
             }
 
@@ -137,11 +132,17 @@ namespace OpenRiaServices.Client.DomainClients.Http
             }
         }
 
-        private byte[] SerializeValue(object value, Type type)
+        private static MessagePackSerializer AddMethodParametersConverter(MessagePackSerializer serializer)
         {
-            using var stream = new MemoryStream();
-            _serializer.SerializeObject(stream, value, _typeShapeProvider.GetTypeShapeOrThrow(type));
-            return stream.ToArray();
+            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new MessagePackMethodParametersConverter() }).ToArray();
+            return serializer with { Converters = ConverterCollection.Create(converters) };
+        }
+
+        private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, MethodParameters methodParameters)
+        {
+            SerializationContext context = serializer.StartingContext;
+            context[MessagePackMethodParametersConverter.MethodParametersKey] = methodParameters;
+            return serializer with { StartingContext = context };
         }
 
         private static Type GetResponseEnvelopeType(string operationName, Type returnType)
@@ -174,7 +175,166 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private sealed class MessagePackMethodParameters
         {
-            public Dictionary<string, byte[]> Values { get; set; } = new(StringComparer.Ordinal);
+            public Dictionary<string, object> Values { get; set; } = new(StringComparer.Ordinal);
+        }
+
+        private sealed class MessagePackMethodParametersConverter : MessagePackConverter<MessagePackMethodParameters>
+        {
+            internal static readonly object MethodParametersKey = new();
+
+            public override bool PreferAsyncSerialization => true;
+
+            public override MessagePackMethodParameters Read(ref MessagePackReader reader, SerializationContext context)
+            {
+                if (reader.TryReadNil())
+                    return null;
+
+                context.DepthStep();
+                MethodParameters methodParameters = GetMethodParameters(context);
+                var result = new MessagePackMethodParameters();
+                int count = reader.ReadMapHeader();
+
+                for (int i = 0; i < count; i++)
+                {
+                    string name = reader.ReadString();
+                    if (name is not null)
+                    {
+                        Type parameterType = methodParameters.GetTypeForMethodParameter(name);
+                        result.Values[name] = ReadValue(ref reader, parameterType, context);
+                    }
+                    else
+                    {
+                        reader.Skip(context);
+                    }
+                }
+
+                return result;
+            }
+
+            public override void Write(ref MessagePackWriter writer, in MessagePackMethodParameters value, SerializationContext context)
+            {
+                if (value is null)
+                {
+                    writer.WriteNil();
+                    return;
+                }
+
+                context.DepthStep();
+                MethodParameters methodParameters = GetMethodParameters(context);
+                writer.WriteMapHeader(value.Values.Count);
+
+                foreach (var parameterValue in value.Values)
+                {
+                    writer.Write(parameterValue.Key);
+                    Type parameterType = methodParameters.GetTypeForMethodParameter(parameterValue.Key);
+                    WriteValue(ref writer, parameterValue.Value, parameterType, context);
+                }
+            }
+
+            public override async ValueTask<MessagePackMethodParameters> ReadAsync(MessagePackAsyncReader reader, SerializationContext context)
+            {
+                await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
+                MessagePackReader bufferedReader = reader.CreateBufferedReader();
+                if (bufferedReader.TryReadNil())
+                {
+                    reader.ReturnReader(ref bufferedReader);
+                    return null;
+                }
+
+                context.DepthStep();
+                MethodParameters methodParameters = GetMethodParameters(context);
+                var result = new MessagePackMethodParameters();
+                int count = bufferedReader.ReadMapHeader();
+                reader.ReturnReader(ref bufferedReader);
+
+                for (int i = 0; i < count; i++)
+                {
+                    await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
+                    bufferedReader = reader.CreateBufferedReader();
+                    string name = bufferedReader.ReadString();
+                    reader.ReturnReader(ref bufferedReader);
+
+                    if (name is not null)
+                    {
+                        Type parameterType = methodParameters.GetTypeForMethodParameter(name);
+                        result.Values[name] = await ReadValueAsync(reader, parameterType, context).ConfigureAwait(false);
+                    }
+                    else
+                    {
+                        await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
+                        bufferedReader = reader.CreateBufferedReader();
+                        bufferedReader.Skip(context);
+                        reader.ReturnReader(ref bufferedReader);
+                    }
+                }
+
+                return result;
+            }
+
+            public override async ValueTask WriteAsync(MessagePackAsyncWriter writer, MessagePackMethodParameters value, SerializationContext context)
+            {
+                if (value is null)
+                {
+                    writer.WriteNil();
+                    return;
+                }
+
+                context.DepthStep();
+                MethodParameters methodParameters = GetMethodParameters(context);
+                writer.WriteMapHeader(value.Values.Count);
+
+                foreach (var parameterValue in value.Values)
+                {
+                    writer.Write(static (ref MessagePackWriter syncWriter, string key) => syncWriter.Write(key), parameterValue.Key);
+                    Type parameterType = methodParameters.GetTypeForMethodParameter(parameterValue.Key);
+                    await WriteValueAsync(writer, parameterValue.Value, parameterType, context).ConfigureAwait(false);
+                    await writer.FlushIfAppropriateAsync(context).ConfigureAwait(false);
+                }
+            }
+
+            private static MethodParameters GetMethodParameters(SerializationContext context)
+                => (MethodParameters)context[MethodParametersKey];
+
+            private static object ReadValue(ref MessagePackReader reader, Type parameterType, SerializationContext context)
+            {
+                if (reader.TryReadNil())
+                    return null;
+
+                return context.GetConverter(parameterType, context.TypeShapeProvider).ReadObject(ref reader, context);
+            }
+
+            private static async ValueTask<object> ReadValueAsync(MessagePackAsyncReader reader, Type parameterType, SerializationContext context)
+            {
+                await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
+                MessagePackReader bufferedReader = reader.CreateBufferedReader();
+                if (bufferedReader.TryReadNil())
+                {
+                    reader.ReturnReader(ref bufferedReader);
+                    return null;
+                }
+
+                reader.ReturnReader(ref bufferedReader);
+                return await context.GetConverter(parameterType, context.TypeShapeProvider).ReadObjectAsync(reader, context).ConfigureAwait(false);
+            }
+
+            private static void WriteValue(ref MessagePackWriter writer, object value, Type parameterType, SerializationContext context)
+            {
+                if (value is null)
+                    writer.WriteNil();
+                else
+                    context.GetConverter(parameterType, context.TypeShapeProvider).WriteObject(ref writer, value, context);
+            }
+
+            private static ValueTask WriteValueAsync(MessagePackAsyncWriter writer, object value, Type parameterType, SerializationContext context)
+                => value is null
+                    ? WriteNilAsync(writer)
+                    : context.GetConverter(parameterType, context.TypeShapeProvider).WriteObjectAsync(writer, value, context);
+
+            private static ValueTask WriteNilAsync(MessagePackAsyncWriter writer)
+            {
+                writer.WriteNil();
+                return default;
+            }
         }
 
         private abstract class MessagePackResponseEnvelopeBase

@@ -15,15 +15,22 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     {
         private readonly MessagePackSerializationOptions _options;
         private readonly FilteredTypeShapeProvider _filteredTypeShapeProvider;
+        private readonly MessagePackSerializer _serializer;
 
         public MessagePackSerializationProvider(MessagePackSerializationOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _filteredTypeShapeProvider = new FilteredTypeShapeProvider(options.TypeShapeProvider);
+            _serializer = AddMethodParametersConverter(options.Serializer);
         }
 
         public RequestSerializer GetRequestSerializer(DomainOperationEntry operation)
-            => new MessagePackRequestSerializer(operation, _options.Serializer, _filteredTypeShapeProvider, _options.TypeShapeProvider);
+            => new MessagePackRequestSerializer(operation, _serializer, _filteredTypeShapeProvider, _options.TypeShapeProvider);
+        private static MessagePackSerializer AddMethodParametersConverter(MessagePackSerializer serializer)
+        {
+            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new MethodParametersConverter() }).ToArray();
+            return serializer with { Converters = ConverterCollection.Create(converters) };
+        }
     }
 
     internal sealed class MessagePackRequestSerializer : RequestSerializer
@@ -32,6 +39,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private readonly ITypeShapeProvider _typeShapeProvider;
         private readonly ITypeShapeProvider _envelopeTypeShapeProvider;
         private readonly DomainOperationEntry _operation;
+        private readonly MessagePackSerializer _operationSerializer;
 
         public MessagePackRequestSerializer(DomainOperationEntry operation, MessagePackSerializer serializer, ITypeShapeProvider typeShapeProvider, ITypeShapeProvider envelopeTypeShapeProvider)
         {
@@ -39,6 +47,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             _typeShapeProvider = typeShapeProvider ?? throw new ArgumentNullException(nameof(typeShapeProvider));
             _envelopeTypeShapeProvider = envelopeTypeShapeProvider ?? throw new ArgumentNullException(nameof(envelopeTypeShapeProvider));
+            _operationSerializer = CreateOperationSerializer(_serializer, _operation);
         }
 
         public override bool CanRead(ReadOnlySpan<char> contentType)
@@ -61,12 +70,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             var parameters = operation.Parameters;
             object?[] values = new object?[parameters.Count];
-            var payload = envelope.Parameters?.Values ?? new Dictionary<string, byte[]?>(StringComparer.Ordinal);
+            var payload = envelope.Parameters?.Values ?? new Dictionary<string, object?>(StringComparer.Ordinal);
 
             for (int i = 0; i < parameters.Count; i++)
             {
                 var parameter = parameters[i];
-                if (!payload.TryGetValue(parameter.Name, out var bytes))
+                if (!payload.TryGetValue(parameter.Name, out var value))
                 {
                     if (parameter.IsNullable)
                     {
@@ -77,7 +86,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     throw new Microsoft.AspNetCore.Http.BadHttpRequestException($"No value provided for parameter '{parameter.Name}'", (int)HttpStatusCode.BadRequest);
                 }
 
-                if (bytes is null)
+                if (value is null)
                 {
                     if (!parameter.IsNullable)
                         throw new Microsoft.AspNetCore.Http.BadHttpRequestException($"Null value provided for parameter '{parameter.Name}'", (int)HttpStatusCode.BadRequest);
@@ -86,7 +95,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     continue;
                 }
 
-                values[i] = Deserialize(bytes, parameter.ParameterType);
+                values[i] = value;
             }
 
             ServiceQuery? serviceQuery = null;
@@ -123,15 +132,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private async Task WriteEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, object envelope)
         {
             context.Response.Headers.ContentType = MimeTypes.MessagePack;
-            await _serializer.SerializeObjectAsync(
+            await _operationSerializer.SerializeObjectAsync(
                 context.Response.Body,
                 envelope,
                 _envelopeTypeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()),
                 context.RequestAborted).ConfigureAwait(false);
         }
 
-        private object? Deserialize(byte[] bytes, Type type)
-            => _serializer.DeserializeObject(bytes, _typeShapeProvider.GetTypeShapeOrThrow(type));
 
         private static Type GetReturnType(DomainOperationEntry operation)
             => operation.Operation switch
@@ -151,11 +158,18 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 _ => typeof(MessagePackInvokeRequestEnvelope),
             };
 
-            return (MessagePackRequestEnvelopeBase?)await _serializer.DeserializeObjectAsync(
+            return (MessagePackRequestEnvelopeBase?)await _operationSerializer.DeserializeObjectAsync(
                 context.Request.Body,
                 _envelopeTypeShapeProvider.GetTypeShapeOrThrow(envelopeType),
                 context.RequestAborted).ConfigureAwait(false)
                 ?? (MessagePackRequestEnvelopeBase)Activator.CreateInstance(envelopeType)!;
+        }
+
+        private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, DomainOperationEntry operation)
+        {
+            SerializationContext context = serializer.StartingContext;
+            context[MethodParametersConverter.OperationKey] = operation;
+            return serializer with { StartingContext = context };
         }
 
         private object CreateResponseEnvelope(DomainOperationEntry operation, object? result, DomainServiceFault? fault)
@@ -215,7 +229,183 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     internal sealed class MethodParameters
     {
         [DataMember]
-        public Dictionary<string, byte[]?> Values { get; set; } = new(StringComparer.Ordinal);
+        public Dictionary<string, object?> Values { get; set; } = new(StringComparer.Ordinal);
+    }
+
+    internal sealed class MethodParametersConverter : MessagePackConverter<MethodParameters?>
+    {
+        internal static readonly object OperationKey = new();
+
+        public override bool PreferAsyncSerialization => true;
+
+        public override MethodParameters? Read(ref MessagePackReader reader, SerializationContext context)
+        {
+            if (reader.TryReadNil())
+                return null;
+
+            context.DepthStep();
+            DomainOperationEntry operation = GetOperation(context);
+            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
+            var result = new MethodParameters();
+
+            int count = reader.ReadMapHeader();
+            for (int i = 0; i < count; i++)
+            {
+                string? name = reader.ReadString();
+                if (name is not null && parametersByName.TryGetValue(name, out DomainOperationParameter parameter))
+                {
+                    result.Values[name] = ReadValue(ref reader, parameter.ParameterType, context);
+                }
+                else
+                {
+                    reader.Skip(context);
+                }
+            }
+
+            return result;
+        }
+
+        public override void Write(ref MessagePackWriter writer, in MethodParameters? value, SerializationContext context)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            context.DepthStep();
+            DomainOperationEntry operation = GetOperation(context);
+            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
+            writer.WriteMapHeader(value.Values.Count);
+
+            foreach (var parameterValue in value.Values)
+            {
+                writer.Write(parameterValue.Key);
+                if (parametersByName.TryGetValue(parameterValue.Key, out DomainOperationParameter parameter))
+                {
+                    WriteValue(ref writer, parameterValue.Value, parameter.ParameterType, context);
+                }
+                else
+                {
+                    writer.WriteNil();
+                }
+            }
+        }
+
+        public override async ValueTask<MethodParameters?> ReadAsync(MessagePackAsyncReader reader, SerializationContext context)
+        {
+            await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
+            MessagePackReader bufferedReader = reader.CreateBufferedReader();
+            if (bufferedReader.TryReadNil())
+            {
+                reader.ReturnReader(ref bufferedReader);
+                return null;
+            }
+
+            context.DepthStep();
+            DomainOperationEntry operation = GetOperation(context);
+            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
+            var result = new MethodParameters();
+
+            int count = bufferedReader.ReadMapHeader();
+            reader.ReturnReader(ref bufferedReader);
+
+            for (int i = 0; i < count; i++)
+            {
+                await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
+                bufferedReader = reader.CreateBufferedReader();
+                string? name = bufferedReader.ReadString();
+                reader.ReturnReader(ref bufferedReader);
+
+                if (name is not null && parametersByName.TryGetValue(name, out DomainOperationParameter parameter))
+                {
+                    result.Values[name] = await ReadValueAsync(reader, parameter.ParameterType, context).ConfigureAwait(false);
+                }
+                else
+                {
+                    await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
+                    bufferedReader = reader.CreateBufferedReader();
+                    bufferedReader.Skip(context);
+                    reader.ReturnReader(ref bufferedReader);
+                }
+            }
+
+            return result;
+        }
+
+        public override async ValueTask WriteAsync(MessagePackAsyncWriter writer, MethodParameters? value, SerializationContext context)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+
+            context.DepthStep();
+            DomainOperationEntry operation = GetOperation(context);
+            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
+            writer.WriteMapHeader(value.Values.Count);
+
+            foreach (var parameterValue in value.Values)
+            {
+                writer.Write(static (ref MessagePackWriter syncWriter, string key) => syncWriter.Write(key), parameterValue.Key);
+                if (parametersByName.TryGetValue(parameterValue.Key, out DomainOperationParameter parameter))
+                {
+                    await WriteValueAsync(writer, parameterValue.Value, parameter.ParameterType, context).ConfigureAwait(false);
+                }
+                else
+                {
+                    writer.WriteNil();
+                }
+
+                await writer.FlushIfAppropriateAsync(context).ConfigureAwait(false);
+            }
+        }
+
+        private static DomainOperationEntry GetOperation(SerializationContext context)
+            => (DomainOperationEntry?)context[OperationKey]
+                ?? throw new MessagePackSerializationException("Domain operation metadata is required to serialize method parameters.");
+
+        private static object? ReadValue(ref MessagePackReader reader, Type parameterType, SerializationContext context)
+        {
+            if (reader.TryReadNil())
+                return null;
+
+            return context.GetConverter(parameterType, context.TypeShapeProvider).ReadObject(ref reader, context);
+        }
+
+        private static async ValueTask<object?> ReadValueAsync(MessagePackAsyncReader reader, Type parameterType, SerializationContext context)
+        {
+            await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
+            MessagePackReader bufferedReader = reader.CreateBufferedReader();
+            if (bufferedReader.TryReadNil())
+            {
+                reader.ReturnReader(ref bufferedReader);
+                return null;
+            }
+
+            reader.ReturnReader(ref bufferedReader);
+            return await context.GetConverter(parameterType, context.TypeShapeProvider).ReadObjectAsync(reader, context).ConfigureAwait(false);
+        }
+
+        private static void WriteValue(ref MessagePackWriter writer, object? value, Type parameterType, SerializationContext context)
+        {
+            if (value is null)
+                writer.WriteNil();
+            else
+                context.GetConverter(parameterType, context.TypeShapeProvider).WriteObject(ref writer, value, context);
+        }
+
+        private static ValueTask WriteValueAsync(MessagePackAsyncWriter writer, object? value, Type parameterType, SerializationContext context)
+            => value is null
+                ? WriteNilAsync(writer)
+                : context.GetConverter(parameterType, context.TypeShapeProvider).WriteObjectAsync(writer, value, context);
+
+        private static ValueTask WriteNilAsync(MessagePackAsyncWriter writer)
+        {
+            writer.WriteNil();
+            return default;
+        }
     }
 
     [DataContract]

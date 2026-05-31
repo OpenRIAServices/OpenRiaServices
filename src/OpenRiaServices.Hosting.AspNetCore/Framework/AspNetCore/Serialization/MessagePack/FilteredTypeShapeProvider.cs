@@ -56,7 +56,7 @@ public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
             return null;
         }
 
-        if (inner.Provider == this)
+        if (ReferenceEquals(inner.Provider, this))
         {
             return inner;
         }
@@ -181,12 +181,9 @@ public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
         if (metaMember.IsDataMember)
             return true;
 
-        if (metaMember.IsAssociationMember)
+        if (metaMember.IsAssociationMember && _options.AssociationMemberSerializationMode == AssociationMemberSerializationMode.Include)
         {
-            if (_options.AssociationMemberSerializationMode == AssociationMemberSerializationMode.Include)
-            {
-                return metaType.IncludedAssociations.Find(property.Name, ignoreCase: false) is not null;
-            }
+            return metaType.IncludedAssociations.Find(property.Name, ignoreCase: false) is not null;
         }
 
         return false;
@@ -402,7 +399,7 @@ internal sealed class EnumerableTypeShapeWrapper<TEnumerable, TElement>(Filtered
 {
     private readonly IEnumerableTypeShape<TEnumerable, TElement> _inner = (IEnumerableTypeShape<TEnumerable, TElement>)inner;
 
-    public ITypeShape ElementType => (ITypeShape)ProviderCore.Wrap(_inner.ElementType)!;
+    public ITypeShape ElementType => ProviderCore.Wrap(_inner.ElementType)!;
     ITypeShape<TElement> IEnumerableTypeShape<TEnumerable, TElement>.ElementType => (ITypeShape<TElement>)ProviderCore.Wrap(_inner.ElementType)!;
     public CollectionConstructionStrategy ConstructionStrategy => _inner.ConstructionStrategy;
     public CollectionComparerOptions SupportedComparer => _inner.SupportedComparer;
@@ -427,8 +424,8 @@ internal sealed class DictionaryTypeShapeWrapper<TDictionary, TKey, TValue>(Filt
 {
     private readonly IDictionaryTypeShape<TDictionary, TKey, TValue> _inner = (IDictionaryTypeShape<TDictionary, TKey, TValue>)inner;
 
-    public ITypeShape KeyType => (ITypeShape)ProviderCore.Wrap(_inner.KeyType)!;
-    public ITypeShape ValueType => (ITypeShape)ProviderCore.Wrap(_inner.ValueType)!;
+    public ITypeShape KeyType => ProviderCore.Wrap(_inner.KeyType)!;
+    public ITypeShape ValueType => ProviderCore.Wrap(_inner.ValueType)!;
     ITypeShape<TKey> IDictionaryTypeShape<TDictionary, TKey, TValue>.KeyType => (ITypeShape<TKey>)ProviderCore.Wrap(_inner.KeyType)!;
     ITypeShape<TValue> IDictionaryTypeShape<TDictionary, TKey, TValue>.ValueType => (ITypeShape<TValue>)ProviderCore.Wrap(_inner.ValueType)!;
     public CollectionConstructionStrategy ConstructionStrategy => _inner.ConstructionStrategy;
@@ -451,7 +448,7 @@ internal sealed class OptionalTypeShapeWrapper<TOptional, TElement>(FilteredType
 {
     private readonly IOptionalTypeShape<TOptional, TElement> _inner = (IOptionalTypeShape<TOptional, TElement>)inner;
 
-    public ITypeShape ElementType => (ITypeShape)ProviderCore.Wrap(_inner.ElementType)!;
+    public ITypeShape ElementType => ProviderCore.Wrap(_inner.ElementType)!;
     ITypeShape<TElement> IOptionalTypeShape<TOptional, TElement>.ElementType => (ITypeShape<TElement>)ProviderCore.Wrap(_inner.ElementType)!;
 
     public override object? Accept(TypeShapeVisitor visitor, object? state = null)
@@ -470,7 +467,7 @@ internal sealed class SurrogateTypeShapeWrapper<T, TSurrogate>(FilteredTypeShape
     private readonly ISurrogateTypeShape<T, TSurrogate> _inner = (ISurrogateTypeShape<T, TSurrogate>)inner;
 
     public IMarshaler<T, TSurrogate> Marshaler => _inner.Marshaler;
-    public ITypeShape SurrogateType => (ITypeShape)ProviderCore.Wrap(_inner.SurrogateType)!;
+    public ITypeShape SurrogateType => ProviderCore.Wrap(_inner.SurrogateType)!;
     ITypeShape<TSurrogate> ISurrogateTypeShape<T, TSurrogate>.SurrogateType => (ITypeShape<TSurrogate>)ProviderCore.Wrap(_inner.SurrogateType)!;
 
     public override object? Accept(TypeShapeVisitor visitor, object? state = null)
@@ -491,7 +488,7 @@ internal sealed class UnionTypeShapeWrapper<TUnion> : TypeShapeWrapper<TUnion>, 
         _unionCases = new Lazy<IReadOnlyList<IUnionCaseShape>>(() => _inner.UnionCases.Select(ProviderCore.WrapUnionCase).ToArray());
     }
 
-    public ITypeShape BaseType => (ITypeShape)ProviderCore.Wrap(_inner.BaseType)!;
+    public ITypeShape BaseType => ProviderCore.Wrap(_inner.BaseType)!;
     ITypeShape<TUnion> IUnionTypeShape<TUnion>.BaseType => (ITypeShape<TUnion>)ProviderCore.Wrap(_inner.BaseType)!;
     public IReadOnlyList<IUnionCaseShape> UnionCases => _unionCases.Value;
 
@@ -512,7 +509,7 @@ internal sealed class UnionCaseShapeWrapper<TUnionCase, TUnion>(FilteredTypeShap
     public int Tag => _inner.Tag;
     public bool IsTagSpecified => _inner.IsTagSpecified;
     public int Index => _inner.Index;
-    public ITypeShape UnionCaseType => (ITypeShape)provider.Wrap(_inner.UnionCaseType)!;
+    public ITypeShape UnionCaseType => provider.Wrap(_inner.UnionCaseType)!;
     ITypeShape<TUnionCase> IUnionCaseShape<TUnionCase, TUnion>.UnionCaseType => (ITypeShape<TUnionCase>)provider.Wrap(_inner.UnionCaseType)!;
     public IMarshaler<TUnionCase, TUnion> Marshaler => _inner.Marshaler;
 
@@ -529,7 +526,7 @@ internal sealed class EnumTypeShapeWrapper<TEnum, TUnderlying>(FilteredTypeShape
 {
     private readonly IEnumTypeShape<TEnum, TUnderlying> _inner = (IEnumTypeShape<TEnum, TUnderlying>)inner;
 
-    public ITypeShape UnderlyingType => (ITypeShape)ProviderCore.Wrap(_inner.UnderlyingType)!;
+    public ITypeShape UnderlyingType => ProviderCore.Wrap(_inner.UnderlyingType)!;
     ITypeShape<TUnderlying> IEnumTypeShape<TEnum, TUnderlying>.UnderlyingType => (ITypeShape<TUnderlying>)ProviderCore.Wrap(_inner.UnderlyingType)!;
     public bool IsFlags => _inner.IsFlags;
     public IReadOnlyDictionary<string, TUnderlying> Members => _inner.Members;
@@ -553,7 +550,7 @@ internal sealed class FunctionTypeShapeWrapper<TFunction, TArgumentState, TResul
         _parameters = new Lazy<IReadOnlyList<IParameterShape>>(() => _inner.Parameters.Select(ProviderCore.WrapParameter).ToArray());
     }
 
-    public ITypeShape ReturnType => (ITypeShape)ProviderCore.Wrap(_inner.ReturnType)!;
+    public ITypeShape ReturnType => ProviderCore.Wrap(_inner.ReturnType)!;
     ITypeShape<TResult> IFunctionTypeShape<TFunction, TArgumentState, TResult>.ReturnType => (ITypeShape<TResult>)ProviderCore.Wrap(_inner.ReturnType)!;
     public bool IsVoidLike => _inner.IsVoidLike;
     public bool IsAsync => _inner.IsAsync;
@@ -584,9 +581,9 @@ internal sealed class MethodShapeWrapper<TDeclaringType, TArgumentState, TResult
         _parameters = new Lazy<IReadOnlyList<IParameterShape>>(() => _inner.Parameters.Select(_provider.WrapParameter).ToArray());
     }
 
-    public ITypeShape DeclaringType => (ITypeShape)_provider.Wrap(_inner.DeclaringType)!;
+    public ITypeShape DeclaringType => _provider.Wrap(_inner.DeclaringType)!;
     ITypeShape<TDeclaringType> IMethodShape<TDeclaringType, TArgumentState, TResult>.DeclaringType => (ITypeShape<TDeclaringType>)_provider.Wrap(_inner.DeclaringType)!;
-    public ITypeShape ReturnType => (ITypeShape)_provider.Wrap(_inner.ReturnType)!;
+    public ITypeShape ReturnType => _provider.Wrap(_inner.ReturnType)!;
     ITypeShape<TResult> IMethodShape<TDeclaringType, TArgumentState, TResult>.ReturnType => (ITypeShape<TResult>)_provider.Wrap(_inner.ReturnType)!;
     public string Name => _inner.Name;
     public bool IsPublic => _inner.IsPublic;
@@ -644,7 +641,7 @@ internal sealed class ParameterShapeWrapper<TArgumentState, TParameterType>(Filt
     private readonly IParameterShape<TArgumentState, TParameterType> _inner = (IParameterShape<TArgumentState, TParameterType>)inner;
 
     public int Position => _inner.Position;
-    public ITypeShape ParameterType => (ITypeShape)provider.Wrap(_inner.ParameterType)!;
+    public ITypeShape ParameterType => provider.Wrap(_inner.ParameterType)!;
     ITypeShape<TParameterType> IParameterShape<TArgumentState, TParameterType>.ParameterType => (ITypeShape<TParameterType>)provider.Wrap(_inner.ParameterType)!;
     public string Name => _inner.Name;
     public ParameterKind Kind => _inner.Kind;
@@ -675,7 +672,7 @@ internal sealed class EventShapeWrapper<TDeclaringType, TEventHandler>(FilteredT
     public string Name => _inner.Name;
     public bool IsStatic => _inner.IsStatic;
     public bool IsPublic => _inner.IsPublic;
-    public ITypeShape DeclaringType => (ITypeShape)provider.Wrap(_inner.DeclaringType)!;
+    public ITypeShape DeclaringType => provider.Wrap(_inner.DeclaringType)!;
     ITypeShape<TDeclaringType> IEventShape<TDeclaringType, TEventHandler>.DeclaringType => (ITypeShape<TDeclaringType>)provider.Wrap(_inner.DeclaringType)!;
     public IFunctionTypeShape HandlerType => (IFunctionTypeShape)provider.Wrap(_inner.HandlerType)!;
     public EventInfo? EventInfo => _inner.EventInfo;

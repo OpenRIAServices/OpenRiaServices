@@ -44,7 +44,6 @@ public sealed class FilteredTypeShapeProviderTests
 
         var shape = (IObjectTypeShape?)provider.GetTypeShapeOrThrow(typeof(FilterTestModel));
         var baseShape = (IObjectTypeShape)baseProvider.GetTypeShapeOrThrow(typeof(FilterTestModel));
-        var props = TypeDescriptor.GetProperties(typeof(FilterTestModel));
 
         Assert.IsTrue(provider.ShouldIncludeProperty(typeof(FilterTestModel), baseShape.Properties.First(f => f.Name == nameof(FilterTestModel.Included))));
         Assert.IsTrue(provider.ShouldIncludeProperty(typeof(FilterTestModel), baseShape.Properties.First(f => f.Name == nameof(FilterTestModel.Association))));
@@ -188,3 +187,4 @@ public sealed class FilteredTypeShapeProviderTests
         public CycleNode? Parent { get; set; }
     }
 }
+
