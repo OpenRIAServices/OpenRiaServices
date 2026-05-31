@@ -31,7 +31,8 @@ The server should accept media type parameters case-insensitively when matching,
 
 1. Add `MimeTypes.MessagePack = "application/vnd.msgpack"`.
 2. Add a MessagePack serialization provider under `Framework/AspNetCore/Serialization/MessagePack`.
-3. Add `OpenRiaServicesOptionsBuilder.AddMessagePackSerialization(bool defaultProvider = false)` and an overload that accepts MessagePack-specific options.
+3. Add `OpenRiaServicesOptionsBuilder.AddMessagePackSerialization(bool defaultProvider = false)` and an overload that accepts MessagePack-specific options
+(the user should be able to pass in a custom `ITypeShapeProvider` and/or `MessagePackSerializer`)
 4. Construct the serializer with the Open RIA Services filtered `ITypeShapeProvider`, wrapping the existing branch-specific `FilteredTypeShapeProvider`.
 5. Implement the `RequestSerializer` methods:
    - `ReadParametersFromBodyAsync`
@@ -80,7 +81,7 @@ Rules:
 
 - CLR null is encoded as MessagePack nil.
 - Primitive values use the native MessagePack representation selected by `Nerdbank.MessagePack`.
-- Entity, complex, and projection values use map-based object encoding from the filtered type shape.
+- Entity, complex, and projection values use map-based object encoding from the filtered type shape. (no explicit formatters/converters are required use `Nerdbank.MessagePack` built-in serialization/deserialization)
 - Collections use MessagePack arrays for item order.
 - The envelope uses maps for version tolerance; collection contents may use arrays where the collection semantics require ordering.
 
@@ -91,7 +92,6 @@ Used when a query or invoke operation uses POST. GET behavior is unchanged and c
 ```text
 {
   "protocolVersion": 1,
-  "kind": "query" | "invoke",
   "operation": "OperationName",
   "parameters": {
     "parameterName": <domain-value-or-nil>
@@ -108,7 +108,7 @@ Used when a query or invoke operation uses POST. GET behavior is unchanged and c
 }
 ```
 
-Required keys: `protocolVersion`, `kind`, `operation`, `parameters`.
+Required keys: `protocolVersion`, `operation`, `parameters`.
 
 Optional keys:
 
@@ -117,7 +117,6 @@ Optional keys:
 
 Validation:
 
-- `kind` must match the domain operation being invoked.
 - `operation` must match the routed operation name.
 - Each required operation parameter must be present.
 - Nil is allowed only for nullable parameters.
@@ -128,9 +127,8 @@ Validation:
 ```text
 {
   "protocolVersion": 1,
-  "kind": "submit",
   "operation": "Submit",
-  "changeSet": [
+  "parameters": [
     <ChangeSetEntry>,
     <ChangeSetEntry>
   ]
@@ -148,7 +146,6 @@ Used for query, invoke, and submit success responses.
 ```text
 {
   "protocolVersion": 1,
-  "kind": "response",
   "operation": "OperationName",
   "result": <domain-value-or-nil>
 }
@@ -167,13 +164,12 @@ A failed domain operation response uses the same HTTP status behavior as the exi
 ```text
 {
   "protocolVersion": 1,
-  "kind": "fault",
   "operation": "OperationName",
   "fault": <DomainServiceFault>
 }
 ```
 
-Required keys: `protocolVersion`, `kind`, `operation`, `fault`.
+Required keys: `protocolVersion`,  `operation`, `fault`.
 
 `fault` is a `DomainServiceFault` encoded through the filtered type-shape provider. Readers should construct the same client-side exception type and `OperationErrorStatus` mapping that the current HTTP client uses for XML fault responses.
 
@@ -187,5 +183,7 @@ Required keys: `protocolVersion`, `kind`, `operation`, `fault`.
 ## Open questions before implementation
 
 - Confirm `application/vnd.msgpack` as the final MIME type, or choose a vendor-specific Open RIA Services subtype such as `application/vnd.openriaservices.msgpack`.
+  use `application/vnd.msgpack`
 - Decide whether to reject higher `protocolVersion` values by default or allow them with best-effort unknown-key skipping.
-- Decide whether the first implementation should expose all `Nerdbank.MessagePack` options or only `ITypeShapeProvider` and serializer configuration needed by Open RIA Services.
+  Reject unkown versions  
+ 
