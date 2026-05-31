@@ -1,7 +1,5 @@
 ﻿* [Start](README.md)
 
-* [MessagePack Serialization Plan](messagepack-serialization.md)
-
 * [Prerequisites for Open Ria Services](gg512106.md)
 
   * [Walkthrough: Installing and Configuring SQL Server 2008 R2 Express with Advanced Services](gg512108.md)
