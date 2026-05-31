@@ -52,10 +52,17 @@ namespace OpenRiaServices.Client.Test
                 return httpClient;
             };
 
+#if NET10_0
+            DomainContext.DomainClientFactory = new MessagePackHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory)
+            {
+                UseQueryHttpMethod = true,
+            };
+#else
             DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory)
             {
                 UseQueryHttpMethod = true,
             };
+#endif
             // DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
         }
 

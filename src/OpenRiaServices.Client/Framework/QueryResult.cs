@@ -78,6 +78,9 @@ namespace OpenRiaServices.Client
         /// Get the ValidationErros for a query (or <c>null</c> if query was successful)
         /// </summary>
         [IgnoreDataMember]
+#if ASPNET_CORE
+        [PolyType.PropertyShape(Ignore = true)] // exclude this property from serialization
+#endif
         public IEnumerable<ValidationResult> ValidationErrors { get; }
 #endif
         /// <summary>

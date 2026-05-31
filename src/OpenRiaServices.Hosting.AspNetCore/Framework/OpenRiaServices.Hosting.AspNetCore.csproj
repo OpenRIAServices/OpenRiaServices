@@ -26,6 +26,7 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Nerdbank.MessagePack" Version="1.2.4" />
   </ItemGroup>
 
   <ItemGroup>
