@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Net.Http;
@@ -13,7 +14,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.AspNetCore.Serialization;
+using PolyType;
+using PolyType.ReflectionProvider;
 using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore;
@@ -67,6 +71,16 @@ public class SerializationOptionsTests
         Assert.AreSame(builder, returned, "AddXmlSerialization should return the builder for chaining");
     }
 
+    [TestMethod]
+    [Description("AddMessagePackSerialization with configure returns the builder for chaining")]
+    public void Builder_AddMessagePackSerialization_WithConfigure_ReturnsSameBuilder()
+    {
+        var services = new ServiceCollection();
+        var builder = services.AddOpenRiaServices();
+        var returned = builder.AddMessagePackSerialization(_ => { });
+        Assert.AreSame(builder, returned, "AddMessagePackSerialization should return the builder for chaining");
+    }
+
     // -------------------------------------------------------------------------
     // Reader quota enforcement tests (binary)
     // -------------------------------------------------------------------------
@@ -113,13 +127,28 @@ public class SerializationOptionsTests
         await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", content), "The maximum string content length quota (10) has been exceeded");
     }
 
+    [TestMethod]
+    [Description("MessagePack invoke roundtrip works for simple parameters and results")]
+    public async Task MessagePack_Invoke_Roundtrip_Works()
+    {
+        using var host = await CreateHost(useMessagePack: true);
+        var client = host.GetTestClient();
+        using var content = BuildMessagePackInvokeRequest("EchoString", "value", "hello-messagepack");
+        var response = await client.PostAsync("SerializationTestDomainService/EchoString", content);
+        response.EnsureSuccessStatusCode();
+        Assert.AreEqual("application/vnd.msgpack", response.Content.Headers.ContentType?.MediaType);
+        var payload = await response.Content.ReadAsByteArrayAsync();
+        Assert.AreEqual("hello-messagepack", ReadMessagePackInvokeResponse(payload, typeof(string)));
+    }
+
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
 
     private static async Task<IHost> CreateHost(
         Action<BinarySerializationOptions> binaryConfigure = null,
-        Action<XmlSerializationOptions> xmlConfigure = null)
+        Action<XmlSerializationOptions> xmlConfigure = null,
+        bool useMessagePack = false)
     {
         return await new HostBuilder()
             .ConfigureWebHost(webBuilder =>
@@ -134,6 +163,11 @@ public class SerializationOptionsTests
                             oria.ConfigureBinarySerialization(binaryConfigure);
                         if (xmlConfigure is not null)
                             oria.AddXmlSerialization(xmlConfigure);
+                        if (useMessagePack)
+                        {
+                            oria.ClearSerializationProviders()
+                                .AddMessagePackSerialization();
+                        }
                         services.AddDomainService<SerializationTestDomainService>();
                     })
                     .Configure(app =>
@@ -199,6 +233,50 @@ public class SerializationOptionsTests
         var content = new ByteArrayContent(ms.ToArray());
         content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/xml");
         return content;
+    }
+
+    private static ByteArrayContent BuildMessagePackInvokeRequest(string operationName, string paramName, string paramValue)
+    {
+        var serializer = new MessagePackSerializer();
+        var provider = ReflectionTypeShapeProvider.Default;
+        var payload = new MessagePackRequestEnvelope
+        {
+            Parameters = { [paramName] = SerializeValue(paramValue, typeof(string)) }
+        };
+
+        using var ms = new MemoryStream();
+        serializer.SerializeObject(ms, payload, provider.GetTypeShapeOrThrow(typeof(MessagePackRequestEnvelope)));
+        var content = new ByteArrayContent(ms.ToArray());
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/vnd.msgpack");
+        return content;
+
+        byte[] SerializeValue(object value, Type type)
+        {
+            using var valueStream = new MemoryStream();
+            serializer.SerializeObject(valueStream, value, provider.GetTypeShapeOrThrow(type));
+            return valueStream.ToArray();
+        }
+    }
+
+    private static string ReadMessagePackInvokeResponse(byte[] payload, Type resultType)
+    {
+        var serializer = new MessagePackSerializer();
+        var provider = ReflectionTypeShapeProvider.Default;
+        var response = (MessagePackResponseEnvelope)serializer.DeserializeObject(payload, provider.GetTypeShapeOrThrow(typeof(MessagePackResponseEnvelope)));
+        return (string)serializer.DeserializeObject(response.Result, provider.GetTypeShapeOrThrow(resultType));
+    }
+
+    private sealed class MessagePackRequestEnvelope
+    {
+        public Dictionary<string, byte[]> Parameters { get; set; } = new(StringComparer.Ordinal);
+        public List<ServiceQueryPart> QueryOptions { get; set; }
+        public bool IncludeTotalCount { get; set; }
+    }
+
+    private sealed class MessagePackResponseEnvelope
+    {
+        public byte[] Result { get; set; }
+        public DomainServiceFault Fault { get; set; }
     }
 
     // -------------------------------------------------------------------------

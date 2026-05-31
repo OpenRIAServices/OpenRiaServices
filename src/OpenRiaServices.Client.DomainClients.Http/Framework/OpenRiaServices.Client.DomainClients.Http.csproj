@@ -22,6 +22,9 @@
     <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Nerdbank.MessagePack" Version="1.2.4" />
+  </ItemGroup>
+  <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Polyfills.cs" />
     <Compile Update="Http\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
