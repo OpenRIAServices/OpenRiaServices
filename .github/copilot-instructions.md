@@ -98,6 +98,17 @@ CI separates test execution by target framework and excludes `OpenRiaServices.Co
 - NuGet package outputs go under `NuGet\bin` locally, or the artifact staging directory in CI.
 - Packaging scripts and `.nuspec` files are under `NuGet`.
 
+## Changelog and documentation expectations
+
+- Treat changelog and documentation updates as part of completing a feature or notable behavior change, not as optional follow-up work.
+- Record notable changes in the repository root changelog, `D:\a\OpenRiaServices\OpenRiaServices\Changelog.md`.
+- Follow the existing changelog structure and keep entries compatible with the project's "Keep a Changelog" style release notes.
+- The project aims to follow Semantic Versioning. Changes affecting explicitly versioned packages such as ASP.NET Core and EntityFrameworkCore should be documented clearly enough to support `major.minor.patch` release notes.
+- When adding or changing a feature, update the most relevant project README in addition to code comments/API docs. For example, project-specific usage belongs in files such as `src\OpenRiaServices.Hosting.AspNetCore\Framework\README.md` and `src\OpenRiaServices.Server.EntityFrameworkCore\Framework\README.md`.
+- Feature documentation should describe how to use the feature and, when helpful, why or when the feature makes sense.
+- If a change is too small to merit a changelog entry, explicitly consider whether README or other documentation still needs an update.
+- AI agents working in this repository should proactively check whether `Changelog.md`, a project README, `README.md`, `CONTRIBUTING.md`, or legacy docs under `docs` need updates as part of the same task.
+
 ## Known gotchas and workarounds
 
 - The repository is a mixed modern/legacy .NET solution. A plain Ubuntu environment is not sufficient for normal validation.
