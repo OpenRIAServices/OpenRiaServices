@@ -29,7 +29,8 @@ builder.Services.AddOpenRiaServices(o =>
     };
 
 })
-    .AddXmlSerialization();
+    .AddXmlSerialization()
+    .AddMessagePackSerialization();
 // Possible future extension point for configuring OpenRia Services
 //.ConfigureBinaryXmlSerializer(options => { ... MaxItemsInObjectGraph, XmlDictionaryReaderQuotas Writer/ReaderQuotas ... })
 //o.ConfigureBinaryXml(o => { })
