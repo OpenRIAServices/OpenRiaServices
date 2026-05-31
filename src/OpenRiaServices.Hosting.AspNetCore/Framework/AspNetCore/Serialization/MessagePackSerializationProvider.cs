@@ -47,7 +47,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             _typeShapeProvider = typeShapeProvider ?? throw new ArgumentNullException(nameof(typeShapeProvider));
             _envelopeTypeShapeProvider = envelopeTypeShapeProvider ?? throw new ArgumentNullException(nameof(envelopeTypeShapeProvider));
-            _operationSerializer = CreateOperationSerializer(_serializer, _operation);
+            _operationSerializer = CreateOperationSerializer(_serializer, _operation, _typeShapeProvider);
         }
 
         public override bool CanRead(ReadOnlySpan<char> contentType)
@@ -165,10 +165,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 ?? (MessagePackRequestEnvelopeBase)Activator.CreateInstance(envelopeType)!;
         }
 
-        private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, DomainOperationEntry operation)
+        private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, DomainOperationEntry operation, ITypeShapeProvider typeShapeProvider)
         {
             SerializationContext context = serializer.StartingContext;
             context[MethodParametersConverter.OperationKey] = operation;
+            context[MethodParametersConverter.TypeShapeProviderKey] = typeShapeProvider;
             return serializer with { StartingContext = context };
         }
 
@@ -235,6 +236,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     internal sealed class MethodParametersConverter : MessagePackConverter<MethodParameters?>
     {
         internal static readonly object OperationKey = new();
+        internal static readonly object TypeShapeProviderKey = new();
 
         public override bool PreferAsyncSerialization => true;
 
@@ -366,12 +368,15 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             => (DomainOperationEntry?)context[OperationKey]
                 ?? throw new MessagePackSerializationException("Domain operation metadata is required to serialize method parameters.");
 
+        private static ITypeShapeProvider GetTypeShapeProvider(SerializationContext context)
+            => (ITypeShapeProvider?)context[TypeShapeProviderKey] ?? context.TypeShapeProvider;
+
         private static object? ReadValue(ref MessagePackReader reader, Type parameterType, SerializationContext context)
         {
             if (reader.TryReadNil())
                 return null;
 
-            return context.GetConverter(parameterType, context.TypeShapeProvider).ReadObject(ref reader, context);
+            return context.GetConverter(parameterType, GetTypeShapeProvider(context)).ReadObject(ref reader, context);
         }
 
         private static async ValueTask<object?> ReadValueAsync(MessagePackAsyncReader reader, Type parameterType, SerializationContext context)
@@ -385,7 +390,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
 
             reader.ReturnReader(ref bufferedReader);
-            return await context.GetConverter(parameterType, context.TypeShapeProvider).ReadObjectAsync(reader, context).ConfigureAwait(false);
+            return await context.GetConverter(parameterType, GetTypeShapeProvider(context)).ReadObjectAsync(reader, context).ConfigureAwait(false);
         }
 
         private static void WriteValue(ref MessagePackWriter writer, object? value, Type parameterType, SerializationContext context)
@@ -393,13 +398,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             if (value is null)
                 writer.WriteNil();
             else
-                context.GetConverter(parameterType, context.TypeShapeProvider).WriteObject(ref writer, value, context);
+                context.GetConverter(parameterType, GetTypeShapeProvider(context)).WriteObject(ref writer, value, context);
         }
 
         private static ValueTask WriteValueAsync(MessagePackAsyncWriter writer, object? value, Type parameterType, SerializationContext context)
             => value is null
                 ? WriteNilAsync(writer)
-                : context.GetConverter(parameterType, context.TypeShapeProvider).WriteObjectAsync(writer, value, context);
+                : context.GetConverter(parameterType, GetTypeShapeProvider(context)).WriteObjectAsync(writer, value, context);
 
         private static ValueTask WriteNilAsync(MessagePackAsyncWriter writer)
         {

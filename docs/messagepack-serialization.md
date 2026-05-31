@@ -6,8 +6,8 @@ OpenRiaServices supports MessagePack with MIME type `application/vnd.msgpack`.
 
 Top-level object map:
 
-- `parameters`: map<string, bin?>  
-  Parameter name to MessagePack payload bytes for the declared parameter type. `nil` means `null`.
+- `parameters`: map<string, value?>  
+  Parameter name to a MessagePack value serialized with the declared parameter type converter. `nil` means `null`.
 - `queryOptions`: array of `ServiceQueryPart` (optional)
 - `includeTotalCount`: bool (optional)
 
@@ -15,8 +15,8 @@ Top-level object map:
 
 Top-level object map:
 
-- `result`: bin?  
-  MessagePack payload bytes for the declared operation return type. `nil` means `null` / no value.
+- `result`: value?  
+  MessagePack value for the declared operation return type. `nil` means `null` / no value.
 
 ## Fault response envelope
 

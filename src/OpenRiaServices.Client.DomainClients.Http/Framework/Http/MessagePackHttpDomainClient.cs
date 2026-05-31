@@ -112,7 +112,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
                 using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 Type envelopeType = GetResponseEnvelopeType(operationName, returnType);
-                var envelope = (MessagePackResponseEnvelopeBase?)await _serializer.DeserializeObjectAsync(stream, _typeShapeProvider.GetTypeShapeOrThrow(envelopeType)).ConfigureAwait(false)
+                var envelope = (MessagePackResponseEnvelopeBase)await _serializer.DeserializeObjectAsync(stream, _typeShapeProvider.GetTypeShapeOrThrow(envelopeType)).ConfigureAwait(false)
                     ?? (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
 
                 if (envelope.Fault is not null)
