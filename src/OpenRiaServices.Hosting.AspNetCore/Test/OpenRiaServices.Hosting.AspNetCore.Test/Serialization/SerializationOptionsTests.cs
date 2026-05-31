@@ -241,7 +241,10 @@ public class SerializationOptionsTests
         var provider = ReflectionTypeShapeProvider.Default;
         var payload = new MessagePackRequestEnvelope
         {
-            Parameters = { [paramName] = SerializeValue(paramValue, typeof(string)) }
+            Parameters = new MethodParameters
+            {
+                Values = { [paramName] = SerializeValue(paramValue, typeof(string)) }
+            }
         };
 
         using var ms = new MemoryStream();
@@ -262,20 +265,26 @@ public class SerializationOptionsTests
     {
         var serializer = new MessagePackSerializer();
         var provider = ReflectionTypeShapeProvider.Default;
-        var response = (MessagePackResponseEnvelope)serializer.DeserializeObject(payload, provider.GetTypeShapeOrThrow(typeof(MessagePackResponseEnvelope)));
-        return (string)serializer.DeserializeObject(response.Result, provider.GetTypeShapeOrThrow(resultType));
+        var responseType = typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(resultType);
+        dynamic response = serializer.DeserializeObject(payload, provider.GetTypeShapeOrThrow(responseType));
+        return (string)response.Result;
     }
 
     private sealed class MessagePackRequestEnvelope
     {
-        public Dictionary<string, byte[]> Parameters { get; set; } = new(StringComparer.Ordinal);
+        public MethodParameters Parameters { get; set; } = new();
         public List<ServiceQueryPart> QueryOptions { get; set; }
         public bool IncludeTotalCount { get; set; }
     }
 
-    private sealed class MessagePackResponseEnvelope
+    private sealed class MethodParameters
     {
-        public byte[] Result { get; set; }
+        public Dictionary<string, byte[]> Values { get; set; } = new(StringComparer.Ordinal);
+    }
+
+    private sealed class MessagePackInvokeResponseEnvelope<TResult>
+    {
+        public TResult Result { get; set; }
         public DomainServiceFault Fault { get; set; }
     }
 

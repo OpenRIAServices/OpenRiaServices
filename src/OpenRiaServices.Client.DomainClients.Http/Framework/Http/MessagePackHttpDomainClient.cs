@@ -39,10 +39,12 @@ namespace OpenRiaServices.Client.DomainClients.Http
         private async Task<HttpResponseMessage> SendWithBodyAsync(HttpMethod method, string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
             using var request = new HttpRequestMessage(method, operationName);
-            var envelope = CreateRequestEnvelope(operationName, parameters, queryOptions);
+            var envelope = CreateRequestEnvelope(method, operationName, parameters, queryOptions);
 
             using var stream = new MemoryStream();
-            _serializer.SerializeObject(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(typeof(MessagePackRequestEnvelope)), cancellationToken);
+            // TODO: If possible, replace this buffering with a custom HttpContent override of SerializeToStream
+            // so the request payload can be serialized asynchronously directly to the outgoing request stream.
+            await _serializer.SerializeObjectAsync(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken).ConfigureAwait(false);
 
             var bytes = stream.ToArray();
             request.Content = new ByteArrayContent(bytes);
@@ -51,9 +53,13 @@ namespace OpenRiaServices.Client.DomainClients.Http
             return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
         }
 
-        private MessagePackRequestEnvelope CreateRequestEnvelope(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
+        private MessagePackRequestEnvelopeBase CreateRequestEnvelope(HttpMethod method, string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
         {
-            var result = new MessagePackRequestEnvelope();
+            MessagePackRequestEnvelopeBase result = method == s_queryMethod
+                ? new MessagePackQueryRequestEnvelope()
+                : string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal)
+                    ? new MessagePackSubmitRequestEnvelope()
+                    : new MessagePackInvokeRequestEnvelope();
             if (parameters is not null && parameters.Count > 0)
             {
                 MethodParameters methodParameters = GetMethodParameters(operationName);
@@ -61,29 +67,29 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 {
                     if (param.Value is null)
                     {
-                        result.Parameters[param.Key] = null;
+                        result.Parameters.Values[param.Key] = null;
                     }
                     else
                     {
                         var parameterType = methodParameters.GetTypeForMethodParameter(param.Key);
-                        result.Parameters[param.Key] = SerializeValue(param.Value, parameterType);
+                        result.Parameters.Values[param.Key] = SerializeValue(param.Value, parameterType);
                     }
                 }
             }
 
-            if (queryOptions is not null && queryOptions.Count > 0)
+            if (result is MessagePackQueryRequestEnvelope queryRequest && queryOptions is not null && queryOptions.Count > 0)
             {
-                result.QueryOptions = new List<ServiceQueryPart>(queryOptions.Count);
+                queryRequest.QueryOptions = new List<ServiceQueryPart>(queryOptions.Count);
                 foreach (var queryOption in queryOptions)
                 {
                     if (string.Equals(queryOption.QueryOperator, "includeTotalCount", StringComparison.OrdinalIgnoreCase)
                         && bool.TryParse(queryOption.Expression, out bool includeTotalCount))
                     {
-                        result.IncludeTotalCount = includeTotalCount;
+                        queryRequest.IncludeTotalCount = includeTotalCount;
                     }
                     else
                     {
-                        result.QueryOptions.Add(queryOption);
+                        queryRequest.QueryOptions.Add(queryOption);
                     }
                 }
             }
@@ -110,8 +116,9 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 }
 
                 using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                var envelope = (MessagePackResponseEnvelope)_serializer.DeserializeObject(stream, _typeShapeProvider.GetTypeShapeOrThrow(typeof(MessagePackResponseEnvelope)))
-                    ?? new MessagePackResponseEnvelope();
+                Type envelopeType = GetResponseEnvelopeType(operationName, returnType);
+                var envelope = (MessagePackResponseEnvelopeBase?)await _serializer.DeserializeObjectAsync(stream, _typeShapeProvider.GetTypeShapeOrThrow(envelopeType)).ConfigureAwait(false)
+                    ?? (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
 
                 if (envelope.Fault is not null)
                 {
@@ -122,10 +129,11 @@ namespace OpenRiaServices.Client.DomainClients.Http
                         operationName);
                 }
 
-                if (returnType == typeof(void) || envelope.Result is null)
+                object result = envelope.GetResult();
+                if (returnType == typeof(void) || result is null)
                     return null;
 
-                return DeserializeValue(envelope.Result, returnType);
+                return result;
             }
         }
 
@@ -136,20 +144,61 @@ namespace OpenRiaServices.Client.DomainClients.Http
             return stream.ToArray();
         }
 
-        private object DeserializeValue(byte[] bytes, Type type)
-            => _serializer.DeserializeObject(bytes, _typeShapeProvider.GetTypeShapeOrThrow(type));
-
-        private sealed class MessagePackRequestEnvelope
+        private static Type GetResponseEnvelopeType(string operationName, Type returnType)
         {
-            public Dictionary<string, byte[]> Parameters { get; set; } = new(StringComparer.Ordinal);
+            if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(QueryResult<>))
+                return typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(returnType);
+            if (string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal))
+                return typeof(MessagePackSubmitResponseEnvelope<>).MakeGenericType(returnType);
+            return typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(returnType);
+        }
+
+        private abstract class MessagePackRequestEnvelopeBase
+        {
+            public MessagePackMethodParameters Parameters { get; set; } = new();
+        }
+
+        private sealed class MessagePackQueryRequestEnvelope : MessagePackRequestEnvelopeBase
+        {
             public List<ServiceQueryPart> QueryOptions { get; set; }
             public bool IncludeTotalCount { get; set; }
         }
 
-        private sealed class MessagePackResponseEnvelope
+        private sealed class MessagePackInvokeRequestEnvelope : MessagePackRequestEnvelopeBase
         {
-            public byte[] Result { get; set; }
+        }
+
+        private sealed class MessagePackSubmitRequestEnvelope : MessagePackRequestEnvelopeBase
+        {
+        }
+
+        private sealed class MessagePackMethodParameters
+        {
+            public Dictionary<string, byte[]> Values { get; set; } = new(StringComparer.Ordinal);
+        }
+
+        private abstract class MessagePackResponseEnvelopeBase
+        {
             public DomainServiceFault Fault { get; set; }
+            public abstract object GetResult();
+        }
+
+        private sealed class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
+        {
+            public TResult Result { get; set; }
+            public override object GetResult() => Result;
+        }
+
+        private sealed class MessagePackInvokeResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
+        {
+            public TResult Result { get; set; }
+            public override object GetResult() => Result;
+        }
+
+        private sealed class MessagePackSubmitResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
+        {
+            public TResult Result { get; set; }
+            public override object GetResult() => Result;
         }
     }
 }

@@ -1,11 +1,12 @@
 using Nerdbank.MessagePack;
+using OpenRiaServices.Hosting.Serialization.MessagePack;
 using OpenRiaServices.Server;
 using PolyType;
 using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net;
+using System.Runtime.Serialization;
 using System.Threading.Tasks;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
@@ -13,27 +14,31 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     internal sealed class MessagePackSerializationProvider : ISerializationProvider
     {
         private readonly MessagePackSerializationOptions _options;
+        private readonly FilteredTypeShapeProvider _filteredTypeShapeProvider;
 
         public MessagePackSerializationProvider(MessagePackSerializationOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
+            _filteredTypeShapeProvider = new FilteredTypeShapeProvider(options.TypeShapeProvider);
         }
 
         public RequestSerializer GetRequestSerializer(DomainOperationEntry operation)
-            => new MessagePackRequestSerializer(operation, _options.Serializer, _options.TypeShapeProvider);
+            => new MessagePackRequestSerializer(operation, _options.Serializer, _filteredTypeShapeProvider, _options.TypeShapeProvider);
     }
 
     internal sealed class MessagePackRequestSerializer : RequestSerializer
     {
         private readonly MessagePackSerializer _serializer;
         private readonly ITypeShapeProvider _typeShapeProvider;
+        private readonly ITypeShapeProvider _envelopeTypeShapeProvider;
         private readonly DomainOperationEntry _operation;
 
-        public MessagePackRequestSerializer(DomainOperationEntry operation, MessagePackSerializer serializer, ITypeShapeProvider typeShapeProvider)
+        public MessagePackRequestSerializer(DomainOperationEntry operation, MessagePackSerializer serializer, ITypeShapeProvider typeShapeProvider, ITypeShapeProvider envelopeTypeShapeProvider)
         {
             _operation = operation ?? throw new ArgumentNullException(nameof(operation));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             _typeShapeProvider = typeShapeProvider ?? throw new ArgumentNullException(nameof(typeShapeProvider));
+            _envelopeTypeShapeProvider = envelopeTypeShapeProvider ?? throw new ArgumentNullException(nameof(envelopeTypeShapeProvider));
         }
 
         public override bool CanRead(ReadOnlySpan<char> contentType)
@@ -44,14 +49,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
         public override async Task<(ServiceQuery?, object?[])> ReadParametersFromBodyAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainOperationEntry operation)
         {
-            MessagePackRequestEnvelope envelope;
+            MessagePackRequestEnvelopeBase envelope;
             try
             {
-                envelope = await _serializer.DeserializeAsync(
-                    context.Request.Body,
-                    _typeShapeProvider.GetTypeShapeOrThrow<MessagePackRequestEnvelope>(),
-                    context.RequestAborted).ConfigureAwait(false)
-                    ?? new MessagePackRequestEnvelope();
+                envelope = await DeserializeRequestEnvelopeAsync(context, operation).ConfigureAwait(false);
             }
             catch (Exception ex) when (!ExceptionHandlingUtility.IsFatal(ex))
             {
@@ -60,7 +61,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             var parameters = operation.Parameters;
             object?[] values = new object?[parameters.Count];
-            var payload = envelope.Parameters ?? new Dictionary<string, byte[]?>(StringComparer.Ordinal);
+            var payload = envelope.Parameters?.Values ?? new Dictionary<string, byte[]?>(StringComparer.Ordinal);
 
             for (int i = 0; i < parameters.Count; i++)
             {
@@ -89,12 +90,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
 
             ServiceQuery? serviceQuery = null;
-            if ((envelope.QueryOptions?.Count ?? 0) > 0 || envelope.IncludeTotalCount)
+            if (envelope is MessagePackQueryRequestEnvelope queryEnvelope
+                && ((queryEnvelope.QueryOptions?.Count ?? 0) > 0 || queryEnvelope.IncludeTotalCount))
             {
                 serviceQuery = new ServiceQuery
                 {
-                    IncludeTotalCount = envelope.IncludeTotalCount,
-                    QueryParts = envelope.QueryOptions ?? new List<ServiceQueryPart>(),
+                    IncludeTotalCount = queryEnvelope.IncludeTotalCount,
+                    QueryParts = queryEnvelope.QueryOptions ?? new List<ServiceQueryPart>(),
                 };
             }
 
@@ -112,40 +114,20 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
         public override Task WriteErrorAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
         {
-            var envelope = new MessagePackResponseEnvelope
-            {
-                Fault = fault,
-            };
-
-            return WriteEnvelopeAsync(context, envelope);
+            return WriteEnvelopeAsync(context, CreateResponseEnvelope(operation, result: null, fault));
         }
 
         public override Task WriteResponseAsync(Microsoft.AspNetCore.Http.HttpContext context, object? result, DomainOperationEntry operation)
+            => WriteEnvelopeAsync(context, CreateResponseEnvelope(operation, result, fault: null));
+
+        private async Task WriteEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, object envelope)
         {
-            var envelope = new MessagePackResponseEnvelope
-            {
-                Result = result is null ? null : Serialize(result, GetReturnType(operation)),
-            };
-
-            return WriteEnvelopeAsync(context, envelope);
-        }
-
-        private async Task WriteEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, MessagePackResponseEnvelope envelope)
-        {
-            using var stream = new MemoryStream();
-            _serializer.SerializeObject(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(typeof(MessagePackResponseEnvelope)));
-            stream.Position = 0;
-
             context.Response.Headers.ContentType = MimeTypes.MessagePack;
-            context.Response.ContentLength = stream.Length;
-            await stream.CopyToAsync(context.Response.Body, context.RequestAborted).ConfigureAwait(false);
-        }
-
-        private byte[] Serialize(object value, Type type)
-        {
-            using var stream = new MemoryStream();
-            _serializer.SerializeObject(stream, value, _typeShapeProvider.GetTypeShapeOrThrow(type));
-            return stream.ToArray();
+            await _serializer.SerializeObjectAsync(
+                context.Response.Body,
+                envelope,
+                _envelopeTypeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()),
+                context.RequestAborted).ConfigureAwait(false);
         }
 
         private object? Deserialize(byte[] bytes, Type type)
@@ -160,6 +142,39 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 _ => throw new NotSupportedException()
             };
 
+        private async Task<MessagePackRequestEnvelopeBase> DeserializeRequestEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainOperationEntry operation)
+        {
+            Type envelopeType = operation.Operation switch
+            {
+                DomainOperation.Query => typeof(MessagePackQueryRequestEnvelope),
+                DomainOperation.Custom when operation.Name == "Submit" => typeof(MessagePackSubmitRequestEnvelope),
+                _ => typeof(MessagePackInvokeRequestEnvelope),
+            };
+
+            return (MessagePackRequestEnvelopeBase?)await _serializer.DeserializeObjectAsync(
+                context.Request.Body,
+                _envelopeTypeShapeProvider.GetTypeShapeOrThrow(envelopeType),
+                context.RequestAborted).ConfigureAwait(false)
+                ?? (MessagePackRequestEnvelopeBase)Activator.CreateInstance(envelopeType)!;
+        }
+
+        private object CreateResponseEnvelope(DomainOperationEntry operation, object? result, DomainServiceFault? fault)
+        {
+            Type responseEnvelopeType = operation.Operation switch
+            {
+                DomainOperation.Query => typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(GetReturnType(operation)),
+                DomainOperation.Custom when operation.Name == "Submit" => typeof(MessagePackSubmitResponseEnvelope<>).MakeGenericType(GetReturnType(operation)),
+                _ => typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(GetReturnType(operation)),
+            };
+
+            object envelope = Activator.CreateInstance(responseEnvelopeType)!;
+            responseEnvelopeType.GetProperty(nameof(MessagePackResponseEnvelopeBase.Fault))!.SetValue(envelope, fault);
+            if (result is not null)
+                responseEnvelopeType.GetProperty("Result")!.SetValue(envelope, result);
+
+            return envelope;
+        }
+
         private static bool MatchesMediaType(ReadOnlySpan<char> value, ReadOnlySpan<char> expected)
         {
             int separator = value.IndexOf(';');
@@ -170,16 +185,64 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         }
     }
 
-    internal sealed class MessagePackRequestEnvelope
+    [DataContract]
+    internal abstract class MessagePackRequestEnvelopeBase
     {
-        public Dictionary<string, byte[]?>? Parameters { get; set; } = new(StringComparer.Ordinal);
+        [DataMember]
+        public MethodParameters? Parameters { get; set; } = new();
+    }
+
+    [DataContract]
+    internal sealed class MessagePackQueryRequestEnvelope : MessagePackRequestEnvelopeBase
+    {
+        [DataMember]
         public List<ServiceQueryPart>? QueryOptions { get; set; }
+        [DataMember]
         public bool IncludeTotalCount { get; set; }
     }
 
-    internal sealed class MessagePackResponseEnvelope
+    [DataContract]
+    internal sealed class MessagePackInvokeRequestEnvelope : MessagePackRequestEnvelopeBase
     {
-        public byte[]? Result { get; set; }
+    }
+
+    [DataContract]
+    internal sealed class MessagePackSubmitRequestEnvelope : MessagePackRequestEnvelopeBase
+    {
+    }
+
+    [DataContract]
+    internal sealed class MethodParameters
+    {
+        [DataMember]
+        public Dictionary<string, byte[]?> Values { get; set; } = new(StringComparer.Ordinal);
+    }
+
+    [DataContract]
+    internal abstract class MessagePackResponseEnvelopeBase
+    {
+        [DataMember]
         public DomainServiceFault? Fault { get; set; }
+    }
+
+    [DataContract]
+    internal sealed class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
+    {
+        [DataMember]
+        public TResult? Result { get; set; }
+    }
+
+    [DataContract]
+    internal sealed class MessagePackInvokeResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
+    {
+        [DataMember]
+        public TResult? Result { get; set; }
+    }
+
+    [DataContract]
+    internal sealed class MessagePackSubmitResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
+    {
+        [DataMember]
+        public TResult? Result { get; set; }
     }
 }
