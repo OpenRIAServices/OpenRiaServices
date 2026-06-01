@@ -68,6 +68,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 mappings.Add((DerivedTypeUnion)mapping);
             }
 
+            // Register all entities as object for ChangeSetEntry
+            DerivedShapeMapping<object> objectMapping = new();
+            AddDerivedTypes(objectMapping, description.EntityTypes);
+            mappings.Add(objectMapping);
+
             return mappings;
         }
 

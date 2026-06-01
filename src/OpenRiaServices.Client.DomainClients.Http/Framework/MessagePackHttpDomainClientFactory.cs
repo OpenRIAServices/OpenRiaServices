@@ -38,6 +38,12 @@ namespace OpenRiaServices.Client.DomainClients
 
         private static MessagePackSerializer ConfigureSerializer(MessagePackSerializer serializer)
         {
+            //// TODO
+            //// Register all entities as object for ChangeSetEntry
+            //DerivedShapeMapping<Entity> objectMapping = new();
+            //AddDerivedTypes(objectMapping, description.EntityTypes);
+            //mappings.Add(objectMapping);
+
             serializer = serializer.WithHiFiDateTime();
 
             MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new Http.MessagePack.MessagePackMethodParametersConverter() }).ToArray();
