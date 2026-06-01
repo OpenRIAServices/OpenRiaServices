@@ -1,4 +1,5 @@
 using Nerdbank.MessagePack;
+using OpenRiaServices.Client.DomainClients.Http.MessagePack;
 using PolyType;
 using PolyType.ReflectionProvider;
 using System;
@@ -58,38 +59,34 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private MessagePackRequestEnvelopeBase CreateRequestEnvelope(HttpMethod method, string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
         {
-            MessagePackRequestEnvelopeBase result = method == s_queryMethod
-                ? new MessagePackQueryRequestEnvelope()
-                : string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal)
-                    ? new MessagePackSubmitRequestEnvelope()
-                    : new MessagePackInvokeRequestEnvelope();
-            if (parameters is not null && parameters.Count > 0)
-            {
-                foreach (var param in parameters)
-                {
-                    methodParameters.GetTypeForMethodParameter(param.Key);
-                    result.Parameters.Values[param.Key] = param.Value;
-                }
-            }
+            MessagePackMethodParameters requestParameters = (parameters is { Count: > 0 })
+                ? new (methodParameters, parameters) : null;
 
-            if (result is MessagePackQueryRequestEnvelope queryRequest && queryOptions is not null && queryOptions.Count > 0)
+            if (queryOptions is not null && queryOptions.Count > 0)
             {
-                queryRequest.QueryOptions = new List<ServiceQueryPart>(queryOptions.Count);
+                var request = new MessagePackQueryRequestEnvelope()
+                {
+                    QueryOptions = new List<ServiceQueryPart>(queryOptions.Count),
+                    Parameters = requestParameters
+                };
                 foreach (var queryOption in queryOptions)
                 {
                     if (string.Equals(queryOption.QueryOperator, "includeTotalCount", StringComparison.OrdinalIgnoreCase)
                         && bool.TryParse(queryOption.Expression, out bool includeTotalCount))
                     {
-                        queryRequest.IncludeTotalCount = includeTotalCount;
+                        request.IncludeTotalCount = includeTotalCount;
                     }
                     else
                     {
-                        queryRequest.QueryOptions.Add(queryOption);
+                        request.QueryOptions.Add(queryOption);
                     }
                 }
+                return request;
             }
 
-            return result;
+            return string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal)
+                ? new MessagePackSubmitRequestEnvelope() { Parameters = requestParameters }
+                : new MessagePackInvokeRequestEnvelope() { Parameters = requestParameters };
         }
 
         private protected override async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType)
@@ -154,211 +151,5 @@ namespace OpenRiaServices.Client.DomainClients.Http
             return typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(returnType);
         }
 
-        private abstract class MessagePackRequestEnvelopeBase
-        {
-            public MessagePackMethodParameters Parameters { get; set; } = new();
-        }
-
-        private sealed class MessagePackQueryRequestEnvelope : MessagePackRequestEnvelopeBase
-        {
-            public List<ServiceQueryPart> QueryOptions { get; set; }
-            public bool IncludeTotalCount { get; set; }
-        }
-
-        private sealed class MessagePackInvokeRequestEnvelope : MessagePackRequestEnvelopeBase
-        {
-        }
-
-        private sealed class MessagePackSubmitRequestEnvelope : MessagePackRequestEnvelopeBase
-        {
-        }
-
-        private sealed class MessagePackMethodParameters
-        {
-            public Dictionary<string, object> Values { get; set; } = new(StringComparer.Ordinal);
-        }
-
-        private sealed class MessagePackMethodParametersConverter : MessagePackConverter<MessagePackMethodParameters>
-        {
-            internal static readonly object MethodParametersKey = new();
-
-            public override bool PreferAsyncSerialization => true;
-
-            public override MessagePackMethodParameters Read(ref MessagePackReader reader, SerializationContext context)
-            {
-                if (reader.TryReadNil())
-                    return null;
-
-                context.DepthStep();
-                MethodParameters methodParameters = GetMethodParameters(context);
-                var result = new MessagePackMethodParameters();
-                int count = reader.ReadMapHeader();
-
-                for (int i = 0; i < count; i++)
-                {
-                    string name = reader.ReadString();
-                    if (name is not null)
-                    {
-                        Type parameterType = methodParameters.GetTypeForMethodParameter(name);
-                        result.Values[name] = ReadValue(ref reader, parameterType, context);
-                    }
-                    else
-                    {
-                        reader.Skip(context);
-                    }
-                }
-
-                return result;
-            }
-
-            public override void Write(ref MessagePackWriter writer, in MessagePackMethodParameters value, SerializationContext context)
-            {
-                if (value is null)
-                {
-                    writer.WriteNil();
-                    return;
-                }
-
-                context.DepthStep();
-                MethodParameters methodParameters = GetMethodParameters(context);
-                writer.WriteMapHeader(value.Values.Count);
-
-                foreach (var parameterValue in value.Values)
-                {
-                    writer.Write(parameterValue.Key);
-                    Type parameterType = methodParameters.GetTypeForMethodParameter(parameterValue.Key);
-                    WriteValue(ref writer, parameterValue.Value, parameterType, context);
-                }
-            }
-
-            public override async ValueTask<MessagePackMethodParameters> ReadAsync(MessagePackAsyncReader reader, SerializationContext context)
-            {
-                await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
-                MessagePackReader bufferedReader = reader.CreateBufferedReader();
-                if (bufferedReader.TryReadNil())
-                {
-                    reader.ReturnReader(ref bufferedReader);
-                    return null;
-                }
-
-                context.DepthStep();
-                MethodParameters methodParameters = GetMethodParameters(context);
-                var result = new MessagePackMethodParameters();
-                int count = bufferedReader.ReadMapHeader();
-                reader.ReturnReader(ref bufferedReader);
-
-                for (int i = 0; i < count; i++)
-                {
-                    await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
-                    bufferedReader = reader.CreateBufferedReader();
-                    string name = bufferedReader.ReadString();
-                    reader.ReturnReader(ref bufferedReader);
-
-                    if (name is not null)
-                    {
-                        Type parameterType = methodParameters.GetTypeForMethodParameter(name);
-                        result.Values[name] = await ReadValueAsync(reader, parameterType, context).ConfigureAwait(false);
-                    }
-                    else
-                    {
-                        await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
-                        bufferedReader = reader.CreateBufferedReader();
-                        bufferedReader.Skip(context);
-                        reader.ReturnReader(ref bufferedReader);
-                    }
-                }
-
-                return result;
-            }
-
-            public override async ValueTask WriteAsync(MessagePackAsyncWriter writer, MessagePackMethodParameters value, SerializationContext context)
-            {
-                if (value is null)
-                {
-                    writer.WriteNil();
-                    return;
-                }
-
-                context.DepthStep();
-                MethodParameters methodParameters = GetMethodParameters(context);
-                writer.WriteMapHeader(value.Values.Count);
-
-                foreach (var parameterValue in value.Values)
-                {
-                    writer.Write(static (ref MessagePackWriter syncWriter, string key) => syncWriter.Write(key), parameterValue.Key);
-                    Type parameterType = methodParameters.GetTypeForMethodParameter(parameterValue.Key);
-                    await WriteValueAsync(writer, parameterValue.Value, parameterType, context).ConfigureAwait(false);
-                    await writer.FlushIfAppropriateAsync(context).ConfigureAwait(false);
-                }
-            }
-
-            private static MethodParameters GetMethodParameters(SerializationContext context)
-                => (MethodParameters)context[MethodParametersKey];
-
-            private static object ReadValue(ref MessagePackReader reader, Type parameterType, SerializationContext context)
-            {
-                if (reader.TryReadNil())
-                    return null;
-
-                return context.GetConverter(parameterType, context.TypeShapeProvider).ReadObject(ref reader, context);
-            }
-
-            private static async ValueTask<object> ReadValueAsync(MessagePackAsyncReader reader, Type parameterType, SerializationContext context)
-            {
-                await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
-                MessagePackReader bufferedReader = reader.CreateBufferedReader();
-                if (bufferedReader.TryReadNil())
-                {
-                    reader.ReturnReader(ref bufferedReader);
-                    return null;
-                }
-
-                reader.ReturnReader(ref bufferedReader);
-                return await context.GetConverter(parameterType, context.TypeShapeProvider).ReadObjectAsync(reader, context).ConfigureAwait(false);
-            }
-
-            private static void WriteValue(ref MessagePackWriter writer, object value, Type parameterType, SerializationContext context)
-            {
-                if (value is null)
-                    writer.WriteNil();
-                else
-                    context.GetConverter(parameterType, context.TypeShapeProvider).WriteObject(ref writer, value, context);
-            }
-
-            private static ValueTask WriteValueAsync(MessagePackAsyncWriter writer, object value, Type parameterType, SerializationContext context)
-                => value is null
-                    ? WriteNilAsync(writer)
-                    : context.GetConverter(parameterType, context.TypeShapeProvider).WriteObjectAsync(writer, value, context);
-
-            private static ValueTask WriteNilAsync(MessagePackAsyncWriter writer)
-            {
-                writer.WriteNil();
-                return default;
-            }
-        }
-
-        private abstract class MessagePackResponseEnvelopeBase
-        {
-            public DomainServiceFault Fault { get; set; }
-            public abstract object GetResult();
-        }
-
-        private sealed class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
-        {
-            public TResult Result { get; set; }
-            public override object GetResult() => Result;
-        }
-
-        private sealed class MessagePackInvokeResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
-        {
-            public TResult Result { get; set; }
-            public override object GetResult() => Result;
-        }
-
-        private sealed class MessagePackSubmitResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
-        {
-            public TResult Result { get; set; }
-            public override object GetResult() => Result;
-        }
     }
 }
