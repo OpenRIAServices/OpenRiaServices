@@ -1,5 +1,6 @@
 using Nerdbank.MessagePack;
-using OpenRiaServices.Hosting.Serialization.MessagePack;
+using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
+using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters;
 using OpenRiaServices.Server;
 using PolyType;
 using System;
@@ -21,15 +22,49 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
             _filteredTypeShapeProvider = new FilteredTypeShapeProvider(options.TypeShapeProvider);
-            _serializer = AddMethodParametersConverter(options.Serializer);
+            _serializer = ConfigureSerializer(options.Serializer);
         }
 
         public RequestSerializer GetRequestSerializer(DomainOperationEntry operation)
             => new MessagePackRequestSerializer(operation, _serializer, _filteredTypeShapeProvider, _options.TypeShapeProvider);
-        private static MessagePackSerializer AddMethodParametersConverter(MessagePackSerializer serializer)
+
+        private static MessagePackSerializer ConfigureSerializer(MessagePackSerializer serializer)
         {
             MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new MethodParametersConverter() }).ToArray();
-            return serializer with { Converters = ConverterCollection.Create(converters) };
+
+            serializer = serializer
+                .WithHiFiDateTime();
+
+            return serializer with
+            {
+                Converters = ConverterCollection.Create(converters),
+                 //PreserveReferences
+                  
+            };
+
+            /*
+             *             MessagePackSerializer serializer = new()
+            {
+                PreserveReferences = ReferencePreservationMode.RejectCycles,
+                //PropertyNamingPolicy =   
+                StartingContext = new SerializationContext()
+                {
+                    //CancellationToken = ct,
+                    //TypeShapeProvider
+                    MaxDepth = 256
+                }
+            };
+
+            // TODO: Look it TypeShapeMapping should be generated or not (KnownTypes can be enough)
+            // Allow DerivedShapeMapping
+            // Can we add Object and allow all entity types for it ?
+
+            //DerivedShapeMapping<Animal> mapping = new();
+            //mapping.Add<Horse>(1);
+            //mapping.Add<Cow>(2);
+            //return serializer with { DerivedTypeMappings = [.. serializer.DerivedTypeMappings, mapping] };
+
+            */
         }
     }
 
@@ -37,7 +72,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     {
         private readonly MessagePackSerializer _serializer;
         private readonly ITypeShapeProvider _typeShapeProvider;
-        private readonly ITypeShapeProvider _envelopeTypeShapeProvider;
         private readonly DomainOperationEntry _operation;
         private readonly MessagePackSerializer _operationSerializer;
 
@@ -46,7 +80,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             _operation = operation ?? throw new ArgumentNullException(nameof(operation));
             _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             _typeShapeProvider = typeShapeProvider ?? throw new ArgumentNullException(nameof(typeShapeProvider));
-            _envelopeTypeShapeProvider = envelopeTypeShapeProvider ?? throw new ArgumentNullException(nameof(envelopeTypeShapeProvider));
             _operationSerializer = CreateOperationSerializer(_serializer, _operation, _typeShapeProvider);
         }
 
@@ -121,10 +154,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         public override Task WriteSubmitResponseAsync(Microsoft.AspNetCore.Http.HttpContext context, IEnumerable<ChangeSetEntry> result)
             => WriteResponseAsync(context, result, _operation);
 
-        public override Task WriteErrorAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
+        public override async Task WriteErrorAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
         {
-            return WriteEnvelopeAsync(context, CreateResponseEnvelope(operation, result: null, fault));
+            context.Response.Headers.ContentType = MimeTypes.MessagePack;
+            await _operationSerializer.SerializeObjectAsync(
+                context.Response.Body,
+                new MessagePackResponseEnvelopeBase { Fault = fault},
                 _typeShapeProvider.GetTypeShapeOrThrow<MessagePackResponseEnvelopeBase>(),
+                context.RequestAborted).ConfigureAwait(false);
         }
 
         public override Task WriteResponseAsync(Microsoft.AspNetCore.Http.HttpContext context, object? result, DomainOperationEntry operation)
@@ -136,7 +173,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             await _operationSerializer.SerializeObjectAsync(
                 context.Response.Body,
                 envelope,
-                _envelopeTypeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()),
+                _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()),
                 context.RequestAborted).ConfigureAwait(false);
         }
 
@@ -156,12 +193,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             {
                 DomainOperation.Query => typeof(MessagePackQueryRequestEnvelope),
                 DomainOperation.Custom when operation.Name == "Submit" => typeof(MessagePackSubmitRequestEnvelope),
-                _ => typeof(MessagePackInvokeRequestEnvelope),
+                _ => typeof(MessagePackRequestEnvelopeBase),
             };
 
             return (MessagePackRequestEnvelopeBase?)await _operationSerializer.DeserializeObjectAsync(
                 context.Request.Body,
-                _envelopeTypeShapeProvider.GetTypeShapeOrThrow(envelopeType),
+                _typeShapeProvider.GetTypeShapeOrThrow(envelopeType),
                 context.RequestAborted).ConfigureAwait(false)
                 ?? (MessagePackRequestEnvelopeBase)Activator.CreateInstance(envelopeType)!;
         }
@@ -176,15 +213,26 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
         private object CreateResponseEnvelope(DomainOperationEntry operation, object? result, DomainServiceFault? fault)
         {
+            // iF the operation is a query, the return type of the envelope is QueryResult<T>, where T is the associated type of the operation. For submit operations, the return type is IEnumerable<ChangeSetEntry>. For invoke operations, the return type is the declared return type of the operation.
+
+            if (fault is not null)
+                return new MessagePackResponseEnvelopeBase { Fault = fault };
+
+
+            if (operation.Operation == DomainOperation.Custom && operation.Name == "Submit")
+            {
+                return new MessagePackSubmitResponseEnvelope((IEnumerable<ChangeSetEntry>)result!);
+            }
+
+
             Type responseEnvelopeType = operation.Operation switch
             {
-                DomainOperation.Query => typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(GetReturnType(operation)),
-                DomainOperation.Custom when operation.Name == "Submit" => typeof(MessagePackSubmitResponseEnvelope<>).MakeGenericType(GetReturnType(operation)),
-                _ => typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(GetReturnType(operation)),
+                DomainOperation.Query => typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(operation.AssociatedType!),
+                DomainOperation.Invoke => typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(GetReturnType(operation)),
+                _ => throw new NotSupportedException()
             };
 
-            object envelope = Activator.CreateInstance(responseEnvelopeType)!;
-            responseEnvelopeType.GetProperty(nameof(MessagePackResponseEnvelopeBase.Fault))!.SetValue(envelope, fault);
+            object envelope = Activator.CreateInstance(responseEnvelopeType, result)!;
             if (result is not null)
                 responseEnvelopeType.GetProperty("Result")!.SetValue(envelope, result);
 
@@ -200,245 +248,5 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             return value.Equals(expected, StringComparison.OrdinalIgnoreCase);
         }
     }
-
-    [DataContract]
-    internal abstract class MessagePackRequestEnvelopeBase
-    {
-        [DataMember]
-        public MethodParameters? Parameters { get; set; } = new();
-    }
-
-    [DataContract]
-    internal sealed class MessagePackQueryRequestEnvelope : MessagePackRequestEnvelopeBase
-    {
-        [DataMember]
-        public List<ServiceQueryPart>? QueryOptions { get; set; }
-        [DataMember]
-        public bool IncludeTotalCount { get; set; }
-    }
-
-    [DataContract]
-    internal sealed class MessagePackInvokeRequestEnvelope : MessagePackRequestEnvelopeBase
-    {
-    }
-
-    [DataContract]
-    internal sealed class MessagePackSubmitRequestEnvelope : MessagePackRequestEnvelopeBase
-    {
-    }
-
-    [DataContract]
-    internal sealed class MethodParameters
-    {
-        [DataMember]
-        public Dictionary<string, object?> Values { get; set; } = new(StringComparer.Ordinal);
-    }
-
-    internal sealed class MethodParametersConverter : MessagePackConverter<MethodParameters?>
-    {
-        internal static readonly object OperationKey = new();
-        internal static readonly object TypeShapeProviderKey = new();
-
-        public override bool PreferAsyncSerialization => true;
-
-        public override MethodParameters? Read(ref MessagePackReader reader, SerializationContext context)
-        {
-            if (reader.TryReadNil())
-                return null;
-
-            context.DepthStep();
-            DomainOperationEntry operation = GetOperation(context);
-            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
-            var result = new MethodParameters();
-
-            int count = reader.ReadMapHeader();
-            for (int i = 0; i < count; i++)
-            {
-                string? name = reader.ReadString();
-                if (name is not null && parametersByName.TryGetValue(name, out DomainOperationParameter parameter))
-                {
-                    result.Values[name] = ReadValue(ref reader, parameter.ParameterType, context);
-                }
-                else
-                {
-                    reader.Skip(context);
-                }
-            }
-
-            return result;
-        }
-
-        public override void Write(ref MessagePackWriter writer, in MethodParameters? value, SerializationContext context)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            context.DepthStep();
-            DomainOperationEntry operation = GetOperation(context);
-            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
-            writer.WriteMapHeader(value.Values.Count);
-
-            foreach (var parameterValue in value.Values)
-            {
-                writer.Write(parameterValue.Key);
-                if (parametersByName.TryGetValue(parameterValue.Key, out DomainOperationParameter parameter))
-                {
-                    WriteValue(ref writer, parameterValue.Value, parameter.ParameterType, context);
-                }
-                else
-                {
-                    writer.WriteNil();
-                }
-            }
-        }
-
-        public override async ValueTask<MethodParameters?> ReadAsync(MessagePackAsyncReader reader, SerializationContext context)
-        {
-            await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
-            MessagePackReader bufferedReader = reader.CreateBufferedReader();
-            if (bufferedReader.TryReadNil())
-            {
-                reader.ReturnReader(ref bufferedReader);
-                return null;
-            }
-
-            context.DepthStep();
-            DomainOperationEntry operation = GetOperation(context);
-            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
-            var result = new MethodParameters();
-
-            int count = bufferedReader.ReadMapHeader();
-            reader.ReturnReader(ref bufferedReader);
-
-            for (int i = 0; i < count; i++)
-            {
-                await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
-                bufferedReader = reader.CreateBufferedReader();
-                string? name = bufferedReader.ReadString();
-                reader.ReturnReader(ref bufferedReader);
-
-                if (name is not null && parametersByName.TryGetValue(name, out DomainOperationParameter parameter))
-                {
-                    result.Values[name] = await ReadValueAsync(reader, parameter.ParameterType, context).ConfigureAwait(false);
-                }
-                else
-                {
-                    await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
-                    bufferedReader = reader.CreateBufferedReader();
-                    bufferedReader.Skip(context);
-                    reader.ReturnReader(ref bufferedReader);
-                }
-            }
-
-            return result;
-        }
-
-        public override async ValueTask WriteAsync(MessagePackAsyncWriter writer, MethodParameters? value, SerializationContext context)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            context.DepthStep();
-            DomainOperationEntry operation = GetOperation(context);
-            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
-            writer.WriteMapHeader(value.Values.Count);
-
-            foreach (var parameterValue in value.Values)
-            {
-                writer.Write(static (ref MessagePackWriter syncWriter, string key) => syncWriter.Write(key), parameterValue.Key);
-                if (parametersByName.TryGetValue(parameterValue.Key, out DomainOperationParameter parameter))
-                {
-                    await WriteValueAsync(writer, parameterValue.Value, parameter.ParameterType, context).ConfigureAwait(false);
-                }
-                else
-                {
-                    writer.WriteNil();
-                }
-
-                await writer.FlushIfAppropriateAsync(context).ConfigureAwait(false);
-            }
-        }
-
-        private static DomainOperationEntry GetOperation(SerializationContext context)
-            => (DomainOperationEntry?)context[OperationKey]
-                ?? throw new MessagePackSerializationException("Domain operation metadata is required to serialize method parameters.");
-
-        private static ITypeShapeProvider GetTypeShapeProvider(SerializationContext context)
-            => (ITypeShapeProvider?)context[TypeShapeProviderKey] ?? context.TypeShapeProvider;
-
-        private static object? ReadValue(ref MessagePackReader reader, Type parameterType, SerializationContext context)
-        {
-            if (reader.TryReadNil())
-                return null;
-
-            return context.GetConverter(parameterType, GetTypeShapeProvider(context)).ReadObject(ref reader, context);
-        }
-
-        private static async ValueTask<object?> ReadValueAsync(MessagePackAsyncReader reader, Type parameterType, SerializationContext context)
-        {
-            await reader.BufferNextStructureAsync(context).ConfigureAwait(false);
-            MessagePackReader bufferedReader = reader.CreateBufferedReader();
-            if (bufferedReader.TryReadNil())
-            {
-                reader.ReturnReader(ref bufferedReader);
-                return null;
-            }
-
-            reader.ReturnReader(ref bufferedReader);
-            return await context.GetConverter(parameterType, GetTypeShapeProvider(context)).ReadObjectAsync(reader, context).ConfigureAwait(false);
-        }
-
-        private static void WriteValue(ref MessagePackWriter writer, object? value, Type parameterType, SerializationContext context)
-        {
-            if (value is null)
-                writer.WriteNil();
-            else
-                context.GetConverter(parameterType, GetTypeShapeProvider(context)).WriteObject(ref writer, value, context);
-        }
-
-        private static ValueTask WriteValueAsync(MessagePackAsyncWriter writer, object? value, Type parameterType, SerializationContext context)
-            => value is null
-                ? WriteNilAsync(writer)
-                : context.GetConverter(parameterType, GetTypeShapeProvider(context)).WriteObjectAsync(writer, value, context);
-
-        private static ValueTask WriteNilAsync(MessagePackAsyncWriter writer)
-        {
-            writer.WriteNil();
-            return default;
-        }
-    }
-
-    [DataContract]
-    internal abstract class MessagePackResponseEnvelopeBase
-    {
-        [DataMember]
-        public DomainServiceFault? Fault { get; set; }
-    }
-
-    [DataContract]
-    internal sealed class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
-    {
-        [DataMember]
-        public TResult? Result { get; set; }
-    }
-
-    [DataContract]
-    internal sealed class MessagePackInvokeResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
-    {
-        [DataMember]
-        public TResult? Result { get; set; }
-    }
-
-    [DataContract]
-    internal sealed class MessagePackSubmitResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
-    {
-        [DataMember]
-        public TResult? Result { get; set; }
-    }
+ 
 }
