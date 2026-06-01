@@ -137,18 +137,19 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
 
         private async Task<MessagePackRequestEnvelopeBase> DeserializeRequestEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainOperationEntry operation)
         {
-            Type envelopeType = operation.Operation switch
+            ITypeShape envelopeType = operation.Operation switch
             {
-                DomainOperation.Query => typeof(MessagePackQueryRequestEnvelope),
-                DomainOperation.Custom when operation.Name == "Submit" => typeof(MessagePackSubmitRequestEnvelope),
-                _ => typeof(MessagePackRequestEnvelopeBase),
+                DomainOperation.Query => _typeShapeProvider.GetTypeShapeOrThrow<MessagePackQueryRequestEnvelope>(),
+                DomainOperation.Custom when operation.Name == "Submit" =>
+                _typeShapeProvider.GetTypeShapeOrThrow<MessagePackSubmitRequestEnvelope>(),
+                _ => _typeShapeProvider.GetTypeShapeOrThrow<MessagePackInvokeRequestEnvelope>(),
             };
 
             return (MessagePackRequestEnvelopeBase?)await _operationSerializer.DeserializeObjectAsync(
                 context.Request.Body,
-                _typeShapeProvider.GetTypeShapeOrThrow(envelopeType),
+                envelopeType,
                 context.RequestAborted).ConfigureAwait(false)
-                ?? (MessagePackRequestEnvelopeBase)Activator.CreateInstance(envelopeType)!;
+                ?? (MessagePackRequestEnvelopeBase)Activator.CreateInstance(envelopeType.Type)!;
         }
 
         private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, DomainOperationEntry operation, ITypeShapeProvider typeShapeProvider)

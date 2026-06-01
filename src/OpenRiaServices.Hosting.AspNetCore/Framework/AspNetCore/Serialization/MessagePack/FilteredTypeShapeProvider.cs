@@ -172,8 +172,7 @@ public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
             return true;
 
         // Skip hosting specific envelope types
-        if (declaringType.BaseType == typeof(MessagePackResponseEnvelopeBase)
-                || declaringType == typeof(MessagePackResponseEnvelopeBase)
+        if (declaringType.Assembly == typeof(MessagePackResponseEnvelopeBase).Assembly
                 || declaringType.BaseType == typeof(QueryResult))
         {
             return true;

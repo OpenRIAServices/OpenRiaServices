@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
+using Nerdbank.MessagePack;
 using OpenRiaServices.Server;
 using PolyType;
 
@@ -40,7 +41,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     }
 
     [DataContract]
-    [GenerateShape]
+    //[GenerateShape]
     internal sealed partial class MessagePackSubmitResponseEnvelope : MessagePackResponseEnvelopeBase
     {
         public MessagePackSubmitResponseEnvelope() { }
@@ -54,15 +55,15 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     }
 
 
-    [DataContract]
     internal abstract class MessagePackRequestEnvelopeBase
     {
-        [DataMember]
+        [MessagePackConverter(typeof(MessagePack.Converters.MethodParametersConverter))]
         public MethodParameters? Parameters { get; set; } = new();
     }
 
     [DataContract]
-    internal sealed class MessagePackQueryRequestEnvelope : MessagePackRequestEnvelopeBase
+    //[GenerateShape]
+    internal sealed partial class MessagePackQueryRequestEnvelope : MessagePackRequestEnvelopeBase
     {
         [DataMember]
         public List<ServiceQueryPart>? QueryOptions { get; set; }
@@ -71,19 +72,20 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     }
 
     [DataContract]
-    internal sealed class MessagePackInvokeRequestEnvelope : MessagePackRequestEnvelopeBase
+    //[GenerateShape]
+    internal sealed partial class MessagePackInvokeRequestEnvelope : MessagePackRequestEnvelopeBase
     {
     }
 
     [DataContract]
-    internal sealed class MessagePackSubmitRequestEnvelope : MessagePackRequestEnvelopeBase
+    //[GenerateShape]
+    internal sealed partial class MessagePackSubmitRequestEnvelope : MessagePackRequestEnvelopeBase
     {
     }
 
-    [DataContract]
+    
     internal sealed class MethodParameters
     {
-        [DataMember]
         public Dictionary<string, object?> Values { get; set; } = new(StringComparer.Ordinal);
     }
 }
