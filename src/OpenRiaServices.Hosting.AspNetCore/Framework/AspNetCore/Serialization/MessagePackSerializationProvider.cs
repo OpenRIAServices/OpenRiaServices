@@ -169,9 +169,15 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
         private async Task WriteEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, object envelope)
         {
+            // HOW To write response without "Envelope type"
+            var bufferWriter = context.Response.BodyWriter;
+            //MessagePackWriter writer = new MessagePackWriter(bufferWriter);
+            //writer.WriteMapHeader("");
+            //writer.Flush();
+
             context.Response.Headers.ContentType = MimeTypes.MessagePack;
             await _operationSerializer.SerializeObjectAsync(
-                context.Response.Body,
+                bufferWriter,
                 envelope,
                 _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()),
                 context.RequestAborted).ConfigureAwait(false);

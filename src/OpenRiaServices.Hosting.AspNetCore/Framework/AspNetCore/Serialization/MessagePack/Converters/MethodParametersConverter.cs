@@ -10,7 +10,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
     internal sealed class MethodParametersConverter : MessagePackConverter<MethodParameters?>
     {
         internal static readonly object OperationKey = new();
-        internal static readonly object TypeShapeProviderKey = new();
 
         public override bool PreferAsyncSerialization => true;
 
