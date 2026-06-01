@@ -16,13 +16,13 @@ using PolyType.ReflectionProvider;
 using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
 #nullable enable
-namespace OpenRiaServices.Hosting.Serialization.MessagePack.Tests;
+namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Tests;
 
 [TestClass]
 public sealed class FilteredTypeShapeProviderTests
 {
     [TestMethod]
-    [IgnoreAttribute("Used for manual testing")] 
+    //[IgnoreAttribute("Used for manual testing")] 
     public void Properties_Should_Match_DataContract_Surrogates_Exactly()
     {
         ServiceCollection collection = new();
@@ -52,6 +52,8 @@ public sealed class FilteredTypeShapeProviderTests
             var knownTypes = new HashSet<Type>(domainServiceDescription.EntityTypes);
             foreach (var type in domainServiceDescription.EntityTypes.Concat(domainServiceDescription.ComplexTypes))
             {
+
+
                 Type surrogateType = DataContractSurrogateGenerator.GetSurrogateType(knownTypes, type);
 
                 if (surrogateType is null)
@@ -60,9 +62,11 @@ public sealed class FilteredTypeShapeProviderTests
                     surrogateType = type;
                 }
 
-                if (type == typeof(TestDomainServices.D)
-                    || type == typeof(TestDomainServices.MixedType)
-                    || type == typeof(NorthwindModel.Product))
+                if (type == typeof(Cities.City)
+                    //|| type == typeof(TestDomainServices.D)
+                    //|| type == typeof(TestDomainServices.MixedType)
+                    //|| type == typeof(NorthwindModel.Product)
+                    )
                 {
                     Debugger.Break();
                 }

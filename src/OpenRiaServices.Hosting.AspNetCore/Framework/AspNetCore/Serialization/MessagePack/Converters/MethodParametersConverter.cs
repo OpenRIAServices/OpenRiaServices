@@ -20,6 +20,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
 
             context.DepthStep();
             DomainOperationEntry operation = GetOperation(context);
+            // TODO: consider passing ITypeShapeProvider using context
+            // So that generated type shapes can be used for "envelopes"
             var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
             var result = new MethodParameters();
 

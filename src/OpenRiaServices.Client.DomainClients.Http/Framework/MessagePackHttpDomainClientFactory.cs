@@ -1,6 +1,11 @@
+using Nerdbank.MessagePack;
 using OpenRiaServices.Client.DomainClients.Http;
+using PolyType;
 using System;
+using System.Linq;
 using System.Net.Http;
+
+#nullable enable
 
 namespace OpenRiaServices.Client.DomainClients
 {
@@ -26,6 +31,17 @@ namespace OpenRiaServices.Client.DomainClients
         {
             HttpClient httpClient = CreateHttpClient(serviceUri, MessagePackHttpDomainClient.MediaType);
             return new MessagePackHttpDomainClient(httpClient, serviceContract, this);
+        }
+
+        internal MessagePackSerializer? Serializer { get; } = ConfigureSerializer(new MessagePackSerializer());
+        internal ITypeShapeProvider TypeShapeProver { get; } = PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Default;
+
+        private static MessagePackSerializer ConfigureSerializer(MessagePackSerializer serializer)
+        {
+            serializer = serializer.WithHiFiDateTime();
+
+            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new Http.MessagePack.MessagePackMethodParametersConverter() }).ToArray();
+            return serializer with { Converters = ConverterCollection.Create(converters) };
         }
     }
 }

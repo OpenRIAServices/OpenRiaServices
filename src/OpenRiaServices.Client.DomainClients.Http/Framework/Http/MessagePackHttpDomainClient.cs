@@ -24,12 +24,13 @@ namespace OpenRiaServices.Client.DomainClients.Http
         internal const string MediaType = "application/vnd.msgpack";
         private static readonly HttpMethod s_queryMethod = new("QUERY");
         private readonly MessagePackSerializer _serializer;
-        private readonly ITypeShapeProvider _typeShapeProvider = ReflectionTypeShapeProvider.Default;
+        private readonly ITypeShapeProvider _typeShapeProvider;
 
         public MessagePackHttpDomainClient(HttpClient httpClient, Type serviceInterface, MessagePackHttpDomainClientFactory factory)
             : base(httpClient, serviceInterface, factory)
         {
-            _serializer = AddMethodParametersConverter(new MessagePackSerializer());
+            _serializer = factory.Serializer;
+            _typeShapeProvider = factory.TypeShapeProver;
         }
 
         private protected override Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
@@ -109,7 +110,9 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
                 using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 Type envelopeType = GetResponseEnvelopeType(operationName, returnType);
-                var envelope = (MessagePackResponseEnvelopeBase)await _serializer.DeserializeObjectAsync(stream, _typeShapeProvider.GetTypeShapeOrThrow(envelopeType)).ConfigureAwait(false)
+                var typeShape = _typeShapeProvider.GetTypeShapeOrThrow(envelopeType);
+
+                var envelope = (MessagePackResponseEnvelopeBase)await _serializer.DeserializeObjectAsync(stream, typeShape).ConfigureAwait(false)
                     ?? (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
 
                 if (envelope.Fault is not null)
@@ -129,11 +132,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
             }
         }
 
-        private static MessagePackSerializer AddMethodParametersConverter(MessagePackSerializer serializer)
-        {
-            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new MessagePackMethodParametersConverter() }).ToArray();
-            return serializer with { Converters = ConverterCollection.Create(converters) };
-        }
 
         private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, MethodParameters methodParameters)
         {

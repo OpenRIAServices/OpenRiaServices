@@ -1,4 +1,4 @@
-namespace OpenRiaServices.Hosting.Serialization.MessagePack;
+namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
 
 public enum AssociationMemberSerializationMode
 {
