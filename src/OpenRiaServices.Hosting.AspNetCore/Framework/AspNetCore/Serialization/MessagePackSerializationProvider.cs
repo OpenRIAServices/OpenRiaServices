@@ -124,6 +124,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         public override Task WriteErrorAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
         {
             return WriteEnvelopeAsync(context, CreateResponseEnvelope(operation, result: null, fault));
+                _typeShapeProvider.GetTypeShapeOrThrow<MessagePackResponseEnvelopeBase>(),
         }
 
         public override Task WriteResponseAsync(Microsoft.AspNetCore.Http.HttpContext context, object? result, DomainOperationEntry operation)
