@@ -1,8 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics;
 using System.Linq;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.AspNetCore;
+using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
+using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 using PolyType;
 using PolyType.Abstractions;
@@ -15,6 +21,126 @@ namespace OpenRiaServices.Hosting.Serialization.MessagePack.Tests;
 [TestClass]
 public sealed class FilteredTypeShapeProviderTests
 {
+    [TestMethod]
+    [IgnoreAttribute("Used for manual testing")] 
+    public void Properties_Should_Match_DataContract_Surrogates_Exactly()
+    {
+        ServiceCollection collection = new();
+        collection.AddDomainServices(typeof(Cities.CityDomainService).Assembly);
+        var provider = collection.BuildServiceProvider();
+
+        ITypeShapeProvider baseProvider = ReflectionTypeShapeProvider.Default;
+        var typeShapeProvider = new FilteredTypeShapeProvider(baseProvider);
+
+        foreach (var serviceRegistration in collection)
+        {
+            DomainServiceDescription domainServiceDescription;
+            try
+            {
+                domainServiceDescription = DomainServiceDescription.GetDescription(serviceRegistration.ImplementationType);
+                using DomainService? service = (DomainService?)provider.GetService(serviceRegistration.ServiceType);
+                if (service is null)
+                    continue;
+            }
+            catch (System.Exception)
+            {
+                // Ignore throwing domain services
+                continue;
+            }
+
+            // Get data contract surrogates
+            var knownTypes = new HashSet<Type>(domainServiceDescription.EntityTypes);
+            foreach (var type in domainServiceDescription.EntityTypes.Concat(domainServiceDescription.ComplexTypes))
+            {
+                Type surrogateType = DataContractSurrogateGenerator.GetSurrogateType(knownTypes, type);
+
+                if (surrogateType is null)
+                {
+                    Console.WriteLine($"No surrogate for {type}");
+                    surrogateType = type;
+                }
+
+                if (type == typeof(TestDomainServices.D)
+                    || type == typeof(TestDomainServices.MixedType)
+                    || type == typeof(NorthwindModel.Product))
+                {
+                    Debugger.Break();
+                }
+
+                ITypeShape shape = typeShapeProvider.GetTypeShapeOrThrow(type);
+                AssertTypesAreEqual(typeShapeProvider, shape, surrogateType);
+            }
+        }
+
+        static void AssertTypesAreEqual(FilteredTypeShapeProvider typeShapeProvider, ITypeShape shape, Type surrogateType)
+        {
+            IUnionTypeShape? unionType = shape as IUnionTypeShape;
+
+            string errors = string.Empty;
+
+            if (shape is IObjectTypeShape objectType)
+            {
+                string actualProperties = string.Join(", ", objectType.Properties.Select(p => p.Name).OrderBy(n => n));
+                string expectedProperties = string.Join(", ", surrogateType.GetProperties().Select(p => p.Name).OrderBy(n => n));
+
+                //Assert.AreEqual(expectedProperties, actualProperties, $"Properties of surrogate {surrogateType.FullName} should match properties of original {surrogateType.FullName}");
+
+                // DataContractSurrogateGenerator replaces Binary with byte[] in surrogate, so normalize that for comparison
+                actualProperties = actualProperties.Replace("System.Data.Linq.Binary", "System.Byte[]");
+
+                if (expectedProperties != actualProperties)
+                {
+                    errors = $"\t\tProperties of surrogate {surrogateType.FullName} should match properties of original {surrogateType.FullName}";
+                    errors += $"\n\t\tExpected: {expectedProperties}";
+                    errors += $"\n\t\tActual: {actualProperties}";
+                }
+                else
+                {
+                    string actualTypes = string.Join(", ", objectType.Properties.OrderBy(n => n.Name).Select(p => p.PropertyType.Type));
+                    string expectedTypes = string.Join(", ", surrogateType.GetProperties().OrderBy(p => p.Name).Select(p => p.PropertyType));
+
+                    //Assert.AreEqual(expectedTypes, actualTypes, $"Property types of surrogate {surrogateType.FullName} should match property types of original {surrogateType.FullName}");
+
+                    if (expectedTypes != actualTypes)
+                    {
+                        errors = $"\t\tProperty types of surrogate {surrogateType.FullName} should match property types of original {surrogateType.FullName}";
+                        errors += $"\n\t\tExpected: {expectedTypes}";
+                        errors += $"\n\t\tActual: {actualTypes}";
+                    }
+                }
+            }
+            else if (unionType is not null)
+            {
+                Console.WriteLine($"SKIPPING UNION {shape.Type}");
+                // TODO: Implement
+                return;
+
+                // TODO: Check known derived types of union type match nested types of surrogate
+                var derivedTypes = KnownTypeUtilities.ImportKnownTypes(surrogateType, inherit: true)
+                    .OrderBy(t => t.Name)
+                    .ToList(); // Force load known types from surrogate
+                var unionKnownTypes = unionType.UnionCases.Select(t => t.UnionCaseType).OrderBy(t => t.Type.Name)
+                    .ToList();
+
+                CollectionAssert.AreEqual(derivedTypes, unionKnownTypes.Select(t => t.Type).ToList());
+                for (int i = 0; i < derivedTypes.Count; i++)
+                {
+                    AssertTypesAreEqual(typeShapeProvider, unionKnownTypes[i], derivedTypes[i]);
+                }
+            }
+
+            if (string.IsNullOrEmpty(errors))
+            {
+                //Console.WriteLine($"OK: {shape.Type}");
+            }
+            else
+            {
+                Console.WriteLine($"FAIL: {shape.Type} - {errors}");
+            }
+        }
+    }
+
+
     [TestMethod]
     public void ObjectShape_FiltersToMetaTypeDataMembers_ByDefault()
     {

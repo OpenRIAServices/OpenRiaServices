@@ -9,11 +9,10 @@ using System.Threading;
 using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using OpenRiaServices.Hosting.Serialization.MessagePack;
+using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
 
-#pragma warning disable PT0019
-
-
-namespace OpenRiaServices.Hosting.Serialization.MessagePack;
+namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
 
 public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
 {
@@ -172,21 +171,42 @@ public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
         if (TypeUtility.IsPredefinedType(declaringType))
             return true;
 
+        // Skip hosting specific envelope types
+        if (declaringType.BaseType == typeof(MessagePackResponseEnvelopeBase)
+                || declaringType == typeof(MessagePackResponseEnvelopeBase)
+                || declaringType.BaseType == typeof(QueryResult))
+        {
+            return true;
+        }
+
+        // Similart to SerializationUtility.IsSerializableDataMember.
+        if (!(TypeUtility.IsPredefinedType(property.PropertyType.Type) || TypeUtility.IsSupportedComplexType(property.PropertyType.Type)))
+        {
+            return false;
+        }
+
         MetaType metaType = MetaType.GetMetaType(declaringType);
         MetaMember metaMember = metaType[property.Name];
 
         if (metaMember is null)
             return false;
 
-        if (metaMember.IsDataMember)
-            return true;
-
-        if (metaMember.IsAssociationMember && _options.AssociationMemberSerializationMode == AssociationMemberSerializationMode.Include)
+        if (metaMember.IsAssociationMember)
         {
-            return metaType.IncludedAssociations.Find(property.Name, ignoreCase: false) is not null;
+            return _options.AssociationMemberSerializationMode == AssociationMemberSerializationMode.Include
+                && metaType.IncludedAssociations.Find(property.Name, ignoreCase: false) is not null;
         }
 
-        return false;
+        return metaMember.IsDataMember;
+
+        /*
+
+        var props = TypeDescriptor.GetProperties(declaringType);
+        var propDesc = props[property.Name];
+
+        bool epected1 = propDesc is not null
+            && SerializationUtility.IsSerializableDataMember(propDesc);
+*/
     }
 
     //internal static IGenericCustomAttributeProvider CreateTypeAttributeProvider(Type type)
@@ -213,6 +233,8 @@ public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
         return interfaceType.GetGenericArguments();
     }
 }
+
+#pragma warning disable PT0019
 
 internal sealed class TypeDescriptorAttributeProvider : IGenericCustomAttributeProvider
 {
@@ -361,6 +383,17 @@ internal sealed class PropertyShapeWrapper<TDeclaringType, TPropertyType>(Filter
     private readonly Lazy<IObjectTypeShape<TDeclaringType>> _declaringType = new(() => (IObjectTypeShape<TDeclaringType>)provider.Wrap(((IPropertyShape<TDeclaringType, TPropertyType>)inner).DeclaringType)!);
     private readonly Lazy<ITypeShape<TPropertyType>> _propertyType = new(() => (ITypeShape<TPropertyType>)provider.Wrap(((IPropertyShape<TDeclaringType, TPropertyType>)inner).PropertyType)!);
     //private readonly Lazy<IGenericCustomAttributeProvider> _attributeProvider = new(() => provider.CreatePropertyAttributeProvider(typeof(TDeclaringType), ((IPropertyShape<TDeclaringType, TPropertyType>)inner).Name, ((IPropertyShape<TDeclaringType, TPropertyType>)inner).AttributeProvider));
+
+    // TODO: Decide what to do about Projection Includes
+    // Throw on error, includeAttribute.IsProjection
+    // Can they be supported given that such a "Path" exist
+    //  and we chain several existing properties together.
+    // Should it be OBSOLETE
+    // If the name is new then should a separate property be added
+    // 
+
+    string _name = (inner.AttributeProvider.GetCustomAttribute<IncludeAttribute>() is IncludeAttribute includeAttribute
+        && includeAttribute.IsProjection) ? includeAttribute.MemberName : inner.Name;
 
     public int Position => _inner.Position;
     public string Name => _inner.Name;
