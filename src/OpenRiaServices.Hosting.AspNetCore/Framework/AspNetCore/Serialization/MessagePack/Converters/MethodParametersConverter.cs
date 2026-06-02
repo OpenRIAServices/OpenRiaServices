@@ -139,7 +139,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             }
         }
 
-        private static DomainOperationEntry GetOperation(SerializationContext context)
+        internal static DomainOperationEntry GetOperation(SerializationContext context)
             => (DomainOperationEntry?)context[OperationKey]
                 ?? throw new MessagePackSerializationException("Domain operation metadata is required to serialize method parameters.");
 

@@ -114,13 +114,18 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             // Local => Local but where .ToUtc gives same value
             serializer = serializer.WithHiFiDateTime();
 
-            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new MethodParametersConverter() }).ToArray();
+            MessagePackConverter[] converters = serializer.Converters
+                .Concat(new MessagePackConverter[]
+                {
+                    new MethodParametersConverter(),
+                    new ChangeSetEntryConverter()
+                })
+                .ToArray();
 
             return serializer with
             {
                 Converters = ConverterCollection.Create(converters),
                 //PreserveReferences
-
             };
 
             /*
@@ -135,16 +140,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     MaxDepth = 256
                 }
             };
-
-            // TODO: Look it TypeShapeMapping should be generated or not (KnownTypes can be enough)
-            // Allow DerivedShapeMapping
-            // Can we add Object and allow all entity types for it ?
-
-            //DerivedShapeMapping<Animal> mapping = new();
-            //mapping.Add<Horse>(1);
-            //mapping.Add<Cow>(2);
-            //return serializer with { DerivedTypeMappings = [.. serializer.DerivedTypeMappings, mapping] };
-
             */
         }
     }
