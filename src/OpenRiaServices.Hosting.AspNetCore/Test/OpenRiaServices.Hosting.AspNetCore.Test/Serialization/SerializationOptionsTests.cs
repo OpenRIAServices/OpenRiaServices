@@ -272,14 +272,9 @@ public class SerializationOptionsTests
 
     private sealed class MessagePackRequestEnvelope
     {
-        public MethodParameters Parameters { get; set; } = new();
+        public Serialization.MessagePack.MethodParameters Parameters { get; set; } = new();
         public List<ServiceQueryPart> QueryOptions { get; set; }
         public bool IncludeTotalCount { get; set; }
-    }
-
-    private sealed class MethodParameters
-    {
-        public Dictionary<string, byte[]> Values { get; set; } = new(StringComparer.Ordinal);
     }
 
     private sealed class MessagePackInvokeResponseEnvelope<TResult>

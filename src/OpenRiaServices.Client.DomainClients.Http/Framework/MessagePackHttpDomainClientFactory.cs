@@ -1,5 +1,5 @@
 using Nerdbank.MessagePack;
-using OpenRiaServices.Client.DomainClients.Http;
+using OpenRiaServices.Client.DomainClients.MessagePack;
 using PolyType;
 using System;
 using System.Linq;
@@ -33,8 +33,23 @@ namespace OpenRiaServices.Client.DomainClients
             return new MessagePackHttpDomainClient(httpClient, serviceContract, this);
         }
 
-        internal MessagePackSerializer? Serializer { get; } = ConfigureSerializer(new MessagePackSerializer());
+        internal MessagePackSerializer? BaseSerializerSerializer { get; } = ConfigureSerializer(new MessagePackSerializer());
         internal ITypeShapeProvider TypeShapeProver { get; } = PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Default;
+
+
+        private static MessagePackSerializer ConfigurePerServiceSerializer(Type serviceContract, MessagePackSerializer serializer)
+        {
+            //// TODO
+            //// Register all entities as object for ChangeSetEntry
+            //DerivedShapeMapping<Entity> objectMapping = new();
+            //AddDerivedTypes(objectMapping, description.EntityTypes);
+            //mappings.Add(objectMapping);
+
+            serializer = serializer.WithHiFiDateTime();
+
+            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new MessagePack.MessagePackMethodParametersConverter() }).ToArray();
+            return serializer with { Converters = ConverterCollection.Create(converters) };
+        }
 
         private static MessagePackSerializer ConfigureSerializer(MessagePackSerializer serializer)
         {
@@ -46,7 +61,7 @@ namespace OpenRiaServices.Client.DomainClients
 
             serializer = serializer.WithHiFiDateTime();
 
-            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new Http.MessagePack.MessagePackMethodParametersConverter() }).ToArray();
+            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new MessagePack.MessagePackMethodParametersConverter() }).ToArray();
             return serializer with { Converters = ConverterCollection.Create(converters) };
         }
     }

@@ -1,8 +1,9 @@
 using Nerdbank.MessagePack;
+using OpenRiaServices.Client.DomainClients.Http;
 using System;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.DomainClients.Http.MessagePack;
+namespace OpenRiaServices.Client.DomainClients.MessagePack;
 sealed class MessagePackMethodParametersConverter : MessagePackConverter<MessagePackMethodParameters>
 {
     internal static readonly object MethodParametersKey = new();

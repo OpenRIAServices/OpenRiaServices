@@ -49,28 +49,28 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private IReadOnlyList<DerivedTypeUnion> BuildDerivedTypeMappings(Type domainServiceType)
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(domainServiceType);
-            Type[] exposedTypes = description.EntityTypes.Concat(description.ComplexTypes).ToArray();
             List<DerivedTypeUnion> mappings = new();
 
-            foreach (Type baseType in exposedTypes)
+            foreach ((var baseType, var candidates)  in description.EntityKnownTypes)
             {
-                List<Type> derivedTypes = exposedTypes
-                    .Where(candidate => candidate != baseType && baseType.IsAssignableFrom(candidate))
-                    .ToList();
-
-                if (derivedTypes.Count == 0)
+                if (candidates.Count == 0)
                 {
                     continue;
                 }
 
                 object mapping = CreateDerivedShapeMapping(baseType);
-                AddDerivedTypes(mapping, derivedTypes);
+                AddDerivedTypes(mapping, candidates, static t => t.Name);
                 mappings.Add((DerivedTypeUnion)mapping);
             }
 
             // Register all entities as object for ChangeSetEntry
+            // when dealing with method parameters
+            // OR use marshaller in order to allow setting different converters for method parameters (e.g. DateTime) vs entities (e.g. DateTimeOffset)
             DerivedShapeMapping<object> objectMapping = new();
-            AddDerivedTypes(objectMapping, description.EntityTypes);
+            AddDerivedTypes(objectMapping, description.EntityTypes, static t => t.FullName!);
+            // Add complex types and primitives ? if we should use object serialization for parameters
+            // AddDerivedTypes(objectMapping, description.ComplexTypes, static t => t.FullName!);
+            // 
             mappings.Add(objectMapping);
 
             return mappings;
@@ -82,7 +82,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             return Activator.CreateInstance(mappingType)!;
         }
 
-        private void AddDerivedTypes(object mapping, IEnumerable<Type> derivedTypes)
+        private void AddDerivedTypes(object mapping, IEnumerable<Type> derivedTypes, Func<Type, string> discriminator)
         {
             MethodInfo? addMethodDefinition = mapping.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .Where(m => m.Name == "Add" && m.IsGenericMethodDefinition)
@@ -103,7 +103,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             foreach (Type derivedType in derivedTypes)
             {
                 MethodInfo addMethod = addMethodDefinition.MakeGenericMethod(derivedType);
-                DerivedTypeIdentifier unionIdentifier = new DerivedTypeIdentifier(derivedType.Name);
+                DerivedTypeIdentifier unionIdentifier = new DerivedTypeIdentifier(discriminator(derivedType));
                 addMethod.Invoke(mapping, new object[] { unionIdentifier, _filteredTypeShapeProvider });
             }
         }
@@ -118,7 +118,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 .Concat(new MessagePackConverter[]
                 {
                     new MethodParametersConverter(),
-                    new ChangeSetEntryConverter()
+                    //new ChangeSetEntryConverter()
                 })
                 .ToArray();
 

@@ -1,7 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using OpenRiaServices.Client.DomainClients.Http;
 
-namespace OpenRiaServices.Client.DomainClients.Http.MessagePack
+namespace OpenRiaServices.Client.DomainClients.MessagePack
 {
     sealed class MessagePackMethodParameters
     {

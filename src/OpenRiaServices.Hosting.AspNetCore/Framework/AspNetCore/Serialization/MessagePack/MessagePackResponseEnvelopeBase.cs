@@ -20,7 +20,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     internal sealed partial class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
     {
         public MessagePackQueryResponseEnvelope() { }
-
+        // TODO: Should look into if GetSerializationType should be called to get type for serialization
+        // and not look at actual type returned, derived types might differ
         public MessagePackQueryResponseEnvelope(QueryResult<TResult> result)
             => Result = result;
 
@@ -86,6 +87,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     
     internal sealed class MethodParameters
     {
+        // TODO: Look into how this affect security
+        [UseComparer(typeof(StringComparer), nameof(StringComparer.Ordinal))]
         public Dictionary<string, object?> Values { get; set; } = new(StringComparer.Ordinal);
     }
 }

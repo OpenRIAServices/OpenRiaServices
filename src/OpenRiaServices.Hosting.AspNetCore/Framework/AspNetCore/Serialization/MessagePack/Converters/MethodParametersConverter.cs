@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters
 {
+
     internal sealed class MethodParametersConverter : MessagePackConverter<MethodParameters?>
     {
         internal static readonly object OperationKey = new();
@@ -31,7 +32,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 string? name = reader.ReadString();
                 if (name is not null && parametersByName.TryGetValue(name, out DomainOperationParameter? parameter))
                 {
-                    result.Values[name] = ReadValue(ref reader, parameter.ParameterType, context);
+                    Type type = parameter.ParameterType;
+                    // HACK, TODO: Fix
+                    if (type == typeof(ChangeSet))
+                    {
+                        type = typeof(System.Collections.Generic.IEnumerable<ChangeSetEntry>);
+                    }
+
+                    result.Values[name] = ReadValue(ref reader, type, context);
                 }
                 else
                 {

@@ -1,5 +1,5 @@
 using Nerdbank.MessagePack;
-using OpenRiaServices.Client.DomainClients.Http.MessagePack;
+using OpenRiaServices.Client.DomainClients.Http;
 using PolyType;
 using PolyType.ReflectionProvider;
 using System;
@@ -10,11 +10,12 @@ using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.Reflection;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.DomainClients.Http
+namespace OpenRiaServices.Client.DomainClients.MessagePack
 {
     /// <summary>
     /// <see cref="DomainClient"/> implementation which uses MessagePack over HTTP.
@@ -29,7 +30,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         public MessagePackHttpDomainClient(HttpClient httpClient, Type serviceInterface, MessagePackHttpDomainClientFactory factory)
             : base(httpClient, serviceInterface, factory)
         {
-            _serializer = factory.Serializer;
+            _serializer = factory.BaseSerializerSerializer;
             _typeShapeProvider = factory.TypeShapeProver;
         }
 
@@ -44,7 +45,10 @@ namespace OpenRiaServices.Client.DomainClients.Http
             using var request = new HttpRequestMessage(method, operationName);
             MethodParameters methodParameters = GetMethodParameters(operationName);
             var envelope = CreateRequestEnvelope(method, operationName, methodParameters, parameters, queryOptions);
-            MessagePackSerializer operationSerializer = CreateOperationSerializer(_serializer, methodParameters);
+
+
+            MessagePackSerializer operationSerializer = envelope is MessagePackSubmitRequestEnvelope ? GetSubmitSerializer(methodParameters)
+                : CreateOperationSerializer(_serializer, methodParameters);
 
             using var stream = new MemoryStream();
             // TODO: If possible, replace this buffering with a custom HttpContent override of SerializeToStream
@@ -58,10 +62,46 @@ namespace OpenRiaServices.Client.DomainClients.Http
             return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
         }
 
+        private MessagePackSerializer GetSubmitSerializer(MethodParameters methodParameters)
+        {
+
+            DerivedShapeMapping<Entity> _entityTypes = new DerivedShapeMapping<Entity>();
+            AddDerivedTypes(_entityTypes, EntityTypes, t => t.FullName);
+
+            return CreateOperationSerializer(_serializer, methodParameters)
+                with { DerivedTypeUnions = [_entityTypes, .. _serializer.DerivedTypeUnions] };
+
+            void AddDerivedTypes(object mapping, IEnumerable<Type> derivedTypes, Func<Type, string> discriminator)
+            {
+                MethodInfo? addMethodDefinition = mapping.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public)
+                    .Where(m => m.Name == "Add" && m.IsGenericMethodDefinition)
+                    .FirstOrDefault(m =>
+                    {
+                        ParameterInfo[] parameters = m.GetParameters();
+                        return parameters.Length == 2
+                            && parameters[0].ParameterType == typeof(DerivedTypeIdentifier)
+                            && parameters[1].ParameterType == typeof(PolyType.ITypeShapeProvider);
+                    });
+
+                if (addMethodDefinition == null)
+                {
+                    throw new InvalidOperationException($"Unable to locate DerivedShapeMapping.Add<TDerived>(..., ...) on {mapping.GetType().FullName}.");
+                }
+
+
+                foreach (Type derivedType in derivedTypes)
+                {
+                    MethodInfo addMethod = addMethodDefinition.MakeGenericMethod(derivedType);
+                    DerivedTypeIdentifier unionIdentifier = new DerivedTypeIdentifier(discriminator(derivedType));
+                    addMethod.Invoke(mapping, new object[] { unionIdentifier, _typeShapeProvider });
+                }
+            }
+        }
+
         private MessagePackRequestEnvelopeBase CreateRequestEnvelope(HttpMethod method, string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
         {
             MessagePackMethodParameters requestParameters = (parameters is { Count: > 0 })
-                ? new (methodParameters, parameters) : null;
+                ? new(methodParameters, parameters) : null;
 
             if (queryOptions is not null && queryOptions.Count > 0)
             {
@@ -84,6 +124,8 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 }
                 return request;
             }
+
+
 
             return string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal)
                 ? new MessagePackSubmitRequestEnvelope() { Parameters = requestParameters }
@@ -135,6 +177,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, MethodParameters methodParameters)
         {
+            // TODO: Look at how this affect cahces. Keep different serializers ?
             SerializationContext context = serializer.StartingContext;
             context[MessagePackMethodParametersConverter.MethodParametersKey] = methodParameters;
             return serializer with { StartingContext = context };
@@ -146,7 +189,9 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 return typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(returnType);
             if (string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal))
                 return typeof(MessagePackSubmitResponseEnvelope<>).MakeGenericType(returnType);
-            return typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(returnType);
+
+            return (returnType == typeof(void)) ? typeof(MessagePackInvokeResponseEnvelope<object>)
+                : typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(returnType);
         }
 
     }
