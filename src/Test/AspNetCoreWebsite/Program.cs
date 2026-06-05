@@ -3,6 +3,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using AspNetCoreWebsite.MessagePack;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -40,12 +41,11 @@ builder.Services.AddOpenRiaServices(o =>
         //mapping.Add<Cities.CityWithEditHistory>(new(typeof(Cities.CityWithEditHistory).Name), typeShapeProvider);
         //mapping.Add()
 
-        //var serializer = new Nerdbank.MessagePack.MessagePackSerializer();
-
-        //opt.Serializer = serializer with
-        //{
-        //    DerivedTypeUnions = [mapping]
-        //};
+        opt.Serializer = new Nerdbank.MessagePack.MessagePackSerializer()
+        {
+            Converters = [new XElementConverter(), new BinaryConverter()],
+            ComparerProvider = new CustomComparerProvider(),
+        };
     });
 // Possible future extension point for configuring OpenRia Services
 //.ConfigureBinaryXmlSerializer(options => { ... MaxItemsInObjectGraph, XmlDictionaryReaderQuotas Writer/ReaderQuotas ... })

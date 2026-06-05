@@ -31,7 +31,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             : base(httpClient, serviceInterface, factory)
         {
             _serializer = factory.BaseSerializerSerializer;
-            _typeShapeProvider = factory.TypeShapeProver;
+            _typeShapeProvider = factory.TypeShapeProvider;
         }
 
         private protected override Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)

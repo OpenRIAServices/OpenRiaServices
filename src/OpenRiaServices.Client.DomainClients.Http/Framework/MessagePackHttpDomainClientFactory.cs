@@ -15,15 +15,11 @@ namespace OpenRiaServices.Client.DomainClients
     public class MessagePackHttpDomainClientFactory : HttpDomainClientFactory
     {
         /// <inheritdoc />
-        public MessagePackHttpDomainClientFactory(Uri serverBaseUri, HttpMessageHandler messageHandler)
-            : base(serverBaseUri, messageHandler)
-        {
-        }
-
-        /// <inheritdoc />
-        public MessagePackHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory)
+        public MessagePackHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory, MessagePackSerializer? serializer = null, ITypeShapeProvider? typeShapeProvider = null)
             : base(serverBaseUri, httpClientFactory)
         {
+            BaseSerializerSerializer = ConfigureSerializer(serializer ?? new MessagePackSerializer());
+            TypeShapeProvider = typeShapeProvider ?? PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Default;
         }
 
         /// <inheritdoc />
@@ -33,23 +29,8 @@ namespace OpenRiaServices.Client.DomainClients
             return new MessagePackHttpDomainClient(httpClient, serviceContract, this);
         }
 
-        internal MessagePackSerializer? BaseSerializerSerializer { get; } = ConfigureSerializer(new MessagePackSerializer());
-        internal ITypeShapeProvider TypeShapeProver { get; } = PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Default;
-
-
-        private static MessagePackSerializer ConfigurePerServiceSerializer(Type serviceContract, MessagePackSerializer serializer)
-        {
-            //// TODO
-            //// Register all entities as object for ChangeSetEntry
-            //DerivedShapeMapping<Entity> objectMapping = new();
-            //AddDerivedTypes(objectMapping, description.EntityTypes);
-            //mappings.Add(objectMapping);
-
-            serializer = serializer.WithHiFiDateTime();
-
-            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new MessagePack.MessagePackMethodParametersConverter() }).ToArray();
-            return serializer with { Converters = ConverterCollection.Create(converters) };
-        }
+        internal MessagePackSerializer? BaseSerializerSerializer { get; }
+        internal ITypeShapeProvider TypeShapeProvider { get; }
 
         private static MessagePackSerializer ConfigureSerializer(MessagePackSerializer serializer)
         {
@@ -61,7 +42,7 @@ namespace OpenRiaServices.Client.DomainClients
 
             serializer = serializer.WithHiFiDateTime();
 
-            MessagePackConverter[] converters = serializer.Converters.Concat(new MessagePackConverter[] { new MessagePack.MessagePackMethodParametersConverter() }).ToArray();
+            MessagePackConverter[] converters = [.. serializer.Converters, new MessagePack.MessagePackMethodParametersConverter()];
             return serializer with { Converters = ConverterCollection.Create(converters) };
         }
     }
