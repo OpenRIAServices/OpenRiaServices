@@ -35,25 +35,31 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private MessagePackSerializer CreateSerializerForDomainService(Type domainServiceType)
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(domainServiceType);
+            Wcf.DomainServiceSerializationSurrogate surrogateProvider = new Wcf.DomainServiceSerializationSurrogate(description);
 
-            IReadOnlyList<DerivedTypeUnion> derivedTypeMappings = BuildDerivedTypeMappings(description);
-            if (derivedTypeMappings.Count == 0)
-            {
-                return _serializer;
-            }
+            IReadOnlyList<DerivedTypeUnion> derivedTypeMappings = BuildDerivedTypeMappings(description, surrogateProvider);
 
             // Create converters to handle surrogates,
             // TODO: Determine if it should be a provider intead ? 
-            Wcf.DomainServiceSerializationSurrogate surrogateProvider = new Wcf.DomainServiceSerializationSurrogate(description);
             List<MessagePackConverter> converters = new();
-            foreach (var entityType in description.EntityTypes)
+            foreach (var entityType in description.EntityTypes.Concat(description.ComplexTypes))
             {
                 if (surrogateProvider.GetSurrogateType(entityType) is Type surrogateType)
                 {
+                    // TODO: Consider only doing this if there are any derived types, otherwise we can just register surrogateType directly and avoid the extra surrogate converter (which adds some overhead during serialization)
+                    if (description.EntityKnownTypes.TryGetValue(entityType, out var candidates)
+                        && (candidates.Count > 1 || (candidates.Count == 1 && !candidates.Contains(entityType))))
+                    {
+                        // Find base type for surrogate (This type has all BuildDerivedTypeMappings configured) 
+                        surrogateType = surrogateProvider.GetSurrogateType(description.GetRootEntityType(entityType));
+                    }
+
                     converters.Add((MessagePackConverter)
                         Activator.CreateInstance(typeof(SurrogateConverter<,>).MakeGenericType([surrogateType, entityType]), args: [surrogateProvider])!);
                 }
             }
+            // All surrogates implement IClonable, use that as common base class for surrogates
+            converters.Add(new SurrogateConverter<ICloneable, object>(surrogateProvider));
 
             return _serializer with
             {
@@ -62,42 +68,46 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             };
         }
 
-        private IReadOnlyList<DerivedTypeUnion> BuildDerivedTypeMappings(DomainServiceDescription description)
+        private IReadOnlyList<DerivedTypeUnion> BuildDerivedTypeMappings(DomainServiceDescription description, Wcf.DomainServiceSerializationSurrogate surrogateProvider)
         {
             List<DerivedTypeUnion> mappings = new();
 
-            foreach ((var baseType, var candidates)  in description.EntityKnownTypes)
+            foreach (var baseType in description.RootEntityTypes)
             {
-                if (candidates.Count == 0)
+                var candidates = description.EntityKnownTypes[baseType];
+                if (candidates.Count == 0 || (candidates.Count == 1 && candidates.Contains(baseType)))
                 {
                     continue;
                 }
 
-                object mapping = CreateDerivedShapeMapping(baseType);
-                AddDerivedTypes(mapping, candidates, static t => t.Name);
-                mappings.Add((DerivedTypeUnion)mapping);
+                //if (candidates.Contains(baseType))
+                //    System.Diagnostics.Debugger.Break();
+
+                // From original Type
+                //object mapping = CreateDerivedShapeMapping(surrogateProvider.GetSurrogateType(baseType));
+                //AddDerivedTypes(mapping, candidates.Select(t => surrogateProvider.GetSurrogateType(t)), static t => t.Name);
+                DerivedTypeUnion mapping = CreateDerivedShapeMapping(surrogateProvider.GetSurrogateType(baseType));
+                AddDerivedTypes(mapping, candidates.Select(t => surrogateProvider.GetSurrogateType(t)), static t => t.Name);
+                mappings.Add(mapping);
             }
 
             // Register all entities as object for ChangeSetEntry
             // when dealing with method parameters
             // OR use marshaller in order to allow setting different converters for method parameters (e.g. DateTime) vs entities (e.g. DateTimeOffset)
-            DerivedShapeMapping<object> objectMapping = new();
-            AddDerivedTypes(objectMapping, description.EntityTypes, static t => t.FullName!);
-            // Add complex types and primitives ? if we should use object serialization for parameters
-            // AddDerivedTypes(objectMapping, description.ComplexTypes, static t => t.FullName!);
-            // 
+            DerivedShapeMapping<ICloneable> objectMapping = new();
+            AddDerivedTypes(objectMapping, description.EntityTypes.Select(t => surrogateProvider.GetSurrogateType(t)), static t => t.FullName!);
             mappings.Add(objectMapping);
 
             return mappings;
         }
 
-        private static object CreateDerivedShapeMapping(Type baseType)
+        private static DerivedTypeUnion CreateDerivedShapeMapping(Type baseType)
         {
             Type mappingType = typeof(DerivedShapeMapping<>).MakeGenericType(baseType);
-            return Activator.CreateInstance(mappingType)!;
+            return (DerivedTypeUnion)Activator.CreateInstance(mappingType)!;
         }
 
-        private void AddDerivedTypes(object mapping, IEnumerable<Type> derivedTypes, Func<Type, string> discriminator)
+        private void AddDerivedTypes(DerivedTypeUnion mapping, IEnumerable<Type> derivedTypes, Func<Type, string> discriminator)
         {
             MethodInfo? addMethodDefinition = mapping.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .Where(m => m.Name == "Add" && m.IsGenericMethodDefinition)
@@ -117,6 +127,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             foreach (Type derivedType in derivedTypes)
             {
+                // TODO: Determin if base type should be excluded or not, without base type will be encoded as null..
+                //if (mapping.BaseType == derivedType)
+                //{
+                //    continue;
+                //}
+
                 MethodInfo addMethod = addMethodDefinition.MakeGenericMethod(derivedType);
                 DerivedTypeIdentifier unionIdentifier = new DerivedTypeIdentifier(discriminator(derivedType));
                 addMethod.Invoke(mapping, new object[] { unionIdentifier, _filteredTypeShapeProvider });

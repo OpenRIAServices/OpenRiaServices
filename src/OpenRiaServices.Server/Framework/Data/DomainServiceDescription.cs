@@ -90,7 +90,7 @@ namespace OpenRiaServices.Server
             {
                 if (this._entityKnownTypes == null)
                 {
-                    this._entityKnownTypes = this.ComputeEntityKnownTypes();
+                    this._entityKnownTypes = this.ComputeKnownTypeSet(EntityTypes);
                 }
                 return this._entityKnownTypes;
             }
@@ -1962,19 +1962,18 @@ namespace OpenRiaServices.Server
         }
 
         /// <summary>
-        /// Computes the closure of known types for all the known entities.
-        /// See <see cref="EntityKnownTypes"/>
+        /// Computes the closure of known types for all the <paramref name="types" />.
         /// </summary>
-        /// <returns>A dictionary, keyed by entity type and containing all the
+        /// <returns>A dictionary, keyed by type and containing all the
         /// declared known types for it, including the transitive closure.
         /// </returns>
-        private Dictionary<Type, HashSet<Type>> ComputeEntityKnownTypes()
+        private Dictionary<Type, HashSet<Type>> ComputeKnownTypeSet(IEnumerable<Type> types)
         {
             Dictionary<Type, HashSet<Type>> closure = new Dictionary<Type, HashSet<Type>>();
 
             // Gather all the explicit known types from attributes.
             // Because we ask to inherit [KnownType], we will collect the full closure
-            foreach (Type entityType in this.EntityTypes)
+            foreach (Type entityType in types)
             {
                 // Get all [KnownType]'s and subselect only those that actually derive from this entity
                 IEnumerable<Type> knownTypes = KnownTypeUtilities.ImportKnownTypes(entityType, /* inherit */ true).Where(t => entityType.IsAssignableFrom(t));
@@ -1982,18 +1981,15 @@ namespace OpenRiaServices.Server
             }
 
             // 2nd pass -- add all the derived types' known types back to their base so we have the closure
-            foreach (Type entityType in this.EntityTypes)
+            foreach (Type entityType in types)
             {
-                IEnumerable<Type> knownTypes = closure[entityType];
+                HashSet<Type> knownTypes = closure[entityType];
                 for (Type baseType = this.GetEntityBaseType(entityType);
                      baseType != null;
                      baseType = this.GetEntityBaseType(baseType))
                 {
                     HashSet<Type> hash = closure[baseType];
-                    foreach (Type knownType in knownTypes)
-                    {
-                        hash.Add(knownType);
-                    }
+                    hash.UnionWith(knownTypes);
                 }
             }
             return closure;
