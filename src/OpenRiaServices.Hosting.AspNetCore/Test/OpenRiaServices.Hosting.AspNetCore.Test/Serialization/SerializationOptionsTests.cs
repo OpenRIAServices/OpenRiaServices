@@ -241,7 +241,7 @@ public class SerializationOptionsTests
         var provider = ReflectionTypeShapeProvider.Default;
         var payload = new MessagePackRequestEnvelope
         {
-            Parameters = new MethodParameters
+            Parameters = new()
             {
                 Values = { [paramName] = SerializeValue(paramValue, typeof(string)) }
             }

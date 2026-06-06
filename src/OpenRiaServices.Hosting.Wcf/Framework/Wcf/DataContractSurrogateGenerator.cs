@@ -201,6 +201,18 @@ namespace OpenRiaServices.Hosting.Wcf
 
             constructorGenerator.Emit(OpCodes.Ret);
 
+#if ASPNET_CORE
+            // public Surrogate() : base()
+            constructorBuilder = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new Type[] { });
+            constructorGenerator = constructorBuilder.GetILGenerator();
+
+            // base()
+            constructorGenerator.Emit(OpCodes.Ldarg_0);
+            constructorGenerator.Emit(OpCodes.Call, parentSurrogateType.GetConstructor(Type.EmptyTypes));
+
+            constructorGenerator.Emit(OpCodes.Ret);
+#endif
+
             // Only generate a type initializer if there are any virtual properties.
             Lazy<ILGenerator> typeInitializerFactory = new Lazy<ILGenerator>(() =>
             {
@@ -256,6 +268,29 @@ namespace OpenRiaServices.Hosting.Wcf
             onDeserializingMethodGenerator.Emit(OpCodes.Stfld, wrapperField);
 
             onDeserializingMethodGenerator.Emit(OpCodes.Ret);
+
+#if ASPNET_CORE
+            Type serializationCallbacks = typeof(Nerdbank.MessagePack.IMessagePackSerializationCallbacks);
+            typeBuilder.AddInterfaceImplementation(typeof(Nerdbank.MessagePack.IMessagePackSerializationCallbacks));
+// Nerdbank.MessagePack attributes
+//Nerdbank.MessagePack.IMessagePackSerializationCallbacks callbacks;
+
+// public void IMessagePackSerializationCallbacks.OnBeforeDeserialize()
+//typeBuilder.DefineMethodOverride(
+//    onDeserializingMethodBuilder,
+//    typeof(Nerdbank.MessagePack.IMessagePackSerializationCallbacks).GetMethod("OnBeforeDeserialize"));
+            onDeserializingMethodBuilder = typeBuilder.DefineMethod("OnBeforeDeserialize", MethodAttributes.Public | MethodAttributes.Virtual, null, []);
+            onDeserializingMethodGenerator = onDeserializingMethodBuilder.GetILGenerator();
+
+            // _$wrapper = new Entity();
+            onDeserializingMethodGenerator.Emit(OpCodes.Ldarg_0);
+            onDeserializingMethodGenerator.Emit(OpCodes.Newobj, type.GetConstructor(Type.EmptyTypes));
+            onDeserializingMethodGenerator.Emit(OpCodes.Stfld, wrapperField);
+
+            onDeserializingMethodGenerator.Emit(OpCodes.Ret);
+
+            typeBuilder.DefineMethodOverride(onDeserializingMethodBuilder, serializationCallbacks.GetMethod("OnBeforeDeserialize"));
+#endif
         }
 
         private static void EmitProperties(TypeBuilder typeBuilder, Type type, Type parentSurrogateType, FieldInfo wrapperField, Lazy<ILGenerator> typeInitializerGenerator)

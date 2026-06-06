@@ -34,21 +34,36 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         // TODO: Add issue to PolyType to support KnownTypeAttribute (when no DataContact is present)
         private MessagePackSerializer CreateSerializerForDomainService(Type domainServiceType)
         {
-            IReadOnlyList<DerivedTypeUnion> derivedTypeMappings = BuildDerivedTypeMappings(domainServiceType);
+            DomainServiceDescription description = DomainServiceDescription.GetDescription(domainServiceType);
+
+            IReadOnlyList<DerivedTypeUnion> derivedTypeMappings = BuildDerivedTypeMappings(description);
             if (derivedTypeMappings.Count == 0)
             {
                 return _serializer;
             }
 
+            // Create converters to handle surrogates,
+            // TODO: Determine if it should be a provider intead ? 
+            Wcf.DomainServiceSerializationSurrogate surrogateProvider = new Wcf.DomainServiceSerializationSurrogate(description);
+            List<MessagePackConverter> converters = new();
+            foreach (var entityType in description.EntityTypes)
+            {
+                if (surrogateProvider.GetSurrogateType(entityType) is Type surrogateType)
+                {
+                    converters.Add((MessagePackConverter)
+                        Activator.CreateInstance(typeof(SurrogateConverter<,>).MakeGenericType([surrogateType, entityType]), args: [surrogateProvider])!);
+                }
+            }
+
             return _serializer with
             {
                 DerivedTypeUnions = [.. _serializer.DerivedTypeUnions, .. derivedTypeMappings],
+                Converters = ConverterCollection.Create([.. _serializer.Converters, .. converters])
             };
         }
 
-        private IReadOnlyList<DerivedTypeUnion> BuildDerivedTypeMappings(Type domainServiceType)
+        private IReadOnlyList<DerivedTypeUnion> BuildDerivedTypeMappings(DomainServiceDescription description)
         {
-            DomainServiceDescription description = DomainServiceDescription.GetDescription(domainServiceType);
             List<DerivedTypeUnion> mappings = new();
 
             foreach ((var baseType, var candidates)  in description.EntityKnownTypes)
