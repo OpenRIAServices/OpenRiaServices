@@ -63,7 +63,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             return _serializer with
             {
-                DerivedTypeUnions = [.. _serializer.DerivedTypeUnions, .. derivedTypeMappings],
+                //DerivedTypeUnions = [.. _serializer.DerivedTypeUnions, .. derivedTypeMappings],
                 Converters = ConverterCollection.Create([.. _serializer.Converters, .. converters])
             };
         }
