@@ -24,14 +24,17 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
     {
         internal const string MediaType = "application/vnd.msgpack";
         private static readonly HttpMethod s_queryMethod = new("QUERY");
-        private readonly MessagePackSerializer _serializer;
+        private MessagePackSerializer _serializerCache;
         private readonly ITypeShapeProvider _typeShapeProvider;
+        private readonly MessagePackHttpDomainClientFactory _factory;
+
+        private MessagePackSerializer Serializer => (_serializerCache ??= _factory.GetSerializer(ServiceInterface, base.EntityTypes));
 
         public MessagePackHttpDomainClient(HttpClient httpClient, Type serviceInterface, MessagePackHttpDomainClientFactory factory)
             : base(httpClient, serviceInterface, factory)
         {
-            _serializer = factory.BaseSerializerSerializer;
             _typeShapeProvider = factory.TypeShapeProvider;
+            _factory = factory;
         }
 
         private protected override Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
@@ -47,8 +50,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             var envelope = CreateRequestEnvelope(method, operationName, methodParameters, parameters, queryOptions);
 
 
-            MessagePackSerializer operationSerializer = envelope is MessagePackSubmitRequestEnvelope ? GetSubmitSerializer(methodParameters)
-                : CreateOperationSerializer(_serializer, methodParameters);
+            MessagePackSerializer operationSerializer = CreateOperationSerializer(methodParameters);
 
             using var stream = new MemoryStream();
             // TODO: If possible, replace this buffering with a custom HttpContent override of SerializeToStream
@@ -60,42 +62,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(MediaType);
 
             return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
-        }
-
-        private MessagePackSerializer GetSubmitSerializer(MethodParameters methodParameters)
-        {
-
-            DerivedShapeMapping<Entity> _entityTypes = new DerivedShapeMapping<Entity>();
-            AddDerivedTypes(_entityTypes, EntityTypes, t => t.FullName);
-
-            return CreateOperationSerializer(_serializer, methodParameters)
-                with { DerivedTypeUnions = [_entityTypes, .. _serializer.DerivedTypeUnions] };
-
-            void AddDerivedTypes(object mapping, IEnumerable<Type> derivedTypes, Func<Type, string> discriminator)
-            {
-                MethodInfo? addMethodDefinition = mapping.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                    .Where(m => m.Name == "Add" && m.IsGenericMethodDefinition)
-                    .FirstOrDefault(m =>
-                    {
-                        ParameterInfo[] parameters = m.GetParameters();
-                        return parameters.Length == 2
-                            && parameters[0].ParameterType == typeof(DerivedTypeIdentifier)
-                            && parameters[1].ParameterType == typeof(PolyType.ITypeShapeProvider);
-                    });
-
-                if (addMethodDefinition == null)
-                {
-                    throw new InvalidOperationException($"Unable to locate DerivedShapeMapping.Add<TDerived>(..., ...) on {mapping.GetType().FullName}.");
-                }
-
-
-                foreach (Type derivedType in derivedTypes)
-                {
-                    MethodInfo addMethod = addMethodDefinition.MakeGenericMethod(derivedType);
-                    DerivedTypeIdentifier unionIdentifier = new DerivedTypeIdentifier(discriminator(derivedType));
-                    addMethod.Invoke(mapping, new object[] { unionIdentifier, _typeShapeProvider });
-                }
-            }
         }
 
         private MessagePackRequestEnvelopeBase CreateRequestEnvelope(HttpMethod method, string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
@@ -154,7 +120,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 Type envelopeType = GetResponseEnvelopeType(operationName, returnType);
                 var typeShape = _typeShapeProvider.GetTypeShapeOrThrow(envelopeType);
 
-                var envelope = (MessagePackResponseEnvelopeBase)await _serializer.DeserializeObjectAsync(stream, typeShape).ConfigureAwait(false)
+                var envelope = (MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(stream, typeShape).ConfigureAwait(false)
                     ?? (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
 
                 if (envelope.Fault is not null)
@@ -175,12 +141,13 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
         }
 
 
-        private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, MethodParameters methodParameters)
+        private MessagePackSerializer CreateOperationSerializer(MethodParameters methodParameters)
         {
             // TODO: Look at how this affect cahces. Keep different serializers ?
-            SerializationContext context = serializer.StartingContext;
+            // TODO: How does this affect concurrency, ensure Serializer.StartingContext is not modified ?
+            SerializationContext context = Serializer.StartingContext;
             context[MessagePackMethodParametersConverter.MethodParametersKey] = methodParameters;
-            return serializer with { StartingContext = context };
+            return Serializer with { StartingContext = context };
         }
 
         private static Type GetResponseEnvelopeType(string operationName, Type returnType)

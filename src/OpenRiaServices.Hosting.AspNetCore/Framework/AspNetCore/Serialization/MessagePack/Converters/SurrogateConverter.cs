@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.Wcf;
@@ -38,31 +39,35 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
         private readonly bool _useDiscriminator = true;
         private readonly FrozenDictionary<Type, byte[]> _discriminators;
         private readonly Dictionary<byte[], Type> _typeLookup;
+        Type _surrogateBase = typeof(TSurrogate); 
 
         public SurrogateConverter(Wcf.DomainServiceSerializationSurrogate surrogateProvider)
         {
             _surrogateProvider = surrogateProvider;
 
             IEnumerable<Type> knownTypes;
+            Func<Type, byte[]> discriminatorFunc;
             if (typeof(T) == typeof(object))
             {
                 knownTypes = _surrogateProvider.SurrogateTypes;
+                discriminatorFunc = static (t) => System.Text.Encoding.UTF8.GetBytes(t.FullName!);
             }
             else
             {
-                Type baseType = surrogateProvider.GetSurrogateType(typeof(T));
-                knownTypes = _surrogateProvider.SurrogateTypes.Where(t => t.IsAssignableTo(baseType));
+                _surrogateBase = surrogateProvider.GetSurrogateType(typeof(T));
+                Debug.Assert(_surrogateBase == typeof(TSurrogate));
+                knownTypes = _surrogateProvider.SurrogateTypes.Where(t => t.IsAssignableTo(_surrogateBase));
+                discriminatorFunc = static (t) => System.Text.Encoding.UTF8.GetBytes(t.Name!);
             }
 
-            _typeLookup = knownTypes.ToDictionary(t => System.Text.Encoding.UTF8.GetBytes(t.FullName!),
-                 new ByteArrayComparer());
+            _typeLookup = knownTypes.ToDictionary(discriminatorFunc, new ByteArrayComparer());
 
             _discriminators = FrozenDictionary.ToFrozenDictionary(
                 _typeLookup
                     .Select(k => new KeyValuePair<Type, byte[]>(k.Value, k.Key)))
                 ;
 
-            _useDiscriminator = _typeLookup.Count > 1;
+            _useDiscriminator = _typeLookup.Count > 1 || typeof(T) == typeof(object);
         }
 
         public override T? Read(ref MessagePackReader reader, SerializationContext context)
@@ -72,7 +77,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 return null;
             }
 
-            MessagePackConverter converter;
+            Type surrogateType;
             if (_useDiscriminator)
             {
                 // READ array
@@ -90,15 +95,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
 
                 // TODO: add cache for looking up types based on span
                 // Need to use StructuralComparisons.StructuralEqualityComparer in dicationary
-                Type surrogateType = _typeLookup[discriminator.ToArray()];
-
-                converter = context.GetConverter(surrogateType, context.TypeShapeProvider);
+                surrogateType = _typeLookup[discriminator.ToArray()];
             }
             else
             {
-                converter = context.GetConverter<TSurrogate>(context.TypeShapeProvider);
+                surrogateType = _surrogateBase;
             }
 
+            MessagePackConverter converter = context.GetConverter(surrogateType, context.TypeShapeProvider);
             object? surrogate = converter.ReadObject(ref reader, context);
             return (T)_surrogateProvider.GetDeserializedObject(surrogate, typeof(T));
 

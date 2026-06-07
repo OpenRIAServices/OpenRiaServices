@@ -26,12 +26,12 @@ namespace OpenRiaServices.Client.DomainClients.Http
         private static readonly ConcurrentDictionary<(Type serviceInterface, string operationName), MethodParameters> s_methodParametersCache = new ConcurrentDictionary<(Type serviceInterface, string operationName), MethodParameters>();
 
         private readonly OpenRiaServices.Client.DomainClients.HttpDomainClientFactory _factory;
-        private readonly Type _serviceInterface;
 
         /// <inheritdoc/>
         public override bool SupportsCancellation => true;
 
         private protected HttpClient HttpClient { get; }
+        private protected Type ServiceInterface { get; }
 
         private protected HttpDomainClient(HttpClient httpClient, Type serviceInterface, OpenRiaServices.Client.DomainClients.HttpDomainClientFactory factory)
         {
@@ -40,7 +40,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
             ArgumentNullException.ThrowIfNull(factory);
 
             HttpClient = httpClient;
-            _serviceInterface = serviceInterface;
+            ServiceInterface = serviceInterface;
             _factory = factory;
         }
 
@@ -50,7 +50,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private protected MethodParameters GetMethodParameters(string operationName)
         {
-            return s_methodParametersCache.GetOrAdd((_serviceInterface, operationName), static key => new MethodParameters(key.serviceInterface, key.operationName));
+            return s_methodParametersCache.GetOrAdd((ServiceInterface, operationName), static key => new MethodParameters(key.serviceInterface, key.operationName));
         }
 
         private protected string GetParameterValueAsString(string operationName, string parameterName, object parameterValue)
