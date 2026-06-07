@@ -11,7 +11,7 @@ using PolyType.ReflectionProvider;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters
 {
-    sealed class ByteArrayComparer : IEqualityComparer<byte[]>
+    sealed class ByteArrayComparer : IEqualityComparer<byte[]?>
     {
         public bool Equals(byte[]? x, byte[]? y)
         {
@@ -23,9 +23,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             return x.AsSpan().SequenceEqual(y);
         }
 
-        int IEqualityComparer<byte[]>.GetHashCode(byte[] obj)
+        int IEqualityComparer<byte[]?>.GetHashCode(byte[]? obj)
         {
-            return  (int)System.IO.Hashing.XxHash32.HashToUInt32(obj);
+            return obj == null ? 0 : (int)System.IO.Hashing.XxHash32.HashToUInt32(obj);
         }
     }
 
@@ -37,9 +37,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
     {
         private readonly DomainServiceSerializationSurrogate _surrogateProvider;
         private readonly bool _useDiscriminator = true;
-        private readonly FrozenDictionary<Type, byte[]> _discriminators;
+        private readonly FrozenDictionary<Type, byte[]?> _discriminators;
         private readonly Dictionary<byte[], Type> _typeLookup;
-        Type _surrogateBase = typeof(TSurrogate); 
+        Type _surrogateBase = typeof(TSurrogate);
 
         public SurrogateConverter(Wcf.DomainServiceSerializationSurrogate surrogateProvider)
         {
@@ -57,15 +57,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 _surrogateBase = surrogateProvider.GetSurrogateType(typeof(T));
                 Debug.Assert(_surrogateBase == typeof(TSurrogate));
                 knownTypes = _surrogateProvider.SurrogateTypes.Where(t => t.IsAssignableTo(_surrogateBase));
-                discriminatorFunc = static (t) => System.Text.Encoding.UTF8.GetBytes(t.Name!);
+                discriminatorFunc = (t) => (t != _surrogateBase) ? System.Text.Encoding.UTF8.GetBytes(t.Name!) : [];
             }
 
             _typeLookup = knownTypes.ToDictionary(discriminatorFunc, new ByteArrayComparer());
 
             _discriminators = FrozenDictionary.ToFrozenDictionary(
                 _typeLookup
-                    .Select(k => new KeyValuePair<Type, byte[]>(k.Value, k.Key)))
-                ;
+                    .Select(k => new KeyValuePair<Type, byte[]?>(k.Value, k.Key is [] ? null : k.Key)));
 
             _useDiscriminator = _typeLookup.Count > 1 || typeof(T) == typeof(object);
         }
@@ -90,12 +89,19 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                     throw new MessagePackSerializationException("SurrogateConverter encountered array of wrong length");
                 }
 
-                if (!reader.TryReadStringSpan(out var discriminator))
-                    throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
+                if (reader.TryReadNil())
+                {
+                    surrogateType = _typeLookup[[]];
+                }
+                else
+                {
+                    if (!reader.TryReadStringSpan(out var discriminator))
+                        throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
 
-                // TODO: add cache for looking up types based on span
-                // Need to use StructuralComparisons.StructuralEqualityComparer in dicationary
-                surrogateType = _typeLookup[discriminator.ToArray()];
+                    // TODO: add cache for looking up types based on span
+                    // Need to use StructuralComparisons.StructuralEqualityComparer in dicationary
+                    surrogateType = _typeLookup[discriminator.ToArray()];
+                }
             }
             else
             {
@@ -122,10 +128,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             {
                 writer.WriteArrayHeader(2);
 
-                byte[] discriminator = _discriminators[surrogate.GetType()];
-                writer.WriteString(discriminator);
-            }
+                byte[]? discriminator = _discriminators[surrogate.GetType()];
 
+                if (discriminator is null)
+                    writer.WriteNil();
+                else
+                    writer.WriteString(discriminator);
+            }
 
             var converter = context.GetConverter(surrogate.GetType(), context.TypeShapeProvider);
             converter.WriteObject(ref writer, surrogate, context);
