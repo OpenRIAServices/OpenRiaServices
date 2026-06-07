@@ -401,7 +401,7 @@ internal sealed class PropertyShapeWrapper<TDeclaringType, TPropertyType>(Filter
     public ITypeShape PropertyType => _propertyType.Value;
     ITypeShape<TPropertyType> IPropertyShape<TDeclaringType, TPropertyType>.PropertyType => _propertyType.Value;
     public bool HasGetter => _inner.HasGetter;
-    public bool HasSetter => _inner.HasSetter;
+    public bool HasSetter => true;
     public bool IsField => _inner.IsField;
     public bool IsGetterPublic => _inner.IsGetterPublic;
     public bool IsSetterPublic => _inner.IsSetterPublic;
@@ -420,7 +420,10 @@ internal sealed class PropertyShapeWrapper<TDeclaringType, TPropertyType>(Filter
 
     public Setter<TDeclaringType, TPropertyType> GetSetter()
     {
-        return _inner.GetSetter();
+        if (_inner.HasSetter)
+            return _inner.GetSetter();
+        else
+            return (ref TDeclaringType instance, TPropertyType value) => { };
     }
 }
 
@@ -510,16 +513,19 @@ internal sealed class UnionTypeShapeWrapper<TUnion> : TypeShapeWrapper<TUnion>, 
 {
     private readonly IUnionTypeShape<TUnion> _inner;
     private readonly Lazy<IReadOnlyList<IUnionCaseShape>> _unionCases;
+    private readonly Lazy<ITypeShape<TUnion>> _base;
 
     public UnionTypeShapeWrapper(FilteredTypeShapeProvider provider, ITypeShape inner)
         : base(provider, (IUnionTypeShape<TUnion>)inner)
     {
         _inner = (IUnionTypeShape<TUnion>)inner;
         _unionCases = new Lazy<IReadOnlyList<IUnionCaseShape>>(() => _inner.UnionCases.Select(ProviderCore.WrapUnionCase).ToArray());
+        // The base and "union" case have the same Type so need to call wrap core
+        _base = new (() => (ITypeShape<TUnion>)provider.WrapCore(_inner.BaseType)!);
     }
 
-    public ITypeShape BaseType => ProviderCore.Wrap(_inner.BaseType)!;
-    ITypeShape<TUnion> IUnionTypeShape<TUnion>.BaseType => (ITypeShape<TUnion>)ProviderCore.Wrap(_inner.BaseType)!;
+    public ITypeShape BaseType => _base.Value;
+    ITypeShape<TUnion> IUnionTypeShape<TUnion>.BaseType => _base.Value;
     public IReadOnlyList<IUnionCaseShape> UnionCases => _unionCases.Value;
 
     public override object? Accept(TypeShapeVisitor visitor, object? state = null)
