@@ -2,6 +2,7 @@ using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
 using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters;
 using OpenRiaServices.Server;
+using PolyType;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -14,19 +15,21 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
     internal sealed class MessagePackSerializationProvider : ISerializationProvider
     {
         private readonly MessagePackSerializationOptions _options;
-        private readonly FilteredTypeShapeProvider _filteredTypeShapeProvider;
+        private readonly ITypeShapeProvider _typeShapeProvider;
         private readonly MessagePackSerializer _serializer;
         private readonly ConcurrentDictionary<Type, MessagePackSerializer> _serializerByDomainServiceType = new();
 
         public MessagePackSerializationProvider(MessagePackSerializationOptions options)
         {
             _options = options ?? throw new ArgumentNullException(nameof(options));
-            _filteredTypeShapeProvider = new FilteredTypeShapeProvider(options.TypeShapeProvider);
+            // TODO: Test without wrapping
+            _typeShapeProvider = new FilteredTypeShapeProvider(options.TypeShapeProvider);
+            //_typeShapeProvider = options.TypeShapeProvider;
             _serializer = ConfigureSerializer(options.Serializer);
         }
 
         public RequestSerializer GetRequestSerializer(DomainOperationEntry operation)
-            => new MessagePackRequestSerializer(operation, GetSerializerForDomainService(operation.DomainServiceType), _filteredTypeShapeProvider);
+            => new MessagePackRequestSerializer(operation, GetSerializerForDomainService(operation.DomainServiceType), _typeShapeProvider);
 
         private MessagePackSerializer GetSerializerForDomainService(Type domainServiceType)
             => _serializerByDomainServiceType.GetOrAdd(domainServiceType, CreateSerializerForDomainService);
@@ -58,6 +61,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                         Activator.CreateInstance(typeof(SurrogateConverter<,>).MakeGenericType([surrogateType, entityType]), args: [surrogateProvider])!);
                 }
             }
+
             // All surrogates implement IClonable, use that as common base class for surrogates
             converters.Add(new SurrogateConverter<ICloneable, object>(surrogateProvider));
 
@@ -80,12 +84,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                     continue;
                 }
 
-                //if (candidates.Contains(baseType))
-                //    System.Diagnostics.Debugger.Break();
-
-                // From original Type
-                //object mapping = CreateDerivedShapeMapping(surrogateProvider.GetSurrogateType(baseType));
-                //AddDerivedTypes(mapping, candidates.Select(t => surrogateProvider.GetSurrogateType(t)), static t => t.Name);
                 DerivedTypeUnion mapping = CreateDerivedShapeMapping(surrogateProvider.GetSurrogateType(baseType));
                 AddDerivedTypes(mapping, candidates.Select(t => surrogateProvider.GetSurrogateType(t)), static t => t.Name);
                 mappings.Add(mapping);
@@ -110,32 +108,33 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private void AddDerivedTypes(DerivedTypeUnion mapping, IEnumerable<Type> derivedTypes, Func<Type, string> discriminator)
         {
             MethodInfo? addMethodDefinition = mapping.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public)
-                .Where(m => m.Name == "Add" && m.IsGenericMethodDefinition)
-                .FirstOrDefault(m =>
-                {
-                    ParameterInfo[] parameters = m.GetParameters();
-                    return parameters.Length == 2
-                        && parameters[0].ParameterType == typeof(DerivedTypeIdentifier)
-                        && parameters[1].ParameterType == typeof(PolyType.ITypeShapeProvider);
-                });
+              .Where(m => m.Name == "Add" && m.IsGenericMethodDefinition)
+              .FirstOrDefault(m =>
+              {
+                  ParameterInfo[] parameters = m.GetParameters();
+                  return parameters.Length == 2
+                      && parameters[0].ParameterType == typeof(DerivedTypeIdentifier)
+                      && parameters[1].ParameterType.IsGenericType
+                      && parameters[1].ParameterType.GetGenericTypeDefinition() == typeof(PolyType.ITypeShape<>);
+              });
 
             if (addMethodDefinition == null)
             {
                 throw new InvalidOperationException($"Unable to locate DerivedShapeMapping.Add<TDerived>(..., ...) on {mapping.GetType().FullName}.");
             }
 
-
             foreach (Type derivedType in derivedTypes)
             {
-                // TODO: Determin if base type should be excluded or not, without base type will be encoded as null..
-                //if (mapping.BaseType == derivedType)
-                //{
-                //    continue;
-                //}
-
                 MethodInfo addMethod = addMethodDefinition.MakeGenericMethod(derivedType);
                 DerivedTypeIdentifier unionIdentifier = new DerivedTypeIdentifier(discriminator(derivedType));
-                addMethod.Invoke(mapping, new object[] { unionIdentifier, _filteredTypeShapeProvider });
+                ITypeShape typeShape = _typeShapeProvider.GetTypeShapeOrThrow(derivedType);
+
+                // Ensure we register the actual type shape, in case it is a base class (union)
+                // To avoid multiple discriminators for the same type
+                while (typeShape is PolyType.Abstractions.IUnionTypeShape unionShape)
+                    typeShape = unionShape.BaseType;
+
+                addMethod.Invoke(mapping, [unionIdentifier, typeShape]);
             }
         }
 
@@ -145,33 +144,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             // Local => Local but where .ToUtc gives same value
             serializer = serializer.WithHiFiDateTime();
 
-            MessagePackConverter[] converters = serializer.Converters
-                .Concat(new MessagePackConverter[]
-                {
-                    new MethodParametersConverter(),
-                    //new ChangeSetEntryConverter()
-                })
-                .ToArray();
-
             return serializer with
             {
-                Converters = ConverterCollection.Create(converters),
-                //PreserveReferences
+                PreserveReferences = ReferencePreservationMode.Off,
+                //PreserveReferences = ReferencePreservationMode.RejectCycles,
+                Converters = [.. serializer.Converters, new MethodParametersConverter()],
             };
-
-            /*
-             *             MessagePackSerializer serializer = new()
-            {
-                PreserveReferences = ReferencePreservationMode.RejectCycles,
-                //PropertyNamingPolicy =   
-                StartingContext = new SerializationContext()
-                {
-                    //CancellationToken = ct,
-                    //TypeShapeProvider
-                    MaxDepth = 256
-                }
-            };
-            */
         }
     }
 }

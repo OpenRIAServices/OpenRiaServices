@@ -1,6 +1,7 @@
 using Nerdbank.MessagePack;
 using OpenRiaServices.Client.DomainClients.MessagePack;
 using PolyType;
+using PolyType.Abstractions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace OpenRiaServices.Client.DomainClients
                     foreach (var derivedType in Server.KnownTypeUtilities.ImportKnownTypes(knownType, true))
                         allTypes.Add(derivedType);
 
-                
+
                 DerivedShapeMapping<Entity> entityMapping = new();
                 AddDerivedTypes(entityMapping, allTypes, static t => t.FullName!);
 
@@ -55,7 +56,7 @@ namespace OpenRiaServices.Client.DomainClients
 
                 return args.Item1.BaseSerializerSerializer with
                 {
-                     DerivedTypeUnions = [.. args.Item1.BaseSerializerSerializer.DerivedTypeUnions, entityMapping, objectMapping]
+                    DerivedTypeUnions = [.. args.Item1.BaseSerializerSerializer.DerivedTypeUnions, entityMapping, objectMapping]
                 };
 
             }, (this, knownTypes));
@@ -63,16 +64,15 @@ namespace OpenRiaServices.Client.DomainClients
 
         private static MessagePackSerializer ConfigureSerializer(MessagePackSerializer serializer)
         {
-            //// TODO
-            //// Register all entities as object for ChangeSetEntry
-            //DerivedShapeMapping<Entity> objectMapping = new();
-            //AddDerivedTypes(objectMapping, description.EntityTypes);
-            //mappings.Add(objectMapping);
 
             serializer = serializer.WithHiFiDateTime();
 
             MessagePackConverter[] converters = [.. serializer.Converters, new MessagePack.MessagePackMethodParametersConverter()];
-            return serializer with { Converters = ConverterCollection.Create(converters) };
+
+            return serializer with {
+                PreserveReferences = ReferencePreservationMode.Off,
+                Converters = ConverterCollection.Create(converters)
+            };
         }
 
         private void AddDerivedTypes<T>(DerivedShapeMapping<T> mapping, IEnumerable<Type> derivedTypes, Func<Type, string> discriminator)
@@ -84,7 +84,8 @@ namespace OpenRiaServices.Client.DomainClients
                     ParameterInfo[] parameters = m.GetParameters();
                     return parameters.Length == 2
                         && parameters[0].ParameterType == typeof(DerivedTypeIdentifier)
-                        && parameters[1].ParameterType == typeof(PolyType.ITypeShapeProvider);
+                        && parameters[1].ParameterType.IsGenericType
+                        && parameters[1].ParameterType.GetGenericTypeDefinition() == typeof(PolyType.ITypeShape<>);
                 });
 
             if (addMethodDefinition == null)
@@ -92,18 +93,18 @@ namespace OpenRiaServices.Client.DomainClients
                 throw new InvalidOperationException($"Unable to locate DerivedShapeMapping.Add<TDerived>(..., ...) on {mapping.GetType().FullName}.");
             }
 
-
             foreach (Type derivedType in derivedTypes)
             {
-                // TODO: Determin if base type should be excluded or not, without base type will be encoded as null..
-                //if (mapping.BaseType == derivedType)
-                //{
-                //    continue;
-                //}
-
                 MethodInfo addMethod = addMethodDefinition.MakeGenericMethod(derivedType);
                 DerivedTypeIdentifier unionIdentifier = new DerivedTypeIdentifier(discriminator(derivedType));
-                addMethod.Invoke(mapping, new object[] { unionIdentifier, TypeShapeProvider });
+                ITypeShape typeShape = TypeShapeProvider.GetTypeShapeOrThrow(derivedType);
+
+                // Ensure we register the actual type shape, in case it is a base class (union)
+                // To avoid multiple discriminators for the same type
+                while (typeShape is IUnionTypeShape unionShape)
+                    typeShape = unionShape.BaseType;
+
+                addMethod.Invoke(mapping, [unionIdentifier, typeShape]);
             }
         }
     }
