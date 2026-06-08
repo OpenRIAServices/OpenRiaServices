@@ -50,13 +50,18 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             if (typeof(T) == typeof(object))
             {
                 knownTypes = _surrogateProvider.SurrogateTypes;
-                discriminatorFunc = static (t) => System.Text.Encoding.UTF8.GetBytes(t.FullName!);
+
+                // TODO: Prefer discriminator from [DerivedTypeShapeAttribute]
+                // Take namespace from datacontract if any ???
+                discriminatorFunc = static (t) => System.Text.Encoding.UTF8.GetBytes(t.Name!);
             }
             else
             {
                 _surrogateBase = surrogateProvider.GetSurrogateType(typeof(T));
                 Debug.Assert(_surrogateBase == typeof(TSurrogate));
                 knownTypes = _surrogateProvider.SurrogateTypes.Where(t => t.IsAssignableTo(_surrogateBase));
+
+                // Take namespace from datacontract ???
                 discriminatorFunc = (t) => (t != _surrogateBase) ? System.Text.Encoding.UTF8.GetBytes(t.Name!) : [];
             }
 

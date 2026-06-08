@@ -49,14 +49,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             {
                 if (surrogateProvider.GetSurrogateType(entityType) is Type surrogateType)
                 {
-                    // TODO: Consider only doing this if there are any derived types, otherwise we can just register surrogateType directly and avoid the extra surrogate converter (which adds some overhead during serialization)
-                    if (description.EntityKnownTypes.TryGetValue(entityType, out var candidates)
-                        && (candidates.Count > 1 || (candidates.Count == 1 && !candidates.Contains(entityType))))
-                    {
-                        // Find base type for surrogate (This type has all BuildDerivedTypeMappings configured) 
-                        surrogateType = surrogateProvider.GetSurrogateType(description.GetRootEntityType(entityType));
-                    }
-
                     converters.Add((MessagePackConverter)
                         Activator.CreateInstance(typeof(SurrogateConverter<,>).MakeGenericType([surrogateType, entityType]), args: [surrogateProvider])!);
                 }
