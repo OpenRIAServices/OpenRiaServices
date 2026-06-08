@@ -752,7 +752,13 @@ namespace OpenRiaServices.Tools
                 "../net8.0/OpenRiaServices.Tools.CodeGenTask.dll"));
 
             if (!File.Exists(path))
-                throw new FileNotFoundException(path);
+            {
+                // try once more but with net10.0, this can happen when running tests
+                path = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(typeof(CreateOpenRiaClientFilesTask).Assembly.Location),
+                "../net10.0/OpenRiaServices.Tools.CodeGenTask.dll"));
+                if (!File.Exists(path))
+                    throw new FileNotFoundException(path);
+            }
 
             using var loggingServer = new CrossProcessLoggingServer();
             var startInfo = new ProcessStartInfo
