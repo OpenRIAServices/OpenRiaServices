@@ -11,6 +11,8 @@ See [AspNetCore README](src/OpenRiaServices.Hosting.AspNetCore/Framework/README.
   * Non-side-effect operations now accept `GET`, `POST`, and `QUERY` requests (previously `GET` and `POST` only)
   * Side-effect operations remain `POST`-only
 
+# 5.9.0
+
 ## Client (`OpenRiaServices.Client.DomainClients.Http`)
 
 * Added `MaxQueryStringLength` setting to `HttpDomainClientFactory` (default `2048`)
@@ -29,6 +31,9 @@ DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(baseUri, h
 };
 ```
 
+## Server
+
+* Improve performance for creating surrogate types, by reducing number of lookups (affect serialization performance)
 
 # EF Core 4.1.0
 
