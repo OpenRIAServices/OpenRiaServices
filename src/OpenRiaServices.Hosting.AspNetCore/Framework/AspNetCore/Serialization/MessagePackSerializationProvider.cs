@@ -56,6 +56,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             // All surrogates implement IClonable, use that as common base class for surrogates
             converters.Add(new SurrogateConverter<ICloneable, object>(surrogateProvider));
+            converters.Add(new ChangeSetEntryConverter());
 
             return _serializer with
             {

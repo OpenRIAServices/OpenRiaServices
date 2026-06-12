@@ -1,5 +1,6 @@
 using Nerdbank.MessagePack;
 using OpenRiaServices.Client.DomainClients.Http;
+using OpenRiaServices.Client.DomainClients.MessagePack.Converters;
 using PolyType;
 using PolyType.ReflectionProvider;
 using System;

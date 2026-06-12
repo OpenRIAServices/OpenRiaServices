@@ -3,7 +3,8 @@ using OpenRiaServices.Client.DomainClients.Http;
 using System;
 using System.Threading.Tasks;
 
-namespace OpenRiaServices.Client.DomainClients.MessagePack;
+namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters;
+
 sealed class MessagePackMethodParametersConverter : MessagePackConverter<MessagePackMethodParameters>
 {
     internal static readonly object MethodParametersKey = new();

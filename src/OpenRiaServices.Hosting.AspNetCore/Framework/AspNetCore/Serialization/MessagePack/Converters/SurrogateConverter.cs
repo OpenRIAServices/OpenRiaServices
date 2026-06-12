@@ -115,7 +115,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
 
             MessagePackConverter converter = context.GetConverter(surrogateType, context.TypeShapeProvider);
             object? surrogate = converter.ReadObject(ref reader, context);
-            return (T)_surrogateProvider.GetDeserializedObject(surrogate, typeof(T));
+            return (T)DomainServiceSerializationSurrogate.GetDeserializedObject(surrogate);
 
         }
 

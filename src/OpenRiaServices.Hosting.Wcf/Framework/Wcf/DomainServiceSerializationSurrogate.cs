@@ -78,6 +78,14 @@ namespace OpenRiaServices.Hosting.Wcf
             return obj;
         }
 
+        /// <summary>
+        /// A faster version of <see cref="GetDeserializedObject(object, Type)"/> that can be used when the surrogate type is already known.
+        /// </summary>
+        internal static object GetDeserializedObject(object obj)
+        {
+            return ((ICloneable)obj).Clone();
+        }
+
         public object GetObjectToSerialize(object obj, Type targetType)
         {
             Type exposedType = this.description.GetSerializationType(obj.GetType());
@@ -92,6 +100,11 @@ namespace OpenRiaServices.Hosting.Wcf
             }
 
             return obj;
+        }
+
+        internal Func<object, object> GetSurrogateFactory(Type type)
+        {
+            return this.exposedTypeToSurrogateMap[type].surrogateFactory;
         }
 
 #if !ASPNET_CORE

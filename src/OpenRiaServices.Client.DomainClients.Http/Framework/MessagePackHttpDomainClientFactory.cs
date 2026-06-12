@@ -1,5 +1,6 @@
 using Nerdbank.MessagePack;
 using OpenRiaServices.Client.DomainClients.MessagePack;
+using OpenRiaServices.Client.DomainClients.MessagePack.Converters;
 using PolyType;
 using PolyType.Abstractions;
 using System;
@@ -86,7 +87,7 @@ namespace OpenRiaServices.Client.DomainClients
 
             serializer = serializer.WithHiFiDateTime();
 
-            MessagePackConverter[] converters = [.. serializer.Converters, new MessagePack.MessagePackMethodParametersConverter()];
+            MessagePackConverter[] converters = [.. serializer.Converters, new MessagePackMethodParametersConverter(), new ChangeSetEntryConverter()];
 
             return serializer with {
                 PreserveReferences = ReferencePreservationMode.Off,
