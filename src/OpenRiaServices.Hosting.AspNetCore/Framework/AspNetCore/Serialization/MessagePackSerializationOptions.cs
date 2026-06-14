@@ -17,6 +17,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// <summary>
         /// Gets or sets the type-shape provider used to resolve runtime type metadata for serialization.
         /// </summary>
-        public ITypeShapeProvider TypeShapeProvider { get; set; } = ReflectionTypeShapeProvider.Default;
+        /// Not public, since surrogates must be serialized using ReflectionTypeShapeProvider
+        internal ITypeShapeProvider TypeShapeProvider { get; set; } = ReflectionTypeShapeProvider.Default;
     }
 }

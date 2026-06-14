@@ -72,7 +72,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 switch (name)
                 {
                     case nameof(ChangeSetEntry.Entity):
-                        result.Entity = (Entity)ReadValue(ref reader, typeof(Entity), context)!;
+                        result.Entity = ReadEntity(ref reader, context)!;
                         break;
                     case nameof(ChangeSetEntry.Id):
                         result.Id = reader.ReadInt32();
@@ -87,10 +87,10 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                         reader.Skip(context);
                         break;
                     case nameof(ChangeSetEntry.OriginalEntity):
-                        result.OriginalEntity = (Entity?)ReadValue(ref reader, typeof(Entity), context);
+                        result.OriginalEntity = ReadEntity(ref reader, context);
                         break;
                     case nameof(ChangeSetEntry.StoreEntity):
-                        result.StoreEntity = (Entity?)ReadValue(ref reader, typeof(Entity), context);
+                        result.StoreEntity = ReadEntity(ref reader, context);
                         break;
                     case nameof(ChangeSetEntry.ValidationErrors):
                         result.ValidationErrors = (IEnumerable<ValidationResultInfo>?)ReadValue(ref reader, typeof(IEnumerable<ValidationResultInfo>), context);
@@ -115,6 +115,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
 
             return result;
         }
+
 
         private static object? ReadValue(ref MessagePackReader reader, Type type, SerializationContext context)
         {
@@ -268,6 +269,11 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 writer.WriteNil();
             else
                 context.GetConverter(type).WriteObject(ref writer, value, context);
+        }
+
+        private static Entity? ReadEntity(ref MessagePackReader reader, SerializationContext context)
+        {
+            return (Entity?)ReadValue(ref reader, typeof(Entity), context);
         }
 
         private static void WriteEntity(ref MessagePackWriter writer, Entity? value, SerializationContext context)

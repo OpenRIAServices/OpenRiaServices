@@ -8,6 +8,7 @@ using System.Diagnostics;
 using System.Linq;
 using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.Wcf;
+using OpenRiaServices.Server;
 using PolyType.ReflectionProvider;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters
@@ -22,34 +23,59 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
         private readonly bool _useDiscriminator = true;
         private readonly FrozenDictionary<Type, byte[]?> _discriminators;
         private readonly Dictionary<byte[], Type> _typeLookup;
-        //private readonly FrozenDictionary<Type, Func<object, object>> _surrogateFactory;
+        private readonly FrozenDictionary<Type, Func<object, object>> _surrogateFactory;
         private readonly Type _surrogateBase = typeof(TSurrogate);
 
         // TODO: Pass in IEnumerator<Type> derivedTypes
         // This will allow us to build _surrogateFactory, as well as to create dictionaries with only relevant surrogate types
-        public SurrogateConverter(Wcf.DomainServiceSerializationSurrogate surrogateProvider)
+        public SurrogateConverter(DomainServiceDescription description, Wcf.DomainServiceSerializationSurrogate surrogateProvider)
         {
             _surrogateProvider = surrogateProvider;
 
             IEnumerable<Type> knownTypes;
+            IEnumerable<Type> surrogateTypes;
             Func<Type, byte[]> discriminatorFunc;
             if (typeof(T) == typeof(object))
             {
-                knownTypes = _surrogateProvider.SurrogateTypes;
+                surrogateTypes = _surrogateProvider.SurrogateTypes;
                 discriminatorFunc = MessagePackUtility.GetDiscriminator;
+
+                HashSet<Type> allKnownTypes = new(description.EntityTypes);
+                //allKnownTypes.Add(description.ComplexTypes);
+                foreach (var (entityType, entityKnownTypes) in description.EntityKnownTypes)
+                {
+                    allKnownTypes.UnionWith(entityKnownTypes);
+                }
+                knownTypes = allKnownTypes;
             }
             else
             {
+                // Entity types can have derived types
+                if (description.EntityKnownTypes.TryGetValue(typeof(T), out var knownSet))
+                {
+                    if (knownSet.Contains(typeof(T)))
+                        knownTypes = knownSet;
+                    else
+                        knownTypes = [typeof(T), .. knownSet];
+                }
+                else
+                {
+                    knownTypes = [typeof(T)];
+                }
+
                 _surrogateBase = surrogateProvider.GetSurrogateType(typeof(T));
                 Debug.Assert(_surrogateBase == typeof(TSurrogate));
-                knownTypes = _surrogateProvider.SurrogateTypes.Where(t => t.IsAssignableTo(_surrogateBase));
+
+                surrogateTypes = knownTypes.Select(surrogateProvider.GetSurrogateType);
                 discriminatorFunc = (t) => (t != _surrogateBase) ? MessagePackUtility.GetDiscriminator(t) : [];
             }
 
             // TODO: Consider a dictionary for surrogate factory lookup
             // This avoids double dictionary lookups in surrogateProvider
-            //_surrogateFactory = knownTypes.ToDictionary(t => t, _surrogateProvider.GetSurrogateFactory).ToFrozenDictionary();
-            _typeLookup = knownTypes.ToDictionary(discriminatorFunc, new MessagePackUtility.ByteArrayComparer());
+            _surrogateFactory = knownTypes
+                .Where(t => !t.IsAbstract)
+                .ToDictionary(t => t, _surrogateProvider.GetSurrogateFactory).ToFrozenDictionary();
+            _typeLookup = surrogateTypes.ToDictionary(discriminatorFunc, new MessagePackUtility.ByteArrayComparer());
             _discriminators = FrozenDictionary.ToFrozenDictionary(
                 _typeLookup
                     .Select(k => new KeyValuePair<Type, byte[]?>(k.Value, k.Key is [] ? null : k.Key)));
@@ -126,10 +152,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 return;
             }
 
-            object surrogate = _surrogateProvider.GetObjectToSerialize(value, typeof(TSurrogate));
-            // _surrogateFactory.TryGetValue(value.GetType(), out var factory) ? factory(value)
-            // Below code handles derived proxy types and similar
-            //: GetSurrogateTypeSlow(value);
+            //object surrogate = _surrogateProvider.GetObjectToSerialize(value, typeof(TSurrogate));
+            object surrogate = _surrogateFactory.TryGetValue(value.GetType(), out var factory) ? factory(value)
+                // Below code handles derived proxy types and similar
+                : GetSurrogateTypeSlow(value);
 
             if (_useDiscriminator)
             {
@@ -146,19 +172,20 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             var converter = context.GetConverter(surrogate.GetType(), context.TypeShapeProvider);
             converter.WriteObject(ref writer, surrogate, context);
 
-            //object GetSurrogateTypeSlow(in T value)
-            //{
-            //    Type? baseType = value.GetType().BaseType;
-            //    while (baseType != null)
-            //    {
-            //        if (_surrogateFactory.TryGetValue(baseType, out var factory))
-            //        {
-            //            return factory(value);
-            //        }
-            //    }
+            object GetSurrogateTypeSlow(in T value)
+            {
+                Type? baseType = value.GetType().BaseType;
+                while (baseType != null)
+                {
+                    if (_surrogateFactory.TryGetValue(baseType, out var factory))
+                    {
+                        return factory(value);
+                    }
+                    baseType = baseType.BaseType;
+                }
 
-            //    throw new InvalidOperationException($"Could not get surrogate type for {value.GetType()}");
-            //}
+                throw new InvalidOperationException($"Could not get surrogate type for {value.GetType()}");
+            }
         }
 
 

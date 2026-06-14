@@ -4,6 +4,7 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using Nerdbank.MessagePack;
 
 #nullable enable
 
@@ -54,6 +55,21 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             }
 
             return Encoding.UTF8.GetBytes(discriminator);
+        }
+
+        /// <summary>
+        /// Perform basic setup of the MessagePackSerializer to ensure it is configured correctly for use in Open RIA Services.
+        /// </summary>
+        internal static MessagePackSerializer ConfigureSerializer(MessagePackSerializer serializer,
+            IEnumerable<MessagePackConverter> converters)
+        {
+            serializer = serializer.WithHiFiDateTime();
+
+            return serializer with
+            {
+                PreserveReferences = ReferencePreservationMode.Off,
+                Converters = [.. serializer.Converters, .. converters]
+            };
         }
 
         internal sealed class ByteArrayComparer : IEqualityComparer<byte[]?>
