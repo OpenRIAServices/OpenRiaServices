@@ -63,7 +63,6 @@ namespace OpenRiaServices.Client.DomainClients
                         continue;
                 }
 
-                converters.Add(new ObjectConverter<Entity>(allTypes));
                 converters.Add(new ObjectConverter<object>(allTypes));
 
                 return args.Item1.BaseSerializerSerializer with

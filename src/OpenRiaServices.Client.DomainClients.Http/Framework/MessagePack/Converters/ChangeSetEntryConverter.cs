@@ -273,7 +273,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
 
         private static Entity? ReadEntity(ref MessagePackReader reader, SerializationContext context)
         {
-            return (Entity?)ReadValue(ref reader, typeof(Entity), context);
+            return (Entity?)ReadValue(ref reader, typeof(object), context);
         }
 
         private static void WriteEntity(ref MessagePackWriter writer, Entity? value, SerializationContext context)
@@ -283,7 +283,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 writer.WriteNil();
                 return;
             }
-            context.GetConverter(typeof(Entity)).WriteObject(ref writer, value, context);
+            context.GetConverter(typeof(object)).WriteObject(ref writer, value, context);
         }
     }
 }
