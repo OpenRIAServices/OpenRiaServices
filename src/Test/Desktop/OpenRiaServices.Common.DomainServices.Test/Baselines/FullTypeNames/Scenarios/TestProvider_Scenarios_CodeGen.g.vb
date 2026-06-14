@@ -1208,11 +1208,11 @@ Namespace TestDomainServices
         ''' Deserialization ctor for MessagePack support, when any Property is required
         ''' </summary>
         <Global.PolyType.ConstructorShapeAttribute()>  _
-        Private Sub New(ByVal id As Integer)
+        Private Sub New(ByVal ID As Integer)
             MyBase.New
             Me.OnCreated
             MyBase.OnDeserializing(CType(Nothing, Global.System.Runtime.Serialization.StreamingContext))
-            Me.ID = id
+            Me.ID = ID
         End Sub
         
         ''' <summary>

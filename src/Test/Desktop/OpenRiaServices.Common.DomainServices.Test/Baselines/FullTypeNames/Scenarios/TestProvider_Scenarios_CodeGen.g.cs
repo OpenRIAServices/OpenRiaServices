@@ -1318,11 +1318,11 @@ namespace TestDomainServices
         /// Deserialization ctor for MessagePack support, when any Property is required
         /// </summary>
         [global::PolyType.ConstructorShapeAttribute()]
-        private TestEntity_DataMemberBuddy(int id)
+        private TestEntity_DataMemberBuddy(int ID)
         {
             this.OnCreated();
             base.OnDeserializing(default(global::System.Runtime.Serialization.StreamingContext));
-            this.ID = id;
+            this.ID = ID;
         }
         
         /// <summary>

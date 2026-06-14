@@ -477,11 +477,11 @@ Namespace TestDomainServices
         ''' Deserialization ctor for MessagePack support, when any Property is required
         ''' </summary>
         <PolyType.ConstructorShapeAttribute()>  _
-        Private Sub New(ByVal customerid As Integer)
+        Private Sub New(ByVal CustomerId As Integer)
             MyBase.New
             Me.OnCreated
             MyBase.OnDeserializing(CType(Nothing, System.Runtime.Serialization.StreamingContext))
-            Me.CustomerId = customerid
+            Me.CustomerId = CustomerId
         End Sub
         
         ''' <summary>

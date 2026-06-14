@@ -234,7 +234,7 @@ namespace OpenRiaServices.Tools
                     deserializingConstructor.CustomAttributes.Add(new CodeAttributeDeclaration("PolyType.ConstructorShapeAttribute"));
 
                     // Add constructor parameter from selected property descriptor
-                    string parameterName = pd.Name.ToLower(CultureInfo.InvariantCulture);
+                    string parameterName = pd.Name;
                     deserializingConstructor.Parameters.Add(
                         new CodeParameterDeclarationExpression(
                             CodeGenUtilities.GetTypeReference(pd.PropertyType, this.ClientProxyGenerator, this.ProxyClass),

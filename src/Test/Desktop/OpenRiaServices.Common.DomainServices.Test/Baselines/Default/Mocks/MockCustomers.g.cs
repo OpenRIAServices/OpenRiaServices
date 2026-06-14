@@ -496,11 +496,11 @@ namespace TestDomainServices
         /// Deserialization ctor for MessagePack support, when any Property is required
         /// </summary>
         [PolyType.ConstructorShapeAttribute()]
-        private MockReport(int customerid)
+        private MockReport(int CustomerId)
         {
             this.OnCreated();
             base.OnDeserializing(default(System.Runtime.Serialization.StreamingContext));
-            this.CustomerId = customerid;
+            this.CustomerId = CustomerId;
         }
         
         /// <summary>
