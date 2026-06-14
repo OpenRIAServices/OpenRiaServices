@@ -4,6 +4,7 @@ using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Buffers;
 using System.Linq;
 using Nerdbank.MessagePack;
 using PolyType;
@@ -72,15 +73,26 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             }
             else
             {
-                if (!reader.TryReadStringSpan(out var discriminator))
-                    throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
+                if (reader.NextMessagePackType != MessagePackType.String)
+                {
+                    throw new MessagePackSerializationException("SurrogateConverter expected string discriminator");
+                }
 
-                // TODO: add cache for looking up types based on span
+                if (reader.TryReadStringSpan(out var discriminator))
+                {
 #if NET10_0_OR_GREATER
                     surrogateType = _typeLookup.GetAlternateLookup<ReadOnlySpan<byte>>()[discriminator];
 #else
-                type = _typeLookup[discriminator.ToArray()];
+                    type = _typeLookup[discriminator.ToArray()];
 #endif
+                }
+                else if (reader.ReadStringSequence() is { } sequence)
+                {
+                    type = _typeLookup[BuffersExtensions.ToArray(sequence)];
+                }
+                else 
+                    throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
+                // TODO: add cache for looking up types based on span
             }
 
             MessagePackConverter converter = GetConverter(type, ref context);
