@@ -49,6 +49,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             {
                 if (surrogateProvider.GetSurrogateType(entityType) is Type surrogateType)
                 {
+                    // TODO: Pass in description or description.GetEntityDerivedTypes(entityType) instead
                     converters.Add((MessagePackConverter)
                         Activator.CreateInstance(typeof(SurrogateConverter<,>).MakeGenericType([surrogateType, entityType]), args: [surrogateProvider])!);
                 }

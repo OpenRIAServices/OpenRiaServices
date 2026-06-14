@@ -45,38 +45,47 @@ namespace OpenRiaServices.Client.DomainClients
             {
                 HashSet<Type> allTypes = new HashSet<Type>(args.knownTypes);
                 foreach (Type knownType in args.knownTypes)
-                    foreach (var derivedType in Server.KnownTypeUtilities.ImportKnownTypes(knownType, true))
-                        allTypes.Add(derivedType);
+                    allTypes.UnionWith(Server.KnownTypeUtilities.ImportKnownTypes(knownType, true));
 
                 List<DerivedTypeUnion> mappings = new List<DerivedTypeUnion>();
-                foreach(var item in ComputeKnownTypeSet(allTypes))
+                List<MessagePackConverter> converters = new List<MessagePackConverter>();
+                foreach (var item in ComputeKnownTypeSet(allTypes))
                 {
-                    // Skip base type since they have KnownType attribute already
-                    if (item.Key.BaseType == typeof(Entity))
-                        continue;
-
                     var knownTypes = item.Value;
-                    // Skip mapping with no derived types
+
+                    // Add all discovered trypes
+                    allTypes.UnionWith(knownTypes);
+
+                    //// Skip mapping with no derived types
                     if (knownTypes.Count == 0
                         || (knownTypes.Count == 1 && knownTypes.Contains(item.Key)))
                         continue;
 
-                    var mapping = CreateDerivedShapeMapping(item.Key);
-                    AddDerivedTypes(mapping, knownTypes, static t => t.Name!);
-                    mappings.Add(mapping);
+                    //// Remove built in union support
+                    //if (item.Key.BaseType == typeof(Entity))
+                    //    continue;
+
+                    //var mapping = CreateDerivedShapeMapping(item.Key);
+                    //AddDerivedTypes(mapping, knownTypes, static t => t.Name!);
+                    //mappings.Add(mapping);
                 }
 
-                DerivedShapeMapping<Entity> entityMapping = new();
-                AddDerivedTypes(entityMapping, allTypes, static t => t.Name!);
-                mappings.Add(entityMapping);
+                // TODO: Remove and replace with something else
+                // nerdbank may select base types
+                converters.Add(new ObjectConverter<Entity>(allTypes));
+                converters.Add(new ObjectConverter<object>(allTypes));
+                //DerivedShapeMapping<Entity> entityMapping = new();
+                //AddDerivedTypes(entityMapping, allTypes, static t => t.Name!);
+                //mappings.Add(entityMapping);
 
-                DerivedShapeMapping<object> objectMapping = new();
-                AddDerivedTypes(objectMapping, allTypes, static t => t.Name!);
-                mappings.Add(objectMapping);
+                //DerivedShapeMapping<object> objectMapping = new();
+                //AddDerivedTypes(objectMapping, allTypes, static t => t.Name!);
+                //mappings.Add(objectMapping);
 
                 return args.Item1.BaseSerializerSerializer with
                 {
-                    DerivedTypeUnions = [.. args.Item1.BaseSerializerSerializer.DerivedTypeUnions, .. mappings]
+                    Converters = [.. args.Item1.BaseSerializerSerializer.Converters, .. converters],
+                    DerivedTypeUnions = [.. args.Item1.BaseSerializerSerializer.DerivedTypeUnions, .. mappings],
                 };
 
             }, (this, knownTypes));
@@ -89,7 +98,8 @@ namespace OpenRiaServices.Client.DomainClients
 
             MessagePackConverter[] converters = [.. serializer.Converters, new MessagePackMethodParametersConverter(), new ChangeSetEntryConverter()];
 
-            return serializer with {
+            return serializer with
+            {
                 PreserveReferences = ReferencePreservationMode.Off,
                 Converters = ConverterCollection.Create(converters)
             };
@@ -101,7 +111,7 @@ namespace OpenRiaServices.Client.DomainClients
             return (DerivedTypeUnion)Activator.CreateInstance(mappingType)!;
         }
 
-        private void AddDerivedTypes(DerivedTypeUnion mapping, IEnumerable<Type> derivedTypes, Func<Type, string> discriminator)
+        private void AddDerivedTypes(DerivedTypeUnion mapping, HashSet<Type> derivedTypes, Func<Type, string> discriminator)
         {
             MethodInfo? addMethodDefinition = mapping.GetType().GetMethods(BindingFlags.Instance | BindingFlags.Public)
                 .Where(m => m.Name == "Add" && m.IsGenericMethodDefinition)
@@ -119,6 +129,10 @@ namespace OpenRiaServices.Client.DomainClients
                 throw new InvalidOperationException($"Unable to locate DerivedShapeMapping.Add<TDerived>(..., ...) on {mapping.GetType().FullName}.");
             }
 
+            // MessagePack resolved types in the order they were registered, so we need to ensure derived types are registered before their base types to ensure correct deserialization.
+            // We achieve this by sorting the types topologically based on their inheritance hierarchy.
+            List<Type> sortedTypes = SortTypesTopologically(derivedTypes);
+
             foreach (Type derivedType in derivedTypes)
             {
                 MethodInfo addMethod = addMethodDefinition.MakeGenericMethod(derivedType);
@@ -132,6 +146,116 @@ namespace OpenRiaServices.Client.DomainClients
 
                 addMethod.Invoke(mapping, [unionIdentifier, typeShape]);
             }
+        }
+
+        // MessagePack resolved types in the order they were registered, so we need to ensure derived types are registered before their base types to ensure correct deserialization.
+        // We achieve this by sorting the types topologically based on their inheritance hierarchy.
+        private List<Type> SortTypesTopologically(HashSet<Type> types)
+        {
+            List<Type> result = new List<Type>(types.Count);
+            HashSet<Type> remaining = new HashSet<Type>(types);
+
+
+            while (remaining.Count > 0)
+            {
+                foreach (Type type in remaining)
+                {
+                    // If any base type is still in the remaining set, we need to process it first
+                    bool canRemove = true;
+                    for (Type? baseType = type.BaseType; baseType is not null; baseType = baseType.BaseType)
+                    {
+                        if (remaining.Contains(baseType))
+                        {
+                            canRemove = false;
+                            break;
+                        }
+                    }
+
+                    if (canRemove)
+                    {
+                        result.Add(type);
+                        remaining.Remove(type);
+                    }
+                }
+            }
+
+            result.Reverse();
+            return result;
+
+            //ArgumentNullException.ThrowIfNull(types);
+
+            //static string GetSortKey(Type type) => type.FullName ?? type.Name;
+
+            //Dictionary<Type, HashSet<Type>> edges = new(types.Count);
+            //Dictionary<Type, int> indegree = new(types.Count);
+
+            //foreach (Type type in types)
+            //{
+            //    edges[type] = [];
+            //    indegree[type] = 0;
+            //}
+
+            //// Edge direction is: derived -> base (or implemented interface)
+            //// so topological order registers more-derived types first.
+            //for (int i = 0; i < types.Count; i++)
+            //{
+            //    Type current = types[i];
+
+            //    for (int j = 0; j < types.Count; j++)
+            //    {
+            //        if (i == j)
+            //        {
+            //            continue;
+            //        }
+
+            //        Type candidateBase = types[j];
+            //        if (!candidateBase.IsAssignableFrom(current))
+            //        {
+            //            continue;
+            //        }
+
+            //        if (edges[current].Add(candidateBase))
+            //        {
+            //            indegree[candidateBase]++;
+            //        }
+            //    }
+            //}
+
+            //var available = indegree
+            //    .Where(kvp => kvp.Value == 0)
+            //    .Select(kvp => kvp.Key)
+            //    .OrderBy(GetSortKey, StringComparer.Ordinal)
+            //    .ToList();
+
+            //List<Type> result = new(types.Count);
+
+            //while (available.Count > 0)
+            //{
+            //    Type current = available[0];
+            //    available.RemoveAt(0);
+            //    result.Add(current);
+
+            //    foreach (Type dependent in edges[current])
+            //    {
+            //        indegree[dependent]--;
+            //        if (indegree[dependent] == 0)
+            //        {
+            //            available.Add(dependent);
+            //        }
+            //    }
+
+            //    available.Sort((a, b) => StringComparer.Ordinal.Compare(GetSortKey(a), GetSortKey(b)));
+            //}
+
+            //// Defensive fallback: if something unexpected prevented a full topological order,
+            //// append remaining types deterministically.
+            //if (result.Count != types.Count)
+            //{
+            //    HashSet<Type> added = new(result);
+            //    result.AddRange(types.Where(t => !added.Contains(t)).OrderBy(GetSortKey, StringComparer.Ordinal));
+            //}
+
+            return result;
         }
 
 

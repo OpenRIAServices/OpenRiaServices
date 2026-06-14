@@ -23,9 +23,9 @@ namespace OpenRiaServices.Server
         /// <param name="type">The type to examine for <see cref="KnownTypeAttribute"/>s</param>
         /// <param name="inherit"><c>true</c> to allow inheritance of <see cref="KnownTypeAttribute"/> from the base.</param>
         /// <returns>The distinct set of types found via the <see cref="KnownTypeAttribute"/>s</returns>
-        internal static IEnumerable<Type> ImportKnownTypes(Type type, bool inherit)
+        internal static HashSet<Type> ImportKnownTypes(Type type, bool inherit)
         {
-            IDictionary<Type, Type> knownTypes = new Dictionary<Type, Type>();
+            HashSet<Type> knownTypes = new HashSet<Type>();
             IEnumerable<KnownTypeAttribute> knownTypeAttributes = type.GetCustomAttributes(typeof(KnownTypeAttribute), inherit).Cast<KnownTypeAttribute>();
             
             foreach (KnownTypeAttribute knownTypeAttribute in knownTypeAttributes)
@@ -33,7 +33,7 @@ namespace OpenRiaServices.Server
                 Type knownType = knownTypeAttribute.Type;
                 if (knownType != null)
                 {
-                    knownTypes[knownType] = knownType;
+                    knownTypes.Add(knownType);
                 }
 
                 string methodName = knownTypeAttribute.MethodName;
@@ -46,15 +46,12 @@ namespace OpenRiaServices.Server
                         IEnumerable<Type> enumerable = methodInfo.Invoke(null, null) as IEnumerable<Type>;
                         if (enumerable != null)
                         {
-                            foreach (Type t in enumerable)
-                            {
-                                knownTypes[t] = t;
-                            }
+                            knownTypes.UnionWith(enumerable);
                         }
                     }
                 }
             }
-            return knownTypes.Keys;
+            return knownTypes;
         }
     }
 }

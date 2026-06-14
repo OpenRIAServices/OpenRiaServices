@@ -130,9 +130,9 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
         public override object? GetResult() => Result;
     }
 
-    sealed class MessagePackSubmitResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
+    sealed class MessagePackSubmitResponseEnvelope : MessagePackResponseEnvelopeBase
     {
-        public TResult? Result { get; set; }
+        public IEnumerable<ChangeSetEntry?>? Result { get; set; }
         public override object? GetResult() => Result;
     }
 }

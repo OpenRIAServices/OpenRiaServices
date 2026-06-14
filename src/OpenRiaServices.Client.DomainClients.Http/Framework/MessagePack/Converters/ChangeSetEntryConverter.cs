@@ -151,7 +151,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
 
             writer.WriteMapHeader(count);
             writer.Write(nameof(ChangeSetEntry.Entity));
-            WriteValue(ref writer, value.Entity, typeof(object), context);
+            WriteEntity(ref writer, value.Entity, context);
             writer.Write(nameof(ChangeSetEntry.Id));
             WriteValue(ref writer, value.Id, typeof(int), context);
             writer.Write(nameof(ChangeSetEntry.HasMemberChanges));
@@ -164,13 +164,13 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             if (value.OriginalEntity is not null)
             {
                 writer.Write(nameof(ChangeSetEntry.OriginalEntity));
-                WriteValue(ref writer, value.OriginalEntity, typeof(object), context);
+                WriteEntity(ref writer, value.OriginalEntity, context);
             }
 
             if (value.StoreEntity is not null)
             {
                 writer.Write(nameof(ChangeSetEntry.StoreEntity));
-                WriteValue(ref writer, value.StoreEntity, typeof(object), context);
+                WriteEntity(ref writer, value.StoreEntity, context);
             }
 
             if (value.ValidationErrors is not null)
@@ -260,6 +260,16 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 writer.WriteNil();
             else
                 context.GetConverter(type).WriteObject(ref writer, value, context);
+        }
+
+        private static void WriteEntity(ref MessagePackWriter writer, Entity? value, SerializationContext context)
+        {
+            if (value is null)
+            {
+                writer.WriteNil();
+                return;
+            }
+            context.GetConverter(typeof(Entity)).WriteObject(ref writer, value, context);
         }
     }
 }

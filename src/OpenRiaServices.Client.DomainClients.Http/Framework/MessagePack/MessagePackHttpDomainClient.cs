@@ -156,7 +156,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(QueryResult<>))
                 return typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(returnType);
             if (string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal))
-                return typeof(MessagePackSubmitResponseEnvelope<>).MakeGenericType(returnType);
+                return typeof(MessagePackSubmitResponseEnvelope);
 
             return (returnType == typeof(void)) ? typeof(MessagePackInvokeResponseEnvelope<object>)
                 : typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(returnType);
