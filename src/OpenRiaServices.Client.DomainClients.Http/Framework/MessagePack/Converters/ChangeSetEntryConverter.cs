@@ -4,6 +4,7 @@ using OpenRiaServices.Client.Internal;
 using PolyType;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -242,10 +243,10 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 return;
             }
 
-            MethodInfo customMethod = entityType.GetMethod(methodName) ?? throw new InvalidOperationException("Could not get entity action parameters");
+            MethodInfo customMethod = entityType.GetMethod(methodName) ?? EntityActionDoesNotExist(entityType, methodName);
             ParameterInfo[] parameters = customMethod.GetParameters();
             if (parameters.Length != values.Length)
-                throw new MessagePackSerializationException($"Parameter count mismatch for method '{methodName}' on entity type '{entityType.FullName}'. Expected {parameters.Length} parameters but got {values.Length}.");
+                throw new InvalidOperationException($"Parameter count mismatch for method '{methodName}' on entity type '{entityType.FullName}'. Expected {parameters.Length} parameters but got {values.Length}.");
 
             writer.WriteArrayHeader(values.Length);
             for (int i = 0; i < values.Length; i++)
@@ -254,6 +255,13 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 WriteValue(ref writer, values[i], parameterType, context);
             }
         }
+
+        [DoesNotReturn]
+        private static MethodInfo EntityActionDoesNotExist(Type entityType, string methodName)
+        {
+            throw new InvalidOperationException($"This DomainService does not support operation '{methodName}' for entity '{entityType.Name}'.");
+        }
+
         private static void WriteValue(ref MessagePackWriter writer, object? value, Type type, SerializationContext context)
         {
             if (value is null)

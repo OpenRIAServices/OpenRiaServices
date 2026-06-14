@@ -289,8 +289,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
         }
 
         private static DomainOperationEntry GetCustomMethod(DomainServiceDescription description, Type entityType, string methodName)
-            => description.GetCustomMethod(entityType, methodName)
-                ?? throw new MessagePackSerializationException($"Custom method '{methodName}' was not found for entity type '{entityType.FullName}'.");
+            => description.GetCustomMethodOrThrow(entityType, methodName);
 
         private static object? ReadValue(ref MessagePackReader reader, Type type, SerializationContext context)
         {

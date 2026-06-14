@@ -259,10 +259,7 @@ namespace OpenRiaServices.Server
             this.EnsureInitialized();
 
             ArgumentNullException.ThrowIfNull(entityType);
-            if (string.IsNullOrEmpty(methodName))
-            {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.DomainOperationEntry_ArgumentCannotBeNullOrEmpty, "methodName"));
-            }
+            ArgumentException.ThrowIfNullOrEmpty(methodName);
 
             DomainOperationEntry method = null;
             for (Type baseType = entityType; baseType != null; baseType = baseType.BaseType)
@@ -282,6 +279,21 @@ namespace OpenRiaServices.Server
 
             return method;
         }
+
+#nullable enable
+        /// <summary>
+        /// Returns the <see cref="DomainService"/> custom method of the specified name associated with the specified entity type
+        /// </summary>
+        /// <param name="entityType">The entity type the custom method is associated with</param>
+        /// <param name="methodName">The name of the custom method</param>
+        /// <returns><see cref="DomainOperationEntry"/> for the custom method</returns>
+        /// <exception cref="InvalidOperationException">Thrown if the custom method is not found</exception>"
+        internal DomainOperationEntry GetCustomMethodOrThrow(Type entityType, string methodName)
+        {
+            return GetCustomMethod(entityType, methodName)
+                ?? throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainService_InvalidDomainOperationEntry, methodName, entityType.Name));
+        }
+#nullable restore
 
         /// <summary>
         /// Returns the collection of custom methods defined for the given entity type
