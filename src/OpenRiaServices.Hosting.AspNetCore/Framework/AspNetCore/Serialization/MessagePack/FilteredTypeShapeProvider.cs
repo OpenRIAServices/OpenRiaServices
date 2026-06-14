@@ -183,7 +183,7 @@ public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
         }
 
         MetaType metaType = MetaType.GetMetaType(declaringType);
-        MetaMember metaMember = metaType[property.Name];
+        MetaMember metaMember = metaType[property.MemberInfo.Name];
 
         if (metaMember is null)
             return false;
