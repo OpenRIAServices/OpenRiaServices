@@ -66,7 +66,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             };
         }
 
-        private IReadOnlyList<DerivedTypeUnion> BuildDerivedTypeMappings(DomainServiceDescription description, Wcf.DomainServiceSerializationSurrogate surrogateProvider)
+        private List<DerivedTypeUnion> BuildDerivedTypeMappings(DomainServiceDescription description, Wcf.DomainServiceSerializationSurrogate surrogateProvider)
         {
             List<DerivedTypeUnion> mappings = new();
 

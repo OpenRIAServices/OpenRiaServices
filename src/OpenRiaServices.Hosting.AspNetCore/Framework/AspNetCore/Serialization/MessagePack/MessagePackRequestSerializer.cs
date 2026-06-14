@@ -115,9 +115,36 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
         public override Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result, DomainOperationEntry operation)
         {
             // Create response for base type returned ??
+            var description = DomainServiceDescription.GetDescription(operation.DomainServiceType);
+            Type serializationType = description.GetRootEntityType(typeof(T));
 
+            if (serializationType == typeof(T))
+            {
+                return WriteEnvelopeAsync(context, new MessagePackQueryResponseEnvelope<T>(result));
+            }
+            else
+            {
+                // TODO: Cache convert method (shared static cache)?
+                var convertedResult = (QueryResult)typeof(MessagePackRequestSerializer)
+                    .GetMethod(nameof(ConvertQueryResult), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)!
+                    .MakeGenericMethod(typeof(T), serializationType)
+                    .Invoke(null, new object[] { result })!;
 
-            return WriteEnvelopeAsync(context, new MessagePackQueryResponseEnvelope<T>(result));
+                var envelope = (MessagePackResponseEnvelopeBase)Activator.CreateInstance(
+                    typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(serializationType),
+                    convertedResult)!;
+
+                return WriteEnvelopeAsync(context, envelope);
+            }
+        }
+
+        private static QueryResult<TTo> ConvertQueryResult<TFrom,TTo>(QueryResult<TFrom> query)
+//            where TFrom : TTo
+        {
+            return new QueryResult<TTo>((IEnumerable<TTo>)query.RootResults, query.TotalCount)
+            {
+                IncludedResults = query.IncludedResults
+            };
         }
 
         private async Task WriteEnvelopeAsync(HttpContext context, MessagePackResponseEnvelopeBase envelope)

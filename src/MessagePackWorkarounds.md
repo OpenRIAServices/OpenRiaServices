@@ -43,6 +43,7 @@ Workarounds:
            * MessagePackRequestSerializer.WriteQueryResponseAsync (server)
            * MessagePackRequestSerializer.CreateInvokeResponseEnvelope (server)
 
+
 # Serializing using
 
 # Object and Union converter for same type cannot coexist
@@ -60,3 +61,13 @@ Resulting in failed test
 
 * Addin a ctor with required parameters still does not resolve the issue.
 * adding required parameters to ctor leads to duplicate parameters
+
+# Other todos etc
+
+* Creata a server side test corresponding to DomainClient_SubmitWithNonexistentDomainMethod
+  * Validate behaviour when client send entityAction that does not exist
+* Update generated code to handle TestDomainServices.MockReport issue with required members
+* Ensure whole class hierarchies are properly serialized/deserialized when using "object" serializer
+  * See " Maybe always serialize/deserialize using "base type" serializer ??" above
+  * PARTIALLY IMPLEMENTED (Queries only)
+     * `MessagePackHttpDomainClient.GetResponseEnvelopeType` + `MessagePackRequestSerializer.WriteQueryResponseAsync`

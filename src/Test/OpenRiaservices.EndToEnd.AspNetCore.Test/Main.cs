@@ -67,7 +67,7 @@ namespace OpenRiaServices.Client.Test
             var messagePack = new MessagePackHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory, msgPackSerializer)
             {
                 UseQueryHttpMethod = true,
-                
+
             };
             var binary = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory)
             {
@@ -76,7 +76,7 @@ namespace OpenRiaServices.Client.Test
             var xml = new XmlHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
 
 #if NET10_0
-            DomainContext.DomainClientFactory = new CompositeDomainClientFactory(binary, messagePack, binary);
+            DomainContext.DomainClientFactory = messagePack;
 #else
             DomainContext.DomainClientFactory = binary;
 #endif
@@ -168,56 +168,6 @@ namespace OpenRiaServices.Client.Test
             } while (stopwatch.Elapsed <= TimeSpan.FromMinutes(1));
 
             throw new TimeoutException("webserver did not respond to '/' in 1 minute");
-        }
-    }
-
-    sealed class CompositeDomainClientFactory : IDomainClientFactory
-    {
-        private readonly IDomainClientFactory _queryFactory;
-        private readonly IDomainClientFactory _invokeFactory;
-        private readonly IDomainClientFactory _submitFactory;
-
-        public CompositeDomainClientFactory(IDomainClientFactory queryFactory, IDomainClientFactory invokeFactory, IDomainClientFactory submitFactory)
-        {
-            _queryFactory = queryFactory;
-            _invokeFactory = invokeFactory;
-            _submitFactory = submitFactory;
-        }
-
-        public DomainClient CreateDomainClient([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type serviceContract, Uri serviceUri, bool requiresSecureEndpoint)
-        {
-            return new CompositeDomainClient(_queryFactory.CreateDomainClient(serviceContract, serviceUri, requiresSecureEndpoint)
-                , _invokeFactory.CreateDomainClient(serviceContract, serviceUri, requiresSecureEndpoint)
-                , _submitFactory.CreateDomainClient(serviceContract, serviceUri, requiresSecureEndpoint));
-        }
-
-        sealed class CompositeDomainClient(DomainClient queryClient, DomainClient invokeClient, DomainClient submitClient) : DomainClient
-        {
-            public override bool SupportsCancellation => true;
-
-            protected override Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
-            {
-                if (invokeClient.EntityTypes is null)
-                    invokeClient.EntityTypes = this.EntityTypes;
-
-                return invokeClient.InvokeAsync(invokeArgs, cancellationToken);
-            }
-
-            protected override Task<QueryCompletedResult> QueryAsyncCore(EntityQuery query, CancellationToken cancellationToken)
-            {
-                if (queryClient.EntityTypes is null)
-                    queryClient.EntityTypes = this.EntityTypes;
-
-                return queryClient.QueryAsync(query, cancellationToken);
-            }
-
-            protected override Task<SubmitCompletedResult> SubmitAsyncCore(EntityChangeSet changeSet, CancellationToken cancellationToken)
-            {
-                if (submitClient.EntityTypes is null)
-                    submitClient.EntityTypes = this.EntityTypes;
-
-                return submitClient.SubmitAsync(changeSet, cancellationToken);
-            }
         }
     }
 }
