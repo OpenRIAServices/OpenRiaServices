@@ -1327,6 +1327,17 @@ namespace TestDomainServices
         }
         
         /// <summary>
+        /// Deserialization ctor for MessagePack support, when any Property is required
+        /// </summary>
+        [PolyType.ConstructorShapeAttribute()]
+        private TestEntity_DataMemberBuddy(int id)
+        {
+            this.OnCreated();
+            base.OnDeserializing(default(System.Runtime.Serialization.StreamingContext));
+            this.ID = id;
+        }
+        
+        /// <summary>
         /// Gets or sets the 'ID' value.
         /// </summary>
         [DataMember()]

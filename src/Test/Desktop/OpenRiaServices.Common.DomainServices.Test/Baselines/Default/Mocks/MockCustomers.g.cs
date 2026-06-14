@@ -491,17 +491,16 @@ namespace TestDomainServices
         {
             this.OnCreated();
         }
-
-        // TODO: Update generated code for required properties
-#if NET
-        [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
-        [PolyType.ConstructorShape]
-#endif
-        // Note this must not be the required member ??
-        private MockReport(int customerId)
+        
+        /// <summary>
+        /// Deserialization ctor for MessagePack support, when any Property is required
+        /// </summary>
+        [PolyType.ConstructorShapeAttribute()]
+        private MockReport(int customerid)
         {
-            base.OnDeserializing(default);
-            CustomerId = customerId;
+            this.OnCreated();
+            base.OnDeserializing(default(System.Runtime.Serialization.StreamingContext));
+            this.CustomerId = customerid;
         }
         
         /// <summary>

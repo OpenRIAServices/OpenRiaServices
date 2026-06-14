@@ -474,6 +474,17 @@ Namespace TestDomainServices
         End Sub
         
         ''' <summary>
+        ''' Deserialization ctor for MessagePack support, when any Property is required
+        ''' </summary>
+        <PolyType.ConstructorShapeAttribute()>  _
+        Private Sub New(ByVal customerid As Integer)
+            MyBase.New
+            Me.OnCreated
+            MyBase.OnDeserializing(CType(Nothing, System.Runtime.Serialization.StreamingContext))
+            Me.CustomerId = customerid
+        End Sub
+        
+        ''' <summary>
         ''' Gets or sets the associated <see cref="MockCustomer"/> entity.
         ''' </summary>
         <EntityAssociation("R_C", "CustomerId", "CustomerId")>  _
