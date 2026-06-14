@@ -203,7 +203,7 @@ namespace OpenRiaServices.Hosting.Wcf
 
 #if ASPNET_CORE
             // public Surrogate() : base()
-            constructorBuilder = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, new Type[] { });
+            constructorBuilder = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, []);
             constructorGenerator = constructorBuilder.GetILGenerator();
 
             if (parentSurrogateType == typeof(object))

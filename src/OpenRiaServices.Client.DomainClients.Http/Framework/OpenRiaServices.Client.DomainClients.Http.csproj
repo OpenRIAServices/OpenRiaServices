@@ -17,6 +17,7 @@
     <Compile Include="..\..\OpenRiaServices.Client.Web\Framework\Linq\QuerySerializer.cs" Link="OpenRiaServices.Client.Web\Linq\QuerySerializer.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="OpenRiaServices.Client\BinaryTypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\TypeUtility.cs" Link="OpenRiaServices.Client\TypeUtility.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.AspNetCore\Framework\AspNetCore\Serialization\MessagePack\MessagePackUtility.cs" Link="MessagePack\MessagePackUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\KnownTypeUtilities.cs" Link="OpenRiaServices.Server\KnownTypeUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -24,6 +25,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Nerdbank.MessagePack" Version="1.2.4" />
+    <PackageReference Include="System.IO.Hashing" Version="10.0.9" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Framework\Polyfills.cs" Link="Polyfills.cs" />

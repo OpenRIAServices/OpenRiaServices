@@ -31,14 +31,10 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
         // This will allow us to build _surrogateFactory, as well as to create dictionaries with only relevant surrogate types
         public ObjectConverter(IEnumerable<Type> knownTypes)
         {
-            // TODO: Prefer discriminator from [DerivedTypeShapeAttribute]
-            // Take namespace from datacontract if any ???
-            Func<Type, byte[]> discriminatorFunc = static (t) => System.Text.Encoding.UTF8.GetBytes(t.Name!);
-
-            var comparer = StructuralEqualityComparer.GetDefault(s_reflectionTypeShapeProvider.GetTypeShape<byte[]>());
+            var comparer = new MessagePackUtility.ByteArrayComparer();
 
             // This avoids double dictionary lookups in surrogateProvider
-            _typeLookup = knownTypes.Where(t => !t.IsAbstract).ToDictionary(discriminatorFunc, comparer);
+            _typeLookup = knownTypes.Where(t => !t.IsAbstract).ToDictionary(MessagePackUtility.GetDiscriminator, comparer);
             _discriminators = FrozenDictionary.ToFrozenDictionary(_typeLookup.Select(k => new KeyValuePair<Type, byte[]>(k.Value, k.Key)));
 
         }

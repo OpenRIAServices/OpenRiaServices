@@ -491,6 +491,18 @@ namespace TestDomainServices
         {
             this.OnCreated();
         }
+
+        // TODO: Update generated code for required properties
+#if NET
+        [System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
+        [PolyType.ConstructorShape]
+#endif
+        // Note this must not be the required member ??
+        private MockReport(int customerId)
+        {
+            base.OnDeserializing(default);
+            CustomerId = customerId;
+        }
         
         /// <summary>
         /// Gets or sets the associated <see cref="MockCustomer"/> entity.

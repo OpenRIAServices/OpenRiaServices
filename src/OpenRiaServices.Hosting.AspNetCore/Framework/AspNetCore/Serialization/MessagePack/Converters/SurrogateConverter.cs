@@ -12,38 +12,6 @@ using PolyType.ReflectionProvider;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters
 {
-    sealed class ByteArrayComparer : IEqualityComparer<byte[]?>
-#if NET10_0_OR_GREATER
-        , IAlternateEqualityComparer<ReadOnlySpan<byte>, byte[]?>
-#endif
-    {
-        public bool Equals(byte[]? x, byte[]? y)
-        {
-            if (ReferenceEquals(x, y))
-                return true;
-            if (x is null || y is null)
-                return false;
-
-            return x.AsSpan().SequenceEqual(y);
-        }
-
-        int IEqualityComparer<byte[]?>.GetHashCode(byte[]? obj)
-        {
-            return obj == null ? 0 : (int)System.IO.Hashing.XxHash32.HashToUInt32(obj);
-        }
-
-#if NET10_0_OR_GREATER
-        byte[]? IAlternateEqualityComparer<ReadOnlySpan<byte>, byte[]?>.Create(ReadOnlySpan<byte> alternate)
-            => alternate.ToArray();
-
-        bool IAlternateEqualityComparer<ReadOnlySpan<byte>, byte[]?>.Equals(ReadOnlySpan<byte> alternate, byte[]? other)
-            => other is not null && alternate.SequenceEqual(other);
-
-        int IAlternateEqualityComparer<ReadOnlySpan<byte>, byte[]?>.GetHashCode(ReadOnlySpan<byte> alternate)
-            => (int)System.IO.Hashing.XxHash32.HashToUInt32(alternate);
-#endif
-    }
-
     /// <summary>
     /// Serializes an instance of <typeparamref name="T"/> using a surrogate type <typeparamref name="TSurrogate"/>
     /// </summary>
@@ -68,25 +36,20 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             if (typeof(T) == typeof(object))
             {
                 knownTypes = _surrogateProvider.SurrogateTypes;
-
-                // TODO: Prefer discriminator from [DerivedTypeShapeAttribute]
-                // Take namespace from datacontract if any ???
-                discriminatorFunc = static (t) => System.Text.Encoding.UTF8.GetBytes(t.Name!);
+                discriminatorFunc = MessagePackUtility.GetDiscriminator;
             }
             else
             {
                 _surrogateBase = surrogateProvider.GetSurrogateType(typeof(T));
                 Debug.Assert(_surrogateBase == typeof(TSurrogate));
                 knownTypes = _surrogateProvider.SurrogateTypes.Where(t => t.IsAssignableTo(_surrogateBase));
-
-                // Take namespace from datacontract ???
-                discriminatorFunc = (t) => (t != _surrogateBase) ? System.Text.Encoding.UTF8.GetBytes(t.Name!) : [];
+                discriminatorFunc = (t) => (t != _surrogateBase) ? MessagePackUtility.GetDiscriminator(t) : [];
             }
 
             // TODO: Consider a dictionary for surrogate factory lookup
             // This avoids double dictionary lookups in surrogateProvider
-            _typeLookup = knownTypes.ToDictionary(discriminatorFunc, new ByteArrayComparer());
             //_surrogateFactory = knownTypes.ToDictionary(t => t, _surrogateProvider.GetSurrogateFactory).ToFrozenDictionary();
+            _typeLookup = knownTypes.ToDictionary(discriminatorFunc, new MessagePackUtility.ByteArrayComparer());
             _discriminators = FrozenDictionary.ToFrozenDictionary(
                 _typeLookup
                     .Select(k => new KeyValuePair<Type, byte[]?>(k.Value, k.Key is [] ? null : k.Key)));
