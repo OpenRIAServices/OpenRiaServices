@@ -360,7 +360,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// <param name="operation">The operation descriptor for which the response is being written.</param>
         /// <returns>A task that completes when the response has been written to the HTTP response.</returns>
         /// <remarks>If the request is already canceled, no output is written. The response's Content-Type and Content-Length are set by this method.</remarks>
-        public override async Task WriteResponseAsync(HttpContext context, object? result, DomainOperationEntry operation)
+        private async Task WriteResponseAsync(HttpContext context, object? result, DomainOperationEntry operation)
         {
             var ct = context.RequestAborted;
             if (ct.IsCancellationRequested)
@@ -392,6 +392,16 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// <param name="context">The current HTTP context.</param>
         /// <param name="result">The change set entries to include in the submit response.</param>
         public override Task WriteSubmitResponseAsync(HttpContext context, IEnumerable<ChangeSetEntry> result)
+        {
+            return WriteResponseAsync(context, result, _operation);
+        }
+
+        public override Task WriteInvokeResponseAsync(HttpContext context, object? result, DomainOperationEntry operation)
+        {
+            return WriteResponseAsync(context, result, _operation);
+        }
+
+        public override Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result, DomainOperationEntry operation)
         {
             return WriteResponseAsync(context, result, _operation);
         }

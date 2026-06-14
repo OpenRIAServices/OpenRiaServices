@@ -1,3 +1,4 @@
+using Microsoft.AspNetCore.Http;
 using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters;
 using OpenRiaServices.Server;
@@ -92,10 +93,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
             (_, object?[] parameters) = await ReadParametersFromBodyAsync(context, _operation).ConfigureAwait(false);
             return (IEnumerable<ChangeSetEntry>?)parameters.FirstOrDefault() ?? Array.Empty<ChangeSetEntry>();
         }
-
-        public override Task WriteSubmitResponseAsync(Microsoft.AspNetCore.Http.HttpContext context, IEnumerable<ChangeSetEntry> result)
-            => WriteResponseAsync(context, result, _operation);
-
         public override async Task WriteErrorAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
         {
             context.Response.Headers.ContentType = MimeTypes.MessagePack;
@@ -106,10 +103,24 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
                 context.RequestAborted).ConfigureAwait(false);
         }
 
-        public override Task WriteResponseAsync(Microsoft.AspNetCore.Http.HttpContext context, object? result, DomainOperationEntry operation)
-            => WriteEnvelopeAsync(context, CreateResponseEnvelope(operation, result, fault: null));
 
-        private async Task WriteEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, object envelope)
+        public override Task WriteSubmitResponseAsync(Microsoft.AspNetCore.Http.HttpContext context, IEnumerable<ChangeSetEntry> result)
+            => WriteEnvelopeAsync(context, new MessagePackSubmitResponseEnvelope(result));
+
+        public override Task WriteInvokeResponseAsync(HttpContext context, object? result, DomainOperationEntry operation)
+        {
+            return WriteEnvelopeAsync(context, CreateInvokeResponseEnvelope(operation, result));
+        }
+
+        public override Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result, DomainOperationEntry operation)
+        {
+            // Create response for base type returned ??
+
+
+            return WriteEnvelopeAsync(context, new MessagePackQueryResponseEnvelope<T>(result));
+        }
+
+        private async Task WriteEnvelopeAsync(HttpContext context, MessagePackResponseEnvelopeBase envelope)
         {
             // HOW To write response without "Envelope type"
             var bufferWriter = context.Response.BodyWriter;
@@ -124,17 +135,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
                 _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()),
                 context.RequestAborted).ConfigureAwait(false);
         }
-
-
-        private static Type GetReturnType(DomainOperationEntry operation)
-            => operation.Operation switch
-            {
-                DomainOperation.Query => typeof(QueryResult<>).MakeGenericType(operation.AssociatedType!),
-                DomainOperation.Invoke when operation.ReturnType == typeof(void) => typeof(object),
-                DomainOperation.Invoke => operation.ReturnType,
-                DomainOperation.Custom when operation.Name == "Submit" => typeof(IEnumerable<ChangeSetEntry>),
-                _ => throw new NotSupportedException()
-            };
 
         private async Task<MessagePackRequestEnvelopeBase> DeserializeRequestEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainOperationEntry operation)
         {
@@ -160,32 +160,16 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
             return serializer with { StartingContext = context };
         }
 
-        private object CreateResponseEnvelope(DomainOperationEntry operation, object? result, DomainServiceFault? fault)
+        private static MessagePackResponseEnvelopeBase CreateInvokeResponseEnvelope(DomainOperationEntry operation, object? result)
         {
             // iF the operation is a query, the return type of the envelope is QueryResult<T>, where T is the associated type of the operation. For submit operations, the return type is IEnumerable<ChangeSetEntry>. For invoke operations, the return type is the declared return type of the operation.
-
-            if (fault is not null)
-                return new MessagePackResponseEnvelopeBase { Fault = fault };
-
-
-            if (operation.Operation == DomainOperation.Custom && operation.Name == "Submit")
-            {
-                return new MessagePackSubmitResponseEnvelope((IEnumerable<ChangeSetEntry>)result!);
-            }
-
-
             Type responseEnvelopeType = operation.Operation switch
             {
-                DomainOperation.Query => typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(operation.AssociatedType!),
-                DomainOperation.Invoke => typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(GetReturnType(operation)),
+                DomainOperation.Invoke => typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(operation.ReturnType),
                 _ => throw new NotSupportedException()
             };
 
-            object envelope = Activator.CreateInstance(responseEnvelopeType, result)!;
-            if (result is not null)
-                responseEnvelopeType.GetProperty("Result")!.SetValue(envelope, result);
-
-            return envelope;
+            return (MessagePackResponseEnvelopeBase)Activator.CreateInstance(responseEnvelopeType, result)!;
         }
 
         private static bool MatchesMediaType(ReadOnlySpan<char> value, ReadOnlySpan<char> expected)
