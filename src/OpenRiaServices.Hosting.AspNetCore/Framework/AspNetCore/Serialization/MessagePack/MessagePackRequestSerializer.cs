@@ -165,6 +165,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
             // iF the operation is a query, the return type of the envelope is QueryResult<T>, where T is the associated type of the operation. For submit operations, the return type is IEnumerable<ChangeSetEntry>. For invoke operations, the return type is the declared return type of the operation.
             Type responseEnvelopeType = operation.Operation switch
             {
+                DomainOperation.Invoke when operation.ReturnType == typeof(void) => typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(typeof(object)),
                 DomainOperation.Invoke => typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(operation.ReturnType),
                 _ => throw new NotSupportedException()
             };
