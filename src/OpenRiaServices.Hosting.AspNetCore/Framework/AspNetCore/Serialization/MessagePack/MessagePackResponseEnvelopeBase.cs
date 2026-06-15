@@ -53,7 +53,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     }
 
 
-    [DerivedTypeShape(typeof(MessagePackQueryRequestEnvelope))]
     class MessagePackRequestEnvelope
     {
         [MessagePackConverter(typeof(Converters.MethodParametersConverter))]

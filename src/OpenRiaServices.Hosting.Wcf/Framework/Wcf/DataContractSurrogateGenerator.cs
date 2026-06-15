@@ -212,16 +212,12 @@ namespace OpenRiaServices.Hosting.Wcf
                 constructorGenerator.Emit(OpCodes.Ldarg_0);
                 constructorGenerator.Emit(OpCodes.Call, parentSurrogateType.GetConstructor(Type.EmptyTypes));
 
-                if (!type.IsAbstract && type.GetConstructor(Type.EmptyTypes) is { } ctor)
+                if (!type.IsAbstract)
                 {
                     // _wrapper = new Type()
                     constructorGenerator.Emit(OpCodes.Ldarg_0);
-                    constructorGenerator.Emit(OpCodes.Newobj, ctor);
+                    constructorGenerator.Emit(OpCodes.Newobj, type.GetConstructor(Type.EmptyTypes));
                     constructorGenerator.Emit(OpCodes.Stfld, wrapperField);
-                }
-                else
-                {
-                    // TODO: Throw exception
                 }
             }
             else if (!type.IsAbstract)
@@ -229,7 +225,7 @@ namespace OpenRiaServices.Hosting.Wcf
                 // base(new Type())
                 constructorGenerator.Emit(OpCodes.Ldarg_0);
                 constructorGenerator.Emit(OpCodes.Newobj, type.GetConstructor(Type.EmptyTypes));
-                constructorGenerator.Emit(OpCodes.Call, parentSurrogateType.GetConstructor(new Type[] { parentType }));
+                constructorGenerator.Emit(OpCodes.Call, parentSurrogateType.GetConstructor([parentType]));
             }
 
             constructorGenerator.Emit(OpCodes.Ret);

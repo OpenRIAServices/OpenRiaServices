@@ -1,7 +1,5 @@
 using System;
 using System.Buffers;
-using System.Collections;
-using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -9,7 +7,6 @@ using System.Linq;
 using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
-using PolyType.ReflectionProvider;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters
 {
@@ -25,7 +22,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
         private readonly FrozenDictionary<Type, Func<object, object>> _surrogateFactory;
         private readonly Type _surrogateBase;
 
-        public SurrogateConverter(DomainServiceDescription description, Wcf.DomainServiceSerializationSurrogate surrogateProvider)
+        public SurrogateConverter(DomainServiceDescription description, DomainServiceSerializationSurrogate surrogateProvider)
         {
             _surrogateBase = surrogateProvider.GetSurrogateType(typeof(T));
             IEnumerable<Type> knownTypes;

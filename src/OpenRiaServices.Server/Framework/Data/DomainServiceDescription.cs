@@ -287,7 +287,7 @@ namespace OpenRiaServices.Server
         /// <param name="entityType">The entity type the custom method is associated with</param>
         /// <param name="methodName">The name of the custom method</param>
         /// <returns><see cref="DomainOperationEntry"/> for the custom method</returns>
-        /// <exception cref="InvalidOperationException">Thrown if the custom method is not found</exception>"
+        /// <exception cref="InvalidOperationException">Thrown if the custom method is not found</exception>
         internal DomainOperationEntry GetCustomMethodOrThrow(Type entityType, string methodName)
         {
             return GetCustomMethod(entityType, methodName)
@@ -1671,137 +1671,137 @@ namespace OpenRiaServices.Server
                 case DomainOperation.Delete:
                 case DomainOperation.Insert:
                 case DomainOperation.Update:
+                {
+                    // insert signature check: parameter length must be 1
+                    if (parameters.Count != 1)
                     {
-                        // insert signature check: parameter length must be 1
-                        if (parameters.Count != 1)
-                        {
-                            error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidInsertUpdateDeleteMethod_IncorrectParameterLength, methodName));
-                            return false;
-                        }
-
-                        // parameter must be by-value
-                        if (!IsByVal(parameters[0]))
-                        {
-                            error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_ParamMustBeByVal, methodName, parameters[0].Name));
-                            return false;
-                        }
-
-                        if (!description._entityTypes.Contains(parameters[0].ParameterType))
-                        {
-                            error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainMethod_ParamMustBeEntity, parameters[0].Name, methodName));
-                            return false;
-                        }
-
-                        break;
+                        error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidInsertUpdateDeleteMethod_IncorrectParameterLength, methodName));
+                        return false;
                     }
+
+                    // parameter must be by-value
+                    if (!IsByVal(parameters[0]))
+                    {
+                        error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_ParamMustBeByVal, methodName, parameters[0].Name));
+                        return false;
+                    }
+
+                    if (!description._entityTypes.Contains(parameters[0].ParameterType))
+                    {
+                        error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainMethod_ParamMustBeEntity, parameters[0].Name, methodName));
+                        return false;
+                    }
+
+                    break;
+                }
                 case DomainOperation.Query:
+                {
+                    // Ignore the optional "out count" parameter.
+                    IEnumerable<DomainOperationParameter> queryParameters = parameters;
+                    DomainOperationParameter lastParameter = queryParameters.LastOrDefault();
+                    if (lastParameter != null && lastParameter.IsOut)
                     {
-                        // Ignore the optional "out count" parameter.
-                        IEnumerable<DomainOperationParameter> queryParameters = parameters;
-                        DomainOperationParameter lastParameter = queryParameters.LastOrDefault();
-                        if (lastParameter != null && lastParameter.IsOut)
-                        {
-                            queryParameters = queryParameters.Take(queryParameters.Count() - 1).ToArray();
-                        }
+                        queryParameters = queryParameters.Take(queryParameters.Count() - 1).ToArray();
+                    }
 
-                        foreach (DomainOperationParameter param in queryParameters)
+                    foreach (DomainOperationParameter param in queryParameters)
+                    {
+                        if (!TypeUtility.IsPredefinedType(param.ParameterType))
                         {
-                            if (!TypeUtility.IsPredefinedType(param.ParameterType))
-                            {
-                                error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_ParamMustBeSimple, methodName, param.Name));
-                                return false;
-                            }
-                        }
-
-                        // Determine the entity Type and validate the return type
-                        // (must return IEnumerable<T> or a singleton)
-                        bool isSingleton = false;
-                        Type entityType = DomainServiceDescription.GetQueryEntityReturnType(operationEntry, out isSingleton, out error);
-                        if (error != null)
-                        {
+                            error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_ParamMustBeSimple, methodName, param.Name));
                             return false;
                         }
-
-                        // validate the entity Type
-                        if (entityType != null || !description._entityTypes.Contains(entityType))
-                        {
-                            string errorMessage;
-                            if (!IsValidEntityType(entityType, out errorMessage))
-                            {
-                                error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.Invalid_Entity_Type, entityType.Name, errorMessage));
-                                return false;
-                            }
-                        }
-
-                        // Only IEnumerable<T> returning query methods can be marked composable
-                        if (isSingleton && ((QueryAttribute)operationEntry.OperationAttribute).IsComposable)
-                        {
-                            throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_SingletonQueryMethodCannotCompose, methodName, returnType));
-                        }
-
-                        break;
                     }
+
+                    // Determine the entity Type and validate the return type
+                    // (must return IEnumerable<T> or a singleton)
+                    bool isSingleton = false;
+                    Type entityType = DomainServiceDescription.GetQueryEntityReturnType(operationEntry, out isSingleton, out error);
+                    if (error != null)
+                    {
+                        return false;
+                    }
+
+                    // validate the entity Type
+                    if (entityType != null || !description._entityTypes.Contains(entityType))
+                    {
+                        string errorMessage;
+                        if (!IsValidEntityType(entityType, out errorMessage))
+                        {
+                            error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.Invalid_Entity_Type, entityType.Name, errorMessage));
+                            return false;
+                        }
+                    }
+
+                    // Only IEnumerable<T> returning query methods can be marked composable
+                    if (isSingleton && ((QueryAttribute)operationEntry.OperationAttribute).IsComposable)
+                    {
+                        throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_SingletonQueryMethodCannotCompose, methodName, returnType));
+                    }
+
+                    break;
+                }
                 case DomainOperation.Custom:
+                {
+                    // check that the method signature is conforming to our expectations (Entity, one or more of pre-defined types)
+                    if (parameters.Count == 0)
                     {
-                        // check that the method signature is conforming to our expectations (Entity, one or more of pre-defined types)
-                        if (parameters.Count == 0)
+                        error = new InvalidOperationException(Resource.InvalidCustomMethod_MethodCannotBeParameterless);
+                        return false;
+                    }
+                    bool first = true;
+                    foreach (DomainOperationParameter param in parameters)
+                    {
+                        if (first)
                         {
-                            error = new InvalidOperationException(Resource.InvalidCustomMethod_MethodCannotBeParameterless);
-                            return false;
-                        }
-                        bool first = true;
-                        foreach (DomainOperationParameter param in parameters)
-                        {
-                            if (first)
+                            // if first parameter, ensure that its type is one of the Entity types associated with CRUD.
+                            if (!description._entityTypes.Contains(param.ParameterType))
                             {
-                                // if first parameter, ensure that its type is one of the Entity types associated with CRUD.
-                                if (!description._entityTypes.Contains(param.ParameterType))
-                                {
-                                    error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainMethod_ParamMustBeEntity, param.Name, methodName));
-                                    return false;
-                                }
-                                first = false;
-                            }
-                            else if (!TypeUtility.IsPredefinedType(param.ParameterType) && !TypeUtility.IsSupportedComplexType(param.ParameterType))
-                            {
-                                error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_ParamMustBeSimple, methodName, param.Name));
+                                error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainMethod_ParamMustBeEntity, param.Name, methodName));
                                 return false;
                             }
+                            first = false;
                         }
-                        break;
+                        else if (!TypeUtility.IsPredefinedType(param.ParameterType) && !TypeUtility.IsSupportedComplexType(param.ParameterType))
+                        {
+                            error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_ParamMustBeSimple, methodName, param.Name));
+                            return false;
+                        }
                     }
+                    break;
+                }
                 case DomainOperation.Invoke:
+                {
+                    foreach (DomainOperationParameter param in parameters)
                     {
-                        foreach (DomainOperationParameter param in parameters)
+                        // parameter Type must be one of the predefined types, a supported complex type, an entity or collection of entities
+                        if (!description._entityTypes.Contains(param.ParameterType) && !TypeUtility.IsPredefinedType(param.ParameterType) && !TypeUtility.IsSupportedComplexType(param.ParameterType))
                         {
-                            // parameter Type must be one of the predefined types, a supported complex type, an entity or collection of entities
-                            if (!description._entityTypes.Contains(param.ParameterType) && !TypeUtility.IsPredefinedType(param.ParameterType) && !TypeUtility.IsSupportedComplexType(param.ParameterType))
-                            {
-                                // see if the parameter type is a supported collection of entities
-                                Type elementType = TypeUtility.GetElementType(param.ParameterType);
-                                bool isEntityCollection = description._entityTypes.Contains(elementType) && TypeUtility.IsSupportedCollectionType(param.ParameterType);
-                                if (!isEntityCollection)
-                                {
-                                    error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidInvokeOperation_ParameterType, methodName));
-                                    return false;
-                                }
-                            }
-                        }
-
-                        // return Type must be one of the predefined types, an entity or collection of entities
-                        if (returnType != typeof(void) && !description._entityTypes.Contains(returnType) && !TypeUtility.IsPredefinedType(returnType) && !TypeUtility.IsSupportedComplexType(returnType))
-                        {
-                            // see if the return is a supported collection of entities
-                            Type elementType = TypeUtility.GetElementType(returnType);
-                            bool isEntityCollection = description._entityTypes.Contains(elementType) && TypeUtility.IsSupportedCollectionType(returnType);
+                            // see if the parameter type is a supported collection of entities
+                            Type elementType = TypeUtility.GetElementType(param.ParameterType);
+                            bool isEntityCollection = description._entityTypes.Contains(elementType) && TypeUtility.IsSupportedCollectionType(param.ParameterType);
                             if (!isEntityCollection)
                             {
-                                error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidInvokeOperation_ReturnType, methodName));
+                                error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidInvokeOperation_ParameterType, methodName));
                                 return false;
                             }
                         }
-                        break;
                     }
+
+                    // return Type must be one of the predefined types, an entity or collection of entities
+                    if (returnType != typeof(void) && !description._entityTypes.Contains(returnType) && !TypeUtility.IsPredefinedType(returnType) && !TypeUtility.IsSupportedComplexType(returnType))
+                    {
+                        // see if the return is a supported collection of entities
+                        Type elementType = TypeUtility.GetElementType(returnType);
+                        bool isEntityCollection = description._entityTypes.Contains(elementType) && TypeUtility.IsSupportedCollectionType(returnType);
+                        if (!isEntityCollection)
+                        {
+                            error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidInvokeOperation_ReturnType, methodName));
+                            return false;
+                        }
+                    }
+                    break;
+                }
             }
 
             // return type should be void for domain operations which are not invoke or query

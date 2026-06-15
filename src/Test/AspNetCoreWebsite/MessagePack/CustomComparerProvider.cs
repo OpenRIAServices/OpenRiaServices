@@ -3,7 +3,7 @@ using System.Xml.Linq;
 using Nerdbank.MessagePack;
 using PolyType;
 
-internal class CustomComparerProvider : IComparerProvider
+class CustomComparerProvider : IComparerProvider
 {
     public IComparer<T> GetComparer<T>(ITypeShape<T> shape)
     {
