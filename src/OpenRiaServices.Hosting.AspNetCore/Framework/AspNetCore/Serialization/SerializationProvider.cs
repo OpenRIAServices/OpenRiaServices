@@ -67,16 +67,16 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// </summary>
         /// <param name="context">The HTTP context to which the response will be written.</param>
         /// <param name="result">The operation result to serialize into the response; may be null for no content.</param>
-        /// <param name="operation">Metadata for the domain operation that guides serialization and response formatting.</param>
-        public abstract Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result, DomainOperationEntry operation);
+        /// 
+        public abstract Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result);
 
         /// <summary>
         /// Writes the return value of a successful operation to the provided <see cref="HttpContext"/>.
         /// </summary>
         /// <param name="context">The HTTP context to which the response will be written.</param>
         /// <param name="result">The operation result to serialize into the response; may be null for no content.</param>
-        /// <param name="operation">Metadata for the domain operation that guides serialization and response formatting.</param>
-        public abstract Task WriteInvokeResponseAsync(HttpContext context, object? result, DomainOperationEntry operation);
+        /// 
+        public abstract Task WriteInvokeResponseAsync(HttpContext context, object? result);
     }
 
 }

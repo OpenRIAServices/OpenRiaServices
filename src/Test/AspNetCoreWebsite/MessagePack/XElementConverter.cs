@@ -8,11 +8,8 @@ using Nerdbank.MessagePack;
 namespace AspNetCoreWebsite.MessagePack;
 
 /// <summary>
-/// Converts a <see cref="Binary"/> object to and from MessagePack.
+/// Converts a <see cref="XElement"/> object to and from MessagePack as plain text
 /// </summary>
-/// <remarks>
-/// <see cref="Binary"/> is declared in the "System.Data.Linq.Data" package.
-/// </remarks>
 internal class XElementConverter : MessagePackConverter<XElement>
 {
     public override void Write(ref MessagePackWriter writer, in XElement? value, SerializationContext context)

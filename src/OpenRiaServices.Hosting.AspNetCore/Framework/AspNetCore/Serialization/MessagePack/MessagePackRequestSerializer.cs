@@ -107,15 +107,15 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
         public override Task WriteSubmitResponseAsync(Microsoft.AspNetCore.Http.HttpContext context, IEnumerable<ChangeSetEntry> result)
             => WriteEnvelopeAsync(context, new MessagePackSubmitResponseEnvelope(result));
 
-        public override Task WriteInvokeResponseAsync(HttpContext context, object? result, DomainOperationEntry operation)
+        public override Task WriteInvokeResponseAsync(HttpContext context, object? result)
         {
-            return WriteEnvelopeAsync(context, CreateInvokeResponseEnvelope(operation, result));
+            return WriteEnvelopeAsync(context, CreateInvokeResponseEnvelope(_operation, result));
         }
 
-        public override Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result, DomainOperationEntry operation)
+        public override Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result)
         {
             // Create response for base type returned ??
-            var description = DomainServiceDescription.GetDescription(operation.DomainServiceType);
+            var description = DomainServiceDescription.GetDescription(_operation.DomainServiceType);
             Type serializationType = description.GetRootEntityType(typeof(T));
 
             if (serializationType == typeof(T))

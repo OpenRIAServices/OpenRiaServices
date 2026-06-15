@@ -826,7 +826,7 @@ namespace OpenRiaServices.Server
                 {
                     foreach (var entityAction in changeSetEntry.EntityActions)
                     {
-                        DomainOperationEntry customMethodOperation = this.ServiceDescription.GetCustomMethodOrThrow(entityType, entityAction.Key);
+                        _ = this.ServiceDescription.GetCustomMethodOrThrow(entityType, entityAction.Key);
 
                         // if the primary operation for an update is null and there is a valid
                         // custom method, its considered a "named update"

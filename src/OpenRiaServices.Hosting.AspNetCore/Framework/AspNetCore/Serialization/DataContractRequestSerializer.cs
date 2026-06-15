@@ -396,12 +396,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             return WriteResponseAsync(context, result);
         }
 
-        public override Task WriteInvokeResponseAsync(HttpContext context, object? result, DomainOperationEntry operation)
+        public override Task WriteInvokeResponseAsync(HttpContext context, object? result)
         {
             return WriteResponseAsync(context, result);
         }
 
-        public override Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result, DomainOperationEntry operation)
+        public override Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result)
         {
             return WriteResponseAsync(context, result);
         }

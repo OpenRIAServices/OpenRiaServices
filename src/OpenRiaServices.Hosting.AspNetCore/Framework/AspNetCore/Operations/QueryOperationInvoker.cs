@@ -71,7 +71,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 if (result.ValidationErrors != null && result.ValidationErrors.Any())
                     await WriteError(writer, context, result.ValidationErrors);
                 else
-                    await writer.WriteQueryResponseAsync(context, result, DomainOperation);
+                    await writer.WriteQueryResponseAsync(context, result);
             }
             catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
             {
