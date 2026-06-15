@@ -51,10 +51,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 // Entity types can have derived types
                 if (description.EntityKnownTypes.TryGetValue(typeof(T), out var knownSet))
                 {
-                    if (knownSet.Contains(typeof(T)))
-                        knownTypes = knownSet;
-                    else
-                        knownTypes = [typeof(T), .. knownSet];
+                    knownTypes = knownSet.Contains(typeof(T)) ? knownSet : [typeof(T), .. knownSet];
                 }
                 else
                 {
