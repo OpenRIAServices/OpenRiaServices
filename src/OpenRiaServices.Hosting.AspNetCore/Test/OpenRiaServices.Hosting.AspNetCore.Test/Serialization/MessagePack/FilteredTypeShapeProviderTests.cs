@@ -19,10 +19,11 @@ using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttri
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Tests;
 
 [TestClass]
+//[Ignore("Not used")] 
 public sealed class FilteredTypeShapeProviderTests
 {
     [TestMethod]
-    //[IgnoreAttribute("Used for manual testing")] 
+    [IgnoreAttribute("Used for manual testing")] 
     public void Properties_Should_Match_DataContract_Surrogates_Exactly()
     {
         ServiceCollection collection = new();

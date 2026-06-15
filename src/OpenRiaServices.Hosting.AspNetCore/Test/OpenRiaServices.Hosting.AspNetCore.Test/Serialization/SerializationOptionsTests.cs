@@ -19,6 +19,7 @@ using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using PolyType;
 using PolyType.ReflectionProvider;
 using OpenRiaServices.Server;
+using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
 namespace OpenRiaServices.Hosting.AspNetCore;
 
@@ -129,6 +130,7 @@ public class SerializationOptionsTests
 
     [TestMethod]
     [Description("MessagePack invoke roundtrip works for simple parameters and results")]
+    //"TODO: Update payload and move test messagepack related class"
     public async Task MessagePack_Invoke_Roundtrip_Works()
     {
         using var host = await CreateHost(useMessagePack: true);
@@ -136,9 +138,10 @@ public class SerializationOptionsTests
         using var content = BuildMessagePackInvokeRequest("EchoString", "value", "hello-messagepack");
         var response = await client.PostAsync("SerializationTestDomainService/EchoString", content);
         response.EnsureSuccessStatusCode();
+
         Assert.AreEqual("application/vnd.msgpack", response.Content.Headers.ContentType?.MediaType);
         var payload = await response.Content.ReadAsByteArrayAsync();
-        Assert.AreEqual("hello-messagepack", ReadMessagePackInvokeResponse(payload, typeof(string)));
+        Assert.AreEqual("hello-messagepack", ReadMessagePackInvokeResponse<string>(payload));
     }
 
     // -------------------------------------------------------------------------
@@ -239,16 +242,18 @@ public class SerializationOptionsTests
     {
         var serializer = new MessagePackSerializer();
         var provider = ReflectionTypeShapeProvider.Default;
-        var payload = new MessagePackRequestEnvelope
+
+        var parameters = new Dictionary<string, string>()
         {
-            Parameters = new()
-            {
-                Values = { [paramName] = SerializeValue(paramValue, typeof(string)) }
-            }
+            { paramName, paramValue }
+        };
+        var payload = new Dictionary<string, Dictionary<string, string>>()
+        {
+            {"Parameters", parameters}
         };
 
         using var ms = new MemoryStream();
-        serializer.SerializeObject(ms, payload, provider.GetTypeShapeOrThrow(typeof(MessagePackRequestEnvelope)));
+        serializer.SerializeObject(ms, payload, provider.GetTypeShapeOrThrow(payload.GetType()));
         var content = new ByteArrayContent(ms.ToArray());
         content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/vnd.msgpack");
         return content;
@@ -261,26 +266,14 @@ public class SerializationOptionsTests
         }
     }
 
-    private static string ReadMessagePackInvokeResponse(byte[] payload, Type resultType)
+    private static TResult ReadMessagePackInvokeResponse<TResult>(byte[] payload)
     {
-        var serializer = new MessagePackSerializer();
+        var serializer = new MessagePackSerializer()
+            .WithObjectConverter();
         var provider = ReflectionTypeShapeProvider.Default;
-        var responseType = typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(resultType);
-        dynamic response = serializer.DeserializeObject(payload, provider.GetTypeShapeOrThrow(responseType));
-        return (string)response.Result;
-    }
+        var response = serializer.Deserialize(payload, provider.GetTypeShapeOrThrow<Dictionary<string, TResult>>());
 
-    private sealed class MessagePackRequestEnvelope
-    {
-        public Serialization.MessagePack.MethodParameters Parameters { get; set; } = new();
-        public List<ServiceQueryPart> QueryOptions { get; set; }
-        public bool IncludeTotalCount { get; set; }
-    }
-
-    private sealed class MessagePackInvokeResponseEnvelope<TResult>
-    {
-        public TResult Result { get; set; }
-        public DomainServiceFault Fault { get; set; }
+        return response["Result"];
     }
 
     // -------------------------------------------------------------------------

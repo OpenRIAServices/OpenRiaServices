@@ -176,11 +176,6 @@ public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
             return true;
         }
 
-        // Similart to SerializationUtility.IsSerializableDataMember.
-        if (!(TypeUtility.IsPredefinedType(property.PropertyType.Type) || TypeUtility.IsSupportedComplexType(property.PropertyType.Type)))
-        {
-            return false;
-        }
 
         MetaType metaType = MetaType.GetMetaType(declaringType);
         MetaMember metaMember = metaType[property.MemberInfo.Name];
@@ -194,16 +189,9 @@ public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
                 && metaType.IncludedAssociations.Find(property.Name, ignoreCase: false) is not null;
         }
 
-        return metaMember.IsDataMember;
-
-        /*
-
-        var props = TypeDescriptor.GetProperties(declaringType);
-        var propDesc = props[property.Name];
-
-        bool epected1 = propDesc is not null
-            && SerializationUtility.IsSerializableDataMember(propDesc);
-*/
+        return metaMember.IsDataMember
+            // Similart to SerializationUtility.IsSerializableDataMember.
+            && (TypeUtility.IsPredefinedType(property.PropertyType.Type) || TypeUtility.IsSupportedComplexType(property.PropertyType.Type));
     }
 
     //internal static IGenericCustomAttributeProvider CreateTypeAttributeProvider(Type type)
