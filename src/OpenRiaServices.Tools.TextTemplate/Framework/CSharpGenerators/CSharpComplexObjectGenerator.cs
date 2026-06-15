@@ -329,7 +329,14 @@ this.Write("()\r\n{\r\n\tthis.OnCreated();\r\n}\r\n");
                     .FirstOrDefault(p => !p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
                         && ShouldDeclareProperty(p)
                         && CanGenerateProperty(p));
-                string parameterName = pd.Name;
+
+                if (pd is null)
+                {
+                    this.ClientCodeGenerator.Error($"The type '{this.Type}' has only required properties, cannot generate PolyType compatible constructor");
+                }
+                else
+                {
+                    string parameterName = pd.Name;
 
 this.Write("\r\n[PolyType.ConstructorShape]\r\nprivate ");
 
@@ -355,6 +362,7 @@ this.Write(this.ToStringHelper.ToStringWithCulture(parameterName));
 this.Write(";\r\n}\r\n");
 
 
+                }
             }
         }
 	}

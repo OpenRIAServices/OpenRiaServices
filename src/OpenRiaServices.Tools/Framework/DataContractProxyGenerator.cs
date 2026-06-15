@@ -263,7 +263,7 @@ namespace OpenRiaServices.Tools
                 }
                 else
                 {
-                    throw new InvalidOperationException($"All properties of {this.Type} is Required, cannot generate code");
+                    throw new InvalidOperationException($"The type '{this.Type}' has only required properties, cannot generate PolyType compatible constructor");
                 }
             }
         }

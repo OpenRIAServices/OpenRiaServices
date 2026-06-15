@@ -80,7 +80,14 @@ namespace <#= this.Type.Namespace #>
                     .FirstOrDefault(p => !p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
                         && ShouldDeclareProperty(p)
                         && CanGenerateProperty(p));
-                string parameterName = pd.Name;
+
+                if (pd is null)
+                {
+                    this.ClientCodeGenerator.Error($"The type '{this.Type}' has only required properties, cannot generate PolyType compatible constructor");
+                }
+                else
+                {
+                    string parameterName = pd.Name;
 #>
 
 [PolyType.ConstructorShape]
@@ -91,6 +98,7 @@ private <#= typeName #>(<#= CodeGenUtilities.GetTypeName(pd.PropertyType) #> <#=
     this.<#= pd.Name #> = <#= parameterName #>;
 }
 <#+
+                }
             }
         }
 	}
