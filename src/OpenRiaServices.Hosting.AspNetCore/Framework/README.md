@@ -132,6 +132,16 @@ builder.Services.AddOpenRiaServices(o => { } )
     .AddXmlSerialization();
 ```
 
+### Supporting MessagePack wire format
+
+MessagePack can be enabled as an additional format using MIME type `application/vnd.msgpack`.
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenRiaServices()
+    .AddMessagePackSerialization();
+```
+
 ### Configuring serializer security quotas
 
 You can configure reader quotas to limit resource consumption and mitigate denial-of-service (DoS) attacks.

@@ -493,6 +493,17 @@ namespace TestDomainServices
         }
         
         /// <summary>
+        /// Deserialization ctor for MessagePack support, when any Property is required
+        /// </summary>
+        [PolyType.ConstructorShapeAttribute()]
+        private MockReport(int CustomerId)
+        {
+            this.OnCreated();
+            base.OnDeserializing(default(System.Runtime.Serialization.StreamingContext));
+            this.CustomerId = CustomerId;
+        }
+        
+        /// <summary>
         /// Gets or sets the associated <see cref="MockCustomer"/> entity.
         /// </summary>
         [EntityAssociation("R_C", "CustomerId", "CustomerId")]

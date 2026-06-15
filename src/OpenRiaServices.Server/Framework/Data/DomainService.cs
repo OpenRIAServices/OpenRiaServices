@@ -826,20 +826,11 @@ namespace OpenRiaServices.Server
                 {
                     foreach (var entityAction in changeSetEntry.EntityActions)
                     {
-                        DomainOperationEntry customMethodOperation = this.ServiceDescription.GetCustomMethod(entityType, entityAction.Key);
-                        if (customMethodOperation == null)
-                        {
-                            throw new InvalidOperationException(
-                            string.Format(
-                                CultureInfo.CurrentCulture,
-                                Resource.DomainService_InvalidDomainOperationEntry,
-                                entityAction.Key,
-                                entityType.Name));
-                        }
+                        _ = this.ServiceDescription.GetCustomMethodOrThrow(entityType, entityAction.Key);
 
                         // if the primary operation for an update is null and there is a valid
                         // custom method, its considered a "named update"
-                        isNamedUpdate = isNamedUpdate || (domainOperationEntry == null && customMethodOperation != null);
+                        isNamedUpdate = isNamedUpdate || (domainOperationEntry == null);
                     }
                 }
 

@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0</TargetFrameworks>
+    <TargetFrameworks>net8.0;net10.0</TargetFrameworks>
     <DefineConstants>$(DefineConstants);SERVERFX;ASPNET_CORE</DefineConstants>
     <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
     <!-- Ignore documentation varnings while experimental-->
@@ -26,6 +26,8 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Nerdbank.MessagePack" Version="1.2.4" />
+    <PackageReference Include="System.IO.Hashing" Version="10.0.8" />
   </ItemGroup>
 
   <ItemGroup>

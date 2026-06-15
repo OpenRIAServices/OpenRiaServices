@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Globalization;
 using System.Linq;
 using System.Runtime.Serialization;
+using Nerdbank.MessagePack;
 using OpenRiaServices.Client.Internal;
 
 #nullable enable
@@ -17,7 +18,7 @@ namespace OpenRiaServices.Client
     /// Base class for all complex objects.
     /// </summary>
     [DataContract]
-    public abstract partial class ComplexObject : INotifyPropertyChanged, IEditableObject
+    public abstract partial class ComplexObject : INotifyPropertyChanged, IEditableObject, IMessagePackSerializationCallbacks
     {
         private PropertyChangedEventHandler? _propChangedHandler;
         private ComplexObjectValidationResultCollection? _validationErrors;
@@ -649,6 +650,26 @@ namespace OpenRiaServices.Client
             this.NotifyParentMemberValidationChanged(null, validationResults);
 
             this._editSession = null;
+        }
+
+        void IMessagePackSerializationCallbacks.OnBeforeSerialize()
+        {
+            // Intentionally left empty
+        }
+
+        void IMessagePackSerializationCallbacks.OnAfterSerialize()
+        {
+            // Intentionally left empty
+        }
+
+        void IMessagePackSerializationCallbacks.OnBeforeDeserialize()
+        {
+            OnDeserializing(default);
+        }
+
+        void IMessagePackSerializationCallbacks.OnAfterDeserialize()
+        {
+            OnDeserialized(default);
         }
         #endregion
 

@@ -7,7 +7,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
     /// <summary>
     /// A dictionary of parameter name and types for a method
     /// </summary>
-    internal class MethodParameters
+    internal sealed class MethodParameters
     {
         private readonly string _operationName;
         private readonly Dictionary<string, Type> _parameterNameAndTypeDictionary;

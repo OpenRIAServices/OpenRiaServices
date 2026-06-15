@@ -42,7 +42,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// </summary>
         public IEndpointConventionBuilder AddDomainService([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type)
         {
-            ArgumentNullException.ThrowIfNull(nameof(type));
+            ArgumentNullException.ThrowIfNull(type);
 
             if (!_typeIsService.IsService(type))
                 throw new InvalidOperationException($"Domainservice {type} cannot be resolved by container, register it before calling map");
@@ -55,9 +55,9 @@ namespace OpenRiaServices.Hosting.AspNetCore
         /// </summary>
         public IEndpointConventionBuilder AddDomainService([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type, string path)
         {
-            ArgumentNullException.ThrowIfNull(nameof(type));
+            ArgumentNullException.ThrowIfNull(type);
 #if NET7_0_OR_GREATER
-            ArgumentNullException.ThrowIfNullOrEmpty(nameof(path));
+            ArgumentException.ThrowIfNullOrEmpty(path);
 #endif
             if (path.EndsWith('/'))
                 throw new ArgumentException("Path should not end with /", nameof(path));

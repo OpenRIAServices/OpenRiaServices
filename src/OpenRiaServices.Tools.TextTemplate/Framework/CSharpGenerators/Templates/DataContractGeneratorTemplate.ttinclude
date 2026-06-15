@@ -58,12 +58,41 @@ namespace <#= this.Type.Namespace #>
 	protected virtual void GenerateConstructor()
 	{
 		string ctorVisibility = this.IsAbstract ? "protected" : "public";
+        string typeName = CodeGenUtilities.GetSafeName(this.Type.Name);
 #>
-<#=ctorVisibility #> <#= CodeGenUtilities.GetSafeName(this.Type.Name) #>()
+<#=ctorVisibility #> <#= typeName #>()
 {
 	this.OnCreated();
 }
 <#+
+
+        if (!this.IsAbstract)
+        {
+            var properties = TypeDescriptor.GetProperties(this.Type);
+            bool hasRequiredProperty = properties.Cast<PropertyDescriptor>()
+                .Any(p => p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
+                    && ShouldDeclareProperty(p)
+                    && CanGenerateProperty(p));
+
+            if (hasRequiredProperty)
+            {
+                var pd = properties.Cast<PropertyDescriptor>()
+                    .FirstOrDefault(p => !p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
+                        && ShouldDeclareProperty(p)
+                        && CanGenerateProperty(p));
+                string parameterName = pd.Name;
+#>
+
+[PolyType.ConstructorShape]
+private <#= typeName #>(<#= CodeGenUtilities.GetTypeName(pd.PropertyType) #> <#= parameterName #>)
+{
+	this.OnCreated();
+    base.OnDeserializing(default(System.Runtime.Serialization.StreamingContext));
+    this.<#= pd.Name #> = <#= parameterName #>;
+}
+<#+
+            }
+        }
 	}
 	
 	private void GeneratePropertiesInternal()
