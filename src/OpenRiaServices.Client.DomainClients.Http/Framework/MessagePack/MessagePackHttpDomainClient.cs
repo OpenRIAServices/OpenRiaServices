@@ -50,13 +50,10 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             MethodParameters methodParameters = GetMethodParameters(operationName);
             var envelope = CreateRequestEnvelope(method, operationName, methodParameters, parameters, queryOptions);
 
-
-            MessagePackSerializer operationSerializer = CreateOperationSerializer(methodParameters);
-
             using var stream = new MemoryStream();
             // TODO: If possible, replace this buffering with a custom HttpContent override of SerializeToStream
             // so the request payload can be serialized asynchronously directly to the outgoing request stream.
-            await operationSerializer.SerializeObjectAsync(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken).ConfigureAwait(false);
+            await Serializer.SerializeObjectAsync(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken).ConfigureAwait(false);
 
             var bytes = stream.ToArray();
             request.Content = new ByteArrayContent(bytes);
@@ -65,7 +62,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
         }
 
-        private MessagePackRequestEnvelopeBase CreateRequestEnvelope(HttpMethod method, string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
+        private static MessagePackRequestEnvelopeBase CreateRequestEnvelope(HttpMethod method, string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
         {
             MessagePackMethodParameters requestParameters = (parameters is { Count: > 0 })
                 ? new(methodParameters, parameters) : null;
@@ -92,8 +89,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 return request;
             }
 
-
-
             return string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal)
                 ? new MessagePackSubmitRequestEnvelope() { Parameters = requestParameters }
                 : new MessagePackInvokeRequestEnvelope() { Parameters = requestParameters };
@@ -117,6 +112,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                         throw new DomainOperationException(message, OperationErrorStatus.ServerError, (int)response.StatusCode, null);
                 }
 
+
                 using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 Type envelopeType = GetResponseEnvelopeType(operationName, returnType);
                 var typeShape = _typeShapeProvider.GetTypeShapeOrThrow(envelopeType);
@@ -139,16 +135,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
 
                 return result;
             }
-        }
-
-
-        private MessagePackSerializer CreateOperationSerializer(MethodParameters methodParameters)
-        {
-            // TODO: Look at how this affect cahces. Keep different serializers ?
-            // TODO: How does this affect concurrency, ensure Serializer.StartingContext is not modified ?
-            SerializationContext context = Serializer.StartingContext;
-            context[MessagePackMethodParametersConverter.MethodParametersKey] = methodParameters;
-            return Serializer with { StartingContext = context };
         }
 
         private static Type GetResponseEnvelopeType(string operationName, Type returnType)

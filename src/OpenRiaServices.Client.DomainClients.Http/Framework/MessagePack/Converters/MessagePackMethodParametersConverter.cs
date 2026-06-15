@@ -7,8 +7,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters;
 
 sealed class MessagePackMethodParametersConverter : MessagePackConverter<MessagePackMethodParameters>
 {
-    internal static readonly object MethodParametersKey = new();
-
     public override bool PreferAsyncSerialization => true;
 
     public override MessagePackMethodParameters Read(ref MessagePackReader reader, SerializationContext context)
@@ -25,7 +23,7 @@ sealed class MessagePackMethodParametersConverter : MessagePackConverter<Message
         }
 
         context.DepthStep();
-        MethodParameters methodParameters = GetMethodParameters(context);
+        MethodParameters methodParameters = value.MethodParameters;
         writer.WriteMapHeader(value.Values.Count);
 
         foreach (var parameterValue in value.Values)
@@ -50,7 +48,7 @@ sealed class MessagePackMethodParametersConverter : MessagePackConverter<Message
         }
 
         context.DepthStep();
-        MethodParameters methodParameters = GetMethodParameters(context);
+        MethodParameters methodParameters = value.MethodParameters;
         writer.WriteMapHeader(value.Values.Count);
 
         foreach (var parameterValue in value.Values)
@@ -62,8 +60,6 @@ sealed class MessagePackMethodParametersConverter : MessagePackConverter<Message
         }
     }
 
-    private static MethodParameters GetMethodParameters(SerializationContext context)
-        => (MethodParameters)context[MethodParametersKey];
     private static void WriteValue(ref MessagePackWriter writer, object value, Type parameterType, SerializationContext context)
     {
         if (value is null)

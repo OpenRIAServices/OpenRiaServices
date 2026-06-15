@@ -7,7 +7,6 @@ using PolyType;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
 {
-    [GenerateShape]
     [DataContract]
     internal partial class MessagePackResponseEnvelopeBase
     {
@@ -16,7 +15,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     }
 
     [DataContract]
-    //[GenerateShape<]
     internal sealed partial class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
     {
         public MessagePackQueryResponseEnvelope() { }

@@ -1,12 +1,12 @@
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
 
-public enum AssociationMemberSerializationMode
+enum AssociationMemberSerializationMode
 {
     Exclude = 0,
     Include = 1,
 }
 
-public sealed class FilteredTypeShapeProviderOptions
+sealed class FilteredTypeShapeProviderOptions
 {
     public static FilteredTypeShapeProviderOptions Default { get; } = new();
 

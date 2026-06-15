@@ -18,7 +18,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
         where T : class
     {
         private readonly FrozenDictionary<Type, byte[]> _discriminators;
-        private readonly Dictionary<byte[], Type> _typeLookup;
+        private readonly FrozenDictionary<byte[], Type> _typeLookup;
         // We need to use a seprate type shape provider for looking up converters
         // otherwise we will get union converters instead of the object converter for the underlying type 
         private static readonly ReflectionTypeShapeProvider s_reflectionTypeShapeProvider = ReflectionTypeShapeProvider.Create(new()
@@ -27,16 +27,14 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             TypeShapeExtensionAssemblies = new[] { typeof(DomainClient).Assembly }
         });
 
-        // TODO: Pass in IEnumerator<Type> derivedTypes
-        // This will allow us to build _surrogateFactory, as well as to create dictionaries with only relevant surrogate types
+
         public ObjectConverter(IEnumerable<Type> knownTypes)
         {
             var comparer = new MessagePackUtility.ByteArrayComparer();
 
             // This avoids double dictionary lookups in surrogateProvider
-            _typeLookup = knownTypes.Where(t => !t.IsAbstract).ToDictionary(MessagePackUtility.GetDiscriminator, comparer);
+            _typeLookup = knownTypes.Where(t => !t.IsAbstract).ToFrozenDictionary(MessagePackUtility.GetDiscriminator, comparer);
             _discriminators = FrozenDictionary.ToFrozenDictionary(_typeLookup.Select(k => new KeyValuePair<Type, byte[]>(k.Value, k.Key)));
-
         }
 
         public override T? Read(ref MessagePackReader reader, SerializationContext context)
@@ -47,11 +45,9 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             }
 
             Type type;
-            // READ array
-            // of 2 items
+            // READ array of 2 items
             // 1'st is type name (string)
             // then lookup converter for surrogate type based on type name and deserialize surrogate
-            // if the type is a base type, then use original reader which consumes the type name and surrogate,
             if (!reader.TryReadArrayHeader(out int count) || count != 2)
             {
                 throw new MessagePackSerializationException("SurrogateConverter encountered array of wrong length");
@@ -77,7 +73,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 if (reader.TryReadStringSpan(out var discriminator))
                 {
 #if NET10_0_OR_GREATER
-                    surrogateType = _typeLookup.GetAlternateLookup<ReadOnlySpan<byte>>()[discriminator];
+                    type = _typeLookup.GetAlternateLookup<ReadOnlySpan<byte>>()[discriminator];
 #else
                     type = _typeLookup[discriminator.ToArray()];
 #endif
@@ -88,7 +84,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 }
                 else 
                     throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
-                // TODO: add cache for looking up types based on span
             }
 
             MessagePackConverter converter = GetConverter(type, ref context);

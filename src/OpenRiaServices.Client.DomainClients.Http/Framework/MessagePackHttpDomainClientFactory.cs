@@ -19,7 +19,7 @@ namespace OpenRiaServices.Client.DomainClients
     /// </summary>
     public class MessagePackHttpDomainClientFactory : HttpDomainClientFactory
     {
-        ConcurrentDictionary<Type, MessagePackSerializer> _serializerCache = new ConcurrentDictionary<Type, MessagePackSerializer>();
+        private readonly ConcurrentDictionary<Type, MessagePackSerializer> _serializerCache = new ConcurrentDictionary<Type, MessagePackSerializer>();
 
         /// <inheritdoc />
         public MessagePackHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory, MessagePackSerializer? serializer = null, ITypeShapeProvider? typeShapeProvider = null)
@@ -100,8 +100,10 @@ namespace OpenRiaServices.Client.DomainClients
                      baseType != null && baseType != typeof(Entity);
                      baseType = baseType.BaseType)
                 {
-                    HashSet<Type> hash = closure[baseType];
-                    hash.UnionWith(knownTypes);
+                    if (closure.TryGetValue(baseType, out HashSet<Type>? hash))
+                    {
+                        hash.UnionWith(knownTypes);
+                    }
                 }
             }
             return closure;

@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
 
-public sealed class FilteredTypeShapeProvider : ITypeShapeProvider
+sealed class FilteredTypeShapeProvider : ITypeShapeProvider
 {
     private readonly ITypeShapeProvider _baseProvider;
     private readonly FilteredTypeShapeProviderOptions _options;

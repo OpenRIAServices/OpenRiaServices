@@ -22,12 +22,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
         private readonly DomainServiceSerializationSurrogate _surrogateProvider;
         private readonly bool _useDiscriminator = true;
         private readonly FrozenDictionary<Type, byte[]?> _discriminators;
-        private readonly Dictionary<byte[], Type> _typeLookup;
+        private readonly FrozenDictionary<byte[], Type> _typeLookup;
         private readonly FrozenDictionary<Type, Func<object, object>> _surrogateFactory;
         private readonly Type _surrogateBase = typeof(TSurrogate);
 
-        // TODO: Pass in IEnumerator<Type> derivedTypes
-        // This will allow us to build _surrogateFactory, as well as to create dictionaries with only relevant surrogate types
         public SurrogateConverter(DomainServiceDescription description, Wcf.DomainServiceSerializationSurrogate surrogateProvider)
         {
             _surrogateProvider = surrogateProvider;
@@ -75,7 +73,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             _surrogateFactory = knownTypes
                 .Where(t => !t.IsAbstract)
                 .ToDictionary(t => t, _surrogateProvider.GetSurrogateFactory).ToFrozenDictionary();
-            _typeLookup = surrogateTypes.ToDictionary(discriminatorFunc, new MessagePackUtility.ByteArrayComparer());
+            _typeLookup = surrogateTypes.ToFrozenDictionary(discriminatorFunc, new MessagePackUtility.ByteArrayComparer());
             _discriminators = FrozenDictionary.ToFrozenDictionary(
                 _typeLookup
                     .Select(k => new KeyValuePair<Type, byte[]?>(k.Value, k.Key is [] ? null : k.Key)));

@@ -18,7 +18,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
     {
         public static byte[] GetDiscriminator(Type type)
         {
-            // Search base types for discriminator attributes
+            // Search base types for discriminator attributes mapping to type
             Type? baseType = type.BaseType;
             while (baseType != null)
             {

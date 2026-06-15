@@ -1,9 +1,10 @@
+using System;
+using System.Linq;
+using System.Reflection.Metadata;
+using System.Threading.Tasks;
 using Nerdbank.MessagePack;
 using OpenRiaServices.Server;
 using PolyType;
-using System;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters
 {
@@ -32,14 +33,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 string? name = reader.ReadString();
                 if (name is not null && parametersByName.TryGetValue(name, out DomainOperationParameter? parameter))
                 {
-                    Type type = parameter.ParameterType;
-                    // HACK, TODO: Fix
-                    if (type == typeof(ChangeSet))
-                    {
-                        type = typeof(System.Collections.Generic.IEnumerable<ChangeSetEntry>);
-                    }
-
-                    result.Values[name] = ReadValue(ref reader, type, context);
+                    result.Values[name] = ReadValue(ref reader, parameter.ParameterType, context);
                 }
                 else
                 {
@@ -51,31 +45,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
         }
 
         public override void Write(ref MessagePackWriter writer, in MethodParameters? value, SerializationContext context)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            context.DepthStep();
-            DomainOperationEntry operation = GetOperation(context);
-            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
-            writer.WriteMapHeader(value.Values.Count);
-
-            foreach (var parameterValue in value.Values)
-            {
-                writer.Write(parameterValue.Key);
-                if (parametersByName.TryGetValue(parameterValue.Key, out DomainOperationParameter? parameter))
-                {
-                    WriteValue(ref writer, parameterValue.Value, parameter.ParameterType, context);
-                }
-                else
-                {
-                    writer.WriteNil();
-                }
-            }
-        }
+            => throw new NotImplementedException("Can only read method parameters.");
 
         public override async ValueTask<MethodParameters?> ReadAsync(MessagePackAsyncReader reader, SerializationContext context)
         {
@@ -118,35 +88,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             return result;
         }
 
-        public override async ValueTask WriteAsync(MessagePackAsyncWriter writer, MethodParameters? value, SerializationContext context)
-        {
-            if (value is null)
-            {
-                writer.WriteNil();
-                return;
-            }
-
-            context.DepthStep();
-            DomainOperationEntry operation = GetOperation(context);
-            var parametersByName = operation.Parameters.ToDictionary(p => p.Name, StringComparer.Ordinal);
-            writer.WriteMapHeader(value.Values.Count);
-
-            foreach (var parameterValue in value.Values)
-            {
-                writer.Write(static (ref MessagePackWriter syncWriter, string key) => syncWriter.Write(key), parameterValue.Key);
-                if (parametersByName.TryGetValue(parameterValue.Key, out DomainOperationParameter? parameter))
-                {
-                    await WriteValueAsync(writer, parameterValue.Value, parameter.ParameterType, context).ConfigureAwait(false);
-                }
-                else
-                {
-                    writer.WriteNil();
-                }
-
-                await writer.FlushIfAppropriateAsync(context).ConfigureAwait(false);
-            }
-        }
-
         internal static DomainOperationEntry GetOperation(SerializationContext context)
             => (DomainOperationEntry?)context[OperationKey]
                 ?? throw new MessagePackSerializationException("Domain operation metadata is required to serialize method parameters.");
@@ -155,6 +96,11 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
         {
             if (reader.TryReadNil())
                 return null;
+
+            if (parameterType == typeof(ChangeSet))
+            {
+                parameterType = typeof(System.Collections.Generic.IEnumerable<ChangeSetEntry>);
+            }
 
             return context.GetConverter(parameterType).ReadObject(ref reader, context);
         }
@@ -170,26 +116,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             }
 
             reader.ReturnReader(ref bufferedReader);
+
+            if (parameterType == typeof(ChangeSet))
+            {
+                parameterType = typeof(System.Collections.Generic.IEnumerable<ChangeSetEntry>);
+            }
             return await context.GetConverter(parameterType).ReadObjectAsync(reader, context).ConfigureAwait(false);
-        }
-
-        private static void WriteValue(ref MessagePackWriter writer, object? value, Type parameterType, SerializationContext context)
-        {
-            if (value is null)
-                writer.WriteNil();
-            else
-                context.GetConverter(parameterType).WriteObject(ref writer, value, context);
-        }
-
-        private static ValueTask WriteValueAsync(MessagePackAsyncWriter writer, object? value, Type parameterType, SerializationContext context)
-            => value is null
-                ? WriteNilAsync(writer)
-                : context.GetConverter(parameterType).WriteObjectAsync(writer, value, context);
-
-        private static ValueTask WriteNilAsync(MessagePackAsyncWriter writer)
-        {
-            writer.WriteNil();
-            return default;
         }
     }
 }
