@@ -19,27 +19,21 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
     internal sealed class SurrogateConverter<TSurrogate, T> : MessagePackConverter<T>
         where T : class
     {
-        private readonly DomainServiceSerializationSurrogate _surrogateProvider;
         private readonly bool _useDiscriminator = true;
         private readonly FrozenDictionary<Type, byte[]?> _discriminators;
         private readonly FrozenDictionary<byte[], Type> _typeLookup;
         private readonly FrozenDictionary<Type, Func<object, object>> _surrogateFactory;
-        private readonly Type _surrogateBase = typeof(TSurrogate);
+        private readonly Type _surrogateBase;
 
         public SurrogateConverter(DomainServiceDescription description, Wcf.DomainServiceSerializationSurrogate surrogateProvider)
         {
-            _surrogateProvider = surrogateProvider;
-
+            _surrogateBase = surrogateProvider.GetSurrogateType(typeof(T));
             IEnumerable<Type> knownTypes;
-            IEnumerable<Type> surrogateTypes;
-            Func<Type, byte[]> discriminatorFunc;
+
+            // Object is used as property on ChangeSetEntry, where it can be any Entity exposed by the DomainService
             if (typeof(T) == typeof(object))
             {
-                surrogateTypes = _surrogateProvider.SurrogateTypes;
-                discriminatorFunc = MessagePackUtility.GetDiscriminator;
-
                 HashSet<Type> allKnownTypes = new(description.EntityTypes);
-                //allKnownTypes.Add(description.ComplexTypes);
                 foreach (var (entityType, entityKnownTypes) in description.EntityKnownTypes)
                 {
                     allKnownTypes.UnionWith(entityKnownTypes);
@@ -55,21 +49,22 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 }
                 else
                 {
+                    // We are creating surrogate for a complex type (inheritance is not currently allowed)
                     knownTypes = [typeof(T)];
                 }
 
                 _surrogateBase = surrogateProvider.GetSurrogateType(typeof(T));
                 Debug.Assert(_surrogateBase == typeof(TSurrogate));
-
-                surrogateTypes = knownTypes.Select(surrogateProvider.GetSurrogateType);
-                discriminatorFunc = (t) => (t != _surrogateBase) ? MessagePackUtility.GetDiscriminator(t) : [];
             }
 
-            // TODO: Consider a dictionary for surrogate factory lookup
-            // This avoids double dictionary lookups in surrogateProvider
+
+            IEnumerable<Type> surrogateTypes = knownTypes.Select(surrogateProvider.GetSurrogateType);
+            Func<Type, byte[]> discriminatorFunc = (Type t) => (t != _surrogateBase) ? MessagePackUtility.GetDiscriminator(t) : [];
+
+            // Setup lookup dictionaries for mapping types to surrogate and discriminators, and from discriminator back to surrogate type
             _surrogateFactory = knownTypes
                 .Where(t => !t.IsAbstract)
-                .ToDictionary(t => t, _surrogateProvider.GetSurrogateFactory).ToFrozenDictionary();
+                .ToDictionary(t => t, surrogateProvider.GetSurrogateFactory).ToFrozenDictionary();
             _typeLookup = surrogateTypes.ToFrozenDictionary(discriminatorFunc, new MessagePackUtility.ByteArrayComparer());
             _discriminators = FrozenDictionary.ToFrozenDictionary(
                 _typeLookup
@@ -130,6 +125,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             }
             else
             {
+                // same as surrogateType = _typeLookup[[]];
                 surrogateType = _surrogateBase;
             }
 
@@ -147,7 +143,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 return;
             }
 
-            //object surrogate = _surrogateProvider.GetObjectToSerialize(value, typeof(TSurrogate));
             object surrogate = _surrogateFactory.TryGetValue(value.GetType(), out var factory) ? factory(value)
                 // Below code handles derived proxy types and similar
                 : GetSurrogateTypeSlow(value);
@@ -182,7 +177,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 throw new InvalidOperationException($"Could not get surrogate type for {value.GetType()}");
             }
         }
-
 
         // TODO: Handle async serialization if the surrogate converter supports it
     }

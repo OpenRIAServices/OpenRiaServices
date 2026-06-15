@@ -512,9 +512,9 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.IsTrue(submitTask.IsFaulted, "Should have exception");
 
-                // TODO; Make a way of validaing this against the server side, messagepack currently handle it client side
 #if (ASPNETCORE && NET10_0_OR_GREATER)
-                // will get serialization exception
+                // MessagePack gives MessagePackSerializationException on client
+                // User friendly message is buried deep in the exception hierarchy
                 Assert.IsInstanceOfType(submitTask.Exception.InnerException,
                     typeof(Nerdbank.MessagePack.MessagePackSerializationException));
 #else

@@ -34,7 +34,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
 
         public override async Task<(ServiceQuery?, object?[])> ReadParametersFromBodyAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainOperationEntry operation)
         {
-            MessagePackRequestEnvelopeBase envelope;
+            MessagePackRequestEnvelope envelope;
             try
             {
                 envelope = await DeserializeRequestEnvelopeAsync(context, operation).ConfigureAwait(false);
@@ -163,21 +163,19 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
                 context.RequestAborted).ConfigureAwait(false);
         }
 
-        private async Task<MessagePackRequestEnvelopeBase> DeserializeRequestEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainOperationEntry operation)
+        private async Task<MessagePackRequestEnvelope> DeserializeRequestEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainOperationEntry operation)
         {
             ITypeShape envelopeType = operation.Operation switch
             {
                 DomainOperation.Query => _typeShapeProvider.GetTypeShapeOrThrow<MessagePackQueryRequestEnvelope>(),
-                DomainOperation.Custom when operation.Name == "Submit" =>
-                _typeShapeProvider.GetTypeShapeOrThrow<MessagePackSubmitRequestEnvelope>(),
-                _ => _typeShapeProvider.GetTypeShapeOrThrow<MessagePackInvokeRequestEnvelope>(),
+                _ => _typeShapeProvider.GetTypeShapeOrThrow<MessagePackRequestEnvelope>(),
             };
 
-            return (MessagePackRequestEnvelopeBase?)await _operationSerializer.DeserializeObjectAsync(
+            return (MessagePackRequestEnvelope?)await _operationSerializer.DeserializeObjectAsync(
                 context.Request.Body,
                 envelopeType,
                 context.RequestAborted).ConfigureAwait(false)
-                ?? (MessagePackRequestEnvelopeBase)Activator.CreateInstance(envelopeType.Type)!;
+                ?? (MessagePackRequestEnvelope)Activator.CreateInstance(envelopeType.Type)!;
         }
 
         private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, DomainOperationEntry operation, ITypeShapeProvider typeShapeProvider)

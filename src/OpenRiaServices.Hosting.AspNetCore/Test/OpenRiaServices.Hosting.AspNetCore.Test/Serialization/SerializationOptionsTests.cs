@@ -257,13 +257,6 @@ public class SerializationOptionsTests
         var content = new ByteArrayContent(ms.ToArray());
         content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/vnd.msgpack");
         return content;
-
-        byte[] SerializeValue(object value, Type type)
-        {
-            using var valueStream = new MemoryStream();
-            serializer.SerializeObject(valueStream, value, provider.GetTypeShapeOrThrow(type));
-            return valueStream.ToArray();
-        }
     }
 
     private static TResult ReadMessagePackInvokeResponse<TResult>(byte[] payload)

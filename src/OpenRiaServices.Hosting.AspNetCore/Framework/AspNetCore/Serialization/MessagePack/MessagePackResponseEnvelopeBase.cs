@@ -8,14 +8,14 @@ using PolyType;
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
 {
     [DataContract]
-    internal partial class MessagePackResponseEnvelopeBase
+    partial class MessagePackResponseEnvelopeBase
     {
         [DataMember]
         public DomainServiceFault? Fault { get; set; }
     }
 
     [DataContract]
-    internal sealed partial class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
+    sealed partial class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
     {
         public MessagePackQueryResponseEnvelope() { }
         // TODO: Should look into if GetSerializationType should be called to get type for serialization
@@ -30,7 +30,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     }
 
     [DataContract]
-    internal sealed class MessagePackInvokeResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
+    sealed class MessagePackInvokeResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
     {
         public MessagePackInvokeResponseEnvelope(TResult result)
             => Result = result;
@@ -40,8 +40,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     }
 
     [DataContract]
-    //[GenerateShape]
-    internal sealed partial class MessagePackSubmitResponseEnvelope : MessagePackResponseEnvelopeBase
+    sealed partial class MessagePackSubmitResponseEnvelope : MessagePackResponseEnvelopeBase
     {
         public MessagePackSubmitResponseEnvelope() { }
         public MessagePackSubmitResponseEnvelope(IEnumerable<ChangeSetEntry> result)
@@ -54,35 +53,23 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     }
 
 
-    internal abstract class MessagePackRequestEnvelopeBase
+    [DerivedTypeShape(typeof(MessagePackQueryRequestEnvelope))]
+    class MessagePackRequestEnvelope
     {
-        [MessagePackConverter(typeof(MessagePack.Converters.MethodParametersConverter))]
+        [MessagePackConverter(typeof(Converters.MethodParametersConverter))]
         public MethodParameters? Parameters { get; set; } = new();
     }
 
-    [DataContract]
-    //[GenerateShape]
-    internal sealed partial class MessagePackQueryRequestEnvelope : MessagePackRequestEnvelopeBase
+    sealed class MessagePackQueryRequestEnvelope : MessagePackRequestEnvelope
     {
-        [DataMember]
         public List<ServiceQueryPart>? QueryOptions { get; set; }
-        [DataMember]
         public bool IncludeTotalCount { get; set; }
     }
 
-    [DataContract]
-    //[GenerateShape]
-    internal sealed partial class MessagePackInvokeRequestEnvelope : MessagePackRequestEnvelopeBase
-    {
-    }
-
-    [DataContract]
-    //[GenerateShape]
-    internal sealed partial class MessagePackSubmitRequestEnvelope : MessagePackRequestEnvelopeBase
-    {
-    }
-
-    
+    /// <summary>
+    /// Helper class to allow custom (de)serialization of method parameters.
+    /// <see cref="Converters.MethodParametersConverter"/> contains the important logic
+    /// </summary>
     internal sealed class MethodParameters
     {
         // TODO: Look into how this affect security

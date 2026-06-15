@@ -22,7 +22,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             Type? baseType = type.BaseType;
             while (baseType != null)
             {
-                var derivedTypeShapes = type.GetCustomAttributes(typeof(PolyType.DerivedTypeShapeAttribute), inherit: false)
+                var derivedTypeShapes = baseType.GetCustomAttributes(typeof(PolyType.DerivedTypeShapeAttribute), inherit: false)
                     .Cast<PolyType.DerivedTypeShapeAttribute>()
                     .FirstOrDefault(p => p.Type == type);
 
