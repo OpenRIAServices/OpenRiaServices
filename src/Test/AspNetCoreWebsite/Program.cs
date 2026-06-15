@@ -43,7 +43,7 @@ builder.Services.AddOpenRiaServices(o =>
 
         opt.Serializer = new Nerdbank.MessagePack.MessagePackSerializer()
         {
-            Converters = [new XElementConverter()],
+            Converters = [new XElementConverter(), new BinaryConverter()],
             ComparerProvider = new CustomComparerProvider(),
         };
     });
