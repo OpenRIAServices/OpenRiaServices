@@ -47,9 +47,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
     // AI Generated code
     internal sealed class ChangeSetEntryConverter : MessagePackConverter<ChangeSetEntry?>
     {
-        // TODO: Can use context.Security.MaxCollectionPreallocation instead
-        private const int MaxPreallocation = 50;
-
         public override bool PreferAsyncSerialization => false;
 
         public override ChangeSetEntry? Read(ref MessagePackReader reader, SerializationContext context)
@@ -203,11 +200,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             DomainServiceDescription description = DomainServiceDescription.GetDescription(MethodParametersConverter.GetOperation(context).DomainServiceType);
 
             int count = reader.ReadArrayHeader();
-            var actions = new List<OpenRiaServices.Serialization.KeyValue<string, object?[]>>(Math.Min(count, MaxPreallocation));
+            var actions = new List<OpenRiaServices.Serialization.KeyValue<string, object?[]>>(Math.Min(count, context.Security.MaxCollectionPreallocation));
 
             for (int i = 0; i < count; i++)
             {
-                // TODO: ReadArray here and validate count is 1 or 2
                 int memberCount = reader.ReadArrayHeader();
 
                 if (memberCount == 0 || memberCount > 2)

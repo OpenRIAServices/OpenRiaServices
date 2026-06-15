@@ -14,7 +14,16 @@ using PolyType.ReflectionProvider;
 
 namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
 {
-    internal sealed class ObjectConverter<T> : MessagePackConverter<T>
+    /// <summary>
+    /// Serializes a class hierarchy by writing an array of 2 items [string? "typename", Instance]
+    /// <para>The serialization mimics DataContractSerializer in that it will work efen if T is not the base type</para>
+    /// </summary>
+    /// <remarks>
+    /// PolyType and therefore NerdBank.MessagePack has limitations when it comes to polymorphic serialization, when any other class than the base class is serialized.
+    /// The converter uses a dictionary to map between types and their corresponding discriminators, which are generated based on the known types provided to the constructor.
+    /// </remarks>
+    /// <typeparam name="T"></typeparam>
+    sealed class ObjectConverter<T> : MessagePackConverter<T>
         where T : class
     {
         private readonly FrozenDictionary<Type, byte[]> _discriminators;
@@ -119,13 +128,14 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
 
         private static MessagePackConverter GetConverter(Type type, ref SerializationContext context)
         {
+            // Need to get the base shape in order to avoid gettting the same discriminator repeted again by converter
             ITypeShape shape = s_reflectionTypeShapeProvider.GetTypeShapeOrThrow(type);
             if (shape is PolyType.Abstractions.IUnionTypeShape unionShape)
                 shape = unionShape.BaseType;
 
             MessagePackConverter converter = context.GetConverter(shape);
 
-            Debug.Assert(converter.GetType()!.FullName.StartsWith("Nerdbank.MessagePack.Converters.Object", StringComparison.Ordinal), "Must not get union converter");
+            Debug.Assert(converter.GetType().FullName!.StartsWith("Nerdbank.MessagePack.Converters.Object", StringComparison.Ordinal), "Must not get union converter");
 
             return converter;
         }

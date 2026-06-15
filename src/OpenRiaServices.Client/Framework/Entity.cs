@@ -20,7 +20,6 @@ namespace OpenRiaServices.Client
     /// Base class for all entity types.
     /// </summary>
     [DataContract]
-    // TODO: Consider injecting Nerdbank.MessagePack.IMessagePackSerializationCallbacks in generated code instead
     public abstract partial class Entity : IEditableObject, INotifyPropertyChanged, IRevertibleChangeTracking, Nerdbank.MessagePack.IMessagePackSerializationCallbacks
     {
         private Action? _setChangedCallback;
