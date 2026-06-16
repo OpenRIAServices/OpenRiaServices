@@ -11,6 +11,9 @@ using System.Threading.Tasks;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
 {
+    /// <summary>
+    /// Handles Serialization of requests and responses
+    /// </summary>
     internal sealed class MessagePackRequestSerializer : RequestSerializer
     {
         private readonly MessagePackSerializer _serializer;
@@ -32,7 +35,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
         public override bool CanWrite(ReadOnlySpan<char> contentType)
             => MatchesMediaType(contentType, MimeTypes.MessagePack);
 
-        public override async Task<(ServiceQuery?, object?[])> ReadParametersFromBodyAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainOperationEntry operation)
+        public override async Task<(ServiceQuery?, object?[])> ReadParametersFromBodyAsync(HttpContext context, DomainOperationEntry operation)
         {
             MessagePackRequestEnvelope envelope;
             try
@@ -41,7 +44,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
             }
             catch (Exception ex) when (!ExceptionHandlingUtility.IsFatal(ex))
             {
-                throw new Microsoft.AspNetCore.Http.BadHttpRequestException($"Failed to read body: {ex.Message}", ex);
+                throw new BadHttpRequestException($"Failed to read body: {ex.Message}", ex);
             }
 
             var parameters = operation.Parameters;
@@ -59,13 +62,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
                         continue;
                     }
 
-                    throw new Microsoft.AspNetCore.Http.BadHttpRequestException($"No value provided for parameter '{parameter.Name}'", (int)HttpStatusCode.BadRequest);
+                    throw new BadHttpRequestException($"No value provided for parameter '{parameter.Name}'", (int)HttpStatusCode.BadRequest);
                 }
 
                 if (value is null)
                 {
                     if (!parameter.IsNullable)
-                        throw new Microsoft.AspNetCore.Http.BadHttpRequestException($"Null value provided for parameter '{parameter.Name}'", (int)HttpStatusCode.BadRequest);
+                        throw new BadHttpRequestException($"Null value provided for parameter '{parameter.Name}'", (int)HttpStatusCode.BadRequest);
 
                     values[i] = null;
                     continue;
@@ -88,23 +91,22 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
             return (serviceQuery, values);
         }
 
-        public override async Task<IEnumerable<ChangeSetEntry>> ReadSubmitRequestAsync(Microsoft.AspNetCore.Http.HttpContext context)
+        public override async Task<IEnumerable<ChangeSetEntry>> ReadSubmitRequestAsync(HttpContext context)
         {
             (_, object?[] parameters) = await ReadParametersFromBodyAsync(context, _operation).ConfigureAwait(false);
             return (IEnumerable<ChangeSetEntry>?)parameters.FirstOrDefault() ?? Array.Empty<ChangeSetEntry>();
         }
-        public override async Task WriteErrorAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
+        public override async Task WriteErrorAsync(HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
         {
             context.Response.Headers.ContentType = MimeTypes.MessagePack;
-            await _operationSerializer.SerializeObjectAsync(
+            await _operationSerializer.SerializeAsync(
                 context.Response.Body,
-                new MessagePackResponseEnvelopeBase { Fault = fault },
-                _typeShapeProvider.GetTypeShapeOrThrow<MessagePackResponseEnvelopeBase>(),
+                new MessagePackFaultResponse { Fault = fault },
                 context.RequestAborted).ConfigureAwait(false);
         }
 
 
-        public override Task WriteSubmitResponseAsync(Microsoft.AspNetCore.Http.HttpContext context, IEnumerable<ChangeSetEntry> result)
+        public override Task WriteSubmitResponseAsync(HttpContext context, IEnumerable<ChangeSetEntry> result)
             => WriteEnvelopeAsync(context, new MessagePackSubmitResponseEnvelope(result));
 
         public override Task WriteInvokeResponseAsync(HttpContext context, object? result)
@@ -114,56 +116,20 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
 
         public override Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result)
         {
-            // Create response for base type returned ??
-            var description = DomainServiceDescription.GetDescription(_operation.DomainServiceType);
-            Type serializationType = description.GetRootEntityType(typeof(T));
-
-            if (serializationType == typeof(T))
-            {
-                return WriteEnvelopeAsync(context, new MessagePackQueryResponseEnvelope<T>(result));
-            }
-            else
-            {
-                // TODO: Cache convert method (shared static cache)?
-                var convertedResult = (QueryResult)typeof(MessagePackRequestSerializer)
-                    .GetMethod(nameof(ConvertQueryResult), System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static)!
-                    .MakeGenericMethod(typeof(T), serializationType)
-                    .Invoke(null, new object[] { result })!;
-
-                var envelope = (MessagePackResponseEnvelopeBase)Activator.CreateInstance(
-                    typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(serializationType),
-                    convertedResult)!;
-
-                return WriteEnvelopeAsync(context, envelope);
-            }
-        }
-
-        private static QueryResult<TTo> ConvertQueryResult<TFrom,TTo>(QueryResult<TFrom> query)
-//            where TFrom : TTo
-        {
-            return new QueryResult<TTo>((IEnumerable<TTo>)query.RootResults, query.TotalCount)
-            {
-                IncludedResults = query.IncludedResults
-            };
+            return WriteEnvelopeAsync(context, new MessagePackQueryResponseEnvelope<T>(result));
         }
 
         private async Task WriteEnvelopeAsync(HttpContext context, MessagePackResponseEnvelopeBase envelope)
         {
-            // HOW To write response without "Envelope type"
-            var bufferWriter = context.Response.BodyWriter;
-            //MessagePackWriter writer = new MessagePackWriter(bufferWriter);
-            //writer.WriteMapHeader("");
-            //writer.Flush();
-
             context.Response.Headers.ContentType = MimeTypes.MessagePack;
             await _operationSerializer.SerializeObjectAsync(
-                bufferWriter,
+                context.Response.BodyWriter,
                 envelope,
                 _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()),
                 context.RequestAborted).ConfigureAwait(false);
         }
 
-        private async Task<MessagePackRequestEnvelope> DeserializeRequestEnvelopeAsync(Microsoft.AspNetCore.Http.HttpContext context, DomainOperationEntry operation)
+        private async Task<MessagePackRequestEnvelope> DeserializeRequestEnvelopeAsync(HttpContext context, DomainOperationEntry operation)
         {
             ITypeShape envelopeType = operation.Operation switch
             {

@@ -28,14 +28,8 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
     {
         private readonly FrozenDictionary<Type, byte[]> _discriminators;
         private readonly FrozenDictionary<byte[], Type> _typeLookup;
-        // We need to use a seprate type shape provider for looking up converters
-        // otherwise we will get union converters instead of the object converter for the underlying type 
-        private static readonly ReflectionTypeShapeProvider s_reflectionTypeShapeProvider = ReflectionTypeShapeProvider.Create(new()
-        {
-            // Note: We need to specify a new unique set of assemblies to avoid conflicts with the main type shape provider
-            TypeShapeExtensionAssemblies = new[] { typeof(DomainClient).Assembly }
-        });
-
+        // The base type of the hierarchy, used to determine if we need to write a discriminator when the declared type is not the base type
+        private readonly Type? _baseType;
 
         public ObjectConverter(IEnumerable<Type> knownTypes)
         {
@@ -44,6 +38,16 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             // This avoids double dictionary lookups in surrogateProvider
             _typeLookup = knownTypes.Where(t => !t.IsAbstract).ToFrozenDictionary(MessagePackUtility.GetDiscriminator, comparer);
             _discriminators = FrozenDictionary.ToFrozenDictionary(_typeLookup.Select(k => new KeyValuePair<Type, byte[]>(k.Value, k.Key)));
+
+            if (typeof(Entity).IsAssignableFrom(typeof(T)) && typeof(T) != typeof(Entity))
+            {
+                // See if T has KnownTypes that attribute ?? to be sure it is generated base class
+                var _baseType = typeof(T);
+                while (_baseType.BaseType != typeof(Entity))
+                    _baseType = _baseType.BaseType!;
+            }
+            else
+                _baseType = null;
         }
 
         public override T? Read(ref MessagePackReader reader, SerializationContext context)
@@ -65,12 +69,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             // Handle null input
             if (reader.TryReadNil())
             {
-                if (typeof(T) == typeof(Entity) || typeof(T) == typeof(object))
-                {
-                    throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
-                }
-                else
-                    type = typeof(T);
+                type = _baseType ?? throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
             }
             else
             {
@@ -91,7 +90,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 {
                     type = _typeLookup[BuffersExtensions.ToArray(sequence)];
                 }
-                else 
+                else
                     throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
             }
 
@@ -129,7 +128,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
         private static MessagePackConverter GetConverter(Type type, ref SerializationContext context)
         {
             // Need to get the base shape in order to avoid gettting the same discriminator repeted again by converter
-            ITypeShape shape = s_reflectionTypeShapeProvider.GetTypeShapeOrThrow(type);
+            ITypeShape shape = ObjectConverterFactory.ObjectConverterTypeShapeProvider.GetTypeShapeOrThrow(type);
             if (shape is PolyType.Abstractions.IUnionTypeShape unionShape)
                 shape = unionShape.BaseType;
 

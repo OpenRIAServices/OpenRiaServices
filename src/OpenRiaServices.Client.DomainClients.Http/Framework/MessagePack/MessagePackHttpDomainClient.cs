@@ -141,12 +141,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
         {
             if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(QueryResult<>))
             {
-                // Change returnType to base type since PolyType/Messagepack cannot serialize types in middle of class hierarchies
-                Type entityType = returnType.GenericTypeArguments[0];
-                while (entityType.BaseType != typeof(Entity))
-                    entityType = entityType.BaseType;
-
-                returnType = typeof(QueryResult<>).MakeGenericType(entityType);
                 return typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(returnType);
             }
             if (string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal))

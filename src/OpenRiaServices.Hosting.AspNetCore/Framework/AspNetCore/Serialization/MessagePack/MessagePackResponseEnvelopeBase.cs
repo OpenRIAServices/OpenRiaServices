@@ -8,10 +8,15 @@ using PolyType;
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
 {
     [DataContract]
-    partial class MessagePackResponseEnvelopeBase
+    [GenerateShape]
+    partial class MessagePackFaultResponse
     {
         [DataMember]
         public DomainServiceFault? Fault { get; set; }
+    }
+
+    class MessagePackResponseEnvelopeBase
+    {
     }
 
     [DataContract]
