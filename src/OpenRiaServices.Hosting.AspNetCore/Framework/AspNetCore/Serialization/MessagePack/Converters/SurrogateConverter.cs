@@ -31,7 +31,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             if (typeof(T) == typeof(object))
             {
                 HashSet<Type> allKnownTypes = new(description.EntityTypes);
-                foreach (var (entityType, entityKnownTypes) in description.EntityKnownTypes)
+                foreach (var (_, entityKnownTypes) in description.EntityKnownTypes)
                 {
                     allKnownTypes.UnionWith(entityKnownTypes);
                 }

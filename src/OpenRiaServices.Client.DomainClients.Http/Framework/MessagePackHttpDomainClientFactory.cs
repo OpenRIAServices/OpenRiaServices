@@ -43,11 +43,11 @@ namespace OpenRiaServices.Client.DomainClients
 
         internal MessagePackSerializer GetSerializer(Type service, IEnumerable<Type> knownTypes)
         {
-            return _serializerCache.GetOrAdd(service, (_, args) =>
+            return _serializerCache.GetOrAdd(service, static (_, args) =>
             {
                 return args.Item1.BaseSerializerSerializer with
                 {
-                    ConverterFactories = [new ObjectConverterFactory(args.knownTypes, TypeShapeProvider), .. args.Item1.BaseSerializerSerializer.ConverterFactories]
+                    ConverterFactories = [new ObjectConverterFactory(args.knownTypes), .. args.Item1.BaseSerializerSerializer.ConverterFactories]
                 };
 
             }, (this, knownTypes));

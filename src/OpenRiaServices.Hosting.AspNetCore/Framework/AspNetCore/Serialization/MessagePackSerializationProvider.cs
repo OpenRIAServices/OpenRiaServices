@@ -7,23 +7,20 @@ using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
     internal sealed class MessagePackSerializationProvider : ISerializationProvider
     {
-        private readonly MessagePackSerializationOptions _options;
         private readonly ITypeShapeProvider _typeShapeProvider;
         private readonly MessagePackSerializer _serializer;
         private readonly ConcurrentDictionary<Type, MessagePackSerializer> _serializerByDomainServiceType = new();
 
         public MessagePackSerializationProvider(MessagePackSerializationOptions options)
         {
-            _options = options ?? throw new ArgumentNullException(nameof(options));
-            _typeShapeProvider = options.TypeShapeProvider;
+            ArgumentNullException.ThrowIfNull(options);
 
+            _typeShapeProvider = options.TypeShapeProvider;
             _serializer = MessagePackUtility.ConfigureSerializer(options.Serializer, [new MethodParametersConverter()]);
         }
 
@@ -33,7 +30,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private MessagePackSerializer GetSerializerForDomainService(Type domainServiceType)
             => _serializerByDomainServiceType.GetOrAdd(domainServiceType, CreateSerializerForDomainService);
 
-        // TODO: Add issue to PolyType to support KnownTypeAttribute (when no DataContact is present)
         private MessagePackSerializer CreateSerializerForDomainService(Type domainServiceType)
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(domainServiceType);
@@ -46,7 +42,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 if (surrogateProvider.GetSurrogateType(entityType) is Type surrogateType)
                 {
                     converters.Add((MessagePackConverter)
-                        Activator.CreateInstance(typeof(SurrogateConverter<,>).MakeGenericType([surrogateType, entityType]), args: [description, surrogateProvider])!);
+                        Activator.CreateInstance(typeof(SurrogateConverter<,>).MakeGenericType(surrogateType, entityType), args: [description, surrogateProvider])!);
                 }
             }
 

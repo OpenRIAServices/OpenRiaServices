@@ -20,7 +20,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
     /// </summary>
     sealed class ObjectConverterFactory : IMessagePackConverterFactory
     {
-        private readonly ITypeShapeProvider _typeShapeProvider;
         private readonly FrozenDictionary<Type, MessagePackConverter> _converters;
 
         // We need to use a seprate type shape provider for looking up converters
@@ -31,7 +30,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             TypeShapeExtensionAssemblies = new[] { typeof(DomainClient).Assembly }
         });
 
-        public ObjectConverterFactory(IEnumerable<Type> entityTypes, ITypeShapeProvider typeShapeProvider)
+        public ObjectConverterFactory(IEnumerable<Type> entityTypes)
         {
             HashSet<Type> allTypes = new HashSet<Type>(entityTypes);
             foreach (Type knownType in entityTypes)
@@ -50,7 +49,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 if (knownTypes.Count <= 1)
                     continue;
 
-                // Skip base types
+                // Skip base types, it has KnownType attributes and is handled correctly
                 if (item.Key.BaseType == typeof(Entity))
                     continue;
 
@@ -58,13 +57,11 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             }
             converters.Add(typeof(object), new ObjectConverter<object>(allTypes));
 
-            _typeShapeProvider = typeShapeProvider;
             _converters = converters.ToFrozenDictionary();
         }
 
         MessagePackConverter? IMessagePackConverterFactory.CreateConverter(Type type, ITypeShape? shape, in ConverterContext context)
         {
-            // TODO: != ObjectConverter.s_reflectionTypeShapeProvider
             // Only return type shapes for specified converter, this allows nerdbank default converters to be generated for other providers
             if (!object.ReferenceEquals(shape?.Provider, ObjectConverterTypeShapeProvider)
                 && _converters.TryGetValue(type, out var converter))

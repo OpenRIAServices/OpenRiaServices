@@ -19,41 +19,29 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     {
     }
 
-    [DataContract]
     sealed partial class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
     {
-        public MessagePackQueryResponseEnvelope() { }
-        // TODO: Should look into if GetSerializationType should be called to get type for serialization
-        // and not look at actual type returned, derived types might differ
         public MessagePackQueryResponseEnvelope(QueryResult<TResult> result)
             => Result = result;
 
-        [DataMember]
-        [Include]
-        [PropertyShape()]
         public QueryResult<TResult>? Result { get; set; }
     }
 
-    [DataContract]
     sealed class MessagePackInvokeResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
     {
         public MessagePackInvokeResponseEnvelope(TResult result)
             => Result = result;
 
-        [DataMember]
         public TResult? Result { get; set; }
     }
 
-    [DataContract]
     sealed partial class MessagePackSubmitResponseEnvelope : MessagePackResponseEnvelopeBase
     {
-        public MessagePackSubmitResponseEnvelope() { }
         public MessagePackSubmitResponseEnvelope(IEnumerable<ChangeSetEntry> result)
         {
             Result = result;
         }
 
-        [DataMember]
         public IEnumerable<ChangeSetEntry>? Result { get; set; }
     }
 

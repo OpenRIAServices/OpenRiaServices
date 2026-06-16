@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters
 {
     /**
-    // ChangeSetEntryConverter v2
+    // Thoughs on a future ChangeSetEntryConverter v2 without all the manual code.
+
       Entry = ["entity.full.type.name", [changesetentry_surrogate]]
       on read: will set entity type in SerializationContext
        * todo: Cache serializer or context ??
@@ -40,12 +41,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
       *  EntityAction  is (string MethodName, Dictionary{string, object})
         where Dictionary{string, object} should use existing MethodParametersConverter
 
-
     */
-
-    // TODO: FIX THIS
-    // AI Generated code
-    internal sealed class ChangeSetEntryConverter : MessagePackConverter<ChangeSetEntry?>
+    sealed class ChangeSetEntryConverter : MessagePackConverter<ChangeSetEntry?>
     {
         public override bool PreferAsyncSerialization => false;
 

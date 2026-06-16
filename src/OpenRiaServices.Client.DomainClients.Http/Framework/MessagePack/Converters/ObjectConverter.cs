@@ -108,18 +108,15 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 writer.WriteNil();
                 return;
             }
+
             Type type = value.GetType();
-
-
             writer.WriteArrayHeader(2);
-            if (typeof(T) == type && (typeof(T) != typeof(Entity) && typeof(T) != typeof(object)))
+            if (type == _baseType)
             {
                 writer.WriteNil();
             }
             else
             {
-                // TODO: find first known type to handle inheritance without
-                //if (_discriminators.TryGetValue
                 writer.WriteString(_discriminators[type]);
             }
 

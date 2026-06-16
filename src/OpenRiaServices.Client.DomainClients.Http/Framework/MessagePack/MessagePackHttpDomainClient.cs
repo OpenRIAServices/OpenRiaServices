@@ -48,7 +48,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
         {
             using var request = new HttpRequestMessage(method, operationName);
             MethodParameters methodParameters = GetMethodParameters(operationName);
-            var envelope = CreateRequestEnvelope(method, operationName, methodParameters, parameters, queryOptions);
+            var envelope = CreateRequestEnvelope(operationName, methodParameters, parameters, queryOptions);
 
             using var stream = new MemoryStream();
             // TODO: If possible, replace this buffering with a custom HttpContent override of SerializeToStream
@@ -62,7 +62,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
         }
 
-        private static MessagePackRequestEnvelopeBase CreateRequestEnvelope(HttpMethod method, string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
+        private static MessagePackRequestEnvelopeBase CreateRequestEnvelope(string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
         {
             MessagePackMethodParameters requestParameters = (parameters is { Count: > 0 })
                 ? new(methodParameters, parameters) : null;

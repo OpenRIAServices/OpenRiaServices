@@ -1,60 +1,16 @@
 using Nerdbank.MessagePack;
-using OpenRiaServices.Client;
-using OpenRiaServices.Client.Internal;
-using PolyType;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
 
 #nullable enable
 
 namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
 {
-    /**
-    // ChangeSetEntryConverter v2
-      Entry = ["entity.full.type.name", [changesetentry_surrogate]]
-      on read: will set entity type in SerializationContext
-       * todo: Cache serializer or context ??
-
-    Can do and register converter per entity ?
-
-    // [MessagePackConverter(typeof(MyConverter {}))] is maybe not a good idea
-    //  use CustomConverter ChangeSetEntry and delegate to base class
-
-    class ChangeSetEntry{TEntity} : ChangeSetEntry
-    {
-       public new TEntity Entity;
-       public new IList{EntityAction{TEntity}} EntityActions;
-    };
-
-    [Converter(EntityActionConverter{})]
-    class EntityAction{TEntity}
-    {
-    }
-    EntityActionConverter{}
-    {
-
-
-    changeset_surrogate is like ChangeSetEntry
-    * maybe generic typed ChangeSetEntrySurrogate{TEntity} ??? (how does it affect serializer cache etc)
-    *   * otherwise use "KnownTypeConverter/ObjectConverter" that support all EntityTypes (fullname as discriminator)
-    * has list of EntityAction instead of KeyValuePair {string, object[]}
-      *  EntityAction  is (string MethodName, Dictionary{string, object})
-        where Dictionary{string, object} should use existing MethodParametersConverter
-
-
-    */
-
-    // TODO: FIX THIS
-    // AI Generated code
     internal sealed class ChangeSetEntryConverter : MessagePackConverter<ChangeSetEntry?>
     {
-        // TODO: Can use context.Security.MaxCollectionPreallocation instead
-        private const int MaxPreallocation = 50;
-
         public override bool PreferAsyncSerialization => false;
 
         public override ChangeSetEntry? Read(ref MessagePackReader reader, SerializationContext context)
@@ -225,7 +181,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                     // can write as string if no parameters
                     writer.WriteArrayHeader(1);
                     writer.Write(action.Key);
-                    continue;
                 }
                 else
                 {

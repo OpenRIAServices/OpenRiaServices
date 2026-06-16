@@ -24,7 +24,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
         {
             _operation = operation ?? throw new ArgumentNullException(nameof(operation));
             _typeShapeProvider = typeShapeProvider ?? throw new ArgumentNullException(nameof(typeShapeProvider));
-            _operationSerializer = CreateOperationSerializer(serializer, _operation, _typeShapeProvider);
+            _operationSerializer = CreateOperationSerializer(serializer, _operation);
         }
 
         public override bool CanRead(ReadOnlySpan<char> contentType)
@@ -142,7 +142,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
                 ?? (MessagePackRequestEnvelope)Activator.CreateInstance(envelopeType.Type)!;
         }
 
-        private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, DomainOperationEntry operation, ITypeShapeProvider typeShapeProvider)
+        private static MessagePackSerializer CreateOperationSerializer(MessagePackSerializer serializer, DomainOperationEntry operation)
         {
             SerializationContext context = serializer.StartingContext;
             context[MethodParametersConverter.OperationKey] = operation;
