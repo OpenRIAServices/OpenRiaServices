@@ -48,13 +48,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         public abstract Task<IEnumerable<ChangeSetEntry>> ReadSubmitRequestAsync(HttpContext context);
 
         /// <summary>
-        /// Writes the result of a Submit to the provided <see cref="HttpContext"/>.
-        /// </summary>
-        /// <param name="context">The HTTP context to write the response to.</param>
-        /// <param name="result">The change-set entries representing the results of the submit operation.</param>
-        public abstract Task WriteSubmitResponseAsync(HttpContext context, IEnumerable<ChangeSetEntry> result);
-
-        /// <summary>
         /// Writes an error response (<paramref name="fault"/>) to the provided <see cref="HttpContext"/>.
         /// </summary>
         /// <param name="context">The HTTP context to write the error response to.</param>
@@ -63,12 +56,27 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         public abstract Task WriteErrorAsync(HttpContext context, DomainServiceFault fault, DomainOperationEntry operation);
 
         /// <summary>
+        /// Writes the result of a Submit to the provided <see cref="HttpContext"/>.
+        /// </summary>
+        /// <param name="context">The HTTP context to write the response to.</param>
+        /// <param name="result">The change-set entries representing the results of the submit operation.</param>
+        public abstract Task WriteSubmitResponseAsync(HttpContext context, IEnumerable<ChangeSetEntry> result);
+
+        /// <summary>
         /// Writes the return value of a successful operation to the provided <see cref="HttpContext"/>.
         /// </summary>
         /// <param name="context">The HTTP context to which the response will be written.</param>
         /// <param name="result">The operation result to serialize into the response; may be null for no content.</param>
-        /// <param name="operation">Metadata for the domain operation that guides serialization and response formatting.</param>
-        public abstract Task WriteResponseAsync(HttpContext context, object? result, DomainOperationEntry operation);
+        /// 
+        public abstract Task WriteQueryResponseAsync<T>(HttpContext context, QueryResult<T> result);
+
+        /// <summary>
+        /// Writes the return value of a successful operation to the provided <see cref="HttpContext"/>.
+        /// </summary>
+        /// <param name="context">The HTTP context to which the response will be written.</param>
+        /// <param name="result">The operation result to serialize into the response; may be null for no content.</param>
+        /// 
+        public abstract Task WriteInvokeResponseAsync(HttpContext context, object? result);
     }
 
 }

@@ -201,6 +201,36 @@ namespace OpenRiaServices.Hosting.Wcf
 
             constructorGenerator.Emit(OpCodes.Ret);
 
+#if ASPNET_CORE
+            // public Surrogate() : base()
+            constructorBuilder = typeBuilder.DefineConstructor(MethodAttributes.Public, CallingConventions.Standard, []);
+            constructorGenerator = constructorBuilder.GetILGenerator();
+
+            if (parentSurrogateType == typeof(object))
+            {
+                // base()
+                constructorGenerator.Emit(OpCodes.Ldarg_0);
+                constructorGenerator.Emit(OpCodes.Call, parentSurrogateType.GetConstructor(Type.EmptyTypes));
+
+                if (!type.IsAbstract)
+                {
+                    // _wrapper = new Type()
+                    constructorGenerator.Emit(OpCodes.Ldarg_0);
+                    constructorGenerator.Emit(OpCodes.Newobj, type.GetConstructor(Type.EmptyTypes));
+                    constructorGenerator.Emit(OpCodes.Stfld, wrapperField);
+                }
+            }
+            else if (!type.IsAbstract)
+            {
+                // base(new Type())
+                constructorGenerator.Emit(OpCodes.Ldarg_0);
+                constructorGenerator.Emit(OpCodes.Newobj, type.GetConstructor(Type.EmptyTypes));
+                constructorGenerator.Emit(OpCodes.Call, parentSurrogateType.GetConstructor([parentType]));
+            }
+
+            constructorGenerator.Emit(OpCodes.Ret);
+#endif
+
             // Only generate a type initializer if there are any virtual properties.
             Lazy<ILGenerator> typeInitializerFactory = new Lazy<ILGenerator>(() =>
             {
@@ -650,7 +680,7 @@ namespace OpenRiaServices.Hosting.Wcf
             assemName.Name = name;
 
 #if NET
-// Dev note: the SecurityContextSource.CurrentAppDomain is new in CLR 4.0
+            // Dev note: the SecurityContextSource.CurrentAppDomain is new in CLR 4.0
             // and permits the assembly builder to inherit the security permissions of the
             // app domain. - CDB Removed, Medium trust support removed
             AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(

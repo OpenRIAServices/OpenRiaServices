@@ -86,7 +86,7 @@ CI separates test execution by target framework and excludes `OpenRiaServices.Co
 - Follow `.editorconfig` and existing style in nearby files.
 - C# uses 4-space indentation and C# 14.0 (`src\Directory.Build.props`).
 - Framework projects enable recommended analysis mode and XML documentation generation.
-- New public, protected, and internal APIs should have XML documentation comments.
+- New public, protected, and internal APIs should have XML documentation comments, this is not required for assembly local ("private") types.
 - Release builds should not introduce warnings.
 - Assembly signing is enabled centrally in `src\Directory.Build.props`; framework and test projects use keys from `src\snk`.
 - Use existing libraries and patterns. Do not modernize unrelated legacy code while fixing a targeted issue.

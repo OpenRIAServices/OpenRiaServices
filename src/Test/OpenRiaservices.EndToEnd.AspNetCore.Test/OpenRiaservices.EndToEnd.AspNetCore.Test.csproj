@@ -56,6 +56,8 @@
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\MessageUtilityTests.cs" />
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\WebDomainClientTests.cs" />
     <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\IntegrationTests\SoapXmlEndpointTests.cs" />
+    <Compile Include="..\AspNetCoreWebsite\MessagePack\*.cs" LinkBase="Included\MessagePack\" />
+    <Compile Remove="..\AspNetCoreWebsite\MessagePack\BinaryConverter.cs" />
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="Data\DomainClients\Cities.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>

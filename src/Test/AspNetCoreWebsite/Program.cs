@@ -3,11 +3,13 @@ using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
+using AspNetCoreWebsite.MessagePack;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 using RootNamespace.TestNamespace;
@@ -29,7 +31,15 @@ builder.Services.AddOpenRiaServices(o =>
     };
 
 })
-    .AddXmlSerialization();
+    .AddXmlSerialization()
+    .AddMessagePackSerialization(opt =>
+    {
+        opt.Serializer = new Nerdbank.MessagePack.MessagePackSerializer()
+        {
+            Converters = [new XElementConverter(), new BinaryConverter()],
+            ComparerProvider = new CustomComparerProvider(),
+        };
+    });
 // Possible future extension point for configuring OpenRia Services
 //.ConfigureBinaryXmlSerializer(options => { ... MaxItemsInObjectGraph, XmlDictionaryReaderQuotas Writer/ReaderQuotas ... })
 //o.ConfigureBinaryXml(o => { })

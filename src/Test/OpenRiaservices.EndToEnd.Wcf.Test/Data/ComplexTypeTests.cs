@@ -548,7 +548,7 @@ namespace OpenRiaServices.Client.Test
 
             Address returnAddress = await ctxt.InvokeGetInvalidAddressAsync(CancellationToken.None);
 
-            Assert.IsFalse(returnAddress.HasValidationErrors);
+            Assert.IsFalse(returnAddress.HasValidationErrors, "Should not have validation errors");
             Assert.AreEqual("Invalid", returnAddress.State);
         }
 

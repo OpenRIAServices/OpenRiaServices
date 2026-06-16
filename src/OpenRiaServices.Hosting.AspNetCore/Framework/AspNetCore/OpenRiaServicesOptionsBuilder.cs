@@ -60,6 +60,41 @@ namespace OpenRiaServices.Hosting.AspNetCore
         }
 
         /// <summary>
+        /// Enables MessagePack wire format (<c>application/vnd.msgpack</c>) in addition to built in binary Xml.
+        /// </summary>
+        /// <remarks>
+        /// Request should specify mime-type <c>application/vnd.msgpack</c> using <c>Content-Type</c> or <c>Accept</c> HTTP-headers.
+        /// </remarks>
+        /// <param name="defaultProvider">If <see langword="true"/> the MessagePack provider will be the default for responses (when content type is not specified)</param>
+        public OpenRiaServicesOptionsBuilder AddMessagePackSerialization(bool defaultProvider = false)
+        {
+            return AddMessagePackSerialization(configure: null, defaultProvider);
+        }
+
+        /// <summary>
+        /// Enables MessagePack wire format (<c>application/vnd.msgpack</c>) in addition to built in binary Xml,
+        /// with options configurable via a callback.
+        /// </summary>
+        /// <remarks>
+        /// Request should specify mime-type <c>application/vnd.msgpack</c> using <c>Content-Type</c> or <c>Accept</c> HTTP-headers.
+        /// </remarks>
+        /// <param name="configure">An optional callback to configure <see cref="MessagePackSerializationOptions"/>.</param>
+        /// <param name="defaultProvider">If <see langword="true"/> the MessagePack provider will be the default for responses (when content type is not specified)</param>
+        public OpenRiaServicesOptionsBuilder AddMessagePackSerialization(Action<MessagePackSerializationOptions>? configure, bool defaultProvider = false)
+        {
+            if (configure is not null)
+                Services.Configure(configure);
+
+            Services.AddOptions<OpenRiaServicesOptions>()
+                .Configure((OpenRiaServicesOptions options, IOptions<MessagePackSerializationOptions> serializationOptions) =>
+                {
+                    options.AddSerializationProvider(new MessagePackSerializationProvider(serializationOptions.Value), defaultProvider);
+                });
+
+            return this;
+        }
+
+        /// <summary>
         /// Configures the default binary XML (<c>application/msbin1</c>) serialization provider.
         /// </summary>
         /// <remarks>

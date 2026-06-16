@@ -17,9 +17,18 @@
     <language>en-US</language>
     <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
     <dependencies>
-      <group targetFramework="net472" />
-      <group targetFramework="net8.0" />
-	  <group targetFramework="net8.0-windows7.0" />
+      <group targetFramework="net472">
+        <dependency id="Nerdbank.MessagePack" version="1.2.4" exclude="Build,Analyzers" />
+        <dependency id="System.IO.Hashing" version="10.0.9" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net8.0">
+        <dependency id="Nerdbank.MessagePack" version="1.2.4" exclude="Build,Analyzers" />
+        <dependency id="System.IO.Hashing" version="10.0.9" exclude="Build,Analyzers" />
+      </group>
+      <group targetFramework="net8.0-windows7.0">
+        <dependency id="Nerdbank.MessagePack" version="1.2.4" exclude="Build,Analyzers" />
+        <dependency id="System.IO.Hashing" version="10.0.9" exclude="Build,Analyzers" />
+      </group>
     </dependencies>
     <frameworkReferences>
       <group targetFramework="net8.0-windows7.0">

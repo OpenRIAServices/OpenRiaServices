@@ -512,8 +512,15 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.IsTrue(submitTask.IsFaulted, "Should have exception");
 
+#if (ASPNETCORE && NET10_0_OR_GREATER)
+                // MessagePack gives MessagePackSerializationException on client
+                // User friendly message is buried deep in the exception hierarchy
+                Assert.IsInstanceOfType(submitTask.Exception.InnerException,
+                    typeof(Nerdbank.MessagePack.MessagePackSerializationException));
+#else
                 var expectedException = (DomainOperationException)submitTask.Exception.InnerException;
                 Assert.AreEqual("This DomainService does not support operation 'Reject' for entity 'CityWithInfo'.", expectedException?.Message);
+#endif
             });
 
             EnqueueTestComplete();

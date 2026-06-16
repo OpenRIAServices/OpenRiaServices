@@ -1217,6 +1217,17 @@ Namespace TestDomainServices
         End Sub
         
         ''' <summary>
+        ''' Deserialization ctor for MessagePack support, when any Property is required
+        ''' </summary>
+        <PolyType.ConstructorShapeAttribute()>  _
+        Private Sub New(ByVal ID As Integer)
+            MyBase.New
+            Me.OnCreated
+            MyBase.OnDeserializing(CType(Nothing, System.Runtime.Serialization.StreamingContext))
+            Me.ID = ID
+        End Sub
+        
+        ''' <summary>
         ''' Gets or sets the 'ID' value.
         ''' </summary>
         <DataMember(),  _

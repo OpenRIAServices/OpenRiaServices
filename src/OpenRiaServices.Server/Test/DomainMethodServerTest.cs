@@ -169,16 +169,16 @@ namespace OpenRiaServices.Server.Test
             }, "entityType");
 
             // call with empty domain method name. Verify ArgumentEx.
-            ExceptionHelper.ExpectArgumentException(delegate
+            ExceptionHelper.ExpectEmptyStringArgumentException(delegate
             {
                 description.GetCustomMethod(typeof(City), "");
-            }, string.Format(CultureInfo.CurrentCulture, Resource.DomainOperationEntry_ArgumentCannotBeNullOrEmpty, "methodName"));
+            }, "methodName");
 
             // call with null domain method name. Verify ArgumentEx.
-            ExceptionHelper.ExpectArgumentException(delegate
+            ExceptionHelper.ExpectArgumentNullException(delegate
             {
                 description.GetCustomMethod(typeof(City), null);
-            }, string.Format(CultureInfo.CurrentCulture, Resource.DomainOperationEntry_ArgumentCannotBeNullOrEmpty, "methodName"));
+            }, "methodName");
         }
 
         [TestMethod]

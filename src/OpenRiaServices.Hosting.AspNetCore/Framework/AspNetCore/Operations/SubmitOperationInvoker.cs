@@ -69,7 +69,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     }
                 }
 
-                await writer.WriteResponseAsync(context, result, DomainOperation);
+                await writer.WriteSubmitResponseAsync(context, result);
             }
             catch (OperationCanceledException) when (context.RequestAborted.IsCancellationRequested)
             {

@@ -9,6 +9,7 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using Nerdbank.MessagePack;
 using OpenRiaServices.Client.Internal;
 
 #nullable enable
@@ -19,7 +20,7 @@ namespace OpenRiaServices.Client
     /// Base class for all entity types.
     /// </summary>
     [DataContract]
-    public abstract partial class Entity : IEditableObject, INotifyPropertyChanged, IRevertibleChangeTracking
+    public abstract partial class Entity : IEditableObject, INotifyPropertyChanged, IRevertibleChangeTracking, Nerdbank.MessagePack.IMessagePackSerializationCallbacks
     {
         private Action? _setChangedCallback;
         private EditSession? _editSession;
@@ -1788,6 +1789,26 @@ namespace OpenRiaServices.Client
             {
                 complexObject.VerifyNotEditing();
             }
+        }
+
+        void IMessagePackSerializationCallbacks.OnBeforeSerialize()
+        {
+            // Intentionally left emtpy
+        }
+
+        void IMessagePackSerializationCallbacks.OnAfterSerialize()
+        {
+            // Intentionally left emtpy
+        }
+
+        void IMessagePackSerializationCallbacks.OnBeforeDeserialize()
+        {
+            OnDeserializing(default);
+        }
+
+        void IMessagePackSerializationCallbacks.OnAfterDeserialize()
+        {
+            OnDeserialized(default);
         }
 
         #region Nested Types

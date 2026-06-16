@@ -9,6 +9,10 @@ using System.Threading;
 using httpDomainClient::OpenRiaServices.Client.DomainClients;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
+using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
+using Nerdbank.MessagePack;
+using AspNetCoreWebsite.MessagePack;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -52,10 +56,30 @@ namespace OpenRiaServices.Client.Test
                 return httpClient;
             };
 
-            DomainContext.DomainClientFactory = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory)
+            var msgPackSerializer = new MessagePackSerializer()
+            {
+                Converters = [
+                        new XElementConverter()
+                    ],
+                ComparerProvider = new CustomComparerProvider()
+            };
+
+            var messagePack = new MessagePackHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory, msgPackSerializer)
+            {
+                UseQueryHttpMethod = true,
+
+            };
+            var binary = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory)
             {
                 UseQueryHttpMethod = true,
             };
+            var xml = new XmlHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
+
+#if NET10_0
+            DomainContext.DomainClientFactory = messagePack;
+#else
+            DomainContext.DomainClientFactory = binary;
+#endif
             // DomainContext.DomainClientFactory = new XmlHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
         }
 
