@@ -34,13 +34,6 @@ builder.Services.AddOpenRiaServices(o =>
     .AddXmlSerialization()
     .AddMessagePackSerialization(opt =>
     {
-        //PolyType.ITypeShapeProvider typeShapeProvider = opt.TypeShapeProvider;
-
-        //DerivedShapeMapping<Cities.City> mapping = new();
-        //mapping.Add<Cities.CityWithInfo>(new(typeof(Cities.CityWithInfo).Name), typeShapeProvider);
-        //mapping.Add<Cities.CityWithEditHistory>(new(typeof(Cities.CityWithEditHistory).Name), typeShapeProvider);
-        //mapping.Add()
-
         opt.Serializer = new Nerdbank.MessagePack.MessagePackSerializer()
         {
             Converters = [new XElementConverter(), new BinaryConverter()],

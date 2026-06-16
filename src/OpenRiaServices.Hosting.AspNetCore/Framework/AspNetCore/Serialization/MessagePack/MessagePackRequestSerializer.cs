@@ -16,7 +16,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
     /// </summary>
     internal sealed class MessagePackRequestSerializer : RequestSerializer
     {
-        private readonly MessagePackSerializer _serializer;
         private readonly ITypeShapeProvider _typeShapeProvider;
         private readonly DomainOperationEntry _operation;
         private readonly MessagePackSerializer _operationSerializer;
@@ -24,9 +23,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
         public MessagePackRequestSerializer(DomainOperationEntry operation, MessagePackSerializer serializer, ITypeShapeProvider typeShapeProvider)
         {
             _operation = operation ?? throw new ArgumentNullException(nameof(operation));
-            _serializer = serializer ?? throw new ArgumentNullException(nameof(serializer));
             _typeShapeProvider = typeShapeProvider ?? throw new ArgumentNullException(nameof(typeShapeProvider));
-            _operationSerializer = CreateOperationSerializer(_serializer, _operation, _typeShapeProvider);
+            _operationSerializer = CreateOperationSerializer(serializer, _operation, _typeShapeProvider);
         }
 
         public override bool CanRead(ReadOnlySpan<char> contentType)

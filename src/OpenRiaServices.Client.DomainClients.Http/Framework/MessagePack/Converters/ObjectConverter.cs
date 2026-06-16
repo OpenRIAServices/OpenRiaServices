@@ -42,12 +42,14 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             if (typeof(Entity).IsAssignableFrom(typeof(T)) && typeof(T) != typeof(Entity))
             {
                 // See if T has KnownTypes that attribute ?? to be sure it is generated base class
-                var _baseType = typeof(T);
-                while (_baseType.BaseType != typeof(Entity))
-                    _baseType = _baseType.BaseType!;
+                var computedBaseType = typeof(T);
+                while (computedBaseType.BaseType != typeof(Entity))
+                    computedBaseType = computedBaseType.BaseType!;
+
+                this._baseType = computedBaseType;
             }
             else
-                _baseType = null;
+                this._baseType = null;
         }
 
         public override T? Read(ref MessagePackReader reader, SerializationContext context)
