@@ -1,3 +1,55 @@
+# 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
+
+## AspNetCore 1.6.0
+
+* Added MessagePack wire-format support (`application/vnd.msgpack`) via [#591](https://github.com/OpenRIAServices/OpenRiaServices/pull/591)
+
+### Enable MessagePack on the server
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenRiaServices()
+    .AddMessagePackSerialization();
+```
+
+Optionally pass a custom `Nerdbank.MessagePack.MessagePackSerializer` to add converters or a custom comparer provider:
+
+```csharp
+builder.Services.AddOpenRiaServices()
+    .AddMessagePackSerialization(opt =>
+    {
+        opt.Serializer = new Nerdbank.MessagePack.MessagePackSerializer()
+        {
+            // custom converters / comparer provider
+        };
+    });
+```
+
+## Client (`OpenRiaServices.Client.DomainClients.Http`)
+
+* Added `MessagePackHttpDomainClientFactory` — a `DomainClientFactory` that communicates with the server using MessagePack over HTTP
+
+### Enable MessagePack on the client
+
+```csharp
+DomainContext.DomainClientFactory =
+    new MessagePackHttpDomainClientFactory(baseUri, httpClientFactory);
+```
+
+Optionally pass a custom serializer:
+
+```csharp
+var serializer = new MessagePackSerializer()
+{
+    // custom converters / comparer provider
+};
+
+DomainContext.DomainClientFactory =
+    new MessagePackHttpDomainClientFactory(baseUri, httpClientFactory, serializer);
+```
+
+For performance benchmark data see [PR #591](https://github.com/OpenRIAServices/OpenRiaServices/pull/591).
+
 # AspNetCore 1.5.0
 
 * Allow configuring Serializer security settings
