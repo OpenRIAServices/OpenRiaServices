@@ -142,6 +142,26 @@ builder.Services.AddOpenRiaServices()
     .AddMessagePackSerialization();
 ```
 
+#### Known limitations
+
+The following types are **not** supported out of the box and require custom `MessagePackConverter<T>` implementations registered via `MessagePackSerializationOptions.Serializer.Converters`:
+
+- **`System.Xml.Linq.XElement`** — not handled by the default serializer. See the [XElementConverter sample](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/src/Test/AspNetCoreWebsite/MessagePack/XElementConverter.cs) for a reference implementation that serialises the element as a plain XML string.
+- **`System.Data.Linq.Binary`** — not handled by the default serializer. See the [BinaryConverter sample](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/src/Test/AspNetCoreWebsite/MessagePack/BinaryConverter.cs) for a reference implementation.
+
+Register the converters by passing a configuration callback:
+
+```csharp
+builder.Services.AddOpenRiaServices()
+    .AddMessagePackSerialization(opt =>
+    {
+        opt.Serializer = new Nerdbank.MessagePack.MessagePackSerializer()
+        {
+            Converters = [new XElementConverter(), new BinaryConverter()],
+        };
+    });
+```
+
 ### Configuring serializer security quotas
 
 You can configure reader quotas to limit resource consumption and mitigate denial-of-service (DoS) attacks.
