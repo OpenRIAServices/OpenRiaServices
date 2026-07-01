@@ -7,7 +7,7 @@ namespace OpenRiaServices.Server.Authentication
     /// </summary>
     /// <remarks>
     /// This attribute is used to associate the <see cref="AuthenticationCodeProcessor"/> with
-    /// an implementation of the <see cref="IAuthentication{T}"/> interface.
+    /// an implementation of the <see cref="IAuthentication{T}"/> and <see cref="IAuthenticationAsync{T}"/> interface.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Class | AttributeTargets.Interface, AllowMultiple = false, Inherited = true)]
     public sealed class AuthenticationServiceAttribute : DomainIdentifierAttribute
