@@ -45,9 +45,11 @@ namespace OpenRiaServices.Client.DomainClients
         {
             return _serializerCache.GetOrAdd(service, static (_, args) =>
             {
+                var converterFactory = new ObjectConverterFactory(args.knownTypes);
                 return args.Item1.BaseSerializerSerializer with
                 {
-                    ConverterFactories = [new ObjectConverterFactory(args.knownTypes), .. args.Item1.BaseSerializerSerializer.ConverterFactories]
+                    ConverterFactories = [converterFactory, .. args.Item1.BaseSerializerSerializer.ConverterFactories],
+                    DerivedTypeUnions = [..converterFactory.GetDerivedTypeUnions(), .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
                 };
 
             }, (this, knownTypes));

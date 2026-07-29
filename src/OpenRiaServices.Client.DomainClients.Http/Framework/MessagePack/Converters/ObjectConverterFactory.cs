@@ -56,6 +56,15 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             _converters = converters.ToFrozenDictionary();
         }
 
+        /// <summary>
+        /// Generate DerivedTypeUnion required for the ObjectConverterFactory to work.
+        /// </summary>
+        /// <remarks>
+        /// In order to prevent Nerdabank.MessagePack from creating additional discriminators we must disable the built in inheritance support for the types.
+        /// </remarks>
+        public IEnumerable<DerivedTypeUnion> GetDerivedTypeUnions()
+            => _converters.Keys.Select(DerivedTypeUnion.CreateDisabled);
+
         MessagePackConverter? IMessagePackConverterFactory.CreateConverter(Type type, ITypeShape? shape, in ConverterContext context)
         {
             // Only return type shapes for specified converter, this allows nerdbank default converters to be generated for other providers
