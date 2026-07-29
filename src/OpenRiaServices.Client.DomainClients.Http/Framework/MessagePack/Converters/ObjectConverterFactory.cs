@@ -49,10 +49,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 if (knownTypes.Count <= 1)
                     continue;
 
-                // Skip base types, it has KnownType attributes and is handled correctly
-                if (item.Key.BaseType == typeof(Entity))
-                    continue;
-
                 converters.Add(item.Key, (MessagePackConverter)Activator.CreateInstance(typeof(ObjectConverter<>).MakeGenericType(item.Key), [knownTypes])!);
             }
             converters.Add(typeof(object), new ObjectConverter<object>(allTypes));
