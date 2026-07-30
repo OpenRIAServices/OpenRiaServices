@@ -423,15 +423,15 @@ this.Write(")\r\n{\r\n\tthis.OnCreated();\r\n\tbase.OnDeserializing(default(Syst
 
 				foreach (var pd in requiredProperties)
 				{
-					string parameterName = CodeGenUtilities.GetSafeName(pd.Name);
+					string safeName = CodeGenUtilities.GetSafeName(pd.Name);
 
 this.Write("\tthis.");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(pd.Name));
+this.Write(this.ToStringHelper.ToStringWithCulture(safeName));
 
 this.Write(" = ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(parameterName));
+this.Write(this.ToStringHelper.ToStringWithCulture(safeName));
 
 this.Write(";\r\n");
 

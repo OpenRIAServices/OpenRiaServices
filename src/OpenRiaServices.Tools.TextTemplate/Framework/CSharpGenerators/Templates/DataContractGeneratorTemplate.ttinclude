@@ -88,9 +88,9 @@ private <#= typeName #>(<#= parameterDeclarations #>)
 <#+
 				foreach (var pd in requiredProperties)
 				{
-					string parameterName = CodeGenUtilities.GetSafeName(pd.Name);
+					string safeName = CodeGenUtilities.GetSafeName(pd.Name);
 #>
-	this.<#= pd.Name #> = <#= parameterName #>;
+	this.<#= safeName #> = <#= safeName #>;
 <#+
 				}
 #>
