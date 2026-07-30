@@ -27,7 +27,7 @@ Imports System.Threading
 Imports System.Threading.Tasks
 
 Namespace TestDomainServices
-
+    
     'The following attributes were not generated:
     '
     '- The attribute 'System.ComponentModel.DataAnnotations.CustomValidationAttribute' references type 'TestDomainServices.ServerOnlyValidator' that is not accessible in the client project 'MockProject'. If you would like the attribute to be generated, make sure the assembly containing the attribute is referenced on the client.
@@ -37,78 +37,78 @@ Namespace TestDomainServices
     ''' <summary>
     ''' The 'A' entity class.
     ''' </summary>
-    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class A
         Inherits Entity
-
+        
         Private _b As EntityRef(Of B)
-
+        
         Private _bid1 As Integer
-
+        
         Private _bid2 As Integer
-
+        
         Private _id As Integer
-
+        
         Private _readOnlyData_NoReadOnlyAttribute As String
-
+        
         Private _readOnlyData_NoSetter As String
-
+        
         Private _readOnlyData_WithSetter As String
-
+        
         Private _requiredString As String
-
-#Region "Extensibility Method Definitions"
+        
+        #Region "Extensibility Method Definitions"
 
         ''' <summary>
         ''' This method is invoked from the constructor once initialization is complete and
         ''' can be used for further object setup.
         ''' </summary>
-        Partial Private Sub OnCreated()
+        Private Partial Sub OnCreated()
         End Sub
-        Partial Private Sub OnBID1Changing(ByVal value As Integer)
+        Private Partial Sub OnBID1Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnBID1Changed()
+        Private Partial Sub OnBID1Changed()
         End Sub
-        Partial Private Sub OnBID2Changing(ByVal value As Integer)
+        Private Partial Sub OnBID2Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnBID2Changed()
+        Private Partial Sub OnBID2Changed()
         End Sub
-        Partial Private Sub OnIDChanging(ByVal value As Integer)
+        Private Partial Sub OnIDChanging(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnIDChanged()
+        Private Partial Sub OnIDChanged()
         End Sub
-        Partial Private Sub OnReadOnlyData_NoReadOnlyAttributeChanging(ByVal value As String)
+        Private Partial Sub OnReadOnlyData_NoReadOnlyAttributeChanging(ByVal value As String)
         End Sub
-        Partial Private Sub OnReadOnlyData_NoReadOnlyAttributeChanged()
+        Private Partial Sub OnReadOnlyData_NoReadOnlyAttributeChanged()
         End Sub
-        Partial Private Sub OnReadOnlyData_NoSetterChanging(ByVal value As String)
+        Private Partial Sub OnReadOnlyData_NoSetterChanging(ByVal value As String)
         End Sub
-        Partial Private Sub OnReadOnlyData_NoSetterChanged()
+        Private Partial Sub OnReadOnlyData_NoSetterChanged()
         End Sub
-        Partial Private Sub OnReadOnlyData_WithSetterChanging(ByVal value As String)
+        Private Partial Sub OnReadOnlyData_WithSetterChanging(ByVal value As String)
         End Sub
-        Partial Private Sub OnReadOnlyData_WithSetterChanged()
+        Private Partial Sub OnReadOnlyData_WithSetterChanged()
         End Sub
-        Partial Private Sub OnRequiredStringChanging(ByVal value As String)
+        Private Partial Sub OnRequiredStringChanging(ByVal value As String)
         End Sub
-        Partial Private Sub OnRequiredStringChanged()
+        Private Partial Sub OnRequiredStringChanged()
         End Sub
 
-#End Region
-
-
+        #End Region
+        
+        
         ''' <summary>
         ''' Initializes a new instance of the <see cref="A"/> class.
         ''' </summary>
         Public Sub New()
             MyBase.New
-            Me.OnCreated()
+            Me.OnCreated
         End Sub
-
+        
         ''' <summary>
         ''' Gets or sets the associated <see cref="B"/> entity.
         ''' </summary>
-        <EntityAssociation("A_B", New String() {"BID1", "BID2"}, New String() {"ID1", "ID2"}, IsForeignKey:=True)>
+        <EntityAssociation("A_B", New String() {"BID1", "BID2"}, New String() {"ID1", "ID2"}, IsForeignKey:=true)>  _
         Public Property B() As B
             Get
                 If (Me._b Is Nothing) Then
@@ -118,150 +118,150 @@ Namespace TestDomainServices
             End Get
             Set
                 Dim previous As B = Me.B
-                If (Object.Equals(previous, Value) = False) Then
-                    Me.ValidateProperty("B", Value)
-                    If (Not (Value) Is Nothing) Then
-                        Me.BID1 = Value.ID1
-                        Me.BID2 = Value.ID2
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("B", value)
+                    If (Not (value) Is Nothing) Then
+                        Me.BID1 = value.ID1
+                        Me.BID2 = value.ID2
                     Else
                         Me.BID1 = CType(Nothing, Integer)
                         Me.BID2 = CType(Nothing, Integer)
                     End If
-                    Me._b.Entity = Value
+                    Me._b.Entity = value
                     Me.RaisePropertyChanged("B")
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'BID1' value.
         ''' </summary>
-        <DataMember(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         RoundtripOriginal()>  _
         Public Property BID1() As Integer
             Get
                 Return Me._bid1
             End Get
             Set
-                If ((Me._bid1 = Value) _
-                            = False) Then
-                    Me.OnBID1Changing(Value)
+                If ((Me._bid1 = value)  _
+                            = false) Then
+                    Me.OnBID1Changing(value)
                     Me.RaiseDataMemberChanging("BID1")
-                    Me.ValidateProperty("BID1", Value)
-                    Me._bid1 = Value
+                    Me.ValidateProperty("BID1", value)
+                    Me._bid1 = value
                     Me.RaiseDataMemberChanged("BID1")
-                    Me.OnBID1Changed()
+                    Me.OnBID1Changed
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'BID2' value.
         ''' </summary>
-        <DataMember(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         RoundtripOriginal()>  _
         Public Property BID2() As Integer
             Get
                 Return Me._bid2
             End Get
             Set
-                If ((Me._bid2 = Value) _
-                            = False) Then
-                    Me.OnBID2Changing(Value)
+                If ((Me._bid2 = value)  _
+                            = false) Then
+                    Me.OnBID2Changing(value)
                     Me.RaiseDataMemberChanging("BID2")
-                    Me.ValidateProperty("BID2", Value)
-                    Me._bid2 = Value
+                    Me.ValidateProperty("BID2", value)
+                    Me._bid2 = value
                     Me.RaiseDataMemberChanged("BID2")
-                    Me.OnBID2Changed()
+                    Me.OnBID2Changed
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ID' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False, AllowInitialValue:=True),
-         Key(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
         Public Property ID() As Integer
             Get
                 Return Me._id
             End Get
             Set
-                If ((Me._id = Value) _
-                            = False) Then
-                    Me.OnIDChanging(Value)
-                    Me.ValidateProperty("ID", Value)
-                    Me._id = Value
+                If ((Me._id = value)  _
+                            = false) Then
+                    Me.OnIDChanging(value)
+                    Me.ValidateProperty("ID", value)
+                    Me._id = value
                     Me.RaisePropertyChanged("ID")
-                    Me.OnIDChanged()
+                    Me.OnIDChanged
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ReadOnlyData_NoReadOnlyAttribute' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False),
-         [ReadOnly](True)>
+        <DataMember(),  _
+         Editable(false),  _
+         [ReadOnly](true)>  _
         Public Property ReadOnlyData_NoReadOnlyAttribute() As String
             Get
                 Return Me._readOnlyData_NoReadOnlyAttribute
             End Get
             Set
-                If (String.Equals(Me._readOnlyData_NoReadOnlyAttribute, Value) = False) Then
-                    Me.OnReadOnlyData_NoReadOnlyAttributeChanging(Value)
-                    Me.ValidateProperty("ReadOnlyData_NoReadOnlyAttribute", Value)
-                    Me._readOnlyData_NoReadOnlyAttribute = Value
+                If (String.Equals(Me._readOnlyData_NoReadOnlyAttribute, value) = false) Then
+                    Me.OnReadOnlyData_NoReadOnlyAttributeChanging(value)
+                    Me.ValidateProperty("ReadOnlyData_NoReadOnlyAttribute", value)
+                    Me._readOnlyData_NoReadOnlyAttribute = value
                     Me.RaisePropertyChanged("ReadOnlyData_NoReadOnlyAttribute")
-                    Me.OnReadOnlyData_NoReadOnlyAttributeChanged()
+                    Me.OnReadOnlyData_NoReadOnlyAttributeChanged
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ReadOnlyData_NoSetter' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False),
-         [ReadOnly](True)>
+        <DataMember(),  _
+         Editable(false),  _
+         [ReadOnly](true)>  _
         Public Property ReadOnlyData_NoSetter() As String
             Get
                 Return Me._readOnlyData_NoSetter
             End Get
             Set
-                If (String.Equals(Me._readOnlyData_NoSetter, Value) = False) Then
-                    Me.OnReadOnlyData_NoSetterChanging(Value)
-                    Me.ValidateProperty("ReadOnlyData_NoSetter", Value)
-                    Me._readOnlyData_NoSetter = Value
+                If (String.Equals(Me._readOnlyData_NoSetter, value) = false) Then
+                    Me.OnReadOnlyData_NoSetterChanging(value)
+                    Me.ValidateProperty("ReadOnlyData_NoSetter", value)
+                    Me._readOnlyData_NoSetter = value
                     Me.RaisePropertyChanged("ReadOnlyData_NoSetter")
-                    Me.OnReadOnlyData_NoSetterChanged()
+                    Me.OnReadOnlyData_NoSetterChanged
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ReadOnlyData_WithSetter' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False)>
+        <DataMember(),  _
+         Editable(false)>  _
         Public Property ReadOnlyData_WithSetter() As String
             Get
                 Return Me._readOnlyData_WithSetter
             End Get
             Set
-                If (String.Equals(Me._readOnlyData_WithSetter, Value) = False) Then
-                    Me.OnReadOnlyData_WithSetterChanging(Value)
-                    Me.ValidateProperty("ReadOnlyData_WithSetter", Value)
-                    Me._readOnlyData_WithSetter = Value
+                If (String.Equals(Me._readOnlyData_WithSetter, value) = false) Then
+                    Me.OnReadOnlyData_WithSetterChanging(value)
+                    Me.ValidateProperty("ReadOnlyData_WithSetter", value)
+                    Me._readOnlyData_WithSetter = value
                     Me.RaisePropertyChanged("ReadOnlyData_WithSetter")
-                    Me.OnReadOnlyData_WithSetterChanged()
+                    Me.OnReadOnlyData_WithSetterChanged
                 End If
             End Set
         End Property
-
+        
         'The following attributes were not generated:
         '
         '- The attribute 'System.ComponentModel.DataAnnotations.CustomValidationAttribute' references type 'TestDomainServices.ServerOnlyValidator' that is not accessible in the client project 'MockProject'. If you would like the attribute to be generated, make sure the assembly containing the attribute is referenced on the client.
@@ -274,30 +274,30 @@ Namespace TestDomainServices
         ''' <summary>
         ''' Gets or sets the 'RequiredString' value.
         ''' </summary>
-        <Custom(),
-         DataMember(),
-         Editable(True),
-         Required()>
+        <Custom(),  _
+         DataMember(),  _
+         Editable(true),  _
+         Required()>  _
         Public Property RequiredString() As String
             Get
                 Return Me._requiredString
             End Get
             Set
-                If (String.Equals(Me._requiredString, Value) = False) Then
-                    Me.OnRequiredStringChanging(Value)
+                If (String.Equals(Me._requiredString, value) = false) Then
+                    Me.OnRequiredStringChanging(value)
                     Me.RaiseDataMemberChanging("RequiredString")
-                    Me.ValidateProperty("RequiredString", Value)
-                    Me._requiredString = Value
+                    Me.ValidateProperty("RequiredString", value)
+                    Me._requiredString = value
                     Me.RaiseDataMemberChanged("RequiredString")
-                    Me.OnRequiredStringChanged()
+                    Me.OnRequiredStringChanged
                 End If
             End Set
         End Property
-
+        
         Private Function FilterB(ByVal entity As B) As Boolean
             Return (Object.Equals(entity.ID1, Me.BID1) AndAlso Object.Equals(entity.ID2, Me.BID2))
         End Function
-
+        
         ''' <summary>
         ''' Computes a value from the key fields that uniquely identifies this entity instance.
         ''' </summary>
@@ -306,53 +306,53 @@ Namespace TestDomainServices
             Return Me._id
         End Function
     End Class
-
+    
     ''' <summary>
     ''' The 'B' entity class.
     ''' </summary>
-    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class B
         Inherits Entity
-
+        
         Private _cs As EntityCollection(Of C)
-
+        
         Private _id1 As Integer
-
+        
         Private _id2 As Integer
-
-#Region "Extensibility Method Definitions"
+        
+        #Region "Extensibility Method Definitions"
 
         ''' <summary>
         ''' This method is invoked from the constructor once initialization is complete and
         ''' can be used for further object setup.
         ''' </summary>
-        Partial Private Sub OnCreated()
+        Private Partial Sub OnCreated()
         End Sub
-        Partial Private Sub OnID1Changing(ByVal value As Integer)
+        Private Partial Sub OnID1Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnID1Changed()
+        Private Partial Sub OnID1Changed()
         End Sub
-        Partial Private Sub OnID2Changing(ByVal value As Integer)
+        Private Partial Sub OnID2Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnID2Changed()
+        Private Partial Sub OnID2Changed()
         End Sub
 
-#End Region
-
-
+        #End Region
+        
+        
         ''' <summary>
         ''' Initializes a new instance of the <see cref="B"/> class.
         ''' </summary>
         Public Sub New()
             MyBase.New
-            Me.OnCreated()
+            Me.OnCreated
         End Sub
-
+        
         ''' <summary>
         ''' Gets the collection of associated <see cref="C"/> entity instances.
         ''' </summary>
-        <Display(Description:="Cs"),
-         EntityAssociation("B_C", New String() {"ID1", "ID2"}, New String() {"BID1", "BID2"})>
+        <Display(Description:="Cs"),  _
+         EntityAssociation("B_C", New String() {"ID1", "ID2"}, New String() {"BID1", "BID2"})>  _
         Public ReadOnly Property Cs() As EntityCollection(Of C)
             Get
                 If (Me._cs Is Nothing) Then
@@ -361,57 +361,57 @@ Namespace TestDomainServices
                 Return Me._cs
             End Get
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ID1' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False, AllowInitialValue:=True),
-         Key(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
         Public Property ID1() As Integer
             Get
                 Return Me._id1
             End Get
             Set
-                If ((Me._id1 = Value) _
-                            = False) Then
-                    Me.OnID1Changing(Value)
-                    Me.ValidateProperty("ID1", Value)
-                    Me._id1 = Value
+                If ((Me._id1 = value)  _
+                            = false) Then
+                    Me.OnID1Changing(value)
+                    Me.ValidateProperty("ID1", value)
+                    Me._id1 = value
                     Me.RaisePropertyChanged("ID1")
-                    Me.OnID1Changed()
+                    Me.OnID1Changed
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ID2' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False, AllowInitialValue:=True),
-         Key(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
         Public Property ID2() As Integer
             Get
                 Return Me._id2
             End Get
             Set
-                If ((Me._id2 = Value) _
-                            = False) Then
-                    Me.OnID2Changing(Value)
-                    Me.ValidateProperty("ID2", Value)
-                    Me._id2 = Value
+                If ((Me._id2 = value)  _
+                            = false) Then
+                    Me.OnID2Changing(value)
+                    Me.ValidateProperty("ID2", value)
+                    Me._id2 = value
                     Me.RaisePropertyChanged("ID2")
-                    Me.OnID2Changed()
+                    Me.OnID2Changed
                 End If
             End Set
         End Property
-
+        
         Private Function FilterCs(ByVal entity As C) As Boolean
             Return (Object.Equals(entity.BID1, Me.ID1) AndAlso Object.Equals(entity.BID2, Me.ID2))
         End Function
-
+        
         ''' <summary>
         ''' Computes a value from the key fields that uniquely identifies this entity instance.
         ''' </summary>
@@ -420,115 +420,115 @@ Namespace TestDomainServices
             Return EntityKey.Create(Me._id1, Me._id2)
         End Function
     End Class
-
+    
     ''' <summary>
     ''' The 'C' entity class.
     ''' </summary>
-    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class C
         Inherits Entity
-
+        
         Private _bid1 As Integer
-
+        
         Private _bid2 As Integer
-
+        
         Private _d_Ref1 As EntityRef(Of D)
-
+        
         Private _d_Ref2 As EntityRef(Of D)
-
+        
         Private _did_Ref1 As Integer
-
+        
         Private _did_Ref2 As Integer
-
+        
         Private _id As Integer
-
-#Region "Extensibility Method Definitions"
+        
+        #Region "Extensibility Method Definitions"
 
         ''' <summary>
         ''' This method is invoked from the constructor once initialization is complete and
         ''' can be used for further object setup.
         ''' </summary>
-        Partial Private Sub OnCreated()
+        Private Partial Sub OnCreated()
         End Sub
-        Partial Private Sub OnBID1Changing(ByVal value As Integer)
+        Private Partial Sub OnBID1Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnBID1Changed()
+        Private Partial Sub OnBID1Changed()
         End Sub
-        Partial Private Sub OnBID2Changing(ByVal value As Integer)
+        Private Partial Sub OnBID2Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnBID2Changed()
+        Private Partial Sub OnBID2Changed()
         End Sub
-        Partial Private Sub OnDID_Ref1Changing(ByVal value As Integer)
+        Private Partial Sub OnDID_Ref1Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnDID_Ref1Changed()
+        Private Partial Sub OnDID_Ref1Changed()
         End Sub
-        Partial Private Sub OnDID_Ref2Changing(ByVal value As Integer)
+        Private Partial Sub OnDID_Ref2Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnDID_Ref2Changed()
+        Private Partial Sub OnDID_Ref2Changed()
         End Sub
-        Partial Private Sub OnIDChanging(ByVal value As Integer)
+        Private Partial Sub OnIDChanging(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnIDChanged()
+        Private Partial Sub OnIDChanged()
         End Sub
 
-#End Region
-
-
+        #End Region
+        
+        
         ''' <summary>
         ''' Initializes a new instance of the <see cref="C"/> class.
         ''' </summary>
         Public Sub New()
             MyBase.New
-            Me.OnCreated()
+            Me.OnCreated
         End Sub
-
+        
         ''' <summary>
         ''' Gets or sets the 'BID1' value.
         ''' </summary>
-        <DataMember()>
+        <DataMember()>  _
         Public Property BID1() As Integer
             Get
                 Return Me._bid1
             End Get
             Set
-                If ((Me._bid1 = Value) _
-                            = False) Then
-                    Me.OnBID1Changing(Value)
+                If ((Me._bid1 = value)  _
+                            = false) Then
+                    Me.OnBID1Changing(value)
                     Me.RaiseDataMemberChanging("BID1")
-                    Me.ValidateProperty("BID1", Value)
-                    Me._bid1 = Value
+                    Me.ValidateProperty("BID1", value)
+                    Me._bid1 = value
                     Me.RaiseDataMemberChanged("BID1")
-                    Me.OnBID1Changed()
+                    Me.OnBID1Changed
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'BID2' value.
         ''' </summary>
-        <DataMember()>
+        <DataMember()>  _
         Public Property BID2() As Integer
             Get
                 Return Me._bid2
             End Get
             Set
-                If ((Me._bid2 = Value) _
-                            = False) Then
-                    Me.OnBID2Changing(Value)
+                If ((Me._bid2 = value)  _
+                            = false) Then
+                    Me.OnBID2Changing(value)
                     Me.RaiseDataMemberChanging("BID2")
-                    Me.ValidateProperty("BID2", Value)
-                    Me._bid2 = Value
+                    Me.ValidateProperty("BID2", value)
+                    Me._bid2 = value
                     Me.RaiseDataMemberChanged("BID2")
-                    Me.OnBID2Changed()
+                    Me.OnBID2Changed
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <Display(Description:="D_Ref1"),
-         EntityAssociation("C_D_Ref1", "DID_Ref1", "ID", IsForeignKey:=True)>
+        <Display(Description:="D_Ref1"),  _
+         EntityAssociation("C_D_Ref1", "DID_Ref1", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref1() As D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
@@ -538,30 +538,30 @@ Namespace TestDomainServices
             End Get
             Set
                 Dim previous As D = Me.D_Ref1
-                If (Object.Equals(previous, Value) = False) Then
-                    Me.ValidateProperty("D_Ref1", Value)
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("D_Ref1", value)
                     If (Not (previous) Is Nothing) Then
                         Me._d_Ref1.Entity = Nothing
                         previous.C = Nothing
                     End If
-                    If (Not (Value) Is Nothing) Then
-                        Me.DID_Ref1 = Value.ID
+                    If (Not (value) Is Nothing) Then
+                        Me.DID_Ref1 = value.ID
                     Else
                         Me.DID_Ref1 = CType(Nothing, Integer)
                     End If
-                    Me._d_Ref1.Entity = Value
-                    If (Not (Value) Is Nothing) Then
-                        Value.C = Me
+                    Me._d_Ref1.Entity = value
+                    If (Not (value) Is Nothing) Then
+                        value.C = Me
                     End If
                     Me.RaisePropertyChanged("D_Ref1")
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("C_D_Ref2", "DID_Ref2", "ID", IsForeignKey:=True)>
+        <EntityAssociation("C_D_Ref2", "DID_Ref2", "ID", IsForeignKey:=true)>  _
         Public Property D_Ref2() As D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
@@ -571,94 +571,94 @@ Namespace TestDomainServices
             End Get
             Set
                 Dim previous As D = Me.D_Ref2
-                If (Object.Equals(previous, Value) = False) Then
-                    Me.ValidateProperty("D_Ref2", Value)
-                    If (Not (Value) Is Nothing) Then
-                        Me.DID_Ref2 = Value.ID
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("D_Ref2", value)
+                    If (Not (value) Is Nothing) Then
+                        Me.DID_Ref2 = value.ID
                     Else
                         Me.DID_Ref2 = CType(Nothing, Integer)
                     End If
-                    Me._d_Ref2.Entity = Value
+                    Me._d_Ref2.Entity = value
                     Me.RaisePropertyChanged("D_Ref2")
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'DID_Ref1' value.
         ''' </summary>
-        <DataMember(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         RoundtripOriginal()>  _
         Public Property DID_Ref1() As Integer
             Get
                 Return Me._did_Ref1
             End Get
             Set
-                If ((Me._did_Ref1 = Value) _
-                            = False) Then
-                    Me.OnDID_Ref1Changing(Value)
+                If ((Me._did_Ref1 = value)  _
+                            = false) Then
+                    Me.OnDID_Ref1Changing(value)
                     Me.RaiseDataMemberChanging("DID_Ref1")
-                    Me.ValidateProperty("DID_Ref1", Value)
-                    Me._did_Ref1 = Value
+                    Me.ValidateProperty("DID_Ref1", value)
+                    Me._did_Ref1 = value
                     Me.RaiseDataMemberChanged("DID_Ref1")
-                    Me.OnDID_Ref1Changed()
+                    Me.OnDID_Ref1Changed
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'DID_Ref2' value.
         ''' </summary>
-        <DataMember(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         RoundtripOriginal()>  _
         Public Property DID_Ref2() As Integer
             Get
                 Return Me._did_Ref2
             End Get
             Set
-                If ((Me._did_Ref2 = Value) _
-                            = False) Then
-                    Me.OnDID_Ref2Changing(Value)
+                If ((Me._did_Ref2 = value)  _
+                            = false) Then
+                    Me.OnDID_Ref2Changing(value)
                     Me.RaiseDataMemberChanging("DID_Ref2")
-                    Me.ValidateProperty("DID_Ref2", Value)
-                    Me._did_Ref2 = Value
+                    Me.ValidateProperty("DID_Ref2", value)
+                    Me._did_Ref2 = value
                     Me.RaiseDataMemberChanged("DID_Ref2")
-                    Me.OnDID_Ref2Changed()
+                    Me.OnDID_Ref2Changed
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ID' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False, AllowInitialValue:=True),
-         Key(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
         Public Property ID() As Integer
             Get
                 Return Me._id
             End Get
             Set
-                If ((Me._id = Value) _
-                            = False) Then
-                    Me.OnIDChanging(Value)
-                    Me.ValidateProperty("ID", Value)
-                    Me._id = Value
+                If ((Me._id = value)  _
+                            = false) Then
+                    Me.OnIDChanging(value)
+                    Me.ValidateProperty("ID", value)
+                    Me._id = value
                     Me.RaisePropertyChanged("ID")
-                    Me.OnIDChanged()
+                    Me.OnIDChanged
                 End If
             End Set
         End Property
-
+        
         Private Function FilterD_Ref1(ByVal entity As D) As Boolean
             Return Object.Equals(entity.ID, Me.DID_Ref1)
         End Function
-
+        
         Private Function FilterD_Ref2(ByVal entity As D) As Boolean
             Return Object.Equals(entity.ID, Me.DID_Ref2)
         End Function
-
+        
         ''' <summary>
         ''' Computes a value from the key fields that uniquely identifies this entity instance.
         ''' </summary>
@@ -667,104 +667,104 @@ Namespace TestDomainServices
             Return Me._id
         End Function
     End Class
-
+    
     ''' <summary>
     ''' The 'D' entity class.
     ''' </summary>
-    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class D
         Inherits Entity
-
+        
         Private _binaryData() As Byte
-
+        
         Private _c As EntityRef(Of C)
-
+        
         Private _d1 As EntityRef(Of D)
-
+        
         Private _d2 As EntityRef(Of D)
-
+        
         Private _d2_BackRef As EntityRef(Of D)
-
+        
         Private _ds As EntityCollection(Of D)
-
+        
         Private _dSelfRef_ID1 As Integer
-
+        
         Private _dSelfRef_ID2 As Integer
-
+        
         Private _id As Integer
-
+        
         Private _projectedD1BinaryData() As Byte
-
+        
         Private _projectedD1ID As Integer
-
-#Region "Extensibility Method Definitions"
+        
+        #Region "Extensibility Method Definitions"
 
         ''' <summary>
         ''' This method is invoked from the constructor once initialization is complete and
         ''' can be used for further object setup.
         ''' </summary>
-        Partial Private Sub OnCreated()
+        Private Partial Sub OnCreated()
         End Sub
-        Partial Private Sub OnBinaryDataChanging(ByVal value() As Byte)
+        Private Partial Sub OnBinaryDataChanging(ByVal value() As Byte)
         End Sub
-        Partial Private Sub OnBinaryDataChanged()
+        Private Partial Sub OnBinaryDataChanged()
         End Sub
-        Partial Private Sub OnDSelfRef_ID1Changing(ByVal value As Integer)
+        Private Partial Sub OnDSelfRef_ID1Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnDSelfRef_ID1Changed()
+        Private Partial Sub OnDSelfRef_ID1Changed()
         End Sub
-        Partial Private Sub OnDSelfRef_ID2Changing(ByVal value As Integer)
+        Private Partial Sub OnDSelfRef_ID2Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnDSelfRef_ID2Changed()
+        Private Partial Sub OnDSelfRef_ID2Changed()
         End Sub
-        Partial Private Sub OnIDChanging(ByVal value As Integer)
+        Private Partial Sub OnIDChanging(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnIDChanged()
+        Private Partial Sub OnIDChanged()
         End Sub
-        Partial Private Sub OnProjectedD1BinaryDataChanging(ByVal value() As Byte)
+        Private Partial Sub OnProjectedD1BinaryDataChanging(ByVal value() As Byte)
         End Sub
-        Partial Private Sub OnProjectedD1BinaryDataChanged()
+        Private Partial Sub OnProjectedD1BinaryDataChanged()
         End Sub
-        Partial Private Sub OnProjectedD1IDChanging(ByVal value As Integer)
+        Private Partial Sub OnProjectedD1IDChanging(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnProjectedD1IDChanged()
+        Private Partial Sub OnProjectedD1IDChanged()
         End Sub
 
-#End Region
-
-
+        #End Region
+        
+        
         ''' <summary>
         ''' Initializes a new instance of the <see cref="D"/> class.
         ''' </summary>
         Public Sub New()
             MyBase.New
-            Me.OnCreated()
+            Me.OnCreated
         End Sub
-
+        
         ''' <summary>
         ''' Gets or sets the 'BinaryData' value.
         ''' </summary>
-        <DataMember()>
+        <DataMember()>  _
         Public Property BinaryData() As Byte()
             Get
                 Return Me._binaryData
             End Get
             Set
-                If (Object.Equals(Me._binaryData, Value) = False) Then
-                    Me.OnBinaryDataChanging(Value)
+                If (Object.Equals(Me._binaryData, value) = false) Then
+                    Me.OnBinaryDataChanging(value)
                     Me.RaiseDataMemberChanging("BinaryData")
-                    Me.ValidateProperty("BinaryData", Value)
-                    Me._binaryData = Value
+                    Me.ValidateProperty("BinaryData", value)
+                    Me._binaryData = value
                     Me.RaiseDataMemberChanged("BinaryData")
-                    Me.OnBinaryDataChanged()
+                    Me.OnBinaryDataChanged
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the associated <see cref="C"/> entity.
         ''' </summary>
-        <EntityAssociation("C_D_Ref1", "ID", "DID_Ref1")>
+        <EntityAssociation("C_D_Ref1", "ID", "DID_Ref1")>  _
         Public Property C() As C
             Get
                 If (Me._c Is Nothing) Then
@@ -774,25 +774,25 @@ Namespace TestDomainServices
             End Get
             Set
                 Dim previous As C = Me.C
-                If (Object.Equals(previous, Value) = False) Then
-                    Me.ValidateProperty("C", Value)
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("C", value)
                     If (Not (previous) Is Nothing) Then
                         Me._c.Entity = Nothing
                         previous.D_Ref1 = Nothing
                     End If
-                    Me._c.Entity = Value
-                    If (Not (Value) Is Nothing) Then
-                        Value.D_Ref1 = Me
+                    Me._c.Entity = value
+                    If (Not (value) Is Nothing) Then
+                        value.D_Ref1 = Me
                     End If
                     Me.RaisePropertyChanged("C")
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("D_D", "DSelfRef_ID1", "ID", IsForeignKey:=True)>
+        <EntityAssociation("D_D", "DSelfRef_ID1", "ID", IsForeignKey:=true)>  _
         Public Property D1() As D
             Get
                 If (Me._d1 Is Nothing) Then
@@ -802,30 +802,30 @@ Namespace TestDomainServices
             End Get
             Set
                 Dim previous As D = Me.D1
-                If (Object.Equals(previous, Value) = False) Then
-                    Me.ValidateProperty("D1", Value)
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("D1", value)
                     If (Not (previous) Is Nothing) Then
                         Me._d1.Entity = Nothing
                         previous.Ds.Remove(Me)
                     End If
-                    If (Not (Value) Is Nothing) Then
-                        Me.DSelfRef_ID1 = Value.ID
+                    If (Not (value) Is Nothing) Then
+                        Me.DSelfRef_ID1 = value.ID
                     Else
                         Me.DSelfRef_ID1 = CType(Nothing, Integer)
                     End If
-                    Me._d1.Entity = Value
-                    If (Not (Value) Is Nothing) Then
-                        Value.Ds.Add(Me)
+                    Me._d1.Entity = value
+                    If (Not (value) Is Nothing) Then
+                        value.Ds.Add(Me)
                     End If
                     Me.RaisePropertyChanged("D1")
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("D_D2", "DSelfRef_ID2", "ID", IsForeignKey:=True)>
+        <EntityAssociation("D_D2", "DSelfRef_ID2", "ID", IsForeignKey:=true)>  _
         Public Property D2() As D
             Get
                 If (Me._d2 Is Nothing) Then
@@ -835,30 +835,30 @@ Namespace TestDomainServices
             End Get
             Set
                 Dim previous As D = Me.D2
-                If (Object.Equals(previous, Value) = False) Then
-                    Me.ValidateProperty("D2", Value)
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("D2", value)
                     If (Not (previous) Is Nothing) Then
                         Me._d2.Entity = Nothing
                         previous.D2_BackRef = Nothing
                     End If
-                    If (Not (Value) Is Nothing) Then
-                        Me.DSelfRef_ID2 = Value.ID
+                    If (Not (value) Is Nothing) Then
+                        Me.DSelfRef_ID2 = value.ID
                     Else
                         Me.DSelfRef_ID2 = CType(Nothing, Integer)
                     End If
-                    Me._d2.Entity = Value
-                    If (Not (Value) Is Nothing) Then
-                        Value.D2_BackRef = Me
+                    Me._d2.Entity = value
+                    If (Not (value) Is Nothing) Then
+                        value.D2_BackRef = Me
                     End If
                     Me.RaisePropertyChanged("D2")
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the associated <see cref="D"/> entity.
         ''' </summary>
-        <EntityAssociation("D_D2", "ID", "DSelfRef_ID2")>
+        <EntityAssociation("D_D2", "ID", "DSelfRef_ID2")>  _
         Public Property D2_BackRef() As D
             Get
                 If (Me._d2_BackRef Is Nothing) Then
@@ -868,25 +868,25 @@ Namespace TestDomainServices
             End Get
             Set
                 Dim previous As D = Me.D2_BackRef
-                If (Object.Equals(previous, Value) = False) Then
-                    Me.ValidateProperty("D2_BackRef", Value)
+                If (Object.Equals(previous, value) = false) Then
+                    Me.ValidateProperty("D2_BackRef", value)
                     If (Not (previous) Is Nothing) Then
                         Me._d2_BackRef.Entity = Nothing
                         previous.D2 = Nothing
                     End If
-                    Me._d2_BackRef.Entity = Value
-                    If (Not (Value) Is Nothing) Then
-                        Value.D2 = Me
+                    Me._d2_BackRef.Entity = value
+                    If (Not (value) Is Nothing) Then
+                        value.D2 = Me
                     End If
                     Me.RaisePropertyChanged("D2_BackRef")
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets the collection of associated <see cref="D"/> entity instances.
         ''' </summary>
-        <EntityAssociation("D_D", "ID", "DSelfRef_ID1")>
+        <EntityAssociation("D_D", "ID", "DSelfRef_ID1")>  _
         Public ReadOnly Property Ds() As EntityCollection(Of D)
             Get
                 If (Me._ds Is Nothing) Then
@@ -895,146 +895,146 @@ Namespace TestDomainServices
                 Return Me._ds
             End Get
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'DSelfRef_ID1' value.
         ''' </summary>
-        <DataMember(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         RoundtripOriginal()>  _
         Public Property DSelfRef_ID1() As Integer
             Get
                 Return Me._dSelfRef_ID1
             End Get
             Set
-                If ((Me._dSelfRef_ID1 = Value) _
-                            = False) Then
-                    Me.OnDSelfRef_ID1Changing(Value)
+                If ((Me._dSelfRef_ID1 = value)  _
+                            = false) Then
+                    Me.OnDSelfRef_ID1Changing(value)
                     Me.RaiseDataMemberChanging("DSelfRef_ID1")
-                    Me.ValidateProperty("DSelfRef_ID1", Value)
-                    Me._dSelfRef_ID1 = Value
+                    Me.ValidateProperty("DSelfRef_ID1", value)
+                    Me._dSelfRef_ID1 = value
                     Me.RaiseDataMemberChanged("DSelfRef_ID1")
-                    Me.OnDSelfRef_ID1Changed()
+                    Me.OnDSelfRef_ID1Changed
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'DSelfRef_ID2' value.
         ''' </summary>
-        <DataMember(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         RoundtripOriginal()>  _
         Public Property DSelfRef_ID2() As Integer
             Get
                 Return Me._dSelfRef_ID2
             End Get
             Set
-                If ((Me._dSelfRef_ID2 = Value) _
-                            = False) Then
-                    Me.OnDSelfRef_ID2Changing(Value)
+                If ((Me._dSelfRef_ID2 = value)  _
+                            = false) Then
+                    Me.OnDSelfRef_ID2Changing(value)
                     Me.RaiseDataMemberChanging("DSelfRef_ID2")
-                    Me.ValidateProperty("DSelfRef_ID2", Value)
-                    Me._dSelfRef_ID2 = Value
+                    Me.ValidateProperty("DSelfRef_ID2", value)
+                    Me._dSelfRef_ID2 = value
                     Me.RaiseDataMemberChanged("DSelfRef_ID2")
-                    Me.OnDSelfRef_ID2Changed()
+                    Me.OnDSelfRef_ID2Changed
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ID' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False, AllowInitialValue:=True),
-         Key(),
-         Range(0, 99999),
-         RoundtripOriginal(),
-         UIHint("TextBlock")>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         Range(0, 99999),  _
+         RoundtripOriginal(),  _
+         UIHint("TextBlock")>  _
         Public Property ID() As Integer
             Get
                 Return Me._id
             End Get
             Set
-                If ((Me._id = Value) _
-                            = False) Then
-                    Me.OnIDChanging(Value)
-                    Me.ValidateProperty("ID", Value)
-                    Me._id = Value
+                If ((Me._id = value)  _
+                            = false) Then
+                    Me.OnIDChanging(value)
+                    Me.ValidateProperty("ID", value)
+                    Me._id = value
                     Me.RaisePropertyChanged("ID")
-                    Me.OnIDChanged()
+                    Me.OnIDChanged
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ProjectedD1BinaryData' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False)>
+        <DataMember(),  _
+         Editable(false)>  _
         Public Property ProjectedD1BinaryData() As Byte()
             Get
                 Return Me._projectedD1BinaryData
             End Get
             Set
-                If (Object.Equals(Me._projectedD1BinaryData, Value) = False) Then
-                    Me.OnProjectedD1BinaryDataChanging(Value)
-                    Me.ValidateProperty("ProjectedD1BinaryData", Value)
-                    Me._projectedD1BinaryData = Value
+                If (Object.Equals(Me._projectedD1BinaryData, value) = false) Then
+                    Me.OnProjectedD1BinaryDataChanging(value)
+                    Me.ValidateProperty("ProjectedD1BinaryData", value)
+                    Me._projectedD1BinaryData = value
                     Me.RaisePropertyChanged("ProjectedD1BinaryData")
-                    Me.OnProjectedD1BinaryDataChanged()
+                    Me.OnProjectedD1BinaryDataChanged
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'ProjectedD1ID' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False),
-         UIHint("TextBlock")>
+        <DataMember(),  _
+         Editable(false),  _
+         UIHint("TextBlock")>  _
         Public Property ProjectedD1ID() As Integer
             Get
                 Return Me._projectedD1ID
             End Get
             Set
-                If ((Me._projectedD1ID = Value) _
-                            = False) Then
-                    Me.OnProjectedD1IDChanging(Value)
-                    Me.ValidateProperty("ProjectedD1ID", Value)
-                    Me._projectedD1ID = Value
+                If ((Me._projectedD1ID = value)  _
+                            = false) Then
+                    Me.OnProjectedD1IDChanging(value)
+                    Me.ValidateProperty("ProjectedD1ID", value)
+                    Me._projectedD1ID = value
                     Me.RaisePropertyChanged("ProjectedD1ID")
-                    Me.OnProjectedD1IDChanged()
+                    Me.OnProjectedD1IDChanged
                 End If
             End Set
         End Property
-
+        
         Private Function FilterC(ByVal entity As C) As Boolean
             Return Object.Equals(entity.DID_Ref1, Me.ID)
         End Function
-
+        
         Private Function FilterD1(ByVal entity As D) As Boolean
             Return Object.Equals(entity.ID, Me.DSelfRef_ID1)
         End Function
-
+        
         Private Function FilterD2(ByVal entity As D) As Boolean
             Return Object.Equals(entity.ID, Me.DSelfRef_ID2)
         End Function
-
+        
         Private Function FilterD2_BackRef(ByVal entity As D) As Boolean
             Return Object.Equals(entity.DSelfRef_ID2, Me.ID)
         End Function
-
+        
         Private Sub AttachDs(ByVal entity As D)
             entity.D1 = Me
         End Sub
-
+        
         Private Sub DetachDs(ByVal entity As D)
             entity.D1 = Nothing
         End Sub
-
+        
         Private Function FilterDs(ByVal entity As D) As Boolean
             Return Object.Equals(entity.DSelfRef_ID1, Me.ID)
         End Function
-
+        
         ''' <summary>
         ''' Computes a value from the key fields that uniquely identifies this entity instance.
         ''' </summary>
@@ -1043,131 +1043,131 @@ Namespace TestDomainServices
             Return Me._id
         End Function
     End Class
-
+    
     ''' <summary>
     ''' Enum ImageKindEnum
     ''' </summary>
     Public Enum ImageKindEnum
-
+        
         ''' <summary>
         ''' ThumbNail
         ''' </summary>
         ThumbNail = 0
-
+        
         ''' <summary>
         ''' Full
         ''' </summary>
         Full = 1
     End Enum
-
+    
     ''' <summary>
     ''' The 'SpecialDataTypes' entity class.
     ''' </summary>
-    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class SpecialDataTypes
         Inherits Entity
-
+        
         Private _booleanProperty As IEnumerable(Of Nullable(Of Boolean))
-
+        
         Private _dateTimeProperty As IEnumerable(Of Nullable(Of DateTime))
-
+        
         Private _id As Integer
-
-#Region "Extensibility Method Definitions"
+        
+        #Region "Extensibility Method Definitions"
 
         ''' <summary>
         ''' This method is invoked from the constructor once initialization is complete and
         ''' can be used for further object setup.
         ''' </summary>
-        Partial Private Sub OnCreated()
+        Private Partial Sub OnCreated()
         End Sub
-        Partial Private Sub OnBooleanPropertyChanging(ByVal value As IEnumerable(Of Nullable(Of Boolean)))
+        Private Partial Sub OnBooleanPropertyChanging(ByVal value As IEnumerable(Of Nullable(Of Boolean)))
         End Sub
-        Partial Private Sub OnBooleanPropertyChanged()
+        Private Partial Sub OnBooleanPropertyChanged()
         End Sub
-        Partial Private Sub OnDateTimePropertyChanging(ByVal value As IEnumerable(Of Nullable(Of DateTime)))
+        Private Partial Sub OnDateTimePropertyChanging(ByVal value As IEnumerable(Of Nullable(Of DateTime)))
         End Sub
-        Partial Private Sub OnDateTimePropertyChanged()
+        Private Partial Sub OnDateTimePropertyChanged()
         End Sub
-        Partial Private Sub OnIdChanging(ByVal value As Integer)
+        Private Partial Sub OnIdChanging(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnIdChanged()
+        Private Partial Sub OnIdChanged()
         End Sub
 
-#End Region
-
-
+        #End Region
+        
+        
         ''' <summary>
         ''' Initializes a new instance of the <see cref="SpecialDataTypes"/> class.
         ''' </summary>
         Public Sub New()
             MyBase.New
-            Me.OnCreated()
+            Me.OnCreated
         End Sub
-
+        
         ''' <summary>
         ''' Gets or sets the 'BooleanProperty' value.
         ''' </summary>
-        <DataMember()>
+        <DataMember()>  _
         Public Property BooleanProperty() As IEnumerable(Of Nullable(Of Boolean))
             Get
                 Return Me._booleanProperty
             End Get
             Set
-                If (Object.Equals(Me._booleanProperty, Value) = False) Then
-                    Me.OnBooleanPropertyChanging(Value)
+                If (Object.Equals(Me._booleanProperty, value) = false) Then
+                    Me.OnBooleanPropertyChanging(value)
                     Me.RaiseDataMemberChanging("BooleanProperty")
-                    Me.ValidateProperty("BooleanProperty", Value)
-                    Me._booleanProperty = Value
+                    Me.ValidateProperty("BooleanProperty", value)
+                    Me._booleanProperty = value
                     Me.RaiseDataMemberChanged("BooleanProperty")
-                    Me.OnBooleanPropertyChanged()
+                    Me.OnBooleanPropertyChanged
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'DateTimeProperty' value.
         ''' </summary>
-        <DataMember()>
+        <DataMember()>  _
         Public Property DateTimeProperty() As IEnumerable(Of Nullable(Of DateTime))
             Get
                 Return Me._dateTimeProperty
             End Get
             Set
-                If (Object.Equals(Me._dateTimeProperty, Value) = False) Then
-                    Me.OnDateTimePropertyChanging(Value)
+                If (Object.Equals(Me._dateTimeProperty, value) = false) Then
+                    Me.OnDateTimePropertyChanging(value)
                     Me.RaiseDataMemberChanging("DateTimeProperty")
-                    Me.ValidateProperty("DateTimeProperty", Value)
-                    Me._dateTimeProperty = Value
+                    Me.ValidateProperty("DateTimeProperty", value)
+                    Me._dateTimeProperty = value
                     Me.RaiseDataMemberChanged("DateTimeProperty")
-                    Me.OnDateTimePropertyChanged()
+                    Me.OnDateTimePropertyChanged
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Gets or sets the 'Id' value.
         ''' </summary>
-        <DataMember(),
-         Editable(False, AllowInitialValue:=True),
-         Key(),
-         RoundtripOriginal()>
+        <DataMember(),  _
+         Editable(false, AllowInitialValue:=true),  _
+         Key(),  _
+         RoundtripOriginal()>  _
         Public Property Id() As Integer
             Get
                 Return Me._id
             End Get
             Set
-                If ((Me._id = Value) _
-                            = False) Then
-                    Me.OnIdChanging(Value)
-                    Me.ValidateProperty("Id", Value)
-                    Me._id = Value
+                If ((Me._id = value)  _
+                            = false) Then
+                    Me.OnIdChanging(value)
+                    Me.ValidateProperty("Id", value)
+                    Me._id = value
                     Me.RaisePropertyChanged("Id")
-                    Me.OnIdChanged()
+                    Me.OnIdChanged
                 End If
             End Set
         End Property
-
+        
         ''' <summary>
         ''' Computes a value from the key fields that uniquely identifies this entity instance.
         ''' </summary>
@@ -1176,57 +1176,57 @@ Namespace TestDomainServices
             Return Me._id
         End Function
     End Class
-
+    
     ''' <summary>
     ''' The 'TestEntity_DataMemberBuddy' entity class.
     ''' </summary>
-    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
     Partial Public NotInheritable Class TestEntity_DataMemberBuddy
         Inherits Entity
-
+        
         Private _id As Integer
-
+        
         Private _prop1 As Integer
-
-#Region "Extensibility Method Definitions"
+        
+        #Region "Extensibility Method Definitions"
 
         ''' <summary>
         ''' This method is invoked from the constructor once initialization is complete and
         ''' can be used for further object setup.
         ''' </summary>
-        Partial Private Sub OnCreated()
+        Private Partial Sub OnCreated()
         End Sub
-        Partial Private Sub OnIDChanging(ByVal value As Integer)
+        Private Partial Sub OnIDChanging(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnIDChanged()
+        Private Partial Sub OnIDChanged()
         End Sub
-        Partial Private Sub OnProp1Changing(ByVal value As Integer)
+        Private Partial Sub OnProp1Changing(ByVal value As Integer)
         End Sub
-        Partial Private Sub OnProp1Changed()
+        Private Partial Sub OnProp1Changed()
         End Sub
 
-#End Region
-
-
+        #End Region
+        
+        
         ''' <summary>
         ''' Initializes a new instance of the <see cref="TestEntity_DataMemberBuddy"/> class.
         ''' </summary>
         Public Sub New()
             MyBase.New
-            Me.OnCreated()
+            Me.OnCreated
         End Sub
-
+        
         ''' <summary>
         ''' Deserialization ctor for MessagePack support, when any Property is required
         ''' </summary>
-        <PolyType.ConstructorShapeAttribute()>
+        <PolyType.ConstructorShapeAttribute()>  _
         Private Sub New(ByVal Prop1 As Integer)
             MyBase.New
-            Me.OnCreated()
+            Me.OnCreated
             MyBase.OnDeserializing(CType(Nothing, System.Runtime.Serialization.StreamingContext))
             Me.Prop1 = Prop1
         End Sub
-
+        
         ''' <summary>
         ''' Gets or sets the 'ID' value.
         ''' </summary>
