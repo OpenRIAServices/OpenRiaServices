@@ -49,16 +49,21 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 if (knownTypes.Count <= 1)
                     continue;
 
-                // Skip base types, it has KnownType attributes and is handled correctly
-                if (item.Key.BaseType == typeof(Entity))
-                    continue;
-
                 converters.Add(item.Key, (MessagePackConverter)Activator.CreateInstance(typeof(ObjectConverter<>).MakeGenericType(item.Key), [knownTypes])!);
             }
             converters.Add(typeof(object), new ObjectConverter<object>(allTypes));
 
             _converters = converters.ToFrozenDictionary();
         }
+
+        /// <summary>
+        /// Generate DerivedTypeUnion required for the ObjectConverterFactory to work.
+        /// </summary>
+        /// <remarks>
+        /// In order to prevent Nerdabank.MessagePack from creating additional discriminators we must disable the built in inheritance support for the types.
+        /// </remarks>
+        public IEnumerable<DerivedTypeUnion> GetDerivedTypeUnions()
+            => _converters.Keys.Select(DerivedTypeUnion.CreateDisabled);
 
         MessagePackConverter? IMessagePackConverterFactory.CreateConverter(Type type, ITypeShape? shape, in ConverterContext context)
         {
