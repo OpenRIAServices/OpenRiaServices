@@ -392,13 +392,12 @@ namespace OpenRiaServices.Client.Test
             EnqueueTestComplete();
         }
 
-
         [TestMethod]
-        [Description("Ensure queries works for 3 levels of inheritance")]
-        public async Task Inherit_QuerieAsync()
+        [Description("Ensure querying works for 3 levels of inheritance")]
+        public async Task Inherit_Queries()
         {
             // Inheritance is City <-- CityWithEditHistory <-- CityWithInfo
-            // This test invokes a custom method declared on CityWithEditHistory via a CityWithInfo instance
+            // Ensure we can methods retrieve entities at all levels of the hierarchy
             CityDomainContext baseContext = new CityDomainContext();
             CityDomainContext middleContext = new CityDomainContext();
             CityDomainContext mostDerivedContext = new CityDomainContext();
