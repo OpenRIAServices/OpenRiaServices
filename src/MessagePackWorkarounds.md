@@ -44,18 +44,13 @@ Workarounds:
            * MessagePackRequestSerializer.CreateInvokeResponseEnvelope (server)
 
 
+# Serializing using
+
 # Object and Union converter for same type cannot coexist
 
 Problems
 * Cannot get "object" converter for a specific Type, the converter is "always" UnionTypeShape
 * Converter Cache does dot distinguish betweeen `IUniontTypeShape<T>` and `IObjectTypeShape<T>`
-
-## PolyType errors give poor exception messages
-
-Errors from serialization of polymorphic types give poor exception messages, making it hard to debug issues.
-* See TS polytype error ...
-
-
 
 # Other bugs
 
