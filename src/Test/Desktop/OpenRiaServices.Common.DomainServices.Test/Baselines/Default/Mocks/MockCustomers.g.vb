@@ -25,65 +25,65 @@ Imports System.Runtime.Serialization
 Imports System.Threading.Tasks
 
 Namespace TestDomainServices
-    
+
     ''' <summary>
     ''' The 'MockCustomer' entity class.
     ''' </summary>
-    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>  _
+    <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/TestDomainServices")>
     Partial Public NotInheritable Class MockCustomer
         Inherits Entity
-        
+
         Private _city As EntityRef(Of Global.Cities.City)
-        
+
         Private _cityName As String
-        
+
         Private _customerId As Integer
-        
+
         Private _previousResidences As EntityCollection(Of Global.Cities.City)
-        
+
         Private _stateName As String
-        
-        #Region "Extensibility Method Definitions"
+
+#Region "Extensibility Method Definitions"
 
         ''' <summary>
         ''' This method is invoked from the constructor once initialization is complete and
         ''' can be used for further object setup.
         ''' </summary>
-        Private Partial Sub OnCreated()
+        Partial Private Sub OnCreated()
         End Sub
-        Private Partial Sub OnCityNameChanging(ByVal value As String)
+        Partial Private Sub OnCityNameChanging(ByVal value As String)
         End Sub
-        Private Partial Sub OnCityNameChanged()
+        Partial Private Sub OnCityNameChanged()
         End Sub
-        Private Partial Sub OnCustomerIdChanging(ByVal value As Integer)
+        Partial Private Sub OnCustomerIdChanging(ByVal value As Integer)
         End Sub
-        Private Partial Sub OnCustomerIdChanged()
+        Partial Private Sub OnCustomerIdChanged()
         End Sub
-        Private Partial Sub OnStateNameChanging(ByVal value As String)
+        Partial Private Sub OnStateNameChanging(ByVal value As String)
         End Sub
-        Private Partial Sub OnStateNameChanged()
+        Partial Private Sub OnStateNameChanged()
         End Sub
-        Private Partial Sub OnMockCustomerCustomMethodInvoking(ByVal expectedStateName As String, ByVal expectedOriginalStateName As String)
+        Partial Private Sub OnMockCustomerCustomMethodInvoking(ByVal expectedStateName As String, ByVal expectedOriginalStateName As String)
         End Sub
-        Private Partial Sub OnMockCustomerCustomMethodInvoked()
+        Partial Private Sub OnMockCustomerCustomMethodInvoked()
         End Sub
 
-        #End Region
-        
-        
+#End Region
+
+
         ''' <summary>
         ''' Initializes a new instance of the <see cref="MockCustomer"/> class.
         ''' </summary>
         Public Sub New()
             MyBase.New
-            Me.OnCreated
+            Me.OnCreated()
         End Sub
-        
+
         ''' <summary>
         ''' Gets or sets the associated <see cref="City"/> entity.
         ''' </summary>
-        <EntityAssociation("Customer_City", New String() {"CityName", "StateName"}, New String() {"Name", "StateName"}, IsForeignKey:=true),  _
-         ExternalReference()>  _
+        <EntityAssociation("Customer_City", New String() {"CityName", "StateName"}, New String() {"Name", "StateName"}, IsForeignKey:=True),
+         ExternalReference()>
         Public Property City() As Global.Cities.City
             Get
                 If (Me._city Is Nothing) Then
@@ -93,11 +93,11 @@ Namespace TestDomainServices
             End Get
             Set
                 Dim previous As Global.Cities.City = Me.City
-                If (Object.Equals(previous, value) = false) Then
-                    Me.ValidateProperty("City", value)
-                    If (Not (value) Is Nothing) Then
-                        Me.CityName = value.Name
-                        Me.StateName = value.StateName
+                If (Object.Equals(previous, Value) = False) Then
+                    Me.ValidateProperty("City", Value)
+                    If (Not (Value) Is Nothing) Then
+                        Me.CityName = Value.Name
+                        Me.StateName = Value.StateName
                     Else
                         Me.CityName = CType(Nothing, String)
                         Me.StateName = CType(Nothing, String)
@@ -105,56 +105,56 @@ Namespace TestDomainServices
                 End If
             End Set
         End Property
-        
+
         ''' <summary>
         ''' Gets or sets the 'CityName' value.
         ''' </summary>
-        <DataMember(),  _
-         RoundtripOriginal()>  _
+        <DataMember(),
+         RoundtripOriginal()>
         Public Property CityName() As String
             Get
                 Return Me._cityName
             End Get
             Set
-                If (String.Equals(Me._cityName, value) = false) Then
-                    Me.OnCityNameChanging(value)
+                If (String.Equals(Me._cityName, Value) = False) Then
+                    Me.OnCityNameChanging(Value)
                     Me.RaiseDataMemberChanging("CityName")
-                    Me.ValidateProperty("CityName", value)
-                    Me._cityName = value
+                    Me.ValidateProperty("CityName", Value)
+                    Me._cityName = Value
                     Me.RaiseDataMemberChanged("CityName")
-                    Me.OnCityNameChanged
+                    Me.OnCityNameChanged()
                 End If
             End Set
         End Property
-        
+
         ''' <summary>
         ''' Gets or sets the 'CustomerId' value.
         ''' </summary>
-        <DataMember(),  _
-         Editable(false, AllowInitialValue:=true),  _
-         Key(),  _
-         RoundtripOriginal()>  _
+        <DataMember(),
+         Editable(False, AllowInitialValue:=True),
+         Key(),
+         RoundtripOriginal()>
         Public Property CustomerId() As Integer
             Get
                 Return Me._customerId
             End Get
             Set
-                If ((Me._customerId = value)  _
-                            = false) Then
-                    Me.OnCustomerIdChanging(value)
-                    Me.ValidateProperty("CustomerId", value)
-                    Me._customerId = value
+                If ((Me._customerId = Value) _
+                            = False) Then
+                    Me.OnCustomerIdChanging(Value)
+                    Me.ValidateProperty("CustomerId", Value)
+                    Me._customerId = Value
                     Me.RaisePropertyChanged("CustomerId")
-                    Me.OnCustomerIdChanged
+                    Me.OnCustomerIdChanged()
                 End If
             End Set
         End Property
-        
+
         ''' <summary>
         ''' Gets the collection of associated <see cref="City"/> entity instances.
         ''' </summary>
-        <EntityAssociation("Customer_PreviousResidences", "StateName", "StateName"),  _
-         ExternalReference()>  _
+        <EntityAssociation("Customer_PreviousResidences", "StateName", "StateName"),
+         ExternalReference()>
         Public ReadOnly Property PreviousResidences() As EntityCollection(Of Global.Cities.City)
             Get
                 If (Me._previousResidences Is Nothing) Then
@@ -163,56 +163,56 @@ Namespace TestDomainServices
                 Return Me._previousResidences
             End Get
         End Property
-        
+
         ''' <summary>
         ''' Gets or sets the 'StateName' value.
         ''' </summary>
-        <DataMember(),  _
-         RoundtripOriginal()>  _
+        <DataMember(),
+         RoundtripOriginal()>
         Public Property StateName() As String
             Get
                 Return Me._stateName
             End Get
             Set
-                If (String.Equals(Me._stateName, value) = false) Then
-                    Me.OnStateNameChanging(value)
+                If (String.Equals(Me._stateName, Value) = False) Then
+                    Me.OnStateNameChanging(Value)
                     Me.RaiseDataMemberChanging("StateName")
-                    Me.ValidateProperty("StateName", value)
-                    Me._stateName = value
+                    Me.ValidateProperty("StateName", Value)
+                    Me._stateName = Value
                     Me.RaiseDataMemberChanged("StateName")
-                    Me.OnStateNameChanged
+                    Me.OnStateNameChanged()
                 End If
             End Set
         End Property
-        
+
         ''' <summary>
         ''' Gets a value indicating whether the 'MockCustomerCustomMethod' action has been invoked on this entity.
         ''' </summary>
-        <Display(AutoGenerateField:=false)>  _
+        <Display(AutoGenerateField:=False)>
         Public ReadOnly Property IsMockCustomerCustomMethodInvoked() As Boolean
             Get
                 Return MyBase.IsActionInvoked("MockCustomerCustomMethod")
             End Get
         End Property
-        
+
         ''' <summary>
         ''' Gets a value indicating whether the 'MockCustomerCustomMethod' method can be invoked on this entity.
         ''' </summary>
-        <Display(AutoGenerateField:=false)>  _
+        <Display(AutoGenerateField:=False)>
         Public ReadOnly Property CanMockCustomerCustomMethod() As Boolean
             Get
                 Return MyBase.CanInvokeAction("MockCustomerCustomMethod")
             End Get
         End Property
-        
+
         Private Function FilterCity(ByVal entity As Global.Cities.City) As Boolean
             Return (Object.Equals(entity.Name, Me.CityName) AndAlso Object.Equals(entity.StateName, Me.StateName))
         End Function
-        
+
         Private Function FilterPreviousResidences(ByVal entity As Global.Cities.City) As Boolean
             Return Object.Equals(entity.StateName, Me.StateName)
         End Function
-        
+
         ''' <summary>
         ''' Computes a value from the key fields that uniquely identifies this entity instance.
         ''' </summary>
@@ -220,62 +220,62 @@ Namespace TestDomainServices
         Public Overrides Function GetIdentity() As Object
             Return Me._customerId
         End Function
-        
+
         ''' <summary>
         ''' Invokes the 'MockCustomerCustomMethod' action on this entity.
         ''' </summary>
         ''' <param name="expectedStateName">The value to pass to the server method's 'expectedStateName' parameter.</param>
         ''' <param name="expectedOriginalStateName">The value to pass to the server method's 'expectedOriginalStateName' parameter.</param>
-        <EntityAction("MockCustomerCustomMethod", AllowMultipleInvocations:=false)>  _
+        <EntityAction("MockCustomerCustomMethod", AllowMultipleInvocations:=False)>
         Public Sub MockCustomerCustomMethod(ByVal expectedStateName As String, ByVal expectedOriginalStateName As String)
             Me.OnMockCustomerCustomMethodInvoking(expectedStateName, expectedOriginalStateName)
             MyBase.InvokeAction("MockCustomerCustomMethod", expectedStateName, expectedOriginalStateName)
-            Me.OnMockCustomerCustomMethodInvoked
+            Me.OnMockCustomerCustomMethodInvoked()
         End Sub
     End Class
-    
+
     ''' <summary>
     ''' The DomainContext corresponding to the 'MockCustomerDomainService' DomainService.
     ''' </summary>
     Partial Public NotInheritable Class MockCustomerDomainContext
         Inherits DomainContext
-        
-        #Region "Extensibility Method Definitions"
+
+#Region "Extensibility Method Definitions"
 
         ''' <summary>
         ''' This method is invoked from the constructor once initialization is complete and
         ''' can be used for further object setup.
         ''' </summary>
-        Private Partial Sub OnCreated()
+        Partial Private Sub OnCreated()
         End Sub
 
-        #End Region
-        
-        
+#End Region
+
+
         ''' <summary>
         ''' Initializes a new instance of the <see cref="MockCustomerDomainContext"/> class.
         ''' </summary>
         Public Sub New()
             Me.New(New Uri("TestDomainServices-MockCustomerDomainService.svc", UriKind.Relative))
         End Sub
-        
+
         ''' <summary>
         ''' Initializes a new instance of the <see cref="MockCustomerDomainContext"/> class with the specified service URI.
         ''' </summary>
         ''' <param name="serviceUri">The MockCustomerDomainService service URI.</param>
         Public Sub New(ByVal serviceUri As Uri)
-            Me.New(DomainContext.CreateDomainClient(GetType(IMockCustomerDomainServiceContract), serviceUri, false))
+            Me.New(DomainContext.CreateDomainClient(GetType(IMockCustomerDomainServiceContract), serviceUri, False))
         End Sub
-        
+
         ''' <summary>
         ''' Initializes a new instance of the <see cref="MockCustomerDomainContext"/> class with the specified <paramref name="domainClient"/>.
         ''' </summary>
         ''' <param name="domainClient">The DomainClient instance to use for this DomainContext.</param>
         Public Sub New(ByVal domainClient As DomainClient)
             MyBase.New(domainClient)
-            Me.OnCreated
+            Me.OnCreated()
         End Sub
-        
+
         ''' <summary>
         ''' Gets the set of <see cref="MockCustomer"/> entity instances that have been loaded into this <see cref="MockCustomerDomainContext"/> instance.
         ''' </summary>
@@ -284,7 +284,7 @@ Namespace TestDomainServices
                 Return MyBase.EntityContainer.GetEntitySet(Of MockCustomer)
             End Get
         End Property
-        
+
         ''' <summary>
         ''' Gets the set of <see cref="MockReport"/> entity instances that have been loaded into this <see cref="MockCustomerDomainContext"/> instance.
         ''' </summary>
@@ -293,25 +293,25 @@ Namespace TestDomainServices
                 Return MyBase.EntityContainer.GetEntitySet(Of MockReport)
             End Get
         End Property
-        
+
         ''' <summary>
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockCustomer"/> entity instances using the 'GetCustomers' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockCustomer"/> entity instances.</returns>
         Public Function GetCustomersQuery() As EntityQuery(Of MockCustomer)
             Me.ValidateMethod("GetCustomersQuery", Nothing)
-            Return MyBase.CreateQuery(Of MockCustomer)("GetCustomers", Nothing, false, true)
+            Return MyBase.CreateQuery(Of MockCustomer)("GetCustomers", Nothing, False, True)
         End Function
-        
+
         ''' <summary>
         ''' Gets an EntityQuery instance that can be used to load <see cref="MockReport"/> entity instances using the 'GetReports' query.
         ''' </summary>
         ''' <returns>An EntityQuery that can be loaded to retrieve <see cref="MockReport"/> entity instances.</returns>
         Public Function GetReportsQuery() As EntityQuery(Of MockReport)
             Me.ValidateMethod("GetReportsQuery", Nothing)
-            Return MyBase.CreateQuery(Of MockReport)("GetReports", Nothing, false, true)
+            Return MyBase.CreateQuery(Of MockReport)("GetReports", Nothing, False, True)
         End Function
-        
+
         ''' <summary>
         ''' Invokes the 'MockCustomerCustomMethod' method of the specified <see cref="MockCustomer"/> entity.
         ''' </summary>
@@ -321,15 +321,15 @@ Namespace TestDomainServices
         Public Sub MockCustomerCustomMethod(ByVal current As MockCustomer, ByVal expectedStateName As String, ByVal expectedOriginalStateName As String)
             current.MockCustomerCustomMethod(expectedStateName, expectedOriginalStateName)
         End Sub
-        
+
         ''' <summary>
         ''' Invokes the 'MockReportCustomMethod' method of the specified <see cref="MockReport"/> entity.
         ''' </summary>
         ''' <param name="current">The <see cref="MockReport"/> entity instance.</param>
         Public Sub MockReportCustomMethod(ByVal current As MockReport)
-            current.MockReportCustomMethod
+            current.MockReportCustomMethod()
         End Sub
-        
+
         ''' <summary>
         ''' Creates a new EntityContainer for this DomainContext's EntitySets.
         ''' </summary>
@@ -337,44 +337,44 @@ Namespace TestDomainServices
         Protected Overrides Function CreateEntityContainer() As EntityContainer
             Return New MockCustomerDomainContextEntityContainer()
         End Function
-        
+
         ''' <summary>
         ''' Service contract for the 'MockCustomerDomainService' DomainService.
         ''' </summary>
         Public Interface IMockCustomerDomainServiceContract
-            
+
             ''' <summary>
             ''' Asynchronously invokes the 'GetCustomers' operation.
             ''' </summary>
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
+            <HasSideEffects(False)>
             Function BeginGetCustomers(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
+
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginGetCustomers'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetCustomers'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCustomers' operation.</returns>
             Function EndGetCustomers(ByVal result As IAsyncResult) As QueryResult(Of MockCustomer)
-            
+
             ''' <summary>
             ''' Asynchronously invokes the 'GetReports' operation.
             ''' </summary>
             ''' <param name="callback">Callback to invoke on completion.</param>
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
+            <HasSideEffects(False)>
             Function BeginGetReports(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
+
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginGetReports'.
             ''' </summary>
             ''' <param name="result">The IAsyncResult returned from 'BeginGetReports'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetReports' operation.</returns>
             Function EndGetReports(ByVal result As IAsyncResult) As QueryResult(Of MockReport)
-            
+
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
             ''' </summary>
@@ -383,7 +383,7 @@ Namespace TestDomainServices
             ''' <param name="asyncState">Optional state object.</param>
             ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
+
             ''' <summary>
             ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
             ''' </summary>
@@ -391,10 +391,10 @@ Namespace TestDomainServices
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
             Function EndSubmitChanges(ByVal result As IAsyncResult) As IEnumerable(Of ChangeSetEntry)
         End Interface
-        
+
         Friend NotInheritable Class MockCustomerDomainContextEntityContainer
             Inherits EntityContainer
-            
+
             Public Sub New()
                 MyBase.New
                 Me.CreateEntitySet(Of MockCustomer)(EntitySetOperations.Edit)
@@ -402,88 +402,88 @@ Namespace TestDomainServices
             End Sub
         End Class
     End Class
-    
+
     ''' <summary>
     ''' The 'MockReport' entity class.
     ''' </summary>
-    <DataContract([Namespace]:="Mock.Models", Name:="MR"),  _
-     RoundtripOriginal()>  _
+    <DataContract([Namespace]:="Mock.Models", Name:="MR"),
+     RoundtripOriginal()>
     Partial Public NotInheritable Class MockReport
         Inherits Entity
-        
+
         Private _customer As EntityRef(Of MockCustomer)
-        
+
         Private _customerId As Integer
-        
+
         Private _reportBody As MockReportBody
-        
+
         Private _reportElementFieldId As Integer
-        
+
         Private _reportTitle As String
-        
+
         Private _start As DateTime
-        
+
         Private _state As String
-        
-        #Region "Extensibility Method Definitions"
+
+#Region "Extensibility Method Definitions"
 
         ''' <summary>
         ''' This method is invoked from the constructor once initialization is complete and
         ''' can be used for further object setup.
         ''' </summary>
-        Private Partial Sub OnCreated()
+        Partial Private Sub OnCreated()
         End Sub
-        Private Partial Sub OnCustomerIdChanging(ByVal value As Integer)
+        Partial Private Sub OnCustomerIdChanging(ByVal value As Integer)
         End Sub
-        Private Partial Sub OnCustomerIdChanged()
+        Partial Private Sub OnCustomerIdChanged()
         End Sub
-        Private Partial Sub OnReportBodyChanging(ByVal value As MockReportBody)
+        Partial Private Sub OnReportBodyChanging(ByVal value As MockReportBody)
         End Sub
-        Private Partial Sub OnReportBodyChanged()
+        Partial Private Sub OnReportBodyChanged()
         End Sub
-        Private Partial Sub OnReportElementFieldIdChanging(ByVal value As Integer)
+        Partial Private Sub OnReportElementFieldIdChanging(ByVal value As Integer)
         End Sub
-        Private Partial Sub OnReportElementFieldIdChanged()
+        Partial Private Sub OnReportElementFieldIdChanged()
         End Sub
-        Private Partial Sub OnReportTitleChanging(ByVal value As String)
+        Partial Private Sub OnReportTitleChanging(ByVal value As String)
         End Sub
-        Private Partial Sub OnReportTitleChanged()
+        Partial Private Sub OnReportTitleChanged()
         End Sub
-        Private Partial Sub OnStartChanging(ByVal value As DateTime)
+        Partial Private Sub OnStartChanging(ByVal value As DateTime)
         End Sub
-        Private Partial Sub OnStartChanged()
+        Partial Private Sub OnStartChanged()
         End Sub
-        Private Partial Sub OnStateChanging(ByVal value As String)
+        Partial Private Sub OnStateChanging(ByVal value As String)
         End Sub
-        Private Partial Sub OnStateChanged()
+        Partial Private Sub OnStateChanged()
         End Sub
-        Private Partial Sub OnMockReportCustomMethodInvoking()
+        Partial Private Sub OnMockReportCustomMethodInvoking()
         End Sub
-        Private Partial Sub OnMockReportCustomMethodInvoked()
+        Partial Private Sub OnMockReportCustomMethodInvoked()
         End Sub
 
-        #End Region
-        
-        
+#End Region
+
+
         ''' <summary>
         ''' Initializes a new instance of the <see cref="MockReport"/> class.
         ''' </summary>
         Public Sub New()
             MyBase.New
-            Me.OnCreated
+            Me.OnCreated()
         End Sub
-        
+
         ''' <summary>
         ''' Deserialization ctor for MessagePack support, when any Property is required
         ''' </summary>
-        <PolyType.ConstructorShapeAttribute()>  _
-        Private Sub New(ByVal CustomerId As Integer)
+        <PolyType.ConstructorShapeAttribute()>
+        Private Sub New(ByVal ReportTitle As String)
             MyBase.New
-            Me.OnCreated
+            Me.OnCreated()
             MyBase.OnDeserializing(CType(Nothing, System.Runtime.Serialization.StreamingContext))
-            Me.CustomerId = CustomerId
+            Me.ReportTitle = ReportTitle
         End Sub
-        
+
         ''' <summary>
         ''' Gets or sets the associated <see cref="MockCustomer"/> entity.
         ''' </summary>
