@@ -5,12 +5,10 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Threading.Tasks;
 using Cities;
 using Microsoft.Silverlight.Testing;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
-using TestDomainServices;
-using TestDomainServices.NamedUpdates;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -392,6 +390,27 @@ namespace OpenRiaServices.Client.Test
             });
 
             EnqueueTestComplete();
+        }
+
+        [TestMethod]
+        [Description("Ensure querying works for 3 levels of inheritance")]
+        public async Task Inherit_Queries()
+        {
+            // Inheritance is City <-- CityWithEditHistory <-- CityWithInfo
+            // Ensure we can methods retrieve entities at all levels of the hierarchy
+            CityDomainContext baseContext = new CityDomainContext();
+            CityDomainContext middleContext = new CityDomainContext();
+            CityDomainContext mostDerivedContext = new CityDomainContext();
+
+            var baseResult = await baseContext.LoadAsync(baseContext.GetCitiesQuery());
+            var editResult = await middleContext.LoadAsync(middleContext.GetCitiesWithEditHistoryQuery());
+            var mostDerivedResult = await mostDerivedContext.LoadAsync(mostDerivedContext.GetCitiesWithInfoQuery());
+
+            // CityWithEditHistory is abstract so should be return exactly the same number of entities as CityWithInfo
+            Assert.HasCount(2, mostDerivedResult.Entities);
+            Assert.HasCount(2, editResult.Entities);
+            Assert.HasCount(2, baseResult.Entities.OfType<CityWithInfo>());
+            Assert.HasCount(11, baseResult.Entities);
         }
 
         #endregion //Custom methods
