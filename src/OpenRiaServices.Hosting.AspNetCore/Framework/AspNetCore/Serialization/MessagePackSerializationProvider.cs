@@ -36,6 +36,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             Wcf.DomainServiceSerializationSurrogate surrogateProvider = new Wcf.DomainServiceSerializationSurrogate(description);
 
             // Create converters to handle surrogates,
+            Dictionary<Type, DerivedTypeUnion> derivedTypeUnions = _serializer.DerivedTypeUnions.ToDictionary(du => du.BaseType);
             List<MessagePackConverter> converters = new();
             foreach (var entityType in description.EntityTypes.Concat(description.ComplexTypes))
             {
@@ -43,6 +44,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 {
                     converters.Add((MessagePackConverter)
                         Activator.CreateInstance(typeof(SurrogateConverter<,>).MakeGenericType(surrogateType, entityType), args: [description, surrogateProvider])!);
+
+                    // Prevent Nerdbank.MessagePack from adding an additional discriminator.
+                    derivedTypeUnions[entityType] = DerivedTypeUnion.CreateDisabled(entityType);
                 }
             }
 
@@ -52,7 +56,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
             return _serializer with
             {
-                Converters = [.. _serializer.Converters, .. converters]
+                Converters = [.. _serializer.Converters, .. converters],
+                DerivedTypeUnions = [.. derivedTypeUnions.Values],
             };
         }
     }
