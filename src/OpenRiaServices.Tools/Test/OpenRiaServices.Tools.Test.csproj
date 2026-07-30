@@ -40,6 +40,7 @@
     <PackageReference Include="Microsoft.Build.Framework" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.*" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">

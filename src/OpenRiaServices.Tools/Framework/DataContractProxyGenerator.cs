@@ -213,58 +213,52 @@ namespace OpenRiaServices.Tools
 
         private void GeneratePolyTypeDeserializationConstructor()
         {
-            var properties = TypeDescriptor.GetProperties(this.Type);
-            bool hasRequiredProperty = properties.Cast<PropertyDescriptor>()
-                .Any(p => p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
+            var requiredProperties = TypeDescriptor.GetProperties(this.Type)
+                .Cast<PropertyDescriptor>()
+                .Where(p => p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
                     && ShouldDeclareProperty(p)
-                    && CanGenerateProperty(p));
+                    && CanGenerateProperty(p))
+                .ToList();
 
-            if (hasRequiredProperty)
+            if (requiredProperties.Count > 0)
             {
-                var pd = properties.Cast<PropertyDescriptor>()
-                    .FirstOrDefault(p => !p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
-                        && ShouldDeclareProperty(p)
-                        && CanGenerateProperty(p));
-                if (pd != null)
+                var deserializingConstructor = new CodeConstructor();
+                deserializingConstructor.Attributes = MemberAttributes.Private;
+
+                // [ConstructorShape]
+                deserializingConstructor.CustomAttributes.Add(new CodeAttributeDeclaration("PolyType.ConstructorShapeAttribute"));
+
+                foreach (var pd in requiredProperties)
                 {
-                    var deserializingConstructor = new CodeConstructor();
-                    deserializingConstructor.Attributes = MemberAttributes.Private;
-
-                    // [ConstructorShape]
-                    deserializingConstructor.CustomAttributes.Add(new CodeAttributeDeclaration("PolyType.ConstructorShapeAttribute"));
-
-                    // Add constructor parameter from selected property descriptor
-                    string parameterName = pd.Name;
                     deserializingConstructor.Parameters.Add(
                         new CodeParameterDeclarationExpression(
                             CodeGenUtilities.GetTypeReference(pd.PropertyType, this.ClientProxyGenerator, this.ProxyClass),
-                            parameterName));
+                            pd.Name));
+                }
 
-                    // add default ctor doc comments
-                    string comment = "Deserialization ctor for MessagePack support, when any Property is required";
-                    deserializingConstructor.Comments.AddRange(CodeGenUtilities.GenerateSummaryCodeComment(comment, this.ClientProxyGenerator.IsCSharp));
+                // add default ctor doc comments
+                string comment = "Deserialization ctor for MessagePack support, when any Property is required";
+                deserializingConstructor.Comments.AddRange(CodeGenUtilities.GenerateSummaryCodeComment(comment, this.ClientProxyGenerator.IsCSharp));
 
-                    // add call to default OnCreated method
-                    deserializingConstructor.Statements.Add(this.NotificationMethodGen.OnCreatedMethodInvokeExpression);
+                // add call to default OnCreated method
+                deserializingConstructor.Statements.Add(this.NotificationMethodGen.OnCreatedMethodInvokeExpression);
 
-                    // Generate: base.OnDeserializing(default);
-                    deserializingConstructor.Statements.Add(
-                        new CodeMethodInvokeExpression(
-                            new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), "OnDeserializing"),
-                            new CodeDefaultValueExpression(new CodeTypeReference(typeof(StreamingContext)))));
+                // Generate: base.OnDeserializing(default);
+                deserializingConstructor.Statements.Add(
+                    new CodeMethodInvokeExpression(
+                        new CodeMethodReferenceExpression(new CodeBaseReferenceExpression(), "OnDeserializing"),
+                        new CodeDefaultValueExpression(new CodeTypeReference(typeof(StreamingContext)))));
 
+                foreach (var pd in requiredProperties)
+                {
                     // Set property from constructor parameter: this.<pd.Name> = <parameter>;
                     deserializingConstructor.Statements.Add(
                         new CodeAssignStatement(
                             new CodePropertyReferenceExpression(new CodeThisReferenceExpression(), pd.Name),
-                            new CodeArgumentReferenceExpression(parameterName)));
+                            new CodeArgumentReferenceExpression(pd.Name)));
+                }
 
-                    this.ProxyClass.Members.Add(deserializingConstructor);
-                }
-                else
-                {
-                    throw new InvalidOperationException($"The type '{this.Type}' has only required properties, cannot generate PolyType compatible constructor");
-                }
+                this.ProxyClass.Members.Add(deserializingConstructor);
             }
         }
 
