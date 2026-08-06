@@ -6,6 +6,7 @@ using OpenRiaServices.Client.Test;
 using Microsoft.CSharp;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Server.Authentication;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.Server.Test.Authentication
 {
@@ -214,26 +215,26 @@ namespace OpenRiaServices.Server.Test.Authentication
                 null /* unused in negative tests */);
         }
 
-        public class AcpDomainService<T> : DomainService, IAuthentication<T> where T : IUser
+        public class AcpDomainService<T> : DomainService, IAuthenticationAsync<T> where T : IUser
         {
             #region IAuthentication<T> Members
 
-            public T Login(string userName, string password, bool isPersistent, string customData)
+            public Task<T> LoginAsync(string userName, string password, bool isPersistent, string customData)
             {
                 throw new NotImplementedException();
             }
 
-            public T Logout()
+            public Task<T> LogoutAsync()
             {
                 throw new NotImplementedException();
             }
 
-            public T GetUser()
+            public Task<T> GetUserAsync()
             {
                 throw new NotImplementedException();
             }
 
-            public void UpdateUser(T user)
+            public Task UpdateUserAsync(T user)
             {
                 throw new NotImplementedException();
             }
