@@ -1,0 +1,16 @@
+﻿OpenRiaServices.LinqToSql.DataContextExtensions
+OpenRiaServices.LinqToSql.LinqToSqlDomainService<TContext>
+OpenRiaServices.LinqToSql.LinqToSqlDomainService<TContext>.DataContext.get -> TContext
+OpenRiaServices.LinqToSql.LinqToSqlDomainService<TContext>.LinqToSqlDomainService() -> void
+OpenRiaServices.LinqToSql.LinqToSqlDomainServiceDescriptionProviderAttribute
+OpenRiaServices.LinqToSql.LinqToSqlDomainServiceDescriptionProviderAttribute.DataContextType.get -> System.Type
+OpenRiaServices.LinqToSql.LinqToSqlDomainServiceDescriptionProviderAttribute.LinqToSqlDomainServiceDescriptionProviderAttribute() -> void
+OpenRiaServices.LinqToSql.LinqToSqlDomainServiceDescriptionProviderAttribute.LinqToSqlDomainServiceDescriptionProviderAttribute(System.Type dataContextType) -> void
+override OpenRiaServices.LinqToSql.LinqToSqlDomainService<TContext>.CountAsync<T>(System.Linq.IQueryable<T> query, System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<int>
+override OpenRiaServices.LinqToSql.LinqToSqlDomainService<TContext>.Dispose(bool disposing) -> void
+override OpenRiaServices.LinqToSql.LinqToSqlDomainService<TContext>.Initialize(OpenRiaServices.Server.DomainServiceContext context) -> void
+override OpenRiaServices.LinqToSql.LinqToSqlDomainService<TContext>.PersistChangeSetAsync(System.Threading.CancellationToken cancellationToken) -> System.Threading.Tasks.ValueTask<bool>
+override OpenRiaServices.LinqToSql.LinqToSqlDomainServiceDescriptionProviderAttribute.CreateProvider(System.Type domainServiceType, OpenRiaServices.Server.DomainServiceDescriptionProvider parent) -> OpenRiaServices.Server.DomainServiceDescriptionProvider
+static OpenRiaServices.LinqToSql.DataContextExtensions.IsAttached(this System.Data.Linq.ITable table, object entity) -> bool
+virtual OpenRiaServices.LinqToSql.LinqToSqlDomainService<TContext>.CreateDataContext() -> TContext
+virtual OpenRiaServices.LinqToSql.LinqToSqlDomainService<TContext>.ResolveConflicts(System.Data.Linq.ChangeConflictCollection conflicts) -> bool

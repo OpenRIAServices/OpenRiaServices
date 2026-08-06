@@ -1,0 +1,70 @@
+﻿abstract OpenRiaServices.Hosting.QueryResult.GetIncludedResults() -> System.Collections.Generic.IEnumerable<object>
+abstract OpenRiaServices.Hosting.QueryResult.GetRootResults() -> System.Collections.Generic.IEnumerable<object>
+Microsoft.Extensions.DependencyInjection.OpenRiaServicesServiceCollectionExtensions
+OpenRiaServices.Hosting.DomainServiceFault
+OpenRiaServices.Hosting.DomainServiceFault.DomainServiceFault() -> void
+OpenRiaServices.Hosting.DomainServiceFault.ErrorCode.get -> int
+OpenRiaServices.Hosting.DomainServiceFault.ErrorCode.set -> void
+OpenRiaServices.Hosting.DomainServiceFault.ErrorMessage.get -> string
+OpenRiaServices.Hosting.DomainServiceFault.ErrorMessage.set -> void
+OpenRiaServices.Hosting.DomainServiceFault.GetValidationErrors() -> System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Hosting.DomainServiceFault.IsDomainException.get -> bool
+OpenRiaServices.Hosting.DomainServiceFault.IsDomainException.set -> void
+OpenRiaServices.Hosting.DomainServiceFault.OperationErrors.get -> System.Collections.Generic.IEnumerable<OpenRiaServices.Server.ValidationResultInfo>
+OpenRiaServices.Hosting.DomainServiceFault.OperationErrors.set -> void
+OpenRiaServices.Hosting.DomainServiceFault.StackTrace.get -> string
+OpenRiaServices.Hosting.DomainServiceFault.StackTrace.set -> void
+OpenRiaServices.Hosting.QueryResult
+OpenRiaServices.Hosting.QueryResult.QueryResult() -> void
+OpenRiaServices.Hosting.QueryResult.TotalCount.get -> int
+OpenRiaServices.Hosting.QueryResult.TotalCount.set -> void
+OpenRiaServices.Hosting.QueryResult<T>
+OpenRiaServices.Hosting.QueryResult<T>.IncludedResults.get -> System.Collections.Generic.IEnumerable<object>
+OpenRiaServices.Hosting.QueryResult<T>.IncludedResults.set -> void
+OpenRiaServices.Hosting.QueryResult<T>.QueryResult() -> void
+OpenRiaServices.Hosting.QueryResult<T>.QueryResult(System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult> validationErrors) -> void
+OpenRiaServices.Hosting.QueryResult<T>.QueryResult(System.Collections.Generic.IEnumerable<T> results) -> void
+OpenRiaServices.Hosting.QueryResult<T>.QueryResult(System.Collections.Generic.IEnumerable<T> results, int totalCount) -> void
+OpenRiaServices.Hosting.QueryResult<T>.RootResults.get -> System.Collections.Generic.IEnumerable<T>
+OpenRiaServices.Hosting.QueryResult<T>.RootResults.set -> void
+OpenRiaServices.Hosting.QueryResult<T>.ValidationErrors.get -> System.Collections.Generic.IEnumerable<System.ComponentModel.DataAnnotations.ValidationResult>
+OpenRiaServices.Hosting.Wcf.Behaviors.SoapQueryBehavior
+OpenRiaServices.Hosting.Wcf.Behaviors.SoapQueryBehavior.AddBindingParameters(System.ServiceModel.Description.ServiceEndpoint endpoint, System.ServiceModel.Channels.BindingParameterCollection bindingParameters) -> void
+OpenRiaServices.Hosting.Wcf.Behaviors.SoapQueryBehavior.ApplyClientBehavior(System.ServiceModel.Description.ServiceEndpoint endpoint, System.ServiceModel.Dispatcher.ClientRuntime clientRuntime) -> void
+OpenRiaServices.Hosting.Wcf.Behaviors.SoapQueryBehavior.ApplyDispatchBehavior(System.ServiceModel.Description.ServiceEndpoint endpoint, System.ServiceModel.Dispatcher.EndpointDispatcher endpointDispatcher) -> void
+OpenRiaServices.Hosting.Wcf.Behaviors.SoapQueryBehavior.SoapQueryBehavior() -> void
+OpenRiaServices.Hosting.Wcf.Behaviors.SoapQueryBehavior.Validate(System.ServiceModel.Description.ServiceEndpoint endpoint) -> void
+OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection
+OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection.DomainServicesSection() -> void
+OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection.Endpoints.get -> System.Configuration.ProviderSettingsCollection
+OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration
+OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.EndpointFactories.get -> System.Collections.Generic.ISet<OpenRiaServices.Hosting.Wcf.DomainServiceEndpointFactory>
+OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.ServiceProvider.get -> System.IServiceProvider
+OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.ServiceProvider.set -> void
+OpenRiaServices.Hosting.Wcf.DomainServiceEndpointFactory
+OpenRiaServices.Hosting.Wcf.DomainServiceEndpointFactory.DomainServiceEndpointFactory() -> void
+OpenRiaServices.Hosting.Wcf.DomainServiceEndpointFactory.DomainServiceEndpointFactory(string name) -> void
+OpenRiaServices.Hosting.Wcf.DomainServiceEndpointFactory.Name.get -> string
+OpenRiaServices.Hosting.Wcf.DomainServiceEndpointFactory.Name.set -> void
+OpenRiaServices.Hosting.Wcf.DomainServiceHost
+OpenRiaServices.Hosting.Wcf.DomainServiceHost.DomainServiceHost(System.Type domainServiceType, params System.Uri[] baseAddresses) -> void
+OpenRiaServices.Hosting.Wcf.DomainServiceHost.GetService(System.Type serviceType) -> object
+OpenRiaServices.Hosting.Wcf.DomainServiceHostFactory
+OpenRiaServices.Hosting.Wcf.DomainServiceHostFactory.DomainServiceHostFactory() -> void
+OpenRiaServices.Hosting.Wcf.DomainServiceHttpModule
+OpenRiaServices.Hosting.Wcf.DomainServiceHttpModule.DomainServiceHttpModule() -> void
+OpenRiaServices.Hosting.Wcf.PoxBinaryEndpointFactory
+OpenRiaServices.Hosting.Wcf.PoxBinaryEndpointFactory.PoxBinaryEndpointFactory() -> void
+override OpenRiaServices.Hosting.QueryResult<T>.GetIncludedResults() -> System.Collections.Generic.IEnumerable<object>
+override OpenRiaServices.Hosting.QueryResult<T>.GetRootResults() -> System.Collections.Generic.IEnumerable<object>
+override OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection.InitializeDefault() -> void
+override OpenRiaServices.Hosting.Wcf.DomainServiceHost.ApplyConfiguration() -> void
+override OpenRiaServices.Hosting.Wcf.DomainServiceHost.CreateDescription(out System.Collections.Generic.IDictionary<string, System.ServiceModel.Description.ContractDescription> implementedContracts) -> System.ServiceModel.Description.ServiceDescription
+override OpenRiaServices.Hosting.Wcf.DomainServiceHostFactory.CreateServiceHost(System.Type serviceType, System.Uri[] baseAddresses) -> System.ServiceModel.ServiceHost
+override OpenRiaServices.Hosting.Wcf.PoxBinaryEndpointFactory.CreateEndpointForAddress(System.ServiceModel.Description.ContractDescription contract, System.Uri address) -> System.ServiceModel.Description.ServiceEndpoint
+static Microsoft.Extensions.DependencyInjection.OpenRiaServicesServiceCollectionExtensions.AddDomainServices(this Microsoft.Extensions.DependencyInjection.IServiceCollection serviceCollection, Microsoft.Extensions.DependencyInjection.ServiceLifetime serviceLifetime, System.Reflection.Assembly[] assemblies = null) -> Microsoft.Extensions.DependencyInjection.IServiceCollection
+static OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection.Current.get -> OpenRiaServices.Hosting.Wcf.Configuration.DomainServicesSection
+static OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.Current.get -> OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration
+virtual OpenRiaServices.Hosting.Wcf.DomainServiceEndpointFactory.CreateEndpointForAddress(System.ServiceModel.Description.ContractDescription contract, System.Uri address) -> System.ServiceModel.Description.ServiceEndpoint
+virtual OpenRiaServices.Hosting.Wcf.DomainServiceEndpointFactory.CreateEndpoints(OpenRiaServices.Server.DomainServiceDescription description, OpenRiaServices.Hosting.Wcf.DomainServiceHost serviceHost, System.ServiceModel.Description.ContractDescription contractDescription) -> System.Collections.Generic.IEnumerable<System.ServiceModel.Description.ServiceEndpoint>
+virtual OpenRiaServices.Hosting.Wcf.DomainServiceHost.AddDefaultBehaviors() -> void
