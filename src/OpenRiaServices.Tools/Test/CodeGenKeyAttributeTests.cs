@@ -38,6 +38,22 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsFalse(string.IsNullOrEmpty(generatedCode));
             TestHelper.AssertGeneratedCodeDoesNotContain(generatedCode, "GetIdentity");
         }
+
+        [TestMethod]
+        [Description("DomainService with shared IEquatable simple struct key succeeds")]
+        public void CodeGen_Attribute_KeyAttribute_SimpleStruct_Shared()
+        {
+            ConsoleLogger logger = new ConsoleLogger();
+
+            ISharedCodeService sts = new MockSharedCodeService(
+                    new Type[] { typeof(Mock_CG_SimpleStructKey) },
+                    Array.Empty<MethodInfo>(),
+                    Array.Empty<string>());
+
+            string generatedCode = TestHelper.GenerateCode("C#", new Type[] { typeof(Mock_CG_Attr_Entity_SimpleStructKey_DomainService) }, logger, sts);
+            Assert.IsFalse(string.IsNullOrEmpty(generatedCode));
+            TestHelper.AssertContainsNoErrors(logger);
+        }
     }
 
     public class Mock_CG_Attr_Entity_Missing_Key_DomainService : GenericDomainService<Mock_CG_Attr_Entity_Missing_Key> { }
@@ -56,5 +72,27 @@ namespace OpenRiaServices.Tools.Test
 
         [Key]
         public string K2 { get; set; }
+    }
+
+    public class Mock_CG_Attr_Entity_SimpleStructKey_DomainService : GenericDomainService<Mock_CG_Attr_Entity_SimpleStructKey> { }
+
+    public partial class Mock_CG_Attr_Entity_SimpleStructKey
+    {
+        [Key]
+        public Mock_CG_SimpleStructKey K1 { get; set; }
+    }
+
+    public readonly struct Mock_CG_SimpleStructKey : IEquatable<Mock_CG_SimpleStructKey>
+    {
+        public Mock_CG_SimpleStructKey(int value)
+        {
+            Value = value;
+        }
+
+        public int Value { get; }
+
+        public bool Equals(Mock_CG_SimpleStructKey other) => Value == other.Value;
+        public override bool Equals(object obj) => obj is Mock_CG_SimpleStructKey other && Equals(other);
+        public override int GetHashCode() => Value;
     }
 }
