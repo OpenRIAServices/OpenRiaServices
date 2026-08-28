@@ -1509,7 +1509,7 @@ namespace OpenRiaServices.Server.Test
         {
             DomainServiceDescription d = DomainServiceDescription.GetDescription(typeof(Provider_Convention_SimpleStruct));
             string result = d.DomainOperationEntries.OrderBy(op => op.Name).Select(op => op.Name).Aggregate((l, r) => l + "," + r);
-            Assert.AreEqual("EchoKey,GetCitiesByKey,UpdateCityWithKey", result);
+            Assert.AreEqual("EchoKey,GetCitiesByKey,MoveCityWithKey", result);
             result = d.DomainOperationEntries.OrderBy(op => op.Name).Select(op => op.Operation.ToString()).Aggregate((l, r) => l + "," + r);
             Assert.AreEqual("Invoke,Query,Custom", result);
         }
@@ -3936,7 +3936,7 @@ namespace OpenRiaServices.Server.Test
     {
         public IEnumerable<City> GetCitiesByKey(SimpleStructKey key) { return null; }
         public int EchoKey(SimpleStructKey key) { return key.Value; }
-        public void UpdateCityWithKey(City city, SimpleStructKey key) { }
+        public void MoveCityWithKey(City city, SimpleStructKey key) { }
     }
 
     [EnableClientAccess]

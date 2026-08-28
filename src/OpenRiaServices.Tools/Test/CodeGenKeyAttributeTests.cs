@@ -51,8 +51,7 @@ namespace OpenRiaServices.Tools.Test
                     Array.Empty<string>());
 
             string generatedCode = TestHelper.GenerateCode("C#", new Type[] { typeof(Mock_CG_Attr_Entity_SimpleStructKey_DomainService) }, logger, sts);
-            Assert.IsFalse(string.IsNullOrEmpty(generatedCode));
-            TestHelper.AssertContainsNoErrors(logger);
+            TestHelper.AssertCodeGenSuccess(generatedCode, logger);
         }
     }
 
