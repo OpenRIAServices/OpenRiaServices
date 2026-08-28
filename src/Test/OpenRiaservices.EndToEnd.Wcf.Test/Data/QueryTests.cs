@@ -790,6 +790,36 @@ namespace OpenRiaServices.Client.Test
         }
 
         /// <summary>
+        /// Verifies that a Query operation can accept a complex type as a parameter, and that
+        /// the value provided by the client is correctly serialized, sent to the server, and used
+        /// to filter the results returned.
+        /// </summary>
+        [TestMethod]
+        public async Task QueryMethod_WithComplexTypeParameter()
+        {
+            ComplexTypes_TestContext ctxt = new ComplexTypes_TestContext(TestURIs.ComplexTypes_TestService);
+
+            // Two of the three parents in the test data share the "43616" zip code.
+            Address address = new Address { Zip = "43616" };
+            LoadOperation<ComplexType_Parent> result = ctxt.Load(ctxt.GetParentsByHomeAddressQuery(address), false);
+
+            await result;
+            Assert.IsNull(result.Error);
+            Assert.HasCount(2, result.Entities);
+            Assert.IsTrue(result.Entities.All(p => p.ContactInfo.HomeAddress.Zip == "43616"));
+
+            // A zip code matching only a single parent should return exactly that entity.
+            ctxt = new ComplexTypes_TestContext(TestURIs.ComplexTypes_TestService);
+            address = new Address { Zip = "98029" };
+            result = ctxt.Load(ctxt.GetParentsByHomeAddressQuery(address), false);
+
+            await result;
+            Assert.IsNull(result.Error);
+            Assert.HasCount(1, result.Entities);
+            Assert.AreEqual("98029", result.Entities.Single().ContactInfo.HomeAddress.Zip);
+        }
+
+        /// <summary>
         /// Issue was the way URL encoding was handling '+' - this test executes a query
         /// with '+' operators so that they go all the way through the service layer to ensure
         /// we're handling them properly.
