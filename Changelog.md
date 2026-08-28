@@ -1,3 +1,10 @@
+# Unreleased
+
+## Core libraries
+
+* Added phase-1 support for simple structs as predefined serializable types in DomainService operation signatures (query/custom/invoke), scoped to single-member user structs.
+* Added key validation support for simple struct key members in client code generation when the struct is shared with the client and implements `IEquatable<T>`.
+
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
 ## AspNetCore 1.6.0

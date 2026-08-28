@@ -169,6 +169,7 @@ namespace OpenRiaServices
         public static bool IsPredefinedType(Type type)
         {
             return IsPredefinedSimpleType(type) ||
+                   IsSimpleStructType(type) ||
                    IsPredefinedListType(type) ||
                    IsPredefinedDictionaryType(type);
         }
@@ -184,7 +185,7 @@ namespace OpenRiaServices
             if (IsSupportedCollectionType(type))
             {
                 Type elementType = GetElementType(type);
-                return IsPredefinedSimpleType(elementType);
+                return IsPredefinedSimpleType(elementType) || IsSimpleStructType(elementType);
             }
 
             return false;
@@ -220,7 +221,7 @@ namespace OpenRiaServices
 
             if (typeof(IDictionary<,>).DefinitionIsAssignableFrom(type, out genericType))
             {
-                return genericType.GetGenericArguments().All(t => IsPredefinedSimpleType(t));
+                return genericType.GetGenericArguments().All(t => IsPredefinedSimpleType(t) || IsSimpleStructType(t));
             }
 
             return false;
@@ -266,6 +267,65 @@ namespace OpenRiaServices
             }
 
             return false;
+        }
+
+        /// <summary>
+        /// Determines whether the specified type is a simple struct that should be treated
+        /// the same way as predefined simple types.
+        /// </summary>
+        /// <param name="type">The type to test.</param>
+        /// <returns><c>true</c> if the type is a supported simple struct, otherwise <c>false</c>.</returns>
+        public static bool IsSimpleStructType(Type type)
+        {
+            type = GetNonNullableType(type);
+
+            if (!type.IsValueType || type.IsPrimitive || type.IsEnum || type.IsGenericType || !type.IsVisible)
+            {
+                return false;
+            }
+
+            // Types already handled as predefined simple types should stay in that path.
+            if (IsPredefinedSimpleType(type))
+            {
+                return false;
+            }
+
+            // Keep support scoped to user-defined structs.
+            if (IsSystemAssembly(type.Assembly))
+            {
+                return false;
+            }
+
+            // Keep phase-1 behavior narrow to "typed key" structs:
+            // exactly one readable public instance property of predefined simple type.
+            PropertyInfo[] properties = type
+                .GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
+                .ToArray();
+
+            if (properties.Length != 1)
+            {
+                return false;
+            }
+
+            return IsPredefinedSimpleType(properties[0].PropertyType);
+        }
+
+        /// <summary>
+        /// Determines whether the specified type is a supported simple struct key type.
+        /// </summary>
+        /// <param name="type">The type to test.</param>
+        /// <returns><c>true</c> if the type is a supported simple struct key type.</returns>
+        public static bool IsSimpleStructKeyType(Type type)
+        {
+            type = GetNonNullableType(type);
+            if (!IsSimpleStructType(type))
+            {
+                return false;
+            }
+
+            // Struct keys must support strongly typed equality semantics.
+            return typeof(IEquatable<>).MakeGenericType(type).IsAssignableFrom(type);
         }
 
         /// <summary>

@@ -367,7 +367,7 @@
     <value>Parameter '{1}' of domain operation entry '{0}' must be passed by value.</value>
   </data>
   <data name="InvalidDomainOperationEntry_ParamMustBeSimple" xml:space="preserve">
-    <value>Parameter '{1}' of domain operation entry '{0}' must be one of the predefined serializable types.</value>
+    <value>Parameter '{1}' of domain operation entry '{0}' must be one of the predefined serializable types or a supported simple struct type.</value>
   </data>
   <data name="InvalidDomainOperationType" xml:space="preserve">
     <value>'{0}' is not a valid DomainOperation type for a ChangeSetEntry.</value>
@@ -382,10 +382,10 @@
     <value>Domain operation entry '{0}' must take exactly one parameter.</value>
   </data>
   <data name="InvalidInvokeOperation_ParameterType" xml:space="preserve">
-    <value>Operation named '{0}' does not conform to the required signature. Parameter types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types.</value>
+    <value>Operation named '{0}' does not conform to the required signature. Parameter types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types or supported simple struct types.</value>
   </data>
   <data name="InvalidInvokeOperation_ReturnType" xml:space="preserve">
-    <value>Operation named '{0}' does not conform to the required signature. Return types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types.</value>
+    <value>Operation named '{0}' does not conform to the required signature. Return types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types or supported simple struct types.</value>
   </data>
   <data name="InvalidMemberProjection_EmptyMemberName" xml:space="preserve">
     <value>Invalid member projection specification : MemberName cannot be empty.</value>
