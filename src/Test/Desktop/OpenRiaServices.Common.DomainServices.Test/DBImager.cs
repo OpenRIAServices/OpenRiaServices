@@ -93,9 +93,29 @@ namespace TestDomainServices.Testing
                 File.SetAttributes(DestMDF, FileAttributes.Normal);
                 File.Copy(SourceLDF, DestLDF, overwrite);
                 File.SetAttributes(DestLDF, FileAttributes.Normal);
+
+                // When the database is attached, sql server can decide to create a new log file
+                // named "<database file name>_log.ldf". Attaching fails if that file is left over
+                // from a previous test run, so make sure it is removed.
+                DeleteFileIfExists(GetAutoCreatedLogFilePath(dbName));
             }
 
             return DestMDF;
+        }
+
+        /// <summary>
+        /// Gets the path of the log file which sql server creates by itself when the database
+        /// is attached using <c>AttachDbFilename</c> (the log file of the source database is not used).
+        /// </summary>
+        private static string GetAutoCreatedLogFilePath(string dbName)
+        {
+            return GetTempDbFilePath(dbName, "_log.ldf");
+        }
+
+        private static void DeleteFileIfExists(string path)
+        {
+            if (File.Exists(path))
+                File.Delete(path);
         }
 
 
@@ -163,6 +183,7 @@ namespace TestDomainServices.Testing
                 string DestLDF = DestMDF.Replace(".mdf", ".ldf");
                 File.Delete(DestMDF);
                 File.Delete(DestLDF);
+                DeleteFileIfExists(GetAutoCreatedLogFilePath(dbName));
             }
             catch (Exception ex)
             {
