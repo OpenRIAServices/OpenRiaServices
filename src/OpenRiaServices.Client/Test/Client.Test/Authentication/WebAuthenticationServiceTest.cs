@@ -103,6 +103,11 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             service = new MockWebAuthenticationService();
 
+            // Use a type which exists but which is not an AuthenticationDomainContextBase, so that no domain
+            // context can be created. Leaving DomainContextType unset is not a reliable way to test this since
+            // the service then falls back to scanning the entry assembly, which differs between test runners.
+            service.DomainContextType = typeof(WebAuthenticationServiceTest).AssemblyQualifiedName;
+
             ExceptionHelper.ExpectException<InvalidOperationException>(
                 () => WebAuthenticationServiceTest.InitializeService(service));
         }

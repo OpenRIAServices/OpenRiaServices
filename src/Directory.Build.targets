@@ -1,0 +1,33 @@
+<Project>
+
+  <!--
+    Shared configuration for test projects running on Microsoft.Testing.Platform (MTP).
+
+    Test projects opt in by setting <EnableMSTestRunner>true</EnableMSTestRunner> and
+    <OutputType>Exe</OutputType>. The extensions below give the same capabilities the
+    VSTest based pipeline used to provide:
+      * TrxReport     : "report-trx", TRX files for test result publishing
+      * CrashDump     : "crashdump", dumps when the test host crashes
+      * HangDump      : "hangdump", dumps when the test run hangs
+    The versions must stay in sync with the Microsoft.Testing.Platform version used by
+    the MSTest.TestAdapter version referenced by the test projects.
+
+    Code coverage is *not* collected via the Microsoft.Testing.Extensions.CodeCoverage
+    package because it ships its own (older) copy of Mono.Cecil, which conflicts with the
+    Mono.Cecil version used by OpenRiaServices.Tools. Instead the "dotnet-coverage" tool is
+    used to collect coverage for the whole test run, see azure-pipelines.yml.
+  -->
+  <PropertyGroup Condition="'$(EnableMSTestRunner)' == 'true'">
+    <MicrosoftTestingExtensionsVersion>1.9.1</MicrosoftTestingExtensionsVersion>
+    <IsPackable>false</IsPackable>
+    <!-- Show the full failure information (message + stack trace) for failing tests in the log -->
+    <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(EnableMSTestRunner)' == 'true'">
+    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="$(MicrosoftTestingExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CrashDump" Version="$(MicrosoftTestingExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Testing.Extensions.HangDump" Version="$(MicrosoftTestingExtensionsVersion)" />
+  </ItemGroup>
+
+</Project>

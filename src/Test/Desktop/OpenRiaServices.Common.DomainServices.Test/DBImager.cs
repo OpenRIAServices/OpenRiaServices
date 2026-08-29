@@ -64,8 +64,8 @@ namespace TestDomainServices.Testing
         /// <returns>connection string used to connect to database</returns>
         public static string CreateNewDatabase(string dbName)
         {
-            string DestMDF = CreateDatabaseFile(dbName, overwrite: true);
-            return GetConnectionStringForDatabaseFile(DestMDF);
+            CreateDatabaseFile(dbName, overwrite: true);
+            return GetConnectionStringForDatabaseFile(dbName);
         }
 
         /// <summary>
@@ -75,8 +75,7 @@ namespace TestDomainServices.Testing
         /// <returns></returns>
         public static string GetNewDatabaseConnectionString(string dbName)
         {
-            string DestMDF = GetTempDbFilePath(dbName, ".mdf");
-            return GetConnectionStringForDatabaseFile(DestMDF);
+            return GetConnectionStringForDatabaseFile(dbName);
         }
 
         private static string CreateDatabaseFile(string dbName, bool overwrite)
@@ -109,21 +108,29 @@ namespace TestDomainServices.Testing
         /// <returns>full path to use for temporary db file</returns>
         private static string GetTempDbFilePath(string dbName, string extension)
         {
-            return Path.Combine(Environment.GetEnvironmentVariable("TEMP"), dbName + extension);
+            return Path.Combine(Environment.GetEnvironmentVariable("TEMP"), dbName + DbNameSuffix + extension);
         }
+
+        /// <summary>
+        /// Suffix appended to the name of the temporary databases (and their files) so that several
+        /// test websites can use their own copy of the same source database at the same time.
+        /// It is set via the <c>OPENRIASERVICES_TESTDB_SUFFIX</c> environment variable by whoever starts the website.
+        /// </summary>
+        private static string DbNameSuffix { get; } = Environment.GetEnvironmentVariable("OPENRIASERVICES_TESTDB_SUFFIX") ?? string.Empty;
 
         // TODO: Allow reading from env and app settings
         internal static string LocalSqlServer => "(localdb)\\MSSQLLocalDB";
 
-        private static string GetConnectionStringForDatabaseFile(string path)
+        private static string GetConnectionStringForDatabaseFile(string dbName)
         {
-            string catalogName = GetDbCatalogName(Path.GetFileNameWithoutExtension(path));
+            string catalogName = GetDbCatalogName(dbName);
+            string path = GetTempDbFilePath(dbName, ".mdf");
             return $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={path};Integrated Security=True;Connect Timeout=5";
         }
 
         private static string GetDbCatalogName(string dbName)
         {
-            return $"{dbName}_ATTACHED";
+            return $"{dbName}{DbNameSuffix}_ATTACHED";
         }
 
         /// <summary>
