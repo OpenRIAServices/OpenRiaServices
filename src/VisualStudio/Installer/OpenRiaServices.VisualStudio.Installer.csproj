@@ -23,8 +23,8 @@
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <VSIXSubPath>OpenRiaServices</VSIXSubPath>
     <VSSDKBuildToolsAutoSetup>true</VSSDKBuildToolsAutoSetup>
+    <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <VsixDeployOnDebug>true</VsixDeployOnDebug>
-    <GeneratePkgDefFile>false</GeneratePkgDefFile>
     <UseCodebase>true</UseCodebase>
     <!-- Prevent invalid resource from beeing generated in InitializeComponent for xaml dialogs -->
     <AssemblyVersion>
