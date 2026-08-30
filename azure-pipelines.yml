@@ -91,7 +91,7 @@ steps:
     New-Item -ItemType Directory -Force -Path "$(TestResultsDirectory)" | Out-Null
 
     $testCommand = 'dotnet test --solution RiaServices.Tests.slnf --no-build --configuration $(BuildConfiguration)' +
-      ' --results-directory "$(TestResultsDirectory)" --report-trx --crashdump --hangdump --hangdump-timeout 20m'
+      ' --results-directory "$(TestResultsDirectory)" --report-trx --report-azdo --crashdump --hangdump --hangdump-timeout 20m'
 
     dotnet-coverage collect --settings codecoverage.config --output "$(TestResultsDirectory)\coverage.coverage" $testCommand
     $testExitCode = $LASTEXITCODE
