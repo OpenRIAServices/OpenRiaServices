@@ -5,3 +5,17 @@ Convert template projects included by the installer (`BusinessApplicationProject
 **Done when**: All four template projects are SDK-style, keep existing template output assets, remove legacy VSSDK import usage, and remain compatible with VSIX template packaging.
 
 ---
+
+## Research Findings
+
+This scope was completed as part of task `01-convert-vsix-installer` because the installer build path depends on all four template projects exposing `TemplateProjectOutputGroup` under SDK-style conversion.
+
+Converted template projects:
+- `src/VisualStudio/Templates/CSharp/BusinessApplication/BusinessApplicationProjectTemplate.csproj`
+- `src/VisualStudio/Templates/CSharp/RIAServicesLibrary/OpenRiaServicesLibrary.csproj`
+- `src/VisualStudio/ItemTemplates/CSharp/AuthenticationDomainService/AuthenticationDomainService.csproj`
+- `src/VisualStudio/ItemTemplates/CSharp/DomainServiceClass/DomainServiceClass.csproj`
+
+Validation evidence:
+- Installer build now resolves template output groups and produces VSIX.
+- Legacy `Microsoft.VsSDK.targets` imports were removed from all four template projects.
