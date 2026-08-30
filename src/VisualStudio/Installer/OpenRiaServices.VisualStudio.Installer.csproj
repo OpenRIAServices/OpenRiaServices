@@ -6,9 +6,6 @@
     <ProjectTypeGuids>{82b43b9b-a64c-4715-b499-d71e9ca2bd60};{60dc8134-eba5-43b8-bcc9-bb4bc16c2548};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <ProjectGuid>{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <OutputPath>bin\$(Configuration)\</OutputPath>
-    <IntermediateOutputPath>obj\$(Configuration)\</IntermediateOutputPath>
-    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">14.0</VisualStudioVersion>
     <MinimumVisualStudioVersion>17.0</MinimumVisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
     <VsixType>v3</VsixType>
@@ -35,41 +32,14 @@
     <Version>
     </Version>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <IncludeDebugSymbolsInLocalVSIXDeployment>true</IncludeDebugSymbolsInLocalVSIXDeployment>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-
   <ItemGroup>
     <ProjectCapability Include="CreateVsixContainer" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="EnvDTE80" Version="8.0.3" />
-    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.9.0" Version="9.0.30730" />
-    <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.WCF" Version="9.0.21023" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.14.0" Version="14.0.23205" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.Design" Version="14.0.23205" />
-    <PackageReference Include="Microsoft.VisualStudio.Shell.Interop.10.0" Version="10.0.30320" />
-    <PackageReference Include="Microsoft.VisualStudio.Threading" Version="14.0.50702" />
-    <PackageReference Include="Microsoft.VisualStudio.Utilities" Version="14.0.23205" />
-    <PackageReference Include="Microsoft.VisualStudio.Validation" Version="14.0.50702" />
-    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="18.5.38461">
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="18.5.40034">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
-    <PackageReference Include="VSSDK.ComponentModelHost" Version="12.0.4" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaSharedFilesMode.cs">
@@ -102,73 +72,11 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
-    <Content Include="ItemTemplates\VisualBasic\Web\1033\AuthenticationDomainService.zip">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ItemTemplates\VisualBasic\Web\1033\DomainServiceClass.zip">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ProjectTemplates\CSharp\Silverlight\1033\SilverlightBusinessApplication.zip">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\OpenRIAServicesClassLibrary.zip">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="ProjectTemplates\VisualBasic\Silverlight\1033\SilverlightBusinessApplication.zip">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <VSCTCompile Include="VisualStudio.MenuExtension.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
       <SubType>Designer</SubType>
     </VSCTCompile>
     <Resource Include="Resources\Package.ico" />
-    <!--
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Client.CodeGen.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.Client.CodeGen.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Client.Core.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.Client.Core.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Server.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.Server.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Client.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.Signed.Client.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Client.CodeGen.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.Signed.Client.CodeGen.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Client.Core.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.Signed.Client.Core.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Server.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.Signed.Server.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Signed.Silverlight.CodeGen.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.Signed.Silverlight.CodeGen.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.Silverlight.CodeGen.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.Silverlight.CodeGen.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-    <Content Include="..\..\OpenRiaServices.NuGet\bin\OpenRiaServices.ViewModel.4.5.1.nupkg">
-      <Link>Packages\OpenRiaServices.ViewModel.4.5.1.nupkg</Link>
-      <IncludeInVSIX>true</IncludeInVSIX>
-    </Content>
-	-->
     <None Include="app.config">
       <SubType>Designer</SubType>
     </None>
@@ -273,14 +181,11 @@
       <SubType>Designer</SubType>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
   <PropertyGroup>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <CreateVsixContainer>True</CreateVsixContainer>
   </PropertyGroup>
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>
