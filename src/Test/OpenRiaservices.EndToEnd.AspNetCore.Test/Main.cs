@@ -141,9 +141,6 @@ namespace OpenRiaServices.Client.Test
             startInfo.ArgumentList.Add("--urls");
             startInfo.ArgumentList.Add(TestURIs.RootURI.ToString());
             startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
-            // Give each target framework its own copy of the test databases so that the test modules
-            // for the different target frameworks can run at the same time
-            startInfo.EnvironmentVariables.Add("OPENRIASERVICES_TESTDB_SUFFIX", "_" + targetFramework.Replace(".", "_"));
             s_aspNetCoreSite = Process.Start(startInfo);
 
             Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);

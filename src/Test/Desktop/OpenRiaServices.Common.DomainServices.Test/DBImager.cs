@@ -132,11 +132,18 @@ namespace TestDomainServices.Testing
         }
 
         /// <summary>
-        /// Suffix appended to the name of the temporary databases (and their files) so that several
-        /// test websites can use their own copy of the same source database at the same time.
-        /// It is set via the <c>OPENRIASERVICES_TESTDB_SUFFIX</c> environment variable by whoever starts the website.
+        /// Suffix appended to the name of the temporary databases (and their files) so that the
+        /// test websites for the different target frameworks can each use their own copy of the
+        /// same source database at the same time.
+        /// The suffix is derived from the runtime of the current process, which means it is stable
+        /// between runs (so the database files can be reused) while still being unique per website.
         /// </summary>
-        private static string DbNameSuffix { get; } = Environment.GetEnvironmentVariable("OPENRIASERVICES_TESTDB_SUFFIX") ?? string.Empty;
+        private static string DbNameSuffix =>
+#if NET
+            "_net" + Environment.Version.Major;
+#else
+            "_netfx";
+#endif
 
         // TODO: Allow reading from env and app settings
         internal static string LocalSqlServer => "(localdb)\\MSSQLLocalDB";

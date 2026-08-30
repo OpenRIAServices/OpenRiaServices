@@ -1,14 +1,21 @@
 <Project>
 
   <!--
-    Shared configuration for test projects running on Microsoft.Testing.Platform (MTP).
+    Shared configuration for the test projects, which run on Microsoft.Testing.Platform (MTP).
 
-    Test projects opt in by setting <EnableMSTestRunner>true</EnableMSTestRunner> and
-    <OutputType>Exe</OutputType>. The extensions below give the same capabilities the
-    VSTest based pipeline used to provide:
-      * TrxReport     : "report-trx", TRX files for test result publishing
-      * CrashDump     : "crashdump", dumps when the test host crashes
-      * HangDump      : "hangdump", dumps when the test run hangs
+    A test project opts in by setting EnableMSTestRunner and OutputType in its project file
+    (OutputType has to be set there, setting it from here is too late for the net472 projects
+    to be recognized as runnable by "dotnet test"). Opting in per project, rather than for
+    example for every project below a "Test" folder, is deliberate: most projects matching such
+    a convention are websites, class libraries used by the code generation tests or shared test
+    helpers, which must stay libraries.
+
+    The extensions below give the same capabilities the VSTest based pipeline used to provide:
+      * TrxReport         : 'report-trx', TRX files for test result publishing
+      * CrashDump         : 'crashdump', dumps when the test host crashes
+      * HangDump          : 'hangdump', dumps when the test run hangs
+      * AzureDevOpsReport : reports failing tests as Azure Pipelines errors so they show up in the
+                            build summary and are annotated on the corresponding source lines
     The versions must stay in sync with the Microsoft.Testing.Platform version used by
     the MSTest.TestAdapter version referenced by the test projects.
 
@@ -25,9 +32,10 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(EnableMSTestRunner)' == 'true'">
-    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="$(MicrosoftTestingExtensionsVersion)" />
-    <PackageReference Include="Microsoft.Testing.Extensions.CrashDump" Version="$(MicrosoftTestingExtensionsVersion)" />
-    <PackageReference Include="Microsoft.Testing.Extensions.HangDump" Version="$(MicrosoftTestingExtensionsVersion)" />
+    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="$(MicrosoftTestingExtensionsVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CrashDump" Version="$(MicrosoftTestingExtensionsVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Testing.Extensions.HangDump" Version="$(MicrosoftTestingExtensionsVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Testing.Extensions.AzureDevOpsReport" Version="$(MicrosoftTestingExtensionsVersion)" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
