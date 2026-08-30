@@ -128,7 +128,7 @@ namespace TestDomainServices.Testing
         /// <returns>full path to use for temporary db file</returns>
         private static string GetTempDbFilePath(string dbName, string extension)
         {
-            return Path.Combine(Environment.GetEnvironmentVariable("TEMP"), dbName + DbNameSuffix + extension);
+            return Path.Join(Environment.GetEnvironmentVariable("TEMP"), dbName + DbNameSuffix + extension);
         }
 
         /// <summary>
