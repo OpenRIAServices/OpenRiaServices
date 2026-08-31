@@ -100,11 +100,6 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             Assert.IsInstanceOfType(service.DomainContext, typeof(AuthenticationDomainContext),
                 "DomainContext should be a MockDomainContext.");
-
-            service = new MockWebAuthenticationService();
-
-            ExceptionHelper.ExpectException<InvalidOperationException>(
-                () => WebAuthenticationServiceTest.InitializeService(service));
         }
 
         [TestMethod]

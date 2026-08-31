@@ -1,0 +1,41 @@
+<Project>
+
+  <!--
+    Shared configuration for the test projects, which run on Microsoft.Testing.Platform (MTP).
+
+    A test project opts in by setting EnableMSTestRunner and OutputType in its project file
+    (OutputType has to be set there, setting it from here is too late for the net472 projects
+    to be recognized as runnable by "dotnet test"). Opting in per project, rather than for
+    example for every project below a "Test" folder, is deliberate: most projects matching such
+    a convention are websites, class libraries used by the code generation tests or shared test
+    helpers, which must stay libraries.
+
+    The extensions below give the same capabilities the VSTest based pipeline used to provide:
+      * TrxReport         : 'report-trx', TRX files for test result publishing
+      * CrashDump         : 'crashdump', dumps when the test host crashes
+      * HangDump          : 'hangdump', dumps when the test run hangs
+      * AzureDevOpsReport : reports failing tests as Azure Pipelines errors so they show up in the
+                            build summary and are annotated on the corresponding source lines
+    The versions must stay in sync with the Microsoft.Testing.Platform version used by
+    the MSTest.TestAdapter version referenced by the test projects.
+
+    Code coverage is *not* collected via the Microsoft.Testing.Extensions.CodeCoverage
+    package because it ships its own (older) copy of Mono.Cecil, which conflicts with the
+    Mono.Cecil version used by OpenRiaServices.Tools. Instead the "dotnet-coverage" tool is
+    used to collect coverage for the whole test run, see azure-pipelines.yml.
+  -->
+  <PropertyGroup Condition="'$(EnableMSTestRunner)' == 'true'">
+    <MicrosoftTestingExtensionsVersion>1.9.1</MicrosoftTestingExtensionsVersion>
+    <IsPackable>false</IsPackable>
+    <!-- Show the full failure information (message + stack trace) for failing tests in the log -->
+    <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
+  </PropertyGroup>
+
+  <ItemGroup Condition="'$(EnableMSTestRunner)' == 'true'">
+    <PackageReference Include="Microsoft.Testing.Extensions.TrxReport" Version="$(MicrosoftTestingExtensionsVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Testing.Extensions.CrashDump" Version="$(MicrosoftTestingExtensionsVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Testing.Extensions.HangDump" Version="$(MicrosoftTestingExtensionsVersion)" PrivateAssets="all" />
+    <PackageReference Include="Microsoft.Testing.Extensions.AzureDevOpsReport" Version="$(MicrosoftTestingExtensionsVersion)" PrivateAssets="all" />
+  </ItemGroup>
+
+</Project>

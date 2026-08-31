@@ -8,6 +8,8 @@ variables:
   # Msbuild might create logs in the following directory in case some of the "tool" tests fail
   MSBUILDDEBUGPATH: $(Build.ArtifactStagingDirectory)
   RunProcMonDuringTest: false
+  # Directory used for test results (trx), code coverage and crash/hang dumps
+  TestResultsDirectory: $(Agent.TempDirectory)\TestResults
   # Define the following variable for the build pipeline in order to enable SonarCloud analysis
   # sonarcloud-endpoint: 'sonarcloud.io'
 
@@ -25,11 +27,6 @@ steps:
   inputs:
     packageType: 'sdk'
     version: '10.0.x'
-
-- task: VisualStudioTestPlatformInstaller@1
-  inputs:
-    packageFeedSelector: 'nugetOrg'
-    versionSelector: 'latestStable'
 
 - task: NuGetToolInstaller@1
   inputs:
@@ -61,6 +58,8 @@ steps:
     extraProperties: |
       # Additional properties that will be passed to the scanner, 
       # Put one key=value per line, example:
+      sonar.cs.vscoveragexml.reportsPaths=$(TestResultsDirectory)\coverage.xml
+      sonar.cs.vstest.reportsPaths=$(TestResultsDirectory)\**\*.trx
 
 - task: VSBuild@1
   displayName: 'Build solution RiaServices.sln'
@@ -78,59 +77,50 @@ steps:
     .\Setup-TestDatabases.ps1
   displayName: 'Setup database'
 
-- task: VSTest@3
-  displayName: 'Run tests - .NET 10'
+- powershell: |
+    dotnet tool install --global dotnet-coverage
+    if (-not $?) { Write-Error 'failed to install dotnet-coverage' }
+  displayName: 'Install dotnet-coverage'
+
+# Run all tests using Microsoft.Testing.Platform (MTP) via "dotnet test".
+# * Test modules run in parallel (one process per project and target framework)
+# * "--report-trx" produces the trx files which are published below
+# * "--crashdump"/"--hangdump" produce dumps for crashing or hanging test modules (failed test diagnostics)
+# * dotnet-coverage collects code coverage for the whole run, including all child processes
+- powershell: |
+    New-Item -ItemType Directory -Force -Path "$(TestResultsDirectory)" | Out-Null
+
+    $testCommand = 'dotnet test --solution RiaServices.Tests.slnf --no-build --configuration $(BuildConfiguration)' +
+      ' --results-directory "$(TestResultsDirectory)" --report-trx --crashdump --hangdump --hangdump-timeout 20m'
+
+    dotnet-coverage collect --settings codecoverage.config --output "$(TestResultsDirectory)\coverage.coverage" $testCommand
+    $testExitCode = $LASTEXITCODE
+
+    # Convert the collected coverage into the formats used by the Azure DevOps and SonarCloud reports
+    dotnet-coverage merge --output "$(TestResultsDirectory)\coverage.cobertura.xml" --output-format cobertura "$(TestResultsDirectory)\coverage.coverage"
+    dotnet-coverage merge --remove-input-files --output "$(TestResultsDirectory)\coverage.xml" --output-format xml "$(TestResultsDirectory)\coverage.coverage"
+
+    if ($testExitCode -ne 0) { Write-Error "dotnet test failed with exit code $testExitCode" }
+  displayName: 'Run tests'
+  workingDirectory: 'src'
+  timeoutInMinutes: 30
+
+- task: PublishTestResults@2
+  displayName: 'Publish test results'
+  condition: succeededOrFailed()
   inputs:
-    testAssemblyVer2: |
-      **\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.*Test.dll
-      !**\bin\$(BuildConfiguration)\net10.0\OpenRiaServices.Common*Test.dll
-      !**\obj\**
+    testResultsFormat: 'VSTest'
+    testResultsFiles: '**/*.trx'
+    searchFolder: '$(TestResultsDirectory)'
+    mergeTestResults: true
+    publishRunAttachments: true
+    failTaskOnFailedTests: false
 
-    runOnlyImpactedTests: false
-    runInParallel: true
-    runSettingsFile: 'src\test.runsettings'
-    codeCoverageEnabled: true
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-    vsTestVersion: 'toolsInstaller'
-  timeoutInMinutes: 10
-
-- task: VSTest@3
-  displayName: 'Run tests - .NET'
+- task: PublishCodeCoverageResults@2
+  displayName: 'Publish code coverage'
+  condition: succeededOrFailed()
   inputs:
-    testAssemblyVer2: |
-      **/OpenRiaServices.*Test.dll
-      !**/OpenRiaServices.Common*Test.dll
-      !**/net4*/OpenRiaServices.*Test.dll
-      !**/net10.0/OpenRiaServices.*Test.dll
-      !**/obj/**
-
-    runOnlyImpactedTests: false
-    runInParallel: true
-    runSettingsFile: 'src\test.runsettings'
-    codeCoverageEnabled: true
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-    vsTestVersion: 'toolsInstaller'
-  timeoutInMinutes: 25
-
-- task: VSTest@3
-  displayName: 'Run tests - .NET Framework'
-  inputs:
-    testAssemblyVer2: |
-      **\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-      !src\VisualStudio\**\bin\$(BuildConfiguration)\net4*\OpenRiaServices.*Test.dll
-      !**\bin\$(BuildConfiguration)\*\OpenRiaServices.Common*Test.dll
-      src\VisualStudio\Tools\Test\bin\$(BuildConfiguration)\net4*\OpenRiaServices.VisualStudio.*.Test.dll
-      !**\obj\**
-
-    runOnlyImpactedTests: false
-    runInParallel: true
-    runSettingsFile: 'src\test.runsettings'
-    codeCoverageEnabled: true
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-  timeoutInMinutes: 25
+    summaryFileLocation: '$(TestResultsDirectory)\coverage.cobertura.xml'
 
 - task: SonarCloudAnalyze@3
   inputs:
@@ -164,12 +154,12 @@ steps:
 - task: CopyFiles@2
   displayName: 'Copy dump files  to $(build.artifactstagingdirectory)'
   inputs:
-    SourceFolder: '$(Agent.TempDirectory)'
+    SourceFolder: '$(TestResultsDirectory)'
     Contents: |
-      TestResults/*/*
-      **/*.diag
-      !TestResults/*/*.coverage*
-    TargetFolder: '$(build.artifactstagingdirectory)/vstest'
+      **/*
+      !**/*.coverage*
+      !**/*.cobertura.xml
+    TargetFolder: '$(build.artifactstagingdirectory)/testresults'
   condition: succeededOrFailed()
 
 - task: PublishBuildArtifacts@1

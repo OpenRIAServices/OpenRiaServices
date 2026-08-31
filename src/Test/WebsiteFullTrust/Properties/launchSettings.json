@@ -1,0 +1,20 @@
+{
+  "profiles": {
+    "IIS Express (WebsiteFullTrust)": {
+      "commandName": "IISExpress",
+      "launchBrowser": true,
+      "applicationUrl": "http://localhost:60002/",
+      "httpPort": 60002,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      }
+    }
+  },
+  "iisSettings": {
+    "windowsAuthentication": false,
+    "anonymousAuthentication": true,
+    "iisExpress": {
+      "port": 60002
+    }
+  }
+}

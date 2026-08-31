@@ -46,7 +46,8 @@ jobs:
       uses: microsoft/setup-msbuild@v2
 
     - name: build
-      run: msbuild src\RiaServices.sln -restore /p:Configuration=Release -v:minimal -m
+      # The analyzers only add noise (and build time) here, CodeQL does the analysis in this workflow
+      run: msbuild src\RiaServices.sln -restore /p:Configuration=Release /p:RunAnalyzers=false -v:minimal -m
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4

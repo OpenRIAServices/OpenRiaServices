@@ -1,13 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <EnableMSTestRunner>true</EnableMSTestRunner>
     <TargetFrameworks>net472</TargetFrameworks>
     <DefineConstants>TRACE;DEBUG;VBTests</DefineConstants>
     <RootNamespace>OpenRiaServices.Client.Test</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="18.*" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.11.1" />
     <PackageReference Include="MSTest.TestFramework" Version="3.11.1" />
   </ItemGroup>
@@ -70,7 +71,6 @@
       <Private>false</Private>
       <ExcludeAssets>All</ExcludeAssets>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <SetTargetFramework>TargetFramework=net472</SetTargetFramework>
     </ProjectReference>
   </ItemGroup>
 

@@ -64,8 +64,8 @@ namespace TestDomainServices.Testing
         /// <returns>connection string used to connect to database</returns>
         public static string CreateNewDatabase(string dbName)
         {
-            string DestMDF = CreateDatabaseFile(dbName, overwrite: true);
-            return GetConnectionStringForDatabaseFile(DestMDF);
+            CreateDatabaseFile(dbName, overwrite: true);
+            return GetConnectionStringForDatabaseFile(dbName);
         }
 
         /// <summary>
@@ -75,8 +75,7 @@ namespace TestDomainServices.Testing
         /// <returns></returns>
         public static string GetNewDatabaseConnectionString(string dbName)
         {
-            string DestMDF = GetTempDbFilePath(dbName, ".mdf");
-            return GetConnectionStringForDatabaseFile(DestMDF);
+            return GetConnectionStringForDatabaseFile(dbName);
         }
 
         private static string CreateDatabaseFile(string dbName, bool overwrite)
@@ -94,9 +93,29 @@ namespace TestDomainServices.Testing
                 File.SetAttributes(DestMDF, FileAttributes.Normal);
                 File.Copy(SourceLDF, DestLDF, overwrite);
                 File.SetAttributes(DestLDF, FileAttributes.Normal);
+
+                // When the database is attached, sql server can decide to create a new log file
+                // named "<database file name>_log.ldf". Attaching fails if that file is left over
+                // from a previous test run, so make sure it is removed.
+                DeleteFileIfExists(GetAutoCreatedLogFilePath(dbName));
             }
 
             return DestMDF;
+        }
+
+        /// <summary>
+        /// Gets the path of the log file which sql server creates by itself when the database
+        /// is attached using <c>AttachDbFilename</c> (the log file of the source database is not used).
+        /// </summary>
+        private static string GetAutoCreatedLogFilePath(string dbName)
+        {
+            return GetTempDbFilePath(dbName, "_log.ldf");
+        }
+
+        private static void DeleteFileIfExists(string path)
+        {
+            if (File.Exists(path))
+                File.Delete(path);
         }
 
 
@@ -109,21 +128,36 @@ namespace TestDomainServices.Testing
         /// <returns>full path to use for temporary db file</returns>
         private static string GetTempDbFilePath(string dbName, string extension)
         {
-            return Path.Combine(Environment.GetEnvironmentVariable("TEMP"), dbName + extension);
+            return Path.Combine(Environment.GetEnvironmentVariable("TEMP"), dbName + DbNameSuffix + extension);
         }
+
+        /// <summary>
+        /// Suffix appended to the name of the temporary databases (and their files) so that the
+        /// test websites for the different target frameworks can each use their own copy of the
+        /// same source database at the same time.
+        /// The suffix is derived from the runtime of the current process, which means it is stable
+        /// between runs (so the database files can be reused) while still being unique per website.
+        /// </summary>
+        private static string DbNameSuffix =>
+#if NET
+            "_net" + Environment.Version.Major;
+#else
+            "_netfx";
+#endif
 
         // TODO: Allow reading from env and app settings
         internal static string LocalSqlServer => "(localdb)\\MSSQLLocalDB";
 
-        private static string GetConnectionStringForDatabaseFile(string path)
+        private static string GetConnectionStringForDatabaseFile(string dbName)
         {
-            string catalogName = GetDbCatalogName(Path.GetFileNameWithoutExtension(path));
+            string catalogName = GetDbCatalogName(dbName);
+            string path = GetTempDbFilePath(dbName, ".mdf");
             return $"Data Source={LocalSqlServer};Initial Catalog={catalogName};AttachDbFilename={path};Integrated Security=True;Connect Timeout=5";
         }
 
         private static string GetDbCatalogName(string dbName)
         {
-            return $"{dbName}_ATTACHED";
+            return $"{dbName}{DbNameSuffix}_ATTACHED";
         }
 
         /// <summary>
@@ -156,6 +190,7 @@ namespace TestDomainServices.Testing
                 string DestLDF = DestMDF.Replace(".mdf", ".ldf");
                 File.Delete(DestMDF);
                 File.Delete(DestLDF);
+                DeleteFileIfExists(GetAutoCreatedLogFilePath(dbName));
             }
             catch (Exception ex)
             {
