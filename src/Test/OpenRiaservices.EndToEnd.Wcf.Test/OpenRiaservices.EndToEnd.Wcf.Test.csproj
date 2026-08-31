@@ -113,7 +113,6 @@
       <Private>false</Private>
       <ExcludeAssets>All</ExcludeAssets>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
-      <SetTargetFramework>TargetFramework=net472</SetTargetFramework>
     </ProjectReference>
   </ItemGroup>
 
