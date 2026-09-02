@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 17
-VisualStudioVersion = 17.0.32014.148
+# Visual Studio Version 18
+VisualStudioVersion = 18.8.12023.21 stable
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Framework", "Framework", "{1CED8364-77AC-4254-869F-1E4EC5A33416}"
 EndProject
@@ -21,12 +21,12 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		..\.gitignore = ..\.gitignore
 		..\azure-pipelines.yml = ..\azure-pipelines.yml
 		..\Changelog.md = ..\Changelog.md
+		codecoverage.config = codecoverage.config
 		Directory.Build.props = Directory.Build.props
 		Directory.Build.targets = Directory.Build.targets
-		RiaServices.Tests.slnf = RiaServices.Tests.slnf
-		codecoverage.config = codecoverage.config
 		global.json = global.json
 		..\README.md = ..\README.md
+		RiaServices.Tests.slnf = RiaServices.Tests.slnf
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OpenRiaServices.Server", "OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj", "{72E74082-7928-4A70-83C1-49806B942FCB}"
@@ -291,8 +291,10 @@ Global
 		{BBC94BB6-1E30-436B-A37A-2BE747CC69CF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Debug|Any CPU.Deploy.0 = Debug|Any CPU
 		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DFD7622B-7F9A-42B7-9460-7078D34BCDE8}.Release|Any CPU.Deploy.0 = Release|Any CPU
 		{5E123B6A-4757-49F7-93B7-38DD46A7FBFA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5E123B6A-4757-49F7-93B7-38DD46A7FBFA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5E123B6A-4757-49F7-93B7-38DD46A7FBFA}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -1,43 +1,49 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-    <Metadata>
-        <Identity Id="874C448B-42DE-466B-A7E7-0EFEC1E7C009" Version="5.0.0.1" Language="en-US" Publisher="Open Ria Services" />
-        <DisplayName>Open Ria Services</DisplayName>
-        <Description xml:space="preserve">OpenRiaServices Tooling and Templates For Visual Studio 2017 and 2019
+  <Metadata>
+    <Identity Id="5f50195d-fc17-4559-8ca8-9ab622c3fe90" Version="5.0.0.1" Language="en-US" Publisher="Open Ria Services" />
+    <DisplayName>Open Ria Services</DisplayName>
+    <Description xml:space="preserve">OpenRiaServices Tooling and Templates For Visual Studio 2022 and later
 
 For 5.0+</Description>
-        <MoreInfo>https://github.com/OpenRIAServices/OpenRiaServices/</MoreInfo>
-        <Icon>DomainServiceClass.10.0.ico</Icon>
-    </Metadata>
-    <Installation>
-        <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Community" />
-        <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Pro" />
-        <InstallationTarget Version="[14.0,17.0)" Id="Microsoft.VisualStudio.Enterprise" />
-    </Installation>
-    <Dependencies>
-        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.7.2,)" />
-    </Dependencies>
-    <Assets>
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.VisualStudio.DomainServices.Tools" Path="|OpenRiaServices.VisualStudio.DomainServices.Tools|" AssemblyName="|OpenRiaServices.VisualStudio.DomainServices.Tools;AssemblyName|" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.Wcf" Path="|OpenRiaServices.Hosting.Wcf|" AssemblyName="|OpenRiaServices.Hosting.Wcf;AssemblyName|" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.Wcf.OData" Path="|OpenRiaServices.Hosting.Wcf.OData|" AssemblyName="|OpenRiaServices.Hosting.Wcf.OData;AssemblyName|" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.Server" Path="|OpenRiaServices.Server|" AssemblyName="|OpenRiaServices.Server;AssemblyName|" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.dll" AssemblyName="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="File" Path="EntityFramework.SqlServer.dll" AssemblyName="EntityFramework.SqlServer, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" Path="ItemTemplates" d:TargetPath="|AuthenticationDomainService;TemplateProjectOutputGroup|" d:ProjectName="AuthenticationDomainService" d:VsixSubPath="ItemTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="Project" Path="ItemTemplates" d:TargetPath="|DomainServiceClass;TemplateProjectOutputGroup|" d:ProjectName="DomainServiceClass" d:VsixSubPath="ItemTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\VB\Web\1033\Authentication Domain Service.zip" />
-        <Asset Type="Microsoft.VisualStudio.ItemTemplate" d:Source="File" Path="ItemTemplates" d:TargetPath="it\VB\Web\1033\Domain Service Class.zip" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\CS\SL\1033\Silverlight Business Application.zip" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\VB\SL\1033\Silverlight Business Application.zip" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="File" Path="ProjectTemplates" d:TargetPath="pt\VB\SL\1033\Open RIA Services Class Library.zip" />
-        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:TargetPath="|BusinessApplicationProjectTemplate;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.ProjectTemplate" d:Source="Project" d:ProjectName="OpenRiaServicesLibrary" d:TargetPath="|OpenRiaServicesLibrary;TemplateProjectOutputGroup|" Path="ProjectTemplates" d:VsixSubPath="ProjectTemplates" />
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="OpenRiaServices.EntityFramework" Path="|OpenRiaServices.EntityFramework|" AssemblyName="|OpenRiaServices.EntityFramework;AssemblyName|" />
-    </Assets>
-    <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[15.0,)" DisplayName="Visual Studio core editor" />
-        <Prerequisite Id="Microsoft.VisualStudio.Component.NuGet" Version="[15.0,)" DisplayName="NuGet package manager" />
-    </Prerequisites>
+    <MoreInfo>https://github.com/OpenRIAServices/OpenRiaServices/</MoreInfo>
+    <Icon>DomainServiceClass.10.0.ico</Icon>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Id="Microsoft.VisualStudio.Community" Version="[17.0,18.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Pro" Version="[17.0,18.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Id="Microsoft.VisualStudio.Enterprise" Version="[17.0,18.0)">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" Version="[4.7.2,)" d:Source="Manual" />
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.Assembly" Path="|OpenRiaServices.VisualStudio.DomainServices.Tools|" Addressable="true" d:Source="Project" d:ProjectName="OpenRiaServices.VisualStudio.DomainServices.Tools" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" Path="|OpenRiaServices.Hosting.Wcf|" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.Wcf" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" Path="|OpenRiaServices.Hosting.Wcf.OData|" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.Wcf.OData" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" Path="|OpenRiaServices.Server|" d:Source="Project" d:ProjectName="OpenRiaServices.Server" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" Path="EntityFramework.dll" d:Source="File" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" Path="EntityFramework.SqlServer.dll" d:Source="File" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" Path="ItemTemplates" d:Source="Project" d:ProjectName="AuthenticationDomainService" d:VsixSubPath="ItemTemplates" d:TargetPath="|AuthenticationDomainService;TemplateProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" Path="ItemTemplates" d:Source="Project" d:ProjectName="DomainServiceClass" d:VsixSubPath="ItemTemplates" d:TargetPath="|DomainServiceClass;TemplateProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" Path="ItemTemplates" d:Source="File" d:TargetPath="it\VB\Web\1033\Authentication Domain Service.zip" />
+    <Asset Type="Microsoft.VisualStudio.ItemTemplate" Path="ItemTemplates" d:Source="File" d:TargetPath="it\VB\Web\1033\Domain Service Class.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" Path="ProjectTemplates" d:Source="File" d:TargetPath="pt\CS\SL\1033\Silverlight Business Application.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" Path="ProjectTemplates" d:Source="File" d:TargetPath="pt\VB\SL\1033\Silverlight Business Application.zip" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" Path="ProjectTemplates" d:Source="File" d:TargetPath="pt\VB\SL\1033\Open RIA Services Class Library.zip" />
+    <Asset Type="Microsoft.VisualStudio.VsPackage" Path="|%CurrentProject%;PkgdefProjectOutputGroup|" d:Source="Project" d:ProjectName="%CurrentProject%" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" Path="ProjectTemplates" d:Source="Project" d:VsixSubPath="ProjectTemplates" d:TargetPath="|BusinessApplicationProjectTemplate;TemplateProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.ProjectTemplate" Path="ProjectTemplates" d:Source="Project" d:ProjectName="OpenRiaServicesLibrary" d:VsixSubPath="ProjectTemplates" d:TargetPath="|OpenRiaServicesLibrary;TemplateProjectOutputGroup|" />
+    <Asset Type="Microsoft.VisualStudio.Assembly" Path="|OpenRiaServices.EntityFramework|" d:Source="Project" d:ProjectName="OpenRiaServices.EntityFramework" />
+  </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" DisplayName="Visual Studio core editor" Version="[15.0,)" />
+    <Prerequisite Id="Microsoft.VisualStudio.Component.NuGet" DisplayName="NuGet package manager" Version="[15.0,)" />
+  </Prerequisites>
 </PackageManifest>

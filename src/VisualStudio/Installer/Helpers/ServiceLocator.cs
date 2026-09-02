@@ -12,7 +12,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
     /// <summary>
     /// This class unifies all the different ways of getting services within visual studio.
     /// </summary>
-    /// <from>NuGet</from>   
+    /// <from>NuGet</from>
     public static class ServiceLocator
     {
         public static void InitializePackageServiceProvider(IServiceProvider provider)
@@ -40,7 +40,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
             }
 
             // then try to find the service as a component model, then try dte then lastly try global service
-            // Per bug #2072, avoid calling GetGlobalService() from within the Initialize() method of NuGetPackage class. 
+            // Per bug #2072, avoid calling GetGlobalService() from within the Initialize() method of NuGetPackage class.
             // Doing so is illegal and may cause VS to hang. As a result of that, we defer calling GetGlobalService to the last option.
             return GetDTEService<TService>() ??
                    GetComponentModelService<TService>() ??
@@ -79,7 +79,7 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
             return GetServiceProvider(dte);
         }
 
-        private static object QueryService(_DTE dte, Type serviceType)
+        private static object QueryService(DTE dte, Type serviceType)
         {
             Guid guidService = serviceType.GUID;
             Guid riid = guidService;
@@ -103,11 +103,10 @@ namespace OpenRiaServices.VisualStudio.Installer.Helpers
             }
 
             return service;
-
         }
 
         [SuppressMessage("Microsoft.Reliability", "CA2000:Dispose objects before losing scope", Justification = "The caller is responsible for disposing this")]
-        private static IServiceProvider GetServiceProvider(_DTE dte)
+        private static IServiceProvider GetServiceProvider(DTE dte)
         {
             IServiceProvider serviceProvider = new ServiceProvider(dte as Microsoft.VisualStudio.OLE.Interop.IServiceProvider);
             Debug.Assert(serviceProvider != null, "Service provider is null");
