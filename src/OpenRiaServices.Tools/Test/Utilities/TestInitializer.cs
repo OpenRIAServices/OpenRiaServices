@@ -4,41 +4,65 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using Microsoft.Build.Locator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
+#if NETFRAMEWORK
+namespace System.Runtime.CompilerServices
+{
+    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
+    internal sealed class ModuleInitializerAttribute : Attribute
+    {
+    }
+}
+#endif
 
 namespace OpenRiaServices.Tools.Test.Utilities
 {
     [TestClass]
     public static class TestInitializer
     {
-        [AssemblyInitialize]
-        public static void AssemblyInit(TestContext testContext)
+        [ModuleInitializer]
+        public static void InitializeMsBuildLocator()
         {
-            var allInstances = MSBuildLocator.QueryVisualStudioInstances()
-                .OrderByDescending(instance => instance.Version);
+            if (MSBuildLocator.IsRegistered)
+                return;
 
-            var instance = allInstances.FirstOrDefault();
+            var instance = MSBuildLocator.QueryVisualStudioInstances()
+                .OrderByDescending(instance => instance.Version)
+                .FirstOrDefault();
+
             // IMPORTANT: MSBuildLocator only discover SDK versions that are as old or older thant the
             // current target framework.
             // This means we can get errors in case, we compile for .NET 8 but only have .NET 9 or 10 SDK
 #if NET
+            string currentRuntime = typeof(TestInitializer).Assembly.GetCustomAttribute<System.Runtime.Versioning.TargetFrameworkAttribute>().FrameworkDisplayName;
 
-            string currentRuntime = (typeof(TestInitializer).Assembly.GetCustomAttribute<System.Runtime.Versioning.TargetFrameworkAttribute>()).FrameworkDisplayName;
-
-            Assert.IsNotNull(instance, $"No dotnet SDK found (searched version <= {currentRuntime})");
+            if (instance == null)
+                throw new InvalidOperationException($"No dotnet SDK found (searched version <= {currentRuntime})");
 
             // Extract current runtime version
-            Assert.StartsWith(".NET ", currentRuntime);
+            if (!currentRuntime.StartsWith(".NET ", StringComparison.Ordinal))
+                throw new InvalidOperationException($"Unexpected target framework name: {currentRuntime}");
+
             Version runtimeVersion = Version.Parse(currentRuntime.AsSpan(5));
 
-            Assert.IsTrue(runtimeVersion < instance.Version, $"Expected dotnet sdk to be at least {runtimeVersion}, but found {instance.Version}");
+            if (runtimeVersion >= instance.Version)
+                throw new InvalidOperationException($"Expected dotnet sdk to be at least {runtimeVersion}, but found {instance.Version}");
 #endif
 
-            Assert.IsNotNull(instance, "MSBuildLocator failed to find msbuild");
-            // Register the most recent version of MSBuild
+            if (instance == null)
+                throw new InvalidOperationException("MSBuildLocator failed to find msbuild");
+
             MSBuildLocator.RegisterInstance(instance);
+        }
+
+        [AssemblyInitialize]
+        public static void AssemblyInit(TestContext testContext)
+        {
+            InitializeMsBuildLocator();
 
             //Set currenct culture to en-US by default since there are hard coded
             //strings in some tests
