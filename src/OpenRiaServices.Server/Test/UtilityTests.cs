@@ -195,6 +195,16 @@ namespace OpenRiaServices.Server.Test
             Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.ShapeOverridesIgnore)]));
         }
 
+        [TestMethod]
+        public void SerializableDataMember_UsesPolyTypePrecedenceForPoco()
+        {
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(PolyTypePoco));
+
+            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypePoco.Unannotated)]));
+            Assert.IsFalse(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypePoco.Ignored)]));
+            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypePoco.ShapeOverridesIgnore)]));
+        }
+
         [DataContract]
         private sealed class PolyTypeDataContract
         {
@@ -206,6 +216,18 @@ namespace OpenRiaServices.Server.Test
             [DataMember]
             [PropertyShape(Ignore = true)]
             public string IgnoredShape { get; set; }
+
+            [IgnoreDataMember]
+            [PropertyShape]
+            public string ShapeOverridesIgnore { get; set; }
+        }
+
+        private sealed class PolyTypePoco
+        {
+            public string Unannotated { get; set; }
+
+            [IgnoreDataMember]
+            public string Ignored { get; set; }
 
             [IgnoreDataMember]
             [PropertyShape]

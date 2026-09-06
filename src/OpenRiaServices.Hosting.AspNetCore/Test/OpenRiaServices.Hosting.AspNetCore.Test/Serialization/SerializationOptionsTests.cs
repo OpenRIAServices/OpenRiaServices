@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.AspNetCore.Serialization;
+using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
 using PolyType;
 using PolyType.ReflectionProvider;
 using OpenRiaServices.Server;
@@ -80,6 +81,14 @@ public class SerializationOptionsTests
         var builder = services.AddOpenRiaServices();
         var returned = builder.AddMessagePackSerialization(_ => { });
         Assert.AreSame(builder, returned, "AddMessagePackSerialization should return the builder for chaining");
+    }
+
+    [TestMethod]
+    public void MessagePackDiscriminator_UsesPolyTypeDefaultName()
+    {
+        byte[] discriminator = MessagePackUtility.GetDiscriminator(typeof(DerivedWithDefaultName));
+
+        CollectionAssert.AreEqual(Encoding.UTF8.GetBytes(nameof(DerivedWithDefaultName)), discriminator);
     }
 
     // -------------------------------------------------------------------------
@@ -278,5 +287,14 @@ public class SerializationOptionsTests
     {
         [Invoke(HasSideEffects = true)]
         public string EchoString(string value) => value;
+    }
+
+    [DerivedTypeShape(typeof(DerivedWithDefaultName))]
+    private class BaseWithDerivedTypeShape
+    {
+    }
+
+    private sealed class DerivedWithDefaultName : BaseWithDerivedTypeShape
+    {
     }
 }
