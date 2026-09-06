@@ -1051,7 +1051,7 @@ namespace OpenRiaServices.Tools
             string[] targetKeyMembers = TypeDescriptor.GetProperties(associationProperty.PropertyType)
                 .Cast<PropertyDescriptor>()
                 .Where(p => p.Attributes[typeof(KeyAttribute)] != null)
-                .OrderBy(p => p.Name, StringComparer.Ordinal)
+                .OrderBy(p => p.Name)
                 .Select(p => p.Name)
                 .ToArray();
 

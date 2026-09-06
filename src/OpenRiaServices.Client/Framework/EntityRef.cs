@@ -32,6 +32,9 @@ namespace OpenRiaServices.Client
         private string MemberName => _metaMember.Name;
         private bool IsComposition => _metaMember.IsComposition;
         private EntityAssociationAttribute AssocAttribute => _metaMember.AssociationAttribute;
+        private bool CachedEntityIsAvailable => this._entityLookup == null
+            || this._parent.EntitySet == null
+            || this._entity?.EntitySet != null;
 
         /// <summary>
         /// Initializes a new instance of the EntityRef class
@@ -82,8 +85,9 @@ namespace OpenRiaServices.Client
             {
                 // if we have assigned a value, or the cached entity is still valid,
                 // return it
-                if (!this._requiresFullScan
-                    && (this._hasAssignedEntity || (this._entity != null && this._entityPredicate(this._entity))))
+                if ((this._hasAssignedEntity && (this._entity == null || this._entity.EntityState != EntityState.Deleted))
+                    || (this.CachedEntityIsAvailable && !this._requiresFullScan
+                        && (this._hasAssignedEntity || (this._entity != null && this._entityPredicate(this._entity)))))
                 {
                     return this._entity;
                 }
@@ -427,7 +431,7 @@ namespace OpenRiaServices.Client
         {
             get
             {
-                return this.Entity;
+                return this._entityLookup != null ? this._entity : this.Entity;
             }
         }
 

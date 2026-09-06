@@ -23,7 +23,7 @@ namespace OpenRiaServices.Client
     public abstract class EntitySet : IList, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
     {
         private readonly Dictionary<EntityAssociationAttribute, Action<Entity>?> _associationUpdateCallbackMap = new();
-        private int _identityVersion;
+        private bool _isIdentityCacheStale;
         private readonly Type _entityType;
         private EntityContainer _entityContainer;
         private EntitySetOperations _supportedOperations;
@@ -119,6 +119,7 @@ namespace OpenRiaServices.Client
             }
 
             this._identityCache.Clear();
+            this._isIdentityCacheStale = false;
             this._interestingEntities.Clear();
             this._list = this.CreateList();
             this._set.Clear();
@@ -281,9 +282,11 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that was changed.</param>
         internal void UpdateRelatedAssociations(Entity entity, string propertyName)
         {
-            if (entity.MetaType[propertyName]?.IsKeyMember == true)
+            if (!_isIdentityCacheStale
+                && entity.MetaType[propertyName]?.IsKeyMember == true
+                && this._identityCache.ContainsValue(entity))
             {
-                this._identityVersion++;
+                this._isIdentityCacheStale = true;
             }
 
             // Here we notify any association update callbacks so they can update collection membership
@@ -889,7 +892,7 @@ namespace OpenRiaServices.Client
             return entity;
         }
 
-        internal int IdentityVersion => this._identityVersion;
+        internal bool IsIdentityCacheStale => this._isIdentityCacheStale;
 
         /// <summary>
         /// Load the specified set of entities

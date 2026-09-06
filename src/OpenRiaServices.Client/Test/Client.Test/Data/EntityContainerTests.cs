@@ -1078,6 +1078,21 @@ namespace OpenRiaServices.Client.Test
 
             targets.Attach(entities[0]);
             Assert.AreSame(entities[0], reference.Entity);
+
+            entities[1].ApplyState(new Dictionary<string, object> { { "ID", 1 } });
+            Assert.IsNull(reference.Entity);
+
+            source.DID_Ref1 = 2;
+            Assert.IsNull(reference.Entity);
+
+            entities[1].ApplyState(new Dictionary<string, object> { { "ID", 2 } });
+            Assert.AreSame(entities[1], reference.Entity);
+
+            D assignedEntity = new D { ID = entities.Length + 1 };
+            source.DID_Ref1 = assignedEntity.ID;
+            reference.Entity = assignedEntity;
+            entities[2].ApplyState(new Dictionary<string, object> { { "ID", entities.Length + 2 } });
+            Assert.AreSame(assignedEntity, reference.Entity);
         }
 
         [TestMethod]

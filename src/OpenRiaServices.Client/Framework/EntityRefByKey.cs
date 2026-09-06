@@ -18,7 +18,6 @@ namespace OpenRiaServices.Client
     {
         private readonly Func<object?> _keyGetter;
         private readonly EntityRef<TEntity> _entityRef;
-        private int _identityVersion;
 
         /// <summary>
         /// Initializes a new key-based entity reference.
@@ -56,9 +55,8 @@ namespace OpenRiaServices.Client
                 return null;
             }
 
-            if (this._identityVersion != set.IdentityVersion)
+            if (set.IsIdentityCacheStale)
             {
-                this._identityVersion = set.IdentityVersion;
                 TEntity? match = null;
                 foreach (TEntity candidate in set)
                 {
@@ -77,7 +75,7 @@ namespace OpenRiaServices.Client
             }
 
             TEntity? entity = set.GetEntityByIdentity(key) as TEntity;
-            return entity?.EntityState != EntityState.New ? entity : null;
+            return entity?.EntitySet == set && entity.EntityState != EntityState.New ? entity : null;
         }
     }
 }
