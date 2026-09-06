@@ -824,6 +824,10 @@ this.Write(")]\r\n");
 		this.GenerateAssociationField(metadata);
 		this.GenerateSingletonAssociationProperty(metadata);
 		this.GenerateAssociationFilterMethod(metadata);
+		if (metadata.UseKeyLookup)
+		{
+			this.GenerateAssociationKeyGetter(metadata);
+		}
     }
 
 	private void GenerateAssociationField(AssociationMetadata metadata)
@@ -901,9 +905,9 @@ this.Write("(this, \"");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(metadata.PropertyName));
 
-this.Write("\", this.Filter");
+this.Write("\", this.");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(metadata.PropertyName));
+this.Write(this.ToStringHelper.ToStringWithCulture(metadata.UseKeyLookup ? "Get" + metadata.PropertyName + "Key" : "Filter" + metadata.PropertyName));
 
 this.Write(");\r\n\t}\r\n\treturn this.");
 
@@ -912,6 +916,44 @@ this.Write(this.ToStringHelper.ToStringWithCulture(returnType));
 this.Write(";\r\n}\r\n");
 
 
+	}
+
+	private void GenerateAssociationKeyGetter(AssociationMetadata metadata)
+	{
+		string[] keyMembers = metadata.AssociationAttribute.ThisKeyMembers.ToArray();
+		this.Write("private object Get");
+		this.Write(this.ToStringHelper.ToStringWithCulture(metadata.PropertyName));
+		this.Write("Key()\r\n{\r\n");
+		foreach (string keyMember in keyMembers)
+		{
+			Type keyType = TypeDescriptor.GetProperties(this.Type)[keyMember].PropertyType;
+			if (!keyType.IsValueType || TypeUtility.IsNullableType(keyType))
+			{
+				this.Write("\tif (this.");
+				this.Write(this.ToStringHelper.ToStringWithCulture(keyMember));
+				this.Write(" == null)\r\n\t{\r\n\t\treturn null;\r\n\t}\r\n");
+			}
+		}
+
+		this.Write("\treturn ");
+		if (keyMembers.Length > 1)
+		{
+			this.Write("OpenRiaServices.Client.EntityKey.Create(");
+		}
+		for (int i = 0; i < keyMembers.Length; i++)
+		{
+			this.Write("this.");
+			this.Write(this.ToStringHelper.ToStringWithCulture(keyMembers[i]));
+			if (i + 1 < keyMembers.Length)
+			{
+				this.Write(", ");
+			}
+		}
+		if (keyMembers.Length > 1)
+		{
+			this.Write(")");
+		}
+		this.Write(";\r\n}\r\n");
 	}
 	
 	private void GenerateSingletonAssociationPropertySetter(AssociationMetadata metadata)

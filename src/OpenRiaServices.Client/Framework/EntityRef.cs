@@ -23,6 +23,7 @@ namespace OpenRiaServices.Client
         private readonly MetaMember _metaMember;
         private EntitySet? _sourceSet;
         private readonly Func<TEntity, bool> _entityPredicate;
+        private readonly Func<EntitySet, TEntity?>? _entityLookup;
         private TEntity? _entity;
         private bool _hasAssignedEntity;
         private bool _hasLoadedEntity;
@@ -38,6 +39,11 @@ namespace OpenRiaServices.Client
         /// <param name="memberName">The name of this EntityRef member on the parent entity</param>
         /// <param name="entityPredicate">The function used to filter the associated entity.</param>
         public EntityRef(Entity parent, string memberName, Func<TEntity, bool> entityPredicate)
+            : this(parent, memberName, entityPredicate, null)
+        {
+        }
+
+        internal EntityRef(Entity parent, string memberName, Func<TEntity, bool> entityPredicate, Func<EntitySet, TEntity?>? entityLookup)
         {
             ArgumentNullException.ThrowIfNull(parent);
             ArgumentException.ThrowIfNullOrEmpty(memberName);
@@ -45,6 +51,7 @@ namespace OpenRiaServices.Client
 
             this._parent = parent;
             this._entityPredicate = entityPredicate;
+            this._entityLookup = entityLookup;
             this._metaMember = this._parent.MetaType[memberName];
 
             if (this._metaMember == null)
@@ -86,7 +93,9 @@ namespace OpenRiaServices.Client
                     // Since this is the first time the entity has been returned, we don't
                     // need to send a property change notification.
                     EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
-                    this._entity = this.GetSingleMatch(set);
+                    this._entity = this._entityLookup != null
+                        ? this._entityLookup(set)
+                        : this.GetSingleMatch(set);
 
                     if (this._entity != null && this.IsComposition)
                     {

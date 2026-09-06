@@ -134,6 +134,7 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
         public bool IsCollection { get; private set; }
         public string PropTypeName { get; private set; }
         public string AssociationTypeName { get; private set; }
+        public bool UseKeyLookup { get; private set; }
         public string PropertyName { get; private set; }
         public string FieldName { get; private set; }
         public IEnumerable<Attribute> Attributes { get; private set; }
@@ -150,7 +151,15 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
             if (!this.IsCollection)
             {
                 this.PropTypeName = CodeGenUtilities.GetTypeName(pd.PropertyType);
-                this.AssociationTypeName = @"OpenRiaServices.Client.EntityRef<" + this.PropTypeName + ">";
+                string[] targetKeyMembers = TypeDescriptor.GetProperties(pd.PropertyType)
+                    .Cast<PropertyDescriptor>()
+                    .Where(p => p.Attributes[typeof(KeyAttribute)] != null)
+                    .Select(p => p.Name)
+                    .ToArray();
+                this.UseKeyLookup = targetKeyMembers.Length > 0
+                    && targetKeyMembers.SequenceEqual(this.AssociationAttribute.OtherKeyMembers);
+                string referenceType = this.UseKeyLookup ? "EntityRefByKey" : "EntityRef";
+                this.AssociationTypeName = "OpenRiaServices.Client." + referenceType + "<" + this.PropTypeName + ">";
                 this.Attributes = propertyAttributes.Cast<Attribute>().Where(a => a.GetType() != typeof(DataMemberAttribute));
             }
             else
@@ -172,4 +181,3 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
         }
     }
 }
-

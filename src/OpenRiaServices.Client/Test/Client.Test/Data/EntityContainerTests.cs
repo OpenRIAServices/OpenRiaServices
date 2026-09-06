@@ -1056,6 +1056,49 @@ namespace OpenRiaServices.Client.Test
             Assert.AreSame(d1, c1.D_Ref1);
         }
 
+        [TestMethod]
+        public void EntityRefByKey_UsesIdentityIndexAndTracksChanges()
+        {
+            DynamicEntityContainer container = new DynamicEntityContainer();
+            container.AddEntitySet<C>(EntitySetOperations.All);
+            EntitySet<D> targets = container.AddEntitySet<D>(EntitySetOperations.All);
+
+            D[] entities = Enumerable.Range(1, 5000).Select(id => new D { ID = id }).ToArray();
+            C source = new C { ID = 1, DID_Ref1 = entities.Length };
+            container.LoadEntities(entities.Cast<Entity>().Append(source));
+
+            EntityRefByKey<D> reference = new EntityRefByKey<D>(source, "D_Ref1", () => source.DID_Ref1);
+            Assert.AreSame(entities[^1], reference.Entity);
+
+            source.DID_Ref1 = 1;
+            Assert.AreSame(entities[0], reference.Entity);
+
+            targets.Remove(entities[0]);
+            Assert.IsNull(reference.Entity);
+
+            targets.Add(entities[0]);
+            Assert.AreSame(entities[0], reference.Entity);
+        }
+
+        [TestMethod]
+        public void EntityRefByKey_ResolvesCompositeIdentity()
+        {
+            DynamicEntityContainer container = new DynamicEntityContainer();
+            container.AddEntitySet<City>(EntitySetOperations.All);
+            container.AddEntitySet<County>(EntitySetOperations.All);
+
+            County county = new County { Name = "King", StateName = "WA" };
+            City city = new City { Name = "Redmond", CountyName = county.Name, StateName = county.StateName };
+            container.LoadEntities(new Entity[] { county, city });
+
+            EntityRefByKey<County> reference = new EntityRefByKey<County>(
+                city,
+                "County",
+                () => EntityKey.Create(city.CountyName, city.StateName));
+
+            Assert.AreSame(county, reference.Entity);
+        }
+
         /// <summary>
         /// When an entity is in an edit state, any behind the scenes refresh
         /// operation will be ignored for that entity. That ensures that user

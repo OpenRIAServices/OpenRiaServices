@@ -772,7 +772,11 @@ namespace OpenRiaServices.Tools
 
             // generate field:
             // private EntityRef<Product> _Product;
-            CodeTypeReference fldType = CodeGenUtilities.GetTypeReference(TypeConstants.EntityRefTypeFullName, this.Type.Namespace, false);
+            bool useKeyLookup = CanUseKeyLookup(pd, EntityAssociationAttribute);
+            CodeTypeReference fldType = CodeGenUtilities.GetTypeReference(
+                useKeyLookup ? TypeConstants.EntityRefByKeyTypeFullName : TypeConstants.EntityRefTypeFullName,
+                this.Type.Namespace,
+                false);
             fldType.TypeArguments.Add(propType);
 
             CodeMemberField fld = new CodeMemberField();
@@ -825,6 +829,9 @@ namespace OpenRiaServices.Tools
             string[] thisKeyProps = EntityAssociationAttribute.ThisKeyMembers.ToArray();
             string[] otherKeyProps = EntityAssociationAttribute.OtherKeyMembers.ToArray();
             CodeMemberMethod filterMethod = this.GenerateFilterMethod(proxyClass, pd.Name, pd.PropertyType, thisKeyProps, otherKeyProps, isExternal);
+            CodeMemberMethod keyGetterMethod = useKeyLookup
+                ? this.GenerateAssociationKeyGetter(proxyClass, pd.Name, thisKeyProps)
+                : null;
 
             // --------------------------
             // Generate getter
@@ -840,7 +847,10 @@ namespace OpenRiaServices.Tools
                     new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), fld.Name));
 
             CodeExpression filterDelegate =
-                CodeGenUtilities.MakeDelegateCreateExpression(this.ClientProxyGenerator.IsCSharp, new CodeTypeReference("System.Func"), filterMethod.Name);
+                CodeGenUtilities.MakeDelegateCreateExpression(
+                    this.ClientProxyGenerator.IsCSharp,
+                    new CodeTypeReference("System.Func"),
+                    useKeyLookup ? keyGetterMethod.Name : filterMethod.Name);
 
             CodeAssignStatement initExpr = new CodeAssignStatement(
                 new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), fld.Name),
@@ -1030,6 +1040,65 @@ namespace OpenRiaServices.Tools
 
             proxyClass.Members.Add(prop);
             proxyClass.Members.Add(filterMethod);
+            if (keyGetterMethod != null)
+            {
+                proxyClass.Members.Add(keyGetterMethod);
+            }
+        }
+
+        private static bool CanUseKeyLookup(PropertyDescriptor associationProperty, EntityAssociationAttribute association)
+        {
+            string[] targetKeyMembers = TypeDescriptor.GetProperties(associationProperty.PropertyType)
+                .Cast<PropertyDescriptor>()
+                .Where(p => p.Attributes[typeof(KeyAttribute)] != null)
+                .Select(p => p.Name)
+                .ToArray();
+
+            return targetKeyMembers.Length > 0
+                && targetKeyMembers.SequenceEqual(association.OtherKeyMembers);
+        }
+
+        private CodeMemberMethod GenerateAssociationKeyGetter(CodeTypeDeclaration proxyClass, string targetName, string[] keyMembers)
+        {
+            CodeMemberMethod method = new CodeMemberMethod
+            {
+                Name = "Get" + targetName + "Key",
+                Attributes = MemberAttributes.Private,
+                ReturnType = CodeGenUtilities.GetTypeReference(typeof(object), this.ClientProxyGenerator, proxyClass)
+            };
+
+            CodeExpression[] keyReferences = keyMembers
+                .Select(name => (CodeExpression)new CodePropertyReferenceExpression(new CodeThisReferenceExpression(), name))
+                .ToArray();
+
+            CodeExpression nullTest = null;
+            for (int i = 0; i < keyMembers.Length; i++)
+            {
+                Type keyType = TypeDescriptor.GetProperties(this.Type)[keyMembers[i]].PropertyType;
+                if (!keyType.IsValueType || TypeUtility.IsNullableType(keyType))
+                {
+                    CodeExpression currentTest = CodeGenUtilities.MakeEqualToNull(keyReferences[i]);
+                    nullTest = nullTest == null
+                        ? currentTest
+                        : new CodeBinaryOperatorExpression(nullTest, CodeBinaryOperatorType.BooleanOr, currentTest);
+                }
+            }
+
+            if (nullTest != null)
+            {
+                method.Statements.Add(new CodeConditionStatement(
+                    nullTest,
+                    new CodeMethodReturnStatement(new CodePrimitiveExpression(null))));
+            }
+
+            CodeExpression identity = keyReferences.Length == 1
+                ? keyReferences[0]
+                : new CodeMethodInvokeExpression(
+                    new CodeTypeReferenceExpression(TypeConstants.EntityKeyTypeFullName),
+                    "Create",
+                    keyReferences);
+            method.Statements.Add(new CodeMethodReturnStatement(identity));
+            return method;
         }
 
         private void GenGetIdentityMethod(CodeTypeDeclaration proxyClass, List<PropertyDescriptor> keyProperties)

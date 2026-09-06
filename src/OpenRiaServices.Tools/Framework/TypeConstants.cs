@@ -88,6 +88,14 @@
         public const string EntityRefTypeFullName = "OpenRiaServices.Client.EntityRef";
 
         /// <summary>
+        /// The 'OpenRiaServices.Client.EntityRefByKey' type name.
+        /// </summary>
+        /// <remarks>
+        /// Used during code generation.
+        /// </remarks>
+        public const string EntityRefByKeyTypeFullName = "OpenRiaServices.Client.EntityRefByKey";
+
+        /// <summary>
         /// The 'OpenRiaServices.Client.EntityCollection' type name.
         /// </summary>
         /// <remarks>

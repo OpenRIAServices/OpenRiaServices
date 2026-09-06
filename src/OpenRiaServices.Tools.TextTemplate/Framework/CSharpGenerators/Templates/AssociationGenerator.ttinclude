@@ -5,6 +5,10 @@
 		this.GenerateAssociationField(metadata);
 		this.GenerateSingletonAssociationProperty(metadata);
 		this.GenerateAssociationFilterMethod(metadata);
+		if (metadata.UseKeyLookup)
+		{
+			this.GenerateAssociationKeyGetter(metadata);
+		}
     }
 
 	private void GenerateAssociationField(AssociationMetadata metadata)
@@ -52,7 +56,50 @@ get
 {
 	if(this.<#= metadata.FieldName #> == null)
 	{
-		this.<#= metadata.FieldName #> = new <#= metadata.AssociationTypeName #>(this, "<#= metadata.PropertyName #>", this.Filter<#= metadata.PropertyName #>);
+		this.<#= metadata.FieldName #> = new <#= metadata.AssociationTypeName #>(this, "<#= metadata.PropertyName #>", this.<#= metadata.UseKeyLookup ? "Get" + metadata.PropertyName + "Key" : "Filter" + metadata.PropertyName #>);
+	}
+
+	private void GenerateAssociationKeyGetter(AssociationMetadata metadata)
+	{
+		string[] keyMembers = metadata.AssociationAttribute.ThisKeyMembers.ToArray();
+#>
+private object Get<#= metadata.PropertyName #>Key()
+{
+<#+
+		foreach (string keyMember in keyMembers)
+		{
+			Type keyType = TypeDescriptor.GetProperties(this.Type)[keyMember].PropertyType;
+			if (!keyType.IsValueType || TypeUtility.IsNullableType(keyType))
+			{
+#>
+	if (this.<#= keyMember #> == null)
+	{
+		return null;
+	}
+<#+
+			}
+		}
+#>
+	return <#+
+		if (keyMembers.Length > 1)
+		{
+#>OpenRiaServices.Client.EntityKey.Create(<#+
+		}
+		for (int i = 0; i < keyMembers.Length; i++)
+		{
+#>this.<#= keyMembers[i] #><#+
+			if (i + 1 < keyMembers.Length)
+			{
+#>, <#+
+			}
+		}
+		if (keyMembers.Length > 1)
+		{
+#>)<#+
+		}
+#>;
+}
+<#+
 	}
 	return this.<#= returnType #>;
 }
