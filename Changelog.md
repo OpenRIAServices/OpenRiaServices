@@ -1,6 +1,7 @@
 # Unreleased
 
 * Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
+* Client code generation now uses identity-indexed entity references when an association targets the complete primary key, avoiding linear scans as the target `EntitySet` grows. Fixes [#6](https://github.com/OpenRIAServices/OpenRiaServices/issues/6)
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 

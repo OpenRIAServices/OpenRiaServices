@@ -50,6 +50,16 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(options);
         }
 
+        [TestMethod]
+        public void EntityRefCodeGen_UsesKeyLookupOnlyForPrimaryKey()
+        {
+            string generatedCode = TestHelper.GenerateCode("C#", typeof(EntityRefCodeGenDomainService), this._logger);
+
+            TestHelper.AssertGeneratedCodeContains(generatedCode, "EntityRefByKey<EntityRefCodeGenTarget> _byPrimaryKey");
+            TestHelper.AssertGeneratedCodeContains(generatedCode, "EntityRef<EntityRefCodeGenTarget> _byNonKey");
+            TestHelper.AssertGeneratedCodeContains(generatedCode, "new EntityRefByKey<EntityRefCodeGenTarget>(this, \"ByPrimaryKey\", this.GetByPrimaryKeyKey)");
+        }
+
         [DeploymentItem(@"Baselines\Default\Mocks", "CG_Scenarios_Complex_RootNs_FullTypeNames")]
         [DeploymentItem(@"Shared\Test.shared.cs")]
         [TestMethod]

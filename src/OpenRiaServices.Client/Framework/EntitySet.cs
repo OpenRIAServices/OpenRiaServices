@@ -23,6 +23,7 @@ namespace OpenRiaServices.Client
     public abstract class EntitySet : IList, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
     {
         private readonly Dictionary<EntityAssociationAttribute, Action<Entity>?> _associationUpdateCallbackMap = new();
+        private int _identityVersion;
         private readonly Type _entityType;
         private EntityContainer _entityContainer;
         private EntitySetOperations _supportedOperations;
@@ -280,6 +281,11 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that was changed.</param>
         internal void UpdateRelatedAssociations(Entity entity, string propertyName)
         {
+            if (entity.MetaType[propertyName]?.IsKeyMember == true)
+            {
+                this._identityVersion++;
+            }
+
             // Here we notify any association update callbacks so they can update collection membership
             // for the modified entity. This needs to happen in the following cases:
             // 1) If the entity is transitioning from a New to Unmodified state.
@@ -882,6 +888,8 @@ namespace OpenRiaServices.Client
             this._identityCache.TryGetValue(identity, out Entity? entity);
             return entity;
         }
+
+        internal int IdentityVersion => this._identityVersion;
 
         /// <summary>
         /// Load the specified set of entities

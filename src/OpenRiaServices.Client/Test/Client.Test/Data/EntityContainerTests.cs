@@ -1073,10 +1073,10 @@ namespace OpenRiaServices.Client.Test
             source.DID_Ref1 = 1;
             Assert.AreSame(entities[0], reference.Entity);
 
-            targets.Remove(entities[0]);
+            targets.Detach(entities[0]);
             Assert.IsNull(reference.Entity);
 
-            targets.Add(entities[0]);
+            targets.Attach(entities[0]);
             Assert.AreSame(entities[0], reference.Entity);
         }
 

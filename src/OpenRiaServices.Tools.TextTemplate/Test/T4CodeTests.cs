@@ -31,6 +31,20 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
         }
 
         [TestMethod]
+        public void T4EntityRefCodeGen_UsesKeyLookupOnlyForPrimaryKey()
+        {
+            using T4AssemblyGenerator generator = new T4AssemblyGenerator(
+                true,
+                false,
+                new[] { typeof(EntityRefCodeGenDomainService) });
+
+            string generatedCode = generator.GeneratedCode;
+            StringAssert.Contains(generatedCode, "OpenRiaServices.Client.EntityRefByKey<OpenRiaServices.Tools.Test.EntityRefCodeGenTarget> _byPrimaryKey");
+            StringAssert.Contains(generatedCode, "OpenRiaServices.Client.EntityRef<OpenRiaServices.Tools.Test.EntityRefCodeGenTarget> _byNonKey");
+            StringAssert.Contains(generatedCode, "new OpenRiaServices.Client.EntityRefByKey<OpenRiaServices.Tools.Test.EntityRefCodeGenTarget>(this, \"ByPrimaryKey\", this.GetByPrimaryKeyKey)");
+        }
+
+        [TestMethod]
         public void T4CodeGenTest_Inheritance()
         {
             Type[] domainServiceTypes = new Type[] {

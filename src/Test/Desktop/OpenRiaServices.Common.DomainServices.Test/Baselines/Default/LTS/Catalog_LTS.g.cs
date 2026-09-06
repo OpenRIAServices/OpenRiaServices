@@ -43,7 +43,7 @@ namespace DataTests.AdventureWorks.LTS
         
         private string _loginID;
         
-        private EntityRef<Employee> _manager;
+        private EntityRefByKey<Employee> _manager;
         
         private Nullable<int> _managerID;
         
@@ -315,7 +315,7 @@ namespace DataTests.AdventureWorks.LTS
             {
                 if ((this._manager == null))
                 {
-                    this._manager = new EntityRef<Employee>(this, "Manager", this.FilterManager);
+                    this._manager = new EntityRefByKey<Employee>(this, "Manager", this.GetManagerKey);
                 }
                 return this._manager.Entity;
             }
@@ -623,6 +623,15 @@ namespace DataTests.AdventureWorks.LTS
         private bool FilterManager(Employee entity)
         {
             return (entity.EmployeeID == this.ManagerID);
+        }
+        
+        private object GetManagerKey()
+        {
+            if ((this.ManagerID == null))
+            {
+                return null;
+            }
+            return this.ManagerID;
         }
         
         private void AttachPurchaseOrders(PurchaseOrder entity)
@@ -1473,7 +1482,7 @@ namespace DataTests.AdventureWorks.LTS
     public sealed partial class PurchaseOrder : Entity
     {
         
-        private EntityRef<Employee> _employee;
+        private EntityRefByKey<Employee> _employee;
         
         private int _employeeID;
         
@@ -1558,7 +1567,7 @@ namespace DataTests.AdventureWorks.LTS
             {
                 if ((this._employee == null))
                 {
-                    this._employee = new EntityRef<Employee>(this, "Employee", this.FilterEmployee);
+                    this._employee = new EntityRefByKey<Employee>(this, "Employee", this.GetEmployeeKey);
                 }
                 return this._employee.Entity;
             }
@@ -1950,6 +1959,11 @@ namespace DataTests.AdventureWorks.LTS
             return (entity.EmployeeID == this.EmployeeID);
         }
         
+        private object GetEmployeeKey()
+        {
+            return this.EmployeeID;
+        }
+        
         private void AttachPurchaseOrderDetails(PurchaseOrderDetail entity)
         {
             entity.PurchaseOrder = this;
@@ -1990,11 +2004,11 @@ namespace DataTests.AdventureWorks.LTS
         
         private short _orderQty;
         
-        private EntityRef<Product> _product;
+        private EntityRefByKey<Product> _product;
         
         private int _productID;
         
-        private EntityRef<PurchaseOrder> _purchaseOrder;
+        private EntityRefByKey<PurchaseOrder> _purchaseOrder;
         
         private int _purchaseOrderDetailID;
         
@@ -2162,7 +2176,7 @@ namespace DataTests.AdventureWorks.LTS
             {
                 if ((this._product == null))
                 {
-                    this._product = new EntityRef<Product>(this, "Product", this.FilterProduct);
+                    this._product = new EntityRefByKey<Product>(this, "Product", this.GetProductKey);
                 }
                 return this._product.Entity;
             }
@@ -2231,7 +2245,7 @@ namespace DataTests.AdventureWorks.LTS
             {
                 if ((this._purchaseOrder == null))
                 {
-                    this._purchaseOrder = new EntityRef<PurchaseOrder>(this, "PurchaseOrder", this.FilterPurchaseOrder);
+                    this._purchaseOrder = new EntityRefByKey<PurchaseOrder>(this, "PurchaseOrder", this.GetPurchaseOrderKey);
                 }
                 return this._purchaseOrder.Entity;
             }
@@ -2426,9 +2440,19 @@ namespace DataTests.AdventureWorks.LTS
             return (entity.ProductID == this.ProductID);
         }
         
+        private object GetProductKey()
+        {
+            return this.ProductID;
+        }
+        
         private bool FilterPurchaseOrder(PurchaseOrder entity)
         {
             return (entity.PurchaseOrderID == this.PurchaseOrderID);
+        }
+        
+        private object GetPurchaseOrderKey()
+        {
+            return this.PurchaseOrderID;
         }
         
         /// <summary>

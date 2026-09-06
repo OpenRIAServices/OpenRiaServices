@@ -18,6 +18,7 @@ namespace OpenRiaServices.Client
     {
         private readonly Func<object?> _keyGetter;
         private readonly EntityRef<TEntity> _entityRef;
+        private int _identityVersion;
 
         /// <summary>
         /// Initializes a new key-based entity reference.
@@ -53,6 +54,26 @@ namespace OpenRiaServices.Client
             if (key == null)
             {
                 return null;
+            }
+
+            if (this._identityVersion != set.IdentityVersion)
+            {
+                this._identityVersion = set.IdentityVersion;
+                TEntity? match = null;
+                foreach (TEntity candidate in set)
+                {
+                    if (candidate.EntityState != EntityState.New && this.KeyEquals(candidate))
+                    {
+                        if (match != null)
+                        {
+                            return null;
+                        }
+
+                        match = candidate;
+                    }
+                }
+
+                return match;
             }
 
             TEntity? entity = set.GetEntityByIdentity(key) as TEntity;

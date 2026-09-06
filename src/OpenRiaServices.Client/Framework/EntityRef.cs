@@ -27,6 +27,7 @@ namespace OpenRiaServices.Client
         private TEntity? _entity;
         private bool _hasAssignedEntity;
         private bool _hasLoadedEntity;
+        private bool _requiresFullScan;
 
         private string MemberName => _metaMember.Name;
         private bool IsComposition => _metaMember.IsComposition;
@@ -81,7 +82,8 @@ namespace OpenRiaServices.Client
             {
                 // if we have assigned a value, or the cached entity is still valid,
                 // return it
-                if (this._hasAssignedEntity || (this._entity != null && this._entityPredicate(this._entity)))
+                if (!this._requiresFullScan
+                    && (this._hasAssignedEntity || (this._entity != null && this._entityPredicate(this._entity))))
                 {
                     return this._entity;
                 }
@@ -93,9 +95,10 @@ namespace OpenRiaServices.Client
                     // Since this is the first time the entity has been returned, we don't
                     // need to send a property change notification.
                     EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
-                    this._entity = this._entityLookup != null
+                    this._entity = this._entityLookup != null && !this._requiresFullScan
                         ? this._entityLookup(set)
                         : this.GetSingleMatch(set);
+                    this._requiresFullScan = false;
 
                     if (this._entity != null && this.IsComposition)
                     {
@@ -337,6 +340,11 @@ namespace OpenRiaServices.Client
 
             if (typedEntity != null && (this._hasLoadedEntity || this._hasAssignedEntity))
             {
+                // Identity changes can temporarily leave the EntitySet identity cache out of
+                // sync or create duplicate matches. Preserve EntityRef's single-match semantics
+                // by scanning once after an association update.
+                this._requiresFullScan = this._entityLookup != null;
+
                 // We allow the parent entity to be New during the AcceptChanges phase of a submit (AcceptChanges called on the other entity)
                 // of a successfull Submit operation, in which case we know that it will soon be unmodified.
                 // Without this exception we will fail to raise property changed for the member property if the other entities changes are accepted first

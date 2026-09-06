@@ -58,6 +58,10 @@ get
 	{
 		this.<#= metadata.FieldName #> = new <#= metadata.AssociationTypeName #>(this, "<#= metadata.PropertyName #>", this.<#= metadata.UseKeyLookup ? "Get" + metadata.PropertyName + "Key" : "Filter" + metadata.PropertyName #>);
 	}
+	return this.<#= returnType #>;
+}
+<#+
+	}
 
 	private void GenerateAssociationKeyGetter(AssociationMetadata metadata)
 	{
@@ -98,10 +102,6 @@ private object Get<#= metadata.PropertyName #>Key()
 #>)<#+
 		}
 #>;
-}
-<#+
-	}
-	return this.<#= returnType #>;
 }
 <#+
 	}

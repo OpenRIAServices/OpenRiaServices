@@ -154,6 +154,7 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
                 string[] targetKeyMembers = TypeDescriptor.GetProperties(pd.PropertyType)
                     .Cast<PropertyDescriptor>()
                     .Where(p => p.Attributes[typeof(KeyAttribute)] != null)
+                    .OrderBy(p => p.Name, StringComparer.Ordinal)
                     .Select(p => p.Name)
                     .ToArray();
                 this.UseKeyLookup = targetKeyMembers.Length > 0
