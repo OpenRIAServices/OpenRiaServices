@@ -19,14 +19,17 @@
     <dependencies>
       <group targetFramework="net472">
         <dependency id="Nerdbank.MessagePack" version="1.2.36" exclude="Build,Analyzers" />
+        <dependency id="PolyType" version="1.4.1" exclude="Build,Analyzers" />
         <dependency id="System.IO.Hashing" version="10.0.9" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net8.0">
         <dependency id="Nerdbank.MessagePack" version="1.2.36" exclude="Build,Analyzers" />
+        <dependency id="PolyType" version="1.4.1" exclude="Build,Analyzers" />
         <dependency id="System.IO.Hashing" version="10.0.9" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net8.0-windows7.0">
         <dependency id="Nerdbank.MessagePack" version="1.2.36" exclude="Build,Analyzers" />
+        <dependency id="PolyType" version="1.4.1" exclude="Build,Analyzers" />
         <dependency id="System.IO.Hashing" version="10.0.9" exclude="Build,Analyzers" />
       </group>
     </dependencies>

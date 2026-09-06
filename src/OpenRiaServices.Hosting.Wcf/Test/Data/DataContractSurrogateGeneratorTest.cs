@@ -10,6 +10,9 @@ using OpenRiaServices.Server;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Hosting.Wcf;
+using PolyType;
+using PolyType.Abstractions;
+using PolyType.ReflectionProvider;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
@@ -435,6 +438,20 @@ namespace OpenRiaServices.Hosting.UnitTests
             Assert.AreEqual(expected, surrogate, "Surrogate does not match expected results.");
         }
 
+        [TestMethod]
+        public void PolyTypePropertyShapePropagation()
+        {
+            Type entityType = typeof(SurrogateTestEntity_PropertyShape);
+            Type surrogateType = DataContractSurrogateGenerator.GetSurrogateType(new HashSet<Type> { entityType }, entityType);
+            ITypeShapeProvider provider = ReflectionTypeShapeProvider.Default;
+            IObjectTypeShape entityShape = (IObjectTypeShape)provider.GetTypeShape(entityType);
+            IObjectTypeShape surrogateShape = (IObjectTypeShape)provider.GetTypeShape(surrogateType);
+
+            CollectionAssert.AreEqual(
+                entityShape.Properties.Select(property => property.Name).ToArray(),
+                surrogateShape.Properties.Select(property => property.Name).ToArray());
+        }
+
         private static string GetDataContract(Type type)
         {
             string result = string.Empty;
@@ -574,6 +591,23 @@ namespace OpenRiaServices.Hosting.UnitTests
     public class SurrogateTestEntity_ClrProperty_Nullable_Primitive_ReadOnly : GenericEntity<int>
     {
         public int? TestProperty { get; private set; }
+    }
+
+    [DataContract]
+    public class SurrogateTestEntity_PropertyShape
+    {
+        [DataMember(Name = "data-member-name")]
+        [PropertyShape(Name = "shape-name")]
+        public string Renamed { get; set; }
+
+        [PropertyShape]
+        public string ShapeOnly { get; set; }
+
+        [DataMember]
+        [PropertyShape(Ignore = true)]
+        public string Ignored { get; set; }
+
+        public string Unannotated { get; set; }
     }
 
     public class MockTypeDescriptionProvider : TypeDescriptionProvider

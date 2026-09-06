@@ -4,21 +4,22 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using PolyType;
 
 namespace OpenRiaServices.Server
 {
     /// <summary>
-    /// Utility class to deal with <see cref="KnownTypeAttribute"/>
+    /// Utility class to deal with <see cref="KnownTypeAttribute"/> and <see cref="DerivedTypeShapeAttribute"/>.
     /// </summary>
     internal static class KnownTypeUtilities
     {
         /// <summary>
-        /// Obtains the set of known types from the <see cref="KnownTypeAttribute"/> custom attributes
+        /// Obtains the set of known types from the polymorphism attributes
         /// attached to the specified <paramref name="type"/>.
         /// </summary>
         /// <remarks>
-        /// This utility function duplicates what WCF does by either retrieving the declared
-        /// types or invoking the method declared in <see cref="KnownTypeAttribute.MethodName"/>.
+        /// <see cref="DerivedTypeShapeAttribute"/> takes precedence over <see cref="KnownTypeAttribute"/>
+        /// on each declaring type, matching PolyType.
         /// </remarks>
         /// <param name="type">The type to examine for <see cref="KnownTypeAttribute"/>s</param>
         /// <param name="inherit"><c>true</c> to allow inheritance of <see cref="KnownTypeAttribute"/> from the base.</param>
@@ -26,8 +27,31 @@ namespace OpenRiaServices.Server
         internal static HashSet<Type> ImportKnownTypes(Type type, bool inherit)
         {
             HashSet<Type> knownTypes = new HashSet<Type>();
-            IEnumerable<KnownTypeAttribute> knownTypeAttributes = type.GetCustomAttributes(typeof(KnownTypeAttribute), inherit).Cast<KnownTypeAttribute>();
-            
+            for (Type currentType = type; currentType != null; currentType = inherit ? currentType.BaseType : null)
+            {
+                ImportDeclaredKnownTypes(currentType, knownTypes);
+            }
+
+            return knownTypes;
+        }
+
+        private static void ImportDeclaredKnownTypes(Type type, HashSet<Type> knownTypes)
+        {
+            DerivedTypeShapeAttribute[] derivedTypeShapeAttributes = type
+                .GetCustomAttributes(typeof(DerivedTypeShapeAttribute), inherit: false)
+                .Cast<DerivedTypeShapeAttribute>()
+                .ToArray();
+
+            if (derivedTypeShapeAttributes.Length > 0)
+            {
+                knownTypes.UnionWith(derivedTypeShapeAttributes.Select(attribute => attribute.Type));
+                return;
+            }
+
+            IEnumerable<KnownTypeAttribute> knownTypeAttributes = type
+                .GetCustomAttributes(typeof(KnownTypeAttribute), inherit: false)
+                .Cast<KnownTypeAttribute>();
+
             foreach (KnownTypeAttribute knownTypeAttribute in knownTypeAttributes)
             {
                 Type knownType = knownTypeAttribute.Type;
@@ -51,7 +75,6 @@ namespace OpenRiaServices.Server
                     }
                 }
             }
-            return knownTypes;
         }
     }
 }
