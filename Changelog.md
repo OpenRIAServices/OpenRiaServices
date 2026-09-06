@@ -1,5 +1,6 @@
 # Unreleased
 
+* Added support for PolyType `[PropertyShape]` and `[DerivedTypeShape]` model attributes in server metadata and generated clients, using PolyType precedence when combined with data contract attributes. Fixes [#603](https://github.com/OpenRIAServices/OpenRiaServices/issues/603)
 * Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview

@@ -1,10 +1,13 @@
 ﻿extern alias SystemWebDomainServices;
 
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Linq;
 using System.Linq;
+using System.Runtime.Serialization;
 //using DbContextModels.AdventureWorks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PolyType;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TestDomainServices;
 using Address = TestDomainServices.Address;
@@ -179,6 +182,34 @@ namespace OpenRiaServices.Server.Test
                 "Server Binary values should be equal.");
             Assert.AreEqual(binary, SerializationUtility.GetServerValue(typeof(Binary), bytes),
                 "Server byte[] values should be equal.");
+        }
+
+        [TestMethod]
+        public void SerializableDataMember_UsesPolyTypePrecedence()
+        {
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(PolyTypeDataContract));
+
+            Assert.IsFalse(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.Unannotated)]));
+            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.DataMember)]));
+            Assert.IsFalse(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.IgnoredShape)]));
+            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.ShapeOverridesIgnore)]));
+        }
+
+        [DataContract]
+        private sealed class PolyTypeDataContract
+        {
+            public string Unannotated { get; set; }
+
+            [DataMember]
+            public string DataMember { get; set; }
+
+            [DataMember]
+            [PropertyShape(Ignore = true)]
+            public string IgnoredShape { get; set; }
+
+            [IgnoreDataMember]
+            [PropertyShape]
+            public string ShapeOverridesIgnore { get; set; }
         }
     }
 }
