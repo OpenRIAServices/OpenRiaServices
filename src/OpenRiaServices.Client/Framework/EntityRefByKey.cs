@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel.DataAnnotations;
 
 #nullable enable
 
@@ -14,7 +15,7 @@ namespace OpenRiaServices.Client
     /// scanning the set. It must only be used when the association's other-key members
     /// exactly match the associated entity's primary key members in identity order.
     /// </remarks>
-    public sealed class EntityRefByKey<TEntity> where TEntity : Entity
+    public sealed class EntityRefByKey<TEntity> : IEntityRef where TEntity : Entity
     {
         private readonly Func<object?> _keyGetter;
         private readonly EntityRef<TEntity> _entityRef;
@@ -31,6 +32,7 @@ namespace OpenRiaServices.Client
 
             this._keyGetter = keyGetter;
             this._entityRef = new EntityRef<TEntity>(parent, memberName, this.KeyEquals, this.FindEntity);
+            parent.SetEntityRef(memberName, this);
         }
 
         /// <summary>
@@ -77,5 +79,13 @@ namespace OpenRiaServices.Client
             TEntity? entity = set.GetEntityByIdentity(key) as TEntity;
             return entity?.EntitySet == set && entity.EntityState != EntityState.New ? entity : null;
         }
+
+        EntityAssociationAttribute IEntityRef.Association => ((IEntityRef)this._entityRef).Association;
+
+        bool IEntityRef.HasValue => ((IEntityRef)this._entityRef).HasValue;
+
+        Entity? IEntityRef.Entity => ((IEntityRef)this._entityRef).Entity;
+
+        Func<Entity, bool> IEntityRef.Filter => ((IEntityRef)this._entityRef).Filter;
     }
 }

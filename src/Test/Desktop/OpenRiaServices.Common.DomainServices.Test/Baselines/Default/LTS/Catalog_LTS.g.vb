@@ -588,10 +588,6 @@ Namespace DataTests.AdventureWorks.LTS
             End Set
         End Property
         
-        Private Function FilterManager(ByVal entity As Employee) As Boolean
-            Return Object.Equals(entity.EmployeeID, Me.ManagerID)
-        End Function
-        
         Private Function GetManagerKey() As Object
             If (Me.ManagerID Is Nothing) Then
                 Return Nothing
@@ -1842,10 +1838,6 @@ Namespace DataTests.AdventureWorks.LTS
             End Set
         End Property
         
-        Private Function FilterEmployee(ByVal entity As Employee) As Boolean
-            Return Object.Equals(entity.EmployeeID, Me.EmployeeID)
-        End Function
-        
         Private Function GetEmployeeKey() As Object
             Return Me.EmployeeID
         End Function
@@ -2287,16 +2279,8 @@ Namespace DataTests.AdventureWorks.LTS
             End Set
         End Property
         
-        Private Function FilterProduct(ByVal entity As Product) As Boolean
-            Return Object.Equals(entity.ProductID, Me.ProductID)
-        End Function
-        
         Private Function GetProductKey() As Object
             Return Me.ProductID
-        End Function
-        
-        Private Function FilterPurchaseOrder(ByVal entity As PurchaseOrder) As Boolean
-            Return Object.Equals(entity.PurchaseOrderID, Me.PurchaseOrderID)
         End Function
         
         Private Function GetPurchaseOrderKey() As Object

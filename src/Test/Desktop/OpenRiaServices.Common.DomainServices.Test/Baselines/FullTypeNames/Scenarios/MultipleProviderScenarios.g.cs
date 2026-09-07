@@ -1161,11 +1161,6 @@ namespace DataTests.Northwind.LTS
             }
         }
         
-        private bool FilterCustomer(global::DataTests.Northwind.LTS.Customer entity)
-        {
-            return (entity.CustomerID == this.CustomerID);
-        }
-        
         private object GetCustomerKey()
         {
             if ((this.CustomerID == null))
@@ -1468,19 +1463,9 @@ namespace DataTests.Northwind.LTS
             }
         }
         
-        private bool FilterOrder(global::DataTests.Northwind.LTS.Order entity)
-        {
-            return (entity.OrderID == this.OrderID);
-        }
-        
         private object GetOrderKey()
         {
             return this.OrderID;
-        }
-        
-        private bool FilterProduct(global::DataTests.Northwind.LTS.Product entity)
-        {
-            return (entity.ProductID == this.ProductID);
         }
         
         private object GetProductKey()
@@ -2002,11 +1987,6 @@ namespace DataTests.Northwind.LTS
             }
         }
         
-        private bool FilterCategory(global::DataTests.Northwind.LTS.Category entity)
-        {
-            return (entity.CategoryID == this.CategoryID);
-        }
-        
         private object GetCategoryKey()
         {
             if ((this.CategoryID == null))
@@ -2499,11 +2479,6 @@ namespace DataTests.Northwind.LTS
                     this.OnTerritoryIDChanged();
                 }
             }
-        }
-        
-        private bool FilterRegion(global::DataTests.Northwind.LTS.Region entity)
-        {
-            return (entity.RegionID == this.RegionID);
         }
         
         private object GetRegionKey()
@@ -3670,11 +3645,6 @@ namespace NorthwindModel
             }
         }
         
-        private bool FilterCustomer(global::NorthwindModel.Customer entity)
-        {
-            return (entity.CustomerID == this.CustomerID);
-        }
-        
         private object GetCustomerKey()
         {
             if ((this.CustomerID == null))
@@ -3977,19 +3947,9 @@ namespace NorthwindModel
             }
         }
         
-        private bool FilterOrder(global::NorthwindModel.Order entity)
-        {
-            return (entity.OrderID == this.OrderID);
-        }
-        
         private object GetOrderKey()
         {
             return this.OrderID;
-        }
-        
-        private bool FilterProduct(global::NorthwindModel.Product entity)
-        {
-            return (entity.ProductID == this.ProductID);
         }
         
         private object GetProductKey()
@@ -4510,11 +4470,6 @@ namespace NorthwindModel
             }
         }
         
-        private bool FilterCategory(global::NorthwindModel.Category entity)
-        {
-            return (entity.CategoryID == this.CategoryID);
-        }
-        
         private object GetCategoryKey()
         {
             if ((this.CategoryID == null))
@@ -5000,11 +4955,6 @@ namespace NorthwindModel
                     this.OnTerritoryIDChanged();
                 }
             }
-        }
-        
-        private bool FilterRegion(global::NorthwindModel.Region entity)
-        {
-            return (entity.RegionID == this.RegionID);
         }
         
         private object GetRegionKey()

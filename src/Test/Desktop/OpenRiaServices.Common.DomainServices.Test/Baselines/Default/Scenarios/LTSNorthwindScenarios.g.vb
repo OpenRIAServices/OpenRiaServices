@@ -982,10 +982,6 @@ Namespace DataTests.Scenarios.LTS.Northwind
             End Set
         End Property
         
-        Private Function FilterCustomer(ByVal entity As Customer_Bug479436) As Boolean
-            Return Object.Equals(entity.CustomerID, Me.CustomerID)
-        End Function
-        
         Private Function GetCustomerKey() As Object
             If (Me.CustomerID Is Nothing) Then
                 Return Nothing

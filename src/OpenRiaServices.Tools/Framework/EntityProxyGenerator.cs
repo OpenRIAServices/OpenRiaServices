@@ -828,7 +828,9 @@ namespace OpenRiaServices.Tools
             // }
             string[] thisKeyProps = EntityAssociationAttribute.ThisKeyMembers.ToArray();
             string[] otherKeyProps = EntityAssociationAttribute.OtherKeyMembers.ToArray();
-            CodeMemberMethod filterMethod = this.GenerateFilterMethod(proxyClass, pd.Name, pd.PropertyType, thisKeyProps, otherKeyProps, isExternal);
+            CodeMemberMethod filterMethod = useKeyLookup
+                ? null
+                : this.GenerateFilterMethod(proxyClass, pd.Name, pd.PropertyType, thisKeyProps, otherKeyProps, isExternal);
             CodeMemberMethod keyGetterMethod = useKeyLookup
                 ? this.GenerateAssociationKeyGetter(proxyClass, pd.Name, thisKeyProps)
                 : null;
@@ -1039,7 +1041,10 @@ namespace OpenRiaServices.Tools
             }
 
             proxyClass.Members.Add(prop);
-            proxyClass.Members.Add(filterMethod);
+            if (filterMethod != null)
+            {
+                proxyClass.Members.Add(filterMethod);
+            }
             if (keyGetterMethod != null)
             {
                 proxyClass.Members.Add(keyGetterMethod);

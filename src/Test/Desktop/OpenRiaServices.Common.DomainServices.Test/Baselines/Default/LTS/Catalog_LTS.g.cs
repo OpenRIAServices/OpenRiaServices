@@ -620,11 +620,6 @@ namespace DataTests.AdventureWorks.LTS
             }
         }
         
-        private bool FilterManager(Employee entity)
-        {
-            return (entity.EmployeeID == this.ManagerID);
-        }
-        
         private object GetManagerKey()
         {
             if ((this.ManagerID == null))
@@ -1954,11 +1949,6 @@ namespace DataTests.AdventureWorks.LTS
             }
         }
         
-        private bool FilterEmployee(Employee entity)
-        {
-            return (entity.EmployeeID == this.EmployeeID);
-        }
-        
         private object GetEmployeeKey()
         {
             return this.EmployeeID;
@@ -2435,19 +2425,9 @@ namespace DataTests.AdventureWorks.LTS
             }
         }
         
-        private bool FilterProduct(Product entity)
-        {
-            return (entity.ProductID == this.ProductID);
-        }
-        
         private object GetProductKey()
         {
             return this.ProductID;
-        }
-        
-        private bool FilterPurchaseOrder(PurchaseOrder entity)
-        {
-            return (entity.PurchaseOrderID == this.PurchaseOrderID);
         }
         
         private object GetPurchaseOrderKey()

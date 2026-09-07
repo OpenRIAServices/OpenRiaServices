@@ -1094,10 +1094,6 @@ Namespace DataTests.Northwind.LTS
             End Set
         End Property
         
-        Private Function FilterCustomer(ByVal entity As Customer) As Boolean
-            Return Object.Equals(entity.CustomerID, Me.CustomerID)
-        End Function
-        
         Private Function GetCustomerKey() As Object
             If (Me.CustomerID Is Nothing) Then
                 Return Nothing
@@ -1370,16 +1366,8 @@ Namespace DataTests.Northwind.LTS
             End Set
         End Property
         
-        Private Function FilterOrder(ByVal entity As Order) As Boolean
-            Return Object.Equals(entity.OrderID, Me.OrderID)
-        End Function
-        
         Private Function GetOrderKey() As Object
             Return Me.OrderID
-        End Function
-        
-        Private Function FilterProduct(ByVal entity As Product) As Boolean
-            Return Object.Equals(entity.ProductID, Me.ProductID)
         End Function
         
         Private Function GetProductKey() As Object
@@ -1861,10 +1849,6 @@ Namespace DataTests.Northwind.LTS
             End Get
         End Property
         
-        Private Function FilterCategory(ByVal entity As Category) As Boolean
-            Return Object.Equals(entity.CategoryID, Me.CategoryID)
-        End Function
-        
         Private Function GetCategoryKey() As Object
             If (Me.CategoryID Is Nothing) Then
                 Return Nothing
@@ -2321,10 +2305,6 @@ Namespace DataTests.Northwind.LTS
                 End If
             End Set
         End Property
-        
-        Private Function FilterRegion(ByVal entity As Region) As Boolean
-            Return Object.Equals(entity.RegionID, Me.RegionID)
-        End Function
         
         Private Function GetRegionKey() As Object
             Return Me.RegionID

@@ -1045,11 +1045,6 @@ namespace DataTests.Scenarios.LTS.Northwind
             }
         }
         
-        private bool FilterCustomer(Customer_Bug479436 entity)
-        {
-            return (entity.CustomerID == this.CustomerID);
-        }
-        
         private object GetCustomerKey()
         {
             if ((this.CustomerID == null))

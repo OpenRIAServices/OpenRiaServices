@@ -1065,10 +1065,10 @@ namespace OpenRiaServices.Client.Test
 
             D[] entities = Enumerable.Range(1, 5000).Select(id => new D { ID = id }).ToArray();
             C source = new C { ID = 1, DID_Ref1 = entities.Length };
-            container.LoadEntities(entities.Cast<Entity>().Append(source));
+            container.LoadEntities(entities.Cast<Entity>().Concat(new[] { source }));
 
             EntityRefByKey<D> reference = new EntityRefByKey<D>(source, "D_Ref1", () => source.DID_Ref1);
-            Assert.AreSame(entities[^1], reference.Entity);
+            Assert.AreSame(entities[entities.Length - 1], reference.Entity);
 
             source.DID_Ref1 = 1;
             Assert.AreSame(entities[0], reference.Entity);

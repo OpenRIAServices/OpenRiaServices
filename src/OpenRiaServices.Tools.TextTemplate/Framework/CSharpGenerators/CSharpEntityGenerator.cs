@@ -823,10 +823,13 @@ this.Write(")]\r\n");
 		AssociationMetadata metadata = new AssociationMetadata(pd);
 		this.GenerateAssociationField(metadata);
 		this.GenerateSingletonAssociationProperty(metadata);
-		this.GenerateAssociationFilterMethod(metadata);
 		if (metadata.UseKeyLookup)
 		{
 			this.GenerateAssociationKeyGetter(metadata);
+		}
+		else
+		{
+			this.GenerateAssociationFilterMethod(metadata);
 		}
     }
 

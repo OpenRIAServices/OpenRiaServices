@@ -58,6 +58,7 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.AssertGeneratedCodeContains(generatedCode, "EntityRefByKey<EntityRefCodeGenTarget> _byPrimaryKey");
             TestHelper.AssertGeneratedCodeContains(generatedCode, "EntityRef<EntityRefCodeGenTarget> _byNonKey");
             TestHelper.AssertGeneratedCodeContains(generatedCode, "new EntityRefByKey<EntityRefCodeGenTarget>(this, \"ByPrimaryKey\", this.GetByPrimaryKeyKey)");
+            TestHelper.AssertGeneratedCodeDoesNotContain(generatedCode, "FilterByPrimaryKey");
         }
 
         [DeploymentItem(@"Baselines\Default\Mocks", "CG_Scenarios_Complex_RootNs_FullTypeNames")]
