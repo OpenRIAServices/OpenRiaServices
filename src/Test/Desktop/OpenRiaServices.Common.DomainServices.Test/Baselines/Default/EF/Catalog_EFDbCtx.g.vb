@@ -48,7 +48,7 @@ Namespace DbContextModels.AdventureWorks
         
         Private _loginID As String
         
-        Private _manager As EntityRef(Of Employee)
+        Private _manager As EntityRefByKey(Of Employee)
         
         Private _managerID As Nullable(Of Integer)
         
@@ -315,7 +315,7 @@ Namespace DbContextModels.AdventureWorks
         Public Property Manager() As Employee
             Get
                 If (Me._manager Is Nothing) Then
-                    Me._manager = New EntityRef(Of Employee)(Me, "Manager", AddressOf Me.FilterManager)
+                    Me._manager = New EntityRefByKey(Of Employee)(Me, "Manager", AddressOf Me.GetManagerKey)
                 End If
                 Return Me._manager.Entity
             End Get
@@ -559,8 +559,11 @@ Namespace DbContextModels.AdventureWorks
             End Set
         End Property
         
-        Private Function FilterManager(ByVal entity As Employee) As Boolean
-            Return Object.Equals(entity.EmployeeID, Me.ManagerID)
+        Private Function GetManagerKey() As Object
+            If (Me.ManagerID Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.ManagerID
         End Function
         
         Private Sub AttachPurchaseOrders(ByVal entity As PurchaseOrder)
@@ -1462,7 +1465,7 @@ Namespace DbContextModels.AdventureWorks
     Partial Public NotInheritable Class PurchaseOrder
         Inherits Entity
         
-        Private _employee As EntityRef(Of Employee)
+        Private _employee As EntityRefByKey(Of Employee)
         
         Private _employeeID As Integer
         
@@ -1571,7 +1574,7 @@ Namespace DbContextModels.AdventureWorks
         Public Property Employee() As Employee
             Get
                 If (Me._employee Is Nothing) Then
-                    Me._employee = New EntityRef(Of Employee)(Me, "Employee", AddressOf Me.FilterEmployee)
+                    Me._employee = New EntityRefByKey(Of Employee)(Me, "Employee", AddressOf Me.GetEmployeeKey)
                 End If
                 Return Me._employee.Entity
             End Get
@@ -1887,8 +1890,8 @@ Namespace DbContextModels.AdventureWorks
             End Set
         End Property
         
-        Private Function FilterEmployee(ByVal entity As Employee) As Boolean
-            Return Object.Equals(entity.EmployeeID, Me.EmployeeID)
+        Private Function GetEmployeeKey() As Object
+            Return Me.EmployeeID
         End Function
         
         Private Sub AttachPurchaseOrderDetails(ByVal entity As PurchaseOrderDetail)
@@ -1927,11 +1930,11 @@ Namespace DbContextModels.AdventureWorks
         
         Private _orderQty As Short
         
-        Private _product As EntityRef(Of Product)
+        Private _product As EntityRefByKey(Of Product)
         
         Private _productID As Integer
         
-        Private _purchaseOrder As EntityRef(Of PurchaseOrder)
+        Private _purchaseOrder As EntityRefByKey(Of PurchaseOrder)
         
         Private _purchaseOrderDetailID As Integer
         
@@ -2100,7 +2103,7 @@ Namespace DbContextModels.AdventureWorks
         Public Property Product() As Product
             Get
                 If (Me._product Is Nothing) Then
-                    Me._product = New EntityRef(Of Product)(Me, "Product", AddressOf Me.FilterProduct)
+                    Me._product = New EntityRefByKey(Of Product)(Me, "Product", AddressOf Me.GetProductKey)
                 End If
                 Return Me._product.Entity
             End Get
@@ -2155,7 +2158,7 @@ Namespace DbContextModels.AdventureWorks
         Public Property PurchaseOrder() As PurchaseOrder
             Get
                 If (Me._purchaseOrder Is Nothing) Then
-                    Me._purchaseOrder = New EntityRef(Of PurchaseOrder)(Me, "PurchaseOrder", AddressOf Me.FilterPurchaseOrder)
+                    Me._purchaseOrder = New EntityRefByKey(Of PurchaseOrder)(Me, "PurchaseOrder", AddressOf Me.GetPurchaseOrderKey)
                 End If
                 Return Me._purchaseOrder.Entity
             End Get
@@ -2311,12 +2314,12 @@ Namespace DbContextModels.AdventureWorks
             End Set
         End Property
         
-        Private Function FilterProduct(ByVal entity As Product) As Boolean
-            Return Object.Equals(entity.ProductID, Me.ProductID)
+        Private Function GetProductKey() As Object
+            Return Me.ProductID
         End Function
         
-        Private Function FilterPurchaseOrder(ByVal entity As PurchaseOrder) As Boolean
-            Return Object.Equals(entity.PurchaseOrderID, Me.PurchaseOrderID)
+        Private Function GetPurchaseOrderKey() As Object
+            Return Me.PurchaseOrderID
         End Function
         
         ''' <summary>

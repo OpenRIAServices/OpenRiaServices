@@ -32,9 +32,9 @@ namespace SharedEntities
     public sealed partial class EntityA : Entity
     {
         
-        private EntityRef<EntityB> _entityB;
+        private EntityRefByKey<EntityB> _entityB;
         
-        private EntityRef<EntityC> _entityC;
+        private EntityRefByKey<EntityC> _entityC;
         
         private int _id;
         
@@ -81,7 +81,7 @@ namespace SharedEntities
             {
                 if ((this._entityB == null))
                 {
-                    this._entityB = new EntityRef<EntityB>(this, "EntityB", this.FilterEntityB);
+                    this._entityB = new EntityRefByKey<EntityB>(this, "EntityB", this.GetEntityBKey);
                 }
                 return this._entityB.Entity;
             }
@@ -107,7 +107,7 @@ namespace SharedEntities
             {
                 if ((this._entityC == null))
                 {
-                    this._entityC = new EntityRef<EntityC>(this, "EntityC", this.FilterEntityC);
+                    this._entityC = new EntityRefByKey<EntityC>(this, "EntityC", this.GetEntityCKey);
                 }
                 return this._entityC.Entity;
             }
@@ -245,14 +245,14 @@ namespace SharedEntities
             }
         }
         
-        private bool FilterEntityB(EntityB entity)
+        private object GetEntityBKey()
         {
-            return (entity.Id == this.IdB);
+            return this.IdB;
         }
         
-        private bool FilterEntityC(EntityC entity)
+        private object GetEntityCKey()
         {
-            return (entity.Id == this.IdC);
+            return this.IdC;
         }
         
         /// <summary>
@@ -533,7 +533,7 @@ namespace SharedEntities
     public sealed partial class EntityY : EntityX
     {
         
-        private EntityRef<EntityZ> _entityZ;
+        private EntityRefByKey<EntityZ> _entityZ;
         
         private int _idZ;
         
@@ -568,7 +568,7 @@ namespace SharedEntities
             {
                 if ((this._entityZ == null))
                 {
-                    this._entityZ = new EntityRef<EntityZ>(this, "EntityZ", this.FilterEntityZ);
+                    this._entityZ = new EntityRefByKey<EntityZ>(this, "EntityZ", this.GetEntityZKey);
                 }
                 return this._entityZ.Entity;
             }
@@ -608,9 +608,9 @@ namespace SharedEntities
             }
         }
         
-        private bool FilterEntityZ(EntityZ entity)
+        private object GetEntityZKey()
         {
-            return (entity.Id == this.IdZ);
+            return this.IdZ;
         }
     }
     

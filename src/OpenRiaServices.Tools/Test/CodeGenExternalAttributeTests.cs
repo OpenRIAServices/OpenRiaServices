@@ -53,7 +53,7 @@ namespace OpenRiaServices.Tools.Test
 
             TestHelper.AssertGeneratedCodeContains(
                 generatedCode,
-                "private EntityRef<global::DataTests.Scenarios.EF.Northwind.PersonalDetails> _personalDetails_MarkedAsExternal;",
+                "private EntityRefByKey<global::DataTests.Scenarios.EF.Northwind.PersonalDetails> _personalDetails_MarkedAsExternal;",
                 "[EntityAssociation(\"Employee_PersonalDetails\", \"EmployeeID\", \"UniqueID\", IsForeignKey=true)] [ExternalReference()]",
                 "public global::DataTests.Scenarios.EF.Northwind.PersonalDetails PersonalDetails_MarkedAsExternal",
                 "private bool FilterPersonalDetails_MarkedAsExternal(global::DataTests.Scenarios.EF.Northwind.PersonalDetails entity)");

@@ -621,7 +621,7 @@ namespace DataTests.Northwind.LTS
     public sealed partial class Order : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Customer> _customer;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Customer> _customer;
         
         private string _customerID;
         
@@ -714,7 +714,7 @@ namespace DataTests.Northwind.LTS
             {
                 if ((this._customer == null))
                 {
-                    this._customer = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Customer>(this, "Customer", this.FilterCustomer);
+                    this._customer = new global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Customer>(this, "Customer", this.GetCustomerKey);
                 }
                 return this._customer.Entity;
             }
@@ -1161,9 +1161,13 @@ namespace DataTests.Northwind.LTS
             }
         }
         
-        private bool FilterCustomer(global::DataTests.Northwind.LTS.Customer entity)
+        private object GetCustomerKey()
         {
-            return (entity.CustomerID == this.CustomerID);
+            if ((this.CustomerID == null))
+            {
+                return null;
+            }
+            return this.CustomerID;
         }
         
         private void AttachOrder_Details(global::DataTests.Northwind.LTS.Order_Detail entity)
@@ -1200,11 +1204,11 @@ namespace DataTests.Northwind.LTS
         
         private float _discount;
         
-        private global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Order> _order;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Order> _order;
         
         private int _orderID;
         
-        private global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Product> _product;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Product> _product;
         
         private int _productID;
         
@@ -1277,7 +1281,7 @@ namespace DataTests.Northwind.LTS
             {
                 if ((this._order == null))
                 {
-                    this._order = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Order>(this, "Order", this.FilterOrder);
+                    this._order = new global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Order>(this, "Order", this.GetOrderKey);
                 }
                 return this._order.Entity;
             }
@@ -1347,7 +1351,7 @@ namespace DataTests.Northwind.LTS
             {
                 if ((this._product == null))
                 {
-                    this._product = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Product>(this, "Product", this.FilterProduct);
+                    this._product = new global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Product>(this, "Product", this.GetProductKey);
                 }
                 return this._product.Entity;
             }
@@ -1459,14 +1463,14 @@ namespace DataTests.Northwind.LTS
             }
         }
         
-        private bool FilterOrder(global::DataTests.Northwind.LTS.Order entity)
+        private object GetOrderKey()
         {
-            return (entity.OrderID == this.OrderID);
+            return this.OrderID;
         }
         
-        private bool FilterProduct(global::DataTests.Northwind.LTS.Product entity)
+        private object GetProductKey()
         {
-            return (entity.ProductID == this.ProductID);
+            return this.ProductID;
         }
         
         /// <summary>
@@ -1486,7 +1490,7 @@ namespace DataTests.Northwind.LTS
     public sealed partial class Product : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Category> _category;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Category> _category;
         
         private global::System.Nullable<int> _categoryID;
         
@@ -1573,7 +1577,7 @@ namespace DataTests.Northwind.LTS
             {
                 if ((this._category == null))
                 {
-                    this._category = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Category>(this, "Category", this.FilterCategory);
+                    this._category = new global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Category>(this, "Category", this.GetCategoryKey);
                 }
                 return this._category.Entity;
             }
@@ -1983,9 +1987,13 @@ namespace DataTests.Northwind.LTS
             }
         }
         
-        private bool FilterCategory(global::DataTests.Northwind.LTS.Category entity)
+        private object GetCategoryKey()
         {
-            return (entity.CategoryID == this.CategoryID);
+            if ((this.CategoryID == null))
+            {
+                return null;
+            }
+            return this.CategoryID;
         }
         
         private void AttachOrder_Details(global::DataTests.Northwind.LTS.Order_Detail entity)
@@ -2314,7 +2322,7 @@ namespace DataTests.Northwind.LTS
     public sealed partial class Territory : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Region> _region;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Region> _region;
         
         private int _regionID;
         
@@ -2357,7 +2365,7 @@ namespace DataTests.Northwind.LTS
             {
                 if ((this._region == null))
                 {
-                    this._region = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Region>(this, "Region", this.FilterRegion);
+                    this._region = new global::OpenRiaServices.Client.EntityRefByKey<global::DataTests.Northwind.LTS.Region>(this, "Region", this.GetRegionKey);
                 }
                 return this._region.Entity;
             }
@@ -2473,9 +2481,9 @@ namespace DataTests.Northwind.LTS
             }
         }
         
-        private bool FilterRegion(global::DataTests.Northwind.LTS.Region entity)
+        private object GetRegionKey()
         {
-            return (entity.RegionID == this.RegionID);
+            return this.RegionID;
         }
         
         /// <summary>
@@ -3098,7 +3106,7 @@ namespace NorthwindModel
     public sealed partial class Order : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Customer> _customer;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Customer> _customer;
         
         private string _customerID;
         
@@ -3191,7 +3199,7 @@ namespace NorthwindModel
             {
                 if ((this._customer == null))
                 {
-                    this._customer = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Customer>(this, "Customer", this.FilterCustomer);
+                    this._customer = new global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Customer>(this, "Customer", this.GetCustomerKey);
                 }
                 return this._customer.Entity;
             }
@@ -3637,9 +3645,13 @@ namespace NorthwindModel
             }
         }
         
-        private bool FilterCustomer(global::NorthwindModel.Customer entity)
+        private object GetCustomerKey()
         {
-            return (entity.CustomerID == this.CustomerID);
+            if ((this.CustomerID == null))
+            {
+                return null;
+            }
+            return this.CustomerID;
         }
         
         private void AttachOrder_Details(global::NorthwindModel.Order_Detail entity)
@@ -3676,11 +3688,11 @@ namespace NorthwindModel
         
         private float _discount;
         
-        private global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Order> _order;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Order> _order;
         
         private int _orderID;
         
-        private global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Product> _product;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Product> _product;
         
         private int _productID;
         
@@ -3753,7 +3765,7 @@ namespace NorthwindModel
             {
                 if ((this._order == null))
                 {
-                    this._order = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Order>(this, "Order", this.FilterOrder);
+                    this._order = new global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Order>(this, "Order", this.GetOrderKey);
                 }
                 return this._order.Entity;
             }
@@ -3823,7 +3835,7 @@ namespace NorthwindModel
             {
                 if ((this._product == null))
                 {
-                    this._product = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Product>(this, "Product", this.FilterProduct);
+                    this._product = new global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Product>(this, "Product", this.GetProductKey);
                 }
                 return this._product.Entity;
             }
@@ -3935,14 +3947,14 @@ namespace NorthwindModel
             }
         }
         
-        private bool FilterOrder(global::NorthwindModel.Order entity)
+        private object GetOrderKey()
         {
-            return (entity.OrderID == this.OrderID);
+            return this.OrderID;
         }
         
-        private bool FilterProduct(global::NorthwindModel.Product entity)
+        private object GetProductKey()
         {
-            return (entity.ProductID == this.ProductID);
+            return this.ProductID;
         }
         
         /// <summary>
@@ -3962,7 +3974,7 @@ namespace NorthwindModel
     public sealed partial class Product : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Category> _category;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Category> _category;
         
         private global::System.Nullable<int> _categoryID;
         
@@ -4049,7 +4061,7 @@ namespace NorthwindModel
             {
                 if ((this._category == null))
                 {
-                    this._category = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Category>(this, "Category", this.FilterCategory);
+                    this._category = new global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Category>(this, "Category", this.GetCategoryKey);
                 }
                 return this._category.Entity;
             }
@@ -4458,9 +4470,13 @@ namespace NorthwindModel
             }
         }
         
-        private bool FilterCategory(global::NorthwindModel.Category entity)
+        private object GetCategoryKey()
         {
-            return (entity.CategoryID == this.CategoryID);
+            if ((this.CategoryID == null))
+            {
+                return null;
+            }
+            return this.CategoryID;
         }
         
         private void AttachOrder_Details(global::NorthwindModel.Order_Detail entity)
@@ -4786,7 +4802,7 @@ namespace NorthwindModel
     public sealed partial class Territory : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Region> _region;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Region> _region;
         
         private int _regionID;
         
@@ -4829,7 +4845,7 @@ namespace NorthwindModel
             {
                 if ((this._region == null))
                 {
-                    this._region = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Region>(this, "Region", this.FilterRegion);
+                    this._region = new global::OpenRiaServices.Client.EntityRefByKey<global::NorthwindModel.Region>(this, "Region", this.GetRegionKey);
                 }
                 return this._region.Entity;
             }
@@ -4941,9 +4957,9 @@ namespace NorthwindModel
             }
         }
         
-        private bool FilterRegion(global::NorthwindModel.Region entity)
+        private object GetRegionKey()
         {
-            return (entity.RegionID == this.RegionID);
+            return this.RegionID;
         }
         
         /// <summary>

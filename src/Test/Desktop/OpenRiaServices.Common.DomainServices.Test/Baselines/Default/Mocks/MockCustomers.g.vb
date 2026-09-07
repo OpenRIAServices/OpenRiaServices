@@ -411,7 +411,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class MockReport
         Inherits Entity
         
-        Private _customer As EntityRef(Of MockCustomer)
+        Private _customer As EntityRefByKey(Of MockCustomer)
         
         Private _customerId As Integer
         
@@ -491,7 +491,7 @@ Namespace TestDomainServices
         Public Property Customer() As MockCustomer
             Get
                 If (Me._customer Is Nothing) Then
-                    Me._customer = New EntityRef(Of MockCustomer)(Me, "Customer", AddressOf Me.FilterCustomer)
+                    Me._customer = New EntityRefByKey(Of MockCustomer)(Me, "Customer", AddressOf Me.GetCustomerKey)
                 End If
                 Return Me._customer.Entity
             End Get
@@ -650,8 +650,8 @@ Namespace TestDomainServices
             End Get
         End Property
         
-        Private Function FilterCustomer(ByVal entity As MockCustomer) As Boolean
-            Return Object.Equals(entity.CustomerId, Me.CustomerId)
+        Private Function GetCustomerKey() As Object
+            Return Me.CustomerId
         End Function
         
         ''' <summary>

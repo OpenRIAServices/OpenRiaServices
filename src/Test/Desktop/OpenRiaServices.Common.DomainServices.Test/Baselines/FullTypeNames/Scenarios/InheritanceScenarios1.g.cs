@@ -27,7 +27,7 @@ namespace TestDomainServices
         
         private int _inheritanceD_ID;
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.InheritanceT1> _t1;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.InheritanceT1> _t1;
         
         private int _t1_id;
         
@@ -171,7 +171,7 @@ namespace TestDomainServices
             {
                 if ((this._t1 == null))
                 {
-                    this._t1 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.InheritanceT1>(this, "T1", this.FilterT1);
+                    this._t1 = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.InheritanceT1>(this, "T1", this.GetT1Key);
                 }
                 return this._t1.Entity;
             }
@@ -236,9 +236,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterT1(global::TestDomainServices.InheritanceT1 entity)
+        private object GetT1Key()
         {
-            return (entity.ID == this.T1_ID);
+            return this.T1_ID;
         }
         
         private bool FilterT1s(global::TestDomainServices.InheritanceT1 entity)
@@ -271,7 +271,7 @@ namespace TestDomainServices
         
         private int _inheritanceD_ID;
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.InheritanceT1> _t1;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.InheritanceT1> _t1;
         
         private int _t1_id;
         
@@ -415,7 +415,7 @@ namespace TestDomainServices
             {
                 if ((this._t1 == null))
                 {
-                    this._t1 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.InheritanceT1>(this, "T1", this.FilterT1);
+                    this._t1 = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.InheritanceT1>(this, "T1", this.GetT1Key);
                 }
                 return this._t1.Entity;
             }
@@ -480,9 +480,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterT1(global::TestDomainServices.InheritanceT1 entity)
+        private object GetT1Key()
         {
-            return (entity.ID == this.T1_ID);
+            return this.T1_ID;
         }
         
         private bool FilterT1s(global::TestDomainServices.InheritanceT1 entity)

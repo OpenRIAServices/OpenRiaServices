@@ -207,9 +207,9 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         
         private OwnedEntityWithBackNavigation _ownedEntityWithBackNavigation;
         
-        private EntityRef<OwnedEntityWithExplicitId> _ownedEntityWithExplicitId;
+        private EntityRefByKey<OwnedEntityWithExplicitId> _ownedEntityWithExplicitId;
         
-        private EntityRef<OwnedEntityWithExplicitIdAndBackNavigation> _ownedEntityWithExplicitIdAndBackNavigation;
+        private EntityRefByKey<OwnedEntityWithExplicitIdAndBackNavigation> _ownedEntityWithExplicitIdAndBackNavigation;
         
         #region Extensibility Method Definitions
 
@@ -323,7 +323,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
             {
                 if ((this._ownedEntityWithExplicitId == null))
                 {
-                    this._ownedEntityWithExplicitId = new EntityRef<OwnedEntityWithExplicitId>(this, "OwnedEntityWithExplicitId", this.FilterOwnedEntityWithExplicitId);
+                    this._ownedEntityWithExplicitId = new EntityRefByKey<OwnedEntityWithExplicitId>(this, "OwnedEntityWithExplicitId", this.GetOwnedEntityWithExplicitIdKey);
                 }
                 return this._ownedEntityWithExplicitId.Entity;
             }
@@ -351,7 +351,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
             {
                 if ((this._ownedEntityWithExplicitIdAndBackNavigation == null))
                 {
-                    this._ownedEntityWithExplicitIdAndBackNavigation = new EntityRef<OwnedEntityWithExplicitIdAndBackNavigation>(this, "OwnedEntityWithExplicitIdAndBackNavigation", this.FilterOwnedEntityWithExplicitIdAndBackNavigation);
+                    this._ownedEntityWithExplicitIdAndBackNavigation = new EntityRefByKey<OwnedEntityWithExplicitIdAndBackNavigation>(this, "OwnedEntityWithExplicitIdAndBackNavigation", this.GetOwnedEntityWithExplicitIdAndBackNavigationKey);
                 }
                 return this._ownedEntityWithExplicitIdAndBackNavigation.Entity;
             }
@@ -372,9 +372,19 @@ namespace EFCoreModels.Scenarios.OwnedTypes
             return (entity.EmployeeId == this.EmployeeId);
         }
         
+        private object GetOwnedEntityWithExplicitIdKey()
+        {
+            return this.EmployeeId;
+        }
+        
         private bool FilterOwnedEntityWithExplicitIdAndBackNavigation(OwnedEntityWithExplicitIdAndBackNavigation entity)
         {
             return (entity.EmployeeId == this.EmployeeId);
+        }
+        
+        private object GetOwnedEntityWithExplicitIdAndBackNavigationKey()
+        {
+            return this.EmployeeId;
         }
         
         /// <summary>
@@ -547,7 +557,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         
         private string _description;
         
-        private EntityRef<Employee> _employee;
+        private EntityRefByKey<Employee> _employee;
         
         private int _employeeId;
         
@@ -609,7 +619,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
             {
                 if ((this._employee == null))
                 {
-                    this._employee = new EntityRef<Employee>(this, "Employee", this.FilterEmployee);
+                    this._employee = new EntityRefByKey<Employee>(this, "Employee", this.GetEmployeeKey);
                 }
                 return this._employee.Entity;
             }
@@ -662,6 +672,11 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         private bool FilterEmployee(Employee entity)
         {
             return (entity.EmployeeId == this.EmployeeId);
+        }
+        
+        private object GetEmployeeKey()
+        {
+            return this.EmployeeId;
         }
         
         /// <summary>

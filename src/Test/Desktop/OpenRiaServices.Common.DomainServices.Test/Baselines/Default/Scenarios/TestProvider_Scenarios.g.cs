@@ -39,7 +39,7 @@ namespace TestDomainServices
     public sealed partial class A : Entity
     {
         
-        private EntityRef<B> _b;
+        private EntityRefByKey<B> _b;
         
         private int _bid1;
         
@@ -102,7 +102,7 @@ namespace TestDomainServices
             {
                 if ((this._b == null))
                 {
-                    this._b = new EntityRef<B>(this, "B", this.FilterB);
+                    this._b = new EntityRefByKey<B>(this, "B", this.GetBKey);
                 }
                 return this._b.Entity;
             }
@@ -314,10 +314,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterB(B entity)
+        private object GetBKey()
         {
-            return ((entity.ID1 == this.BID1) 
-                        && (entity.ID2 == this.BID2));
+            return OpenRiaServices.Client.EntityKey.Create(this.BID1, this.BID2);
         }
         
         /// <summary>
@@ -466,9 +465,9 @@ namespace TestDomainServices
         
         private int _bid2;
         
-        private EntityRef<D> _d_Ref1;
+        private EntityRefByKey<D> _d_Ref1;
         
-        private EntityRef<D> _d_Ref2;
+        private EntityRefByKey<D> _d_Ref2;
         
         private int _did_Ref1;
         
@@ -564,7 +563,7 @@ namespace TestDomainServices
             {
                 if ((this._d_Ref1 == null))
                 {
-                    this._d_Ref1 = new EntityRef<D>(this, "D_Ref1", this.FilterD_Ref1);
+                    this._d_Ref1 = new EntityRefByKey<D>(this, "D_Ref1", this.GetD_Ref1Key);
                 }
                 return this._d_Ref1.Entity;
             }
@@ -607,7 +606,7 @@ namespace TestDomainServices
             {
                 if ((this._d_Ref2 == null))
                 {
-                    this._d_Ref2 = new EntityRef<D>(this, "D_Ref2", this.FilterD_Ref2);
+                    this._d_Ref2 = new EntityRefByKey<D>(this, "D_Ref2", this.GetD_Ref2Key);
                 }
                 return this._d_Ref2.Entity;
             }
@@ -707,14 +706,14 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterD_Ref1(D entity)
+        private object GetD_Ref1Key()
         {
-            return (entity.ID == this.DID_Ref1);
+            return this.DID_Ref1;
         }
         
-        private bool FilterD_Ref2(D entity)
+        private object GetD_Ref2Key()
         {
-            return (entity.ID == this.DID_Ref2);
+            return this.DID_Ref2;
         }
         
         /// <summary>
@@ -835,7 +834,7 @@ namespace TestDomainServices
     public sealed partial class CartItem : Entity
     {
         
-        private EntityRef<Cart> _cart;
+        private EntityRefByKey<Cart> _cart;
         
         private int _cartId;
         
@@ -878,7 +877,7 @@ namespace TestDomainServices
             {
                 if ((this._cart == null))
                 {
-                    this._cart = new EntityRef<Cart>(this, "Cart", this.FilterCart);
+                    this._cart = new EntityRefByKey<Cart>(this, "Cart", this.GetCartKey);
                 }
                 return this._cart.Entity;
             }
@@ -985,9 +984,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterCart(Cart entity)
+        private object GetCartKey()
         {
-            return (entity.CartId == this.CartItemId);
+            return this.CartItemId;
         }
         
         /// <summary>
@@ -1140,9 +1139,9 @@ namespace TestDomainServices
         
         private EntityRef<C> _c;
         
-        private EntityRef<D> _d1;
+        private EntityRefByKey<D> _d1;
         
-        private EntityRef<D> _d2;
+        private EntityRefByKey<D> _d2;
         
         private EntityRef<D> _d2_BackRef;
         
@@ -1258,7 +1257,7 @@ namespace TestDomainServices
             {
                 if ((this._d1 == null))
                 {
-                    this._d1 = new EntityRef<D>(this, "D1", this.FilterD1);
+                    this._d1 = new EntityRefByKey<D>(this, "D1", this.GetD1Key);
                 }
                 return this._d1.Entity;
             }
@@ -1301,7 +1300,7 @@ namespace TestDomainServices
             {
                 if ((this._d2 == null))
                 {
-                    this._d2 = new EntityRef<D>(this, "D2", this.FilterD2);
+                    this._d2 = new EntityRefByKey<D>(this, "D2", this.GetD2Key);
                 }
                 return this._d2.Entity;
             }
@@ -1517,14 +1516,14 @@ namespace TestDomainServices
             return (entity.DID_Ref1 == this.ID);
         }
         
-        private bool FilterD1(D entity)
+        private object GetD1Key()
         {
-            return (entity.ID == this.DSelfRef_ID1);
+            return this.DSelfRef_ID1;
         }
         
-        private bool FilterD2(D entity)
+        private object GetD2Key()
         {
-            return (entity.ID == this.DSelfRef_ID2);
+            return this.DSelfRef_ID2;
         }
         
         private bool FilterD2_BackRef(D entity)
@@ -5411,9 +5410,9 @@ namespace TestDomainServices
         
         private int _id;
         
-        private EntityRef<NullableFKParent> _parent;
+        private EntityRefByKey<NullableFKParent> _parent;
         
-        private EntityRef<NullableFKParent> _parent2;
+        private EntityRefByKey<NullableFKParent> _parent2;
         
         private Nullable<int> _parentID;
         
@@ -5506,7 +5505,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new EntityRef<NullableFKParent>(this, "Parent", this.FilterParent);
+                    this._parent = new EntityRefByKey<NullableFKParent>(this, "Parent", this.GetParentKey);
                 }
                 return this._parent.Entity;
             }
@@ -5549,7 +5548,7 @@ namespace TestDomainServices
             {
                 if ((this._parent2 == null))
                 {
-                    this._parent2 = new EntityRef<NullableFKParent>(this, "Parent2", this.FilterParent2);
+                    this._parent2 = new EntityRefByKey<NullableFKParent>(this, "Parent2", this.GetParent2Key);
                 }
                 return this._parent2.Entity;
             }
@@ -5632,14 +5631,22 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterParent(NullableFKParent entity)
+        private object GetParentKey()
         {
-            return (entity.ID == this.ParentID);
+            if ((this.ParentID == null))
+            {
+                return null;
+            }
+            return this.ParentID;
         }
         
-        private bool FilterParent2(NullableFKParent entity)
+        private object GetParent2Key()
         {
-            return (entity.ID == this.ParentID_Singleton);
+            if ((this.ParentID_Singleton == null))
+            {
+                return null;
+            }
+            return this.ParentID_Singleton;
         }
         
         /// <summary>
@@ -6158,7 +6165,7 @@ namespace TestDomainServices
     public sealed partial class RoundtripOriginal_TestEntity2 : Entity
     {
         
-        private EntityRef<RoundtripOriginal_TestEntity> _assocProp;
+        private EntityRefByKey<RoundtripOriginal_TestEntity> _assocProp;
         
         private int _id;
         
@@ -6201,7 +6208,7 @@ namespace TestDomainServices
             {
                 if ((this._assocProp == null))
                 {
-                    this._assocProp = new EntityRef<RoundtripOriginal_TestEntity>(this, "AssocProp", this.FilterAssocProp);
+                    this._assocProp = new EntityRefByKey<RoundtripOriginal_TestEntity>(this, "AssocProp", this.GetAssocPropKey);
                 }
                 return this._assocProp.Entity;
             }
@@ -6290,9 +6297,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterAssocProp(RoundtripOriginal_TestEntity entity)
+        private object GetAssocPropKey()
         {
-            return (entity.ID == this.ID);
+            return this.ID;
         }
         
         /// <summary>
@@ -6545,7 +6552,7 @@ namespace TestDomainServices
     public sealed partial class TestCycles : Entity
     {
         
-        private EntityRef<TestCycles> _includedT;
+        private EntityRefByKey<TestCycles> _includedT;
         
         private EntityCollection<TestCycles> _includedTs;
         
@@ -6586,7 +6593,7 @@ namespace TestDomainServices
             {
                 if ((this._includedT == null))
                 {
-                    this._includedT = new EntityRef<TestCycles>(this, "IncludedT", this.FilterIncludedT);
+                    this._includedT = new EntityRefByKey<TestCycles>(this, "IncludedT", this.GetIncludedTKey);
                 }
                 return this._includedT.Entity;
             }
@@ -6686,9 +6693,13 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterIncludedT(TestCycles entity)
+        private object GetIncludedTKey()
         {
-            return (entity.Name == this.ParentName);
+            if ((this.ParentName == null))
+            {
+                return null;
+            }
+            return this.ParentName;
         }
         
         private void AttachIncludedTs(TestCycles entity)

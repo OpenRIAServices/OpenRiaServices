@@ -35,7 +35,7 @@ namespace TestDomainServices
         
         private string _operationResult;
         
-        private EntityRef<Parent> _parent;
+        private EntityRefByKey<Parent> _parent;
         
         private int _parentID;
         
@@ -147,7 +147,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new EntityRef<Parent>(this, "Parent", this.FilterParent);
+                    this._parent = new EntityRefByKey<Parent>(this, "Parent", this.GetParentKey);
                 }
                 return this._parent.Entity;
             }
@@ -268,9 +268,9 @@ namespace TestDomainServices
             return (entity.ParentID == this.ID);
         }
         
-        private bool FilterParent(Parent entity)
+        private object GetParentKey()
         {
-            return (entity.ID == this.ParentID);
+            return this.ParentID;
         }
         
         /// <summary>
@@ -305,7 +305,7 @@ namespace TestDomainServices
         
         private int _id;
         
-        private EntityRef<CompositionScenarios_Parent> _parent;
+        private EntityRefByKey<CompositionScenarios_Parent> _parent;
         
         private int _parentID;
         
@@ -394,7 +394,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new EntityRef<CompositionScenarios_Parent>(this, "Parent", this.FilterParent);
+                    this._parent = new EntityRefByKey<CompositionScenarios_Parent>(this, "Parent", this.GetParentKey);
                 }
                 return this._parent.Entity;
             }
@@ -452,9 +452,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterParent(CompositionScenarios_Parent entity)
+        private object GetParentKey()
         {
-            return (entity.ID == this.ParentID);
+            return this.ParentID;
         }
         
         /// <summary>
@@ -1000,7 +1000,7 @@ namespace TestDomainServices
         
         private string _operationResult;
         
-        private EntityRef<Child> _parent;
+        private EntityRefByKey<Child> _parent;
         
         private int _parentID;
         
@@ -1131,7 +1131,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new EntityRef<Child>(this, "Parent", this.FilterParent);
+                    this._parent = new EntityRefByKey<Child>(this, "Parent", this.GetParentKey);
                 }
                 return this._parent.Entity;
             }
@@ -1242,9 +1242,9 @@ namespace TestDomainServices
             return (entity.ParentID == this.ID);
         }
         
-        private bool FilterParent(Child entity)
+        private object GetParentKey()
         {
-            return (entity.ID == this.ParentID);
+            return this.ParentID;
         }
         
         /// <summary>
@@ -1279,7 +1279,7 @@ namespace TestDomainServices
         
         private string _operationResult;
         
-        private EntityRef<GrandChild> _parent;
+        private EntityRefByKey<GrandChild> _parent;
         
         private int _parentID;
         
@@ -1374,7 +1374,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new EntityRef<GrandChild>(this, "Parent", this.FilterParent);
+                    this._parent = new EntityRefByKey<GrandChild>(this, "Parent", this.GetParentKey);
                 }
                 return this._parent.Entity;
             }
@@ -1480,9 +1480,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterParent(GrandChild entity)
+        private object GetParentKey()
         {
-            return (entity.ID == this.ParentID);
+            return this.ParentID;
         }
         
         /// <summary>
@@ -1710,7 +1710,7 @@ namespace TestDomainServices
         
         private int _id;
         
-        private EntityRef<SelfReferencingComposition> _parent;
+        private EntityRefByKey<SelfReferencingComposition> _parent;
         
         private int _parentID;
         
@@ -1813,7 +1813,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new EntityRef<SelfReferencingComposition>(this, "Parent", this.FilterParent);
+                    this._parent = new EntityRefByKey<SelfReferencingComposition>(this, "Parent", this.GetParentKey);
                 }
                 return this._parent.Entity;
             }
@@ -1900,9 +1900,9 @@ namespace TestDomainServices
             return (entity.ParentID == this.ID);
         }
         
-        private bool FilterParent(SelfReferencingComposition entity)
+        private object GetParentKey()
         {
-            return (entity.ID == this.ParentID);
+            return this.ParentID;
         }
         
         /// <summary>
@@ -1926,7 +1926,7 @@ namespace TestDomainServices
         
         private int _id;
         
-        private EntityRef<SelfReferencingComposition_OneToMany> _parent;
+        private EntityRefByKey<SelfReferencingComposition_OneToMany> _parent;
         
         private int _parentID;
         
@@ -2010,7 +2010,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new EntityRef<SelfReferencingComposition_OneToMany>(this, "Parent", this.FilterParent);
+                    this._parent = new EntityRefByKey<SelfReferencingComposition_OneToMany>(this, "Parent", this.GetParentKey);
                 }
                 return this._parent.Entity;
             }
@@ -2107,9 +2107,9 @@ namespace TestDomainServices
             return (entity.ParentID == this.ID);
         }
         
-        private bool FilterParent(SelfReferencingComposition_OneToMany entity)
+        private object GetParentKey()
         {
-            return (entity.ID == this.ParentID);
+            return this.ParentID;
         }
         
         /// <summary>

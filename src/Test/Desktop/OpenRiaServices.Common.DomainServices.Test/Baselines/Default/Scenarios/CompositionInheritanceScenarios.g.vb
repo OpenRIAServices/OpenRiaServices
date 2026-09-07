@@ -129,7 +129,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class AI_DetailDerived1
         Inherits AI_Detail
         
-        Private _master As EntityRef(Of AI_MasterDerived)
+        Private _master As EntityRefByKey(Of AI_MasterDerived)
         
         #Region "Extensibility Method Definitions"
 
@@ -158,7 +158,7 @@ Namespace TestDomainServices
         Public Property Master() As AI_MasterDerived
             Get
                 If (Me._master Is Nothing) Then
-                    Me._master = New EntityRef(Of AI_MasterDerived)(Me, "Master", AddressOf Me.FilterMaster)
+                    Me._master = New EntityRefByKey(Of AI_MasterDerived)(Me, "Master", AddressOf Me.GetMasterKey)
                 End If
                 Return Me._master.Entity
             End Get
@@ -184,8 +184,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterMaster(ByVal entity As AI_MasterDerived) As Boolean
-            Return Object.Equals(entity.ID, Me.MasterID)
+        Private Function GetMasterKey() As Object
+            Return Me.MasterID
         End Function
     End Class
     
@@ -196,7 +196,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class AI_DetailDerived2
         Inherits AI_Detail
         
-        Private _master As EntityRef(Of AI_MasterDerived)
+        Private _master As EntityRefByKey(Of AI_MasterDerived)
         
         #Region "Extensibility Method Definitions"
 
@@ -225,7 +225,7 @@ Namespace TestDomainServices
         Public Property Master() As AI_MasterDerived
             Get
                 If (Me._master Is Nothing) Then
-                    Me._master = New EntityRef(Of AI_MasterDerived)(Me, "Master", AddressOf Me.FilterMaster)
+                    Me._master = New EntityRefByKey(Of AI_MasterDerived)(Me, "Master", AddressOf Me.GetMasterKey)
                 End If
                 Return Me._master.Entity
             End Get
@@ -251,8 +251,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterMaster(ByVal entity As AI_MasterDerived) As Boolean
-            Return Object.Equals(entity.ID, Me.MasterID)
+        Private Function GetMasterKey() As Object
+            Return Me.MasterID
         End Function
     End Class
     
@@ -263,7 +263,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class AI_DetailDerived3
         Inherits AI_Detail
         
-        Private _master As EntityRef(Of AI_MasterDerived)
+        Private _master As EntityRefByKey(Of AI_MasterDerived)
         
         #Region "Extensibility Method Definitions"
 
@@ -292,7 +292,7 @@ Namespace TestDomainServices
         Public Property Master() As AI_MasterDerived
             Get
                 If (Me._master Is Nothing) Then
-                    Me._master = New EntityRef(Of AI_MasterDerived)(Me, "Master", AddressOf Me.FilterMaster)
+                    Me._master = New EntityRefByKey(Of AI_MasterDerived)(Me, "Master", AddressOf Me.GetMasterKey)
                 End If
                 Return Me._master.Entity
             End Get
@@ -318,8 +318,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterMaster(ByVal entity As AI_MasterDerived) As Boolean
-            Return Object.Equals(entity.ID, Me.MasterID)
+        Private Function GetMasterKey() As Object
+            Return Me.MasterID
         End Function
     End Class
     
@@ -330,7 +330,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class AI_DetailDerived4
         Inherits AI_Detail
         
-        Private _master As EntityRef(Of AI_MasterDerived)
+        Private _master As EntityRefByKey(Of AI_MasterDerived)
         
         #Region "Extensibility Method Definitions"
 
@@ -359,7 +359,7 @@ Namespace TestDomainServices
         Public Property Master() As AI_MasterDerived
             Get
                 If (Me._master Is Nothing) Then
-                    Me._master = New EntityRef(Of AI_MasterDerived)(Me, "Master", AddressOf Me.FilterMaster)
+                    Me._master = New EntityRefByKey(Of AI_MasterDerived)(Me, "Master", AddressOf Me.GetMasterKey)
                 End If
                 Return Me._master.Entity
             End Get
@@ -385,8 +385,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterMaster(ByVal entity As AI_MasterDerived) As Boolean
-            Return Object.Equals(entity.ID, Me.MasterID)
+        Private Function GetMasterKey() As Object
+            Return Me.MasterID
         End Function
     End Class
     
@@ -833,7 +833,7 @@ Namespace TestDomainServices
         
         Private _operationResult As String
         
-        Private _parent As EntityRef(Of CI_Parent)
+        Private _parent As EntityRefByKey(Of CI_Parent)
         
         Private _parentID As Integer
         
@@ -954,7 +954,7 @@ Namespace TestDomainServices
         Public Property Parent() As CI_Parent
             Get
                 If (Me._parent Is Nothing) Then
-                    Me._parent = New EntityRef(Of CI_Parent)(Me, "Parent", AddressOf Me.FilterParent)
+                    Me._parent = New EntityRefByKey(Of CI_Parent)(Me, "Parent", AddressOf Me.GetParentKey)
                 End If
                 Return Me._parent.Entity
             End Get
@@ -1042,8 +1042,8 @@ Namespace TestDomainServices
             End Get
         End Property
         
-        Private Function FilterParent(ByVal entity As CI_Parent) As Boolean
-            Return Object.Equals(entity.ID, Me.ParentID)
+        Private Function GetParentKey() As Object
+            Return Me.ParentID
         End Function
         
         ''' <summary>

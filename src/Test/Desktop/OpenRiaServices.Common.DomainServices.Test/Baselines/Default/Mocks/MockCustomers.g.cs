@@ -445,7 +445,7 @@ namespace TestDomainServices
     public sealed partial class MockReport : Entity
     {
         
-        private EntityRef<MockCustomer> _customer;
+        private EntityRefByKey<MockCustomer> _customer;
         
         private int _customerId;
         
@@ -513,7 +513,7 @@ namespace TestDomainServices
             {
                 if ((this._customer == null))
                 {
-                    this._customer = new EntityRef<MockCustomer>(this, "Customer", this.FilterCustomer);
+                    this._customer = new EntityRefByKey<MockCustomer>(this, "Customer", this.GetCustomerKey);
                 }
                 return this._customer.Entity;
             }
@@ -699,9 +699,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterCustomer(MockCustomer entity)
+        private object GetCustomerKey()
         {
-            return (entity.CustomerId == this.CustomerId);
+            return this.CustomerId;
         }
         
         /// <summary>

@@ -268,7 +268,7 @@ namespace TestDomainServices
         
         private string _nonThrowingProperty;
         
-        private EntityRef<AttributeThrowingEntity> _throwingAssociation;
+        private EntityRefByKey<AttributeThrowingEntity> _throwingAssociation;
         
         private EntityCollection<AttributeThrowingEntity> _throwingAssociationCollection;
         
@@ -339,7 +339,7 @@ namespace TestDomainServices
             {
                 if ((this._throwingAssociation == null))
                 {
-                    this._throwingAssociation = new EntityRef<AttributeThrowingEntity>(this, "ThrowingAssociation", this.FilterThrowingAssociation);
+                    this._throwingAssociation = new EntityRefByKey<AttributeThrowingEntity>(this, "ThrowingAssociation", this.GetThrowingAssociationKey);
                 }
                 return this._throwingAssociation.Entity;
             }
@@ -436,9 +436,13 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterThrowingAssociation(AttributeThrowingEntity entity)
+        private object GetThrowingAssociationKey()
         {
-            return (entity.NonThrowingProperty == this.ThrowingProperty);
+            if ((this.ThrowingProperty == null))
+            {
+                return null;
+            }
+            return this.ThrowingProperty;
         }
         
         private bool FilterThrowingAssociationCollection(AttributeThrowingEntity entity)

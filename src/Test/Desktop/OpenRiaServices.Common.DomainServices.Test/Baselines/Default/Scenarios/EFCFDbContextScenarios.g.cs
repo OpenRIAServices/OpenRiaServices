@@ -627,7 +627,7 @@ namespace CodeFirstModels
     public sealed partial class Order : Entity
     {
         
-        private EntityRef<Customer> _customer;
+        private EntityRefByKey<Customer> _customer;
         
         private string _customerID;
         
@@ -720,7 +720,7 @@ namespace CodeFirstModels
             {
                 if ((this._customer == null))
                 {
-                    this._customer = new EntityRef<Customer>(this, "Customer", this.FilterCustomer);
+                    this._customer = new EntityRefByKey<Customer>(this, "Customer", this.GetCustomerKey);
                 }
                 return this._customer.Entity;
             }
@@ -1166,9 +1166,13 @@ namespace CodeFirstModels
             }
         }
         
-        private bool FilterCustomer(Customer entity)
+        private object GetCustomerKey()
         {
-            return (entity.CustomerID == this.CustomerID);
+            if ((this.CustomerID == null))
+            {
+                return null;
+            }
+            return this.CustomerID;
         }
         
         private void AttachOrder_Details(Order_Detail entity)
@@ -1205,11 +1209,11 @@ namespace CodeFirstModels
         
         private float _discount;
         
-        private EntityRef<Order> _order;
+        private EntityRefByKey<Order> _order;
         
         private int _orderID;
         
-        private EntityRef<Product> _product;
+        private EntityRefByKey<Product> _product;
         
         private int _productID;
         
@@ -1282,7 +1286,7 @@ namespace CodeFirstModels
             {
                 if ((this._order == null))
                 {
-                    this._order = new EntityRef<Order>(this, "Order", this.FilterOrder);
+                    this._order = new EntityRefByKey<Order>(this, "Order", this.GetOrderKey);
                 }
                 return this._order.Entity;
             }
@@ -1352,7 +1356,7 @@ namespace CodeFirstModels
             {
                 if ((this._product == null))
                 {
-                    this._product = new EntityRef<Product>(this, "Product", this.FilterProduct);
+                    this._product = new EntityRefByKey<Product>(this, "Product", this.GetProductKey);
                 }
                 return this._product.Entity;
             }
@@ -1464,14 +1468,14 @@ namespace CodeFirstModels
             }
         }
         
-        private bool FilterOrder(Order entity)
+        private object GetOrderKey()
         {
-            return (entity.OrderID == this.OrderID);
+            return this.OrderID;
         }
         
-        private bool FilterProduct(Product entity)
+        private object GetProductKey()
         {
-            return (entity.ProductID == this.ProductID);
+            return this.ProductID;
         }
         
         /// <summary>
@@ -1491,7 +1495,7 @@ namespace CodeFirstModels
     public sealed partial class Product : Entity
     {
         
-        private EntityRef<Category> _category;
+        private EntityRefByKey<Category> _category;
         
         private Nullable<int> _categoryID;
         
@@ -1578,7 +1582,7 @@ namespace CodeFirstModels
             {
                 if ((this._category == null))
                 {
-                    this._category = new EntityRef<Category>(this, "Category", this.FilterCategory);
+                    this._category = new EntityRefByKey<Category>(this, "Category", this.GetCategoryKey);
                 }
                 return this._category.Entity;
             }
@@ -1987,9 +1991,13 @@ namespace CodeFirstModels
             }
         }
         
-        private bool FilterCategory(Category entity)
+        private object GetCategoryKey()
         {
-            return (entity.CategoryID == this.CategoryID);
+            if ((this.CategoryID == null))
+            {
+                return null;
+            }
+            return this.CategoryID;
         }
         
         private void AttachOrder_Details(Order_Detail entity)
@@ -2314,7 +2322,7 @@ namespace CodeFirstModels
     public sealed partial class Territory : Entity
     {
         
-        private EntityRef<Region> _region;
+        private EntityRefByKey<Region> _region;
         
         private int _regionID;
         
@@ -2357,7 +2365,7 @@ namespace CodeFirstModels
             {
                 if ((this._region == null))
                 {
-                    this._region = new EntityRef<Region>(this, "Region", this.FilterRegion);
+                    this._region = new EntityRefByKey<Region>(this, "Region", this.GetRegionKey);
                 }
                 return this._region.Entity;
             }
@@ -2468,9 +2476,9 @@ namespace CodeFirstModels
             }
         }
         
-        private bool FilterRegion(Region entity)
+        private object GetRegionKey()
         {
-            return (entity.RegionID == this.RegionID);
+            return this.RegionID;
         }
         
         /// <summary>

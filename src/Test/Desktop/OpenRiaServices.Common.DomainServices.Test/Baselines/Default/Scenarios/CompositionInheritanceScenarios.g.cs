@@ -127,7 +127,7 @@ namespace TestDomainServices
     public sealed partial class AI_DetailDerived1 : AI_Detail
     {
         
-        private EntityRef<AI_MasterDerived> _master;
+        private EntityRefByKey<AI_MasterDerived> _master;
         
         #region Extensibility Method Definitions
 
@@ -158,7 +158,7 @@ namespace TestDomainServices
             {
                 if ((this._master == null))
                 {
-                    this._master = new EntityRef<AI_MasterDerived>(this, "Master", this.FilterMaster);
+                    this._master = new EntityRefByKey<AI_MasterDerived>(this, "Master", this.GetMasterKey);
                 }
                 return this._master.Entity;
             }
@@ -191,9 +191,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterMaster(AI_MasterDerived entity)
+        private object GetMasterKey()
         {
-            return (entity.ID == this.MasterID);
+            return this.MasterID;
         }
     }
     
@@ -204,7 +204,7 @@ namespace TestDomainServices
     public sealed partial class AI_DetailDerived2 : AI_Detail
     {
         
-        private EntityRef<AI_MasterDerived> _master;
+        private EntityRefByKey<AI_MasterDerived> _master;
         
         #region Extensibility Method Definitions
 
@@ -235,7 +235,7 @@ namespace TestDomainServices
             {
                 if ((this._master == null))
                 {
-                    this._master = new EntityRef<AI_MasterDerived>(this, "Master", this.FilterMaster);
+                    this._master = new EntityRefByKey<AI_MasterDerived>(this, "Master", this.GetMasterKey);
                 }
                 return this._master.Entity;
             }
@@ -268,9 +268,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterMaster(AI_MasterDerived entity)
+        private object GetMasterKey()
         {
-            return (entity.ID == this.MasterID);
+            return this.MasterID;
         }
     }
     
@@ -281,7 +281,7 @@ namespace TestDomainServices
     public sealed partial class AI_DetailDerived3 : AI_Detail
     {
         
-        private EntityRef<AI_MasterDerived> _master;
+        private EntityRefByKey<AI_MasterDerived> _master;
         
         #region Extensibility Method Definitions
 
@@ -312,7 +312,7 @@ namespace TestDomainServices
             {
                 if ((this._master == null))
                 {
-                    this._master = new EntityRef<AI_MasterDerived>(this, "Master", this.FilterMaster);
+                    this._master = new EntityRefByKey<AI_MasterDerived>(this, "Master", this.GetMasterKey);
                 }
                 return this._master.Entity;
             }
@@ -345,9 +345,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterMaster(AI_MasterDerived entity)
+        private object GetMasterKey()
         {
-            return (entity.ID == this.MasterID);
+            return this.MasterID;
         }
     }
     
@@ -358,7 +358,7 @@ namespace TestDomainServices
     public sealed partial class AI_DetailDerived4 : AI_Detail
     {
         
-        private EntityRef<AI_MasterDerived> _master;
+        private EntityRefByKey<AI_MasterDerived> _master;
         
         #region Extensibility Method Definitions
 
@@ -389,7 +389,7 @@ namespace TestDomainServices
             {
                 if ((this._master == null))
                 {
-                    this._master = new EntityRef<AI_MasterDerived>(this, "Master", this.FilterMaster);
+                    this._master = new EntityRefByKey<AI_MasterDerived>(this, "Master", this.GetMasterKey);
                 }
                 return this._master.Entity;
             }
@@ -422,9 +422,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterMaster(AI_MasterDerived entity)
+        private object GetMasterKey()
         {
-            return (entity.ID == this.MasterID);
+            return this.MasterID;
         }
     }
     
@@ -911,7 +911,7 @@ namespace TestDomainServices
         
         private string _operationResult;
         
-        private EntityRef<CI_Parent> _parent;
+        private EntityRefByKey<CI_Parent> _parent;
         
         private int _parentID;
         
@@ -1032,7 +1032,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new EntityRef<CI_Parent>(this, "Parent", this.FilterParent);
+                    this._parent = new EntityRefByKey<CI_Parent>(this, "Parent", this.GetParentKey);
                 }
                 return this._parent.Entity;
             }
@@ -1138,9 +1138,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterParent(CI_Parent entity)
+        private object GetParentKey()
         {
-            return (entity.ID == this.ParentID);
+            return this.ParentID;
         }
         
         /// <summary>

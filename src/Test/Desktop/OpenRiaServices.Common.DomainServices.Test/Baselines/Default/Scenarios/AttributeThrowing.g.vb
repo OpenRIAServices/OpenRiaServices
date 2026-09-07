@@ -261,7 +261,7 @@ Namespace TestDomainServices
         
         Private _nonThrowingProperty As String
         
-        Private _throwingAssociation As EntityRef(Of AttributeThrowingEntity)
+        Private _throwingAssociation As EntityRefByKey(Of AttributeThrowingEntity)
         
         Private _throwingAssociationCollection As EntityCollection(Of AttributeThrowingEntity)
         
@@ -332,7 +332,7 @@ Namespace TestDomainServices
         Public Property ThrowingAssociation() As AttributeThrowingEntity
             Get
                 If (Me._throwingAssociation Is Nothing) Then
-                    Me._throwingAssociation = New EntityRef(Of AttributeThrowingEntity)(Me, "ThrowingAssociation", AddressOf Me.FilterThrowingAssociation)
+                    Me._throwingAssociation = New EntityRefByKey(Of AttributeThrowingEntity)(Me, "ThrowingAssociation", AddressOf Me.GetThrowingAssociationKey)
                 End If
                 Return Me._throwingAssociation.Entity
             End Get
@@ -413,8 +413,11 @@ Namespace TestDomainServices
             End Get
         End Property
         
-        Private Function FilterThrowingAssociation(ByVal entity As AttributeThrowingEntity) As Boolean
-            Return Object.Equals(entity.NonThrowingProperty, Me.ThrowingProperty)
+        Private Function GetThrowingAssociationKey() As Object
+            If (Me.ThrowingProperty Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.ThrowingProperty
         End Function
         
         Private Function FilterThrowingAssociationCollection(ByVal entity As AttributeThrowingEntity) As Boolean

@@ -36,9 +36,9 @@ Namespace SharedEntities
     Partial Public NotInheritable Class EntityA
         Inherits Entity
         
-        Private _entityB As EntityRef(Of EntityB)
+        Private _entityB As EntityRefByKey(Of EntityB)
         
-        Private _entityC As EntityRef(Of EntityC)
+        Private _entityC As EntityRefByKey(Of EntityC)
         
         Private _id As Integer
         
@@ -93,7 +93,7 @@ Namespace SharedEntities
         Public Property EntityB() As EntityB
             Get
                 If (Me._entityB Is Nothing) Then
-                    Me._entityB = New EntityRef(Of EntityB)(Me, "EntityB", AddressOf Me.FilterEntityB)
+                    Me._entityB = New EntityRefByKey(Of EntityB)(Me, "EntityB", AddressOf Me.GetEntityBKey)
                 End If
                 Return Me._entityB.Entity
             End Get
@@ -114,7 +114,7 @@ Namespace SharedEntities
         Public Property EntityC() As EntityC
             Get
                 If (Me._entityC Is Nothing) Then
-                    Me._entityC = New EntityRef(Of EntityC)(Me, "EntityC", AddressOf Me.FilterEntityC)
+                    Me._entityC = New EntityRefByKey(Of EntityC)(Me, "EntityC", AddressOf Me.GetEntityCKey)
                 End If
                 Return Me._entityC.Entity
             End Get
@@ -233,12 +233,12 @@ Namespace SharedEntities
             End Get
         End Property
         
-        Private Function FilterEntityB(ByVal entity As EntityB) As Boolean
-            Return Object.Equals(entity.Id, Me.IdB)
+        Private Function GetEntityBKey() As Object
+            Return Me.IdB
         End Function
         
-        Private Function FilterEntityC(ByVal entity As EntityC) As Boolean
-            Return Object.Equals(entity.Id, Me.IdC)
+        Private Function GetEntityCKey() As Object
+            Return Me.IdC
         End Function
         
         ''' <summary>
@@ -512,7 +512,7 @@ Namespace SharedEntities
     Partial Public NotInheritable Class EntityY
         Inherits EntityX
         
-        Private _entityZ As EntityRef(Of EntityZ)
+        Private _entityZ As EntityRefByKey(Of EntityZ)
         
         Private _idZ As Integer
         
@@ -547,7 +547,7 @@ Namespace SharedEntities
         Public Property EntityZ() As EntityZ
             Get
                 If (Me._entityZ Is Nothing) Then
-                    Me._entityZ = New EntityRef(Of EntityZ)(Me, "EntityZ", AddressOf Me.FilterEntityZ)
+                    Me._entityZ = New EntityRefByKey(Of EntityZ)(Me, "EntityZ", AddressOf Me.GetEntityZKey)
                 End If
                 Return Me._entityZ.Entity
             End Get
@@ -582,8 +582,8 @@ Namespace SharedEntities
             End Set
         End Property
         
-        Private Function FilterEntityZ(ByVal entity As EntityZ) As Boolean
-            Return Object.Equals(entity.Id, Me.IdZ)
+        Private Function GetEntityZKey() As Object
+            Return Me.IdZ
         End Function
     End Class
     

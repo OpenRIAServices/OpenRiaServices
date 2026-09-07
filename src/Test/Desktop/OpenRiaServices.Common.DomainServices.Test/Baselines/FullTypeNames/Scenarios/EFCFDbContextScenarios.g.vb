@@ -580,7 +580,7 @@ Namespace CodeFirstModels
     Partial Public NotInheritable Class Order
         Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _customer As Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Customer)
+        Private _customer As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Customer)
         
         Private _customerID As String
         
@@ -701,7 +701,7 @@ Namespace CodeFirstModels
         Public Property Customer() As Global.CodeFirstModels.Customer
             Get
                 If (Me._customer Is Nothing) Then
-                    Me._customer = New Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Customer)(Me, "Customer", AddressOf Me.FilterCustomer)
+                    Me._customer = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Customer)(Me, "Customer", AddressOf Me.GetCustomerKey)
                 End If
                 Return Me._customer.Entity
             End Get
@@ -1078,8 +1078,11 @@ Namespace CodeFirstModels
             End Set
         End Property
         
-        Private Function FilterCustomer(ByVal entity As Global.CodeFirstModels.Customer) As Boolean
-            Return Object.Equals(entity.CustomerID, Me.CustomerID)
+        Private Function GetCustomerKey() As Object
+            If (Me.CustomerID Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.CustomerID
         End Function
         
         Private Sub AttachOrder_Details(ByVal entity As Global.CodeFirstModels.Order_Detail)
@@ -1112,11 +1115,11 @@ Namespace CodeFirstModels
         
         Private _discount As Single
         
-        Private _order As Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Order)
+        Private _order As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Order)
         
         Private _orderID As Integer
         
-        Private _product As Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Product)
+        Private _product As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Product)
         
         Private _productID As Integer
         
@@ -1194,7 +1197,7 @@ Namespace CodeFirstModels
         Public Property Order() As Global.CodeFirstModels.Order
             Get
                 If (Me._order Is Nothing) Then
-                    Me._order = New Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Order)(Me, "Order", AddressOf Me.FilterOrder)
+                    Me._order = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Order)(Me, "Order", AddressOf Me.GetOrderKey)
                 End If
                 Return Me._order.Entity
             End Get
@@ -1251,7 +1254,7 @@ Namespace CodeFirstModels
         Public Property Product() As Global.CodeFirstModels.Product
             Get
                 If (Me._product Is Nothing) Then
-                    Me._product = New Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Product)(Me, "Product", AddressOf Me.FilterProduct)
+                    Me._product = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Product)(Me, "Product", AddressOf Me.GetProductKey)
                 End If
                 Return Me._product.Entity
             End Get
@@ -1347,12 +1350,12 @@ Namespace CodeFirstModels
             End Set
         End Property
         
-        Private Function FilterOrder(ByVal entity As Global.CodeFirstModels.Order) As Boolean
-            Return Object.Equals(entity.OrderID, Me.OrderID)
+        Private Function GetOrderKey() As Object
+            Return Me.OrderID
         End Function
         
-        Private Function FilterProduct(ByVal entity As Global.CodeFirstModels.Product) As Boolean
-            Return Object.Equals(entity.ProductID, Me.ProductID)
+        Private Function GetProductKey() As Object
+            Return Me.ProductID
         End Function
         
         ''' <summary>
@@ -1371,7 +1374,7 @@ Namespace CodeFirstModels
     Partial Public NotInheritable Class Product
         Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _category As Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Category)
+        Private _category As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Category)
         
         Private _categoryID As Global.System.Nullable(Of Integer)
         
@@ -1484,7 +1487,7 @@ Namespace CodeFirstModels
         Public Property Category() As Global.CodeFirstModels.Category
             Get
                 If (Me._category Is Nothing) Then
-                    Me._category = New Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Category)(Me, "Category", AddressOf Me.FilterCategory)
+                    Me._category = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Category)(Me, "Category", AddressOf Me.GetCategoryKey)
                 End If
                 Return Me._category.Entity
             End Get
@@ -1829,8 +1832,11 @@ Namespace CodeFirstModels
             End Get
         End Property
         
-        Private Function FilterCategory(ByVal entity As Global.CodeFirstModels.Category) As Boolean
-            Return Object.Equals(entity.CategoryID, Me.CategoryID)
+        Private Function GetCategoryKey() As Object
+            If (Me.CategoryID Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.CategoryID
         End Function
         
         Private Sub AttachOrder_Details(ByVal entity As Global.CodeFirstModels.Order_Detail)
@@ -2134,7 +2140,7 @@ Namespace CodeFirstModels
     Partial Public NotInheritable Class Territory
         Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _region As Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Region)
+        Private _region As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Region)
         
         Private _regionID As Integer
         
@@ -2181,7 +2187,7 @@ Namespace CodeFirstModels
         Public Property Region() As Global.CodeFirstModels.Region
             Get
                 If (Me._region Is Nothing) Then
-                    Me._region = New Global.OpenRiaServices.Client.EntityRef(Of Global.CodeFirstModels.Region)(Me, "Region", AddressOf Me.FilterRegion)
+                    Me._region = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.CodeFirstModels.Region)(Me, "Region", AddressOf Me.GetRegionKey)
                 End If
                 Return Me._region.Entity
             End Get
@@ -2274,8 +2280,8 @@ Namespace CodeFirstModels
             End Set
         End Property
         
-        Private Function FilterRegion(ByVal entity As Global.CodeFirstModels.Region) As Boolean
-            Return Object.Equals(entity.RegionID, Me.RegionID)
+        Private Function GetRegionKey() As Object
+            Return Me.RegionID
         End Function
         
         ''' <summary>

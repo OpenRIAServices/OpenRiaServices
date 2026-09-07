@@ -44,7 +44,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class A
         Inherits Entity
         
-        Private _b As EntityRef(Of B)
+        Private _b As EntityRefByKey(Of B)
         
         Private _bid1 As Integer
         
@@ -115,7 +115,7 @@ Namespace TestDomainServices
         Public Property B() As B
             Get
                 If (Me._b Is Nothing) Then
-                    Me._b = New EntityRef(Of B)(Me, "B", AddressOf Me.FilterB)
+                    Me._b = New EntityRefByKey(Of B)(Me, "B", AddressOf Me.GetBKey)
                 End If
                 Return Me._b.Entity
             End Get
@@ -297,8 +297,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterB(ByVal entity As B) As Boolean
-            Return (Object.Equals(entity.ID1, Me.BID1) AndAlso Object.Equals(entity.ID2, Me.BID2))
+        Private Function GetBKey() As Object
+            Return OpenRiaServices.Client.EntityKey.Create(Me.BID1, Me.BID2)
         End Function
         
         ''' <summary>
@@ -435,9 +435,9 @@ Namespace TestDomainServices
         
         Private _bid2 As Integer
         
-        Private _d_Ref1 As EntityRef(Of D)
+        Private _d_Ref1 As EntityRefByKey(Of D)
         
-        Private _d_Ref2 As EntityRef(Of D)
+        Private _d_Ref2 As EntityRefByKey(Of D)
         
         Private _did_Ref1 As Integer
         
@@ -535,7 +535,7 @@ Namespace TestDomainServices
         Public Property D_Ref1() As D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
-                    Me._d_Ref1 = New EntityRef(Of D)(Me, "D_Ref1", AddressOf Me.FilterD_Ref1)
+                    Me._d_Ref1 = New EntityRefByKey(Of D)(Me, "D_Ref1", AddressOf Me.GetD_Ref1Key)
                 End If
                 Return Me._d_Ref1.Entity
             End Get
@@ -568,7 +568,7 @@ Namespace TestDomainServices
         Public Property D_Ref2() As D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
-                    Me._d_Ref2 = New EntityRef(Of D)(Me, "D_Ref2", AddressOf Me.FilterD_Ref2)
+                    Me._d_Ref2 = New EntityRefByKey(Of D)(Me, "D_Ref2", AddressOf Me.GetD_Ref2Key)
                 End If
                 Return Me._d_Ref2.Entity
             End Get
@@ -654,12 +654,12 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterD_Ref1(ByVal entity As D) As Boolean
-            Return Object.Equals(entity.ID, Me.DID_Ref1)
+        Private Function GetD_Ref1Key() As Object
+            Return Me.DID_Ref1
         End Function
         
-        Private Function FilterD_Ref2(ByVal entity As D) As Boolean
-            Return Object.Equals(entity.ID, Me.DID_Ref2)
+        Private Function GetD_Ref2Key() As Object
+            Return Me.DID_Ref2
         End Function
         
         ''' <summary>
@@ -772,7 +772,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class CartItem
         Inherits Entity
         
-        Private _cart As EntityRef(Of Cart)
+        Private _cart As EntityRefByKey(Of Cart)
         
         Private _cartId As Integer
         
@@ -819,7 +819,7 @@ Namespace TestDomainServices
         Public Property Cart() As Cart
             Get
                 If (Me._cart Is Nothing) Then
-                    Me._cart = New EntityRef(Of Cart)(Me, "Cart", AddressOf Me.FilterCart)
+                    Me._cart = New EntityRefByKey(Of Cart)(Me, "Cart", AddressOf Me.GetCartKey)
                 End If
                 Return Me._cart.Entity
             End Get
@@ -909,8 +909,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterCart(ByVal entity As Cart) As Boolean
-            Return Object.Equals(entity.CartId, Me.CartItemId)
+        Private Function GetCartKey() As Object
+            Return Me.CartItemId
         End Function
         
         ''' <summary>
@@ -1055,9 +1055,9 @@ Namespace TestDomainServices
         
         Private _c As EntityRef(Of C)
         
-        Private _d1 As EntityRef(Of D)
+        Private _d1 As EntityRefByKey(Of D)
         
-        Private _d2 As EntityRef(Of D)
+        Private _d2 As EntityRefByKey(Of D)
         
         Private _d2_BackRef As EntityRef(Of D)
         
@@ -1172,7 +1172,7 @@ Namespace TestDomainServices
         Public Property D1() As D
             Get
                 If (Me._d1 Is Nothing) Then
-                    Me._d1 = New EntityRef(Of D)(Me, "D1", AddressOf Me.FilterD1)
+                    Me._d1 = New EntityRefByKey(Of D)(Me, "D1", AddressOf Me.GetD1Key)
                 End If
                 Return Me._d1.Entity
             End Get
@@ -1205,7 +1205,7 @@ Namespace TestDomainServices
         Public Property D2() As D
             Get
                 If (Me._d2 Is Nothing) Then
-                    Me._d2 = New EntityRef(Of D)(Me, "D2", AddressOf Me.FilterD2)
+                    Me._d2 = New EntityRefByKey(Of D)(Me, "D2", AddressOf Me.GetD2Key)
                 End If
                 Return Me._d2.Entity
             End Get
@@ -1387,12 +1387,12 @@ Namespace TestDomainServices
             Return Object.Equals(entity.DID_Ref1, Me.ID)
         End Function
         
-        Private Function FilterD1(ByVal entity As D) As Boolean
-            Return Object.Equals(entity.ID, Me.DSelfRef_ID1)
+        Private Function GetD1Key() As Object
+            Return Me.DSelfRef_ID1
         End Function
         
-        Private Function FilterD2(ByVal entity As D) As Boolean
-            Return Object.Equals(entity.ID, Me.DSelfRef_ID2)
+        Private Function GetD2Key() As Object
+            Return Me.DSelfRef_ID2
         End Function
         
         Private Function FilterD2_BackRef(ByVal entity As D) As Boolean
@@ -5087,9 +5087,9 @@ Namespace TestDomainServices
         
         Private _id As Integer
         
-        Private _parent As EntityRef(Of NullableFKParent)
+        Private _parent As EntityRefByKey(Of NullableFKParent)
         
-        Private _parent2 As EntityRef(Of NullableFKParent)
+        Private _parent2 As EntityRefByKey(Of NullableFKParent)
         
         Private _parentID As Nullable(Of Integer)
         
@@ -5181,7 +5181,7 @@ Namespace TestDomainServices
         Public Property Parent() As NullableFKParent
             Get
                 If (Me._parent Is Nothing) Then
-                    Me._parent = New EntityRef(Of NullableFKParent)(Me, "Parent", AddressOf Me.FilterParent)
+                    Me._parent = New EntityRefByKey(Of NullableFKParent)(Me, "Parent", AddressOf Me.GetParentKey)
                 End If
                 Return Me._parent.Entity
             End Get
@@ -5214,7 +5214,7 @@ Namespace TestDomainServices
         Public Property Parent2() As NullableFKParent
             Get
                 If (Me._parent2 Is Nothing) Then
-                    Me._parent2 = New EntityRef(Of NullableFKParent)(Me, "Parent2", AddressOf Me.FilterParent2)
+                    Me._parent2 = New EntityRefByKey(Of NullableFKParent)(Me, "Parent2", AddressOf Me.GetParent2Key)
                 End If
                 Return Me._parent2.Entity
             End Get
@@ -5282,12 +5282,18 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterParent(ByVal entity As NullableFKParent) As Boolean
-            Return Object.Equals(entity.ID, Me.ParentID)
+        Private Function GetParentKey() As Object
+            If (Me.ParentID Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.ParentID
         End Function
         
-        Private Function FilterParent2(ByVal entity As NullableFKParent) As Boolean
-            Return Object.Equals(entity.ID, Me.ParentID_Singleton)
+        Private Function GetParent2Key() As Object
+            If (Me.ParentID_Singleton Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.ParentID_Singleton
         End Function
         
         ''' <summary>
@@ -5774,7 +5780,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class RoundtripOriginal_TestEntity2
         Inherits Entity
         
-        Private _assocProp As EntityRef(Of RoundtripOriginal_TestEntity)
+        Private _assocProp As EntityRefByKey(Of RoundtripOriginal_TestEntity)
         
         Private _id As Integer
         
@@ -5821,7 +5827,7 @@ Namespace TestDomainServices
         Public Property AssocProp() As RoundtripOriginal_TestEntity
             Get
                 If (Me._assocProp Is Nothing) Then
-                    Me._assocProp = New EntityRef(Of RoundtripOriginal_TestEntity)(Me, "AssocProp", AddressOf Me.FilterAssocProp)
+                    Me._assocProp = New EntityRefByKey(Of RoundtripOriginal_TestEntity)(Me, "AssocProp", AddressOf Me.GetAssocPropKey)
                 End If
                 Return Me._assocProp.Entity
             End Get
@@ -5899,8 +5905,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterAssocProp(ByVal entity As RoundtripOriginal_TestEntity) As Boolean
-            Return Object.Equals(entity.ID, Me.ID)
+        Private Function GetAssocPropKey() As Object
+            Return Me.ID
         End Function
         
         ''' <summary>
@@ -6143,7 +6149,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class TestCycles
         Inherits Entity
         
-        Private _includedT As EntityRef(Of TestCycles)
+        Private _includedT As EntityRefByKey(Of TestCycles)
         
         Private _includedTs As EntityCollection(Of TestCycles)
         
@@ -6186,7 +6192,7 @@ Namespace TestDomainServices
         Public Property IncludedT() As TestCycles
             Get
                 If (Me._includedT Is Nothing) Then
-                    Me._includedT = New EntityRef(Of TestCycles)(Me, "IncludedT", AddressOf Me.FilterIncludedT)
+                    Me._includedT = New EntityRefByKey(Of TestCycles)(Me, "IncludedT", AddressOf Me.GetIncludedTKey)
                 End If
                 Return Me._includedT.Entity
             End Get
@@ -6268,8 +6274,11 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterIncludedT(ByVal entity As TestCycles) As Boolean
-            Return Object.Equals(entity.Name, Me.ParentName)
+        Private Function GetIncludedTKey() As Object
+            If (Me.ParentName Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.ParentName
         End Function
         
         Private Sub AttachIncludedTs(ByVal entity As TestCycles)

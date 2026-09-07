@@ -29,7 +29,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class A
         Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _b As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.B)
+        Private _b As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.B)
         
         Private _bid1 As Integer
         
@@ -100,7 +100,7 @@ Namespace TestDomainServices
         Public Property B() As Global.TestDomainServices.B
             Get
                 If (Me._b Is Nothing) Then
-                    Me._b = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.B)(Me, "B", AddressOf Me.FilterB)
+                    Me._b = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.B)(Me, "B", AddressOf Me.GetBKey)
                 End If
                 Return Me._b.Entity
             End Get
@@ -282,8 +282,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterB(ByVal entity As Global.TestDomainServices.B) As Boolean
-            Return (Object.Equals(entity.ID1, Me.BID1) AndAlso Object.Equals(entity.ID2, Me.BID2))
+        Private Function GetBKey() As Object
+            Return Global.OpenRiaServices.Client.EntityKey.Create(Me.BID1, Me.BID2)
         End Function
         
         ''' <summary>
@@ -420,9 +420,9 @@ Namespace TestDomainServices
         
         Private _bid2 As Integer
         
-        Private _d_Ref1 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d_Ref1 As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.D)
         
-        Private _d_Ref2 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d_Ref2 As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.D)
         
         Private _did_Ref1 As Integer
         
@@ -520,7 +520,7 @@ Namespace TestDomainServices
         Public Property D_Ref1() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
-                    Me._d_Ref1 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref1", AddressOf Me.FilterD_Ref1)
+                    Me._d_Ref1 = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.D)(Me, "D_Ref1", AddressOf Me.GetD_Ref1Key)
                 End If
                 Return Me._d_Ref1.Entity
             End Get
@@ -553,7 +553,7 @@ Namespace TestDomainServices
         Public Property D_Ref2() As Global.TestDomainServices.D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
-                    Me._d_Ref2 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D_Ref2", AddressOf Me.FilterD_Ref2)
+                    Me._d_Ref2 = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.D)(Me, "D_Ref2", AddressOf Me.GetD_Ref2Key)
                 End If
                 Return Me._d_Ref2.Entity
             End Get
@@ -639,12 +639,12 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterD_Ref1(ByVal entity As Global.TestDomainServices.D) As Boolean
-            Return Object.Equals(entity.ID, Me.DID_Ref1)
+        Private Function GetD_Ref1Key() As Object
+            Return Me.DID_Ref1
         End Function
         
-        Private Function FilterD_Ref2(ByVal entity As Global.TestDomainServices.D) As Boolean
-            Return Object.Equals(entity.ID, Me.DID_Ref2)
+        Private Function GetD_Ref2Key() As Object
+            Return Me.DID_Ref2
         End Function
         
         ''' <summary>
@@ -757,7 +757,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class CartItem
         Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _cart As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.Cart)
+        Private _cart As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.Cart)
         
         Private _cartId As Integer
         
@@ -804,7 +804,7 @@ Namespace TestDomainServices
         Public Property Cart() As Global.TestDomainServices.Cart
             Get
                 If (Me._cart Is Nothing) Then
-                    Me._cart = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.Cart)(Me, "Cart", AddressOf Me.FilterCart)
+                    Me._cart = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.Cart)(Me, "Cart", AddressOf Me.GetCartKey)
                 End If
                 Return Me._cart.Entity
             End Get
@@ -894,8 +894,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterCart(ByVal entity As Global.TestDomainServices.Cart) As Boolean
-            Return Object.Equals(entity.CartId, Me.CartItemId)
+        Private Function GetCartKey() As Object
+            Return Me.CartItemId
         End Function
         
         ''' <summary>
@@ -1040,9 +1040,9 @@ Namespace TestDomainServices
         
         Private _c As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.C)
         
-        Private _d1 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d1 As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.D)
         
-        Private _d2 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
+        Private _d2 As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.D)
         
         Private _d2_BackRef As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)
         
@@ -1157,7 +1157,7 @@ Namespace TestDomainServices
         Public Property D1() As Global.TestDomainServices.D
             Get
                 If (Me._d1 Is Nothing) Then
-                    Me._d1 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D1", AddressOf Me.FilterD1)
+                    Me._d1 = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.D)(Me, "D1", AddressOf Me.GetD1Key)
                 End If
                 Return Me._d1.Entity
             End Get
@@ -1190,7 +1190,7 @@ Namespace TestDomainServices
         Public Property D2() As Global.TestDomainServices.D
             Get
                 If (Me._d2 Is Nothing) Then
-                    Me._d2 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.D)(Me, "D2", AddressOf Me.FilterD2)
+                    Me._d2 = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.D)(Me, "D2", AddressOf Me.GetD2Key)
                 End If
                 Return Me._d2.Entity
             End Get
@@ -1372,12 +1372,12 @@ Namespace TestDomainServices
             Return Object.Equals(entity.DID_Ref1, Me.ID)
         End Function
         
-        Private Function FilterD1(ByVal entity As Global.TestDomainServices.D) As Boolean
-            Return Object.Equals(entity.ID, Me.DSelfRef_ID1)
+        Private Function GetD1Key() As Object
+            Return Me.DSelfRef_ID1
         End Function
         
-        Private Function FilterD2(ByVal entity As Global.TestDomainServices.D) As Boolean
-            Return Object.Equals(entity.ID, Me.DSelfRef_ID2)
+        Private Function GetD2Key() As Object
+            Return Me.DSelfRef_ID2
         End Function
         
         Private Function FilterD2_BackRef(ByVal entity As Global.TestDomainServices.D) As Boolean
@@ -5072,9 +5072,9 @@ Namespace TestDomainServices
         
         Private _id As Integer
         
-        Private _parent As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)
+        Private _parent As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.NullableFKParent)
         
-        Private _parent2 As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)
+        Private _parent2 As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.NullableFKParent)
         
         Private _parentID As Global.System.Nullable(Of Integer)
         
@@ -5166,7 +5166,7 @@ Namespace TestDomainServices
         Public Property Parent() As Global.TestDomainServices.NullableFKParent
             Get
                 If (Me._parent Is Nothing) Then
-                    Me._parent = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)(Me, "Parent", AddressOf Me.FilterParent)
+                    Me._parent = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.NullableFKParent)(Me, "Parent", AddressOf Me.GetParentKey)
                 End If
                 Return Me._parent.Entity
             End Get
@@ -5199,7 +5199,7 @@ Namespace TestDomainServices
         Public Property Parent2() As Global.TestDomainServices.NullableFKParent
             Get
                 If (Me._parent2 Is Nothing) Then
-                    Me._parent2 = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.NullableFKParent)(Me, "Parent2", AddressOf Me.FilterParent2)
+                    Me._parent2 = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.NullableFKParent)(Me, "Parent2", AddressOf Me.GetParent2Key)
                 End If
                 Return Me._parent2.Entity
             End Get
@@ -5267,12 +5267,18 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterParent(ByVal entity As Global.TestDomainServices.NullableFKParent) As Boolean
-            Return Object.Equals(entity.ID, Me.ParentID)
+        Private Function GetParentKey() As Object
+            If (Me.ParentID Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.ParentID
         End Function
         
-        Private Function FilterParent2(ByVal entity As Global.TestDomainServices.NullableFKParent) As Boolean
-            Return Object.Equals(entity.ID, Me.ParentID_Singleton)
+        Private Function GetParent2Key() As Object
+            If (Me.ParentID_Singleton Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.ParentID_Singleton
         End Function
         
         ''' <summary>
@@ -5759,7 +5765,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class RoundtripOriginal_TestEntity2
         Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _assocProp As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
+        Private _assocProp As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)
         
         Private _id As Integer
         
@@ -5806,7 +5812,7 @@ Namespace TestDomainServices
         Public Property AssocProp() As Global.TestDomainServices.RoundtripOriginal_TestEntity
             Get
                 If (Me._assocProp Is Nothing) Then
-                    Me._assocProp = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)(Me, "AssocProp", AddressOf Me.FilterAssocProp)
+                    Me._assocProp = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.RoundtripOriginal_TestEntity)(Me, "AssocProp", AddressOf Me.GetAssocPropKey)
                 End If
                 Return Me._assocProp.Entity
             End Get
@@ -5884,8 +5890,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterAssocProp(ByVal entity As Global.TestDomainServices.RoundtripOriginal_TestEntity) As Boolean
-            Return Object.Equals(entity.ID, Me.ID)
+        Private Function GetAssocPropKey() As Object
+            Return Me.ID
         End Function
         
         ''' <summary>
@@ -6128,7 +6134,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class TestCycles
         Inherits Global.OpenRiaServices.Client.Entity
         
-        Private _includedT As Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.TestCycles)
+        Private _includedT As Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.TestCycles)
         
         Private _includedTs As Global.OpenRiaServices.Client.EntityCollection(Of Global.TestDomainServices.TestCycles)
         
@@ -6171,7 +6177,7 @@ Namespace TestDomainServices
         Public Property IncludedT() As Global.TestDomainServices.TestCycles
             Get
                 If (Me._includedT Is Nothing) Then
-                    Me._includedT = New Global.OpenRiaServices.Client.EntityRef(Of Global.TestDomainServices.TestCycles)(Me, "IncludedT", AddressOf Me.FilterIncludedT)
+                    Me._includedT = New Global.OpenRiaServices.Client.EntityRefByKey(Of Global.TestDomainServices.TestCycles)(Me, "IncludedT", AddressOf Me.GetIncludedTKey)
                 End If
                 Return Me._includedT.Entity
             End Get
@@ -6253,8 +6259,11 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterIncludedT(ByVal entity As Global.TestDomainServices.TestCycles) As Boolean
-            Return Object.Equals(entity.Name, Me.ParentName)
+        Private Function GetIncludedTKey() As Object
+            If (Me.ParentName Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.ParentName
         End Function
         
         Private Sub AttachIncludedTs(ByVal entity As Global.TestDomainServices.TestCycles)

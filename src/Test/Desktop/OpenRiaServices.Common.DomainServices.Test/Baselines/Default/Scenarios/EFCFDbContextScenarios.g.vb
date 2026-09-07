@@ -591,7 +591,7 @@ Namespace CodeFirstModels
     Partial Public NotInheritable Class Order
         Inherits Entity
         
-        Private _customer As EntityRef(Of Customer)
+        Private _customer As EntityRefByKey(Of Customer)
         
         Private _customerID As String
         
@@ -712,7 +712,7 @@ Namespace CodeFirstModels
         Public Property Customer() As Customer
             Get
                 If (Me._customer Is Nothing) Then
-                    Me._customer = New EntityRef(Of Customer)(Me, "Customer", AddressOf Me.FilterCustomer)
+                    Me._customer = New EntityRefByKey(Of Customer)(Me, "Customer", AddressOf Me.GetCustomerKey)
                 End If
                 Return Me._customer.Entity
             End Get
@@ -1089,8 +1089,11 @@ Namespace CodeFirstModels
             End Set
         End Property
         
-        Private Function FilterCustomer(ByVal entity As Customer) As Boolean
-            Return Object.Equals(entity.CustomerID, Me.CustomerID)
+        Private Function GetCustomerKey() As Object
+            If (Me.CustomerID Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.CustomerID
         End Function
         
         Private Sub AttachOrder_Details(ByVal entity As Order_Detail)
@@ -1123,11 +1126,11 @@ Namespace CodeFirstModels
         
         Private _discount As Single
         
-        Private _order As EntityRef(Of Order)
+        Private _order As EntityRefByKey(Of Order)
         
         Private _orderID As Integer
         
-        Private _product As EntityRef(Of Product)
+        Private _product As EntityRefByKey(Of Product)
         
         Private _productID As Integer
         
@@ -1205,7 +1208,7 @@ Namespace CodeFirstModels
         Public Property Order() As Order
             Get
                 If (Me._order Is Nothing) Then
-                    Me._order = New EntityRef(Of Order)(Me, "Order", AddressOf Me.FilterOrder)
+                    Me._order = New EntityRefByKey(Of Order)(Me, "Order", AddressOf Me.GetOrderKey)
                 End If
                 Return Me._order.Entity
             End Get
@@ -1262,7 +1265,7 @@ Namespace CodeFirstModels
         Public Property Product() As Product
             Get
                 If (Me._product Is Nothing) Then
-                    Me._product = New EntityRef(Of Product)(Me, "Product", AddressOf Me.FilterProduct)
+                    Me._product = New EntityRefByKey(Of Product)(Me, "Product", AddressOf Me.GetProductKey)
                 End If
                 Return Me._product.Entity
             End Get
@@ -1358,12 +1361,12 @@ Namespace CodeFirstModels
             End Set
         End Property
         
-        Private Function FilterOrder(ByVal entity As Order) As Boolean
-            Return Object.Equals(entity.OrderID, Me.OrderID)
+        Private Function GetOrderKey() As Object
+            Return Me.OrderID
         End Function
         
-        Private Function FilterProduct(ByVal entity As Product) As Boolean
-            Return Object.Equals(entity.ProductID, Me.ProductID)
+        Private Function GetProductKey() As Object
+            Return Me.ProductID
         End Function
         
         ''' <summary>
@@ -1382,7 +1385,7 @@ Namespace CodeFirstModels
     Partial Public NotInheritable Class Product
         Inherits Entity
         
-        Private _category As EntityRef(Of Category)
+        Private _category As EntityRefByKey(Of Category)
         
         Private _categoryID As Nullable(Of Integer)
         
@@ -1495,7 +1498,7 @@ Namespace CodeFirstModels
         Public Property Category() As Category
             Get
                 If (Me._category Is Nothing) Then
-                    Me._category = New EntityRef(Of Category)(Me, "Category", AddressOf Me.FilterCategory)
+                    Me._category = New EntityRefByKey(Of Category)(Me, "Category", AddressOf Me.GetCategoryKey)
                 End If
                 Return Me._category.Entity
             End Get
@@ -1840,8 +1843,11 @@ Namespace CodeFirstModels
             End Get
         End Property
         
-        Private Function FilterCategory(ByVal entity As Category) As Boolean
-            Return Object.Equals(entity.CategoryID, Me.CategoryID)
+        Private Function GetCategoryKey() As Object
+            If (Me.CategoryID Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.CategoryID
         End Function
         
         Private Sub AttachOrder_Details(ByVal entity As Order_Detail)
@@ -2145,7 +2151,7 @@ Namespace CodeFirstModels
     Partial Public NotInheritable Class Territory
         Inherits Entity
         
-        Private _region As EntityRef(Of Region)
+        Private _region As EntityRefByKey(Of Region)
         
         Private _regionID As Integer
         
@@ -2192,7 +2198,7 @@ Namespace CodeFirstModels
         Public Property Region() As Region
             Get
                 If (Me._region Is Nothing) Then
-                    Me._region = New EntityRef(Of Region)(Me, "Region", AddressOf Me.FilterRegion)
+                    Me._region = New EntityRefByKey(Of Region)(Me, "Region", AddressOf Me.GetRegionKey)
                 End If
                 Return Me._region.Entity
             End Get
@@ -2285,8 +2291,8 @@ Namespace CodeFirstModels
             End Set
         End Property
         
-        Private Function FilterRegion(ByVal entity As Region) As Boolean
-            Return Object.Equals(entity.RegionID, Me.RegionID)
+        Private Function GetRegionKey() As Object
+            Return Me.RegionID
         End Function
         
         ''' <summary>

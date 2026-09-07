@@ -34,7 +34,7 @@ namespace Cities
         
         private string _calculatedCounty;
         
-        private EntityRef<County> _county;
+        private EntityRefByKey<County> _county;
         
         private string _countyName;
         
@@ -123,7 +123,7 @@ namespace Cities
             {
                 if ((this._county == null))
                 {
-                    this._county = new EntityRef<County>(this, "County", this.FilterCounty);
+                    this._county = new EntityRefByKey<County>(this, "County", this.GetCountyKey);
                 }
                 return this._county.Entity;
             }
@@ -389,10 +389,14 @@ namespace Cities
             }
         }
         
-        private bool FilterCounty(County entity)
+        private object GetCountyKey()
         {
-            return ((entity.Name == this.CountyName) 
-                        && (entity.StateName == this.StateName));
+            if (((this.CountyName == null) 
+                        || (this.StateName == null)))
+            {
+                return null;
+            }
+            return OpenRiaServices.Client.EntityKey.Create(this.CountyName, this.StateName);
         }
         
         private void AttachZipCodes(Zip entity)

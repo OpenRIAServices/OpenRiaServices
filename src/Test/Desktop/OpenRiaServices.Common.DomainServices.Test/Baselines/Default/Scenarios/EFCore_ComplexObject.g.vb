@@ -206,9 +206,9 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         
         Private _ownedEntityWithBackNavigation As OwnedEntityWithBackNavigation
         
-        Private _ownedEntityWithExplicitId As EntityRef(Of OwnedEntityWithExplicitId)
+        Private _ownedEntityWithExplicitId As EntityRefByKey(Of OwnedEntityWithExplicitId)
         
-        Private _ownedEntityWithExplicitIdAndBackNavigation As EntityRef(Of OwnedEntityWithExplicitIdAndBackNavigation)
+        Private _ownedEntityWithExplicitIdAndBackNavigation As EntityRefByKey(Of OwnedEntityWithExplicitIdAndBackNavigation)
         
         #Region "Extensibility Method Definitions"
 
@@ -315,7 +315,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         Public Property OwnedEntityWithExplicitId() As OwnedEntityWithExplicitId
             Get
                 If (Me._ownedEntityWithExplicitId Is Nothing) Then
-                    Me._ownedEntityWithExplicitId = New EntityRef(Of OwnedEntityWithExplicitId)(Me, "OwnedEntityWithExplicitId", AddressOf Me.FilterOwnedEntityWithExplicitId)
+                    Me._ownedEntityWithExplicitId = New EntityRefByKey(Of OwnedEntityWithExplicitId)(Me, "OwnedEntityWithExplicitId", AddressOf Me.GetOwnedEntityWithExplicitIdKey)
                 End If
                 Return Me._ownedEntityWithExplicitId.Entity
             End Get
@@ -338,7 +338,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         Public Property OwnedEntityWithExplicitIdAndBackNavigation() As OwnedEntityWithExplicitIdAndBackNavigation
             Get
                 If (Me._ownedEntityWithExplicitIdAndBackNavigation Is Nothing) Then
-                    Me._ownedEntityWithExplicitIdAndBackNavigation = New EntityRef(Of OwnedEntityWithExplicitIdAndBackNavigation)(Me, "OwnedEntityWithExplicitIdAndBackNavigation", AddressOf Me.FilterOwnedEntityWithExplicitIdAndBackNavigation)
+                    Me._ownedEntityWithExplicitIdAndBackNavigation = New EntityRefByKey(Of OwnedEntityWithExplicitIdAndBackNavigation)(Me, "OwnedEntityWithExplicitIdAndBackNavigation", AddressOf Me.GetOwnedEntityWithExplicitIdAndBackNavigationKey)
                 End If
                 Return Me._ownedEntityWithExplicitIdAndBackNavigation.Entity
             End Get
@@ -356,8 +356,16 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
             Return Object.Equals(entity.EmployeeId, Me.EmployeeId)
         End Function
         
+        Private Function GetOwnedEntityWithExplicitIdKey() As Object
+            Return Me.EmployeeId
+        End Function
+        
         Private Function FilterOwnedEntityWithExplicitIdAndBackNavigation(ByVal entity As OwnedEntityWithExplicitIdAndBackNavigation) As Boolean
             Return Object.Equals(entity.EmployeeId, Me.EmployeeId)
+        End Function
+        
+        Private Function GetOwnedEntityWithExplicitIdAndBackNavigationKey() As Object
+            Return Me.EmployeeId
         End Function
         
         ''' <summary>
@@ -525,7 +533,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         
         Private _description As String
         
-        Private _employee As EntityRef(Of Employee)
+        Private _employee As EntityRefByKey(Of Employee)
         
         Private _employeeId As Integer
         
@@ -585,7 +593,7 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         Public Property Employee() As Employee
             Get
                 If (Me._employee Is Nothing) Then
-                    Me._employee = New EntityRef(Of Employee)(Me, "Employee", AddressOf Me.FilterEmployee)
+                    Me._employee = New EntityRefByKey(Of Employee)(Me, "Employee", AddressOf Me.GetEmployeeKey)
                 End If
                 Return Me._employee.Entity
             End Get
@@ -629,6 +637,10 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
         
         Private Function FilterEmployee(ByVal entity As Employee) As Boolean
             Return Object.Equals(entity.EmployeeId, Me.EmployeeId)
+        End Function
+        
+        Private Function GetEmployeeKey() As Object
+            Return Me.EmployeeId
         End Function
         
         ''' <summary>

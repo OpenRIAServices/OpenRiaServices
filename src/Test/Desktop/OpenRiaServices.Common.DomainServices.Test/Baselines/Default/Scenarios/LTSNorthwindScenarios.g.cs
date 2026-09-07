@@ -592,7 +592,7 @@ namespace DataTests.Scenarios.LTS.Northwind
     public sealed partial class Order_Bug479436 : Entity
     {
         
-        private EntityRef<Customer_Bug479436> _customer;
+        private EntityRefByKey<Customer_Bug479436> _customer;
         
         private string _customerID;
         
@@ -675,7 +675,7 @@ namespace DataTests.Scenarios.LTS.Northwind
             {
                 if ((this._customer == null))
                 {
-                    this._customer = new EntityRef<Customer_Bug479436>(this, "Customer", this.FilterCustomer);
+                    this._customer = new EntityRefByKey<Customer_Bug479436>(this, "Customer", this.GetCustomerKey);
                 }
                 return this._customer.Entity;
             }
@@ -1045,9 +1045,13 @@ namespace DataTests.Scenarios.LTS.Northwind
             }
         }
         
-        private bool FilterCustomer(Customer_Bug479436 entity)
+        private object GetCustomerKey()
         {
-            return (entity.CustomerID == this.CustomerID);
+            if ((this.CustomerID == null))
+            {
+                return null;
+            }
+            return this.CustomerID;
         }
         
         /// <summary>

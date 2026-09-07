@@ -38,7 +38,7 @@ Namespace Cities
         
         Private _calculatedCounty As String
         
-        Private _county As EntityRef(Of County)
+        Private _county As EntityRefByKey(Of County)
         
         Private _countyName As String
         
@@ -135,7 +135,7 @@ Namespace Cities
         Public Property County() As County
             Get
                 If (Me._county Is Nothing) Then
-                    Me._county = New EntityRef(Of County)(Me, "County", AddressOf Me.FilterCounty)
+                    Me._county = New EntityRefByKey(Of County)(Me, "County", AddressOf Me.GetCountyKey)
                 End If
                 Return Me._county.Entity
             End Get
@@ -354,8 +354,12 @@ Namespace Cities
             End Get
         End Property
         
-        Private Function FilterCounty(ByVal entity As County) As Boolean
-            Return (Object.Equals(entity.Name, Me.CountyName) AndAlso Object.Equals(entity.StateName, Me.StateName))
+        Private Function GetCountyKey() As Object
+            If ((Me.CountyName Is Nothing)  _
+                        OrElse (Me.StateName Is Nothing)) Then
+                Return Nothing
+            End If
+            Return OpenRiaServices.Client.EntityKey.Create(Me.CountyName, Me.StateName)
         End Function
         
         Private Sub AttachZipCodes(ByVal entity As Zip)

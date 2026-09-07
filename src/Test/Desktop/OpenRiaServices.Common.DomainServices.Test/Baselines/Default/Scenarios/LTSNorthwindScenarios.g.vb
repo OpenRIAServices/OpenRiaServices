@@ -561,7 +561,7 @@ Namespace DataTests.Scenarios.LTS.Northwind
     Partial Public NotInheritable Class Order_Bug479436
         Inherits Entity
         
-        Private _customer As EntityRef(Of Customer_Bug479436)
+        Private _customer As EntityRefByKey(Of Customer_Bug479436)
         
         Private _customerID As String
         
@@ -668,7 +668,7 @@ Namespace DataTests.Scenarios.LTS.Northwind
         Public Property Customer() As Customer_Bug479436
             Get
                 If (Me._customer Is Nothing) Then
-                    Me._customer = New EntityRef(Of Customer_Bug479436)(Me, "Customer", AddressOf Me.FilterCustomer)
+                    Me._customer = New EntityRefByKey(Of Customer_Bug479436)(Me, "Customer", AddressOf Me.GetCustomerKey)
                 End If
                 Return Me._customer.Entity
             End Get
@@ -982,8 +982,11 @@ Namespace DataTests.Scenarios.LTS.Northwind
             End Set
         End Property
         
-        Private Function FilterCustomer(ByVal entity As Customer_Bug479436) As Boolean
-            Return Object.Equals(entity.CustomerID, Me.CustomerID)
+        Private Function GetCustomerKey() As Object
+            If (Me.CustomerID Is Nothing) Then
+                Return Nothing
+            End If
+            Return Me.CustomerID
         End Function
         
         ''' <summary>

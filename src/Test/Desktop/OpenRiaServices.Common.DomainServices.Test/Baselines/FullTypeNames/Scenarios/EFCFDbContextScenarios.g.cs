@@ -617,7 +617,7 @@ namespace CodeFirstModels
     public sealed partial class Order : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Customer> _customer;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Customer> _customer;
         
         private string _customerID;
         
@@ -710,7 +710,7 @@ namespace CodeFirstModels
             {
                 if ((this._customer == null))
                 {
-                    this._customer = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Customer>(this, "Customer", this.FilterCustomer);
+                    this._customer = new global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Customer>(this, "Customer", this.GetCustomerKey);
                 }
                 return this._customer.Entity;
             }
@@ -1156,9 +1156,13 @@ namespace CodeFirstModels
             }
         }
         
-        private bool FilterCustomer(global::CodeFirstModels.Customer entity)
+        private object GetCustomerKey()
         {
-            return (entity.CustomerID == this.CustomerID);
+            if ((this.CustomerID == null))
+            {
+                return null;
+            }
+            return this.CustomerID;
         }
         
         private void AttachOrder_Details(global::CodeFirstModels.Order_Detail entity)
@@ -1195,11 +1199,11 @@ namespace CodeFirstModels
         
         private float _discount;
         
-        private global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Order> _order;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Order> _order;
         
         private int _orderID;
         
-        private global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Product> _product;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Product> _product;
         
         private int _productID;
         
@@ -1272,7 +1276,7 @@ namespace CodeFirstModels
             {
                 if ((this._order == null))
                 {
-                    this._order = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Order>(this, "Order", this.FilterOrder);
+                    this._order = new global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Order>(this, "Order", this.GetOrderKey);
                 }
                 return this._order.Entity;
             }
@@ -1342,7 +1346,7 @@ namespace CodeFirstModels
             {
                 if ((this._product == null))
                 {
-                    this._product = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Product>(this, "Product", this.FilterProduct);
+                    this._product = new global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Product>(this, "Product", this.GetProductKey);
                 }
                 return this._product.Entity;
             }
@@ -1454,14 +1458,14 @@ namespace CodeFirstModels
             }
         }
         
-        private bool FilterOrder(global::CodeFirstModels.Order entity)
+        private object GetOrderKey()
         {
-            return (entity.OrderID == this.OrderID);
+            return this.OrderID;
         }
         
-        private bool FilterProduct(global::CodeFirstModels.Product entity)
+        private object GetProductKey()
         {
-            return (entity.ProductID == this.ProductID);
+            return this.ProductID;
         }
         
         /// <summary>
@@ -1481,7 +1485,7 @@ namespace CodeFirstModels
     public sealed partial class Product : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Category> _category;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Category> _category;
         
         private global::System.Nullable<int> _categoryID;
         
@@ -1568,7 +1572,7 @@ namespace CodeFirstModels
             {
                 if ((this._category == null))
                 {
-                    this._category = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Category>(this, "Category", this.FilterCategory);
+                    this._category = new global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Category>(this, "Category", this.GetCategoryKey);
                 }
                 return this._category.Entity;
             }
@@ -1977,9 +1981,13 @@ namespace CodeFirstModels
             }
         }
         
-        private bool FilterCategory(global::CodeFirstModels.Category entity)
+        private object GetCategoryKey()
         {
-            return (entity.CategoryID == this.CategoryID);
+            if ((this.CategoryID == null))
+            {
+                return null;
+            }
+            return this.CategoryID;
         }
         
         private void AttachOrder_Details(global::CodeFirstModels.Order_Detail entity)
@@ -2304,7 +2312,7 @@ namespace CodeFirstModels
     public sealed partial class Territory : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Region> _region;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Region> _region;
         
         private int _regionID;
         
@@ -2347,7 +2355,7 @@ namespace CodeFirstModels
             {
                 if ((this._region == null))
                 {
-                    this._region = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Region>(this, "Region", this.FilterRegion);
+                    this._region = new global::OpenRiaServices.Client.EntityRefByKey<global::CodeFirstModels.Region>(this, "Region", this.GetRegionKey);
                 }
                 return this._region.Entity;
             }
@@ -2458,9 +2466,9 @@ namespace CodeFirstModels
             }
         }
         
-        private bool FilterRegion(global::CodeFirstModels.Region entity)
+        private object GetRegionKey()
         {
-            return (entity.RegionID == this.RegionID);
+            return this.RegionID;
         }
         
         /// <summary>

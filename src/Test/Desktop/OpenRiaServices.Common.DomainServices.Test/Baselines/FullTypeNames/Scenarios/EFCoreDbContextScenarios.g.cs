@@ -618,7 +618,7 @@ namespace EFCoreModels.Northwind
     public sealed partial class Order : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Customer> _customer;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Customer> _customer;
         
         private string _customerID;
         
@@ -711,7 +711,7 @@ namespace EFCoreModels.Northwind
             {
                 if ((this._customer == null))
                 {
-                    this._customer = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Customer>(this, "Customer", this.FilterCustomer);
+                    this._customer = new global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Customer>(this, "Customer", this.GetCustomerKey);
                 }
                 return this._customer.Entity;
             }
@@ -1157,9 +1157,13 @@ namespace EFCoreModels.Northwind
             }
         }
         
-        private bool FilterCustomer(global::EFCoreModels.Northwind.Customer entity)
+        private object GetCustomerKey()
         {
-            return (entity.CustomerID == this.CustomerID);
+            if ((this.CustomerID == null))
+            {
+                return null;
+            }
+            return this.CustomerID;
         }
         
         private void AttachOrder_Details(global::EFCoreModels.Northwind.Order_Detail entity)
@@ -1196,11 +1200,11 @@ namespace EFCoreModels.Northwind
         
         private float _discount;
         
-        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Order> _order;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Order> _order;
         
         private int _orderID;
         
-        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Product> _product;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Product> _product;
         
         private int _productID;
         
@@ -1273,7 +1277,7 @@ namespace EFCoreModels.Northwind
             {
                 if ((this._order == null))
                 {
-                    this._order = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Order>(this, "Order", this.FilterOrder);
+                    this._order = new global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Order>(this, "Order", this.GetOrderKey);
                 }
                 return this._order.Entity;
             }
@@ -1343,7 +1347,7 @@ namespace EFCoreModels.Northwind
             {
                 if ((this._product == null))
                 {
-                    this._product = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Product>(this, "Product", this.FilterProduct);
+                    this._product = new global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Product>(this, "Product", this.GetProductKey);
                 }
                 return this._product.Entity;
             }
@@ -1455,14 +1459,14 @@ namespace EFCoreModels.Northwind
             }
         }
         
-        private bool FilterOrder(global::EFCoreModels.Northwind.Order entity)
+        private object GetOrderKey()
         {
-            return (entity.OrderID == this.OrderID);
+            return this.OrderID;
         }
         
-        private bool FilterProduct(global::EFCoreModels.Northwind.Product entity)
+        private object GetProductKey()
         {
-            return (entity.ProductID == this.ProductID);
+            return this.ProductID;
         }
         
         /// <summary>
@@ -1482,7 +1486,7 @@ namespace EFCoreModels.Northwind
     public sealed partial class Product : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Category> _category;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Category> _category;
         
         private global::System.Nullable<int> _categoryID;
         
@@ -1569,7 +1573,7 @@ namespace EFCoreModels.Northwind
             {
                 if ((this._category == null))
                 {
-                    this._category = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Category>(this, "Category", this.FilterCategory);
+                    this._category = new global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Category>(this, "Category", this.GetCategoryKey);
                 }
                 return this._category.Entity;
             }
@@ -1978,9 +1982,13 @@ namespace EFCoreModels.Northwind
             }
         }
         
-        private bool FilterCategory(global::EFCoreModels.Northwind.Category entity)
+        private object GetCategoryKey()
         {
-            return (entity.CategoryID == this.CategoryID);
+            if ((this.CategoryID == null))
+            {
+                return null;
+            }
+            return this.CategoryID;
         }
         
         private void AttachOrder_Details(global::EFCoreModels.Northwind.Order_Detail entity)
@@ -2306,7 +2314,7 @@ namespace EFCoreModels.Northwind
     public sealed partial class Territory : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Region> _region;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Region> _region;
         
         private int _regionID;
         
@@ -2349,7 +2357,7 @@ namespace EFCoreModels.Northwind
             {
                 if ((this._region == null))
                 {
-                    this._region = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Region>(this, "Region", this.FilterRegion);
+                    this._region = new global::OpenRiaServices.Client.EntityRefByKey<global::EFCoreModels.Northwind.Region>(this, "Region", this.GetRegionKey);
                 }
                 return this._region.Entity;
             }
@@ -2461,9 +2469,9 @@ namespace EFCoreModels.Northwind
             }
         }
         
-        private bool FilterRegion(global::EFCoreModels.Northwind.Region entity)
+        private object GetRegionKey()
         {
-            return (entity.RegionID == this.RegionID);
+            return this.RegionID;
         }
         
         /// <summary>

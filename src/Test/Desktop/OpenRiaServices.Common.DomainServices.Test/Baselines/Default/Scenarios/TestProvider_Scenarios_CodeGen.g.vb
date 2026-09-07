@@ -41,7 +41,7 @@ Namespace TestDomainServices
     Partial Public NotInheritable Class A
         Inherits Entity
         
-        Private _b As EntityRef(Of B)
+        Private _b As EntityRefByKey(Of B)
         
         Private _bid1 As Integer
         
@@ -112,7 +112,7 @@ Namespace TestDomainServices
         Public Property B() As B
             Get
                 If (Me._b Is Nothing) Then
-                    Me._b = New EntityRef(Of B)(Me, "B", AddressOf Me.FilterB)
+                    Me._b = New EntityRefByKey(Of B)(Me, "B", AddressOf Me.GetBKey)
                 End If
                 Return Me._b.Entity
             End Get
@@ -294,8 +294,8 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterB(ByVal entity As B) As Boolean
-            Return (Object.Equals(entity.ID1, Me.BID1) AndAlso Object.Equals(entity.ID2, Me.BID2))
+        Private Function GetBKey() As Object
+            Return OpenRiaServices.Client.EntityKey.Create(Me.BID1, Me.BID2)
         End Function
         
         ''' <summary>
@@ -432,9 +432,9 @@ Namespace TestDomainServices
         
         Private _bid2 As Integer
         
-        Private _d_Ref1 As EntityRef(Of D)
+        Private _d_Ref1 As EntityRefByKey(Of D)
         
-        Private _d_Ref2 As EntityRef(Of D)
+        Private _d_Ref2 As EntityRefByKey(Of D)
         
         Private _did_Ref1 As Integer
         
@@ -532,7 +532,7 @@ Namespace TestDomainServices
         Public Property D_Ref1() As D
             Get
                 If (Me._d_Ref1 Is Nothing) Then
-                    Me._d_Ref1 = New EntityRef(Of D)(Me, "D_Ref1", AddressOf Me.FilterD_Ref1)
+                    Me._d_Ref1 = New EntityRefByKey(Of D)(Me, "D_Ref1", AddressOf Me.GetD_Ref1Key)
                 End If
                 Return Me._d_Ref1.Entity
             End Get
@@ -565,7 +565,7 @@ Namespace TestDomainServices
         Public Property D_Ref2() As D
             Get
                 If (Me._d_Ref2 Is Nothing) Then
-                    Me._d_Ref2 = New EntityRef(Of D)(Me, "D_Ref2", AddressOf Me.FilterD_Ref2)
+                    Me._d_Ref2 = New EntityRefByKey(Of D)(Me, "D_Ref2", AddressOf Me.GetD_Ref2Key)
                 End If
                 Return Me._d_Ref2.Entity
             End Get
@@ -651,12 +651,12 @@ Namespace TestDomainServices
             End Set
         End Property
         
-        Private Function FilterD_Ref1(ByVal entity As D) As Boolean
-            Return Object.Equals(entity.ID, Me.DID_Ref1)
+        Private Function GetD_Ref1Key() As Object
+            Return Me.DID_Ref1
         End Function
         
-        Private Function FilterD_Ref2(ByVal entity As D) As Boolean
-            Return Object.Equals(entity.ID, Me.DID_Ref2)
+        Private Function GetD_Ref2Key() As Object
+            Return Me.DID_Ref2
         End Function
         
         ''' <summary>
@@ -679,9 +679,9 @@ Namespace TestDomainServices
         
         Private _c As EntityRef(Of C)
         
-        Private _d1 As EntityRef(Of D)
+        Private _d1 As EntityRefByKey(Of D)
         
-        Private _d2 As EntityRef(Of D)
+        Private _d2 As EntityRefByKey(Of D)
         
         Private _d2_BackRef As EntityRef(Of D)
         
@@ -796,7 +796,7 @@ Namespace TestDomainServices
         Public Property D1() As D
             Get
                 If (Me._d1 Is Nothing) Then
-                    Me._d1 = New EntityRef(Of D)(Me, "D1", AddressOf Me.FilterD1)
+                    Me._d1 = New EntityRefByKey(Of D)(Me, "D1", AddressOf Me.GetD1Key)
                 End If
                 Return Me._d1.Entity
             End Get
@@ -829,7 +829,7 @@ Namespace TestDomainServices
         Public Property D2() As D
             Get
                 If (Me._d2 Is Nothing) Then
-                    Me._d2 = New EntityRef(Of D)(Me, "D2", AddressOf Me.FilterD2)
+                    Me._d2 = New EntityRefByKey(Of D)(Me, "D2", AddressOf Me.GetD2Key)
                 End If
                 Return Me._d2.Entity
             End Get
@@ -1011,12 +1011,12 @@ Namespace TestDomainServices
             Return Object.Equals(entity.DID_Ref1, Me.ID)
         End Function
         
-        Private Function FilterD1(ByVal entity As D) As Boolean
-            Return Object.Equals(entity.ID, Me.DSelfRef_ID1)
+        Private Function GetD1Key() As Object
+            Return Me.DSelfRef_ID1
         End Function
         
-        Private Function FilterD2(ByVal entity As D) As Boolean
-            Return Object.Equals(entity.ID, Me.DSelfRef_ID2)
+        Private Function GetD2Key() As Object
+            Return Me.DSelfRef_ID2
         End Function
         
         Private Function FilterD2_BackRef(ByVal entity As D) As Boolean

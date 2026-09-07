@@ -25,7 +25,7 @@ namespace TestDomainServices
     public sealed partial class A : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.B> _b;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.B> _b;
         
         private int _bid1;
         
@@ -88,7 +88,7 @@ namespace TestDomainServices
             {
                 if ((this._b == null))
                 {
-                    this._b = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.B>(this, "B", this.FilterB);
+                    this._b = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.B>(this, "B", this.GetBKey);
                 }
                 return this._b.Entity;
             }
@@ -300,10 +300,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterB(global::TestDomainServices.B entity)
+        private object GetBKey()
         {
-            return ((entity.ID1 == this.BID1) 
-                        && (entity.ID2 == this.BID2));
+            return global::OpenRiaServices.Client.EntityKey.Create(this.BID1, this.BID2);
         }
         
         /// <summary>
@@ -452,9 +451,9 @@ namespace TestDomainServices
         
         private int _bid2;
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref1;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.D> _d_Ref1;
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d_Ref2;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.D> _d_Ref2;
         
         private int _did_Ref1;
         
@@ -550,7 +549,7 @@ namespace TestDomainServices
             {
                 if ((this._d_Ref1 == null))
                 {
-                    this._d_Ref1 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref1", this.FilterD_Ref1);
+                    this._d_Ref1 = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.D>(this, "D_Ref1", this.GetD_Ref1Key);
                 }
                 return this._d_Ref1.Entity;
             }
@@ -593,7 +592,7 @@ namespace TestDomainServices
             {
                 if ((this._d_Ref2 == null))
                 {
-                    this._d_Ref2 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref2", this.FilterD_Ref2);
+                    this._d_Ref2 = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.D>(this, "D_Ref2", this.GetD_Ref2Key);
                 }
                 return this._d_Ref2.Entity;
             }
@@ -693,14 +692,14 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterD_Ref1(global::TestDomainServices.D entity)
+        private object GetD_Ref1Key()
         {
-            return (entity.ID == this.DID_Ref1);
+            return this.DID_Ref1;
         }
         
-        private bool FilterD_Ref2(global::TestDomainServices.D entity)
+        private object GetD_Ref2Key()
         {
-            return (entity.ID == this.DID_Ref2);
+            return this.DID_Ref2;
         }
         
         /// <summary>
@@ -821,7 +820,7 @@ namespace TestDomainServices
     public sealed partial class CartItem : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.Cart> _cart;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.Cart> _cart;
         
         private int _cartId;
         
@@ -864,7 +863,7 @@ namespace TestDomainServices
             {
                 if ((this._cart == null))
                 {
-                    this._cart = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.Cart>(this, "Cart", this.FilterCart);
+                    this._cart = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.Cart>(this, "Cart", this.GetCartKey);
                 }
                 return this._cart.Entity;
             }
@@ -971,9 +970,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterCart(global::TestDomainServices.Cart entity)
+        private object GetCartKey()
         {
-            return (entity.CartId == this.CartItemId);
+            return this.CartItemId;
         }
         
         /// <summary>
@@ -1126,9 +1125,9 @@ namespace TestDomainServices
         
         private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.C> _c;
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d1;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.D> _d1;
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d2;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.D> _d2;
         
         private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D> _d2_BackRef;
         
@@ -1244,7 +1243,7 @@ namespace TestDomainServices
             {
                 if ((this._d1 == null))
                 {
-                    this._d1 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D1", this.FilterD1);
+                    this._d1 = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.D>(this, "D1", this.GetD1Key);
                 }
                 return this._d1.Entity;
             }
@@ -1287,7 +1286,7 @@ namespace TestDomainServices
             {
                 if ((this._d2 == null))
                 {
-                    this._d2 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2", this.FilterD2);
+                    this._d2 = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.D>(this, "D2", this.GetD2Key);
                 }
                 return this._d2.Entity;
             }
@@ -1503,14 +1502,14 @@ namespace TestDomainServices
             return (entity.DID_Ref1 == this.ID);
         }
         
-        private bool FilterD1(global::TestDomainServices.D entity)
+        private object GetD1Key()
         {
-            return (entity.ID == this.DSelfRef_ID1);
+            return this.DSelfRef_ID1;
         }
         
-        private bool FilterD2(global::TestDomainServices.D entity)
+        private object GetD2Key()
         {
-            return (entity.ID == this.DSelfRef_ID2);
+            return this.DSelfRef_ID2;
         }
         
         private bool FilterD2_BackRef(global::TestDomainServices.D entity)
@@ -5397,9 +5396,9 @@ namespace TestDomainServices
         
         private int _id;
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.NullableFKParent> _parent;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.NullableFKParent> _parent;
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.NullableFKParent> _parent2;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.NullableFKParent> _parent2;
         
         private global::System.Nullable<int> _parentID;
         
@@ -5492,7 +5491,7 @@ namespace TestDomainServices
             {
                 if ((this._parent == null))
                 {
-                    this._parent = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.NullableFKParent>(this, "Parent", this.FilterParent);
+                    this._parent = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.NullableFKParent>(this, "Parent", this.GetParentKey);
                 }
                 return this._parent.Entity;
             }
@@ -5535,7 +5534,7 @@ namespace TestDomainServices
             {
                 if ((this._parent2 == null))
                 {
-                    this._parent2 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.NullableFKParent>(this, "Parent2", this.FilterParent2);
+                    this._parent2 = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.NullableFKParent>(this, "Parent2", this.GetParent2Key);
                 }
                 return this._parent2.Entity;
             }
@@ -5618,14 +5617,22 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterParent(global::TestDomainServices.NullableFKParent entity)
+        private object GetParentKey()
         {
-            return (entity.ID == this.ParentID);
+            if ((this.ParentID == null))
+            {
+                return null;
+            }
+            return this.ParentID;
         }
         
-        private bool FilterParent2(global::TestDomainServices.NullableFKParent entity)
+        private object GetParent2Key()
         {
-            return (entity.ID == this.ParentID_Singleton);
+            if ((this.ParentID_Singleton == null))
+            {
+                return null;
+            }
+            return this.ParentID_Singleton;
         }
         
         /// <summary>
@@ -6144,7 +6151,7 @@ namespace TestDomainServices
     public sealed partial class RoundtripOriginal_TestEntity2 : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.RoundtripOriginal_TestEntity> _assocProp;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.RoundtripOriginal_TestEntity> _assocProp;
         
         private int _id;
         
@@ -6187,7 +6194,7 @@ namespace TestDomainServices
             {
                 if ((this._assocProp == null))
                 {
-                    this._assocProp = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.RoundtripOriginal_TestEntity>(this, "AssocProp", this.FilterAssocProp);
+                    this._assocProp = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.RoundtripOriginal_TestEntity>(this, "AssocProp", this.GetAssocPropKey);
                 }
                 return this._assocProp.Entity;
             }
@@ -6276,9 +6283,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterAssocProp(global::TestDomainServices.RoundtripOriginal_TestEntity entity)
+        private object GetAssocPropKey()
         {
-            return (entity.ID == this.ID);
+            return this.ID;
         }
         
         /// <summary>
@@ -6531,7 +6538,7 @@ namespace TestDomainServices
     public sealed partial class TestCycles : global::OpenRiaServices.Client.Entity
     {
         
-        private global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.TestCycles> _includedT;
+        private global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.TestCycles> _includedT;
         
         private global::OpenRiaServices.Client.EntityCollection<global::TestDomainServices.TestCycles> _includedTs;
         
@@ -6572,7 +6579,7 @@ namespace TestDomainServices
             {
                 if ((this._includedT == null))
                 {
-                    this._includedT = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.TestCycles>(this, "IncludedT", this.FilterIncludedT);
+                    this._includedT = new global::OpenRiaServices.Client.EntityRefByKey<global::TestDomainServices.TestCycles>(this, "IncludedT", this.GetIncludedTKey);
                 }
                 return this._includedT.Entity;
             }
@@ -6672,9 +6679,13 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterIncludedT(global::TestDomainServices.TestCycles entity)
+        private object GetIncludedTKey()
         {
-            return (entity.Name == this.ParentName);
+            if ((this.ParentName == null))
+            {
+                return null;
+            }
+            return this.ParentName;
         }
         
         private void AttachIncludedTs(global::TestDomainServices.TestCycles entity)

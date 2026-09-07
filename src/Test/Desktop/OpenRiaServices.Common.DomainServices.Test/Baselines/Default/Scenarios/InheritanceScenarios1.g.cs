@@ -37,7 +37,7 @@ namespace TestDomainServices
         
         private int _inheritanceD_ID;
         
-        private EntityRef<InheritanceT1> _t1;
+        private EntityRefByKey<InheritanceT1> _t1;
         
         private int _t1_id;
         
@@ -181,7 +181,7 @@ namespace TestDomainServices
             {
                 if ((this._t1 == null))
                 {
-                    this._t1 = new EntityRef<InheritanceT1>(this, "T1", this.FilterT1);
+                    this._t1 = new EntityRefByKey<InheritanceT1>(this, "T1", this.GetT1Key);
                 }
                 return this._t1.Entity;
             }
@@ -246,9 +246,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterT1(InheritanceT1 entity)
+        private object GetT1Key()
         {
-            return (entity.ID == this.T1_ID);
+            return this.T1_ID;
         }
         
         private bool FilterT1s(InheritanceT1 entity)
@@ -281,7 +281,7 @@ namespace TestDomainServices
         
         private int _inheritanceD_ID;
         
-        private EntityRef<InheritanceT1> _t1;
+        private EntityRefByKey<InheritanceT1> _t1;
         
         private int _t1_id;
         
@@ -425,7 +425,7 @@ namespace TestDomainServices
             {
                 if ((this._t1 == null))
                 {
-                    this._t1 = new EntityRef<InheritanceT1>(this, "T1", this.FilterT1);
+                    this._t1 = new EntityRefByKey<InheritanceT1>(this, "T1", this.GetT1Key);
                 }
                 return this._t1.Entity;
             }
@@ -490,9 +490,9 @@ namespace TestDomainServices
             }
         }
         
-        private bool FilterT1(InheritanceT1 entity)
+        private object GetT1Key()
         {
-            return (entity.ID == this.T1_ID);
+            return this.T1_ID;
         }
         
         private bool FilterT1s(InheritanceT1 entity)

@@ -43,7 +43,7 @@ namespace DbContextModels.AdventureWorks
         
         private string _loginID;
         
-        private EntityRef<Employee> _manager;
+        private EntityRefByKey<Employee> _manager;
         
         private Nullable<int> _managerID;
         
@@ -303,7 +303,7 @@ namespace DbContextModels.AdventureWorks
             {
                 if ((this._manager == null))
                 {
-                    this._manager = new EntityRef<Employee>(this, "Manager", this.FilterManager);
+                    this._manager = new EntityRefByKey<Employee>(this, "Manager", this.GetManagerKey);
                 }
                 return this._manager.Entity;
             }
@@ -591,9 +591,13 @@ namespace DbContextModels.AdventureWorks
             }
         }
         
-        private bool FilterManager(Employee entity)
+        private object GetManagerKey()
         {
-            return (entity.EmployeeID == this.ManagerID);
+            if ((this.ManagerID == null))
+            {
+                return null;
+            }
+            return this.ManagerID;
         }
         
         private void AttachPurchaseOrders(PurchaseOrder entity)
@@ -1552,7 +1556,7 @@ namespace DbContextModels.AdventureWorks
     public sealed partial class PurchaseOrder : Entity
     {
         
-        private EntityRef<Employee> _employee;
+        private EntityRefByKey<Employee> _employee;
         
         private int _employeeID;
         
@@ -1637,7 +1641,7 @@ namespace DbContextModels.AdventureWorks
             {
                 if ((this._employee == null))
                 {
-                    this._employee = new EntityRef<Employee>(this, "Employee", this.FilterEmployee);
+                    this._employee = new EntityRefByKey<Employee>(this, "Employee", this.GetEmployeeKey);
                 }
                 return this._employee.Entity;
             }
@@ -2003,9 +2007,9 @@ namespace DbContextModels.AdventureWorks
             }
         }
         
-        private bool FilterEmployee(Employee entity)
+        private object GetEmployeeKey()
         {
-            return (entity.EmployeeID == this.EmployeeID);
+            return this.EmployeeID;
         }
         
         private void AttachPurchaseOrderDetails(PurchaseOrderDetail entity)
@@ -2048,11 +2052,11 @@ namespace DbContextModels.AdventureWorks
         
         private short _orderQty;
         
-        private EntityRef<Product> _product;
+        private EntityRefByKey<Product> _product;
         
         private int _productID;
         
-        private EntityRef<PurchaseOrder> _purchaseOrder;
+        private EntityRefByKey<PurchaseOrder> _purchaseOrder;
         
         private int _purchaseOrderDetailID;
         
@@ -2213,7 +2217,7 @@ namespace DbContextModels.AdventureWorks
             {
                 if ((this._product == null))
                 {
-                    this._product = new EntityRef<Product>(this, "Product", this.FilterProduct);
+                    this._product = new EntityRefByKey<Product>(this, "Product", this.GetProductKey);
                 }
                 return this._product.Entity;
             }
@@ -2281,7 +2285,7 @@ namespace DbContextModels.AdventureWorks
             {
                 if ((this._purchaseOrder == null))
                 {
-                    this._purchaseOrder = new EntityRef<PurchaseOrder>(this, "PurchaseOrder", this.FilterPurchaseOrder);
+                    this._purchaseOrder = new EntityRefByKey<PurchaseOrder>(this, "PurchaseOrder", this.GetPurchaseOrderKey);
                 }
                 return this._purchaseOrder.Entity;
             }
@@ -2462,14 +2466,14 @@ namespace DbContextModels.AdventureWorks
             }
         }
         
-        private bool FilterProduct(Product entity)
+        private object GetProductKey()
         {
-            return (entity.ProductID == this.ProductID);
+            return this.ProductID;
         }
         
-        private bool FilterPurchaseOrder(PurchaseOrder entity)
+        private object GetPurchaseOrderKey()
         {
-            return (entity.PurchaseOrderID == this.PurchaseOrderID);
+            return this.PurchaseOrderID;
         }
         
         /// <summary>

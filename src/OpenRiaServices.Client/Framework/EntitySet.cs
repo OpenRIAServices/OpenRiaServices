@@ -23,6 +23,7 @@ namespace OpenRiaServices.Client
     public abstract class EntitySet : IList, INotifyCollectionChanged, IRevertibleChangeTracking, INotifyPropertyChanged
     {
         private readonly Dictionary<EntityAssociationAttribute, Action<Entity>?> _associationUpdateCallbackMap = new();
+        private bool _isIdentityCacheStale;
         private readonly Type _entityType;
         private EntityContainer _entityContainer;
         private EntitySetOperations _supportedOperations;
@@ -118,6 +119,7 @@ namespace OpenRiaServices.Client
             }
 
             this._identityCache.Clear();
+            this._isIdentityCacheStale = false;
             this._interestingEntities.Clear();
             this._list = this.CreateList();
             this._set.Clear();
@@ -280,6 +282,13 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that was changed.</param>
         internal void UpdateRelatedAssociations(Entity entity, string propertyName)
         {
+            if (!_isIdentityCacheStale
+                && entity.MetaType[propertyName]?.IsKeyMember == true
+                && this._identityCache.ContainsValue(entity))
+            {
+                this._isIdentityCacheStale = true;
+            }
+
             // Here we notify any association update callbacks so they can update collection membership
             // for the modified entity. This needs to happen in the following cases:
             // 1) If the entity is transitioning from a New to Unmodified state.
@@ -871,6 +880,19 @@ namespace OpenRiaServices.Client
             this._identityCache.TryGetValue(identity, out entity);
             return entity;
         }
+
+        /// <summary>
+        /// Queries the cache for the entity with the specified identity.
+        /// </summary>
+        /// <param name="identity">The entity identity.</param>
+        /// <returns>The entity if found; otherwise, <see langword="null"/>.</returns>
+        internal Entity? GetEntityByIdentity(object identity)
+        {
+            this._identityCache.TryGetValue(identity, out Entity? entity);
+            return entity;
+        }
+
+        internal bool IsIdentityCacheStale => this._isIdentityCacheStale;
 
         /// <summary>
         /// Load the specified set of entities
