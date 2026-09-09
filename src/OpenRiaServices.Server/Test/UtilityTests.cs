@@ -139,16 +139,16 @@ namespace OpenRiaServices.Server.Test
             // verify deep CT collection validation
             List<ComplexType_Recursive> children = new List<ComplexType_Recursive> {
                 new ComplexType_Recursive { P1 = "1", P4 = -1 },  // invalid element
-                new ComplexType_Recursive { P1 = "2", P3 = 
-                    new List<ComplexType_Recursive> { 
+                new ComplexType_Recursive { P1 = "2", P3 =
+                    new List<ComplexType_Recursive> {
                         new ComplexType_Recursive { P1 = "3", P4 = -5 }  // invalid element in nested collection
                     }
                 }
             };
-            ComplexType_Scenarios_Parent parent = new ComplexType_Scenarios_Parent 
-            { 
-                ID = 1, 
-                ComplexType_Recursive = new ComplexType_Recursive { P1 = "1", P3 = children } 
+            ComplexType_Scenarios_Parent parent = new ComplexType_Scenarios_Parent
+            {
+                ID = 1,
+                ComplexType_Recursive = new ComplexType_Recursive { P1 = "1", P3 = children }
             };
             validationContext = ValidationUtilities.CreateValidationContext(parent, null);
             results = new List<ValidationResult>();
@@ -188,27 +188,6 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
-        public void SerializableDataMember_UsesPolyTypePrecedence()
-        {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(PolyTypeDataContract));
-
-            Assert.IsFalse(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.Unannotated)]));
-            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.DataMember)]));
-            Assert.IsFalse(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.IgnoredShape)]));
-            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.ShapeOverridesIgnore)]));
-        }
-
-        [TestMethod]
-        public void SerializableDataMember_UsesPolyTypePrecedenceForPoco()
-        {
-            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(PolyTypePoco));
-
-            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypePoco.Unannotated)]));
-            Assert.IsFalse(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypePoco.Ignored)]));
-            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypePoco.ShapeOverridesIgnore)]));
-        }
-
-        [TestMethod]
         [DataRow(typeof(PolyTypeDataContract))]
         [DataRow(typeof(PolyTypePoco))]
         [DataRow(typeof(PolyTypeDerivedNonContract))]
@@ -222,10 +201,7 @@ namespace OpenRiaServices.Server.Test
                 .Select(GetShapePropertyName)
                 .ToArray();
 
-            CollectionAssert.AreEquivalent(
-                expectedNames,
-                actualNames,
-                $"Expected: {string.Join(", ", expectedNames)}; actual: {string.Join(", ", actualNames)}");
+            Assert.AreSequenceEqual(expectedNames, actualNames, SequenceOrder.InAnyOrder);
         }
 
         private static string GetShapePropertyName(PropertyDescriptor property)
