@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Principal;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Xml;
@@ -73,6 +74,28 @@ public class OperationInvokerTests
         var operationInvoker = new QueryOperationInvoker<City>(operation, s_options);
 
         await InvokeAndAssertNoResponseIsWritten(operationInvoker);
+    }
+
+    [TestMethod]
+    [Description("Query operation: IAsyncEnumerable<T> results are recognized and composed")]
+    public async Task TestQuery_IAsyncEnumerable()
+    {
+        var description = DomainServiceDescription.GetDescription(typeof(AsyncEnumerableQueryDomainService));
+        var operation = description.GetQueryMethod(nameof(AsyncEnumerableQueryDomainService.GetCities));
+
+        Assert.IsNotNull(operation);
+        Assert.AreEqual(typeof(City), operation.AssociatedType);
+        Assert.IsTrue(((QueryAttribute)operation.OperationAttribute).IsComposable);
+
+        var service = new AsyncEnumerableQueryDomainService();
+        service.Initialize(new DomainServiceContext(new ServiceCollection().BuildServiceProvider(), new GenericPrincipal(new GenericIdentity("user"), Array.Empty<string>()), DomainOperationType.Query));
+
+        var query = Array.Empty<City>().AsQueryable().Where(c => c.StateName == "WA").Take(1);
+        var result = await service.QueryAsync<City>(new QueryDescription(operation, Array.Empty<object>(), includeTotalCount: false, query), CancellationToken.None);
+
+        Assert.IsFalse(result.HasValidationErrors);
+        Assert.AreEqual(1, result.Result.Count());
+        Assert.AreEqual("Redmond", result.Result.Single().Name);
     }
 
     [TestMethod]
@@ -198,6 +221,19 @@ public class OperationInvokerTests
                 cancellationToken.ThrowIfCancellationRequested();
 
             return base.SubmitAsync(changeSet, cancellationToken);
+        }
+    }
+
+    [EnableClientAccess]
+    public class AsyncEnumerableQueryDomainService : DomainService
+    {
+        [Query]
+        public async IAsyncEnumerable<City> GetCities([System.Runtime.CompilerServices.EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            yield return new City() { Name = "Redmond", CountyName = "King", StateName = "WA" };
+            await Task.Yield();
+            cancellationToken.ThrowIfCancellationRequested();
+            yield return new City() { Name = "Bellevue", CountyName = "King", StateName = "WA" };
         }
     }
 }

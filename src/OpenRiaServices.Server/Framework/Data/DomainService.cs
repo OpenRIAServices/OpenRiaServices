@@ -346,7 +346,16 @@ namespace OpenRiaServices.Server
 
                 // One or more results were returned. If the result is enumerable, compose
                 // any specified query operators, otherwise just return the singleton instance.
-                enumerableResult = result as IEnumerable;
+#if NET
+                if (result is IAsyncEnumerable<T> asyncEnumerableResult)
+                {
+                    enumerableResult = await EnumerateAsyncEnumerable(asyncEnumerableResult, DomainService.DefaultEstimatedQueryResultCount, cancellationToken).ConfigureAwait(false);
+                }
+                else
+#endif
+                {
+                    enumerableResult = result as IEnumerable;
+                }
                 if (enumerableResult != null)
                 {
                     // If there are additional filtering, sorting and paging parameters to apply
@@ -413,6 +422,19 @@ namespace OpenRiaServices.Server
             }
 
             return new ServiceQueryResult<T>(enumeratedResult, totalCount);
+
+#if NET
+            static async ValueTask<IReadOnlyCollection<T>> EnumerateAsyncEnumerable(IAsyncEnumerable<T> asyncEnumerable, int estimatedResultCount, CancellationToken cancellationToken)
+            {
+                List<T> result = new List<T>(capacity: estimatedResultCount);
+                await foreach (var item in asyncEnumerable.WithCancellation(cancellationToken).ConfigureAwait(false))
+                {
+                    result.Add(item);
+                }
+
+                return result;
+            }
+#endif
         }
 
         /// <summary>

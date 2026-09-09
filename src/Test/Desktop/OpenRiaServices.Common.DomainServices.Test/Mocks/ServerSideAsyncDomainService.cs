@@ -57,9 +57,24 @@ namespace TestDomainServices
         }
 
         /// <summary>
-        /// Query returing a queryable range in a task
+        /// Query returning an async enumerable range
         /// </summary>
         /// <returns></returns>
+        #if NET
+        public async IAsyncEnumerable<RangeItem> GetQueryableRange([EnumeratorCancellation] CancellationToken cancellationToken)
+        {
+            if (!cancellationToken.Equals(ServiceContext.CancellationToken))
+                throw new DomainException("CancellationToken parameter does not work");
+
+            await Task.Delay(1, cancellationToken);
+
+            foreach (var item in _items)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                yield return item;
+            }
+        }
+        #else
         public Task<IQueryable<RangeItem>> GetQueryableRangeAsync(CancellationToken cancellationToken)
         {
             if (!cancellationToken.Equals(ServiceContext.CancellationToken))
@@ -70,6 +85,7 @@ namespace TestDomainServices
                    _items.AsQueryable()
                );
         }
+        #endif
 
         /// <summary>
         /// Single item Query throwing exception directly

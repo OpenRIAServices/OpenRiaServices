@@ -456,6 +456,15 @@ namespace OpenRiaServices
             return genericType != null;
         }
 
+        internal static Type FindQueryEnumerable(Type seqType)
+        {
+            Type enumerableType = FindIEnumerable(seqType);
+#if NET
+            enumerableType ??= FindIAsyncEnumerable(seqType);
+#endif
+            return enumerableType;
+        }
+
         internal static Type FindIEnumerable(Type seqType)
         {
             if (seqType == null || seqType == typeof(string))
@@ -495,6 +504,44 @@ namespace OpenRiaServices
             }
             return null;
         }
+
+#if NET
+        internal static Type FindIAsyncEnumerable(Type seqType)
+        {
+            if (seqType == null || seqType == typeof(string))
+            {
+                return null;
+            }
+            if (seqType.IsGenericType)
+            {
+                foreach (Type arg in seqType.GetGenericArguments())
+                {
+                    Type asyncEnumerable = typeof(IAsyncEnumerable<>).MakeGenericType(arg);
+                    if (asyncEnumerable.IsAssignableFrom(seqType))
+                    {
+                        return asyncEnumerable;
+                    }
+                }
+            }
+            Type[] ifaces = seqType.GetInterfaces();
+            if (ifaces != null && ifaces.Length > 0)
+            {
+                foreach (Type iface in ifaces)
+                {
+                    Type asyncEnumerable = FindIAsyncEnumerable(iface);
+                    if (asyncEnumerable != null)
+                    {
+                        return asyncEnumerable;
+                    }
+                }
+            }
+            if (seqType.BaseType != null && seqType.BaseType != typeof(object))
+            {
+                return FindIAsyncEnumerable(seqType.BaseType);
+            }
+            return null;
+        }
+#endif
 #endif
 
         /// <summary>
