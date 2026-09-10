@@ -847,7 +847,7 @@ namespace OpenRiaServices.Server
             isSingleton = false;
             error = null;
 
-            Type enumerableOfT = TypeUtility.FindIEnumerable(returnType);
+            Type enumerableOfT = TypeUtility.FindQueryEnumerable(returnType);
             if (enumerableOfT != null)
             {
                 // IEnumerable<T> returning method

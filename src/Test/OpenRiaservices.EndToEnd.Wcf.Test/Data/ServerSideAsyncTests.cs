@@ -114,7 +114,7 @@ namespace OpenRiaServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        [Description("Server side query returning Task<IEnumerable<T>>")]
+        [Description("Server side query returning IAsyncEnumerable<T>")]
         public void Query_TaskAsync()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);
@@ -160,7 +160,7 @@ namespace OpenRiaServices.Client.Test
 
         [TestMethod]
         [Asynchronous]
-        [Description("Test that filtering is applied to server side query returning Task<IEnumerable<T>>")]
+        [Description("Test that filtering is applied to server side query returning IAsyncEnumerable<T>")]
         public void Query_TaskAsync_WithFilter()
         {
             var ctx = new ServerSideAsyncDomainContext(TestURIs.ServerSideAsync);

@@ -235,7 +235,7 @@ namespace OpenRiaServices.Server
                     {
                         QueryAttribute qa = new QueryAttribute();
                         // singleton returning query methods aren't composable
-                        qa.IsComposable = TypeUtility.FindIEnumerable(this.ReturnType) != null;
+                        qa.IsComposable = TypeUtility.FindQueryEnumerable(this.ReturnType) != null;
                         this._operationAttribute = qa;
                         attributeCreated = true;
                     }
@@ -361,7 +361,7 @@ namespace OpenRiaServices.Server
                 {
                     if (this.Operation == DomainOperation.Query)
                     {
-                        Type entityType = TypeUtility.FindIEnumerable(this.ReturnType);
+                        Type entityType = TypeUtility.FindQueryEnumerable(this.ReturnType);
                         if (entityType != null)
                         {
                             entityType = entityType.GetGenericArguments()[0];

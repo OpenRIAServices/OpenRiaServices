@@ -1,6 +1,7 @@
 # Unreleased
 
 * Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
+* Query methods can now return `IAsyncEnumerable<T>` on modern .NET targets, and the results are handled the same way as existing enumerable query results.
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 

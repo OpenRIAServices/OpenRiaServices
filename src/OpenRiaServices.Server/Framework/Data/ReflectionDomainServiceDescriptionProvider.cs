@@ -91,7 +91,7 @@ namespace OpenRiaServices.Server
         /// <param name="methodInfo">The method to register for.</param>
         private static void RegisterAssociatedMetadataProvider(MethodInfo methodInfo)
         {
-            Type type = TypeUtility.GetElementType(methodInfo.ReturnType);
+            Type type = TypeUtility.FindQueryEnumerable(methodInfo.ReturnType)?.GetGenericArguments()[0] ?? TypeUtility.GetElementType(methodInfo.ReturnType);
             if (type != typeof(void) && type.GetCustomAttributes(typeof(MetadataTypeAttribute), true).Length != 0)
             {
                 ReflectionDomainServiceDescriptionProvider.RegisterAssociatedMetadataTypeTypeDescriptor(type);
@@ -244,7 +244,7 @@ namespace OpenRiaServices.Server
         /// <returns>True if the operation is a query method, false otherwise.</returns>
         private bool IsQueryMethod(DomainOperationEntry operation)
         {
-            Type elementType = TypeUtility.GetElementType(operation.ReturnType);
+            Type elementType = TypeUtility.FindQueryEnumerable(operation.ReturnType)?.GetGenericArguments()[0] ?? TypeUtility.GetElementType(operation.ReturnType);
             return this.IsEntityType(elementType);
         }
 
