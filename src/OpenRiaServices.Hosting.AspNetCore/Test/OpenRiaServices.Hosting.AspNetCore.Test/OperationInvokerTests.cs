@@ -99,6 +99,26 @@ public class OperationInvokerTests
     }
 
     [TestMethod]
+    [Description("Query operation: IQueryable results that also implement IAsyncEnumerable<T> are composed before enumeration")]
+    public async Task TestQuery_IQueryableAsyncEnumerable_ComposesBeforeEnumeration()
+    {
+        var description = DomainServiceDescription.GetDescription(typeof(AsyncQueryableQueryDomainService));
+        var operation = description.GetQueryMethod(nameof(AsyncQueryableQueryDomainService.GetCities));
+
+        Assert.IsNotNull(operation);
+
+        var service = new AsyncQueryableQueryDomainService();
+        service.Initialize(new DomainServiceContext(new ServiceCollection().BuildServiceProvider(), new GenericPrincipal(new GenericIdentity("user"), Array.Empty<string>()), DomainOperationType.Query));
+
+        var query = Array.Empty<City>().AsQueryable().Where(c => c.StateName == "WA").Take(1);
+        var result = await service.QueryAsync<City>(new QueryDescription(operation, Array.Empty<object>(), includeTotalCount: false, query), CancellationToken.None);
+
+        Assert.IsFalse(result.HasValidationErrors);
+        Assert.AreEqual(1, result.Result.Count());
+        Assert.AreEqual("Redmond", result.Result.Single().Name);
+    }
+
+    [TestMethod]
     [Description("Submit operation: Cancellation is requested but method returned succesfully")]
     public async Task TestSubmit_CancelAndReturn()
     {
@@ -234,6 +254,44 @@ public class OperationInvokerTests
             await Task.Yield();
             cancellationToken.ThrowIfCancellationRequested();
             yield return new City() { Name = "Bellevue", CountyName = "King", StateName = "WA" };
+        }
+    }
+
+    [EnableClientAccess]
+    public class AsyncQueryableQueryDomainService : DomainService
+    {
+        [Query]
+        public IQueryable<City> GetCities()
+        {
+            return new ThrowOnSecondAsyncEnumerationQueryable<City>(new[]
+            {
+                new City() { Name = "Redmond", CountyName = "King", StateName = "WA" },
+                new City() { Name = "Vancouver", CountyName = "Clark", StateName = "WA" },
+            });
+        }
+    }
+
+    internal sealed class ThrowOnSecondAsyncEnumerationQueryable<T> : EnumerableQuery<T>, IAsyncEnumerable<T>
+    {
+        public ThrowOnSecondAsyncEnumerationQueryable(IEnumerable<T> enumerable)
+            : base(enumerable)
+        {
+        }
+
+        public async IAsyncEnumerator<T> GetAsyncEnumerator(CancellationToken cancellationToken = default)
+        {
+            var index = 0;
+            foreach (var item in this)
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                if (index++ > 0)
+                {
+                    throw new InvalidOperationException("Async enumeration should only happen after query composition.");
+                }
+
+                yield return item;
+                await Task.Yield();
+            }
         }
     }
 }
