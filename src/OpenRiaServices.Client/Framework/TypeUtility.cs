@@ -323,7 +323,7 @@ namespace OpenRiaServices
 #endif
             return true;
         }
-        
+
         /// <summary>
         /// Determines whether the specified type is one of the supported collection types
         /// with a complex element type.
@@ -429,7 +429,7 @@ namespace OpenRiaServices
                     bool interfaceMatched = false;
                     foreach (Type interfaceType in genericType.GetInterfaces().Concat(new[] { derivedType }))
                     {
-                        if (interfaceType.IsGenericType  &&
+                        if (interfaceType.IsGenericType &&
                             genericTypeDefinition == interfaceType.GetGenericTypeDefinition())
                         {
                             interfaceMatched = true;
@@ -465,6 +465,34 @@ namespace OpenRiaServices
             return enumerableType;
         }
 
+        /// <summary>
+        /// Finds the implemented <see cref="IEnumerable{T}"/> type for the specified sequence type.
+        /// Strings are excluded because they are treated as scalar values.
+        /// </summary>
+        /// <remarks>
+        /// <list type="table">
+        ///   <listheader>
+        ///     <term>Input type</term>
+        ///     <description>Result</description>
+        ///   </listheader>
+        ///   <item>
+        ///     <term><see cref="List{T}"/></term>
+        ///     <description><see cref="IEnumerable{T}"/></description>
+        ///   </item>
+        ///   <item>
+        ///     <term><see cref="Array"/></term>
+        ///     <description><see cref="IEnumerable{T}"/></description>
+        ///   </item>
+        ///   <item>
+        ///     <term><see cref="String"/></term>
+        ///     <description><see langword="null"/></description>
+        ///   </item>
+        ///   <item>
+        ///     <term>Non-sequence type</term>
+        ///     <description><see langword="null"/></description>
+        ///   </item>
+        /// </list>
+        /// </remarks>
         internal static Type FindIEnumerable(Type seqType)
         {
             if (seqType == null || seqType == typeof(string))
@@ -477,6 +505,8 @@ namespace OpenRiaServices
             }
             if (seqType.IsGenericType)
             {
+                // This seems intended to catch List<T> and similar, it will check if it implements IEnumerable<T>
+                // This is probably faster than checking all interfaces below
                 foreach (Type arg in seqType.GetGenericArguments())
                 {
                     Type ienum = typeof(IEnumerable<>).MakeGenericType(arg);
@@ -486,59 +516,64 @@ namespace OpenRiaServices
                     }
                 }
             }
+            // See if any of the interfaces implemented by this type are IEnumerable<T> (or derived from it)
             Type[] ifaces = seqType.GetInterfaces();
             if (ifaces != null && ifaces.Length > 0)
             {
                 foreach (Type iface in ifaces)
                 {
-                    Type ienum = FindIEnumerable(iface);
-                    if (ienum != null)
+                    if (iface.IsGenericType && iface.GetGenericTypeDefinition() == typeof(IEnumerable<>))
                     {
-                        return ienum;
+                        return iface;
                     }
                 }
             }
-            if (seqType.BaseType != null && seqType.BaseType != typeof(object))
-            {
-                return FindIEnumerable(seqType.BaseType);
-            }
+
             return null;
         }
 
 #if NET
-        internal static Type FindIAsyncEnumerable(Type seqType)
+        internal static Type FindIAsyncEnumerable(Type type)
         {
-            if (seqType == null || seqType == typeof(string))
+            if (type == null)
             {
                 return null;
             }
-            if (seqType.IsGenericType)
+
+            // If type.IsGenericType then prefer implementations that match 
+            if (type.IsGenericType)
             {
-                foreach (Type arg in seqType.GetGenericArguments())
+                // Simple case, IAsyncEnumerable<T> is used
+                if (type.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>))
+                {
+                    return type;
+                }
+
+                // Allow custom implementations of IAsyncEnumerable<T> to be used, e.g. MyAsyncEnumerable<T> : IAsyncEnumerable<T>
+                // In the unlikely case of multiple IAsyncEnumerable<> types beeing implemented
+                // This ensure we match on the type matchign the types generic 
+                foreach (Type arg in type.GetGenericArguments())
                 {
                     Type asyncEnumerable = typeof(IAsyncEnumerable<>).MakeGenericType(arg);
-                    if (asyncEnumerable.IsAssignableFrom(seqType))
+                    if (asyncEnumerable.IsAssignableFrom(type))
                     {
                         return asyncEnumerable;
                     }
                 }
             }
-            Type[] ifaces = seqType.GetInterfaces();
-            if (ifaces != null && ifaces.Length > 0)
+
+
+            if (type.GetInterfaces() is { } ifaces)
             {
                 foreach (Type iface in ifaces)
                 {
-                    Type asyncEnumerable = FindIAsyncEnumerable(iface);
-                    if (asyncEnumerable != null)
+                    if (iface.IsGenericType && iface.GetGenericTypeDefinition() == typeof(IAsyncEnumerable<>))
                     {
-                        return asyncEnumerable;
+                        return iface;
                     }
                 }
             }
-            if (seqType.BaseType != null && seqType.BaseType != typeof(object))
-            {
-                return FindIAsyncEnumerable(seqType.BaseType);
-            }
+
             return null;
         }
 #endif

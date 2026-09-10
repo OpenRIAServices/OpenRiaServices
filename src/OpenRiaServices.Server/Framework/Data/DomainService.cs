@@ -419,19 +419,6 @@ namespace OpenRiaServices.Server
             }
 
             return new ServiceQueryResult<T>(enumeratedResult, totalCount);
-
-#if NET
-            static async ValueTask<IReadOnlyCollection<T>> EnumerateAsyncEnumerable(IAsyncEnumerable<T> asyncEnumerable, int estimatedResultCount, CancellationToken cancellationToken)
-            {
-                List<T> result = new List<T>(capacity: estimatedResultCount);
-                await foreach (var item in asyncEnumerable.WithCancellation(cancellationToken).ConfigureAwait(false))
-                {
-                    result.Add(item);
-                }
-
-                return result;
-            }
-#endif
         }
 
         /// <summary>
@@ -1273,17 +1260,6 @@ namespace OpenRiaServices.Server
             {
                 return EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);
             }
-
-            static async ValueTask<IReadOnlyCollection<T>> EnumerateAsyncEnumerable(IAsyncEnumerable<T> asyncEnumerable, int estimatedResultCount, CancellationToken cancellationToken)
-            {
-                List<T> result = new List<T>(capacity: estimatedResultCount);
-                await foreach (var item in asyncEnumerable.WithCancellation(cancellationToken).ConfigureAwait(false))
-                {
-                    result.Add(item);
-                }
-
-                return result;
-            }
 #endif
 
             var list = new List<T>(estimatedResultCount);
@@ -1293,6 +1269,19 @@ namespace OpenRiaServices.Server
             }
             return new ValueTask<IReadOnlyCollection<T>>(list);
         }
+
+#if NET
+        private static async ValueTask<IReadOnlyCollection<T>> EnumerateAsyncEnumerable<T>(IAsyncEnumerable<T> asyncEnumerable, int estimatedResultCount, CancellationToken cancellationToken)
+        {
+            List<T> result = new List<T>(capacity: estimatedResultCount);
+            await foreach (var item in asyncEnumerable.WithCancellation(cancellationToken).ConfigureAwait(false))
+            {
+                result.Add(item);
+            }
+
+            return result;
+        }
+#endif
 
         #region Nested Types
 
