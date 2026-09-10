@@ -406,5 +406,6 @@ namespace OpenRiaServices.Client.Test
             ec.LoadEntities(new PurchaseOrderDetail[] { new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = GetUniquePurchaseOrderID() } });
             Assert.AreEqual(1, NumNotifications);
         }
+
     }
 }
