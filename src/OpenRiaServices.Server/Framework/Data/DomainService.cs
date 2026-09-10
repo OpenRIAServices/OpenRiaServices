@@ -283,6 +283,12 @@ namespace OpenRiaServices.Server
                 this.CheckOperationType(DomainOperationType.Query);
 
                 object[] parameters = queryDescription.ParameterValues;
+                ClientQuery<T>? clientQuery = null;
+                if (queryDescription.Method.HasClientQueryParameter)
+                {
+                    int resultLimit = ((QueryAttribute)queryDescription.Method.OperationAttribute).ResultLimit;
+                    clientQuery = new ClientQuery<T>(queryDescription.Query, queryDescription.IncludeTotalCount, resultLimit);
+                }
 
                 // Authentication check - will throw if unauthorized
                 if (!this.ValidateMethodCall(queryDescription.Method, parameters, out List<ValidationResult> errors))
@@ -303,8 +309,18 @@ namespace OpenRiaServices.Server
                 {
                     try
                     {
-                        result = await queryDescription.Method.InvokeAsync(this, parameters, out totalCount, this.ServiceContext.CancellationToken)
-                            .ConfigureAwait(false);
+                        if (clientQuery != null)
+                        {
+                            result = await queryDescription.Method.InvokeQueryAsync(this, parameters, clientQuery, this.ServiceContext.CancellationToken)
+                                .ConfigureAwait(false);
+                            totalCount = DomainService.TotalCountUndefined;
+                            queryDescription.ClientQueryApplyCount = clientQuery.ApplyCount;
+                        }
+                        else
+                        {
+                            result = await queryDescription.Method.InvokeAsync(this, parameters, out totalCount, this.ServiceContext.CancellationToken)
+                                .ConfigureAwait(false);
+                        }
                     }
                     catch (TargetInvocationException tie)
                     {
@@ -349,9 +365,24 @@ namespace OpenRiaServices.Server
                 enumerableResult = result as IEnumerable;
                 if (enumerableResult != null)
                 {
+                    if (clientQuery != null)
+                    {
+                        if (clientQuery.TotalCount.HasValue)
+                        {
+                            totalCount = clientQuery.TotalCount.Value;
+                        }
+                        else if (clientQuery.TotalCountQuery != null)
+                        {
+                            totalCount = await CountAsync<T>(clientQuery.TotalCountQuery, cancellationToken).ConfigureAwait(false);
+                        }
+                        else
+                        {
+                            totalCount = DomainService.TotalCountEqualsResultSetCount;
+                        }
+                    }
                     // If there are additional filtering, sorting and paging parameters to apply
                     // we'll need to compose a query
-                    if (queryDescription.Query != null)
+                    else if (queryDescription.Query != null)
                     {
                         // Compose the query over the results
                         enumerableResult = QueryComposer.Compose(enumerableResult.AsQueryable(), queryDescription.Query);
@@ -367,7 +398,8 @@ namespace OpenRiaServices.Server
                     }
 
                     IEnumerable limitedResults;
-                    if (QueryComposer.TryComposeWithLimit(enumerableResult, queryDescription.Method, out limitedResults))
+                    if ((clientQuery == null || clientQuery.ApplyCount == 0)
+                        && QueryComposer.TryComposeWithLimit(enumerableResult, queryDescription.Method, out limitedResults))
                     {
                         if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                         {

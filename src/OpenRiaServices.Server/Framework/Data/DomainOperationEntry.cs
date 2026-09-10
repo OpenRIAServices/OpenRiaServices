@@ -335,6 +335,16 @@ namespace OpenRiaServices.Server
         public ReadOnlyCollection<DomainOperationParameter> Parameters { get; }
 
         /// <summary>
+        /// Gets a value indicating whether this query operation receives a
+        /// <see cref="ClientQuery{T}"/> parameter.
+        /// </summary>
+        public bool HasClientQueryParameter { get; internal set; }
+
+        internal Type? ClientQueryEntityType { get; set; }
+
+        internal int ClientQueryParameterCount { get; set; }
+
+        /// <summary>
         /// Invokes this <see cref="DomainOperationEntry" />.
         /// </summary>
         /// <param name="domainService">The <see cref="DomainService"/> instance the operation is being invoked on.</param>
@@ -342,6 +352,11 @@ namespace OpenRiaServices.Server
         /// <param name="cancellationToken">A cancellation token that can be used to signal cancellation of this operation</param>
         /// <returns>The return value of the invoked method.</returns>
         public abstract ValueTask<object?> InvokeAsync(DomainService domainService, object[] parameters, CancellationToken cancellationToken);
+
+        internal virtual ValueTask<object?> InvokeQueryAsync(DomainService domainService, object[] parameters, object clientQuery, CancellationToken cancellationToken)
+        {
+            return InvokeAsync(domainService, parameters, cancellationToken);
+        }
 
         /// <summary>
         /// Gets the type of domain operation implemented by the method.
@@ -385,7 +400,7 @@ namespace OpenRiaServices.Server
             }
         }
 
-        private bool HasOutCountParameter { get; }
+        internal bool HasOutCountParameter { get; }
 
         /// <summary>
         /// Invokes this <see cref="DomainOperationEntry" />.

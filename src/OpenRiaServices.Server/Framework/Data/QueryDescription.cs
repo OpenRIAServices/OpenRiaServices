@@ -108,5 +108,10 @@ namespace OpenRiaServices.Server
                 return this._includeTotalCount;
             }
         }
+
+        /// <summary>
+        /// Gets the number of times the query method applied the client query during this invocation.
+        /// </summary>
+        public int ClientQueryApplyCount { get; internal set; }
     }
 }
