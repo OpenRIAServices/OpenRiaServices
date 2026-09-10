@@ -48,7 +48,7 @@ namespace OpenRiaServices.Client
             }
 
             this._entityType = entityType;
-            this._indexes = new EntitySetIndexManager(this);
+            this._indexes = new EntitySetIndexManager();
             // These are set in initialize, and are always called directly after ctor
             _entityContainer = null!;
             _list = null!;
