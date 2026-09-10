@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -306,6 +307,54 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        public void EntitySet_AssociationIndex_MultiValuePreservesEntitySetOrder()
+        {
+            CatalogEntityContainer container = new CatalogEntityContainer();
+
+            PurchaseOrder order = new PurchaseOrder
+            {
+                PurchaseOrderID = 1
+            };
+            PurchaseOrderDetail detail1 = new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 3 };
+            PurchaseOrderDetail detail2 = new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 1 };
+            PurchaseOrderDetail detail3 = new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 2 };
+
+            container.LoadEntities(new Entity[] { order, detail1, detail2, detail3 });
+
+            EntitySet detailSet = container.GetEntitySet<PurchaseOrderDetail>();
+            EntityAssociationAttribute association = ((IEntityCollection)order.PurchaseOrderDetails).Association;
+
+            Assert.IsTrue(detailSet.TryGetMultiValueAssociationEntities(association, order, out IEnumerable<Entity>? entities));
+            Assert.IsNotNull(entities);
+            Assert.IsTrue(new[] { detail1, detail2, detail3 }.SequenceEqual(entities.Cast<PurchaseOrderDetail>()));
+        }
+
+        [TestMethod]
+        public void EntitySet_AssociationIndex_UniqueReturnsAmbiguousMatches()
+        {
+            DynamicEntityContainer container = new DynamicEntityContainer();
+            EntitySet<NullableFKParent> parentSet = container.AddEntitySet<NullableFKParent>(EntitySetOperations.All);
+            EntitySet<NullableFKChild> childSet = container.AddEntitySet<NullableFKChild>(EntitySetOperations.All);
+
+            NullableFKParent parent = new NullableFKParent { ID = 1 };
+            NullableFKChild child1 = new NullableFKChild { ID = 2, ParentID_Singleton = 1 };
+            NullableFKChild child2 = new NullableFKChild { ID = 3, ParentID_Singleton = 1 };
+
+            parentSet.Attach(parent);
+            childSet.Attach(child1);
+            childSet.Attach(child2);
+            _ = parent.Child;
+
+            EntitySet sourceSet = container.GetEntitySet<NullableFKChild>();
+            EntityAssociationAttribute association = ((IEntityRef)parent.GetEntityRef("Child")).Association;
+
+            Assert.IsTrue(sourceSet.TryGetUniqueAssociationEntities(association, parent, out IEnumerable<Entity>? entities));
+            Assert.IsNotNull(entities);
+            Assert.IsTrue(new[] { child1, child2 }.SequenceEqual(entities.Cast<NullableFKChild>()));
+            Assert.IsNull(parent.Child);
+        }
+
+        [TestMethod]
         public void TestCollectionQuery_DetachedEntity() {
             CatalogEntityContainer ec = new CatalogEntityContainer();
 
@@ -407,5 +456,13 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(1, NumNotifications);
         }
 
+        private sealed class DynamicEntityContainer : EntityContainer
+        {
+            public EntitySet<TEntity> AddEntitySet<TEntity>(EntitySetOperations operations) where TEntity : Entity
+            {
+                base.CreateEntitySet<TEntity>(operations);
+                return GetEntitySet<TEntity>();
+            }
+        }
     }
 }

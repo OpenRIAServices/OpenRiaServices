@@ -86,7 +86,7 @@ namespace OpenRiaServices.Client
                     // Since this is the first time the entity has been returned, we don't
                     // need to send a property change notification.
                     EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
-                    this._entity = this.GetSingleMatch(set);
+                    this._entity = this.GetSingleMatch(this.GetAssociationCandidates(set));
 
                     if (this._entity != null && this.IsComposition)
                     {
@@ -229,6 +229,17 @@ namespace OpenRiaServices.Client
                 entity = currEntity;
             }
             return entity;
+        }
+
+        private IEnumerable GetAssociationCandidates(EntitySet set)
+        {
+            if (set.TryGetUniqueAssociationEntities(this.AssocAttribute, this._parent, out IEnumerable<Entity>? entities)
+                && entities != null)
+            {
+                return entities;
+            }
+
+            return set;
         }
 
         /// <summary>

@@ -48,7 +48,7 @@ namespace OpenRiaServices.Client
             }
 
             this._entityType = entityType;
-            this._indexes = new EntitySetIndexManager();
+            this._indexes = new EntitySetIndexManager(this);
             // These are set in initialize, and are always called directly after ctor
             _entityContainer = null!;
             _list = null!;
@@ -281,6 +281,8 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that was changed.</param>
         internal void UpdateRelatedAssociations(Entity entity, string propertyName)
         {
+            this._indexes.UpdateAssociationIndexes(entity, propertyName);
+
             // Here we notify any association update callbacks so they can update collection membership
             // for the modified entity. This needs to happen in the following cases:
             // 1) If the entity is transitioning from a New to Unmodified state.
@@ -415,6 +417,7 @@ namespace OpenRiaServices.Client
             {
                 int idx = this._list.Add(entity);
                 entity.EntitySet = this;
+                this._indexes.AddAssociationEntity(entity);
                 this.OnCollectionChanged(NotifyCollectionChangedAction.Add, entity, idx);
             }
         }
@@ -489,6 +492,7 @@ namespace OpenRiaServices.Client
 
             this._list.RemoveAt(idx);
             this._set.Remove(entity);
+            this._indexes.RemoveAssociationEntity(entity);
             this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, entity, idx);
             return true;
         }
@@ -753,6 +757,7 @@ namespace OpenRiaServices.Client
 
                 entity.MarkUnmodified();
                 entity.EntitySet = this;
+                this._indexes.AddAssociationEntity(entity);
 
                 if (this.CanEdit)
                 {
@@ -760,7 +765,6 @@ namespace OpenRiaServices.Client
                     // deserialized (i.e. don't want to track serializer property sets)
                     entity.StartTracking();
                 }
-                entity.OnLoaded(true);
                 entity.OnLoaded(true);
 
                 if (isAdded)
@@ -805,6 +809,7 @@ namespace OpenRiaServices.Client
         internal void AddToCache(Entity entity)
         {
             this._indexes.AddPrimary(entity);
+            this._indexes.AddAssociationEntity(entity);
         }
 
         /// <summary>
@@ -814,6 +819,7 @@ namespace OpenRiaServices.Client
         internal void RemoveFromCache(Entity entity)
         {
             this._indexes.RemovePrimary(entity);
+            this._indexes.RemoveAssociationEntity(entity);
         }
 
         /// <summary>
@@ -842,6 +848,16 @@ namespace OpenRiaServices.Client
 
             this._indexes.TryGetPrimaryEntity(identity, out entity);
             return entity;
+        }
+
+        internal bool TryGetUniqueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
+        {
+            return this._indexes.TryGetUniqueAssociationEntities(association, sourceEntity, out entities);
+        }
+
+        internal bool TryGetMultiValueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
+        {
+            return this._indexes.TryGetMultiValueAssociationEntities(association, sourceEntity, out entities);
         }
 
         /// <summary>
