@@ -62,8 +62,6 @@ namespace OpenRiaServices.Tools.Test.Utilities
         [AssemblyInitialize]
         public static void AssemblyInit(TestContext testContext)
         {
-            InitializeMsBuildLocator();
-
             //Set currenct culture to en-US by default since there are hard coded
             //strings in some tests
             Thread.CurrentThread.CurrentCulture =
