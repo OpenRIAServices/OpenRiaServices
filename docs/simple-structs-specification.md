@@ -14,8 +14,8 @@ A type is considered a supported simple struct when it meets all of the followin
 - It is public/visible.
 - It is non-generic.
 - It is not a framework/system assembly type.
-- It has exactly one public readable instance property (non-indexer).
-- That property type is a predefined simple type supported by OpenRiaServices.
+- It has one or more public readable instance properties (non-indexers).
+- Every such property type is a predefined simple type supported by OpenRiaServices.
 
 Additional requirements when used as an entity key member:
 
@@ -36,6 +36,7 @@ Supported simple structs are accepted where predefined types are accepted in:
 - Query method parameters
 - Custom method scalar parameters
 - Invoke method parameters and return values
+- Supported collections and dictionaries that use supported simple structs as element/generic argument types
 
 ### Key validation
 

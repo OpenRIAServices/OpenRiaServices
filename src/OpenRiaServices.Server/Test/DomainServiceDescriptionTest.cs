@@ -1509,18 +1509,9 @@ namespace OpenRiaServices.Server.Test
         {
             DomainServiceDescription d = DomainServiceDescription.GetDescription(typeof(Provider_Convention_SimpleStruct));
             string result = d.DomainOperationEntries.OrderBy(op => op.Name).Select(op => op.Name).Aggregate((l, r) => l + "," + r);
-            Assert.AreEqual("EchoKey,GetCitiesByKey,MoveCityWithKey", result);
+            Assert.AreEqual("EchoCompositeKey,EchoCompositeKeys,EchoKey,GetCitiesByCompositeKey,GetCitiesByCompositeKeys,GetCitiesByKey,MoveCityWithCompositeKey,MoveCityWithKey", result);
             result = d.DomainOperationEntries.OrderBy(op => op.Name).Select(op => op.Operation.ToString()).Aggregate((l, r) => l + "," + r);
-            Assert.AreEqual("Invoke,Query,Custom", result);
-        }
-
-        [TestMethod]
-        public void DomainServiceDescription_Convention_SimpleStruct_MultiMemberRejected()
-        {
-            ExceptionHelper.ExpectInvalidOperationException(delegate
-            {
-                DomainServiceDescription.GetDescription(typeof(Provider_Convention_InvalidSimpleStruct));
-            }, String.Format(Resource.InvalidDomainOperationEntry_ParamMustBeSimple, "GetCitiesByKey", "key"));
+            Assert.AreEqual("Invoke,Invoke,Invoke,Query,Query,Query,Custom,Custom", result);
         }
 
         [TestMethod]
@@ -3935,14 +3926,13 @@ namespace OpenRiaServices.Server.Test
     public class Provider_Convention_SimpleStruct : DomainService
     {
         public IEnumerable<City> GetCitiesByKey(SimpleStructKey key) { return null; }
+        public IEnumerable<City> GetCitiesByCompositeKey(MultiMemberSimpleStructKey key) { return null; }
+        public IEnumerable<City> GetCitiesByCompositeKeys(IEnumerable<MultiMemberSimpleStructKey> keys) { return null; }
         public int EchoKey(SimpleStructKey key) { return key.Value; }
+        public MultiMemberSimpleStructKey EchoCompositeKey(MultiMemberSimpleStructKey key) { return key; }
+        public IEnumerable<MultiMemberSimpleStructKey> EchoCompositeKeys(IEnumerable<MultiMemberSimpleStructKey> keys) { return keys; }
         public void MoveCityWithKey(City city, SimpleStructKey key) { }
-    }
-
-    [EnableClientAccess]
-    public class Provider_Convention_InvalidSimpleStruct : DomainService
-    {
-        public IEnumerable<City> GetCitiesByKey(MultiMemberSimpleStructKey key) { return null; }
+        public void MoveCityWithCompositeKey(City city, MultiMemberSimpleStructKey key) { }
     }
 
     public readonly struct SimpleStructKey : IEquatable<SimpleStructKey>
