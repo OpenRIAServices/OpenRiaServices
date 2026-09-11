@@ -1,7 +1,6 @@
 # Unreleased
 
-## Core libraries
-
+* Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
 * Added phase-1 support for simple structs as predefined serializable types in DomainService operation signatures (query/custom/invoke), including multi-property structs and collections of supported simple structs.
 * Added key validation support for simple struct key members in client code generation when the struct is shared with the client and implements `IEquatable<T>`.
 

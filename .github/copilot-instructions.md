@@ -48,11 +48,11 @@ Alternative when MSBuild is correctly available through the .NET SDK and install
 dotnet build src\RiaServices.sln --configuration Release
 ```
 
-CI builds `src\RiaServices.sln` in `Release|Any CPU` on a Windows image with Visual Studio, .NET 8, .NET 10, NuGet, GitVersion, SQL LocalDB, and VSTest.
+CI builds `src\RiaServices.sln` in `Release|Any CPU` on a Windows image with Visual Studio, .NET 8, .NET 10, NuGet, GitVersion and SQL LocalDB.
 
 ## Test commands
 
-Most tests use MSTest. Some tests need SQL LocalDB databases restored from backups under `src\Test\Databases`.
+Test projects use MSTest and run on Microsoft.Testing.Platform (MTP), not VSTest. Each test project sets `EnableMSTestRunner`/`OutputType=Exe` and `src\global.json` selects the `Microsoft.Testing.Platform` runner for `dotnet test`, so `dotnet test` must be run from the `src` directory. Some tests need SQL LocalDB databases restored from backups under `src\Test\Databases`.
 
 Before running database-backed tests:
 
@@ -70,16 +70,18 @@ If the `SqlServer` PowerShell module cannot be installed/imported but `sqlcmd` i
 Run tests after building:
 
 ```powershell
-dotnet test src\RiaServices.sln --configuration Release --settings src\test.runsettings
+cd src
+dotnet test --solution RiaServices.Tests.slnf --configuration Release
 ```
 
 For focused changes, prefer running the relevant test project directly, for example:
 
 ```powershell
-dotnet test src\OpenRiaServices.Hosting.AspNetCore\Test\OpenRiaServices.Hosting.AspNetCore.Test\OpenRiaServices.Hosting.AspNetCore.Test.csproj --configuration Release
+cd src
+dotnet test --project OpenRiaServices.Hosting.AspNetCore\Test\OpenRiaServices.Hosting.AspNetCore.Test\OpenRiaServices.Hosting.AspNetCore.Test.csproj --configuration Release
 ```
 
-CI separates test execution by target framework and excludes `OpenRiaServices.Common*Test.dll` from its main patterns. If a local full test run behaves differently from CI, inspect `azure-pipelines.yml` for the exact VSTest assembly patterns.
+CI runs the whole suite with a single `dotnet test` command against `src\RiaServices.Tests.slnf`, which lists every test project. `RiaServices.sln` itself cannot be used because it contains website projects which require Visual Studio targets, so new test projects must be added to the solution filter as well. MTP runs the test modules (project + target framework) in parallel; use `--max-parallel-test-modules 1` when debugging suspected concurrency issues.
 
 ## Coding conventions
 

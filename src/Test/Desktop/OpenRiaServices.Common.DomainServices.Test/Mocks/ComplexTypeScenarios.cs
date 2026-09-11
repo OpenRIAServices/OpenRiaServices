@@ -16,6 +16,12 @@ namespace TestDomainServices
             return CreateParents().AsQueryable();
         }
 
+        [Query]
+        public IQueryable<ComplexType_Parent> GetParentsByHomeAddress(Address address)
+        {
+            return CreateParents().Where(p => p.ContactInfo.HomeAddress.Zip == address.Zip).AsQueryable();
+        }
+
         public void UpdateComplexType_Parent(ComplexType_Parent parent)
         {
             ComplexType_Parent orig = this.ChangeSet.GetOriginal(parent);

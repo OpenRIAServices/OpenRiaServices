@@ -79,7 +79,7 @@ namespace OpenRiaServices.Client.Test
                 return te;
             }
 
-            Assert.Fail("Expected exception of type " + typeof(TException) + ".");
+            Assert.Fail("Expected exception of type " + typeof(TException) + ", but no exception was raised.");
             throw new Exception("can't happen");
         }
 

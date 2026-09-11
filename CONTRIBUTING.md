@@ -62,6 +62,24 @@ For multi part commits, it is a good idea to embed the issue number in the commi
 
 Please take your time and add test for any new functionality added.
 
+The test projects run on [Microsoft.Testing.Platform](https://learn.microsoft.com/dotnet/core/testing/microsoft-testing-platform-intro) (MTP) instead of VSTest.
+Each test project therefore sets `EnableMSTestRunner` and `OutputType=Exe` and does *not* reference `Microsoft.NET.Test.Sdk`.
+The MTP extensions used (trx report, crash dump and hang dump) are added centrally by `src/Directory.Build.targets`.
+
+`src/global.json` selects the `Microsoft.Testing.Platform` runner for `dotnet test`, so `dotnet test` has to be run from the `src` folder:
+
+```powershell
+cd src
+dotnet test --solution RiaServices.Tests.slnf --configuration Release
+```
+
+`RiaServices.Tests.slnf` is a solution filter listing all test projects; `RiaServices.sln` cannot be used directly with `dotnet test`
+because it also contains website projects requiring Visual Studio specific MSBuild targets.
+**Remember to add new test projects to `RiaServices.Tests.slnf`**, otherwise they will not run in CI.
+
+A single test project can be run with `dotnet test --project <path to csproj>`, or by simply starting the built `.exe`/`dll`.
+Useful options are `--filter`, `--list-tests`, `--report-trx` and `--max-parallel-test-modules 1` (to disable running test modules in parallel).
+
 # Changelog and documentation updates
 
 Please update documentation as part of the same change whenever you add a feature or make a notable behavior change.

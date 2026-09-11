@@ -1188,6 +1188,19 @@ namespace TestDomainServices
         }
         
         /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="ComplexType_Parent"/> entity instances using the 'GetParentsByHomeAddress' query.
+        /// </summary>
+        /// <param name="address">The value for the 'address' parameter of the query.</param>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="ComplexType_Parent"/> entity instances.</returns>
+        public EntityQuery<ComplexType_Parent> GetParentsByHomeAddressQuery(Address address)
+        {
+            Dictionary<string, object> parameters = new Dictionary<string, object>();
+            parameters.Add("address", address);
+            this.ValidateMethod("GetParentsByHomeAddressQuery", parameters);
+            return base.CreateQuery<ComplexType_Parent>("GetParentsByHomeAddress", parameters, false, true);
+        }
+        
+        /// <summary>
         /// Invokes the 'TestAutoSync' method of the specified <see cref="ComplexType_Parent"/> entity.
         /// </summary>
         /// <param name="parent">The <see cref="ComplexType_Parent"/> entity instance.</param>
@@ -1311,6 +1324,23 @@ namespace TestDomainServices
             /// <param name="result">The IAsyncResult returned from 'BeginGetParents'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetParents' operation.</returns>
             QueryResult<ComplexType_Parent> EndGetParents(IAsyncResult result);
+            
+            /// <summary>
+            /// Asynchronously invokes the 'GetParentsByHomeAddress' operation.
+            /// </summary>
+            /// <param name="address">The value for the 'address' parameter of this action.</param>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(false)]
+            IAsyncResult BeginGetParentsByHomeAddress(Address address, AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetParentsByHomeAddress'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetParentsByHomeAddress'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetParentsByHomeAddress' operation.</returns>
+            QueryResult<ComplexType_Parent> EndGetParentsByHomeAddress(IAsyncResult result);
             
             /// <summary>
             /// Asynchronously invokes the 'ReturnHomeAddress' operation.

@@ -408,6 +408,16 @@ namespace OpenRiaServices.Server.Test
         }
     }
 
+    [EnableClientAccess]
+    public class SelectMethod_ValidProvider_ComplexTypeParam : CityDomainService
+    {
+        [Query]
+        public IEnumerable<City> GetCitiesByAddress(TestDomainServices.Address address)
+        {
+            yield break;
+        }
+    }
+
     public class DomainMethod_InvalidProvider_ComnplexParams : CityDomainService
     {
         [EntityAction]

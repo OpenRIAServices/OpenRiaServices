@@ -592,7 +592,7 @@ namespace OpenRiaServices.Server
             // validation to actually validate the signatures.
             foreach (DomainOperationEntry entry in this.DomainOperationEntries)
             {
-                if (entry.Operation == DomainOperation.Invoke || entry.Operation == DomainOperation.Custom)
+                if (entry.Operation == DomainOperation.Invoke || entry.Operation == DomainOperation.Custom || entry.Operation == DomainOperation.Query)
                 {
                     foreach (DomainOperationParameter parameter in entry.Parameters)
                     {
@@ -1706,7 +1706,7 @@ namespace OpenRiaServices.Server
 
                     foreach (DomainOperationParameter param in queryParameters)
                     {
-                        if (!TypeUtility.IsPredefinedType(param.ParameterType))
+                        if (!TypeUtility.IsPredefinedType(param.ParameterType) && !TypeUtility.IsSupportedComplexType(param.ParameterType))
                         {
                             error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntry_ParamMustBeSimple, methodName, param.Name));
                             return false;
