@@ -38,6 +38,36 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsFalse(string.IsNullOrEmpty(generatedCode));
             TestHelper.AssertGeneratedCodeDoesNotContain(generatedCode, "GetIdentity");
         }
+
+        [TestMethod]
+        [Description("DomainService with shared IEquatable simple struct key succeeds")]
+        public void CodeGen_Attribute_KeyAttribute_SimpleStruct_Shared()
+        {
+            ConsoleLogger logger = new ConsoleLogger();
+
+            ISharedCodeService sts = new MockSharedCodeService(
+                    new Type[] { typeof(Mock_CG_SimpleStructKey) },
+                    Array.Empty<MethodInfo>(),
+                    Array.Empty<string>());
+
+            string generatedCode = TestHelper.GenerateCode("C#", new Type[] { typeof(Mock_CG_Attr_Entity_SimpleStructKey_DomainService) }, logger, sts);
+            TestHelper.AssertCodeGenSuccess(generatedCode, logger);
+        }
+
+        [TestMethod]
+        [Description("DomainService with shared multi-property IEquatable simple struct key succeeds")]
+        public void CodeGen_Attribute_KeyAttribute_MultiPropertySimpleStruct_Shared()
+        {
+            ConsoleLogger logger = new ConsoleLogger();
+
+            ISharedCodeService sts = new MockSharedCodeService(
+                    new Type[] { typeof(Mock_CG_CompositeSimpleStructKey) },
+                    Array.Empty<MethodInfo>(),
+                    Array.Empty<string>());
+
+            string generatedCode = TestHelper.GenerateCode("C#", new Type[] { typeof(Mock_CG_Attr_Entity_CompositeSimpleStructKey_DomainService) }, logger, sts);
+            TestHelper.AssertCodeGenSuccess(generatedCode, logger);
+        }
     }
 
     public class Mock_CG_Attr_Entity_Missing_Key_DomainService : GenericDomainService<Mock_CG_Attr_Entity_Missing_Key> { }
@@ -56,5 +86,51 @@ namespace OpenRiaServices.Tools.Test
 
         [Key]
         public string K2 { get; set; }
+    }
+
+    public class Mock_CG_Attr_Entity_SimpleStructKey_DomainService : GenericDomainService<Mock_CG_Attr_Entity_SimpleStructKey> { }
+
+    public partial class Mock_CG_Attr_Entity_SimpleStructKey
+    {
+        [Key]
+        public Mock_CG_SimpleStructKey K1 { get; set; }
+    }
+
+    public readonly struct Mock_CG_SimpleStructKey : IEquatable<Mock_CG_SimpleStructKey>
+    {
+        public Mock_CG_SimpleStructKey(int value)
+        {
+            Value = value;
+        }
+
+        public int Value { get; }
+
+        public bool Equals(Mock_CG_SimpleStructKey other) => Value == other.Value;
+        public override bool Equals(object obj) => obj is Mock_CG_SimpleStructKey other && Equals(other);
+        public override int GetHashCode() => Value;
+    }
+
+    public class Mock_CG_Attr_Entity_CompositeSimpleStructKey_DomainService : GenericDomainService<Mock_CG_Attr_Entity_CompositeSimpleStructKey> { }
+
+    public partial class Mock_CG_Attr_Entity_CompositeSimpleStructKey
+    {
+        [Key]
+        public Mock_CG_CompositeSimpleStructKey K1 { get; set; }
+    }
+
+    public readonly struct Mock_CG_CompositeSimpleStructKey : IEquatable<Mock_CG_CompositeSimpleStructKey>
+    {
+        public Mock_CG_CompositeSimpleStructKey(int value, Guid tenantId)
+        {
+            Value = value;
+            TenantId = tenantId;
+        }
+
+        public int Value { get; }
+        public Guid TenantId { get; }
+
+        public bool Equals(Mock_CG_CompositeSimpleStructKey other) => Value == other.Value && TenantId == other.TenantId;
+        public override bool Equals(object obj) => obj is Mock_CG_CompositeSimpleStructKey other && Equals(other);
+        public override int GetHashCode() => HashCode.Combine(Value, TenantId);
     }
 }

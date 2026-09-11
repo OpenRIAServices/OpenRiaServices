@@ -248,7 +248,7 @@ namespace OpenRiaServices.Tools.TextTemplate
 
             if (hasKeyAttr)
             {
-                if (!TypeUtility.IsPredefinedSimpleType(propertyType))
+                if (!IsSupportedKeyType(propertyType))
                 {
                     this.ClientCodeGenerator.CodeGenerationHost.LogError(string.Format(
                         CultureInfo.CurrentCulture,
@@ -259,6 +259,23 @@ namespace OpenRiaServices.Tools.TextTemplate
             }
 
             return true;
+        }
+
+        private bool IsSupportedKeyType(Type propertyType)
+        {
+            propertyType = TypeUtility.GetNonNullableType(propertyType);
+            if (TypeUtility.IsPredefinedSimpleType(propertyType))
+            {
+                return true;
+            }
+
+            if (!TypeUtility.IsSimpleStructKeyType(propertyType))
+            {
+                return false;
+            }
+
+            CodeMemberShareKind shareKind = this.ClientCodeGenerator.GetTypeShareKind(propertyType);
+            return (shareKind & CodeMemberShareKind.Shared) != 0;
         }
 
         internal override bool HandleNonSerializableProperty(PropertyDescriptor propertyDescriptor)

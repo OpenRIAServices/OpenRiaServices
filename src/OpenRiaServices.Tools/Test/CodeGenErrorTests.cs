@@ -94,6 +94,12 @@ namespace OpenRiaServices.Tools.Test
 
             error = string.Format(Resource.EntityCodeGen_EntityKey_KeyTypeNotSupported, typeof(Mock_CG_Key_Type_Complex), "KeyField", typeof(List<string>));
             TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_KeyTypeComplex), error);
+
+            error = string.Format(Resource.EntityCodeGen_EntityKey_KeyTypeNotSupported, typeof(Mock_CG_Key_Type_SimpleStruct_NotEquatable), "KeyField", typeof(Mock_CG_Key_SimpleStruct_NotEquatable));
+            TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_KeyTypeSimpleStruct_NotEquatable), error);
+
+            error = string.Format(Resource.EntityCodeGen_EntityKey_KeyTypeNotSupported, typeof(Mock_CG_Key_Type_SimpleStruct_Equatable_NotShared), "KeyField", typeof(Mock_CG_Key_SimpleStruct_Equatable));
+            TestHelper.GenerateCodeAssertFailure("C#", typeof(Mock_KeyTypeSimpleStruct_Equatable_NotShared), error);
         }
 
         [TestMethod]
@@ -463,6 +469,22 @@ namespace OpenRiaServices.Tools.Test
             public Uri KeyField { get; set; }
         }
 
+        [DataContract]
+        public class Mock_CG_Key_Type_SimpleStruct_NotEquatable
+        {
+            [DataMember]
+            [Key]
+            public Mock_CG_Key_SimpleStruct_NotEquatable KeyField { get; set; }
+        }
+
+        [DataContract]
+        public class Mock_CG_Key_Type_SimpleStruct_Equatable_NotShared
+        {
+            [DataMember]
+            [Key]
+            public Mock_CG_Key_SimpleStruct_Equatable KeyField { get; set; }
+        }
+
         public struct Mock_CG_Struct
         {
             public int MockValue;
@@ -609,6 +631,38 @@ namespace OpenRiaServices.Tools.Test
         [EnableClientAccess]
         public class Mock_KeyTypeUri : GenericDomainService<Mock_CG_Key_Type_Uri>
         {
+        }
+
+        public class Mock_KeyTypeSimpleStruct_NotEquatable : GenericDomainService<Mock_CG_Key_Type_SimpleStruct_NotEquatable>
+        {
+        }
+
+        public class Mock_KeyTypeSimpleStruct_Equatable_NotShared : GenericDomainService<Mock_CG_Key_Type_SimpleStruct_Equatable_NotShared>
+        {
+        }
+
+        public readonly struct Mock_CG_Key_SimpleStruct_NotEquatable
+        {
+            public Mock_CG_Key_SimpleStruct_NotEquatable(int value)
+            {
+                Value = value;
+            }
+
+            public int Value { get; }
+        }
+
+        public readonly struct Mock_CG_Key_SimpleStruct_Equatable : IEquatable<Mock_CG_Key_SimpleStruct_Equatable>
+        {
+            public Mock_CG_Key_SimpleStruct_Equatable(int value)
+            {
+                Value = value;
+            }
+
+            public int Value { get; }
+
+            public bool Equals(Mock_CG_Key_SimpleStruct_Equatable other) => Value == other.Value;
+            public override bool Equals(object obj) => obj is Mock_CG_Key_SimpleStruct_Equatable other && Equals(other);
+            public override int GetHashCode() => Value;
         }
         #endregion
     }
