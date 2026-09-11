@@ -25,7 +25,7 @@
     used to collect coverage for the whole test run, see azure-pipelines.yml.
   -->
   <PropertyGroup Condition="'$(EnableMSTestRunner)' == 'true'">
-    <MicrosoftTestingExtensionsVersion>1.9.1</MicrosoftTestingExtensionsVersion>
+    <MicrosoftTestingExtensionsVersion>2.3.3</MicrosoftTestingExtensionsVersion>
     <IsPackable>false</IsPackable>
     <!-- Show the full failure information (message + stack trace) for failing tests in the log -->
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>
