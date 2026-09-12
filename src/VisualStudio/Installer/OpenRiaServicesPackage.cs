@@ -68,7 +68,6 @@ namespace OpenRiaServices.VisualStudio.Installer
 
         protected override async System.Threading.Tasks.Task InitializeAsync(CancellationToken cancellationToken, IProgress<ServiceProgressData> progress)
         {
-            SetupBindingRedirectForOldZipTemplates();
             Debug.WriteLine(string.Format(CultureInfo.CurrentCulture, "Entering Initialize() of: {0}", this.ToString()));
 
             await base.InitializeAsync(cancellationToken, progress).ConfigureAwait(false);
@@ -81,36 +80,6 @@ namespace OpenRiaServices.VisualStudio.Installer
                 MenuCommand menuItem = new OleMenuCommand(LinkRiaProjectCallback, null, BeforeQueryStatusForAddPackageDialog, menuCommandID);
                 _mcs.AddCommand(menuItem);
             }
-        }
-
-        /// <summary>
-        /// Resolve references from old templates in zip files to unsigned tooling assembly with references
-        /// to the actual boundled strong named assembly.
-        /// </summary>
-        private void SetupBindingRedirectForOldZipTemplates()
-        {
-            AppDomain.CurrentDomain.AssemblyResolve += AssemblyResolveUnsignedToolsWithSigned;
-        }
-
-        /// <summary>
-        /// Resolve references from old templates in zip files to unsigned tooling assembly with references
-        /// to the actual boundled strong named assembly.
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="args"></param>
-        /// <returns></returns>
-        private static Assembly AssemblyResolveUnsignedToolsWithSigned(object sender, ResolveEventArgs args)
-        {
-            var nameComparison = StringComparison.OrdinalIgnoreCase;
-
-            if (args.Name != null
-                && args.Name.StartsWith("OpenRiaServices.VisualStudio.DomainServices.Tools", nameComparison)
-                && args.Name.IndexOf("PublicKeyToken=null", nameComparison) != -1)
-            {
-                return typeof(DomainServices.Tools.DomainServiceClassWizard).Assembly;
-            }
-
-            return null;
         }
 
         private bool IsSolutionExistsAndNotDebuggingAndNotBuilding()
