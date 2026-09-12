@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
-using System.Linq;
 using OpenRiaServices.Client.Internal;
 
 #nullable enable
@@ -13,6 +12,9 @@ namespace OpenRiaServices.Client
     {
         private readonly EntitySet _entitySet;
         private readonly PrimaryKeyEntityIndex _primaryKeyIndex = new();
+        private readonly Dictionary<EntityAssociationAttribute, AssociationLookupMetadata?> _associationLookupMetadata = new();
+        private readonly Dictionary<string, AssociationIndexDefinition> _singleMemberAssociationDefinitions = new(StringComparer.Ordinal);
+        private readonly Dictionary<CompositeAssociationMemberNames, AssociationIndexDefinition> _compositeAssociationDefinitions = new();
         private readonly Dictionary<AssociationIndexDefinition, UniqueAssociationEntityIndex> _uniqueAssociationIndexes = new();
         private readonly Dictionary<AssociationIndexDefinition, MultiValueAssociationEntityIndex> _multiValueAssociationIndexes = new();
 
@@ -102,17 +104,29 @@ namespace OpenRiaServices.Client
 
         public bool TryGetUniqueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
         {
-            return TryGetAssociationEntities(GetOrCreateUniqueAssociationIndex(association), sourceEntity, association.ThisKeyMembers, out entities);
+            if (!TryGetAssociationLookupMetadata(association, sourceEntity.MetaType, out AssociationLookupMetadata? metadata))
+            {
+                entities = null;
+                return false;
+            }
+
+            return TryGetAssociationEntities(GetOrCreateUniqueAssociationIndex(metadata.IndexDefinition), sourceEntity, metadata, out entities);
         }
 
         public bool TryGetMultiValueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
         {
-            return TryGetAssociationEntities(GetOrCreateMultiValueAssociationIndex(association), sourceEntity, association.ThisKeyMembers, out entities);
+            if (!TryGetAssociationLookupMetadata(association, sourceEntity.MetaType, out AssociationLookupMetadata? metadata))
+            {
+                entities = null;
+                return false;
+            }
+
+            return TryGetAssociationEntities(GetOrCreateMultiValueAssociationIndex(metadata.IndexDefinition), sourceEntity, metadata, out entities);
         }
 
-        private bool TryGetAssociationEntities(AssociationEntityIndexBase? index, Entity sourceEntity, IReadOnlyList<string> sourceMemberNames, out IEnumerable<Entity>? entities)
+        private static bool TryGetAssociationEntities(AssociationEntityIndexBase index, Entity sourceEntity, AssociationLookupMetadata metadata, out IEnumerable<Entity>? entities)
         {
-            if (index == null || !TryCreateLookupKey(sourceEntity, sourceMemberNames, out EntitySetIndexKey key))
+            if (!metadata.TryCreateLookupKey(sourceEntity, out AssociationIndexKey key))
             {
                 entities = null;
                 return false;
@@ -122,13 +136,8 @@ namespace OpenRiaServices.Client
             return true;
         }
 
-        private UniqueAssociationEntityIndex? GetOrCreateUniqueAssociationIndex(EntityAssociationAttribute association)
+        private UniqueAssociationEntityIndex GetOrCreateUniqueAssociationIndex(AssociationIndexDefinition definition)
         {
-            if (!TryCreateAssociationIndexDefinition(association, out AssociationIndexDefinition definition))
-            {
-                return null;
-            }
-
             if (!_uniqueAssociationIndexes.TryGetValue(definition, out UniqueAssociationEntityIndex? index))
             {
                 index = new UniqueAssociationEntityIndex(_entitySet, definition);
@@ -139,13 +148,8 @@ namespace OpenRiaServices.Client
             return index;
         }
 
-        private MultiValueAssociationEntityIndex? GetOrCreateMultiValueAssociationIndex(EntityAssociationAttribute association)
+        private MultiValueAssociationEntityIndex GetOrCreateMultiValueAssociationIndex(AssociationIndexDefinition definition)
         {
-            if (!TryCreateAssociationIndexDefinition(association, out AssociationIndexDefinition definition))
-            {
-                return null;
-            }
-
             if (!_multiValueAssociationIndexes.TryGetValue(definition, out MultiValueAssociationEntityIndex? index))
             {
                 index = new MultiValueAssociationEntityIndex(_entitySet, definition);
@@ -158,56 +162,88 @@ namespace OpenRiaServices.Client
 
         private void LoadAssociationIndex(AssociationEntityIndexBase index)
         {
-            foreach (Entity entity in _entitySet.List.Cast<Entity>())
+            for (int i = 0; i < _entitySet.List.Count; i++)
             {
-                index.Add(entity);
+                index.Add((Entity)_entitySet.List[i]!);
             }
         }
 
-        private bool TryCreateAssociationIndexDefinition(EntityAssociationAttribute association, out AssociationIndexDefinition definition)
+        private bool TryGetAssociationLookupMetadata(EntityAssociationAttribute association, MetaType sourceMetaType, out AssociationLookupMetadata? metadata)
+        {
+            if (_associationLookupMetadata.TryGetValue(association, out metadata))
+            {
+                return metadata != null;
+            }
+
+            metadata = CreateAssociationLookupMetadata(association, sourceMetaType);
+            _associationLookupMetadata.Add(association, metadata);
+            return metadata != null;
+        }
+
+        private AssociationLookupMetadata? CreateAssociationLookupMetadata(EntityAssociationAttribute association, MetaType sourceMetaType)
         {
             if (association.ThisKeyMembers.Count != association.OtherKeyMembers.Count || association.OtherKeyMembers.Count == 0)
             {
-                definition = default!;
-                return false;
+                return null;
             }
 
-            MetaType metaType = MetaType.GetMetaType(_entitySet.EntityType);
-            MetaMember[] members = new MetaMember[association.OtherKeyMembers.Count];
-            for (int i = 0; i < association.OtherKeyMembers.Count; i++)
+            MetaMember[] sourceMembers = new MetaMember[association.ThisKeyMembers.Count];
+            for (int i = 0; i < association.ThisKeyMembers.Count; i++)
             {
-                MetaMember member = metaType[association.OtherKeyMembers[i]];
+                MetaMember member = sourceMetaType[association.ThisKeyMembers[i]];
                 if (member == null)
                 {
-                    definition = default!;
-                    return false;
+                    return null;
                 }
 
-                members[i] = member;
+                sourceMembers[i] = member;
             }
 
-            definition = new AssociationIndexDefinition(association.OtherKeyMembers.ToArray(), members);
-            return true;
+            AssociationIndexDefinition definition = GetOrCreateAssociationIndexDefinition(association);
+            return definition == null ? null : new AssociationLookupMetadata(definition, sourceMembers);
         }
 
-        private static bool TryCreateLookupKey(Entity entity, IReadOnlyList<string> memberNames, out EntitySetIndexKey key)
+        private AssociationIndexDefinition? GetOrCreateAssociationIndexDefinition(EntityAssociationAttribute association)
         {
-            MetaType metaType = entity.MetaType;
-            object?[] values = new object?[memberNames.Count];
-            for (int i = 0; i < memberNames.Count; i++)
+            if (association.OtherKeyMembers.Count == 1)
             {
-                MetaMember member = metaType[memberNames[i]];
-                if (member == null)
+                string memberName = association.OtherKeyMembers[0];
+                if (!_singleMemberAssociationDefinitions.TryGetValue(memberName, out AssociationIndexDefinition? definition))
                 {
-                    key = default!;
-                    return false;
+                    MetaMember member = MetaType.GetMetaType(_entitySet.EntityType)[memberName];
+                    if (member == null)
+                    {
+                        return null;
+                    }
+
+                    definition = new AssociationIndexDefinition(memberName, member);
+                    _singleMemberAssociationDefinitions.Add(memberName, definition);
                 }
 
-                values[i] = member.GetValue(entity);
+                return definition;
             }
 
-            key = new EntitySetIndexKey(values);
-            return true;
+            CompositeAssociationMemberNames memberNames = new CompositeAssociationMemberNames(association.OtherKeyMembers);
+            if (!_compositeAssociationDefinitions.TryGetValue(memberNames, out AssociationIndexDefinition? compositeDefinition))
+            {
+                MetaMember[] members = new MetaMember[association.OtherKeyMembers.Count];
+                MetaType metaType = MetaType.GetMetaType(_entitySet.EntityType);
+                for (int i = 0; i < association.OtherKeyMembers.Count; i++)
+                {
+                    MetaMember member = metaType[association.OtherKeyMembers[i]];
+                    if (member == null)
+                    {
+                        return null;
+                    }
+
+                    members[i] = member;
+                }
+
+                compositeDefinition = new AssociationIndexDefinition(memberNames, members);
+                _compositeAssociationDefinitions.Add(memberNames, compositeDefinition);
+            }
+
+            return compositeDefinition;
         }
 
         private static bool ShouldIndexEntity(Entity entity)
@@ -218,8 +254,13 @@ namespace OpenRiaServices.Client
         private sealed class PrimaryKeyEntityIndex
         {
             private readonly Dictionary<object, Entity> _entities = new();
+            private readonly Dictionary<Entity, object> _identitiesByEntity = new();
 
-            public void Clear() => _entities.Clear();
+            public void Clear()
+            {
+                _entities.Clear();
+                _identitiesByEntity.Clear();
+            }
 
             public bool Contains(object identity) => _entities.ContainsKey(identity);
 
@@ -237,41 +278,36 @@ namespace OpenRiaServices.Client
                 {
                     throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
                 }
+
+                _identitiesByEntity[entity] = identity;
             }
 
             public void Remove(Entity entity)
             {
-                object? identity = entity.GetIdentity();
-                if (identity != null && _entities.TryGetValue(identity, out Entity? cachedEntity) && cachedEntity == entity)
+                if (_identitiesByEntity.TryGetValue(entity, out object? identity))
                 {
                     _entities.Remove(identity);
-                    return;
-                }
-
-                foreach (KeyValuePair<object, Entity> entry in _entities.ToArray())
-                {
-                    if (ReferenceEquals(entry.Value, entity))
-                    {
-                        _entities.Remove(entry.Key);
-                        break;
-                    }
+                    _identitiesByEntity.Remove(entity);
                 }
             }
         }
 
         private abstract class AssociationEntityIndexBase
         {
-            private readonly EntitySet _entitySet;
             private readonly AssociationIndexDefinition _definition;
-            private readonly Dictionary<EntitySetIndexKey, List<Entity>> _entitiesByKey = new();
+            private readonly Dictionary<AssociationIndexKey, List<Entity>> _entitiesByKey = new();
+            private readonly Dictionary<Entity, AssociationIndexKey> _keysByEntity = new();
 
             protected AssociationEntityIndexBase(EntitySet entitySet, AssociationIndexDefinition definition)
             {
-                _entitySet = entitySet;
                 _definition = definition;
             }
 
-            public void Clear() => _entitiesByKey.Clear();
+            public void Clear()
+            {
+                _entitiesByKey.Clear();
+                _keysByEntity.Clear();
+            }
 
             public void Add(Entity entity)
             {
@@ -280,88 +316,95 @@ namespace OpenRiaServices.Client
                     return;
                 }
 
-                EntitySetIndexKey key = CreateKey(entity);
-                if (!_entitiesByKey.TryGetValue(key, out List<Entity>? entities))
+                AssociationIndexKey key = _definition.CreateKey(entity);
+                if (_keysByEntity.TryGetValue(entity, out AssociationIndexKey existingKey))
                 {
-                    entities = new List<Entity>();
-                    _entitiesByKey.Add(key, entities);
+                    if (existingKey.Equals(key))
+                    {
+                        return;
+                    }
+
+                    RemoveFromBucket(existingKey, entity);
                 }
 
-                InsertInEntitySetOrder(entities, entity);
+                GetOrCreateBucket(key).Add(entity);
+                _keysByEntity[entity] = key;
             }
 
             public void Remove(Entity entity)
             {
-                foreach (KeyValuePair<EntitySetIndexKey, List<Entity>> entry in _entitiesByKey.ToArray())
+                if (_keysByEntity.TryGetValue(entity, out AssociationIndexKey key))
                 {
-                    Remove(entry.Value, entity);
-                    if (entry.Value.Count == 0)
-                    {
-                        _entitiesByKey.Remove(entry.Key);
-                    }
+                    RemoveFromBucket(key, entity);
+                    _keysByEntity.Remove(entity);
                 }
             }
 
             public void Update(Entity entity, string propertyName)
             {
-                if (propertyName != nameof(Entity.EntityState) && !_definition.MemberNames.Contains(propertyName))
+                if (propertyName != nameof(Entity.EntityState) && !_definition.ContainsMemberName(propertyName))
                 {
                     return;
                 }
 
-                Remove(entity);
-                Add(entity);
+                if (!ShouldIndexEntity(entity))
+                {
+                    Remove(entity);
+                    return;
+                }
+
+                AssociationIndexKey newKey = _definition.CreateKey(entity);
+                if (_keysByEntity.TryGetValue(entity, out AssociationIndexKey existingKey))
+                {
+                    if (existingKey.Equals(newKey))
+                    {
+                        return;
+                    }
+
+                    RemoveFromBucket(existingKey, entity);
+                }
+
+                GetOrCreateBucket(newKey).Add(entity);
+                _keysByEntity[entity] = newKey;
             }
 
-            public IEnumerable<Entity> Lookup(EntitySetIndexKey key)
+            public IEnumerable<Entity> Lookup(AssociationIndexKey key)
             {
                 if (_entitiesByKey.TryGetValue(key, out List<Entity>? entities))
                 {
                     return entities;
                 }
 
-                return Enumerable.Empty<Entity>();
+                return Array.Empty<Entity>();
             }
 
-            private EntitySetIndexKey CreateKey(Entity entity)
+            private List<Entity> GetOrCreateBucket(AssociationIndexKey key)
             {
-                object?[] values = new object?[_definition.Members.Length];
-                for (int i = 0; i < _definition.Members.Length; i++)
+                if (!_entitiesByKey.TryGetValue(key, out List<Entity>? entities))
                 {
-                    values[i] = _definition.Members[i].GetValue(entity);
+                    entities = new List<Entity>();
+                    _entitiesByKey.Add(key, entities);
                 }
 
-                return new EntitySetIndexKey(values);
+                return entities;
             }
 
-            private void InsertInEntitySetOrder(List<Entity> entities, Entity entity)
+            private void RemoveFromBucket(AssociationIndexKey key, Entity entity)
             {
-                if (entities.Any(e => ReferenceEquals(e, entity)))
+                if (_entitiesByKey.TryGetValue(key, out List<Entity>? entities))
                 {
-                    return;
-                }
-
-                int entityIndex = _entitySet.List.IndexOf(entity);
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    if (_entitySet.List.IndexOf(entities[i]) > entityIndex)
+                    for (int i = 0; i < entities.Count; i++)
                     {
-                        entities.Insert(i, entity);
-                        return;
-                    }
-                }
+                        if (ReferenceEquals(entities[i], entity))
+                        {
+                            entities.RemoveAt(i);
+                            if (entities.Count == 0)
+                            {
+                                _entitiesByKey.Remove(key);
+                            }
 
-                entities.Add(entity);
-            }
-
-            private static void Remove(List<Entity> entities, Entity entity)
-            {
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    if (ReferenceEquals(entities[i], entity))
-                    {
-                        entities.RemoveAt(i);
-                        return;
+                            return;
+                        }
                     }
                 }
             }
@@ -386,29 +429,70 @@ namespace OpenRiaServices.Client
         private sealed class AssociationIndexDefinition : IEquatable<AssociationIndexDefinition>
         {
             private readonly int _hashCode;
+            private readonly CompositeAssociationMemberNames? _compositeMemberNames;
 
-            public AssociationIndexDefinition(string[] memberNames, MetaMember[] members)
+            public AssociationIndexDefinition(string memberName, MetaMember member)
             {
-                MemberNames = memberNames;
-                Members = members;
-
-                HashCode hashCode = new HashCode();
-                hashCode.Add(memberNames.Length);
-                foreach (string memberName in memberNames)
-                {
-                    hashCode.Add(memberName, StringComparer.Ordinal);
-                }
-
-                _hashCode = hashCode.ToHashCode();
+                SingleMemberName = memberName;
+                SingleMember = member;
+                _hashCode = StringComparer.Ordinal.GetHashCode(memberName);
             }
 
-            public string[] MemberNames { get; }
+            public AssociationIndexDefinition(CompositeAssociationMemberNames memberNames, MetaMember[] members)
+            {
+                _compositeMemberNames = memberNames;
+                Members = members;
+                _hashCode = memberNames.GetHashCode();
+            }
 
-            public MetaMember[] Members { get; }
+            public string? SingleMemberName { get; }
+
+            public MetaMember? SingleMember { get; }
+
+            public MetaMember[]? Members { get; }
+
+            public bool IsSingleMember => SingleMember != null;
+
+            public bool ContainsMemberName(string propertyName)
+            {
+                if (SingleMemberName != null)
+                {
+                    return string.Equals(SingleMemberName, propertyName, StringComparison.Ordinal);
+                }
+
+                return _compositeMemberNames != null && _compositeMemberNames.Contains(propertyName);
+            }
+
+            public AssociationIndexKey CreateKey(Entity entity)
+            {
+                if (SingleMember != null)
+                {
+                    return AssociationIndexKey.Create(SingleMember.GetValue(entity));
+                }
+
+                MetaMember[] members = Members!;
+                object?[] values = new object?[members.Length];
+                for (int i = 0; i < members.Length; i++)
+                {
+                    values[i] = members[i].GetValue(entity);
+                }
+
+                return AssociationIndexKey.Create(values);
+            }
 
             public bool Equals(AssociationIndexDefinition? other)
             {
-                return other != null && MemberNames.SequenceEqual(other.MemberNames, StringComparer.Ordinal);
+                if (other == null || IsSingleMember != other.IsSingleMember)
+                {
+                    return false;
+                }
+
+                if (SingleMemberName != null)
+                {
+                    return string.Equals(SingleMemberName, other.SingleMemberName, StringComparison.Ordinal);
+                }
+
+                return _compositeMemberNames != null && _compositeMemberNames.Equals(other._compositeMemberNames);
             }
 
             public override bool Equals(object? obj) => Equals(obj as AssociationIndexDefinition);
@@ -416,35 +500,90 @@ namespace OpenRiaServices.Client
             public override int GetHashCode() => _hashCode;
         }
 
-        private sealed class EntitySetIndexKey : IEquatable<EntitySetIndexKey>
+        private sealed class AssociationLookupMetadata
         {
-            private readonly object?[] _values;
+            private readonly MetaMember[]? _compositeSourceMembers;
+            private readonly MetaMember? _singleSourceMember;
+
+            public AssociationLookupMetadata(AssociationIndexDefinition indexDefinition, MetaMember[] sourceMembers)
+            {
+                IndexDefinition = indexDefinition;
+                if (sourceMembers.Length == 1)
+                {
+                    _singleSourceMember = sourceMembers[0];
+                }
+                else
+                {
+                    _compositeSourceMembers = sourceMembers;
+                }
+            }
+
+            public AssociationIndexDefinition IndexDefinition { get; }
+
+            public bool TryCreateLookupKey(Entity entity, out AssociationIndexKey key)
+            {
+                if (_singleSourceMember != null)
+                {
+                    key = AssociationIndexKey.Create(_singleSourceMember.GetValue(entity));
+                    return true;
+                }
+
+                MetaMember[] sourceMembers = _compositeSourceMembers!;
+                object?[] values = new object?[sourceMembers.Length];
+                for (int i = 0; i < sourceMembers.Length; i++)
+                {
+                    values[i] = sourceMembers[i].GetValue(entity);
+                }
+
+                key = AssociationIndexKey.Create(values);
+                return true;
+            }
+        }
+
+        private sealed class CompositeAssociationMemberNames : IEquatable<CompositeAssociationMemberNames>
+        {
+            private readonly string[] _memberNames;
             private readonly int _hashCode;
 
-            public EntitySetIndexKey(object?[] values)
+            public CompositeAssociationMemberNames(IReadOnlyList<string> memberNames)
             {
-                _values = values;
+                _memberNames = new string[memberNames.Count];
 
                 HashCode hashCode = new HashCode();
-                hashCode.Add(values.Length);
-                foreach (object? value in values)
+                hashCode.Add(memberNames.Count);
+                for (int i = 0; i < memberNames.Count; i++)
                 {
-                    hashCode.Add(value);
+                    string memberName = memberNames[i];
+                    _memberNames[i] = memberName;
+                    hashCode.Add(memberName, StringComparer.Ordinal);
                 }
 
                 _hashCode = hashCode.ToHashCode();
             }
 
-            public bool Equals(EntitySetIndexKey? other)
+            public bool Contains(string propertyName)
             {
-                if (other == null || other._values.Length != _values.Length)
+                for (int i = 0; i < _memberNames.Length; i++)
+                {
+                    if (string.Equals(_memberNames[i], propertyName, StringComparison.Ordinal))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            public bool Equals(CompositeAssociationMemberNames? other)
+            {
+                if (other == null || other._memberNames.Length != _memberNames.Length)
                 {
                     return false;
                 }
 
-                for (int i = 0; i < _values.Length; i++)
+                for (int i = 0; i < _memberNames.Length; i++)
                 {
-                    if (!Equals(_values[i], other._values[i]))
+                    if (!string.Equals(_memberNames[i], other._memberNames[i], StringComparison.Ordinal))
                     {
                         return false;
                     }
@@ -453,7 +592,65 @@ namespace OpenRiaServices.Client
                 return true;
             }
 
-            public override bool Equals(object? obj) => Equals(obj as EntitySetIndexKey);
+            public override bool Equals(object? obj) => Equals(obj as CompositeAssociationMemberNames);
+
+            public override int GetHashCode() => _hashCode;
+        }
+
+        private readonly struct AssociationIndexKey : IEquatable<AssociationIndexKey>
+        {
+            private readonly object? _singleValue;
+            private readonly object?[]? _compositeValues;
+            private readonly int _hashCode;
+
+            private AssociationIndexKey(object? singleValue, object?[]? compositeValues, int hashCode)
+            {
+                _singleValue = singleValue;
+                _compositeValues = compositeValues;
+                _hashCode = hashCode;
+            }
+
+            public static AssociationIndexKey Create(object? value)
+            {
+                return new AssociationIndexKey(value, null, HashCode.Combine(1, value));
+            }
+
+            public static AssociationIndexKey Create(object?[] values)
+            {
+                HashCode hashCode = new HashCode();
+                hashCode.Add(values.Length);
+                for (int i = 0; i < values.Length; i++)
+                {
+                    hashCode.Add(values[i]);
+                }
+
+                return new AssociationIndexKey(null, values, hashCode.ToHashCode());
+            }
+
+            public bool Equals(AssociationIndexKey other)
+            {
+                if (_compositeValues == null || other._compositeValues == null)
+                {
+                    return _compositeValues == other._compositeValues && Equals(_singleValue, other._singleValue);
+                }
+
+                if (_compositeValues.Length != other._compositeValues.Length)
+                {
+                    return false;
+                }
+
+                for (int i = 0; i < _compositeValues.Length; i++)
+                {
+                    if (!Equals(_compositeValues[i], other._compositeValues[i]))
+                    {
+                        return false;
+                    }
+                }
+
+                return true;
+            }
+
+            public override bool Equals(object? obj) => obj is AssociationIndexKey other && Equals(other);
 
             public override int GetHashCode() => _hashCode;
         }
