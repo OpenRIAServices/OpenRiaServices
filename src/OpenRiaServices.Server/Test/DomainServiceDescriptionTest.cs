@@ -1791,6 +1791,17 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
+        [Description("Query methods should be allowed to accept a supported complex type as a parameter")]
+        public void Select_ComplexTypeArgs_Allowed()
+        {
+            DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(SelectMethod_ValidProvider_ComplexTypeParam));
+            DomainOperationEntry getCitiesByAddress = description.GetQueryMethod("GetCitiesByAddress");
+            Assert.IsNotNull(getCitiesByAddress);
+            Assert.AreEqual(typeof(TestDomainServices.Address), getCitiesByAddress.Parameters.Single().ParameterType);
+            CollectionAssert.Contains(description.ComplexTypes.ToList(), typeof(TestDomainServices.Address));
+        }
+
+        [TestMethod]
         public void DomainMethod_ComplexArgs()
         {
             ExceptionHelper.ExpectInvalidOperationException(delegate

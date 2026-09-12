@@ -120,45 +120,39 @@ namespace OpenRiaServices.Client.Test
             if (!File.Exists(processPath))
                 throw new FileNotFoundException($"AspNetCore website not found at {processPath}");
 
-            var websites = Process.GetProcessesByName(ProcessName);
-            if (websites.Any())
-            {
-                Console.WriteLine("AssemblyInitialize: Webserver process was already started, not starting anything");
-                // Already running. do nothing
-            }
-            else
-            {
-                var startInfo = new ProcessStartInfo
-                {
-                    FileName = processPath,
-                    UseShellExecute = false,
-                    WorkingDirectory = Path.GetFullPath(Path.Join(projectPath, @"../AspNetCoreWebsite/"))
-                };
-                startInfo.ArgumentList.Add("--urls");
-                startInfo.ArgumentList.Add(TestURIs.RootURI.ToString());
-                startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
-                s_aspNetCoreSite = Process.Start(startInfo);
+            using HttpClient httpClient = new HttpClient();
 
-                Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
+            // Check whether a webserver is already listening on the expected address instead of just looking for
+            // a process with the expected name. Each target framework uses a dedicated port, and the test modules
+            // for the different target frameworks can run in parallel, so a running "AspNetCoreWebsite" process
+            // does not mean that *our* webserver is running.
+            if (IsWebServerRunning(httpClient))
+            {
+                Console.WriteLine("AssemblyInitialize: Webserver was already listening on {0}, not starting anything", TestURIs.RootURI);
+                return;
             }
+
+            var startInfo = new ProcessStartInfo
+            {
+                FileName = processPath,
+                UseShellExecute = false,
+                WorkingDirectory = Path.GetFullPath(Path.Join(projectPath, @"../AspNetCoreWebsite/"))
+            };
+            startInfo.ArgumentList.Add("--urls");
+            startInfo.ArgumentList.Add(TestURIs.RootURI.ToString());
+            startInfo.EnvironmentVariables.Add("ASPNETCORE_ENVIRONMENT", "Development");
+            s_aspNetCoreSite = Process.Start(startInfo);
+
+            Console.WriteLine("AssemblyInitialize: Started webserver with PID {0}", s_aspNetCoreSite.Id);
 
             // Wait for a successfull (GET "/") to succeed so we know webserver has started
-            using HttpClient httpClient = new HttpClient();
             Stopwatch stopwatch = Stopwatch.StartNew();
             do
             {
-                try
+                if (IsWebServerRunning(httpClient))
                 {
-                    var res = httpClient.GetAsync(TestURIs.RootURI).GetAwaiter().GetResult();
-                    if (res.IsSuccessStatusCode)
-                    {
-                        Console.WriteLine("AssemblyInitialize: Webserver started");
-                        return;
-                    }
-                }
-                catch (Exception)
-                {
-                    // Ignore error
+                    Console.WriteLine("AssemblyInitialize: Webserver started");
+                    return;
                 }
 
                 if (s_aspNetCoreSite?.HasExited == true)
@@ -168,6 +162,23 @@ namespace OpenRiaServices.Client.Test
             } while (stopwatch.Elapsed <= TimeSpan.FromMinutes(1));
 
             throw new TimeoutException("webserver did not respond to '/' in 1 minute");
+        }
+
+        /// <summary>
+        /// Determines if a webserver responds successfully to a GET of <see cref="TestURIs.RootURI"/>.
+        /// </summary>
+        private static bool IsWebServerRunning(HttpClient httpClient)
+        {
+            try
+            {
+                var res = httpClient.GetAsync(TestURIs.RootURI).GetAwaiter().GetResult();
+                return res.IsSuccessStatusCode;
+            }
+            catch (Exception)
+            {
+                // Ignore error, webserver is not running (yet)
+                return false;
+            }
         }
     }
 }

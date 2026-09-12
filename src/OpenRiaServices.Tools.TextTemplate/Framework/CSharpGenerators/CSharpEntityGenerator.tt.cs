@@ -396,28 +396,18 @@ this.Write("()\r\n{\r\n\tthis.OnCreated();\r\n}\r\n");
 
 
 
-        if (!this.IsAbstract)
-        {
-            var properties = TypeDescriptor.GetProperties(this.Type);
-            bool hasRequiredProperty = properties.Cast<PropertyDescriptor>()
-                .Any(p => p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
-                    && ShouldDeclareProperty(p)
-                    && CanGenerateProperty(p));
+		if (!this.IsAbstract)
+		{
+			var requiredProperties = TypeDescriptor.GetProperties(this.Type)
+				.Cast<PropertyDescriptor>()
+				.Where(p => p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
+					&& ShouldDeclareProperty(p)
+					&& CanGenerateProperty(p))
+				.ToList();
 
-            if (hasRequiredProperty)
-            {
-                var pd = properties.Cast<PropertyDescriptor>()
-                    .FirstOrDefault(p => !p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
-                        && ShouldDeclareProperty(p)
-                        && CanGenerateProperty(p));
-
-                if (pd is null)
-                {
-                    this.ClientCodeGenerator.Error($"The type '{this.Type}' has only required properties, cannot generate PolyType compatible constructor");
-                }
-                else
-                {
-                    string parameterName = pd.Name;
+			if (requiredProperties.Count > 0)
+			{
+				string parameterDeclarations = string.Join(", ", requiredProperties.Select(pd => $"{CodeGenUtilities.GetTypeName(pd.PropertyType)} {CodeGenUtilities.GetSafeName(pd.Name)}"));
 
 this.Write("\r\n[PolyType.ConstructorShape]\r\nprivate ");
 
@@ -425,27 +415,34 @@ this.Write(this.ToStringHelper.ToStringWithCulture(typeName));
 
 this.Write("(");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetTypeName(pd.PropertyType)));
+this.Write(this.ToStringHelper.ToStringWithCulture(parameterDeclarations));
 
-this.Write(" ");
+this.Write(")\r\n{\r\n\tthis.OnCreated();\r\n\tbase.OnDeserializing(default(System.Runtime.Serializat" +
+        "ion.StreamingContext));\r\n");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(parameterName));
 
-this.Write(")\r\n{\r\n\tthis.OnCreated();\r\n    base.OnDeserializing(default(System.Runtime.Seriali" +
-        "zation.StreamingContext));\r\n    this.");
+				foreach (var pd in requiredProperties)
+				{
+					string safeName = CodeGenUtilities.GetSafeName(pd.Name);
 
-this.Write(this.ToStringHelper.ToStringWithCulture(pd.Name));
+this.Write("\tthis.");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(safeName));
 
 this.Write(" = ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(parameterName));
+this.Write(this.ToStringHelper.ToStringWithCulture(safeName));
 
-this.Write(";\r\n}\r\n");
+this.Write(";\r\n");
 
 
-                }
-            }
-        }
+				}
+
+this.Write("}\r\n");
+
+
+			}
+		}
 	}
 	
 	private void GeneratePropertiesInternal()

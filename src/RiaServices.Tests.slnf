@@ -1,0 +1,23 @@
+{
+  "solution": {
+    "path": "RiaServices.sln",
+    "projects": [
+      "OpenRiaServices.Client\\Test\\Client.External.Test\\OpenRiaServices.Client.External.Test.csproj",
+      "OpenRiaServices.Client\\Test\\Client.Test\\OpenRiaServices.Client.Test.csproj",
+      "OpenRiaServices.Client\\Test\\Client.Vb.Test\\OpenRiaServices.Client.Vb.Test.csproj",
+      "OpenRiaServices.Hosting.AspNetCore\\Test\\OpenRiaServices.Hosting.AspNetCore.Test\\OpenRiaServices.Hosting.AspNetCore.Test.csproj",
+      "OpenRiaServices.Hosting.Local\\Test\\OpenRiaServices.Hosting.Local.Test.csproj",
+      "OpenRiaServices.Hosting.Wcf.Endpoint\\Test\\OpenRiaServices.Hosting.Wcf.Endpoint.Test.csproj",
+      "OpenRiaServices.Hosting.Wcf\\Test\\OpenRiaServices.Hosting.Wcf.Test.csproj",
+      "OpenRiaServices.Server.Authentication.AspNetMembership\\Test\\OpenRiaServices.Server.Authentication.AspNetMembership.Test.csproj",
+      "OpenRiaServices.Server.EntityFrameworkCore\\Test\\OpenRiaServices.Server.EntityFrameworkCore.Test\\OpenRiaServices.Server.EntityFrameworkCore.Test.csproj",
+      "OpenRiaServices.Server.UnitTesting\\Test\\OpenRiaServices.Server.UnitTesting.Test.csproj",
+      "OpenRiaServices.Server\\Test\\OpenRiaServices.Server.Test.csproj",
+      "OpenRiaServices.Tools.TextTemplate\\Test\\OpenRiaServices.Tools.TextTemplate.Test.csproj",
+      "OpenRiaServices.Tools\\Test\\OpenRiaServices.Tools.Test.csproj",
+      "Test\\OpenRiaservices.EndToEnd.AspNetCore.Test\\OpenRiaservices.EndToEnd.AspNetCore.Test.csproj",
+      "Test\\OpenRiaservices.EndToEnd.Wcf.Test\\OpenRiaservices.EndToEnd.Wcf.Test.csproj",
+      "VisualStudio\\Tools\\Test\\OpenRiaServices.VisualStudio.DomainServices.Tools.Test.csproj"
+    ]
+  }
+}

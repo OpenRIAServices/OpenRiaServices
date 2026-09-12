@@ -66,41 +66,38 @@ namespace <#= this.Type.Namespace #>
 }
 <#+
 
-        if (!this.IsAbstract)
-        {
-            var properties = TypeDescriptor.GetProperties(this.Type);
-            bool hasRequiredProperty = properties.Cast<PropertyDescriptor>()
-                .Any(p => p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
-                    && ShouldDeclareProperty(p)
-                    && CanGenerateProperty(p));
+		if (!this.IsAbstract)
+		{
+			var requiredProperties = TypeDescriptor.GetProperties(this.Type)
+				.Cast<PropertyDescriptor>()
+				.Where(p => p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
+					&& ShouldDeclareProperty(p)
+					&& CanGenerateProperty(p))
+				.ToList();
 
-            if (hasRequiredProperty)
-            {
-                var pd = properties.Cast<PropertyDescriptor>()
-                    .FirstOrDefault(p => !p.Attributes.OfType<DataMemberAttribute>().Any(a => a.IsRequired)
-                        && ShouldDeclareProperty(p)
-                        && CanGenerateProperty(p));
-
-                if (pd is null)
-                {
-                    this.ClientCodeGenerator.Error($"The type '{this.Type}' has only required properties, cannot generate PolyType compatible constructor");
-                }
-                else
-                {
-                    string parameterName = pd.Name;
+			if (requiredProperties.Count > 0)
+			{
+				string parameterDeclarations = string.Join(", ", requiredProperties.Select(pd => $"{CodeGenUtilities.GetTypeName(pd.PropertyType)} {CodeGenUtilities.GetSafeName(pd.Name)}"));
 #>
 
 [PolyType.ConstructorShape]
-private <#= typeName #>(<#= CodeGenUtilities.GetTypeName(pd.PropertyType) #> <#= parameterName #>)
+private <#= typeName #>(<#= parameterDeclarations #>)
 {
 	this.OnCreated();
-    base.OnDeserializing(default(System.Runtime.Serialization.StreamingContext));
-    this.<#= pd.Name #> = <#= parameterName #>;
+	base.OnDeserializing(default(System.Runtime.Serialization.StreamingContext));
+<#+
+				foreach (var pd in requiredProperties)
+				{
+					string safeName = CodeGenUtilities.GetSafeName(pd.Name);
+#>
+	this.<#= safeName #> = <#= safeName #>;
+<#+
+				}
+#>
 }
 <#+
-                }
-            }
-        }
+			}
+		}
 	}
 	
 	private void GeneratePropertiesInternal()

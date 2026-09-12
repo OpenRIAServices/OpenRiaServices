@@ -23,38 +23,38 @@ Run from the repository root on Windows with Visual Studio/MSBuild and .NET Fram
 ```powershell
 # Restore and Release-build (preferred)
 msbuild src\RiaServices.sln -restore /p:Configuration=Release /m /v:minimal
-
-# Test the solution after building
-dotnet test src\RiaServices.sln --no-restore --configuration Release --settings src\test.runsettings
 ```
 
-Prefer targeted project builds/tests. CI separates target frameworks and excludes `OpenRiaServices.Common*Test.dll` from its main test patterns; consult `azure-pipelines.yml` when local behavior differs.
-
-Database-backed tests require SQL LocalDB and restored `Northwind`/`AdventureWorks` databases:
+Run tests after building:
 
 ```powershell
+# Start SQL localdb and setup test databases  `Northwind`/`AdventureWorks` MUST RUN ONCE before running database-backed tests, such as EndToEnd tests
 sqllocaldb start MSSQLLocalDB
 .\Setup-TestDatabases.ps1 # use -UseSqlCmd if the SqlServer module is unavailable
+
+# Run all tests in the solution
+cd src
+dotnet test --solution RiaServices.Tests.slnf --configuration Release
 ```
 
+For focused changes, prefer running the relevant test project directly:
+```powershell
+cd src
+dotnet test --project OpenRiaServices.Hosting.AspNetCore\Test\OpenRiaServices.Hosting.AspNetCore.Test\OpenRiaServices.Hosting.AspNetCore.Test.csproj --configuration Release
+```
+
+CI runs the whole suite with a single `dotnet test` command against `src\RiaServices.Tests.slnf`, which lists every test project. 
+`RiaServices.sln` itself cannot be used because it contains website projects which require Visual Studio targets, so new test projects must be added to the solution filter as well. 
+MTP runs the test modules (project + target framework) in parallel; use `--max-parallel-test-modules 1` when debugging suspected concurrency issues.
+
+
+
+Database-backed tests require SQL LocalDB and restored `Northwind`/`AdventureWorks` databases:
 ## Generated files
 
 - NEVER edit `*.tt.cs` under `src\OpenRiaServices.Tools.TextTemplate\Framework`. Edit the corresponding `.tt`/`.ttinclude`, regenerate affected templates with Visual Studio **Transform All T4 Templates** or `devenv /Command TextTransformation.TransformAllTemplates`, review output, and build `src\OpenRiaServices.Tools.TextTemplate\Framework\OpenRiaServices.Tools.TextTemplate.csproj` for all targets.
 - NEVER edit baseline `*.g.cs` or `*.g.vb` files directly. Run `dotnet test src\OpenRiaServices.Tools\Test\OpenRiaServices.Tools.Test.csproj --framework net472`, execute the exact `updateAllBaselines.bat` reported by failures, build, and rerun the test until it passes.
 
-Run tests after building:
-
-```powershell
-dotnet test src\RiaServices.sln --configuration Release --settings src\test.runsettings
-```
-
-For focused changes, prefer running the relevant test project directly, for example:
-
-```powershell
-dotnet test src\OpenRiaServices.Hosting.AspNetCore\Test\OpenRiaServices.Hosting.AspNetCore.Test\OpenRiaServices.Hosting.AspNetCore.Test.csproj --configuration Release
-```
-
-CI separates test execution by target framework and excludes `OpenRiaServices.Common*Test.dll` from its main patterns. If a local full test run behaves differently from CI, inspect `azure-pipelines.yml` for the exact VSTest assembly patterns.
 
 ## Coding conventions
 
