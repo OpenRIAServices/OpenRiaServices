@@ -64,8 +64,4 @@
     <FileVersion>$(GitVersion_MajorMinorPatch).$(GitVersion_PreReleaseNumber)</FileVersion>
   </PropertyGroup>
 
-
-  <!-- Source Link is included in .NET SDK 8+ for supported hosts such as GitHub.
-       PublishRepositoryUrl and EmbedUntrackedSources are configured above. -->
-
 </Project>
