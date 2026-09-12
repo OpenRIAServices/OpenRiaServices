@@ -70,7 +70,16 @@ get
 set
 <#+  	this.GenerateOpeningBrace();
 #>
-<#= metadata.PropTypeName #> previous = this.<#= metadata.PropertyDescriptor.Name #>;
+<#= metadata.PropTypeName #> previous;
+if (this.<#= metadata.FieldName #> != null)
+{
+	previous = this.<#= metadata.FieldName #>.Entity;
+}
+else
+{
+	this.<#= metadata.FieldName #> = new <#= metadata.AssociationTypeName #>(this, "<#= metadata.PropertyName #>", this.Filter<#= metadata.PropertyName #>);
+	previous = null;
+}
 if (previous != value)
 <#+  	this.GenerateOpeningBrace();
 #>
