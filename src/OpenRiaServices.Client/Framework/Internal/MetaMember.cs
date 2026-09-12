@@ -16,9 +16,13 @@ namespace OpenRiaServices.Client.Internal
     {
         private static MethodInfo s_getterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateGetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
         private static MethodInfo s_setterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateSetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+        private static MethodInfo s_typedGetterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateTypedGetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
 
         private Func<object, object> _getter;
         private Action<object, object> _setter;
+        private Delegate _typedGetter;
+        private ISingleValueAccessor _singleValueAccessor;
+        private bool _singleValueAccessorInitialized;
 
         internal MetaMember(MetaType metaType, PropertyInfo property, bool isRoundtripEntity)
         {
@@ -173,6 +177,29 @@ namespace OpenRiaServices.Client.Internal
             _setter(instance, value);
         }
 
+        internal Delegate GetTypedGetter()
+        {
+            if (_typedGetter == null)
+            {
+                var helper = s_typedGetterDelegateHelper.MakeGenericMethod(Member.DeclaringType, Member.PropertyType);
+                _typedGetter = (Delegate)helper.Invoke(null, new[] { Member });
+            }
+
+            return _typedGetter;
+        }
+
+        internal bool TryGetSingleValueAccessor(out ISingleValueAccessor accessor)
+        {
+            if (!_singleValueAccessorInitialized)
+            {
+                _singleValueAccessor = CreateSingleValueAccessorFactory(this);
+                _singleValueAccessorInitialized = true;
+            }
+
+            accessor = _singleValueAccessor;
+            return accessor != null;
+        }
+
         /// <summary>
         /// Gets a value indicating whether this member is mergable 
         /// (should be updated when loading with behaviour <see cref="LoadBehavior.MergeIntoCurrent"/> or <see cref="LoadBehavior.RefreshCurrent"/>).
@@ -211,6 +238,20 @@ namespace OpenRiaServices.Client.Internal
             return (object instance) => (object)getter((T)instance);
         }
 
+        private static Delegate CreateTypedGetterDelegateHelper<T, Tprop>(PropertyInfo propertyInfo)
+        {
+            var getMethod = propertyInfo.GetGetMethod();
+            if (getMethod == null)
+            {
+                // If no getter was found, fallback to method throw same type of exception
+                // which exception would do, these should never propagate to the user
+                return (Func<object, Tprop>)(obj => throw new ArgumentException("Internal error: No getter"));
+            }
+
+            var getter = (Func<T, Tprop>)Delegate.CreateDelegate(typeof(Func<T, Tprop>), getMethod);
+            return (Func<object, Tprop>)(instance => getter((T)instance));
+        }
+
         /// <summary>
         /// Helper method which creates a delegate which can be used to invoke a specific getter
         /// </summary>
@@ -238,6 +279,49 @@ namespace OpenRiaServices.Client.Internal
             return (object obj, object value) => setter((T)obj, (Tprop)value);
         }
 
+        private static ISingleValueAccessor CreateSingleValueAccessorFactory(MetaMember member)
+        {
+            Type propertyType = member.PropertyType;
+            if (propertyType == typeof(int))
+            {
+                return new NonNullableSingleValueAccessor<int>((Func<object, int>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(int?))
+            {
+                return new NullableSingleValueAccessor<int>((Func<object, int?>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(long))
+            {
+                return new NonNullableSingleValueAccessor<long>((Func<object, long>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(long?))
+            {
+                return new NullableSingleValueAccessor<long>((Func<object, long?>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(Guid))
+            {
+                return new NonNullableSingleValueAccessor<Guid>((Func<object, Guid>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(Guid?))
+            {
+                return new NullableSingleValueAccessor<Guid>((Func<object, Guid?>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(string))
+            {
+                return new ReferenceSingleValueAccessor<string>((Func<object, string>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(DateTime))
+            {
+                return new NonNullableSingleValueAccessor<DateTime>((Func<object, DateTime>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(DateTime?))
+            {
+                return new NullableSingleValueAccessor<DateTime>((Func<object, DateTime?>)member.GetTypedGetter());
+            }
+
+            return null;
+        }
+
         private static bool CheckIfMergeableMember(MetaMember metaMember)
         {
             return metaMember.IsDataMember && !metaMember.IsAssociationMember;
@@ -248,6 +332,83 @@ namespace OpenRiaServices.Client.Internal
         {
             return metaMember.IsDataMember && !metaMember.IsAssociationMember &&
                        (isRoundtripEntity || TypeUtility.IsAttributeDefined(metaMember.Member, typeof(RoundtripOriginalAttribute), false));
+        }
+
+        internal interface ISingleValueAccessor
+        {
+            Type KeyType { get; }
+        }
+
+        internal interface ISingleValueAccessor<TKey> : ISingleValueAccessor
+        {
+            bool TryGetValue(object instance, out TKey value);
+        }
+
+        private abstract class SingleValueAccessor<TKey> : ISingleValueAccessor<TKey>
+        {
+            protected SingleValueAccessor()
+            {
+                KeyType = typeof(TKey);
+            }
+
+            public Type KeyType { get; }
+
+            public abstract bool TryGetValue(object instance, out TKey value);
+        }
+
+        private sealed class NonNullableSingleValueAccessor<TKey> : SingleValueAccessor<TKey>
+        {
+            private readonly Func<object, TKey> _getter;
+
+            public NonNullableSingleValueAccessor(Func<object, TKey> getter)
+            {
+                _getter = getter;
+            }
+
+            public override bool TryGetValue(object instance, out TKey value)
+            {
+                value = _getter(instance);
+                return true;
+            }
+        }
+
+        private sealed class NullableSingleValueAccessor<TKey> : SingleValueAccessor<TKey> where TKey : struct
+        {
+            private readonly Func<object, TKey?> _getter;
+
+            public NullableSingleValueAccessor(Func<object, TKey?> getter)
+            {
+                _getter = getter;
+            }
+
+            public override bool TryGetValue(object instance, out TKey value)
+            {
+                TKey? nullableValue = _getter(instance);
+                if (nullableValue.HasValue)
+                {
+                    value = nullableValue.Value;
+                    return true;
+                }
+
+                value = default;
+                return false;
+            }
+        }
+
+        private sealed class ReferenceSingleValueAccessor<TKey> : SingleValueAccessor<TKey>
+        {
+            private readonly Func<object, TKey> _getter;
+
+            public ReferenceSingleValueAccessor(Func<object, TKey> getter)
+            {
+                _getter = getter;
+            }
+
+            public override bool TryGetValue(object instance, out TKey value)
+            {
+                value = _getter(instance);
+                return value != null;
+            }
         }
     }
 }
