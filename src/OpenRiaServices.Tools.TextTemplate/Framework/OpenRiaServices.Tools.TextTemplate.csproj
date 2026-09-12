@@ -32,42 +32,42 @@
     <Compile Include="..\..\OpenRiaServices.Client\Framework\ExceptionHandlingUtility.cs" Link="Utilities\ExceptionHandlingUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\SerializationUtility.cs" Link="Utilities\SerializationUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Server\Framework\TypeDescriptorExtensions.cs" Link="Utilities\TypeDescriptorExtensions.cs" />
-    <Compile Update="CodeGeneratorTextTemplate.cs">
+    <Compile Update="CodeGeneratorTextTemplate.tt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CodeGeneratorTextTemplate.tt</DependentUpon>
     </Compile>
-    <Compile Update="ComplexObjectGenerator.cs">
+    <Compile Update="ComplexObjectGenerator.tt.cs">
       <DependentUpon>ComplexObjectGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="CSharpGenerators\CSharpComplexObjectGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpComplexObjectGenerator.tt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpComplexObjectGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Update="CSharpGenerators\CSharpDomainContextGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpDomainContextGenerator.tt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpDomainContextGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Update="CSharpGenerators\CSharpEntityGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpEntityGenerator.tt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpEntityGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Update="CSharpGenerators\CSharpEnumGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpEnumGenerator.tt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpEnumGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Update="CSharpGenerators\CSharpClientCodeGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpClientCodeGenerator.tt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpClientCodeGenerator.tt</DependentUpon>
     </Compile>
-    <Compile Update="CSharpGenerators\CSharpWebContextGenerator.cs">
+    <Compile Update="CSharpGenerators\CSharpWebContextGenerator.tt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>CSharpWebContextGenerator.tt</DependentUpon>
@@ -77,22 +77,22 @@
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="DomainContextGenerator.cs">
+    <Compile Update="DomainContextGenerator.tt.cs">
       <DependentUpon>DomainContextGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="EntityGenerator.cs">
+    <Compile Update="EntityGenerator.tt.cs">
       <DependentUpon>EntityGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="EnumGenerator.cs">
+    <Compile Update="EnumGenerator.tt.cs">
       <DependentUpon>EnumGenerator.tt</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="ClientCodeGenerator.cs">
+    <Compile Update="ClientCodeGenerator.tt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ClientCodeGenerator.tt</DependentUpon>
@@ -107,7 +107,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>TextTemplateResource.resx</DependentUpon>
     </Compile>
-    <Compile Update="WebContextGenerator.cs">
+    <Compile Update="WebContextGenerator.tt.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>WebContextGenerator.tt</DependentUpon>
@@ -118,7 +118,7 @@
     <None Update="**\*.tt">
       <!---TextTemplatingFilePreprocessor , TextTemplatingFileGenerator-->
       <Generator>TextTemplatingFilePreprocessor</Generator>
-      <LastGenOutput>%(Filename).cs</LastGenOutput>
+      <LastGenOutput>%(Filename).tt.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>
@@ -146,5 +146,10 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Update="DataContractProxyGenerator.tt">
+      <LastGenOutput>DataContractProxyGenerator.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 </Project>
