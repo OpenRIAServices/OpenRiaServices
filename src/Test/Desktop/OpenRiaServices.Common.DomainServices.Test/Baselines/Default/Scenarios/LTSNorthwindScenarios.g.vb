@@ -673,7 +673,13 @@ Namespace DataTests.Scenarios.LTS.Northwind
                 Return Me._customer.Entity
             End Get
             Set
-                Dim previous As Customer_Bug479436 = Me.Customer
+                Dim previous As Customer_Bug479436
+                If (Not (Me._customer) Is Nothing) Then
+                    previous = Me._customer.Entity
+                Else
+                    Me._customer = New EntityRef(Of Customer_Bug479436)(Me, "Customer", AddressOf Me.FilterCustomer)
+                    previous = Nothing
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Customer", value)
                     If (Not (value) Is Nothing) Then

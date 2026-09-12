@@ -928,11 +928,31 @@ this.Write("set\r\n");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(metadata.PropTypeName));
 
-this.Write(" previous = this.");
+this.Write(" previous;\r\nif (this.");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(metadata.PropertyDescriptor.Name));
+this.Write(this.ToStringHelper.ToStringWithCulture(metadata.FieldName));
 
-this.Write(";\r\nif (previous != value)\r\n");
+this.Write(" != null)\r\n{\r\n\tprevious = this.");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(metadata.FieldName));
+
+this.Write(".Entity;\r\n}\r\nelse\r\n{\r\n\tthis.");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(metadata.FieldName));
+
+this.Write(" = new ");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(metadata.AssociationTypeName));
+
+this.Write("(this, \"");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(metadata.PropertyName));
+
+this.Write("\", this.Filter");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(metadata.PropertyName));
+
+this.Write(");\r\n\tprevious = null;\r\n}\r\nif (previous != value)\r\n");
 
   	this.GenerateOpeningBrace();
 

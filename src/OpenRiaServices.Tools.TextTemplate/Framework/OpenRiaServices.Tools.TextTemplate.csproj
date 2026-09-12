@@ -147,4 +147,15 @@
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
+  <ItemGroup>
+    <None Update="CSharpGenerators\CSharpClientCodeGenerator.tt">
+      <LastGenOutput>CSharpClientCodeGenerator.cs</LastGenOutput>
+    </None>
+    <None Update="CSharpGenerators\CSharpComplexObjectGenerator.tt">
+      <LastGenOutput>CSharpComplexObjectGenerator.cs</LastGenOutput>
+    </None>
+    <None Update="DataContractProxyGenerator.tt">
+      <LastGenOutput>DataContractProxyGenerator.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
 </Project>
