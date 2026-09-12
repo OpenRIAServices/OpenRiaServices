@@ -64,4 +64,8 @@
     <FileVersion>$(GitVersion_MajorMinorPatch).$(GitVersion_PreReleaseNumber)</FileVersion>
   </PropertyGroup>
 
+  <ItemGroup Condition="'$(DeterministicSourcePaths)' == 'true' and '$(IsFrameworkProject)' == 'true'">
+    <SourceRoot Include="$(MSBuildThisFileDirectory)" />
+  </ItemGroup>
+
 </Project>
