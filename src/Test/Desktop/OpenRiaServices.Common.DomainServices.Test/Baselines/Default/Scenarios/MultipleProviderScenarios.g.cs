@@ -730,7 +730,16 @@ namespace DataTests.Northwind.LTS
             }
             set
             {
-                Customer previous = this.Customer;
+                Customer previous;
+                if ((this._customer != null))
+                {
+                    previous = this._customer.Entity;
+                }
+                else
+                {
+                    this._customer = new EntityRef<Customer>(this, "Customer", this.FilterCustomer);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Customer", value);
@@ -1293,7 +1302,16 @@ namespace DataTests.Northwind.LTS
             }
             set
             {
-                Order previous = this.Order;
+                Order previous;
+                if ((this._order != null))
+                {
+                    previous = this._order.Entity;
+                }
+                else
+                {
+                    this._order = new EntityRef<Order>(this, "Order", this.FilterOrder);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Order", value);
@@ -1363,7 +1381,16 @@ namespace DataTests.Northwind.LTS
             }
             set
             {
-                Product previous = this.Product;
+                Product previous;
+                if ((this._product != null))
+                {
+                    previous = this._product.Entity;
+                }
+                else
+                {
+                    this._product = new EntityRef<Product>(this, "Product", this.FilterProduct);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Product", value);
@@ -1589,7 +1616,16 @@ namespace DataTests.Northwind.LTS
             }
             set
             {
-                Category previous = this.Category;
+                Category previous;
+                if ((this._category != null))
+                {
+                    previous = this._category.Entity;
+                }
+                else
+                {
+                    this._category = new EntityRef<Category>(this, "Category", this.FilterCategory);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Category", value);
@@ -2373,7 +2409,16 @@ namespace DataTests.Northwind.LTS
             }
             set
             {
-                Region previous = this.Region;
+                Region previous;
+                if ((this._region != null))
+                {
+                    previous = this._region.Entity;
+                }
+                else
+                {
+                    this._region = new EntityRef<Region>(this, "Region", this.FilterRegion);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Region", value);
@@ -3217,7 +3262,16 @@ namespace NorthwindModel
             }
             set
             {
-                Customer previous = this.Customer;
+                Customer previous;
+                if ((this._customer != null))
+                {
+                    previous = this._customer.Entity;
+                }
+                else
+                {
+                    this._customer = new EntityRef<Customer>(this, "Customer", this.FilterCustomer);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Customer", value);
@@ -3779,7 +3833,16 @@ namespace NorthwindModel
             }
             set
             {
-                Order previous = this.Order;
+                Order previous;
+                if ((this._order != null))
+                {
+                    previous = this._order.Entity;
+                }
+                else
+                {
+                    this._order = new EntityRef<Order>(this, "Order", this.FilterOrder);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Order", value);
@@ -3849,7 +3912,16 @@ namespace NorthwindModel
             }
             set
             {
-                Product previous = this.Product;
+                Product previous;
+                if ((this._product != null))
+                {
+                    previous = this._product.Entity;
+                }
+                else
+                {
+                    this._product = new EntityRef<Product>(this, "Product", this.FilterProduct);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Product", value);
@@ -4075,7 +4147,16 @@ namespace NorthwindModel
             }
             set
             {
-                Category previous = this.Category;
+                Category previous;
+                if ((this._category != null))
+                {
+                    previous = this._category.Entity;
+                }
+                else
+                {
+                    this._category = new EntityRef<Category>(this, "Category", this.FilterCategory);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Category", value);
@@ -4855,7 +4936,16 @@ namespace NorthwindModel
             }
             set
             {
-                Region previous = this.Region;
+                Region previous;
+                if ((this._region != null))
+                {
+                    previous = this._region.Entity;
+                }
+                else
+                {
+                    this._region = new EntityRef<Region>(this, "Region", this.FilterRegion);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Region", value);

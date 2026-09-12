@@ -721,7 +721,13 @@ Namespace DataTests.Northwind.LTS
                 Return Me._customer.Entity
             End Get
             Set
-                Dim previous As Customer = Me.Customer
+                Dim previous As Customer
+                If (Not (Me._customer) Is Nothing) Then
+                    previous = Me._customer.Entity
+                Else
+                    Me._customer = New EntityRef(Of Customer)(Me, "Customer", AddressOf Me.FilterCustomer)
+                    previous = Nothing
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Customer", value)
                     If (Not (previous) Is Nothing) Then
@@ -1215,7 +1221,13 @@ Namespace DataTests.Northwind.LTS
                 Return Me._order.Entity
             End Get
             Set
-                Dim previous As Order = Me.Order
+                Dim previous As Order
+                If (Not (Me._order) Is Nothing) Then
+                    previous = Me._order.Entity
+                Else
+                    Me._order = New EntityRef(Of Order)(Me, "Order", AddressOf Me.FilterOrder)
+                    previous = Nothing
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Order", value)
                     If (Not (previous) Is Nothing) Then
@@ -1272,7 +1284,13 @@ Namespace DataTests.Northwind.LTS
                 Return Me._product.Entity
             End Get
             Set
-                Dim previous As Product = Me.Product
+                Dim previous As Product
+                If (Not (Me._product) Is Nothing) Then
+                    previous = Me._product.Entity
+                Else
+                    Me._product = New EntityRef(Of Product)(Me, "Product", AddressOf Me.FilterProduct)
+                    previous = Nothing
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Product", value)
                     If (Not (previous) Is Nothing) Then
@@ -1505,7 +1523,13 @@ Namespace DataTests.Northwind.LTS
                 Return Me._category.Entity
             End Get
             Set
-                Dim previous As Category = Me.Category
+                Dim previous As Category
+                If (Not (Me._category) Is Nothing) Then
+                    previous = Me._category.Entity
+                Else
+                    Me._category = New EntityRef(Of Category)(Me, "Category", AddressOf Me.FilterCategory)
+                    previous = Nothing
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Category", value)
                     If (Not (previous) Is Nothing) Then
@@ -2207,7 +2231,13 @@ Namespace DataTests.Northwind.LTS
                 Return Me._region.Entity
             End Get
             Set
-                Dim previous As Region = Me.Region
+                Dim previous As Region
+                If (Not (Me._region) Is Nothing) Then
+                    previous = Me._region.Entity
+                Else
+                    Me._region = New EntityRef(Of Region)(Me, "Region", AddressOf Me.FilterRegion)
+                    previous = Nothing
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Region", value)
                     If (Not (previous) Is Nothing) Then

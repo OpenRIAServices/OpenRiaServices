@@ -681,7 +681,16 @@ namespace DataTests.Scenarios.LTS.Northwind
             }
             set
             {
-                Customer_Bug479436 previous = this.Customer;
+                Customer_Bug479436 previous;
+                if ((this._customer != null))
+                {
+                    previous = this._customer.Entity;
+                }
+                else
+                {
+                    this._customer = new EntityRef<Customer_Bug479436>(this, "Customer", this.FilterCustomer);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Customer", value);

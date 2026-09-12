@@ -321,7 +321,16 @@ namespace DataTests.AdventureWorks.LTS
             }
             set
             {
-                Employee previous = this.Manager;
+                Employee previous;
+                if ((this._manager != null))
+                {
+                    previous = this._manager.Entity;
+                }
+                else
+                {
+                    this._manager = new EntityRef<Employee>(this, "Manager", this.FilterManager);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Manager", value);
@@ -1564,7 +1573,16 @@ namespace DataTests.AdventureWorks.LTS
             }
             set
             {
-                Employee previous = this.Employee;
+                Employee previous;
+                if ((this._employee != null))
+                {
+                    previous = this._employee.Entity;
+                }
+                else
+                {
+                    this._employee = new EntityRef<Employee>(this, "Employee", this.FilterEmployee);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Employee", value);
@@ -2168,7 +2186,16 @@ namespace DataTests.AdventureWorks.LTS
             }
             set
             {
-                Product previous = this.Product;
+                Product previous;
+                if ((this._product != null))
+                {
+                    previous = this._product.Entity;
+                }
+                else
+                {
+                    this._product = new EntityRef<Product>(this, "Product", this.FilterProduct);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Product", value);
@@ -2237,7 +2264,16 @@ namespace DataTests.AdventureWorks.LTS
             }
             set
             {
-                PurchaseOrder previous = this.PurchaseOrder;
+                PurchaseOrder previous;
+                if ((this._purchaseOrder != null))
+                {
+                    previous = this._purchaseOrder.Entity;
+                }
+                else
+                {
+                    this._purchaseOrder = new EntityRef<PurchaseOrder>(this, "PurchaseOrder", this.FilterPurchaseOrder);
+                    previous = null;
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("PurchaseOrder", value);
