@@ -1,5 +1,5 @@
 ﻿<#@ template language="C#" inherits="OpenRiaServices.Tools.TextTemplate.WebContextGenerator" linePragmas="false" #>
-<#@ output extension=".tt.cs" #>
+<#@ output extension=".cs" #>
 
 <#@ import namespace="OpenRiaServices" #>
 <#@ import namespace="OpenRiaServices.Server" #>

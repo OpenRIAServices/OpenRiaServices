@@ -52,7 +52,7 @@ MTP runs the test modules (project + target framework) in parallel; use `--max-p
 Database-backed tests require SQL LocalDB and restored `Northwind`/`AdventureWorks` databases:
 ## Generated files
 
-- NEVER edit `*.tt.cs` under `src\OpenRiaServices.Tools.TextTemplate\Framework`. Edit the corresponding `.tt`/`.ttinclude`, regenerate affected templates with Visual Studio **Transform All T4 Templates** or `devenv /Command TextTransformation.TransformAllTemplates`, review output, and build `src\OpenRiaServices.Tools.TextTemplate\Framework\OpenRiaServices.Tools.TextTemplate.csproj` for all targets.
+- NEVER edit `*.cs` under `src\OpenRiaServices.Tools.TextTemplate\Framework` when there is a corresponding `.tt` file. Edit the corresponding `.tt`/`.ttinclude`, regenerate affected templates with Visual Studio **Transform All T4 Templates** or `devenv /Command TextTransformation.TransformAllTemplates`, review output, and build `src\OpenRiaServices.Tools.TextTemplate\Framework\OpenRiaServices.Tools.TextTemplate.csproj` for all targets.
 - NEVER edit baseline `*.g.cs` or `*.g.vb` files directly. Run `dotnet test src\OpenRiaServices.Tools\Test\OpenRiaServices.Tools.Test.csproj --framework net472`, execute the exact `updateAllBaselines.bat` reported by failures, build, and rerun the test until it passes.
 
 

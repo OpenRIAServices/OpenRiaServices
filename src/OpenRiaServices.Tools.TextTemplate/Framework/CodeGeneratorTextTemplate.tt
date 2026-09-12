@@ -1,2 +1,2 @@
 ﻿<#@ template language="C#" linePragmas="false" #>
-<#@ output extension=".tt.cs" #>
+<#@ output extension=".cs" #>

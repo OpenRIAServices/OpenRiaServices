@@ -1,5 +1,5 @@
 ﻿<#@ template language="C#" inherits="OpenRiaServices.Tools.TextTemplate.DomainContextGenerator" linePragmas="false" #>
-<#@ output extension=".tt.cs" #>
+<#@ output extension=".cs" #>
 
 <#@ import namespace="System" #>
 <#@ import namespace="System.ComponentModel" #>

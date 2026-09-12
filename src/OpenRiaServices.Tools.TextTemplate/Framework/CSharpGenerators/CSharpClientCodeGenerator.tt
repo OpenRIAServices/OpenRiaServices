@@ -1,4 +1,4 @@
 ﻿<#@ template language="C#" inherits="OpenRiaServices.Tools.TextTemplate.ClientCodeGenerator" linePragmas="false"#>
-<#@ output extension=".tt.cs" #>
+<#@ output extension=".cs" #>
 
 <# this.GenerateProxyClass(); #>
