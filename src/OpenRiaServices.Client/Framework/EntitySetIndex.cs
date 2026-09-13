@@ -114,8 +114,7 @@ namespace OpenRiaServices.Client
                 return false;
             }
 
-            AssociationLookupMetadata resolvedMetadata = metadata;
-            return resolvedMetadata.TryLookup(GetOrCreateUniqueAssociationIndex(resolvedMetadata.IndexDefinition), sourceEntity, out entities);
+            return metadata.TryLookup(GetOrCreateUniqueAssociationIndex(metadata.IndexDefinition), sourceEntity, out entities);
         }
 
         public bool TryGetMultiValueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
@@ -126,8 +125,7 @@ namespace OpenRiaServices.Client
                 return false;
             }
 
-            AssociationLookupMetadata resolvedMetadata = metadata;
-            return resolvedMetadata.TryLookup(GetOrCreateMultiValueAssociationIndex(resolvedMetadata.IndexDefinition), sourceEntity, out entities);
+            return metadata.TryLookup(GetOrCreateMultiValueAssociationIndex(metadata.IndexDefinition), sourceEntity, out entities);
         }
 
         private AssociationEntityIndexBase GetOrCreateUniqueAssociationIndex(AssociationIndexDefinition definition)
@@ -944,7 +942,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Preserves member order when identifying composite index definitions, because key order determines association compatibility.
         /// </summary>
-        private sealed class CompositeAssociationMemberNames : IEquatable<CompositeAssociationMemberNames>
+        private readonly struct CompositeAssociationMemberNames : IEquatable<CompositeAssociationMemberNames>
         {
             private readonly string[] _memberNames;
             private readonly int _hashCode;
@@ -978,9 +976,9 @@ namespace OpenRiaServices.Client
                 return false;
             }
 
-            public bool Equals(CompositeAssociationMemberNames? other)
+            public bool Equals(CompositeAssociationMemberNames other)
             {
-                if (other == null || other._memberNames.Length != _memberNames.Length)
+                if (other._memberNames.Length != _memberNames.Length)
                 {
                     return false;
                 }
@@ -996,7 +994,7 @@ namespace OpenRiaServices.Client
                 return true;
             }
 
-            public override bool Equals(object? obj) => Equals(obj as CompositeAssociationMemberNames);
+            public override bool Equals(object? obj) => obj is CompositeAssociationMemberNames other && Equals(other);
 
             public override int GetHashCode() => _hashCode;
         }
