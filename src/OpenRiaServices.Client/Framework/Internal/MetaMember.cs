@@ -22,6 +22,7 @@ namespace OpenRiaServices.Client.Internal
         private Action<object, object> _setter;
         private Delegate _typedGetter;
         private ISingleValueAccessor _singleValueAccessor;
+        private ISingleValueAccessor<object> _objectSingleValueAccessor;
         private bool _singleValueAccessorInitialized;
 
         internal MetaMember(MetaType metaType, PropertyInfo property, bool isRoundtripEntity)
@@ -199,8 +200,6 @@ namespace OpenRiaServices.Client.Internal
         /// <returns><c>true</c> when an accessor can be created for this member; otherwise, <c>false</c>.</returns>
         internal bool TryGetSingleValueAccessor(out ISingleValueAccessor accessor)
         {
-            // TODO: Can rewrite as ISingleValueAccessor GetSingleValueAccessor() instead
-            // We should create accessor only for primitive types (non-associations)
             if (!_singleValueAccessorInitialized)
             {
                 _singleValueAccessor = CreateSingleValueAccessorFactory(this);
@@ -212,7 +211,7 @@ namespace OpenRiaServices.Client.Internal
         }
 
         internal ISingleValueAccessor<object> GetObjectSingleValueAccessor()
-            => new MemberSingleValueAccessor(this);
+            => _objectSingleValueAccessor ??= new MemberSingleValueAccessor(this);
 
         /// <summary>
         /// Gets a value indicating whether this member is mergable 
@@ -316,19 +315,24 @@ namespace OpenRiaServices.Client.Internal
             {
                 return new ReferenceSingleValueAccessor<string>((Func<object, string>)member.GetTypedGetter());
             }
-
-            // Reflection based fallback for other types
-            if (propertyType.IsValueType)
+            if (propertyType == typeof(Guid))
             {
-                if (TypeUtility.IsNullableType(propertyType))
-                    return (ISingleValueAccessor)Activator.CreateInstance(typeof(NullableSingleValueAccessor<>).MakeGenericType(TypeUtility.GetNonNullableType(propertyType))
-                        , member.GetTypedGetter());
-                else
-                    return (ISingleValueAccessor)Activator.CreateInstance(typeof(NonNullableSingleValueAccessor<>).MakeGenericType(propertyType)
-                        , member.GetTypedGetter());
+                return new NonNullableSingleValueAccessor<Guid>((Func<object, Guid>)member.GetTypedGetter());
             }
-            else
-                return Activator.CreateInstance(typeof(ReferenceSingleValueAccessor<>).MakeGenericType(propertyType), member.GetTypedGetter()) as ISingleValueAccessor;
+            if (propertyType == typeof(Guid?))
+            {
+                return new NullableSingleValueAccessor<Guid>((Func<object, Guid?>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(DateTime))
+            {
+                return new NonNullableSingleValueAccessor<DateTime>((Func<object, DateTime>)member.GetTypedGetter());
+            }
+            if (propertyType == typeof(DateTime?))
+            {
+                return new NullableSingleValueAccessor<DateTime>((Func<object, DateTime?>)member.GetTypedGetter());
+            }
+
+            return null;
         }
 
         private static bool CheckIfMergeableMember(MetaMember metaMember)

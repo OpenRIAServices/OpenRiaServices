@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Globalization;
 using OpenRiaServices.Client.Internal;
 
@@ -771,13 +770,6 @@ namespace OpenRiaServices.Client
                     if (accessor is MetaMember.ISingleValueAccessor<DateTime> dateTimeAccessor)
                     {
                         return new TypedSingleValueIndexFactory<DateTime>(dateTimeAccessor);
-                    }
-
-                    if (accessor.GetType().GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(MetaMember.ISingleValueAccessor<>))
-                            is Type genericAccessorInterface)
-                    {
-                        Type indexType = typeof(TypedSingleValueIndexFactory<>).MakeGenericType(genericAccessorInterface.GetGenericArguments()[0]);
-                        return (SingleValueIndexFactory)Activator.CreateInstance(indexType, accessor)!;
                     }
                 }
 

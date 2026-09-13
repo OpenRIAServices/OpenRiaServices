@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.Serialization;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
@@ -355,6 +356,44 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        public void EntitySet_AssociationIndex_StringKeyUniqueLookup()
+        {
+            DynamicEntityContainer container = new DynamicEntityContainer();
+            EntitySet<StringKeyParent> parentSet = container.AddEntitySet<StringKeyParent>(EntitySetOperations.All);
+            container.AddEntitySet<StringKeyChild>(EntitySetOperations.All);
+
+            StringKeyParent parent = new StringKeyParent { Name = "parent" };
+            StringKeyChild child = new StringKeyChild { Id = 1, ParentName = "parent" };
+
+            parentSet.Attach(parent);
+
+            EntityAssociationAttribute association = new EntityAssociationAttribute("StringKeyParent_Children", "ParentName", "Name");
+
+            Assert.IsTrue(parentSet.TryGetUniqueAssociationEntities(association, child, out IEnumerable<Entity>? entities));
+            Assert.IsNotNull(entities);
+            Assert.IsTrue(new[] { parent }.SequenceEqual(entities.Cast<StringKeyParent>()));
+        }
+
+        [TestMethod]
+        public void EntitySet_AssociationIndex_UnsupportedSingleKeyFallsBackToObjectLookup()
+        {
+            DynamicEntityContainer container = new DynamicEntityContainer();
+            EntitySet<DecimalKeyParent> parentSet = container.AddEntitySet<DecimalKeyParent>(EntitySetOperations.All);
+            container.AddEntitySet<DecimalKeyChild>(EntitySetOperations.All);
+
+            DecimalKeyParent parent = new DecimalKeyParent { Amount = 12.5m };
+            DecimalKeyChild child = new DecimalKeyChild { Id = 1, ParentAmount = 12.5m };
+
+            parentSet.Attach(parent);
+
+            EntityAssociationAttribute association = new EntityAssociationAttribute("DecimalKeyParent_Children", "ParentAmount", "Amount");
+
+            Assert.IsTrue(parentSet.TryGetUniqueAssociationEntities(association, child, out IEnumerable<Entity>? entities));
+            Assert.IsNotNull(entities);
+            Assert.IsTrue(new[] { parent }.SequenceEqual(entities.Cast<DecimalKeyParent>()));
+        }
+
+        [TestMethod]
         public void TestCollectionQuery_DetachedEntity() {
             CatalogEntityContainer ec = new CatalogEntityContainer();
 
@@ -463,6 +502,40 @@ namespace OpenRiaServices.Client.Test
                 base.CreateEntitySet<TEntity>(operations);
                 return GetEntitySet<TEntity>();
             }
+        }
+
+        private sealed class StringKeyParent : Entity
+        {
+            [Key]
+            [DataMember]
+            public string Name { get; set; }
+        }
+
+        private sealed class StringKeyChild : Entity
+        {
+            [Key]
+            [DataMember]
+            public int Id { get; set; }
+
+            [DataMember]
+            public string ParentName { get; set; }
+        }
+
+        private sealed class DecimalKeyParent : Entity
+        {
+            [Key]
+            [DataMember]
+            public decimal Amount { get; set; }
+        }
+
+        private sealed class DecimalKeyChild : Entity
+        {
+            [Key]
+            [DataMember]
+            public int Id { get; set; }
+
+            [DataMember]
+            public decimal ParentAmount { get; set; }
         }
     }
 }
