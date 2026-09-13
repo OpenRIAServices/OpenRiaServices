@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Linq;
 using System.Globalization;
 using OpenRiaServices.Client.Internal;
 
@@ -8,6 +9,9 @@ using OpenRiaServices.Client.Internal;
 
 namespace OpenRiaServices.Client
 {
+    /// <summary>
+    /// Maintains identity and association indexes so entity relationship resolution does not require repeatedly scanning an <see cref="EntitySet"/>.
+    /// </summary>
     internal sealed class EntitySetIndexManager
     {
         private readonly EntitySet _entitySet;
@@ -158,7 +162,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-        private bool TryGetAssociationLookupMetadata(EntityAssociationAttribute association, MetaType sourceMetaType, out AssociationLookupMetadata? metadata)
+        private bool TryGetAssociationLookupMetadata(EntityAssociationAttribute association, MetaType sourceMetaType, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out AssociationLookupMetadata? metadata)
         {
             if (_associationLookupMetadata.TryGetValue(association, out metadata))
             {
@@ -246,6 +250,9 @@ namespace OpenRiaServices.Client
             return entity.EntitySet != null && entity.EntityState != EntityState.New;
         }
 
+        /// <summary>
+        /// Maintains bidirectional identity mappings so entities can be removed even when their key has subsequently changed.
+        /// </summary>
         private sealed class PrimaryKeyEntityIndex
         {
             private readonly Dictionary<object, Entity> _entities = new();
@@ -287,17 +294,39 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Defines the lifecycle operations shared by lazily-created association indexes.
+        /// </summary>
         private abstract class AssociationEntityIndexBase
         {
+            /// <summary>
+            /// Removes all cached relationship mappings when the owning entity set is reset.
+            /// </summary>
             public abstract void Clear();
 
+            /// <summary>
+            /// Adds an entity to this index when its current state can participate in association resolution.
+            /// </summary>
+            /// <param name="entity">The entity to index.</param>
             public abstract void Add(Entity entity);
 
+            /// <summary>
+            /// Removes an entity's cached relationship mapping when it no longer belongs in this index.
+            /// </summary>
+            /// <param name="entity">The entity to remove.</param>
             public abstract void Remove(Entity entity);
 
+            /// <summary>
+            /// Reconciles an entity's mapping after a property or state change, avoiding a full index rebuild.
+            /// </summary>
+            /// <param name="entity">The changed entity.</param>
+            /// <param name="propertyName">The name of the changed property.</param>
             public abstract void Update(Entity entity, string propertyName);
         }
 
+        /// <summary>
+        /// Indexes entities by one association member while retaining each entity's previous key to support incremental updates.
+        /// </summary>
         private abstract class SingleValueIndex<TKey> : AssociationEntityIndexBase where TKey : notnull
         {
             private readonly string _memberName;
@@ -455,6 +484,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Represents the index used by <see cref="EntityRef{TEntity}"/> lookups, where an association resolves from a source entity to its single related entity.
+        /// </summary>
         private sealed class UniqueSingleValueIndex<TKey> : SingleValueIndex<TKey> where TKey : notnull
         {
             public UniqueSingleValueIndex(string memberName, MetaMember.ISingleValueAccessor<TKey> keyAccessor)
@@ -463,6 +495,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Represents the index used by <see cref="EntityCollection{TEntity}"/> lookups, where an association resolves from a source entity to all matching related entities.
+        /// </summary>
         private sealed class MultiValueSingleValueIndex<TKey> : SingleValueIndex<TKey> where TKey : notnull
         {
             public MultiValueSingleValueIndex(string memberName, MetaMember.ISingleValueAccessor<TKey> keyAccessor)
@@ -471,6 +506,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Provides a single-member index fallback for member types without a specialized typed accessor.
+        /// </summary>
         private sealed class ObjectSingleValueIndex : AssociationEntityIndexBase
         {
             private readonly string _memberName;
@@ -621,6 +659,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Indexes entities by an ordered set of association members when no single member uniquely identifies the relationship.
+        /// </summary>
         private sealed class CompositeAssociationEntityIndex : AssociationEntityIndexBase
         {
             private readonly CompositeAssociationMemberNames _memberNames;
@@ -742,15 +783,34 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Describes how to construct a reusable association index and its compatible source-side lookup metadata.
+        /// </summary>
         private abstract class AssociationIndexDefinition
         {
+            /// <summary>
+            /// Creates an index dedicated to a single-related-entity association, keeping it separate from collection association caches.
+            /// </summary>
+            /// <returns>An index for a unique association lookup.</returns>
             public abstract AssociationEntityIndexBase CreateUniqueIndex();
 
+            /// <summary>
+            /// Creates an index dedicated to a collection association, allowing its lifecycle to remain independent of unique association caches.
+            /// </summary>
+            /// <returns>An index for a multi-value association lookup.</returns>
             public abstract AssociationEntityIndexBase CreateMultiValueIndex();
 
+            /// <summary>
+            /// Creates the source-side key adapter when the association members can be matched to this index definition.
+            /// </summary>
+            /// <param name="sourceMembers">The source members that provide lookup key values.</param>
+            /// <returns>The compatible lookup metadata, or <see langword="null"/> when the member shapes do not match.</returns>
             public abstract AssociationLookupMetadata? CreateLookupMetadata(MetaMember[] sourceMembers);
         }
 
+        /// <summary>
+        /// Describes an association index keyed by one target member, allowing equivalent associations to share an index.
+        /// </summary>
         private sealed class SingleValueAssociationIndexDefinition : AssociationIndexDefinition
         {
             private readonly string _memberName;
@@ -793,6 +853,9 @@ namespace OpenRiaServices.Client
             public override int GetHashCode() => _hashCode;
         }
 
+        /// <summary>
+        /// Describes an association index keyed by an ordered group of target members.
+        /// </summary>
         private sealed class CompositeAssociationIndexDefinition : AssociationIndexDefinition
         {
             private readonly CompositeAssociationMemberNames _memberNames;
@@ -828,8 +891,16 @@ namespace OpenRiaServices.Client
             public override int GetHashCode() => _memberNames.GetHashCode();
         }
 
+        /// <summary>
+        /// Selects typed index implementations where possible to avoid object-based key handling during relationship lookup.
+        /// </summary>
         private abstract class SingleValueIndexFactory
         {
+            /// <summary>
+            /// Chooses a specialized factory for supported member types, falling back to object keys to support all other association members.
+            /// </summary>
+            /// <param name="member">The target association member to index.</param>
+            /// <returns>A factory compatible with <paramref name="member"/>.</returns>
             public static SingleValueIndexFactory Create(MetaMember member)
             {
                 if (member.TryGetSingleValueAccessor(out MetaMember.ISingleValueAccessor? accessor))
@@ -854,18 +925,44 @@ namespace OpenRiaServices.Client
                     {
                         return new TypedSingleValueIndexFactory<DateTime>(dateTimeAccessor);
                     }
+
+                    if (accessor.GetType().GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(MetaMember.ISingleValueAccessor<>))
+                            is Type genericAccessorInterface)
+                    {
+                        Type indexType = typeof(TypedSingleValueIndexFactory<>).MakeGenericType(genericAccessorInterface.GetGenericArguments()[0]);
+                        return (SingleValueIndexFactory)Activator.CreateInstance(indexType, accessor)!;
+                    }
                 }
 
                 return new ObjectSingleValueIndexFactory(member);
             }
 
+            /// <summary>
+            /// Creates the typed representation used for a single-related-entity association.
+            /// </summary>
+            /// <param name="memberName">The indexed target member name.</param>
+            /// <returns>An index for unique association lookup.</returns>
             public abstract AssociationEntityIndexBase CreateUniqueIndex(string memberName);
 
+            /// <summary>
+            /// Creates the typed representation used for a collection association.
+            /// </summary>
+            /// <param name="memberName">The indexed target member name.</param>
+            /// <returns>An index for multi-value association lookup.</returns>
             public abstract AssociationEntityIndexBase CreateMultiValueIndex(string memberName);
 
+            /// <summary>
+            /// Creates a lookup adapter that reads a source key in the most efficient compatible form.
+            /// </summary>
+            /// <param name="definition">The index definition the adapter will query.</param>
+            /// <param name="sourceMember">The source member that provides the lookup key.</param>
+            /// <returns>Metadata that can query the associated index.</returns>
             public abstract AssociationLookupMetadata CreateLookupMetadata(AssociationIndexDefinition definition, MetaMember sourceMember);
         }
 
+        /// <summary>
+        /// Creates type-preserving indexes and lookups for a supported association key type.
+        /// </summary>
         private sealed class TypedSingleValueIndexFactory<TKey> : SingleValueIndexFactory where TKey : notnull
         {
             private readonly MetaMember.ISingleValueAccessor<TKey> _targetAccessor;
@@ -897,6 +994,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Creates object-based indexes when an association key cannot use a specialized typed implementation.
+        /// </summary>
         private sealed class ObjectSingleValueIndexFactory : SingleValueIndexFactory
         {
             private readonly MetaMember _member;
@@ -922,6 +1022,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Bridges source association members to a compatible target index so lookup code remains independent of key shape.
+        /// </summary>
         private abstract class AssociationLookupMetadata
         {
             protected AssociationLookupMetadata(AssociationIndexDefinition indexDefinition)
@@ -929,11 +1032,24 @@ namespace OpenRiaServices.Client
                 IndexDefinition = indexDefinition;
             }
 
+            /// <summary>
+            /// Gets the index definition this metadata can query.
+            /// </summary>
             public AssociationIndexDefinition IndexDefinition { get; }
 
+            /// <summary>
+            /// Uses the source entity's association key to query a compatible index without exposing its key representation to callers.
+            /// </summary>
+            /// <param name="index">The association index to query.</param>
+            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
+            /// <param name="entities">The matching entities when the lookup is supported.</param>
+            /// <returns><see langword="true"/> when this metadata supports the supplied index; otherwise, <see langword="false"/>.</returns>
             public abstract bool TryLookup(AssociationEntityIndexBase index, Entity sourceEntity, out IEnumerable<Entity>? entities);
         }
 
+        /// <summary>
+        /// Performs a type-preserving source-key lookup against a single-member association index.
+        /// </summary>
         private sealed class TypedSingleValueAssociationLookupMetadata<TKey> : AssociationLookupMetadata where TKey : notnull
         {
             private readonly MetaMember.ISingleValueAccessor<TKey> _sourceAccessor;
@@ -954,6 +1070,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Performs a single-member lookup when source and target members cannot share a typed accessor.
+        /// </summary>
         private sealed class ObjectSingleValueAssociationLookupMetadata : AssociationLookupMetadata
         {
             private readonly MetaMember _sourceMember;
@@ -971,6 +1090,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Builds ordered source keys for lookup against a composite association index.
+        /// </summary>
         private sealed class CompositeAssociationLookupMetadata : AssociationLookupMetadata
         {
             private readonly MetaMember[] _sourceMembers;
@@ -994,6 +1116,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Distinguishes a null association key from a populated typed key without requiring nullable dictionary keys.
+        /// </summary>
         private readonly struct SingleValueIndexKey<TKey> : IEquatable<SingleValueIndexKey<TKey>> where TKey : notnull
         {
             private SingleValueIndexKey(TKey? value, bool hasValue)
@@ -1027,6 +1152,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Distinguishes a null association key from a populated object key for the fallback index.
+        /// </summary>
         private readonly struct ObjectSingleValueIndexKey : IEquatable<ObjectSingleValueIndexKey>
         {
             private ObjectSingleValueIndexKey(object? value, bool hasValue)
@@ -1058,6 +1186,9 @@ namespace OpenRiaServices.Client
             }
         }
 
+        /// <summary>
+        /// Preserves member order when identifying composite index definitions, because key order determines association compatibility.
+        /// </summary>
         private sealed class CompositeAssociationMemberNames : IEquatable<CompositeAssociationMemberNames>
         {
             private readonly string[] _memberNames;
@@ -1115,6 +1246,9 @@ namespace OpenRiaServices.Client
             public override int GetHashCode() => _hashCode;
         }
 
+        /// <summary>
+        /// Represents an ordered composite association key for dictionary indexing.
+        /// </summary>
         private readonly struct AssociationIndexKey : IEquatable<AssociationIndexKey>
         {
             private readonly object?[] _values;

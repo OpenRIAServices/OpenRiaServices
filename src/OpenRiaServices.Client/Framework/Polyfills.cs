@@ -268,6 +268,16 @@ namespace System.Diagnostics.CodeAnalysis
     [System.AttributeUsage(System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.Property | System.AttributeTargets.ReturnValue, Inherited = false)]
     internal sealed class NotNullAttribute : Attribute { }
 
+    [AttributeUsage(AttributeTargets.Parameter, Inherited = false)]
+    internal sealed class NotNullWhenAttribute : Attribute {
+        public bool ReturnValue { get; }
+
+        public NotNullWhenAttribute(bool returnValue)
+        {
+            ReturnValue = returnValue;
+        }
+    }
+
     /// <summary>
     /// Specifies that a method will never return under any circumstance.
     /// </summary>
