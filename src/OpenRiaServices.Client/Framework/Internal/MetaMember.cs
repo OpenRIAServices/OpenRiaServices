@@ -211,6 +211,9 @@ namespace OpenRiaServices.Client.Internal
             return accessor != null;
         }
 
+        internal ISingleValueAccessor<object> GetObjectSingleValueAccessor()
+            => new MemberSingleValueAccessor(this);
+
         /// <summary>
         /// Gets a value indicating whether this member is mergable 
         /// (should be updated when loading with behaviour <see cref="LoadBehavior.MergeIntoCurrent"/> or <see cref="LoadBehavior.RefreshCurrent"/>).
@@ -422,6 +425,27 @@ namespace OpenRiaServices.Client.Internal
             {
                 value = getter(instance);
                 return value != null;
+            }
+        }
+
+        /// <summary>
+        /// Reads an association key through reflection when no typed member accessor is available.
+        /// </summary>
+        private sealed class MemberSingleValueAccessor(MetaMember member) : ISingleValueAccessor<object>
+        {
+            public Type KeyType => typeof(object);
+
+            public bool TryGetValue(object instance, out object value)
+            {
+                object memberValue = member.GetValue(instance);
+                if (memberValue == null)
+                {
+                    value = default!;
+                    return false;
+                }
+
+                value = memberValue;
+                return true;
             }
         }
     }

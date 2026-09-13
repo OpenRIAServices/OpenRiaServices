@@ -507,159 +507,6 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Provides a single-member index fallback for member types without a specialized typed accessor.
-        /// </summary>
-        private sealed class ObjectSingleValueIndex : AssociationEntityIndexBase
-        {
-            private readonly string _memberName;
-            private readonly MetaMember _member;
-            private readonly Dictionary<object, List<Entity>> _entitiesByKey = new();
-            private readonly Dictionary<Entity, ObjectSingleValueIndexKey> _keysByEntity = new();
-            private List<Entity>? _entitiesWithNullKey;
-
-            public ObjectSingleValueIndex(string memberName, MetaMember member)
-            {
-                _memberName = memberName;
-                _member = member;
-            }
-
-            public override void Clear()
-            {
-                _entitiesByKey.Clear();
-                _keysByEntity.Clear();
-                _entitiesWithNullKey = null;
-            }
-
-            public override void Add(Entity entity)
-            {
-                if (!ShouldIndexEntity(entity))
-                {
-                    return;
-                }
-
-                AddOrUpdateEntity(entity);
-            }
-
-            public override void Remove(Entity entity)
-            {
-                if (_keysByEntity.TryGetValue(entity, out ObjectSingleValueIndexKey key))
-                {
-                    RemoveFromBucket(key, entity);
-                    _keysByEntity.Remove(entity);
-                }
-            }
-
-            public override void Update(Entity entity, string propertyName)
-            {
-                if (propertyName != nameof(Entity.EntityState)
-                    && !string.Equals(propertyName, _memberName, StringComparison.Ordinal))
-                {
-                    return;
-                }
-
-                if (!ShouldIndexEntity(entity))
-                {
-                    Remove(entity);
-                    return;
-                }
-
-                AddOrUpdateEntity(entity);
-            }
-
-            public IEnumerable<Entity> Lookup(object? key)
-            {
-                if (key == null)
-                {
-                    if (_entitiesWithNullKey != null)
-                    {
-                        return _entitiesWithNullKey;
-                    }
-
-                    return Array.Empty<Entity>();
-                }
-
-                if (_entitiesByKey.TryGetValue(key, out List<Entity>? entities))
-                {
-                    return entities;
-                }
-
-                return Array.Empty<Entity>();
-            }
-
-            private void AddOrUpdateEntity(Entity entity)
-            {
-                ObjectSingleValueIndexKey newKey = ObjectSingleValueIndexKey.Create(_member.GetValue(entity));
-                if (_keysByEntity.TryGetValue(entity, out ObjectSingleValueIndexKey existingKey))
-                {
-                    if (existingKey.Equals(newKey))
-                    {
-                        return;
-                    }
-
-                    RemoveFromBucket(existingKey, entity);
-                }
-
-                GetOrCreateBucket(newKey).Add(entity);
-                _keysByEntity[entity] = newKey;
-            }
-
-            private List<Entity> GetOrCreateBucket(ObjectSingleValueIndexKey key)
-            {
-                if (!key.HasValue)
-                {
-                    return _entitiesWithNullKey ??= new List<Entity>();
-                }
-
-                if (!_entitiesByKey.TryGetValue(key.Value!, out List<Entity>? entities))
-                {
-                    entities = new List<Entity>();
-                    _entitiesByKey.Add(key.Value!, entities);
-                }
-
-                return entities;
-            }
-
-            private void RemoveFromBucket(ObjectSingleValueIndexKey key, Entity entity)
-            {
-                List<Entity>? entities;
-                if (!key.HasValue)
-                {
-                    entities = _entitiesWithNullKey;
-                }
-                else if (!_entitiesByKey.TryGetValue(key.Value!, out entities))
-                {
-                    return;
-                }
-
-                if (entities == null)
-                {
-                    return;
-                }
-
-                for (int i = 0; i < entities.Count; i++)
-                {
-                    if (ReferenceEquals(entities[i], entity))
-                    {
-                        entities.RemoveAt(i);
-                        if (entities.Count == 0)
-                        {
-                            if (!key.HasValue)
-                            {
-                                _entitiesWithNullKey = null;
-                            }
-                            else
-                            {
-                                _entitiesByKey.Remove(key.Value!);
-                            }
-                        }
-
-                        return;
-                    }
-                }
-            }
-        }
-
-        /// <summary>
         /// Indexes entities by an ordered set of association members when no single member uniquely identifies the relationship.
         /// </summary>
         private sealed class CompositeAssociationEntityIndex : AssociationEntityIndexBase
@@ -934,7 +781,7 @@ namespace OpenRiaServices.Client
                     }
                 }
 
-                return new ObjectSingleValueIndexFactory(member);
+                return new TypedSingleValueIndexFactory<object>(member.GetObjectSingleValueAccessor());
             }
 
             /// <summary>
@@ -990,35 +837,7 @@ namespace OpenRiaServices.Client
                     return new TypedSingleValueAssociationLookupMetadata<TKey>(definition, typedAccessor);
                 }
 
-                return new ObjectSingleValueAssociationLookupMetadata(definition, sourceMember);
-            }
-        }
-
-        /// <summary>
-        /// Creates object-based indexes when an association key cannot use a specialized typed implementation.
-        /// </summary>
-        private sealed class ObjectSingleValueIndexFactory : SingleValueIndexFactory
-        {
-            private readonly MetaMember _member;
-
-            public ObjectSingleValueIndexFactory(MetaMember member)
-            {
-                _member = member;
-            }
-
-            public override AssociationEntityIndexBase CreateUniqueIndex(string memberName)
-            {
-                return new ObjectSingleValueIndex(memberName, _member);
-            }
-
-            public override AssociationEntityIndexBase CreateMultiValueIndex(string memberName)
-            {
-                return new ObjectSingleValueIndex(memberName, _member);
-            }
-
-            public override AssociationLookupMetadata CreateLookupMetadata(AssociationIndexDefinition definition, MetaMember sourceMember)
-            {
-                return new ObjectSingleValueAssociationLookupMetadata(definition, sourceMember);
+                return new TypedSingleValueAssociationLookupMetadata<object>(definition, sourceMember.GetObjectSingleValueAccessor());
             }
         }
 
@@ -1066,26 +885,6 @@ namespace OpenRiaServices.Client
                 entities = _sourceAccessor.TryGetValue(sourceEntity, out TKey key)
                     ? typedIndex.Lookup(key)
                     : typedIndex.LookupNull();
-                return true;
-            }
-        }
-
-        /// <summary>
-        /// Performs a single-member lookup when source and target members cannot share a typed accessor.
-        /// </summary>
-        private sealed class ObjectSingleValueAssociationLookupMetadata : AssociationLookupMetadata
-        {
-            private readonly MetaMember _sourceMember;
-
-            public ObjectSingleValueAssociationLookupMetadata(AssociationIndexDefinition indexDefinition, MetaMember sourceMember)
-                : base(indexDefinition)
-            {
-                _sourceMember = sourceMember;
-            }
-
-            public override bool TryLookup(AssociationEntityIndexBase index, Entity sourceEntity, out IEnumerable<Entity>? entities)
-            {
-                entities = ((ObjectSingleValueIndex)index).Lookup(_sourceMember.GetValue(sourceEntity));
                 return true;
             }
         }
@@ -1149,40 +948,6 @@ namespace OpenRiaServices.Client
             public override int GetHashCode()
             {
                 return HasValue ? EqualityComparer<TKey>.Default.GetHashCode(Value!) : 0;
-            }
-        }
-
-        /// <summary>
-        /// Distinguishes a null association key from a populated object key for the fallback index.
-        /// </summary>
-        private readonly struct ObjectSingleValueIndexKey : IEquatable<ObjectSingleValueIndexKey>
-        {
-            private ObjectSingleValueIndexKey(object? value, bool hasValue)
-            {
-                Value = value;
-                HasValue = hasValue;
-            }
-
-            public static ObjectSingleValueIndexKey Create(object? value)
-            {
-                return new ObjectSingleValueIndexKey(value, value != null);
-            }
-
-            public object? Value { get; }
-
-            public bool HasValue { get; }
-
-            public bool Equals(ObjectSingleValueIndexKey other)
-            {
-                return HasValue == other.HasValue
-                    && (!HasValue || Equals(Value, other.Value));
-            }
-
-            public override bool Equals(object? obj) => obj is ObjectSingleValueIndexKey other && Equals(other);
-
-            public override int GetHashCode()
-            {
-                return HasValue ? Value!.GetHashCode() : 0;
             }
         }
 
