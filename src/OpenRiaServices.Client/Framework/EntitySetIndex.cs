@@ -156,10 +156,8 @@ namespace OpenRiaServices.Client
 
         private void LoadAssociationIndex(AssociationEntityIndexBase index)
         {
-            for (int i = 0; i < _entitySet.List.Count; i++)
-            {
-                index.Add((Entity)_entitySet.List[i]!);
-            }
+            foreach (Entity entity in _entitySet.List)
+                index.Add(entity);
         }
 
         private bool TryGetAssociationLookupMetadata(EntityAssociationAttribute association, MetaType sourceMetaType, [System.Diagnostics.CodeAnalysis.NotNullWhen(true)] out AssociationLookupMetadata? metadata)
@@ -461,24 +459,20 @@ namespace OpenRiaServices.Client
                     return;
                 }
 
-                for (int i = 0; i < entities.Count; i++)
+                int index = entities.IndexOf(entity);
+                if (index >= 0)
                 {
-                    if (ReferenceEquals(entities[i], entity))
+                    entities.RemoveAt(index);
+                    if (entities.Count == 0)
                     {
-                        entities.RemoveAt(i);
-                        if (entities.Count == 0)
+                        if (!key.HasValue)
                         {
-                            if (!key.HasValue)
-                            {
-                                _entitiesWithNullKey = null;
-                            }
-                            else
-                            {
-                                _entitiesByKey.Remove(key.Value!);
-                            }
+                            _entitiesWithNullKey = null;
                         }
-
-                        return;
+                        else
+                        {
+                            _entitiesByKey.Remove(key.Value!);
+                        }
                     }
                 }
             }
@@ -614,17 +608,13 @@ namespace OpenRiaServices.Client
                     return;
                 }
 
-                for (int i = 0; i < entities.Count; i++)
+                int index = entities.IndexOf(entity);
+                if (index >= 0)
                 {
-                    if (ReferenceEquals(entities[i], entity))
+                    entities.RemoveAt(index);
+                    if (entities.Count == 0)
                     {
-                        entities.RemoveAt(i);
-                        if (entities.Count == 0)
-                        {
-                            _entitiesByKey.Remove(key);
-                        }
-
-                        return;
+                        _entitiesByKey.Remove(key);
                     }
                 }
             }

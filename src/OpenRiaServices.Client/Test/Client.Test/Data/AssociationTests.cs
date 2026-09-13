@@ -325,7 +325,7 @@ namespace OpenRiaServices.Client.Test
             EntitySet detailSet = container.GetEntitySet<PurchaseOrderDetail>();
             EntityAssociationAttribute association = ((IEntityCollection)order.PurchaseOrderDetails).Association;
 
-            Assert.IsTrue(detailSet.TryGetMultiValueAssociationEntities(association, order, out IEnumerable<Entity>? entities));
+            Assert.IsTrue(detailSet.TryGetMultiValueAssociationEntities(association, order, out IEnumerable<Entity> entities));
             Assert.IsNotNull(entities);
             Assert.IsTrue(new[] { detail1, detail2, detail3 }.SequenceEqual(entities.Cast<PurchaseOrderDetail>()));
         }
@@ -349,7 +349,7 @@ namespace OpenRiaServices.Client.Test
             EntitySet sourceSet = container.GetEntitySet<NullableFKChild>();
             EntityAssociationAttribute association = ((IEntityRef)parent.GetEntityRef("Child")).Association;
 
-            Assert.IsTrue(sourceSet.TryGetUniqueAssociationEntities(association, parent, out IEnumerable<Entity>? entities));
+            Assert.IsTrue(sourceSet.TryGetUniqueAssociationEntities(association, parent, out IEnumerable<Entity> entities));
             Assert.IsNotNull(entities);
             Assert.IsTrue(new[] { child1, child2 }.SequenceEqual(entities.Cast<NullableFKChild>()));
             Assert.IsNull(parent.Child);
