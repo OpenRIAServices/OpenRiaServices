@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using OpenRiaServices.Client.Internal;
@@ -30,7 +31,7 @@ namespace OpenRiaServices.Client
         private IList _list;
         // set of entities, for fast lookup
         private readonly HashSet<Entity> _set = new();
-        private readonly Dictionary<object, Entity> _identityCache = new();
+        private readonly EntitySetIndexManager _indexes;
         private readonly HashSet<Entity> _interestingEntities = new();
         private NotifyCollectionChangedEventHandler? _collectionChangedEventHandler;
 
@@ -48,6 +49,7 @@ namespace OpenRiaServices.Client
             }
 
             this._entityType = entityType;
+            this._indexes = new EntitySetIndexManager(this);
             // These are set in initialize, and are always called directly after ctor
             _entityContainer = null!;
             _list = null!;
@@ -117,7 +119,7 @@ namespace OpenRiaServices.Client
                 entity.Reset();
             }
 
-            this._identityCache.Clear();
+            this._indexes.Clear();
             this._interestingEntities.Clear();
             this._list = this.CreateList();
             this._set.Clear();
@@ -280,6 +282,8 @@ namespace OpenRiaServices.Client
         /// <param name="propertyName">The name of the property that was changed.</param>
         internal void UpdateRelatedAssociations(Entity entity, string propertyName)
         {
+            this._indexes.UpdateAssociationIndexes(entity, propertyName);
+
             // Here we notify any association update callbacks so they can update collection membership
             // for the modified entity. This needs to happen in the following cases:
             // 1) If the entity is transitioning from a New to Unmodified state.
@@ -393,7 +397,7 @@ namespace OpenRiaServices.Client
                 //   state transition scenarios)
                 object? identity = entity.GetIdentity();
                 if (identity != null
-                    && this._identityCache.TryGetValue(identity, out Entity? cachedEntity)
+                    && this._indexes.TryGetPrimaryEntity(identity, out Entity? cachedEntity)
                     && cachedEntity.EntityState != EntityState.Deleted
                     && !object.ReferenceEquals(entity, cachedEntity))
                 {
@@ -414,6 +418,7 @@ namespace OpenRiaServices.Client
             {
                 int idx = this._list.Add(entity);
                 entity.EntitySet = this;
+                this._indexes.AddAssociationEntity(entity);
                 this.OnCollectionChanged(NotifyCollectionChangedAction.Add, entity, idx);
             }
         }
@@ -488,6 +493,7 @@ namespace OpenRiaServices.Client
 
             this._list.RemoveAt(idx);
             this._set.Remove(entity);
+            this._indexes.RemoveAssociationEntity(entity);
             this.OnCollectionChanged(NotifyCollectionChangedAction.Remove, entity, idx);
             return true;
         }
@@ -625,7 +631,7 @@ namespace OpenRiaServices.Client
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
             }
-            if (this._identityCache.ContainsKey(identity))
+            if (this._indexes.ContainsPrimaryIdentity(identity))
             {
                 throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
             }
@@ -736,11 +742,11 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
             }
 
-            this._identityCache.TryGetValue(identity, out Entity? cachedEntity);
+            this._indexes.TryGetPrimaryEntity(identity, out Entity? cachedEntity);
             if (cachedEntity == null)
             {
                 // add the entity to the cache
-                this._identityCache.Add(identity, entity);
+                this._indexes.AddPrimary(entity);
                 cachedEntity = entity;
 
                 int idx = 0;
@@ -752,6 +758,7 @@ namespace OpenRiaServices.Client
 
                 entity.MarkUnmodified();
                 entity.EntitySet = this;
+                this._indexes.AddAssociationEntity(entity);
 
                 if (this.CanEdit)
                 {
@@ -759,7 +766,6 @@ namespace OpenRiaServices.Client
                     // deserialized (i.e. don't want to track serializer property sets)
                     entity.StartTracking();
                 }
-
                 entity.OnLoaded(true);
 
                 if (isAdded)
@@ -803,17 +809,8 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The entity to add</param>
         internal void AddToCache(Entity entity)
         {
-            object? identity = entity.GetIdentity();
-            if (identity == null)
-            {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
-            }
-
-            if (!this._identityCache.TryAdd(identity, entity))
-            {
-                // Throw if we already have an entity cached with the same identity
-                throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
-            }
+            this._indexes.AddPrimary(entity);
+            this._indexes.AddAssociationEntity(entity);
         }
 
         /// <summary>
@@ -822,26 +819,8 @@ namespace OpenRiaServices.Client
         /// <param name="entity">The entity to remove.</param>
         internal void RemoveFromCache(Entity entity)
         {
-            object? identity = entity.GetIdentity();
-
-            Entity? cachedEntity;
-            if (identity == null || !this._identityCache.TryGetValue(identity, out cachedEntity) || cachedEntity != entity)
-            {
-                // Entity's identity has changed since it was added to the cache. Do an instance based lookup to find it.
-                foreach (KeyValuePair<object, Entity> entry in this._identityCache)
-                {
-                    if (Object.ReferenceEquals(entry.Value, entity))
-                    {
-                        this._identityCache.Remove(entry.Key);
-                        break;
-                    }
-                }
-            }
-            else
-            {
-                // Entity exists in the cache and its identity maps to its instance.
-                this._identityCache.Remove(identity);
-            }
+            this._indexes.RemovePrimary(entity);
+            this._indexes.RemoveAssociationEntity(entity);
         }
 
         /// <summary>
@@ -868,8 +847,21 @@ namespace OpenRiaServices.Client
                 identity = EntityKey.Create(keyValues);
             }
 
-            this._identityCache.TryGetValue(identity, out entity);
+            this._indexes.TryGetPrimaryEntity(identity, out entity);
             return entity;
+        }
+
+        /// <summary>
+        /// Attempts to retrieve entities matching the specified association using the set's association indexes.
+        /// </summary>
+        /// <param name="association">The association that defines the source and target key members.</param>
+        /// <param name="sourceEntity">The entity whose association key values are used for the lookup.</param>
+        /// <param name="entities">The matching entities when the association can be queried; otherwise, <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if the association can be queried; otherwise, <see langword="false"/>.</returns>
+        /// <remarks><see langword="false"/> means the association is invalid (or there is no index to query), not that there are no matching entities</remarks>
+        internal bool TryGetAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)
+        {
+            return this._indexes.TryGetAssociationEntities(association, sourceEntity, out entities);
         }
 
         /// <summary>
