@@ -324,7 +324,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Indexes entities by one association member while retaining each entity's previous key to support incremental updates.
         /// </summary>
-        private abstract class SingleValueIndex<TKey> : AssociationEntityIndexBase where TKey : notnull
+        private sealed class SingleValueIndex<TKey> : AssociationEntityIndexBase where TKey : notnull
         {
             private readonly string _memberName;
             private readonly MetaMember.IValueAccessor<TKey> _keyAccessor;
@@ -332,7 +332,7 @@ namespace OpenRiaServices.Client
             private readonly Dictionary<Entity, SingleValueIndexKey<TKey>> _keysByEntity = new();
             private List<Entity>? _entitiesWithNullKey;
 
-            protected SingleValueIndex(string memberName, MetaMember.IValueAccessor<TKey> keyAccessor)
+            public SingleValueIndex(string memberName, MetaMember.IValueAccessor<TKey> keyAccessor)
             {
                 _memberName = memberName;
                 _keyAccessor = keyAccessor;
@@ -474,28 +474,6 @@ namespace OpenRiaServices.Client
                         }
                     }
                 }
-            }
-        }
-
-        /// <summary>
-        /// Represents the index used by <see cref="EntityRef{TEntity}"/> lookups, where an association resolves from a source entity to its single related entity.
-        /// </summary>
-        private sealed class UniqueSingleValueIndex<TKey> : SingleValueIndex<TKey> where TKey : notnull
-        {
-            public UniqueSingleValueIndex(string memberName, MetaMember.IValueAccessor<TKey> keyAccessor)
-                : base(memberName, keyAccessor)
-            {
-            }
-        }
-
-        /// <summary>
-        /// Represents the index used by <see cref="EntityCollection{TEntity}"/> lookups, where an association resolves from a source entity to all matching related entities.
-        /// </summary>
-        private sealed class MultiValueSingleValueIndex<TKey> : SingleValueIndex<TKey> where TKey : notnull
-        {
-            public MultiValueSingleValueIndex(string memberName, MetaMember.IValueAccessor<TKey> keyAccessor)
-                : base(memberName, keyAccessor)
-            {
             }
         }
 
@@ -809,12 +787,12 @@ namespace OpenRiaServices.Client
 
             public override AssociationEntityIndexBase CreateUniqueIndex(string memberName)
             {
-                return new UniqueSingleValueIndex<TKey>(memberName, _targetAccessor);
+                return new SingleValueIndex<TKey>(memberName, _targetAccessor);
             }
 
             public override AssociationEntityIndexBase CreateMultiValueIndex(string memberName)
             {
-                return new MultiValueSingleValueIndex<TKey>(memberName, _targetAccessor);
+                return new SingleValueIndex<TKey>(memberName, _targetAccessor);
             }
 
             public override AssociationLookupMetadata CreateLookupMetadata(AssociationIndexDefinition definition, MetaMember sourceMember)
