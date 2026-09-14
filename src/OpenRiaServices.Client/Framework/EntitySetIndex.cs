@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using OpenRiaServices.Client.Internal;
 using static OpenRiaServices.Client.Internal.MetaMember;
 
@@ -18,11 +19,10 @@ namespace OpenRiaServices.Client
     {
         private readonly EntitySet _entitySet;
         private readonly PrimaryKeyEntityIndex _primaryKeyIndex = new();
-        private readonly Dictionary<EntityAssociationAttribute, AssociationLookupMetadata?> _associationLookupMetadata = new();
-        private readonly Dictionary<string, AssociationIndexDefinition> _singleMemberAssociationDefinitions = new(StringComparer.Ordinal);
+        private readonly Dictionary<EntityAssociationAttribute, AssociationLookupMetadata?> _associationLookupMetadata = new(ReferenceEqualityComparer<EntityAssociationAttribute>.Instance);
+        private readonly Dictionary<string, AssociationIndexDefinition> _singleMemberAssociationDefinitions = new();
         private readonly Dictionary<CompositeAssociationMemberNames, AssociationIndexDefinition> _compositeAssociationDefinitions = new();
-        private readonly Dictionary<AssociationIndexDefinition, AssociationEntityIndexBase> _uniqueAssociationIndexes = new();
-        private readonly Dictionary<AssociationIndexDefinition, AssociationEntityIndexBase> _multiValueAssociationIndexes = new();
+        private readonly List<AssociationEntityIndexBase> _associationIndexes = new();
 
         public EntitySetIndexManager(EntitySet entitySet)
         {
@@ -33,12 +33,7 @@ namespace OpenRiaServices.Client
         {
             _primaryKeyIndex.Clear();
 
-            foreach (AssociationEntityIndexBase index in _uniqueAssociationIndexes.Values)
-            {
-                index.Clear();
-            }
-
-            foreach (AssociationEntityIndexBase index in _multiValueAssociationIndexes.Values)
+            foreach (AssociationEntityIndexBase index in _associationIndexes)
             {
                 index.Clear();
             }
@@ -71,12 +66,7 @@ namespace OpenRiaServices.Client
                 return;
             }
 
-            foreach (AssociationEntityIndexBase index in _uniqueAssociationIndexes.Values)
-            {
-                index.Add(entity);
-            }
-
-            foreach (AssociationEntityIndexBase index in _multiValueAssociationIndexes.Values)
+            foreach (AssociationEntityIndexBase index in _associationIndexes)
             {
                 index.Add(entity);
             }
@@ -84,12 +74,7 @@ namespace OpenRiaServices.Client
 
         public void RemoveAssociationEntity(Entity entity)
         {
-            foreach (AssociationEntityIndexBase index in _uniqueAssociationIndexes.Values)
-            {
-                index.Remove(entity);
-            }
-
-            foreach (AssociationEntityIndexBase index in _multiValueAssociationIndexes.Values)
+            foreach (AssociationEntityIndexBase index in _associationIndexes)
             {
                 index.Remove(entity);
             }
@@ -97,12 +82,7 @@ namespace OpenRiaServices.Client
 
         public void UpdateAssociationIndexes(Entity entity, string propertyName)
         {
-            foreach (AssociationEntityIndexBase index in _uniqueAssociationIndexes.Values)
-            {
-                index.Update(entity, propertyName);
-            }
-
-            foreach (AssociationEntityIndexBase index in _multiValueAssociationIndexes.Values)
+            foreach (AssociationEntityIndexBase index in _associationIndexes)
             {
                 index.Update(entity, propertyName);
             }
@@ -116,7 +96,7 @@ namespace OpenRiaServices.Client
                 return false;
             }
 
-            return metadata.TryLookup(GetOrCreateUniqueAssociationIndex(metadata.IndexDefinition), sourceEntity, out entities);
+            return metadata.TryLookup(GetOrCreateAssociationIndex(metadata.IndexDefinition), sourceEntity, out entities);
         }
 
         public bool TryGetMultiValueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
@@ -127,31 +107,20 @@ namespace OpenRiaServices.Client
                 return false;
             }
 
-            return metadata.TryLookup(GetOrCreateMultiValueAssociationIndex(metadata.IndexDefinition), sourceEntity, out entities);
+            return metadata.TryLookup(GetOrCreateAssociationIndex(metadata.IndexDefinition), sourceEntity, out entities);
         }
 
-        private AssociationEntityIndexBase GetOrCreateUniqueAssociationIndex(AssociationIndexDefinition definition)
+        private AssociationEntityIndexBase GetOrCreateAssociationIndex(AssociationIndexDefinition definition)
         {
-            if (!_uniqueAssociationIndexes.TryGetValue(definition, out AssociationEntityIndexBase? index))
+            if (definition.Index == null)
             {
-                index = definition.CreateUniqueIndex();
+                AssociationEntityIndexBase index = definition.CreateIndex();
                 LoadAssociationIndex(index);
-                _uniqueAssociationIndexes.Add(definition, index);
+                definition.Index = index;
+                _associationIndexes.Add(index);
             }
 
-            return index;
-        }
-
-        private AssociationEntityIndexBase GetOrCreateMultiValueAssociationIndex(AssociationIndexDefinition definition)
-        {
-            if (!_multiValueAssociationIndexes.TryGetValue(definition, out AssociationEntityIndexBase? index))
-            {
-                index = definition.CreateMultiValueIndex();
-                LoadAssociationIndex(index);
-                _multiValueAssociationIndexes.Add(definition, index);
-            }
-
-            return index;
+            return definition.Index;
         }
 
         private void LoadAssociationIndex(AssociationEntityIndexBase index)
@@ -253,8 +222,8 @@ namespace OpenRiaServices.Client
         /// </summary>
         private sealed class PrimaryKeyEntityIndex
         {
-            private readonly Dictionary<object, Entity> _entities = new();
-            private readonly Dictionary<Entity, object> _identitiesByEntity = new();
+            private readonly Dictionary<object, Entity> _entities = new(EqualityComparer<object>.Default);
+            private readonly Dictionary<Entity, object> _identitiesByEntity = new(ReferenceEqualityComparer<Entity>.Instance);
 
             public void Clear()
             {
@@ -329,8 +298,8 @@ namespace OpenRiaServices.Client
         {
             private readonly string _memberName;
             private readonly MetaMember.IValueAccessor<TKey> _keyAccessor;
-            private readonly Dictionary<TKey, List<Entity>> _entitiesByKey = new();
-            private readonly Dictionary<Entity, SingleValueIndexKey<TKey>> _keysByEntity = new();
+            private readonly Dictionary<TKey, List<Entity>> _entitiesByKey = new(EqualityComparer<TKey>.Default);
+            private readonly Dictionary<Entity, SingleValueIndexKey<TKey>> _keysByEntity = new(ReferenceEqualityComparer<Entity>.Instance);
             private List<Entity>? _entitiesWithNullKey;
 
             public SingleValueIndex(string memberName, MetaMember.IValueAccessor<TKey> keyAccessor)
@@ -485,8 +454,8 @@ namespace OpenRiaServices.Client
         {
             private readonly CompositeAssociationMemberNames _memberNames;
             private readonly MetaMember[] _members;
-            private readonly Dictionary<AssociationIndexKey, List<Entity>> _entitiesByKey = new();
-            private readonly Dictionary<Entity, AssociationIndexKey> _keysByEntity = new();
+            private readonly Dictionary<AssociationIndexKey, List<Entity>> _entitiesByKey = new(EqualityComparer<AssociationIndexKey>.Default);
+            private readonly Dictionary<Entity, AssociationIndexKey> _keysByEntity = new(ReferenceEqualityComparer<Entity>.Instance);
 
             public CompositeAssociationEntityIndex(CompositeAssociationMemberNames memberNames, MetaMember[] members)
             {
@@ -604,16 +573,15 @@ namespace OpenRiaServices.Client
         private abstract class AssociationIndexDefinition
         {
             /// <summary>
-            /// Creates an index dedicated to a single-related-entity association, keeping it separate from collection association caches.
+            /// Gets or sets the lazily-created index shared by associations with the same target members.
             /// </summary>
-            /// <returns>An index for a unique association lookup.</returns>
-            public abstract AssociationEntityIndexBase CreateUniqueIndex();
+            public AssociationEntityIndexBase? Index { get; set; }
 
             /// <summary>
-            /// Creates an index dedicated to a collection association, allowing its lifecycle to remain independent of unique association caches.
+            /// Creates the index shared by associations with the same target members.
             /// </summary>
-            /// <returns>An index for a multi-value association lookup.</returns>
-            public abstract AssociationEntityIndexBase CreateMultiValueIndex();
+            /// <returns>The association index.</returns>
+            public abstract AssociationEntityIndexBase CreateIndex();
 
             /// <summary>
             /// Creates the source-side key adapter when the association members can be matched to this index definition.
@@ -630,23 +598,16 @@ namespace OpenRiaServices.Client
         {
             private readonly string _memberName;
             private readonly SingleValueIndexFactory _factory;
-            private readonly int _hashCode;
 
             public SingleValueAssociationIndexDefinition(string memberName, MetaMember member)
             {
                 _memberName = memberName;
                 _factory = SingleValueIndexFactory.Create(member);
-                _hashCode = StringComparer.Ordinal.GetHashCode(memberName);
             }
 
-            public override AssociationEntityIndexBase CreateUniqueIndex()
+            public override AssociationEntityIndexBase CreateIndex()
             {
-                return _factory.CreateUniqueIndex(_memberName);
-            }
-
-            public override AssociationEntityIndexBase CreateMultiValueIndex()
-            {
-                return _factory.CreateMultiValueIndex(_memberName);
+                return _factory.CreateIndex(_memberName);
             }
 
             public override AssociationLookupMetadata? CreateLookupMetadata(MetaMember[] sourceMembers)
@@ -658,14 +619,6 @@ namespace OpenRiaServices.Client
 
                 return _factory.CreateLookupMetadata(this, sourceMembers[0]);
             }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is SingleValueAssociationIndexDefinition other
-                    && string.Equals(_memberName, other._memberName, StringComparison.Ordinal);
-            }
-
-            public override int GetHashCode() => _hashCode;
         }
 
         /// <summary>
@@ -682,12 +635,7 @@ namespace OpenRiaServices.Client
                 _members = members;
             }
 
-            public override AssociationEntityIndexBase CreateUniqueIndex()
-            {
-                return new CompositeAssociationEntityIndex(_memberNames, _members);
-            }
-
-            public override AssociationEntityIndexBase CreateMultiValueIndex()
+            public override AssociationEntityIndexBase CreateIndex()
             {
                 return new CompositeAssociationEntityIndex(_memberNames, _members);
             }
@@ -696,14 +644,6 @@ namespace OpenRiaServices.Client
             {
                 return new CompositeAssociationLookupMetadata(this, sourceMembers);
             }
-
-            public override bool Equals(object? obj)
-            {
-                return obj is CompositeAssociationIndexDefinition other
-                    && _memberNames.Equals(other._memberNames);
-            }
-
-            public override int GetHashCode() => _memberNames.GetHashCode();
         }
 
         /// <summary>
@@ -752,18 +692,11 @@ namespace OpenRiaServices.Client
             }
 
             /// <summary>
-            /// Creates the typed representation used for a single-related-entity association.
+            /// Creates the typed index shared by compatible associations.
             /// </summary>
             /// <param name="memberName">The indexed target member name.</param>
-            /// <returns>An index for unique association lookup.</returns>
-            public abstract AssociationEntityIndexBase CreateUniqueIndex(string memberName);
-
-            /// <summary>
-            /// Creates the typed representation used for a collection association.
-            /// </summary>
-            /// <param name="memberName">The indexed target member name.</param>
-            /// <returns>An index for multi-value association lookup.</returns>
-            public abstract AssociationEntityIndexBase CreateMultiValueIndex(string memberName);
+            /// <returns>An index for association lookup.</returns>
+            public abstract AssociationEntityIndexBase CreateIndex(string memberName);
 
             /// <summary>
             /// Creates a lookup adapter that reads a source key in the most efficient compatible form.
@@ -786,12 +719,7 @@ namespace OpenRiaServices.Client
                 _targetAccessor = targetAccessor;
             }
 
-            public override AssociationEntityIndexBase CreateUniqueIndex(string memberName)
-            {
-                return new SingleValueIndex<TKey>(memberName, _targetAccessor);
-            }
-
-            public override AssociationEntityIndexBase CreateMultiValueIndex(string memberName)
+            public override AssociationEntityIndexBase CreateIndex(string memberName)
             {
                 return new SingleValueIndex<TKey>(memberName, _targetAccessor);
             }
@@ -1027,6 +955,19 @@ namespace OpenRiaServices.Client
             public override bool Equals(object? obj) => obj is AssociationIndexKey other && Equals(other);
 
             public override int GetHashCode() => _hashCode;
+        }
+
+        private sealed class ReferenceEqualityComparer<T> : IEqualityComparer<T> where T : class
+        {
+            public static ReferenceEqualityComparer<T> Instance { get; } = new();
+
+            private ReferenceEqualityComparer()
+            {
+            }
+
+            public bool Equals(T? x, T? y) => ReferenceEquals(x, y);
+
+            public int GetHashCode(T obj) => RuntimeHelpers.GetHashCode(obj);
         }
     }
 }
