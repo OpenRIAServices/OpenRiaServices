@@ -22,7 +22,6 @@ namespace OpenRiaServices.Client.Internal
         private Action<object, object> _setter;
         private Delegate _typedGetter;
         private IValueAccessor _valueAccessor;
-        private bool _valueAccessorInitialized;
 
         internal MetaMember(MetaType metaType, PropertyInfo property, bool isRoundtripEntity)
         {
@@ -193,24 +192,17 @@ namespace OpenRiaServices.Client.Internal
         }
 
         /// <summary>
-        /// Gets the cached accessor used to read this member as a single key value for internal indexing.
+        /// Gets accessor used to read this member without boxing.
         /// </summary>
-        /// <param name="accessor">When this method returns <c>true</c>, the accessor for this member; otherwise, <c>null</c>.</param>
-        /// <returns><c>true</c> when an accessor can be created for this member; otherwise, <c>false</c>.</returns>
-        internal bool TryGetValueAccessor(out IValueAccessor accessor)
+        /// <returns>The accessor for this member.</returns>
+        internal IValueAccessor GetValueAccessor()
         {
-            // TODO: Can rewrite as IValueAccessor GetValueAccessor() instead
-            // We should create accessor only for primitive types (non-associations)
-            if (!_valueAccessorInitialized)
-            {
-                _valueAccessor = CreateValueAccessorFactory(this);
-                _valueAccessorInitialized = true;
-            }
-
-            accessor = _valueAccessor;
-            return accessor != null;
+            return _valueAccessor ??= CreateValueAccessorFactory(this);
         }
 
+        /// <summary>
+        /// Gets accessor used to read this member as object.
+        /// </summary>
         internal IValueAccessor<object> GetObjectValueAccessor()
             => new MemberValueAccessor(this);
 

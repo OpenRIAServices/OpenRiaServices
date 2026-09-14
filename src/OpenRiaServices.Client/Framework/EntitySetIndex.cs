@@ -1,9 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Globalization;
+using System.Linq;
 using OpenRiaServices.Client.Internal;
+using static OpenRiaServices.Client.Internal.MetaMember;
 
 #nullable enable
 
@@ -738,35 +739,34 @@ namespace OpenRiaServices.Client
             /// <returns>A factory compatible with <paramref name="member"/>.</returns>
             public static SingleValueIndexFactory Create(MetaMember member)
             {
-                if (member.TryGetValueAccessor(out MetaMember.IValueAccessor? accessor))
-                {
-                    if (accessor is MetaMember.IValueAccessor<int> intAccessor)
-                    {
-                        return new TypedSingleValueIndexFactory<int>(intAccessor);
-                    }
-                    if (accessor is MetaMember.IValueAccessor<long> longAccessor)
-                    {
-                        return new TypedSingleValueIndexFactory<long>(longAccessor);
-                    }
-                    if (accessor is MetaMember.IValueAccessor<Guid> guidAccessor)
-                    {
-                        return new TypedSingleValueIndexFactory<Guid>(guidAccessor);
-                    }
-                    if (accessor is MetaMember.IValueAccessor<string> stringAccessor)
-                    {
-                        return new TypedSingleValueIndexFactory<string>(stringAccessor);
-                    }
-                    if (accessor is MetaMember.IValueAccessor<DateTime> dateTimeAccessor)
-                    {
-                        return new TypedSingleValueIndexFactory<DateTime>(dateTimeAccessor);
-                    }
+                var accessor = member.GetValueAccessor();
 
-                    if (accessor.GetType().GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(MetaMember.IValueAccessor<>))
-                            is Type genericAccessorInterface)
-                    {
-                        Type indexType = typeof(TypedSingleValueIndexFactory<>).MakeGenericType(genericAccessorInterface.GetGenericArguments()[0]);
-                        return (SingleValueIndexFactory)Activator.CreateInstance(indexType, accessor)!;
-                    }
+                if (accessor is MetaMember.IValueAccessor<int> intAccessor)
+                {
+                    return new TypedSingleValueIndexFactory<int>(intAccessor);
+                }
+                if (accessor is MetaMember.IValueAccessor<long> longAccessor)
+                {
+                    return new TypedSingleValueIndexFactory<long>(longAccessor);
+                }
+                if (accessor is MetaMember.IValueAccessor<Guid> guidAccessor)
+                {
+                    return new TypedSingleValueIndexFactory<Guid>(guidAccessor);
+                }
+                if (accessor is MetaMember.IValueAccessor<string> stringAccessor)
+                {
+                    return new TypedSingleValueIndexFactory<string>(stringAccessor);
+                }
+                if (accessor is MetaMember.IValueAccessor<DateTime> dateTimeAccessor)
+                {
+                    return new TypedSingleValueIndexFactory<DateTime>(dateTimeAccessor);
+                }
+
+                if (accessor.GetType().GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(MetaMember.IValueAccessor<>))
+                        is Type genericAccessorInterface)
+                {
+                    Type indexType = typeof(TypedSingleValueIndexFactory<>).MakeGenericType(genericAccessorInterface.GetGenericArguments()[0]);
+                    return (SingleValueIndexFactory)Activator.CreateInstance(indexType, accessor)!;
                 }
 
                 return new TypedSingleValueIndexFactory<object>(member.GetObjectValueAccessor());
@@ -819,8 +819,9 @@ namespace OpenRiaServices.Client
 
             public override AssociationLookupMetadata CreateLookupMetadata(AssociationIndexDefinition definition, MetaMember sourceMember)
             {
-                if (sourceMember.TryGetValueAccessor(out MetaMember.IValueAccessor? accessor)
-                    && accessor is MetaMember.IValueAccessor<TKey> typedAccessor)
+                IValueAccessor accessor = sourceMember.GetValueAccessor();
+
+                if (accessor is MetaMember.IValueAccessor<TKey> typedAccessor)
                 {
                     return new TypedSingleValueAssociationLookupMetadata<TKey>(definition, typedAccessor);
                 }
