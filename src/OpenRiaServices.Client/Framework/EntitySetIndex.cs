@@ -18,7 +18,7 @@ namespace OpenRiaServices.Client
     {
         private readonly EntitySet _entitySet;
         private readonly PrimaryKeyEntityIndex _primaryKeyIndex = new();
-        private readonly Dictionary<EntityAssociationAttribute, AssociationLookupMetadata?> _associationLookupMetadata = new(ReferenceEqualityComparer.Instance);
+        private readonly Dictionary<EntityAssociationAttribute, AssociationLookupMetadata?> _associationLookupMetadata = new();
         private readonly Dictionary<string, AssociationIndexDefinition> _singleMemberAssociationDefinitions = new(StringComparer.Ordinal);
         private readonly Dictionary<CompositeAssociationMemberNames, AssociationIndexDefinition> _compositeAssociationDefinitions = new();
         private readonly Dictionary<AssociationIndexDefinition, AssociationEntityIndexBase> _uniqueAssociationIndexes = new();
