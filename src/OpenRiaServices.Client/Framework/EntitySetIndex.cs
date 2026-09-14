@@ -17,7 +17,7 @@ namespace OpenRiaServices.Client
     {
         private readonly EntitySet _entitySet;
         private readonly PrimaryKeyEntityIndex _primaryKeyIndex = new();
-        private readonly Dictionary<EntityAssociationAttribute, AssociationLookupMetadata?> _associationLookupMetadata = new();
+        private readonly Dictionary<EntityAssociationAttribute, AssociationLookupMetadata?> _associationLookupMetadata = new(ReferenceEqualityComparer.Instance);
         private readonly Dictionary<string, AssociationIndexDefinition> _singleMemberAssociationDefinitions = new(StringComparer.Ordinal);
         private readonly Dictionary<CompositeAssociationMemberNames, AssociationIndexDefinition> _compositeAssociationDefinitions = new();
         private readonly Dictionary<AssociationIndexDefinition, AssociationEntityIndexBase> _uniqueAssociationIndexes = new();
@@ -804,7 +804,7 @@ namespace OpenRiaServices.Client
                     return new TypedSingleValueAssociationLookupMetadata<TKey>(definition, typedAccessor);
                 }
 
-                return new TypedSingleValueAssociationLookupMetadata<object>(definition, sourceMember.GetObjectValueAccessor());
+                throw new InvalidOperationException($"The source member type {sourceMember.PropertyType} is not compatible with the target member type for association lookup on {sourceMember.MetaType.Type}.{sourceMember.Name}.");
             }
         }
 
