@@ -4,7 +4,7 @@ OpenRiaServices keeps internal in-memory indexes for `EntitySet` identity and me
 
 - `EntitySet` primary-key lookup uses a dedicated index instead of repeatedly scanning entities.
 - `EntityRef<TEntity>` and `EntityCollection<TEntity>` automatically use association indexes when the relationship can be described from metadata.
-- Single-member association keys use typed accessors for common key types such as `int`, `long`, `Guid`, `string`, and `DateTime`, which reduces boxing and temporary allocations on lookup and index maintenance.
+- Single-member association keys use typed accessors, which reduces boxing and temporary allocations on lookup and index maintenance.
 - Existing predicate-based association behavior is still preserved; when metadata cannot describe the relationship, the existing fallback path is used.
 
 ## Performance characteristics
