@@ -17,8 +17,7 @@ namespace OpenRiaServices.Client
     {
         private readonly EntitySet _entitySet;
         private readonly PrimaryKeyEntityIndex _primaryKeyIndex = new();
-        private readonly Dictionary<EntityAssociationAttribute, AssociationIndexDefinition> _associationDefinitions = new(OtherKeyComparer.Instance);
-        private readonly List<AssociationEntityIndexBase> _associationIndexes = new();
+        private readonly Dictionary<EntityAssociationAttribute, EntityAssociationIndex> _associationIndexes = new(OtherKeyComparer.Instance);
 
         public EntitySetIndexManager(EntitySet entitySet)
         {
@@ -29,7 +28,7 @@ namespace OpenRiaServices.Client
         {
             _primaryKeyIndex.Clear();
 
-            foreach (AssociationEntityIndexBase index in _associationIndexes)
+            foreach (EntityAssociationIndex index in _associationIndexes.Values)
             {
                 index.Clear();
             }
@@ -62,7 +61,7 @@ namespace OpenRiaServices.Client
                 return;
             }
 
-            foreach (AssociationEntityIndexBase index in _associationIndexes)
+            foreach (EntityAssociationIndex index in _associationIndexes.Values)
             {
                 index.Add(entity);
             }
@@ -70,7 +69,7 @@ namespace OpenRiaServices.Client
 
         public void RemoveAssociationEntity(Entity entity)
         {
-            foreach (AssociationEntityIndexBase index in _associationIndexes)
+            foreach (EntityAssociationIndex index in _associationIndexes.Values)
             {
                 index.Remove(entity);
             }
@@ -78,7 +77,7 @@ namespace OpenRiaServices.Client
 
         public void UpdateAssociationIndexes(Entity entity, string propertyName)
         {
-            foreach (AssociationEntityIndexBase index in _associationIndexes)
+            foreach (EntityAssociationIndex index in _associationIndexes.Values)
             {
                 index.Update(entity, propertyName);
             }
@@ -86,30 +85,30 @@ namespace OpenRiaServices.Client
 
         public bool TryGetAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
         {
-            if (!TryGetAssociationIndexDefinition(association, out AssociationIndexDefinition? definition))
+            if (!TryGetAssociationIndex(association, out EntityAssociationIndex? index))
             {
                 entities = null;
                 return false;
             }
 
-            return definition.Index.TryLookup(association, sourceEntity, out entities);
+            return index.TryLookup(association, sourceEntity, out entities);
         }
 
-        private void LoadAssociationIndex(AssociationEntityIndexBase index)
+        private void LoadAssociationIndex(EntityAssociationIndex index)
         {
             foreach (Entity entity in _entitySet.List)
                 index.Add(entity);
         }
 
-        private bool TryGetAssociationIndexDefinition(EntityAssociationAttribute association, [NotNullWhen(true)] out AssociationIndexDefinition? definition)
+        private bool TryGetAssociationIndex(EntityAssociationAttribute association, [NotNullWhen(true)] out EntityAssociationIndex? index)
         {
             if (association.ThisKeyMembers.Count != association.OtherKeyMembers.Count || association.OtherKeyMembers.Count == 0)
             {
-                definition = null;
+                index = null;
                 return false;
             }
 
-            if (_associationDefinitions.TryGetValue(association, out definition))
+            if (_associationIndexes.TryGetValue(association, out index))
             {
                 return true;
             }
@@ -121,11 +120,11 @@ namespace OpenRiaServices.Client
                 MetaMember member = metaType[memberName];
                 if (member == null)
                 {
-                    definition = null;
+                    index = null;
                     return false;
                 }
 
-                definition = new SingleValueAssociationIndexDefinition(member);
+                index = SingleValueIndexFactory.Create(member).CreateIndex(member.Name);
             }
             else
             {
@@ -135,20 +134,18 @@ namespace OpenRiaServices.Client
                     MetaMember member = metaType[association.OtherKeyMembers[i]];
                     if (member == null)
                     {
-                        definition = null;
+                        index = null;
                         return false;
                     }
 
                     members[i] = member;
                 }
 
-                definition = new CompositeAssociationIndexDefinition(new CompositeAssociationMemberNames(association.OtherKeyMembers), members);
+                index = new CompositeAssociationEntityIndex(new CompositeAssociationMemberNames(association.OtherKeyMembers), members);
             }
 
-            LoadAssociationIndex(definition.Index);
-            _associationIndexes.Add(definition.Index);
-
-            _associationDefinitions.Add(association, definition);
+            LoadAssociationIndex(index);
+            _associationIndexes.Add(association, index);
             return true;
         }
 
@@ -160,7 +157,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Defines the lifecycle operations shared by lazily-created association indexes.
         /// </summary>
-        private abstract class AssociationEntityIndexBase
+        private abstract class EntityAssociationIndex
         {
             /// <summary>
             /// Removes all cached relationship mappings when the owning entity set is reset.
@@ -200,7 +197,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Indexes entities by one association member while retaining each entity's previous key to support incremental updates.
         /// </summary>
-        private sealed class SingleValueIndex<TKey> : AssociationEntityIndexBase where TKey : notnull
+        private sealed class SingleValueIndex<TKey> : EntityAssociationIndex where TKey : notnull
         {
             private readonly string _memberName;
             private readonly MetaMember.IValueAccessor<TKey> _keyAccessor;
@@ -376,7 +373,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Indexes entities by an ordered set of association members when no single member uniquely identifies the relationship.
         /// </summary>
-        private sealed class CompositeAssociationEntityIndex : AssociationEntityIndexBase
+        private sealed class CompositeAssociationEntityIndex : EntityAssociationIndex
         {
             private readonly CompositeAssociationMemberNames _targetMemberNames;
             private readonly MetaMember[] _targetMembers;
@@ -513,47 +510,6 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Describes how to construct and query a reusable association index.
-        /// </summary>
-        private abstract class AssociationIndexDefinition
-        {
-            public abstract AssociationEntityIndexBase Index { get; }
-        }
-
-        /// <summary>
-        /// Describes an association index keyed by one target member, allowing equivalent associations to share an index.
-        /// </summary>
-        private sealed class SingleValueAssociationIndexDefinition : AssociationIndexDefinition
-        {
-            private readonly SingleValueIndexFactory _factory;
-
-            public override AssociationEntityIndexBase Index { get; }
-
-            public SingleValueAssociationIndexDefinition(MetaMember targetMember)
-            {
-                _factory = SingleValueIndexFactory.Create(targetMember);
-                Index = _factory.CreateIndex(targetMember.Name);
-            }
-        }
-
-        /// <summary>
-        /// Describes an association index keyed by an ordered group of target members.
-        /// </summary>
-        private sealed class CompositeAssociationIndexDefinition : AssociationIndexDefinition
-        {
-            private readonly MetaMember[] _targetMembers;
-            private readonly CompositeAssociationEntityIndex _index;
-
-            public override AssociationEntityIndexBase Index => _index;
-
-            public CompositeAssociationIndexDefinition(CompositeAssociationMemberNames targetMemberNames, MetaMember[] targetMembers)
-            {
-                _targetMembers = targetMembers;
-                _index = new CompositeAssociationEntityIndex(targetMemberNames, _targetMembers);
-            }
-        }
-
-        /// <summary>
         /// Selects typed index implementations where possible to avoid object-based key handling during relationship lookup.
         /// </summary>
         private abstract class SingleValueIndexFactory
@@ -603,7 +559,7 @@ namespace OpenRiaServices.Client
             /// </summary>
             /// <param name="memberName">The indexed target member name.</param>
             /// <returns>An index for association lookup.</returns>
-            public abstract AssociationEntityIndexBase CreateIndex(string memberName);
+            public abstract EntityAssociationIndex CreateIndex(string memberName);
         }
 
         /// <summary>
@@ -618,7 +574,7 @@ namespace OpenRiaServices.Client
                 _targetAccessor = targetAccessor;
             }
 
-            public override AssociationEntityIndexBase CreateIndex(string memberName)
+            public override EntityAssociationIndex CreateIndex(string memberName)
             {
                 return new SingleValueIndex<TKey>(memberName, _targetAccessor);
             }
