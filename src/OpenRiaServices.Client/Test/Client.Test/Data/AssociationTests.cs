@@ -11,9 +11,11 @@ using TestDomainServices;
 
 namespace OpenRiaServices.Client.Test
 {
-    public class CatalogEntityContainer : EntityContainer {
-        public CatalogEntityContainer() {
-            CreateEntitySet<Product>(EntitySetOperations.Add|EntitySetOperations.Edit|EntitySetOperations.Remove);
+    public class CatalogEntityContainer : EntityContainer
+    {
+        public CatalogEntityContainer()
+        {
+            CreateEntitySet<Product>(EntitySetOperations.Add | EntitySetOperations.Edit | EntitySetOperations.Remove);
             CreateEntitySet<PurchaseOrder>(EntitySetOperations.Add | EntitySetOperations.Edit | EntitySetOperations.Remove);
             CreateEntitySet<PurchaseOrderDetail>(EntitySetOperations.Add | EntitySetOperations.Edit | EntitySetOperations.Remove);
             CreateEntitySet<Employee>(EntitySetOperations.Add | EntitySetOperations.Edit | EntitySetOperations.Remove);
@@ -29,7 +31,8 @@ namespace OpenRiaServices.Client.Test
         private int purchaseOrderDetailIDSequence = 1;
 
         [TestInitialize]
-        public void TestSetup() {
+        public void TestSetup()
+        {
             TestOrder = new PurchaseOrder
             {
                 PurchaseOrderID = 1
@@ -44,7 +47,8 @@ namespace OpenRiaServices.Client.Test
             };
         }
 
-        private int GetUniquePurchaseOrderID() {
+        private int GetUniquePurchaseOrderID()
+        {
             return purchaseOrderDetailIDSequence++;
         }
 
@@ -105,7 +109,7 @@ namespace OpenRiaServices.Client.Test
             C c1 = new C { ID = 1, DID_Ref1 = 1 };
 
             D d2 = new D { ID = 2 };
-            C c2= new C { ID = 2, DID_Ref1 = 2 };
+            C c2 = new C { ID = 2, DID_Ref1 = 2 };
             ec.GetEntitySet<D>().Attach(d1);
             ec.GetEntitySet<D>().Attach(d2);
             ec.GetEntitySet<C>().Attach(c1);
@@ -130,13 +134,15 @@ namespace OpenRiaServices.Client.Test
             {
                 PurchaseOrderID = 1
             };
-            PurchaseOrderDetail detail1 = new PurchaseOrderDetail 
-            { 
-                PurchaseOrderID = 1, PurchaseOrderDetailID = 1 
+            PurchaseOrderDetail detail1 = new PurchaseOrderDetail
+            {
+                PurchaseOrderID = 1,
+                PurchaseOrderDetailID = 1
             };
             PurchaseOrderDetail detail2 = new PurchaseOrderDetail
             {
-                PurchaseOrderID = 1, PurchaseOrderDetailID = 2
+                PurchaseOrderID = 1,
+                PurchaseOrderDetailID = 2
             };
             container.LoadEntities(new Entity[] { order, detail1, detail2 });
 
@@ -149,7 +155,7 @@ namespace OpenRiaServices.Client.Test
             order.PurchaseOrderDetails.Add(detail4);
 
             Assert.AreEqual(4, order.PurchaseOrderDetails.Count);
-            
+
             // now modify the parent FK, which will cause the cached
             // results to be reset, but we expect the explicitly added
             // entities to be retained
@@ -163,21 +169,25 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public void TestEntityRefCaching() {
+        public void TestEntityRefCaching()
+        {
             CatalogEntityContainer container = new CatalogEntityContainer();
 
-            PurchaseOrderDetail detail = new PurchaseOrderDetail {
+            PurchaseOrderDetail detail = new PurchaseOrderDetail
+            {
                 PurchaseOrderDetailID = 1,
                 PurchaseOrderID = 1
             };
-            PurchaseOrder order = new PurchaseOrder {
+            PurchaseOrder order = new PurchaseOrder
+            {
                 PurchaseOrderID = 1
             };
-            PurchaseOrder order2 = new PurchaseOrder {
+            PurchaseOrder order2 = new PurchaseOrder
+            {
                 PurchaseOrderID = 2
             };
 
-            container.LoadEntities(new Entity[] { order, order2});
+            container.LoadEntities(new Entity[] { order, order2 });
             container.LoadEntities(new Entity[] { detail });
 
             // force the EntityRef to cache
@@ -274,7 +284,8 @@ namespace OpenRiaServices.Client.Test
 
             B b = new B
             {
-                ID1 = 1, ID2 = 2
+                ID1 = 1,
+                ID2 = 2
             };
             A a = new A { ID = 1 };
 
@@ -380,7 +391,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.IsTrue(childSet.TryGetMultiValueAssociationEntities(association, parent, out IEnumerable<Entity> entities));
             Assert.AreSequenceEqual([child1, child2], entities.Cast<NullableFKChild>());
-    
+
             Assert.AreSame(parent, child1.Parent);
         }
 
@@ -399,12 +410,14 @@ namespace OpenRiaServices.Client.Test
             EntityAssociationAttribute association = new EntityAssociationAttribute("StringKeyParent_Children", "ParentName", "Name");
 
             Assert.IsTrue(parentSet.TryGetUniqueAssociationEntities(association, child, out IEnumerable<Entity>? entities));
-            Assert.IsNotNull(entities);
-            Assert.IsTrue(new[] { parent }.SequenceEqual(entities.Cast<StringKeyParent>()));
+            Assert.AreSequenceEqual([parent], entities);
         }
 
+        /// <summary>
+        /// Execise the generic fallback path for accessing keys
+        /// </summary>
         [TestMethod]
-        public void EntitySet_AssociationIndex_UnsupportedSingleKeyFallsBackToObjectLookup()
+        public void EntitySet_AssociationIndex_NonSpecializedTypes()
         {
             DynamicEntityContainer container = new DynamicEntityContainer();
             EntitySet<DecimalKeyParent> parentSet = container.AddEntitySet<DecimalKeyParent>(EntitySetOperations.All);
@@ -417,13 +430,13 @@ namespace OpenRiaServices.Client.Test
 
             EntityAssociationAttribute association = new EntityAssociationAttribute("DecimalKeyParent_Children", "ParentAmount", "Amount");
 
-            Assert.IsTrue(parentSet.TryGetUniqueAssociationEntities(association, child, out IEnumerable<Entity>? entities));
-            Assert.IsNotNull(entities);
-            Assert.IsTrue(new[] { parent }.SequenceEqual(entities.Cast<DecimalKeyParent>()));
+            Assert.IsTrue(parentSet.TryGetUniqueAssociationEntities(association, child, out IEnumerable<Entity> entities));
+            Assert.AreSequenceEqual([parent], entities);
         }
 
         [TestMethod]
-        public void TestCollectionQuery_DetachedEntity() {
+        public void TestCollectionQuery_DetachedEntity()
+        {
             CatalogEntityContainer ec = new CatalogEntityContainer();
 
             // with the order not part of any EntityContainer/Set,
@@ -435,13 +448,15 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public void TestCollectionQuery_SubscribeBeforeAttach() {
+        public void TestCollectionQuery_SubscribeBeforeAttach()
+        {
             CatalogEntityContainer ec = new CatalogEntityContainer();
             NumNotifications = 0;
 
             // here we subscribe to the event BEFORE the entity is added
             // to the container
-            ((INotifyCollectionChanged)TestOrder.PurchaseOrderDetails).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e) {
+            ((INotifyCollectionChanged)TestOrder.PurchaseOrderDetails).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
+            {
                 NumNotifications++;
             };
 
@@ -451,7 +466,8 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public void TestCollectionQuery_SubscribeAfterAttach() {
+        public void TestCollectionQuery_SubscribeAfterAttach()
+        {
             CatalogEntityContainer ec = new CatalogEntityContainer();
             NumNotifications = 0;
 
@@ -464,12 +480,14 @@ namespace OpenRiaServices.Client.Test
             TestNotifications(ec);
         }
 
-        private void EntityCollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+        private void EntityCollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
             NumNotifications++;
         }
 
         [TestMethod]
-        public void TestCollectionQuery_DetachParent() {
+        public void TestCollectionQuery_DetachParent()
+        {
             CatalogEntityContainer ec = new CatalogEntityContainer();
             NumNotifications = 0;
 
@@ -482,7 +500,7 @@ namespace OpenRiaServices.Client.Test
             // load a detail and verify we are notified
             ec.LoadEntities(new PurchaseOrderDetail[] { new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = GetUniquePurchaseOrderID() } });
             Assert.AreEqual(1, NumNotifications);
-            
+
             // detach the parent entity and verify we no longer receive notifications
             NumNotifications = 0;
             TestOrder.EntitySet = null;
@@ -490,7 +508,8 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(0, NumNotifications);
         }
 
-        private void TestNotifications(CatalogEntityContainer ec) {
+        private void TestNotifications(CatalogEntityContainer ec)
+        {
             // with only the order in the container
             // its collection returns empty
             Assert.IsNotNull(TestOrder.EntitySet);
