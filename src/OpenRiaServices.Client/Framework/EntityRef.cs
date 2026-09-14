@@ -233,8 +233,7 @@ namespace OpenRiaServices.Client
 
         private IEnumerable GetAssociationCandidates(EntitySet set)
         {
-            if (set.TryGetAssociationEntities(this.AssocAttribute, this._parent, out IEnumerable<Entity>? entities)
-                && entities != null)
+            if (set.TryGetAssociationEntities(this.AssocAttribute, this._parent, out IEnumerable<Entity>? entities))
             {
                 return entities;
             }
