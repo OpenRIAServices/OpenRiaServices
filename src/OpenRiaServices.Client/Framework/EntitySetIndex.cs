@@ -15,7 +15,7 @@ namespace OpenRiaServices.Client
     /// <summary>
     /// Maintains identity and association indexes so entity relationship resolution does not require repeatedly scanning an <see cref="EntitySet"/>.
     /// </summary>
-    internal sealed class EntitySetIndexManager
+    internal sealed partial class EntitySetIndexManager
     {
         private readonly EntitySet _entitySet;
         private readonly PrimaryKeyEntityIndex _primaryKeyIndex = new();
