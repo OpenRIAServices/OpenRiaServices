@@ -276,14 +276,11 @@ namespace OpenRiaServices.Client
 
             public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)
             {
-                if (association.ThisKeyMembers.Count != 1 || sourceEntity.MetaType[association.ThisKeyMembers[0]] is not MetaMember sourceMember)
-                {
-                    entities = null;
-                    return false;
-                }
+                var thisKeyMembes = association.ThisKeyMembers;
 
-                IValueAccessor accessor = sourceMember.GetValueAccessor();
-                if (accessor is MetaMember.IValueAccessor<TKey> typedAccessor)
+                if (thisKeyMembes.Count == 1
+                    && sourceEntity.MetaType[thisKeyMembes[0]] is MetaMember sourceMember
+                    && sourceMember.GetValueAccessor() is IValueAccessor<TKey> typedAccessor)
                 {
                     entities = typedAccessor.TryGetValue(sourceEntity, out TKey key)
                         ? Lookup(key)
@@ -291,7 +288,9 @@ namespace OpenRiaServices.Client
                     return true;
                 }
 
-                throw new InvalidOperationException($"The source member type {sourceMember.PropertyType} is not compatible with the target member type for association lookup on {sourceMember.MetaType.Type}.{sourceMember.Name}.");
+                // Types does not match, so we cannot perform the lookup. This is a programming error, so throw an exception.
+                entities = null;
+                return false;
             }
 
             private void AddOrUpdateEntity(Entity entity)
