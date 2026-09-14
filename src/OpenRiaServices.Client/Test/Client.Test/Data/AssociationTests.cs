@@ -2,6 +2,7 @@
 using System.Collections.Specialized;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Reflection;
 using System.Runtime.Serialization;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -344,15 +345,43 @@ namespace OpenRiaServices.Client.Test
             parentSet.Attach(parent);
             childSet.Attach(child1);
             childSet.Attach(child2);
+            childSet.Attach(new NullableFKChild { ID = 4, ParentID_Singleton = null });
+            childSet.Attach(new NullableFKChild { ID = 5, ParentID_Singleton = 2 });
             _ = parent.Child;
 
-            EntitySet sourceSet = container.GetEntitySet<NullableFKChild>();
             EntityAssociationAttribute association = ((IEntityRef)parent.GetEntityRef("Child")).Association;
 
-            Assert.IsTrue(sourceSet.TryGetUniqueAssociationEntities(association, parent, out IEnumerable<Entity> entities));
-            Assert.IsNotNull(entities);
-            Assert.IsTrue(new[] { child1, child2 }.SequenceEqual(entities.Cast<NullableFKChild>()));
+            Assert.IsTrue(childSet.TryGetUniqueAssociationEntities(association, parent, out IEnumerable<Entity> entities));
+            Assert.AreSequenceEqual([child1, child2], entities.Cast<NullableFKChild>());
             Assert.IsNull(parent.Child);
+
+            Assert.AreSame(parent, child1.Parent2);
+        }
+
+        [TestMethod]
+        public void EntitySet_AssociationIndex_NullableKey()
+        {
+            DynamicEntityContainer container = new DynamicEntityContainer();
+            EntitySet<NullableFKParent> parentSet = container.AddEntitySet<NullableFKParent>(EntitySetOperations.All);
+            EntitySet<NullableFKChild> childSet = container.AddEntitySet<NullableFKChild>(EntitySetOperations.All);
+
+            NullableFKParent parent = new NullableFKParent { ID = 1 };
+            NullableFKChild child1 = new NullableFKChild { ID = 2, ParentID = 1 };
+            NullableFKChild child2 = new NullableFKChild { ID = 3, ParentID = 1 };
+
+            parentSet.Attach(parent);
+            childSet.Attach(child1);
+            childSet.Attach(child2);
+            childSet.Attach(new NullableFKChild { ID = 4, ParentID = null });
+            childSet.Attach(new NullableFKChild { ID = 5, ParentID = 2 });
+            _ = parent.Children;
+
+            EntityAssociationAttribute association = parent.GetType().GetProperty(nameof(parent.Children)).GetCustomAttribute<EntityAssociationAttribute>();
+
+            Assert.IsTrue(childSet.TryGetMultiValueAssociationEntities(association, parent, out IEnumerable<Entity> entities));
+            Assert.AreSequenceEqual([child1, child2], entities.Cast<NullableFKChild>());
+    
+            Assert.AreSame(parent, child1.Parent);
         }
 
         [TestMethod]
