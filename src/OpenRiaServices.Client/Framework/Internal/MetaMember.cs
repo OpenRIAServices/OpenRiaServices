@@ -21,8 +21,8 @@ namespace OpenRiaServices.Client.Internal
         private Func<object, object> _getter;
         private Action<object, object> _setter;
         private Delegate _typedGetter;
-        private ISingleValueAccessor _singleValueAccessor;
-        private bool _singleValueAccessorInitialized;
+        private IValueAccessor _valueAccessor;
+        private bool _valueAccessorInitialized;
 
         internal MetaMember(MetaType metaType, PropertyInfo property, bool isRoundtripEntity)
         {
@@ -197,22 +197,22 @@ namespace OpenRiaServices.Client.Internal
         /// </summary>
         /// <param name="accessor">When this method returns <c>true</c>, the accessor for this member; otherwise, <c>null</c>.</param>
         /// <returns><c>true</c> when an accessor can be created for this member; otherwise, <c>false</c>.</returns>
-        internal bool TryGetSingleValueAccessor(out ISingleValueAccessor accessor)
+        internal bool TryGetValueAccessor(out IValueAccessor accessor)
         {
-            // TODO: Can rewrite as ISingleValueAccessor GetSingleValueAccessor() instead
+            // TODO: Can rewrite as IValueAccessor GetValueAccessor() instead
             // We should create accessor only for primitive types (non-associations)
-            if (!_singleValueAccessorInitialized)
+            if (!_valueAccessorInitialized)
             {
-                _singleValueAccessor = CreateSingleValueAccessorFactory(this);
-                _singleValueAccessorInitialized = true;
+                _valueAccessor = CreateValueAccessorFactory(this);
+                _valueAccessorInitialized = true;
             }
 
-            accessor = _singleValueAccessor;
+            accessor = _valueAccessor;
             return accessor != null;
         }
 
-        internal ISingleValueAccessor<object> GetObjectSingleValueAccessor()
-            => new MemberSingleValueAccessor(this);
+        internal IValueAccessor<object> GetObjectValueAccessor()
+            => new MemberValueAccessor(this);
 
         /// <summary>
         /// Gets a value indicating whether this member is mergable 
@@ -293,42 +293,42 @@ namespace OpenRiaServices.Client.Internal
             return (object obj, object value) => setter((T)obj, (Tprop)value);
         }
 
-        private static ISingleValueAccessor CreateSingleValueAccessorFactory(MetaMember member)
+        private static IValueAccessor CreateValueAccessorFactory(MetaMember member)
         {
             Type propertyType = member.PropertyType;
             if (propertyType == typeof(int))
             {
-                return new NonNullableSingleValueAccessor<int>((Func<object, int>)member.GetTypedGetter());
+                return new NonNullableValueAccessor<int>((Func<object, int>)member.GetTypedGetter());
             }
             if (propertyType == typeof(int?))
             {
-                return new NullableSingleValueAccessor<int>((Func<object, int?>)member.GetTypedGetter());
+                return new NullableValueAccessor<int>((Func<object, int?>)member.GetTypedGetter());
             }
             if (propertyType == typeof(long))
             {
-                return new NonNullableSingleValueAccessor<long>((Func<object, long>)member.GetTypedGetter());
+                return new NonNullableValueAccessor<long>((Func<object, long>)member.GetTypedGetter());
             }
             if (propertyType == typeof(long?))
             {
-                return new NullableSingleValueAccessor<long>((Func<object, long?>)member.GetTypedGetter());
+                return new NullableValueAccessor<long>((Func<object, long?>)member.GetTypedGetter());
             }
             if (propertyType == typeof(string))
             {
-                return new ReferenceSingleValueAccessor<string>((Func<object, string>)member.GetTypedGetter());
+                return new ReferenceValueAccessor<string>((Func<object, string>)member.GetTypedGetter());
             }
 
             // Reflection based fallback for other types
             if (propertyType.IsValueType)
             {
                 if (TypeUtility.IsNullableType(propertyType))
-                    return (ISingleValueAccessor)Activator.CreateInstance(typeof(NullableSingleValueAccessor<>).MakeGenericType(TypeUtility.GetNonNullableType(propertyType))
+                    return (IValueAccessor)Activator.CreateInstance(typeof(NullableValueAccessor<>).MakeGenericType(TypeUtility.GetNonNullableType(propertyType))
                         , member.GetTypedGetter());
                 else
-                    return (ISingleValueAccessor)Activator.CreateInstance(typeof(NonNullableSingleValueAccessor<>).MakeGenericType(propertyType)
+                    return (IValueAccessor)Activator.CreateInstance(typeof(NonNullableValueAccessor<>).MakeGenericType(propertyType)
                         , member.GetTypedGetter());
             }
             else
-                return Activator.CreateInstance(typeof(ReferenceSingleValueAccessor<>).MakeGenericType(propertyType), member.GetTypedGetter()) as ISingleValueAccessor;
+                return Activator.CreateInstance(typeof(ReferenceValueAccessor<>).MakeGenericType(propertyType), member.GetTypedGetter()) as IValueAccessor;
         }
 
         private static bool CheckIfMergeableMember(MetaMember metaMember)
@@ -347,10 +347,10 @@ namespace OpenRiaServices.Client.Internal
         /// Defines an internal accessor for reading a value without boxing
         /// </summary>
         /// <remarks>
-        /// Cast to <see cref="ISingleValueAccessor{TKey}"/> where <see cref="KeyType"/> corresponds to <c>TKey</c>,
+        /// Cast to <see cref="IValueAccessor{TKey}"/> where <see cref="KeyType"/> corresponds to <c>TKey</c>,
         /// to be able to retrieve a value of Type <see cref="KeyType"/> without boxing.
         /// </remarks>
-        internal interface ISingleValueAccessor
+        internal interface IValueAccessor
         {
             /// <summary>
             /// Gets the CLR type of the key value produced by this accessor.
@@ -362,7 +362,7 @@ namespace OpenRiaServices.Client.Internal
         /// Defines a strongly typed internal accessor for reading a single member value used as an index key.
         /// </summary>
         /// <typeparam name="TKey">The CLR type of the key value.</typeparam>
-        internal interface ISingleValueAccessor<TKey> : ISingleValueAccessor
+        internal interface IValueAccessor<TKey> : IValueAccessor
         {
             /// <summary>
             /// Attempts to read the member value from an entity instance as an index key.
@@ -373,9 +373,9 @@ namespace OpenRiaServices.Client.Internal
             bool TryGetValue(object instance, out TKey value);
         }
 
-        private abstract class SingleValueAccessor<TKey> : ISingleValueAccessor<TKey>
+        private abstract class ValueAccessor<TKey> : IValueAccessor<TKey>
         {
-            protected SingleValueAccessor()
+            protected ValueAccessor()
             {
                 KeyType = typeof(TKey);
             }
@@ -386,9 +386,9 @@ namespace OpenRiaServices.Client.Internal
         }
 
         /// <summary>
-        /// Implements <see cref="ISingleValueAccessor{TKey}"/> for struct types.
+        /// Implements <see cref="IValueAccessor{TKey}"/> for struct types.
         /// </summary>
-        private sealed class NonNullableSingleValueAccessor<TKey>(Func<object, TKey> getter) : SingleValueAccessor<TKey>
+        private sealed class NonNullableValueAccessor<TKey>(Func<object, TKey> getter) : ValueAccessor<TKey>
         {
             public override bool TryGetValue(object instance, out TKey value)
             {
@@ -398,9 +398,9 @@ namespace OpenRiaServices.Client.Internal
         }
 
         /// <summary>
-        /// Implements <see cref="ISingleValueAccessor{TKey}"/> for Nullable{TKey}
+        /// Implements <see cref="IValueAccessor{TKey}"/> for Nullable{TKey}
         /// </summary>
-        private sealed class NullableSingleValueAccessor<TKey>(Func<object, TKey?> getter) : SingleValueAccessor<TKey> where TKey : struct
+        private sealed class NullableValueAccessor<TKey>(Func<object, TKey?> getter) : ValueAccessor<TKey> where TKey : struct
         {
             public override bool TryGetValue(object instance, out TKey value)
             {
@@ -417,9 +417,9 @@ namespace OpenRiaServices.Client.Internal
         }
 
         /// <summary>
-        /// Implements <see cref="ISingleValueAccessor{TKey}"/> for reference types
+        /// Implements <see cref="IValueAccessor{TKey}"/> for reference types
         /// </summary>
-        private sealed class ReferenceSingleValueAccessor<TKey>(Func<object, TKey> getter) : SingleValueAccessor<TKey>
+        private sealed class ReferenceValueAccessor<TKey>(Func<object, TKey> getter) : ValueAccessor<TKey>
         {
             public override bool TryGetValue(object instance, out TKey value)
             {
@@ -431,7 +431,7 @@ namespace OpenRiaServices.Client.Internal
         /// <summary>
         /// Reads an association key through reflection when no typed member accessor is available.
         /// </summary>
-        private sealed class MemberSingleValueAccessor(MetaMember member) : ISingleValueAccessor<object>
+        private sealed class MemberValueAccessor(MetaMember member) : IValueAccessor<object>
         {
             public Type KeyType => typeof(object);
 
