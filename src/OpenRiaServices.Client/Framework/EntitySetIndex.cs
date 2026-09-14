@@ -84,7 +84,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-        public bool TryGetUniqueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
+        public bool TryGetAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
         {
             if (!TryGetAssociationIndexDefinition(association, out AssociationIndexDefinition? definition))
             {
@@ -92,18 +92,7 @@ namespace OpenRiaServices.Client
                 return false;
             }
 
-            return definition.TryLookup(association, sourceEntity, out entities);
-        }
-
-        public bool TryGetMultiValueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
-        {
-            if (!TryGetAssociationIndexDefinition(association, out AssociationIndexDefinition? definition))
-            {
-                entities = null;
-                return false;
-            }
-
-            return definition.TryLookup(association, sourceEntity, out entities);
+            return definition.Index.TryLookup(association, sourceEntity, out entities);
         }
 
         private void LoadAssociationIndex(AssociationEntityIndexBase index)
@@ -196,6 +185,16 @@ namespace OpenRiaServices.Client
             /// <param name="entity">The changed entity.</param>
             /// <param name="propertyName">The name of the changed property.</param>
             public abstract void Update(Entity entity, string propertyName);
+
+            /// <summary>
+            /// Uses the source entity's association key to query a compatible index.
+            /// </summary>
+            /// <param name="association">The association that identifies the source members.</param>
+            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
+            /// <param name="entities">The matching entities when the lookup is supported.</param>
+            /// 
+            /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
+            public abstract bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities);
         }
 
         /// <summary>
@@ -276,6 +275,26 @@ namespace OpenRiaServices.Client
                 }
 
                 return Array.Empty<Entity>();
+            }
+
+            public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)
+            {
+                if (association.ThisKeyMembers.Count != 1 || sourceEntity.MetaType[association.ThisKeyMembers[0]] is not MetaMember sourceMember)
+                {
+                    entities = null;
+                    return false;
+                }
+
+                IValueAccessor accessor = sourceMember.GetValueAccessor();
+                if (accessor is MetaMember.IValueAccessor<TKey> typedAccessor)
+                {
+                    entities = typedAccessor.TryGetValue(sourceEntity, out TKey key)
+                        ? Lookup(key)
+                        : LookupNull();
+                    return true;
+                }
+
+                throw new InvalidOperationException($"The source member type {sourceMember.PropertyType} is not compatible with the target member type for association lookup on {sourceMember.MetaType.Type}.{sourceMember.Name}.");
             }
 
             private void AddOrUpdateEntity(Entity entity)
@@ -359,15 +378,15 @@ namespace OpenRiaServices.Client
         /// </summary>
         private sealed class CompositeAssociationEntityIndex : AssociationEntityIndexBase
         {
-            private readonly CompositeAssociationMemberNames _memberNames;
-            private readonly MetaMember[] _members;
+            private readonly CompositeAssociationMemberNames _targetMemberNames;
+            private readonly MetaMember[] _targetMembers;
             private readonly Dictionary<AssociationIndexKey, List<Entity>> _entitiesByKey = new(EqualityComparer<AssociationIndexKey>.Default);
             private readonly Dictionary<Entity, AssociationIndexKey> _keysByEntity = new();
 
             public CompositeAssociationEntityIndex(CompositeAssociationMemberNames memberNames, MetaMember[] members)
             {
-                _memberNames = memberNames;
-                _members = members;
+                _targetMemberNames = memberNames;
+                _targetMembers = members;
             }
 
             public override void Clear()
@@ -397,7 +416,7 @@ namespace OpenRiaServices.Client
 
             public override void Update(Entity entity, string propertyName)
             {
-                if (propertyName != nameof(Entity.EntityState) && !_memberNames.Contains(propertyName))
+                if (propertyName != nameof(Entity.EntityState) && !_targetMemberNames.Contains(propertyName))
                 {
                     return;
                 }
@@ -446,10 +465,10 @@ namespace OpenRiaServices.Client
 
             private AssociationIndexKey CreateKey(Entity entity)
             {
-                object?[] values = new object?[_members.Length];
-                for (int i = 0; i < _members.Length; i++)
+                object?[] values = new object?[_targetMembers.Length];
+                for (int i = 0; i < _targetMembers.Length; i++)
                 {
-                    values[i] = _members[i].GetValue(entity);
+                    values[i] = _targetMembers[i].GetValue(entity);
                 }
 
                 return AssociationIndexKey.Create(values);
@@ -472,6 +491,25 @@ namespace OpenRiaServices.Client
                     }
                 }
             }
+
+            public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)
+            {
+                object?[] values = new object?[_targetMembers.Length];
+                for (int i = 0; i < _targetMembers.Length; i++)
+                {
+                    MetaMember sourceMember = sourceEntity.MetaType[association.ThisKeyMembers[i]];
+                    if (sourceMember == null)
+                    {
+                        entities = null;
+                        return false;
+                    }
+
+                    values[i] = sourceMember.GetValue(sourceEntity);
+                }
+
+                entities = Lookup(AssociationIndexKey.Create(values));
+                return true;
+            }
         }
 
         /// <summary>
@@ -480,16 +518,6 @@ namespace OpenRiaServices.Client
         private abstract class AssociationIndexDefinition
         {
             public abstract AssociationEntityIndexBase Index { get; }
-
-            /// <summary>
-            /// Uses the source entity's association key to query a compatible index.
-            /// </summary>
-            /// <param name="association">The association that identifies the source members.</param>
-            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
-            /// <param name="entities">The matching entities when the lookup is supported.</param>
-            /// 
-            /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
-            public abstract bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities);
         }
 
         /// <summary>
@@ -505,17 +533,6 @@ namespace OpenRiaServices.Client
             {
                 _factory = SingleValueIndexFactory.Create(targetMember);
                 Index = _factory.CreateIndex(targetMember.Name);
-            }
-
-            public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
-            {
-                if (association.ThisKeyMembers.Count != 1 || sourceEntity.MetaType[association.ThisKeyMembers[0]] is not MetaMember sourceMember)
-                {
-                    entities = null;
-                    return false;
-                }
-
-                return _factory.TryLookup(this.Index, sourceMember, sourceEntity, out entities);
             }
         }
 
@@ -533,25 +550,6 @@ namespace OpenRiaServices.Client
             {
                 _targetMembers = targetMembers;
                 _index = new CompositeAssociationEntityIndex(targetMemberNames, _targetMembers);
-            }
-
-            public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
-            {
-                object?[] values = new object?[_targetMembers.Length];
-                for (int i = 0; i < _targetMembers.Length; i++)
-                {
-                    MetaMember sourceMember = sourceEntity.MetaType[association.ThisKeyMembers[i]];
-                    if (sourceMember == null)
-                    {
-                        entities = null;
-                        return false;
-                    }
-
-                    values[i] = sourceMember.GetValue(sourceEntity);
-                }
-
-                entities = _index.Lookup(AssociationIndexKey.Create(values));
-                return true;
             }
         }
 
@@ -606,16 +604,6 @@ namespace OpenRiaServices.Client
             /// <param name="memberName">The indexed target member name.</param>
             /// <returns>An index for association lookup.</returns>
             public abstract AssociationEntityIndexBase CreateIndex(string memberName);
-
-            /// <summary>
-            /// Reads a source key in the most efficient compatible form and queries the index.
-            /// </summary>
-            /// <param name="index">The association index to query.</param>
-            /// <param name="sourceMember">The source member that provides the lookup key.</param>
-            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
-            /// <param name="entities">The matching entities.</param>
-            /// <returns><see langword="true"/> when the lookup succeeds.</returns>
-            public abstract bool TryLookup(AssociationEntityIndexBase index, MetaMember sourceMember, Entity sourceEntity, out IEnumerable<Entity>? entities);
         }
 
         /// <summary>
@@ -633,22 +621,6 @@ namespace OpenRiaServices.Client
             public override AssociationEntityIndexBase CreateIndex(string memberName)
             {
                 return new SingleValueIndex<TKey>(memberName, _targetAccessor);
-            }
-
-            public override bool TryLookup(AssociationEntityIndexBase index, MetaMember sourceMember, Entity sourceEntity, out IEnumerable<Entity>? entities)
-            {
-                IValueAccessor accessor = sourceMember.GetValueAccessor();
-
-                if (accessor is MetaMember.IValueAccessor<TKey> typedAccessor)
-                {
-                    SingleValueIndex<TKey> typedIndex = (SingleValueIndex<TKey>)index;
-                    entities = typedAccessor.TryGetValue(sourceEntity, out TKey key)
-                        ? typedIndex.Lookup(key)
-                        : typedIndex.LookupNull();
-                    return true;
-                }
-
-                throw new InvalidOperationException($"The source member type {sourceMember.PropertyType} is not compatible with the target member type for association lookup on {sourceMember.MetaType.Type}.{sourceMember.Name}.");
             }
         }
 

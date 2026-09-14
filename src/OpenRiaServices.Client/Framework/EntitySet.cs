@@ -852,12 +852,12 @@ namespace OpenRiaServices.Client
 
         internal bool TryGetUniqueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
         {
-            return this._indexes.TryGetUniqueAssociationEntities(association, sourceEntity, out entities);
+            return this._indexes.TryGetAssociationEntities(association, sourceEntity, out entities);
         }
 
         internal bool TryGetMultiValueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
         {
-            return this._indexes.TryGetMultiValueAssociationEntities(association, sourceEntity, out entities);
+            return this._indexes.TryGetAssociationEntities(association, sourceEntity, out entities);
         }
 
         /// <summary>
