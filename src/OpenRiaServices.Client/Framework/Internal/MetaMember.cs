@@ -16,7 +16,7 @@ namespace OpenRiaServices.Client.Internal
     {
         private static MethodInfo s_getterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateGetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
         private static MethodInfo s_setterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateSetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
-        private static MethodInfo s_typedGetterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateTypedGetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
+        private static readonly MethodInfo s_typedGetterDelegateHelper = typeof(MetaMember).GetMethod(nameof(MetaMember.CreateTypedGetterDelegateHelper), BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.DeclaredOnly);
 
         private Func<object, object> _getter;
         private Action<object, object> _setter;

@@ -360,7 +360,7 @@ namespace OpenRiaServices.Client.Test
             childSet.Attach(new NullableFKChild { ID = 5, ParentID_Singleton = 2 });
             _ = parent.Child;
 
-            EntityAssociationAttribute association = ((IEntityRef)parent.GetEntityRef("Child")).Association;
+            EntityAssociationAttribute association = parent.GetEntityRef("Child").Association;
 
             Assert.IsTrue(childSet.TryGetUniqueAssociationEntities(association, parent, out IEnumerable<Entity> entities));
             Assert.AreSequenceEqual([child1, child2], entities.Cast<NullableFKChild>());
