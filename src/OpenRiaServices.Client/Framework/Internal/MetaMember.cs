@@ -375,12 +375,7 @@ namespace OpenRiaServices.Client.Internal
 
         private abstract class ValueAccessor<TKey> : IValueAccessor<TKey>
         {
-            protected ValueAccessor()
-            {
-                KeyType = typeof(TKey);
-            }
-
-            public Type KeyType { get; }
+            public Type KeyType => typeof(TKey);
 
             public abstract bool TryGetValue(object instance, out TKey value);
         }
@@ -420,6 +415,7 @@ namespace OpenRiaServices.Client.Internal
         /// Implements <see cref="IValueAccessor{TKey}"/> for reference types
         /// </summary>
         private sealed class ReferenceValueAccessor<TKey>(Func<object, TKey> getter) : ValueAccessor<TKey>
+            where TKey : class
         {
             public override bool TryGetValue(object instance, out TKey value)
             {
@@ -440,7 +436,7 @@ namespace OpenRiaServices.Client.Internal
                 object memberValue = member.GetValue(instance);
                 if (memberValue == null)
                 {
-                    value = default!;
+                    value = default;
                     return false;
                 }
 

@@ -409,7 +409,7 @@ namespace OpenRiaServices.Client.Test
 
             EntityAssociationAttribute association = new EntityAssociationAttribute("StringKeyParent_Children", "ParentName", "Name");
 
-            Assert.IsTrue(parentSet.TryGetUniqueAssociationEntities(association, child, out IEnumerable<Entity>? entities));
+            Assert.IsTrue(parentSet.TryGetUniqueAssociationEntities(association, child, out IEnumerable<Entity> entities));
             Assert.AreSequenceEqual([parent], entities);
         }
 

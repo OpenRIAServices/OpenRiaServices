@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using OpenRiaServices.Client.Internal;
@@ -43,7 +44,7 @@ namespace OpenRiaServices.Client
             }
         }
 
-        public bool TryGetPrimaryEntity(object identity, out Entity? entity)
+        public bool TryGetPrimaryEntity(object identity, [NotNullWhen(true)] out Entity? entity)
         {
             return _primaryKeyIndex.TryGetValue(identity, out entity);
         }
@@ -263,7 +264,7 @@ namespace OpenRiaServices.Client
 
             public bool Contains(object identity) => _entities.ContainsKey(identity);
 
-            public bool TryGetValue(object identity, out Entity? entity) => _entities.TryGetValue(identity, out entity);
+            public bool TryGetValue(object identity, [NotNullWhen(true)] out Entity? entity) => _entities.TryGetValue(identity, out entity);
 
             public void Add(Entity entity)
             {
