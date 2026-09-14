@@ -16,7 +16,7 @@ namespace OpenRiaServices.Client
     internal sealed partial class EntitySetIndexManager
     {
         private readonly EntitySet _entitySet;
-        private readonly PrimaryKeyEntityIndex _primaryKeyIndex = new();
+        private readonly IdentityKeyIndex _primaryKeyIndex = new();
         private readonly Dictionary<EntityAssociationAttribute, EntityAssociationIndex> _associationIndexes = new(OtherKeyComparer.Instance);
 
         public EntitySetIndexManager(EntitySet entitySet)

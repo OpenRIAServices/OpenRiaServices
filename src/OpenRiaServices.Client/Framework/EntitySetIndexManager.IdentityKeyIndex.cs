@@ -7,12 +7,12 @@ using System.Globalization;
 
 namespace OpenRiaServices.Client
 {
-internal sealed partial class EntitySetIndexManager
+    internal sealed partial class EntitySetIndexManager
     {
         /// <summary>
         /// Maintains bidirectional identity mappings so entities can be removed even when their key has subsequently changed.
         /// </summary>
-        private sealed class PrimaryKeyEntityIndex
+        private sealed class IdentityKeyIndex
         {
             private readonly Dictionary<object, Entity> _entities = new(EqualityComparer<object>.Default);
             private readonly Dictionary<Entity, object> _identitiesByEntity = new(ReferenceEqualityComparer<Entity>.Instance);
