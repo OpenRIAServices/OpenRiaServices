@@ -348,7 +348,7 @@ namespace OpenRiaServices.Client.Internal
         /// </summary>
         /// <remarks>
         /// Cast to <see cref="ISingleValueAccessor{TKey}"/> where <see cref="KeyType"/> corresponds to <c>TKey</c>,
-        /// to be able to retreive a value of Type <see cref="KeyType"/> without boxing.
+        /// to be able to retrieve a value of Type <see cref="KeyType"/> without boxing.
         /// </remarks>
         internal interface ISingleValueAccessor
         {
