@@ -124,7 +124,7 @@ namespace OpenRiaServices.Client
                     return false;
                 }
 
-                index = SingleValueIndexFactory.Create(member).CreateIndex(member.Name);
+                index = SingleValueIndex.Create(member);
             }
             else
             {
@@ -512,71 +512,39 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Selects typed index implementations where possible to avoid object-based key handling during relationship lookup.
         /// </summary>
-        private abstract class SingleValueIndexFactory
+        private static class SingleValueIndex
         {
             /// <summary>
             /// Chooses a specialized factory for supported member types, falling back to object keys to support all other association members.
             /// </summary>
             /// <param name="member">The target association member to index.</param>
             /// <returns>A factory compatible with <paramref name="member"/>.</returns>
-            public static SingleValueIndexFactory Create(MetaMember member)
+            public static EntityAssociationIndex Create(MetaMember member)
             {
                 var accessor = member.GetValueAccessor();
 
-                if (accessor is MetaMember.IValueAccessor<int> intAccessor)
+                switch (accessor)
                 {
-                    return new TypedSingleValueIndexFactory<int>(intAccessor);
-                }
-                if (accessor is MetaMember.IValueAccessor<long> longAccessor)
-                {
-                    return new TypedSingleValueIndexFactory<long>(longAccessor);
-                }
-                if (accessor is MetaMember.IValueAccessor<Guid> guidAccessor)
-                {
-                    return new TypedSingleValueIndexFactory<Guid>(guidAccessor);
-                }
-                if (accessor is MetaMember.IValueAccessor<string> stringAccessor)
-                {
-                    return new TypedSingleValueIndexFactory<string>(stringAccessor);
-                }
-                if (accessor is MetaMember.IValueAccessor<DateTime> dateTimeAccessor)
-                {
-                    return new TypedSingleValueIndexFactory<DateTime>(dateTimeAccessor);
+                    case IValueAccessor<int> intAccessor:
+                        return new SingleValueIndex<int>(member.Name, intAccessor);
+                    case IValueAccessor<long> longAccessor:
+                        return new SingleValueIndex<long>(member.Name, longAccessor);
+                    case IValueAccessor<Guid> guidAccessor:
+                        return new SingleValueIndex<Guid>(member.Name, guidAccessor);
+                    case IValueAccessor<string> stringAccessor:
+                        return new SingleValueIndex<string>(member.Name, stringAccessor);
+                    case IValueAccessor<DateTime> dateTimeAccessor:
+                        return new SingleValueIndex<DateTime>(member.Name, dateTimeAccessor);
                 }
 
                 if (accessor.GetType().GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(MetaMember.IValueAccessor<>))
                         is Type genericAccessorInterface)
                 {
-                    Type indexType = typeof(TypedSingleValueIndexFactory<>).MakeGenericType(genericAccessorInterface.GetGenericArguments()[0]);
-                    return (SingleValueIndexFactory)Activator.CreateInstance(indexType, accessor)!;
+                    Type indexType = typeof(SingleValueIndex<>).MakeGenericType(genericAccessorInterface.GetGenericArguments()[0]);
+                    return (EntityAssociationIndex)Activator.CreateInstance(indexType, [member.Name, accessor])!;
                 }
 
-                return new TypedSingleValueIndexFactory<object>(member.GetObjectValueAccessor());
-            }
-
-            /// <summary>
-            /// Creates the typed index shared by compatible associations.
-            /// </summary>
-            /// <param name="memberName">The indexed target member name.</param>
-            /// <returns>An index for association lookup.</returns>
-            public abstract EntityAssociationIndex CreateIndex(string memberName);
-        }
-
-        /// <summary>
-        /// Creates type-preserving indexes and lookups for a supported association key type.
-        /// </summary>
-        private sealed class TypedSingleValueIndexFactory<TKey> : SingleValueIndexFactory where TKey : notnull
-        {
-            private readonly MetaMember.IValueAccessor<TKey> _targetAccessor;
-
-            public TypedSingleValueIndexFactory(MetaMember.IValueAccessor<TKey> targetAccessor)
-            {
-                _targetAccessor = targetAccessor;
-            }
-
-            public override EntityAssociationIndex CreateIndex(string memberName)
-            {
-                return new SingleValueIndex<TKey>(memberName, _targetAccessor);
+                return new SingleValueIndex<object>(member.Name, member.GetObjectValueAccessor());
             }
         }
 
