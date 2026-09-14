@@ -414,7 +414,7 @@ namespace OpenRiaServices.Client.Test
         }
 
         /// <summary>
-        /// Execise the generic fallback path for accessing keys
+        /// Exercise the generic fallback path for accessing keys
         /// </summary>
         [TestMethod]
         public void EntitySet_AssociationIndex_NonSpecializedTypes()
