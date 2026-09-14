@@ -337,7 +337,7 @@ namespace OpenRiaServices.Client.Test
             EntitySet detailSet = container.GetEntitySet<PurchaseOrderDetail>();
             EntityAssociationAttribute association = ((IEntityCollection)order.PurchaseOrderDetails).Association;
 
-            Assert.IsTrue(detailSet.TryGetMultiValueAssociationEntities(association, order, out IEnumerable<Entity> entities));
+            Assert.IsTrue(detailSet.TryGetAssociationEntities(association, order, out IEnumerable<Entity> entities));
             Assert.IsNotNull(entities);
             Assert.IsTrue(new[] { detail1, detail2, detail3 }.SequenceEqual(entities.Cast<PurchaseOrderDetail>()));
         }
@@ -362,7 +362,7 @@ namespace OpenRiaServices.Client.Test
 
             EntityAssociationAttribute association = parent.GetEntityRef("Child").Association;
 
-            Assert.IsTrue(childSet.TryGetUniqueAssociationEntities(association, parent, out IEnumerable<Entity> entities));
+            Assert.IsTrue(childSet.TryGetAssociationEntities(association, parent, out IEnumerable<Entity> entities));
             Assert.AreSequenceEqual([child1, child2], entities.Cast<NullableFKChild>());
             Assert.IsNull(parent.Child);
 
@@ -389,7 +389,7 @@ namespace OpenRiaServices.Client.Test
 
             EntityAssociationAttribute association = parent.GetType().GetProperty(nameof(parent.Children)).GetCustomAttribute<EntityAssociationAttribute>();
 
-            Assert.IsTrue(childSet.TryGetMultiValueAssociationEntities(association, parent, out IEnumerable<Entity> entities));
+            Assert.IsTrue(childSet.TryGetAssociationEntities(association, parent, out IEnumerable<Entity> entities));
             Assert.AreSequenceEqual([child1, child2], entities.Cast<NullableFKChild>());
 
             Assert.AreSame(parent, child1.Parent);
@@ -409,7 +409,7 @@ namespace OpenRiaServices.Client.Test
 
             EntityAssociationAttribute association = new EntityAssociationAttribute("StringKeyParent_Children", "ParentName", "Name");
 
-            Assert.IsTrue(parentSet.TryGetUniqueAssociationEntities(association, child, out IEnumerable<Entity> entities));
+            Assert.IsTrue(parentSet.TryGetAssociationEntities(association, child, out IEnumerable<Entity> entities));
             Assert.AreSequenceEqual([parent], entities);
         }
 
@@ -430,7 +430,7 @@ namespace OpenRiaServices.Client.Test
 
             EntityAssociationAttribute association = new EntityAssociationAttribute("DecimalKeyParent_Children", "ParentAmount", "Amount");
 
-            Assert.IsTrue(parentSet.TryGetUniqueAssociationEntities(association, child, out IEnumerable<Entity> entities));
+            Assert.IsTrue(parentSet.TryGetAssociationEntities(association, child, out IEnumerable<Entity> entities));
             Assert.AreSequenceEqual([parent], entities);
         }
 

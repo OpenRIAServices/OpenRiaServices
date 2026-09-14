@@ -5,6 +5,7 @@ using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using OpenRiaServices.Client.Internal;
@@ -850,12 +851,15 @@ namespace OpenRiaServices.Client
             return entity;
         }
 
-        internal bool TryGetUniqueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
-        {
-            return this._indexes.TryGetAssociationEntities(association, sourceEntity, out entities);
-        }
-
-        internal bool TryGetMultiValueAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
+        /// <summary>
+        /// Attempts to retrieve entities matching the specified association using the set's association indexes.
+        /// </summary>
+        /// <param name="association">The association that defines the source and target key members.</param>
+        /// <param name="sourceEntity">The entity whose association key values are used for the lookup.</param>
+        /// <param name="entities">The matching entities when the association can be queried; otherwise, <see langword="null"/>.</param>
+        /// <returns><see langword="true"/> if the association can be queried; otherwise, <see langword="false"/>.</returns>
+        /// <remarks><see langword="false"/> means the association is invalid (or there is no index to query), not that there are no matching entities</remarks>
+        internal bool TryGetAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)
         {
             return this._indexes.TryGetAssociationEntities(association, sourceEntity, out entities);
         }
