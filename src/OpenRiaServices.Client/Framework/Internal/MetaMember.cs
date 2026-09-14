@@ -318,11 +318,11 @@ namespace OpenRiaServices.Client.Internal
             }
             if (propertyType == typeof(Guid))
             {
-                return new NonNullableSingleValueAccessor<Guid>((Func<object, Guid>) member.GetTypedGetter());
+                return new NonNullableValueAccessor<Guid>((Func<object, Guid>) member.GetTypedGetter());
             }
             if (propertyType == typeof(Guid?))
             {
-                return new NullableSingleValueAccessor<Guid>((Func<object, Guid?>)member.GetTypedGetter());
+                return new NullableValueAccessor<Guid>((Func<object, Guid?>)member.GetTypedGetter());
             }
 
             // Reflection based fallback for other types
