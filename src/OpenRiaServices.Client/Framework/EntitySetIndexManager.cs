@@ -17,7 +17,7 @@ namespace OpenRiaServices.Client
     {
         private readonly EntitySet _entitySet;
         private readonly IdentityKeyIndex _primaryKeyIndex;
-        private readonly Dictionary<CompositeAssociationMemberNames, IEntityAssociationLookup> _associationIndexes = new();
+        private readonly Dictionary<CompositeAssociationMemberNames, EntityIndex> _associationIndexes = new();
         private readonly List<EntityAssociationIndex> _secondaryIndexes = new();
 
         public EntitySetIndexManager(EntitySet entitySet)
@@ -104,7 +104,7 @@ namespace OpenRiaServices.Client
 
         public bool TryGetAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
         {
-            if (!TryGetAssociationIndex(association, out IEntityAssociationLookup? index))
+            if (!TryGetAssociationIndex(association, out EntityIndex? index))
             {
                 entities = null;
                 return false;
@@ -119,7 +119,7 @@ namespace OpenRiaServices.Client
                 index.Add(entity);
         }
 
-        private bool TryGetAssociationIndex(EntityAssociationAttribute association, [NotNullWhen(true)] out IEntityAssociationLookup? index)
+        private bool TryGetAssociationIndex(EntityAssociationAttribute association, [NotNullWhen(true)] out EntityIndex? index)
         {
             if (association.ThisKeyMembers.Count != association.OtherKeyMembers.Count || association.OtherKeyMembers.Count == 0)
             {
@@ -179,19 +179,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Defines the lifecycle operations shared by lazily-created association indexes.
         /// </summary>
-        private interface IEntityAssociationLookup
-        {
-            /// <summary>
-            /// Uses the source entity's association key to query a compatible index.
-            /// </summary>
-            /// <param name="association">The association that identifies the source members.</param>
-            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
-            /// <param name="entities">The matching entities when the lookup is supported.</param>
-            /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
-            bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities);
-        }
-
-        private abstract class EntityAssociationIndex : IEntityAssociationLookup
+        private abstract class EntityIndex
         {
             /// <summary>
             /// Removes all cached relationship mappings when the owning entity set is reset.
@@ -211,13 +199,23 @@ namespace OpenRiaServices.Client
             public abstract void Remove(Entity entity);
 
             /// <summary>
+            /// Uses the source entity's association key to query a compatible index.
+            /// </summary>
+            /// <param name="association">The association that identifies the source members.</param>
+            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
+            /// <param name="entities">The matching entities when the lookup is supported.</param>
+            /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
+            public abstract bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities);
+        }
+
+        private abstract class EntityAssociationIndex : EntityIndex
+        {
+            /// <summary>
             /// Reconciles an entity's mapping after a property or state change, avoiding a full index rebuild.
             /// </summary>
             /// <param name="entity">The changed entity.</param>
             /// <param name="propertyName">The name of the changed property.</param>
             public abstract void Update(Entity entity, string propertyName);
-
-            public abstract bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities);
         }
 
         /// <summary>

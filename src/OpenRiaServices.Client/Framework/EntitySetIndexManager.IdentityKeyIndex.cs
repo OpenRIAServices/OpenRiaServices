@@ -14,7 +14,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Maintains bidirectional identity mappings so entities can be removed even when their key has subsequently changed.
         /// </summary>
-        private abstract class IdentityKeyIndex : IEntityAssociationLookup
+        private abstract class IdentityKeyIndex : EntityIndex
         {
             public static IdentityKeyIndex Create(IReadOnlyList<MetaMember> keyMembers)
             {
@@ -28,19 +28,9 @@ namespace OpenRiaServices.Client
                 return new IdentityKeyIndex<object>(IdentityValueAccessor.Instance);
             }
 
-            public abstract void Clear();
-
-            public abstract bool Contains(object identity);
-
             public abstract bool TryGetValue(object identity, [NotNullWhen(true)] out Entity? entity);
 
             public abstract bool TryGetByIdentity(Entity identity, bool throwOnNull, [NotNullWhen(true)] out Entity? entity);
-
-            public abstract void Add(Entity entity);
-
-            public abstract void Remove(Entity entity);
-
-            public abstract bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities);
 
             /// <summary>
             /// A value accessor that retrieves the identity of an entity.
@@ -84,11 +74,6 @@ namespace OpenRiaServices.Client
             {
                 _entities.Clear();
                 _identitiesByEntity.Clear();
-            }
-
-            public override bool Contains(object identity)
-            {
-                return identity is TKey typedIdentity && _entities.ContainsKey(typedIdentity);
             }
 
             public override bool TryGetValue(object identity, [NotNullWhen(true)] out Entity? entity)
