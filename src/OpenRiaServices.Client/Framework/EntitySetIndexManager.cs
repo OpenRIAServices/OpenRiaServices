@@ -122,7 +122,7 @@ namespace OpenRiaServices.Client
 
         private bool TryGetAssociationIndex(EntityAssociationAttribute association, [NotNullWhen(true)] out EntityIndex? index)
         {
-            if (association.ThisKeyMembers.Count != association.OtherKeyMembers.Count || association.OtherKeyMembers.Count == 0)
+            if (association.ThisKeyMembers.Count != association.OtherKeyMembers.Count)
             {
                 index = null;
                 return false;
@@ -135,9 +135,10 @@ namespace OpenRiaServices.Client
             }
 
             MetaType metaType = MetaType.GetMetaType(_entitySet.EntityType);
-            if (association.OtherKeyMembers.Count == 1)
+            var keyMembers = association.OtherKeyMembers;
+            if (keyMembers.Count == 1)
             {
-                string memberName = association.OtherKeyMembers[0];
+                string memberName = keyMembers[0];
                 MetaMember member = metaType[memberName];
                 if (member == null)
                 {
@@ -149,10 +150,10 @@ namespace OpenRiaServices.Client
             }
             else
             {
-                MetaMember[] members = new MetaMember[association.OtherKeyMembers.Count];
-                for (int i = 0; i < association.OtherKeyMembers.Count; i++)
+                MetaMember[] members = new MetaMember[keyMembers.Count];
+                for (int i = 0; i < keyMembers.Count; i++)
                 {
-                    MetaMember member = metaType[association.OtherKeyMembers[i]];
+                    MetaMember member = metaType[keyMembers[i]];
                     if (member == null)
                     {
                         index = null;
