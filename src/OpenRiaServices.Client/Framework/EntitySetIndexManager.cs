@@ -612,20 +612,17 @@ namespace OpenRiaServices.Client
         /// </summary>
         private readonly struct CompositeAssociationMemberNames : IEquatable<CompositeAssociationMemberNames>
         {
-            private readonly string[] _memberNames;
+            private readonly IReadOnlyList<string> _memberNames;
             private readonly int _hashCode;
 
             public CompositeAssociationMemberNames(IReadOnlyList<string> memberNames)
             {
-                _memberNames = new string[memberNames.Count];
+                _memberNames = memberNames;
 
                 HashCode hashCode = new HashCode();
-                hashCode.Add(memberNames.Count);
                 for (int i = 0; i < memberNames.Count; i++)
                 {
-                    string memberName = memberNames[i];
-                    _memberNames[i] = memberName;
-                    hashCode.Add(memberName, StringComparer.Ordinal);
+                    hashCode.Add(memberNames[i], StringComparer.Ordinal);
                 }
 
                 _hashCode = hashCode.ToHashCode();
@@ -633,7 +630,7 @@ namespace OpenRiaServices.Client
 
             public bool Contains(string propertyName)
             {
-                for (int i = 0; i < _memberNames.Length; i++)
+                for (int i = 0; i < _memberNames.Count; i++)
                 {
                     if (string.Equals(_memberNames[i], propertyName, StringComparison.Ordinal))
                     {
@@ -646,12 +643,12 @@ namespace OpenRiaServices.Client
 
             public bool Equals(CompositeAssociationMemberNames other)
             {
-                if (other._memberNames.Length != _memberNames.Length)
+                if (other._memberNames.Count != _memberNames.Count)
                 {
                     return false;
                 }
 
-                for (int i = 0; i < _memberNames.Length; i++)
+                for (int i = 0; i < _memberNames.Count; i++)
                 {
                     if (!string.Equals(_memberNames[i], other._memberNames[i], StringComparison.Ordinal))
                     {
