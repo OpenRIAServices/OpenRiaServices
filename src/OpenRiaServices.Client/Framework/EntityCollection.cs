@@ -448,8 +448,7 @@ namespace OpenRiaServices.Client
             // Get associated entity set and filter based on FK predicate
             EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
             IEnumerable<Entity> entities = set.OfType<Entity>();
-            if (set.TryGetAssociationEntities(this.AssocAttribute, this._parent, out IEnumerable<Entity>? indexedEntities)
-                && indexedEntities != null)
+            if (set.TryGetAssociationEntities(this.AssocAttribute, this._parent, out IEnumerable<Entity>? indexedEntities))
             {
                 entities = indexedEntities;
             }

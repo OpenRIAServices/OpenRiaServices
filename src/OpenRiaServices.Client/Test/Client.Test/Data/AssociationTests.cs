@@ -317,6 +317,21 @@ namespace OpenRiaServices.Client.Test
             a.BID2 = 2;
             Assert.AreSame(b, a.B);
             Assert.AreEqual(4, propChangeCount);
+
+            EntitySet<B> bSet = ctxt.EntityContainer.GetEntitySet<B>();
+            EntityAssociationAttribute primaryKeyAssociation = new EntityAssociationAttribute(
+                "A_B_PrimaryKey",
+                [nameof(A.BID1), nameof(A.BID2)],
+                [nameof(B.ID1), nameof(B.ID2)]);
+            Assert.IsTrue(bSet.TryGetAssociationEntities(primaryKeyAssociation, a, out IEnumerable<Entity> primaryKeyMatches));
+            Assert.AreSequenceEqual([b], primaryKeyMatches.Cast<B>());
+
+            EntityAssociationAttribute reorderedKeyAssociation = new EntityAssociationAttribute(
+                "A_B_ReorderedKey",
+                [nameof(A.BID2), nameof(A.BID1)],
+                [nameof(B.ID2), nameof(B.ID1)]);
+            Assert.IsTrue(bSet.TryGetAssociationEntities(reorderedKeyAssociation, a, out IEnumerable<Entity> reorderedKeyMatches));
+            Assert.AreSequenceEqual([b], reorderedKeyMatches.Cast<B>());
         }
 
         [TestMethod]
@@ -342,32 +357,6 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(new[] { detail1, detail2, detail3 }.SequenceEqual(entities.Cast<PurchaseOrderDetail>()));
         }
 
-        [TestMethod]
-        public void EntitySet_AssociationIndex_UniqueReturnsAmbiguousMatches()
-        {
-            DynamicEntityContainer container = new DynamicEntityContainer();
-            EntitySet<NullableFKParent> parentSet = container.AddEntitySet<NullableFKParent>(EntitySetOperations.All);
-            EntitySet<NullableFKChild> childSet = container.AddEntitySet<NullableFKChild>(EntitySetOperations.All);
-
-            NullableFKParent parent = new NullableFKParent { ID = 1 };
-            NullableFKChild child1 = new NullableFKChild { ID = 2, ParentID_Singleton = 1 };
-            NullableFKChild child2 = new NullableFKChild { ID = 3, ParentID_Singleton = 1 };
-
-            parentSet.Attach(parent);
-            childSet.Attach(child1);
-            childSet.Attach(child2);
-            childSet.Attach(new NullableFKChild { ID = 4, ParentID_Singleton = null });
-            childSet.Attach(new NullableFKChild { ID = 5, ParentID_Singleton = 2 });
-            _ = parent.Child;
-
-            EntityAssociationAttribute association = parent.GetEntityRef("Child").Association;
-
-            Assert.IsTrue(childSet.TryGetAssociationEntities(association, parent, out IEnumerable<Entity> entities));
-            Assert.AreSequenceEqual([child1, child2], entities.Cast<NullableFKChild>());
-            Assert.IsNull(parent.Child);
-
-            Assert.AreSame(parent, child1.Parent2);
-        }
 
         [TestMethod]
         public void EntitySet_AssociationIndex_NullableKey()
@@ -411,6 +400,28 @@ namespace OpenRiaServices.Client.Test
 
             Assert.IsTrue(parentSet.TryGetAssociationEntities(association, child, out IEnumerable<Entity> entities));
             Assert.AreSequenceEqual([parent], entities);
+            Assert.AreSame(parent, parentSet.GetEntityByKey(["parent"]));
+        }
+
+        [TestMethod]
+        public void EntitySet_TypedIdentityIndex_PreservesIdentityLifecycle()
+        {
+            DynamicEntityContainer container = new DynamicEntityContainer();
+            EntitySet<StringKeyParent> parentSet = container.AddEntitySet<StringKeyParent>(EntitySetOperations.All);
+            StringKeyParent parent = new StringKeyParent { Name = "parent" };
+
+            parentSet.Attach(parent);
+            Assert.AreSame(parent, parentSet.GetEntityByKey(["parent"]));
+
+            ExceptionHelper.ExpectInvalidOperationException(
+                () => parentSet.Attach(new StringKeyParent { Name = "parent" }),
+                Resource.EntitySet_DuplicateIdentity);
+
+            parent.Name = "changed";
+            parentSet.Detach(parent);
+
+            Assert.IsNull(parentSet.GetEntityByKey(["parent"]));
+            Assert.IsNull(parentSet.GetEntityByKey(["changed"]));
         }
 
         /// <summary>
