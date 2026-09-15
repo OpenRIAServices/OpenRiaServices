@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
@@ -16,7 +17,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         private abstract class IdentityKeyIndex : EntityIndex
         {
-            public static IdentityKeyIndex Create(IReadOnlyList<MetaMember> keyMembers)
+            public static IdentityKeyIndex Create(ReadOnlyCollection<MetaMember> keyMembers)
             {
                 if (keyMembers.Count == 1)
                 {
