@@ -350,10 +350,10 @@ namespace OpenRiaServices.Client
                     return _entitiesWithNullKey ??= new List<Entity>();
                 }
 
-                if (!_entitiesByKey.TryGetValue(key.Value!, out List<Entity>? entities))
+                if (!_entitiesByKey.TryGetValue(key.Value, out List<Entity>? entities))
                 {
                     entities = new List<Entity>();
-                    _entitiesByKey.Add(key.Value!, entities);
+                    _entitiesByKey.Add(key.Value, entities);
                 }
 
                 return entities;
@@ -366,7 +366,7 @@ namespace OpenRiaServices.Client
                 {
                     entities = _entitiesWithNullKey;
                 }
-                else if (!_entitiesByKey.TryGetValue(key.Value!, out entities))
+                else if (!_entitiesByKey.TryGetValue(key.Value, out entities))
                 {
                     return;
                 }
@@ -376,20 +376,15 @@ namespace OpenRiaServices.Client
                     return;
                 }
 
-                int index = entities.IndexOf(entity);
-                if (index >= 0)
+                if (entities.Remove(entity) && entities.Count == 0)
                 {
-                    entities.RemoveAt(index);
-                    if (entities.Count == 0)
+                    if (!key.HasValue)
                     {
-                        if (!key.HasValue)
-                        {
-                            _entitiesWithNullKey = null;
-                        }
-                        else
-                        {
-                            _entitiesByKey.Remove(key.Value!);
-                        }
+                        _entitiesWithNullKey = null;
+                    }
+                    else
+                    {
+                        _entitiesByKey.Remove(key.Value);
                     }
                 }
             }
@@ -503,14 +498,9 @@ namespace OpenRiaServices.Client
                     return;
                 }
 
-                int index = entities.IndexOf(entity);
-                if (index >= 0)
+                if (entities.Remove(entity) && entities.Count == 0)
                 {
-                    entities.RemoveAt(index);
-                    if (entities.Count == 0)
-                    {
-                        _entitiesByKey.Remove(key);
-                    }
+                    _entitiesByKey.Remove(key);
                 }
             }
 
@@ -593,19 +583,20 @@ namespace OpenRiaServices.Client
 
             public TKey? Value { get; }
 
+            [MemberNotNullWhen(true, nameof(Value))]
             public bool HasValue { get; }
 
             public bool Equals(SingleValueIndexKey<TKey> other)
             {
                 return HasValue == other.HasValue
-                    && (!HasValue || EqualityComparer<TKey>.Default.Equals(Value!, other.Value!));
+                    && (!HasValue || EqualityComparer<TKey>.Default.Equals(Value, other.Value!));
             }
 
             public override bool Equals(object? obj) => obj is SingleValueIndexKey<TKey> other && Equals(other);
 
             public override int GetHashCode()
             {
-                return HasValue ? EqualityComparer<TKey>.Default.GetHashCode(Value!) : 0;
+                return HasValue ? EqualityComparer<TKey>.Default.GetHashCode(Value) : 0;
             }
         }
 
