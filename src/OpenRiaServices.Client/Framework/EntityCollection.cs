@@ -594,8 +594,6 @@ namespace OpenRiaServices.Client
             }
             else if (this._parent.EntitySet == null && this._sourceSet != null)
             {
-                // PERF: Can look into making RegisterAssociationCallback callbacks a Set<collection> per assocAttribute
-
                 // If the parent entity has been detached and we were monitoring,
                 // we need to remove our event handler
                 ((INotifyCollectionChanged)this._sourceSet).CollectionChanged -= this.SourceSet_CollectionChanged;
@@ -663,10 +661,6 @@ namespace OpenRiaServices.Client
         /// <param name="args">The collection changed event arguments.</param>
         private void SourceSet_CollectionChanged(object? sender, NotifyCollectionChangedEventArgs args)
         {
-            // PERF: add a HashSet<IEntityCollection> to set instead of using INotifyCollectionChanged to avoid the overhead of the event delegate invocation
-            // For added entities, only invoke the method if the entity is not New
-            // For even better perf, keep track of collections based on parent Key (find parents and then collection)
-
             if (this._parent.EntityState != EntityState.New &&
                 args.Action == NotifyCollectionChangedAction.Add
                 && args.NewItems is not null)
