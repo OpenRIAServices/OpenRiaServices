@@ -16,39 +16,58 @@ namespace OpenRiaServices.Client
     internal sealed partial class EntitySetIndexManager
     {
         private readonly EntitySet _entitySet;
-        private readonly IdentityKeyIndex _primaryKeyIndex = new();
-        private readonly Dictionary<EntityAssociationAttribute, EntityAssociationIndex> _associationIndexes = new(OtherKeyComparer.Instance);
+        private readonly IdentityKeyIndex _primaryKeyIndex;
+        private readonly Dictionary<CompositeAssociationMemberNames, IEntityAssociationLookup> _associationIndexes = new();
+        private readonly List<EntityAssociationIndex> _secondaryIndexes = new();
 
         public EntitySetIndexManager(EntitySet entitySet)
         {
             _entitySet = entitySet ?? throw new ArgumentNullException(nameof(entitySet));
+            MetaType metaType = MetaType.GetMetaType(entitySet.EntityType);
+            _primaryKeyIndex = IdentityKeyIndex.Create(metaType.KeyMembers);
+            // Allow primary key to be used as index for assication properties
+            _associationIndexes.Add(
+                new CompositeAssociationMemberNames(metaType.KeyMembers.Select(static member => member.Name).ToArray()),
+                _primaryKeyIndex);
         }
 
         public void Clear()
         {
             _primaryKeyIndex.Clear();
 
-            foreach (EntityAssociationIndex index in _associationIndexes.Values)
+            foreach (EntityAssociationIndex index in _secondaryIndexes)
             {
                 index.Clear();
             }
         }
 
-        public bool TryGetPrimaryEntity(object identity, [NotNullWhen(true)] out Entity? entity)
+        /// <summary>
+        /// Lookup an entity by identity. Returns <see langword="true"/> if the entity was found; otherwise, <see langword="false"/>.
+        /// </summary>
+        public bool TryGetByPrimary(object identity, [NotNullWhen(true)] out Entity? entity)
         {
             return _primaryKeyIndex.TryGetValue(identity, out entity);
         }
 
-        public bool ContainsPrimaryIdentity(object identity)
+        /// <summary>
+        /// Lookup currently tracked entity (if any) with the same identity as the provided entity
+        /// </summary>
+        public bool TryGetByPrimary(Entity identity, bool throwOnNull, [NotNullWhen(true)] out Entity? entity)
         {
-            return _primaryKeyIndex.Contains(identity);
+            return _primaryKeyIndex.TryGetByIdentity(identity, throwOnNull, out entity);
         }
 
+        /// <summary>
+        /// Add entity to primary index, throwing if an entity with the same identity is already tracked.
+        /// </summary>
         public void AddPrimary(Entity entity)
         {
             _primaryKeyIndex.Add(entity);
         }
 
+        /// <summary>
+        /// Removes an entity from primary index, does nothing if the entity does not already exist.
+        /// </summary>
         public void RemovePrimary(Entity entity)
         {
             _primaryKeyIndex.Remove(entity);
@@ -61,7 +80,7 @@ namespace OpenRiaServices.Client
                 return;
             }
 
-            foreach (EntityAssociationIndex index in _associationIndexes.Values)
+            foreach (EntityAssociationIndex index in _secondaryIndexes)
             {
                 index.Add(entity);
             }
@@ -69,7 +88,7 @@ namespace OpenRiaServices.Client
 
         public void RemoveAssociationEntity(Entity entity)
         {
-            foreach (EntityAssociationIndex index in _associationIndexes.Values)
+            foreach (EntityAssociationIndex index in _secondaryIndexes)
             {
                 index.Remove(entity);
             }
@@ -77,7 +96,7 @@ namespace OpenRiaServices.Client
 
         public void UpdateAssociationIndexes(Entity entity, string propertyName)
         {
-            foreach (EntityAssociationIndex index in _associationIndexes.Values)
+            foreach (EntityAssociationIndex index in _secondaryIndexes)
             {
                 index.Update(entity, propertyName);
             }
@@ -85,7 +104,7 @@ namespace OpenRiaServices.Client
 
         public bool TryGetAssociationEntities(EntityAssociationAttribute association, Entity sourceEntity, out IEnumerable<Entity>? entities)
         {
-            if (!TryGetAssociationIndex(association, out EntityAssociationIndex? index))
+            if (!TryGetAssociationIndex(association, out IEntityAssociationLookup? index))
             {
                 entities = null;
                 return false;
@@ -100,7 +119,7 @@ namespace OpenRiaServices.Client
                 index.Add(entity);
         }
 
-        private bool TryGetAssociationIndex(EntityAssociationAttribute association, [NotNullWhen(true)] out EntityAssociationIndex? index)
+        private bool TryGetAssociationIndex(EntityAssociationAttribute association, [NotNullWhen(true)] out IEntityAssociationLookup? index)
         {
             if (association.ThisKeyMembers.Count != association.OtherKeyMembers.Count || association.OtherKeyMembers.Count == 0)
             {
@@ -108,7 +127,8 @@ namespace OpenRiaServices.Client
                 return false;
             }
 
-            if (_associationIndexes.TryGetValue(association, out index))
+            CompositeAssociationMemberNames memberNames = new(association.OtherKeyMembers);
+            if (_associationIndexes.TryGetValue(memberNames, out index))
             {
                 return true;
             }
@@ -141,11 +161,13 @@ namespace OpenRiaServices.Client
                     members[i] = member;
                 }
 
-                index = new CompositeAssociationEntityIndex(new CompositeAssociationMemberNames(association.OtherKeyMembers), members);
+                index = new CompositeAssociationEntityIndex(memberNames, members);
             }
 
-            LoadAssociationIndex(index);
-            _associationIndexes.Add(association, index);
+            EntityAssociationIndex secondaryIndex = (EntityAssociationIndex)index;
+            LoadAssociationIndex(secondaryIndex);
+            _secondaryIndexes.Add(secondaryIndex);
+            _associationIndexes.Add(memberNames, index);
             return true;
         }
 
@@ -157,7 +179,19 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Defines the lifecycle operations shared by lazily-created association indexes.
         /// </summary>
-        private abstract class EntityAssociationIndex
+        private interface IEntityAssociationLookup
+        {
+            /// <summary>
+            /// Uses the source entity's association key to query a compatible index.
+            /// </summary>
+            /// <param name="association">The association that identifies the source members.</param>
+            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
+            /// <param name="entities">The matching entities when the lookup is supported.</param>
+            /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
+            bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities);
+        }
+
+        private abstract class EntityAssociationIndex : IEntityAssociationLookup
         {
             /// <summary>
             /// Removes all cached relationship mappings when the owning entity set is reset.
@@ -183,14 +217,6 @@ namespace OpenRiaServices.Client
             /// <param name="propertyName">The name of the changed property.</param>
             public abstract void Update(Entity entity, string propertyName);
 
-            /// <summary>
-            /// Uses the source entity's association key to query a compatible index.
-            /// </summary>
-            /// <param name="association">The association that identifies the source members.</param>
-            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
-            /// <param name="entities">The matching entities when the lookup is supported.</param>
-            /// 
-            /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
             public abstract bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities);
         }
 
@@ -691,51 +717,6 @@ namespace OpenRiaServices.Client
             public override bool Equals(object? obj) => obj is AssociationIndexKey other && Equals(other);
 
             public override int GetHashCode() => _hashCode;
-        }
-
-        private sealed class OtherKeyComparer : IEqualityComparer<EntityAssociationAttribute>
-        {
-            public static OtherKeyComparer Instance { get; } = new();
-            private OtherKeyComparer()
-            {
-            }
-
-            public bool Equals(EntityAssociationAttribute? x, EntityAssociationAttribute? y)
-            {
-                if (x is null || y is null)
-                {
-                    return (x is null) == (y is null);
-                }
-
-                var keyMembers = x.OtherKeyMembers;
-                var otherKeyMembers = y.OtherKeyMembers;
-
-                if (keyMembers.Count != otherKeyMembers.Count)
-                {
-                    return false;
-                }
-
-                for (int i = 0; i < keyMembers.Count; ++i)
-                {
-                    if (keyMembers[i] != otherKeyMembers[i])
-                        return false;
-                }
-                return true;
-            }
-
-            public int GetHashCode(EntityAssociationAttribute obj)
-            {
-                var keyMembers = obj.OtherKeyMembers;
-                if (keyMembers.Count == 1)
-                    return keyMembers[0].GetHashCode();
-
-                int hashCode = keyMembers.Count.GetHashCode();
-                for (int i = 0; i < keyMembers.Count; ++i)
-                {
-                    hashCode = HashCode.Combine(hashCode, keyMembers[i].GetHashCode());
-                }
-                return hashCode;
-            }
         }
 
         private sealed class ReferenceEqualityComparer<T> : IEqualityComparer<T> where T : class

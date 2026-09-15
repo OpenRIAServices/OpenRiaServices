@@ -395,9 +395,7 @@ namespace OpenRiaServices.Client
                 // - scenarios where an entity is removed and a new entity with the same identity is added
                 // - scenarios where the entity instance itself is the one already cached (for infer attach
                 //   state transition scenarios)
-                object? identity = entity.GetIdentity();
-                if (identity != null
-                    && this._indexes.TryGetPrimaryEntity(identity, out Entity? cachedEntity)
+                if (this._indexes.TryGetByPrimary(entity, throwOnNull: false, out Entity? cachedEntity)
                     && cachedEntity.EntityState != EntityState.Deleted
                     && !object.ReferenceEquals(entity, cachedEntity))
                 {
@@ -626,12 +624,7 @@ namespace OpenRiaServices.Client
 
             // Throw if the entity identity is null or we already have
             // an entity cached with the same identity.
-            object? identity = entity.GetIdentity();
-            if (identity == null)
-            {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
-            }
-            if (this._indexes.ContainsPrimaryIdentity(identity))
+            if (this._indexes.TryGetByPrimary(entity, throwOnNull: true, out _))
             {
                 throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
             }
@@ -736,13 +729,8 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(Resource.EntitySet_EntityAlreadyAttached);
             }
 
-            object? identity = entity.GetIdentity();
-            if (identity == null)
-            {
-                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.EntityKey_NullIdentity, entity));
-            }
-
-            this._indexes.TryGetPrimaryEntity(identity, out Entity? cachedEntity);
+            // TODO:
+            this._indexes.TryGetByPrimary(entity, throwOnNull: true, out Entity? cachedEntity);
             if (cachedEntity == null)
             {
                 // add the entity to the cache
@@ -847,7 +835,7 @@ namespace OpenRiaServices.Client
                 identity = EntityKey.Create(keyValues);
             }
 
-            this._indexes.TryGetPrimaryEntity(identity, out entity);
+            this._indexes.TryGetByPrimary(identity, out entity);
             return entity;
         }
 
