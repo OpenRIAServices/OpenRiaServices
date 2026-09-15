@@ -729,7 +729,7 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(Resource.EntitySet_EntityAlreadyAttached);
             }
 
-            // TODO:
+            // Look for existing entity in the cache based on key identity.
             this._indexes.TryGetByPrimary(entity, throwOnNull: true, out Entity? cachedEntity);
             if (cachedEntity == null)
             {

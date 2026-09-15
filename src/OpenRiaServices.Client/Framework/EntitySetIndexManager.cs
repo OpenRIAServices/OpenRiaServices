@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using OpenRiaServices.Client.Internal;
 using static OpenRiaServices.Client.Internal.MetaMember;
 
@@ -724,7 +725,8 @@ namespace OpenRiaServices.Client
 
             public bool Equals(T? x, T? y) => ReferenceEquals(x, y);
 
-            public int GetHashCode(T obj) => obj.GetHashCode();
+            // Note: RuntimeHelpers.GetHashCode returns a hash code based on the object reference, not the object's contents. This is important for reference equality comparisons.
+            public int GetHashCode(T obj) => RuntimeHelpers.GetHashCode(obj!);
         }
     }
 }
