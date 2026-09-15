@@ -25,7 +25,7 @@ namespace OpenRiaServices.Client
             _entitySet = entitySet ?? throw new ArgumentNullException(nameof(entitySet));
             MetaType metaType = MetaType.GetMetaType(entitySet.EntityType);
             _primaryKeyIndex = IdentityKeyIndex.Create(metaType.KeyMembers);
-            // Allow primary key to be used as index for assication properties
+            // Allow primary key to be used as index for association properties
             _associationIndexes.Add(
                 new CompositeAssociationMemberNames(metaType.KeyMembers.Select(static member => member.Name).ToArray()),
                 _primaryKeyIndex);
