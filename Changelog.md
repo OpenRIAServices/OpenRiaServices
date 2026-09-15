@@ -1,5 +1,6 @@
 # Unreleased
 
+* Query methods can opt into applying client-provided filtering, ordering, and paging before materialization by accepting an injected `ClientQuery<TEntity>` parameter. This enables methods to return a `List<TEntity>` while retaining database-side query composition and total-count support.
 * Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
 * Client-side entity association lookup now uses internal `EntitySet` indexes, including typed single-key accessors for common scalar key types, to reduce repeated full-set scans and lower allocation overhead during relationship resolution.
 * Updated Source Link configuration to rely on .NET SDK built-in Source Link support (removed explicit `Microsoft.SourceLink.GitHub` package reference)

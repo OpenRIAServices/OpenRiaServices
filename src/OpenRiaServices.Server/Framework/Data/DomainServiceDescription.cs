@@ -1666,6 +1666,27 @@ namespace OpenRiaServices.Server
             ReadOnlyCollection<DomainOperationParameter> parameters = operationEntry.Parameters;
             Type returnType = operationEntry.ReturnType;
 
+            if (operationEntry.HasClientQueryParameter)
+            {
+                if (operation != DomainOperation.Query)
+                {
+                    error = new InvalidOperationException($"Operation '{methodName}' can only use a ClientQuery<T> parameter when it is a query operation.");
+                    return false;
+                }
+
+                if (operationEntry.ClientQueryParameterCount != 1)
+                {
+                    error = new InvalidOperationException($"Query operation '{methodName}' must not declare more than one ClientQuery<T> parameter.");
+                    return false;
+                }
+
+                if (operationEntry.HasOutCountParameter)
+                {
+                    error = new InvalidOperationException($"Query operation '{methodName}' cannot combine a ClientQuery<T> parameter with an out total-count parameter.");
+                    return false;
+                }
+            }
+
             switch (operation)
             {
                 case DomainOperation.Delete:
@@ -1737,6 +1758,21 @@ namespace OpenRiaServices.Server
                     if (isSingleton && ((QueryAttribute)operationEntry.OperationAttribute).IsComposable)
                     {
                         throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_SingletonQueryMethodCannotCompose, methodName, returnType));
+                    }
+
+                    if (operationEntry.HasClientQueryParameter)
+                    {
+                        if (isSingleton || !((QueryAttribute)operationEntry.OperationAttribute).IsComposable)
+                        {
+                            error = new InvalidOperationException($"Query operation '{methodName}' must return an enumerable and be composable to use a ClientQuery<T> parameter.");
+                            return false;
+                        }
+
+                        if (operationEntry.ClientQueryEntityType != entityType)
+                        {
+                            error = new InvalidOperationException($"The ClientQuery entity type '{operationEntry.ClientQueryEntityType}' on query operation '{methodName}' must match the returned entity type '{entityType}'.");
+                            return false;
+                        }
                     }
 
                     break;
