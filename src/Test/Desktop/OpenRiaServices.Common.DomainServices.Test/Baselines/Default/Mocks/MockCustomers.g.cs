@@ -87,7 +87,23 @@ namespace TestDomainServices
             }
             set
             {
-                global::Cities.City previous = this.City;
+                global::Cities.City previous;
+                if ((this._city != null))
+                {
+                    previous = this._city.Entity;
+                }
+                else
+                {
+                    this._city = new EntityRef<global::Cities.City>(this, "City", this.FilterCity);
+                    if ((value == null))
+                    {
+                        previous = this._city.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("City", value);
@@ -519,7 +535,23 @@ namespace TestDomainServices
             }
             set
             {
-                MockCustomer previous = this.Customer;
+                MockCustomer previous;
+                if ((this._customer != null))
+                {
+                    previous = this._customer.Entity;
+                }
+                else
+                {
+                    this._customer = new EntityRef<MockCustomer>(this, "Customer", this.FilterCustomer);
+                    if ((value == null))
+                    {
+                        previous = this._customer.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Customer", value);

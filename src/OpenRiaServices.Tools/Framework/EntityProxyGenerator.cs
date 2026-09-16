@@ -940,8 +940,26 @@ namespace OpenRiaServices.Tools
                 // if(previous != value)
                 CodeExpression prevValueExpr = CodeGenUtilities.MakeNotEqual(null, new CodeVariableReferenceExpression("previous"), new CodePropertySetValueReferenceExpression(), this.ClientProxyGenerator.IsCSharp);
 
-                // Product previous = Product;
-                prop.SetStatements.Add(new CodeVariableDeclarationStatement(prop.Type, "previous", new CodePropertyReferenceExpression(new CodeThisReferenceExpression(), pd.Name)));
+                // Product previous;
+                prop.SetStatements.Add(new CodeVariableDeclarationStatement(prop.Type, "previous"));
+
+                // Avoid invoking the property getter, which may search the associated EntitySet.
+                // if (_Product != null) {
+                //     previous = _Product.Entity;
+                // } else {
+                //     _Product = new EntityRef<Product>(this, "Product", filter_Product);
+                //     previous = value == null ? _Product.Entity : null;
+                // }
+                CodeStatement setPreviousEntity = new CodeAssignStatement(new CodeVariableReferenceExpression("previous"), entityExpr);
+                CodeStatement setPreviousNull = new CodeAssignStatement(new CodeVariableReferenceExpression("previous"), new CodePrimitiveExpression(null));
+                CodeStatement setPreviousFromValue = new CodeConditionStatement(
+                    CodeGenUtilities.MakeEqual(null, new CodePropertySetValueReferenceExpression(), new CodePrimitiveExpression(null), this.ClientProxyGenerator.IsCSharp),
+                    new[] { setPreviousEntity },
+                    new[] { setPreviousNull });
+                prop.SetStatements.Add(new CodeConditionStatement(
+                    CodeGenUtilities.MakeNotEqualToNull(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), fld.Name)),
+                    new[] { setPreviousEntity },
+                    new CodeStatement[] { initExpr, setPreviousFromValue }));
 
                 List<CodeStatement> stmts = new List<CodeStatement>();
 

@@ -120,7 +120,17 @@ Namespace TestDomainServices
                 Return Me._b.Entity
             End Get
             Set
-                Dim previous As B = Me.B
+                Dim previous As B
+                If (Not (Me._b) Is Nothing) Then
+                    previous = Me._b.Entity
+                Else
+                    Me._b = New EntityRef(Of B)(Me, "B", AddressOf Me.FilterB)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._b.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("B", value)
                     If (Not (value) Is Nothing) Then
@@ -540,7 +550,17 @@ Namespace TestDomainServices
                 Return Me._d_Ref1.Entity
             End Get
             Set
-                Dim previous As D = Me.D_Ref1
+                Dim previous As D
+                If (Not (Me._d_Ref1) Is Nothing) Then
+                    previous = Me._d_Ref1.Entity
+                Else
+                    Me._d_Ref1 = New EntityRef(Of D)(Me, "D_Ref1", AddressOf Me.FilterD_Ref1)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._d_Ref1.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("D_Ref1", value)
                     If (Not (previous) Is Nothing) Then
@@ -573,7 +593,17 @@ Namespace TestDomainServices
                 Return Me._d_Ref2.Entity
             End Get
             Set
-                Dim previous As D = Me.D_Ref2
+                Dim previous As D
+                If (Not (Me._d_Ref2) Is Nothing) Then
+                    previous = Me._d_Ref2.Entity
+                Else
+                    Me._d_Ref2 = New EntityRef(Of D)(Me, "D_Ref2", AddressOf Me.FilterD_Ref2)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._d_Ref2.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("D_Ref2", value)
                     If (Not (value) Is Nothing) Then
@@ -824,7 +854,17 @@ Namespace TestDomainServices
                 Return Me._cart.Entity
             End Get
             Set
-                Dim previous As Cart = Me.Cart
+                Dim previous As Cart
+                If (Not (Me._cart) Is Nothing) Then
+                    previous = Me._cart.Entity
+                Else
+                    Me._cart = New EntityRef(Of Cart)(Me, "Cart", AddressOf Me.FilterCart)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._cart.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Cart", value)
                     If (Not (previous) Is Nothing) Then
@@ -1149,7 +1189,17 @@ Namespace TestDomainServices
                 Return Me._c.Entity
             End Get
             Set
-                Dim previous As C = Me.C
+                Dim previous As C
+                If (Not (Me._c) Is Nothing) Then
+                    previous = Me._c.Entity
+                Else
+                    Me._c = New EntityRef(Of C)(Me, "C", AddressOf Me.FilterC)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._c.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("C", value)
                     If (Not (previous) Is Nothing) Then
@@ -1177,7 +1227,17 @@ Namespace TestDomainServices
                 Return Me._d1.Entity
             End Get
             Set
-                Dim previous As D = Me.D1
+                Dim previous As D
+                If (Not (Me._d1) Is Nothing) Then
+                    previous = Me._d1.Entity
+                Else
+                    Me._d1 = New EntityRef(Of D)(Me, "D1", AddressOf Me.FilterD1)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._d1.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("D1", value)
                     If (Not (previous) Is Nothing) Then
@@ -1210,7 +1270,17 @@ Namespace TestDomainServices
                 Return Me._d2.Entity
             End Get
             Set
-                Dim previous As D = Me.D2
+                Dim previous As D
+                If (Not (Me._d2) Is Nothing) Then
+                    previous = Me._d2.Entity
+                Else
+                    Me._d2 = New EntityRef(Of D)(Me, "D2", AddressOf Me.FilterD2)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._d2.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("D2", value)
                     If (Not (previous) Is Nothing) Then
@@ -1243,7 +1313,17 @@ Namespace TestDomainServices
                 Return Me._d2_BackRef.Entity
             End Get
             Set
-                Dim previous As D = Me.D2_BackRef
+                Dim previous As D
+                If (Not (Me._d2_BackRef) Is Nothing) Then
+                    previous = Me._d2_BackRef.Entity
+                Else
+                    Me._d2_BackRef = New EntityRef(Of D)(Me, "D2_BackRef", AddressOf Me.FilterD2_BackRef)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._d2_BackRef.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("D2_BackRef", value)
                     If (Not (previous) Is Nothing) Then
@@ -5186,7 +5266,17 @@ Namespace TestDomainServices
                 Return Me._parent.Entity
             End Get
             Set
-                Dim previous As NullableFKParent = Me.Parent
+                Dim previous As NullableFKParent
+                If (Not (Me._parent) Is Nothing) Then
+                    previous = Me._parent.Entity
+                Else
+                    Me._parent = New EntityRef(Of NullableFKParent)(Me, "Parent", AddressOf Me.FilterParent)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._parent.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Parent", value)
                     If (Not (previous) Is Nothing) Then
@@ -5219,7 +5309,17 @@ Namespace TestDomainServices
                 Return Me._parent2.Entity
             End Get
             Set
-                Dim previous As NullableFKParent = Me.Parent2
+                Dim previous As NullableFKParent
+                If (Not (Me._parent2) Is Nothing) Then
+                    previous = Me._parent2.Entity
+                Else
+                    Me._parent2 = New EntityRef(Of NullableFKParent)(Me, "Parent2", AddressOf Me.FilterParent2)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._parent2.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Parent2", value)
                     If (Not (previous) Is Nothing) Then
@@ -5354,7 +5454,17 @@ Namespace TestDomainServices
                 Return Me._child.Entity
             End Get
             Set
-                Dim previous As NullableFKChild = Me.Child
+                Dim previous As NullableFKChild
+                If (Not (Me._child) Is Nothing) Then
+                    previous = Me._child.Entity
+                Else
+                    Me._child = New EntityRef(Of NullableFKChild)(Me, "Child", AddressOf Me.FilterChild)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._child.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Child", value)
                     If (Not (previous) Is Nothing) Then
@@ -5826,7 +5936,17 @@ Namespace TestDomainServices
                 Return Me._assocProp.Entity
             End Get
             Set
-                Dim previous As RoundtripOriginal_TestEntity = Me.AssocProp
+                Dim previous As RoundtripOriginal_TestEntity
+                If (Not (Me._assocProp) Is Nothing) Then
+                    previous = Me._assocProp.Entity
+                Else
+                    Me._assocProp = New EntityRef(Of RoundtripOriginal_TestEntity)(Me, "AssocProp", AddressOf Me.FilterAssocProp)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._assocProp.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("AssocProp", value)
                     Me._assocProp.Entity = value
@@ -6191,7 +6311,17 @@ Namespace TestDomainServices
                 Return Me._includedT.Entity
             End Get
             Set
-                Dim previous As TestCycles = Me.IncludedT
+                Dim previous As TestCycles
+                If (Not (Me._includedT) Is Nothing) Then
+                    previous = Me._includedT.Entity
+                Else
+                    Me._includedT = New EntityRef(Of TestCycles)(Me, "IncludedT", AddressOf Me.FilterIncludedT)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._includedT.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("IncludedT", value)
                     If (Not (previous) Is Nothing) Then

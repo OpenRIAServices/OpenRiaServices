@@ -716,7 +716,23 @@ namespace CodeFirstModels
             }
             set
             {
-                global::CodeFirstModels.Customer previous = this.Customer;
+                global::CodeFirstModels.Customer previous;
+                if ((this._customer != null))
+                {
+                    previous = this._customer.Entity;
+                }
+                else
+                {
+                    this._customer = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Customer>(this, "Customer", this.FilterCustomer);
+                    if ((value == null))
+                    {
+                        previous = this._customer.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Customer", value);
@@ -1278,7 +1294,23 @@ namespace CodeFirstModels
             }
             set
             {
-                global::CodeFirstModels.Order previous = this.Order;
+                global::CodeFirstModels.Order previous;
+                if ((this._order != null))
+                {
+                    previous = this._order.Entity;
+                }
+                else
+                {
+                    this._order = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Order>(this, "Order", this.FilterOrder);
+                    if ((value == null))
+                    {
+                        previous = this._order.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Order", value);
@@ -1348,7 +1380,23 @@ namespace CodeFirstModels
             }
             set
             {
-                global::CodeFirstModels.Product previous = this.Product;
+                global::CodeFirstModels.Product previous;
+                if ((this._product != null))
+                {
+                    previous = this._product.Entity;
+                }
+                else
+                {
+                    this._product = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Product>(this, "Product", this.FilterProduct);
+                    if ((value == null))
+                    {
+                        previous = this._product.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Product", value);
@@ -1574,7 +1622,23 @@ namespace CodeFirstModels
             }
             set
             {
-                global::CodeFirstModels.Category previous = this.Category;
+                global::CodeFirstModels.Category previous;
+                if ((this._category != null))
+                {
+                    previous = this._category.Entity;
+                }
+                else
+                {
+                    this._category = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Category>(this, "Category", this.FilterCategory);
+                    if ((value == null))
+                    {
+                        previous = this._category.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Category", value);
@@ -2353,7 +2417,23 @@ namespace CodeFirstModels
             }
             set
             {
-                global::CodeFirstModels.Region previous = this.Region;
+                global::CodeFirstModels.Region previous;
+                if ((this._region != null))
+                {
+                    previous = this._region.Entity;
+                }
+                else
+                {
+                    this._region = new global::OpenRiaServices.Client.EntityRef<global::CodeFirstModels.Region>(this, "Region", this.FilterRegion);
+                    if ((value == null))
+                    {
+                        previous = this._region.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Region", value);

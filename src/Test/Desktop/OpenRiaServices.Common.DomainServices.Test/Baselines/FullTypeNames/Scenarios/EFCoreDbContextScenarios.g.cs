@@ -717,7 +717,23 @@ namespace EFCoreModels.Northwind
             }
             set
             {
-                global::EFCoreModels.Northwind.Customer previous = this.Customer;
+                global::EFCoreModels.Northwind.Customer previous;
+                if ((this._customer != null))
+                {
+                    previous = this._customer.Entity;
+                }
+                else
+                {
+                    this._customer = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Customer>(this, "Customer", this.FilterCustomer);
+                    if ((value == null))
+                    {
+                        previous = this._customer.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Customer", value);
@@ -1279,7 +1295,23 @@ namespace EFCoreModels.Northwind
             }
             set
             {
-                global::EFCoreModels.Northwind.Order previous = this.Order;
+                global::EFCoreModels.Northwind.Order previous;
+                if ((this._order != null))
+                {
+                    previous = this._order.Entity;
+                }
+                else
+                {
+                    this._order = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Order>(this, "Order", this.FilterOrder);
+                    if ((value == null))
+                    {
+                        previous = this._order.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Order", value);
@@ -1349,7 +1381,23 @@ namespace EFCoreModels.Northwind
             }
             set
             {
-                global::EFCoreModels.Northwind.Product previous = this.Product;
+                global::EFCoreModels.Northwind.Product previous;
+                if ((this._product != null))
+                {
+                    previous = this._product.Entity;
+                }
+                else
+                {
+                    this._product = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Product>(this, "Product", this.FilterProduct);
+                    if ((value == null))
+                    {
+                        previous = this._product.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Product", value);
@@ -1575,7 +1623,23 @@ namespace EFCoreModels.Northwind
             }
             set
             {
-                global::EFCoreModels.Northwind.Category previous = this.Category;
+                global::EFCoreModels.Northwind.Category previous;
+                if ((this._category != null))
+                {
+                    previous = this._category.Entity;
+                }
+                else
+                {
+                    this._category = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Category>(this, "Category", this.FilterCategory);
+                    if ((value == null))
+                    {
+                        previous = this._category.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Category", value);
@@ -2355,7 +2419,23 @@ namespace EFCoreModels.Northwind
             }
             set
             {
-                global::EFCoreModels.Northwind.Region previous = this.Region;
+                global::EFCoreModels.Northwind.Region previous;
+                if ((this._region != null))
+                {
+                    previous = this._region.Entity;
+                }
+                else
+                {
+                    this._region = new global::OpenRiaServices.Client.EntityRef<global::EFCoreModels.Northwind.Region>(this, "Region", this.FilterRegion);
+                    if ((value == null))
+                    {
+                        previous = this._region.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Region", value);

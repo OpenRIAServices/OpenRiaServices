@@ -345,7 +345,23 @@ namespace TestDomainServices
             }
             set
             {
-                AttributeThrowingEntity previous = this.ThrowingAssociation;
+                AttributeThrowingEntity previous;
+                if ((this._throwingAssociation != null))
+                {
+                    previous = this._throwingAssociation.Entity;
+                }
+                else
+                {
+                    this._throwingAssociation = new EntityRef<AttributeThrowingEntity>(this, "ThrowingAssociation", this.FilterThrowingAssociation);
+                    if ((value == null))
+                    {
+                        previous = this._throwingAssociation.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("ThrowingAssociation", value);

@@ -187,7 +187,23 @@ namespace TestDomainServices
             }
             set
             {
-                InheritanceT1 previous = this.T1;
+                InheritanceT1 previous;
+                if ((this._t1 != null))
+                {
+                    previous = this._t1.Entity;
+                }
+                else
+                {
+                    this._t1 = new EntityRef<InheritanceT1>(this, "T1", this.FilterT1);
+                    if ((value == null))
+                    {
+                        previous = this._t1.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("T1", value);
@@ -431,7 +447,23 @@ namespace TestDomainServices
             }
             set
             {
-                InheritanceT1 previous = this.T1;
+                InheritanceT1 previous;
+                if ((this._t1 != null))
+                {
+                    previous = this._t1.Entity;
+                }
+                else
+                {
+                    this._t1 = new EntityRef<InheritanceT1>(this, "T1", this.FilterT1);
+                    if ((value == null))
+                    {
+                        previous = this._t1.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("T1", value);

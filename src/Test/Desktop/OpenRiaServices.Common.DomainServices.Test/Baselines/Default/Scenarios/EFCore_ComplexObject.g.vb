@@ -320,7 +320,17 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
                 Return Me._ownedEntityWithExplicitId.Entity
             End Get
             Set
-                Dim previous As OwnedEntityWithExplicitId = Me.OwnedEntityWithExplicitId
+                Dim previous As OwnedEntityWithExplicitId
+                If (Not (Me._ownedEntityWithExplicitId) Is Nothing) Then
+                    previous = Me._ownedEntityWithExplicitId.Entity
+                Else
+                    Me._ownedEntityWithExplicitId = New EntityRef(Of OwnedEntityWithExplicitId)(Me, "OwnedEntityWithExplicitId", AddressOf Me.FilterOwnedEntityWithExplicitId)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._ownedEntityWithExplicitId.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("OwnedEntityWithExplicitId", value)
                     Me._ownedEntityWithExplicitId.Entity = value
@@ -343,7 +353,17 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
                 Return Me._ownedEntityWithExplicitIdAndBackNavigation.Entity
             End Get
             Set
-                Dim previous As OwnedEntityWithExplicitIdAndBackNavigation = Me.OwnedEntityWithExplicitIdAndBackNavigation
+                Dim previous As OwnedEntityWithExplicitIdAndBackNavigation
+                If (Not (Me._ownedEntityWithExplicitIdAndBackNavigation) Is Nothing) Then
+                    previous = Me._ownedEntityWithExplicitIdAndBackNavigation.Entity
+                Else
+                    Me._ownedEntityWithExplicitIdAndBackNavigation = New EntityRef(Of OwnedEntityWithExplicitIdAndBackNavigation)(Me, "OwnedEntityWithExplicitIdAndBackNavigation", AddressOf Me.FilterOwnedEntityWithExplicitIdAndBackNavigation)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._ownedEntityWithExplicitIdAndBackNavigation.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("OwnedEntityWithExplicitIdAndBackNavigation", value)
                     Me._ownedEntityWithExplicitIdAndBackNavigation.Entity = value
@@ -590,7 +610,17 @@ Namespace EFCoreModels.Scenarios.OwnedTypes
                 Return Me._employee.Entity
             End Get
             Set
-                Dim previous As Employee = Me.Employee
+                Dim previous As Employee
+                If (Not (Me._employee) Is Nothing) Then
+                    previous = Me._employee.Entity
+                Else
+                    Me._employee = New EntityRef(Of Employee)(Me, "Employee", AddressOf Me.FilterEmployee)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._employee.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Employee", value)
                     If (Not (value) Is Nothing) Then

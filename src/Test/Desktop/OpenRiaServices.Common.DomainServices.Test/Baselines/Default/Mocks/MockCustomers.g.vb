@@ -92,7 +92,17 @@ Namespace TestDomainServices
                 Return Me._city.Entity
             End Get
             Set
-                Dim previous As Global.Cities.City = Me.City
+                Dim previous As Global.Cities.City
+                If (Not (Me._city) Is Nothing) Then
+                    previous = Me._city.Entity
+                Else
+                    Me._city = New EntityRef(Of Global.Cities.City)(Me, "City", AddressOf Me.FilterCity)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._city.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("City", value)
                     If (Not (value) Is Nothing) Then
@@ -496,7 +506,17 @@ Namespace TestDomainServices
                 Return Me._customer.Entity
             End Get
             Set
-                Dim previous As MockCustomer = Me.Customer
+                Dim previous As MockCustomer
+                If (Not (Me._customer) Is Nothing) Then
+                    previous = Me._customer.Entity
+                Else
+                    Me._customer = New EntityRef(Of MockCustomer)(Me, "Customer", AddressOf Me.FilterCustomer)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._customer.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Customer", value)
                     Me._customer.Entity = value
