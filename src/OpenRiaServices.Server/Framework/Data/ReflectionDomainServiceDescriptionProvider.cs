@@ -389,7 +389,7 @@ namespace OpenRiaServices.Server
         internal class ReflectionDomainOperationEntry : DomainOperationEntry
         {
             private bool _isInferred;
-            private readonly Func<DomainService, object[], ValueTask<object>> _method;
+            private readonly Func<DomainService, object[], object, ValueTask<object>> _method;
 
             /// <summary>
             /// Creates an instance of a <see cref="ReflectionDomainOperationEntry"/>.
@@ -406,6 +406,17 @@ namespace OpenRiaServices.Server
                 if (!methodInfo.IsGenericMethodDefinition)
                 {
                     this._method = DynamicMethodUtility.GetDelegateForMethod(methodInfo);
+                }
+
+                Type[] clientQueryTypes = methodInfo.GetParameters()
+                    .Select(parameter => parameter.ParameterType)
+                    .Where(ClientQuery.IsClientQueryType)
+                    .ToArray();
+                if (clientQueryTypes.Length > 0)
+                {
+                    HasClientQueryParameter = true;
+                    ClientQueryEntityType = clientQueryTypes[0].GetGenericArguments()[0];
+                    ClientQueryParameterCount = clientQueryTypes.Length;
                 }
             }
 
@@ -436,9 +447,13 @@ namespace OpenRiaServices.Server
             /// <returns>The return value of the invoked method.</returns>
             public override ValueTask<object> InvokeAsync(DomainService domainService, object[] parameters, CancellationToken cancellationToken)
             {
-                return this._method(domainService, parameters);
+                return this._method(domainService, parameters, null);
             }
 
+            internal override ValueTask<object> InvokeQueryAsync(DomainService domainService, object[] parameters, object clientQuery, CancellationToken cancellationToken)
+            {
+                return this._method(domainService, parameters, clientQuery);
+            }
             private static IEnumerable<DomainOperationParameter> GetMethodParameters(MethodInfo methodInfo)
             {
                 ParameterInfo[] actualParameters = methodInfo.GetParameters();
@@ -465,6 +480,7 @@ namespace OpenRiaServices.Server
             internal static bool IsInjectedParameter(ParameterInfo parameterInfo, Attribute [] attributes)
             {
                 return parameterInfo.ParameterType == typeof(CancellationToken)
+                    || ClientQuery.IsClientQueryType(parameterInfo.ParameterType)
                     || attributes.Any(a => a is InjectParameterAttribute);
             }
 
