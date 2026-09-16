@@ -948,14 +948,18 @@ namespace OpenRiaServices.Tools
                 //     previous = _Product.Entity;
                 // } else {
                 //     _Product = new EntityRef<Product>(this, "Product", filter_Product);
-                //     previous = null;
+                //     previous = value == null ? _Product.Entity : null;
                 // }
                 CodeStatement setPreviousEntity = new CodeAssignStatement(new CodeVariableReferenceExpression("previous"), entityExpr);
                 CodeStatement setPreviousNull = new CodeAssignStatement(new CodeVariableReferenceExpression("previous"), new CodePrimitiveExpression(null));
+                CodeStatement setPreviousFromValue = new CodeConditionStatement(
+                    CodeGenUtilities.MakeEqual(null, new CodePropertySetValueReferenceExpression(), new CodePrimitiveExpression(null), this.ClientProxyGenerator.IsCSharp),
+                    new[] { setPreviousEntity },
+                    new[] { setPreviousNull });
                 prop.SetStatements.Add(new CodeConditionStatement(
                     CodeGenUtilities.MakeNotEqualToNull(new CodeFieldReferenceExpression(new CodeThisReferenceExpression(), fld.Name)),
                     new[] { setPreviousEntity },
-                    new CodeStatement[] { initExpr, setPreviousNull }));
+                    new CodeStatement[] { initExpr, setPreviousFromValue }));
 
                 List<CodeStatement> stmts = new List<CodeStatement>();
 

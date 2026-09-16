@@ -952,7 +952,11 @@ this.Write("\", this.Filter");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(metadata.PropertyName));
 
-this.Write(");\r\n\tprevious = null;\r\n}\r\nif (previous != value)\r\n");
+this.Write(");\r\n\tprevious = (value == null) ? this.");
+
+this.Write(this.ToStringHelper.ToStringWithCulture(metadata.FieldName));
+
+this.Write(".Entity : null;\r\n}\r\nif (previous != value)\r\n");
 
   	this.GenerateOpeningBrace();
 

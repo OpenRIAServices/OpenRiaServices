@@ -78,7 +78,7 @@ if (this.<#= metadata.FieldName #> != null)
 else
 {
 	this.<#= metadata.FieldName #> = new <#= metadata.AssociationTypeName #>(this, "<#= metadata.PropertyName #>", this.Filter<#= metadata.PropertyName #>);
-	previous = null;
+	previous = (value == null) ? this.<#= metadata.FieldName #>.Entity : null;
 }
 if (previous != value)
 <#+  	this.GenerateOpeningBrace();
