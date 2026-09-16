@@ -1,7 +1,12 @@
+extern alias httpDomainClient;
+
 using System;
+using System.Collections.Generic;
 using System.Linq;
+using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
+using httpDomainClient::OpenRiaServices.Client.DomainClients;
 using SimpleStructs;
 
 namespace OpenRiaServices.Client.Test
@@ -53,6 +58,39 @@ namespace OpenRiaServices.Client.Test
                 new CompositeSimpleStruct(2, new Guid("207b1d8f-1f78-4f35-b262-b2787e1289f1")),
                 entity.CompositeValue);
             Assert.AreSame(entity, domainContext.SimpleStructEntities.Single());
+        }
+
+        [TestMethod]
+        public async Task RoundtripsSimpleStructsUsingGet()
+        {
+            using var httpHandler = new RecordingHttpHandler(new HttpClientHandler());
+            var domainClient = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpHandler)
+                .CreateDomainClient(
+                    typeof(SimpleStructDomainContext.ISimpleStructDomainServiceContract),
+                    new Uri("SimpleStructs-SimpleStructDomainService", UriKind.Relative),
+                    false);
+            SimpleStruct simple = new(42);
+            CompositeSimpleStruct composite = new(7, Guid.NewGuid());
+
+            InvokeCompletedResult simpleResult = await domainClient.InvokeAsync(
+                new InvokeArgs(
+                    "RoundtripSimpleStruct",
+                    typeof(SimpleStruct),
+                    new Dictionary<string, object> { { "value", simple } },
+                    hasSideEffects: false),
+                CancellationToken.None);
+            InvokeCompletedResult compositeResult = await domainClient.InvokeAsync(
+                new InvokeArgs(
+                    "RoundtripCompositeSimpleStruct",
+                    typeof(CompositeSimpleStruct),
+                    new Dictionary<string, object> { { "value", composite } },
+                    hasSideEffects: false),
+                CancellationToken.None);
+
+            Assert.AreEqual(simple, simpleResult.ReturnValue);
+            Assert.AreEqual(composite, compositeResult.ReturnValue);
+            Assert.IsTrue(httpHandler.Requests.All(r => r.Method == HttpMethod.Get));
+            Assert.IsTrue(httpHandler.Requests.All(r => r.RequestUri.Query.Contains("value=", StringComparison.Ordinal)));
         }
     }
 }

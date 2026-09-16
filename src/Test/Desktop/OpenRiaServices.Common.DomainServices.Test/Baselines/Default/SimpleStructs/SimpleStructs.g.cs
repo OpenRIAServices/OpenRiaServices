@@ -99,7 +99,7 @@ namespace SimpleStructs
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("RoundtripCompositeSimpleStruct", parameters);
-            return this.InvokeOperation<CompositeSimpleStruct>("RoundtripCompositeSimpleStruct", typeof(CompositeSimpleStruct), parameters, true, callback, userState);
+            return this.InvokeOperation<CompositeSimpleStruct>("RoundtripCompositeSimpleStruct", typeof(CompositeSimpleStruct), parameters, false, callback, userState);
         }
         
         /// <summary>
@@ -112,7 +112,7 @@ namespace SimpleStructs
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("RoundtripCompositeSimpleStruct", parameters);
-            return this.InvokeOperation<CompositeSimpleStruct>("RoundtripCompositeSimpleStruct", typeof(CompositeSimpleStruct), parameters, true, null, null);
+            return this.InvokeOperation<CompositeSimpleStruct>("RoundtripCompositeSimpleStruct", typeof(CompositeSimpleStruct), parameters, false, null, null);
         }
         
         /// <summary>
@@ -126,7 +126,7 @@ namespace SimpleStructs
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("RoundtripCompositeSimpleStruct", parameters);
-            return this.InvokeOperationAsync<CompositeSimpleStruct>("RoundtripCompositeSimpleStruct", parameters, true, cancellationToken);
+            return this.InvokeOperationAsync<CompositeSimpleStruct>("RoundtripCompositeSimpleStruct", parameters, false, cancellationToken);
         }
         
         /// <summary>
@@ -183,7 +183,7 @@ namespace SimpleStructs
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("RoundtripSimpleStruct", parameters);
-            return this.InvokeOperation<SimpleStruct>("RoundtripSimpleStruct", typeof(SimpleStruct), parameters, true, callback, userState);
+            return this.InvokeOperation<SimpleStruct>("RoundtripSimpleStruct", typeof(SimpleStruct), parameters, false, callback, userState);
         }
         
         /// <summary>
@@ -196,7 +196,7 @@ namespace SimpleStructs
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("RoundtripSimpleStruct", parameters);
-            return this.InvokeOperation<SimpleStruct>("RoundtripSimpleStruct", typeof(SimpleStruct), parameters, true, null, null);
+            return this.InvokeOperation<SimpleStruct>("RoundtripSimpleStruct", typeof(SimpleStruct), parameters, false, null, null);
         }
         
         /// <summary>
@@ -210,7 +210,7 @@ namespace SimpleStructs
             Dictionary<string, object> parameters = new Dictionary<string, object>();
             parameters.Add("value", value);
             this.ValidateMethod("RoundtripSimpleStruct", parameters);
-            return this.InvokeOperationAsync<SimpleStruct>("RoundtripSimpleStruct", parameters, true, cancellationToken);
+            return this.InvokeOperationAsync<SimpleStruct>("RoundtripSimpleStruct", parameters, false, cancellationToken);
         }
         
         /// <summary>
@@ -293,7 +293,7 @@ namespace SimpleStructs
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
+            [HasSideEffects(false)]
             IAsyncResult BeginRoundtripCompositeSimpleStruct(CompositeSimpleStruct value, AsyncCallback callback, object asyncState);
             
             /// <summary>
@@ -327,7 +327,7 @@ namespace SimpleStructs
             /// <param name="callback">Callback to invoke on completion.</param>
             /// <param name="asyncState">Optional state object.</param>
             /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
+            [HasSideEffects(false)]
             IAsyncResult BeginRoundtripSimpleStruct(SimpleStruct value, AsyncCallback callback, object asyncState);
             
             /// <summary>

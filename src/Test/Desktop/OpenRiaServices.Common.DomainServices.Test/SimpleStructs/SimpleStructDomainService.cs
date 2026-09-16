@@ -22,10 +22,10 @@ namespace SimpleStructs
             }.AsQueryable();
         }
 
-        [Invoke]
+        [Invoke(HasSideEffects = false)]
         public SimpleStruct RoundtripSimpleStruct(SimpleStruct value) => value;
 
-        [Invoke]
+        [Invoke(HasSideEffects = false)]
         public CompositeSimpleStruct RoundtripCompositeSimpleStruct(CompositeSimpleStruct value) => value;
 
         [Invoke]
