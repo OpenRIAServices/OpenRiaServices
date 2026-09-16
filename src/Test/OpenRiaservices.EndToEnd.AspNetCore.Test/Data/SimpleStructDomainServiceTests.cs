@@ -63,7 +63,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task RoundtripsSimpleStructsUsingGet()
         {
-            using var httpHandler = new RecordingHttpHandler(new HttpClientHandler());
+            using var httpHandler = new SimpleStructRecordingHttpHandler(new HttpClientHandler());
             var domainClient = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpHandler)
                 .CreateDomainClient(
                     typeof(SimpleStructDomainContext.ISimpleStructDomainServiceContract),
@@ -91,6 +91,22 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(composite, compositeResult.ReturnValue);
             Assert.IsTrue(httpHandler.Requests.All(r => r.Method == HttpMethod.Get));
             Assert.IsTrue(httpHandler.Requests.All(r => r.RequestUri.Query.Contains("value=", StringComparison.Ordinal)));
+        }
+
+        private sealed class SimpleStructRecordingHttpHandler : DelegatingHandler
+        {
+            public SimpleStructRecordingHttpHandler(HttpMessageHandler innerHandler)
+                : base(innerHandler)
+            {
+            }
+
+            public List<HttpRequestMessage> Requests { get; } = [];
+
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                Requests.Add(request);
+                return base.SendAsync(request, cancellationToken);
+            }
         }
     }
 }
