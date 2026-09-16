@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -86,7 +87,7 @@ namespace OpenRiaServices.Client
                     // Since this is the first time the entity has been returned, we don't
                     // need to send a property change notification.
                     EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
-                    this._entity = this.GetSingleMatch(set);
+                    this._entity = this.GetSingleMatch(this.GetAssociationCandidates(set));
 
                     if (this._entity != null && this.IsComposition)
                     {
@@ -229,6 +230,16 @@ namespace OpenRiaServices.Client
                 entity = currEntity;
             }
             return entity;
+        }
+
+        private IEnumerable GetAssociationCandidates(EntitySet set)
+        {
+            if (set.TryGetAssociationEntities(this.AssocAttribute, this._parent, out IEnumerable<Entity>? entities))
+            {
+                return entities;
+            }
+
+            return set;
         }
 
         /// <summary>
@@ -443,6 +454,7 @@ namespace OpenRiaServices.Client
         /// Gets a value indicating whether this EntityRef has been loaded or
         /// has had a value assigned to it.
         /// </summary>
+        [MemberNotNullWhen(true, nameof(Entity))]
         bool HasValue
         {
             get;
