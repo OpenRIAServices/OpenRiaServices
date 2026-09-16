@@ -1,0 +1,13 @@
+<Project>
+  <ItemGroup Condition="'$(IsFrameworkProject)' == 'true' and '$(TargetFramework)' != '' and Exists('$(MSBuildProjectDirectory)\PublicAPI.Shipped.$(TargetFramework).txt')">
+    <AdditionalFiles Remove="$(MSBuildProjectDirectory)\PublicAPI.Shipped.txt" />
+    <AdditionalFiles Remove="PublicAPI.Shipped.txt" />
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI.Shipped.$(TargetFramework).txt" />
+  </ItemGroup>
+
+  <ItemGroup Condition="'$(IsFrameworkProject)' == 'true' and '$(TargetFramework)' != '' and Exists('$(MSBuildProjectDirectory)\PublicAPI.Unshipped.$(TargetFramework).txt')">
+    <AdditionalFiles Remove="$(MSBuildProjectDirectory)\PublicAPI.Unshipped.txt" />
+    <AdditionalFiles Remove="PublicAPI.Unshipped.txt" />
+    <AdditionalFiles Include="$(MSBuildProjectDirectory)\PublicAPI.Unshipped.$(TargetFramework).txt" />
+  </ItemGroup>
+</Project>
