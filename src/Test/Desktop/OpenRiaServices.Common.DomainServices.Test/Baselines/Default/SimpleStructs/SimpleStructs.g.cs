@@ -14,6 +14,7 @@ namespace SimpleStructs
     using System.ComponentModel;
     using System.ComponentModel.DataAnnotations;
     using System.Linq;
+    using System.Runtime.Serialization;
     using System.Threading;
     using System.Threading.Tasks;
     using OpenRiaServices;
@@ -63,6 +64,27 @@ namespace SimpleStructs
                 base(domainClient)
         {
             this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets the set of <see cref="SimpleStructEntity"/> entity instances that have been loaded into this <see cref="SimpleStructDomainContext"/> instance.
+        /// </summary>
+        public EntitySet<SimpleStructEntity> SimpleStructEntities
+        {
+            get
+            {
+                return base.EntityContainer.GetEntitySet<SimpleStructEntity>();
+            }
+        }
+        
+        /// <summary>
+        /// Gets an EntityQuery instance that can be used to load <see cref="SimpleStructEntity"/> entity instances using the 'GetSimpleStructEntities' query.
+        /// </summary>
+        /// <returns>An EntityQuery that can be loaded to retrieve <see cref="SimpleStructEntity"/> entity instances.</returns>
+        public EntityQuery<SimpleStructEntity> GetSimpleStructEntitiesQuery()
+        {
+            this.ValidateMethod("GetSimpleStructEntitiesQuery", null);
+            return base.CreateQuery<SimpleStructEntity>("GetSimpleStructEntities", null, false, true);
         }
         
         /// <summary>
@@ -249,6 +271,22 @@ namespace SimpleStructs
         {
             
             /// <summary>
+            /// Asynchronously invokes the 'GetSimpleStructEntities' operation.
+            /// </summary>
+            /// <param name="callback">Callback to invoke on completion.</param>
+            /// <param name="asyncState">Optional state object.</param>
+            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
+            [HasSideEffects(false)]
+            IAsyncResult BeginGetSimpleStructEntities(AsyncCallback callback, object asyncState);
+            
+            /// <summary>
+            /// Completes the asynchronous operation begun by 'BeginGetSimpleStructEntities'.
+            /// </summary>
+            /// <param name="result">The IAsyncResult returned from 'BeginGetSimpleStructEntities'.</param>
+            /// <returns>The 'QueryResult' returned from the 'GetSimpleStructEntities' operation.</returns>
+            QueryResult<SimpleStructEntity> EndGetSimpleStructEntities(IAsyncResult result);
+            
+            /// <summary>
             /// Asynchronously invokes the 'RoundtripCompositeSimpleStruct' operation.
             /// </summary>
             /// <param name="value">The value for the 'value' parameter of this action.</param>
@@ -322,7 +360,130 @@ namespace SimpleStructs
             
             public SimpleStructDomainContextEntityContainer()
             {
+                this.CreateEntitySet<SimpleStructEntity>(EntitySetOperations.None);
             }
+        }
+    }
+    
+    /// <summary>
+    /// The 'SimpleStructEntity' entity class.
+    /// </summary>
+    [DataContract(Namespace="http://schemas.datacontract.org/2004/07/SimpleStructs")]
+    public sealed partial class SimpleStructEntity : Entity
+    {
+        
+        private CompositeSimpleStruct _compositeValue;
+        
+        private SimpleStruct _id;
+        
+        private string _name;
+        
+        #region Extensibility Method Definitions
+
+        /// <summary>
+        /// This method is invoked from the constructor once initialization is complete and
+        /// can be used for further object setup.
+        /// </summary>
+        partial void OnCreated();
+        partial void OnCompositeValueChanging(CompositeSimpleStruct value);
+        partial void OnCompositeValueChanged();
+        partial void OnIdChanging(SimpleStruct value);
+        partial void OnIdChanged();
+        partial void OnNameChanging(string value);
+        partial void OnNameChanged();
+
+        #endregion
+        
+        
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SimpleStructEntity"/> class.
+        /// </summary>
+        public SimpleStructEntity()
+        {
+            this.OnCreated();
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'CompositeValue' value.
+        /// </summary>
+        [DataMember()]
+        public CompositeSimpleStruct CompositeValue
+        {
+            get
+            {
+                return this._compositeValue;
+            }
+            set
+            {
+                if ((this._compositeValue != value))
+                {
+                    this.OnCompositeValueChanging(value);
+                    this.RaiseDataMemberChanging("CompositeValue");
+                    this.ValidateProperty("CompositeValue", value);
+                    this._compositeValue = value;
+                    this.RaiseDataMemberChanged("CompositeValue");
+                    this.OnCompositeValueChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Id' value.
+        /// </summary>
+        [DataMember()]
+        [Editable(false, AllowInitialValue=true)]
+        [Key()]
+        [RoundtripOriginal()]
+        public SimpleStruct Id
+        {
+            get
+            {
+                return this._id;
+            }
+            set
+            {
+                if ((this._id != value))
+                {
+                    this.OnIdChanging(value);
+                    this.ValidateProperty("Id", value);
+                    this._id = value;
+                    this.RaisePropertyChanged("Id");
+                    this.OnIdChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Gets or sets the 'Name' value.
+        /// </summary>
+        [DataMember()]
+        public string Name
+        {
+            get
+            {
+                return this._name;
+            }
+            set
+            {
+                if ((this._name != value))
+                {
+                    this.OnNameChanging(value);
+                    this.RaiseDataMemberChanging("Name");
+                    this.ValidateProperty("Name", value);
+                    this._name = value;
+                    this.RaiseDataMemberChanged("Name");
+                    this.OnNameChanged();
+                }
+            }
+        }
+        
+        /// <summary>
+        /// Computes a value from the key fields that uniquely identifies this entity instance.
+        /// </summary>
+        /// <returns>An object instance that uniquely identifies this entity instance.</returns>
+        public override object GetIdentity()
+        {
+            return this._id;
         }
     }
 }

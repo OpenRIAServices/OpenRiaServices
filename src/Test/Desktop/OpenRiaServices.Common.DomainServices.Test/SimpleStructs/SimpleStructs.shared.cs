@@ -28,6 +28,16 @@ namespace SimpleStructs
         {
             return Value;
         }
+
+        public static bool operator ==(SimpleStruct left, SimpleStruct right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(SimpleStruct left, SimpleStruct right)
+        {
+            return !left.Equals(right);
+        }
     }
 
     [DataContract]
@@ -58,6 +68,16 @@ namespace SimpleStructs
         public override int GetHashCode()
         {
             return (Value * 397) ^ TenantId.GetHashCode();
+        }
+
+        public static bool operator ==(CompositeSimpleStruct left, CompositeSimpleStruct right)
+        {
+            return left.Equals(right);
+        }
+
+        public static bool operator !=(CompositeSimpleStruct left, CompositeSimpleStruct right)
+        {
+            return !left.Equals(right);
         }
     }
 }

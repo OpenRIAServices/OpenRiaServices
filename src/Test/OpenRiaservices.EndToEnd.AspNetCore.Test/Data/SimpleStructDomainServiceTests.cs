@@ -38,5 +38,21 @@ namespace OpenRiaServices.Client.Test
             CollectionAssert.AreEqual(simple, simpleResult.Value.ToArray());
             CollectionAssert.AreEqual(composite, compositeResult.Value.ToArray());
         }
+
+        [TestMethod]
+        public async Task LoadsEntityWithSimpleStructKeyAndProperty()
+        {
+            SimpleStructDomainContext domainContext = new SimpleStructDomainContext();
+
+            LoadResult<SimpleStructEntity> result =
+                await domainContext.LoadAsync(domainContext.GetSimpleStructEntitiesQuery());
+
+            SimpleStructEntity entity = result.Single();
+            Assert.AreEqual(new SimpleStruct(1), entity.Id);
+            Assert.AreEqual(
+                new CompositeSimpleStruct(2, new Guid("207b1d8f-1f78-4f35-b262-b2787e1289f1")),
+                entity.CompositeValue);
+            Assert.AreSame(entity, domainContext.SimpleStructEntities.Single());
+        }
     }
 }
