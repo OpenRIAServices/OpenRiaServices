@@ -970,7 +970,10 @@ namespace OpenRiaServices.Server
             {
                 foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(type))
                 {
-                    ValidateSimpleStructType(property.PropertyType);
+                    if (property.Attributes[typeof(ExcludeAttribute)] == null)
+                    {
+                        ValidateSimpleStructType(property.PropertyType);
+                    }
                 }
             }
         }
