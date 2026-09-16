@@ -51,6 +51,21 @@ Entity key members may use supported simple structs when key-specific requiremen
 No new Parse/TryParse-based mechanism is required for phase 1.
 Existing query-string conversion behavior remains in effect, including existing JSON fallback behavior in WebHttp conversion flows.
 
+Simple structs must be compatible with the configured transport serializer. For the default DataContract serialization, annotate the struct and its writable properties with `[DataContract]` and `[DataMember]`:
+
+```csharp
+[DataContract]
+public struct CustomerKey : IEquatable<CustomerKey>
+{
+    public CustomerKey(int value) => Value = value;
+
+    [DataMember]
+    public int Value { get; set; }
+
+    // IEquatable<CustomerKey> implementation omitted
+}
+```
+
 ## Planned work
 
 ### Phase 2: client generation support

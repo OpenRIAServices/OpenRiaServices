@@ -204,6 +204,7 @@ builder.Services.AddOpenRiaServices()
 Simple user-defined structs can be used in query/custom/invoke operation signatures when they follow the current simple-struct rules (one or more public readable properties of predefined simple types).
 
 When a simple struct is used as an entity key member, the struct must be shared with the client and implement `IEquatable<T>`.
+The struct must also be compatible with the configured transport serializer; with the default DataContract serialization, use `[DataContract]` and writable `[DataMember]` properties.
 
 ### Specifying endpoint routes
 

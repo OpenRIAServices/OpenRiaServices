@@ -508,6 +508,25 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.CodeGenValidationOptions options = new TestHelper.CodeGenValidationOptions(@"Default\People", "CG_People", "Person.g", typeof(People.PeopleDomainService), [], false);
             TestHelper.ValidateCodeGen(options);
         }
+
+        [DeploymentItem(@"Baselines\Default\SimpleStructs", "CG_SimpleStructs")]
+        [DeploymentItem(@"SimpleStructs\SimpleStructs.shared.cs")]
+        [TestMethod]
+        [Description("Create client proxies for a domain service using shared simple structs")]
+        public void TestSimpleStructClientProxies()
+        {
+            string[] sharedFiles = [TestHelper.GetTestFileName("SimpleStructs.shared.cs")];
+            TestHelper.CodeGenValidationOptions options = new TestHelper.CodeGenValidationOptions(
+                @"Default\SimpleStructs",
+                "CG_SimpleStructs",
+                "SimpleStructs.g",
+                typeof(SimpleStructs.SimpleStructDomainService),
+                "C#",
+                sharedFiles,
+                false);
+
+            TestHelper.ValidateCodeGen(options);
+        }
 #endif
         [DeploymentItem(@"Baselines\Default\Mocks", "CG_Mocks")]
         [DeploymentItem(@"Mocks\MockDomainServices.cs")]
