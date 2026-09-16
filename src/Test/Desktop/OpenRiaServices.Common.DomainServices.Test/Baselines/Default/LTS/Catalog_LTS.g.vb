@@ -337,7 +337,11 @@ Namespace DataTests.AdventureWorks.LTS
                     previous = Me._manager.Entity
                 Else
                     Me._manager = New EntityRef(Of Employee)(Me, "Manager", AddressOf Me.FilterManager)
-                    previous = Nothing
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._manager.Entity
+                    Else
+                        previous = Nothing
+                    End If
                 End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Manager", value)
@@ -1514,7 +1518,11 @@ Namespace DataTests.AdventureWorks.LTS
                     previous = Me._employee.Entity
                 Else
                     Me._employee = New EntityRef(Of Employee)(Me, "Employee", AddressOf Me.FilterEmployee)
-                    previous = Nothing
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._employee.Entity
+                    Else
+                        previous = Nothing
+                    End If
                 End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Employee", value)
@@ -2077,7 +2085,11 @@ Namespace DataTests.AdventureWorks.LTS
                     previous = Me._product.Entity
                 Else
                     Me._product = New EntityRef(Of Product)(Me, "Product", AddressOf Me.FilterProduct)
-                    previous = Nothing
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._product.Entity
+                    Else
+                        previous = Nothing
+                    End If
                 End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Product", value)
@@ -2139,7 +2151,11 @@ Namespace DataTests.AdventureWorks.LTS
                     previous = Me._purchaseOrder.Entity
                 Else
                     Me._purchaseOrder = New EntityRef(Of PurchaseOrder)(Me, "PurchaseOrder", AddressOf Me.FilterPurchaseOrder)
-                    previous = Nothing
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._purchaseOrder.Entity
+                    Else
+                        previous = Nothing
+                    End If
                 End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("PurchaseOrder", value)

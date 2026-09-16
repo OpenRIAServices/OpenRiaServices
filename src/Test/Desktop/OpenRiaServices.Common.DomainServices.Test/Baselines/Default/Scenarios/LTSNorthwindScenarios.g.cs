@@ -689,7 +689,14 @@ namespace DataTests.Scenarios.LTS.Northwind
                 else
                 {
                     this._customer = new EntityRef<Customer_Bug479436>(this, "Customer", this.FilterCustomer);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._customer.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {

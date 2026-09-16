@@ -738,7 +738,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._customer = new EntityRef<Customer>(this, "Customer", this.FilterCustomer);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._customer.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -1310,7 +1317,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._order = new EntityRef<Order>(this, "Order", this.FilterOrder);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._order.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -1389,7 +1403,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._product = new EntityRef<Product>(this, "Product", this.FilterProduct);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._product.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -1624,7 +1645,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._category = new EntityRef<Category>(this, "Category", this.FilterCategory);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._category.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -2417,7 +2445,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._region = new EntityRef<Region>(this, "Region", this.FilterRegion);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._region.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {

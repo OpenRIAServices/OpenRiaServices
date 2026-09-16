@@ -329,7 +329,7 @@ namespace DataTests.AdventureWorks.LTS
                 else
                 {
                     this._manager = new EntityRef<Employee>(this, "Manager", this.FilterManager);
-                    previous = null;
+                    previous = (value == null) ? this._manager.Entity : null;
                 }
                 if ((previous != value))
                 {

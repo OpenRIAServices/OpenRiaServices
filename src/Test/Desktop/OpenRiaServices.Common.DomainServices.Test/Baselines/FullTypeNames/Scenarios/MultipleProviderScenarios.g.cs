@@ -728,7 +728,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._customer = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Customer>(this, "Customer", this.FilterCustomer);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._customer.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -1300,7 +1307,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._order = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Order>(this, "Order", this.FilterOrder);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._order.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -1379,7 +1393,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._product = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Product>(this, "Product", this.FilterProduct);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._product.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -1614,7 +1635,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._category = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Category>(this, "Category", this.FilterCategory);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._category.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -2407,7 +2435,14 @@ namespace DataTests.Northwind.LTS
                 else
                 {
                     this._region = new global::OpenRiaServices.Client.EntityRef<global::DataTests.Northwind.LTS.Region>(this, "Region", this.FilterRegion);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._region.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -3250,7 +3285,14 @@ namespace NorthwindModel
                 else
                 {
                     this._customer = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Customer>(this, "Customer", this.FilterCustomer);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._customer.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -3821,7 +3863,14 @@ namespace NorthwindModel
                 else
                 {
                     this._order = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Order>(this, "Order", this.FilterOrder);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._order.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -3900,7 +3949,14 @@ namespace NorthwindModel
                 else
                 {
                     this._product = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Product>(this, "Product", this.FilterProduct);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._product.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -4135,7 +4191,14 @@ namespace NorthwindModel
                 else
                 {
                     this._category = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Category>(this, "Category", this.FilterCategory);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._category.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {
@@ -4924,7 +4987,14 @@ namespace NorthwindModel
                 else
                 {
                     this._region = new global::OpenRiaServices.Client.EntityRef<global::NorthwindModel.Region>(this, "Region", this.FilterRegion);
-                    previous = null;
+                    if ((value == null))
+                    {
+                        previous = this._region.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
                 }
                 if ((previous != value))
                 {

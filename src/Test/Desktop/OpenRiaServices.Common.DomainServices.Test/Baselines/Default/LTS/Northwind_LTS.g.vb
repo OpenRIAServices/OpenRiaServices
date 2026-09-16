@@ -726,7 +726,11 @@ Namespace DataTests.Northwind.LTS
                     previous = Me._customer.Entity
                 Else
                     Me._customer = New EntityRef(Of Customer)(Me, "Customer", AddressOf Me.FilterCustomer)
-                    previous = Nothing
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._customer.Entity
+                    Else
+                        previous = Nothing
+                    End If
                 End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Customer", value)
@@ -1226,7 +1230,11 @@ Namespace DataTests.Northwind.LTS
                     previous = Me._order.Entity
                 Else
                     Me._order = New EntityRef(Of Order)(Me, "Order", AddressOf Me.FilterOrder)
-                    previous = Nothing
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._order.Entity
+                    Else
+                        previous = Nothing
+                    End If
                 End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Order", value)
@@ -1289,7 +1297,11 @@ Namespace DataTests.Northwind.LTS
                     previous = Me._product.Entity
                 Else
                     Me._product = New EntityRef(Of Product)(Me, "Product", AddressOf Me.FilterProduct)
-                    previous = Nothing
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._product.Entity
+                    Else
+                        previous = Nothing
+                    End If
                 End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Product", value)
@@ -1528,7 +1540,11 @@ Namespace DataTests.Northwind.LTS
                     previous = Me._category.Entity
                 Else
                     Me._category = New EntityRef(Of Category)(Me, "Category", AddressOf Me.FilterCategory)
-                    previous = Nothing
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._category.Entity
+                    Else
+                        previous = Nothing
+                    End If
                 End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Category", value)
@@ -2236,7 +2252,11 @@ Namespace DataTests.Northwind.LTS
                     previous = Me._region.Entity
                 Else
                     Me._region = New EntityRef(Of Region)(Me, "Region", AddressOf Me.FilterRegion)
-                    previous = Nothing
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._region.Entity
+                    Else
+                        previous = Nothing
+                    End If
                 End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Region", value)
