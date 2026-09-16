@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -453,6 +454,7 @@ namespace OpenRiaServices.Client
         /// Gets a value indicating whether this EntityRef has been loaded or
         /// has had a value assigned to it.
         /// </summary>
+        [MemberNotNullWhen(true, nameof(Entity))]
         bool HasValue
         {
             get;
