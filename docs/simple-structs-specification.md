@@ -16,6 +16,7 @@ A type is considered a supported simple struct when it meets all of the followin
 - It is not a framework/system assembly type.
 - It has one or more public readable instance properties (non-indexers).
 - Every such property type is a predefined simple type supported by OpenRiaServices.
+- None of its public properties are marked with `[Exclude]`.
 
 Additional requirements when used as an entity key member:
 

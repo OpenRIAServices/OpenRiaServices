@@ -348,6 +348,9 @@
   <data name="InvalidComplexType_PropertyAttribute" xml:space="preserve">
     <value>Property '{0}' of complex type '{1}' is invalid. {2}</value>
   </data>
+  <data name="InvalidSimpleStruct_ExcludeMember" xml:space="preserve">
+    <value>Property '{0}' of simple struct '{1}' is invalid. Simple struct properties cannot be marked with ExcludeAttribute.</value>
+  </data>
   <data name="InvalidCustomMethod_MethodCannotBeParameterless" xml:space="preserve">
     <value>Custom methods must contain at least one parameter.</value>
   </data>

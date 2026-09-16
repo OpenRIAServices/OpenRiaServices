@@ -553,6 +553,7 @@ namespace OpenRiaServices.Server
             // must include all extension metadata
             this.ValidateEntityTypes();
             this.ValidateComplexTypes();
+            this.ValidateSimpleStructTypes();
 
             this._isInitialized = true;
             this._isInitializing = false;
@@ -949,6 +950,58 @@ namespace OpenRiaServices.Server
                 if (childEntityType != null)
                 {
                     throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidComplexType_EntityInheritance, this.DomainServiceType, childEntityType, complexType));
+                }
+            }
+        }
+
+        private void ValidateSimpleStructTypes()
+        {
+            foreach (DomainOperationEntry operation in this.DomainOperationEntries)
+            {
+                foreach (DomainOperationParameter parameter in operation.Parameters)
+                {
+                    ValidateSimpleStructType(parameter.ParameterType);
+                }
+
+                ValidateSimpleStructType(operation.ReturnType);
+            }
+
+            foreach (Type type in this.EntityTypes.Concat(this.ComplexTypes))
+            {
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(type))
+                {
+                    ValidateSimpleStructType(property.PropertyType);
+                }
+            }
+        }
+
+        private static void ValidateSimpleStructType(Type type)
+        {
+            type = TypeUtility.GetNonNullableType(type);
+            if (TypeUtility.IsSimpleStructType(type))
+            {
+                PropertyDescriptor excludedProperty = TypeDescriptor.GetProperties(type)
+                    .Cast<PropertyDescriptor>()
+                    .FirstOrDefault(p => p.Attributes[typeof(ExcludeAttribute)] != null);
+                if (excludedProperty != null)
+                {
+                    throw new InvalidOperationException(string.Format(
+                        CultureInfo.CurrentCulture,
+                        Resource.InvalidSimpleStruct_ExcludeMember,
+                        excludedProperty.Name,
+                        type.Name));
+                }
+            }
+
+            if (type.HasElementType)
+            {
+                ValidateSimpleStructType(type.GetElementType());
+            }
+            else if (type.IsGenericType)
+            {
+                foreach (Type argument in type.GetGenericArguments())
+                {
+                    ValidateSimpleStructType(argument);
                 }
             }
         }

@@ -788,6 +788,15 @@ namespace OpenRiaServices.Server {
                 return ResourceManager.GetString("InvalidComplexType_PropertyAttribute", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Property '{0}' of simple struct '{1}' is invalid. Simple struct properties cannot be marked with ExcludeAttribute..
+        /// </summary>
+        internal static string InvalidSimpleStruct_ExcludeMember {
+            get {
+                return ResourceManager.GetString("InvalidSimpleStruct_ExcludeMember", resourceCulture);
+            }
+        }
         
         /// <summary>
         ///   Looks up a localized string similar to Custom methods must contain at least one parameter..

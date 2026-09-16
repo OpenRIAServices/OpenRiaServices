@@ -1515,6 +1515,17 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
+        public void DomainServiceDescription_SimpleStructWithExcludedMemberThrows()
+        {
+            ExceptionHelper.ExpectInvalidOperationException(
+                () => DomainServiceDescription.GetDescription(typeof(Provider_Invalid_ExcludedSimpleStruct)),
+                string.Format(
+                    Resource.InvalidSimpleStruct_ExcludeMember,
+                    nameof(ExcludedMemberSimpleStruct.ExcludedValue),
+                    nameof(ExcludedMemberSimpleStruct)));
+        }
+
+        [TestMethod]
         public void DomainServiceDescription_InterfaceAttributes()
         {
             var d = DomainServiceDescription.GetDescription(typeof(InterfaceInheritanceDomainService));
@@ -3964,6 +3975,21 @@ namespace OpenRiaServices.Server.Test
     {
         public int Value { get; set; }
         public int OtherValue { get; set; }
+    }
+
+    [EnableClientAccess]
+    public class Provider_Invalid_ExcludedSimpleStruct : DomainService
+    {
+        [Invoke]
+        public ExcludedMemberSimpleStruct Echo(ExcludedMemberSimpleStruct value) { return value; }
+    }
+
+    public struct ExcludedMemberSimpleStruct
+    {
+        public int Value { get; set; }
+
+        [Exclude]
+        public int ExcludedValue { get; set; }
     }
 
     public class InvalidComplexType_Generic<T> { }
