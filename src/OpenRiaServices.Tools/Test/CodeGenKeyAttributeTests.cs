@@ -3,6 +3,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using SimpleStructs;
 
 namespace OpenRiaServices.Tools.Test
 {
@@ -39,6 +40,31 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.AssertGeneratedCodeDoesNotContain(generatedCode, "GetIdentity");
         }
 
+        [TestMethod]
+        public void CodeGen_Attribute_KeyAttribute_SimpleStructWithExcludedMember_Fails()
+        {
+            ConsoleLogger logger = new ConsoleLogger();
+            ISharedCodeService sharedCodeService = new MockSharedCodeService(
+                new[] { typeof(Mock_CG_ExcludedMemberSimpleStruct) },
+                Array.Empty<MethodInfo>(),
+                Array.Empty<string>());
+
+            string generatedCode = TestHelper.GenerateCode(
+                "C#",
+                new[] { typeof(Mock_CG_Attr_Entity_ExcludedSimpleStructKey_DomainService) },
+                logger,
+                sharedCodeService);
+
+            Assert.IsTrue(string.IsNullOrEmpty(generatedCode));
+            TestHelper.AssertContainsErrors(
+                logger,
+                string.Format(
+                    Resource.EntityCodeGen_EntityKey_KeyTypeNotSupported,
+                    typeof(Mock_CG_Attr_Entity_ExcludedSimpleStructKey),
+                    nameof(Mock_CG_Attr_Entity_ExcludedSimpleStructKey.K1),
+                    typeof(Mock_CG_ExcludedMemberSimpleStruct)));
+        }
+
     }
 
     public class Mock_CG_Attr_Entity_Missing_Key_DomainService : GenericDomainService<Mock_CG_Attr_Entity_Missing_Key> { }
@@ -58,4 +84,13 @@ namespace OpenRiaServices.Tools.Test
         [Key]
         public string K2 { get; set; }
     }
+
+    public class Mock_CG_Attr_Entity_ExcludedSimpleStructKey_DomainService : GenericDomainService<Mock_CG_Attr_Entity_ExcludedSimpleStructKey> { }
+
+    public partial class Mock_CG_Attr_Entity_ExcludedSimpleStructKey
+    {
+        [Key]
+        public Mock_CG_ExcludedMemberSimpleStruct K1 { get; set; }
+    }
+
 }

@@ -347,6 +347,13 @@ namespace OpenRiaServices.Tools
                 return false;
             }
 
+            if (TypeDescriptor.GetProperties(propertyType)
+                .Cast<PropertyDescriptor>()
+                .Any(p => p.Attributes[typeof(ExcludeAttribute)] != null))
+            {
+                return false;
+            }
+
             CodeMemberShareKind shareKind = this.ClientProxyGenerator.GetTypeShareKind(propertyType);
             return (shareKind & CodeMemberShareKind.Shared) != 0;
         }

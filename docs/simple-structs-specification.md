@@ -13,15 +13,14 @@ A type is considered a supported simple struct when it meets all of the followin
 - It is a `struct` (value type), not an enum.
 - It is public/visible.
 - It is non-generic.
-- It is not a framework/system assembly type.
 - It has one or more public readable instance properties (non-indexers).
 - Every such property type is a predefined simple type supported by OpenRiaServices.
-- None of its public properties are marked with `[Exclude]`.
 
 Additional requirements when used as an entity key member:
 
 - The struct must implement `IEquatable<T>`.
 - In phase 1, the struct must be shared/available on the client (shared-type-only support).
+- None of its public properties may be marked with `[Exclude]`.
 
 ## Current support
 
@@ -43,9 +42,20 @@ Supported simple structs are accepted where predefined types are accepted in:
 
 Entity key members may use supported simple structs when key-specific requirements are met (`IEquatable<T>` + shared-type-only in phase 1).
 
+### Validation
+
+Validation attributes applied directly to an operation parameter or entity property are evaluated normally. Validation attributes on properties inside a simple struct are not recursively evaluated for operation parameters or entity properties.
+
+### Entity properties
+
+An entity property may be a supported simple struct, including a key member that meets the additional key requirements.
+
+Collections and dictionaries of simple structs are supported in operation signatures, but are not currently supported as entity properties.
+
 ### Out of scope
 
 - OData hosting support
+- Collections and dictionaries of simple structs as entity properties
 
 ## Serialization and conversion behavior
 
@@ -74,3 +84,7 @@ public struct CustomerKey : IEquatable<CustomerKey>
 - Add generation of non-shared simple structs to client proxy code generation.
 - Keep compatibility with existing complex type generation and behavior.
 - Expand test coverage for generated (non-shared) simple struct scenarios.
+
+### Entity collection support
+
+When collections of simple structs are added to entities, client collections will need to be readonly or observable. An observable collection may be exposed by a getter-only property, but mutations must mark the entity as modified.

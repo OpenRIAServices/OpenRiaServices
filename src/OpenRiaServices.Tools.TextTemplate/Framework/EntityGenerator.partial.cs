@@ -274,6 +274,13 @@ namespace OpenRiaServices.Tools.TextTemplate
                 return false;
             }
 
+            if (TypeDescriptor.GetProperties(propertyType)
+                .Cast<PropertyDescriptor>()
+                .Any(p => p.Attributes[typeof(ExcludeAttribute)] != null))
+            {
+                return false;
+            }
+
             CodeMemberShareKind shareKind = this.ClientCodeGenerator.GetTypeShareKind(propertyType);
             return (shareKind & CodeMemberShareKind.Shared) != 0;
         }

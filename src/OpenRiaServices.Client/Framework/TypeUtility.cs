@@ -290,25 +290,16 @@ namespace OpenRiaServices
                 return false;
             }
 
-            // Keep support scoped to user-defined structs.
-            if (IsSystemAssembly(type.Assembly))
-            {
-                return false;
-            }
-
             // Keep phase-1 behavior narrow to "typed key"-style value objects:
             // one or more readable public instance properties of predefined simple types.
             PropertyInfo[] properties = type
                 .GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Where(p => p.CanRead && p.GetIndexParameters().Length == 0)
                 .ToArray();
 
-            if (properties.Length == 0)
-            {
-                return false;
-            }
-
-            return properties.All(p => IsPredefinedSimpleType(p.PropertyType));
+            return properties.Length != 0 &&
+                properties.All(p => p.CanRead &&
+                    p.GetIndexParameters().Length == 0 &&
+                    IsPredefinedSimpleType(p.PropertyType));
         }
 
         /// <summary>

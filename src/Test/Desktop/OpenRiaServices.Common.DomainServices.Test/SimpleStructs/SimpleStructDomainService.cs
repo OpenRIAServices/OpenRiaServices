@@ -5,6 +5,16 @@ using OpenRiaServices.Server;
 
 namespace SimpleStructs
 {
+    public struct Mock_CG_ExcludedMemberSimpleStruct : System.IEquatable<Mock_CG_ExcludedMemberSimpleStruct>
+    {
+        public int Value { get; set; }
+
+        [Exclude]
+        public int ExcludedValue { get; set; }
+
+        public bool Equals(Mock_CG_ExcludedMemberSimpleStruct other) => Value == other.Value;
+    }
+
     [EnableClientAccess]
     public class SimpleStructDomainService : DomainService
     {
