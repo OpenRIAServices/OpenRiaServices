@@ -46,7 +46,7 @@ namespace OpenRiaServices.Tools.Test
             ConsoleLogger logger = new ConsoleLogger();
             ISharedCodeService sharedCodeService = new MockSharedCodeService(
                 new[] { typeof(Mock_CG_ExcludedMemberSimpleStruct) },
-                Array.Empty<MethodInfo>(),
+                new[] { typeof(Mock_CG_Attr_Entity_ExcludedSimpleStructKey).GetProperty(nameof(Mock_CG_Attr_Entity_ExcludedSimpleStructKey.K1)).GetGetMethod() },
                 Array.Empty<string>());
 
             string generatedCode = TestHelper.GenerateCode(
