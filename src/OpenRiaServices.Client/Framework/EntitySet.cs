@@ -857,7 +857,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="association">The association that defines the source and target key members.</param>
         /// <param name="sourceEntity">The entity whose association key values are used for the lookup.</param>
-        /// <param name="entity">The matching entity when found; otherwise, <see langword="null"/> in case there where 0 or multiple matches.</param>
+        /// <param name="entity">The matching entity when found; otherwise, <see langword="null"/> in case there were 0 or multiple matches.</param>
         /// <returns><see langword="true"/> if the association can be queried; otherwise, <see langword="false"/>.</returns>
         internal bool TryGetAssociationEntity(EntityAssociationAttribute association, Entity sourceEntity, out Entity? entity)
         {

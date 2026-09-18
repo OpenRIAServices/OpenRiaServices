@@ -225,7 +225,7 @@ namespace OpenRiaServices.Client
             /// </summary>
             /// <param name="association">The association that identifies the source members.</param>
             /// <param name="sourceEntity">The entity that provides the lookup key.</param>
-            /// <param name="entity">The matching entity, or <see langword="null"/> when 0 or more entities matches.</param>
+            /// <param name="entity">The matching entity, or <see langword="null"/> when no or multiple entities match.</param>
             /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
             public virtual bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, out Entity? entity)
             {
