@@ -150,6 +150,10 @@ namespace OpenRiaServices.Client
                 }
                 else
                 {
+                    // TODO: This can happen by using BeginEdit/EndEdit on an entity that is not yet indexed.
+                    // and changing the PK , this currently gives a Modified entity without a valid key (null) which is strange
+                    //  The remove at the top of this method will remove the entity from the index if the key is null, 
+                    //  System.Diagnostics.Debug.Assert(false, "Entity should have been indexed by identity.");
 
                     if (!_entities.TryAdd(identity, entity))
                     {
