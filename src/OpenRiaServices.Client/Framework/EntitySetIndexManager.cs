@@ -18,6 +18,7 @@ namespace OpenRiaServices.Client
     {
         private readonly EntitySet _entitySet;
         private readonly IdentityKeyIndex _primaryKeyIndex;
+        private readonly CompositeAssociationMemberNames _primaryKeyMemberNames;
         private readonly Dictionary<CompositeAssociationMemberNames, EntityIndex> _associationIndexes = new();
         private readonly List<EntityAssociationIndex> _secondaryIndexes = new();
 
@@ -26,9 +27,10 @@ namespace OpenRiaServices.Client
             _entitySet = entitySet ?? throw new ArgumentNullException(nameof(entitySet));
             MetaType metaType = MetaType.GetMetaType(entitySet.EntityType);
             _primaryKeyIndex = IdentityKeyIndex.Create(metaType.KeyMembers);
+            _primaryKeyMemberNames = new CompositeAssociationMemberNames(metaType.KeyMembers.Select(static member => member.Name).ToArray());
             // Allow primary key to be used as index for association properties
             _associationIndexes.Add(
-                new CompositeAssociationMemberNames(metaType.KeyMembers.Select(static member => member.Name).ToArray()),
+                _primaryKeyMemberNames,
                 _primaryKeyIndex);
         }
 
@@ -97,6 +99,11 @@ namespace OpenRiaServices.Client
 
         public void UpdateAssociationIndexes(Entity entity, string propertyName)
         {
+            if (propertyName == nameof(Entity.EntityState) || _primaryKeyMemberNames.Contains(propertyName))
+            {
+                _primaryKeyIndex.Update(entity, propertyName);
+            }
+
             foreach (EntityAssociationIndex index in _secondaryIndexes)
             {
                 index.Update(entity, propertyName);
