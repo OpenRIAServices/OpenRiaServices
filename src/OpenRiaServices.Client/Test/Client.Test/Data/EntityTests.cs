@@ -826,12 +826,11 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public void Entity_RaiseDataMemberChanged()
         {
-            MockEntity_RaisePropertyChangedEvents entity = new MockEntity_RaisePropertyChangedEvents();
-            entity.StartTracking();
+            MockEntity_RaisePropertyChangedEvents entity = new MockEntity_RaisePropertyChangedEvents() { Property1 = 1 };
 
             ConfigurableEntityContainer container = new ConfigurableEntityContainer();
             container.CreateSet<MockEntity_RaisePropertyChangedEvents>(EntitySetOperations.All);
-            container.GetEntitySet<MockEntity_RaisePropertyChangedEvents>().Add(entity);
+            container.GetEntitySet<MockEntity_RaisePropertyChangedEvents>().Attach(entity);
 
             List<string> propertyChanges = new List<string>();
             entity.PropertyChanged += (s, a) => propertyChanges.Add(a.PropertyName);

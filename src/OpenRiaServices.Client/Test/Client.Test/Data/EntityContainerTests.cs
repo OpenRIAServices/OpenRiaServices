@@ -1825,10 +1825,6 @@ namespace OpenRiaServices.Client.Test
             {
                 ProductID = 2
             };
-            Product p3 = new Product
-            {
-                ProductID = 3
-            };
             PurchaseOrderDetail d1 = new PurchaseOrderDetail
             {
                 PurchaseOrderID = 1,
@@ -1853,7 +1849,7 @@ namespace OpenRiaServices.Client.Test
                 PurchaseOrderDetailID = 4,
                 ProductID = 3
             };
-            ec.LoadEntities(new Entity[] { p1, p2, p3, d1, d2, d3, d4 });
+            ec.LoadEntities(new Entity[] { p1, p2, d1, d2, d3, d4 });
 
             NotifyCollectionChangedEventArgs args1 = null;
             ((INotifyCollectionChanged)p1.PurchaseOrderDetails).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e)
