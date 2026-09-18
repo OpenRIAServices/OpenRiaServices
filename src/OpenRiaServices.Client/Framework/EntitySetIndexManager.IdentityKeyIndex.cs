@@ -119,10 +119,9 @@ namespace OpenRiaServices.Client
 
             public override void Remove(Entity entity)
             {
-                if (_identitiesByEntity.TryGetValue(entity, out TKey? identity))
+                if (_identitiesByEntity.Remove(entity, out TKey? identity))
                 {
                     _entities.Remove(identity);
-                    _identitiesByEntity.Remove(entity);
                 }
             }
 
@@ -130,12 +129,7 @@ namespace OpenRiaServices.Client
             {
                 if (!_identityAccessor.TryGetValue(entity, out TKey identity))
                 {
-                    if (_identitiesByEntity.TryGetValue(entity, out TKey? oldIdentity))
-                    {
-                        _entities.Remove(oldIdentity);
-                        _identitiesByEntity.Remove(entity);
-                    }
-
+                    Remove(entity);
                     return;
                 }
 
@@ -146,16 +140,24 @@ namespace OpenRiaServices.Client
                         return;
                     }
 
+                    if (!_entities.TryAdd(identity, entity))
+                    {
+                        throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
+                    }
+
                     _entities.Remove(existingIdentity);
-                    _identitiesByEntity.Remove(entity);
+                    _identitiesByEntity[entity] = identity;
                 }
-
-                if (!_entities.TryAdd(identity, entity))
+                else
                 {
-                    throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
-                }
 
-                _identitiesByEntity[entity] = identity;
+                    if (!_entities.TryAdd(identity, entity))
+                    {
+                        throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
+                    }
+
+                    _identitiesByEntity[entity] = identity;
+                }
             }
 
             public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)

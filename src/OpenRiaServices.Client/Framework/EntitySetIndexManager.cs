@@ -99,7 +99,7 @@ namespace OpenRiaServices.Client
 
         public void UpdateAssociationIndexes(Entity entity, string propertyName)
         {
-            if (propertyName == nameof(Entity.EntityState) || _primaryKeyMemberNames.Contains(propertyName))
+            if (_primaryKeyMemberNames.Contains(propertyName) && ShouldIndexEntity(entity))
             {
                 _primaryKeyIndex.Update(entity, propertyName);
             }
@@ -193,6 +193,7 @@ namespace OpenRiaServices.Client
 
         private static bool ShouldIndexEntity(Entity entity)
         {
+            // A deleted entity will have EntitySet null
             return entity.EntitySet != null && entity.EntityState != EntityState.New;
         }
 

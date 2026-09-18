@@ -72,6 +72,18 @@ namespace System.Collections.Generic
                 return false;
             }
         }
+
+        public static bool Remove<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, out TValue value)
+        {
+            // This is expected to be used in scenarios where the add will almost always succeed, so we pay the cost of an exception
+            // on duplicates instead of checking if the Key exists first
+            if (dictionary.TryGetValue(key, out value))
+            {
+                dictionary.Remove(key);
+                return true;
+            }
+            return false;
+        }
     }
 }
 
