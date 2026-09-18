@@ -347,6 +347,8 @@ namespace OpenRiaServices.Tools
                 return false;
             }
 
+            // TODO: Make this a general check on all simple object members
+            // not just keys
             CodeMemberShareKind shareKind = this.ClientProxyGenerator.GetTypeShareKind(propertyType);
             return (shareKind & CodeMemberShareKind.Shared) != 0;
         }
