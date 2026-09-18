@@ -1,5 +1,6 @@
 # Unreleased
 
+* Added support for PolyType `[PropertyShape]` and `[DerivedTypeShape]` model attributes in server metadata and generated clients, using PolyType precedence when combined with data contract attributes. Fixes [#603](https://github.com/OpenRIAServices/OpenRiaServices/issues/603)
 * Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
 * Client-side entity association lookup now uses internal `EntitySet` indexes, including typed single-key accessors for common scalar key types, to reduce repeated full-set scans and lower allocation overhead during relationship resolution.
 * Updated Source Link configuration to rely on .NET SDK built-in Source Link support (removed explicit `Microsoft.SourceLink.GitHub` package reference)

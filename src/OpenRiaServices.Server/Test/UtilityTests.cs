@@ -1,10 +1,16 @@
 ﻿extern alias SystemWebDomainServices;
 
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Linq;
 using System.Linq;
+using System.Runtime.Serialization;
 //using DbContextModels.AdventureWorks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PolyType;
+using PolyType.Abstractions;
+using PolyType.ReflectionProvider;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TestDomainServices;
 using Address = TestDomainServices.Address;
@@ -179,6 +185,101 @@ namespace OpenRiaServices.Server.Test
                 "Server Binary values should be equal.");
             Assert.AreEqual(binary, SerializationUtility.GetServerValue(typeof(Binary), bytes),
                 "Server byte[] values should be equal.");
+        }
+
+        [TestMethod]
+        public void SerializableDataMember_UsesPolyTypePrecedence()
+        {
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(PolyTypeDataContract));
+
+            Assert.IsFalse(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.Unannotated)]));
+            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.DataMember)]));
+            Assert.IsFalse(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.IgnoredShape)]));
+            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypeDataContract.ShapeOverridesIgnore)]));
+        }
+
+        [TestMethod]
+        public void SerializableDataMember_UsesPolyTypePrecedenceForPoco()
+        {
+            PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(PolyTypePoco));
+
+            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypePoco.Unannotated)]));
+            Assert.IsFalse(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypePoco.Ignored)]));
+            Assert.IsTrue(SerializationUtility.IsSerializableDataMember(properties[nameof(PolyTypePoco.ShapeOverridesIgnore)]));
+        }
+
+        [TestMethod]
+        [DataRow(typeof(PolyTypeDataContract))]
+        [DataRow(typeof(PolyTypePoco))]
+        [DataRow(typeof(PolyTypeDerivedNonContract))]
+        public void SerializableDataMembers_MatchPolyTypeReflectionShape(Type type)
+        {
+            IObjectTypeShape shape = (IObjectTypeShape)ReflectionTypeShapeProvider.Default.GetTypeShape(type);
+            string[] expectedNames = shape.Properties.Select(property => property.Name).ToArray();
+            string[] actualNames = TypeDescriptor.GetProperties(type)
+                .Cast<PropertyDescriptor>()
+                .Where(SerializationUtility.IsSerializableDataMember)
+                .Select(GetShapePropertyName)
+                .ToArray();
+
+            CollectionAssert.AreEquivalent(
+                expectedNames,
+                actualNames,
+                $"Expected: {string.Join(", ", expectedNames)}; actual: {string.Join(", ", actualNames)}");
+        }
+
+        private static string GetShapePropertyName(PropertyDescriptor property)
+        {
+            if (property.Attributes[typeof(PropertyShapeAttribute)] is PropertyShapeAttribute propertyShape)
+            {
+                return propertyShape.Name ?? property.Name;
+            }
+
+            return (property.Attributes[typeof(DataMemberAttribute)] as DataMemberAttribute)?.Name ?? property.Name;
+        }
+
+        [DataContract]
+        private class PolyTypeDataContract
+        {
+            [DataMember(Name = "id", Order = 0, IsRequired = true)]
+            public int Id { get; set; }
+
+            public string Unannotated { get; set; }
+
+            [DataMember(Name = "data-name", Order = 1)]
+            public string DataMember { get; set; }
+
+            [PropertyShape(Name = "shape-name", Order = 2)]
+            public string PropertyShapeOnly { get; set; }
+
+            [DataMember(Name = "ignored-data-name", Order = 4)]
+            [PropertyShape(Name = "preferred-shape-name", Order = 100)]
+            public string ConflictingNames { get; set; }
+
+            [DataMember]
+            [PropertyShape(Ignore = true)]
+            public string IgnoredShape { get; set; }
+
+            [IgnoreDataMember]
+            [PropertyShape]
+            public string ShapeOverridesIgnore { get; set; }
+        }
+
+        private sealed class PolyTypeDerivedNonContract : PolyTypeDataContract
+        {
+            public string DerivedProperty { get; set; }
+        }
+
+        private sealed class PolyTypePoco
+        {
+            public string Unannotated { get; set; }
+
+            [IgnoreDataMember]
+            public string Ignored { get; set; }
+
+            [IgnoreDataMember]
+            [PropertyShape]
+            public string ShapeOverridesIgnore { get; set; }
         }
     }
 }

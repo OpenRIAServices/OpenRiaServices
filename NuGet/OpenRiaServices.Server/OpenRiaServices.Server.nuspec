@@ -23,9 +23,11 @@
     </frameworkAssemblies>
     <dependencies>
         <group targetFramework="net472">
+            <dependency id="PolyType" version="1.4.1"/>
             <dependency id="System.Threading.Tasks.Extensions" version="4.6.3"/>
         </group>
         <group targetFramework="net8.0">
+            <dependency id="PolyType" version="1.4.1"/>
             <dependency id="System.CodeDom" version="8.0.0"/>
         </group>
     </dependencies>

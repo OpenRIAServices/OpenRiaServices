@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="PolyType" Version="1.4.1" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\BinaryTypeUtility.cs" Link="Data\BinaryTypeUtility.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\DomainException.cs" Link="Data\DomainException.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Framework\DomainIdentifierAttribute.cs" Link="Data\DomainIdentifierAttribute.cs" />

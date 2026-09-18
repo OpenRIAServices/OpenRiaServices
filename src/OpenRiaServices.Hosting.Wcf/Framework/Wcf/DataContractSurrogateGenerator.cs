@@ -9,6 +9,7 @@ using System.Reflection.Emit;
 using System.Runtime.Serialization;
 using System.Security;
 using OpenRiaServices.Server;
+using PolyType;
 
 #nullable disable
 
@@ -384,6 +385,7 @@ namespace OpenRiaServices.Hosting.Wcf
             CustomAttributeBuilder dataMemberAtt = DataContractSurrogateGenerator.GetDataMemberAttributeBuilder(
                 pd.Attributes[typeof(DataMemberAttribute)] as DataMemberAttribute);
             propertyBuilder.SetCustomAttribute(dataMemberAtt);
+            SetPropertyShapeAttribute(propertyBuilder, pd);
 
             // get {
             //     return $property.GetValue(_$wrapper);
@@ -516,6 +518,7 @@ namespace OpenRiaServices.Hosting.Wcf
             CustomAttributeBuilder dataMemberAtt = DataContractSurrogateGenerator.GetDataMemberAttributeBuilder(
                 pd.Attributes.OfType<DataMemberAttribute>().FirstOrDefault());
             propertyBuilder.SetCustomAttribute(dataMemberAtt);
+            SetPropertyShapeAttribute(propertyBuilder, pd);
 
             // get {
             //     return ((Entity)$wrapper).Property;
@@ -768,6 +771,34 @@ namespace OpenRiaServices.Hosting.Wcf
             }
 
             return GetAttributeBuilder(dataMemberType, dataMemberProperties);
+        }
+
+        private static void SetPropertyShapeAttribute(PropertyBuilder propertyBuilder, PropertyDescriptor propertyDescriptor)
+        {
+            if (propertyDescriptor.Attributes[typeof(PropertyShapeAttribute)] is not PropertyShapeAttribute propertyShapeAttribute)
+            {
+                return;
+            }
+
+            Dictionary<string, object> properties = new Dictionary<string, object>();
+            if (propertyShapeAttribute.Name != null)
+            {
+                properties[nameof(PropertyShapeAttribute.Name)] = propertyShapeAttribute.Name;
+            }
+            if (propertyShapeAttribute.Order != 0)
+            {
+                properties[nameof(PropertyShapeAttribute.Order)] = propertyShapeAttribute.Order;
+            }
+
+            PropertyInfo isRequiredSpecifiedProperty = typeof(PropertyShapeAttribute).GetProperty(
+                "IsRequiredSpecified",
+                BindingFlags.Instance | BindingFlags.NonPublic);
+            if ((bool)isRequiredSpecifiedProperty.GetValue(propertyShapeAttribute))
+            {
+                properties[nameof(PropertyShapeAttribute.IsRequired)] = propertyShapeAttribute.IsRequired;
+            }
+
+            propertyBuilder.SetCustomAttribute(GetAttributeBuilder(typeof(PropertyShapeAttribute), properties));
         }
 
         private static CustomAttributeBuilder GetAttributeBuilder(Type type, Dictionary<string, object> attProperties)

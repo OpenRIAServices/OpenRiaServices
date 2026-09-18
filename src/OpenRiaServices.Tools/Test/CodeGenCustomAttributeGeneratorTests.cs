@@ -4,9 +4,11 @@ using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PolyType;
 using TestDomainServices;
 using IgnoreAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 
@@ -47,6 +49,33 @@ namespace OpenRiaServices.Tools.Test
 
             generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", new Type[] { typeof(Mock_CG_Attr_Entity_Bindable_DomainService) }, new ConsoleLogger(), mockSts, true);
             TestHelper.AssertGeneratedCodeContains(generatedCode, "[global::System.ComponentModel.BindableAttribute(true, global::System.ComponentModel.BindingDirection.TwoWay)]"); 
+        }
+
+        [TestMethod]
+        public void CodeGen_CustomAttrGen_PolyTypeAttributes()
+        {
+            MockSharedCodeService mockSts = new MockSharedCodeService(
+                new[] { typeof(PropertyShapeAttribute), typeof(DerivedTypeShapeAttribute) },
+                Array.Empty<MethodBase>(),
+                Array.Empty<string>());
+
+            string generatedCode = TestHelper.GenerateCodeAssertSuccess(
+                "C#",
+                new[] { typeof(Mock_CG_PolyType_DomainService) },
+                mockSts);
+
+            TestHelper.AssertGeneratedCodeContains(
+                generatedCode,
+                "PropertyShape(",
+                "\"shape-name\"",
+                "DerivedTypeShape(",
+                "typeof(Mock_CG_PolyType_Derived)",
+                "\"derived\"",
+                "public string ShapeOverridesIgnore");
+            TestHelper.AssertGeneratedCodeDoesNotContain(
+                generatedCode,
+                "public string IgnoredShape",
+                "public string Unannotated");
         }
 
         [TestMethod]
@@ -595,6 +624,34 @@ namespace OpenRiaServices.Tools.Test
         [System.ComponentModel.Bindable(true, System.ComponentModel.BindingDirection.TwoWay)]
         public int K { get; set; }
     }
+
+    public class Mock_CG_PolyType_DomainService : GenericDomainService<Mock_CG_PolyType_Entity> { }
+
+    [DataContract]
+    [DerivedTypeShape(typeof(Mock_CG_PolyType_Derived), Name = "derived")]
+    public class Mock_CG_PolyType_Entity
+    {
+        [Key]
+        [DataMember]
+        public int Id { get; set; }
+
+        public string Unannotated { get; set; }
+
+        [DataMember(Name = "data-member-name")]
+        [PropertyShape(Name = "shape-name")]
+        public string Renamed { get; set; }
+
+        [DataMember]
+        [PropertyShape(Ignore = true)]
+        public string IgnoredShape { get; set; }
+
+        [IgnoreDataMember]
+        [PropertyShape]
+        public string ShapeOverridesIgnore { get; set; }
+    }
+
+    [DataContract]
+    public class Mock_CG_PolyType_Derived : Mock_CG_PolyType_Entity { }
 }
 
 // The code generator only emits errors for attributes in the System.ComponentModel.DataAnnotations namespace to

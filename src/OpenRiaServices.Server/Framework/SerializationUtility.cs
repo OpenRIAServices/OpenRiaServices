@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
 using OpenRiaServices.Server;
+using PolyType;
 
 namespace OpenRiaServices
 {
@@ -97,6 +98,13 @@ namespace OpenRiaServices
             }
 
             AttributeCollection attrs = propertyDescriptor.ComponentType.Attributes();
+            PropertyShapeAttribute propertyShapeAttribute = propertyDescriptor.Attributes[typeof(PropertyShapeAttribute)] as PropertyShapeAttribute;
+
+            // PolyType gives PropertyShapeAttribute precedence over the data contract attributes.
+            if (propertyShapeAttribute != null)
+            {
+                return !propertyShapeAttribute.Ignore;
+            }
 
             if (attrs[typeof(DataContractAttribute)] != null)
             {

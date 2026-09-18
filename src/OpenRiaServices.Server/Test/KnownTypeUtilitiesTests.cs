@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PolyType;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using KnownTypeUtil = OpenRiaServices.Server.KnownTypeUtilities;
 
@@ -90,6 +91,26 @@ namespace OpenRiaServices.Server.Test
             Assert.IsTrue(knownTypes.Contains(typeof(KTU_3)));
             Assert.IsTrue(knownTypes.Contains(typeof(KTU_4)));
         }
+
+        [TestMethod]
+        public void KnownType_Utilities_DerivedTypeShape_Takes_Precedence_Per_Type()
+        {
+            IEnumerable<Type> knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_PolyType), false);
+
+            CollectionAssert.AreEquivalent(
+                new[] { typeof(KTU_1), typeof(KTU_2) },
+                knownTypes.ToArray());
+        }
+
+        [TestMethod]
+        public void KnownType_Utilities_DerivedTypeShape_Inherits_Base_Registrations()
+        {
+            IEnumerable<Type> knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_PolyTypeDerived), true);
+
+            CollectionAssert.AreEquivalent(
+                new[] { typeof(KTU_1), typeof(KTU_2), typeof(KTU_3) },
+                knownTypes.ToArray());
+        }
     }
 
     public class KTU_00 { }
@@ -98,6 +119,14 @@ namespace OpenRiaServices.Server.Test
     public class KTU_2 { }
     public class KTU_3 { }
     public class KTU_4 { }
+
+    [KnownType(typeof(KTU_4))]
+    [DerivedTypeShape(typeof(KTU_1))]
+    [DerivedTypeShape(typeof(KTU_2))]
+    public class KTU_PolyType { }
+
+    [DerivedTypeShape(typeof(KTU_3))]
+    public class KTU_PolyTypeDerived : KTU_PolyType { }
 
     [KnownType(typeof(KTU_00))]     // exposed only on least derived type
     public class KTU_Base00 { }
