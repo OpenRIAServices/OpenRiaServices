@@ -87,9 +87,9 @@ namespace OpenRiaServices.Client
                     // Since this is the first time the entity has been returned, we don't
                     // need to send a property change notification.
                     EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
-                    if (set.TryGetAssociationEntity(this.AssocAttribute, this._parent, out Entity? entity))
+                    if (set.TryGetAssociationEntity(this.AssocAttribute, this._parent, out TEntity? entity))
                     {
-                        this._entity = entity as TEntity;
+                        this._entity = entity;
                     }
                     else
                     {

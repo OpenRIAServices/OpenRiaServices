@@ -172,58 +172,54 @@ namespace OpenRiaServices.Client
                 return true;
             }
 
-            public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, out Entity? entity)
+            public override bool TryLookup<TEntity>(EntityAssociationAttribute association, Entity sourceEntity, out TEntity? entity)
+                where TEntity : class
             {
+                TKey identity;
                 var sourceMemberNames = association.ThisKeyMembers;
                 if (sourceMemberNames.Count == 1)
                 {
                     MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[0]];
-                    if (sourceMember?.GetValueAccessor() is not MetaMember.IValueAccessor<TKey> accessor)
+                    if ((sourceMember?.GetValueAccessor() is not MetaMember.IValueAccessor<TKey> accessor)
+                        || !accessor.TryGetValue(sourceEntity, out identity))
+                    {
+                        entity = null;
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (typeof(TKey) != typeof(object))
                     {
                         entity = null;
                         return false;
                     }
 
-                    if (!accessor.TryGetValue(sourceEntity, out TKey identity))
+                    object[] keyValues = new object[sourceMemberNames.Count];
+                    for (int i = 0; i < sourceMemberNames.Count; i++)
                     {
-                        entity = null;
-                        return true;
+                        MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[i]];
+                        object? keyValue = sourceMember?.GetValue(sourceEntity);
+                        if (keyValue == null)
+                        {
+                            entity = null;
+                            return sourceMember != null;
+                        }
+
+                        keyValues[i] = keyValue;
                     }
 
-                    if (!_entities.TryGetValue(identity, out entity) || !ShouldIndexEntity(entity))
-                    {
-                        entity = null;
-                    }
-
-                    return true;
+                    identity = (TKey)(object)EntityKey.Create(keyValues);
                 }
 
-                if (typeof(TKey) != typeof(object))
+                if (_entities.TryGetValue(identity, out Entity? candidate) && ShouldIndexEntity(candidate))
                 {
-                    entity = null;
-                    return false;
+                    entity = candidate as TEntity;
                 }
-
-                object[] keyValues = new object[sourceMemberNames.Count];
-                for (int i = 0; i < sourceMemberNames.Count; i++)
-                {
-                    MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[i]];
-                    object? keyValue = sourceMember?.GetValue(sourceEntity);
-                    if (keyValue == null)
-                    {
-                        entity = null;
-                        return sourceMember != null;
-                    }
-
-                    keyValues[i] = keyValue;
-                }
-
-                TKey compositeIdentity = (TKey)(object)EntityKey.Create(keyValues);
-                if (!_entities.TryGetValue(compositeIdentity, out entity) || !ShouldIndexEntity(entity))
+                else
                 {
                     entity = null;
                 }
-
                 return true;
             }
 

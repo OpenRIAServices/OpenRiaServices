@@ -121,7 +121,8 @@ namespace OpenRiaServices.Client
             return index.TryLookup(association, sourceEntity, out entities);
         }
 
-        public bool TryGetAssociationEntity(EntityAssociationAttribute association, Entity sourceEntity, out Entity? entity)
+        public bool TryGetAssociationEntity<TEntity>(EntityAssociationAttribute association, Entity sourceEntity, out TEntity? entity)
+            where TEntity : Entity
         {
             if (!TryGetAssociationIndex(association, out EntityIndex? index))
             {
@@ -235,7 +236,8 @@ namespace OpenRiaServices.Client
             /// <param name="sourceEntity">The entity that provides the lookup key.</param>
             /// <param name="entity">The matching entity, or <see langword="null"/> when no or multiple entities match.</param>
             /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
-            public virtual bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, out Entity? entity)
+            public virtual bool TryLookup<TEntity>(EntityAssociationAttribute association, Entity sourceEntity, out TEntity? entity)
+                where TEntity : Entity
             {
                 entity = null;
 
@@ -243,13 +245,16 @@ namespace OpenRiaServices.Client
                 {
                     foreach (var e in entities)
                     {
+                        if (e is not TEntity candidate)
+                            continue;
+
                         // There were multiple matches, return null
                         if (entity != null)
                         {
                             entity = null;
                             break;
                         }
-                        entity = e;
+                        entity = candidate;
                     }
 
                     return true;
