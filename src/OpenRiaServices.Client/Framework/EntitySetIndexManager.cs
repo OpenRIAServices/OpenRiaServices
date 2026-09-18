@@ -114,6 +114,17 @@ namespace OpenRiaServices.Client
             return index.TryLookup(association, sourceEntity, out entities);
         }
 
+        public bool TryGetAssociationEntity(EntityAssociationAttribute association, Entity sourceEntity, out Entity? entity)
+        {
+            if (!TryGetAssociationIndex(association, out EntityIndex? index))
+            {
+                entity = null;
+                return false;
+            }
+
+            return index.TryLookup(association, sourceEntity, out entity);
+        }
+
         private void LoadAssociationIndex(EntityAssociationIndex index)
         {
             foreach (Entity entity in _entitySet.List)
@@ -208,6 +219,36 @@ namespace OpenRiaServices.Client
             /// <param name="entities">The matching entities when the lookup is supported.</param>
             /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
             public abstract bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities);
+
+            /// <summary>
+            /// Uses the source entity's association key to query an index that can contain at most one matching entity.
+            /// </summary>
+            /// <param name="association">The association that identifies the source members.</param>
+            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
+            /// <param name="entity">The matching entity, or <see langword="null"/> when 0 or more entities matches.</param>
+            /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
+            public virtual bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, out Entity? entity)
+            {
+                entity = null;
+
+                if (TryLookup(association, sourceEntity, out IEnumerable<Entity>? entities))
+                {
+                    foreach (var e in entities)
+                    {
+                        // There were multiple matches, return null
+                        if (entity != null)
+                        {
+                            entity = null;
+                            break;
+                        }
+                        entity = e;
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
         }
 
         private abstract class EntityAssociationIndex : EntityIndex

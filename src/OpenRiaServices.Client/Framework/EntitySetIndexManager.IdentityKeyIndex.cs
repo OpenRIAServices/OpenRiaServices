@@ -126,29 +126,45 @@ namespace OpenRiaServices.Client
 
             public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)
             {
+                if (!TryLookup(association, sourceEntity, out Entity? entity))
+                {
+                    entities = null;
+                    return false;
+                }
+
+                entities = entity is null ? Array.Empty<Entity>() : [entity];
+                return true;
+            }
+
+            public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, out Entity? entity)
+            {
                 var sourceMemberNames = association.ThisKeyMembers;
                 if (sourceMemberNames.Count == 1)
                 {
                     MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[0]];
                     if (sourceMember?.GetValueAccessor() is not MetaMember.IValueAccessor<TKey> accessor)
                     {
-                        entities = null;
+                        entity = null;
                         return false;
                     }
 
                     if (!accessor.TryGetValue(sourceEntity, out TKey identity))
                     {
-                        entities = Array.Empty<Entity>();
+                        entity = null;
                         return true;
                     }
 
-                    entities = _entities.TryGetValue(identity, out Entity? entity) && ShouldIndexEntity(entity) ? [entity] : Array.Empty<Entity>();
+                    if (!_entities.TryGetValue(identity, out entity) || !ShouldIndexEntity(entity))
+                    {
+                        entity = null;
+                    }
+
                     return true;
                 }
 
                 if (typeof(TKey) != typeof(object))
                 {
-                    entities = null;
+                    entity = null;
                     return false;
                 }
 
@@ -159,7 +175,7 @@ namespace OpenRiaServices.Client
                     object? keyValue = sourceMember?.GetValue(sourceEntity);
                     if (keyValue == null)
                     {
-                        entities = Array.Empty<Entity>();
+                        entity = null;
                         return sourceMember != null;
                     }
 
@@ -167,9 +183,11 @@ namespace OpenRiaServices.Client
                 }
 
                 TKey compositeIdentity = (TKey)(object)EntityKey.Create(keyValues);
-                entities = _entities.TryGetValue(compositeIdentity, out Entity? compositeEntity) && ShouldIndexEntity(compositeEntity)
-                    ? [compositeEntity]
-                    : Array.Empty<Entity>();
+                if (!_entities.TryGetValue(compositeIdentity, out entity) || !ShouldIndexEntity(entity))
+                {
+                    entity = null;
+                }
+
                 return true;
             }
 

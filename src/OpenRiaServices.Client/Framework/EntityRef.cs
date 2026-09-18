@@ -87,7 +87,14 @@ namespace OpenRiaServices.Client
                     // Since this is the first time the entity has been returned, we don't
                     // need to send a property change notification.
                     EntitySet set = this._parent.EntitySet.EntityContainer.GetEntitySet(typeof(TEntity));
-                    this._entity = this.GetSingleMatch(this.GetAssociationCandidates(set));
+                    if (set.TryGetAssociationEntity(this.AssocAttribute, this._parent, out Entity? entity))
+                    {
+                        this._entity = entity as TEntity;
+                    }
+                    else
+                    {
+                        this._entity = this.GetSingleMatch(set);
+                    }
 
                     if (this._entity != null && this.IsComposition)
                     {
@@ -217,12 +224,14 @@ namespace OpenRiaServices.Client
         /// <returns>The entity or null.</returns>
         private TEntity? GetSingleMatch(IEnumerable entities)
         {
-            IEnumerable<TEntity> enumerable = (entities as ICollection<TEntity>)
-                ?? entities.OfType<TEntity>();
-
             TEntity? entity = null;
-            foreach (TEntity currEntity in enumerable.Where(this.Filter))
+            foreach (object? candidate in entities)
             {
+                if (candidate is not TEntity currEntity || !this.Filter(currEntity))
+                {
+                    continue;
+                }
+
                 if (entity != null)
                 {
                     return null;
@@ -230,16 +239,6 @@ namespace OpenRiaServices.Client
                 entity = currEntity;
             }
             return entity;
-        }
-
-        private IEnumerable GetAssociationCandidates(EntitySet set)
-        {
-            if (set.TryGetAssociationEntities(this.AssocAttribute, this._parent, out IEnumerable<Entity>? entities))
-            {
-                return entities;
-            }
-
-            return set;
         }
 
         /// <summary>
