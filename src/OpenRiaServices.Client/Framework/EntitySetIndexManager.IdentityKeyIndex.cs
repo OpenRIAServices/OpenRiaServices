@@ -33,6 +33,8 @@ namespace OpenRiaServices.Client
 
             public abstract bool TryGetByIdentity(Entity identity, bool throwOnNull, [NotNullWhen(true)] out Entity? entity);
 
+            public abstract void Update(Entity entity, string propertyName);
+
             /// <summary>
             /// A value accessor that retrieves the identity of an entity.
             /// </summary>
@@ -122,6 +124,38 @@ namespace OpenRiaServices.Client
                     _entities.Remove(identity);
                     _identitiesByEntity.Remove(entity);
                 }
+            }
+
+            public override void Update(Entity entity, string propertyName)
+            {
+                if (!_identityAccessor.TryGetValue(entity, out TKey identity))
+                {
+                    if (_identitiesByEntity.TryGetValue(entity, out TKey? oldIdentity))
+                    {
+                        _entities.Remove(oldIdentity);
+                        _identitiesByEntity.Remove(entity);
+                    }
+
+                    return;
+                }
+
+                if (_identitiesByEntity.TryGetValue(entity, out TKey? existingIdentity))
+                {
+                    if (EqualityComparer<TKey>.Default.Equals(existingIdentity, identity))
+                    {
+                        return;
+                    }
+
+                    _entities.Remove(existingIdentity);
+                    _identitiesByEntity.Remove(entity);
+                }
+
+                if (!_entities.TryAdd(identity, entity))
+                {
+                    throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
+                }
+
+                _identitiesByEntity[entity] = identity;
             }
 
             public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)
