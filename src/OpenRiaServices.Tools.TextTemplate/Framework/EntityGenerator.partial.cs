@@ -226,16 +226,6 @@ namespace OpenRiaServices.Tools.TextTemplate
 
         internal override bool ShouldDeclareProperty(PropertyDescriptor pd)
         {
-            if (pd.ExplicitAttributes()[typeof(KeyAttribute)] != null &&
-                HasExcludedSimpleStructMember(pd.PropertyType))
-            {
-                this.ClientCodeGenerator.CodeGenerationHost.LogError(string.Format(
-                    CultureInfo.CurrentCulture,
-                    Resource.EntityCodeGen_EntityKey_KeyTypeNotSupported,
-                    this.Type, pd.Name, pd.PropertyType));
-                return false;
-            }
-
             if (!base.ShouldDeclareProperty(pd))
             {
                 return false;
@@ -284,22 +274,8 @@ namespace OpenRiaServices.Tools.TextTemplate
                 return false;
             }
 
-            if (HasExcludedSimpleStructMember(propertyType))
-            {
-                return false;
-            }
-
             CodeMemberShareKind shareKind = this.ClientCodeGenerator.GetTypeShareKind(propertyType);
             return (shareKind & CodeMemberShareKind.Shared) != 0;
-        }
-
-        private static bool HasExcludedSimpleStructMember(Type propertyType)
-        {
-            propertyType = TypeUtility.GetNonNullableType(propertyType);
-            return TypeUtility.IsSimpleStructType(propertyType) &&
-                TypeDescriptor.GetProperties(propertyType)
-                    .Cast<PropertyDescriptor>()
-                    .Any(p => p.Attributes[typeof(ExcludeAttribute)] != null);
         }
 
         internal override bool HandleNonSerializableProperty(PropertyDescriptor propertyDescriptor)

@@ -20,7 +20,6 @@ Additional requirements when used as an entity key member:
 
 - The struct must implement `IEquatable<T>`.
 - In phase 1, the struct must be shared/available on the client (shared-type-only support).
-- None of its public properties may be marked with `[Exclude]`.
 
 ## Current support
 
@@ -82,6 +81,7 @@ public struct CustomerKey : IEquatable<CustomerKey>
 ### Phase 2: client generation support
 
 - Add generation of non-shared simple structs to client proxy code generation.
+  - Validate none of its public properties may be marked with `[Exclude]`.
 - Keep compatibility with existing complex type generation and behavior.
 - Expand test coverage for generated (non-shared) simple struct scenarios.
 

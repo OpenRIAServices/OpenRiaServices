@@ -299,16 +299,6 @@ namespace OpenRiaServices.Tools
         // or a key attribute is not a simple type.
         protected override bool ShouldDeclareProperty(PropertyDescriptor pd)
         {
-            if (pd.ExplicitAttributes()[typeof(KeyAttribute)] != null &&
-                HasExcludedSimpleStructMember(pd.PropertyType))
-            {
-                this.ClientProxyGenerator.LogError(string.Format(
-                    CultureInfo.CurrentCulture,
-                    Resource.EntityCodeGen_EntityKey_KeyTypeNotSupported,
-                    this.Type, pd.Name, pd.PropertyType));
-                return false;
-            }
-
             if (!base.ShouldDeclareProperty(pd))
             {
                 return false;
@@ -357,22 +347,8 @@ namespace OpenRiaServices.Tools
                 return false;
             }
 
-            if (HasExcludedSimpleStructMember(propertyType))
-            {
-                return false;
-            }
-
             CodeMemberShareKind shareKind = this.ClientProxyGenerator.GetTypeShareKind(propertyType);
             return (shareKind & CodeMemberShareKind.Shared) != 0;
-        }
-
-        private static bool HasExcludedSimpleStructMember(Type propertyType)
-        {
-            propertyType = TypeUtility.GetNonNullableType(propertyType);
-            return TypeUtility.IsSimpleStructType(propertyType) &&
-                TypeDescriptor.GetProperties(propertyType)
-                    .Cast<PropertyDescriptor>()
-                    .Any(p => p.Attributes[typeof(ExcludeAttribute)] != null);
         }
 
         /// <summary>
