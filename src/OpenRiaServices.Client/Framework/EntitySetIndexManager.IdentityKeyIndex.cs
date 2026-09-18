@@ -33,6 +33,8 @@ namespace OpenRiaServices.Client
 
             public abstract bool TryGetByIdentity(Entity identity, bool throwOnNull, [NotNullWhen(true)] out Entity? entity);
 
+            public abstract void Update(Entity entity, string propertyName);
+
             /// <summary>
             /// A value accessor that retrieves the identity of an entity.
             /// </summary>
@@ -117,59 +119,111 @@ namespace OpenRiaServices.Client
 
             public override void Remove(Entity entity)
             {
-                if (_identitiesByEntity.TryGetValue(entity, out TKey? identity))
+                if (_identitiesByEntity.Remove(entity, out TKey? identity))
                 {
                     _entities.Remove(identity);
-                    _identitiesByEntity.Remove(entity);
+                }
+            }
+
+            public override void Update(Entity entity, string propertyName)
+            {
+                if (!_identityAccessor.TryGetValue(entity, out TKey identity))
+                {
+                    Remove(entity);
+                    return;
+                }
+
+                if (_identitiesByEntity.TryGetValue(entity, out TKey? existingIdentity))
+                {
+                    if (EqualityComparer<TKey>.Default.Equals(existingIdentity, identity))
+                    {
+                        return;
+                    }
+
+                    if (!_entities.TryAdd(identity, entity))
+                    {
+                        throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
+                    }
+
+                    _entities.Remove(existingIdentity);
+                    _identitiesByEntity[entity] = identity;
+                }
+                else
+                {
+                    // TODO: This can happen by using BeginEdit/EndEdit on an entity that is not yet indexed.
+                    // and changing the PK , this currently gives a Modified entity without a valid key (null) which is strange
+                    //  The remove at the top of this method will remove the entity from the index if the key is null, 
+                    //  System.Diagnostics.Debug.Assert(false, "Entity should have been indexed by identity.");
+
+                    if (!_entities.TryAdd(identity, entity))
+                    {
+                        throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
+                    }
+
+                    _identitiesByEntity[entity] = identity;
                 }
             }
 
             public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)
             {
-                var sourceMemberNames = association.ThisKeyMembers;
-                if (sourceMemberNames.Count == 1)
-                {
-                    MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[0]];
-                    if (sourceMember?.GetValueAccessor() is not MetaMember.IValueAccessor<TKey> accessor)
-                    {
-                        entities = null;
-                        return false;
-                    }
-
-                    if (!accessor.TryGetValue(sourceEntity, out TKey identity))
-                    {
-                        entities = Array.Empty<Entity>();
-                        return true;
-                    }
-
-                    entities = _entities.TryGetValue(identity, out Entity? entity) && ShouldIndexEntity(entity) ? [entity] : Array.Empty<Entity>();
-                    return true;
-                }
-
-                if (typeof(TKey) != typeof(object))
+                if (!TryLookup(association, sourceEntity, out Entity? entity))
                 {
                     entities = null;
                     return false;
                 }
 
-                object[] keyValues = new object[sourceMemberNames.Count];
-                for (int i = 0; i < sourceMemberNames.Count; i++)
+                entities = entity is null ? Array.Empty<Entity>() : [entity];
+                return true;
+            }
+
+            public override bool TryLookup<TEntity>(EntityAssociationAttribute association, Entity sourceEntity, out TEntity? entity)
+                where TEntity : class
+            {
+                TKey identity;
+                var sourceMemberNames = association.ThisKeyMembers;
+                if (sourceMemberNames.Count == 1)
                 {
-                    MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[i]];
-                    object? keyValue = sourceMember?.GetValue(sourceEntity);
-                    if (keyValue == null)
+                    MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[0]];
+                    if ((sourceMember?.GetValueAccessor() is not MetaMember.IValueAccessor<TKey> accessor)
+                        || !accessor.TryGetValue(sourceEntity, out identity))
                     {
-                        entities = Array.Empty<Entity>();
-                        return sourceMember != null;
+                        entity = null;
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (typeof(TKey) != typeof(object))
+                    {
+                        entity = null;
+                        return false;
                     }
 
-                    keyValues[i] = keyValue;
+                    object[] keyValues = new object[sourceMemberNames.Count];
+                    for (int i = 0; i < sourceMemberNames.Count; i++)
+                    {
+                        MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[i]];
+                        object? keyValue = sourceMember?.GetValue(sourceEntity);
+                        if (keyValue == null)
+                        {
+                            entity = null;
+                            return sourceMember != null;
+                        }
+
+                        keyValues[i] = keyValue;
+                    }
+
+                    identity = (TKey)(object)EntityKey.Create(keyValues);
                 }
 
-                TKey compositeIdentity = (TKey)(object)EntityKey.Create(keyValues);
-                entities = _entities.TryGetValue(compositeIdentity, out Entity? compositeEntity) && ShouldIndexEntity(compositeEntity)
-                    ? [compositeEntity]
-                    : Array.Empty<Entity>();
+                if (_entities.TryGetValue(identity, out Entity? candidate) && ShouldIndexEntity(candidate))
+                {
+                    entity = candidate as TEntity;
+                }
+                else
+                {
+                    entity = null;
+                }
                 return true;
             }
 
