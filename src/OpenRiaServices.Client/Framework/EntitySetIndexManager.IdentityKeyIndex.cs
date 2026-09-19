@@ -13,8 +13,12 @@ namespace OpenRiaServices.Client
     internal sealed partial class EntitySetIndexManager
     {
         /// <summary>
-        /// Maintains bidirectional identity mappings so entities can be removed even when their key has subsequently changed.
+        /// Allows lookup of entities by their identity (<see cref="Entity.GetIdentity()"/> for identity logic).
         /// </summary>
+        /// <remarks>
+        ///     For single key entities, the index is strongly typed to the key type.
+        ///     For composite key entities, the index is typed to object and uses EntityKey as the key type
+        /// </remarks>
         private abstract class IdentityKeyIndex : EntityIndex
         {
             public static IdentityKeyIndex Create(ReadOnlyCollection<MetaMember> keyMembers)
@@ -36,7 +40,7 @@ namespace OpenRiaServices.Client
             public abstract void Update(Entity entity, string propertyName);
 
             /// <summary>
-            /// A value accessor that retrieves the identity of an entity.
+            /// A value accessor that retrieves the identity of an entity using <see cref="Entity.GetIdentity()"/>.
             /// </summary>
             private sealed class IdentityValueAccessor : MetaMember.IValueAccessor<object>
             {
@@ -62,6 +66,10 @@ namespace OpenRiaServices.Client
         /// Maintains bidirectional identity mappings using the identity's CLR type.
         /// </summary>
         /// <typeparam name="TKey">The entity identity type.</typeparam>
+        /// <remarks>
+        /// The index only stores entities that have a non-null identity and are saved (EntityState != EntityState.New).
+        /// If an entity's identity is null, it will not be stored in the index and will not be retrievable by identity.
+        /// </remarks>
         private sealed class IdentityKeyIndex<TKey> : IdentityKeyIndex where TKey : notnull
         {
             private readonly Dictionary<TKey, Entity> _entities = new(EqualityComparer<TKey>.Default);
@@ -125,6 +133,13 @@ namespace OpenRiaServices.Client
                 }
             }
 
+            /// <summary>
+            /// Ensures the entity is indexed by its current identity. If the entity's identity has changed, it will be updated in the index.
+            /// </summary>
+            /// <remarks>
+            /// Keys usually get the [Editable(false, AllowInitialValue=true)] attribute, there are some ways to bypass validation including
+            /// ApplyState to change the key, so we need to handle this case.
+            /// </remarks>
             public override void Update(Entity entity, string propertyName)
             {
                 if (!_identityAccessor.TryGetValue(entity, out TKey identity))
@@ -140,6 +155,7 @@ namespace OpenRiaServices.Client
                         return;
                     }
 
+                    // Add the new identity first, so that if it fails we don't remove the existing identity.
                     if (!_entities.TryAdd(identity, entity))
                     {
                         throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
@@ -150,10 +166,8 @@ namespace OpenRiaServices.Client
                 }
                 else
                 {
-                    // TODO: This can happen by using BeginEdit/EndEdit on an entity that is not yet indexed.
-                    // and changing the PK , this currently gives a Modified entity without a valid key (null) which is strange
-                    //  The remove at the top of this method will remove the entity from the index if the key is null, 
-                    //  System.Diagnostics.Debug.Assert(false, "Entity should have been indexed by identity.");
+                    // The remove at the top of this method will remove the entity from the index if the key becomes null
+                    // If a later change turn the key back to a valid value, we need add the entity to the index again.
 
                     if (!_entities.TryAdd(identity, entity))
                     {
@@ -216,7 +230,7 @@ namespace OpenRiaServices.Client
                     identity = (TKey)(object)EntityKey.Create(keyValues);
                 }
 
-                if (_entities.TryGetValue(identity, out Entity? candidate) && ShouldIndexEntity(candidate))
+                if (_entities.TryGetValue(identity, out Entity? candidate) && candidate.EntitySet is not null)
                 {
                     entity = candidate as TEntity;
                 }
@@ -224,6 +238,7 @@ namespace OpenRiaServices.Client
                 {
                     entity = null;
                 }
+
                 return true;
             }
 
