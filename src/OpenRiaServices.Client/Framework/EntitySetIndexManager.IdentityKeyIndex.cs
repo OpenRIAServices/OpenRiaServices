@@ -158,6 +158,24 @@ namespace OpenRiaServices.Client
                     // Add the new identity first, so that if it fails we don't remove the existing identity.
                     if (!_entities.TryAdd(identity, entity))
                     {
+                        // Revert to previous identity, since the new identity is already in use by another entity.
+                        MetaType metaType = entity.MetaType;
+                        var keyMembers = metaType.KeyMembers;
+                        if (keyMembers.Count == 1)
+                        {
+                            keyMembers[0].SetValue(entity, existingIdentity);
+                        }
+                        else
+                        {
+                            Span<object> keys = new object[keyMembers.Count];
+                            ((EntityKey)(object)existingIdentity).CopyKeyValuesTo(keys);
+
+                            for (int i = 0; i < keyMembers.Count; i++)
+                            {
+                                keyMembers[i].SetValue(entity, keys[i]);
+                            }
+                        }
+
                         throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
                     }
 

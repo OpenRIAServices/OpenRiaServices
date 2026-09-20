@@ -1354,6 +1354,65 @@ namespace OpenRiaServices.Client.Test
         }
 
         /// <summary>
+        /// Verify that attempting to change the identity of a Entity by bypassing validation
+        /// will results in an expected exception.
+        /// </summary>
+        [TestMethod]
+        public void EntitySet_DuplicateKeyDetection_WhenKeyChanges_SingleKey()
+        {
+            TestEntityContainer ec = new TestEntityContainer();
+            EntitySet<PurchaseOrder> set = ec.GetEntitySet<PurchaseOrder>();
+
+            PurchaseOrder d1 = new PurchaseOrder { PurchaseOrderID = 1 };
+            PurchaseOrder d2 = new PurchaseOrder { PurchaseOrderID = 2 };
+
+            set.Attach(d1);
+            set.Attach(d2);
+
+            // attempt to add another entity with the same identity - expect an exception
+            ExceptionHelper.ExpectInvalidOperationException(delegate
+            {
+                // Bypass validation and change the identity of d2 to match d1
+                d2.ApplyState(new Dictionary<string, object>()
+                {
+                    { nameof(d2.PurchaseOrderID), 1 }
+                });
+            }, Resource.EntitySet_DuplicateIdentity);
+
+            Assert.AreEqual(2, d2.PurchaseOrderID);
+        }
+
+        /// <summary>
+        /// Verify that attempting to change the identity of a Entity by bypassing validation
+        /// will results in an expected exception.
+        /// </summary>
+        [TestMethod]
+        public void EntitySet_DuplicateKeyDetection_WhenKeyChanges_CompositeKey()
+        {
+            TestEntityContainer ec = new TestEntityContainer();
+            EntitySet<PurchaseOrderDetail> set = ec.GetEntitySet<PurchaseOrderDetail>();
+
+            PurchaseOrderDetail d1 = new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 1 };
+            PurchaseOrderDetail d2 = new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 2 };
+
+            set.Attach(d1);
+            set.Attach(d2);
+
+            // attempt to add another entity with the same identity - expect an exception
+            ExceptionHelper.ExpectInvalidOperationException(delegate
+            {
+                // Bypass validation and change the identity of d2 to match d1
+                d2.ApplyState(new Dictionary<string, object>()
+                {
+                    { nameof(d2.PurchaseOrderDetailID), 1 }
+                });
+            }, Resource.EntitySet_DuplicateIdentity);
+
+            Assert.AreEqual(2, d2.PurchaseOrderDetailID, "Value should not have changed");
+            Assert.AreEqual(1, d2.PurchaseOrderID);
+        }
+
+        /// <summary>
         /// Tests the EntityContainer.GetEntitySet method.
         /// </summary>
         [TestDescription("Verifies that EntityContainer.GetEntitySet<T> throws an exception when T is a non-root entity type.")]
