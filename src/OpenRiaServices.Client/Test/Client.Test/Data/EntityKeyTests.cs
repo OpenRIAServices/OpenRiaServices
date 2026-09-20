@@ -19,7 +19,7 @@ namespace OpenRiaServices.Client.Test
         {
             // Test one of the generic Create overloads (that doesn't box
             // the key values)
-            object key = EntityKey.Create(5, 2.34M, "test", "hello world");
+            EntityKey key = EntityKey.Create(5, 2.34M, "test", "hello world");
             string formattedKey = key.ToString();
 
             object[] keyValues = [5, 2.34M, "test", "hello world"];
@@ -27,7 +27,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(expectedKey, formattedKey);
 
             // pass the same set into the params version and verify the keys are equal
-            object key2 = EntityKey.Create(keyValues);
+            EntityKey key2 = EntityKey.Create(keyValues);
             Assert.AreSame(key.GetType(), key2.GetType());
             Assert.AreEqual(key, key2);
             Assert.AreEqual(key.GetHashCode(), key2.GetHashCode());
@@ -66,28 +66,9 @@ namespace OpenRiaServices.Client.Test
         public void EntityKey_NullValues()
         {
             string expectedMsg = new ArgumentNullException("value", Resource.EntityKey_CannotBeNull).Message;
-            ArgumentNullException expectedException = null;
-            try
-            {
-                EntityKey.Create([5, null, "test"]);
-            }
-            catch (ArgumentNullException e)
-            {
-                expectedException = e;
-            }
-            Assert.AreEqual(expectedMsg, expectedException.Message);
-            expectedException = null;
 
-            try
-            {
-                EntityKey.Create<int, string>(5, null);
-            }
-            catch (ArgumentNullException e)
-            {
-                expectedException = e;
-            }
-            Assert.AreEqual(expectedMsg, expectedException.Message);
-            expectedException = null;
+            Assert.Throws<ArgumentNullException>(() => EntityKey.Create([5, null, "test"]), expectedMsg);
+            Assert.Throws<ArgumentNullException>(() => EntityKey.Create([5, null]), expectedMsg);
         }
 
         /// <summary>
@@ -100,7 +81,7 @@ namespace OpenRiaServices.Client.Test
         {
             Guid g = Guid.NewGuid();
             object[] keyValues = [123, 34.5M, "hello", new DateTime(234234), g, false, '?'];
-            object key = EntityKey.Create(keyValues);
+            EntityKey key = EntityKey.Create(keyValues);
             int hashCode = key.GetHashCode();
             int expectedHashCode = 0;
             foreach (object keyValue in keyValues)
@@ -115,7 +96,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(expectedHashCode, hashCode);
 
             // compute directly without boxing and verify equal
-            int directlyComputed = ((int)123).GetHashCode() ^ ((decimal)34.5M).GetHashCode() ^ "hello".GetHashCode() ^
+            int directlyComputed = (123).GetHashCode() ^ (34.5M).GetHashCode() ^ "hello".GetHashCode() ^
                 new DateTime(234234).GetHashCode() ^ g.GetHashCode() ^ false.GetHashCode() ^ '?'.GetHashCode();
             Assert.AreEqual(directlyComputed, key.GetHashCode());
         }
