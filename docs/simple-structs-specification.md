@@ -82,9 +82,11 @@ public struct CustomerKey : IEquatable<CustomerKey>
 
 - Add generation of non-shared simple structs to client proxy code generation.
   - Validate none of its public properties may be marked with `[Exclude]`.
-- Keep compatibility with existing complex type generation and behavior.
+  - Review type discovery and handling to be more similar to ComplexType handling (including validation of simple types).
+- Support for entity properties that are collections of simple structs.
+  - When collections of simple structs are added to entities, client collections will need to be readonly or observable. An observable collection may be exposed by a getter-only property, but mutations must mark the entity as modified.
 - Expand test coverage for generated (non-shared) simple struct scenarios.
-
-### Entity collection support
-
-When collections of simple structs are added to entities, client collections will need to be readonly or observable. An observable collection may be exposed by a getter-only property, but mutations must mark the entity as modified.
+- Add handling for structs that do not implement "=="
+  * Gnerate comparisons via EqualityComparer<T>.Default or require and validate the "==" operator is present on the struct.
+- Review serialization comment
+  - "The newly accepted shape is not guaranteed to survive the existing transport serializers. In particular, the representative readonly struct types in this PR expose only getter-only properties; DataContractJsonSerializer/DataContractSerializer do not serialize ordinary getter-only properties, so these values round-trip as defaults even though this method accepts them. Please either add transport support that reconstructs these immutable structs (and exercise an actual request/response round trip) or restrict the predicate to shapes the active serializers can round-trip."
