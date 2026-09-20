@@ -7,6 +7,7 @@
 *.sln.docstates
 .vs/
 project.lock.json
+src/OpenRiaServices.Tools/Test/TestWap/Properties/launchSettings.json
 
 # Coverity
 cov-int/
