@@ -18,7 +18,7 @@
     <IncludeDebugSymbolsInLocalVSIXDeployment>false</IncludeDebugSymbolsInLocalVSIXDeployment>
     <!--prevent build server errors about to long path on deployment to experimental instance-->
     <DeployExtension>True</DeployExtension>
-    <DeployExtension Condition="'$(BUILD_BUILDID)$(APPVEYOR_BUILD_NUMBER)' != ''">False</DeployExtension>
+    <DeployExtension Condition="'$(BUILD_BUILDID)$(APPVEYOR_BUILD_NUMBER)$(CODEQL_ACTION_JOB_RUN_UUID)' != ''">False</DeployExtension>
     <SignAssembly>true</SignAssembly>
     <AssemblyOriginatorKeyFile>key.snk</AssemblyOriginatorKeyFile>
     <VSIXSubPath>OpenRiaServices</VSIXSubPath>
