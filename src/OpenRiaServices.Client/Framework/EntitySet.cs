@@ -853,6 +853,19 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
+        /// Attempts to retrieve a single entity matching the specified association using the set's association indexes.
+        /// </summary>
+        /// <param name="association">The association that defines the source and target key members.</param>
+        /// <param name="sourceEntity">The entity whose association key values are used for the lookup.</param>
+        /// <param name="entity">The matching entity when found; otherwise, <see langword="null"/> in case there were 0 or multiple matches.</param>
+        /// <returns><see langword="true"/> if the association can be queried; otherwise, <see langword="false"/>.</returns>
+        internal bool TryGetAssociationEntity<TEntity>(EntityAssociationAttribute association, Entity sourceEntity, out TEntity? entity)
+            where TEntity : Entity
+        {
+            return this._indexes.TryGetAssociationEntity(association, sourceEntity, out entity);
+        }
+
+        /// <summary>
         /// Load the specified set of entities
         /// </summary>
         /// <param name="entities">The set of entities to load</param>

@@ -13,8 +13,12 @@ namespace OpenRiaServices.Client
     internal sealed partial class EntitySetIndexManager
     {
         /// <summary>
-        /// Maintains bidirectional identity mappings so entities can be removed even when their key has subsequently changed.
+        /// Allows lookup of entities by their identity (<see cref="Entity.GetIdentity()"/> for identity logic).
         /// </summary>
+        /// <remarks>
+        ///     For single key entities, the index is strongly typed to the key type.
+        ///     For composite key entities, the index is typed to object and uses EntityKey as the key type
+        /// </remarks>
         private abstract class IdentityKeyIndex : EntityIndex
         {
             public static IdentityKeyIndex Create(ReadOnlyCollection<MetaMember> keyMembers)
@@ -33,8 +37,10 @@ namespace OpenRiaServices.Client
 
             public abstract bool TryGetByIdentity(Entity identity, bool throwOnNull, [NotNullWhen(true)] out Entity? entity);
 
+            public abstract void Update(Entity entity, string propertyName);
+
             /// <summary>
-            /// A value accessor that retrieves the identity of an entity.
+            /// A value accessor that retrieves the identity of an entity using <see cref="Entity.GetIdentity()"/>.
             /// </summary>
             private sealed class IdentityValueAccessor : MetaMember.IValueAccessor<object>
             {
@@ -60,6 +66,10 @@ namespace OpenRiaServices.Client
         /// Maintains bidirectional identity mappings using the identity's CLR type.
         /// </summary>
         /// <typeparam name="TKey">The entity identity type.</typeparam>
+        /// <remarks>
+        /// The index only stores entities that have a non-null identity and are saved (EntityState != EntityState.New).
+        /// If an entity's identity is null, it will not be stored in the index and will not be retrievable by identity.
+        /// </remarks>
         private sealed class IdentityKeyIndex<TKey> : IdentityKeyIndex where TKey : notnull
         {
             private readonly Dictionary<TKey, Entity> _entities = new(EqualityComparer<TKey>.Default);
@@ -117,59 +127,136 @@ namespace OpenRiaServices.Client
 
             public override void Remove(Entity entity)
             {
-                if (_identitiesByEntity.TryGetValue(entity, out TKey? identity))
+                if (_identitiesByEntity.Remove(entity, out TKey? identity))
                 {
                     _entities.Remove(identity);
-                    _identitiesByEntity.Remove(entity);
+                }
+            }
+
+            /// <summary>
+            /// Ensures the entity is indexed by its current identity. If the entity's identity has changed, it will be updated in the index.
+            /// </summary>
+            /// <remarks>
+            /// Keys usually get the [Editable(false, AllowInitialValue=true)] attribute, there are some ways to bypass validation including
+            /// ApplyState to change the key, so we need to handle this case.
+            /// </remarks>
+            public override void Update(Entity entity, string propertyName)
+            {
+                if (!_identityAccessor.TryGetValue(entity, out TKey identity))
+                {
+                    Remove(entity);
+                    return;
+                }
+
+                if (_identitiesByEntity.TryGetValue(entity, out TKey? existingIdentity))
+                {
+                    if (EqualityComparer<TKey>.Default.Equals(existingIdentity, identity))
+                    {
+                        return;
+                    }
+
+                    // Add the new identity first, so that if it fails we don't remove the existing identity.
+                    if (!_entities.TryAdd(identity, entity))
+                    {
+                        // Revert to previous identity, since the new identity is already in use by another entity.
+                        MetaType metaType = entity.MetaType;
+                        var keyMembers = metaType.KeyMembers;
+                        if (keyMembers.Count == 1)
+                        {
+                            keyMembers[0].SetValue(entity, existingIdentity);
+                        }
+                        else
+                        {
+                            Span<object> keys = new object[keyMembers.Count];
+                            ((EntityKey)(object)existingIdentity).CopyKeyValuesTo(keys);
+
+                            for (int i = 0; i < keyMembers.Count; i++)
+                            {
+                                keyMembers[i].SetValue(entity, keys[i]);
+                            }
+                        }
+
+                        throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
+                    }
+
+                    _entities.Remove(existingIdentity);
+                    _identitiesByEntity[entity] = identity;
+                }
+                else
+                {
+                    // The remove at the top of this method will remove the entity from the index if the key becomes null
+                    // If a later change turn the key back to a valid value, we need add the entity to the index again.
+
+                    if (!_entities.TryAdd(identity, entity))
+                    {
+                        throw new InvalidOperationException(Resource.EntitySet_DuplicateIdentity);
+                    }
+
+                    _identitiesByEntity[entity] = identity;
                 }
             }
 
             public override bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities)
             {
-                var sourceMemberNames = association.ThisKeyMembers;
-                if (sourceMemberNames.Count == 1)
-                {
-                    MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[0]];
-                    if (sourceMember?.GetValueAccessor() is not MetaMember.IValueAccessor<TKey> accessor)
-                    {
-                        entities = null;
-                        return false;
-                    }
-
-                    if (!accessor.TryGetValue(sourceEntity, out TKey identity))
-                    {
-                        entities = Array.Empty<Entity>();
-                        return true;
-                    }
-
-                    entities = _entities.TryGetValue(identity, out Entity? entity) && ShouldIndexEntity(entity) ? [entity] : Array.Empty<Entity>();
-                    return true;
-                }
-
-                if (typeof(TKey) != typeof(object))
+                if (!TryLookup(association, sourceEntity, out Entity? entity))
                 {
                     entities = null;
                     return false;
                 }
 
-                object[] keyValues = new object[sourceMemberNames.Count];
-                for (int i = 0; i < sourceMemberNames.Count; i++)
+                entities = entity is null ? Array.Empty<Entity>() : [entity];
+                return true;
+            }
+
+            public override bool TryLookup<TEntity>(EntityAssociationAttribute association, Entity sourceEntity, out TEntity? entity)
+                where TEntity : class
+            {
+                TKey identity;
+                var sourceMemberNames = association.ThisKeyMembers;
+                if (sourceMemberNames.Count == 1)
                 {
-                    MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[i]];
-                    object? keyValue = sourceMember?.GetValue(sourceEntity);
-                    if (keyValue == null)
+                    MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[0]];
+                    if ((sourceMember?.GetValueAccessor() is not MetaMember.IValueAccessor<TKey> accessor)
+                        || !accessor.TryGetValue(sourceEntity, out identity))
                     {
-                        entities = Array.Empty<Entity>();
-                        return sourceMember != null;
+                        entity = null;
+                        return false;
+                    }
+                }
+                else
+                {
+                    if (typeof(TKey) != typeof(object))
+                    {
+                        entity = null;
+                        return false;
                     }
 
-                    keyValues[i] = keyValue;
+                    object[] keyValues = new object[sourceMemberNames.Count];
+                    for (int i = 0; i < sourceMemberNames.Count; i++)
+                    {
+                        MetaMember sourceMember = sourceEntity.MetaType[sourceMemberNames[i]];
+                        object? keyValue = sourceMember?.GetValue(sourceEntity);
+                        if (keyValue == null)
+                        {
+                            entity = null;
+                            return sourceMember != null;
+                        }
+
+                        keyValues[i] = keyValue;
+                    }
+
+                    identity = (TKey)(object)EntityKey.Create(keyValues);
                 }
 
-                TKey compositeIdentity = (TKey)(object)EntityKey.Create(keyValues);
-                entities = _entities.TryGetValue(compositeIdentity, out Entity? compositeEntity) && ShouldIndexEntity(compositeEntity)
-                    ? [compositeEntity]
-                    : Array.Empty<Entity>();
+                if (_entities.TryGetValue(identity, out Entity? candidate) && candidate.EntitySet is not null)
+                {
+                    entity = candidate as TEntity;
+                }
+                else
+                {
+                    entity = null;
+                }
+
                 return true;
             }
 

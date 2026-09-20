@@ -18,6 +18,7 @@ namespace OpenRiaServices.Client
     {
         private readonly EntitySet _entitySet;
         private readonly IdentityKeyIndex _primaryKeyIndex;
+        private readonly CompositeAssociationMemberNames _primaryKeyMemberNames;
         private readonly Dictionary<CompositeAssociationMemberNames, EntityIndex> _associationIndexes = new();
         private readonly List<EntityAssociationIndex> _secondaryIndexes = new();
 
@@ -26,9 +27,10 @@ namespace OpenRiaServices.Client
             _entitySet = entitySet ?? throw new ArgumentNullException(nameof(entitySet));
             MetaType metaType = MetaType.GetMetaType(entitySet.EntityType);
             _primaryKeyIndex = IdentityKeyIndex.Create(metaType.KeyMembers);
+            _primaryKeyMemberNames = new CompositeAssociationMemberNames(metaType.KeyMembers.Select(static member => member.Name).ToArray());
             // Allow primary key to be used as index for association properties
             _associationIndexes.Add(
-                new CompositeAssociationMemberNames(metaType.KeyMembers.Select(static member => member.Name).ToArray()),
+                _primaryKeyMemberNames,
                 _primaryKeyIndex);
         }
 
@@ -97,6 +99,11 @@ namespace OpenRiaServices.Client
 
         public void UpdateAssociationIndexes(Entity entity, string propertyName)
         {
+            if (_primaryKeyMemberNames.Contains(propertyName) && ShouldIndexEntity(entity))
+            {
+                _primaryKeyIndex.Update(entity, propertyName);
+            }
+
             foreach (EntityAssociationIndex index in _secondaryIndexes)
             {
                 index.Update(entity, propertyName);
@@ -112,6 +119,18 @@ namespace OpenRiaServices.Client
             }
 
             return index.TryLookup(association, sourceEntity, out entities);
+        }
+
+        public bool TryGetAssociationEntity<TEntity>(EntityAssociationAttribute association, Entity sourceEntity, out TEntity? entity)
+            where TEntity : Entity
+        {
+            if (!TryGetAssociationIndex(association, out EntityIndex? index))
+            {
+                entity = null;
+                return false;
+            }
+
+            return index.TryLookup(association, sourceEntity, out entity);
         }
 
         private void LoadAssociationIndex(EntityAssociationIndex index)
@@ -175,6 +194,7 @@ namespace OpenRiaServices.Client
 
         private static bool ShouldIndexEntity(Entity entity)
         {
+            // A deleted entity will have EntitySet null
             return entity.EntitySet != null && entity.EntityState != EntityState.New;
         }
 
@@ -208,6 +228,40 @@ namespace OpenRiaServices.Client
             /// <param name="entities">The matching entities when the lookup is supported.</param>
             /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
             public abstract bool TryLookup(EntityAssociationAttribute association, Entity sourceEntity, [NotNullWhen(true)] out IEnumerable<Entity>? entities);
+
+            /// <summary>
+            /// Uses the source entity's association key to query an index that can contain at most one matching entity.
+            /// </summary>
+            /// <param name="association">The association that identifies the source members.</param>
+            /// <param name="sourceEntity">The entity that provides the lookup key.</param>
+            /// <param name="entity">The matching entity, or <see langword="null"/> when no or multiple entities match.</param>
+            /// <returns><see langword="true"/> when the association can be queried; otherwise, <see langword="false"/>.</returns>
+            public virtual bool TryLookup<TEntity>(EntityAssociationAttribute association, Entity sourceEntity, out TEntity? entity)
+                where TEntity : Entity
+            {
+                entity = null;
+
+                if (TryLookup(association, sourceEntity, out IEnumerable<Entity>? entities))
+                {
+                    foreach (var e in entities)
+                    {
+                        if (e is not TEntity candidate)
+                            continue;
+
+                        // There were multiple matches, return null
+                        if (entity != null)
+                        {
+                            entity = null;
+                            break;
+                        }
+                        entity = candidate;
+                    }
+
+                    return true;
+                }
+
+                return false;
+            }
         }
 
         private abstract class EntityAssociationIndex : EntityIndex
