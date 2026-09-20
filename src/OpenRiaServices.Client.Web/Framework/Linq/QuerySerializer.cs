@@ -421,8 +421,10 @@ namespace OpenRiaServices.Client
                 bool isSupportedMethod = false;
 
                 // methods on our supported types are supported
-                if (TypeUtility.IsPredefinedType(declaringType) || (declaringType == typeof(Math))
-                    || (declaringType == typeof(Convert)) || (declaringType == typeof(object)))
+                if ((TypeUtility.IsPredefinedType(declaringType) && !TypeUtility.IsSimpleStructType(declaringType))
+                    || (declaringType == typeof(Math))
+                    || (declaringType == typeof(Convert))
+                    || (declaringType == typeof(object)))
                 {
                     isSupportedMethod = true;
                 }
