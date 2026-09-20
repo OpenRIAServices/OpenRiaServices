@@ -1505,6 +1505,16 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
+        public void DomainServiceDescription_Convention_SimpleStructOperations()
+        {
+            DomainServiceDescription d = DomainServiceDescription.GetDescription(typeof(Provider_Convention_SimpleStruct));
+            string result = d.DomainOperationEntries.OrderBy(op => op.Name).Select(op => op.Name).Aggregate((l, r) => l + "," + r);
+            Assert.AreEqual("EchoCompositeKey,EchoCompositeKeys,EchoKey,GetCitiesByCompositeKey,GetCitiesByCompositeKeys,GetCitiesByKey,MoveCityWithCompositeKey,MoveCityWithKey", result);
+            result = d.DomainOperationEntries.OrderBy(op => op.Name).Select(op => op.Operation.ToString()).Aggregate((l, r) => l + "," + r);
+            Assert.AreEqual("Invoke,Invoke,Invoke,Query,Query,Query,Custom,Custom", result);
+        }
+
+        [TestMethod]
         public void DomainServiceDescription_InterfaceAttributes()
         {
             var d = DomainServiceDescription.GetDescription(typeof(InterfaceInheritanceDomainService));
@@ -3921,6 +3931,39 @@ namespace OpenRiaServices.Server.Test
         public void InvokeStruct(InvalidComplexType_Struct ict) { }
         public void InvokeNoConstructor(InvalidComplexType_NoConstructor ict) { }
         public void InvokeMicrosoft(System.Data.SqlClient.SqlDataReader ict) { }
+    }
+
+    [EnableClientAccess]
+    public class Provider_Convention_SimpleStruct : DomainService
+    {
+        public IEnumerable<City> GetCitiesByKey(SimpleStructKey key) { return null; }
+        public IEnumerable<City> GetCitiesByCompositeKey(MultiMemberSimpleStructKey key) { return null; }
+        public IEnumerable<City> GetCitiesByCompositeKeys(IEnumerable<MultiMemberSimpleStructKey> keys) { return null; }
+        public int EchoKey(SimpleStructKey key) { return key.Value; }
+        public MultiMemberSimpleStructKey EchoCompositeKey(MultiMemberSimpleStructKey key) { return key; }
+        public IEnumerable<MultiMemberSimpleStructKey> EchoCompositeKeys(IEnumerable<MultiMemberSimpleStructKey> keys) { return keys; }
+        public void MoveCityWithKey(City city, SimpleStructKey key) { }
+        public void MoveCityWithCompositeKey(City city, MultiMemberSimpleStructKey key) { }
+    }
+
+    public readonly struct SimpleStructKey : IEquatable<SimpleStructKey>
+    {
+        public SimpleStructKey(int value)
+        {
+            Value = value;
+        }
+
+        public int Value { get; }
+
+        public bool Equals(SimpleStructKey other) => Value == other.Value;
+        public override bool Equals(object obj) => obj is SimpleStructKey other && Equals(other);
+        public override int GetHashCode() => Value;
+    }
+
+    public struct MultiMemberSimpleStructKey
+    {
+        public int Value { get; set; }
+        public int OtherValue { get; set; }
     }
 
     public class InvalidComplexType_Generic<T> { }

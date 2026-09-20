@@ -4,22 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using Cities;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
+using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-
-#if !SILVERLIGHT
-using System.Reflection;
-#endif
 
 namespace OpenRiaServices.Client.Test
 {
-    using Cities;
-    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
+
 
     [TestClass]
     public class EntityContainerTests : UnitTestBase
@@ -1040,20 +1039,34 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(2, changeSet.AddedEntities);
             Assert.HasCount(2, changeSet.ModifiedEntities);
             Assert.HasCount(2, changeSet.RemovedEntities);
+        }
 
-            // here's a simpler repro
-            ec.Clear();
-            d1 = new D { ID = 1 };
-            d2 = new D { ID = 2 };
-            c1 = new C { ID = 1, DID_Ref1 = 1 };
-            ec.LoadEntities(new Entity[] { d1, d2, c1 });
-            // Here we're using ApplyState to allow us to set a PK member w/o validation failure
-            // since PK members cannot be changed. This test should really be based on an association
-            // not involving PK, but the test is still valid this way.
-            d2.ApplyState(new Dictionary<string, object> {{"ID", 1}});
-            Assert.IsNull(c1.D_Ref1);  // since there is more than one match
-            d2.ApplyState(new Dictionary<string, object> { { "ID", 2 } });
-            Assert.AreSame(d1, c1.D_Ref1);
+
+        [TestMethod]
+        public void EntityRef_MultipleMatches_ReturnsNull()
+        {
+            DynamicEntityContainer container = new DynamicEntityContainer();
+            EntitySet<NullableFKParent> parentSet = container.AddEntitySet<NullableFKParent>(EntitySetOperations.All);
+            EntitySet<NullableFKChild> childSet = container.AddEntitySet<NullableFKChild>(EntitySetOperations.All);
+
+            NullableFKParent parent = new NullableFKParent { ID = 1 };
+            NullableFKChild child1 = new NullableFKChild { ID = 2, ParentID_Singleton = 1 };
+            NullableFKChild child2 = new NullableFKChild { ID = 3, ParentID_Singleton = 1 };
+
+            parentSet.Attach(parent);
+            childSet.Attach(child1);
+            childSet.Attach(child2);
+            childSet.Attach(new NullableFKChild { ID = 4, ParentID_Singleton = null });
+            childSet.Attach(new NullableFKChild { ID = 5, ParentID_Singleton = 2 });
+            Assert.IsNull(parent.Child);
+
+            // Also verify backing index returns the expected results
+            EntityAssociationAttribute association = parent.GetEntityRef("Child").Association;
+
+            Assert.IsTrue(childSet.TryGetAssociationEntities(association, parent, out IEnumerable<Entity> entities));
+            Assert.AreSequenceEqual([child1, child2], entities.Cast<NullableFKChild>());
+
+            Assert.AreSame(parent, child1.Parent2);
         }
 
         /// <summary>
