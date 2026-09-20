@@ -11,7 +11,7 @@ namespace OpenRiaServices.Client
     public abstract class EntityKey
     {
         /// <summary>
-        /// Creates an key using the specified key values
+        /// Creates a key using the specified key values
         /// </summary>
         /// <typeparam name="T1">First key value type</typeparam>
         /// <typeparam name="T2">Second key value type</typeparam>
@@ -24,7 +24,7 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Creates an key using the specified key values
+        /// Creates a key using the specified key values
         /// </summary>
         /// <typeparam name="T1">First key value type</typeparam>
         /// <typeparam name="T2">Second key value type</typeparam>
@@ -39,7 +39,7 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Creates an key using the specified key values.
+        /// Creates a key using the specified key values.
         /// </summary>
         /// <param name="keyValues">Array of key values</param>
         /// <returns>The entity key</returns>
@@ -50,7 +50,7 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Creates an key using the specified key values.
+        /// Creates a key using the specified key values.
         /// </summary>
         /// <param name="keyValues">Array of key values</param>
         /// <returns>The entity key</returns>
@@ -296,7 +296,7 @@ namespace OpenRiaServices.Client
             {
                 if (keyValues.Length != 2)
                 {
-                    throw new ArgumentException("destination length did not match key lenght", nameof(keyValues));
+                    throw new ArgumentException("Destination length did not match key length.", nameof(keyValues));
                 }
 
                 keyValues[0] = this._v1;

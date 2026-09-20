@@ -50,7 +50,7 @@ namespace OpenRiaServices.Client.Test
             VerifyKeyValues(EntityKey.Create(1, "two", 3M), [1, "two", 3M]);
             VerifyKeyValues(EntityKey.Create(1, "two", 3M, '4', true), [1, "two", 3M, '4', true]);
 
-            // Wrong lenght destinatio should throw ArgumentException
+            // A destination with the wrong length should throw ArgumentException
             Assert.Throws<ArgumentException>(() => EntityKey.Create(1, "two").CopyKeyValuesTo(new object[1]));
             Assert.Throws<ArgumentException>(() => EntityKey.Create(1, "two").CopyKeyValuesTo(new object[3]));
 

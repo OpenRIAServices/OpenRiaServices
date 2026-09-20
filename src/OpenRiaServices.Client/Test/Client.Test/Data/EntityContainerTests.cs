@@ -1354,8 +1354,8 @@ namespace OpenRiaServices.Client.Test
         }
 
         /// <summary>
-        /// Verify that attempting to change the identity of a Entity by bypassing validation
-        /// will results in an expected exception.
+        /// Verify that attempting to change the identity of an entity by bypassing validation
+        /// will result in the expected exception.
         /// </summary>
         [TestMethod]
         public void EntitySet_DuplicateKeyDetection_WhenKeyChanges_SingleKey()
@@ -1383,8 +1383,8 @@ namespace OpenRiaServices.Client.Test
         }
 
         /// <summary>
-        /// Verify that attempting to change the identity of a Entity by bypassing validation
-        /// will results in an expected exception.
+        /// Verify that attempting to change the identity of an entity by bypassing validation
+        /// will result in the expected exception.
         /// </summary>
         [TestMethod]
         public void EntitySet_DuplicateKeyDetection_WhenKeyChanges_CompositeKey()
