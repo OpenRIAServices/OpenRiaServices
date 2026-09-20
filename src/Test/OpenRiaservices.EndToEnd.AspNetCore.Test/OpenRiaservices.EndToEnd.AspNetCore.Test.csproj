@@ -117,6 +117,12 @@
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\People\Person.g.cs" Link="Data\DomainClients\Person.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\SimpleStructs\SimpleStructs.g.cs" Link="Data\DomainClients\SimpleStructs.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\SimpleStructs\SimpleStructs.shared.cs" Link="Data\DomainClients\SimpleStructs.shared.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
   </ItemGroup>
 
 </Project>

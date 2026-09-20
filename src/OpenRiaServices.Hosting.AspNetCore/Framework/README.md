@@ -199,6 +199,14 @@ builder.Services.AddOpenRiaServices()
     });
 ```
 
+### Simple struct parameters and keys
+
+Simple structs can be used in query/custom/invoke operation signatures when they have one or more public readable properties of predefined simple types.
+
+When a simple struct is used as an entity key member, the struct must be shared with the client and implement `IEquatable<T>`.
+Its public properties also cannot be marked with `[Exclude]`.
+The struct must also be compatible with the configured transport serializer; with the default DataContract serialization, use `[DataContract]` and writable `[DataMember]` properties.
+
 ### Specifying endpoint routes
 
 You can choose between 3 different approaches to how the endpoint routes are generated.
