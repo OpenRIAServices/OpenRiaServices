@@ -11,9 +11,9 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Reflection;
 using System.Threading.Tasks;
-using httpDomainClient::******.Client.DomainClients;
+using httpDomainClient::OpenRiaServices.Client.DomainClients;
 
-namespace ******.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     [TestClass]
     public class MessagePackHttpDomainClientFactoryTests
