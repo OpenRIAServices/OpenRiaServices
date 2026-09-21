@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -59,7 +60,8 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             request.Content = new ByteArrayContent(bytes);
             request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(MediaType);
 
-            return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+            var completionOption = _factory.BufferResponseContent ? HttpCompletionOption.ResponseContentRead : HttpCompletionOption.ResponseHeadersRead;
+            return await HttpClient.SendAsync(request, completionOption, cancellationToken).ConfigureAwait(false);
         }
 
         private static MessagePackRequestEnvelopeBase CreateRequestEnvelope(string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
@@ -125,7 +127,15 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 else
                 {
                     using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
-                    envelope = (MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(stream, typeShape).ConfigureAwait(false);
+                    PipeReader pipeReader = PipeReader.Create(stream, _factory.GetResponsePipeReaderOptions());
+                    try
+                    {
+                        envelope = (MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(pipeReader, typeShape).ConfigureAwait(false);
+                    }
+                    finally
+                    {
+                        await pipeReader.CompleteAsync().ConfigureAwait(false);
+                    }
                 }
 
                 envelope ??= (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
