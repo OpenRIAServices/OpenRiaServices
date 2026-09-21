@@ -120,7 +120,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 if (_factory.BufferResponseContent)
                 {
                     var payload = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
-                    envelope = (MessagePackResponseEnvelopeBase)Serializer.Deserialize(payload, typeShape);
+                    envelope = (MessagePackResponseEnvelopeBase)Serializer.DeserializeObject(payload, typeShape);
                 }
                 else
                 {
