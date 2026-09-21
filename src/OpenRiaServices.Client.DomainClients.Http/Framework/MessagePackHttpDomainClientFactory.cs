@@ -21,6 +21,16 @@ namespace OpenRiaServices.Client.DomainClients
     {
         private readonly ConcurrentDictionary<Type, MessagePackSerializer> _serializerCache = new ConcurrentDictionary<Type, MessagePackSerializer>();
 
+        /// <summary>
+        /// Gets or sets a value indicating whether MessagePack responses should be fully buffered before deserialization.
+        /// </summary>
+        /// <remarks>
+        /// When enabled, the response content is first read into a byte array and then deserialized synchronously.
+        /// When disabled, the response content is deserialized asynchronously from the response stream.
+        /// Defaults to <see langword="true" /> for now.
+        /// </remarks>
+        public bool BufferResponseContent { get; set; } = true;
+
         /// <inheritdoc />
         public MessagePackHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory, MessagePackSerializer? serializer = null, ITypeShapeProvider? typeShapeProvider = null)
             : base(serverBaseUri, httpClientFactory)

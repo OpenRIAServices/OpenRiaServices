@@ -47,6 +47,7 @@ builder.Services.AddOpenRiaServices()
 ## Client (`OpenRiaServices.Client.DomainClients.Http`)
 
 * Added `MessagePackHttpDomainClientFactory` — a `DomainClientFactory` that communicates with the server using MessagePack over HTTP
+* Added `MessagePackHttpDomainClientFactory.BufferResponseContent` to control whether MessagePack responses are buffered into a byte array before deserialization
 * Client-side entity association lookup now uses internal `EntitySet` indexes, including typed single-key accessors for common scalar key types, to reduce repeated full-set scans and lower allocation overhead during relationship resolution.
 
 ### Enable MessagePack on the client
@@ -54,6 +55,16 @@ builder.Services.AddOpenRiaServices()
 ```csharp
 DomainContext.DomainClientFactory =
     new MessagePackHttpDomainClientFactory(baseUri, httpClientFactory);
+```
+
+For now, MessagePack responses are buffered by default before deserialization. To opt out and keep streaming deserialization:
+
+```csharp
+DomainContext.DomainClientFactory =
+    new MessagePackHttpDomainClientFactory(baseUri, httpClientFactory)
+    {
+        BufferResponseContent = false,
+    };
 ```
 
 Optionally pass a custom serializer:

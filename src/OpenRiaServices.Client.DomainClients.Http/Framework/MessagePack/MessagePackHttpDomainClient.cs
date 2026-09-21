@@ -113,12 +113,22 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 }
 
 
-                using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 Type envelopeType = GetResponseEnvelopeType(operationName, returnType);
                 var typeShape = _typeShapeProvider.GetTypeShapeOrThrow(envelopeType);
 
-                var envelope = (MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(stream, typeShape).ConfigureAwait(false)
-                    ?? (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
+                MessagePackResponseEnvelopeBase envelope;
+                if (_factory.BufferResponseContent)
+                {
+                    var payload = await response.Content.ReadAsByteArrayAsync().ConfigureAwait(false);
+                    envelope = (MessagePackResponseEnvelopeBase)Serializer.Deserialize(payload, typeShape);
+                }
+                else
+                {
+                    using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+                    envelope = (MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(stream, typeShape).ConfigureAwait(false);
+                }
+
+                envelope ??= (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
 
                 if (envelope.Fault is not null)
                 {
