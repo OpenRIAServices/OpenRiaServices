@@ -54,7 +54,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             using var stream = new MemoryStream();
             // TODO: If possible, replace this buffering with a custom HttpContent override of SerializeToStream
             // so the request payload can be serialized asynchronously directly to the outgoing request stream.
-            await Serializer.SerializeObjectAsync(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken).ConfigureAwait(false);
+            Serializer.SerializeObject(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken);
 
             var bytes = stream.ToArray();
             request.Content = new ByteArrayContent(bytes);
