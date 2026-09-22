@@ -15,7 +15,7 @@ using System.Xml;
 namespace System.ServiceModel.Dispatcher
 {
     // Thread Safety: This class is thread safe
-    class QueryStringConverter
+    sealed class QueryStringConverter
     {
         private readonly HashSet<Type> _defaultSupportedQueryStringTypes;
         // the cache does not have a quota since it is per endpoint and is
@@ -53,7 +53,7 @@ namespace System.ServiceModel.Dispatcher
             this._typeConverterCache = new Dictionary<Type, TypeConverter>();
         }
 
-        public virtual bool CanConvert(Type type)
+        public bool CanConvert(Type type)
         {
             if (this._defaultSupportedQueryStringTypes.Contains(type))
             {
@@ -68,7 +68,7 @@ namespace System.ServiceModel.Dispatcher
             return (GetStringConverter(type) != null);
         }
 
-        public virtual string ConvertValueToString(object parameter, Type parameterType)
+        public string ConvertValueToString(object parameter, Type parameterType)
         {
             ArgumentNullException.ThrowIfNull(parameterType);
             if (parameterType.IsValueType && parameter == null)

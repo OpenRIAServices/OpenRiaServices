@@ -31,7 +31,7 @@ namespace OpenRiaServices.Client
             return queryParts;
         }
 
-        internal class Visitor : ExpressionVisitor
+        internal sealed class Visitor : ExpressionVisitor
         {
             private ServiceQueryPart _currPart;
             private StringBuilder _currPartBuilder;
@@ -610,7 +610,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// This visitor is used to make any required method call translations.
         /// </summary>
-        internal class MethodCallConverter : ExpressionVisitor
+        internal sealed class MethodCallConverter : ExpressionVisitor
         {
             protected override Expression VisitUnary(UnaryExpression u)
             {
