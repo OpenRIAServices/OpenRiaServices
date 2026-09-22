@@ -1,21 +1,17 @@
-using Nerdbank.MessagePack;
-using OpenRiaServices.Client.DomainClients.Http;
-using OpenRiaServices.Client.DomainClients.MessagePack.Converters;
-using PolyType;
-using PolyType.ReflectionProvider;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
 using System.IO.Pipelines;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Nerdbank.MessagePack;
+using OpenRiaServices.Client.DomainClients.Http;
+using PolyType;
 
 namespace OpenRiaServices.Client.DomainClients.MessagePack
 {
@@ -56,8 +52,10 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             // so the request payload can be serialized asynchronously directly to the outgoing request stream.
             Serializer.SerializeObject(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken);
 
-            var bytes = stream.ToArray();
-            request.Content = new ByteArrayContent(bytes);
+            if (!stream.TryGetBuffer(out ArraySegment<byte> buffer))
+                buffer = new ArraySegment<byte>(stream.ToArray());
+
+            request.Content = new ByteArrayContent(buffer.Array, buffer.Offset, buffer.Count);
             request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(MediaType);
 
             return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);

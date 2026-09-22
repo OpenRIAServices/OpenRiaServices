@@ -119,7 +119,9 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 writer.WriteEndDocument(); // </OperationName> and </MessageRoot> if present
                 writer.Flush();
 
-                ms.TryGetBuffer(out ArraySegment<byte> buffer);
+                if (!ms.TryGetBuffer(out ArraySegment<byte> buffer))
+                    buffer = new ArraySegment<byte>(ms.ToArray());
+
                 request.Content = new ByteArrayContent(buffer.Array, buffer.Offset, buffer.Count);
                 request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(ContentType);
             }
