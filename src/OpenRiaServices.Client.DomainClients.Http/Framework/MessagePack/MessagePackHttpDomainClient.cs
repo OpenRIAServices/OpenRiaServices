@@ -33,6 +33,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
         {
             _typeShapeProvider = factory.TypeShapeProvider;
             _factory = factory;
+            base.DefaultHttpCompletionOption = HttpCompletionOption.ResponseHeadersRead;
         }
 
         private protected override Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)

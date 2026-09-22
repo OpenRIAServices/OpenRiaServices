@@ -21,7 +21,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// It would be good to do measurements on .net core as well as over the internet
         /// - response headers read should theoretically give lower latency since result can be
         /// deserialized as content is received
-        private const HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
+        private protected HttpCompletionOption DefaultHttpCompletionOption = HttpCompletionOption.ResponseContentRead;
         private static readonly Task<HttpResponseMessage> s_mustSendQueryInBody = Task.FromResult<HttpResponseMessage>(null);
         private static readonly ConcurrentDictionary<(Type serviceInterface, string operationName), MethodParameters> s_methodParametersCache = new ConcurrentDictionary<(Type serviceInterface, string operationName), MethodParameters>();
 
