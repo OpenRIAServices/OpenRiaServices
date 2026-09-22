@@ -4,8 +4,8 @@ using Nerdbank.MessagePack;
 using PolyType;
 using PolyType.ReflectionProvider;
 using System;
-using System.Collections.Generic;
 using System.IO;
+using System.IO.Pipelines;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -19,13 +19,31 @@ namespace OpenRiaServices.Client.Test
     public class MessagePackHttpDomainClientFactoryTests
     {
         [TestMethod]
-        public async Task BuffersResponsesByDefault()
+        public async Task UsesPipeReaderByDefault()
         {
             MessagePackHttpDomainClientFactory factory = CreateFactory();
             DomainClient domainClient = CreateDomainClient(factory);
             byte[] payload = CreateInvokeResponsePayload("hello-messagepack");
 
-            Assert.IsTrue(factory.BufferResponseContent);
+            Assert.IsFalse(factory.BufferResponseContent);
+            Assert.IsNull(factory.ResponsePipeReaderOptions);
+
+            object result = await ReadResponseAsync(
+                domainClient,
+                CreateResponse(payload, ResponseReadMode.StreamOnly),
+                "RoundtripString",
+                typeof(string));
+
+            Assert.AreEqual("hello-messagepack", result);
+        }
+
+        [TestMethod]
+        public async Task CanBufferResponsesWhenEnabled()
+        {
+            MessagePackHttpDomainClientFactory factory = CreateFactory();
+            factory.BufferResponseContent = true;
+            DomainClient domainClient = CreateDomainClient(factory);
+            byte[] payload = CreateInvokeResponsePayload("hello-messagepack");
 
             object result = await ReadResponseAsync(
                 domainClient,
@@ -37,10 +55,11 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task CanDisableBufferedResponses()
+        public async Task CanUseCustomPipeReaderOptions()
         {
             MessagePackHttpDomainClientFactory factory = CreateFactory();
-            factory.BufferResponseContent = false;
+            StreamPipeReaderOptions options = new StreamPipeReaderOptions(bufferSize: 1024 * 1024, minimumReadSize: 256 * 1024, leaveOpen: true);
+            factory.ResponsePipeReaderOptions = options;
             DomainClient domainClient = CreateDomainClient(factory);
             byte[] payload = CreateInvokeResponsePayload("hello-messagepack");
 
@@ -50,6 +69,7 @@ namespace OpenRiaServices.Client.Test
                 "RoundtripString",
                 typeof(string));
 
+            Assert.AreSame(options, factory.ResponsePipeReaderOptions);
             Assert.AreEqual("hello-messagepack", result);
         }
 
@@ -68,7 +88,7 @@ namespace OpenRiaServices.Client.Test
 
         private static byte[] CreateInvokeResponsePayload(string result)
         {
-            var payload = new Dictionary<string, string> { { "Result", result } };
+            var payload = new System.Collections.Generic.Dictionary<string, string> { { "Result", result } };
             var serializer = new MessagePackSerializer();
             using var stream = new MemoryStream();
             serializer.SerializeObject(stream, payload, ReflectionTypeShapeProvider.Default.GetTypeShapeOrThrow(payload.GetType()));

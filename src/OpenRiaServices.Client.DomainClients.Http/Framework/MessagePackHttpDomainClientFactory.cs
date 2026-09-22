@@ -6,6 +6,7 @@ using PolyType.Abstractions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -26,10 +27,18 @@ namespace OpenRiaServices.Client.DomainClients
         /// </summary>
         /// <remarks>
         /// When enabled, the response content is first read into a byte array and then deserialized synchronously.
-        /// When disabled, the response content is deserialized asynchronously from the response stream.
-        /// Defaults to <see langword="true" /> for now.
+        /// When disabled, the response content is deserialized asynchronously from a <see cref="PipeReader" /> created for the response stream.
+        /// Defaults to <see langword="false" />.
         /// </remarks>
-        public bool BufferResponseContent { get; set; } = true;
+        public bool BufferResponseContent { get; set; } = false;
+
+        /// <summary>
+        /// Gets or sets the options used when creating the response <see cref="PipeReader" /> for non-buffered MessagePack responses.
+        /// </summary>
+        /// <remarks>
+        /// When left <see langword="null" />, OpenRIA Services uses defaults optimized for larger responses.
+        /// </remarks>
+        public StreamPipeReaderOptions? ResponsePipeReaderOptions { get; set; }
 
         /// <inheritdoc />
         public MessagePackHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory, MessagePackSerializer? serializer = null, ITypeShapeProvider? typeShapeProvider = null)
@@ -50,6 +59,12 @@ namespace OpenRiaServices.Client.DomainClients
 
         internal MessagePackSerializer BaseSerializerSerializer { get; }
         internal ITypeShapeProvider TypeShapeProvider { get; }
+
+        internal StreamPipeReaderOptions GetResponsePipeReaderOptions()
+            => ResponsePipeReaderOptions ?? new StreamPipeReaderOptions(
+                bufferSize: 1024 * 1024,
+                minimumReadSize: 256 * 1024,
+                leaveOpen: true);
 
         internal MessagePackSerializer GetSerializer(Type service, IEnumerable<Type> knownTypes)
         {

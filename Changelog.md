@@ -48,6 +48,7 @@ builder.Services.AddOpenRiaServices()
 
 * Added `MessagePackHttpDomainClientFactory` — a `DomainClientFactory` that communicates with the server using MessagePack over HTTP
 * Added `MessagePackHttpDomainClientFactory.BufferResponseContent` to control whether MessagePack responses are buffered into a byte array before deserialization
+* Added `MessagePackHttpDomainClientFactory.ResponsePipeReaderOptions` to control `PipeReader` creation for non-buffered MessagePack responses
 * Client-side entity association lookup now uses internal `EntitySet` indexes, including typed single-key accessors for common scalar key types, to reduce repeated full-set scans and lower allocation overhead during relationship resolution.
 
 ### Enable MessagePack on the client
@@ -57,13 +58,26 @@ DomainContext.DomainClientFactory =
     new MessagePackHttpDomainClientFactory(baseUri, httpClientFactory);
 ```
 
-For now, MessagePack responses are buffered by default before deserialization. To opt out and keep streaming deserialization:
+By default, MessagePack responses are read through a `PipeReader` and deserialized without first buffering the entire payload. You can opt into full response buffering instead:
 
 ```csharp
 DomainContext.DomainClientFactory =
     new MessagePackHttpDomainClientFactory(baseUri, httpClientFactory)
     {
-        BufferResponseContent = false,
+        BufferResponseContent = true,
+    };
+```
+
+You can also customize the `PipeReader` used for non-buffered responses. When not specified, OpenRIA Services uses larger read buffers (`minimumReadSize` 256 KB, `bufferSize` 1 MB):
+
+```csharp
+DomainContext.DomainClientFactory =
+    new MessagePackHttpDomainClientFactory(baseUri, httpClientFactory)
+    {
+        ResponsePipeReaderOptions = new StreamPipeReaderOptions(
+            bufferSize: 1024 * 1024,
+            minimumReadSize: 256 * 1024,
+            leaveOpen: true),
     };
 ```
 
