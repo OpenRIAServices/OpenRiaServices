@@ -23,22 +23,15 @@ namespace OpenRiaServices.Client.DomainClients
         private readonly ConcurrentDictionary<Type, MessagePackSerializer> _serializerCache = new ConcurrentDictionary<Type, MessagePackSerializer>();
 
         /// <summary>
-        /// Gets or sets a value indicating whether MessagePack responses should be fully buffered before deserialization.
+        /// Gets or sets the options used when creating the response <see cref="PipeReader" /> used for reading MessagePack responses.
+        /// The default buffer size is increased to to 256 KB
         /// </summary>
-        /// <remarks>
-        /// When enabled, the response content is first read into a byte array and then deserialized synchronously.
-        /// When disabled, the response content is deserialized asynchronously from a <see cref="PipeReader" /> created for the response stream.
-        /// Defaults to <see langword="false" />.
-        /// </remarks>
-        public bool BufferResponseContent { get; set; } = false;
-
-        /// <summary>
-        /// Gets or sets the options used when creating the response <see cref="PipeReader" /> for non-buffered MessagePack responses.
-        /// </summary>
-        /// <remarks>
-        /// When left <see langword="null" />, OpenRIA Services uses defaults optimized for larger responses.
-        /// </remarks>
-        public StreamPipeReaderOptions? ResponsePipeReaderOptions { get; set; }
+        /// <remarks>Ensure at least 64 KB is used to avoid very slow request parsing.</remarks>
+        public StreamPipeReaderOptions ResponsePipeReaderOptions
+        {
+            get => field;
+            init => field = value ?? throw new ArgumentNullException(nameof(value));
+        } = new StreamPipeReaderOptions(bufferSize: 256 * 1024, leaveOpen: true);
 
         /// <inheritdoc />
         public MessagePackHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory, MessagePackSerializer? serializer = null, ITypeShapeProvider? typeShapeProvider = null)
@@ -60,12 +53,6 @@ namespace OpenRiaServices.Client.DomainClients
         internal MessagePackSerializer BaseSerializerSerializer { get; }
         internal ITypeShapeProvider TypeShapeProvider { get; }
 
-        internal StreamPipeReaderOptions GetResponsePipeReaderOptions()
-            => ResponsePipeReaderOptions ?? new StreamPipeReaderOptions(
-                bufferSize: 1024 * 1024,
-                minimumReadSize: 256 * 1024,
-                leaveOpen: true);
-
         internal MessagePackSerializer GetSerializer(Type service, IEnumerable<Type> knownTypes)
         {
             return _serializerCache.GetOrAdd(service, static (_, args) =>
@@ -74,7 +61,7 @@ namespace OpenRiaServices.Client.DomainClients
                 return args.Item1.BaseSerializerSerializer with
                 {
                     ConverterFactories = [converterFactory, .. args.Item1.BaseSerializerSerializer.ConverterFactories],
-                    DerivedTypeUnions = [..converterFactory.GetDerivedTypeUnions(), .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
+                    DerivedTypeUnions = [.. converterFactory.GetDerivedTypeUnions(), .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
                 };
 
             }, (this, knownTypes));

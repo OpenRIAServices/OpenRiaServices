@@ -99,6 +99,8 @@ namespace System.Runtime.CompilerServices
 
         public string ParameterName { get; private set; }
     }
+
+    internal static class IsExternalInit { }
 }
 
 namespace System.Diagnostics
