@@ -14,7 +14,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
     /// and then we use the resolver to allow other collection types at runtime (with same xml name and namespace as the 
     /// collection type registered).
     /// </summary>
-    class SubmitDataContractResolver : DataContractResolver
+    sealed class SubmitDataContractResolver : DataContractResolver
     {
         private readonly ConcurrentDictionary<Type, (XmlDictionaryString typeName, XmlDictionaryString typeNamespace)> _knownTypes
             = new ConcurrentDictionary<Type, (XmlDictionaryString, XmlDictionaryString)>();

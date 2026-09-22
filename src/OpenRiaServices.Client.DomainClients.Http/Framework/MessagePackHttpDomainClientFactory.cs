@@ -6,6 +6,7 @@ using PolyType.Abstractions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Net.Http;
 using System.Reflection;
@@ -20,6 +21,17 @@ namespace OpenRiaServices.Client.DomainClients
     public class MessagePackHttpDomainClientFactory : HttpDomainClientFactory
     {
         private readonly ConcurrentDictionary<Type, MessagePackSerializer> _serializerCache = new ConcurrentDictionary<Type, MessagePackSerializer>();
+
+        /// <summary>
+        /// Gets or sets the options used when creating the response <see cref="PipeReader" /> used for reading MessagePack responses.
+        /// The default buffer size is increased to 256 KB
+        /// </summary>
+        /// <remarks>Ensure at least 64 KB is used to avoid very slow request parsing.</remarks>
+        public StreamPipeReaderOptions ResponsePipeReaderOptions
+        {
+            get;
+            init => field = value ?? throw new ArgumentNullException(nameof(value));
+        } = new StreamPipeReaderOptions(bufferSize: 256 * 1024, leaveOpen: true);
 
         /// <inheritdoc />
         public MessagePackHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory, MessagePackSerializer? serializer = null, ITypeShapeProvider? typeShapeProvider = null)
@@ -49,7 +61,7 @@ namespace OpenRiaServices.Client.DomainClients
                 return args.Item1.BaseSerializerSerializer with
                 {
                     ConverterFactories = [converterFactory, .. args.Item1.BaseSerializerSerializer.ConverterFactories],
-                    DerivedTypeUnions = [..converterFactory.GetDerivedTypeUnions(), .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
+                    DerivedTypeUnions = [.. converterFactory.GetDerivedTypeUnions(), .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
                 };
 
             }, (this, knownTypes));

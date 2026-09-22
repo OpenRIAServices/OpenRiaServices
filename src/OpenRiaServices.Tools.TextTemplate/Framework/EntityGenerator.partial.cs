@@ -632,14 +632,13 @@ namespace OpenRiaServices.Tools.TextTemplate
                 foreach (DomainOperationEntry customMethod in description.GetCustomMethods(this.Type))
                 {
                     methodName = customMethod.Name;
-                    if (entityCustomMethods.ContainsKey(methodName))
+                    if (entityCustomMethods.TryAdd(methodName, customMethod))
                     {
-                        this.ClientCodeGenerator.CodeGenerationHost.LogError(string.Format(CultureInfo.CurrentCulture, Resource.EntityCodeGen_DuplicateCustomMethodName, methodName, this.Type, customMethodToDescriptionMap[methodName].DomainServiceType, description.DomainServiceType));
+                        customMethodToDescriptionMap.Add(methodName, description);
                     }
                     else
                     {
-                        entityCustomMethods.Add(methodName, customMethod);
-                        customMethodToDescriptionMap.Add(methodName, description);
+                        this.ClientCodeGenerator.CodeGenerationHost.LogError(string.Format(CultureInfo.CurrentCulture, Resource.EntityCodeGen_DuplicateCustomMethodName, methodName, this.Type, customMethodToDescriptionMap[methodName].DomainServiceType, description.DomainServiceType));
                     }
                 }
             }
