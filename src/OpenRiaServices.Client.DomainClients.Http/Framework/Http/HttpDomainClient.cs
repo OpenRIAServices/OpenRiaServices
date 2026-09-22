@@ -46,7 +46,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
         private protected abstract Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken);
         private protected abstract Task<HttpResponseMessage> QueryAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken);
-        private protected abstract Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType);
+        private protected abstract Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType, CancellationToken cancellationToken);
 
         private protected MethodParameters GetMethodParameters(string operationName)
         {
@@ -71,7 +71,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
             try
             {
-                returnValue = await ReadResponseAsync(response, invokeArgs.OperationName, invokeArgs.ReturnType)
+                returnValue = await ReadResponseAsync(response, invokeArgs.OperationName, invokeArgs.ReturnType, cancellationToken)
                      .ConfigureAwait(false);
             }
             catch (FaultException<DomainServiceFault> fe)
@@ -102,7 +102,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
 
             try
             {
-                var returnValue = (IEnumerable<ChangeSetEntry>)await ReadResponseAsync(response, operationName, typeof(IEnumerable<ChangeSetEntry>))
+                var returnValue = (IEnumerable<ChangeSetEntry>)await ReadResponseAsync(response, operationName, typeof(IEnumerable<ChangeSetEntry>), cancellationToken)
                      .ConfigureAwait(false);
                 return new SubmitCompletedResult(changeSet, returnValue ?? Enumerable.Empty<ChangeSetEntry>());
             }
@@ -138,7 +138,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 try
                 {
                     var queryType = typeof(QueryResult<>).MakeGenericType(query.EntityType);
-                    var queryResult = (QueryResult)await ReadResponseAsync(response, query.QueryName, queryType)
+                    var queryResult = (QueryResult)await ReadResponseAsync(response, query.QueryName, queryType, cancellationToken)
                          .ConfigureAwait(false);
                     if (queryResult != null)
                     {

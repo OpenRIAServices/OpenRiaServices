@@ -93,7 +93,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 : new MessagePackInvokeRequestEnvelope() { Parameters = requestParameters };
         }
 
-        private protected override async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType)
+        private protected override async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType, CancellationToken cancellationToken)
         {
             using (response)
             {
@@ -116,11 +116,15 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 var typeShape = _typeShapeProvider.GetTypeShapeOrThrow(envelopeType);
 
                 MessagePackResponseEnvelopeBase envelope;
+#if NET
+                using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+#else
                 using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+#endif
                 PipeReader pipeReader = PipeReader.Create(stream, _factory.ResponsePipeReaderOptions);
                 try
                 {
-                    envelope = ((MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(pipeReader, typeShape).ConfigureAwait(false))
+                    envelope = ((MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(pipeReader, typeShape, cancellationToken).ConfigureAwait(false))
                         ?? (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
                 }
                 finally

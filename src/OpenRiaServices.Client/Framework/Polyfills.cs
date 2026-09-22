@@ -100,7 +100,9 @@ namespace System.Runtime.CompilerServices
         public string ParameterName { get; private set; }
     }
 
-    internal static class IsExternalInit { }
+    internal static class IsExternalInit {
+        // Intentionally empty
+    }
 }
 
 namespace System.Diagnostics

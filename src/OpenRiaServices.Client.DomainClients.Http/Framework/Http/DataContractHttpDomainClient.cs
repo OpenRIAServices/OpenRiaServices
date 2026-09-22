@@ -135,10 +135,11 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="response">the <see cref="HttpResponseMessage"/> to deserialize</param>
         /// <param name="operationName">name of operation invoked, used to verify returned xml</param>
         /// <param name="returnType">Type which should be returned.</param>
+        /// <param name="cancellationToken"></param>
         /// <returns></returns>
         /// <exception cref="DomainOperationException">On server errors which did not produce expected output</exception>
         /// <exception cref="FaultException{DomainServiceFault}">If server returned a DomainServiceFault</exception>
-        private protected override async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType)
+        private protected override async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType, CancellationToken cancellationToken)
         {
             // Always dispose using finally block below response or we can leak connections
             using (response)
@@ -158,7 +159,11 @@ namespace OpenRiaServices.Client.DomainClients.Http
                         throw new DomainOperationException(message, OperationErrorStatus.ServerError, (int)response.StatusCode, null);
                 }
 
+#if NET
+                using (var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false))
+#else
                 using (var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false))
+#endif
                 using (var reader = CreateReader(stream))
                 {
                     reader.Read();
