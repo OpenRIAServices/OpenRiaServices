@@ -24,12 +24,12 @@ namespace OpenRiaServices.Client.DomainClients
 
         /// <summary>
         /// Gets or sets the options used when creating the response <see cref="PipeReader" /> used for reading MessagePack responses.
-        /// The default buffer size is increased to to 256 KB
+        /// The default buffer size is increased to 256 KB
         /// </summary>
         /// <remarks>Ensure at least 64 KB is used to avoid very slow request parsing.</remarks>
         public StreamPipeReaderOptions ResponsePipeReaderOptions
         {
-            get => field;
+            get;
             init => field = value ?? throw new ArgumentNullException(nameof(value));
         } = new StreamPipeReaderOptions(bufferSize: 256 * 1024, leaveOpen: true);
 
