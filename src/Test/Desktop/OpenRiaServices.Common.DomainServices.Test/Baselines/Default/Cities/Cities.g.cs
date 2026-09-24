@@ -129,7 +129,23 @@ namespace Cities
             }
             set
             {
-                County previous = this.County;
+                County previous;
+                if ((this._county != null))
+                {
+                    previous = this._county.Entity;
+                }
+                else
+                {
+                    this._county = new EntityRef<County>(this, "County", this.FilterCounty);
+                    if ((value == null))
+                    {
+                        previous = this._county.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("County", value);
@@ -1740,7 +1756,23 @@ namespace Cities
             }
             set
             {
-                State previous = this.State;
+                State previous;
+                if ((this._state != null))
+                {
+                    previous = this._state.Entity;
+                }
+                else
+                {
+                    this._state = new EntityRef<State>(this, "State", this.FilterState);
+                    if ((value == null))
+                    {
+                        previous = this._state.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("State", value);
@@ -2134,7 +2166,23 @@ namespace Cities
             }
             set
             {
-                City previous = this.City;
+                City previous;
+                if ((this._city != null))
+                {
+                    previous = this._city.Entity;
+                }
+                else
+                {
+                    this._city = new EntityRef<City>(this, "City", this.FilterCity);
+                    if ((value == null))
+                    {
+                        previous = this._city.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("City", value);

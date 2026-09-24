@@ -94,7 +94,23 @@ namespace TestDomainServices
             }
             set
             {
-                global::TestDomainServices.B previous = this.B;
+                global::TestDomainServices.B previous;
+                if ((this._b != null))
+                {
+                    previous = this._b.Entity;
+                }
+                else
+                {
+                    this._b = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.B>(this, "B", this.FilterB);
+                    if ((value == null))
+                    {
+                        previous = this._b.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("B", value);
@@ -556,7 +572,23 @@ namespace TestDomainServices
             }
             set
             {
-                global::TestDomainServices.D previous = this.D_Ref1;
+                global::TestDomainServices.D previous;
+                if ((this._d_Ref1 != null))
+                {
+                    previous = this._d_Ref1.Entity;
+                }
+                else
+                {
+                    this._d_Ref1 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref1", this.FilterD_Ref1);
+                    if ((value == null))
+                    {
+                        previous = this._d_Ref1.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("D_Ref1", value);
@@ -599,7 +631,23 @@ namespace TestDomainServices
             }
             set
             {
-                global::TestDomainServices.D previous = this.D_Ref2;
+                global::TestDomainServices.D previous;
+                if ((this._d_Ref2 != null))
+                {
+                    previous = this._d_Ref2.Entity;
+                }
+                else
+                {
+                    this._d_Ref2 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D_Ref2", this.FilterD_Ref2);
+                    if ((value == null))
+                    {
+                        previous = this._d_Ref2.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("D_Ref2", value);
@@ -813,7 +861,23 @@ namespace TestDomainServices
             }
             set
             {
-                global::TestDomainServices.C previous = this.C;
+                global::TestDomainServices.C previous;
+                if ((this._c != null))
+                {
+                    previous = this._c.Entity;
+                }
+                else
+                {
+                    this._c = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.C>(this, "C", this.FilterC);
+                    if ((value == null))
+                    {
+                        previous = this._c.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("C", value);
@@ -848,7 +912,23 @@ namespace TestDomainServices
             }
             set
             {
-                global::TestDomainServices.D previous = this.D1;
+                global::TestDomainServices.D previous;
+                if ((this._d1 != null))
+                {
+                    previous = this._d1.Entity;
+                }
+                else
+                {
+                    this._d1 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D1", this.FilterD1);
+                    if ((value == null))
+                    {
+                        previous = this._d1.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("D1", value);
@@ -891,7 +971,23 @@ namespace TestDomainServices
             }
             set
             {
-                global::TestDomainServices.D previous = this.D2;
+                global::TestDomainServices.D previous;
+                if ((this._d2 != null))
+                {
+                    previous = this._d2.Entity;
+                }
+                else
+                {
+                    this._d2 = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2", this.FilterD2);
+                    if ((value == null))
+                    {
+                        previous = this._d2.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("D2", value);
@@ -934,7 +1030,23 @@ namespace TestDomainServices
             }
             set
             {
-                global::TestDomainServices.D previous = this.D2_BackRef;
+                global::TestDomainServices.D previous;
+                if ((this._d2_BackRef != null))
+                {
+                    previous = this._d2_BackRef.Entity;
+                }
+                else
+                {
+                    this._d2_BackRef = new global::OpenRiaServices.Client.EntityRef<global::TestDomainServices.D>(this, "D2_BackRef", this.FilterD2_BackRef);
+                    if ((value == null))
+                    {
+                        previous = this._d2_BackRef.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("D2_BackRef", value);

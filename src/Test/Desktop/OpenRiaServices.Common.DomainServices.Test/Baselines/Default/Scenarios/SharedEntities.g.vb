@@ -98,7 +98,17 @@ Namespace SharedEntities
                 Return Me._entityB.Entity
             End Get
             Set
-                Dim previous As EntityB = Me.EntityB
+                Dim previous As EntityB
+                If (Not (Me._entityB) Is Nothing) Then
+                    previous = Me._entityB.Entity
+                Else
+                    Me._entityB = New EntityRef(Of EntityB)(Me, "EntityB", AddressOf Me.FilterEntityB)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._entityB.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("EntityB", value)
                     Me._entityB.Entity = value
@@ -119,7 +129,17 @@ Namespace SharedEntities
                 Return Me._entityC.Entity
             End Get
             Set
-                Dim previous As EntityC = Me.EntityC
+                Dim previous As EntityC
+                If (Not (Me._entityC) Is Nothing) Then
+                    previous = Me._entityC.Entity
+                Else
+                    Me._entityC = New EntityRef(Of EntityC)(Me, "EntityC", AddressOf Me.FilterEntityC)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._entityC.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("EntityC", value)
                     Me._entityC.Entity = value
@@ -552,7 +572,17 @@ Namespace SharedEntities
                 Return Me._entityZ.Entity
             End Get
             Set
-                Dim previous As EntityZ = Me.EntityZ
+                Dim previous As EntityZ
+                If (Not (Me._entityZ) Is Nothing) Then
+                    previous = Me._entityZ.Entity
+                Else
+                    Me._entityZ = New EntityRef(Of EntityZ)(Me, "EntityZ", AddressOf Me.FilterEntityZ)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._entityZ.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("EntityZ", value)
                     Me._entityZ.Entity = value

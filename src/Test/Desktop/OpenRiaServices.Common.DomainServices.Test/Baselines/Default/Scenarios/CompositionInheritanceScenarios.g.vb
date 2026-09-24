@@ -163,7 +163,17 @@ Namespace TestDomainServices
                 Return Me._master.Entity
             End Get
             Set
-                Dim previous As AI_MasterDerived = Me.Master
+                Dim previous As AI_MasterDerived
+                If (Not (Me._master) Is Nothing) Then
+                    previous = Me._master.Entity
+                Else
+                    Me._master = New EntityRef(Of AI_MasterDerived)(Me, "Master", AddressOf Me.FilterMaster)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._master.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Master", value)
                     If (Not (previous) Is Nothing) Then
@@ -230,7 +240,17 @@ Namespace TestDomainServices
                 Return Me._master.Entity
             End Get
             Set
-                Dim previous As AI_MasterDerived = Me.Master
+                Dim previous As AI_MasterDerived
+                If (Not (Me._master) Is Nothing) Then
+                    previous = Me._master.Entity
+                Else
+                    Me._master = New EntityRef(Of AI_MasterDerived)(Me, "Master", AddressOf Me.FilterMaster)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._master.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Master", value)
                     If (Not (previous) Is Nothing) Then
@@ -297,7 +317,17 @@ Namespace TestDomainServices
                 Return Me._master.Entity
             End Get
             Set
-                Dim previous As AI_MasterDerived = Me.Master
+                Dim previous As AI_MasterDerived
+                If (Not (Me._master) Is Nothing) Then
+                    previous = Me._master.Entity
+                Else
+                    Me._master = New EntityRef(Of AI_MasterDerived)(Me, "Master", AddressOf Me.FilterMaster)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._master.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Master", value)
                     If (Not (previous) Is Nothing) Then
@@ -364,7 +394,17 @@ Namespace TestDomainServices
                 Return Me._master.Entity
             End Get
             Set
-                Dim previous As AI_MasterDerived = Me.Master
+                Dim previous As AI_MasterDerived
+                If (Not (Me._master) Is Nothing) Then
+                    previous = Me._master.Entity
+                Else
+                    Me._master = New EntityRef(Of AI_MasterDerived)(Me, "Master", AddressOf Me.FilterMaster)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._master.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Master", value)
                     If (Not (previous) Is Nothing) Then
@@ -529,7 +569,17 @@ Namespace TestDomainServices
                 Return Me._detailDerived3.Entity
             End Get
             Set
-                Dim previous As AI_DetailDerived3 = Me.DetailDerived3
+                Dim previous As AI_DetailDerived3
+                If (Not (Me._detailDerived3) Is Nothing) Then
+                    previous = Me._detailDerived3.Entity
+                Else
+                    Me._detailDerived3 = New EntityRef(Of AI_DetailDerived3)(Me, "DetailDerived3", AddressOf Me.FilterDetailDerived3)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._detailDerived3.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("DetailDerived3", value)
                     If (Not (previous) Is Nothing) Then
@@ -557,7 +607,17 @@ Namespace TestDomainServices
                 Return Me._detailDerived4.Entity
             End Get
             Set
-                Dim previous As AI_DetailDerived4 = Me.DetailDerived4
+                Dim previous As AI_DetailDerived4
+                If (Not (Me._detailDerived4) Is Nothing) Then
+                    previous = Me._detailDerived4.Entity
+                Else
+                    Me._detailDerived4 = New EntityRef(Of AI_DetailDerived4)(Me, "DetailDerived4", AddressOf Me.FilterDetailDerived4)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._detailDerived4.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("DetailDerived4", value)
                     If (Not (previous) Is Nothing) Then
@@ -959,7 +1019,17 @@ Namespace TestDomainServices
                 Return Me._parent.Entity
             End Get
             Set
-                Dim previous As CI_Parent = Me.Parent
+                Dim previous As CI_Parent
+                If (Not (Me._parent) Is Nothing) Then
+                    previous = Me._parent.Entity
+                Else
+                    Me._parent = New EntityRef(Of CI_Parent)(Me, "Parent", AddressOf Me.FilterParent)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._parent.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Parent", value)
                     If (Not (previous) Is Nothing) Then

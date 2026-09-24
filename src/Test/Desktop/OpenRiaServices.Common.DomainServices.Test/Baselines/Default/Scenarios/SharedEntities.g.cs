@@ -87,7 +87,23 @@ namespace SharedEntities
             }
             set
             {
-                EntityB previous = this.EntityB;
+                EntityB previous;
+                if ((this._entityB != null))
+                {
+                    previous = this._entityB.Entity;
+                }
+                else
+                {
+                    this._entityB = new EntityRef<EntityB>(this, "EntityB", this.FilterEntityB);
+                    if ((value == null))
+                    {
+                        previous = this._entityB.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("EntityB", value);
@@ -113,7 +129,23 @@ namespace SharedEntities
             }
             set
             {
-                EntityC previous = this.EntityC;
+                EntityC previous;
+                if ((this._entityC != null))
+                {
+                    previous = this._entityC.Entity;
+                }
+                else
+                {
+                    this._entityC = new EntityRef<EntityC>(this, "EntityC", this.FilterEntityC);
+                    if ((value == null))
+                    {
+                        previous = this._entityC.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("EntityC", value);
@@ -574,7 +606,23 @@ namespace SharedEntities
             }
             set
             {
-                EntityZ previous = this.EntityZ;
+                EntityZ previous;
+                if ((this._entityZ != null))
+                {
+                    previous = this._entityZ.Entity;
+                }
+                else
+                {
+                    this._entityZ = new EntityRef<EntityZ>(this, "EntityZ", this.FilterEntityZ);
+                    if ((value == null))
+                    {
+                        previous = this._entityZ.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("EntityZ", value);

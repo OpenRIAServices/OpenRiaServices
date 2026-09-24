@@ -329,7 +329,23 @@ namespace EFCoreModels.Scenarios.OwnedTypes
             }
             set
             {
-                OwnedEntityWithExplicitId previous = this.OwnedEntityWithExplicitId;
+                OwnedEntityWithExplicitId previous;
+                if ((this._ownedEntityWithExplicitId != null))
+                {
+                    previous = this._ownedEntityWithExplicitId.Entity;
+                }
+                else
+                {
+                    this._ownedEntityWithExplicitId = new EntityRef<OwnedEntityWithExplicitId>(this, "OwnedEntityWithExplicitId", this.FilterOwnedEntityWithExplicitId);
+                    if ((value == null))
+                    {
+                        previous = this._ownedEntityWithExplicitId.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("OwnedEntityWithExplicitId", value);
@@ -357,7 +373,23 @@ namespace EFCoreModels.Scenarios.OwnedTypes
             }
             set
             {
-                OwnedEntityWithExplicitIdAndBackNavigation previous = this.OwnedEntityWithExplicitIdAndBackNavigation;
+                OwnedEntityWithExplicitIdAndBackNavigation previous;
+                if ((this._ownedEntityWithExplicitIdAndBackNavigation != null))
+                {
+                    previous = this._ownedEntityWithExplicitIdAndBackNavigation.Entity;
+                }
+                else
+                {
+                    this._ownedEntityWithExplicitIdAndBackNavigation = new EntityRef<OwnedEntityWithExplicitIdAndBackNavigation>(this, "OwnedEntityWithExplicitIdAndBackNavigation", this.FilterOwnedEntityWithExplicitIdAndBackNavigation);
+                    if ((value == null))
+                    {
+                        previous = this._ownedEntityWithExplicitIdAndBackNavigation.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("OwnedEntityWithExplicitIdAndBackNavigation", value);
@@ -615,7 +647,23 @@ namespace EFCoreModels.Scenarios.OwnedTypes
             }
             set
             {
-                Employee previous = this.Employee;
+                Employee previous;
+                if ((this._employee != null))
+                {
+                    previous = this._employee.Entity;
+                }
+                else
+                {
+                    this._employee = new EntityRef<Employee>(this, "Employee", this.FilterEmployee);
+                    if ((value == null))
+                    {
+                        previous = this._employee.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Employee", value);

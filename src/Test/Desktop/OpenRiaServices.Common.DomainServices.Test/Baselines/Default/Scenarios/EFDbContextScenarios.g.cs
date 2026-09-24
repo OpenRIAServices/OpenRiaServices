@@ -727,7 +727,23 @@ namespace DbContextModels.Northwind
             }
             set
             {
-                Customer previous = this.Customer;
+                Customer previous;
+                if ((this._customer != null))
+                {
+                    previous = this._customer.Entity;
+                }
+                else
+                {
+                    this._customer = new EntityRef<Customer>(this, "Customer", this.FilterCustomer);
+                    if ((value == null))
+                    {
+                        previous = this._customer.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Customer", value);
@@ -1289,7 +1305,23 @@ namespace DbContextModels.Northwind
             }
             set
             {
-                Order previous = this.Order;
+                Order previous;
+                if ((this._order != null))
+                {
+                    previous = this._order.Entity;
+                }
+                else
+                {
+                    this._order = new EntityRef<Order>(this, "Order", this.FilterOrder);
+                    if ((value == null))
+                    {
+                        previous = this._order.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Order", value);
@@ -1359,7 +1391,23 @@ namespace DbContextModels.Northwind
             }
             set
             {
-                Product previous = this.Product;
+                Product previous;
+                if ((this._product != null))
+                {
+                    previous = this._product.Entity;
+                }
+                else
+                {
+                    this._product = new EntityRef<Product>(this, "Product", this.FilterProduct);
+                    if ((value == null))
+                    {
+                        previous = this._product.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Product", value);
@@ -1585,7 +1633,23 @@ namespace DbContextModels.Northwind
             }
             set
             {
-                Category previous = this.Category;
+                Category previous;
+                if ((this._category != null))
+                {
+                    previous = this._category.Entity;
+                }
+                else
+                {
+                    this._category = new EntityRef<Category>(this, "Category", this.FilterCategory);
+                    if ((value == null))
+                    {
+                        previous = this._category.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Category", value);
@@ -2365,7 +2429,23 @@ namespace DbContextModels.Northwind
             }
             set
             {
-                Region previous = this.Region;
+                Region previous;
+                if ((this._region != null))
+                {
+                    previous = this._region.Entity;
+                }
+                else
+                {
+                    this._region = new EntityRef<Region>(this, "Region", this.FilterRegion);
+                    if ((value == null))
+                    {
+                        previous = this._region.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Region", value);

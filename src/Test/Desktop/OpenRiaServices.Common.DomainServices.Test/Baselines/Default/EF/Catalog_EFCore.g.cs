@@ -305,7 +305,23 @@ namespace EFCoreModels.AdventureWorks
             }
             set
             {
-                Employee previous = this.Manager;
+                Employee previous;
+                if ((this._manager != null))
+                {
+                    previous = this._manager.Entity;
+                }
+                else
+                {
+                    this._manager = new EntityRef<Employee>(this, "Manager", this.FilterManager);
+                    if ((value == null))
+                    {
+                        previous = this._manager.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Manager", value);
@@ -2088,7 +2104,23 @@ namespace EFCoreModels.AdventureWorks
             }
             set
             {
-                Product previous = this.Product;
+                Product previous;
+                if ((this._product != null))
+                {
+                    previous = this._product.Entity;
+                }
+                else
+                {
+                    this._product = new EntityRef<Product>(this, "Product", this.FilterProduct);
+                    if ((value == null))
+                    {
+                        previous = this._product.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Product", value);
@@ -2156,7 +2188,23 @@ namespace EFCoreModels.AdventureWorks
             }
             set
             {
-                PurchaseOrder previous = this.PurchaseOrder;
+                PurchaseOrder previous;
+                if ((this._purchaseOrder != null))
+                {
+                    previous = this._purchaseOrder.Entity;
+                }
+                else
+                {
+                    this._purchaseOrder = new EntityRef<PurchaseOrder>(this, "PurchaseOrder", this.FilterPurchaseOrder);
+                    if ((value == null))
+                    {
+                        previous = this._purchaseOrder.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("PurchaseOrder", value);

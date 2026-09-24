@@ -140,7 +140,17 @@ Namespace Cities
                 Return Me._county.Entity
             End Get
             Set
-                Dim previous As County = Me.County
+                Dim previous As County
+                If (Not (Me._county) Is Nothing) Then
+                    previous = Me._county.Entity
+                Else
+                    Me._county = New EntityRef(Of County)(Me, "County", AddressOf Me.FilterCounty)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._county.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("County", value)
                     If (Not (previous) Is Nothing) Then
@@ -1614,7 +1624,17 @@ Namespace Cities
                 Return Me._state.Entity
             End Get
             Set
-                Dim previous As State = Me.State
+                Dim previous As State
+                If (Not (Me._state) Is Nothing) Then
+                    previous = Me._state.Entity
+                Else
+                    Me._state = New EntityRef(Of State)(Me, "State", AddressOf Me.FilterState)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._state.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("State", value)
                     If (Not (previous) Is Nothing) Then
@@ -1982,7 +2002,17 @@ Namespace Cities
                 Return Me._city.Entity
             End Get
             Set
-                Dim previous As City = Me.City
+                Dim previous As City
+                If (Not (Me._city) Is Nothing) Then
+                    previous = Me._city.Entity
+                Else
+                    Me._city = New EntityRef(Of City)(Me, "City", AddressOf Me.FilterCity)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._city.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("City", value)
                     If (Not (previous) Is Nothing) Then

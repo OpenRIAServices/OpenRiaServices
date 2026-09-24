@@ -337,7 +337,17 @@ Namespace TestDomainServices
                 Return Me._throwingAssociation.Entity
             End Get
             Set
-                Dim previous As AttributeThrowingEntity = Me.ThrowingAssociation
+                Dim previous As AttributeThrowingEntity
+                If (Not (Me._throwingAssociation) Is Nothing) Then
+                    previous = Me._throwingAssociation.Entity
+                Else
+                    Me._throwingAssociation = New EntityRef(Of AttributeThrowingEntity)(Me, "ThrowingAssociation", AddressOf Me.FilterThrowingAssociation)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._throwingAssociation.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("ThrowingAssociation", value)
                     If (Not (value) Is Nothing) Then

@@ -153,7 +153,23 @@ namespace TestDomainServices
             }
             set
             {
-                Parent previous = this.Parent;
+                Parent previous;
+                if ((this._parent != null))
+                {
+                    previous = this._parent.Entity;
+                }
+                else
+                {
+                    this._parent = new EntityRef<Parent>(this, "Parent", this.FilterParent);
+                    if ((value == null))
+                    {
+                        previous = this._parent.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Parent", value);
@@ -400,7 +416,23 @@ namespace TestDomainServices
             }
             set
             {
-                CompositionScenarios_Parent previous = this.Parent;
+                CompositionScenarios_Parent previous;
+                if ((this._parent != null))
+                {
+                    previous = this._parent.Entity;
+                }
+                else
+                {
+                    this._parent = new EntityRef<CompositionScenarios_Parent>(this, "Parent", this.FilterParent);
+                    if ((value == null))
+                    {
+                        previous = this._parent.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Parent", value);
@@ -1052,7 +1084,23 @@ namespace TestDomainServices
             }
             set
             {
-                GreatGrandChild previous = this.Child;
+                GreatGrandChild previous;
+                if ((this._child != null))
+                {
+                    previous = this._child.Entity;
+                }
+                else
+                {
+                    this._child = new EntityRef<GreatGrandChild>(this, "Child", this.FilterChild);
+                    if ((value == null))
+                    {
+                        previous = this._child.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Child", value);
@@ -1137,7 +1185,23 @@ namespace TestDomainServices
             }
             set
             {
-                Child previous = this.Parent;
+                Child previous;
+                if ((this._parent != null))
+                {
+                    previous = this._parent.Entity;
+                }
+                else
+                {
+                    this._parent = new EntityRef<Child>(this, "Parent", this.FilterParent);
+                    if ((value == null))
+                    {
+                        previous = this._parent.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Parent", value);
@@ -1380,7 +1444,23 @@ namespace TestDomainServices
             }
             set
             {
-                GrandChild previous = this.Parent;
+                GrandChild previous;
+                if ((this._parent != null))
+                {
+                    previous = this._parent.Entity;
+                }
+                else
+                {
+                    this._parent = new EntityRef<GrandChild>(this, "Parent", this.FilterParent);
+                    if ((value == null))
+                    {
+                        previous = this._parent.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Parent", value);
@@ -1758,7 +1838,23 @@ namespace TestDomainServices
             }
             set
             {
-                SelfReferencingComposition previous = this.Child;
+                SelfReferencingComposition previous;
+                if ((this._child != null))
+                {
+                    previous = this._child.Entity;
+                }
+                else
+                {
+                    this._child = new EntityRef<SelfReferencingComposition>(this, "Child", this.FilterChild);
+                    if ((value == null))
+                    {
+                        previous = this._child.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Child", value);
@@ -1819,7 +1915,23 @@ namespace TestDomainServices
             }
             set
             {
-                SelfReferencingComposition previous = this.Parent;
+                SelfReferencingComposition previous;
+                if ((this._parent != null))
+                {
+                    previous = this._parent.Entity;
+                }
+                else
+                {
+                    this._parent = new EntityRef<SelfReferencingComposition>(this, "Parent", this.FilterParent);
+                    if ((value == null))
+                    {
+                        previous = this._parent.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Parent", value);
@@ -2016,7 +2128,23 @@ namespace TestDomainServices
             }
             set
             {
-                SelfReferencingComposition_OneToMany previous = this.Parent;
+                SelfReferencingComposition_OneToMany previous;
+                if ((this._parent != null))
+                {
+                    previous = this._parent.Entity;
+                }
+                else
+                {
+                    this._parent = new EntityRef<SelfReferencingComposition_OneToMany>(this, "Parent", this.FilterParent);
+                    if ((value == null))
+                    {
+                        previous = this._parent.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Parent", value);

@@ -4,84 +4,57 @@
 
 OpenRiaServices is a .NET Foundation project evolved from WCF RIA Services. It provides client/server libraries, hosting packages, code-generation tooling, Visual Studio integration, and tests for rich n-tier applications.
 
-The main solution is `D:\a\OpenRiaServices\OpenRiaServices\src\RiaServices.sln`.
+- `src\OpenRiaServices.Client*`: client libraries/tests
+- `src\OpenRiaServices.Server*`: server, EF/EF Core, and authentication
+- `src\OpenRiaServices.Hosting.*`: hosting; prefer ASP.NET Core for new work
+- `src\OpenRiaServices.Tools*`: code generation, MSBuild, and T4
+- `src\VisualStudio`: VS extension/templates/tests
+- `src\Test`: shared/integration assets and databases
+- `NuGet`: packaging;
+- `docs`: documentation (both new and legacy from WCF RIA Services)
 
-Important areas:
+OData feature is legacy, use them only when explicitly targeted.
+The primary CI definition is `azure-pipelines.yml`.
 
-- `src\OpenRiaServices.Client*` - client libraries and client-side tests.
-- `src\OpenRiaServices.Server*` - server libraries, Entity Framework/Entity Framework Core integration, authentication, and tests.
-- `src\OpenRiaServices.Hosting.*` - hosting implementations. Prefer ASP.NET Core for new work; WCF packages are legacy/deprecated.
-- `src\OpenRiaServices.Tools*` - code-generation, MSBuild task, and T4/text-template tooling.
-- `src\VisualStudio` - Visual Studio extension, item templates, project templates, and related tests.
-- `src\Test` - shared test assets, integration/end-to-end tests, websites, and test databases.
-- `NuGet` - package specifications and packaging scripts.
-- `docs` - legacy documentation derived from WCF RIA Services documentation.
+## Environment and commands
 
-## Environment requirements
-
-This repository is Windows-oriented. Use a Windows runner/shell for normal build and test work because the solution includes .NET Framework, Visual Studio, SQL LocalDB, VS extension/template, and Windows-targeted projects.
-
-Expected tools:
-
-- Visual Studio/MSBuild with .NET Framework 4.7.2 targeting support.
-- .NET SDK 10.0.100 or newer. `src\global.json` requests `10.0.100` with `rollForward: major`.
-- .NET 8 SDK/runtime for multi-targeted projects.
-- NuGet/MSBuild restore support.
-- SQL Server LocalDB (`(localdb)\MSSQLLocalDB`) for database-backed tests.
-- PowerShell. `Setup-TestDatabases.ps1` may install/import the PowerShell `SqlServer` module unless run with `-UseSqlCmd`.
-
-The cloud agent setup workflow already exists at `.github\workflows\copilot-setup-steps.yml` and selects `windows-latest`.
-
-## Build commands
-
-Prefer commands from the repository root, `D:\a\OpenRiaServices\OpenRiaServices`.
-
-Restore and build the full solution:
+Run from the repository root on Windows with Visual Studio/MSBuild and .NET Framework 4.7.2 targeting support. `src\global.json` requests .NET SDK 10.0.100 with major roll-forward; multi-targeted projects also require .NET 8. Cloud setup is in `.github\workflows\copilot-setup-steps.yml`.
 
 ```powershell
+# Restore and Release-build (preferred)
 msbuild src\RiaServices.sln -restore /p:Configuration=Release /m /v:minimal
-```
-
-Alternative when MSBuild is correctly available through the .NET SDK and installed workloads:
-
-```powershell
-dotnet build src\RiaServices.sln --configuration Release
-```
-
-CI builds `src\RiaServices.sln` in `Release|Any CPU` on a Windows image with Visual Studio, .NET 8, .NET 10, NuGet, GitVersion and SQL LocalDB.
-
-## Test commands
-
-Test projects use MSTest and run on Microsoft.Testing.Platform (MTP), not VSTest. Each test project sets `EnableMSTestRunner`/`OutputType=Exe` and `src\global.json` selects the `Microsoft.Testing.Platform` runner for `dotnet test`, so `dotnet test` must be run from the `src` directory. Some tests need SQL LocalDB databases restored from backups under `src\Test\Databases`.
-
-Before running database-backed tests:
-
-```powershell
-sqllocaldb start MSSQLLocalDB
-.\Setup-TestDatabases.ps1
-```
-
-If the `SqlServer` PowerShell module cannot be installed/imported but `sqlcmd` is available:
-
-```powershell
-.\Setup-TestDatabases.ps1 -UseSqlCmd
 ```
 
 Run tests after building:
 
 ```powershell
+# Start SQL localdb and setup test databases  `Northwind`/`AdventureWorks` MUST RUN ONCE before running database-backed tests, such as EndToEnd tests
+sqllocaldb start MSSQLLocalDB
+.\Setup-TestDatabases.ps1 # use -UseSqlCmd if the SqlServer module is unavailable
+
+# Run all tests in the solution
 cd src
 dotnet test --solution RiaServices.Tests.slnf --configuration Release
 ```
 
-For focused changes, prefer running the relevant test project directly, for example:
-
+For focused changes, prefer running the relevant test project directly:
 ```powershell
 cd src
 dotnet test --project OpenRiaServices.Hosting.AspNetCore\Test\OpenRiaServices.Hosting.AspNetCore.Test\OpenRiaServices.Hosting.AspNetCore.Test.csproj --configuration Release
 ```
 
-CI runs the whole suite with a single `dotnet test` command against `src\RiaServices.Tests.slnf`, which lists every test project. `RiaServices.sln` itself cannot be used because it contains website projects which require Visual Studio targets, so new test projects must be added to the solution filter as well. MTP runs the test modules (project + target framework) in parallel; use `--max-parallel-test-modules 1` when debugging suspected concurrency issues.
+CI runs the whole suite with a single `dotnet test` command against `src\RiaServices.Tests.slnf`, which lists every test project. 
+`RiaServices.sln` itself cannot be used because it contains website projects which require Visual Studio targets, so new test projects must be added to the solution filter as well. 
+MTP runs the test modules (project + target framework) in parallel; use `--max-parallel-test-modules 1` when debugging suspected concurrency issues.
+
+
+
+Database-backed tests require SQL LocalDB and restored `Northwind`/`AdventureWorks` databases:
+## Generated files
+
+- NEVER edit `*.cs` under `src\OpenRiaServices.Tools.TextTemplate\Framework` when there is a corresponding `.tt` file. Edit the corresponding `.tt`/`.ttinclude`, regenerate affected templates with Visual Studio **Transform All T4 Templates** or `devenv /Command TextTransformation.TransformAllTemplates`, review output, and build `src\OpenRiaServices.Tools.TextTemplate\Framework\OpenRiaServices.Tools.TextTemplate.csproj` for all targets.
+- NEVER edit baseline `*.g.cs` or `*.g.vb` files directly. Run `dotnet test src\OpenRiaServices.Tools\Test\OpenRiaServices.Tools.Test.csproj --framework net472`, execute the exact `updateAllBaselines.bat` reported by failures, build, and rerun the test until it passes.
+
 
 ## Coding conventions
 
@@ -123,14 +96,13 @@ CI runs the whole suite with a single `dotnet test` command against `src\RiaServ
 - WCF hosting, ASP.NET Membership authentication, and some archived/Silverlight areas are legacy. Prefer ASP.NET Core paths for new work unless the task explicitly targets legacy behavior.
 - The primary CI definition is `azure-pipelines.yml`; GitHub Actions currently cover CodeQL and Copilot setup.
 
-## Validation guidance for agents
+## Validation
 
-Choose the smallest validation that covers the changed area:
+Use the smallest validation covering the change:
 
-- Documentation-only changes: inspect the rendered/changed Markdown; no full build is usually required.
-- Library changes: build the affected project and run its nearby test project(s), then consider the full solution build if feasible.
-- Code-generation or shared infrastructure changes: run a Release build of `src\RiaServices.sln` and targeted code-generation tests.
-- Database or Entity Framework changes: run `Setup-TestDatabases.ps1` first, then the relevant EF/EF Core/server tests.
-- Visual Studio extension/template changes: use MSBuild/Visual Studio tooling on Windows; Linux validation is not representative.
+- Documentation only: inspect the Markdown; no full build normally needed.
+- Library: build the solution and run nearby tests, set up LocalDB and run EndToEnd tests before finishing work
+- Code generation/shared infrastructure: build the solution and run targeted code-generation tests.
+- VS extension/templates: validate with Visual Studio/MSBuild on Windows; Linux is not representative.
 
-Document any setup/build/test errors you encounter in the task summary, including the exact command, failure, and workaround attempted.
+Report exact commands, failures, and attempted workarounds in the task summary. Do not hide validation failures.

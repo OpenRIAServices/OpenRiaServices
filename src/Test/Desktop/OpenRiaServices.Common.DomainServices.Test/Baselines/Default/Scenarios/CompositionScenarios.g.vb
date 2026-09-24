@@ -154,7 +154,17 @@ Namespace TestDomainServices
                 Return Me._parent.Entity
             End Get
             Set
-                Dim previous As Parent = Me.Parent
+                Dim previous As Parent
+                If (Not (Me._parent) Is Nothing) Then
+                    previous = Me._parent.Entity
+                Else
+                    Me._parent = New EntityRef(Of Parent)(Me, "Parent", AddressOf Me.FilterParent)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._parent.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Parent", value)
                     If (Not (previous) Is Nothing) Then
@@ -374,7 +384,17 @@ Namespace TestDomainServices
                 Return Me._parent.Entity
             End Get
             Set
-                Dim previous As CompositionScenarios_Parent = Me.Parent
+                Dim previous As CompositionScenarios_Parent
+                If (Not (Me._parent) Is Nothing) Then
+                    previous = Me._parent.Entity
+                Else
+                    Me._parent = New EntityRef(Of CompositionScenarios_Parent)(Me, "Parent", AddressOf Me.FilterParent)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._parent.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Parent", value)
                     If (Not (previous) Is Nothing) Then
@@ -988,7 +1008,17 @@ Namespace TestDomainServices
                 Return Me._child.Entity
             End Get
             Set
-                Dim previous As GreatGrandChild = Me.Child
+                Dim previous As GreatGrandChild
+                If (Not (Me._child) Is Nothing) Then
+                    previous = Me._child.Entity
+                Else
+                    Me._child = New EntityRef(Of GreatGrandChild)(Me, "Child", AddressOf Me.FilterChild)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._child.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Child", value)
                     If (Not (previous) Is Nothing) Then
@@ -1059,7 +1089,17 @@ Namespace TestDomainServices
                 Return Me._parent.Entity
             End Get
             Set
-                Dim previous As Child = Me.Parent
+                Dim previous As Child
+                If (Not (Me._parent) Is Nothing) Then
+                    previous = Me._parent.Entity
+                Else
+                    Me._parent = New EntityRef(Of Child)(Me, "Parent", AddressOf Me.FilterParent)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._parent.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Parent", value)
                     If (Not (previous) Is Nothing) Then
@@ -1281,7 +1321,17 @@ Namespace TestDomainServices
                 Return Me._parent.Entity
             End Get
             Set
-                Dim previous As GrandChild = Me.Parent
+                Dim previous As GrandChild
+                If (Not (Me._parent) Is Nothing) Then
+                    previous = Me._parent.Entity
+                Else
+                    Me._parent = New EntityRef(Of GrandChild)(Me, "Parent", AddressOf Me.FilterParent)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._parent.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Parent", value)
                     If (Not (previous) Is Nothing) Then
@@ -1628,7 +1678,17 @@ Namespace TestDomainServices
                 Return Me._child.Entity
             End Get
             Set
-                Dim previous As SelfReferencingComposition = Me.Child
+                Dim previous As SelfReferencingComposition
+                If (Not (Me._child) Is Nothing) Then
+                    previous = Me._child.Entity
+                Else
+                    Me._child = New EntityRef(Of SelfReferencingComposition)(Me, "Child", AddressOf Me.FilterChild)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._child.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Child", value)
                     If (Not (previous) Is Nothing) Then
@@ -1679,7 +1739,17 @@ Namespace TestDomainServices
                 Return Me._parent.Entity
             End Get
             Set
-                Dim previous As SelfReferencingComposition = Me.Parent
+                Dim previous As SelfReferencingComposition
+                If (Not (Me._parent) Is Nothing) Then
+                    previous = Me._parent.Entity
+                Else
+                    Me._parent = New EntityRef(Of SelfReferencingComposition)(Me, "Parent", AddressOf Me.FilterParent)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._parent.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Parent", value)
                     If (Not (previous) Is Nothing) Then
@@ -1857,7 +1927,17 @@ Namespace TestDomainServices
                 Return Me._parent.Entity
             End Get
             Set
-                Dim previous As SelfReferencingComposition_OneToMany = Me.Parent
+                Dim previous As SelfReferencingComposition_OneToMany
+                If (Not (Me._parent) Is Nothing) Then
+                    previous = Me._parent.Entity
+                Else
+                    Me._parent = New EntityRef(Of SelfReferencingComposition_OneToMany)(Me, "Parent", AddressOf Me.FilterParent)
+                    If Object.Equals(value, Nothing) Then
+                        previous = Me._parent.Entity
+                    Else
+                        previous = Nothing
+                    End If
+                End If
                 If (Object.Equals(previous, value) = false) Then
                     Me.ValidateProperty("Parent", value)
                     If (Not (previous) Is Nothing) Then

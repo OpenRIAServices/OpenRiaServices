@@ -164,7 +164,23 @@ namespace TestDomainServices
             }
             set
             {
-                AI_MasterDerived previous = this.Master;
+                AI_MasterDerived previous;
+                if ((this._master != null))
+                {
+                    previous = this._master.Entity;
+                }
+                else
+                {
+                    this._master = new EntityRef<AI_MasterDerived>(this, "Master", this.FilterMaster);
+                    if ((value == null))
+                    {
+                        previous = this._master.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Master", value);
@@ -241,7 +257,23 @@ namespace TestDomainServices
             }
             set
             {
-                AI_MasterDerived previous = this.Master;
+                AI_MasterDerived previous;
+                if ((this._master != null))
+                {
+                    previous = this._master.Entity;
+                }
+                else
+                {
+                    this._master = new EntityRef<AI_MasterDerived>(this, "Master", this.FilterMaster);
+                    if ((value == null))
+                    {
+                        previous = this._master.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Master", value);
@@ -318,7 +350,23 @@ namespace TestDomainServices
             }
             set
             {
-                AI_MasterDerived previous = this.Master;
+                AI_MasterDerived previous;
+                if ((this._master != null))
+                {
+                    previous = this._master.Entity;
+                }
+                else
+                {
+                    this._master = new EntityRef<AI_MasterDerived>(this, "Master", this.FilterMaster);
+                    if ((value == null))
+                    {
+                        previous = this._master.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Master", value);
@@ -395,7 +443,23 @@ namespace TestDomainServices
             }
             set
             {
-                AI_MasterDerived previous = this.Master;
+                AI_MasterDerived previous;
+                if ((this._master != null))
+                {
+                    previous = this._master.Entity;
+                }
+                else
+                {
+                    this._master = new EntityRef<AI_MasterDerived>(this, "Master", this.FilterMaster);
+                    if ((value == null))
+                    {
+                        previous = this._master.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Master", value);
@@ -577,7 +641,23 @@ namespace TestDomainServices
             }
             set
             {
-                AI_DetailDerived3 previous = this.DetailDerived3;
+                AI_DetailDerived3 previous;
+                if ((this._detailDerived3 != null))
+                {
+                    previous = this._detailDerived3.Entity;
+                }
+                else
+                {
+                    this._detailDerived3 = new EntityRef<AI_DetailDerived3>(this, "DetailDerived3", this.FilterDetailDerived3);
+                    if ((value == null))
+                    {
+                        previous = this._detailDerived3.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("DetailDerived3", value);
@@ -612,7 +692,23 @@ namespace TestDomainServices
             }
             set
             {
-                AI_DetailDerived4 previous = this.DetailDerived4;
+                AI_DetailDerived4 previous;
+                if ((this._detailDerived4 != null))
+                {
+                    previous = this._detailDerived4.Entity;
+                }
+                else
+                {
+                    this._detailDerived4 = new EntityRef<AI_DetailDerived4>(this, "DetailDerived4", this.FilterDetailDerived4);
+                    if ((value == null))
+                    {
+                        previous = this._detailDerived4.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("DetailDerived4", value);
@@ -1038,7 +1134,23 @@ namespace TestDomainServices
             }
             set
             {
-                CI_Parent previous = this.Parent;
+                CI_Parent previous;
+                if ((this._parent != null))
+                {
+                    previous = this._parent.Entity;
+                }
+                else
+                {
+                    this._parent = new EntityRef<CI_Parent>(this, "Parent", this.FilterParent);
+                    if ((value == null))
+                    {
+                        previous = this._parent.Entity;
+                    }
+                    else
+                    {
+                        previous = null;
+                    }
+                }
                 if ((previous != value))
                 {
                     this.ValidateProperty("Parent", value);
