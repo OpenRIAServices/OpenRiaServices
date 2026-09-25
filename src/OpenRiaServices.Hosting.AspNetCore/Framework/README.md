@@ -1,11 +1,10 @@
 ﻿[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
 
-This software will allow existing applications written for OpenRiaServices or WCF RIA Services to run on net6 and kestrel,
+This software will allow existing applications written for OpenRiaServices or WCF RIA Services to run on .NET and kestrel,
 making them future proof and improving their performance. 
 
 **Hopefully it will allow you as a consumer to make large savings in development time**, weeks or even man years,
 by not having to rewrite your application as well as allowing rapid development.
-
 
 The software is provided free of charge, but **I urge you to use some of the money saved by using this software [to support Ukraine](https://stand-with-ukraine.pp.ua/)**
 The civilian suffering due to the Russian invasion, the attacks on hospitals and other war crimes are enormous.
@@ -24,21 +23,14 @@ This excludes usage by the Russian state, Russian state-owned companies, Russian
 - You allow anonymized telemetry to collected and sent during the preview releases to gather feedback about usage
 
 
-## Sample
-
-There is no documentation except for this yet readme, please see AspNetCoreWebsite project in repository for usage.
-
-* For a sample see [WpfCore_AspNetCore in Samples repository](https://github.com/OpenRIAServices/Samples/tree/main/WpfCore_AspNetCore)
-
-
 ## Getting Started
 
-1. Create a new dotnet 6 web application `dotnet new web` or similar
+1. Create a new dotnet web application `dotnet new web` or similar
 2. Add a reference to *OpenRiaServices.Hosting.AspNetCore*
     `dotnet add package OpenRiaServices.Hosting.AspNetCore`
 3.   Add a reference to *OpenRiaServices.Server*
 
-4. Add one or more domainservices
+4. Add one or more DomainServices
 
 
 ```csharp
@@ -141,6 +133,31 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices()
     .AddMessagePackSerialization();
 ```
+
+### Performance tuning
+
+Kestrel limits can be tuned to improve performance for a particular application scenario.
+For HTTP/2 applications, the flow-control window sizes may be worth adjusting when transferring large responses.
+See the [ASP.NET Core gRPC performance guidance on flow control](https://learn.microsoft.com/aspnet/core/grpc/performance?view=aspnetcore-10.0#flow-control) for details;
+the same HTTP/2 flow-control concepts apply to OpenRiaServices RPC calls.
+
+For example, Kestrel's HTTP/2 stream and connection window sizes can be configured as follows:
+
+```csharp
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.Http2.InitialStreamWindowSize = 2 * 1024 * 1024;
+    options.Limits.Http2.InitialConnectionWindowSize = 4 * 1024 * 1024;
+});
+```
+
+Measure with representative workloads before changing limits, since the best values depend on the application and available resources.
+
+#### MessagePack client responses
+
+The MessagePack client's `ResponsePipeReaderOptions` can be configured to adjust buffering.
+For large responses, increasing the buffer size may improve performance.
+See the [Changelog](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md#client-openriaservicesclientdomainclientshttp) for configuration details and an example.
 
 #### Known limitations
 
@@ -338,7 +355,7 @@ public class MyAuthenticationService : DomainService, IAuthentication<MyUser>
 Sample showing how to integrate the [OutputCache middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output?view=aspnetcore-7.0) 
 **WARNING:** Se caching documentation and ensure that any usage of output cache is not sent to the wrong user.
 
-```
+```csharp
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();
 builder.Services.AddOutputCache(options =>
@@ -367,3 +384,8 @@ public class CacheTestDomainService : DomainService
 }
 
 ```` 
+
+## Sample
+
+There is no documentation except for this readme, please see AspNetCoreWebsite project in repository for usage.
+* For a sample see [WpfCore_AspNetCore in Samples repository](https://github.com/OpenRIAServices/Samples/tree/main/WpfCore_AspNetCore)
