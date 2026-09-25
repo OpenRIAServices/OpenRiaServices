@@ -1,11 +1,10 @@
 ﻿[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
 
-This software will allow existing applications written for OpenRiaServices or WCF RIA Services to run on net6 and kestrel,
+This software will allow existing applications written for OpenRiaServices or WCF RIA Services to run on .NET and kestrel,
 making them future proof and improving their performance. 
 
 **Hopefully it will allow you as a consumer to make large savings in development time**, weeks or even man years,
 by not having to rewrite your application as well as allowing rapid development.
-
 
 The software is provided free of charge, but **I urge you to use some of the money saved by using this software [to support Ukraine](https://stand-with-ukraine.pp.ua/)**
 The civilian suffering due to the Russian invasion, the attacks on hospitals and other war crimes are enormous.
@@ -24,22 +23,17 @@ This excludes usage by the Russian state, Russian state-owned companies, Russian
 - You allow anonymized telemetry to collected and sent during the preview releases to gather feedback about usage
 
 
-## Sample
-
-There is no documentation except for this yet readme, please see AspNetCoreWebsite project in repository for usage.
-
-* For a sample see [WpfCore_AspNetCore in Samples repository](https://github.com/OpenRIAServices/Samples/tree/main/WpfCore_AspNetCore)
-
-
 ## Getting Started
 
-1. Create a new dotnet 6 web application `dotnet new web` or similar
-2. Add a reference to *OpenRiaServices.Hosting.AspNetCore*
-    `dotnet add package OpenRiaServices.Hosting.AspNetCore`
-3.   Add a reference to *OpenRiaServices.Server*
+1. Create a new .NET web application, for example, by running `dotnet new web`.
+2. Add the `OpenRiaServices.Hosting.AspNetCore` package:
 
-4. Add one or more domainservices
+   ```sh
+   dotnet add package OpenRiaServices.Hosting.AspNetCore
+   ```
+3. Add a reference to `OpenRiaServices.Server`.
 
+4. Add one or more domain services:
 
 ```csharp
 [EnableClientAccess]
@@ -48,10 +42,9 @@ public class CityDomainService : DomainService
     /* .....  */
 }
 ```
-For more documentation see https://openriaservices.gitbook.io/openriaservices/ee707348/ee707373 or samples
-https://github.com/OpenRIAServices/OpenRiaServices/blob/086ea8c8fcb115000749be6b2b01cd43bb95bf80/docs/gg602754.md#add-the-poco-class
+For more information, see the [OpenRiaServices documentation](https://openriaservices.gitbook.io/openriaservices/ee707348/ee707373) and the [domain service sample](https://github.com/OpenRIAServices/OpenRiaServices/blob/086ea8c8fcb115000749be6b2b01cd43bb95bf80/docs/gg602754.md#add-the-poco-class).
 
-5. Setup hosting integration
+5. Set up hosting integration.
 
 Sample program:
 
@@ -68,11 +61,12 @@ builder.Services.AddDomainService<CityDomainService>();
 
 var app = builder.Build();
 
-// Map OpenRiaServices routes , you can optionally add a prefix such as "/Services"
-// This will automatically map all DomainServices that are registered in builder.Services
-// Using routes similar to $"{DomainServiceName}/{MethodName}"
+// Map OpenRiaServices routes, optionally with a prefix such as "/Services".
+// This maps all DomainServices registered in builder.Services, using routes
+// similar to $"{DomainServiceName}/{MethodName}".
 app.MapOpenRiaServices();
-// OR app.MapOpenRiaServices(builder => { builder.AddDomainService<CityDomainService>(); }); to specify exactly the DomainServices to map which works better with Trimming
+// Alternatively, specify the DomainServices to map explicitly. This works better with trimming:
+// app.MapOpenRiaServices(builder => { builder.AddDomainService<CityDomainService>(); });
 
 app.Run();
 ```
@@ -81,23 +75,24 @@ app.Run();
 
 ### Configuring Hosting Options
 
-You can configure the hosting options by passing a callback to `AddOpenRiaServices` method.
+You can configure the hosting options by passing a callback to the `AddOpenRiaServices` method.
 
 Options include:
+
 - `ExceptionHandler` - A delegate that can be used to handle exceptions that occur during the execution of a DomainService method.
-    - It allows customizing the error message, and error code that is sent to the client as well as the HTTP status code.
+    - It lets you customize the error message and error code sent to the client, as well as the HTTP status code.
 - `IncludeExceptionMessageInErrors` - A boolean that determines if the exception message should be included in the error response.
    - **WARNING**: Exposing this information might help a hacker. It is generally better to use the `ExceptionHandler` and 
     ensuring that the message is not passed on to the client is "safe" and does not give to much information about the system to a potential hacker.
 - `IncludeExceptionStackTraceInErrors` - A boolean that determines if the exception stack trace should be included in the error response. 
-   - **WARNING**: This is considered INSECURE and is *NOT* *recommended for production use as it would gives an attacker detailed information about your system
+   - **Warning:** This is INSECURE and *NOT* recommended for production because stack traces can reveal detailed information about your system.
 
 Example setup:
 ```csharp
 builder.Services.AddOpenRiaServices(o => {
     o.ExceptionHandler = (context, response) =>
     {
-        // Pass all exceptions to client
+        // Send all exception messages to the client.
         response.ErrorMessage ??= context.Exception.Message;
     };
  
@@ -116,7 +111,7 @@ builder.Services.AddOpenRiaServices(o => {
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices(o => { } )
+builder.Services.AddOpenRiaServices()
     .AddXmlSerialization();
 ```
 
@@ -132,40 +127,10 @@ builder.Services.AddOpenRiaServices(o => { } )
     .AddXmlSerialization();
 ```
 
-### Supporting MessagePack wire format
-
-MessagePack can be enabled as an additional format using MIME type `application/vnd.msgpack`.
-
-```csharp
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices()
-    .AddMessagePackSerialization();
-```
-
-#### Known limitations
-
-The following types are **not** supported out of the box and require custom `MessagePackConverter<T>` implementations registered via `MessagePackSerializationOptions.Serializer.Converters`:
-
-- **`System.Xml.Linq.XElement`** — not handled by the default serializer. See the [XElementConverter sample](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/src/Test/AspNetCoreWebsite/MessagePack/XElementConverter.cs) for a reference implementation that serialises the element as a plain XML string.
-- **`System.Data.Linq.Binary`** — not handled by the default serializer. See the [BinaryConverter sample](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/src/Test/AspNetCoreWebsite/MessagePack/BinaryConverter.cs) for a reference implementation.
-
-Register the converters by passing a configuration callback:
-
-```csharp
-builder.Services.AddOpenRiaServices()
-    .AddMessagePackSerialization(opt =>
-    {
-        opt.Serializer = new Nerdbank.MessagePack.MessagePackSerializer()
-        {
-            Converters = [new XElementConverter(), new BinaryConverter()],
-        };
-    });
-```
-
-### Configuring serializer security quotas
+#### Configuring XML serializer security quotas
 
 You can configure reader quotas to limit resource consumption and mitigate denial-of-service (DoS) attacks.
-By default all quotas are set to their maximum values to preserve backward compatibility.
+By default, all quotas are set to their maximum values for backward compatibility.
 
 **Configure XML serialization quotas:**
 
@@ -199,6 +164,63 @@ builder.Services.AddOpenRiaServices()
     });
 ```
 
+### Supporting MessagePack wire format
+
+MessagePack can be enabled as an additional format using MIME type `application/vnd.msgpack`.
+
+```csharp
+var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddOpenRiaServices()
+    .AddMessagePackSerialization();
+```
+
+### Performance tuning
+
+Kestrel limits can be tuned to improve performance for a particular application scenario.
+For HTTP/2 applications, the flow-control window sizes may be worth adjusting when transferring large responses.
+See the [ASP.NET Core gRPC performance guidance on flow control](https://learn.microsoft.com/aspnet/core/grpc/performance?view=aspnetcore-10.0#flow-control) for details;
+the same HTTP/2 flow-control concepts apply to OpenRiaServices RPC calls.
+
+For example, Kestrel's HTTP/2 stream and connection window sizes can be configured as follows:
+
+```csharp
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.Http2.InitialStreamWindowSize = 2 * 1024 * 1024;
+    options.Limits.Http2.InitialConnectionWindowSize = 4 * 1024 * 1024;
+});
+```
+
+Measure with representative workloads before changing limits, since the best values depend on the application and available resources.
+
+#### MessagePack client responses
+
+The MessagePack client's `ResponsePipeReaderOptions` can be configured to adjust buffering.
+For large responses, increasing the buffer size may improve performance.
+See the [Changelog](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md#client-openriaservicesclientdomainclientshttp) for configuration details and an example.
+
+#### Known limitations
+
+The following types are **not** supported by the default serializer. To use them, implement custom `MessagePackConverter<T>` converters and register them in `MessagePackSerializationOptions.Serializer.Converters`:
+
+- **`System.Xml.Linq.XElement`** — See the [XElementConverter sample](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/src/Test/AspNetCoreWebsite/MessagePack/XElementConverter.cs) for a reference implementation that serializes the element as a plain XML string.
+- **`System.Data.Linq.Binary`** — See the [BinaryConverter sample](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/src/Test/AspNetCoreWebsite/MessagePack/BinaryConverter.cs) for a reference implementation.
+
+Register the converters by passing a configuration callback:
+
+```csharp
+builder.Services.AddOpenRiaServices()
+    .AddMessagePackSerialization(opt =>
+    {
+        opt.Serializer = new Nerdbank.MessagePack.MessagePackSerializer()
+        {
+            Converters = [new XElementConverter(), new BinaryConverter()],
+        };
+    });
+```
+
+
+
 ### Simple struct parameters and keys
 
 Simple structs can be used in query/custom/invoke operation signatures when they have one or more public readable properties of predefined simple types.
@@ -216,11 +238,11 @@ You do this by adding the `DomainServiceEndpointRoutePattern` attribute to your 
      (since the code generation cannot know what project is the startup project, 
     it will always treat the "LinkedServerProject" as the startup project)
    
-The options are `WCF`, `FullName` and `ShortName`.
- * `WCF` will generate the same routes as WCF RIA Services `Some-Namespace-TypeName.svc/binary/Method`
-    * This is the only option that works with the (obsolete) WCF based DomainClient
- * `FullName` will generate routes with the full name of the DomainService `Some-Namespace-TypeName/Method`
- * `Name` will generate routes with the short name of the DomainService `TypeName/Method`
+The options are `WCF`, `FullName`, and `Name`:
+
+- `WCF` generates routes compatible with WCF RIA Services, such as `Some-Namespace-TypeName.svc/binary/Method`. This is the only option supported by the obsolete WCF-based `DomainClient`.
+- `FullName` generates routes using the full DomainService name, such as `Some-Namespace-TypeName/Method`.
+- `Name` generates routes using the short DomainService name, such as `TypeName/Method`.
 
 The default will be changed to `FullName` which is the same as in WCF RIA Services.
 ```csharp
@@ -267,7 +289,7 @@ You will need to tweak it so it validates credentials, assign correct Claims (Ro
 
 
 #### Authentication: Client setup
-For the client, **you need to ensure that all HttpClients share the same CookieContainer** and that the it is set to use to cookies (https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclienthandler.usecookies?view=net-7.0#system-net-http-httpclienthandler-usecookies)
+On the client, ensure that all `HttpClient` instances share the same `CookieContainer` and that the handler is configured to use cookies ([`HttpClientHandler.UseCookies`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclienthandler.usecookies?view=net-7.0#system-net-http-httpclienthandler-usecookies)).
 
 #### Authentication: Asp.Net Core Setup Authentication and Authorization setup
 
@@ -314,7 +336,7 @@ app.MapOpenRiaServices(builder =>
 }).RequireAuthorization();
 ```
 
-You can also control the setting per DomainService using code
+You can also configure authorization for an individual DomainService in code:
 ```csharp
 app.MapOpenRiaServices(builder =>
 {
@@ -323,7 +345,7 @@ app.MapOpenRiaServices(builder =>
 });
 ```
 
-You can also control the setting per DomainService using attributes
+You can also configure authorization for an individual DomainService using attributes:
 ```csharp
 [Authorize]
 public class MyAuthenticationService : DomainService, IAuthentication<MyUser>
@@ -335,15 +357,15 @@ public class MyAuthenticationService : DomainService, IAuthentication<MyUser>
 
 ###  Output Cache Integration
 
-Sample showing how to integrate the [OutputCache middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output?view=aspnetcore-7.0) 
-**WARNING:** Se caching documentation and ensure that any usage of output cache is not sent to the wrong user.
+This example shows how to integrate the [output cache middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output?view=aspnetcore-7.0).
+**Warning:** Read the caching documentation and ensure that cached responses are not served to the wrong user.
 
-```
+```csharp
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices();
 builder.Services.AddOutputCache(options =>
 {
-    options.AddBasePolicy(builder => builder.NoCache());
+    options.AddBasePolicy(policy => policy.NoCache());
 });
 
 builder.Services.AddDomainService<CacheTestDomainService>();
@@ -366,4 +388,8 @@ public class CacheTestDomainService : DomainService
         => DateTime.Now.ToString();
 }
 
-```` 
+```
+
+## Sample
+
+For additional usage examples, see the `AspNetCoreWebsite` project in this repository and the [WpfCore_AspNetCore sample](https://github.com/OpenRIAServices/Samples/tree/main/WpfCore_AspNetCore) in the Samples repository.
