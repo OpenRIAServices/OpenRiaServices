@@ -97,10 +97,13 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
         public override async Task WriteErrorAsync(HttpContext context, DomainServiceFault fault, DomainOperationEntry operation)
         {
             context.Response.Headers.ContentType = MimeTypes.MessagePack;
+
+            await context.Response.StartAsync();
             await _operationSerializer.SerializeAsync(
-                context.Response.Body,
+                context.Response.BodyWriter,
                 new MessagePackFaultResponse { Fault = fault },
                 context.RequestAborted).ConfigureAwait(false);
+            await context.Response.CompleteAsync();
         }
 
 
@@ -120,11 +123,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack
         private async Task WriteEnvelopeAsync(HttpContext context, MessagePackResponseEnvelopeBase envelope)
         {
             context.Response.Headers.ContentType = MimeTypes.MessagePack;
+
+            await context.Response.StartAsync();
             await _operationSerializer.SerializeObjectAsync(
                 context.Response.BodyWriter,
                 envelope,
                 _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()),
                 context.RequestAborted).ConfigureAwait(false);
+            await context.Response.CompleteAsync();
         }
 
         private async Task<MessagePackRequestEnvelope> DeserializeRequestEnvelopeAsync(HttpContext context, DomainOperationEntry operation)
