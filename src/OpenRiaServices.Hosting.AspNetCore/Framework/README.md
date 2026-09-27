@@ -1,17 +1,16 @@
 ﻿[![Stand With Ukraine](https://raw.githubusercontent.com/vshymanskyy/StandWithUkraine/main/banner2-direct.svg)](https://vshymanskyy.github.io/StandWithUkraine)
 
-This software will allow existing applications written for OpenRiaServices or WCF RIA Services to run on .NET and kestrel,
-making them future proof and improving their performance. 
+# ⚡ **Blazing-fast** ASP.NET Core hosting for OpenRiaServices
+
+This software allows existing applications written for OpenRiaServices or WCF RIA Services to run on .NET with Kestrel.
 
 **Hopefully it will allow you as a consumer to make large savings in development time**, weeks or even man years,
-by not having to rewrite your application as well as allowing rapid development.
+by not having to rewrite your application as well as allowing rapid development. <br/>
+The software is provided free of charge, but **I urge you to use some of the money saved by using it [to support Ukraine](https://stand-with-ukraine.pp.ua/)**.
 
-The software is provided free of charge, but **I urge you to use some of the money saved by using this software [to support Ukraine](https://stand-with-ukraine.pp.ua/)**
-The civilian suffering due to the Russian invasion, the attacks on hospitals and other war crimes are enormous.
+## Terms of Use
 
-## TERM OF USE
-
-By using this project or its source code, for any purpose and in any shape or form, you grant your **agreement** to all the following statements:
+By using this project or its source code for any purpose, you agree to all of the following:
 
 - You **condemn Russia and its military aggression against Ukraine**
 - You **recognize that Russia is an occupant that unlawfully invaded a sovereign state**
@@ -20,7 +19,7 @@ By using this project or its source code, for any purpose and in any shape or fo
 
 This excludes usage by the Russian state, Russian state-owned companies, Russian education who spread propaganda instead of truth, anyone who work with the *filtration camps*, or finance the war by importing Russian oil or gas.
 
-- You allow anonymized telemetry to collected and sent during the preview releases to gather feedback about usage
+- You allow anonymized telemetry to be collected and sent during preview releases to gather feedback about usage.
 
 
 ## Getting Started
@@ -96,33 +95,40 @@ builder.Services.AddOpenRiaServices(o => {
         response.ErrorMessage ??= context.Exception.Message;
     };
  
-    // There is at least one test which test that checks that calls stacks of normal exceptions are passed to the client
-    // To get StackTrack of "normal" exceptions we need to pass them on to the user, as well as include stack traces
     o.IncludeExceptionMessageInErrors = true;
+    // INSECURE, see warning above. Only use this for debugging purposes.
     o.IncludeExceptionStackTraceInErrors = true;
 });
 ```
 
 ### Supporting different serialization formats (Text Xml)
 
-* Support for XML serialization was added in 1.4.0 as an alternative to binary serialization format (#546)
-  * Server can now intelligently handles both binary and XML content types based on client requests and configuration settings
+The default serialization format is binary XML, which is compatible with WCF RIA Services.
+You can remove the built-in serialization providers by calling `ClearSerializationProviders`.
 
+* Version 1.6.0 added support for high performance MessagePack serialization.
+* Version 1.4.0 added text XML serialization
+
+The server selects the serialization format based on the request content type and the configured providers.
+
+### Supporting MessagePack wire format
+
+MessagePack can be enabled as an additional format using MIME type `application/vnd.msgpack`. <br />
+Just add a call to `AddMessagePackSerialization` when configuring OpenRiaServices:
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices()
-    .AddXmlSerialization();
+    .AddMessagePackSerialization();
 ```
 
-You can remove default built in formats by calling `ClearSerializationProviders`.
+#### Text XML serialization
 
-The following sample will only accept and return plain text based xml
-using MIME-type `application/xml`
+XML serialization was added in version 1.4.0 as an alternative to binary serialization (#546).
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices(o => { } )
+builder.Services.AddOpenRiaServices()
     .ClearSerializationProviders()
     .AddXmlSerialization();
 ```
@@ -131,22 +137,6 @@ builder.Services.AddOpenRiaServices(o => { } )
 
 You can configure reader quotas to limit resource consumption and mitigate denial-of-service (DoS) attacks.
 By default, all quotas are set to their maximum values for backward compatibility.
-
-**Configure XML serialization quotas:**
-
-```csharp
-var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddOpenRiaServices()
-    .AddXmlSerialization(options =>
-    {
-        options.ReaderQuotas = new System.Xml.XmlDictionaryReaderQuotas
-        {
-            MaxStringContentLength = 1024 * 1024, // 1 MB
-            MaxArrayLength = 65536,
-            MaxDepth = 32,
-        };
-    });
-```
 
 **Configure binary XML serialization quotas (for the default binary provider):**
 
@@ -164,21 +154,28 @@ builder.Services.AddOpenRiaServices()
     });
 ```
 
-### Supporting MessagePack wire format
-
-MessagePack can be enabled as an additional format using MIME type `application/vnd.msgpack`.
+**Configure Text XML serialization quotas:**
 
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices()
-    .AddMessagePackSerialization();
+    .AddXmlSerialization(options =>
+    {
+        options.ReaderQuotas = new System.Xml.XmlDictionaryReaderQuotas
+        {
+            MaxStringContentLength = 1024 * 1024, // 1 MB
+            MaxArrayLength = 65536,
+            MaxDepth = 32,
+        };
+    });
 ```
+
 
 ### Performance tuning
 
 Kestrel limits can be tuned to improve performance for a particular application scenario.
 For HTTP/2 applications, the flow-control window sizes may be worth adjusting when transferring large responses.
-See the [ASP.NET Core gRPC performance guidance on flow control](https://learn.microsoft.com/aspnet/core/grpc/performance?view=aspnetcore-10.0#flow-control) for details;
+See the [ASP.NET Core gRPC performance guidance on flow control](https://learn.microsoft.com/aspnet/core/grpc/performance#flow-control) for details;
 the same HTTP/2 flow-control concepts apply to OpenRiaServices RPC calls.
 
 For example, Kestrel's HTTP/2 stream and connection window sizes can be configured as follows:
@@ -191,7 +188,7 @@ builder.WebHost.ConfigureKestrel(options =>
 });
 ```
 
-Measure with representative workloads before changing limits, since the best values depend on the application and available resources.
+Measure with representative workloads before changing limits, since the best values depend on the application, latency and available resources.
 
 #### MessagePack client responses
 
@@ -231,12 +228,10 @@ The struct must also be compatible with the configured transport serializer; wit
 
 ### Specifying endpoint routes
 
-You can choose between 3 different approaches to how the endpoint routes are generated.
-You do this by adding the `DomainServiceEndpointRoutePattern` attribute to your assembly.
-   - If the attribute is defined in the assembly of a specific DomainService, then that will be used
-   - Otherwise if there is an attribute in the "startup" assembly then that will be used 
-     (since the code generation cannot know what project is the startup project, 
-    it will always treat the "LinkedServerProject" as the startup project)
+You can choose among three endpoint route patterns by adding the `DomainServiceEndpointRoutePattern` attribute to an assembly:
+
+- If the attribute is defined in the DomainService's assembly, that pattern is used.
+- Otherwise, the pattern from the startup assembly is used. Because code generation cannot identify the startup project, it treats the `LinkedServerProject` as the startup project.
    
 The options are `WCF`, `FullName`, and `Name`:
 
@@ -263,25 +258,22 @@ app.MapOpenRiaServices(builder =>
 });
 ```
 
-## Asp.Net Core integration
+## ASP.NET Core integration
 
-Since 0.4.0 any attivbute applied to Invoke/Query are added to the corresponding AspNetCore-Endpoint allowing the use 
-of any AspNetCore endpoint middleware (not MVC specific filters, they must work with "minimal api's").
+Since version 0.4.0, attributes applied to `Invoke` and `Query` operations are added to the corresponding ASP.NET Core endpoints.
+This lets you use ASP.NET Core endpoint middleware.
 
-This means you can use standard [aspnetcore Authentication and Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/?view=aspnetcore-7.0)
-to validate most requests (but **NOT** indivudual Insert,Update,Delete methods, you can apply atttributes to your DomainService class for those).
-The validation will happen before the DomainService is even created, making them more powerful than built in attributes.
+This means you can use standard [ASP.NET Core authentication and authorization](https://learn.microsoft.com/en-us/aspnet/core/security/) to validate most requests.
+This does not apply to individual `Insert`, `Update`, or `Delete` operations; apply the attributes to the DomainService class to protect those operations.
+Authorization middleware runs before the DomainService is created, avoiding the cost of creating the service and its dependencies.
 
 You can still (and probably should) use the OpenRiaServices specific attributes such as `[RequiresAuthentication]` or [your own Authorization attributes](https://openriaservices.gitbook.io/openriaservices/ee707361/ee707357)
-[Simple authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple?view=aspnetcore-7.0), which works on all methods.
+[Simple authorization](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/simple), which works on all methods.
 
 
 
-### AspNetCore Authentication and Authorization
 
-You can use standard [aspnetcore Authentication and Authorization](https://learn.microsoft.com/en-us/aspnet/core/security/?view=aspnetcore-7.0)
-to validate most requests (but **NOT** indivudual Insert, Update, Delete methods, you can apply atttributes to your DomainService class for those).
-The validation will happen before the DomainService is even created, making them more powerful than built in attributes.
+### ASP.NET Core authentication and authorization
 
 The **[AspNetCore Sample](https://github.com/OpenRIAServices/Samples/tree/main/WpfCore_AspNetCore)** shows how cookie based login similar to ASP.NET Membership provider *can* be handled.
 The change was added in [#16: Add AspNetCore AuthenticationService](https://github.com/OpenRIAServices/Samples/pull/16)
@@ -289,9 +281,9 @@ You will need to tweak it so it validates credentials, assign correct Claims (Ro
 
 
 #### Authentication: Client setup
-On the client, ensure that all `HttpClient` instances share the same `CookieContainer` and that the handler is configured to use cookies ([`HttpClientHandler.UseCookies`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclienthandler.usecookies?view=net-7.0#system-net-http-httpclienthandler-usecookies)).
+On the client, ensure that all `HttpClient` instances share the same `CookieContainer` and that the handler is configured to use cookies ([`HttpClientHandler.UseCookies`](https://learn.microsoft.com/en-us/dotnet/api/system.net.http.httpclienthandler.usecookies#system-net-http-httpclienthandler-usecookies)).
 
-#### Authentication: Asp.Net Core Setup Authentication and Authorization setup
+#### Authentication: ASP.NET Core setup
 
 In Program.cs the following code is needed
 
@@ -305,8 +297,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddAuthorization();
 ```
 
-After the "application has been built" and the middleware is configured you should add Authentication (and Authorization if used).
-They should be added **before** *OpenRiaServices*
+After configuring services, add authentication (and authorization, if used) before mapping OpenRiaServices endpoints:
 
 ```csharp
 // Add authentication
@@ -314,19 +305,19 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 // Enable OpenRiaServices
-app.MapOpenRiaServices(....
+app.MapOpenRiaServices(...);
 ```
 
 #### Authorization: Protecting DomainServices using Authorization middleware
 
-A good idea is to protect your DomainServices, all of them or individual, by requiring authorization.
-The [Authorization middleware](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/introduction) should run before the DomainService is created so you will avoid any cost with creating the DomainService and it's dependencies, providing a much better protection against DOS.
+Protect all DomainServices or individual services by requiring authorization.
+The [authorization middleware](https://learn.microsoft.com/en-us/aspnet/core/security/authorization/introduction) should run before the DomainService is created, avoiding the cost of creating the service and its dependencies and helping protect against denial-of-service (DoS) attacks.
 
 **IMPORANT**: error message on the client will be different and not as user friendly as if the `[RequiresAuthentication]` attribute is used.
 You might want to consider changing the HTTP status code to match 401 or similar instead of 404 (when it tries to redirect to missing "/Account/Login" endpoint) 
 **Note**: If you need to selectivly only require authentication for some Submit operations (Insert, Update, Delete or Entity Action) then remember to use `[RequiresAuthentication]`
 
-**Require request to all DomainServices be authorized using default authorization policy**:
+**Example: Require authorization for requests to all mapped DomainServices using the default policy:**
 
 ```csharp
 app.MapOpenRiaServices(builder =>
@@ -355,9 +346,9 @@ public class MyAuthenticationService : DomainService, IAuthentication<MyUser>
 ```
 
 
-###  Output Cache Integration
+### Output cache integration
 
-This example shows how to integrate the [output cache middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output?view=aspnetcore-7.0).
+This example shows how to integrate the [output cache middleware](https://learn.microsoft.com/en-us/aspnet/core/performance/caching/output).
 **Warning:** Read the caching documentation and ensure that cached responses are not served to the wrong user.
 
 ```csharp
