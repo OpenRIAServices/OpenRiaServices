@@ -129,7 +129,6 @@ XML serialization was added in version 1.4.0 as an alternative to binary seriali
 ```csharp
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddOpenRiaServices()
-    .ClearSerializationProviders()
     .AddXmlSerialization();
 ```
 
@@ -239,7 +238,7 @@ The options are `WCF`, `FullName`, and `Name`:
 - `FullName` generates routes using the full DomainService name, such as `Some-Namespace-TypeName/Method`.
 - `Name` generates routes using the short DomainService name, such as `TypeName/Method`.
 
-The default will be changed to `FullName` which is the same as in WCF RIA Services.
+The current default is `WCF`; the default is planned to change to `FullName`.
 ```csharp
 [assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.WCF)]
 // or 
