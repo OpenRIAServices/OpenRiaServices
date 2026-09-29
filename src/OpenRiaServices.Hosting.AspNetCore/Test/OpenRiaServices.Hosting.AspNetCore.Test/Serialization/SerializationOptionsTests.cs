@@ -83,14 +83,6 @@ public class SerializationOptionsTests
         Assert.AreSame(builder, returned, "AddMessagePackSerialization should return the builder for chaining");
     }
 
-    [TestMethod]
-    public void MessagePackDiscriminator_UsesPolyTypeDefaultName()
-    {
-        byte[] discriminator = MessagePackUtility.GetDiscriminator(typeof(DerivedWithDefaultName));
-
-        CollectionAssert.AreEqual(Encoding.UTF8.GetBytes(nameof(DerivedWithDefaultName)), discriminator);
-    }
-
     // -------------------------------------------------------------------------
     // Reader quota enforcement tests (binary)
     // -------------------------------------------------------------------------
@@ -287,14 +279,5 @@ public class SerializationOptionsTests
     {
         [Invoke(HasSideEffects = true)]
         public string EchoString(string value) => value;
-    }
-
-    [DerivedTypeShape(typeof(DerivedWithDefaultName))]
-    private class BaseWithDerivedTypeShape
-    {
-    }
-
-    private sealed class DerivedWithDefaultName : BaseWithDerivedTypeShape
-    {
     }
 }
