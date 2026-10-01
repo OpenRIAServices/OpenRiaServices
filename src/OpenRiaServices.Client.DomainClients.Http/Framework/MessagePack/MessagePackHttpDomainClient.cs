@@ -1,20 +1,17 @@
-using Nerdbank.MessagePack;
-using OpenRiaServices.Client.DomainClients.Http;
-using OpenRiaServices.Client.DomainClients.MessagePack.Converters;
-using PolyType;
-using PolyType.ReflectionProvider;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.IO;
+using System.IO.Pipelines;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
-using System.Reflection;
 using System.ServiceModel;
 using System.Threading;
 using System.Threading.Tasks;
+using Nerdbank.MessagePack;
+using OpenRiaServices.Client.DomainClients.Http;
+using PolyType;
 
 namespace OpenRiaServices.Client.DomainClients.MessagePack
 {
@@ -36,6 +33,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
         {
             _typeShapeProvider = factory.TypeShapeProvider;
             _factory = factory;
+            base.DefaultHttpCompletionOption = HttpCompletionOption.ResponseHeadersRead;
         }
 
         private protected override Task<HttpResponseMessage> PostAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
@@ -53,13 +51,15 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             using var stream = new MemoryStream();
             // TODO: If possible, replace this buffering with a custom HttpContent override of SerializeToStream
             // so the request payload can be serialized asynchronously directly to the outgoing request stream.
-            await Serializer.SerializeObjectAsync(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken).ConfigureAwait(false);
+            Serializer.SerializeObject(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken);
 
-            var bytes = stream.ToArray();
-            request.Content = new ByteArrayContent(bytes);
+            if (!stream.TryGetBuffer(out ArraySegment<byte> buffer))
+                buffer = new ArraySegment<byte>(stream.ToArray());
+
+            request.Content = new ByteArrayContent(buffer.Array, buffer.Offset, buffer.Count);
             request.Content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(MediaType);
 
-            return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseContentRead, cancellationToken).ConfigureAwait(false);
+            return await HttpClient.SendAsync(request, HttpCompletionOption.ResponseHeadersRead, cancellationToken).ConfigureAwait(false);
         }
 
         private static MessagePackRequestEnvelopeBase CreateRequestEnvelope(string operationName, MethodParameters methodParameters, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions)
@@ -94,7 +94,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 : new MessagePackInvokeRequestEnvelope() { Parameters = requestParameters };
         }
 
-        private protected override async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType)
+        private protected override async Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType, CancellationToken cancellationToken)
         {
             using (response)
             {
@@ -113,12 +113,25 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 }
 
 
-                using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
                 Type envelopeType = GetResponseEnvelopeType(operationName, returnType);
                 var typeShape = _typeShapeProvider.GetTypeShapeOrThrow(envelopeType);
 
-                var envelope = (MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(stream, typeShape).ConfigureAwait(false)
-                    ?? (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
+                MessagePackResponseEnvelopeBase envelope;
+#if NET
+                using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
+#else
+                using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
+#endif
+                PipeReader pipeReader = PipeReader.Create(stream, _factory.ResponsePipeReaderOptions);
+                try
+                {
+                    envelope = ((MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(pipeReader, typeShape, cancellationToken).ConfigureAwait(false))
+                        ?? (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
+                }
+                finally
+                {
+                    await pipeReader.CompleteAsync().ConfigureAwait(false);
+                }
 
                 if (envelope.Fault is not null)
                 {

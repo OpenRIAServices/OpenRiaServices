@@ -38,7 +38,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// Evaluates and replaces sub-trees when first candidate is reached (top-down)
         /// </summary>
-        private class SubtreeEvaluator : ExpressionVisitor
+        private sealed class SubtreeEvaluator : ExpressionVisitor
         {
             private readonly Dictionary<Expression, bool> _candidates;
 
@@ -97,7 +97,7 @@ namespace OpenRiaServices.Client
         /// Performs bottom-up analysis to determine which nodes can possibly
         /// be part of an evaluated sub-tree.
         /// </summary>
-        private class Nominator : ExpressionVisitor
+        private sealed class Nominator : ExpressionVisitor
         {
             private Dictionary<Expression, bool> _candidates;
             private readonly Func<Expression, bool> _funcCanBeEvaluated;

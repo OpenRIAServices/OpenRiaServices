@@ -32,11 +32,12 @@ Some of the features are:
    * Batch save (all or nothing) and undo functionality
  * Excellent support for data binding in with built in support for validation, INotifyPropertyChanged, INotifyCollectionChanged .. 
  * Support for client side queries (where, orderby, skip, take ..)
+* High-performance client-side relationship resolution with in-memory `EntitySet` indexes that avoid repeated full-set scans. See [Indexed association lookups](docs/indexed-association-lookups.md).
  * Saves you from having to duplicated lots of code on the server and client
    * Code generation which generates code for client (Model and API) based on server code
    * Automatically handles DTO creation and mapping based on attributes or configuration
    * Allows sharing validation and other logic by using partial classes and automatic linking of files
-   
+
 **Release Notes / Changelog**
 
 * A [Change log](https://github.com/OpenRIAServices/OpenRiaServices/blob/main/Changelog.md) is kept keeping track of changes made and write down release notes as features are developed

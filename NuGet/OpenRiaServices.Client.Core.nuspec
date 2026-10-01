@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Client.Core</id>
@@ -18,21 +18,20 @@
     <tags>WCF RIA Services RIAServices Silverlight OpenRiaServices</tags>
     <dependencies>
       <group targetFramework="net472">
-        <dependency id="Nerdbank.MessagePack" version="1.2.36" exclude="Build,Analyzers" />
+        <dependency id="Nerdbank.MessagePack" version="1.3.86" exclude="Build,Analyzers" />
         <dependency id="PolyType" version="1.4.1" exclude="Build,Analyzers" />
         <dependency id="System.IO.Hashing" version="10.0.9" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net8.0">
-        <dependency id="Nerdbank.MessagePack" version="1.2.36" exclude="Build,Analyzers" />
+        <dependency id="Nerdbank.MessagePack" version="1.3.86" exclude="Build,Analyzers" />
         <dependency id="PolyType" version="1.4.1" exclude="Build,Analyzers" />
         <dependency id="System.IO.Hashing" version="10.0.9" exclude="Build,Analyzers" />
       </group>
       <group targetFramework="net8.0-windows7.0">
-        <dependency id="Nerdbank.MessagePack" version="1.2.36" exclude="Build,Analyzers" />
+        <dependency id="Nerdbank.MessagePack" version="1.3.86" exclude="Build,Analyzers" />
         <dependency id="PolyType" version="1.4.1" exclude="Build,Analyzers" />
         <dependency id="System.IO.Hashing" version="10.0.9" exclude="Build,Analyzers" />
-      </group>
-    </dependencies>
+      </group>    </dependencies>
     <frameworkReferences>
       <group targetFramework="net8.0-windows7.0">
         <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
