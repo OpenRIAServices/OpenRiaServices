@@ -60,7 +60,8 @@ namespace OpenRiaServices.Server
         /// </summary>
         /// <remarks>
         /// Direct <see cref="DerivedTypeShapeAttribute"/> declarations take precedence over
-        /// <see cref="KnownTypeAttribute"/> declarations on each type.
+        /// <see cref="KnownTypeAttribute"/> declarations on each type. Registrations that are
+        /// not assignable to <paramref name="type"/> are excluded.
         /// </remarks>
         internal static HashSet<Type> ImportDerivedTypes(Type type, bool inherit)
         {
@@ -82,6 +83,7 @@ namespace OpenRiaServices.Server
                 }
             }
 
+            derivedTypes.RemoveWhere(derivedType => !type.IsAssignableFrom(derivedType));
             return derivedTypes;
         }
     }

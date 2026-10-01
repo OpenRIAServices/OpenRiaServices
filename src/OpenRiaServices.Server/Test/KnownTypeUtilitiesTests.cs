@@ -112,7 +112,7 @@ namespace OpenRiaServices.Server.Test
             IEnumerable<Type> knownTypes = KnownTypeUtil.ImportDerivedTypes(typeof(KTU_PolyTypeDerived1), true);
 
             CollectionAssert.AreEquivalent(
-                new[] { typeof(KTU_PolyTypeDerived1), typeof(KTU_PolyTypeDerived2), typeof(KTU_PolyTypeGrandchild) },
+                new[] { typeof(KTU_PolyTypeDerived1), typeof(KTU_PolyTypeGrandchild) },
                 knownTypes.ToArray());
         }
     }

@@ -960,7 +960,7 @@ namespace OpenRiaServices.Server
         internal static void ValidateComplexType(Type complexType)
         {
             // Polymorphism attributes indicate a type may be its derived type. Since we do not support complex type inheritance, disallow this.
-            if (KnownTypeUtilities.ImportDerivedTypes(complexType, /* inherit */ false).Any(t => complexType.IsAssignableFrom(t)))
+            if (KnownTypeUtilities.ImportDerivedTypes(complexType, /* inherit */ false).Count > 0)
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidComplexType_KnownTypes, complexType.Name));
             }
@@ -1091,10 +1091,7 @@ namespace OpenRiaServices.Server
             IEnumerable<Type> knownTypes = KnownTypeUtilities.ImportDerivedTypes(entityType, true);
             foreach (Type t in knownTypes)
             {
-                if (entityType.IsAssignableFrom(t))
-                {
-                    this.AddEntityType(t);
-                }
+                this.AddEntityType(t);
             }
         }
 
@@ -1986,8 +1983,7 @@ namespace OpenRiaServices.Server
             // Because we ask to inherit [KnownType], we will collect the full closure
             foreach (Type entityType in types)
             {
-                // Get all registered derived types and subselect only those that actually derive from this entity.
-                IEnumerable<Type> knownTypes = KnownTypeUtilities.ImportDerivedTypes(entityType, /* inherit */ true).Where(t => entityType.IsAssignableFrom(t));
+                IEnumerable<Type> knownTypes = KnownTypeUtilities.ImportDerivedTypes(entityType, /* inherit */ true);
                 closure[entityType] = new HashSet<Type>(knownTypes);
             }
 

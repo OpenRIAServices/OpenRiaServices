@@ -88,9 +88,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             // Gather all the explicit derived types from attributes.
             foreach (Type entityType in types)
             {
-                // Subselect only registrations that actually derive from this entity.
-                IEnumerable<Type> knownTypes = Server.KnownTypeUtilities.ImportDerivedTypes(entityType, /* inherit */ true)
-                    .Where(t => entityType.IsAssignableFrom(t));
+                IEnumerable<Type> knownTypes = Server.KnownTypeUtilities.ImportDerivedTypes(entityType, /* inherit */ true);
                 closure[entityType] = new HashSet<Type>(knownTypes);
             }
 
