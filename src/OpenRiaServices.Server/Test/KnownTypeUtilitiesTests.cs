@@ -95,20 +95,24 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void KnownType_Utilities_DerivedTypeShape_Takes_Precedence_Per_Type()
         {
-            IEnumerable<Type> knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_PolyType), false);
+            IEnumerable<Type> dataContractKnownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_PolyType), false);
+            IEnumerable<Type> knownTypes = KnownTypeUtil.ImportDerivedTypes(typeof(KTU_PolyType), false);
 
             CollectionAssert.AreEquivalent(
-                new[] { typeof(KTU_1), typeof(KTU_2) },
+                new[] { typeof(KTU_PolyTypeKnownDerived) },
+                dataContractKnownTypes.ToArray());
+            CollectionAssert.AreEquivalent(
+                new[] { typeof(KTU_PolyTypeDerived1), typeof(KTU_PolyTypeDerived2) },
                 knownTypes.ToArray());
         }
 
         [TestMethod]
         public void KnownType_Utilities_DerivedTypeShape_Inherits_Base_Registrations()
         {
-            IEnumerable<Type> knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_PolyTypeDerived), true);
+            IEnumerable<Type> knownTypes = KnownTypeUtil.ImportDerivedTypes(typeof(KTU_PolyTypeDerived1), true);
 
             CollectionAssert.AreEquivalent(
-                new[] { typeof(KTU_1), typeof(KTU_2), typeof(KTU_3) },
+                new[] { typeof(KTU_PolyTypeDerived1), typeof(KTU_PolyTypeDerived2), typeof(KTU_PolyTypeGrandchild) },
                 knownTypes.ToArray());
         }
     }
@@ -120,13 +124,16 @@ namespace OpenRiaServices.Server.Test
     public class KTU_3 { }
     public class KTU_4 { }
 
-    [KnownType(typeof(KTU_4))]
-    [DerivedTypeShape(typeof(KTU_1))]
-    [DerivedTypeShape(typeof(KTU_2))]
+    [KnownType(typeof(KTU_PolyTypeKnownDerived))]
+    [DerivedTypeShape(typeof(KTU_PolyTypeDerived1))]
+    [DerivedTypeShape(typeof(KTU_PolyTypeDerived2))]
     public class KTU_PolyType { }
 
-    [DerivedTypeShape(typeof(KTU_3))]
-    public class KTU_PolyTypeDerived : KTU_PolyType { }
+    [DerivedTypeShape(typeof(KTU_PolyTypeGrandchild))]
+    public class KTU_PolyTypeDerived1 : KTU_PolyType { }
+    public class KTU_PolyTypeDerived2 : KTU_PolyType { }
+    public class KTU_PolyTypeKnownDerived : KTU_PolyType { }
+    public class KTU_PolyTypeGrandchild : KTU_PolyTypeDerived1 { }
 
     [KnownType(typeof(KTU_00))]     // exposed only on least derived type
     public class KTU_Base00 { }

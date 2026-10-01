@@ -959,8 +959,8 @@ namespace OpenRiaServices.Server
         /// <param name="complexType">The complex type to validate</param>
         internal static void ValidateComplexType(Type complexType)
         {
-            // KnownTypeAttribute indicates a type may be its derived type. Since we do not support complex type inheritance, disallow this.
-            if (KnownTypeUtilities.ImportKnownTypes(complexType, /* inherit */ false).Any(t => complexType.IsAssignableFrom(t)))
+            // Polymorphism attributes indicate a type may be its derived type. Since we do not support complex type inheritance, disallow this.
+            if (KnownTypeUtilities.ImportDerivedTypes(complexType, /* inherit */ false).Any(t => complexType.IsAssignableFrom(t)))
             {
                 throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidComplexType_KnownTypes, complexType.Name));
             }
@@ -1087,9 +1087,8 @@ namespace OpenRiaServices.Server
                 }
             }
 
-            // Recursively add any derived entity types specified by [KnownType]
-            // attributes
-            IEnumerable<Type> knownTypes = KnownTypeUtilities.ImportKnownTypes(entityType, true);
+            // Recursively add any derived entity types specified by polymorphism attributes.
+            IEnumerable<Type> knownTypes = KnownTypeUtilities.ImportDerivedTypes(entityType, true);
             foreach (Type t in knownTypes)
             {
                 if (entityType.IsAssignableFrom(t))
@@ -1987,8 +1986,8 @@ namespace OpenRiaServices.Server
             // Because we ask to inherit [KnownType], we will collect the full closure
             foreach (Type entityType in types)
             {
-                // Get all [KnownType]'s and subselect only those that actually derive from this entity
-                IEnumerable<Type> knownTypes = KnownTypeUtilities.ImportKnownTypes(entityType, /* inherit */ true).Where(t => entityType.IsAssignableFrom(t));
+                // Get all registered derived types and subselect only those that actually derive from this entity.
+                IEnumerable<Type> knownTypes = KnownTypeUtilities.ImportDerivedTypes(entityType, /* inherit */ true).Where(t => entityType.IsAssignableFrom(t));
                 closure[entityType] = new HashSet<Type>(knownTypes);
             }
 
