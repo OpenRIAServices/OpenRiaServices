@@ -72,6 +72,18 @@ namespace System.Collections.Generic
                 return false;
             }
         }
+
+        public static bool Remove<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, out TValue value)
+        {
+            // This is expected to be used in scenarios where the add will almost always succeed, so we pay the cost of an exception
+            // on duplicates instead of checking if the Key exists first
+            if (dictionary.TryGetValue(key, out value))
+            {
+                dictionary.Remove(key);
+                return true;
+            }
+            return false;
+        }
     }
 }
 
@@ -86,6 +98,10 @@ namespace System.Runtime.CompilerServices
         }
 
         public string ParameterName { get; private set; }
+    }
+
+    internal static class IsExternalInit {
+        // Intentionally empty
     }
 }
 
@@ -267,6 +283,16 @@ namespace System.Diagnostics.CodeAnalysis
     /// </summary>
     [System.AttributeUsage(System.AttributeTargets.Field | System.AttributeTargets.Parameter | System.AttributeTargets.Property | System.AttributeTargets.ReturnValue, Inherited = false)]
     internal sealed class NotNullAttribute : Attribute { }
+
+    [AttributeUsage(AttributeTargets.Parameter, Inherited = false)]
+    internal sealed class NotNullWhenAttribute : Attribute {
+        public bool ReturnValue { get; }
+
+        public NotNullWhenAttribute(bool returnValue)
+        {
+            ReturnValue = returnValue;
+        }
+    }
 
     /// <summary>
     /// Specifies that a method will never return under any circumstance.

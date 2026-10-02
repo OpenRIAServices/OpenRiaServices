@@ -788,7 +788,7 @@ namespace OpenRiaServices.Server {
                 return ResourceManager.GetString("InvalidComplexType_PropertyAttribute", resourceCulture);
             }
         }
-        
+
         /// <summary>
         ///   Looks up a localized string similar to Custom methods must contain at least one parameter..
         /// </summary>
