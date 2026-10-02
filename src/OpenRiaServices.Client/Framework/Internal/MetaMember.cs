@@ -35,7 +35,7 @@ namespace OpenRiaServices.Client.Internal
             if (hasGetter && (property.GetSetMethod() != null))
             {
                 IsDataMember = (IsComplex || TypeUtility.IsPredefinedType(property.PropertyType))
-                        && !IsMemberIgnored(property);
+                        && !TypeUtility.IsAttributeDefined(property, typeof(IgnoreDataMemberAttribute), false);
             }
 
             if (hasGetter)
@@ -66,14 +66,6 @@ namespace OpenRiaServices.Client.Internal
 
             IsRoundtripMember = CheckIfRoundtripMember(this, isRoundtripEntity);
             IsMergable = CheckIfMergeableMember(this);
-        }
-
-        private static bool IsMemberIgnored(PropertyInfo property)
-        {
-            if (property.GetCustomAttribute<PolyType.PropertyShapeAttribute>() is { } propertyShapeAttribute)
-                return propertyShapeAttribute.Ignore;
-
-            return TypeUtility.IsAttributeDefined(property, typeof(IgnoreDataMemberAttribute), false);
         }
 
         /// <summary>
