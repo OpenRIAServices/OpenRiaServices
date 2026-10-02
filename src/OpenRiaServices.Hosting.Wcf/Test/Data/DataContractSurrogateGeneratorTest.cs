@@ -450,6 +450,23 @@ namespace OpenRiaServices.Hosting.UnitTests
             CollectionAssert.AreEqual(
                 entityShape.Properties.Select(property => property.Name).ToArray(),
                 surrogateShape.Properties.Select(property => property.Name).ToArray());
+            Assert.IsNotNull(surrogateType.GetCustomAttribute<TypeShapeAttribute>());
+            Assert.AreEqual(
+                entityType.GetProperty(nameof(SurrogateTestEntity_PropertyShape.Renamed)).GetCustomAttribute<Nerdbank.MessagePack.KeyAttribute>().Index,
+                surrogateType.GetProperty(nameof(SurrogateTestEntity_PropertyShape.Renamed)).GetCustomAttribute<Nerdbank.MessagePack.KeyAttribute>().Index);
+        }
+
+        [TestMethod]
+        public void CitySerializationAttributesPropagation()
+        {
+            DomainServiceDescription.GetDescription(typeof(Cities.CityDomainService));
+            Type entityType = typeof(Cities.City);
+            Type surrogateType = DataContractSurrogateGenerator.GetSurrogateType(new HashSet<Type> { entityType }, entityType);
+            PropertyInfo surrogateName = surrogateType.GetProperty(nameof(Cities.City.Name));
+
+            Assert.IsNotNull(surrogateType.GetCustomAttribute<TypeShapeAttribute>());
+            Assert.IsNotNull(surrogateName.GetCustomAttribute<PropertyShapeAttribute>());
+            Assert.AreEqual(0, surrogateName.GetCustomAttribute<Nerdbank.MessagePack.KeyAttribute>().Index);
         }
 
         private static string GetDataContract(Type type)
@@ -594,19 +611,23 @@ namespace OpenRiaServices.Hosting.UnitTests
     }
 
     [DataContract]
+    [TypeShape]
     public class SurrogateTestEntity_PropertyShape
     {
         [DataMember(Name = "data-member-name")]
         [PropertyShape(Name = "shape-name")]
+        [Nerdbank.MessagePack.Key(0)]
         public string Renamed { get; set; }
 
         [PropertyShape]
+        [Nerdbank.MessagePack.Key(1)]
         public string ShapeOnly { get; set; }
 
         [DataMember]
         [PropertyShape(Ignore = true)]
         public string Ignored { get; set; }
 
+        [Nerdbank.MessagePack.Key(2)]
         public string Unannotated { get; set; }
     }
 

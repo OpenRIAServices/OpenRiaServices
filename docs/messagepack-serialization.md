@@ -32,6 +32,8 @@ Top-level object map:
 
 OpenRiaServices supports PolyType model attributes in addition to data contract attributes. Generated client models preserve these attributes so the server and client use the same MessagePack shape.
 
+WCF serialization surrogates likewise preserve attributes from the PolyType and Nerdbank.MessagePack assemblies.
+
 These rules follow PolyType's [DataContract support](https://eiriktsarpalis.github.io/PolyType/docs/shape-providers.html#datacontract-support).
 
 Member inclusion follows PolyType precedence:
