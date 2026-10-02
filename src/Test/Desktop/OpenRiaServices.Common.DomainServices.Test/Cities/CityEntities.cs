@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using PolyType;
 using OpenRiaServices;
 
 namespace Cities
@@ -28,6 +29,7 @@ namespace Cities
     /// through the use of buddy classes that contribute metadata.
     /// </summary>
     [MetadataType(typeof(CityMetadata))]
+    [TypeShape]
     public partial class City
     {
     }
@@ -40,34 +42,43 @@ namespace Cities
         [RegularExpression("^[A-Z]+[a-z A-Z]*$")]
         [Display(ResourceType = typeof(Cities_Resources), ShortName = "CityCaption", Name = "CityName", Prompt = "CityPrompt", Description = "CityHelpText")]
         [RoundtripOriginal]
+        [PropertyShape]
+        [Nerdbank.MessagePack.Key(0)]
         public string Name { get; set; }
 
         [Key]
         [RoundtripOriginal]
+        [Nerdbank.MessagePack.Key(1)]
         public string CountyName { get; set; }
 
         [Key]
         [StringLength(2)]
         [RegularExpression("^[A-Z]+[a-z A-Z]*$")]
         [RoundtripOriginal]
+        [Nerdbank.MessagePack.Key(2)]
         public string StateName { get; set; }
 
         [Display(AutoGenerateField = false)]
         [RoundtripOriginal]
         [CustomValidation(typeof(CityPropertyValidator), "IsValidZoneName")]
+        [Nerdbank.MessagePack.Key(3)]
         public string ZoneName { get; set; }
 
         [Range(0, 9999)]
         [RoundtripOriginal]
+        [Nerdbank.MessagePack.Key(4)]
         public int ZoneID { get; set; }
 
         [Editable(false)]
+        [Nerdbank.MessagePack.Key(5)]
         public string CalculatedCounty { get; set; }
 
         [Association("County_City", "CountyName,StateName", "Name,StateName", IsForeignKey = true)]
+        [Nerdbank.MessagePack.Key(6)]
         public County County { get; set; }
 
         [Association("City_Zip", "Name, CountyName, StateName", "CityName,  CountyName, StateName")]
+        [Nerdbank.MessagePack.Key(7)]
         public List<Zip> ZipCodes { get; set; }
     }
 

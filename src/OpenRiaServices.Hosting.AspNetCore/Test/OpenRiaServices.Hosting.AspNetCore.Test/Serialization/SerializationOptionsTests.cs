@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.AspNetCore.Serialization;
+using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
 using PolyType;
 using PolyType.ReflectionProvider;
 using OpenRiaServices.Server;

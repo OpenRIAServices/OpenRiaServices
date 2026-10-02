@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using PolyType;
 
 namespace OpenRiaServices.Server
 {
@@ -27,7 +28,7 @@ namespace OpenRiaServices.Server
         {
             HashSet<Type> knownTypes = new HashSet<Type>();
             IEnumerable<KnownTypeAttribute> knownTypeAttributes = type.GetCustomAttributes(typeof(KnownTypeAttribute), inherit).Cast<KnownTypeAttribute>();
-            
+
             foreach (KnownTypeAttribute knownTypeAttribute in knownTypeAttributes)
             {
                 Type knownType = knownTypeAttribute.Type;
@@ -52,6 +53,38 @@ namespace OpenRiaServices.Server
                 }
             }
             return knownTypes;
+        }
+
+        /// <summary>
+        /// Obtains the derived types registered with PolyType or data contract attributes.
+        /// </summary>
+        /// <remarks>
+        /// Direct <see cref="DerivedTypeShapeAttribute"/> declarations take precedence over
+        /// <see cref="KnownTypeAttribute"/> declarations on each type. Registrations that are
+        /// not assignable to <paramref name="type"/> are excluded.
+        /// </remarks>
+        internal static HashSet<Type> ImportDerivedTypes(Type type, bool inherit)
+        {
+            HashSet<Type> derivedTypes = new HashSet<Type>();
+            for (Type currentType = type; currentType != null; currentType = inherit ? currentType.BaseType : null)
+            {
+                DerivedTypeShapeAttribute[] attributes = currentType
+                    .GetCustomAttributes(typeof(DerivedTypeShapeAttribute), inherit: false)
+                    .Cast<DerivedTypeShapeAttribute>()
+                    .ToArray();
+
+                if (attributes.Length > 0)
+                {
+                    derivedTypes.UnionWith(attributes.Select(attribute => attribute.Type));
+                }
+                else
+                {
+                    derivedTypes.UnionWith(ImportKnownTypes(currentType, inherit: false));
+                }
+            }
+
+            derivedTypes.RemoveWhere(derivedType => !type.IsAssignableFrom(derivedType));
+            return derivedTypes;
         }
     }
 }

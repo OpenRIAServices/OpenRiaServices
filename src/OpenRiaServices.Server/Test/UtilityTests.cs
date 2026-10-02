@@ -1,10 +1,16 @@
 ﻿extern alias SystemWebDomainServices;
 
+using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Data.Linq;
 using System.Linq;
+using System.Runtime.Serialization;
 //using DbContextModels.AdventureWorks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PolyType;
+using PolyType.Abstractions;
+using PolyType.ReflectionProvider;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TestDomainServices;
 using Address = TestDomainServices.Address;
@@ -133,16 +139,16 @@ namespace OpenRiaServices.Server.Test
             // verify deep CT collection validation
             List<ComplexType_Recursive> children = new List<ComplexType_Recursive> {
                 new ComplexType_Recursive { P1 = "1", P4 = -1 },  // invalid element
-                new ComplexType_Recursive { P1 = "2", P3 = 
-                    new List<ComplexType_Recursive> { 
+                new ComplexType_Recursive { P1 = "2", P3 =
+                    new List<ComplexType_Recursive> {
                         new ComplexType_Recursive { P1 = "3", P4 = -5 }  // invalid element in nested collection
                     }
                 }
             };
-            ComplexType_Scenarios_Parent parent = new ComplexType_Scenarios_Parent 
-            { 
-                ID = 1, 
-                ComplexType_Recursive = new ComplexType_Recursive { P1 = "1", P3 = children } 
+            ComplexType_Scenarios_Parent parent = new ComplexType_Scenarios_Parent
+            {
+                ID = 1,
+                ComplexType_Recursive = new ComplexType_Recursive { P1 = "1", P3 = children }
             };
             validationContext = ValidationUtilities.CreateValidationContext(parent, null);
             results = new List<ValidationResult>();
@@ -179,6 +185,77 @@ namespace OpenRiaServices.Server.Test
                 "Server Binary values should be equal.");
             Assert.AreEqual(binary, SerializationUtility.GetServerValue(typeof(Binary), bytes),
                 "Server byte[] values should be equal.");
+        }
+
+        [TestMethod]
+        [DataRow(typeof(PolyTypeDataContract))]
+        [DataRow(typeof(PolyTypePoco))]
+        [DataRow(typeof(PolyTypeDerivedNonContract))]
+        public void SerializableDataMembers_MatchPolyTypeReflectionShape(Type type)
+        {
+            IObjectTypeShape shape = (IObjectTypeShape)ReflectionTypeShapeProvider.Default.GetTypeShape(type);
+            string[] expectedNames = shape.Properties.Select(property => property.Name).ToArray();
+            string[] actualNames = TypeDescriptor.GetProperties(type)
+                .Cast<PropertyDescriptor>()
+                .Where(SerializationUtility.IsSerializableDataMember)
+                .Select(GetShapePropertyName)
+                .ToArray();
+
+            Assert.AreSequenceEqual(expectedNames, actualNames, SequenceOrder.InAnyOrder);
+        }
+
+        private static string GetShapePropertyName(PropertyDescriptor property)
+        {
+            if (property.Attributes[typeof(PropertyShapeAttribute)] is PropertyShapeAttribute propertyShape)
+            {
+                return propertyShape.Name ?? property.Name;
+            }
+
+            return (property.Attributes[typeof(DataMemberAttribute)] as DataMemberAttribute)?.Name ?? property.Name;
+        }
+
+        [DataContract]
+        private class PolyTypeDataContract
+        {
+            [DataMember(Name = "id", Order = 0, IsRequired = true)]
+            public int Id { get; set; }
+
+            public string Unannotated { get; set; }
+
+            [DataMember(Name = "data-name", Order = 1)]
+            public string DataMember { get; set; }
+
+            [PropertyShape(Name = "shape-name", Order = 2)]
+            public string PropertyShapeOnly { get; set; }
+
+            [DataMember(Name = "ignored-data-name", Order = 4)]
+            [PropertyShape(Name = "preferred-shape-name", Order = 100)]
+            public string ConflictingNames { get; set; }
+
+            [DataMember]
+            [PropertyShape(Ignore = true)]
+            public string IgnoredShape { get; set; }
+
+            [IgnoreDataMember]
+            [PropertyShape]
+            public string ShapeOverridesIgnore { get; set; }
+        }
+
+        private sealed class PolyTypeDerivedNonContract : PolyTypeDataContract
+        {
+            public string DerivedProperty { get; set; }
+        }
+
+        private sealed class PolyTypePoco
+        {
+            public string Unannotated { get; set; }
+
+            [IgnoreDataMember]
+            public string Ignored { get; set; }
+
+            [IgnoreDataMember]
+            [PropertyShape]
+            public string ShapeOverridesIgnore { get; set; }
         }
     }
 }
