@@ -314,7 +314,6 @@ namespace OpenRiaServices.Server
                             result = await queryDescription.Method.InvokeQueryAsync(this, parameters, clientQuery, this.ServiceContext.CancellationToken)
                                 .ConfigureAwait(false);
                             totalCount = DomainService.TotalCountUndefined;
-                            queryDescription.ClientQueryApplyCount = clientQuery.ApplyCount;
                         }
                         else
                         {
@@ -367,17 +366,20 @@ namespace OpenRiaServices.Server
                 {
                     if (clientQuery != null)
                     {
-                        if (clientQuery.TotalCount.HasValue)
+                        if (queryDescription.IncludeTotalCount)
                         {
-                            totalCount = clientQuery.TotalCount.Value;
-                        }
-                        else if (clientQuery.TotalCountQuery != null)
-                        {
-                            totalCount = await CountAsync<T>(clientQuery.TotalCountQuery, cancellationToken).ConfigureAwait(false);
-                        }
-                        else
-                        {
-                            totalCount = DomainService.TotalCountEqualsResultSetCount;
+                            if (clientQuery.TotalCount.HasValue)
+                            {
+                                totalCount = clientQuery.TotalCount.Value;
+                            }
+                            else if (clientQuery.TotalCountQuery != null)
+                            {
+                                totalCount = await CountAsync<T>(clientQuery.TotalCountQuery, cancellationToken).ConfigureAwait(false);
+                            }
+                            else
+                            {
+                                totalCount = DomainService.TotalCountEqualsResultSetCount;
+                            }
                         }
                     }
                     // If there are additional filtering, sorting and paging parameters to apply
@@ -398,8 +400,7 @@ namespace OpenRiaServices.Server
                     }
 
                     IEnumerable limitedResults;
-                    if ((clientQuery == null || clientQuery.ApplyCount == 0)
-                        && QueryComposer.TryComposeWithLimit(enumerableResult, queryDescription.Method, out limitedResults))
+                    if (QueryComposer.TryComposeWithLimit(enumerableResult, queryDescription.Method, out limitedResults))
                     {
                         if (totalCount == DomainService.TotalCountEqualsResultSetCount)
                         {

@@ -29,7 +29,6 @@ namespace OpenRiaServices.Server.Test
 
             CollectionAssert.AreEqual(new[] { 4, 3 }, result.Result.Select(entity => entity.Id).ToArray());
             Assert.AreEqual(4, result.TotalCount);
-            Assert.AreEqual(1, description.ClientQueryApplyCount);
             Assert.IsTrue(operation.HasClientQueryParameter);
             Assert.HasCount(1, operation.Parameters);
             Assert.AreEqual(typeof(int), operation.Parameters[0].ParameterType);
@@ -51,7 +50,37 @@ namespace OpenRiaServices.Server.Test
 
             Assert.HasCount(2, result.Result);
             Assert.AreEqual(5, result.TotalCount);
-            Assert.AreEqual(0, description.ClientQueryApplyCount);
+        }
+
+        [TestMethod]
+        public async Task QueryMethod_DoesNotReportTotalCountWhenNotRequested()
+        {
+            ClientQueryDomainService service = CreateService();
+            IQueryable<ClientQueryEntity> query = Array.Empty<ClientQueryEntity>().AsQueryable()
+                .Where(entity => entity.Id > 2)
+                .Take(2);
+            DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(typeof(ClientQueryDomainService));
+
+            DomainOperationEntry appliedOperation = domainServiceDescription.GetQueryMethod(nameof(ClientQueryDomainService.GetEntities));
+            ServiceQueryResult<ClientQueryEntity> appliedResult =
+                await service.QueryAsync<ClientQueryEntity>(new QueryDescription(appliedOperation, new object[] { 2 }, false, query), CancellationToken.None);
+
+            Assert.HasCount(2, appliedResult.Result);
+            Assert.AreEqual(DomainService.TotalCountUndefined, appliedResult.TotalCount);
+
+            DomainOperationEntry unappliedOperation = domainServiceDescription.GetQueryMethod(nameof(ClientQueryDomainService.GetEntitiesWithoutApplying));
+            ServiceQueryResult<ClientQueryEntity> unappliedResult =
+                await service.QueryAsync<ClientQueryEntity>(new QueryDescription(unappliedOperation, Array.Empty<object>(), false, query), CancellationToken.None);
+
+            Assert.HasCount(2, unappliedResult.Result);
+            Assert.AreEqual(DomainService.TotalCountUndefined, unappliedResult.TotalCount);
+
+            DomainOperationEntry discardedQueryOperation = domainServiceDescription.GetQueryMethod(nameof(ClientQueryDomainService.GetEntitiesAfterIgnoringAppliedQuery));
+            ServiceQueryResult<ClientQueryEntity> discardedQueryResult =
+                await service.QueryAsync<ClientQueryEntity>(new QueryDescription(discardedQueryOperation, Array.Empty<object>(), false, query), CancellationToken.None);
+
+            Assert.HasCount(2, discardedQueryResult.Result);
+            Assert.AreEqual(DomainService.TotalCountUndefined, discardedQueryResult.TotalCount);
         }
 
         [TestMethod]
@@ -68,7 +97,6 @@ namespace OpenRiaServices.Server.Test
 
             Assert.HasCount(1, result.Result);
             Assert.AreEqual(12, result.TotalCount);
-            Assert.AreEqual(2, description.ClientQueryApplyCount);
         }
 
         [TestMethod]
@@ -149,6 +177,13 @@ namespace OpenRiaServices.Server.Test
         [Query(ResultLimit = 2)]
         public List<ClientQueryEntity> GetEntitiesWithoutApplying(ClientQuery<ClientQueryEntity> query)
         {
+            return _entities.ToList();
+        }
+
+        [Query(ResultLimit = 2)]
+        public List<ClientQueryEntity> GetEntitiesAfterIgnoringAppliedQuery(ClientQuery<ClientQueryEntity> query)
+        {
+            query.ApplyTo(_entities);
             return _entities.ToList();
         }
 

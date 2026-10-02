@@ -414,9 +414,8 @@ namespace OpenRiaServices.Server
                     .ToArray();
                 if (clientQueryTypes.Length > 0)
                 {
-                    HasClientQueryParameter = true;
                     ClientQueryEntityType = clientQueryTypes[0].GetGenericArguments()[0];
-                    ClientQueryParameterCount = clientQueryTypes.Length;
+                    HasMultipleClientQueryParameters = clientQueryTypes.Length > 1;
                 }
             }
 

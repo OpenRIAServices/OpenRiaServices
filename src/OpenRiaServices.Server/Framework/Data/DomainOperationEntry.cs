@@ -338,11 +338,11 @@ namespace OpenRiaServices.Server
         /// Gets a value indicating whether this query operation receives a
         /// <see cref="ClientQuery{T}"/> parameter.
         /// </summary>
-        public bool HasClientQueryParameter { get; internal set; }
+        public bool HasClientQueryParameter => this.ClientQueryEntityType != null;
 
         internal Type? ClientQueryEntityType { get; set; }
 
-        internal int ClientQueryParameterCount { get; set; }
+        internal bool HasMultipleClientQueryParameters { get; set; }
 
         /// <summary>
         /// Invokes this <see cref="DomainOperationEntry" />.
