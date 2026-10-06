@@ -16,6 +16,7 @@ Option Explicit On
 Imports OpenRiaServices
 Imports OpenRiaServices.Client
 Imports OpenRiaServices.Client.Authentication
+Imports PolyType
 Imports System
 Imports System.Collections.Generic
 Imports System.ComponentModel
@@ -32,7 +33,8 @@ Namespace Cities
     ''' </summary>
     <DataContract([Namespace]:="http://schemas.datacontract.org/2004/07/Cities"),  _
      KnownType(GetType(CityWithEditHistory)),  _
-     KnownType(GetType(CityWithInfo))>  _
+     KnownType(GetType(CityWithInfo)),  _
+     TypeShape()>  _
     Partial Public Class City
         Inherits Entity
         
@@ -112,7 +114,8 @@ Namespace Cities
         ''' Gets or sets the 'CalculatedCounty' value.
         ''' </summary>
         <DataMember(),  _
-         Editable(false)>  _
+         Editable(false),  _
+         Nerdbank.MessagePack.Key(5)>  _
         Public Property CalculatedCounty() As String
             Get
                 Return Me._calculatedCounty
@@ -131,7 +134,8 @@ Namespace Cities
         ''' <summary>
         ''' Gets or sets the associated <see cref="County"/> entity.
         ''' </summary>
-        <EntityAssociation("County_City", New String() {"CountyName", "StateName"}, New String() {"Name", "StateName"}, IsForeignKey:=true)>  _
+        <EntityAssociation("County_City", New String() {"CountyName", "StateName"}, New String() {"Name", "StateName"}, IsForeignKey:=true),  _
+         Nerdbank.MessagePack.Key(6)>  _
         Public Property County() As County
             Get
                 If (Me._county Is Nothing) Then
@@ -168,6 +172,7 @@ Namespace Cities
         ''' </summary>
         <DataMember(),  _
          Key(),  _
+         Nerdbank.MessagePack.Key(1),  _
          RoundtripOriginal()>  _
         Public Property CountyName() As String
             Get
@@ -191,6 +196,8 @@ Namespace Cities
         <DataMember(),  _
          Display(Description:="CityHelpText", Name:="CityName", Prompt:="CityPrompt", ResourceType:=GetType(Cities_Resources), ShortName:="CityCaption"),  _
          Key(),  _
+         Nerdbank.MessagePack.Key(0),  _
+         PropertyShape(),  _
          RegularExpression("^[A-Z]+[a-z A-Z]*$"),  _
          Required(),  _
          RoundtripOriginal(),  _
@@ -216,6 +223,7 @@ Namespace Cities
         ''' </summary>
         <DataMember(),  _
          Key(),  _
+         Nerdbank.MessagePack.Key(2),  _
          RegularExpression("^[A-Z]+[a-z A-Z]*$"),  _
          RoundtripOriginal(),  _
          StringLength(2)>  _
@@ -238,7 +246,8 @@ Namespace Cities
         ''' <summary>
         ''' Gets the collection of associated <see cref="Zip"/> entity instances.
         ''' </summary>
-        <EntityAssociation("City_Zip", New String() {"Name", "CountyName", "StateName"}, New String() {"CityName", "CountyName", "StateName"})>  _
+        <EntityAssociation("City_Zip", New String() {"Name", "CountyName", "StateName"}, New String() {"CityName", "CountyName", "StateName"}),  _
+         Nerdbank.MessagePack.Key(7)>  _
         Public ReadOnly Property ZipCodes() As EntityCollection(Of Zip)
             Get
                 If (Me._zipCodes Is Nothing) Then
@@ -252,6 +261,7 @@ Namespace Cities
         ''' Gets or sets the 'ZoneID' value.
         ''' </summary>
         <DataMember(),  _
+         Nerdbank.MessagePack.Key(4),  _
          Range(0, 9999),  _
          RoundtripOriginal()>  _
         Public Property ZoneID() As Integer
@@ -277,6 +287,7 @@ Namespace Cities
         <CustomValidation(GetType(CityPropertyValidator), "IsValidZoneName"),  _
          DataMember(),  _
          Display(AutoGenerateField:=false),  _
+         Nerdbank.MessagePack.Key(3),  _
          RoundtripOriginal()>  _
         Public Property ZoneName() As String
             Get

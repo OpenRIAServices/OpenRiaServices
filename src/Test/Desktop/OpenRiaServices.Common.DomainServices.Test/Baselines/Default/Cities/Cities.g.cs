@@ -21,6 +21,7 @@ namespace Cities
     using OpenRiaServices;
     using OpenRiaServices.Client;
     using OpenRiaServices.Client.Authentication;
+    using PolyType;
     
     
     /// <summary>
@@ -29,6 +30,7 @@ namespace Cities
     [DataContract(Namespace="http://schemas.datacontract.org/2004/07/Cities")]
     [KnownType(typeof(CityWithEditHistory))]
     [KnownType(typeof(CityWithInfo))]
+    [TypeShape()]
     public partial class City : Entity
     {
         
@@ -90,6 +92,7 @@ namespace Cities
         /// </summary>
         [DataMember()]
         [Editable(false)]
+        [Nerdbank.MessagePack.Key(5)]
         public string CalculatedCounty
         {
             get
@@ -117,6 +120,7 @@ namespace Cities
                 "StateName"}, new string[] {
                 "Name",
                 "StateName"}, IsForeignKey=true)]
+        [Nerdbank.MessagePack.Key(6)]
         public County County
         {
             get
@@ -163,6 +167,7 @@ namespace Cities
         /// </summary>
         [DataMember()]
         [Key()]
+        [Nerdbank.MessagePack.Key(1)]
         [RoundtripOriginal()]
         public string CountyName
         {
@@ -190,6 +195,8 @@ namespace Cities
         [DataMember()]
         [Display(Description="CityHelpText", Name="CityName", Prompt="CityPrompt", ResourceType=typeof(Cities_Resources), ShortName="CityCaption")]
         [Key()]
+        [Nerdbank.MessagePack.Key(0)]
+        [PropertyShape()]
         [RegularExpression("^[A-Z]+[a-z A-Z]*$")]
         [Required()]
         [RoundtripOriginal()]
@@ -219,6 +226,7 @@ namespace Cities
         /// </summary>
         [DataMember()]
         [Key()]
+        [Nerdbank.MessagePack.Key(2)]
         [RegularExpression("^[A-Z]+[a-z A-Z]*$")]
         [RoundtripOriginal()]
         [StringLength(2)]
@@ -252,6 +260,7 @@ namespace Cities
                 "CityName",
                 "CountyName",
                 "StateName"})]
+        [Nerdbank.MessagePack.Key(7)]
         public EntityCollection<Zip> ZipCodes
         {
             get
@@ -268,6 +277,7 @@ namespace Cities
         /// Gets or sets the 'ZoneID' value.
         /// </summary>
         [DataMember()]
+        [Nerdbank.MessagePack.Key(4)]
         [Range(0, 9999)]
         [RoundtripOriginal()]
         public int ZoneID
@@ -296,6 +306,7 @@ namespace Cities
         [CustomValidation(typeof(CityPropertyValidator), "IsValidZoneName")]
         [DataMember()]
         [Display(AutoGenerateField=false)]
+        [Nerdbank.MessagePack.Key(3)]
         [RoundtripOriginal()]
         public string ZoneName
         {

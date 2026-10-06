@@ -51,7 +51,7 @@ MTP runs the test modules (project + target framework) in parallel; use `--max-p
 
 - NEVER edit `*.cs` under `src\OpenRiaServices.Tools.TextTemplate\Framework` when there is a corresponding `.tt` file. Edit the corresponding `.tt`/`.ttinclude`, regenerate affected templates with Visual Studio **Transform All T4 Templates** or `devenv /Command TextTransformation.TransformAllTemplates`, review output, and build `src\OpenRiaServices.Tools.TextTemplate\Framework\OpenRiaServices.Tools.TextTemplate.csproj` for all targets.
 - NEVER edit baseline `*.g.cs` or `*.g.vb` files directly. From the `src` directory, run `dotnet test OpenRiaServices.Tools\Test\OpenRiaServices.Tools.Test.csproj --framework net472`, execute the exact `updateAllBaselines.bat` reported by failures, build, and rerun the test until it passes.
-
+- Changes to DomainServices or entity types in the shared Common DomainServices test project can affect generated-code baselines. Run the code-generation tests and update any reported baselines before finishing such changes.
 
 ## Coding conventions
 
