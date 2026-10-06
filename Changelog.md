@@ -1,6 +1,6 @@
 # Unreleased
 
-# 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
+# 5.10.0 / AspNetCore 1.6.0 — MessagePack transport
 
 Major new features in this release are:
 * [MessagePack](docs/messagepack-serialization.md) transport support for both server and client
@@ -14,6 +14,8 @@ Major new features in this release are:
      * There is no validation that the structs are serializable
         * Make sure they are serializable using the choosen serialization format (DataContract for binary, or using MessagePack)
         * Use TypeConverter to specify how to convert the struct to/from a string for query parameters
+* Query methods can opt into applying client-provided filtering, ordering, and paging before materialization by accepting an injected `ClientQuery<TEntity>` parameter. This enables methods to return a `List<TEntity>` while retaining database-side query composition and total-count support.
+* Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
 
 ## AspNetCore 1.6.0
 
@@ -42,6 +44,7 @@ builder.Services.AddOpenRiaServices()
 
 ## Server
 
+* Query methods can opt into applying client-provided filtering, ordering, and paging before materialization by accepting an injected `ClientQuery<TEntity>` parameter. This enables methods to return a `List<TEntity>` while retaining database-side query composition and total-count support.
 * Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
 
 ## Client (`OpenRiaServices.Client.DomainClients.Http`)

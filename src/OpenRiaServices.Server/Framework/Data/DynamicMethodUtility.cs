@@ -70,13 +70,13 @@ namespace OpenRiaServices.Server
         /// </remarks>
         /// <param name="method">The method that the delegate should invoke.</param>
         /// <returns>A delegate.</returns>
-        public static Func<DomainService, object[], ValueTask<object>> GetDelegateForMethod(MethodInfo method)
+        public static Func<DomainService, object[], object, ValueTask<object>> GetDelegateForMethod(MethodInfo method)
         {
             var dynamicMethod = GetDynamicMethod(method);
 
             try
             {
-                return (Func<DomainService, object[], ValueTask<object>>)dynamicMethod.CreateDelegate(typeof(Func<DomainService, object[], ValueTask<object>>));
+                return (Func<DomainService, object[], object, ValueTask<object>>)dynamicMethod.CreateDelegate(typeof(Func<DomainService, object[], object, ValueTask<object>>));
             }
             catch (InvalidProgramException ex)
             {
@@ -84,7 +84,7 @@ namespace OpenRiaServices.Server
                 // the method will get JITted directy so invalid methods throw here before validation
                 // We capture the exception for now and expect that validation will throw another more informative exception
                 // - we never expect the method to be invoked in these cases, but we return a function which throw the same exception on invoke instead
-                return (domainService, parameters) => throw new InvalidProgramException(ex.Message);
+                return (domainService, parameters, clientQuery) => throw new InvalidProgramException(ex.Message);
             }
         }
 
@@ -177,7 +177,7 @@ namespace OpenRiaServices.Server
             }
             else
             {
-                parameterTypes = new Type[] { typeof(DomainService), typeof(object[]) };
+                parameterTypes = new Type[] { typeof(DomainService), typeof(object[]), typeof(object) };
             }
 
             DynamicMethod proxyMethod = new DynamicMethod(method.Name, typeof(ValueTask<object>), parameterTypes, restrictedSkipVisibility: true);
@@ -219,6 +219,11 @@ namespace OpenRiaServices.Server
                         generator.Emit(OpCodes.Ldarg_0);
                         generator.EmitCall(OpCodes.Call, s_serviceContextGetter, null);
                         generator.EmitCall(OpCodes.Call, s_cancellationTokenGetter, null);
+                    }
+                    else if (ClientQuery.IsClientQueryType(parameter.ParameterType))
+                    {
+                        generator.Emit(OpCodes.Ldarg_2);
+                        generator.Emit(OpCodes.Castclass, parameter.ParameterType);
                     }
                     else if (parameter.GetCustomAttribute(typeof(InjectParameterAttribute)) != null)
                     {
