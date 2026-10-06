@@ -460,9 +460,9 @@ namespace OpenRiaServices.Hosting.UnitTests
         public void CitySerializationAttributesPropagation()
         {
             DomainServiceDescription.GetDescription(typeof(Cities.CityDomainService));
-            Type entityType = typeof(Cities.City);
+            Type entityType = typeof(Cities.State);
             Type surrogateType = DataContractSurrogateGenerator.GetSurrogateType(new HashSet<Type> { entityType }, entityType);
-            PropertyInfo surrogateName = surrogateType.GetProperty(nameof(Cities.City.Name));
+            PropertyInfo surrogateName = surrogateType.GetProperty(nameof(Cities.State.Name));
 
             Assert.IsNotNull(surrogateType.GetCustomAttribute<TypeShapeAttribute>());
             Assert.IsNotNull(surrogateName.GetCustomAttribute<PropertyShapeAttribute>());
