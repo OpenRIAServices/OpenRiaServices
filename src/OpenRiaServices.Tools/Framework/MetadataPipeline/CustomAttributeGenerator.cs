@@ -604,7 +604,10 @@ namespace OpenRiaServices.Tools
         /// <returns>A <see cref="CodeAttributeDeclaration"/>.</returns>
         private static CodeAttributeDeclaration CreateCodeAttributeDeclaration(CodeDomClientCodeGenerator proxyGenerator, CodeTypeDeclaration referencingType, AttributeDeclaration attributeDeclaration)
         {
-            CodeAttributeDeclaration codeAttributeDeclaration = CodeGenUtilities.CreateAttributeDeclaration(attributeDeclaration.AttributeType, proxyGenerator, referencingType);
+            Type attributeType = attributeDeclaration.AttributeType;
+            bool useFullyQualifiedName = attributeType.Assembly.GetName().Name == "Nerdbank.MessagePack";
+            CodeTypeReference attributeReference = CodeGenUtilities.GetTypeReference(attributeType, proxyGenerator, referencingType, optimizeAttributeName: true, forceUseFullyQualifiedName: useFullyQualifiedName);
+            CodeAttributeDeclaration codeAttributeDeclaration = new CodeAttributeDeclaration(attributeReference);
 
             // Add ctor args
             foreach (object arg in attributeDeclaration.ConstructorArguments)
@@ -712,4 +715,3 @@ namespace OpenRiaServices.Tools
         }
     }
 }
-

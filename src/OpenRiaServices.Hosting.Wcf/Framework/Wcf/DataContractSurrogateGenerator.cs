@@ -90,6 +90,7 @@ namespace OpenRiaServices.Hosting.Wcf
             {
                 typeBuilder.SetCustomAttribute(dataContractAttBuilder);
             }
+            SetSerializationAttributes(typeBuilder.SetCustomAttribute, type.GetCustomAttributesData());
 
             // Attach a [SecuritySafeCritical] to the surrogate type to permit its setters to deal with
             // types that may be SafeCritical or Critical
@@ -384,6 +385,7 @@ namespace OpenRiaServices.Hosting.Wcf
             CustomAttributeBuilder dataMemberAtt = DataContractSurrogateGenerator.GetDataMemberAttributeBuilder(
                 pd.Attributes[typeof(DataMemberAttribute)] as DataMemberAttribute);
             propertyBuilder.SetCustomAttribute(dataMemberAtt);
+            SetSerializationAttributes(propertyBuilder.SetCustomAttribute, pd.Attributes.Cast<Attribute>());
 
             // get {
             //     return $property.GetValue(_$wrapper);
@@ -516,6 +518,7 @@ namespace OpenRiaServices.Hosting.Wcf
             CustomAttributeBuilder dataMemberAtt = DataContractSurrogateGenerator.GetDataMemberAttributeBuilder(
                 pd.Attributes.OfType<DataMemberAttribute>().FirstOrDefault());
             propertyBuilder.SetCustomAttribute(dataMemberAtt);
+            SetSerializationAttributes(propertyBuilder.SetCustomAttribute, pd.Attributes.Cast<Attribute>());
 
             // get {
             //     return ((Entity)$wrapper).Property;
@@ -768,6 +771,83 @@ namespace OpenRiaServices.Hosting.Wcf
             }
 
             return GetAttributeBuilder(dataMemberType, dataMemberProperties);
+        }
+
+        private static void SetSerializationAttributes(Action<CustomAttributeBuilder> setAttribute, IEnumerable<CustomAttributeData> attributes)
+        {
+            foreach (CustomAttributeData attribute in attributes.Where(attribute => IsSerializationAttribute(attribute.AttributeType)))
+            {
+                CustomAttributeNamedArgument[] properties = attribute.NamedArguments.Where(argument => !argument.IsField).ToArray();
+                CustomAttributeNamedArgument[] fields = attribute.NamedArguments.Where(argument => argument.IsField).ToArray();
+                setAttribute(new CustomAttributeBuilder(
+                    attribute.Constructor,
+                    attribute.ConstructorArguments.Select(GetAttributeValue).ToArray(),
+                    properties.Select(argument => (PropertyInfo)argument.MemberInfo).ToArray(),
+                    properties.Select(argument => GetAttributeValue(argument.TypedValue)).ToArray(),
+                    fields.Select(argument => (FieldInfo)argument.MemberInfo).ToArray(),
+                    fields.Select(argument => GetAttributeValue(argument.TypedValue)).ToArray()));
+            }
+        }
+
+        private static void SetSerializationAttributes(Action<CustomAttributeBuilder> setAttribute, IEnumerable<Attribute> attributes)
+        {
+            foreach (Attribute attribute in attributes.Where(attribute => IsSerializationAttribute(attribute.GetType())))
+            {
+                Type attributeType = attribute.GetType();
+                ConstructorInfo constructor = attributeType.GetConstructors()
+                    .OrderByDescending(candidate => candidate.GetParameters().Length)
+                    .First(candidate => candidate.GetParameters().All(parameter =>
+                        attributeType.GetProperty(parameter.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)?.PropertyType == parameter.ParameterType));
+                HashSet<string> constructorProperties = constructor.GetParameters()
+                    .Select(parameter => parameter.Name)
+                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
+                object[] constructorArguments = constructor.GetParameters()
+                    .Select(parameter => attributeType.GetProperty(parameter.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase).GetValue(attribute))
+                    .ToArray();
+                PropertyInfo[] properties = attributeType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                    .Where(property => property.CanWrite && !constructorProperties.Contains(property.Name) && ShouldCopyAttributeProperty(attribute, property))
+                    .ToArray();
+
+                setAttribute(new CustomAttributeBuilder(
+                    constructor,
+                    constructorArguments,
+                    properties,
+                    properties.Select(property => property.GetValue(attribute)).ToArray()));
+            }
+        }
+
+        private static bool IsSerializationAttribute(Type attributeType)
+        {
+            string assemblyName = attributeType.Assembly.GetName().Name;
+            return assemblyName == "PolyType" || assemblyName == "Nerdbank.MessagePack";
+        }
+
+        private static bool ShouldCopyAttributeProperty(Attribute attribute, PropertyInfo property)
+        {
+            PropertyInfo specifiedProperty = attribute.GetType().GetProperty(
+                property.Name + "Specified",
+                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+            return specifiedProperty?.PropertyType != typeof(bool) || (bool)specifiedProperty.GetValue(attribute);
+        }
+
+        private static object GetAttributeValue(CustomAttributeTypedArgument argument)
+        {
+            if (!argument.ArgumentType.IsArray)
+            {
+                return argument.ArgumentType.IsEnum && argument.Value != null
+                    ? Enum.ToObject(argument.ArgumentType, argument.Value)
+                    : argument.Value;
+            }
+
+            Type elementType = argument.ArgumentType.GetElementType();
+            IReadOnlyCollection<CustomAttributeTypedArgument> values = (IReadOnlyCollection<CustomAttributeTypedArgument>)argument.Value;
+            Array result = Array.CreateInstance(elementType, values.Count);
+            int index = 0;
+            foreach (CustomAttributeTypedArgument value in values)
+            {
+                result.SetValue(GetAttributeValue(value), index++);
+            }
+            return result;
         }
 
         private static CustomAttributeBuilder GetAttributeBuilder(Type type, Dictionary<string, object> attProperties)

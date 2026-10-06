@@ -497,6 +497,9 @@ namespace OpenRiaServices.Tools.Test
             // Default
             TestHelper.CodeGenValidationOptions options = new TestHelper.CodeGenValidationOptions(@"Default\Cities", "CG_Cities", "Cities.g", typeof(CityDomainService), sharedFiles, false);
             options.AddSharedType(typeof(Cities.TimeZone));
+            options.AddSharedType(typeof(PolyType.TypeShapeAttribute));
+            options.AddSharedType(typeof(PolyType.PropertyShapeAttribute));
+            options.AddSharedType(typeof(Nerdbank.MessagePack.KeyAttribute));
             TestHelper.ValidateCodeGen(options);
         }
 #if NET

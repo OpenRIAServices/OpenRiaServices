@@ -19,10 +19,16 @@ namespace Cities
     {
         private readonly List<County> _counties = new List<County>();
 
+        [Nerdbank.MessagePack.Key(0)]
         public string Name { get; set; }
+        [Nerdbank.MessagePack.Key(1)]
         public string FullName { get; set; }
+        [Nerdbank.MessagePack.Key(2)]
         public TimeZone TimeZone { get; set; }
+        [Nerdbank.MessagePack.Key(3)]
         public ShippingZone ShippingZone { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Usage", "NBMsgPack001:Apply [Key] consistently across members", Justification = "Not valid on client")]
         public List<County> Counties { get { return this._counties; } }
     }
 
