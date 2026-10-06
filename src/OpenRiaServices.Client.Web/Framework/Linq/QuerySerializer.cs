@@ -31,7 +31,7 @@ namespace OpenRiaServices.Client
             return queryParts;
         }
 
-        internal class Visitor : ExpressionVisitor
+        internal sealed class Visitor : ExpressionVisitor
         {
             private ServiceQueryPart _currPart;
             private StringBuilder _currPartBuilder;
@@ -421,8 +421,10 @@ namespace OpenRiaServices.Client
                 bool isSupportedMethod = false;
 
                 // methods on our supported types are supported
-                if (TypeUtility.IsPredefinedType(declaringType) || (declaringType == typeof(Math))
-                    || (declaringType == typeof(Convert)) || (declaringType == typeof(object)))
+                if ((TypeUtility.IsPredefinedType(declaringType) && !TypeUtility.IsSimpleStructType(declaringType))
+                    || (declaringType == typeof(Math))
+                    || (declaringType == typeof(Convert))
+                    || (declaringType == typeof(object)))
                 {
                     isSupportedMethod = true;
                 }
@@ -608,7 +610,7 @@ namespace OpenRiaServices.Client
         /// <summary>
         /// This visitor is used to make any required method call translations.
         /// </summary>
-        internal class MethodCallConverter : ExpressionVisitor
+        internal sealed class MethodCallConverter : ExpressionVisitor
         {
             protected override Expression VisitUnary(UnaryExpression u)
             {

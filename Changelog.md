@@ -1,9 +1,21 @@
 # Unreleased
 
+# 5.10.0 / AspNetCore 1.6.0 — MessagePack transport
+
+Major new features in this release are:
+* [MessagePack](docs/messagepack-serialization.md) transport support for both server and client
+* Performance improvements to the client-side entity association lookup using [in memory indices](.indexed-association-lookups.md)
+* Added phase-1 support for [simple structs](docs/simple-structs-specification.md) for parameters/return values and on entities.
+   * Includes structs that only have simple (sucha as primitives) for properties
+   * Structs can be used as keys, as long as they implement `IEquatable<T>` and have a stable hash code implementation
+   * IMPORTANT:
+     * Collections of supported simple structs as method parameters and return values (but not yet as entity properties, changes to codegen is expected for collection properties)
+     * Code generation support is not yet implemented for simple structs, so they must be manually defined in the shared assembly for now
+     * There is no validation that the structs are serializable
+        * Make sure they are serializable using the choosen serialization format (DataContract for binary, or using MessagePack)
+        * Use TypeConverter to specify how to convert the struct to/from a string for query parameters
 * Query methods can opt into applying client-provided filtering, ordering, and paging before materialization by accepting an injected `ClientQuery<TEntity>` parameter. This enables methods to return a `List<TEntity>` while retaining database-side query composition and total-count support.
 * Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
-
-# 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
 ## AspNetCore 1.6.0
 
@@ -30,9 +42,16 @@ builder.Services.AddOpenRiaServices()
     });
 ```
 
+## Server
+
+* Query methods can opt into applying client-provided filtering, ordering, and paging before materialization by accepting an injected `ClientQuery<TEntity>` parameter. This enables methods to return a `List<TEntity>` while retaining database-side query composition and total-count support.
+* Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
+
 ## Client (`OpenRiaServices.Client.DomainClients.Http`)
 
 * Added `MessagePackHttpDomainClientFactory` — a `DomainClientFactory` that communicates with the server using MessagePack over HTTP
+* Added `MessagePackHttpDomainClientFactory.ResponsePipeReaderOptions` to control `PipeReader` creation for non-buffered MessagePack responses
+* Client-side entity association lookup now uses internal `EntitySet` indexes, including typed single-key accessors for common scalar key types, to reduce repeated full-set scans and lower allocation overhead during relationship resolution.
 
 ### Enable MessagePack on the client
 
@@ -53,7 +72,27 @@ DomainContext.DomainClientFactory =
     new MessagePackHttpDomainClientFactory(baseUri, httpClientFactory, serializer);
 ```
 
+By default, MessagePack responses are read through a `PipeReader`.
+You can control the buffering by setting the `ResponsePipeReaderOptions` property.
+If you send large server responses, you may want to increase the buffer size to 512 KB or even 1 MB to improve performance further.
+
+```csharp
+DomainContext.DomainClientFactory =
+    new MessagePackHttpDomainClientFactory(baseUri, httpClientFactory)
+    {
+        ResponsePipeReaderOptions = new StreamPipeReaderOptions(
+            bufferSize: 1024 * 1024,
+            minimumReadSize: 4 * 1024,
+            leaveOpen: true),
+    };
+```
+
 For performance benchmark data see [PR #591](https://github.com/OpenRIAServices/OpenRiaServices/pull/591).
+
+
+## Other
+
+* Updated Source Link configuration to rely on .NET SDK built-in Source Link support (removed explicit `Microsoft.SourceLink.GitHub` package reference)
 
 # AspNetCore 1.5.0
 

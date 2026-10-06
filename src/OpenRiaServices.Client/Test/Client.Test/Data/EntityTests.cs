@@ -499,96 +499,6 @@ namespace OpenRiaServices.Client.Test
         }
 
         /// <summary>
-        /// Test the EntityKey APIs directly
-        /// </summary>
-        [TestMethod]
-        public void EntityKey_Creation()
-        {
-            // Test one of the generic Create overloads (that doesn't box
-            // the key values)
-            object key = EntityKey.Create(5, 2.34M, "test", "hello world");
-            string formattedKey = key.ToString();
-
-            object[] keyValues = new object[] { 5, 2.34M, "test", "hello world" };
-            string expectedKey = "{" + string.Join(",", keyValues) + "}";
-            Assert.AreEqual(expectedKey, formattedKey);
-
-            // pass the same set into the params version and verify the keys are equal
-            object key2 = EntityKey.Create(keyValues);
-            Assert.AreSame(key.GetType(), key2.GetType());
-            Assert.AreEqual(key, key2);
-            Assert.AreEqual(key.GetHashCode(), key2.GetHashCode());
-
-            // Test boxing version for N key values
-            key = EntityKey.Create(5, "hello", 3, 4, 5, "test", 2132, '?');
-            formattedKey = key.ToString();
-            Assert.AreEqual("{5,hello,3,4,5,test,2132,?}", formattedKey);
-
-            // pass the same set of values into the params version and verify the keys are equal
-            key2 = EntityKey.Create(new object[] { 5, "hello", 3, 4, 5, "test", 2132, '?' });
-            Assert.AreEqual(key, key2);
-            Assert.AreEqual(key.GetHashCode(), key2.GetHashCode());
-        }
-
-        [TestMethod]
-        public void EntityKey_NullValues()
-        {
-            string expectedMsg = new ArgumentNullException("value", Resource.EntityKey_CannotBeNull).Message;
-            ArgumentNullException expectedException = null;
-            try
-            {
-                EntityKey.Create(new object[] { 5, null, "test" });
-            }
-            catch (ArgumentNullException e)
-            {
-                expectedException = e;
-            }
-            Assert.AreEqual(expectedMsg, expectedException.Message);
-            expectedException = null;
-
-            try
-            {
-                EntityKey.Create<int, string>(5, null);
-            }
-            catch (ArgumentNullException e)
-            {
-                expectedException = e;
-            }
-            Assert.AreEqual(expectedMsg, expectedException.Message);
-            expectedException = null;
-        }
-
-        /// <summary>
-        /// Verify that for a multipart key, the key created returns
-        /// the same hash code that would result from ORing the values
-        /// together
-        /// </summary>
-        [TestMethod]
-        public void EntityKey_TestHashCodeValues()
-        {
-            Guid g = Guid.NewGuid();
-            object[] keyValues = new object[] { 123, 34.5M, "hello", new DateTime(234234), g, false, '?' };
-            object key = EntityKey.Create(keyValues);
-            int hashCode = key.GetHashCode();
-            int expectedHashCode = 0;
-            foreach (object keyValue in keyValues)
-            {
-                expectedHashCode ^= keyValue.GetHashCode();
-            }
-            Assert.AreEqual(expectedHashCode, hashCode);
-
-            // test the non-boxed version and verify we get the same hashcode
-            key = EntityKey.Create(123, 34.5M, "hello", new DateTime(234234), g, false, '?');
-            hashCode = key.GetHashCode();
-            Assert.AreEqual(expectedHashCode, hashCode);
-
-            // compute directly without boxing and verify equal
-            int directlyComputed = ((int)123).GetHashCode() ^ ((decimal)34.5M).GetHashCode() ^ "hello".GetHashCode() ^
-                new DateTime(234234).GetHashCode() ^ g.GetHashCode() ^ false.GetHashCode() ^ '?'.GetHashCode();
-            Assert.AreEqual(directlyComputed, key.GetHashCode());
-        }
-
-        /// <summary>
         /// Test codegenerated GetIdentity methods which calls EntityKey.Create
         /// </summary>
         [TestMethod]
@@ -826,12 +736,11 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public void Entity_RaiseDataMemberChanged()
         {
-            MockEntity_RaisePropertyChangedEvents entity = new MockEntity_RaisePropertyChangedEvents();
-            entity.StartTracking();
+            MockEntity_RaisePropertyChangedEvents entity = new MockEntity_RaisePropertyChangedEvents() { Property1 = 1 };
 
             ConfigurableEntityContainer container = new ConfigurableEntityContainer();
             container.CreateSet<MockEntity_RaisePropertyChangedEvents>(EntitySetOperations.All);
-            container.GetEntitySet<MockEntity_RaisePropertyChangedEvents>().Add(entity);
+            container.GetEntitySet<MockEntity_RaisePropertyChangedEvents>().Attach(entity);
 
             List<string> propertyChanges = new List<string>();
             entity.PropertyChanged += (s, a) => propertyChanges.Add(a.PropertyName);

@@ -456,7 +456,7 @@ can be used for further object setup.
     <value>The custom method named '{0}' associated with entity type '{1}' is defined more than once in the '{2}' and '{3}' DomainService classes.</value>
   </data>
   <data name="EntityCodeGen_EntityKey_KeyTypeNotSupported" xml:space="preserve">
-    <value>Property '{0}.{1}' is marked as a key property and is of type '{2}', which is not a supported type for a key member.</value>
+    <value>Property '{0}.{1}' is marked as a key property and is of type '{2}', which is not a supported type for a key member. Key members must be predefined simple types, or supported simple structs that are shared with the client and implement IEquatable&lt;T&gt;.</value>
   </data>
   <data name="EntityCodeGen_EntityKey_PropertyNotSerializable" xml:space="preserve">
     <value>The property '{0}.{1}' is marked as a key property, but it's not serializable. Are you missing DataMemberAttribute?</value>

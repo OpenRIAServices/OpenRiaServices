@@ -832,9 +832,10 @@ namespace OpenRiaServices.Tools
             }
 
             // Register namespace
-            if (!namespaceTypeReferences.ContainsKey(containingNamespace))
+            if (!namespaceTypeReferences.TryGetValue(containingNamespace, out Dictionary<string, string> namespaceTypeNames))
             {
-                namespaceTypeReferences.Add(containingNamespace, new Dictionary<string, string>(StringComparer.Ordinal));
+                namespaceTypeNames = new Dictionary<string, string>(StringComparer.Ordinal);
+                namespaceTypeReferences.Add(containingNamespace, namespaceTypeNames);
             }
 
             bool isConflict = false;
@@ -843,13 +844,13 @@ namespace OpenRiaServices.Tools
 
             // Check for conflict
             isConflict =
-                namespaceTypeReferences[containingNamespace].TryGetValue(typeName, out existingTypeName) &&
+                namespaceTypeNames.TryGetValue(typeName, out existingTypeName) &&
                 existingTypeName != fullTypeName;
 
             // Register namespace type reference
             if (!isConflict && existingTypeName == null)
             {
-                namespaceTypeReferences[containingNamespace].Add(typeName, fullTypeName);
+                namespaceTypeNames.Add(typeName, fullTypeName);
             }
 
             return isConflict;

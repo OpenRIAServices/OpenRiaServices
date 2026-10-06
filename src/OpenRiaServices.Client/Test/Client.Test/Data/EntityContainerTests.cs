@@ -4,22 +4,21 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
+using Cities;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
+using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-
-#if !SILVERLIGHT
-using System.Reflection;
-#endif
 
 namespace OpenRiaServices.Client.Test
 {
-    using Cities;
-    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
+
 
     [TestClass]
     public class EntityContainerTests : UnitTestBase
@@ -1040,20 +1039,34 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(2, changeSet.AddedEntities);
             Assert.HasCount(2, changeSet.ModifiedEntities);
             Assert.HasCount(2, changeSet.RemovedEntities);
+        }
 
-            // here's a simpler repro
-            ec.Clear();
-            d1 = new D { ID = 1 };
-            d2 = new D { ID = 2 };
-            c1 = new C { ID = 1, DID_Ref1 = 1 };
-            ec.LoadEntities(new Entity[] { d1, d2, c1 });
-            // Here we're using ApplyState to allow us to set a PK member w/o validation failure
-            // since PK members cannot be changed. This test should really be based on an association
-            // not involving PK, but the test is still valid this way.
-            d2.ApplyState(new Dictionary<string, object> {{"ID", 1}});
-            Assert.IsNull(c1.D_Ref1);  // since there is more than one match
-            d2.ApplyState(new Dictionary<string, object> { { "ID", 2 } });
-            Assert.AreSame(d1, c1.D_Ref1);
+
+        [TestMethod]
+        public void EntityRef_MultipleMatches_ReturnsNull()
+        {
+            DynamicEntityContainer container = new DynamicEntityContainer();
+            EntitySet<NullableFKParent> parentSet = container.AddEntitySet<NullableFKParent>(EntitySetOperations.All);
+            EntitySet<NullableFKChild> childSet = container.AddEntitySet<NullableFKChild>(EntitySetOperations.All);
+
+            NullableFKParent parent = new NullableFKParent { ID = 1 };
+            NullableFKChild child1 = new NullableFKChild { ID = 2, ParentID_Singleton = 1 };
+            NullableFKChild child2 = new NullableFKChild { ID = 3, ParentID_Singleton = 1 };
+
+            parentSet.Attach(parent);
+            childSet.Attach(child1);
+            childSet.Attach(child2);
+            childSet.Attach(new NullableFKChild { ID = 4, ParentID_Singleton = null });
+            childSet.Attach(new NullableFKChild { ID = 5, ParentID_Singleton = 2 });
+            Assert.IsNull(parent.Child);
+
+            // Also verify backing index returns the expected results
+            EntityAssociationAttribute association = parent.GetEntityRef("Child").Association;
+
+            Assert.IsTrue(childSet.TryGetAssociationEntities(association, parent, out IEnumerable<Entity> entities));
+            Assert.AreSequenceEqual([child1, child2], entities.Cast<NullableFKChild>());
+
+            Assert.AreSame(parent, child1.Parent2);
         }
 
         /// <summary>
@@ -1338,6 +1351,65 @@ namespace OpenRiaServices.Client.Test
             {
                 set.Attach(d2);
             }, Resource.EntitySet_DuplicateIdentity);
+        }
+
+        /// <summary>
+        /// Verify that attempting to change the identity of an entity by bypassing validation
+        /// will result in the expected exception.
+        /// </summary>
+        [TestMethod]
+        public void EntitySet_DuplicateKeyDetection_WhenKeyChanges_SingleKey()
+        {
+            TestEntityContainer ec = new TestEntityContainer();
+            EntitySet<PurchaseOrder> set = ec.GetEntitySet<PurchaseOrder>();
+
+            PurchaseOrder d1 = new PurchaseOrder { PurchaseOrderID = 1 };
+            PurchaseOrder d2 = new PurchaseOrder { PurchaseOrderID = 2 };
+
+            set.Attach(d1);
+            set.Attach(d2);
+
+            // attempt to add another entity with the same identity - expect an exception
+            ExceptionHelper.ExpectInvalidOperationException(delegate
+            {
+                // Bypass validation and change the identity of d2 to match d1
+                d2.ApplyState(new Dictionary<string, object>()
+                {
+                    { nameof(d2.PurchaseOrderID), 1 }
+                });
+            }, Resource.EntitySet_DuplicateIdentity);
+
+            Assert.AreEqual(2, d2.PurchaseOrderID);
+        }
+
+        /// <summary>
+        /// Verify that attempting to change the identity of an entity by bypassing validation
+        /// will result in the expected exception.
+        /// </summary>
+        [TestMethod]
+        public void EntitySet_DuplicateKeyDetection_WhenKeyChanges_CompositeKey()
+        {
+            TestEntityContainer ec = new TestEntityContainer();
+            EntitySet<PurchaseOrderDetail> set = ec.GetEntitySet<PurchaseOrderDetail>();
+
+            PurchaseOrderDetail d1 = new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 1 };
+            PurchaseOrderDetail d2 = new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 2 };
+
+            set.Attach(d1);
+            set.Attach(d2);
+
+            // attempt to add another entity with the same identity - expect an exception
+            ExceptionHelper.ExpectInvalidOperationException(delegate
+            {
+                // Bypass validation and change the identity of d2 to match d1
+                d2.ApplyState(new Dictionary<string, object>()
+                {
+                    { nameof(d2.PurchaseOrderDetailID), 1 }
+                });
+            }, Resource.EntitySet_DuplicateIdentity);
+
+            Assert.AreEqual(2, d2.PurchaseOrderDetailID, "Value should not have changed");
+            Assert.AreEqual(1, d2.PurchaseOrderID);
         }
 
         /// <summary>
@@ -1812,10 +1884,6 @@ namespace OpenRiaServices.Client.Test
             {
                 ProductID = 2
             };
-            Product p3 = new Product
-            {
-                ProductID = 3
-            };
             PurchaseOrderDetail d1 = new PurchaseOrderDetail
             {
                 PurchaseOrderID = 1,
@@ -1840,7 +1908,7 @@ namespace OpenRiaServices.Client.Test
                 PurchaseOrderDetailID = 4,
                 ProductID = 3
             };
-            ec.LoadEntities(new Entity[] { p1, p2, p3, d1, d2, d3, d4 });
+            ec.LoadEntities(new Entity[] { p1, p2, d1, d2, d3, d4 });
 
             NotifyCollectionChangedEventArgs args1 = null;
             ((INotifyCollectionChanged)p1.PurchaseOrderDetails).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e)

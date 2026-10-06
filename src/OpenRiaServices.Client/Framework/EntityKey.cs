@@ -11,7 +11,7 @@ namespace OpenRiaServices.Client
     public abstract class EntityKey
     {
         /// <summary>
-        /// Creates an key using the specified key values
+        /// Creates a key using the specified key values
         /// </summary>
         /// <typeparam name="T1">First key value type</typeparam>
         /// <typeparam name="T2">Second key value type</typeparam>
@@ -24,7 +24,7 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Creates an key using the specified key values
+        /// Creates a key using the specified key values
         /// </summary>
         /// <typeparam name="T1">First key value type</typeparam>
         /// <typeparam name="T2">Second key value type</typeparam>
@@ -39,14 +39,23 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Creates an key using the specified key values.
+        /// Creates a key using the specified key values.
         /// </summary>
         /// <param name="keyValues">Array of key values</param>
         /// <returns>The entity key</returns>
         public static EntityKey Create(params object[] keyValues)
         {
             ArgumentNullException.ThrowIfNull(keyValues);
+            return Create(new ReadOnlySpan<object>(keyValues));
+        }
 
+        /// <summary>
+        /// Creates a key using the specified key values.
+        /// </summary>
+        /// <param name="keyValues">Array of key values</param>
+        /// <returns>The entity key</returns>
+        public static EntityKey Create(params ReadOnlySpan<object> keyValues)
+        {
             int keyLength = keyValues.Length;
             if (keyLength == 0)
             {
@@ -90,6 +99,12 @@ namespace OpenRiaServices.Client
                 throw new ArgumentNullException(nameof(value), Resource.EntityKey_CannotBeNull);
             }
         }
+
+        /// <summary>
+        /// Copies the values that make up this key into the specified array.
+        /// </summary>
+        /// <param name="keyValues">The destination array.</param>
+        internal abstract void CopyKeyValuesTo(Span<object> keyValues);
 
         /// <summary>
         /// Formats the key as a set of key values
@@ -186,6 +201,17 @@ namespace OpenRiaServices.Client
             FormatKeyValue(sb, this._v);
         }
 
+        /// <inheritdoc />
+        internal override void CopyKeyValuesTo(Span<object> keyValues)
+        {
+            if (keyValues.Length != 1)
+            {
+                throw new ArgumentException("destination length did not match key lenght", nameof(keyValues));
+            }
+
+            keyValues[0] = this._v;
+        }
+
         #region IEquatable<T> Members
 
         /// <summary>
@@ -256,6 +282,26 @@ namespace OpenRiaServices.Client
         {
             FormatKeyValue(sb, this._v1);
             FormatKeyValue(sb, this._v2);
+        }
+
+        /// <inheritdoc />
+        internal override void CopyKeyValuesTo(Span<object> keyValues)
+        {
+            if (this._v2 is EntityKey entityKey)
+            {
+                entityKey.CopyKeyValuesTo(keyValues.Slice(1));
+                keyValues[0] = this._v1;
+            }
+            else
+            {
+                if (keyValues.Length != 2)
+                {
+                    throw new ArgumentException("Destination length did not match key length.", nameof(keyValues));
+                }
+
+                keyValues[0] = this._v1;
+                keyValues[1] = this._v2;
+            }
         }
 
         #region IEquatable<EntityKey<T1,T2>> Members

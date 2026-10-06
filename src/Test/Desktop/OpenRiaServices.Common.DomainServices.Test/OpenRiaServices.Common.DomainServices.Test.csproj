@@ -156,6 +156,9 @@
     <Compile Update="Shared\Test.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
+    <Compile Update="SimpleStructs\SimpleStructs.shared.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Compile>
     <Content Include="Baselines\Default\Scenarios\AttributeThrowing.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -415,6 +418,9 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\People\Person.g.vb">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Baselines\Default\SimpleStructs\SimpleStructs.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Cities\Cities.g.cs">
