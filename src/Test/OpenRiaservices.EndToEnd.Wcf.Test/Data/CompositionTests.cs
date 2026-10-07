@@ -269,6 +269,34 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(4, entries);
         }
 
+        /// <summary>
+        /// Verifies that an unsupported composition removal leaves the collection and entity states unchanged.
+        /// </summary>
+        /// <param name="childOperations">The operations supported by the child entity set.</param>
+        [TestMethod]
+        public void Composition_EntityCollection_Remove_NotSupported()
+        {
+            var container = new ConfigurableEntityContainer();
+            container.CreateSet<Parent>(EntitySetOperations.All);
+            container.CreateSet<Child>(EntitySetOperations.None);
+            var childSet = container.GetEntitySet<Child>();
+            var parent = new Parent { ID = 1 };
+            var child = new Child { ID = 1, ParentID = 1 };
+
+            container.LoadEntities([parent, child]);
+
+            var exception = Assert.ThrowsExactly<NotSupportedException>(() => parent.Children.Remove(child));
+
+            Assert.AreEqual(string.Format(System.Globalization.CultureInfo.CurrentCulture,
+                Resource.EntitySet_UnsupportedOperation, typeof(Child), EntitySetOperations.Remove), exception.Message);
+            Assert.AreEqual(EntityState.Unmodified, child.EntityState);
+            Assert.AreEqual(EntityState.Unmodified, parent.EntityState);
+            Assert.AreSequenceEqual([child], childSet);
+            Assert.AreSequenceEqual([child], parent.Children);
+            Assert.AreSame(parent, child.Parent);
+            Assert.IsFalse(container.HasChanges);
+        }
+
         [TestMethod]
         public void Composition_EntityCollection_Remove_IdentityPartOfForeignKey()
         {

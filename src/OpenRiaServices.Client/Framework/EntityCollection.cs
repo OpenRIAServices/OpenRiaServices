@@ -299,14 +299,22 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(Resource.EntityCollection_ModificationNotAllowedForExternalReference);
             }
 
+            // when a composed entity is removed from its collection,
+            // it's inferred as a delete, so we need to ensure that the source set is editable for remove operations
+            if (this.IsComposition)
+            {
+                if (this._sourceSet is { } sourceSet && sourceSet.IsAttached(entity) && entity.EntityState != EntityState.New)
+                {
+                    sourceSet.EnsureEditable(EntitySetOperations.Remove);
+                }
+            }
+
             bool raiseCollectionChanged = (idx != -1) && this.RemoveEntityFromCollection(entity, idx);
 
             // Update EntityState for compositional associations before "Detach" callback.
             // This ensures the owned entity is Deleted before detach might change primary key to avoid duplicate IdentityKeys
             if (this.IsComposition)
             {
-                // when a composed entity is removed from its collection,
-                // it's inferred as a delete
                 if (this._sourceSet is { } sourceSet && sourceSet.IsAttached(entity))
                 {
                     sourceSet.Remove(entity);
