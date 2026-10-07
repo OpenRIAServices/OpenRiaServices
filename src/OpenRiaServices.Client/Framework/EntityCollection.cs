@@ -145,8 +145,8 @@ namespace OpenRiaServices.Client
         /// Gets the internal <see cref="HashSet{T}"/> of entities, creating it if it is null.
         /// </summary>
         /// <remarks>
-        /// This property has been created because of performance reasons. Invoking Contains method on <see cref="Entities"/> can take significant amount of time
-        /// if there are large number of entities.
+        /// This property has been created for performance reasons. Invoking the Contains method on <see cref="Entities"/> can take a significant amount of time
+        /// if there is a large number of entities.
         /// </remarks>
         private HashSet<TEntity> EntitiesHashSet
         {
@@ -334,12 +334,12 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Add the specified <paramref name="entity"/> this collection, setting its
+        /// Add the specified <paramref name="entity"/> to this collection, setting its
         /// Parent if this is a compositional association. Whenever an
         /// entity is added to the underlying physical collection, it
         /// should be done through this method.
         /// </summary>
-        /// <param name="entity">The <see cref="Entity"/>to add.</param>
+        /// <param name="entity">The <see cref="Entity"/> to add.</param>
         /// <param name="index">the index of the entity in the collection after addition, or -1 if not added.</param>
         private bool TryAddEntityToCollection(TEntity entity, out int index)
         {
@@ -370,12 +370,12 @@ namespace OpenRiaServices.Client
                 this.Entities.RemoveAt(index);
                 return true;
             }
-            //Debug.Fail("Expected item to be part of Set");
+            Debug.Fail("Expected item to be part of Set");
             return false;
         }
 
         /// <summary>
-        /// Remove the entity if part of the collection and returns it's index through <paramref name="index"/>.(-1 if no removal)
+        /// Remove the entity if it is part of the collection and return its index through <paramref name="index"/> (-1 if no removal).
         /// </summary>
         /// <param name="entity">entity to remove</param>
         /// <param name="index">the index of the entity before removal, or -1 if not removed</param>
@@ -607,7 +607,7 @@ namespace OpenRiaServices.Client
 
         /// <summary>
         /// Callback for when an entity in the source set changes such that we need to reevaluate
-        /// it's membership in our collection. This could be because an FK member for the association
+        /// its membership in our collection. This could be because an FK member for the association
         /// has changed, or when the entity state transitions to Unmodified.
         /// </summary>
         /// <param name="entity">The entity that has changed</param>
@@ -634,8 +634,8 @@ namespace OpenRiaServices.Client
                 bool containsEntity = this.EntitiesHashSet.Contains(typedEntity);
 
                 // We allow the parent entity to be New during the AcceptChanges phase of a submit (AcceptChanges called on the other entity)
-                // of a successfull Submit operation, in which case we know that it will soon be unmodified.
-                // Without this exception we will fail to raise property changed for the member property if the other entities changes are accepted first
+                // of a successful Submit operation, in which case we know that it will soon be unmodified.
+                // Without this exception we will fail to raise property changed for the member property if changes to the other entities are accepted first
                 if (!containsEntity
                     && (this._parent.EntityState != EntityState.New || (this._parent.IsSubmitting && entity.IsSubmitting && entity.EntityState == EntityState.Unmodified))
                     && this.Filter(typedEntity))
@@ -708,7 +708,7 @@ namespace OpenRiaServices.Client
                     // If entity was part of the collection and removed, raise an event
                     if (this.TryRemoveEntityFromCollection(entityToRemove, out int idx))
                     {
-                        // Should we do a single reset event if multiple entitites are removed ??
+                        // Should we do a single reset event if multiple entities are removed ??
                         this.RaiseCollectionChangedNotification(args.Action, entityToRemove, idx);
                     }
                 }
