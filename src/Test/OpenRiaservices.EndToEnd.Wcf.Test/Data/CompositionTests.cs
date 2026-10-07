@@ -285,7 +285,7 @@ namespace OpenRiaServices.Client.Test
 
             // When a link is removed from near.PictureLabels, remove any matching links from far.PictureLabels.
             // Original repro was a sync so link was removed on change, before "Remove" returned
-            // It does no longer matter, but keep the event handler to verify it still works if we change EntityCollection again to raise notification ealier
+            // It replicated without this, but keep the event handler to verify it still works if we change EntityCollection again to raise notification earlier
             picture.PictureLabels.CollectionChanged += (sender, e) =>
             {
                 if (e.Action != NotifyCollectionChangedAction.Remove || e.OldItems == null)
@@ -316,6 +316,53 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(101, newLabel.PictureId);
             Assert.AreEqual(7, newLabel.LabelId);
             Assert.AreEqual(EntityState.New, newLabel.EntityState);
+        }
+
+        /// <summary>
+        /// Verifies removal and replacement of a composed reference whose foreign key is its entire primary key.
+        /// </summary>
+        /// <param name="replaceDirectly">Whether to replace the metadata without first assigning null.</param>
+        [TestMethod]
+        [DataRow(false)]
+        [DataRow(true)]
+        public void Composition_EntityRef_Remove_IdentityPartOfForeignKey(bool replaceDirectly)
+        {
+            var container = new PictureContainer();
+            var picture = new Picture { Id = 101 };
+            var metadata = new PictureMetadata { PictureId = 101 };
+
+            container.LoadEntities([picture, metadata]);
+
+            Assert.AreSame(metadata, picture.Metadata);
+            Assert.AreSame(picture, metadata.Picture);
+
+            if (!replaceDirectly)
+            {
+                picture.Metadata = null;
+
+                Assert.IsNull(picture.Metadata);
+                Assert.IsNull(metadata.Picture);
+                Assert.AreEqual(EntityState.Deleted, metadata.EntityState);
+                Assert.AreEqual(0, metadata.PictureId);
+                Assert.AreSame(metadata, container.GetChanges().RemovedEntities.Single());
+            }
+
+            var replacement = new PictureMetadata();
+            picture.Metadata = replacement;
+
+            Assert.AreEqual(EntityState.Deleted, metadata.EntityState);
+            Assert.IsNull(metadata.Picture);
+            Assert.AreEqual(0, metadata.PictureId);
+            Assert.AreSame(replacement, picture.Metadata);
+            Assert.AreSame(picture, replacement.Picture);
+            Assert.AreEqual(101, replacement.PictureId);
+            Assert.AreEqual(EntityState.New, replacement.EntityState);
+            Assert.AreEqual(EntityState.Modified, picture.EntityState);
+
+            var changes = container.GetChanges();
+            Assert.AreSame(metadata, changes.RemovedEntities.Single());
+            Assert.AreSame(replacement, changes.AddedEntities.Single());
+            Assert.AreSame(picture, changes.ModifiedEntities.Single());
         }
 
         [TestMethod]
@@ -1511,6 +1558,7 @@ namespace OpenRiaServices.Client.Test
                 CreateEntitySet<Picture>(EntitySetOperations.All);
                 CreateEntitySet<Label>(EntitySetOperations.All);
                 CreateEntitySet<PictureLabel>(EntitySetOperations.All);
+                CreateEntitySet<PictureMetadata>(EntitySetOperations.All);
             }
         }
         [DataContract]
@@ -1518,6 +1566,7 @@ namespace OpenRiaServices.Client.Test
         {
             private int _id;
             private EntityCollection<PictureLabel> _pictureLabels;
+            private EntityRef<PictureMetadata> _metadata;
             [Key, DataMember]
             public int Id
             {
@@ -1537,7 +1586,90 @@ namespace OpenRiaServices.Client.Test
             public EntityCollection<PictureLabel> PictureLabels => _pictureLabels ??=
                 new EntityCollection<PictureLabel>(this, nameof(PictureLabels),
                     link => link.PictureId == Id, link => link.Picture = this, link => link.Picture = null);
+            /// <summary>
+            /// Gets or sets the composed metadata with the same identity as this picture.
+            /// </summary>
+            [Composition]
+            [EntityAssociation("RemovalTest_Picture_Metadata", "Id", "PictureId")]
+            public PictureMetadata Metadata
+            {
+                get => (_metadata ??= new EntityRef<PictureMetadata>(this, nameof(Metadata),
+                    entity => entity.PictureId == Id)).Entity;
+                set
+                {
+                    var previous = Metadata;
+                    if (previous == value)
+                        return;
+                    ValidateProperty(nameof(Metadata), value);
+                    if (previous != null)
+                    {
+                        _metadata.Entity = null;
+                        previous.Picture = null;
+                    }
+                    _metadata.Entity = value;
+                    if (value != null)
+                        value.Picture = this;
+                    RaisePropertyChanged(nameof(Metadata));
+                }
+            }
             public override object GetIdentity() => _id;
+        }
+        /// <summary>
+        /// Represents composed metadata whose primary key is also the foreign key to its picture.
+        /// </summary>
+        [DataContract, RoundtripOriginal]
+        public sealed class PictureMetadata : Entity
+        {
+            private int _pictureId;
+            private EntityRef<Picture> _picture;
+
+            /// <summary>
+            /// Gets or sets the primary key and foreign key to the picture.
+            /// </summary>
+            [Key, DataMember]
+            public int PictureId
+            {
+                get => _pictureId;
+                set
+                {
+                    if (_pictureId == value)
+                        return;
+                    RaiseDataMemberChanging(nameof(PictureId));
+                    ValidateProperty(nameof(PictureId), value);
+                    _pictureId = value;
+                    RaiseDataMemberChanged(nameof(PictureId));
+                }
+            }
+
+            /// <summary>
+            /// Gets or sets the picture that owns this metadata.
+            /// </summary>
+            [EntityAssociation("RemovalTest_Picture_Metadata", "PictureId", "Id", IsForeignKey = true)]
+            public Picture Picture
+            {
+                get => (_picture ??= new EntityRef<Picture>(this, nameof(Picture),
+                    entity => entity.Id == PictureId)).Entity;
+                set
+                {
+                    var previous = Picture;
+                    if (previous == value)
+                        return;
+                    ValidateProperty(nameof(Picture), value);
+                    if (previous != null)
+                    {
+                        _picture.Entity = null;
+                        previous.Metadata = null;
+                    }
+                    PictureId = value?.Id ?? default;
+                    _picture.Entity = value;
+                    if (value != null)
+                        value.Metadata = this;
+                    RaisePropertyChanged(nameof(Picture));
+                }
+            }
+
+            /// <inheritdoc />
+            public override object GetIdentity() => _pictureId;
         }
         [DataContract]
         public sealed class Label : Entity
