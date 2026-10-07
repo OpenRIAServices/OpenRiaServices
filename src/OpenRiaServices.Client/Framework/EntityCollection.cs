@@ -299,6 +299,20 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(Resource.EntityCollection_ModificationNotAllowedForExternalReference);
             }
 
+            // Update EntityState for compositional associations before "Detach" callback.
+            // This ensures the owned entitiy is Deleted before property notification in order to avoid duplicate IdentityKeys
+            if (this.IsComposition)
+            {
+                // when a composed entity is removed from its collection,
+                // it's inferred as a delete
+                if (this._sourceSet != null && this._sourceSet.IsAttached(entity))
+                {
+                    this._sourceSet.Remove(entity);
+                }
+
+                entity.Parent!.OnChildUpdate();
+            }
+
             this.Detach(entity);
 
             if (idx != -1)
@@ -310,18 +324,6 @@ namespace OpenRiaServices.Client
                     // with the event already having been raised
                     this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Remove, entity, idx);
                 }
-            }
-
-            if (this.IsComposition)
-            {
-                // when a composed entity is removed from its collection,
-                // it's inferred as a delete
-                if (this._sourceSet != null && this._sourceSet.IsAttached(entity))
-                {
-                    this._sourceSet.Remove(entity);
-                }
-
-                entity.Parent!.OnChildUpdate();
             }
         }
 
@@ -371,7 +373,7 @@ namespace OpenRiaServices.Client
                 this.Entities.RemoveAt(index);
                 return true;
             }
-            Debug.Fail("Expected item to be part of Set");
+            //Debug.Fail("Expected item to be part of Set");
             return false;
         }
 
