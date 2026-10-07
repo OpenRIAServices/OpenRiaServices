@@ -1,5 +1,3 @@
-# Unreleased
-
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
 Major new features in this release are:
@@ -49,6 +47,7 @@ builder.Services.AddOpenRiaServices()
 * Added `MessagePackHttpDomainClientFactory` — a `DomainClientFactory` that communicates with the server using MessagePack over HTTP
 * Added `MessagePackHttpDomainClientFactory.ResponsePipeReaderOptions` to control `PipeReader` creation for non-buffered MessagePack responses
 * Client-side entity association lookup now uses internal `EntitySet` indexes, including typed single-key accessors for common scalar key types, to reduce repeated full-set scans and lower allocation overhead during relationship resolution.
+* Fixed `EntityCollection.Remove` for composition associations so that attempting to remove a child from an entity set that does not support `Remove` throws without removing the child from the collection.
 
 ### Enable MessagePack on the client
 
