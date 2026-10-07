@@ -299,15 +299,17 @@ namespace OpenRiaServices.Client
                 throw new InvalidOperationException(Resource.EntityCollection_ModificationNotAllowedForExternalReference);
             }
 
+            bool raiseCollectionChanged = (idx != -1) && this.RemoveEntityFromCollection(entity, idx);
+
             // Update EntityState for compositional associations before "Detach" callback.
-            // This ensures the owned entitiy is Deleted before property notification in order to avoid duplicate IdentityKeys
+            // This ensures the owned entity is Deleted before detach might change primary key to avoid duplicate IdentityKeys
             if (this.IsComposition)
             {
                 // when a composed entity is removed from its collection,
                 // it's inferred as a delete
-                if (this._sourceSet != null && this._sourceSet.IsAttached(entity))
+                if (this._sourceSet is { } sourceSet && sourceSet.IsAttached(entity))
                 {
-                    this._sourceSet.Remove(entity);
+                    sourceSet.Remove(entity);
                 }
 
                 entity.Parent!.OnChildUpdate();
@@ -315,15 +317,10 @@ namespace OpenRiaServices.Client
 
             this.Detach(entity);
 
-            if (idx != -1)
+            if (raiseCollectionChanged)
             {
-                if (this.RemoveEntityFromCollection(entity, idx))
-                {
-                    // If the entity was removed, raise a collection changed notification. Note that the Detach call above might
-                    // have caused a dynamic removal behind the scenes resulting in the entity no longer being in the collection,
-                    // with the event already having been raised
-                    this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Remove, entity, idx);
-                }
+                // If the entity was removed, raise a collection changed notification.
+                this.RaiseCollectionChangedNotification(NotifyCollectionChangedAction.Remove, entity, idx);
             }
         }
 
