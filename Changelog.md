@@ -16,6 +16,7 @@ Major new features in this release are:
 ## AspNetCore 1.6.0
 
 * Added MessagePack wire-format support (`application/vnd.msgpack`) via [#591](https://github.com/OpenRIAServices/OpenRiaServices/pull/591)
+* Ignore client query options on POST/QUERY requests for non-composable query operations.
 
 ### Enable MessagePack on the server
 

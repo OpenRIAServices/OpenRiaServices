@@ -2,8 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -110,6 +112,50 @@ namespace OpenRiaServices.Hosting.AspNetCore
             await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=1..2"));
         }
 
+        [TestMethod]
+        public async Task TestQuery_Post_NonComposableIgnoresQueryOptions()
+        {
+            var desc = DomainServiceDescription.GetDescription(typeof(BadRequestDomainService));
+            var operation = desc.GetQueryMethod(nameof(BadRequestDomainService.QueryWithDoubleParam));
+            var operationInvoker = new QueryOperationInvoker<People.Person>(operation, s_options);
+
+            var context = new DefaultHttpContext();
+            context.Response.Body = new MemoryStream();
+            context.RequestServices = new ServiceCollection()
+                .AddTransient<BadRequestDomainService>()
+                .BuildServiceProvider();
+            context.Request.Method = "POST";
+            context.Request.ContentType = "application/msbin1";
+            context.Request.Body = GetQueryRequestWithInvalidOptions();
+
+            await operationInvoker.Invoke(context);
+
+            Assert.AreEqual(StatusCodes.Status200OK, context.Response.StatusCode);
+        }
+
+        private static MemoryStream GetQueryRequestWithInvalidOptions()
+        {
+            var requestBody = new MemoryStream();
+            using (var writer = XmlDictionaryWriter.CreateBinaryWriter(requestBody, null, null, ownsStream: false))
+            {
+                writer.WriteStartElement("MessageRoot");
+                writer.WriteStartElement("QueryOptions");
+                writer.WriteStartElement("QueryOption");
+                writer.WriteAttributeString("Name", "where");
+                writer.WriteAttributeString("Value", "(");
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+                writer.WriteStartElement(nameof(BadRequestDomainService.QueryWithDoubleParam));
+                writer.WriteStartElement("value");
+                new DataContractSerializer(typeof(double)).WriteObjectContent(writer, 1d);
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+                writer.WriteEndElement();
+            }
+
+            requestBody.Position = 0;
+            return requestBody;
+        }
         private static async Task AssertBadRequestAsync(Task<System.Net.Http.HttpResponseMessage> responseTask)
         {
             try
