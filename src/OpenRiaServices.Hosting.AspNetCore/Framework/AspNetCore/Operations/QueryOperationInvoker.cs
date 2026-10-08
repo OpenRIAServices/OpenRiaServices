@@ -54,6 +54,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     }
 
                     (serviceQuery, inputs) = await serializer.ReadParametersFromBodyAsync(context, DomainOperation);
+                    if (!((QueryAttribute)_operation.OperationAttribute).IsComposable)
+                        serviceQuery = null;
                 }
 
                 DomainService domainService = CreateDomainService(context);
