@@ -54,7 +54,7 @@ namespace OpenRiaServices.Tools.TextTemplate.CSharpGenerators
         {
             DomainServiceDescription defaultAuthDescription = null;
             IEnumerable<DomainServiceDescription> authDescriptions =
-                this.DomainServiceDescriptions.Where(d => typeof(IAuthentication<>).DefinitionIsAssignableFrom(d.DomainServiceType));
+                this.DomainServiceDescriptions.Where(d => d.IsAuthenticationService());
             if (authDescriptions.Count() > 1)
             {
                 this.ClientCodeGenerator.CodeGenerationHost.LogMessage(
