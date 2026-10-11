@@ -1,4 +1,4 @@
-using Open\u0052iaServices.Client;
+using OpenRiaServices.Client;
 using System.ComponentModel.DataAnnotations;
 
 namespace EFCoreModels.AdventureWorks
