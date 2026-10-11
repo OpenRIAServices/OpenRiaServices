@@ -39,22 +39,17 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             ContextData d = new ContextData()
             {
                 IsClientAccessEnabled = true,
-                IsODataEndpointEnabled = true,
                 Name = "foo",
                 ID = 1
             };
 
             Assert.IsTrue(d.IsClientAccessEnabled, "ClientAccessEnable failed");
-            Assert.IsTrue(d.IsODataEndpointEnabled, "OData failed");
             Assert.AreEqual("foo", d.Name, "Name failed");
             Assert.AreEqual(1, d.ID);
 
             // Flip the bools just in case
             d.IsClientAccessEnabled = false;
             Assert.IsFalse(d.IsClientAccessEnabled, "ClientAccessEnable did not flip");
-
-            d.IsODataEndpointEnabled = false;
-            Assert.IsFalse(d.IsODataEndpointEnabled, "OData did not flip");
         }
 
         [TestMethod]

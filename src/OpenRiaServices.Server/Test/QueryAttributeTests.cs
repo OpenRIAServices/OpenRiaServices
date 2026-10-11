@@ -80,7 +80,7 @@ namespace OpenRiaServices.Server.Test
             // This DSD defines 2 defaults plus 2 non-defaults
             Assert.HasCount(4, does, "Expected this many valid query methods");
 
-            // validate the Linq query we recommend OData use to extract the default queries
+            // validate the Linq query used to extract the default queries
             IEnumerable<DomainOperationEntry> defaultQueries = dsd.DomainOperationEntries
                                                 .Where(doe =>
                                                         (doe.Operation == DomainOperation.Query) &&

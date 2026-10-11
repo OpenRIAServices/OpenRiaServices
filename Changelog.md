@@ -1,3 +1,9 @@
+# Unreleased
+
+## Removed
+
+* Removed legacy WCF OData hosting, its Visual Studio tooling integration, and related tests.
+
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
 Major new features in this release are:

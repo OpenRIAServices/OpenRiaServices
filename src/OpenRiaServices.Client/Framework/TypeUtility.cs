@@ -49,7 +49,6 @@ namespace OpenRiaServices
             "OpenRiaServices.Hosting.Wcf",
             "OpenRiaServices.Hosting.Wcf.Endpoint",
             "OpenRiaServices.Hosting.Local",
-            "OpenRiaServices.Hosting.Wcf.OData",
             "OpenRiaServices.LinqToSql",
             "OpenRiaServices.Server",
             "OpenRiaServices.Server.UnitTesting",

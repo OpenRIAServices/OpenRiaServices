@@ -42,7 +42,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         private GeneratedCode _businessLogicCode;
         private GeneratedCode _metadataCode;
         private bool _isClientAccessEnabled;
-        private bool _isODataEndpointEnabled;
       
         /// <summary>
         /// See <see cref="IWizard.BeforeOpeningFile"/>
@@ -203,7 +202,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     // Capture some model state to we can dispose the contexts and models
                     ContextViewModel currentContext = businessLogicViewModel.CurrentContextViewModel;
                     this._isClientAccessEnabled = currentContext != null && currentContext.IsClientAccessEnabled;
-                    this._isODataEndpointEnabled = currentContext != null && currentContext.IsODataEndpointEnabled;
 
                     // Compute a namespace that includes folder names
                     namespaceName = this.ComputeNamespace();
@@ -542,9 +540,8 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         private void UpdateConfiguration()
         {
             // There is no work to do unless the user has selected some context
-            // and chosen to expose the DomainService via [EnableClientAccess] or
-            // to expose an OData endpoint.
-            if (!this._isClientAccessEnabled && !this._isODataEndpointEnabled)
+            // and chosen to expose the DomainService via [EnableClientAccess].
+            if (!this._isClientAccessEnabled)
             {
                 return;
             }
@@ -583,10 +580,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         bool setAspNetCompatiblity = !webConfigUtil.IsAspNetCompatibilityEnabled();
                         bool setMultipleSiteBindingsEnabled = !webConfigUtil.IsMultipleSiteBindingsEnabled();
                         bool addValidationSection = webConfigUtil.DoWeNeedToValidateIntegratedModeToWebServer();
-                        bool addODataEndpoint = this._isODataEndpointEnabled && !webConfigUtil.IsEndpointDeclared(BusinessLogicClassConstants.ODataEndpointName);
 
                         // Modify the file only if we decided work is required
-                        if (addHttpModule || addModuleToWebServer || setAspNetCompatiblity || setMultipleSiteBindingsEnabled || addValidationSection || addODataEndpoint)
+                        if (addHttpModule || addModuleToWebServer || setAspNetCompatiblity || setMultipleSiteBindingsEnabled || addValidationSection)
                         {
                             string domainServiceFactoryName = WebConfigUtil.GetDomainServiceModuleTypeName();
 
@@ -616,12 +612,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                             if (addValidationSection)
                             {
                                 webConfigUtil.AddValidateIntegratedModeToWebServer();
-                            }
-
-                            if (addODataEndpoint)
-                            {
-                                string odataEndpointFactoryName = WebConfigUtil.GetODataEndpointFactoryTypeName();
-                                webConfigUtil.AddEndpointDeclaration(BusinessLogicClassConstants.ODataEndpointName, odataEndpointFactoryName);
                             }
                             cfg.Save();
                         }
