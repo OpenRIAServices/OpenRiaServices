@@ -56,7 +56,7 @@ namespace OpenRiaServices.Client
         }
 
         /// <summary>
-        /// Creates a WebDomainClient for the specified service contract and uri
+        /// Creates a DomainClient for the specified service contract and uri
         /// </summary>
         /// <param name="serviceContract">The service contract.</param>
         /// <param name="serviceUri">The service URI.</param>
