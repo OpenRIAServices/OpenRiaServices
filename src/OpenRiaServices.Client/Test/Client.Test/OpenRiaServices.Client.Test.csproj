@@ -86,7 +86,6 @@
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs" Link="Data\DomainClient\Test.shared.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\NorthwindEntityContainer.cs" Link="Data\NorthwindEntityContainer.cs" />
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\OperationAwaiter.cs" Link="OperationAwaiter.cs" />
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\TestUris.cs" Link="TestUris.cs" />
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Utilities\UnitTestBaseExtensions.cs" Link="Data\Utilities\UnitTestBaseExtensions.cs" />

@@ -29,8 +29,8 @@
   
   <ItemGroup>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.vb" Link="DomainClients\Cities.g.vb" />
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.vb" Link="DomainClients\Catalog_LTS.g.vb" />
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.vb" Link="DomainClients\Northwind_LTS.g.vb" />
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Catalog_EFCore.g.vb" Link="DomainClients\Catalog_EFCore.g.vb" />
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Northwind_EFCore.g.vb" Link="DomainClients\Northwind_EFCore.g.vb" />
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ServerSideAsyncDomainService.g.vb" Link="DomainClients\ServerSideAsyncDomainService.g.vb" />
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb" Link="DomainClients\IncludeScenariosTestProvider.g.vb" />
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb" Link="DomainClients\TestProvider_Scenarios.g.vb" />
