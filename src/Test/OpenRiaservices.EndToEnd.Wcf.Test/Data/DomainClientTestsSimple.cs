@@ -1,6 +1,4 @@
-﻿extern alias SSmDsClient;
-extern alias SSmDsWeb;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;

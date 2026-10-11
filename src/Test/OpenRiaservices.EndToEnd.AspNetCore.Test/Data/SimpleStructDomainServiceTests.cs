@@ -1,4 +1,3 @@
-extern alias httpDomainClient;
 
 using System;
 using System.Collections.Generic;
@@ -6,7 +5,6 @@ using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using httpDomainClient::OpenRiaServices.Client.DomainClients;
 using SimpleStructs;
 
 namespace OpenRiaServices.Client.Test
@@ -64,7 +62,7 @@ namespace OpenRiaServices.Client.Test
         public async Task RoundtripsSimpleStructsUsingGet()
         {
             using var httpHandler = new SimpleStructRecordingHttpHandler(new HttpClientHandler());
-            var domainClient = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpHandler)
+            var domainClient = DomainContext.DomainClientFactory
                 .CreateDomainClient(
                     typeof(SimpleStructDomainContext.ISimpleStructDomainServiceContract),
                     new Uri("SimpleStructs-SimpleStructDomainService", UriKind.Relative),

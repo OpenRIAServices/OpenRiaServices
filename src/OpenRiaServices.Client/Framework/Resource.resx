@@ -139,7 +139,7 @@
     <value>Custom method invocation name cannot be null or empty.</value>
   </data>
   <data name="DomainContext_DomainClientFactoryNotSet" xml:space="preserve">
-    <value>Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as WebDomainClientFactory from 'OpenRiaServices.Client.Web'.</value>
+    <value>Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as MessagePackHttpDomainClientFactory from 'OpenRiaServices.Client.DomainClients' namespace.</value>
   </data>
   <data name="DomainContext_EntityContainerCannotBeNull" xml:space="preserve">
     <value>The EntityContainer for a DomainContext cannot be null.</value>
@@ -299,8 +299,5 @@
   </data>
   <data name="ValidationUtilities_MethodNotFound_ZeroParams" xml:space="preserve">
     <value>Method '{0}.{1}' accepting zero parameters could not be found.</value>
-  </data>
-  <data name="WebDomainClient_OperationDoesNotExist" xml:space="preserve">
-    <value>Operation '{0}' does not exist.</value>
   </data>
 </root>

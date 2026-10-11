@@ -40,7 +40,6 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj" />
     <ProjectReference Include="..\..\Framework\OpenRiaServices.Client.csproj" />
   </ItemGroup>
 </Project>

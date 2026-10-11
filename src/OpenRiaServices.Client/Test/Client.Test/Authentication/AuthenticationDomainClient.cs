@@ -1,5 +1,4 @@
 ﻿extern alias SSmDsClient;
-extern alias SSmDsWeb;
 
 using System;
 using System.Collections.Generic;

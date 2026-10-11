@@ -20,7 +20,7 @@ namespace OpenRiaServices.Client.Test
 
             // ctor(changeSet, message, status)
             var soe = new SubmitOperationException(changeSet, "message", OperationErrorStatus.Unauthorized);
-            Assert.AreEqual(changeSet, soe.ChangeSet);
+            Assert.AreSame(changeSet, soe.ChangeSet);
             Assert.AreEqual("message", soe.Message, "ctor(msg) failed");
             Assert.IsNull(soe.InnerException, "InnerException s/b null");
             Assert.IsNull(soe.StackTrace, "Default stack trace s/b null");
@@ -31,7 +31,7 @@ namespace OpenRiaServices.Client.Test
             // ctor(changeSet, message, innerException)
             var ioe = new InvalidOperationException("ioe");
             soe = new SubmitOperationException(changeSet, "message", ioe);
-            Assert.AreEqual(changeSet, soe.ChangeSet);
+            Assert.AreSame(changeSet, soe.ChangeSet);
             Assert.AreEqual("message", soe.Message, "ctor(msg) failed");
             Assert.AreSame(ioe, soe.InnerException, "InnerException failed");
             Assert.IsNull(soe.StackTrace, "Default stack trace s/b null");
@@ -42,7 +42,7 @@ namespace OpenRiaServices.Client.Test
             // ctor(changeSet, message, doe)
             var doe2 = new DomainOperationException("message", OperationErrorStatus.Unauthorized, 5, "stackTrace");
             soe = new SubmitOperationException(changeSet, "mm", doe2);
-            Assert.AreEqual(changeSet, soe.ChangeSet); 
+            Assert.AreSame(changeSet, soe.ChangeSet); 
             Assert.AreEqual("mm", soe.Message, "ctor(doe) failed message");
             Assert.IsNull(soe.InnerException, "InnerException s/b null");
             Assert.AreEqual("stackTrace", soe.StackTrace, "StackTrace failed");

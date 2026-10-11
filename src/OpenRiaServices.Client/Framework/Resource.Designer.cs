@@ -19,7 +19,7 @@ namespace OpenRiaServices.Client {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "18.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resource {
@@ -124,7 +124,7 @@ namespace OpenRiaServices.Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as WebDomainClientFactory from &apos;OpenRiaServices.Client.Web&apos;..
+        ///   Looks up a localized string similar to Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as MessagePackHttpDomainClientFactory from &apos;OpenRiaServices.Client.DomainClients&apos; namespace..
         /// </summary>
         internal static string DomainContext_DomainClientFactoryNotSet {
             get {
@@ -606,15 +606,6 @@ namespace OpenRiaServices.Client {
         internal static string ValidationUtilities_MethodNotFound_ZeroParams {
             get {
                 return ResourceManager.GetString("ValidationUtilities_MethodNotFound_ZeroParams", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Operation &apos;{0}&apos; does not exist..
-        /// </summary>
-        internal static string WebDomainClient_OperationDoesNotExist {
-            get {
-                return ResourceManager.GetString("WebDomainClient_OperationDoesNotExist", resourceCulture);
             }
         }
     }

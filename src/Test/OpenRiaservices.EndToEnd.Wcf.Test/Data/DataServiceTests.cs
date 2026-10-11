@@ -27,12 +27,6 @@ namespace OpenRiaServices.Client.Test
         // Test Todo:
         // - test wrong number of parameters sent / mismatch of name/type
 
-        private TestProvider_Scenarios CreateDomainContextWithRestDomainClient()
-        {
-            return new TestProvider_Scenarios(new WebDomainClient<TestProvider_Scenarios.ITestProvider_ScenariosContract>(TestURIs.TestProvider_Scenarios));
-        }
-
-
         private void ExecuteQuery(Func<TestProvider_Scenarios, EntityQuery<CityWithCacheData>> getQuery, string expectedCacheData)
         {
             LoadOperation<CityWithCacheData> loadOp = null;

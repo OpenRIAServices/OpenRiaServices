@@ -14,6 +14,10 @@
   <ItemGroup>
     <PackageReference Include="MSTest.TestAdapter" Version="4.3.3" />
     <PackageReference Include="MSTest.TestFramework" Version="4.3.3" />
+    <PackageReference Include="MSTest.Analyzers" Version="4.3.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
@@ -95,13 +99,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj">
-      <Aliases>httpDomainClient</Aliases>
-    </ProjectReference>
+    <ProjectReference Include="..\..\OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
-    <ProjectReference Include="..\..\OpenRiaServices.Client.Web\Framework\OpenRiaServices.Client.Web.csproj">
-      <Aliases>global,SSmDsWeb</Aliases>
-    </ProjectReference>
     <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj">
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>

@@ -1,8 +1,5 @@
 # Unreleased
 
-## Removed
-
-* Removed legacy WCF OData hosting, its Visual Studio tooling integration, and related tests.
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
@@ -96,6 +93,8 @@ For performance benchmark data see [PR #591](https://github.com/OpenRIAServices/
 ## Other
 
 * Updated Source Link configuration to rely on .NET SDK built-in Source Link support (removed explicit `Microsoft.SourceLink.GitHub` package reference)
+* Removed legacy WCF OData hosting, its Visual Studio tooling integration, and related tests.
+* Removed legacy WCF client, including `WebDomainClientFactory` and related tests.
 
 # AspNetCore 1.5.0
 
