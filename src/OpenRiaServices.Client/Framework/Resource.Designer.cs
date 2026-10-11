@@ -124,7 +124,7 @@ namespace OpenRiaServices.Client {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as WebDomainClientFactory from &apos;OpenRiaServices.Client.Web&apos;..
+        ///   Looks up a localized string similar to Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as MessagePackHttpDomainClientFactory from &apos;OpenRiaServices.Client.DomainClients&apos; namespace..
         /// </summary>
         internal static string DomainContext_DomainClientFactoryNotSet {
             get {

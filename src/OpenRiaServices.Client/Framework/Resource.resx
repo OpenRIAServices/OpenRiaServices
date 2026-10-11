@@ -139,7 +139,7 @@
     <value>Custom method invocation name cannot be null or empty.</value>
   </data>
   <data name="DomainContext_DomainClientFactoryNotSet" xml:space="preserve">
-    <value>Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as WebDomainClientFactory from 'OpenRiaServices.Client.Web'.</value>
+    <value>Cannot create a DomainClient since DomainContext.DomainClientFactory is null, please set it to a DomainClientFactory such as MessagePackHttpDomainClientFactory from 'OpenRiaServices.Client.DomainClients' namespace.</value>
   </data>
   <data name="DomainContext_EntityContainerCannotBeNull" xml:space="preserve">
     <value>The EntityContainer for a DomainContext cannot be null.</value>

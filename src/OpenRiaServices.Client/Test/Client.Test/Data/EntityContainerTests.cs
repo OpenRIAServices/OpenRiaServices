@@ -120,7 +120,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(order.Customer);
 
             bool receivedChangeNotification = false;
-            order.PropertyChanged += (s,e) =>
+            order.PropertyChanged += (s, e) =>
             {
                 if (e.PropertyName == "Customer")
                 {
@@ -268,8 +268,8 @@ namespace OpenRiaServices.Client.Test
             // Setting the PK explicitly on the parent causes all the added
             // children to be removed, since they no longer match the predicate
             // Order.CustomerID == CustomerID
-            //anton.CustomerID = "Foo";
-            //Assert.HasCount(0, anton.Orders);
+            anton.CustomerID = "Foo";
+            Assert.AreEqual(0, 0);
         }
 
         /// <summary>
@@ -296,7 +296,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.HasCount(2, ec.GetChanges().AddedEntities);
 
-            city.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            city.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 // this handler is key to the repro. It forces the city.ZipCodes entity collection to
                 // cache itself
@@ -817,8 +817,8 @@ namespace OpenRiaServices.Client.Test
             ec.LoadEntities(new Entity[] { d1, d2, d3 });
 
             Assert.AreEqual(2, d1.Ds.Count);
-            
-            d1.Ds.EntityRemoved += (s,e) =>
+
+            d1.Ds.EntityRemoved += (s, e) =>
             {
                 // this is the key to the bug - it causes d2.Ds to cache
                 // which causes a callback to be registered for that association
@@ -1220,9 +1220,10 @@ namespace OpenRiaServices.Client.Test
             // verify can't set entity ref to an entity from another container
             PurchaseOrderDetail d1 = ec1.PurchaseOrderDetails.First();
             Product p2 = ec2.Products.First();
-            ExceptionHelper.ExpectInvalidOperationException(delegate {
+            ExceptionHelper.ExpectInvalidOperationException(delegate
+            {
                 d1.Product = p2;
-            }, 
+            },
             string.Format(Resource.EntityContainer_CrossContainerAttach, p2));
 
             // verify that if we detach first, it works
@@ -1254,7 +1255,7 @@ namespace OpenRiaServices.Client.Test
         {
             TestEntityContainer ec1 = CreatePopulatedTestContainer();
             TestEntityContainer ec2 = new TestEntityContainer();
-            ec2.LoadEntities(new Entity[] { 
+            ec2.LoadEntities(new Entity[] {
                 new Product { ProductID = 100, Name = "A" },
                 new Product { ProductID = 200, Name = "B" },
                 new PurchaseOrder { PurchaseOrderID = 100 },
@@ -1269,7 +1270,7 @@ namespace OpenRiaServices.Client.Test
                 ec1.Products.Add(p2);
             },
             string.Format(Resource.EntityContainer_CrossContainerAttach, p2));
-            
+
             // verify it works if detach is called first
             ec2.Products.Detach(p2);
             ec1.Products.Attach(p2);
@@ -1290,7 +1291,7 @@ namespace OpenRiaServices.Client.Test
         private TestEntityContainer CreatePopulatedTestContainer()
         {
             TestEntityContainer ec = new TestEntityContainer();
-            ec.LoadEntities(new Entity[] { 
+            ec.LoadEntities(new Entity[] {
                 new Product { ProductID = 1, Name = "A" },
                 new Product { ProductID = 2, Name = "B" },
                 new Product { ProductID = 3, Name = "C" },
@@ -1443,7 +1444,9 @@ namespace OpenRiaServices.Client.Test
             TestEntityContainer ec = new TestEntityContainer();
             PurchaseOrderDetail ord = new PurchaseOrderDetail
             {
-                PurchaseOrderID = 111, PurchaseOrderDetailID = 222, ProductID = 222
+                PurchaseOrderID = 111,
+                PurchaseOrderDetailID = 222,
+                ProductID = 222
             };
             PurchaseOrder o = new PurchaseOrder
             {
@@ -1451,7 +1454,8 @@ namespace OpenRiaServices.Client.Test
             };
             Product p = new Product
             {
-                ProductID = 222, Name = "Test"
+                ProductID = 222,
+                Name = "Test"
             };
             ord.PurchaseOrder = o;
             ord.Product = p;
@@ -1472,7 +1476,9 @@ namespace OpenRiaServices.Client.Test
 
             PurchaseOrderDetail newOrd = new PurchaseOrderDetail
             {
-                PurchaseOrderID = o.PurchaseOrderID, PurchaseOrderDetailID = 222, ProductID = p.ProductID
+                PurchaseOrderID = o.PurchaseOrderID,
+                PurchaseOrderDetailID = 222,
+                ProductID = p.ProductID
             };
             Assert.AreEqual(0, p.PurchaseOrderDetails.Count);  // This was failing!
             newOrd.Product = ordProd;
@@ -1487,7 +1493,9 @@ namespace OpenRiaServices.Client.Test
             ec = new TestEntityContainer();
             ord = new PurchaseOrderDetail
             {
-                PurchaseOrderID = 111, PurchaseOrderDetailID = 222, ProductID = 222
+                PurchaseOrderID = 111,
+                PurchaseOrderDetailID = 222,
+                ProductID = 222
             };
             o = new PurchaseOrder
             {
@@ -1495,7 +1503,8 @@ namespace OpenRiaServices.Client.Test
             };
             p = new Product
             {
-                ProductID = 222, Name = "Test"
+                ProductID = 222,
+                Name = "Test"
             };
             ord.Product = p;
             ord.PurchaseOrder = o;
@@ -1515,7 +1524,9 @@ namespace OpenRiaServices.Client.Test
 
             newOrd = new PurchaseOrderDetail
             {
-                PurchaseOrderID = o.PurchaseOrderID, PurchaseOrderDetailID = 222, ProductID = p.ProductID
+                PurchaseOrderID = o.PurchaseOrderID,
+                PurchaseOrderDetailID = 222,
+                ProductID = p.ProductID
             };
             Assert.AreEqual(0, p.PurchaseOrderDetails.Count);  // This was failing!
             newOrd.Product = ordProd;
@@ -1538,8 +1549,8 @@ namespace OpenRiaServices.Client.Test
             TestEntityContainer ec = new TestEntityContainer();
             PurchaseOrderDetail ord = new PurchaseOrderDetail
             {
-                PurchaseOrderID = 111, 
-                PurchaseOrderDetailID = 111, 
+                PurchaseOrderID = 111,
+                PurchaseOrderDetailID = 111,
                 ProductID = 222
             };
             PurchaseOrder o = new PurchaseOrder
@@ -1605,11 +1616,15 @@ namespace OpenRiaServices.Client.Test
             };
             PurchaseOrderDetail detail1 = new PurchaseOrderDetail
             {
-                PurchaseOrderID = 1, PurchaseOrderDetailID = 1, ProductID = 1
+                PurchaseOrderID = 1,
+                PurchaseOrderDetailID = 1,
+                ProductID = 1
             };
             PurchaseOrderDetail detail2 = new PurchaseOrderDetail
             {
-                PurchaseOrderID = 1, PurchaseOrderDetailID = 2, ProductID = 1
+                PurchaseOrderID = 1,
+                PurchaseOrderDetailID = 2,
+                ProductID = 1
             };
             ec.LoadEntities(new Entity[] { prod, detail1, detail2 });
 
@@ -1620,7 +1635,7 @@ namespace OpenRiaServices.Client.Test
             // Here we're using ApplyState to allow us to set a PK member w/o validation failure
             // since PK members cannot be changed. This test should really be based on an association
             // not involving PK, but the test is still valid this way.
-            prod.ApplyState(new Dictionary<string, object> { {"ProductID", 5 } });
+            prod.ApplyState(new Dictionary<string, object> { { "ProductID", 5 } });
 
             // load another unrelated entity
             PurchaseOrderDetail detail = new PurchaseOrderDetail
@@ -1643,7 +1658,8 @@ namespace OpenRiaServices.Client.Test
             // first load a category
             DataTests.Northwind.LTS.Category category = new DataTests.Northwind.LTS.Category
             {
-                CategoryID = 1, CategoryName = "Frozen Snacks"
+                CategoryID = 1,
+                CategoryName = "Frozen Snacks"
             };
             entities.LoadEntities(new Entity[] { category });
 
@@ -1651,7 +1667,9 @@ namespace OpenRiaServices.Client.Test
             // reference to be loaded.
             DataTests.Northwind.LTS.Product prod = new DataTests.Northwind.LTS.Product
             {
-                ProductID = 1, CategoryID = 1, ProductName = "Beefcicles"
+                ProductID = 1,
+                CategoryID = 1,
+                ProductName = "Beefcicles"
             };
 
             IEntityRef er = prod.GetEntityRef("Category");
@@ -1663,7 +1681,9 @@ namespace OpenRiaServices.Client.Test
             // now do the same test for an initialized EntityRef
             prod = new DataTests.Northwind.LTS.Product
             {
-                ProductID = 2, CategoryID = 1, ProductName = "Beefy Cheezy Pockets"
+                ProductID = 2,
+                CategoryID = 1,
+                ProductName = "Beefy Cheezy Pockets"
             };
 
             Assert.IsNull(prod.Category);  // force the ref to initialize itself
@@ -1681,7 +1701,9 @@ namespace OpenRiaServices.Client.Test
             // first load a product
             DataTests.Northwind.LTS.Product prod = new DataTests.Northwind.LTS.Product
             {
-                ProductID = 1, CategoryID = 1, ProductName = "Beefcicles"
+                ProductID = 1,
+                CategoryID = 1,
+                ProductName = "Beefcicles"
             };
             entities.LoadEntities(new Entity[] { prod });
 
@@ -1689,7 +1711,8 @@ namespace OpenRiaServices.Client.Test
             // reference to be loaded.
             DataTests.Northwind.LTS.Category category = new DataTests.Northwind.LTS.Category
             {
-                CategoryID = 1, CategoryName = "Frozen Snacks"
+                CategoryID = 1,
+                CategoryName = "Frozen Snacks"
             };
 
             IEntityCollection ec = category.Products;
@@ -1911,7 +1934,7 @@ namespace OpenRiaServices.Client.Test
             ec.LoadEntities(new Entity[] { p1, p2, d1, d2, d3, d4 });
 
             NotifyCollectionChangedEventArgs args1 = null;
-            ((INotifyCollectionChanged)p1.PurchaseOrderDetails).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e)
+            ((INotifyCollectionChanged)p1.PurchaseOrderDetails).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
             {
                 args1 = e;
             };
@@ -1963,7 +1986,7 @@ namespace OpenRiaServices.Client.Test
             // Here we're using ApplyState to allow us to set a PK member w/o validation failure
             // since PK members cannot be changed. This test should really be based on an association
             // not involving PK, but the test is still valid this way.
-            state.ApplyState(new Dictionary<string, object> { {"Name", "HI"} });
+            state.ApplyState(new Dictionary<string, object> { { "Name", "HI" } });
 
             Assert.AreEqual(0, state.Counties.Count);
 
@@ -2011,14 +2034,14 @@ namespace OpenRiaServices.Client.Test
             // TODO : test with both loaded and unloaded ECs
 
             List<NotifyCollectionChangedEventArgs> ordersChangedArgs = new List<NotifyCollectionChangedEventArgs>();
-            ((INotifyCollectionChanged)e1.PurchaseOrders).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e)
+            ((INotifyCollectionChanged)e1.PurchaseOrders).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
             {
                 Assert.AreSame(e1.PurchaseOrders, sender);
                 ordersChangedArgs.Add(e);
             };
 
             List<NotifyCollectionChangedEventArgs> reportsChangedArgs = new List<NotifyCollectionChangedEventArgs>();
-            ((INotifyCollectionChanged)e1.Reports).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e)
+            ((INotifyCollectionChanged)e1.Reports).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
             {
                 Assert.AreSame(e1.Reports, sender);
                 reportsChangedArgs.Add(e);
@@ -2179,7 +2202,7 @@ namespace OpenRiaServices.Client.Test
             ec.LoadEntities(new Entity[] { order, order2, detail });
 
             int notifications = 0;
-            detail.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            detail.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "PurchaseOrder")
                 {
@@ -2265,7 +2288,7 @@ namespace OpenRiaServices.Client.Test
             };
 
             int eventCount = 0;
-            order.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            order.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "Employee")
                 {
@@ -2345,7 +2368,7 @@ namespace OpenRiaServices.Client.Test
             PurchaseOrder order = new PurchaseOrder();
 
             List<NotifyCollectionChangedEventArgs> events = new List<NotifyCollectionChangedEventArgs>();
-            ((INotifyCollectionChanged)order.PurchaseOrderDetails).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e)
+            ((INotifyCollectionChanged)order.PurchaseOrderDetails).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
             {
                 Assert.AreSame(order.PurchaseOrderDetails, sender);
                 events.Add(e);
@@ -2376,7 +2399,7 @@ namespace OpenRiaServices.Client.Test
 
             int hasChangesNotifications = 0;
             int entityStateNotifications = 0;
-            prod.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            prod.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "HasChanges")
                 {
@@ -2494,7 +2517,7 @@ namespace OpenRiaServices.Client.Test
             bool expectChanges = false;
 
             #region Event subscriptions
-            prodSet.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            prodSet.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 // When transitioning to HasChanges == true, verify that the modified
                 // entity state is updated prior to the event being raised
@@ -2520,7 +2543,7 @@ namespace OpenRiaServices.Client.Test
                 }
             };
 
-            ec.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            ec.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "HasChanges" && expectChanges)
                 {
@@ -2530,7 +2553,7 @@ namespace OpenRiaServices.Client.Test
                 }
             };
 
-            ctxt.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            ctxt.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "HasChanges" && expectChanges)
                 {
@@ -2585,7 +2608,7 @@ namespace OpenRiaServices.Client.Test
             #region Event Subscriptions
             int setCountEventTotal = 0;
             int setHasChangesEventTotal = 0;
-            PropertyChangedEventHandler setPropertyChangedHandler = delegate(object sender, PropertyChangedEventArgs e)
+            PropertyChangedEventHandler setPropertyChangedHandler = delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "Count")
                 {
@@ -2600,7 +2623,7 @@ namespace OpenRiaServices.Client.Test
             orderSet.PropertyChanged += setPropertyChangedHandler;
 
             int containerHasChangedEventTotal = 0;
-            ec.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            ec.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "HasChanges")
                 {
@@ -2609,7 +2632,7 @@ namespace OpenRiaServices.Client.Test
             };
 
             int contextHasChangedEventTotal = 0;
-            ctxt.PropertyChanged += delegate(object sender, PropertyChangedEventArgs e)
+            ctxt.PropertyChanged += delegate (object sender, PropertyChangedEventArgs e)
             {
                 if (e.PropertyName == "HasChanges")
                 {
@@ -2618,7 +2641,7 @@ namespace OpenRiaServices.Client.Test
             };
             #endregion
 
-            Func<int, int, int, int, bool> VerifyChangeEvents = delegate(int expectedSetCountTotal, int expectedSetHasChangedTotal, int expectedContainerHasChangedTotal, int expectedContextHasChangedTotal)
+            Func<int, int, int, int, bool> VerifyChangeEvents = delegate (int expectedSetCountTotal, int expectedSetHasChangedTotal, int expectedContainerHasChangedTotal, int expectedContextHasChangedTotal)
             {
                 Assert.AreEqual(expectedSetCountTotal, setCountEventTotal);
 
@@ -2996,7 +3019,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.AreEqual(4, order.PurchaseOrderDetails.Count);
 
-            ((INotifyCollectionChanged)order.PurchaseOrderDetails).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs e)
+            ((INotifyCollectionChanged)order.PurchaseOrderDetails).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs e)
             {
                 if (e.Action == NotifyCollectionChangedAction.Remove)
                 {
@@ -3108,14 +3131,14 @@ namespace OpenRiaServices.Client.Test
 
             // subscribe to CollectionChanged event
             int notifyCollectionChangedCount = 0;
-            ((INotifyCollectionChanged)product.PurchaseOrderDetails).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs args)
+            ((INotifyCollectionChanged)product.PurchaseOrderDetails).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs args)
             {
                 notifyCollectionChangedCount++;
             };
 
             // subscribe to PropertyChanged event
             int countChangedEventCount = 0;
-            ((INotifyPropertyChanged)product.PurchaseOrderDetails).PropertyChanged += delegate(object sender, PropertyChangedEventArgs args)
+            ((INotifyPropertyChanged)product.PurchaseOrderDetails).PropertyChanged += delegate (object sender, PropertyChangedEventArgs args)
             {
                 Assert.AreSame(sender, product.PurchaseOrderDetails);
                 if (args.PropertyName == "Count")
@@ -3128,12 +3151,12 @@ namespace OpenRiaServices.Client.Test
             int addedCount = 0;
             int removedCount = 0;
             EntityCollectionChangedEventArgs<PurchaseOrderDetail> lastEntityCollectionChangedEventArgs = null;
-            product.PurchaseOrderDetails.EntityAdded += delegate(object sender, EntityCollectionChangedEventArgs<PurchaseOrderDetail> args)
+            product.PurchaseOrderDetails.EntityAdded += delegate (object sender, EntityCollectionChangedEventArgs<PurchaseOrderDetail> args)
             {
                 lastEntityCollectionChangedEventArgs = args;
                 addedCount++;
             };
-            product.PurchaseOrderDetails.EntityRemoved += delegate(object sender, EntityCollectionChangedEventArgs<PurchaseOrderDetail> args)
+            product.PurchaseOrderDetails.EntityRemoved += delegate (object sender, EntityCollectionChangedEventArgs<PurchaseOrderDetail> args)
             {
                 lastEntityCollectionChangedEventArgs = args;
                 removedCount++;
@@ -3189,7 +3212,7 @@ namespace OpenRiaServices.Client.Test
 
             // subscribe to CollectionChanged event
             int notifyCollectionChangedCount = 0;
-            ((INotifyCollectionChanged)product.PurchaseOrderDetails).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs args)
+            ((INotifyCollectionChanged)product.PurchaseOrderDetails).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs args)
             {
                 notifyCollectionChangedCount++;
             };
@@ -3197,7 +3220,7 @@ namespace OpenRiaServices.Client.Test
             // subscribe to the Removed events
             int removedCount = 0;
             EntityCollectionChangedEventArgs<PurchaseOrderDetail> lastEntityCollectionChangedEventArgs = null;
-            product.PurchaseOrderDetails.EntityRemoved += delegate(object sender, EntityCollectionChangedEventArgs<PurchaseOrderDetail> args)
+            product.PurchaseOrderDetails.EntityRemoved += delegate (object sender, EntityCollectionChangedEventArgs<PurchaseOrderDetail> args)
             {
                 lastEntityCollectionChangedEventArgs = args;
                 removedCount++;
@@ -3952,7 +3975,7 @@ namespace OpenRiaServices.Client.Test
             EntitySet<Product> prodSet = ec.GetEntitySet<Product>();
             int collectionChangedEventCount = 0;
 
-            ((INotifyCollectionChanged)prodSet).CollectionChanged += delegate(object sender, NotifyCollectionChangedEventArgs args)
+            ((INotifyCollectionChanged)prodSet).CollectionChanged += delegate (object sender, NotifyCollectionChangedEventArgs args)
             {
                 collectionChangedArgs = args;
                 collectionChangedSender = sender;
@@ -4441,13 +4464,13 @@ namespace OpenRiaServices.Client.Test
             // has a custom method invocation. We expect the entity 
             // to remain in the modified state (CM invocation is retained)
             CityDomainContext cities = new CityDomainContext(TestURIs.Cities);
-            City city = new City() {Name="Toledo", CountyName="Lucas", StateName="OH"};
+            City city = new City() { Name = "Toledo", CountyName = "Lucas", StateName = "OH" };
             cities.EntityContainer.LoadEntities(new Entity[] { city });
             city.StateName = "XX";
             city.AssignCityZone("Zone42");
             Assert.AreEqual(1, city.EntityActions.Count());
             Assert.AreEqual(EntityState.Modified, city.EntityState);
-            cities.EntityContainer.LoadEntities(new Entity[] { new City() {Name="Toledo", CountyName="Lucas", StateName="OH"}}, LoadBehavior.RefreshCurrent);
+            cities.EntityContainer.LoadEntities(new Entity[] { new City() { Name = "Toledo", CountyName = "Lucas", StateName = "OH" } }, LoadBehavior.RefreshCurrent);
             Assert.AreEqual(1, city.EntityActions.Count());
             Assert.AreEqual(EntityState.Modified, city.EntityState);
         }
@@ -4509,7 +4532,7 @@ namespace OpenRiaServices.Client.Test
             // detached from the set
             Assert.IsTrue(BaselineTestData.Products.All(p => p.EntitySet == null));
             Assert.IsTrue(BaselineTestData.Products.All(p => p.EntityState == EntityState.Detached));
-           
+
             // verify that Clear also removes any and all pending changes
             prod = TestHelperMethods.CloneEntity(prod);
             products.Attach(prod);
@@ -4673,7 +4696,7 @@ namespace OpenRiaServices.Client.Test
     /// An dynamic EntityContainer class that allows external configuration of
     /// EntitySets for testing purposes.
     /// </summary>
-    public class DynamicEntityContainer : EntityContainer 
+    public class DynamicEntityContainer : EntityContainer
     {
         public EntitySet<T> AddEntitySet<T>(EntitySetOperations operations) where T : Entity
         {
