@@ -84,27 +84,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether the user has enabled
-        /// the exposure of an OData endpoint
-        /// </summary>
-        public bool IsODataEndpointEnabled
-        {
-            get
-            {
-                return this.ContextData.IsODataEndpointEnabled;
-            }
-
-            set
-            {
-                if (value != this.ContextData.IsODataEndpointEnabled)
-                {
-                    this.ContextData.IsODataEndpointEnabled = value;
-                    this.RaisePropertyChanged(nameof(IsODataEndpointEnabled));
-                }
-            }
-        }
-
-        /// <summary>
         /// Gets the collection of entities exposed by this context, sorted by name
         /// </summary>
         public IEnumerable<EntityViewModel> Entities

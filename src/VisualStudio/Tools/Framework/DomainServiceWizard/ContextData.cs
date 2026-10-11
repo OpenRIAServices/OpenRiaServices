@@ -25,11 +25,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         public bool IsClientAccessEnabled { get; set; }
 
         /// <summary>
-        /// Gets or sets a value indicating whether an OData endpoint should be generated
-        /// </summary>
-        public bool IsODataEndpointEnabled { get; set; }
-
-        /// <summary>
         /// Gets or sets a unique identifier for this context that can be used
         /// to track shared instances across the AppDomain boundary.  The <see cref="Name"/>
         /// property is not guaranteed to be unique.

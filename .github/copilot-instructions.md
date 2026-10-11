@@ -13,7 +13,7 @@ OpenRiaServices is a .NET Foundation project evolved from WCF RIA Services. It p
 - `NuGet`: packaging;
 - `docs`: documentation (both new and legacy from WCF RIA Services)
 
-OData feature is legacy, use it only when explicitly targeted.
+The legacy WCF OData hosting project has been removed; do not add OData-specific integrations.
 The primary CI definition is `azure-pipelines.yml`.
 
 ## Environment and commands
