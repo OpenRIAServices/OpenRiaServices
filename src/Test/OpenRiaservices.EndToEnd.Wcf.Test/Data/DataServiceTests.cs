@@ -3,7 +3,7 @@ using System;
 using System.IO;
 using System.Linq;
 using System.Net;
-using DataTests.AdventureWorks.LTS;
+using EFCoreModels.AdventureWorks;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;

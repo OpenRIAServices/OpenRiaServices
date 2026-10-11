@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using DataTests.Northwind.LTS;
+using EFCoreModels.Northwind;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
-using TestDomainServices.LTS;
+using TestDomainServices.EFCore;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -584,7 +584,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public void UncommitedEntityEdits()
         {
-            Northwind ctxt = new Northwind(TestURIs.LTS_Northwind);
+            Northwind ctxt = new Northwind(TestURIs.EFCore_Northwind);
             Product prod = new Product
             {
                 ProductID = 1,
@@ -740,7 +740,7 @@ namespace OpenRiaServices.Client.Test
         [Asynchronous]
         public void EmptyChangeSet_SubmitChanges()
         {
-            Northwind ctxt = new Northwind(TestURIs.LTS_Northwind_CUD);
+            Northwind ctxt = new Northwind(TestURIs.EFCore_Northwind_CUD);
             
             SubmitOperation so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
             this.EnqueueCompletion(() => so);

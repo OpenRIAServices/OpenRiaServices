@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using DataTests.AdventureWorks.LTS;
+using EFCoreModels.AdventureWorks;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestDomainServices.LTS;
+using TestDomainServices.EFCore;
 using OpenRiaServices.Silverlight.Testing;
 using System.Threading.Tasks;
 
@@ -12,8 +12,8 @@ namespace OpenRiaServices.Client.Test
 {
     /// <summary>
     /// Any test cases added to this class will be run against the set of all domain services,
-    /// for example EF, LTS, etc. Add provider specific tests to the appropriate derived class.
-    /// Note: we're using the same generated client for both EF and LTS tests, varying only the
+    /// for example EF and EF Core. Add provider specific tests to the appropriate derived class.
+    /// Note: we're using the same generated EF Core client for all providers, varying only the
     /// provider string that the tests use.
     /// </summary>
     [TestClass]
@@ -45,7 +45,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNull(lo.Error);
 
                 Assert.AreEqual(1, nw.Orders.Count);
-                DataTests.Northwind.LTS.Order order = (DataTests.Northwind.LTS.Order)nw.Orders.List[0];
+                EFCoreModels.Northwind.Order order = (EFCoreModels.Northwind.Order)nw.Orders.List[0];
                 Assert.AreEqual("OrderID: " + order.OrderID.ToString(), order.FormattedName);
             });
             EnqueueTestComplete();
@@ -134,7 +134,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNull(lo.Error, "Load should succeed without error");
                 Assert.AreNotEqual(0, ctxt.Products.Count);
 
-                foreach (DataTests.Northwind.LTS.Product product in ctxt.Products)
+                foreach (EFCoreModels.Northwind.Product product in ctxt.Products)
                 {
                     // All rows except product 1 should have references to supplier and category
                     Assert.IsFalse(string.IsNullOrEmpty(product.SupplierName), "Supplier not loaded");
@@ -494,22 +494,6 @@ namespace OpenRiaServices.Client.Test
             EnqueueTestComplete();
         }
     }
-
-#if !ASPNETCORE
-    [TestClass]
-    public class LTSQueryTests : CrossDomainServiceQueryTests
-    {
-        public LTSQueryTests()
-            : base(TestURIs.LTS_Catalog, ProviderType.LTS)
-        {
-        }
-
-        protected override Northwind CreateNorthwind()
-        {
-            return new Northwind(TestURIs.LTS_Northwind);
-        }
-    }
-#endif
 
     [TestClass]
     public class EFQueryTests : CrossDomainServiceQueryTests

@@ -1,5 +1,8 @@
 # Unreleased
 
+## Removed
+
+* Removed the LINQ to SQL (LTS) project and provider-specific tests from the solution. Shared end-to-end tests now use Entity Framework-generated clients, preserving ASP.NET Core coverage.
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 

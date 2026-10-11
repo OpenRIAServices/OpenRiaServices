@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -324,26 +324,6 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("b", error.MemberNames.Single());
         }
 
-        [TestMethod]
-        [TestCategory("DatabaseTest")]
-        public async Task TestDomainService_QueryDirect()
-        {
-            TestDomainServices.LTS.Catalog provider = ServerTestHelper.CreateInitializedDomainService<TestDomainServices.LTS.Catalog>(DomainOperationType.Query);
-
-            DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(provider.GetType());
-            DomainOperationEntry method = serviceDescription.DomainOperationEntries.Where(p => p.Operation == DomainOperation.Query).First(p => p.Name == "GetProductsByCategory");
-            QueryDescription qd = new QueryDescription(method, new object[] { 1 });
-
-            var queryResult = await provider.QueryAsync<DataTests.AdventureWorks.LTS.Product>(qd, CancellationToken.None);
-            int count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
-            Assert.AreEqual(32, count);
-
-            // verify that we can use the same provider to execute another query
-            qd = new QueryDescription(method, new object[] { 2 });
-            queryResult = await provider.QueryAsync<DataTests.AdventureWorks.LTS.Product>(qd, CancellationToken.None);
-            count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
-            Assert.AreEqual(43, count);
-        }
 
         [TestMethod]
         public async Task TestDomainService_QueryDirect_Throws()
@@ -370,67 +350,7 @@ namespace OpenRiaServices.Server.Test
         //       starts a webserver before running these tests. Or consider moving these tests, or consider 
         //       writing true direct tests that don't require a webserver.
 
-        /// <summary>
-        /// Verify that when a member is marked Exclude, it doesn't show up in the serialized response
-        /// </summary>
-        [TestMethod]
-        [Ignore]
-        public void TestDomainOperationEntry_VerifyDataMemberExclusion()
-        {
-            string soap = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
 
-            // verify that the server entity type has the SafetyStockLevel property and that
-            // it is marked [Exclude]
-            DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Catalog));
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(DataTests.AdventureWorks.LTS.Product)).Cast<PropertyDescriptor>().Single(p => p.Name == "SafetyStockLevel");
-            Assert.AreEqual(1, pd.Attributes.OfType<ExcludeAttribute>().Count());
-
-            // verify that the serialized response doesn't contain excluded data
-            Assert.Contains("ProductID", soap);  // make sure we got at least one product
-            Assert.DoesNotContain("SafetyStockLevel", soap);
-        }
-
-        [TestMethod]
-        [Ignore]
-        public void TestDataService_LTS_Query_MultipleThreads()
-        {
-            const int numberOfThreads = 10;
-            Semaphore s = new Semaphore(0, numberOfThreads);
-            Exception lastError = null;
-
-            string soap = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
-            Assert.Contains("ProductID", soap);  // make sure we got at least one product
-
-            for (int i = 0; i < numberOfThreads; i++)
-            {
-                ThreadPool.QueueUserWorkItem(delegate
-                {
-                    try
-                    {
-                        string soap2 = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
-                        Assert.Contains("ProductID", soap2);  // make sure we got at least one product
-                    }
-                    catch (Exception ex)
-                    {
-                        lastError = ex;
-                    }
-                    finally
-                    {
-                        s.Release();
-                    }
-                });
-            }
-
-            for (int i = 0; i < numberOfThreads; i++)
-            {
-                s.WaitOne(TimeSpan.FromSeconds(5));
-            }
-
-            if (lastError != null)
-            {
-                Assert.Fail(lastError.ToString());
-            }
-        }
 
         // TODO: get this test working again and remove [Ignore]
         // This test fails intermittently on the json.Contains line below.
@@ -514,6 +434,7 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual("1,2", queryParts[0].Expression);
         }
 
+
         /// <summary>
         /// Scenario test that can be used for perf tuning. The test loads 500 orders with OrderDetails
         /// and Products included.
@@ -523,8 +444,6 @@ namespace OpenRiaServices.Server.Test
         [Ignore]
         public void Perf_MeasureScenario1()
         {
-            // The test can be run against LTS simply by changing the service
-            // type to TestDomainServices.LTS.Northwind
             Type serviceType = typeof(TestDomainServices.EF.Northwind);
 
             DateTime before, after;

@@ -39,11 +39,6 @@ public static class TestURIs
     public static readonly Uri EFCore_Northwind_CUD = new Uri(RootURI, "TestDomainServices-EFCore-Northwind_CUD.svc");
     public static readonly Uri EFCore_Catalog = new Uri(RootURI, "TestDomainServices-EFCore-Catalog.svc");
 
-    // LTS
-    public static readonly Uri LTS_Catalog = new Uri("TestDomainServices-LTS-Catalog.svc", UriKind.Relative);
-    public static readonly Uri LTS_Northwind = new Uri("TestDomainServices-LTS-Northwind.svc", UriKind.Relative);
-    public static readonly Uri LTS_Northwind_CUD = new Uri("TestDomainServices-LTS-Northwind_CUD.svc", UriKind.Relative);
-
     // TestProvider
     public static readonly Uri TestProvider_Scenarios = new Uri(RootURI, "TestDomainServices-TestProvider_Scenarios.svc");
     public static readonly Uri TestService_RequiresSecureEndpoint = new Uri(RootURI, "TestDomainServices-TestService_RequiresSecureEndpoint.svc");

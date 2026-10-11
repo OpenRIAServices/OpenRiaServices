@@ -51,13 +51,13 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             try
             {
                 // Try the ctor that takes a type list
-                using (BusinessLogicViewModel model = new BusinessLogicViewModel(tempFolder, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", new Type[] { typeof(DataTests.Northwind.LTS.NorthwindDataContext) }, /* IVsHelp object */ null))
+                using (BusinessLogicViewModel model = new BusinessLogicViewModel(tempFolder, "FooClass", "C#", "ARootNamespace", "AnAssemblyName", new Type[] { typeof(NorthwindEntities) }, /* IVsHelp object */ null))
                 {
                     ContextViewModel context = model.CurrentContextViewModel;
                     Assert.IsNotNull(context, "null context");
                     Assert.IsNotNull(model.ContextViewModels, "null context view models");
                     Assert.HasCount(2, model.ContextViewModels, "Expected 2 contexts");
-                    Assert.AreEqual("NorthwindDataContext (LINQ to SQL)", model.CurrentContextViewModel.Name, "Current context had wrong name");
+                    Assert.AreEqual("NorthwindEntities (Entity Framework)", model.CurrentContextViewModel.Name, "Current context had wrong name");
                 }
             }
             finally
@@ -71,12 +71,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         public void BusinessLogicViewModel_Ctor_Many_Contexts()
         {
             Type[] contextTypes = new Type[] {
-                typeof(DataTests.Northwind.LTS.NorthwindDataContext),
                 typeof(NorthwindEntities),
                 typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios),
-                typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios),
                 typeof(AdventureWorksEntities),
-                typeof(DataTests.AdventureWorks.LTS.AdventureWorks),
             };
 
             string tempFolder = UnitTestHelper.CreateTempFolder();
@@ -125,7 +122,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             string tempFolder = UnitTestHelper.CreateTempFolder();
             try
             {
-                Type contextType = typeof(DataTests.Northwind.LTS.NorthwindDataContext);
+                Type contextType = typeof(NorthwindEntities);
                 string assemblyName = contextType.Assembly.GetName().Name;
                 using (BusinessLogicViewModel model = new BusinessLogicViewModel(tempFolder, "FooClass", "C#", "ARootNamespace", assemblyName, new[] { contextType }, /* IVsHelp object */ null))
                 {
@@ -232,7 +229,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("BusinessLogicClassModel throws if class name has errors")]
         public void BusinessLogicViewModel_Throws_Invalid_ClassName()
         {
-            using (BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "FooClass", "C#", null, "AnAssemblyName", new[] { typeof(DataTests.Northwind.LTS.NorthwindDataContext) }, /* IVsHelp object */ null))
+            using (BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "FooClass", "C#", null, "AnAssemblyName", new[] { typeof(NorthwindEntities) }, /* IVsHelp object */ null))
             {
                 ExceptionHelper.ExpectArgumentException(delegate
                 {
@@ -255,7 +252,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         [Description("BusinessLogicClassModel invokes exception handler on invalid class name")]
         public void BusinessLogicViewModel_Invokes_ExceptionHandler_Invalid_ClassName()
         {
-            using (BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "FooClass", "C#", null, "AnAssemblyName", new[] { typeof(DataTests.Northwind.LTS.NorthwindDataContext) }, /* IVsHelp object */ null))
+            using (BusinessLogicViewModel model = new BusinessLogicViewModel("FooFolder", "FooClass", "C#", null, "AnAssemblyName", new[] { typeof(NorthwindEntities) }, /* IVsHelp object */ null))
             {
                 Exception cachedException = null;
                 model.ExceptionHandler = delegate(Exception ex)
@@ -293,7 +290,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             try
             {
                 using (BusinessLogicViewModel model = new BusinessLogicViewModel(tempFolder, "FooClass", "C#", null, "AnAssemblyName",
-                    new[] { typeof(NorthwindEntities), typeof(DataTests.Northwind.LTS.NorthwindDataContext) }, /* IVsHelp object */ null))
+                    new[] { typeof(NorthwindEntities), typeof(AdventureWorksEntities) }, /* IVsHelp object */ null))
                 {
                     int classNameChanged = 0;
                     int currentContextChanged = 0;
@@ -329,8 +326,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                         Assert.AreEqual(-1, String.Compare(entities[i].Name, entities[i + 1].Name), "Expected sorted entity list but " + entities[i].Name + " is not before " + entities[i + 1].Name);
                     }
 
-                    // Slightly fragile -- assume first entity is Category.  This is a probe into the entity business logic entity
-                    Assert.AreEqual("Category", entity.Name);
+                    Assert.AreEqual("Address", entity.Name);
 
                     // By default, the entity won't be included or editable
                     Assert.IsFalse(entity.IsIncluded);

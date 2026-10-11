@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
-using System.Data.Linq;
 using System.Globalization;
 using System.IO;
 using System.Linq;
@@ -103,7 +102,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 allowDbContext = vsproj.References.Cast<Reference>().Any(r => String.Equals(r.Name, BusinessLogicClassConstants.DbDomainServiceAssemblyShortName));
             }
 
-            // Get the list of available ObjectContexts, DataContexts, and optionally DbContexts.
+            // Get the list of available ObjectContexts and optionally DbContexts.
             bool foundDbContext = false;
             IEnumerable<Type> candidates = this.GetCandidateTypes(typeDiscoveryService, allowDbContext, out foundDbContext);
 
@@ -356,7 +355,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 
         /// <summary>
         /// Using the specified type discovery service, this method locates all the possible
-        /// context types (currently LTS and EDM only)
+        /// Entity Framework context types.
         /// </summary>
         /// <param name="typeDiscoveryService">The type discovery service to use.  It cannot be null.</param>
         /// <param name="allowDbContext">A boolean indicating if DbContext is an allowable context type</param>
@@ -382,14 +381,11 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 }
             }
 
-            // Cache the value of LinqToSqlContext.EnableDataContextTypes locally since the property cannot be cached.
-            bool dataContextEnabled = LinqToSqlContext.EnableDataContextTypes;
-
             // Get all types contained in and referenced by the project. From that list, we find the types interesting to us.
             foreach (Type t in typeDiscoveryService.GetTypes(typeof(object), true))
             {
                 bool typeIsDbContext;
-                if (DomainServiceClassWizard.IsContextType(t, dataContextEnabled, allowDbContext, out typeIsDbContext))
+                if (DomainServiceClassWizard.IsContextType(t, allowDbContext, out typeIsDbContext))
                 {
                     if (IsVisibleInCurrentProject(t, currentProject, references))
                     {
@@ -403,24 +399,23 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         }
 
         /// <summary>
-        /// Returns <c>true</c> if the type is an ObjectContext, DbContext or DataContext. 
+        /// Returns <c>true</c> if the type is an ObjectContext or DbContext.
         /// </summary>
         /// <param name="t">The type to be checked.</param>
-        /// <param name="dataContextEnabled">Flag indicating if the datacontext is enabled.</param>
         /// <param name="allowDbContext">A boolean indicating if DbContext is an allowable context type</param>
+        /// <param name="isDbContext">Whether the type derives from DbContext.</param>
         /// <returns><c>true</c> if the type is one of the context types and <c>false</c> otherwise.</returns>
-        public static bool IsContextType(Type t, bool dataContextEnabled, bool allowDbContext, out bool isDbContext)
+        public static bool IsContextType(Type t, bool allowDbContext, out bool isDbContext)
         {
             isDbContext = false;
 
-            // We are looking for ObjectContext, DbContext or DataContext types only. So we skip Value types and interfaces for performance.
+            // We are looking for ObjectContext or DbContext types only. So we skip Value types and interfaces for performance.
             if (!t.IsValueType && !t.IsInterface)
             {
 
                 isDbContext = IsDbContext(t); //typeof(DbContext).IsAssignableFrom(t);
                 if (typeof(ObjectContext).IsAssignableFrom(t) ||
-                        (allowDbContext && isDbContext) ||
-                        (dataContextEnabled && typeof(DataContext).IsAssignableFrom(t)))
+                        (allowDbContext && isDbContext))
                 {
                     return true;
                 }
@@ -640,35 +635,9 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                     {
                         VSLangProj.Reference reference = vsProject.References.Add(assemblyReference);
 
-                        // The assembly reference string can have the full assembly identity format ('AssemblyName, Version=xxxx, Culture ...')
-                        // or it can be the full assembly file path.
-                        // If the assembly reference is a full path, assume it is not in the GAC and copy it locally to the project
-                        // so it can find it and also for bin-deployment support.
-                        if (ShouldCopyLocal(assemblyReference))
-                        {
-                            reference.CopyLocal = true;
-                        }
                     }
                 }
             }
-        }
-
-        /// <summary>
-        /// Determines whether the specified assembly should be copied into the project or not.
-        /// We special-case some assemblies that are not loaded from the GAC to be able to use them in the project
-        /// and to support bin-deployment.  In this case the assemblyReference contains the assembly full path
-        /// instead of the assembly identity information.
-        /// </summary>
-        /// <param name="assemblyReference">The assembly reference string</param>
-        /// <returns>True if the specified assembly should be copied into the project, false otherwise.</returns>
-        private static bool ShouldCopyLocal(string assemblyReference)
-        {
-            if (File.Exists(assemblyReference))
-            {
-                return assemblyReference.ToUpperInvariant().Contains(BusinessLogicClassConstants.LinqToSqlDomainServiceAssemblyName.ToUpperInvariant());
-            }
-
-            return false;
         }
 
         /// <summary>

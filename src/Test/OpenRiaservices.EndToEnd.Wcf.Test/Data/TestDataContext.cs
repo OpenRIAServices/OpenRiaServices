@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ServiceModel;
-using DataTests.AdventureWorks.LTS;
+using EFCoreModels.AdventureWorks;
 
 namespace OpenRiaServices.Client.Test
 {

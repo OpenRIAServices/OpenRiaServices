@@ -5,7 +5,7 @@
     <DebugType>pdbonly</DebugType>
 
     <NoWarn Condition="'$(TargetFramework)'!='net472'">$(NoWarn);CS0618</NoWarn>
-    <DefineConstants Condition="'$(TargetFramework)'=='net472'">$(DefineConstants);WCF;HAS_LINQ2SQL</DefineConstants>
+    <DefineConstants Condition="'$(TargetFramework)'=='net472'">$(DefineConstants);WCF</DefineConstants>
     <DefineConstants Condition="'$(TargetFramework)'!='net472'">$(DefineConstants);ASPNET_CORE</DefineConstants>
   </PropertyGroup>
 
@@ -38,7 +38,6 @@
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <ProjectReference Include="..\..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Hosting.Wcf\Framework\OpenRiaServices.Hosting.Wcf.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Server.Authentication.AspNetMembership\Framework\OpenRiaServices.Server.Authentication.AspNetMembership.csproj" />
   </ItemGroup>
@@ -183,9 +182,6 @@
     <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Baselines\Default\Scenarios\MultipleProviderScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -268,12 +264,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Scenarios\EF_Inheritance.g.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Scenarios\GlobalNamespace.g.cs">
@@ -435,28 +425,16 @@
     <Content Include="Baselines\Default\EF\Northwind_EF.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Baselines\Default\EF\Catalog_EF.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\EF\Northwind_EF.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Mocks\MockCustomers.g.vb">
@@ -475,9 +453,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb">
@@ -641,17 +616,18 @@
     <Compile Remove="People/*" />
     <None Include="People/*" />
   </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'!='net472'">
+  <ItemGroup>
     <!-- Remove Linq To Sql (LTS) related -->
     <Compile Remove="**\LTS_*.cs" />
     <Compile Remove="DataModels\AdventureWorks.designer.cs" />
     <Compile Remove="DataModels\Northwind.designer.cs" />
     <Compile Remove="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(TargetFramework)'!='net472'">
     <!-- WCF related -->
     <Compile Remove="Cities\CityDomainServiceHost.cs" />
     <Compile Remove="Cities\CityDomainServiceHostFactory.cs" />
 
-    <Compile Remove="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
     <!--  AuthenticationServices are added in AspNetCore website instead-->
     <Compile Remove="Mocks\AuthenticationServices.cs" />
   </ItemGroup>

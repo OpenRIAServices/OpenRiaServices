@@ -16,8 +16,6 @@ using System.Threading;
 using DataModels.ScenarioModels;
 
 #if NETFRAMEWORK
-using DataTests.AdventureWorks.LTS;
-using OpenRiaServices.LinqToSql;
 using System.Web;
 #else
 using Microsoft.AspNetCore.Http;
@@ -200,51 +198,20 @@ namespace TestDomainServices
         }
     }
 
-#if HAS_LINQ2SQL
     /// <summary>
-    /// This domain service attempts to declare L2S description provider with EF context
+    /// This domain service attempts to declare an L2E description provider with a non-context type.
     /// </summary>
     [EnableClientAccess]
-    [LinqToSqlDomainServiceDescriptionProvider(typeof(AdventureWorksModel.AdventureWorksEntities))]
-    public class InvalidLinqToSqlDomainServiceDescriptionProviderDS : DomainService
-    {
-        [Query]
-        public IQueryable<Product> GetProducts()
-        {
-            return (Array.Empty<Product>()).AsQueryable();
-        }
-    }
-
-
-    /// <summary>
-    /// This domain service attempts to declare L2E description provider with L2S context
-    /// </summary>
-    [EnableClientAccess]
-    [LinqToEntitiesDomainServiceDescriptionProvider(typeof(AdventureWorks))]
+    [LinqToEntitiesDomainServiceDescriptionProvider(typeof(object))]
     public class InvalidLinqToEntitiesDomainServiceDescriptionProviderDS : DomainService
     {
         [Query]
-        public IQueryable<Product> GetProducts()
+        public IQueryable<AdventureWorksModel.Product> GetProducts()
         {
-            return (Array.Empty<Product>()).AsQueryable();
+            return (Array.Empty<AdventureWorksModel.Product>()).AsQueryable();
         }
     }
 
-
-    /// <summary>
-    /// This domain service attempts to declare L2S description provider with a throwing L2S context
-    /// </summary>
-    [EnableClientAccess]
-    [LinqToSqlDomainServiceDescriptionProvider(typeof(DataContextInstantiationScenarios))]
-    public class LinqToSqlThrowingDataContextDS : DomainService
-    {
-        [Query]
-        public IQueryable<Product> GetProducts()
-        {
-            return (Array.Empty<Product>()).AsQueryable();
-        }
-    }
-#endif
     #endregion // Invalid DomainServices
 
     #region DomainServices that throw exceptions
@@ -267,39 +234,6 @@ namespace TestDomainServices
             return null;
         }
     }
-
-#if HAS_LINQ2SQL
-    /// <summary>
-    /// This mock LINQ to SQL DomainService throws an exception in its constructor
-    /// </summary>
-    [EnableClientAccess]
-    [ServiceContract(Name = "TestDomainService")]
-    public class ThrowingDomainServiceL2S : LinqToSqlDomainService<AdventureWorks>
-    {
-        public ThrowingDomainServiceL2S()
-        {
-            throw new InvalidOperationException("Couldn't construct this type.");
-        }
-
-        [Query]
-        public IQueryable<Product> GetProducts()
-        {
-            return (Array.Empty<Product>()).AsQueryable();
-        }
-
-        [Query]
-        public IQueryable<PurchaseOrder> GetPurchaseOrders()
-        {
-            return (Array.Empty<PurchaseOrder>()).AsQueryable();
-        }
-
-        [Query]
-        public IQueryable<PurchaseOrderDetail> GetPurchaseOrderDetails()
-        {
-            return (Array.Empty<PurchaseOrderDetail>()).AsQueryable();
-        }
-    }
-#endif
 
     /// <summary>
     /// This mock LINQ to Entities DomainService throws an exception in its constructor
@@ -1351,7 +1285,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
 
         [Query]
         public IQueryable<MixedType> GetMixedTypes_Predefined(string idToChange, string s, decimal d, DateTime dt, TimeSpan ts, DateTimeOffset dto, IEnumerable<string> strings, Uri uri, Guid g,
-#if HAS_LINQ2SQL
+#if NETFRAMEWORK
           Binary b,
 #else
           byte[] b,
@@ -1778,7 +1712,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
 
         [Invoke]
         public bool TestPredefined_Online(MixedType entity, string s, decimal d, DateTime dt, TimeSpan ts, IEnumerable<string> strings, Uri uri, Guid g,
-#if HAS_LINQ2SQL
+#if NETFRAMEWORK
             Binary b,
 #else
             byte[] b,
@@ -1976,7 +1910,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
         }
 
         [Invoke]
-#if HAS_LINQ2SQL
+#if NETFRAMEWORK
         public Binary ReturnsBinary_Online(Binary value)
 #else
         public byte[] ReturnsBinary_Online(byte[] value)
@@ -5259,50 +5193,6 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
     }
 #endregion
 }
-
-#if HAS_LINQ2SQL
-#region LTS Northwind Scenarios
-
-namespace DataTests.Scenarios.LTS.Northwind
-{
-    [EnableClientAccess]
-    public class LTS_NorthwindScenarios : LinqToSqlDomainService<NorthwindScenarios>
-    {
-#region Bug479436 - Uni-Directional association
-        [Query]
-        public IQueryable<Customer_Bug479436> GetCustomer_Bug479436s()
-        {
-            return DataContext.Customer_Bug479436s;
-        }
-
-        [Query]
-        public IQueryable<Order_Bug479436> GetOrder_Bug479436s()
-        {
-            return DataContext.Order_Bug479436s;
-        }
-#endregion
-
-        [Query]
-        public IEnumerable<RequiredAttributeTestEntity> GetRequiredAttributeTestEntities()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [MetadataType(typeof(OrderMetadata))]
-    public partial class Order_Bug479436
-    {
-    }
-
-    public class OrderMetadata
-    {
-        [Include]
-        public static object Customer;
-    }
-}
-
-#endregion LTS Northwind Scenarios
-#endif
 
 #region EF Northwind Scenarios
 

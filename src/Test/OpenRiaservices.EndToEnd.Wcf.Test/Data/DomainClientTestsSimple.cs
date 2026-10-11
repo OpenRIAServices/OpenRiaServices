@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using DataTests.AdventureWorks.LTS;
+using EFCoreModels.AdventureWorks;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
@@ -26,7 +26,7 @@ namespace OpenRiaServices.Client.Web.Test
         [TestMethod]
         public async Task TestMethodQueryMismatch()
         {
-            var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
+            var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.EFCore.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
             dc.EntityTypes = new Type[] { typeof(Product), typeof(PurchaseOrder), typeof(PurchaseOrderDetail) };
 
             var query = new EntityQuery<PurchaseOrder>(new EntityQuery<Product>(dc, "GetProducts", null, true, false), Array.Empty<PurchaseOrder>().AsQueryable().Take(2));
@@ -42,7 +42,7 @@ namespace OpenRiaServices.Client.Web.Test
         [TestMethod]
         public async Task TestQuery()
         {
-            var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
+            var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.EFCore.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
             dc.EntityTypes = new Type[] { typeof(Product) };
 
             var query = from p in Array.Empty<Product>().AsQueryable()
@@ -62,7 +62,7 @@ namespace OpenRiaServices.Client.Web.Test
         [TestMethod]
         public async Task TestQueryEvents()
         {
-            var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
+            var dc = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.EFCore.Catalog.ICatalogContract), TestURIs.EF_Catalog, false);
             dc.EntityTypes = new Type[] { typeof(Product) };
 
             var result = await dc.QueryAsync(new EntityQuery<Product>(dc, "GetProducts", null, true, false), CancellationToken.None);

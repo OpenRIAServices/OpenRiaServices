@@ -17,7 +17,7 @@ namespace OpenRiaServices.Tools.TextTemplate
         {
             typeof(MetadataTypeAttribute),
             typeof(ScaffoldColumnAttribute),
-#if HAS_LINQ2SQL
+#if NETFRAMEWORK
             typeof(ScaffoldTableAttribute),
 #endif
             typeof(SerializableAttribute),

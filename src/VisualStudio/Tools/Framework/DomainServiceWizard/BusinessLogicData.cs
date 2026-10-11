@@ -20,13 +20,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         public string Language { get; set; }
 
         /// <summary>
-        /// Gets or sets the full path to the Linq to Sql DomainService assembly.
-        /// This is required because Linq to Sql is an optional toolkit component
-        /// and may not be present at runtime.
-        /// </summary>
-        public string LinqToSqlPath { get; set; }
-
-        /// <summary>
         /// Gets or sets the full paths to the assemblies that hold <see cref="ContextTypeNames"/>.
         /// These assemblies must be loaded first to evaluate <see cref="ContextTypeNames"/>.
         /// </summary>

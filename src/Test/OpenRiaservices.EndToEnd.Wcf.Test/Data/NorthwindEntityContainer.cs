@@ -6,15 +6,15 @@ namespace OpenRiaServices.Client.Test
     {
         public NorthwindEntityContainer()
         {
-            this.CreateEntitySet<DataTests.Northwind.LTS.Product>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<EFCoreModels.Northwind.Product>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
-            this.CreateEntitySet<DataTests.Northwind.LTS.Order>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<EFCoreModels.Northwind.Order>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
-            this.CreateEntitySet<DataTests.Northwind.LTS.Order_Detail>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<EFCoreModels.Northwind.Order_Detail>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
-            this.CreateEntitySet<DataTests.Northwind.LTS.Customer>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<EFCoreModels.Northwind.Customer>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
-            this.CreateEntitySet<DataTests.Northwind.LTS.Category>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<EFCoreModels.Northwind.Category>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
         }
     }

@@ -114,30 +114,6 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.GenerateCodeAssertFailure("C#", new Type[] { typeof(InvalidAssociationScenarios) }, error);
         }
 
-#if HAS_LINQ2SQL
-        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_MP")]
-        [TestMethod]
-        public void TestClientCodegen_MultipleDomainServices()
-        {
-            string[] sharedFiles = Array.Empty<string>();
-
-            // Default codegen
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_MP", "MultipleProviderScenarios.g",
-                new Type[] {
-                    typeof(TestDomainServices.EF.Northwind), typeof(TestDomainServices.LTS.Northwind)}, "C#", sharedFiles, false));
-        }
-
-        [DeploymentItem(@"Baselines\FullTypeNames\Scenarios", "CG_Scenarios_FullTypes")]
-        [TestMethod]
-        public void TestClientCodegen_MultipleDomainServices_FullTypes()
-        {
-            string[] sharedFiles = Array.Empty<string>();
-
-            // Full type names
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_FullTypes", "MultipleProviderScenarios.g",
-                new Type[] { typeof(TestDomainServices.EF.Northwind), typeof(TestDomainServices.LTS.Northwind) }, "C#", sharedFiles, true));
-        }
-#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_EFDbContext")]
         [TestMethod]
@@ -205,22 +181,10 @@ namespace OpenRiaServices.Tools.Test
                 typeof(TestDomainServices.EFCF.Northwind), sharedFiles, true));
         }
 
-#if HAS_LINQ2SQL
-        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_LTSNW")]
-        [TestMethod]
-        public void TestClientCodegen_LTSNorthwindScenarios()
-        {
-            string[] sharedFiles = Array.Empty<string>();
-
-            // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_LTSNW", "LTSNorthwindScenarios.g",
-                typeof(DataTests.Scenarios.LTS.Northwind.LTS_NorthwindScenarios), sharedFiles, false));
-        }
-#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_EF_Inheritance")]
         [TestMethod]
-        [Description("Validates baseline of simple inheritance model using LTS model")]
+        [Description("Validates baseline of simple inheritance model using EF model")]
         public void TestClientCodegen_EF_Inheritance()
         {
             string[] sharedFiles = Array.Empty<string>();
@@ -230,19 +194,6 @@ namespace OpenRiaServices.Tools.Test
                 typeof(DataTests.Inheritance.EF.EF_Inheritance_DomainService), sharedFiles, false));
         }
 
-#if HAS_LINQ2SQL
-        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_LTS_Inheritance")]
-        [TestMethod]
-        [Description("Validates baseline of simple inheritance model using LTS model")]
-        public void TestClientCodegen_LTS_Inheritance()
-        {
-            string[] sharedFiles = Array.Empty<string>();
-
-            // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_LTS_Inheritance", "LTS_Inheritance.g",
-                typeof(DataTests.Inheritance.LTS.LTS_Inheritance_DomainService), sharedFiles, false));
-        }
-#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_Include")]
         [TestMethod]
@@ -561,24 +512,6 @@ namespace OpenRiaServices.Tools.Test
         }
 
 
-#if HAS_LINQ2SQL
-        [DeploymentItem(@"Baselines\Default\LTS", "CG_CATLTS")]
-        [TestMethod]
-        [Description("Create client proxies for Linq to Sql domain service and compare to known good copy")]
-        public void TestCatalogLTSClientProxies()
-        {
-            // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\LTS", "CG_CATLTS", "Catalog_LTS.g", typeof(TestDomainServices.LTS.Catalog), Array.Empty<string>(), false));
-        }
-
-        [DeploymentItem(@"Baselines\Default\LTS", "CG_NWLTS")]
-        [TestMethod]
-        public void TestNorthwindLTSClientProxies()
-        {
-            // Default
-            TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\LTS", "CG_NWLTS", "Northwind_LTS.g", typeof(TestDomainServices.LTS.Northwind), Array.Empty<string>(), false));
-        }
-#endif
 
         [DeploymentItem(@"Baselines\Default\EF", "CG_NWEF")]
         [TestMethod]

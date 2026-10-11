@@ -17,30 +17,26 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.DomainServiceWi
         }
 
         [TestMethod]
-        [Description("Tests if the IsContextType() method returns true for DbContext/DataContext/ObjectContext types and false otherwise.")]
+        [Description("Tests if the IsContextType() method returns true for DbContext/ObjectContext types and false otherwise.")]
         public void TestIsContextType()
         {
             bool isDbContext;
             
-            Assert.IsTrue(DomainServiceClassWizard.IsContextType(typeof(CodeFirstModels.EFCFNorthwindEntities), true, true, out isDbContext));
+            Assert.IsTrue(DomainServiceClassWizard.IsContextType(typeof(CodeFirstModels.EFCFNorthwindEntities), true, out isDbContext));
             Assert.IsTrue(isDbContext);
 
-            Assert.IsTrue(DomainServiceClassWizard.IsContextType(typeof(NorthwindModel.NorthwindEntities), true, true, out isDbContext));
+            Assert.IsTrue(DomainServiceClassWizard.IsContextType(typeof(NorthwindModel.NorthwindEntities), true, out isDbContext));
             Assert.IsFalse(isDbContext);
             
-            Assert.IsTrue(DomainServiceClassWizard.IsContextType(typeof(DataTests.AdventureWorks.LTS.AdventureWorks), true, true, out isDbContext));
-            Assert.IsFalse(isDbContext);
             
-            Assert.IsFalse(DomainServiceClassWizard.IsContextType(typeof(CodeFirstModels.EFCFNorthwindEntities), true, false, out isDbContext));
+            Assert.IsFalse(DomainServiceClassWizard.IsContextType(typeof(CodeFirstModels.EFCFNorthwindEntities), false, out isDbContext));
             Assert.IsTrue(isDbContext);
 
-            Assert.IsFalse(DomainServiceClassWizard.IsContextType(typeof(DataTests.AdventureWorks.LTS.AdventureWorks), false, true, out isDbContext));
+            
+            Assert.IsFalse(DomainServiceClassWizard.IsContextType(typeof(TestDomainServices.A), true, out isDbContext));
             Assert.IsFalse(isDbContext);
             
-            Assert.IsFalse(DomainServiceClassWizard.IsContextType(typeof(TestDomainServices.A), true, true, out isDbContext));
-            Assert.IsFalse(isDbContext);
-            
-            Assert.IsFalse(DomainServiceClassWizard.IsContextType(typeof(TestDomainServices.EF.Northwind), true, true, out isDbContext));
+            Assert.IsFalse(DomainServiceClassWizard.IsContextType(typeof(TestDomainServices.EF.Northwind), true, out isDbContext));
             Assert.IsFalse(isDbContext);
         }
 

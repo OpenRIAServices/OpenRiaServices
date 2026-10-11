@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using OpenRiaServices.Silverlight.Testing;
-using TestDomainServices.LTS;
+using TestDomainServices.EFCore;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -72,7 +72,7 @@ namespace OpenRiaServices.Client.Test
         [Ignore] // Need to fix Race condition before enabling again
         public async Task CancelSubmit_EmptyChangeset()
         {
-            Northwind nw = new Northwind(TestURIs.LTS_Northwind);
+            Northwind nw = new Northwind(TestURIs.EFCore_Northwind);
             SubmitOperation so = nw.SubmitChanges();
 
             // WARNING: Race condition
@@ -88,7 +88,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public async Task SubmitAsync_Cancel_EmptyChangeset()
         {
-            Northwind nw = new Northwind(TestURIs.LTS_Northwind);
+            Northwind nw = new Northwind(TestURIs.EFCore_Northwind);
             using CancellationTokenSource cts = new CancellationTokenSource();
             cts.Cancel();
 

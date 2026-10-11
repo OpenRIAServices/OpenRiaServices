@@ -7,10 +7,6 @@ namespace OpenRiaServices.Client.Test
     public enum ProviderType
     {
         /// <summary>
-        /// Linq To Sql provider
-        /// </summary>
-        LTS,
-        /// <summary>
         /// Linq to Entities provider
         /// </summary>
         EF,
@@ -20,7 +16,7 @@ namespace OpenRiaServices.Client.Test
         Unspecified,
 
         /// <summary>
-        /// EF Core Linq to SQL provider
+        /// Entity Framework Core provider
         /// </summary>
         EFCore
     }

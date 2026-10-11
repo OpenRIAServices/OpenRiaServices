@@ -371,8 +371,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                         Language = this.Language,
                         AssemblyPaths = assemblyNames.ToArray(),
                         ReferenceAssemblyPaths = referenceAssemblyNames.ToArray(),
-                        ContextTypeNames = candidateTypeNames.ToArray(),
-                        LinqToSqlPath = LinqToSqlContext.LinqToSqlDomainServiceAssemblyPath
+                        ContextTypeNames = candidateTypeNames.ToArray()
                     };
 
                     this._businessLogicModel.Initialize(data);

@@ -22,14 +22,12 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             {
                 AssemblyPaths = assemblyPaths,
                 ContextTypeNames = contextTypes,
-                Language = "C#",
-                LinqToSqlPath = "ltsPath"
+                Language = "C#"
             };
 
             Assert.AreEqual(assemblyPaths, d.AssemblyPaths, "AssemblyPaths failed");
             Assert.AreEqual(contextTypes, d.ContextTypeNames, "ContextTypeNames failed");
             Assert.AreEqual("C#", d.Language, "Language failed");
-            Assert.AreEqual("ltsPath", d.LinqToSqlPath, "LTSPath failed");
         }
 
         [TestMethod]

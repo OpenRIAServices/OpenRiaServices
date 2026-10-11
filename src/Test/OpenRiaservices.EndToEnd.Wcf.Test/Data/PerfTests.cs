@@ -5,7 +5,7 @@ using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
-using TestDomainServices.LTS;
+using TestDomainServices.EFCore;
 using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.Client.Test

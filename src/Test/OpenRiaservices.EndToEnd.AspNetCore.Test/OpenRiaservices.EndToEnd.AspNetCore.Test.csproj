@@ -57,10 +57,10 @@
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="Data\DomainClients\Cities.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.cs" Link="Data\DomainClients\Catalog_LTS.g.cs">
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Catalog_EFCore.g.cs" Link="Data\DomainClients\Catalog_EFCore.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.cs" Link="Data\DomainClients\Northwind_LTS.g.cs">
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Northwind_EFCore.g.cs" Link="Data\DomainClients\Northwind_EFCore.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ComplexTypeScenarios.g.cs" Link="Data\DomainClients\ComplexTypeScenarios.g.cs">

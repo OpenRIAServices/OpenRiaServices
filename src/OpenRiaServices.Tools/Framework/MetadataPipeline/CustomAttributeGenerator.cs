@@ -22,7 +22,7 @@ namespace OpenRiaServices.Tools
         {
             typeof(MetadataTypeAttribute),
             typeof(ScaffoldColumnAttribute),
-#if HAS_LINQ2SQL
+#if NETFRAMEWORK
             typeof(ScaffoldTableAttribute),
 #endif
             typeof(SerializableAttribute),
@@ -712,4 +712,3 @@ namespace OpenRiaServices.Tools
         }
     }
 }
-

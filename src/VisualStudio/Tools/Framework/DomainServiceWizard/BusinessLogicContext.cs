@@ -101,7 +101,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         }
 
         /// <summary>
-        /// Gets the type of the context (e.g. subclass of ObjectContext or DomainContext for EDM and LinqToSql, respectively).
+        /// Gets the type of the context (e.g. subclass of ObjectContext or DbContext for Entity Framework).
         /// </summary>
         public Type ContextType
         {

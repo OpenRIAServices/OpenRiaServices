@@ -25,15 +25,6 @@
         };
 
         /// <summary>
-        /// Additional imports for LinqToSql
-        /// </summary>
-        public static readonly string[] LinqToSqlImports = 
-        { 
-            "System.Data.Linq",
-            "OpenRiaServices.LinqToSql",
-        };
-
-        /// <summary>
         /// Additional imports for LinqToEntities
         /// </summary>
         public static readonly string[] LinqToEntitiesImports = 
@@ -54,11 +45,6 @@
         };
 
         /// <summary>
-        /// The assembly name for the LinqToSql DomainService provider.
-        /// </summary>
-        public static readonly string LinqToSqlDomainServiceAssemblyName = "OpenRiaServices.LinqToSql";
-
-        /// <summary>
         /// The type name of the domain service factory we will register in the web.config
         /// </summary>
         public static readonly string DomainServiceModuleTypeName = "OpenRiaServices.Hosting.DomainServiceHttpModule";
@@ -72,11 +58,6 @@
         /// Effectively typeof(DomainService).Name
         /// </summary>
         public static readonly string DomainServiceTypeName = "DomainService";
-
-        /// <summary>
-        /// Effectively typeof(LinqToSqlDomainService).Name
-        /// </summary>
-        public static readonly string LinqToSqlDomainServiceTypeName = "LinqToSqlDomainService";
 
         /// <summary>
         /// Effectively typeof(LinqToEntitiesDomainService).Name

@@ -24,7 +24,6 @@
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Configuration" />
-    <Reference Include="System.Data.Linq" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Web" />
   </ItemGroup>
@@ -41,7 +40,6 @@
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Framework\OpenRiaServices.EntityFramework.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Test\CodeFirstModel\EFCodeFirstModels.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.EntityFramework\Test\DbContextModel\EFDbContextModels.csproj" />
-    <ProjectReference Include="..\..\..\OpenRiaServices.LinqToSql\Framework\OpenRiaServices.LinqToSql.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
     <ProjectReference Include="..\..\..\OpenRiaServices.Tools\Test\OpenRiaServices.Tools.Test.csproj" />
     <ProjectReference Include="..\..\..\Test\Desktop\EFPOCOModels\EFPOCOModels.csproj" />

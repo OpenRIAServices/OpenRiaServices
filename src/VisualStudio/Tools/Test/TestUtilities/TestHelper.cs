@@ -4,7 +4,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using OpenRiaServices.LinqToSql;
 using ToolHelper = OpenRiaServices.Tools.Test.TestHelper;
 
 namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
@@ -126,21 +125,5 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test.Utilities
             }
         }
 
-
-        /// <summary>
-        /// Enables or disables L2S support.
-        /// </summary>
-        /// <param name="enable">when true, L2S support is enabled as it would when the toolkit is installed</param>
-        public static void EnsureL2SSupport(bool enable)
-        {
-            if (enable)
-            {
-                LinqToSqlContext.OverrideAssemblyPath(typeof(LinqToSqlDomainService<>).Assembly.FullName);
-            }
-            else
-            {
-                LinqToSqlContext.OverrideAssemblyPath(null);
-            }
-        }
     }
 }

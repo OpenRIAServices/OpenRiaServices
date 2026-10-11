@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Data.Entity;
 using System.Data.Entity.Core.Objects;
-using System.Data.Linq;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -56,14 +55,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         {
             System.Diagnostics.Debug.Assert(businessLogicData != null, "BusinessLogicData cannot be null");
             this._businessLogicData = businessLogicData;
-
-            // Note: the LinqToSqlContext in this AppDomain is not the same
-            // one in the caller's AppDomain, so we have to propagate this
-            // override across to this version of the type.
-            if (businessLogicData.LinqToSqlPath != null)
-            {
-                LinqToSqlContext.OverrideAssemblyPath(businessLogicData.LinqToSqlPath);
-            }
         }
 
         /// <summary>
@@ -176,11 +167,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 {
                     try
                     {
-                        if (typeof(DataContext).IsAssignableFrom(t))
-                        {
-                            this._contexts.Add(new LinqToSqlContext(t));
-                        }
-                        else if (typeof(ObjectContext).IsAssignableFrom(t))
+                        if (typeof(ObjectContext).IsAssignableFrom(t))
                         {
                             this._contexts.Add(new LinqToEntitiesContext(t));
                         }

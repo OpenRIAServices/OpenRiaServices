@@ -314,7 +314,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// 
         /// This is to support generating RiaServices generic DomainService classes 
         /// and generic properties; several of them define TParam to have a default ctr 
-        /// For an example see LinqToSqlDomainService or LinqToEntitiesDomainService.
+        /// For an example see LinqToEntitiesDomainService.
         /// </summary>
         /// <param name="type">The type to check.</param>
         /// <returns>Returns true if the type is a valid generic type param.</returns>

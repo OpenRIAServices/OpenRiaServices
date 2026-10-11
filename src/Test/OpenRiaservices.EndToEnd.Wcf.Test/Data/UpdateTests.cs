@@ -5,10 +5,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
-using DataTests.Northwind.LTS;
+using EFCoreModels.Northwind;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestDomainServices.LTS;
+using TestDomainServices.EFCore;
 using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.Client.Test
@@ -19,7 +19,7 @@ namespace OpenRiaServices.Client.Test
     /// End to end update scenario tests. These tests do a one time TestClass level test database
     /// initialization, creating the isolation database that will be used for all the tests. After
     /// all tests have run, and assembly level clean-up method disposes the test database.
-    /// Note: we're using the same generated client for both EF and LTS tests, varying only the
+    /// Note: we're using the same generated EF Core client for all providers, varying only the
     /// provider string that the tests use.
     /// </summary>
 #if !SILVERLIGHT
@@ -136,15 +136,6 @@ namespace OpenRiaServices.Client.Test
                 ChangeSetEntry customerEntry = entries.Single(p => p.Operation == EntityOperationType.Delete);
                 Assert.IsNull(customerEntry.Associations);
                 Assert.IsNull(customerEntry.OriginalAssociations);
-
-                if (this.ProviderType == Test.ProviderType.LTS)
-                {
-                    // EF handles setting the order FK to customer to null when
-                    // the order is removed server side, but LTS doesn't. Without
-                    // this, the delete will fail since we're attempting to add a new entity
-                    // that references it!
-                    o.CustomerID = null;
-                }
 
                 SubmitChanges();
             });
@@ -3796,266 +3787,6 @@ namespace OpenRiaServices.Client.Test
         #endregion
     }
 
-#if !ASPNETCORE
-    [TestClass]
-    public class LTSUpdateTests : UpdateTests
-    {
-        public LTSUpdateTests()
-            : base(TestURIs.LTS_Northwind_CUD, ProviderType.LTS)
-        {
-        }
-
-        /// <summary>
-        /// Silverlight version of class initializer doesn't take TestContext
-        /// </summary>
-        [ClassInitialize]
-        public static void ClassSetup(
-#if !SILVERLIGHT
-TestContext testContext
-#endif
-)
-        {
-            // ensure that our isolation DB has been created once and only once
-            // at the test fixture level
-            TestDatabase.Initialize();
-        }
-
-        /// <summary>
-        /// This is an LTS only test currently since EF doesn't support the entitiy
-        /// level OnValidate partial method pattern.
-        /// </summary>
-        [TestMethod]
-        [Asynchronous]
-        public void Bug594068_PersistChangesErrorHandling()
-        {
-            Northwind ctxt = new Northwind(TestURIs.LTS_Northwind_CUD);
-            SubmitOperation so = null;
-
-            Product prod = new Product
-            {
-                ProductID = 1,
-                ProductName = "Crispy Snax",
-                ReorderLevel = 5
-            };
-
-            EnqueueConditional(delegate
-            {
-                return TestDatabase.IsInitialized;
-            });
-            EnqueueCallback(() =>
-            {
-                ctxt.Products.Attach(prod);
-
-                // create an invalid update
-                prod.ReorderLevel = -1;
-                so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
-            });
-            this.EnqueueCompletion(() => so);
-            EnqueueCallback(() =>
-            {
-                Assert.IsNotNull(so.Error);
-                Product prodInError = so.EntitiesInError.Cast<Product>().Single();
-                var err = prodInError.ValidationErrors.Single();
-                Assert.AreEqual("Invalid Product Update!", err.ErrorMessage);
-                Assert.IsTrue(err.MemberNames.Contains("ReorderLevel"));
-            });
-            EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        [Asynchronous]
-        public void ChangeSet_CancelSubmit()
-        {
-            Product product = null;
-            Northwind ctxt = new Northwind(TestURIs.LTS_Northwind_CUD);
-            LoadOperation lo = null;
-            SubmitOperation so = null;
-
-            EnqueueConditional(delegate
-            {
-                return TestDatabase.IsInitialized;
-            });
-            EnqueueCallback(() =>
-            {
-                lo = ctxt.Load(ctxt.GetProductsQuery().Skip(3).Take(1), false);
-            });
-            this.EnqueueCompletion(() => lo);
-            EnqueueCallback(() =>
-            {
-                Assert.IsNull(lo.Error);
-
-                // Verify we received 1 product as expected
-                Assert.AreEqual<int>(1, ctxt.Products.Count);
-                Assert.IsFalse(ctxt.EntityContainer.HasChanges);
-
-                // Modify product and submit
-                product = ctxt.Products.First();
-                product.ProductName = "New Product Name";
-
-                Assert.IsTrue(ctxt.EntityContainer.HasChanges);
-                so = ctxt.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
-                Assert.IsTrue(so.CanCancel, "Cancellation should be supported.");
-            });
-            EnqueueCallback(() =>
-            {
-                EntityChangeSet changeSet = ctxt.EntityContainer.GetChanges();
-                Assert.IsTrue(changeSet.All(e => e.IsSubmitting), "Not all entities are in IsSubmitting state.");
-
-                // cancel the submit
-                so.Cancel();
-            });
-            this.EnqueueCompletion(() => so);
-            EnqueueCallback(() =>
-            {
-                // Verify event args
-                Assert.IsNull(so.Error);
-                Assert.IsTrue(so.IsCanceled, "Operation should've been cancelled.");
-
-                EntityChangeSet changeSet = ctxt.EntityContainer.GetChanges();
-                Assert.IsFalse(changeSet.Any(e => e.IsSubmitting), "Not all entities are out of the IsSubmitting state.");
-                Assert.IsTrue(ctxt.EntityContainer.HasChanges);
-                Assert.AreSame(product, so.ChangeSet.ModifiedEntities.First());
-            });
-            EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        [Asynchronous]
-        public override void SimpleUpdateConflict()
-        {
-            Northwind nw1 = new Northwind(this.ServiceUri);
-            Northwind nw2 = new Northwind(this.ServiceUri);
-
-            LoadOperation nw1load = null, nw2load = null;
-            string nw1address = DateTime.Now.Ticks.ToString() + " - nw1";
-            string nw2address = DateTime.Now.Ticks.ToString() + " - nw2";
-            string nw2addressOriginal = null;
-            string nw2address2 = DateTime.Now.Ticks.ToString() + " - nw2.2";
-
-            SubmitOperation so = null;
-
-            EnqueueConditional(delegate
-            {
-                return TestDatabase.IsInitialized;
-            });
-            EnqueueCallback(delegate
-            {
-                nw1load = nw1.Load(nw1.GetCustomersQuery(), false);
-                nw2load = nw2.Load(nw2.GetCustomersQuery(), false);
-            });
-            EnqueueConditional(() => nw1load.IsComplete&& nw2load.IsComplete);
-            EnqueueCallback(delegate
-            {
-                if (nw1load.Error != null)
-                {
-                    Assert.Fail("nw1 error: " + nw1load.Error.ToString());
-                }
-                if (nw2load.Error != null)
-                {
-                    Assert.Fail("nw2 error: " + nw2load.Error.ToString());
-                }
-            });
-            EnqueueCallback(delegate
-            {
-                Assert.IsTrue(nw1.Customers.Count > 0);
-                Assert.IsTrue(nw2.Customers.Count > 0);
-                Customer[] customers = nw1.Customers.ToArray();
-                customers[0].Address = nw1address;
-                customers[1].Address = nw1address;
-                nw1.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
-            });
-            EnqueueConditional(() => !nw1.IsSubmitting);
-            EnqueueCallback(delegate
-            {
-                Customer[] customers = nw2.Customers.ToArray();
-                nw2addressOriginal = customers[0].Address;
-                customers[0].Address = nw2address;
-                customers[1].Address = nw2address;
-                customers[2].Address = nw2address2;
-                so = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
-            });
-            this.EnqueueCompletion(() => so);
-            EnqueueCallback(delegate
-            {
-                Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error.Message);
-                Entity[] entitiesInConflict = so.EntitiesInError.ToArray();
-                Assert.AreEqual(3, so.ChangeSet.ModifiedEntities.Count);
-                Assert.AreEqual(2, entitiesInConflict.Length);
-
-                Customer customerInConflict = (Customer)entitiesInConflict[0];
-                EntityConflict conflict = customerInConflict.EntityConflict;
-                Assert.AreEqual(1, conflict.PropertyNames.Count());
-                Assert.IsTrue(conflict.PropertyNames.Contains("Address"));
-                Assert.AreEqual(nw1address, ((Customer)conflict.StoreEntity).Address);
-                Assert.AreEqual(nw2address, ((Customer)conflict.CurrentEntity).Address);
-                Assert.AreEqual(nw2addressOriginal, ((Customer)conflict.OriginalEntity).Address);
-                Assert.AreEqual(nw2address, ((Customer)entitiesInConflict[0]).Address);
-                Assert.AreEqual(nw2address2, ((Customer)so.ChangeSet.ModifiedEntities[2]).Address);
-
-                // resolve all the conflicts and resubmit
-                foreach(Entity entityInConflict in entitiesInConflict)
-                {
-                    conflict = entityInConflict.EntityConflict;
-                    var currentState = conflict.CurrentEntity.ExtractState();
-                    conflict.Resolve();
-                    TestHelperMethods.VerifyEntityState(currentState, conflict.CurrentEntity.ExtractState());
-                    Assert.IsNull(entityInConflict.EntityConflict);
-                }
-
-                so = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
-            });
-            this.EnqueueCompletion(() => so);
-            EnqueueCallback(delegate
-            {
-                Assert.IsFalse(so.HasError);
-            });
-
-            EnqueueTestComplete();
-        }
-
-        [TestMethod]
-        [Asynchronous]
-        public void ReplaceObjectViaInsertDelete()
-        {
-            Northwind ctxt = CreateDomainContext();
-
-            EnqueueConditional(delegate
-            {
-                return TestDatabase.IsInitialized;
-            });
-            EnqueueCallback(delegate
-            {
-                Load(ctxt.GetCustomersQuery().Take(1));
-            });
-            EnqueueConditional(delegate
-            {
-                return IsLoadComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                var c = ctxt.Customers.First();
-                ctxt.Customers.Remove(c);
-                ctxt.Customers.Add(new Customer()
-                {
-                    CustomerID = c.CustomerID,
-                    CompanyName = c.CompanyName
-                });
-                SubmitChanges();
-            });
-            EnqueueConditional(delegate
-            {
-                return IsSubmitComplete;
-            });
-            EnqueueCallback(delegate
-            {
-                AssertSuccess();
-            });
-
-            EnqueueTestComplete();
-        }
-    }
-#endif
-
     [TestClass]
     public class EFUpdateTests : UpdateTests
     {
@@ -4766,7 +4497,7 @@ TestContext testContext
         [TestMethod]
         public void VerifyKeyMembersCannotBeChanged()
         {
-            Northwind ctxt = new Northwind(TestURIs.LTS_Northwind);
+            Northwind ctxt = new Northwind(TestURIs.EFCore_Northwind);
 
             Order_Detail detail = new Order_Detail
             {
@@ -4835,9 +4566,9 @@ TestContext testContext
         public void Bug502481_NullPreviousRef()
         {
             TestEntityContainer ec = new TestEntityContainer();
-            EntitySet employees = ec.GetEntitySet<DataTests.AdventureWorks.LTS.Employee>();
+            EntitySet employees = ec.GetEntitySet<EFCoreModels.AdventureWorks.Employee>();
 
-            DataTests.AdventureWorks.LTS.Employee emp = new DataTests.AdventureWorks.LTS.Employee()
+            EFCoreModels.AdventureWorks.Employee emp = new EFCoreModels.AdventureWorks.Employee()
             {
                 EmployeeID = 100
             };

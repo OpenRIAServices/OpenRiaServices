@@ -55,6 +55,8 @@ Contribution Guidelines can be found at https://github.com/OpenRIAServices/OpenR
 
 # Nuget packages
 
+The solution no longer builds the LINQ to SQL (LTS) provider. Use Entity Framework or Entity Framework Core domain services instead; archived LINQ to SQL documentation describes older releases.
+
 Here are the most common nuget packages and their current versions.
 
 |Package | Stable | Prerelease |
