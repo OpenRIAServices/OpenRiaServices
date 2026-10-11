@@ -228,10 +228,10 @@ namespace OpenRiaServices.Tools.Test
         /// <returns></returns>
         public static List<string> GetClientAssemblies(string relativeTestDir)
         {
-            // Get full path of OpenRiaServices.Client.Web.csproj
+            // Get full path of OpenRiaServices.Client.DomainClients.Http.csproj
             string projectDir = GetCurrentProjectFolder();
-            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.Client.Web\Framework"));
-            string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.Client.Web.csproj");
+            string testProjectDir = Path.GetFullPath(Path.Combine(projectDir, @"..\..\OpenRiaServices.Client.DomainClients.Http\Framework"));
+            string testProjectFile = Path.Combine(testProjectDir, @"OpenRiaServices.Client.DomainClients.Http.csproj");
             Assert.IsTrue(File.Exists(testProjectFile), "This test could not find its required project at " + testProjectFile);
 
             // Retrieve all the assembly references from the test project (follows project-to-project references too)

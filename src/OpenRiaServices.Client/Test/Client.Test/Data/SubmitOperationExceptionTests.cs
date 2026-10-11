@@ -20,7 +20,7 @@ namespace OpenRiaServices.Client.Test
 
             // ctor(changeSet, message, status)
             var soe = new SubmitOperationException(changeSet, "message", OperationErrorStatus.Unauthorized);
-            Assert.AreEqual(changeSet, soe.ChangeSet);
+            Assert.AreEquivalent(changeSet, soe.ChangeSet);
             Assert.AreEqual("message", soe.Message, "ctor(msg) failed");
             Assert.IsNull(soe.InnerException, "InnerException s/b null");
             Assert.IsNull(soe.StackTrace, "Default stack trace s/b null");

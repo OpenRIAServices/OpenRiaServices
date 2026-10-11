@@ -429,10 +429,9 @@ namespace OpenRiaServices.Client.Test
         public void DomainClient_SubmitWithInvalidInvocation()
         {
             TestEntityContainer container = new TestEntityContainer();
-            WebDomainClient<CityDomainContext.ICityDomainServiceContract> client = new WebDomainClient<CityDomainContext.ICityDomainServiceContract>(TestURIs.Cities)
-            {
-                EntityTypes = new Type[] { typeof(City) }
-            };
+            DomainClient client = DomainContext.DomainClientFactory.CreateDomainClient(typeof(CityDomainContext.ICityDomainServiceContract), TestURIs.Cities, false);
+            client.EntityTypes = new Type[] { typeof(City) };
+
             List<Entity> emptyList = new List<Entity>();
             List<Entity> modifiedEntities = new List<Entity>();
 

@@ -1,10 +1,8 @@
-﻿extern alias httpDomainClient; 
-
-using System;
+﻿using System;
 using System.Net.Http;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using httpDomainClient::OpenRiaServices.Client.DomainClients;
+using OpenRiaServices.Client.DomainClients;
 
 namespace OpenRiaServices.Client.Test
 {

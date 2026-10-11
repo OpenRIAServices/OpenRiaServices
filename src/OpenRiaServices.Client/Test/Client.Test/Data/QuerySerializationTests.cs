@@ -1,6 +1,6 @@
 ﻿extern alias DomainServices;
 extern alias DomainServicesTests;
-extern alias SSmDsWeb;
+extern alias httpDomainClient;
 extern alias WebRia;
 using System;
 using System.Collections.Generic;
@@ -13,7 +13,7 @@ using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VbExpressions;
 using DomainServiceDescription = DomainServices::OpenRiaServices.Server.DomainServiceDescription;
-using LinqResource = SSmDsWeb::OpenRiaServices.Client.Resources;
+using LinqResource = httpDomainClient::OpenRiaServices.Client.Resources;
 using NorthwindDomainService = DomainServicesTests::TestDomainServices.EFCore.Northwind;
 using SystemLinqDynamic = WebRia::System.Linq.Dynamic;
 
