@@ -9,7 +9,7 @@
     <projectUrl>https://github.com/OpenRIAServices/OpenRiaServices</projectUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>
-      OpenRiaServices.Client.Core provides the OpenRiaServices.Client and OpenRiaServices.Client.Web assemblies for your client projects.
+      OpenRiaServices.Client.Core provides the OpenRiaServices.Client and DomainClient assemblies for your client projects.
     </description>
     <summary>Open RIA Services - client assemblies and references.</summary>
     <releaseNotes>For release notes see https://github.com/OpenRIAServices/OpenRiaServices/releases</releaseNotes>
