@@ -1,12 +1,10 @@
-﻿extern alias httpDomainClient;
-
-using System;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
-using httpDomainClient::OpenRiaServices.Client.DomainClients;
+using OpenRiaServices.Client.DomainClients;
 using System.Diagnostics;
 using System.Runtime.CompilerServices;
 using System.Diagnostics.CodeAnalysis;

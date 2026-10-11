@@ -1,13 +1,12 @@
 ﻿#if NET10_0_OR_GREATER
 
-extern alias httpDomainClient;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
-using httpDomainClient::OpenRiaServices.Client.DomainClients;
+using OpenRiaServices.Client.DomainClients;
 using People;
 using static People.PeopleDomainContext;
 
