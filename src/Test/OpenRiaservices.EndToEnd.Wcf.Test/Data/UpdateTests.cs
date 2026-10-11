@@ -3136,8 +3136,7 @@ namespace OpenRiaServices.Client.Test
                     so = nw2.SubmitChanges(TestHelperMethods.DefaultOperationAction, null);
                 });
 
-            // Note: there are different expected behaviors wrt L2S and EF domain services.
-            // L2S supports continue on error so all the conflicts should be resolved during the submit
+            // Providers differ in whether conflict resolution continues after an error.
             // EF stops on first error so each subsequent resolve only takes care of one conflict. Since our
             // framework by default only retry once, the first product's conflict will be resolved and on
             // resubmit, the second product will return conflict
@@ -3290,7 +3289,7 @@ namespace OpenRiaServices.Client.Test
                 }
                 else
                 {
-                    // L2S continues on error so both resolve methods are called. Here, we verify client values are not 
+                    // Both resolve methods are called. Here, we verify client values are not
                     // updated since one resolve method returns false
                     conflict = products[0].EntityConflict;
                     Assert.IsNotNull(conflict);
@@ -3412,7 +3411,7 @@ namespace OpenRiaServices.Client.Test
                 }
                 else
                 {
-                    // L2S continues on error so both resolve methods are called. Here, we verify client values are autosynced
+                    // Both resolve methods are called. Here, we verify client values are autosynced
                     // back since the resubmit is successful
                     Assert.IsNull(so.Error);
                     Assert.IsNull(products[0].EntityConflict);

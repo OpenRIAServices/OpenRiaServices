@@ -417,31 +417,6 @@ namespace OpenRiaServices.Client.Test
             EnqueueTestComplete();
         }
 
-#if !ASPNETCORE
-        /// <summary>
-        /// Verify that errors are propagated correctly for L2S DomainService
-        /// </summary>
-        [TestMethod]
-        [Asynchronous]
-        [TestCategory("Linq2Sql")]
-        public void TestL2SProviderConstructorThrows()
-        {
-            // Test for a provider that derives from LinqToSqlDomainService, since LinqToSqlDomainService is instantiated differently
-            TestDataContext ctxt = new TestDataContext(new Uri(TestURIs.RootURI, "TestDomainServices-ThrowingDomainServiceL2S.svc"));
-            LoadOperation lo = ctxt.Load(ctxt.CreateQuery<Product>("GetProducts", null), false);
-            this.EnqueueCompletion(() => lo);
-            EnqueueCallback(delegate
-            {
-                DomainOperationException ex = (DomainOperationException)lo.Error;
-                Assert.IsNotNull(ex);
-                Assert.AreEqual(OperationErrorStatus.NotSupported, ex.Status);
-                Assert.AreEqual(string.Format(Resource.DomainContext_LoadOperationFailed, "GetProducts", "Couldn't construct this type."), ex.Message);
-            });
-
-            EnqueueTestComplete();
-        }
-#endif
-
         /// <summary>
         /// Verify that if an invalid DomainService name is specified, that the Load
         /// operation finishes with the expected WebResponse.StatusCode.
