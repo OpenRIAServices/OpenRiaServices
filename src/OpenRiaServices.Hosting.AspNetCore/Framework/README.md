@@ -101,6 +101,14 @@ builder.Services.AddOpenRiaServices(o => {
 });
 ```
 
+### Client query member visibility
+
+Client query filters and ordering can only access entity and complex-type members exposed by client serialization metadata. Use serializable properties for values that clients need to query; public fields and custom indexers are not exposed by this property-based metadata, even when a field has `[DataMember]`.
+
+The existing property visibility rules, including `[Exclude]`, `[DataContract]`/`[DataMember]`, and `[IgnoreDataMember]`, also apply when a property is inherited and its metadata is registered on the derived entity. Rejected members produce the same query error as unknown members, without executing custom indexer getters.
+
+Standard string, array, list, and dictionary indexing and predefined static constants remain supported. These checks are shared with WCF hosting.
+
 ### Supporting different serialization formats (Text Xml)
 
 The default serialization format is binary XML, which is compatible with WCF RIA Services.
@@ -215,8 +223,6 @@ builder.Services.AddOpenRiaServices()
     });
 ```
 
-
-
 ### Simple struct parameters and keys
 
 Simple structs can be used in query/custom/invoke operation signatures when they have one or more public readable properties of predefined simple types.
@@ -256,6 +262,33 @@ app.MapOpenRiaServices(builder =>
     builder.AddDomainService<Cities.CityDomainService>("Cities-CityDomainService.svc/binary");
 });
 ```
+
+### Client query complexity limits
+
+Client `where` and `orderby` expressions have these limits:
+
+- 200 levels of nesting (ASP.NET Core configurable; WCF uses 200)
+- 4,096 expression nodes and 32,768 characters per expression
+- 64 query parts and 131,072 total expression characters per request
+
+Requests that exceed a limit return an error or fault; they are not truncated. Hosts with small thread stacks may reject deeply nested expressions sooner.
+
+Set the ASP.NET Core depth limit through OpenRiaServices options:
+
+```csharp
+builder.Services.AddOpenRiaServices(options =>
+{
+    options.MaxQueryExpressionDepth = 300;
+});
+```
+
+Increase the limit only when valid queries are rejected. Deeper expressions require more stack space in the parser and LINQ provider.
+
+String replacements are also limited: an expression can contain at most three growing `Replace(string, string)` calls, with a combined growth factor no greater than 100. Each call's factor is `ceil(replacement.Length / search.Length)`; nonconstant or empty search strings use a length of 1.
+
+Non-growing replacements, deletions (`null` or empty replacement), and `Replace(char, char)` do not count. Calls across branches and ordering selectors are counted together. For example, three `Replace("a", "aaa")` calls are allowed (factor 27); a fourth is rejected.
+
+These limits do not replace transport request-size limits or provider execution timeouts.
 
 ## ASP.NET Core integration
 

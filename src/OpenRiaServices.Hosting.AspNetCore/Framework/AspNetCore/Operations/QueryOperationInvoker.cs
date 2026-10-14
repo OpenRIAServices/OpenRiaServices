@@ -55,14 +55,16 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
 
                     (serviceQuery, inputs) = await serializer.ReadParametersFromBodyAsync(context, DomainOperation);
                     if (!((QueryAttribute)_operation.OperationAttribute).IsComposable)
+                    {
                         serviceQuery = null;
+                    }
                 }
 
                 DomainService domainService = CreateDomainService(context);
                 QueryResult<TEntity> result;
                 try
                 {
-                    result = await QueryProcessor.ProcessAsync<TEntity>(domainService, _operation, inputs, serviceQuery);
+                    result = await QueryProcessor.ProcessAsync<TEntity>(domainService, _operation, inputs, serviceQuery, Options.MaxQueryExpressionDepth);
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {

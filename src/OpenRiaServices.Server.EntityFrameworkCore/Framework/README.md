@@ -81,3 +81,52 @@ The *Complex Types* introduced in EF Core 8 are *partially supported** with some
 2. Any ef core configuration/metadata applied to the ComplexType (as part of fluent configuration) **IS NOT** discovered.
 The `DbDomainServiceDescriptionProvider` and `DbDomainService` classes does not have any special handling of *Complex Types*.
     * Attributes on the types are discovered as expected using the normal built in reflection based attribute discovery
+
+
+## Security
+
+### Authorizing concurrency conflict disclosure
+
+On an optimistic concurrency conflict, `DbDomainService` fetches current database
+values without calling your query methods or their authorization checks. Conflict
+responses may expose the entity (`StoreEntity`), differing members
+(`ConflictMembers`), or delete status (`IsDeleteConflict`). A caller could exploit
+this to learn data about another user's entity even when the write fails.
+
+This hook is intended to protect applications that enforce row filtering in their
+query methods (such as `Get`), since those filters do not apply to this lookup.
+Database Row-Level Security (RLS), or a similar data-layer policy, is another
+possible mitigation.
+
+Override `CanDiscloseConflictAsync` to authorize disclosure. Its default returns
+`true` for backward compatibility, so the mitigation is opt-in. For example, this
+allows access only when the stored entity belongs to the authenticated user:
+
+```csharp
+protected override ValueTask<bool> CanDiscloseConflictAsync(
+    ChangeSetEntry changeSetEntry,
+    object storeEntity,
+    CancellationToken cancellationToken)
+{
+    cancellationToken.ThrowIfCancellationRequested();
+    var identity = ServiceContext.User.Identity;
+    bool allowed = identity?.IsAuthenticated == true
+        && storeEntity is MyEntity stored
+        && stored.OwnerId == identity.Name;
+    return new ValueTask<bool>(allowed);
+}
+```
+
+Use trusted identity/tenant data and authorize access to every property in the
+snapshot. Return `false` to deny all detailed conflict information. Async overrides
+can perform authorization queries with the cancellation token.
+
+- `storeEntity` is the database snapshot and may be `null` if the row is missing.
+  Never authorize from `changeSetEntry.Entity` or `OriginalEntity`; both are client
+  input. Permit disclosure of a missing row only when your server-side policy allows it.
+- All snapshots are authorized before conflict details are populated. Returning
+  `false` aborts the submit with a generic `UnauthorizedAccessException` through
+  `DomainService.OnError`; `ResolveConflicts` is not called and the submit is not
+  retried. Avoid sensitive details in custom errors.
+- This hook controls disclosure, not write authorization, and runs after fetching
+  database values. Enforce update/delete permissions separately.

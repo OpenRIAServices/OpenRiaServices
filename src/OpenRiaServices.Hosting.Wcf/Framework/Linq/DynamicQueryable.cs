@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System;
 
 #nullable disable
@@ -21,11 +22,11 @@ namespace System.Linq.Dynamic
 
     internal static class DynamicQueryable
     {
-        public static IQueryable Where(this IQueryable source, string predicate, QueryResolver queryResolver)
+        public static IQueryable Where(this IQueryable source, string predicate, QueryResolver queryResolver, int maxExpressionDepth)
         {
             ArgumentNullException.ThrowIfNull(source);
             ArgumentNullException.ThrowIfNull(predicate);
-            LambdaExpression lambda = DynamicExpression.ParseLambda(source.ElementType, typeof(bool), predicate, queryResolver);
+            LambdaExpression lambda = DynamicExpression.ParseLambda(source.ElementType, typeof(bool), predicate, queryResolver, maxExpressionDepth);
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "Where",
@@ -33,13 +34,13 @@ namespace System.Linq.Dynamic
                     source.Expression, Expression.Quote(lambda)));
         }
 
-        public static IQueryable OrderBy(this IQueryable source, string ordering, QueryResolver queryResolver)
+        public static IQueryable OrderBy(this IQueryable source, string ordering, QueryResolver queryResolver, int maxExpressionDepth)
         {
             ArgumentNullException.ThrowIfNull(source);
             ArgumentNullException.ThrowIfNull(ordering);
             ParameterExpression[] parameters = new ParameterExpression[] {
                 Expression.Parameter(source.ElementType, "") };
-            ExpressionParser parser = new ExpressionParser(parameters, ordering, queryResolver);
+            ExpressionParser parser = new ExpressionParser(parameters, ordering, queryResolver, maxExpressionDepth);
             IEnumerable<DynamicOrdering> orderings = parser.ParseOrdering();
             Expression queryExpr = source.Expression;
             string methodAsc = "OrderBy";
@@ -53,6 +54,7 @@ namespace System.Linq.Dynamic
                 methodAsc = "ThenBy";
                 methodDesc = "ThenByDescending";
             }
+            ExpressionParser.ValidateExpression(queryExpr, maxExpressionDepth, QueryDeserializer.MaxQueryParts + 4);
             return source.Provider.CreateQuery(queryExpr);
         }
 
@@ -87,14 +89,14 @@ namespace System.Linq.Dynamic
             typeof(Func<,,,,>)
         };
 
-        public static LambdaExpression ParseLambda(Type itType, Type resultType, string expression, QueryResolver queryResolver)
+        public static LambdaExpression ParseLambda(Type itType, Type resultType, string expression, QueryResolver queryResolver, int maxExpressionDepth = ExpressionParser.MaxExpressionDepth)
         {
-            return ParseLambda(new ParameterExpression[] { Expression.Parameter(itType, "") }, resultType, expression, queryResolver);
+            return ParseLambda(new ParameterExpression[] { Expression.Parameter(itType, "") }, resultType, expression, queryResolver, maxExpressionDepth);
         }
 
-        public static LambdaExpression ParseLambda(ParameterExpression[] parameters, Type resultType, string expression, QueryResolver queryResolver)
+        public static LambdaExpression ParseLambda(ParameterExpression[] parameters, Type resultType, string expression, QueryResolver queryResolver, int maxExpressionDepth = ExpressionParser.MaxExpressionDepth)
         {
-            ExpressionParser parser = new ExpressionParser(parameters, expression, queryResolver);
+            ExpressionParser parser = new ExpressionParser(parameters, expression, queryResolver, maxExpressionDepth);
             return Lambda(parser.Parse(resultType), parameters);
         }
 
@@ -136,6 +138,87 @@ namespace System.Linq.Dynamic
 
     internal partial class ExpressionParser
     {
+        /// <summary>The default maximum parser recursion and expression-tree depth.</summary>
+        internal const int MaxExpressionDepth = 200;
+        /// <summary>The maximum number of nodes in a client expression tree.</summary>
+        internal const int MaxExpressionNodes = 4096;
+        /// <summary>The maximum length of a client expression.</summary>
+        internal const int MaxExpressionLength = 32768;
+
+        readonly int _maxExpressionDepth;
+        int _expressionDepth;
+        int _growingReplaceCalls;
+        int _stringExpansionFactor = 1;
+
+        void CheckStringExpansion(MethodInfo method, Expression[] args)
+        {
+            if (method.DeclaringType != typeof(string) || method.Name != nameof(string.Replace)
+                || args.Length != 2 || args[0].Type != typeof(string))
+                return;
+
+            // The allowlist requires a constant replacement of at most 100 characters.
+            int newLength = ((ConstantExpression)args[1]).Value is string replacement ? replacement.Length : 0;
+            int oldLength = args[0] is ConstantExpression { Value: string oldValue } ? Math.Max(1, oldValue.Length) : 1;
+            int factor = newLength / oldLength + (newLength % oldLength == 0 ? 0 : 1);
+            if (factor <= 1)
+                return;
+
+            if (++_growingReplaceCalls > 3 || _stringExpansionFactor > 100 / factor)
+                throw ParseError(Resource.ExpressionTooComplex);
+            _stringExpansionFactor *= factor;
+        }
+
+        void EnterExpression()
+        {
+            if (_expressionDepth >= _maxExpressionDepth)
+                throw ParseError(Resource.ExpressionTooComplex);
+            try
+            {
+                RuntimeHelpers.EnsureSufficientExecutionStack();
+            }
+            catch (InsufficientExecutionStackException)
+            {
+                throw ParseError(Resource.ExpressionTooComplex);
+            }
+            _expressionDepth++;
+        }
+
+        /// <summary>Checks tree complexity without recursively walking untrusted expressions.</summary>
+        internal static void ValidateExpression(Expression expression, int maxExpressionDepth = MaxExpressionDepth, int depthAllowance = 0)
+        {
+            new ComplexityValidator((long)maxExpressionDepth + depthAllowance).Validate(expression);
+        }
+
+        sealed class ComplexityValidator(long maxExpressionDepth) : ExpressionVisitor
+        {
+            readonly Queue<(Expression Expression, int Depth)> _pending = new();
+            int _depth;
+            int _nodes;
+
+            public void Validate(Expression expression)
+            {
+                Visit(expression);
+                while (_pending.Count != 0)
+                {
+                    var entry = _pending.Dequeue();
+                    _depth = entry.Depth;
+                    // Dispatch this node only; Visit queues its children instead of recursing.
+                    base.Visit(entry.Expression);
+                }
+            }
+
+            public override Expression Visit(Expression node)
+            {
+                if (node != null)
+                {
+                    if (_depth >= maxExpressionDepth || ++_nodes > MaxExpressionNodes)
+                        throw new ParseException(Resource.ExpressionTooComplex, 0);
+                    _pending.Enqueue((node, _depth + 1));
+                }
+                return node;
+            }
+        }
+
         struct Token(TokenId id, int pos, int length)
         {
             public readonly TokenId id = id;
@@ -369,10 +452,14 @@ namespace System.Linq.Dynamic
             => _text.Substring(token.pos, token.length);
 
 
-        public ExpressionParser(ParameterExpression[] parameters, string expression, QueryResolver queryResolver)
+        public ExpressionParser(ParameterExpression[] parameters, string expression, QueryResolver queryResolver, int maxExpressionDepth = MaxExpressionDepth)
         {
             ArgumentNullException.ThrowIfNull(expression);
 
+            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxExpressionDepth);
+            _maxExpressionDepth = maxExpressionDepth;
+            if (expression.Length > MaxExpressionLength)
+                throw new ParseException(Resource.ExpressionTooComplex, 0);
             this._queryResolver = queryResolver;
             if (parameters != null)
                 ProcessParameters(parameters);
@@ -400,6 +487,7 @@ namespace System.Linq.Dynamic
         {
             int exprPos = CurrentToken.pos;
             Expression expr = ParseExpression();
+            ValidateExpression(expr, _maxExpressionDepth);
             if (resultType != null)
                 if ((expr = PromoteExpression(expr, resultType, true)) == null)
                     throw ParseError(exprPos, Resource.ExpressionTypeMismatch, GetTypeName(resultType));
@@ -413,6 +501,7 @@ namespace System.Linq.Dynamic
             while (true)
             {
                 Expression expr = ParseExpression();
+                ValidateExpression(expr, _maxExpressionDepth);
                 bool ascending = true;
                 if (_tokenId == TokenId.Identifier)
                 {
@@ -443,18 +532,26 @@ namespace System.Linq.Dynamic
         // ?: operator
         Expression ParseExpression()
         {
-            int errorPos = CurrentToken.pos;
-            Expression expr = ParseLogicalOr();
-            if (CurrentToken.id == TokenId.Question)
+            EnterExpression();
+            try
             {
-                NextToken();
-                Expression expr1 = ParseExpression();
-                ValidateToken(TokenId.Colon, Resource.ColonExpected);
-                NextToken();
-                Expression expr2 = ParseExpression();
-                expr = GenerateConditional(expr, expr1, expr2, errorPos);
+                int errorPos = CurrentToken.pos;
+                Expression expr = ParseLogicalOr();
+                if (CurrentToken.id == TokenId.Question)
+                {
+                    NextToken();
+                    Expression expr1 = ParseExpression();
+                    ValidateToken(TokenId.Colon, Resource.ColonExpected);
+                    NextToken();
+                    Expression expr2 = ParseExpression();
+                    expr = GenerateConditional(expr, expr1, expr2, errorPos);
+                }
+                return expr;
             }
-            return expr;
+            finally
+            {
+                _expressionDepth--;
+            }
         }
 
         // ||, or operator
@@ -712,7 +809,16 @@ namespace System.Linq.Dynamic
                     _tokenStart = op.pos;
                     return ParsePrimary();
                 }
-                Expression expr = ParseUnary();
+                Expression expr;
+                EnterExpression();
+                try
+                {
+                    expr = ParseUnary();
+                }
+                finally
+                {
+                    _expressionDepth--;
+                }
                 if (op.id == TokenId.Minus)
                 {
                     CheckAndPromoteOperand(typeof(INegationSignatures), op, ref expr);
@@ -1062,6 +1168,7 @@ namespace System.Linq.Dynamic
                                 id, GetTypeName(method.DeclaringType));
                         if (!IsMemberAccessAllowed(method, args))
                             throw ParseError(errorPos, Resource.MethodsAreInaccessible, GetTypeName(method.DeclaringType));
+                        CheckStringExpansion(method, args);
                         return Expression.Call(instance, (MethodInfo)method, args);
                     default:
                         throw ParseError(errorPos, Resource.AmbiguousMethodInvocation,
@@ -1071,6 +1178,9 @@ namespace System.Linq.Dynamic
             else
             {
                 MemberInfo member = FindPropertyOrField(type, id, instance == null);
+                // Prevent "getting" an indexer, such as it.Item == ''
+                if (member is PropertyInfo property && property.GetIndexParameters().Length != 0)
+                    throw ParseError(errorPos, Resource.UnknownPropertyOrField, id, GetTypeName(type));
                 if (member == null)
                 {
                     if (this._queryResolver != null)

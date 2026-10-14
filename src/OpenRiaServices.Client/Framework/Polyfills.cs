@@ -35,6 +35,16 @@ namespace System
             }
         }
 
+        extension(ArgumentOutOfRangeException)
+        {
+            [MethodImpl(MethodImplOptions.AggressiveInlining)]
+            public static void ThrowIfNegativeOrZero(int value, [CallerArgumentExpression(nameof(value))] string? paramName = null)
+            {
+                if (value <= 0)
+                    throw new ArgumentOutOfRangeException(paramName, "Value must be a non-negative and non-zero");
+            }
+        }
+
         [DoesNotReturn]
         private static void ThrowArgumentNullException(string? paramName)
         {

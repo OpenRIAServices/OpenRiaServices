@@ -12,7 +12,8 @@ namespace OpenRiaServices.Server
     {
         private readonly DomainOperationEntry _domainOperationEntry;
         private object[] _parameterValues;
-        private readonly IQueryable _query;
+        private IQueryable _query;
+        private Func<IQueryable> _queryFactory;
         private readonly bool _includeTotalCount;
 
         /// <summary>
@@ -62,6 +63,21 @@ namespace OpenRiaServices.Server
         }
 
         /// <summary>
+        /// Initializes a query whose client expression is built after method-call validation.
+        /// </summary>
+        /// <param name="domainOperationEntry">The query operation to be processed.</param>
+        /// <param name="parameterValues">The query method's parameter values.</param>
+        /// <param name="queryFactory">The factory for the optional client query.</param>
+        /// <param name="includeTotalCount">Whether total entity count is required.</param>
+        internal QueryDescription(DomainOperationEntry domainOperationEntry, object[] parameterValues, Func<IQueryable> queryFactory, bool includeTotalCount)
+            : this(domainOperationEntry, parameterValues)
+        {
+            ArgumentNullException.ThrowIfNull(queryFactory);
+            this._queryFactory = queryFactory;
+            this._includeTotalCount = includeTotalCount;
+        }
+
+        /// <summary>
         /// Gets the query operation to be processed
         /// </summary>
         public DomainOperationEntry Method
@@ -94,8 +110,17 @@ namespace OpenRiaServices.Server
         {
             get
             {
+                this.ParseQuery();
                 return this._query;
             }
+        }
+
+        /// <summary>
+        /// Builds a deferred client query if it has not already been built.
+        /// </summary>
+        internal void ParseQuery()
+        {
+            this._query ??= this._queryFactory?.Invoke();
         }
 
         /// <summary>

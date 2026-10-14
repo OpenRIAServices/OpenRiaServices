@@ -1,12 +1,5 @@
 # Unreleased
 
-## Changed
-
-* Updated framework dependencies to the latest compatible stable releases and synchronized their versions across projects and NuGet specifications.
-* Retained EF Core 3.1 for .NET Framework, 8.0 for .NET 8, and 10.0 for .NET 10, updating each to its latest patch release.
-* Updated MSTest to 4.5.1 and its Microsoft.Testing.Platform extensions to 2.5.1. MSBuild-related packages are unchanged.
-* Updated System.CodeDom can format generated C# string literals differently; code generation tests now compare equivalent literal expressions while retaining shared baselines.
-
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
 Major new features in this release are:
@@ -21,6 +14,39 @@ Major new features in this release are:
      * There is no validation that the structs are serializable
         * Make sure they are serializable using the choosen serialization format (DataContract for binary, or using MessagePack)
         * Use TypeConverter to specify how to convert the struct to/from a string for query parameters
+
+## Security
+
+* ASP.NET Core hosting now ignores body query options for operations marked
+  `[Query(IsComposable = false)]`, matching GET and WCF hosting behavior.
+* Hardening of client side query parsing
+    * ASP.NET Core and WCF defer client expression parsing until operation
+      authorization and parameter validation succeed. Invalid expressions are
+      rejected before the query method executes and now pass through
+      `DomainService.OnError`.
+    * Shared query parsing limits growing `string.Replace(string, string)` calls to
+      three per expression, with a combined worst-case expansion factor of at most
+      100. Non-growing replacements and the character overload remain available.
+    * ASP.NET Core and WCF query parsing now bounds recursion, expression-tree depth
+      and node count, expression length, and the combined size and number of query
+      options. Excessively complex queries return an error instead of exhausting
+      the host stack. ASP.NET Core hosts can configure the default depth of 200 with
+      `OpenRiaServicesOptions.MaxQueryExpressionDepth`.
+    * WCF and ASP.NET Core client queries now reject fields and custom indexers on reference
+      types when they are not part of client serialization metadata.
+      Standard string and collection indexing and predefined static constants remain supported.
+    * Query validation now rejects navigation properties marked `[Exclude]` before
+        applying the exposed-entity association exception.
+    * Query visibility checks now honor metadata registered on the receiver type for inherited properties.
+      Members without a property descriptor are rejected as unknown members instead of causing a null-reference error.
+
+* EF6 and EntityFrameworkCore `DbDomainService` expose a virtual
+  `CanDiscloseConflictAsync` hook for authorizing disclosure of database snapshots,
+  conflicting members, and delete status. The default permits disclosure for
+  backward compatibility; applications can opt into read authorization by
+  overriding the hook. Denial aborts the submit before conflict details are
+  populated or conflict resolution retries are attempted.
+
 
 ## AspNetCore 1.6.0
 
@@ -101,6 +127,7 @@ For performance benchmark data see [PR #591](https://github.com/OpenRIAServices/
 * Updated Source Link configuration to rely on .NET SDK built-in Source Link support (removed explicit `Microsoft.SourceLink.GitHub` package reference)
 * Removed legacy WCF OData hosting, its Visual Studio tooling integration, and related tests.
 * Removed legacy WCF client, including `WebDomainClientFactory` and related tests.
+* Updated nuget dependencies.
 
 # AspNetCore 1.5.0
 

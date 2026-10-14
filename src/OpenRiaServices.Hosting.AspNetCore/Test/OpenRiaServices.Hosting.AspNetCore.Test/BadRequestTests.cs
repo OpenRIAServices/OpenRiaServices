@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization;
+using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
@@ -134,6 +135,99 @@ namespace OpenRiaServices.Hosting.AspNetCore
         }
 
         private static MemoryStream GetQueryRequestWithInvalidOptions()
+            => GetQueryRequest(nameof(BadRequestDomainService.QueryWithDoubleParam), "(", includeValue: true);
+
+        [TestMethod]
+        public void TestQuery_DepthOptionRejectsNonPositiveValues()
+        {
+            var options = new OpenRiaServicesOptions();
+            Assert.AreEqual(200, options.MaxQueryExpressionDepth);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => options.MaxQueryExpressionDepth = 0);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => options.MaxQueryExpressionDepth = -1);
+        }
+
+        [TestMethod]
+        [DataRow("GET")]
+        [DataRow("POST")]
+        [DataRow("QUERY")]
+        public async Task TestQuery_ConfiguredDepthIsPerHost(string method)
+        {
+            var operation = DomainServiceDescription.GetDescription(typeof(BadRequestDomainService))
+                .GetQueryMethod(nameof(BadRequestDomainService.GetPeople));
+            using var services = new ServiceCollection().AddTransient<BadRequestDomainService>().BuildServiceProvider();
+            string expression = new string('(', 10) + "true" + new string(')', 10);
+            foreach (int depth in new[] { 10, 20 })
+            {
+                var options = new OpenRiaServicesOptions
+                {
+                    MaxQueryExpressionDepth = depth,
+                    SerializationProviders = s_options.SerializationProviders,
+                };
+                var invoker = new QueryOperationInvoker<People.Person>(operation, options);
+                var context = new DefaultHttpContext();
+                context.RequestServices = services;
+                context.Response.Body = new MemoryStream();
+                context.Request.Method = method;
+                if (method == "GET")
+                    context.Request.QueryString = new QueryString("?$where=" + Uri.EscapeDataString(expression));
+                else
+                {
+                    context.Request.ContentType = "application/msbin1";
+                    context.Request.Body = GetQueryRequest(nameof(BadRequestDomainService.GetPeople), expression);
+                }
+                await invoker.Invoke(context);
+                Assert.AreEqual(depth == 10 ? StatusCodes.Status400BadRequest : StatusCodes.Status200OK,
+                    context.Response.StatusCode);
+            }
+        }
+
+        [TestMethod]
+        [DataRow("GET")]
+        [DataRow("POST")]
+        [DataRow("QUERY")]
+        public async Task TestQuery_InvalidExpressionsReturnBadRequestAndSubsequentQuerySucceeds(string method)
+        {
+            var description = DomainServiceDescription.GetDescription(typeof(BadRequestDomainService));
+            var operation = description.GetQueryMethod(nameof(BadRequestDomainService.GetPeople));
+            var invoker = new QueryOperationInvoker<People.Person>(operation, s_options);
+            using var services = new ServiceCollection().AddTransient<BadRequestDomainService>().BuildServiceProvider();
+
+            var expressions = new[]
+            {
+                "Name ==",
+                new string('(', 5000) + "true" + new string(')', 5000),
+                string.Join(" and ", Enumerable.Repeat("true", 1000)),
+                "Name.Replace(\"a\",\"aaa\").Replace(\"a\",\"aaa\").Replace(\"a\",\"aaa\").Replace(\"a\",\"aaa\").Length > 0",
+                "Name.Replace(\"a\",\"aaaaaaaaaaa\").Replace(\"a\",\"aaaaaaaaaaa\").Length > 0",
+            };
+            foreach (var expression in expressions)
+            {
+                var context = new DefaultHttpContext();
+                context.RequestServices = services;
+                context.Response.Body = new MemoryStream();
+                context.Request.Method = method;
+                if (method == "GET")
+                    context.Request.QueryString = new QueryString("?$where=" + Uri.EscapeDataString(expression));
+                else
+                {
+                    context.Request.ContentType = "application/msbin1";
+                    context.Request.Body = GetQueryRequest(nameof(BadRequestDomainService.GetPeople), expression);
+                }
+
+                await invoker.Invoke(context);
+                Assert.AreEqual(StatusCodes.Status400BadRequest, context.Response.StatusCode);
+                Assert.IsTrue(context.Response.Body.Length > 0, "A fault must be returned.");
+            }
+
+            var subsequent = new DefaultHttpContext();
+            subsequent.RequestServices = services;
+            subsequent.Response.Body = new MemoryStream();
+            subsequent.Request.Method = "GET";
+            await invoker.Invoke(subsequent);
+            Assert.AreEqual(StatusCodes.Status200OK, subsequent.Response.StatusCode);
+        }
+
+        private static MemoryStream GetQueryRequest(string operation, string expression, bool includeValue = false)
         {
             var requestBody = new MemoryStream();
             using (var writer = XmlDictionaryWriter.CreateBinaryWriter(requestBody, null, null, ownsStream: false))
@@ -142,13 +236,16 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 writer.WriteStartElement("QueryOptions");
                 writer.WriteStartElement("QueryOption");
                 writer.WriteAttributeString("Name", "where");
-                writer.WriteAttributeString("Value", "(");
+                writer.WriteAttributeString("Value", expression);
                 writer.WriteEndElement();
                 writer.WriteEndElement();
-                writer.WriteStartElement(nameof(BadRequestDomainService.QueryWithDoubleParam));
-                writer.WriteStartElement("value");
-                new DataContractSerializer(typeof(double)).WriteObjectContent(writer, 1d);
-                writer.WriteEndElement();
+                writer.WriteStartElement(operation);
+                if (includeValue)
+                {
+                    writer.WriteStartElement("value");
+                    new DataContractSerializer(typeof(double)).WriteObjectContent(writer, 1d);
+                    writer.WriteEndElement();
+                }
                 writer.WriteEndElement();
                 writer.WriteEndElement();
             }
@@ -156,6 +253,46 @@ namespace OpenRiaServices.Hosting.AspNetCore
             requestBody.Position = 0;
             return requestBody;
         }
+
+        [TestMethod]
+        [DataRow("GET")]
+        [DataRow("POST")]
+        [DataRow("QUERY")]
+        public async Task TestQuery_AuthorizationPrecedesParsing(string method)
+        {
+            var operation = DomainServiceDescription.GetDescription(typeof(BadRequestDomainService))
+                .GetQueryMethod(nameof(BadRequestDomainService.GetProtectedPeople));
+            var invoker = new QueryOperationInvoker<People.Person>(operation, s_options);
+            foreach (bool authenticated in new[] { false, true })
+            {
+                using var service = new BadRequestDomainService();
+                using var services = new ServiceCollection().AddSingleton(service).BuildServiceProvider();
+                var context = new DefaultHttpContext();
+                context.RequestServices = services;
+                context.Response.Body = new MemoryStream();
+                context.Request.Method = method;
+                if (authenticated)
+                    context.User = new ClaimsPrincipal(new ClaimsIdentity(Array.Empty<Claim>(), "test"));
+                string expression = new string('(', 5000) + "true" + new string(')', 5000);
+                if (method == "GET")
+                    context.Request.QueryString = new QueryString("?$where=" + Uri.EscapeDataString(expression));
+                else
+                {
+                    context.Request.ContentType = "application/msbin1";
+                    context.Request.Body = GetQueryRequest(nameof(BadRequestDomainService.GetProtectedPeople), expression);
+                }
+
+                await invoker.Invoke(context);
+                Assert.AreEqual(authenticated ? StatusCodes.Status400BadRequest : StatusCodes.Status401Unauthorized,
+                    context.Response.StatusCode);
+                if (authenticated)
+                    Assert.IsInstanceOfType<System.Linq.Dynamic.ParseException>(service.LastError);
+                else
+                    Assert.IsInstanceOfType<UnauthorizedAccessException>(service.LastError);
+                Assert.IsFalse(service.ProtectedQueryInvoked);
+            }
+        }
+
         private static async Task AssertBadRequestAsync(Task<System.Net.Http.HttpResponseMessage> responseTask)
         {
             try
@@ -174,6 +311,24 @@ namespace OpenRiaServices.Hosting.AspNetCore
         [EnableClientAccess]
         public class BadRequestDomainService : DomainService
         {
+            public IQueryable<People.Person> GetPeople() => Array.Empty<People.Person>().AsQueryable();
+
+            public bool ProtectedQueryInvoked { get; private set; }
+            public Exception LastError { get; private set; }
+
+            [RequiresAuthentication]
+            public IQueryable<People.Person> GetProtectedPeople()
+            {
+                ProtectedQueryInvoked = true;
+                return GetPeople();
+            }
+
+            protected override void OnError(DomainServiceErrorInfo errorInfo)
+            {
+                LastError = errorInfo.Error;
+                base.OnError(errorInfo);
+            }
+
             [Invoke(HasSideEffects = false)]
             public int InvokeIntParam(int value) => value;
 

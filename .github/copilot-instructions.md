@@ -57,7 +57,7 @@ MTP runs the test modules (project + target framework) in parallel; use `--max-p
 - Follow `.editorconfig` and existing style in nearby files.
 - C# uses 4-space indentation and C# 14.0 (`src\Directory.Build.props`).
 - Framework projects enable recommended analysis mode and XML documentation generation.
-- New public, protected, and internal APIs should have XML documentation comments, this is not required for assembly local ("private") types.
+- New public, protected, and internal APIs should have XML documentation comments; this is not required for assembly local ("private") types.
 - Release builds should not introduce warnings.
 - Assembly signing is enabled centrally in `src\Directory.Build.props`; framework and test projects use keys from `src\snk`.
 - Use existing libraries and patterns. Do not modernize unrelated legacy code while fixing a targeted issue.
@@ -72,6 +72,7 @@ MTP runs the test modules (project + target framework) in parallel; use `--max-p
 ## Changelog and documentation expectations
 
 - Treat changelog and documentation updates as part of completing a feature or notable behavior change, not as optional follow-up work.
+- Keep README and changelog additions short and easy to read, including for readers who are not native English speakers.
 - Record notable changes in the repository root changelog, `D:\a\OpenRiaServices\OpenRiaServices\Changelog.md`.
 - Follow the existing changelog structure and keep entries compatible with the project's "Keep a Changelog" style release notes.
 - The project aims to follow Semantic Versioning. Changes affecting explicitly versioned packages such as ASP.NET Core and EntityFrameworkCore should be documented clearly enough to support `major.minor.patch` release notes.
@@ -97,7 +98,7 @@ MTP runs the test modules (project + target framework) in parallel; use `--max-p
 Use the smallest validation covering the change:
 
 - Documentation only: inspect the Markdown; no full build normally needed.
-- Library: build the solution and run nearby tests, set up LocalDB and run EndToEnd tests before finishing work
+- Library: build the solution and run nearby tests, set up LocalDB and run EndToEnd tests before finishing work.
 - Code generation/shared infrastructure: build the solution and run targeted code-generation tests.
 - VS extension/templates: validate with Visual Studio/MSBuild on Windows; Linux is not representative.
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Linq.Expressions;
@@ -17,22 +18,32 @@ namespace System.Linq.Dynamic
     /// </summary>
     internal static class QueryDeserializer
     {
-        internal static IQueryable Deserialize(DomainServiceDescription domainServiceDescription, IQueryable query, IEnumerable<ServiceQueryPart> queryParts)
+        /// <summary>The maximum number of client query operators.</summary>
+        internal const int MaxQueryParts = 64;
+        /// <summary>The maximum combined length of client query expressions.</summary>
+        internal const int MaxQueryLength = 4 * ExpressionParser.MaxExpressionLength;
+
+        internal static IQueryable Deserialize(DomainServiceDescription domainServiceDescription, IQueryable query, IEnumerable<ServiceQueryPart> queryParts, int maxExpressionDepth = ExpressionParser.MaxExpressionDepth)
         {
-            return Deserialize(domainServiceDescription, query, queryParts, new DefaultQueryResolver());
+            return Deserialize(domainServiceDescription, query, queryParts, new DefaultQueryResolver(), maxExpressionDepth);
         }
 
-        internal static IQueryable Deserialize(DomainServiceDescription domainServiceDescription, IQueryable query, IEnumerable<ServiceQueryPart> queryParts, QueryResolver queryResolver)
+        internal static IQueryable Deserialize(DomainServiceDescription domainServiceDescription, IQueryable query, IEnumerable<ServiceQueryPart> queryParts, QueryResolver queryResolver, int maxExpressionDepth = ExpressionParser.MaxExpressionDepth)
         {
+            int parts = 0;
+            long length = 0;
             foreach (ServiceQueryPart part in queryParts)
             {
+                length += part.Expression?.Length ?? 0;
+                if (++parts > MaxQueryParts || length > MaxQueryLength)
+                    throw new ParseException(Resource.ExpressionTooComplex, 0);
                 switch (part.QueryOperator)
                 {
                     case "where":
-                        query = DynamicQueryable.Where(query, part.Expression, queryResolver);
+                        query = DynamicQueryable.Where(query, part.Expression, queryResolver, maxExpressionDepth);
                         break;
                     case "orderby":
-                        query = DynamicQueryable.OrderBy(query, part.Expression, queryResolver);
+                        query = DynamicQueryable.OrderBy(query, part.Expression, queryResolver, maxExpressionDepth);
                         break;
                     case "skip":
                         query = DynamicQueryable.Skip(query, Convert.ToInt32(part.Expression, System.Globalization.CultureInfo.InvariantCulture));
@@ -43,8 +54,10 @@ namespace System.Linq.Dynamic
                 }
             }
 
-            // Perform any required post processing transformations to the
-            // expression tree
+            // Include query operators and lambda/quote wrappers before recursive post-processing.
+            ExpressionParser.ValidateExpression(query.Expression, maxExpressionDepth, MaxQueryParts + 4);
+
+            // Perform any required post processing transformations to the expression tree.
             Expression expr = PostProcessor.Process(domainServiceDescription, query.Expression);
             query = query.Provider.CreateQuery(expr);
 
@@ -76,18 +89,21 @@ namespace System.Linq.Dynamic
             {
                 if (!this.isInProjection)
                 {
-                    if (m.Member.MemberType == MemberTypes.Property)
+                    if (m.Expression != null && (m.Member.MemberType is MemberTypes.Property or MemberTypes.Field))
                     {
-                        PropertyDescriptor pd = TypeDescriptor.GetProperties(m.Member.DeclaringType)[m.Member.Name];
+                        Type declaringType = m.Expression.Type;
+                        PropertyDescriptor pd = m.Member.MemberType == MemberTypes.Property
+                            ? TypeDescriptor.GetProperties(declaringType)[m.Member.Name]
+                            : null;
 
                         // Let properties for which no PropertyDescriptors exist go through. This happens when we 
                         // deal with structs.
-                        bool requiresValidation = !(pd == null && m.Member.DeclaringType.IsValueType);
+                        bool requiresValidation = !(pd == null && declaringType.IsValueType);
                         if (requiresValidation && !this.IsVisible(pd))
                         {
                             if (!PostProcessor.IsProjectionPath(m))
                             {
-                                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.UnknownPropertyOrField, pd.Name, ExpressionParser.GetTypeName(pd.ComponentType)));
+                                throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.UnknownPropertyOrField, m.Member.Name, ExpressionParser.GetTypeName(declaringType)));
                             }
                             else
                             {
@@ -103,8 +119,37 @@ namespace System.Linq.Dynamic
                 return base.VisitMember(m);
             }
 
+            protected override Expression VisitMethodCall(MethodCallExpression m)
+            {
+                if (!this.isInProjection && m.Object != null && m.Method.IsSpecialName && m.Method.Name.StartsWith("get_", StringComparison.Ordinal))
+                {
+                    Type declaringType = m.Method.DeclaringType;
+                    // Framework collection indexers are not represented by PropertyDescriptors.
+                    // Note: IEnumerable means we detect IList, IList<>, IReadOnlyList<> as well as corresponding Dictionary types
+                    bool isFrameworkIndexer = TypeUtility.IsSystemAssembly(declaringType.Assembly)
+                        && (declaringType == typeof(string) || typeof(IEnumerable).IsAssignableFrom(declaringType));
+                    if (!isFrameworkIndexer)
+                    {
+                        string propertyName = m.Method.Name.Substring(4);
+                        Type receiverType = m.Object.Type;
+                        PropertyDescriptor pd = TypeDescriptor.GetProperties(receiverType)[propertyName];
+                        if (!this.IsVisible(pd))
+                        {
+                            throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.UnknownPropertyOrField, propertyName, ExpressionParser.GetTypeName(receiverType)));
+                        }
+                    }
+                }
+
+                return base.VisitMethodCall(m);
+            }
+
             private bool IsVisible(PropertyDescriptor pd)
             {
+                if (pd == null || pd.Attributes[typeof(ExcludeAttribute)] is ExcludeAttribute)
+                {
+                    return false;
+                }
+
                 if (SerializationUtility.IsSerializableDataMember(pd))
                 {
                     return true;

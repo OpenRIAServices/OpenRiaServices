@@ -37,6 +37,7 @@ namespace OpenRiaServices.Hosting.Wcf
             // the results (except fo 404) because silverlight only supports 404/500 error code
             fault.ErrorCode = e switch
             {
+                System.Linq.Dynamic.ParseException => StatusCodes.Status400BadRequest,
                 // invalid operation exception at root level generates BadRequest
                 InvalidOperationException => StatusCodes.Status400BadRequest,
                 // UnauthorizedAccessException can happen if we lack permission or are not authenticcated

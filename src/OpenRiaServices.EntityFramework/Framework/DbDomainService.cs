@@ -10,6 +10,7 @@ using System.ComponentModel;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using DbEntityEntry = Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry;
+using DbPropertyValues = Microsoft.EntityFrameworkCore.ChangeTracking.PropertyValues;
 
 namespace OpenRiaServices.Server.EntityFrameworkCore
 #else
@@ -171,6 +172,25 @@ namespace OpenRiaServices.EntityFramework
         }
 
         /// <summary>
+        /// Determines whether the current caller may receive concurrency conflict information.
+        /// </summary>
+        /// <param name="changeSetEntry">The operation in conflict. Its entity and original values originate from the client.</param>
+        /// <param name="storeEntity">The current database snapshot, or <c>null</c> if the entity no longer exists.</param>
+        /// <param name="cancellationToken">The cancellation token for the submit operation.</param>
+        /// <returns><c>true</c> to allow disclosure of the store entity, conflicting members, and delete status; otherwise, <c>false</c>.</returns>
+        /// <remarks>
+        /// The default implementation returns <c>true</c> for backward compatibility. Override this method to
+        /// enforce read authorization using trusted server-side identity and the database snapshot, not client-supplied
+        /// ownership or tenant values. The method is called before any conflict information is populated, including
+        /// for missing entities. Returning <c>false</c> aborts the submit with an <see cref="UnauthorizedAccessException"/>
+        /// before <see cref="ResolveConflicts"/> is called. This does not replace authorization of update or delete operations.
+        /// </remarks>
+        protected virtual ValueTask<bool> CanDiscloseConflictAsync(ChangeSetEntry changeSetEntry, object storeEntity, CancellationToken cancellationToken)
+        {
+            return new ValueTask<bool>(true);
+        }
+
+        /// <summary>
         /// See <see cref="IDisposable"/>.
         /// </summary>
         /// <param name="disposing">A <see cref="Boolean"/> indicating whether or not the instance is currently disposing.</param>
@@ -252,7 +272,7 @@ namespace OpenRiaServices.EntityFramework
         /// </summary>
         /// <param name="operationConflictMap">Map of conflicts to their corresponding operations entries.</param>
         /// <param name="cancellationToken"></param>
-        private static async Task SetChangeSetConflictsAsync(Dictionary<DbEntityEntry, ChangeSetEntry> operationConflictMap, CancellationToken cancellationToken)
+        private async Task SetChangeSetConflictsAsync(Dictionary<DbEntityEntry, ChangeSetEntry> operationConflictMap, CancellationToken cancellationToken)
         {
             foreach (var conflictEntry in operationConflictMap)
             {
@@ -267,6 +287,11 @@ namespace OpenRiaServices.EntityFramework
 
                 // Determine which members are in conflict by comparing original values to the current DB values
                 var dbValues = await stateEntry.GetDatabaseValuesAsync(cancellationToken);
+                object storeEntity = dbValues?.ToObject();
+                if (!await this.CanDiscloseConflictAsync(operationInConflict, storeEntity, cancellationToken).ConfigureAwait(false))
+                {
+                    throw new UnauthorizedAccessException();
+                }
 
                 PropertyDescriptorCollection propDescriptors = TypeDescriptor.GetProperties(operationInConflict.Entity.GetType());
 
@@ -277,7 +302,7 @@ namespace OpenRiaServices.EntityFramework
                 }
                 else
                 {
-                    operationInConflict.StoreEntity = dbValues.ToObject();
+                    operationInConflict.StoreEntity = storeEntity;
 
                     // Determine which members are in conflict by comparing original values to the current DB values
                     List<string> membersInConflict = new List<string>();
