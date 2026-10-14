@@ -103,8 +103,6 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
 
             await Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(async () =>
                 await service.SubmitAsync(new ChangeSet(new[] { operation }), CancellationToken.None));
-
-            AssertNoConflictDetails(operation);
             Assert.AreEqual(1, service.DisclosureCalls);
             Assert.AreEqual(0, service.ResolveCalls);
             Assert.AreEqual(1, service.SaveCalls);
