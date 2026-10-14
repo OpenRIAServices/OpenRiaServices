@@ -1,5 +1,11 @@
 # Unreleased
 
+## Changed
+
+* Updated framework dependencies to the latest compatible stable releases and synchronized their versions across projects and NuGet specifications.
+* Retained EF Core 3.1 for .NET Framework, 8.0 for .NET 8, and 10.0 for .NET 10, updating each to its latest patch release.
+* Updated MSTest to 4.5.1 and its Microsoft.Testing.Platform extensions to 2.5.1. MSBuild-related packages are unchanged.
+* Updated System.CodeDom can format generated C# string literals differently; code generation tests now compare equivalent literal expressions while retaining shared baselines.
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 

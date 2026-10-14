@@ -4,7 +4,7 @@
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.5.1" />
+    <PackageReference Include="EntityFramework" Version="6.5.2" />
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)'=='net472'">
     <Reference Include="mscorlib" />

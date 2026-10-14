@@ -30,7 +30,7 @@
     <DefineConstants Condition="'$(VsVersion)' == '16.0'">$(DefineConstants);VS16</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.5.1" />
+    <PackageReference Include="EntityFramework" Version="6.5.2" />
     <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.9.0" Version="17.10.40152" />
     <PackageReference Include="Microsoft.VisualStudio.ManagedInterfaces.WCF" Version="17.10.40170" />
     <PackageReference Include="Microsoft.VisualStudio.Shell.Design" Version="17.14.40264" />
