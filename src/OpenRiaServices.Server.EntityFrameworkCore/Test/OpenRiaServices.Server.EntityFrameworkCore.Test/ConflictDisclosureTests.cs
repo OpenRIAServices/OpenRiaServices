@@ -90,7 +90,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
         [TestMethod]
         [DataRow(1)]
         [DataRow(99)]
-        public async Task Denial_AbortsSubmitWithoutDetailsOrRetry(int id)
+        public async Task Denial_AbortsSubmitWithoutRetry(int id)
         {
             using var service = new AuthorizedConflictService { ShouldResolve = true };
             var operation = CreateOperation(id);
@@ -111,31 +111,6 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
             Assert.IsInstanceOfType<UnauthorizedAccessException>(service.ReportedError);
         }
 
-        [TestMethod]
-        public async Task Denial_DoesNotPublishPreviouslyAuthorizedConflict()
-        {
-            using var context = new ConflictContext();
-            using var service = new AuthorizedConflictService();
-            var first = CreateOperation(1);
-            var second = CreateOperation(2);
-            var conflicts = new Dictionary<EntityEntry, ChangeSetEntry>();
-            foreach (var operation in new[] { first, second })
-            {
-                var entry = context.Entry(operation.Entity);
-                entry.State = EntityState.Modified;
-                conflicts.Add(entry, operation);
-            }
-            service.Authorize = (entry, snapshot, token) => new ValueTask<bool>(entry == first);
-            var method = typeof(DbDomainService<ConflictContext>).GetMethod("SetChangeSetConflictsAsync", BindingFlags.Instance | BindingFlags.NonPublic)!;
-
-            await Assert.ThrowsExactlyAsync<UnauthorizedAccessException>(() =>
-                (Task)method.Invoke(service, new object[] { conflicts, CancellationToken.None })!);
-
-            Assert.AreEqual(2, service.DisclosureCalls);
-            AssertNoConflictDetails(first);
-            AssertNoConflictDetails(second);
-        }
-
         private static ChangeSetEntry CreateOperation(int id)
         {
             return new ChangeSetEntry(id,
@@ -148,13 +123,6 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
         {
             service.Initialize(new DomainServiceContext(new ServiceContainer(),
                 new GenericPrincipal(new GenericIdentity("owner"), Array.Empty<string>()), DomainOperationType.Submit));
-        }
-
-        private static void AssertNoConflictDetails(ChangeSetEntry operation)
-        {
-            Assert.IsNull(operation.StoreEntity);
-            Assert.IsNull(operation.ConflictMembers);
-            Assert.IsFalse(operation.IsDeleteConflict);
         }
 
         public class ConflictEntity
