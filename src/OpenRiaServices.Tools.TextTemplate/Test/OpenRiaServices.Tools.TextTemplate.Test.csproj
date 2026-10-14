@@ -28,14 +28,14 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="EntityFramework" Version="6.5.1" />
+    <PackageReference Include="EntityFramework" Version="6.5.2" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.10.12" />
-    <PackageReference Include="System.Collections.Immutable" Version="10.0.5" />
+    <PackageReference Include="System.Collections.Immutable" Version="10.0.13" />
     <PackageReference Include="System.Reflection.MetadataLoadContext" Version="10.0.5" />
     <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
     <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.11.0" />
-    <PackageReference Include="MSTest.TestAdapter" Version="4.3.3" />
-    <PackageReference Include="MSTest.TestFramework" Version="4.3.3" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.5.1" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.5.1" />
   </ItemGroup>
   
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">

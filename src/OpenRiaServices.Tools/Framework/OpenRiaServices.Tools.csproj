@@ -50,8 +50,8 @@
     <!-- Required for validation attributes -->
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <!-- MEF Attribute: TODO consider removing MEF support for .NET (non framework) -->
-    <PackageReference Include="System.ComponentModel.Composition" Version="9.0.0" />
-    <PackageReference Include="System.CodeDom" Version="8.0.0" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="10.0.13" />
+    <PackageReference Include="System.CodeDom" Version="10.0.13" />
   </ItemGroup>
   <ItemGroup>
     <!-- Use PrivateAssets="all" to prevent nuget packages to become nuget dependencies -->
