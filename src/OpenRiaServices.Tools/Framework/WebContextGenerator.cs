@@ -54,7 +54,8 @@ namespace OpenRiaServices.Tools
 
             // Find the AuthenticationServices and if there's just one, use it as the default.
             IEnumerable<DomainServiceDescription> authDescriptions =
-                this.ClientProxyGenerator.DomainServiceDescriptions.Where(d => typeof(IAuthentication<>).DefinitionIsAssignableFrom(d.DomainServiceType));
+                this.ClientProxyGenerator.DomainServiceDescriptions
+                    .Where(d => d.IsAuthenticationService());
             DomainServiceDescription defaultAuthDescription = null;
             if (authDescriptions.Count() > 1)
             {
@@ -148,29 +149,26 @@ namespace OpenRiaServices.Tools
             // }
             // -->
             // ----------------------------------------------------------------
-            if (defaultAuthDescription != null)
+            if (defaultAuthDescription != null
+                && defaultAuthDescription.TryGetAuthenticationServiceType(out Type genericType)
+                && (genericType.GetGenericArguments().Length == 1))
             {
-                Type genericType = null;
-                typeof(IAuthentication<>).DefinitionIsAssignableFrom(defaultAuthDescription.DomainServiceType, out genericType);
-                if ((genericType != null) && (genericType.GetGenericArguments().Length == 1))
-                {
-                    CodeMemberProperty userProperty = new CodeMemberProperty();
+                CodeMemberProperty userProperty = new CodeMemberProperty();
 
-                    userProperty.Attributes = MemberAttributes.Public | MemberAttributes.New | MemberAttributes.Final;
-                    userProperty.Type = CodeGenUtilities.GetTypeReference(
-                        genericType.GetGenericArguments()[0], this.ClientProxyGenerator, proxyClass);
-                    userProperty.Name = "User";
-                    userProperty.HasGet = true;
-                    userProperty.GetStatements.Add(
-                        new CodeMethodReturnStatement(
-                            new CodeCastExpression(userProperty.Type,
-                                new CodePropertyReferenceExpression(
-                                    new CodeBaseReferenceExpression(),
-                                    "User"))));
-                    userProperty.Comments.AddRange(CodeGenUtilities.GetDocComments(Resource.WebContext_CommentUser, this.ClientProxyGenerator.IsCSharp));
+                userProperty.Attributes = MemberAttributes.Public | MemberAttributes.New | MemberAttributes.Final;
+                userProperty.Type = CodeGenUtilities.GetTypeReference(
+                    genericType.GetGenericArguments()[0], this.ClientProxyGenerator, proxyClass);
+                userProperty.Name = "User";
+                userProperty.HasGet = true;
+                userProperty.GetStatements.Add(
+                    new CodeMethodReturnStatement(
+                        new CodeCastExpression(userProperty.Type,
+                            new CodePropertyReferenceExpression(
+                                new CodeBaseReferenceExpression(),
+                                "User"))));
+                userProperty.Comments.AddRange(CodeGenUtilities.GetDocComments(Resource.WebContext_CommentUser, this.ClientProxyGenerator.IsCSharp));
 
-                    proxyClass.Members.Add(userProperty);
-                }
+                proxyClass.Members.Add(userProperty);
             }
         }
         #endregion
