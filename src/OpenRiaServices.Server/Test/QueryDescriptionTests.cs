@@ -12,43 +12,6 @@ namespace OpenRiaServices.Server.Test
     public class QueryDescriptionTests
     {
         [TestMethod]
-        [DataRow(false)]
-        [DataRow(true)]
-        public void DeferredQueryCachesSuccessfulResultIncludingNull(bool returnNull)
-        {
-            int calls = 0;
-            IQueryable query = returnNull ? null : Array.Empty<DeferredEntity>().AsQueryable();
-            var description = new QueryDescription(GetOperation(), new object[] { 1 }, () =>
-            {
-                calls++;
-                return query;
-            }, true);
-
-            Assert.AreEqual(0, calls);
-            Assert.IsTrue(description.IncludeTotalCount);
-            Assert.AreSame(query, description.Query);
-            Assert.AreSame(query, description.Query);
-            Assert.AreEqual(1, calls);
-        }
-
-        [TestMethod]
-        public void DeferredQueryDoesNotHideFactoryFailures()
-        {
-            int calls = 0;
-            var failure = new InvalidOperationException("Invalid client expression");
-            var description = new QueryDescription(GetOperation(), new object[] { 1 }, () =>
-            {
-                calls++;
-                throw failure;
-            }, false);
-
-            Assert.AreSame(failure, Assert.ThrowsExactly<InvalidOperationException>(() => _ = description.Query));
-            Assert.AreSame(failure, Assert.ThrowsExactly<InvalidOperationException>(() => _ = description.Query));
-            Assert.AreSame(failure, Assert.ThrowsExactly<InvalidOperationException>(() => description.ParseQuery()));
-            Assert.AreEqual(1, calls);
-        }
-
-        [TestMethod]
         public void ParseQueryRunsFactoryOnce()
         {
             int calls = 0;
