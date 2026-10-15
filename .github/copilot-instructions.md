@@ -66,6 +66,9 @@ MTP runs the test modules (project + target framework) in parallel; use `--max-p
 
 - Version defaults and package metadata live in `src\Directory.Build.props`.
 - CI uses GitVersion (`GitVersion.yml`) to derive build versions.
+- When changing ASP.NET Core or EntityFrameworkCore, update the package version in the corresponding project file
+  (`VersionPrefix`; also `AssemblyVersion` for EntityFrameworkCore). Bump the version only once for all related
+  unreleased changes, not once per change.
 - NuGet package outputs go under `NuGet\bin` locally, or the artifact staging directory in CI.
 - Packaging scripts and `.nuspec` files are under `NuGet`.
 
