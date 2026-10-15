@@ -7,22 +7,15 @@ namespace OpenRiaServices.Hosting.AspNetCore
 {
     public sealed class OpenRiaServicesOptions
     {
-        private int _maxQueryExpressionDepth = System.Linq.Dynamic.ExpressionParser.MaxExpressionDepth;
-
         /// <summary>
-        /// Gets or sets the maximum recursion and expression-tree depth for client query expressions.
-        /// The default is 200. Stack safety checks can reject expressions below this limit.
+        /// Gets or sets the limits for parsing client query expressions and numeric formats.
         /// </summary>
-        /// <exception cref="ArgumentOutOfRangeException">The value is not positive.</exception>
-        public int MaxQueryExpressionDepth
+        /// <exception cref="ArgumentNullException">The value is null.</exception>
+        public QueryLimits QueryLimits
         {
-            get => _maxQueryExpressionDepth;
-            set
-            {
-                ArgumentOutOfRangeException.ThrowIfNegativeOrZero(value);
-                _maxQueryExpressionDepth = value;
-            }
-        }
+            get;
+            set => field = value ?? throw new ArgumentNullException(nameof(value));
+        } = new();
 
         /// <summary>
         /// Specifies a global exception handler for unhandled exceptions that occur during the processing of a request.

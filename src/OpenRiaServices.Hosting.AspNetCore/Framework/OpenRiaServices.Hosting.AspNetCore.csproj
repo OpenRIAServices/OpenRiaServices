@@ -57,6 +57,7 @@
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DynamicQueryable.cs" Link="Linq\DynamicQueryable.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DynamicQueryableMethodValidator.cs" Link="Linq\DynamicQueryableMethodValidator.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryDeserializer.cs" Link="Linq\QueryDeserializer.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryLimits.cs" Link="Linq\QueryLimits.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryResolver.cs" Link="Linq\QueryResolver.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\Resource.Designer.cs" Link="Linq\Resource.Designer.cs">
       <DesignTime>True</DesignTime>

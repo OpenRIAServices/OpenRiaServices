@@ -5,6 +5,7 @@ using System.Globalization;
 using System.Runtime.Serialization;
 using OpenRiaServices.Server;
 using OpenRiaServices.Hosting;
+using OpenRiaServices.Hosting.AspNetCore;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace System.Linq.Dynamic.UnitTests
@@ -29,7 +30,7 @@ namespace System.Linq.Dynamic.UnitTests
                 new ServiceQueryPart("where", "it.Double < 2.5E+2")
             };
 
-            queryable = (IQueryable<EntityWithExcludedMember>)QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts);
+            queryable = (IQueryable<EntityWithExcludedMember>)QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts, QueryLimits.Defaults);
             Assert.AreEqual(1, queryable.Count());
             Assert.AreEqual(1, queryable.Single().Key);
         }
@@ -47,7 +48,7 @@ namespace System.Linq.Dynamic.UnitTests
 
             Assert.ThrowsExactly<ParseException>(() =>
             {
-                QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts);
+                QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts, QueryLimits.Defaults);
             }, string.Format(CultureInfo.CurrentCulture, System.Linq.Dynamic.Resource.MethodsAreInaccessible + " (at index 24)", typeof(String).Name));
         }
 
@@ -138,7 +139,7 @@ namespace System.Linq.Dynamic.UnitTests
         private static IQueryable Deserialize<T>(T value, string queryOperator, string expression)
         {
             return QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)),
-                new[] { value }.AsQueryable(), new[] { new ServiceQueryPart(queryOperator, expression) });
+                new[] { value }.AsQueryable(), new[] { new ServiceQueryPart(queryOperator, expression) }, QueryLimits.Defaults);
         }
 
         [TestMethod]
@@ -196,7 +197,7 @@ namespace System.Linq.Dynamic.UnitTests
 
             Assert.ThrowsExactly<InvalidOperationException>(() =>
             {
-                QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts);
+                QueryDeserializer.Deserialize(DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService)), queryable, queryParts, QueryLimits.Defaults);
             }, string.Format(CultureInfo.CurrentCulture, System.Linq.Dynamic.Resource.UnknownPropertyOrField, memberToAccess, entityType.Name));
         }
     }

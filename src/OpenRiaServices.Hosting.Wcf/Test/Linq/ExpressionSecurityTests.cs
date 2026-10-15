@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Hosting;
+using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
 namespace System.Linq.Dynamic.UnitTests
@@ -49,7 +50,7 @@ namespace System.Linq.Dynamic.UnitTests
             if (syntax == "method")
                 expression += " > 0";
             Type itType = syntax == "aggregate" ? typeof(RecursiveEntity) : typeof(int);
-            AssertTooComplex(() => DynamicExpression.ParseLambda(itType, typeof(bool), expression, null));
+            AssertTooComplex(() => DynamicExpression.ParseLambda(itType, typeof(bool), expression, null, QueryLimits.Defaults));
         }
 
         [TestMethod]
@@ -58,7 +59,7 @@ namespace System.Linq.Dynamic.UnitTests
             int count = ExpressionParser.MaxExpressionDepth + 1;
             AssertTooComplex(() => ParseBool(string.Join(" and ", Enumerable.Repeat("true", count))));
             string memberChain = "it" + string.Concat(Enumerable.Repeat(".Date", count)) + " == it";
-            AssertTooComplex(() => DynamicExpression.ParseLambda(typeof(DateTime), typeof(bool), memberChain, null));
+            AssertTooComplex(() => DynamicExpression.ParseLambda(typeof(DateTime), typeof(bool), memberChain, null, QueryLimits.Defaults));
         }
 
         [TestMethod]
@@ -82,8 +83,8 @@ namespace System.Linq.Dynamic.UnitTests
                 expression = "(" + expression + "+" + expression + ")";
 
             // 2048 constants + 2047 additions + one negation.
-            DynamicExpression.ParseLambda(typeof(int), typeof(int), "-(" + expression + ")", null);
-            AssertTooComplex(() => DynamicExpression.ParseLambda(typeof(int), typeof(int), "-(-(" + expression + "))", null));
+            DynamicExpression.ParseLambda(typeof(int), typeof(int), "-(" + expression + ")", null, QueryLimits.Defaults);
+            AssertTooComplex(() => DynamicExpression.ParseLambda(typeof(int), typeof(int), "-(-(" + expression + "))", null, QueryLimits.Defaults));
         }
 
         [TestMethod]
@@ -96,20 +97,21 @@ namespace System.Linq.Dynamic.UnitTests
         [TestMethod]
         public void OrderingIsAlsoBounded()
         {
-            var parser = new ExpressionParser([Expression.Parameter(typeof(int), "")], Nest("it", ExpressionParser.MaxExpressionDepth + 1), null);
+            var parser = new ExpressionParser([Expression.Parameter(typeof(int), "")], Nest("it", ExpressionParser.MaxExpressionDepth + 1), null, QueryLimits.Defaults);
             AssertTooComplex(() => parser.ParseOrdering().ToArray());
             AssertTooComplex(() => new[] { 1 }.AsQueryable()
-                .OrderBy(string.Join(",", Enumerable.Repeat("it", 1000)), null, ExpressionParser.MaxExpressionDepth));
+                .OrderBy(string.Join(",", Enumerable.Repeat("it", 1000)), null, QueryLimits.Defaults));
         }
 
         [TestMethod]
         public void ConfiguredDepthAppliesToParserAndTree()
         {
-            DynamicExpression.ParseLambda(typeof(int), typeof(bool), Nest("true", 9), null, 10);
-            AssertTooComplex(() => DynamicExpression.ParseLambda(typeof(int), typeof(bool), Nest("true", 10), null, 10));
+            var limits = new QueryLimits { MaxExpressionDepth = 10 };
+            DynamicExpression.ParseLambda(typeof(int), typeof(bool), Nest("true", 9), null, limits);
+            AssertTooComplex(() => DynamicExpression.ParseLambda(typeof(int), typeof(bool), Nest("true", 10), null, limits));
             AssertTooComplex(() => DynamicExpression.ParseLambda(typeof(int), typeof(bool),
-                string.Join(" and ", Enumerable.Repeat("true", 11)), null, 10));
-            var ordering = new ExpressionParser([Expression.Parameter(typeof(int), "")], Nest("it", 10), null, 10);
+                string.Join(" and ", Enumerable.Repeat("true", 11)), null, limits));
+            var ordering = new ExpressionParser([Expression.Parameter(typeof(int), "")], Nest("it", 10), null, limits);
             AssertTooComplex(() => ordering.ParseOrdering().ToArray());
             ParseBool(Nest("true", 10));
         }
@@ -122,7 +124,7 @@ namespace System.Linq.Dynamic.UnitTests
         public void GrowingReplaceWithinBudgetIsAccepted(int calls, int replacementLength, int expectedLength)
         {
             string expression = ReplaceChain(calls, "a", new string('a', replacementLength));
-            var lambda = (Expression<Func<string, string>>)DynamicExpression.ParseLambda(typeof(string), typeof(string), expression, null);
+            var lambda = (Expression<Func<string, string>>)DynamicExpression.ParseLambda(typeof(string), typeof(string), expression, null, QueryLimits.Defaults);
             Assert.AreEqual(expectedLength, lambda.Compile()("a").Length);
         }
 
@@ -168,17 +170,129 @@ namespace System.Linq.Dynamic.UnitTests
         public void OrderingUsesReplaceBudgetToo()
         {
             var source = new[] { "a" }.AsQueryable();
-            source.OrderBy(ReplaceChain(3, "a", "aaa"), null, ExpressionParser.MaxExpressionDepth).Cast<string>().ToArray();
-            AssertTooComplex(() => source.OrderBy(ReplaceChain(4, "a", "aaa"), null, ExpressionParser.MaxExpressionDepth));
+            source.OrderBy(ReplaceChain(3, "a", "aaa"), null, QueryLimits.Defaults).Cast<string>().ToArray();
+            AssertTooComplex(() => source.OrderBy(ReplaceChain(4, "a", "aaa"), null, QueryLimits.Defaults));
             AssertTooComplex(() => source.OrderBy(
-                string.Join(",", Enumerable.Repeat("it.Replace(\"a\",\"aaa\")", 4)), null, ExpressionParser.MaxExpressionDepth));
+                string.Join(",", Enumerable.Repeat("it.Replace(\"a\",\"aaa\")", 4)), null, QueryLimits.Defaults));
+        }
+
+        [TestMethod]
+        [DataRow("")]
+        [DataRow("D")]
+        [DataRow("D100")]
+        [DataRow("D000100")]
+        [DataRow("f100")]
+        [DataRow("G100")]
+        [DataRow("X100")]
+        [DataRow("0.00")]
+        [DataRow("#,##0.00;(#,##0.00);zero")]
+        [DataRow("'D101'0")]
+        [DataRow("D101#")]
+        public void BoundedNumericFormatsPreserveResults(string format)
+        {
+            string argument = $"\"{format}\"";
+            var lambda = (Expression<Func<int, string>>)DynamicExpression.ParseLambda(
+                typeof(int), typeof(string), $"it.ToString({argument})", null, QueryLimits.Defaults);
+            Assert.AreEqual(12.ToString(format), lambda.Compile()(12));
+        }
+
+        [TestMethod]
+        [DataRow(typeof(sbyte))]
+        [DataRow(typeof(byte))]
+        [DataRow(typeof(short))]
+        [DataRow(typeof(ushort))]
+        [DataRow(typeof(int))]
+        [DataRow(typeof(uint))]
+        [DataRow(typeof(long))]
+        [DataRow(typeof(ulong))]
+        [DataRow(typeof(float))]
+        [DataRow(typeof(double))]
+        [DataRow(typeof(decimal))]
+        public void NumericFormattingIsCheckedForEveryNumericType(Type type)
+        {
+            DynamicExpression.ParseLambda(type, typeof(string), "it.ToString()", null, QueryLimits.Defaults);
+            DynamicExpression.ParseLambda(type, typeof(string), "it.ToString(\"F100\")", null, QueryLimits.Defaults);
+            Assert.ThrowsExactly<ParseException>(() =>
+                DynamicExpression.ParseLambda(type, typeof(string), "it.ToString(\"F101\")", null, QueryLimits.Defaults));
+        }
+
+        [TestMethod]
+        [DataRow("\"D101\"")]
+        [DataRow("\"d000101\"")]
+        [DataRow("\"G101\"")]
+        [DataRow("\"B101\"")]
+        [DataRow("\"D2147483648\"")]
+        [DataRow("it.ToString()")]
+        [DataRow("String.Concat(\"D\",\"2\")")]
+        [DataRow("\"D\" + \"2\"")]
+        [DataRow("iif(true,\"D2\",\"D3\")")]
+        public void UnboundedOrComputedNumericFormatsAreRejectedBeforeExecution(string argument)
+        {
+            Assert.ThrowsExactly<ParseException>(() => DynamicExpression.ParseLambda(
+                typeof(int), typeof(string), $"it.ToString({argument})", null, QueryLimits.Defaults));
+        }
+
+        [TestMethod]
+        public void NumericFormatLengthPrecisionAndTerminatorsAreCheckedWithoutFormatting()
+        {
+            var method = typeof(int).GetMethod(nameof(int.ToString), [typeof(string)]);
+            Assert.IsTrue(ExpressionParser.IsMemberAccessAllowed(method, [Expression.Constant(null, typeof(string))], QueryLimits.Defaults));
+            Assert.IsTrue(ExpressionParser.IsMemberAccessAllowed(method, [Expression.Constant(new string('0', 64))], QueryLimits.Defaults));
+            foreach (string format in new[] { new string('0', 65), "D" + new string('9', 99), "D101\0suffix" })
+            {
+                Assert.IsFalse(ExpressionParser.IsMemberAccessAllowed(method, [Expression.Constant(format)], QueryLimits.Defaults), format);
+            }
+            Assert.IsTrue(ExpressionParser.IsMemberAccessAllowed(method, [Expression.Constant("D100\0suffix")], QueryLimits.Defaults));
+        }
+
+        [TestMethod]
+        public void StringFormatIsNotAllowedForClientQueries()
+        {
+            Assert.ThrowsExactly<ParseException>(() => DynamicExpression.ParseLambda(
+                typeof(int), typeof(string), "String.Format(\"{0:D999999999}\", it)", null, QueryLimits.Defaults));
+        }
+
+        [TestMethod]
+        public void ConfiguredNumericLimitsApplyToFilteringOrderingAndQueryParts()
+        {
+            var limits = new QueryLimits { MaxNumericFormatPrecision = 3, MaxNumericFormatLength = 4 };
+            var source = new[] { 12 }.AsQueryable();
+            Assert.AreEqual(1, source.Where("it.ToString(\"D3\").Length == 3", null, limits).Cast<int>().Count());
+            source.OrderBy("it.ToString(\"0000\")", null, limits).Cast<int>().ToArray();
+            foreach (string format in new[] { "D4", "00000" })
+            {
+                Assert.ThrowsExactly<ParseException>(() => source.Where($"it.ToString(\"{format}\") != null", null, limits));
+                Assert.ThrowsExactly<ParseException>(() => source.OrderBy($"it.ToString(\"{format}\")", null, limits));
+
+                var description = DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService));
+                var entities = Array.Empty<EntityWithExcludedMember>().AsQueryable();
+                Assert.ThrowsExactly<ParseException>(() => QueryDeserializer.Deserialize(description, entities,
+                    [new ServiceQueryPart("where", $"Int32(1).ToString(\"{format}\") != null")], limits));
+                Assert.ThrowsExactly<ParseException>(() => QueryDeserializer.Deserialize(description, entities,
+                    [new ServiceQueryPart("orderby", $"Int32(1).ToString(\"{format}\")")], limits));
+            }
+            source.Where("it.ToString(\"D4\") != null", null, QueryLimits.Defaults).Cast<int>().ToArray();
+            DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(\"F0\")", null,
+                new QueryLimits { MaxNumericFormatPrecision = 0 });
+        }
+
+        [TestMethod]
+        [DataRow(typeof(DateTime))]
+        [DataRow(typeof(DateTimeOffset))]
+        [DataRow(typeof(TimeSpan))]
+        [DataRow(typeof(Guid))]
+        public void NonNumericFormattingStillAcceptsDynamicFormats(Type type)
+        {
+            DynamicExpression.ParseLambda(
+                [Expression.Parameter(type, "value"), Expression.Parameter(typeof(string), "format")],
+                typeof(string), "value.ToString(format)", null, QueryLimits.Defaults);
         }
 
         private static string ReplaceChain(int calls, string oldValue, string newValue) =>
             "it" + string.Concat(Enumerable.Repeat($".Replace(\"{oldValue}\",\"{newValue}\")", calls));
 
         private static LambdaExpression ParseString(string expression) =>
-            DynamicExpression.ParseLambda(typeof(string), typeof(string), expression, null);
+            DynamicExpression.ParseLambda(typeof(string), typeof(string), expression, null, QueryLimits.Defaults);
 
         [TestMethod]
         public void QueryPartCountAndCombinedLengthAreBounded()
@@ -186,12 +300,12 @@ namespace System.Linq.Dynamic.UnitTests
             var description = DomainServiceDescription.GetDescription(typeof(QueryDeserializerDomainService));
             var source = Array.Empty<EntityWithExcludedMember>().AsQueryable();
             var parts = Enumerable.Repeat(new ServiceQueryPart("take", "1"), QueryDeserializer.MaxQueryParts).ToArray();
-            QueryDeserializer.Deserialize(description, source, parts);
-            AssertTooComplex(() => QueryDeserializer.Deserialize(description, source, parts.Append(new ServiceQueryPart("take", "1"))));
+            QueryDeserializer.Deserialize(description, source, parts, QueryLimits.Defaults);
+            AssertTooComplex(() => QueryDeserializer.Deserialize(description, source, parts.Append(new ServiceQueryPart("take", "1")), QueryLimits.Defaults));
 
             var part = new ServiceQueryPart("where", "true".PadRight(ExpressionParser.MaxExpressionLength));
-            QueryDeserializer.Deserialize(description, source, Enumerable.Repeat(part, 4));
-            AssertTooComplex(() => QueryDeserializer.Deserialize(description, source, Enumerable.Repeat(part, 5)));
+            QueryDeserializer.Deserialize(description, source, Enumerable.Repeat(part, 4), QueryLimits.Defaults);
+            AssertTooComplex(() => QueryDeserializer.Deserialize(description, source, Enumerable.Repeat(part, 5), QueryLimits.Defaults));
         }
 
         [TestMethod]
@@ -215,7 +329,7 @@ namespace System.Linq.Dynamic.UnitTests
         }
 
         private static LambdaExpression ParseBool(string expression) =>
-            DynamicExpression.ParseLambda(typeof(int), typeof(bool), expression, null);
+            DynamicExpression.ParseLambda(typeof(int), typeof(bool), expression, null, QueryLimits.Defaults);
 
         private static string Nest(string expression, int depth) =>
             new string('(', depth) + expression + new string(')', depth);

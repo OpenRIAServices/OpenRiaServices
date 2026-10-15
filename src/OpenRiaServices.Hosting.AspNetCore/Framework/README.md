@@ -81,25 +81,61 @@ Options include:
 - `ExceptionHandler` - A delegate that can be used to handle exceptions that occur during the execution of a DomainService method.
     - It lets you customize the error message and error code sent to the client, as well as the HTTP status code.
 - `IncludeExceptionMessageInErrors` - A boolean that determines if the exception message should be included in the error response.
-   - **WARNING**: Exposing this information might help a hacker. It is generally better to use the `ExceptionHandler` and 
-    ensuring that the message is not passed on to the client is "safe" and does not give to much information about the system to a potential hacker.
+   - **WARNING**: Raw exception messages can disclose sensitive data. Keep this `false` in production.
+     If you use `ExceptionHandler`, return only messages that are safe for clients and log the full exception on the server.
 - `IncludeExceptionStackTraceInErrors` - A boolean that determines if the exception stack trace should be included in the error response. 
    - **Warning:** This is INSECURE and *NOT* recommended for production because stack traces can reveal detailed information about your system.
+- `QueryLimits` - allows configuring resource limits for parsing queries passed from the client. Se section "Client query resource limits" for details.
 
-Example setup:
+Production-safe error configuration (both disclosure options default to `false`):
 ```csharp
 builder.Services.AddOpenRiaServices(o => {
     o.ExceptionHandler = (context, response) =>
     {
-        // Send all exception messages to the client.
-        response.ErrorMessage ??= context.Exception.Message;
+        response.ErrorMessage = "The request could not be completed.";
     };
  
-    o.IncludeExceptionMessageInErrors = true;
-    // INSECURE, see warning above. Only use this for debugging purposes.
-    o.IncludeExceptionStackTraceInErrors = true;
+    o.IncludeExceptionMessageInErrors = false;
+    o.IncludeExceptionStackTraceInErrors = false;
 });
 ```
+
+Only enable exception detail or stack traces in a trusted development environment.
+`DomainException` messages are intended for clients, so they must not contain sensitive details either.
+
+### Client query resource limits
+
+| Property | Default | Purpose |
+| --- | --- | --- |
+| `MaxExpressionDepth` | 200 | Limits parser recursion and expression-tree depth. Stack safety checks may reject shallower expressions. |
+| `MaxNumericFormatPrecision` | 100 | Limits the precision in standard numeric formats such as `D10` and `F2`. Zero is allowed. |
+| `MaxNumericFormatLength` | 64 | Limits the number of characters in standard and custom numeric format strings. Must be positive. |
+
+For example, a host can tighten these limits:
+
+```csharp
+using OpenRiaServices.Hosting;
+
+builder.Services.AddOpenRiaServices(options =>
+{
+    options.QueryLimits = new QueryLimits
+    {
+        MaxExpressionDepth = 100,
+        MaxNumericFormatPrecision = 28,
+        MaxNumericFormatLength = 10
+    };
+});
+```
+
+Numeric `ToString(string)` formats in filters and ordering must be constants.
+Ordinary formats such as `"D10"`, `"F2"` and `"0.00"` remain supported within the limits;
+formats read from entity properties or computed by other expressions are rejected, even if their result would be short.
+Parameterless  `ToString()` calls are unchanged.
+Invalid query expressions return HTTP 400 before the query method executes.
+
+**Be careful with raising these limits just to accept untrusted queries.** Larger numeric precision or custom formats
+permit larger allocations during execution; greater depth increases stack risk.
+These are per-expression/per-format safeguards, not a total memory, row-count or execution-time budget.
 
 ### Client query member visibility
 
@@ -142,8 +178,17 @@ builder.Services.AddOpenRiaServices()
 
 #### Configuring XML serializer security quotas
 
-You can configure reader quotas to limit resource consumption and mitigate denial-of-service (DoS) attacks.
-By default, all quotas are set to their maximum values for backward compatibility.
+**The default XML settings are compatibility defaults, not production resource limits.**
+Both binary XML and text XML use `XmlDictionaryReaderQuotas.Max` unless configured.
+Set finite quotas for **every enabled XML provider** before accepting untrusted requests.
+Enabling MessagePack or text XML does not remove the default binary XML provider.
+Use `ClearSerializationProviders` if you intend to disable formats rather than secure all of them.
+
+Reader quotas help limit individual strings, arrays, nesting and XML names.
+They do **not** cap the complete deserialized object graph, total allocation or total request size.
+Small binary XML requests can expand during deserialization. The initial read buffer size is not a request-body limit.
+The examples below are starting points only: adjust them to your service contracts and largest legitimate requests.
+`MaxStringContentLength` counts characters; `MaxArrayLength` counts array elements, not bytes.
 
 **Configure binary XML serialization quotas (for the default binary provider):**
 
@@ -154,9 +199,11 @@ builder.Services.AddOpenRiaServices()
     {
         options.ReaderQuotas = new System.Xml.XmlDictionaryReaderQuotas
         {
-            MaxStringContentLength = 1024 * 1024, // 1 MB
+            MaxStringContentLength = 1024 * 1024,
             MaxArrayLength = 65536,
             MaxDepth = 32,
+            MaxBytesPerRead = 4096,
+            MaxNameTableCharCount = 16384,
         };
     });
 ```
@@ -170,12 +217,39 @@ builder.Services.AddOpenRiaServices()
     {
         options.ReaderQuotas = new System.Xml.XmlDictionaryReaderQuotas
         {
-            MaxStringContentLength = 1024 * 1024, // 1 MB
+            MaxStringContentLength = 1024 * 1024,
             MaxArrayLength = 65536,
             MaxDepth = 32,
+            MaxBytesPerRead = 4096,
+            MaxNameTableCharCount = 16384,
         };
     });
 ```
+
+Apply a separate HTTP request-body limit in Kestrel and in any IIS or reverse-proxy configuration.
+For example, this Kestrel limit allows at most 4 MiB per request body:
+
+```csharp
+builder.WebHost.ConfigureKestrel(options =>
+{
+    options.Limits.MaxRequestBodySize = 4 * 1024 * 1024;
+});
+```
+
+If request decompression is enabled, also bound the decompressed input.
+Body-size limits and reader quotas complement each other; neither is a total deserialization memory budget.
+Keep rate/concurrency limits and timeouts appropriate for the maximum permitted request.
+
+For services that require authentication, configure ASP.NET Core authentication/authorization middleware
+and endpoint authorization (for example, `.RequireAuthorization()` on the relevant service endpoints).
+This can reject unauthorized requests **before body deserialization**.
+Domain-service attributes such as `[RequiresAuthentication]` remain important, but operation authorization runs
+after body deserialization and therefore does not protect that earlier work.
+Query parsing occurs after operation authorization; its `QueryLimits` do not limit XML deserialization.
+
+On HTTP clients, also configure `BinaryHttpDomainClientFactory.ReaderQuotas` and, when used,
+`XmlHttpDomainClientFactory.ReaderQuotas` before creating clients. Their defaults are also maximum quotas.
+Server-side quotas do not protect a client reading a response.
 
 
 ### Performance tuning
@@ -273,16 +347,8 @@ Client `where` and `orderby` expressions have these limits:
 
 Requests that exceed a limit return an error or fault; they are not truncated. Hosts with small thread stacks may reject deeply nested expressions sooner.
 
-Set the ASP.NET Core depth limit through OpenRiaServices options:
-
-```csharp
-builder.Services.AddOpenRiaServices(options =>
-{
-    options.MaxQueryExpressionDepth = 300;
-});
-```
-
-Increase the limit only when valid queries are rejected. Deeper expressions require more stack space in the parser and LINQ provider.
+See [Client query resource limits](#client-query-resource-limits) to configure depth
+and numeric-format limits through `OpenRiaServicesOptions.QueryLimits`.
 
 String replacements are also limited: an expression can contain at most three growing `Replace(string, string)` calls, with a combined growth factor no greater than 100. Each call's factor is `ceil(replacement.Length / search.Length)`; nonconstant or empty search strings use a length of 1.
 

@@ -5,6 +5,7 @@ using System.Linq.Dynamic;
 using System.Linq.Expressions;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Hosting.AspNetCore;
 
 namespace OpenRiaServices.Hosting.Test.Data
 {
@@ -841,7 +842,7 @@ namespace OpenRiaServices.Hosting.Test.Data
                 expressions.Add(Expression.Constant(null));
             }
 
-            return ExpressionParser.IsMemberAccessAllowed(type.GetConstructor(constructorParams), expressions.ToArray());
+            return ExpressionParser.IsMemberAccessAllowed(type.GetConstructor(constructorParams), expressions.ToArray(), QueryLimits.Defaults);
         }
 
         private static bool IsMethodAllowed(Type type, string methodName, params Type[] args)
@@ -853,7 +854,7 @@ namespace OpenRiaServices.Hosting.Test.Data
                 expressions.Add(Expression.Constant(null));
             }
 
-            return ExpressionParser.IsMemberAccessAllowed(type.GetMethod(methodName, args), expressions.ToArray());
+            return ExpressionParser.IsMemberAccessAllowed(type.GetMethod(methodName, args), expressions.ToArray(), QueryLimits.Defaults);
         }
     }
 }

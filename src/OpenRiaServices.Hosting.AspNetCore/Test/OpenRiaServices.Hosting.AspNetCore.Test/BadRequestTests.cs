@@ -14,9 +14,13 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Hosting.AspNetCore.Operations;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Server;
+using PolyType;
+using PolyType.ReflectionProvider;
 using TestDomainServices;
 
 [assembly: DomainServiceEndpointRoutePattern(EndpointRoutePattern.Name)]
@@ -138,12 +142,25 @@ namespace OpenRiaServices.Hosting.AspNetCore
             => GetQueryRequest(nameof(BadRequestDomainService.QueryWithDoubleParam), "(", includeValue: true);
 
         [TestMethod]
-        public void TestQuery_DepthOptionRejectsNonPositiveValues()
+        public void TestQuery_LimitsValidateValuesAndArePerHost()
         {
             var options = new OpenRiaServicesOptions();
-            Assert.AreEqual(200, options.MaxQueryExpressionDepth);
-            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => options.MaxQueryExpressionDepth = 0);
-            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => options.MaxQueryExpressionDepth = -1);
+            Assert.AreEqual(200, options.QueryLimits.MaxExpressionDepth);
+            Assert.AreEqual(100, options.QueryLimits.MaxNumericFormatPrecision);
+            Assert.AreEqual(64, options.QueryLimits.MaxNumericFormatLength);
+            Assert.ThrowsExactly<ArgumentNullException>(() => options.QueryLimits = null);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => options.QueryLimits.MaxExpressionDepth = 0);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => options.QueryLimits.MaxExpressionDepth = -1);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => options.QueryLimits.MaxNumericFormatPrecision = -1);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => options.QueryLimits.MaxNumericFormatLength = 0);
+            Assert.ThrowsExactly<ArgumentOutOfRangeException>(() => options.QueryLimits.MaxNumericFormatLength = -1);
+            options.QueryLimits.MaxExpressionDepth = 10;
+            options.QueryLimits.MaxNumericFormatPrecision = 0;
+            options.QueryLimits.MaxNumericFormatLength = 1;
+            var other = new OpenRiaServicesOptions();
+            Assert.AreEqual(200, other.QueryLimits.MaxExpressionDepth);
+            Assert.AreEqual(100, other.QueryLimits.MaxNumericFormatPrecision);
+            Assert.AreEqual(64, other.QueryLimits.MaxNumericFormatLength);
         }
 
         [TestMethod]
@@ -160,7 +177,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             {
                 var options = new OpenRiaServicesOptions
                 {
-                    MaxQueryExpressionDepth = depth,
+                    QueryLimits = new QueryLimits { MaxExpressionDepth = depth },
                     SerializationProviders = s_options.SerializationProviders,
                 };
                 var invoker = new QueryOperationInvoker<People.Person>(operation, options);
@@ -199,6 +216,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 string.Join(" and ", Enumerable.Repeat("true", 1000)),
                 "Name.Replace(\"a\",\"aaa\").Replace(\"a\",\"aaa\").Replace(\"a\",\"aaa\").Replace(\"a\",\"aaa\").Length > 0",
                 "Name.Replace(\"a\",\"aaaaaaaaaaa\").Replace(\"a\",\"aaaaaaaaaaa\").Length > 0",
+                "Int32(1).ToString(\"D101\") != null",
+                "String.Format(\"{0:D999999999}\", Int32(1)) != null",
+                "Int32(1).ToString(Name) != null",
+                $"Int32(1).ToString(\"{new string('0', 65)}\") != null",
             };
             foreach (var expression in expressions)
             {
@@ -227,7 +248,75 @@ namespace OpenRiaServices.Hosting.AspNetCore
             Assert.AreEqual(StatusCodes.Status200OK, subsequent.Response.StatusCode);
         }
 
-        private static MemoryStream GetQueryRequest(string operation, string expression, bool includeValue = false)
+        [TestMethod]
+        [DataRow("GET", "where")]
+        [DataRow("GET", "orderby")]
+        [DataRow("POST", "where")]
+        [DataRow("POST", "orderby")]
+        [DataRow("QUERY", "where")]
+        [DataRow("QUERY", "orderby")]
+        [DataRow("MessagePack", "where")]
+        [DataRow("MessagePack", "orderby")]
+        public async Task TestQuery_ConfiguredNumericLimitsRejectBeforeInvocation(string method, string queryOperator)
+        {
+            var operation = DomainServiceDescription.GetDescription(typeof(BadRequestDomainService))
+                .GetQueryMethod(nameof(BadRequestDomainService.GetPeople));
+            foreach (var format in new[] { "F4", "00000", "F3" })
+            {
+                foreach (bool restricted in new[] { true, false })
+                {
+                    using var service = new BadRequestDomainService();
+                    using var services = new ServiceCollection().AddSingleton(service).BuildServiceProvider();
+                    var options = new OpenRiaServicesOptions
+                    {
+                        QueryLimits = restricted
+                            ? new QueryLimits { MaxNumericFormatPrecision = 3, MaxNumericFormatLength = 4 }
+                            : new QueryLimits(),
+                        SerializationProviders = method == "MessagePack"
+                            ? [new MessagePackSerializationProvider(new MessagePackSerializationOptions())]
+                            : s_options.SerializationProviders,
+                    };
+                    var invoker = new QueryOperationInvoker<People.Person>(operation, options);
+                    string expression = $"Int32(1).ToString(\"{format}\")";
+                    if (queryOperator == "where")
+                        expression += " != null";
+                    var context = new DefaultHttpContext();
+                    context.RequestServices = services;
+                    context.Response.Body = new MemoryStream();
+                    context.Request.Method = method == "MessagePack" ? "POST" : method;
+                    if (method == "GET")
+                        context.Request.QueryString = new QueryString($"?${queryOperator}=" + Uri.EscapeDataString(expression));
+                    else if (method == "MessagePack")
+                    {
+                        context.Request.ContentType = "application/vnd.msgpack";
+                        var envelope = new
+                        {
+                            QueryOptions = new[] { new ServiceQueryPart(queryOperator, expression) },
+                        };
+                        var body = new MemoryStream();
+                        new MessagePackSerializer().SerializeObject(body, envelope,
+                            ReflectionTypeShapeProvider.Default.GetTypeShapeOrThrow(envelope.GetType()));
+                        body.Position = 0;
+                        context.Request.Body = body;
+                    }
+                    else
+                    {
+                        context.Request.ContentType = "application/msbin1";
+                        context.Request.Body = GetQueryRequest(nameof(BadRequestDomainService.GetPeople), expression,
+                            queryOperator: queryOperator);
+                    }
+                    await invoker.Invoke(context);
+                    bool rejected = restricted && format != "F3";
+                    Assert.AreEqual(rejected ? StatusCodes.Status400BadRequest : StatusCodes.Status200OK,
+                        context.Response.StatusCode, $"{method}: {queryOperator}, {format}, restricted={restricted}");
+                    if (rejected)
+                        Assert.IsInstanceOfType<System.Linq.Dynamic.ParseException>(service.LastError);
+                    Assert.AreEqual(!rejected, service.PeopleQueryInvoked);
+                }
+            }
+        }
+
+        private static MemoryStream GetQueryRequest(string operation, string expression, bool includeValue = false, string queryOperator = "where")
         {
             var requestBody = new MemoryStream();
             using (var writer = XmlDictionaryWriter.CreateBinaryWriter(requestBody, null, null, ownsStream: false))
@@ -235,7 +324,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 writer.WriteStartElement("MessageRoot");
                 writer.WriteStartElement("QueryOptions");
                 writer.WriteStartElement("QueryOption");
-                writer.WriteAttributeString("Name", "where");
+                writer.WriteAttributeString("Name", queryOperator);
                 writer.WriteAttributeString("Value", expression);
                 writer.WriteEndElement();
                 writer.WriteEndElement();
@@ -311,8 +400,13 @@ namespace OpenRiaServices.Hosting.AspNetCore
         [EnableClientAccess]
         public class BadRequestDomainService : DomainService
         {
-            public IQueryable<People.Person> GetPeople() => Array.Empty<People.Person>().AsQueryable();
+            public IQueryable<People.Person> GetPeople()
+            {
+                PeopleQueryInvoked = true;
+                return Array.Empty<People.Person>().AsQueryable();
+            }
 
+            public bool PeopleQueryInvoked { get; private set; }
             public bool ProtectedQueryInvoked { get; private set; }
             public Exception LastError { get; private set; }
 

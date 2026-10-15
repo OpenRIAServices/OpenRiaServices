@@ -6,6 +6,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System;
+using OpenRiaServices.Hosting.AspNetCore;
 
 #nullable disable
 #pragma warning disable CA1859 // Change return type of method 'GenerateStringConcat' from 'System.Linq.Expressions.Expression' to 'System.Linq.Expressions.MethodCallExpression' for improved performance
@@ -20,13 +21,14 @@ namespace System.Linq.Dynamic
     }
 #endif
 
+#nullable enable
     internal static class DynamicQueryable
     {
-        public static IQueryable Where(this IQueryable source, string predicate, QueryResolver queryResolver, int maxExpressionDepth)
+        public static IQueryable Where(this IQueryable source, string predicate, QueryResolver queryResolver, QueryLimits limits)
         {
             ArgumentNullException.ThrowIfNull(source);
             ArgumentNullException.ThrowIfNull(predicate);
-            LambdaExpression lambda = DynamicExpression.ParseLambda(source.ElementType, typeof(bool), predicate, queryResolver, maxExpressionDepth);
+            LambdaExpression lambda = DynamicExpression.ParseLambda(source.ElementType, typeof(bool), predicate, queryResolver, limits);
             return source.Provider.CreateQuery(
                 Expression.Call(
                     typeof(Queryable), "Where",
@@ -34,13 +36,14 @@ namespace System.Linq.Dynamic
                     source.Expression, Expression.Quote(lambda)));
         }
 
-        public static IQueryable OrderBy(this IQueryable source, string ordering, QueryResolver queryResolver, int maxExpressionDepth)
+        public static IQueryable OrderBy(this IQueryable source, string ordering, QueryResolver queryResolver, QueryLimits limits)
         {
             ArgumentNullException.ThrowIfNull(source);
             ArgumentNullException.ThrowIfNull(ordering);
+            ArgumentNullException.ThrowIfNull(limits);
             ParameterExpression[] parameters = new ParameterExpression[] {
                 Expression.Parameter(source.ElementType, "") };
-            ExpressionParser parser = new ExpressionParser(parameters, ordering, queryResolver, maxExpressionDepth);
+            ExpressionParser parser = new ExpressionParser(parameters, ordering, queryResolver, limits);
             IEnumerable<DynamicOrdering> orderings = parser.ParseOrdering();
             Expression queryExpr = source.Expression;
             string methodAsc = "OrderBy";
@@ -54,7 +57,7 @@ namespace System.Linq.Dynamic
                 methodAsc = "ThenBy";
                 methodDesc = "ThenByDescending";
             }
-            ExpressionParser.ValidateExpression(queryExpr, maxExpressionDepth, QueryDeserializer.MaxQueryParts + 4);
+            ExpressionParser.ValidateExpression(queryExpr, limits.MaxExpressionDepth, QueryDeserializer.MaxQueryParts + 4);
             return source.Provider.CreateQuery(queryExpr);
         }
 
@@ -78,6 +81,7 @@ namespace System.Linq.Dynamic
                     source.Expression, Expression.Constant(count)));
         }
     }
+#nullable disable
 
     internal static class DynamicExpression
     {
@@ -89,14 +93,14 @@ namespace System.Linq.Dynamic
             typeof(Func<,,,,>)
         };
 
-        public static LambdaExpression ParseLambda(Type itType, Type resultType, string expression, QueryResolver queryResolver, int maxExpressionDepth = ExpressionParser.MaxExpressionDepth)
+        public static LambdaExpression ParseLambda(Type itType, Type resultType, string expression, QueryResolver queryResolver, QueryLimits limits)
         {
-            return ParseLambda(new ParameterExpression[] { Expression.Parameter(itType, "") }, resultType, expression, queryResolver, maxExpressionDepth);
+            return ParseLambda(new ParameterExpression[] { Expression.Parameter(itType, "") }, resultType, expression, queryResolver, limits);
         }
 
-        public static LambdaExpression ParseLambda(ParameterExpression[] parameters, Type resultType, string expression, QueryResolver queryResolver, int maxExpressionDepth = ExpressionParser.MaxExpressionDepth)
+        public static LambdaExpression ParseLambda(ParameterExpression[] parameters, Type resultType, string expression, QueryResolver queryResolver, QueryLimits limits)
         {
-            ExpressionParser parser = new ExpressionParser(parameters, expression, queryResolver, maxExpressionDepth);
+            ExpressionParser parser = new ExpressionParser(parameters, expression, queryResolver, limits);
             return Lambda(parser.Parse(resultType), parameters);
         }
 
@@ -146,6 +150,7 @@ namespace System.Linq.Dynamic
         internal const int MaxExpressionLength = 32768;
 
         readonly int _maxExpressionDepth;
+        readonly QueryLimits _limits;
         int _expressionDepth;
         int _growingReplaceCalls;
         int _stringExpansionFactor = 1;
@@ -452,12 +457,13 @@ namespace System.Linq.Dynamic
             => _text.Substring(token.pos, token.length);
 
 
-        public ExpressionParser(ParameterExpression[] parameters, string expression, QueryResolver queryResolver, int maxExpressionDepth = MaxExpressionDepth)
+        public ExpressionParser(ParameterExpression[] parameters, string expression, QueryResolver queryResolver, QueryLimits limits)
         {
             ArgumentNullException.ThrowIfNull(expression);
+            ArgumentNullException.ThrowIfNull(limits);
 
-            ArgumentOutOfRangeException.ThrowIfNegativeOrZero(maxExpressionDepth);
-            _maxExpressionDepth = maxExpressionDepth;
+            _limits = limits;
+            _maxExpressionDepth = _limits.MaxExpressionDepth;
             if (expression.Length > MaxExpressionLength)
                 throw new ParseException(Resource.ExpressionTooComplex, 0);
             this._queryResolver = queryResolver;
@@ -1100,7 +1106,7 @@ namespace System.Linq.Dynamic
                             return GenerateConversion(args[0], type, errorPos);
                         throw ParseError(errorPos, Resource.NoMatchingConstructor, GetTypeName(type));
                     case 1:
-                        if (!IsMemberAccessAllowed(method, args))
+                        if (!IsMemberAccessAllowed(method, args, _limits))
                             throw ParseError(errorPos, Resource.MethodsAreInaccessible, GetTypeName(method.DeclaringType));
 
                         return Expression.New((ConstructorInfo)method, args);
@@ -1166,7 +1172,7 @@ namespace System.Linq.Dynamic
                         if (method.ReturnType == typeof(void))
                             throw ParseError(errorPos, Resource.MethodIsVoid,
                                 id, GetTypeName(method.DeclaringType));
-                        if (!IsMemberAccessAllowed(method, args))
+                        if (!IsMemberAccessAllowed(method, args, _limits))
                             throw ParseError(errorPos, Resource.MethodsAreInaccessible, GetTypeName(method.DeclaringType));
                         CheckStringExpansion(method, args);
                         return Expression.Call(instance, (MethodInfo)method, args);

@@ -31,7 +31,7 @@ Major new features in this release are:
       and node count, expression length, and the combined size and number of query
       options. Excessively complex queries return an error instead of exhausting
       the host stack. ASP.NET Core hosts can configure the default depth of 200 with
-      `OpenRiaServicesOptions.MaxQueryExpressionDepth`.
+      `OpenRiaServicesOptions.QueryLimits.MaxExpressionDepth`.
     * WCF and ASP.NET Core client queries now reject fields and custom indexers on reference
       types when they are not part of client serialization metadata.
       Standard string and collection indexing and predefined static constants remain supported.
@@ -39,6 +39,10 @@ Major new features in this release are:
         applying the exposed-entity association exception.
     * Query visibility checks now honor metadata registered on the receiver type for inherited properties.
       Members without a property descriptor are rejected as unknown members instead of causing a null-reference error.
+    * ASP.NET Core and WCF client queries now require constant numeric format strings.
+      Numeric precision and format length are limited, preventing short format strings from requesting excessive allocations.
+      Numeric format strings are limited to 64 characters by default.
+      Settings can be changed using `OpenRiaServicesOptions.QueryLimits`.
 
 * EF6 and EntityFrameworkCore `DbDomainService` expose a virtual
   `CanDiscloseConflictAsync` hook for authorizing disclosure of database snapshots,

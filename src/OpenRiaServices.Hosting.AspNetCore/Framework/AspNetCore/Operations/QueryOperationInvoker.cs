@@ -64,7 +64,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 QueryResult<TEntity> result;
                 try
                 {
-                    result = await QueryProcessor.ProcessAsync<TEntity>(domainService, _operation, inputs, serviceQuery, Options.MaxQueryExpressionDepth);
+                    result = await QueryProcessor.ProcessAsync<TEntity>(domainService, _operation, inputs, serviceQuery, Options.QueryLimits);
                 }
                 catch (Exception ex) when (!ex.IsFatal())
                 {

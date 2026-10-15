@@ -6,9 +6,10 @@ using System.Linq.Expressions;
 using System.Reflection;
 using OpenRiaServices;
 using OpenRiaServices.Hosting;
+using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
-#nullable disable
+#nullable enable
 
 namespace System.Linq.Dynamic
 {
@@ -23,13 +24,14 @@ namespace System.Linq.Dynamic
         /// <summary>The maximum combined length of client query expressions.</summary>
         internal const int MaxQueryLength = 4 * ExpressionParser.MaxExpressionLength;
 
-        internal static IQueryable Deserialize(DomainServiceDescription domainServiceDescription, IQueryable query, IEnumerable<ServiceQueryPart> queryParts, int maxExpressionDepth = ExpressionParser.MaxExpressionDepth)
+        internal static IQueryable Deserialize(DomainServiceDescription domainServiceDescription, IQueryable query, IEnumerable<ServiceQueryPart> queryParts, QueryLimits limits)
         {
-            return Deserialize(domainServiceDescription, query, queryParts, new DefaultQueryResolver(), maxExpressionDepth);
+            return Deserialize(domainServiceDescription, query, queryParts, new DefaultQueryResolver(), limits);
         }
 
-        internal static IQueryable Deserialize(DomainServiceDescription domainServiceDescription, IQueryable query, IEnumerable<ServiceQueryPart> queryParts, QueryResolver queryResolver, int maxExpressionDepth = ExpressionParser.MaxExpressionDepth)
+        internal static IQueryable Deserialize(DomainServiceDescription domainServiceDescription, IQueryable query, IEnumerable<ServiceQueryPart> queryParts, QueryResolver queryResolver, QueryLimits limits)
         {
+            ArgumentNullException.ThrowIfNull(limits);
             int parts = 0;
             long length = 0;
             foreach (ServiceQueryPart part in queryParts)
@@ -40,10 +42,12 @@ namespace System.Linq.Dynamic
                 switch (part.QueryOperator)
                 {
                     case "where":
-                        query = DynamicQueryable.Where(query, part.Expression, queryResolver, maxExpressionDepth);
+                        ArgumentNullException.ThrowIfNull(part.Expression);
+                        query = DynamicQueryable.Where(query, part.Expression, queryResolver, limits);
                         break;
                     case "orderby":
-                        query = DynamicQueryable.OrderBy(query, part.Expression, queryResolver, maxExpressionDepth);
+                        ArgumentNullException.ThrowIfNull(part.Expression);
+                        query = DynamicQueryable.OrderBy(query, part.Expression, queryResolver, limits);
                         break;
                     case "skip":
                         query = DynamicQueryable.Skip(query, Convert.ToInt32(part.Expression, System.Globalization.CultureInfo.InvariantCulture));
@@ -55,7 +59,7 @@ namespace System.Linq.Dynamic
             }
 
             // Include query operators and lambda/quote wrappers before recursive post-processing.
-            ExpressionParser.ValidateExpression(query.Expression, maxExpressionDepth, MaxQueryParts + 4);
+            ExpressionParser.ValidateExpression(query.Expression, limits.MaxExpressionDepth, MaxQueryParts + 4);
 
             // Perform any required post processing transformations to the expression tree.
             Expression expr = PostProcessor.Process(domainServiceDescription, query.Expression);
@@ -92,7 +96,7 @@ namespace System.Linq.Dynamic
                     if (m.Expression != null && (m.Member.MemberType is MemberTypes.Property or MemberTypes.Field))
                     {
                         Type declaringType = m.Expression.Type;
-                        PropertyDescriptor pd = m.Member.MemberType == MemberTypes.Property
+                        PropertyDescriptor? pd = m.Member.MemberType == MemberTypes.Property
                             ? TypeDescriptor.GetProperties(declaringType)[m.Member.Name]
                             : null;
 
@@ -123,7 +127,7 @@ namespace System.Linq.Dynamic
             {
                 if (!this.isInProjection && m.Object != null && m.Method.IsSpecialName && m.Method.Name.StartsWith("get_", StringComparison.Ordinal))
                 {
-                    Type declaringType = m.Method.DeclaringType;
+                    Type declaringType = m.Method.DeclaringType!;
                     // Framework collection indexers are not represented by PropertyDescriptors.
                     // Note: IEnumerable means we detect IList, IList<>, IReadOnlyList<> as well as corresponding Dictionary types
                     bool isFrameworkIndexer = TypeUtility.IsSystemAssembly(declaringType.Assembly)
@@ -132,7 +136,7 @@ namespace System.Linq.Dynamic
                     {
                         string propertyName = m.Method.Name.Substring(4);
                         Type receiverType = m.Object.Type;
-                        PropertyDescriptor pd = TypeDescriptor.GetProperties(receiverType)[propertyName];
+                        PropertyDescriptor? pd = TypeDescriptor.GetProperties(receiverType)[propertyName];
                         if (!this.IsVisible(pd))
                         {
                             throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.UnknownPropertyOrField, propertyName, ExpressionParser.GetTypeName(receiverType)));
@@ -143,7 +147,7 @@ namespace System.Linq.Dynamic
                 return base.VisitMethodCall(m);
             }
 
-            private bool IsVisible(PropertyDescriptor pd)
+            private bool IsVisible(PropertyDescriptor? pd)
             {
                 if (pd == null || pd.Attributes[typeof(ExcludeAttribute)] is ExcludeAttribute)
                 {
@@ -183,11 +187,11 @@ namespace System.Linq.Dynamic
                     m = (MemberExpression)m.Expression;
                 }
 
-                PropertyDescriptor pd = TypeDescriptor.GetProperties(m.Member.DeclaringType)[m.Member.Name];
+                PropertyDescriptor? pd = TypeDescriptor.GetProperties(m.Member.DeclaringType!)[m.Member.Name];
                 if (pd == null)
                     return false;
 
-                IncludeAttribute includeAtt = (IncludeAttribute)pd.Attributes[typeof(IncludeAttribute)];
+                IncludeAttribute? includeAtt = (IncludeAttribute?)pd.Attributes[typeof(IncludeAttribute)];
                 return (includeAtt != null && includeAtt.IsProjection);
             }
         }

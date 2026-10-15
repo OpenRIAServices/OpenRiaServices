@@ -15,6 +15,7 @@ using VbExpressions;
 using DomainServiceDescription = DomainServices::OpenRiaServices.Server.DomainServiceDescription;
 using LinqResource = httpDomainClient::OpenRiaServices.Client.Resources;
 using NorthwindDomainService = DomainServicesTests::TestDomainServices.EFCore.Northwind;
+using QueryLimits = WebRia::OpenRiaServices.Hosting.AspNetCore.QueryLimits;
 using SystemLinqDynamic = WebRia::System.Linq.Dynamic;
 
 namespace OpenRiaServices.Client.Test
@@ -587,7 +588,7 @@ namespace OpenRiaServices.Client.Test
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
 
             DomainServiceDescription northwindDescription = DomainServiceDescription.GetDescription(typeof(NorthwindDomainService));
-            IQueryable<Product> query2 = (IQueryable<Product>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, products, TranslateQueryParts(queryParts));
+            IQueryable<Product> query2 = (IQueryable<Product>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, products, TranslateQueryParts(queryParts), QueryLimits.Defaults);
 
             // verify that in the round-tripped query, the constant's decimal type
             // has been retained
@@ -794,7 +795,7 @@ namespace OpenRiaServices.Client.Test
             IQueryable<PurchaseOrder> query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
             Assert.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString()), queryParts[0].Expression);
-            IQueryable<PurchaseOrder> resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
+            IQueryable<PurchaseOrder> resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts), QueryLimits.Defaults);
             Assert.Contains(string.Format("DateTime({0}, {1})", dt.Ticks, dt.Kind.ToString()), resultQuery.ToString());
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
@@ -803,7 +804,7 @@ namespace OpenRiaServices.Client.Test
             query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
             Assert.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString()), queryParts[0].Expression);
-            resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
+            resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts), QueryLimits.Defaults);
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
             // Verify DateTime.Now, DateTime.Today, etc. are treated as remote expressions
@@ -811,7 +812,7 @@ namespace OpenRiaServices.Client.Test
             query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
             Assert.Contains("DateTime.Now", queryParts[0].Expression);
-            resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
+            resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts), QueryLimits.Defaults);
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
             // Test DateTime with time components specified
@@ -820,7 +821,7 @@ namespace OpenRiaServices.Client.Test
             query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
             Assert.Contains(string.Format("DateTime({0},\"{1}\")", dt.Ticks, dt.Kind.ToString()), queryParts[0].Expression);
-            resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
+            resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts), QueryLimits.Defaults);
             Assert.Contains(string.Format("DateTime({0}, {1})", dt.Ticks, dt.Kind.ToString()), resultQuery.ToString());
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
@@ -830,7 +831,7 @@ namespace OpenRiaServices.Client.Test
             query = Array.Empty<PurchaseOrder>().AsQueryable().Where(predicate);
             queryParts = QuerySerializer.Serialize(query);
             Assert.Contains("OrderDate.DayOfWeek==0", queryParts[0].Expression);
-            resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts));
+            resultQuery = (IQueryable<PurchaseOrder>)SystemLinqDynamic.QueryDeserializer.Deserialize(northwindDescription, poData.AsQueryable(), TranslateQueryParts(queryParts), QueryLimits.Defaults);
             Assert.IsGreaterThan(0, resultQuery.Count());
             Assert.IsTrue(poData.AsQueryable().Where(predicate).OrderBy(p => p.PurchaseOrderID).SequenceEqual(resultQuery.OrderBy(p => p.PurchaseOrderID)));
 
@@ -1164,7 +1165,7 @@ namespace OpenRiaServices.Client.Test
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query);
 
             DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(typeof(NorthwindDomainService));
-            return (IQueryable<T>)SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, data.AsQueryable(), TranslateQueryParts(queryParts));
+            return (IQueryable<T>)SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, data.AsQueryable(), TranslateQueryParts(queryParts), QueryLimits.Defaults);
         }
 
         private void VerifyRoundtrip<T>(string serialized, Func<IQueryable<T>, IQueryable<T>> queryFunc, IEnumerable<T> sampleData)
@@ -1177,7 +1178,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(serialized, queryParts.Single().Expression);
 
             DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(typeof(NorthwindDomainService));
-            var roundTrippedResult = (IQueryable<T>)SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, sampleData.AsQueryable(), TranslateQueryParts(queryParts));
+            var roundTrippedResult = (IQueryable<T>)SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, sampleData.AsQueryable(), TranslateQueryParts(queryParts), QueryLimits.Defaults);
 
             CollectionAssert.AreEqual(query.ToList(), roundTrippedResult.ToList(), message: $"Roundtrip result was different for {serialized ?? string.Join("&", queryParts)}");
         }

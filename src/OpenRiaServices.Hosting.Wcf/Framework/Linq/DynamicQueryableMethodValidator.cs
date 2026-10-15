@@ -1,6 +1,7 @@
 ﻿using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
+using OpenRiaServices.Hosting.AspNetCore;
 
 #nullable disable
 
@@ -13,13 +14,22 @@ namespace System.Linq.Dynamic
         /// </summary>
         /// <param name="method">The method to check for access allowance.</param>
         /// <param name="args">The arguments passed to the method.</param>
+        /// <param name="limits">The client query limits.</param>
         /// <returns><c>true</c> when the member access is allowed, otherwise <c>false</c>.</returns>
-        internal static bool IsMemberAccessAllowed(MethodBase method, Expression[] args)
+        internal static bool IsMemberAccessAllowed(MethodBase method, Expression[] args, QueryLimits limits)
         {
+            ArgumentNullException.ThrowIfNull(limits);
             var type = GetNonNullableType(method.DeclaringType);
             var parameterTypes = method.GetParameters()
                                        .Select(p => p.ParameterType)
                                        .ToArray();
+
+            if (!method.IsStatic && IsNumericType(type) && method.Name == nameof(Int32.ToString)
+                && ArrayEqual(parameterTypes, new[] { typeof(String) })
+                && !IsNumericFormatAllowed(args[0], limits))
+            {
+                return false;
+            }
 
             if (method.IsConstructor)
             {
@@ -889,6 +899,40 @@ namespace System.Linq.Dynamic
             }
 
             return false;
+        }
+
+        private static bool IsNumericFormatAllowed(Expression argument, QueryLimits limits)
+        {
+            if (argument is not ConstantExpression constant)
+                return false;
+            if (constant.Value is null)
+                return true;
+            if (constant.Value is not string format || format.Length > limits.MaxNumericFormatLength)
+                return false;
+
+            // The runtime ignores content after a null character when recognizing standard formats.
+            ReadOnlySpan<char> effectiveFormat = format.AsSpan();
+            int terminator = effectiveFormat.IndexOf('\0');
+            if (terminator >= 0)
+                effectiveFormat = effectiveFormat.Slice(0, terminator);
+
+            if (effectiveFormat.Length == 0 || !(effectiveFormat[0] is >= 'A' and <= 'Z' or >= 'a' and <= 'z'))
+                return true;
+
+            for (int i = 1; i < effectiveFormat.Length; i++)
+            {
+                if (effectiveFormat[i] is < '0' or > '9')
+                    return true; // Custom formats are bounded by their total length.
+            }
+
+            long precision = 0;
+            for (int i = 1; i < effectiveFormat.Length; i++)
+            {
+                precision = precision * 10 + effectiveFormat[i] - '0';
+                if (precision > limits.MaxNumericFormatPrecision)
+                    return false;
+            }
+            return true;
         }
 
         private static int GetStringArgumentLength(ConstantExpression argument)
