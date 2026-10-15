@@ -4,7 +4,7 @@
     <DefineConstants>$(DefineConstants);SERVERFX;EFCORE</DefineConstants>
     <GeneratePackageOnBuild Condition="'$(Configuration)'=='Release'">true</GeneratePackageOnBuild>
     <VersionPrefix>4.2.0</VersionPrefix>
-    <AssemblyVersion>4.2.0</AssemblyVersion>
+    <AssemblyVersion>4.1.0</AssemblyVersion>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageReadmeFile>README.md</PackageReadmeFile>
