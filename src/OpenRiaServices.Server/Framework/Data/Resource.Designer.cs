@@ -403,6 +403,51 @@ namespace OpenRiaServices.Server {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to ClientQuery&lt;T&gt; parameters can only be used by query operations..
+        /// </summary>
+        internal static string DomainServiceDescription_ClientQueryOnlyForQueryOperation {
+            get {
+                return ResourceManager.GetString("DomainServiceDescription_ClientQueryOnlyForQueryOperation", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Query operation '{0}' must not declare more than one ClientQuery&lt;T&gt; parameter..
+        /// </summary>
+        internal static string DomainServiceDescription_MultipleClientQueryParameters {
+            get {
+                return ResourceManager.GetString("DomainServiceDescription_MultipleClientQueryParameters", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Query operation '{0}' cannot combine a ClientQuery&lt;T&gt; parameter with an out total-count parameter..
+        /// </summary>
+        internal static string DomainServiceDescription_ClientQueryWithOutCount {
+            get {
+                return ResourceManager.GetString("DomainServiceDescription_ClientQueryWithOutCount", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Query operation '{0}' must return an enumerable and be composable to use a ClientQuery&lt;T&gt; parameter..
+        /// </summary>
+        internal static string DomainServiceDescription_ClientQueryRequiresComposableEnumerable {
+            get {
+                return ResourceManager.GetString("DomainServiceDescription_ClientQueryRequiresComposableEnumerable", resourceCulture);
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized string similar to The ClientQuery entity type '{0}' on query operation '{1}' must match the returned entity type '{2}'..
+        /// </summary>
+        internal static string DomainServiceDescription_ClientQueryEntityTypeMismatch {
+            get {
+                return ResourceManager.GetString("DomainServiceDescription_ClientQueryEntityTypeMismatch", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to This DomainServiceDescription hasn&apos;t been initialized. Initialize must be called before the description can be used..
         /// </summary>
         internal static string DomainServiceDescription_Uninitialized {

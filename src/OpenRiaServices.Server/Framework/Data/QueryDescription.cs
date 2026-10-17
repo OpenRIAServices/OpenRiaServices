@@ -133,5 +133,6 @@ namespace OpenRiaServices.Server
                 return this._includeTotalCount;
             }
         }
+
     }
 }
