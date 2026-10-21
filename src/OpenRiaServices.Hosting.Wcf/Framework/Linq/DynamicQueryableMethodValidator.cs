@@ -1,4 +1,6 @@
-﻿using System.Globalization;
+﻿using System.Collections.Frozen;
+using System.Collections.Generic;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using OpenRiaServices.Hosting.AspNetCore;
@@ -9,898 +11,699 @@ namespace System.Linq.Dynamic
 {
     internal partial class ExpressionParser
     {
-        /// <summary>
-        /// Determines if the method is allowed to be executed based on an allow list.
-        /// </summary>
-        /// <param name="method">The method to check for access allowance.</param>
-        /// <param name="args">The arguments passed to the method.</param>
-        /// <param name="limits">The client query limits.</param>
-        /// <returns><c>true</c> when the member access is allowed, otherwise <c>false</c>.</returns>
+        private enum MemberRule
+        {
+            Denied,
+            Allowed,
+            NumericFormat,
+            ReplaceCharacter,
+            ReplaceString
+        }
+
+        private delegate bool MemberPolicy(MethodBase method, ParameterInfo[] parameters);
+
+        private static readonly FrozenDictionary<Type, Func<MethodBase, MemberRule>> s_memberPolicies = CreateMemberPolicies();
+
+        private static FrozenDictionary<Type, Func<MethodBase, MemberRule>> CreateMemberPolicies()
+        {
+            var policies = new Dictionary<Type, Func<MethodBase, MemberRule>>();
+            policies.Add(typeof(Char), static method => ResolveRule(method, CharMemberPolicy, false));
+            policies.Add(typeof(String), static method => ResolveRule(method, StringMemberPolicy, false));
+            policies.Add(typeof(DateTime), static method => ResolveRule(method, DateTimeMemberPolicy, false));
+            policies.Add(typeof(DateTimeOffset), static method => ResolveRule(method, DateTimeOffsetMemberPolicy, false));
+            policies.Add(typeof(TimeSpan), static method => ResolveRule(method, TimeSpanMemberPolicy, false));
+            policies.Add(typeof(Guid), static method => ResolveRule(method, GuidMemberPolicy, false));
+            policies.Add(typeof(Uri), static method => ResolveRule(method, UriMemberPolicy, false));
+            policies.Add(typeof(SByte), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(Byte), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(Int16), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(UInt16), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(Int32), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(UInt32), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(Int64), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(Boolean), static method => ResolveRule(method, BooleanMemberPolicy, false));
+            policies.Add(typeof(UInt64), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(Single), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(Double), static method => ResolveRule(method, NumericMemberPolicy, true));
+            policies.Add(typeof(Decimal), static method => ResolveRule(method, DecimalMemberPolicy, true));
+            policies.Add(typeof(Math), static method => ResolveRule(method, MathMemberPolicy, false));
+            policies.Add(typeof(Convert), static method => ResolveRule(method, ConvertMemberPolicy, false));
+#if NET
+            policies.Add(typeof(DateOnly), static method => ResolveRule(method, DateOnlyMemberPolicy, false));
+            policies.Add(typeof(TimeOnly), static method => ResolveRule(method, TimeOnlyMemberPolicy, false));
+#endif
+            return policies.ToFrozenDictionary();
+        }
+
+        private static class MemberRules
+        {
+            internal static readonly FrozenDictionary<MethodBase, MemberRule> Values = Create();
+
+            private static FrozenDictionary<MethodBase, MemberRule> Create()
+            {
+                var rules = new Dictionary<MethodBase, MemberRule>();
+                const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
+                foreach (var policy in s_memberPolicies)
+                {
+                    foreach (MethodBase member in policy.Key.GetMethods(flags).Cast<MethodBase>().Concat(policy.Key.GetConstructors(flags)))
+                    {
+                        MemberRule rule = policy.Value(member);
+                        if (rule != MemberRule.Denied)
+                            rules.Add(member, rule);
+                    }
+                }
+                return rules.ToFrozenDictionary();
+            }
+        }
+
+        /// <summary>Determines whether a bound member and its current arguments are allowed.</summary>
+        /// <param name="method">The bound member to check.</param>
+        /// <param name="args">The current argument expressions.</param>
+        /// <param name="limits">The current query limits.</param>
+        /// <returns>Whether the member and its arguments are permitted.</returns>
         internal static bool IsMemberAccessAllowed(MethodBase method, Expression[] args, QueryLimits limits)
         {
             ArgumentNullException.ThrowIfNull(limits);
-            var type = GetNonNullableType(method.DeclaringType);
-            var parameterTypes = method.GetParameters()
-                                       .Select(p => p.ParameterType)
-                                       .ToArray();
-
-            if (!method.IsStatic && IsNumericType(type) && method.Name == nameof(Int32.ToString)
-                && ArrayEqual(parameterTypes, new[] { typeof(String) })
-                && !IsNumericFormatAllowed(args[0], limits))
+            MemberRule rule;
+            if (!MemberRules.Values.TryGetValue(method, out rule))
             {
-                return false;
+                // Reflected inherited members retain their declaring-type policy without growing the table.
+                rule = method.ReflectedType != method.DeclaringType ? ResolveByType(method) : NullableMemberRule(method);
             }
-
-            if (method.IsConstructor)
-            {
-                if (type == typeof(String))
-                {
-                    return
-                        ArrayEqual(parameterTypes, new[] { typeof(Char[]), typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Char[]) });
-                }
-
-                if (type == typeof(DateTime))
-                {
-                    return
-                        ArrayEqual(parameterTypes, new[] { typeof(Int64) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int64), typeof(DateTimeKind) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(DateTimeKind) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(DateTimeKind) });
-                }
-
-                if (type == typeof(DateTimeOffset))
-                {
-                    return
-                        ArrayEqual(parameterTypes, new[] { typeof(Int64), typeof(TimeSpan) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(DateTime) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(DateTime), typeof(TimeSpan) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(TimeSpan) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(TimeSpan) });
-                }
-
-                if (type == typeof(TimeSpan))
-                {
-                    return
-                        ArrayEqual(parameterTypes, new[] { typeof(Int64) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) });
-                }
-
-                if (type == typeof(Guid))
-                {
-                    return
-                        ArrayEqual(parameterTypes, new[] { typeof(Byte[]) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(UInt32), typeof(UInt16), typeof(UInt16), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int16), typeof(Int16), typeof(Byte[]) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int16), typeof(Int16), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(String) });
-                }
-
-                if (type == typeof(Uri))
-                {
-                    return
-                        ArrayEqual(parameterTypes, new[] { typeof(String) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Boolean) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(String), typeof(UriKind) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Uri), typeof(String) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Uri), typeof(String), typeof(Boolean) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Uri), typeof(Uri) });
-                }
-
-                if (type == typeof(Decimal))
-                {
-                    return
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(UInt32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int64) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(UInt64) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Single) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Double) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32[]) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Boolean), typeof(Byte) });
-                }
-#if NET
-                if (type == typeof(DateOnly))
-                {
-                    return
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Calendar) });
-                }
-
-                if (type == typeof(TimeOnly))
-                {
-                    return
-                        ArrayEqual(parameterTypes, new[] { typeof(Int64) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) }) ||
-                        ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32) });
-                }
-#endif
-            }
-            else
-            {
-                string methodName = method.Name;
-                if (method.DeclaringType == typeof(Char))
-                {
-                    return
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("IsDigit", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsLetter", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsWhiteSpace", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsUpper", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsLower", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsPunctuation", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsLetterOrDigit", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToUpper", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToUpperInvariant", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToLower", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToLowerInvariant", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsControl", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsControl", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsDigit", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsLetter", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsLetterOrDigit", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsLower", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsNumber", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsNumber", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsPunctuation", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsSeparator", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsSeparator", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsSurrogate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsSurrogate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsSymbol", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsSymbol", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsUpper", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsWhiteSpace", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("GetNumericValue", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("GetNumericValue", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsHighSurrogate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsHighSurrogate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsLowSurrogate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsLowSurrogate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsSurrogatePair", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IsSurrogatePair", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char), typeof(Char) })) ||
-                    (methodName.Equals("ConvertFromUtf32", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ConvertToUtf32", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char), typeof(Char) })) ||
-                    (methodName.Equals("ConvertToUtf32", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) }));
-                }
-
-                if (method.DeclaringType == typeof(String))
-                {
-                    return
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(StringComparison) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(StringComparison) })) ||
-                    (methodName.Equals("IsNullOrEmpty", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("IsNullOrWhiteSpace", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Substring", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("Substring", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(Boolean) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(StringComparison) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32), typeof(Boolean) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32), typeof(StringComparison) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("CompareOrdinal", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String) })) ||
-                    (methodName.Equals("CompareOrdinal", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("Contains", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("EndsWith", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("EndsWith", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(StringComparison) })) ||
-                    (methodName.Equals("IndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char), typeof(Int32) })) ||
-                    (methodName.Equals("IndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char), typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("IndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("IndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("IndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("IndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(StringComparison) })) ||
-                    (methodName.Equals("IndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(StringComparison) })) ||
-                    (methodName.Equals("IndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(Int32), typeof(StringComparison) })) ||
-                    (methodName.Equals("LastIndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("LastIndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char), typeof(Int32) })) ||
-                    (methodName.Equals("LastIndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char), typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("LastIndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("LastIndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("LastIndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("LastIndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(StringComparison) })) ||
-                    (methodName.Equals("LastIndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(StringComparison) })) ||
-                    (methodName.Equals("LastIndexOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32), typeof(Int32), typeof(StringComparison) })) ||
-                    (methodName.Equals("StartsWith", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("StartsWith", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(StringComparison) })) ||
-                    (methodName.Equals("ToLower", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToLowerInvariant", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToUpper", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToUpperInvariant", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Trim", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Trim", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char[]) })) ||
-                    (methodName.Equals("TrimStart", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char[]) })) ||
-                    (methodName.Equals("TrimEnd", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char[]) })) ||
-                    (methodName.Equals("Insert", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(String) })) ||
-                    (methodName.Equals("Remove", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("Remove", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("IndexOfAny", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char[]) })) ||
-                    (methodName.Equals("IndexOfAny", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char[]), typeof(Int32) })) ||
-                    (methodName.Equals("IndexOfAny", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char[]), typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("LastIndexOfAny", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char[]) })) ||
-                    (methodName.Equals("LastIndexOfAny", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char[]), typeof(Int32) })) ||
-                    (methodName.Equals("LastIndexOfAny", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char[]), typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("get_Chars", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) || // String Indexer
-                    (methodName.Equals("Concat", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String) })) ||
-                    (methodName.Equals("Concat", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(String) })) ||
-                    (methodName.Equals("Concat", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String), typeof(String), typeof(String) })) ||
-                    (
-                        methodName.Equals("Replace", StringComparison.OrdinalIgnoreCase) &&
-                        (
-                            (ArrayEqual(parameterTypes, new[] { typeof(Char), typeof(Char) }) && args.Length == 2 && args[1].NodeType == ExpressionType.Constant) ||
-                            (ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String) }) && args.Length == 2 && args[1].NodeType == ExpressionType.Constant && GetStringArgumentLength((ConstantExpression)args[1]) <= 100)
-                        )
-                    );
-
-                }
-
-                if (method.DeclaringType == typeof(DateTime))
-                {
-                    return
-                    (methodName.Equals("Add", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
-                    (methodName.Equals("AddDays", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddHours", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddMilliseconds", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddMinutes", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddMonths", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("AddSeconds", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddTicks", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("AddYears", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(DateTime), typeof(DateTime) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("DaysInMonth", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(DateTime), typeof(DateTime) })) ||
-                    (methodName.Equals("FromBinary", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("FromFileTime", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("FromFileTimeUtc", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("FromOADate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("IsDaylightSavingTime", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("SpecifyKind", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(DateTime), typeof(DateTimeKind) })) ||
-                    (methodName.Equals("ToBinary", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("IsLeapYear", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Subtract", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("Subtract", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
-                    (methodName.Equals("ToOADate", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToFileTime", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToFileTimeUtc", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToLocalTime", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToLongDateString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToLongTimeString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToShortDateString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToShortTimeString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToUniversalTime", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0);
-                }
-
-                if (method.DeclaringType == typeof(DateTimeOffset))
-                {
-                    return
-                    (methodName.Equals("ToOffset", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
-                    (methodName.Equals("Add", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
-                    (methodName.Equals("AddDays", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddHours", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddMilliseconds", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddMinutes", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddMonths", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("AddSeconds", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("AddTicks", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("AddYears", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(DateTimeOffset), typeof(DateTimeOffset) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTimeOffset) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTimeOffset) })) ||
-                    (methodName.Equals("EqualsExact", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTimeOffset) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(DateTimeOffset), typeof(DateTimeOffset) })) ||
-                    (methodName.Equals("FromFileTime", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Subtract", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTimeOffset) })) ||
-                    (methodName.Equals("Subtract", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
-                    (methodName.Equals("ToFileTime", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToLocalTime", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToUniversalTime", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0);
-                }
-
-                if (method.DeclaringType == typeof(TimeSpan))
-                {
-                    return
-                    (methodName.Equals("Add", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan), typeof(TimeSpan) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
-                    (methodName.Equals("FromDays", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Duration", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan), typeof(TimeSpan) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("FromHours", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("FromMilliseconds", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("FromMinutes", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Negate", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("FromSeconds", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Subtract", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(TimeSpan) })) ||
-                    (methodName.Equals("FromTicks", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) }));
-                }
-
-                if (method.DeclaringType == typeof(Guid))
-                {
-                    return
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ParseExact", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(String) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Guid) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Guid) })) ||
-                    (methodName.Equals("NewGuid", StringComparison.OrdinalIgnoreCase) && method.IsStatic && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) }));
-                }
-
-                if (method.DeclaringType == typeof(Uri))
-                {
-                    return
-                    (methodName.Equals("CheckSchemeName", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("FromHex", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("GetLeftPart", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UriPartial) })) ||
-                    (methodName.Equals("HexEscape", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsHexDigit", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("IsHexEncoding", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("MakeRelative", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Uri) })) ||
-                    (methodName.Equals("MakeRelativeUri", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Uri) })) ||
-                    (methodName.Equals("IsBaseOf", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Uri) })) ||
-                    (methodName.Equals("GetComponents", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UriComponents), typeof(UriFormat) })) ||
-                    (methodName.Equals("IsWellFormedOriginalString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("IsWellFormedUriString", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(UriKind) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Uri), typeof(Uri), typeof(UriComponents), typeof(UriFormat), typeof(StringComparison) })) ||
-                    (methodName.Equals("UnescapeDataString", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("EscapeUriString", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("EscapeDataString", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) }));
-                }
-
-                if (method.DeclaringType == typeof(SByte))
-                {
-                    return
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) }));
-                }
-
-                if (method.DeclaringType == typeof(Byte))
-                {
-                    return
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) }));
-                }
-
-                if (method.DeclaringType == typeof(Int16))
-                {
-                    return
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) }));
-                }
-
-                if (method.DeclaringType == typeof(UInt16))
-                {
-                    return
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) }));
-                }
-
-                if (method.DeclaringType == typeof(Int32))
-                {
-                    return
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) }));
-                }
-
-                if (method.DeclaringType == typeof(UInt32))
-                {
-                    return
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) }));
-                }
-
-                if (method.DeclaringType == typeof(Int64))
-                {
-                    return
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) }));
-                }
-
-                if (method.DeclaringType == typeof(Boolean))
-                {
-                    return
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) }));
-                }
-
-                if (method.DeclaringType == typeof(UInt64))
-                {
-                    return
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) }));
-                }
-
-                if (method.DeclaringType == typeof(Single))
-                {
-                    return
-                    (methodName.Equals("IsInfinity", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("IsNaN", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("IsPositiveInfinity", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("IsNegativeInfinity", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) }));
-                }
-
-                if (method.DeclaringType == typeof(Double))
-                {
-                    return
-                    (methodName.Equals("IsInfinity", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("IsPositiveInfinity", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("IsNegativeInfinity", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("IsNaN", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) }));
-                }
-
-                if (method.DeclaringType == typeof(Decimal))
-                {
-                    return
-                    (methodName.Equals("ToOACurrency", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("FromOACurrency", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("Add", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Decimal) })) ||
-                    (methodName.Equals("Ceiling", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Compare", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Decimal) })) ||
-                    (methodName.Equals("CompareTo", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Divide", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Decimal) })) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("Equals", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Decimal) })) ||
-                    (methodName.Equals("Floor", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("Parse", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(NumberStyles) })) ||
-                    (methodName.Equals("Remainder", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Decimal) })) ||
-                    (methodName.Equals("Multiply", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Decimal) })) ||
-                    (methodName.Equals("Negate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Int32) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(MidpointRounding) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Int32), typeof(MidpointRounding) })) ||
-                    (methodName.Equals("Subtract", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Decimal) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Truncate", StringComparison.OrdinalIgnoreCase) && method.IsStatic && ArrayEqual(parameterTypes, new[] { typeof(Decimal) }));
-                }
-
-                if (OpenRiaServices.TypeUtility.IsNullableType(method.DeclaringType))
-                {
-                    return
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0);
-                }
-
-                if (method.DeclaringType == typeof(Math))
-                {
-                    return
-                    (methodName.Equals("Acos", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Asin", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Atan", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Atan2", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Double) })) ||
-                    (methodName.Equals("Ceiling", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Ceiling", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Cos", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Cosh", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Floor", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Floor", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Sin", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Tan", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Sinh", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Tanh", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Int32) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(MidpointRounding) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Int32), typeof(MidpointRounding) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Int32) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(MidpointRounding) })) ||
-                    (methodName.Equals("Round", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Int32), typeof(MidpointRounding) })) ||
-                    (methodName.Equals("Truncate", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Truncate", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Sqrt", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Log", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Log10", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Exp", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Pow", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Double) })) ||
-                    (methodName.Equals("IEEERemainder", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Double) })) ||
-                    (methodName.Equals("Abs", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("Abs", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("Abs", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("Abs", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("Abs", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("Abs", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Abs", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte), typeof(SByte) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte), typeof(Byte) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16), typeof(Int16) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16), typeof(UInt16) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32), typeof(UInt32) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64), typeof(Int64) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64), typeof(UInt64) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single), typeof(Single) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Double) })) ||
-                    (methodName.Equals("Max", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Decimal) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte), typeof(SByte) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte), typeof(Byte) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16), typeof(Int16) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16), typeof(UInt16) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32), typeof(UInt32) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64), typeof(Int64) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64), typeof(UInt64) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single), typeof(Single) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Double) })) ||
-                    (methodName.Equals("Min", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal), typeof(Decimal) })) ||
-                    (methodName.Equals("Log", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double), typeof(Double) })) ||
-                    (methodName.Equals("Sign", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("Sign", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("Sign", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("Sign", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("Sign", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("Sign", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("Sign", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("BigMul", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0);
-                }
-
-                if (method.DeclaringType == typeof(Convert))
-                {
-                    return
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToBoolean", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToChar", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToSingle", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToDouble", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToDecimal", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToDateTime", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Boolean) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Char) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(SByte) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt16) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt32) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(UInt64) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Single) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Double) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Decimal) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(DateTime) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String) })) ||
-                    (methodName.Equals("ToByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("ToSByte", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("ToInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("ToUInt16", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("ToInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("ToUInt32", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("ToInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("ToUInt64", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(String), typeof(Int32) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Byte), typeof(Int32) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int16), typeof(Int32) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int32), typeof(Int32) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && ArrayEqual(parameterTypes, new[] { typeof(Int64), typeof(Int32) })) ||
-                    (methodName.Equals("ToString", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0) ||
-                    (methodName.Equals("GetHashCode", StringComparison.OrdinalIgnoreCase) && parameterTypes.Length == 0);
-                }
-
-#if NET
-                if (method.DeclaringType == typeof(DateOnly))
-                {
-                    return IsMemberAccessAllowedDateOnly(method, parameterTypes);
-                }
-
-                if (method.DeclaringType == typeof(TimeOnly))
-                {
-                    return IsMemberAccessAllowedTimeOnly(method, parameterTypes);
-                }
-#endif
-            }
-
-            return false;
+            return ApplyMemberRule(rule, args, limits);
         }
 
+        private static MemberRule ResolveByType(MethodBase method)
+        {
+            return method.DeclaringType != null && s_memberPolicies.TryGetValue(method.DeclaringType, out var resolver)
+                ? resolver(method) : NullableMemberRule(method);
+        }
+
+        private static MemberRule NullableMemberRule(MethodBase method)
+        {
+            return !method.IsConstructor && method.DeclaringType != null
+                && OpenRiaServices.TypeUtility.IsNullableType(method.DeclaringType)
+                && method.Name == "ToString" && method.GetParameters().Length == 0
+                ? MemberRule.Allowed : MemberRule.Denied;
+        }
+
+        private static MemberRule ResolveRule(MethodBase method, MemberPolicy policy, bool numericFormat)
+        {
+            ParameterInfo[] parameters = method.GetParameters();
+            if (!policy(method, parameters))
+                return MemberRule.Denied;
+            if (numericFormat && !method.IsStatic && method.Name == "ToString" && ParametersMatch(parameters, typeof(string)))
+                return MemberRule.NumericFormat;
+            if (method.DeclaringType == typeof(string) && method.Name == "Replace")
+                return parameters[1].ParameterType == typeof(char) ? MemberRule.ReplaceCharacter : MemberRule.ReplaceString;
+            return MemberRule.Allowed;
+        }
+
+        private static bool ApplyMemberRule(MemberRule rule, Expression[] args, QueryLimits limits)
+        {
+            return rule switch
+            {
+                MemberRule.Allowed => true,
+                MemberRule.NumericFormat => IsNumericFormatAllowed(args[0], limits),
+                MemberRule.ReplaceCharacter => args.Length == 2 && args[1].NodeType == ExpressionType.Constant,
+                MemberRule.ReplaceString => args.Length == 2 && args[1].NodeType == ExpressionType.Constant
+                    && GetStringArgumentLength((ConstantExpression)args[1]) <= 100,
+                _ => false
+            };
+        }
+
+        private static bool ParametersMatch(ParameterInfo[] actual, params ReadOnlySpan<Type> expected)
+        {
+            if (actual.Length != expected.Length)
+                return false;
+            for (int i = 0; i < actual.Length; i++)
+            {
+                if (actual[i].ParameterType != expected[i])
+                    return false;
+            }
+            return true;
+        }
+
+        private static bool NumericMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return false;
+            Type type = method.DeclaringType;
+            return method.Name switch
+            {
+                "ToString" => parameters.Length == 0 || ParametersMatch(parameters, typeof(string)),
+                "GetHashCode" => parameters.Length == 0,
+                "CompareTo" or "Equals" => ParametersMatch(parameters, type),
+                "Parse" => method.IsStatic && (ParametersMatch(parameters, typeof(string))
+                    || ParametersMatch(parameters, typeof(string), typeof(NumberStyles))),
+                "IsInfinity" or "IsNaN" or "IsPositiveInfinity" or "IsNegativeInfinity" =>
+                    (type == typeof(float) || type == typeof(double)) && method.IsStatic && ParametersMatch(parameters, type),
+                _ => false
+            };
+        }
+
+        private static bool CharMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return false;
+            return method.Name switch
+            {
+                "GetHashCode" => parameters.Length == 0,
+                "Equals" => ParametersMatch(parameters, typeof(Char)),
+                "CompareTo" => ParametersMatch(parameters, typeof(Char)),
+                "ToString" => parameters.Length == 0
+                    || method.IsStatic && ParametersMatch(parameters, typeof(Char)),
+                "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "IsDigit" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsLetter" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsWhiteSpace" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsUpper" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsLower" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsPunctuation" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsLetterOrDigit" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "ToUpper" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
+                "ToUpperInvariant" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
+                "ToLower" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
+                "ToLowerInvariant" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
+                "IsControl" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsNumber" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsSeparator" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsSurrogate" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsSymbol" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "GetNumericValue" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsHighSurrogate" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsLowSurrogate" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsSurrogatePair" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(Char), typeof(Char)),
+                "ConvertFromUtf32" => method.IsStatic && ParametersMatch(parameters, typeof(Int32)),
+                "ConvertToUtf32" => method.IsStatic && ParametersMatch(parameters, typeof(Char), typeof(Char))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                _ => false
+            };
+        }
+
+        private static bool StringMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return ParametersMatch(parameters, typeof(Char[]), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Char[]));
+            return method.Name switch
+            {
+                "Equals" => ParametersMatch(parameters, typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(StringComparison))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(StringComparison)),
+                "IsNullOrEmpty" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "IsNullOrWhiteSpace" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "GetHashCode" => parameters.Length == 0,
+                "Substring" => ParametersMatch(parameters, typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32)),
+                "Compare" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(Boolean))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(StringComparison))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32), typeof(Boolean))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32), typeof(StringComparison)),
+                "CompareTo" => ParametersMatch(parameters, typeof(String)),
+                "CompareOrdinal" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32)),
+                "Contains" => ParametersMatch(parameters, typeof(String)),
+                "EndsWith" => ParametersMatch(parameters, typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(StringComparison)),
+                "IndexOf" => ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(Char), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Char), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(String), typeof(StringComparison))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(StringComparison))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(Int32), typeof(StringComparison)),
+                "LastIndexOf" => ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(Char), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Char), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(String), typeof(StringComparison))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(StringComparison))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(Int32), typeof(StringComparison)),
+                "StartsWith" => ParametersMatch(parameters, typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(StringComparison)),
+                "ToLower" => parameters.Length == 0,
+                "ToLowerInvariant" => parameters.Length == 0,
+                "ToUpper" => parameters.Length == 0,
+                "ToUpperInvariant" => parameters.Length == 0,
+                "ToString" => parameters.Length == 0,
+                "Trim" => parameters.Length == 0
+                    || ParametersMatch(parameters, typeof(Char[])),
+                "TrimStart" => ParametersMatch(parameters, typeof(Char[])),
+                "TrimEnd" => ParametersMatch(parameters, typeof(Char[])),
+                "Insert" => ParametersMatch(parameters, typeof(Int32), typeof(String)),
+                "Remove" => ParametersMatch(parameters, typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32)),
+                "IndexOfAny" => ParametersMatch(parameters, typeof(Char[]))
+                    || ParametersMatch(parameters, typeof(Char[]), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Char[]), typeof(Int32), typeof(Int32)),
+                "LastIndexOfAny" => ParametersMatch(parameters, typeof(Char[]))
+                    || ParametersMatch(parameters, typeof(Char[]), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Char[]), typeof(Int32), typeof(Int32)),
+                "get_Chars" => ParametersMatch(parameters, typeof(Int32)),
+                "Concat" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(String))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(String), typeof(String)),
+                "Replace" => ((ParametersMatch(parameters, typeof(Char), typeof(Char)) || ParametersMatch(parameters, typeof(String), typeof(String)))),
+                _ => false
+            };
+        }
+
+        private static bool DateTimeMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return ParametersMatch(parameters, typeof(Int64))
+                    || ParametersMatch(parameters, typeof(Int64), typeof(DateTimeKind))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(DateTimeKind))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(DateTimeKind));
+            return method.Name switch
+            {
+                "Add" => ParametersMatch(parameters, typeof(TimeSpan)),
+                "AddDays" => ParametersMatch(parameters, typeof(Double)),
+                "AddHours" => ParametersMatch(parameters, typeof(Double)),
+                "AddMilliseconds" => ParametersMatch(parameters, typeof(Double)),
+                "AddMinutes" => ParametersMatch(parameters, typeof(Double)),
+                "AddMonths" => ParametersMatch(parameters, typeof(Int32)),
+                "AddSeconds" => ParametersMatch(parameters, typeof(Double)),
+                "AddTicks" => ParametersMatch(parameters, typeof(Int64)),
+                "AddYears" => ParametersMatch(parameters, typeof(Int32)),
+                "Compare" => method.IsStatic && ParametersMatch(parameters, typeof(DateTime), typeof(DateTime)),
+                "CompareTo" => ParametersMatch(parameters, typeof(DateTime)),
+                "DaysInMonth" => method.IsStatic && ParametersMatch(parameters, typeof(Int32), typeof(Int32)),
+                "Equals" => ParametersMatch(parameters, typeof(DateTime))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(DateTime), typeof(DateTime)),
+                "FromBinary" => method.IsStatic && ParametersMatch(parameters, typeof(Int64)),
+                "FromFileTime" => method.IsStatic && ParametersMatch(parameters, typeof(Int64)),
+                "FromFileTimeUtc" => method.IsStatic && ParametersMatch(parameters, typeof(Int64)),
+                "FromOADate" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "IsDaylightSavingTime" => parameters.Length == 0,
+                "SpecifyKind" => method.IsStatic && ParametersMatch(parameters, typeof(DateTime), typeof(DateTimeKind)),
+                "ToBinary" => parameters.Length == 0,
+                "GetHashCode" => parameters.Length == 0,
+                "IsLeapYear" => method.IsStatic && ParametersMatch(parameters, typeof(Int32)),
+                "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "Subtract" => ParametersMatch(parameters, typeof(DateTime))
+                    || ParametersMatch(parameters, typeof(TimeSpan)),
+                "ToOADate" => parameters.Length == 0,
+                "ToFileTime" => parameters.Length == 0,
+                "ToFileTimeUtc" => parameters.Length == 0,
+                "ToLocalTime" => parameters.Length == 0,
+                "ToLongDateString" => parameters.Length == 0,
+                "ToLongTimeString" => parameters.Length == 0,
+                "ToShortDateString" => parameters.Length == 0,
+                "ToShortTimeString" => parameters.Length == 0,
+                "ToString" => parameters.Length == 0
+                    || ParametersMatch(parameters, typeof(String)),
+                "ToUniversalTime" => parameters.Length == 0,
+                _ => false
+            };
+        }
+
+        private static bool DateTimeOffsetMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return ParametersMatch(parameters, typeof(Int64), typeof(TimeSpan))
+                    || ParametersMatch(parameters, typeof(DateTime))
+                    || ParametersMatch(parameters, typeof(DateTime), typeof(TimeSpan))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(TimeSpan))
+                    || ParametersMatch(parameters,
+                        typeof(int), typeof(int), typeof(int), typeof(int),
+                        typeof(int), typeof(int), typeof(int), typeof(TimeSpan));
+            return method.Name switch
+            {
+                "ToOffset" => ParametersMatch(parameters, typeof(TimeSpan)),
+                "Add" => ParametersMatch(parameters, typeof(TimeSpan)),
+                "AddDays" => ParametersMatch(parameters, typeof(Double)),
+                "AddHours" => ParametersMatch(parameters, typeof(Double)),
+                "AddMilliseconds" => ParametersMatch(parameters, typeof(Double)),
+                "AddMinutes" => ParametersMatch(parameters, typeof(Double)),
+                "AddMonths" => ParametersMatch(parameters, typeof(Int32)),
+                "AddSeconds" => ParametersMatch(parameters, typeof(Double)),
+                "AddTicks" => ParametersMatch(parameters, typeof(Int64)),
+                "AddYears" => ParametersMatch(parameters, typeof(Int32)),
+                "Compare" => method.IsStatic && ParametersMatch(parameters, typeof(DateTimeOffset), typeof(DateTimeOffset)),
+                "CompareTo" => ParametersMatch(parameters, typeof(DateTimeOffset)),
+                "Equals" => ParametersMatch(parameters, typeof(DateTimeOffset))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(DateTimeOffset), typeof(DateTimeOffset)),
+                "EqualsExact" => ParametersMatch(parameters, typeof(DateTimeOffset)),
+                "FromFileTime" => method.IsStatic && ParametersMatch(parameters, typeof(Int64)),
+                "GetHashCode" => parameters.Length == 0,
+                "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "Subtract" => ParametersMatch(parameters, typeof(DateTimeOffset))
+                    || ParametersMatch(parameters, typeof(TimeSpan)),
+                "ToFileTime" => parameters.Length == 0,
+                "ToLocalTime" => parameters.Length == 0,
+                "ToString" => parameters.Length == 0
+                    || ParametersMatch(parameters, typeof(String)),
+                "ToUniversalTime" => parameters.Length == 0,
+                _ => false
+            };
+        }
+
+        private static bool TimeSpanMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return ParametersMatch(parameters, typeof(Int64))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32));
+            return method.Name switch
+            {
+                "Add" => ParametersMatch(parameters, typeof(TimeSpan)),
+                "Compare" => method.IsStatic && ParametersMatch(parameters, typeof(TimeSpan), typeof(TimeSpan)),
+                "CompareTo" => ParametersMatch(parameters, typeof(TimeSpan)),
+                "FromDays" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "Duration" => parameters.Length == 0,
+                "Equals" => ParametersMatch(parameters, typeof(TimeSpan))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(TimeSpan), typeof(TimeSpan)),
+                "GetHashCode" => parameters.Length == 0,
+                "FromHours" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "FromMilliseconds" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "FromMinutes" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "Negate" => parameters.Length == 0,
+                "FromSeconds" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "Subtract" => ParametersMatch(parameters, typeof(TimeSpan)),
+                "FromTicks" => method.IsStatic && ParametersMatch(parameters, typeof(Int64)),
+                "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "ToString" => parameters.Length == 0
+                    || ParametersMatch(parameters, typeof(String)),
+                _ => false
+            };
+        }
+
+        private static bool GuidMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return ParametersMatch(parameters, typeof(Byte[]))
+                    || ParametersMatch(parameters, typeof(UInt32), typeof(UInt16), typeof(UInt16), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int16), typeof(Int16), typeof(Byte[]))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int16), typeof(Int16), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte), typeof(Byte))
+                    || ParametersMatch(parameters, typeof(String));
+            return method.Name switch
+            {
+                "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "ParseExact" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String)),
+                "ToString" => parameters.Length == 0
+                    || ParametersMatch(parameters, typeof(String)),
+                "GetHashCode" => parameters.Length == 0,
+                "Equals" => ParametersMatch(parameters, typeof(Guid)),
+                "CompareTo" => ParametersMatch(parameters, typeof(Guid)),
+                "NewGuid" => method.IsStatic && parameters.Length == 0,
+                _ => false
+            };
+        }
+
+        private static bool UriMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return ParametersMatch(parameters, typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(Boolean))
+                    || ParametersMatch(parameters, typeof(String), typeof(UriKind))
+                    || ParametersMatch(parameters, typeof(Uri), typeof(String))
+                    || ParametersMatch(parameters, typeof(Uri), typeof(String), typeof(Boolean))
+                    || ParametersMatch(parameters, typeof(Uri), typeof(Uri));
+            return method.Name switch
+            {
+                "CheckSchemeName" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "FromHex" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
+                "GetHashCode" => parameters.Length == 0,
+                "ToString" => parameters.Length == 0,
+                "GetLeftPart" => ParametersMatch(parameters, typeof(UriPartial)),
+                "HexEscape" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
+                "IsHexDigit" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
+                "IsHexEncoding" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "MakeRelative" => ParametersMatch(parameters, typeof(Uri)),
+                "MakeRelativeUri" => ParametersMatch(parameters, typeof(Uri)),
+                "IsBaseOf" => ParametersMatch(parameters, typeof(Uri)),
+                "GetComponents" => ParametersMatch(parameters, typeof(UriComponents), typeof(UriFormat)),
+                "IsWellFormedOriginalString" => parameters.Length == 0,
+                "IsWellFormedUriString" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(UriKind)),
+                "Compare" => method.IsStatic && ParametersMatch(parameters, typeof(Uri), typeof(Uri), typeof(UriComponents), typeof(UriFormat), typeof(StringComparison)),
+                "UnescapeDataString" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "EscapeUriString" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "EscapeDataString" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                _ => false
+            };
+        }
+
+        private static bool BooleanMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return false;
+            return method.Name switch
+            {
+                "CompareTo" => ParametersMatch(parameters, typeof(Boolean)),
+                "Equals" => ParametersMatch(parameters, typeof(Boolean)),
+                "GetHashCode" => parameters.Length == 0,
+                "ToString" => parameters.Length == 0,
+                "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                _ => false
+            };
+        }
+
+        private static bool DecimalMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return ParametersMatch(parameters, typeof(Int32))
+                    || ParametersMatch(parameters, typeof(UInt32))
+                    || ParametersMatch(parameters, typeof(Int64))
+                    || ParametersMatch(parameters, typeof(UInt64))
+                    || ParametersMatch(parameters, typeof(Single))
+                    || ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Int32[]))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Boolean), typeof(Byte));
+            if (NumericMemberPolicy(method, parameters))
+                return true;
+            return method.Name switch
+            {
+                "ToOACurrency" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "FromOACurrency" => method.IsStatic && ParametersMatch(parameters, typeof(Int64)),
+                "Add" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
+                "Ceiling" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "Compare" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
+                "Divide" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
+                "Equals" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
+                "Floor" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "Remainder" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
+                "Multiply" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
+                "Negate" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "Round" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Int32))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(MidpointRounding))
+                    || method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Int32), typeof(MidpointRounding)),
+                "Subtract" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
+                "ToByte" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "ToSByte" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "ToInt16" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "ToDouble" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "ToInt32" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "ToInt64" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "ToUInt16" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "ToUInt32" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "ToUInt64" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "ToSingle" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                "Truncate" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
+                _ => false
+            };
+        }
+
+        private static bool MathMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return false;
+            return method.Name switch
+            {
+                "Acos" => ParametersMatch(parameters, typeof(Double)),
+                "Asin" => ParametersMatch(parameters, typeof(Double)),
+                "Atan" => ParametersMatch(parameters, typeof(Double)),
+                "Atan2" => ParametersMatch(parameters, typeof(Double), typeof(Double)),
+                "Ceiling" => ParametersMatch(parameters, typeof(Decimal))
+                    || ParametersMatch(parameters, typeof(Double)),
+                "Cos" => ParametersMatch(parameters, typeof(Double)),
+                "Cosh" => ParametersMatch(parameters, typeof(Double)),
+                "Floor" => ParametersMatch(parameters, typeof(Decimal))
+                    || ParametersMatch(parameters, typeof(Double)),
+                "Sin" => ParametersMatch(parameters, typeof(Double)),
+                "Tan" => ParametersMatch(parameters, typeof(Double)),
+                "Sinh" => ParametersMatch(parameters, typeof(Double)),
+                "Tanh" => ParametersMatch(parameters, typeof(Double)),
+                "Round" => ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Double), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Double), typeof(MidpointRounding))
+                    || ParametersMatch(parameters, typeof(Double), typeof(Int32), typeof(MidpointRounding))
+                    || ParametersMatch(parameters, typeof(Decimal))
+                    || ParametersMatch(parameters, typeof(Decimal), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Decimal), typeof(MidpointRounding))
+                    || ParametersMatch(parameters, typeof(Decimal), typeof(Int32), typeof(MidpointRounding)),
+                "Truncate" => ParametersMatch(parameters, typeof(Decimal))
+                    || ParametersMatch(parameters, typeof(Double)),
+                "Sqrt" => ParametersMatch(parameters, typeof(Double)),
+                "Log" => ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Double), typeof(Double)),
+                "Log10" => ParametersMatch(parameters, typeof(Double)),
+                "Exp" => ParametersMatch(parameters, typeof(Double)),
+                "Pow" => ParametersMatch(parameters, typeof(Double), typeof(Double)),
+                "IEEERemainder" => ParametersMatch(parameters, typeof(Double), typeof(Double)),
+                "Abs" => ParametersMatch(parameters, typeof(SByte))
+                    || ParametersMatch(parameters, typeof(Int16))
+                    || ParametersMatch(parameters, typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int64))
+                    || ParametersMatch(parameters, typeof(Single))
+                    || ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Decimal)),
+                "Max" => ParametersMatch(parameters, typeof(SByte), typeof(SByte))
+                    || ParametersMatch(parameters, typeof(Byte), typeof(Byte))
+                    || ParametersMatch(parameters, typeof(Int16), typeof(Int16))
+                    || ParametersMatch(parameters, typeof(UInt16), typeof(UInt16))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(UInt32), typeof(UInt32))
+                    || ParametersMatch(parameters, typeof(Int64), typeof(Int64))
+                    || ParametersMatch(parameters, typeof(UInt64), typeof(UInt64))
+                    || ParametersMatch(parameters, typeof(Single), typeof(Single))
+                    || ParametersMatch(parameters, typeof(Double), typeof(Double))
+                    || ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
+                "Min" => ParametersMatch(parameters, typeof(SByte), typeof(SByte))
+                    || ParametersMatch(parameters, typeof(Byte), typeof(Byte))
+                    || ParametersMatch(parameters, typeof(Int16), typeof(Int16))
+                    || ParametersMatch(parameters, typeof(UInt16), typeof(UInt16))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(UInt32), typeof(UInt32))
+                    || ParametersMatch(parameters, typeof(Int64), typeof(Int64))
+                    || ParametersMatch(parameters, typeof(UInt64), typeof(UInt64))
+                    || ParametersMatch(parameters, typeof(Single), typeof(Single))
+                    || ParametersMatch(parameters, typeof(Double), typeof(Double))
+                    || ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
+                "Sign" => ParametersMatch(parameters, typeof(SByte))
+                    || ParametersMatch(parameters, typeof(Int16))
+                    || ParametersMatch(parameters, typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int64))
+                    || ParametersMatch(parameters, typeof(Single))
+                    || ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Decimal)),
+                "BigMul" => ParametersMatch(parameters, typeof(Int32), typeof(Int32)),
+                "ToString" => parameters.Length == 0,
+                "GetHashCode" => parameters.Length == 0,
+                _ => false
+            };
+        }
+
+        private static bool ConvertMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return false;
+            bool singleArgument = parameters.Length == 1 && IsConversionInput(parameters[0].ParameterType);
+            return method.Name switch
+            {
+                "ToBoolean" or "ToChar" or "ToSingle" or "ToDouble" or "ToDecimal" or "ToDateTime" => singleArgument,
+                "ToSByte" or "ToByte" or "ToInt16" or "ToUInt16" or "ToInt32" or "ToUInt32" or "ToInt64" or "ToUInt64" =>
+                    singleArgument || ParametersMatch(parameters, typeof(string), typeof(int)),
+                "ToString" => singleArgument || parameters.Length == 0
+                    || ParametersMatch(parameters, typeof(byte), typeof(int))
+                    || ParametersMatch(parameters, typeof(short), typeof(int))
+                    || ParametersMatch(parameters, typeof(int), typeof(int))
+                    || ParametersMatch(parameters, typeof(long), typeof(int)),
+                "GetHashCode" => parameters.Length == 0,
+                _ => false
+            };
+        }
+
+        private static bool IsConversionInput(Type type)
+        {
+            return type == typeof(bool) || type == typeof(char) || type == typeof(sbyte) || type == typeof(byte)
+                || type == typeof(short) || type == typeof(ushort) || type == typeof(int) || type == typeof(uint)
+                || type == typeof(long) || type == typeof(ulong) || type == typeof(float) || type == typeof(double)
+                || type == typeof(decimal) || type == typeof(string) || type == typeof(DateTime);
+        }
+
+#if NET
+        private static bool DateOnlyMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Calendar));
+            return method.Name switch
+            {
+                "AddDays" => true,
+                "AddMonths" => true,
+                "AddYears" => true,
+                "CompareTo" => ParametersMatch(parameters, typeof(DateOnly))
+                    || ParametersMatch(parameters, typeof(object)),
+                "Equals" => ParametersMatch(parameters, typeof(DateOnly))
+                    || ParametersMatch(parameters, typeof(object)),
+                "FromDateTime" => method.IsStatic && ParametersMatch(parameters, typeof(DateTime)),
+                "FromDayNumber" => method.IsStatic && ParametersMatch(parameters, typeof(int)),
+                "GetHashCode" => parameters.Length == 0,
+                "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(string)),
+                "ParseExact" => method.IsStatic && (ParametersMatch(parameters, typeof(string), typeof(string[]))
+                    || ParametersMatch(parameters, typeof(string), typeof(string))),
+                "ToDateTime" => ParametersMatch(parameters, typeof(TimeOnly))
+                    || ParametersMatch(parameters, typeof(TimeOnly), typeof(DateTimeKind)),
+                "ToLongDateString" => parameters.Length == 0,
+                "ToShortDateString" => parameters.Length == 0,
+                "ToString" => parameters.Length == 0 || ParametersMatch(parameters, typeof(string)),
+                _ => false
+            };
+        }
+
+        private static bool TimeOnlyMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        {
+            if (method.IsConstructor)
+                return ParametersMatch(parameters, typeof(Int64))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32));
+            return method.Name switch
+            {
+                "Add" => true,
+                "AddHours" => true,
+                "AddMinutes" => true,
+                "CompareTo" => ParametersMatch(parameters, typeof(object))
+                    || ParametersMatch(parameters, typeof(TimeOnly)),
+                "Equals" => ParametersMatch(parameters, typeof(object))
+                    || ParametersMatch(parameters, typeof(TimeOnly)),
+                "FromDateTime" => method.IsStatic && ParametersMatch(parameters, typeof(DateTime)),
+                "FromTimeSpan" => method.IsStatic && ParametersMatch(parameters, typeof(TimeSpan)),
+                "GetHashCode" => parameters.Length == 0,
+                "IsBetween" => ParametersMatch(parameters, typeof(TimeOnly), typeof(TimeOnly)),
+                "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(string)),
+                "ParseExact" => method.IsStatic && (ParametersMatch(parameters, typeof(string), typeof(string))
+                    || ParametersMatch(parameters, typeof(string), typeof(string[]))),
+                "ToLongTimeString" => parameters.Length == 0,
+                "ToShortTimeString" => parameters.Length == 0,
+                "ToString" => parameters.Length == 0 || ParametersMatch(parameters, typeof(string)),
+                "ToTimeSpan" => parameters.Length == 0,
+                _ => false
+            };
+        }
+
+#endif
         private static bool IsNumericFormatAllowed(Expression argument, QueryLimits limits)
         {
             if (argument is not ConstantExpression constant)
@@ -940,76 +743,5 @@ namespace System.Linq.Dynamic
             string stringArgument = argument.Value as string;
             return stringArgument != null ? stringArgument.Length : 0;
         }
-
-        private static bool ArrayEqual(Type[] a, Type[] b)
-        {
-            if (a.Length != b.Length)
-            {
-                return false;
-            }
-
-            for (int i = 0; i < a.Length; i++)
-            {
-                if (a[i] != b[i])
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-#if NET
-        private static bool IsMemberAccessAllowedDateOnly(MethodBase method, Type[] parameterTypes)
-        {
-            return method.Name switch
-            {
-                "AddDays" => true,
-                "AddMonths" => true,
-                "AddYears" => true,
-                "CompareTo" => ArrayEqual(parameterTypes, [typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(object)]),
-                "Equals" => ArrayEqual(parameterTypes, [typeof(DateOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(object)]),
-                "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(DateTime)]),
-                "FromDayNumber" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(int)]),
-                "GetHashCode" => parameterTypes.Length == 0,
-                "Parse" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(string)]),
-                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string), typeof(string[])])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string)])),
-                "ToDateTime" => ArrayEqual(parameterTypes, [typeof(TimeOnly)])
-                    || ArrayEqual(parameterTypes, [typeof(TimeOnly), typeof(DateTimeKind)]),
-                "ToLongDateString" => parameterTypes.Length == 0,
-                "ToShortDateString" => parameterTypes.Length == 0,
-                "ToString" => parameterTypes.Length == 0 || ArrayEqual(parameterTypes, [typeof(string)]),
-                _ => false
-            };
-        }
-
-        private static bool IsMemberAccessAllowedTimeOnly(MethodBase method, Type[] parameterTypes)
-        {
-            return method.Name switch
-            {
-                "Add" => true,
-                "AddHours" => true,
-                "AddMinutes" => true,
-                "CompareTo" => ArrayEqual(parameterTypes, [typeof(object)])
-                    || ArrayEqual(parameterTypes, [typeof(TimeOnly)]),
-                "Equals" => ArrayEqual(parameterTypes, [typeof(object)])
-                    || ArrayEqual(parameterTypes, [typeof(TimeOnly)]),
-                "FromDateTime" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(DateTime)]),
-                "FromTimeSpan" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(TimeSpan)]),
-                "GetHashCode" => parameterTypes.Length == 0,
-                "IsBetween" => ArrayEqual(parameterTypes, [typeof(TimeOnly), typeof(TimeOnly)]),
-                "Parse" => method.IsStatic && ArrayEqual(parameterTypes, [typeof(string)]),
-                "ParseExact" => method.IsStatic && (ArrayEqual(parameterTypes, [typeof(string), typeof(string)])
-                    || ArrayEqual(parameterTypes, [typeof(string), typeof(string[])])),
-                "ToLongTimeString" => parameterTypes.Length == 0,
-                "ToShortTimeString" => parameterTypes.Length == 0,
-                "ToString" => parameterTypes.Length == 0 || ArrayEqual(parameterTypes, [typeof(string)]),
-                "ToTimeSpan" => parameterTypes.Length == 0,
-                _ => false
-            };
-        }
-#endif
     }
 }

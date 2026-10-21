@@ -1,5 +1,10 @@
 # Unreleased
 
+## Changed
+
+* WCF and ASP.NET Core dynamic queries now use a fixed member-rule lookup with smaller per-type policies.
+  This reduces validation time and allocations while preserving existing permissions and argument limits.
+
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
 Major new features in this release are:
