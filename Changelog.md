@@ -2,8 +2,8 @@
 
 ## Changed
 
-* Refactor client query parser code responsible to improve performance when determining what method calls are allowed and what overloads are available. (#625)
-* Faster dynamic query parsing in WCF and ASP.NET Core. Operator signatures are now static tables,
+* Refactor the client query parser to improve performance when determining which method calls are allowed and which overloads are available. (#625)
+
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
