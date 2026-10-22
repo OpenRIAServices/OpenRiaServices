@@ -1,5 +1,10 @@
 # Unreleased
 
+## Changed
+
+* Refactor the client query parser to improve performance when determining which method calls are allowed and which overloads are available. (#625)
+
+
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
 Major new features in this release are:
