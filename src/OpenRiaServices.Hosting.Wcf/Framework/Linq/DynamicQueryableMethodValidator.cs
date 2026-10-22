@@ -174,45 +174,45 @@ namespace System.Linq.Dynamic
                 "ToString" => parameters.Length == 0
                     || method.IsStatic && ParametersMatch(parameters, typeof(Char)),
                 "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
-                "IsDigit" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsLetter" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsWhiteSpace" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsUpper" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsLower" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsPunctuation" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsLetterOrDigit" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "IsDigit" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsLetter" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsWhiteSpace" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsUpper" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsLower" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsPunctuation" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsLetterOrDigit" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
                 "ToUpper" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
                 "ToUpperInvariant" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
                 "ToLower" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
                 "ToLowerInvariant" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
-                "IsControl" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsNumber" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsSeparator" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsSurrogate" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsSymbol" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "GetNumericValue" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsHighSurrogate" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsLowSurrogate" => method.IsStatic && ParametersMatch(parameters, typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
-                "IsSurrogatePair" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(Char), typeof(Char)),
+                "IsControl" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsNumber" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsSeparator" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsSurrogate" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsSymbol" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "GetNumericValue" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsHighSurrogate" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsLowSurrogate" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsSurrogatePair" => method.IsStatic && (ParametersMatch(parameters, typeof(String), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Char), typeof(Char))),
                 "ConvertFromUtf32" => method.IsStatic && ParametersMatch(parameters, typeof(Int32)),
-                "ConvertToUtf32" => method.IsStatic && ParametersMatch(parameters, typeof(Char), typeof(Char))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32)),
+                "ConvertToUtf32" => method.IsStatic && (ParametersMatch(parameters, typeof(Char), typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
                 _ => false
             };
         }
@@ -226,22 +226,22 @@ namespace System.Linq.Dynamic
             {
                 "Equals" => ParametersMatch(parameters, typeof(String))
                     || ParametersMatch(parameters, typeof(String), typeof(StringComparison))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(StringComparison)),
+                    || method.IsStatic && (ParametersMatch(parameters, typeof(String), typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(String), typeof(StringComparison))),
                 "IsNullOrEmpty" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
                 "IsNullOrWhiteSpace" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
                 "GetHashCode" => parameters.Length == 0,
                 "Substring" => ParametersMatch(parameters, typeof(Int32))
                     || ParametersMatch(parameters, typeof(Int32), typeof(Int32)),
-                "Compare" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(Boolean))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(StringComparison))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32), typeof(Boolean))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32), typeof(StringComparison)),
+                "Compare" => method.IsStatic && (ParametersMatch(parameters, typeof(String), typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(String), typeof(Boolean))
+                    || ParametersMatch(parameters, typeof(String), typeof(String), typeof(StringComparison))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32), typeof(Boolean))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32), typeof(StringComparison))),
                 "CompareTo" => ParametersMatch(parameters, typeof(String)),
-                "CompareOrdinal" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32)),
+                "CompareOrdinal" => method.IsStatic && (ParametersMatch(parameters, typeof(String), typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32))),
                 "Contains" => ParametersMatch(parameters, typeof(String)),
                 "EndsWith" => ParametersMatch(parameters, typeof(String))
                     || ParametersMatch(parameters, typeof(String), typeof(StringComparison)),
@@ -284,9 +284,9 @@ namespace System.Linq.Dynamic
                     || ParametersMatch(parameters, typeof(Char[]), typeof(Int32))
                     || ParametersMatch(parameters, typeof(Char[]), typeof(Int32), typeof(Int32)),
                 "get_Chars" => ParametersMatch(parameters, typeof(Int32)),
-                "Concat" => method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(String))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(String), typeof(String), typeof(String), typeof(String)),
+                "Concat" => method.IsStatic && (ParametersMatch(parameters, typeof(String), typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(String), typeof(String))
+                    || ParametersMatch(parameters, typeof(String), typeof(String), typeof(String), typeof(String))),
                 "Replace" => ((ParametersMatch(parameters, typeof(Char), typeof(Char)) || ParametersMatch(parameters, typeof(String), typeof(String)))),
                 _ => false
             };
@@ -349,6 +349,7 @@ namespace System.Linq.Dynamic
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(Int64), typeof(TimeSpan))
+
                     || ParametersMatch(parameters, typeof(DateTime))
                     || ParametersMatch(parameters, typeof(DateTime), typeof(TimeSpan))
                     || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(TimeSpan))
@@ -513,10 +514,10 @@ namespace System.Linq.Dynamic
                 "Remainder" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
                 "Multiply" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
                 "Negate" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
-                "Round" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Int32))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(MidpointRounding))
-                    || method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Int32), typeof(MidpointRounding)),
+                "Round" => method.IsStatic && (ParametersMatch(parameters, typeof(Decimal))
+                    || ParametersMatch(parameters, typeof(Decimal), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Decimal), typeof(MidpointRounding))
+                    || ParametersMatch(parameters, typeof(Decimal), typeof(Int32), typeof(MidpointRounding))),
                 "Subtract" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal), typeof(Decimal)),
                 "ToByte" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
                 "ToSByte" => method.IsStatic && ParametersMatch(parameters, typeof(Decimal)),
@@ -535,7 +536,7 @@ namespace System.Linq.Dynamic
 
         private static bool MathMemberPolicy(MethodBase method, ParameterInfo[] parameters)
         {
-            if (method.IsConstructor)
+            if (method.IsConstructor || !method.IsStatic)
                 return false;
             return method.Name switch
             {
@@ -615,7 +616,7 @@ namespace System.Linq.Dynamic
 
         private static bool ConvertMemberPolicy(MethodBase method, ParameterInfo[] parameters)
         {
-            if (method.IsConstructor)
+            if (method.IsConstructor || !method.IsStatic)
                 return false;
             bool singleArgument = parameters.Length == 1 && IsConversionInput(parameters[0].ParameterType);
             return method.Name switch
