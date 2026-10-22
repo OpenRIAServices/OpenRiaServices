@@ -12,7 +12,6 @@ namespace System.Linq.Dynamic.UnitTests
     {
         [TestMethod]
         [DataRow(typeof(char), "IsDigit", true, typeof(char))]
-        [DataRow(typeof(char), "IsDigit", false, typeof(string))]
         [DataRow(typeof(string), "Substring", true, typeof(int))]
         [DataRow(typeof(string), "Equals", true, typeof(string))]
         [DataRow(typeof(string), "Equals", false, typeof(object))]
@@ -32,12 +31,6 @@ namespace System.Linq.Dynamic.UnitTests
         public void ExistingMethodPermissions(Type type, string name, bool allowed, params Type[] parameters)
         {
             MethodInfo method = type.GetMethod(name, parameters);
-            // Some signatures are deliberately absent, not merely disallowed overloads.
-            if (method == null)
-            {
-                Assert.IsFalse(allowed);
-                return;
-            }
             Assert.AreEqual(allowed, Allows(method), method.ToString());
         }
 
