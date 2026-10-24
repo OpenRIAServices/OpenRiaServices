@@ -169,9 +169,10 @@ namespace System.Linq.Dynamic
             if (factor <= 1)
                 return;
 
-            if (++_growingReplaceCalls > 3 || _stringExpansionFactor > 100 / factor)
-                throw ParseError(Resource.ExpressionTooComplex);
             _stringExpansionFactor *= factor;
+
+            if (++_growingReplaceCalls > 3 || _stringExpansionFactor > 100)
+                throw ParseError(Resource.ExpressionTooComplex);
         }
 
         void EnterExpression()
