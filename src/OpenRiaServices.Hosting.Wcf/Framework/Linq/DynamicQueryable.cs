@@ -1,11 +1,12 @@
-﻿using System.Collections.Frozen;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using System;
 using OpenRiaServices.Hosting.AspNetCore;
 
 #nullable disable
@@ -1151,8 +1152,7 @@ namespace System.Linq.Dynamic
             {
                 if (instance != null && type != typeof(string))
                 {
-                    Type enumerableType = FindGenericType(typeof(IEnumerable<>), type);
-                    if (enumerableType != null)
+                    if (FindEnumerableType(type) is { } enumerableType)
                     {
                         Type elementType = enumerableType.GetGenericArguments()[0];
                         return ParseAggregate(instance, elementType, id, errorPos);
@@ -1206,25 +1206,38 @@ namespace System.Linq.Dynamic
             }
         }
 
-        static Type FindGenericType(Type generic, Type type)
+#nullable enable
+        private static readonly ConcurrentDictionary<Type, Type?> s_enumerableTypeLookup = new();
+
+        /// <summary>
+        /// See if <<paramref name="type"/> is <see cref="IEnumerable{T}"/> for any T and if so returns the actual <see cref="IEnumerable{T}"/> type.
+        /// </summary>
+        /// <returns>The matching constructed <see cref="IEnumerable{T}"/> type, or <see langword="null"/> if the type is not an <see cref="IEnumerable{T}"/> .</returns>
+        private static Type? FindEnumerableType(Type type)
         {
-            while (type != null && type != typeof(object))
+            return s_enumerableTypeLookup.GetOrAdd(type, static x => FindGenericType(typeof(IEnumerable<>), x));
+
+            static Type? FindGenericType(Type generic, Type? type)
             {
-                if (type.IsGenericType && type.GetGenericTypeDefinition() == generic)
-                    return type;
-                if (generic.IsInterface)
+                while (type != null && type != typeof(object))
                 {
-                    foreach (Type intfType in type.GetInterfaces())
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == generic)
+                        return type;
+                    if (generic.IsInterface)
                     {
-                        Type found = FindGenericType(generic, intfType);
-                        if (found != null)
-                            return found;
+                        foreach (Type intfType in type.GetInterfaces())
+                        {
+                            Type? found = FindGenericType(generic, intfType);
+                            if (found != null)
+                                return found;
+                        }
                     }
+                    type = type.BaseType;
                 }
-                type = type.BaseType;
+                return null;
             }
-            return null;
         }
+#nullable disable
 
         Expression ParseAggregate(Expression instance, Type elementType, string methodName, int errorPos)
         {
