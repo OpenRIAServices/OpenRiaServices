@@ -1,5 +1,13 @@
 # Unreleased
 
+## Added
+
+* Expand shared ASP.NET Core/WCF query permissions with exact safe overloads for string
+  searching and trimming, Unix timestamps, microsecond date/time operations and constructors,
+  integer `TimeSpan` factories and arithmetic, character predicates, and `Uri.CheckHostName`.
+  Add scalar numeric `Abs`, `Min`, `Max` and `Clamp`, including `Math.Clamp`, when available
+  on the server runtime. Overload binding and argument-dependent security limits are unchanged.
+
 ## Changed
 
 * Refactor the client query parser to improve performance when determining which method calls are allowed and which overloads are available. (#625)

@@ -3,6 +3,7 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using OpenRiaServices.Client;
 using OpenRiaServices.Hosting.AspNetCore;
 
 namespace System.Linq.Dynamic.UnitTests
@@ -73,6 +74,152 @@ namespace System.Linq.Dynamic.UnitTests
             Assert.IsFalse(Allows(type.GetMethod("Equals", [typeof(object)])));
             Assert.IsTrue(Allows(type.GetMethod("Parse", [typeof(string), typeof(NumberStyles)])));
             Assert.IsFalse(Allows(type.GetMethod("Parse", [typeof(string), typeof(IFormatProvider)])));
+        }
+
+        [TestMethod]
+        public void StringAdditions()
+        {
+#if NET
+            AssertRoundTrip<string>(s => s.Contains('a') && s.Contains("A", StringComparison.OrdinalIgnoreCase)
+                && s.Contains('A', StringComparison.OrdinalIgnoreCase), "abc", "zzz");
+            AssertRoundTrip<string>(s => s.StartsWith('a') && s.EndsWith('c')
+                && s.IndexOf('A', StringComparison.OrdinalIgnoreCase) == 0, "abc", "zzz");
+            AssertRoundTrip<string>(s => s.Trim('a') == "bc" && s.TrimStart('a') == "bc"
+                && s.TrimEnd('c') == "ab", "abc", "zzz");
+            AssertRoundTrip<string>(s => s.TrimStart() == "abc " && s.TrimEnd() == " abc", " abc ", "zzz");
+#else
+            Assert.ThrowsExactly<ParseException>(() => DynamicExpression.ParseLambda(
+                typeof(string), typeof(string), "it.TrimStart()", null, QueryLimits.Defaults));
+#endif
+            Assert.IsFalse(Allows(typeof(string).GetMethod("StartsWith", [typeof(string), typeof(bool), typeof(CultureInfo)])));
+            Assert.IsFalse(Allows(typeof(string).GetConstructor([typeof(char), typeof(int)])));
+        }
+
+        [TestMethod]
+        public void CharAdditions()
+        {
+            AssertRoundTrip<char>(c => char.GetUnicodeCategory(c) == UnicodeCategory.UppercaseLetter, 'A', '1');
+            AssertRoundTrip<string>(s => char.GetUnicodeCategory(s, 0) == UnicodeCategory.LowercaseLetter, "a", "1");
+#if NET
+            AssertRoundTrip<char>(c => char.IsAscii(c) && char.IsAsciiDigit(c), '1', '\u0100');
+            AssertRoundTrip<char>(c => char.IsAsciiLetter(c) && char.IsAsciiLetterLower(c)
+                && char.IsAsciiLetterOrDigit(c), 'a', '1');
+            AssertRoundTrip<char>(c => char.IsAsciiLetterUpper(c) && char.IsAsciiHexDigit(c)
+                && char.IsAsciiHexDigitUpper(c), 'A', 'z');
+            AssertRoundTrip<char>(c => char.IsAsciiHexDigitLower(c) && char.IsBetween(c, 'a', 'f'), 'a', 'z');
+#endif
+        }
+
+        [TestMethod]
+        public void DateTimeAdditions()
+        {
+#if NET
+            AssertRoundTrip<DateTime>(d => d.AddMicroseconds(2).Ticks > d.Ticks, new DateTime(2020, 1, 2));
+            AssertParsed("DateTime(DateOnly(2020,1,2),TimeOnly(3,4,5))", () => new DateTime(new DateOnly(2020, 1, 2), new TimeOnly(3, 4, 5)));
+            AssertParsed("DateTime(DateOnly(2020,1,2),TimeOnly(3,4,5),\"Utc\")",
+                () => new DateTime(new DateOnly(2020, 1, 2), new TimeOnly(3, 4, 5), DateTimeKind.Utc));
+            AssertParsed("DateTime(2020,1,2,3,4,5,6,7)", () => new DateTime(2020, 1, 2, 3, 4, 5, 6, 7));
+            AssertParsed("DateTime(2020,1,2,3,4,5,6,7,\"Utc\")", () => new DateTime(2020, 1, 2, 3, 4, 5, 6, 7, DateTimeKind.Utc));
+            AssertParsed("DateTime(2020,1,2,3,4,5,6,\"Utc\")", () => new DateTime(2020, 1, 2, 3, 4, 5, 6, DateTimeKind.Utc));
+            AssertParsed("DateTime(2020,1,2,3,4,5,6,0)", () => new DateTime(2020, 1, 2, 3, 4, 5, 6, 0));
+#endif
+            foreach (ConstructorInfo constructor in typeof(DateTime).GetConstructors()
+                .Where(c => c.GetParameters().Any(p => p.ParameterType == typeof(Calendar))))
+                Assert.IsFalse(Allows(constructor), constructor.ToString());
+        }
+
+        [TestMethod]
+        public void DateTimeOffsetAdditions()
+        {
+            AssertRoundTrip<long>(n => DateTimeOffset.FromUnixTimeSeconds(n).ToUnixTimeSeconds() == n, 0, -123, 123);
+            AssertRoundTrip<long>(n => DateTimeOffset.FromUnixTimeMilliseconds(n).ToUnixTimeMilliseconds() == n, 0, -123, 123);
+#if NET
+            AssertRoundTrip<DateTimeOffset>(d => d.AddMicroseconds(2).Ticks > d.Ticks, new DateTimeOffset(2020, 1, 2, 3, 4, 5, TimeSpan.Zero));
+            AssertParsed("DateTimeOffset(2020,1,2,3,4,5,6,7,TimeSpan(0))", () => new DateTimeOffset(2020, 1, 2, 3, 4, 5, 6, 7, TimeSpan.Zero));
+#endif
+#if NET10_0_OR_GREATER
+            AssertParsed("DateTimeOffset(DateOnly(2020,1,2),TimeOnly(3,4,5),TimeSpan(0))",
+                () => new DateTimeOffset(new DateOnly(2020, 1, 2), new TimeOnly(3, 4, 5), TimeSpan.Zero));
+#endif
+            foreach (ConstructorInfo constructor in typeof(DateTimeOffset).GetConstructors()
+                .Where(c => c.GetParameters().Any(p => p.ParameterType == typeof(Calendar))))
+                Assert.IsFalse(Allows(constructor), constructor.ToString());
+        }
+
+        [TestMethod]
+        public void TimeSpanAdditions()
+        {
+            AssertRoundTrip<int>(n => TimeSpan.FromDays(n).TotalDays == n && TimeSpan.FromHours(n).TotalHours == n
+                && TimeSpan.FromMinutes(n).TotalMinutes == n && TimeSpan.FromSeconds(n).TotalSeconds == n
+                && TimeSpan.FromMilliseconds(n).TotalMilliseconds == n, -1, 0, 1);
+            AssertRoundTrip<double>(n => TimeSpan.FromDays(n).TotalDays == n && TimeSpan.FromHours(n).TotalHours == n
+                && TimeSpan.FromMinutes(n).TotalMinutes == n && TimeSpan.FromSeconds(n).TotalSeconds == n
+                && TimeSpan.FromMilliseconds(n).TotalMilliseconds == n, -1, 0, 1);
+#if NET
+            AssertRoundTrip<int>(n => TimeSpan.FromMicroseconds(n).Ticks == n * 10, -1, 0, 1);
+            AssertRoundTrip<double>(n => TimeSpan.FromMicroseconds(n).Ticks == n * 10, -1, 0, 1);
+            AssertRoundTrip<TimeSpan>(t => t.Multiply(2).Divide(2) == t && t.Divide(TimeSpan.FromTicks(1)) == t.Ticks,
+                TimeSpan.FromTicks(10), TimeSpan.FromTicks(-10));
+            AssertParsed("TimeSpan(1,2,3,4,5,6)", () => new TimeSpan(1, 2, 3, 4, 5, 6));
+#endif
+#if NET10_0_OR_GREATER
+            AssertRoundTrip<long>(n => TimeSpan.FromMinutes(n).TotalMinutes == n
+                && TimeSpan.FromSeconds(n).TotalSeconds == n && TimeSpan.FromMilliseconds(n).TotalMilliseconds == n
+                && TimeSpan.FromMicroseconds(n).Ticks == n * 10, -1, 0, 1);
+            AssertRoundTrip<int>(n => TimeSpan.FromDays(n, 2, 3, 4, 5, 6).Ticks == new TimeSpan(1, 2, 3, 4, 5, 6).Ticks, 1, 0);
+            AssertRoundTrip<int>(n => TimeSpan.FromHours(n, 3, 4, 5, 6).Ticks == new TimeSpan(0, 2, 3, 4, 5, 6).Ticks, 2, 0);
+            AssertRoundTrip<long>(n => TimeSpan.FromMinutes(n, 4, 5, 6).Ticks == new TimeSpan(0, 0, 3, 4, 5, 6).Ticks, 3, 0);
+            AssertRoundTrip<long>(n => TimeSpan.FromSeconds(n, 5, 6).Ticks == new TimeSpan(0, 0, 0, 4, 5, 6).Ticks, 4, 0);
+            AssertRoundTrip<long>(n => TimeSpan.FromMilliseconds(n, 6).Ticks == new TimeSpan(0, 0, 0, 0, 5, 6).Ticks, 5, 0);
+            Assert.ThrowsExactly<ParseException>(() => DynamicExpression.ParseLambda(
+                typeof(int), typeof(TimeSpan), "TimeSpan.FromDays(it,2)", null, QueryLimits.Defaults));
+#endif
+        }
+
+        [TestMethod]
+        [DataRow(typeof(sbyte))]
+        [DataRow(typeof(byte))]
+        [DataRow(typeof(short))]
+        [DataRow(typeof(ushort))]
+        [DataRow(typeof(int))]
+        [DataRow(typeof(uint))]
+        [DataRow(typeof(long))]
+        [DataRow(typeof(ulong))]
+        [DataRow(typeof(float))]
+        [DataRow(typeof(double))]
+        [DataRow(typeof(decimal))]
+        [DataRow(typeof(Math))]
+        public void NumericAdditions(Type type)
+        {
+            foreach (MethodInfo method in type.GetMethods(BindingFlags.Public | BindingFlags.Static | BindingFlags.Instance | BindingFlags.DeclaredOnly))
+            {
+                if (method.Name is "Abs" or "Min" or "Max" or "Clamp")
+                {
+                    Type scalar = method.GetParameters()[0].ParameterType;
+                    bool allowed = scalar != typeof(IntPtr) && scalar != typeof(UIntPtr);
+                    Assert.AreEqual(allowed, Allows(method), method.ToString());
+                    if (allowed)
+                    {
+                        var parameter = Expression.Parameter(scalar, "");
+                        Expression call = Expression.Call(method, method.GetParameters().Select(_ => (Expression)parameter));
+                        Array values = Array.CreateInstance(scalar, 3);
+                        for (int i = 0; i < values.Length; i++)
+                            values.SetValue(Convert.ChangeType(i, scalar, CultureInfo.InvariantCulture), i);
+                        var predicate = Expression.Lambda(Expression.Equal(call, parameter), parameter);
+                        AssertRoundTrip(values.AsQueryable(), predicate);
+                    }
+                }
+                if (method.Name is "GetBits" or "GetTypeCode" or "CopySign" or "IsEvenInteger" or "PopCount" or "Acosh")
+                    Assert.IsFalse(Allows(method), method.ToString());
+                if (method.GetParameters().Any(p => p.ParameterType == typeof(IFormatProvider)))
+                    Assert.IsFalse(Allows(method), method.ToString());
+            }
+        }
+
+        [TestMethod]
+        public void UriAdditions()
+        {
+            AssertRoundTrip<string>(s => Uri.CheckHostName(s) == UriHostNameType.Dns, "example.org", "127.0.0.1", "?");
         }
 
         [TestMethod]
@@ -211,6 +358,52 @@ namespace System.Linq.Dynamic.UnitTests
             Expression[] arguments = method.GetParameters().Select(p => (Expression)Expression.Default(
                 p.ParameterType.IsByRef ? p.ParameterType.GetElementType() : p.ParameterType)).ToArray();
             return ExpressionParser.IsMemberAccessAllowed(method, arguments, QueryLimits.Defaults);
+        }
+
+        private static void AssertRoundTrip<T>(Expression<Func<T, bool>> predicate, params T[] values)
+            => AssertRoundTrip(values.AsQueryable(), predicate);
+
+        private static void AssertRoundTrip(IQueryable source, LambdaExpression predicate)
+        {
+            Type holderType = typeof(QueryValue<>).MakeGenericType(source.ElementType);
+            object[] values = source.Cast<object>().ToArray();
+            Array holders = Array.CreateInstance(holderType, values.Length);
+            for (int i = 0; i < values.Length; i++)
+                holders.SetValue(Activator.CreateInstance(holderType, [values[i]]), i);
+            source = holders.AsQueryable();
+            var parameter = Expression.Parameter(holderType, "");
+            Expression body = new ParameterSubstitution(predicate.Parameters[0],
+                Expression.Property(parameter, "Value")).Visit(predicate.Body);
+            predicate = Expression.Lambda(body, parameter);
+            IQueryable query = source.Provider.CreateQuery(Expression.Call(typeof(Queryable), "Where",
+                [source.ElementType], source.Expression, Expression.Quote(predicate)));
+            string text = QuerySerializer.Serialize(query).Single().Expression;
+            CollectionAssert.AreEqual(query.Cast<object>().ToArray(),
+                source.Where(text, null, QueryLimits.Defaults).Cast<object>().ToArray(), text);
+        }
+
+        private static void AssertParsed<T>(string text, Expression<Func<T>> expected)
+        {
+            LambdaExpression parsed = DynamicExpression.ParseLambda(typeof(int), typeof(T), text, null, QueryLimits.Defaults);
+            Assert.AreEqual(((NewExpression)expected.Body).Constructor, ((NewExpression)parsed.Body).Constructor, text);
+            T value = expected.Compile()();
+            object actual = parsed.Compile().DynamicInvoke(0);
+            Assert.AreEqual(value, actual, text);
+            if (value is DateTime date)
+                Assert.AreEqual(date.Kind, ((DateTime)actual).Kind, text);
+            var parameter = Expression.Parameter(typeof(T), "");
+            AssertRoundTrip(Expression.Lambda<Func<T, bool>>(Expression.Equal(parameter, parsed.Body), parameter), value);
+        }
+
+        private sealed class QueryValue<T>(T value)
+        {
+            public T Value { get; } = value;
+        }
+
+        private sealed class ParameterSubstitution(ParameterExpression parameter, Expression replacement) : ExpressionVisitor
+        {
+            protected override Expression VisitParameter(ParameterExpression node)
+                => node == parameter ? replacement : base.VisitParameter(node);
         }
     }
 }
