@@ -3,6 +3,7 @@
 ## Changed
 
 * Refactor the client query parser to improve performance when determining which method calls are allowed and which overloads are available. (#625)
+* Normalize array-backed span `Contains` calls selected by C# 14 to `Enumerable.Contains`, preserving earlier query serialization and unsupported-operator errors on .NET 10. (#560)
 
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview

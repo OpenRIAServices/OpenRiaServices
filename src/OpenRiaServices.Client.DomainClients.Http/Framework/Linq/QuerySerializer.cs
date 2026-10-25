@@ -635,6 +635,24 @@ namespace OpenRiaServices.Client
 
             protected override Expression VisitMethodCall(MethodCallExpression m)
             {
+#if NET8_0_OR_GREATER
+                if (m.Method.DeclaringType == typeof(MemoryExtensions)
+                    && m.Method.Name == nameof(MemoryExtensions.Contains)
+                    && m.Method.IsGenericMethod
+                    && m.Arguments.Count == 2
+                    && m.Arguments[0] is MethodCallExpression conversion
+                    && conversion.Method.Name == "op_Implicit"
+                    && conversion.Method.DeclaringType == typeof(ReadOnlySpan<>).MakeGenericType(m.Method.GetGenericArguments())
+                    && conversion.Arguments.Count == 1
+                    && conversion.Arguments[0].Type == m.Method.GetGenericArguments()[0].MakeArrayType())
+                {
+                    // C# 14 prefers the span overload for arrays. Remove the ref-struct conversion
+                    // before partial evaluation and use the same query operator as earlier compilers.
+                    return Expression.Call(typeof(Enumerable), nameof(Enumerable.Contains), m.Method.GetGenericArguments(),
+                        this.Visit(conversion.Arguments[0]), this.Visit(m.Arguments[1]));
+                }
+#endif
+
                 if (TypeIsVBOperatorsType(m.Method.DeclaringType)
                     && m.Arguments.Count == 3)
                 {

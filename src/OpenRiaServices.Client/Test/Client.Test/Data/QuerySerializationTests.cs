@@ -892,6 +892,67 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        public void TestQuery_ArrayContains_MethodConversion()
+        {
+            int[] values = [1, 2, 3];
+            Expression<Func<GenericEntity, bool>>[] predicates =
+            [
+                p => values.Contains(p.Key),
+                p => new[] { 1, 2, 3 }.Contains(p.Key),
+                p => values.Where(v => v > 1).ToArray().Contains(p.Key),
+                p => new[] { "One", "Two" }.Contains(p.Title)
+            ];
+
+            foreach (var predicate in predicates)
+            {
+                var original = (MethodCallExpression)predicate.Body;
+                var converted = (MethodCallExpression)new QuerySerializer.MethodCallConverter().Visit(original);
+
+                Assert.AreEqual(typeof(Enumerable), converted.Method.DeclaringType,
+                    $"Original method: {original.Method}; source: {original.Arguments[0]} ({original.Arguments[0].NodeType})");
+                Assert.AreEqual(nameof(Enumerable.Contains), converted.Method.Name);
+                Assert.AreEqual(original.Arguments[1].Type.MakeArrayType(), converted.Arguments[0].Type);
+                Assert.AreSame(original.Arguments[1], converted.Arguments[1]);
+            }
+        }
+
+        [TestMethod]
+        public void TestQuery_ArrayContains_LocalEvaluation()
+        {
+            GenericEntity[] entities = [new GenericEntity { Key = 1 }, new GenericEntity { Key = 2 }];
+            int[] values = [1, 2, 3];
+            IEnumerable<int> enumerable = values;
+
+            foreach (int value in new[] { 2, 4 })
+            {
+                var query = entities.AsQueryable().Where(p => values.Contains(value) && p.Key == 1);
+                var enumerableQuery = entities.AsQueryable().Where(p => enumerable.Contains(value) && p.Key == 1);
+
+                Assert.AreEqual(QuerySerializer.Serialize(enumerableQuery).Single().Expression,
+                    QuerySerializer.Serialize(query).Single().Expression);
+                VerifyRoundtrip(q => q.Where(p => values.Contains(value) && p.Key == 1), entities);
+            }
+
+            values = [];
+            VerifyRoundtrip(q => q.Where(p => values.Contains(1) || p.Key == 1), entities);
+        }
+
+        [TestMethod]
+        public void TestQuery_ArrayContains_UnsupportedSequenceMethod()
+        {
+            int[] values = [1, 2, 3];
+            IEnumerable<int> enumerable = values;
+            var source = Array.Empty<GenericEntity>().AsQueryable();
+
+            var expected = Assert.ThrowsExactly<NotSupportedException>(
+                () => QuerySerializer.Serialize(source.Where(p => enumerable.Contains(p.Key))));
+            var actual = Assert.ThrowsExactly<NotSupportedException>(
+                () => QuerySerializer.Serialize(source.Where(p => values.Contains(p.Key))));
+
+            Assert.AreEqual(expected.Message, actual.Message);
+        }
+
+        [TestMethod]
         public void TestUnsupportedSequenceMethods()
         {
             NotSupportedException expectedException = null;
