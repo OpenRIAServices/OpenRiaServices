@@ -145,6 +145,50 @@ The existing property visibility rules, including `[Exclude]`, `[DataContract]`/
 
 Standard string, array, list, and dictionary indexing and predefined static constants remain supported. These checks are shared with WCF hosting.
 
+### Supported query method additions
+
+Queries can use `DateTimeOffset.FromUnixTimeSeconds(long)`, `FromUnixTimeMilliseconds(long)`,
+`ToUnixTimeSeconds()` and `ToUnixTimeMilliseconds()`, `Char.GetUnicodeCategory(char)` and
+`Char.GetUnicodeCategory(string, int)`, and `Uri.CheckHostName(string)`.
+
+When available on the **server runtime**, the shared ASP.NET Core/WCF parser also allows:
+
+* String searches: `Contains(char)`, `Contains(string, StringComparison)`,
+  `Contains(char, StringComparison)`, `StartsWith(char)`, `EndsWith(char)` and
+  `IndexOf(char, StringComparison)`. Trimming supports `Trim(char)`, `TrimStart(char)`,
+  `TrimEnd(char)`, `TrimStart()` and `TrimEnd()`.
+* `DateTime.AddMicroseconds(double)` and `DateTimeOffset.AddMicroseconds(double)`;
+  non-calendar microsecond constructors for both types; `DateTime(DateOnly, TimeOnly)`
+  with optional `DateTimeKind`; and `DateTimeOffset(DateOnly, TimeOnly, TimeSpan)`.
+* The six-integer `TimeSpan` constructor, integer `FromDays`, `FromHours`, `FromMinutes`,
+  `FromSeconds`, `FromMilliseconds` and `FromMicroseconds` factories, and
+  `FromMicroseconds(double)`. Multi-component integer factories are supported, but the
+  query text must supply **every argument**, including optional arguments.
+  Instance `Multiply(double)`, `Divide(double)` and `Divide(TimeSpan)` are also allowed.
+* `Char.IsAscii`, the `IsAsciiDigit`, `IsAsciiLetter` and `IsAsciiHexDigit` families
+  (including case-specific and letter-or-digit variants), and `Char.IsBetween(char, char, char)`.
+* Scalar `Abs`, `Min`, `Max` and `Clamp` methods on the existing numeric types
+  (`SByte` through `UInt64`, `Single`, `Double` and `Decimal`), plus `Math.Clamp`.
+  Only exact scalar signatures are allowed; native integers and other new numeric types are not added.
+
+For example, filters can use `it.Name.Contains("abc", "OrdinalIgnoreCase")` or
+`it.Duration >= TimeSpan.FromSeconds(30)`. Passing the comparison as a string is supported
+by the parser's existing enum conversion.
+
+Overload selection is unchanged. On newer runtimes, an integer `TimeSpan` factory overload
+can take precedence over its `double` counterpart. Mixed numeric arguments still follow
+the existing binding rules; use matching argument types where needed. For `DateTime` constructors, use
+`"Utc"`, `"Local"` or `"Unspecified"` for the kind instead of an integer that could bind
+to a microsecond parameter. On .NET Framework, parameterless `TrimStart()` and `TrimEnd()`
+are unavailable to this parser: it does not expand `params char[]`.
+
+These permissions do not guarantee that a LINQ provider can translate the operation.
+The client serializer still rejects constructors that depend on entity properties; such
+constructors can be used in query text, while constant constructor expressions are evaluated
+on the client. Calendar- and provider-taking overloads, `GetBits`, `GetTypeCode`, and additional
+numeric classification, bitwise and transcendental methods remain denied.
+Numeric formatting and replacement-argument limits are unchanged.
+
 ### Supporting different serialization formats (Text Xml)
 
 The default serialization format is binary XML, which is compatible with WCF RIA Services.

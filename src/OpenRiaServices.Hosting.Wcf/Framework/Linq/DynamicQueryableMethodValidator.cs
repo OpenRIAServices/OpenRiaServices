@@ -158,6 +158,9 @@ namespace System.Linq.Dynamic
                     || ParametersMatch(parameters, typeof(string), typeof(NumberStyles))),
                 "IsInfinity" or "IsNaN" or "IsPositiveInfinity" or "IsNegativeInfinity" =>
                     (type == typeof(float) || type == typeof(double)) && method.IsStatic && ParametersMatch(parameters, type),
+                "Abs" => method.IsStatic && ParametersMatch(parameters, type),
+                "Min" or "Max" => method.IsStatic && ParametersMatch(parameters, type, type),
+                "Clamp" => method.IsStatic && ParametersMatch(parameters, type, type, type),
                 _ => false
             };
         }
@@ -204,6 +207,12 @@ namespace System.Linq.Dynamic
                     || ParametersMatch(parameters, typeof(String), typeof(Int32))),
                 "GetNumericValue" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
                     || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "GetUnicodeCategory" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(Int32))),
+                "IsAscii" or "IsAsciiDigit" or "IsAsciiLetter" or "IsAsciiLetterLower" or "IsAsciiLetterUpper"
+                    or "IsAsciiLetterOrDigit" or "IsAsciiHexDigit" or "IsAsciiHexDigitLower" or "IsAsciiHexDigitUpper" =>
+                    method.IsStatic && ParametersMatch(parameters, typeof(Char)),
+                "IsBetween" => method.IsStatic && ParametersMatch(parameters, typeof(Char), typeof(Char), typeof(Char)),
                 "IsHighSurrogate" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
                     || ParametersMatch(parameters, typeof(String), typeof(Int32))),
                 "IsLowSurrogate" => method.IsStatic && (ParametersMatch(parameters, typeof(Char))
@@ -242,10 +251,15 @@ namespace System.Linq.Dynamic
                 "CompareTo" => ParametersMatch(parameters, typeof(String)),
                 "CompareOrdinal" => method.IsStatic && (ParametersMatch(parameters, typeof(String), typeof(String))
                     || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(String), typeof(Int32), typeof(Int32))),
-                "Contains" => ParametersMatch(parameters, typeof(String)),
+                "Contains" => ParametersMatch(parameters, typeof(String))
+                    || ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(String), typeof(StringComparison))
+                    || ParametersMatch(parameters, typeof(Char), typeof(StringComparison)),
                 "EndsWith" => ParametersMatch(parameters, typeof(String))
+                    || ParametersMatch(parameters, typeof(Char))
                     || ParametersMatch(parameters, typeof(String), typeof(StringComparison)),
                 "IndexOf" => ParametersMatch(parameters, typeof(Char))
+                    || ParametersMatch(parameters, typeof(Char), typeof(StringComparison))
                     || ParametersMatch(parameters, typeof(Char), typeof(Int32))
                     || ParametersMatch(parameters, typeof(Char), typeof(Int32), typeof(Int32))
                     || ParametersMatch(parameters, typeof(String))
@@ -264,16 +278,16 @@ namespace System.Linq.Dynamic
                     || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(StringComparison))
                     || ParametersMatch(parameters, typeof(String), typeof(Int32), typeof(Int32), typeof(StringComparison)),
                 "StartsWith" => ParametersMatch(parameters, typeof(String))
+                    || ParametersMatch(parameters, typeof(Char))
                     || ParametersMatch(parameters, typeof(String), typeof(StringComparison)),
                 "ToLower" => parameters.Length == 0,
                 "ToLowerInvariant" => parameters.Length == 0,
                 "ToUpper" => parameters.Length == 0,
                 "ToUpperInvariant" => parameters.Length == 0,
                 "ToString" => parameters.Length == 0,
-                "Trim" => parameters.Length == 0
+                "Trim" or "TrimStart" or "TrimEnd" => parameters.Length == 0
+                    || ParametersMatch(parameters, typeof(Char))
                     || ParametersMatch(parameters, typeof(Char[])),
-                "TrimStart" => ParametersMatch(parameters, typeof(Char[])),
-                "TrimEnd" => ParametersMatch(parameters, typeof(Char[])),
                 "Insert" => ParametersMatch(parameters, typeof(Int32), typeof(String)),
                 "Remove" => ParametersMatch(parameters, typeof(Int32), typeof(Int32))
                     || ParametersMatch(parameters, typeof(Int32)),
@@ -301,13 +315,20 @@ namespace System.Linq.Dynamic
                     || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32))
                     || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(DateTimeKind))
                     || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32))
-                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(DateTimeKind));
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(DateTimeKind))
+#if NET
+                    || ParametersMatch(parameters, typeof(DateOnly), typeof(TimeOnly))
+                    || ParametersMatch(parameters, typeof(DateOnly), typeof(TimeOnly), typeof(DateTimeKind))
+#endif
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(DateTimeKind));
             return method.Name switch
             {
                 "Add" => ParametersMatch(parameters, typeof(TimeSpan)),
                 "AddDays" => ParametersMatch(parameters, typeof(Double)),
                 "AddHours" => ParametersMatch(parameters, typeof(Double)),
                 "AddMilliseconds" => ParametersMatch(parameters, typeof(Double)),
+                "AddMicroseconds" => ParametersMatch(parameters, typeof(Double)),
                 "AddMinutes" => ParametersMatch(parameters, typeof(Double)),
                 "AddMonths" => ParametersMatch(parameters, typeof(Int32)),
                 "AddSeconds" => ParametersMatch(parameters, typeof(Double)),
@@ -355,7 +376,12 @@ namespace System.Linq.Dynamic
                     || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(TimeSpan))
                     || ParametersMatch(parameters,
                         typeof(int), typeof(int), typeof(int), typeof(int),
-                        typeof(int), typeof(int), typeof(int), typeof(TimeSpan));
+                        typeof(int), typeof(int), typeof(int), typeof(TimeSpan))
+#if NET
+                    || ParametersMatch(parameters, typeof(DateOnly), typeof(TimeOnly), typeof(TimeSpan))
+#endif
+                    || ParametersMatch(parameters, typeof(int), typeof(int), typeof(int), typeof(int),
+                        typeof(int), typeof(int), typeof(int), typeof(int), typeof(TimeSpan));
             return method.Name switch
             {
                 "ToOffset" => ParametersMatch(parameters, typeof(TimeSpan)),
@@ -363,6 +389,7 @@ namespace System.Linq.Dynamic
                 "AddDays" => ParametersMatch(parameters, typeof(Double)),
                 "AddHours" => ParametersMatch(parameters, typeof(Double)),
                 "AddMilliseconds" => ParametersMatch(parameters, typeof(Double)),
+                "AddMicroseconds" => ParametersMatch(parameters, typeof(Double)),
                 "AddMinutes" => ParametersMatch(parameters, typeof(Double)),
                 "AddMonths" => ParametersMatch(parameters, typeof(Int32)),
                 "AddSeconds" => ParametersMatch(parameters, typeof(Double)),
@@ -374,11 +401,13 @@ namespace System.Linq.Dynamic
                     || method.IsStatic && ParametersMatch(parameters, typeof(DateTimeOffset), typeof(DateTimeOffset)),
                 "EqualsExact" => ParametersMatch(parameters, typeof(DateTimeOffset)),
                 "FromFileTime" => method.IsStatic && ParametersMatch(parameters, typeof(Int64)),
+                "FromUnixTimeSeconds" or "FromUnixTimeMilliseconds" => method.IsStatic && ParametersMatch(parameters, typeof(Int64)),
                 "GetHashCode" => parameters.Length == 0,
                 "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
                 "Subtract" => ParametersMatch(parameters, typeof(DateTimeOffset))
                     || ParametersMatch(parameters, typeof(TimeSpan)),
                 "ToFileTime" => parameters.Length == 0,
+                "ToUnixTimeSeconds" or "ToUnixTimeMilliseconds" => !method.IsStatic && parameters.Length == 0,
                 "ToLocalTime" => parameters.Length == 0,
                 "ToString" => parameters.Length == 0
                     || ParametersMatch(parameters, typeof(String)),
@@ -393,22 +422,38 @@ namespace System.Linq.Dynamic
                 return ParametersMatch(parameters, typeof(Int64))
                     || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32))
                     || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32))
-                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32));
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32));
             return method.Name switch
             {
                 "Add" => ParametersMatch(parameters, typeof(TimeSpan)),
                 "Compare" => method.IsStatic && ParametersMatch(parameters, typeof(TimeSpan), typeof(TimeSpan)),
                 "CompareTo" => ParametersMatch(parameters, typeof(TimeSpan)),
-                "FromDays" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "FromDays" => method.IsStatic && (ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int64), typeof(Int64), typeof(Int64), typeof(Int64))),
                 "Duration" => parameters.Length == 0,
                 "Equals" => ParametersMatch(parameters, typeof(TimeSpan))
                     || method.IsStatic && ParametersMatch(parameters, typeof(TimeSpan), typeof(TimeSpan)),
                 "GetHashCode" => parameters.Length == 0,
-                "FromHours" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
-                "FromMilliseconds" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
-                "FromMinutes" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "FromHours" => method.IsStatic && (ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Int32))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int64), typeof(Int64), typeof(Int64), typeof(Int64))),
+                "FromMilliseconds" => method.IsStatic && (ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Int64))
+                    || ParametersMatch(parameters, typeof(Int64), typeof(Int64))),
+                "FromMicroseconds" => method.IsStatic && (ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Int64))),
+                "FromMinutes" => method.IsStatic && (ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Int64))
+                    || ParametersMatch(parameters, typeof(Int64), typeof(Int64), typeof(Int64), typeof(Int64))),
                 "Negate" => parameters.Length == 0,
-                "FromSeconds" => method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "FromSeconds" => method.IsStatic && (ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(Int64))
+                    || ParametersMatch(parameters, typeof(Int64), typeof(Int64), typeof(Int64))),
+                "Multiply" => !method.IsStatic && ParametersMatch(parameters, typeof(Double)),
+                "Divide" => !method.IsStatic && (ParametersMatch(parameters, typeof(Double))
+                    || ParametersMatch(parameters, typeof(TimeSpan))),
                 "Subtract" => ParametersMatch(parameters, typeof(TimeSpan)),
                 "FromTicks" => method.IsStatic && ParametersMatch(parameters, typeof(Int64)),
                 "Parse" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
@@ -452,6 +497,7 @@ namespace System.Linq.Dynamic
             return method.Name switch
             {
                 "CheckSchemeName" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
+                "CheckHostName" => method.IsStatic && ParametersMatch(parameters, typeof(String)),
                 "FromHex" => method.IsStatic && ParametersMatch(parameters, typeof(Char)),
                 "GetHashCode" => parameters.Length == 0,
                 "ToString" => parameters.Length == 0,
@@ -571,6 +617,17 @@ namespace System.Linq.Dynamic
                 "Exp" => ParametersMatch(parameters, typeof(Double)),
                 "Pow" => ParametersMatch(parameters, typeof(Double), typeof(Double)),
                 "IEEERemainder" => ParametersMatch(parameters, typeof(Double), typeof(Double)),
+                "Clamp" => ParametersMatch(parameters, typeof(SByte), typeof(SByte), typeof(SByte))
+                    || ParametersMatch(parameters, typeof(Byte), typeof(Byte), typeof(Byte))
+                    || ParametersMatch(parameters, typeof(Int16), typeof(Int16), typeof(Int16))
+                    || ParametersMatch(parameters, typeof(UInt16), typeof(UInt16), typeof(UInt16))
+                    || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32))
+                    || ParametersMatch(parameters, typeof(UInt32), typeof(UInt32), typeof(UInt32))
+                    || ParametersMatch(parameters, typeof(Int64), typeof(Int64), typeof(Int64))
+                    || ParametersMatch(parameters, typeof(UInt64), typeof(UInt64), typeof(UInt64))
+                    || ParametersMatch(parameters, typeof(Single), typeof(Single), typeof(Single))
+                    || ParametersMatch(parameters, typeof(Double), typeof(Double), typeof(Double))
+                    || ParametersMatch(parameters, typeof(Decimal), typeof(Decimal), typeof(Decimal)),
                 "Abs" => ParametersMatch(parameters, typeof(SByte))
                     || ParametersMatch(parameters, typeof(Int16))
                     || ParametersMatch(parameters, typeof(Int32))
