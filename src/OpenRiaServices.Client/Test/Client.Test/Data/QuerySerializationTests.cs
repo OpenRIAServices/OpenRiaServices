@@ -892,6 +892,21 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        public void TestQuery_ArrayContains_LocalEvaluation()
+        {
+            GenericEntity[] entities = [new GenericEntity { Key = 1 }, new GenericEntity { Key = 2 }];
+            int[] values = [1, 2, 3];
+            IEnumerable<int> enumerable = values;
+
+            var query = entities.AsQueryable().Where(p => values.Contains(2) && p.Key == 1);
+            var enumerableQuery = entities.AsQueryable().Where(p => enumerable.Contains(2) && p.Key == 1);
+
+            Assert.AreEqual(QuerySerializer.Serialize(enumerableQuery).Single().Expression,
+                QuerySerializer.Serialize(query).Single().Expression);
+            VerifyRoundtrip(q => q.Where(p => values.Contains(2) && p.Key == 1), entities);
+        }
+
+        [TestMethod]
         public void TestUnsupportedSequenceMethods()
         {
             NotSupportedException expectedException = null;
