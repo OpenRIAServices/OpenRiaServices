@@ -47,6 +47,13 @@ namespace OpenRiaServices.Client
         private MetaType? _metaType;
 
         /// <summary>
+        /// Gets or sets unrecognized MessagePack members retained for round-tripping.
+        /// </summary>
+        [PolyType.PropertyShape]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Nerdbank.MessagePack", "NBMsgPack062", Justification = "State management must copy unrecognized data.")]
+        internal UnusedDataPacket? UnusedData { get; set; }
+
+        /// <summary>
         /// "EntityState"
         /// </summary>
         internal const string EntityStatePropertyName = "EntityState";
@@ -916,7 +923,7 @@ namespace OpenRiaServices.Client
         internal void UpdateOriginalValues(IDictionary<string, object?> entityStateToApply)
         {
             Debug.Assert(this._originalValues != null, "Should only call UpdateOriginalValues if the entity has original values.");
-            this._originalValues = new Dictionary<string, object?>(entityStateToApply);
+            this._originalValues = ObjectStateUtility.CopyState(entityStateToApply);
         }
 
         /// <summary>
