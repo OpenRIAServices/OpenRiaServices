@@ -7,7 +7,7 @@
 
 ## Fixed
 
-* HTTP clients now honor `HttpClient.DefaultRequestVersion` and `DefaultVersionPolicy` for POST and QUERY requests, matching GET requests across binary XML, XML, and MessagePack transports on modern .NET.
+* HTTP clients now honor `HttpClient.DefaultRequestVersion` and `DefaultVersionPolicy` for POST and QUERY requests, matching GET requests across binary XML, XML, and MessagePack transports on .NET.
 
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
