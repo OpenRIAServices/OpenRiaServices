@@ -48,6 +48,17 @@ namespace OpenRiaServices.Client.DomainClients.Http
         private protected abstract Task<HttpResponseMessage> QueryAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken);
         private protected abstract Task<object> ReadResponseAsync(HttpResponseMessage response, string operationName, Type returnType, CancellationToken cancellationToken);
 
+        private protected HttpRequestMessage CreateRequestMessage(HttpMethod method, string operationName)
+        {
+            return new HttpRequestMessage(method, operationName)
+            {
+#if NET
+                Version = HttpClient.DefaultRequestVersion,
+                VersionPolicy = HttpClient.DefaultVersionPolicy,
+#endif
+            };
+        }
+
         private protected MethodParameters GetMethodParameters(string operationName)
         {
             return s_methodParametersCache.GetOrAdd((ServiceInterface, operationName), static key => new MethodParameters(key.serviceInterface, key.operationName));
