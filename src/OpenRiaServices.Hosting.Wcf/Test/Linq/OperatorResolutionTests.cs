@@ -25,6 +25,7 @@ namespace System.Linq.Dynamic.UnitTests
         [DataRow(typeof(float), typeof(double), typeof(double))]
         [DataRow(typeof(int), typeof(decimal), typeof(decimal))]
         [DataRow(typeof(int?), typeof(int), typeof(int?))]
+        [DataRow(typeof(char), typeof(int), typeof(int))]
         public void ArithmeticPromotion(Type left, Type right, Type expected)
         {
             Expression body = Parse("a + b", left, right);
@@ -124,13 +125,14 @@ namespace System.Linq.Dynamic.UnitTests
             Assert.IsFalse(ContainsConvert(body), body.ToString());
         }
 
-        [TestMethod]
-        public void CharComparedWithIntegerLiteral_ResolvesAsChar()
-        {
-            var body = (BinaryExpression)Parse("a == 65", typeof(char), typeof(int));
 
-            Assert.AreEqual(typeof(char), body.Left.Type);
-            Assert.AreEqual('A', ((ConstantExpression)body.Right).Value);
+        [TestMethod]
+        public void CharComparisons_PreserveValues()
+        {
+            Assert.IsTrue(Compile<bool>("'A' == 65"));
+            Assert.IsTrue(Compile<bool>("65 == 'A'"));
+            Assert.IsTrue(Compile<bool>("'A' < 70000"));
+            Assert.IsFalse(Compile<bool>("'A' == 70000"));
         }
 
         [TestMethod]

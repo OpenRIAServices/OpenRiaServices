@@ -357,6 +357,29 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        public void TestCharNumericComparisonRoundtrips()
+        {
+            IQueryable<EmployeeWithCharProperty> employees = new[]
+            {
+                new EmployeeWithCharProperty { GenderAsChar = 'M' },
+                new EmployeeWithCharProperty { GenderAsChar = 'F' }
+            }.AsQueryable();
+            Expression<Func<EmployeeWithCharProperty, bool>>[] predicates =
+            [
+                employee => employee.GenderAsChar == 77,
+                employee => 77 == employee.GenderAsChar,
+                employee => employee.GenderAsChar < 70000,
+                employee => employee.GenderAsChar == 70000,
+                employee => (char?)employee.GenderAsChar == 77
+            ];
+            foreach (var predicate in predicates)
+            {
+                IQueryable<EmployeeWithCharProperty> query = employees.Where(predicate);
+                var roundtripped = (IQueryable<EmployeeWithCharProperty>)RoundtripQuery(query, employees);
+                CollectionAssert.AreEqual(query.ToArray(), roundtripped.ToArray(), predicate.ToString());
+            }
+        }
+
         [TestMethod]
         public void TestNullableSubtractionByNullSerializesAsTypedNull()
         {

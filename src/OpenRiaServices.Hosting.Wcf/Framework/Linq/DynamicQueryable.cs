@@ -330,20 +330,6 @@ namespace System.Linq.Dynamic
             public MemberRule Rule { get; }
         }
 
-        /// <summary>
-        /// Tiers originate from interface hierarchies modeling operand types supported by operators.
-        /// Searching each level in turn introduced first-matching-tier priority, not C# best-candidate selection.
-        /// Prefer a flat candidate set per operation over reordering tiers, but first align conversions and signatures:
-        /// char needs implicit numeric conversions rather than synthetic (char, char) comparison signatures.
-        /// Literal re-parsing can make additional signatures applicable; nullable overloads can also become ambiguous. (DateTime - null) (null can be TimeSpan? or DateTime?)
-        /// QuerySerializer omits conversions and null types, so flattening alone cannot guarantee semantic round-tripping.
-        /// Keep ambiguous applicable candidates distinct from no applicable candidates; do not fall through to another tier.
-        /// </summary>
-        sealed class OperatorSignatures(params Signature[][] tiers)
-        {
-            public Signature[][] Tiers { get; } = tiers;
-        }
-
         /// <summary>The supported <see cref="Enumerable"/> aggregate methods and their selector/predicate types.</summary>
         sealed class AggregateSignatures(string name, Signature[] signatures)
         {
@@ -351,51 +337,38 @@ namespace System.Linq.Dynamic
             public Signature[] Signatures { get; } = signatures;
         }
 
-        static readonly Signature[] s_arithmeticTier = BinarySignatures(
-            typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal));
+        // Each operation has one flat candidate set. Construction groups are local and share
+        // signatures, but never establish binding priority. Round-trip compatibility comes first.
+        static readonly Signature[] s_logicalSignatures, s_arithmeticSignatures, s_relationalSignatures,
+            s_equalitySignatures, s_addSignatures, s_subtractSignatures, s_negationSignatures, s_notSignatures;
 
-        /// <summary>
-        /// Types that are allowed to have relational operations in queries (in addition to the arithmetic types).
-        /// This includes types that have custom implementations of the operators as well as types that are handled by special rules in the parser (e.g. string and char).
-        /// </summary>
-        static readonly Signature[] s_relationalTier = BinarySignatures(
-            typeof(string), typeof(char), typeof(DateTime), typeof(TimeSpan), typeof(DateTimeOffset)
+        static ExpressionParser()
+        {
+            s_logicalSignatures = BinarySignatures(typeof(bool));
+            s_arithmeticSignatures = BinarySignatures(
+                typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal));
+            Signature[] comparable = BinarySignatures(
+                typeof(string), typeof(char), typeof(DateTime), typeof(TimeSpan), typeof(DateTimeOffset)
 #if NET
-            , typeof(DateOnly), typeof(TimeOnly)
+                , typeof(DateOnly), typeof(TimeOnly)
 #endif
-            );
-
-        /// <summary>Types that support == and != operators but not relational operators.</summary>
-        static readonly Signature[] s_equalityTier = BinarySignatures(typeof(bool), typeof(Guid));
-
-        static readonly Signature[] s_addTier = PairSignatures(
-            (typeof(DateTime), typeof(TimeSpan)),
-            (typeof(TimeSpan), typeof(TimeSpan)),
-            (typeof(DateTimeOffset), typeof(TimeSpan)));
-
-        static readonly Signature[] s_subtractTier = PairSignatures(
-            (typeof(DateTime), typeof(DateTime)),
-            (typeof(DateTimeOffset), typeof(DateTimeOffset))
+                );
+            s_relationalSignatures = [.. s_arithmeticSignatures, .. comparable];
+            s_equalitySignatures = [.. s_relationalSignatures, .. BinarySignatures(typeof(bool), typeof(Guid))];
+            Signature[] durations = PairSignatures(
+                (typeof(DateTime), typeof(TimeSpan)), (typeof(TimeSpan), typeof(TimeSpan)),
+                (typeof(DateTimeOffset), typeof(TimeSpan)));
+            Signature[] differences = PairSignatures(
+                (typeof(DateTime), typeof(DateTime)), (typeof(DateTimeOffset), typeof(DateTimeOffset))
 #if NET
-            , (typeof(TimeOnly), typeof(TimeOnly))
+                , (typeof(TimeOnly), typeof(TimeOnly))
 #endif
-            );
-
-        static readonly OperatorSignatures s_logicalSignatures = new(BinarySignatures(typeof(bool)));
-        // *,/,%,"mod" and "has" (enum flag check)
-        static readonly OperatorSignatures s_arithmeticSignatures = new(s_arithmeticTier);
-        // <,<=,>,>= Arithmetic is searched first so that integer literals are compared as int (as in C#) rather than as char.
-        static readonly OperatorSignatures s_relationalSignatures = new(s_arithmeticTier, s_relationalTier);
-        // a == b and a != b 
-        static readonly OperatorSignatures s_equalitySignatures = new(s_arithmeticTier, s_equalityTier, s_relationalTier);
-        // "a + b" , add and subtract are searched before arithmetic so that DateTime + TimeSpan resolves to DateTime rather than int.
-        static readonly OperatorSignatures s_addSignatures = new(s_addTier, s_arithmeticTier);
-        // "a - b"
-        static readonly OperatorSignatures s_subtractSignatures = new(s_subtractTier, s_addTier, s_arithmeticTier);
-        // 
-        static readonly OperatorSignatures s_negationSignatures = new(UnarySignatures(
-            typeof(int), typeof(long), typeof(float), typeof(double), typeof(decimal)));
-        static readonly OperatorSignatures s_notSignatures = new(UnarySignatures(typeof(bool)));
+                );
+            s_addSignatures = [.. s_arithmeticSignatures, .. durations];
+            s_subtractSignatures = [.. s_addSignatures, .. differences];
+            s_negationSignatures = UnarySignatures(typeof(int), typeof(long), typeof(float), typeof(double), typeof(decimal));
+            s_notSignatures = UnarySignatures(typeof(bool));
+        }
 
         static readonly FrozenDictionary<string, AggregateSignatures> s_aggregates = CreateAggregates();
 
@@ -1548,7 +1521,7 @@ namespace System.Linq.Dynamic
             return GetNonNullableType(type).IsEnum;
         }
 
-        void CheckAndPromoteOperand(OperatorSignatures signatures, Token op, ref Expression expr)
+        void CheckAndPromoteOperand(Signature[] signatures, Token op, ref Expression expr)
         {
             Expression[] args = new Expression[] { expr };
             if (FindOperator(signatures, args) != 1)
@@ -1557,9 +1530,15 @@ namespace System.Linq.Dynamic
             expr = args[0];
         }
 
-        void CheckAndPromoteOperands(OperatorSignatures signatures, Token op, ref Expression left, ref Expression right)
+        void CheckAndPromoteOperands(Signature[] signatures, Token op, ref Expression left, ref Expression right)
         {
             Expression[] args = new Expression[] { left, right };
+            // Older clients erase null types. Preserve their date-difference interpretation;
+            // typed nulls from newer clients distinguish date differences from duration subtraction.
+            Type leftType = GetNonNullableType(left.Type);
+            if (signatures == s_subtractSignatures && right == NullLiteral
+                && (leftType == typeof(DateTime) || leftType == typeof(DateTimeOffset)))
+                args[1] = Expression.Constant(null, MakeNullable(leftType));
             if (FindOperator(signatures, args) != 1)
                 throw IncompatibleOperandsError(GetString(op), left, right, op.pos);
             left = args[0];
@@ -1569,16 +1548,10 @@ namespace System.Linq.Dynamic
         /// <summary>
         /// Resolves an operator against <paramref name="signatures"/>, promoting <paramref name="args"/> when a single best match is found.
         /// </summary>
-        /// <returns>The number of best matches in the first tier with any match (1 on success).</returns>
-        int FindOperator(OperatorSignatures signatures, Expression[] args)
+        /// <returns>0 for no match, 1 for success, or more than 1 for ambiguity.</returns>
+        int FindOperator(Signature[] signatures, Expression[] args)
         {
-            foreach (Signature[] tier in signatures.Tiers)
-            {
-                int count = FindBestMethod(tier, args, out _);
-                if (count != 0)
-                    return count;
-            }
-            return 0;
+            return FindBestMethod(signatures, args, out _, preferOrdinaryConversions: true);
         }
 
         static Exception IncompatibleOperandsError(string opName, Expression left, Expression right, int pos)
@@ -1667,18 +1640,40 @@ namespace System.Linq.Dynamic
         /// <summary>
         /// Selects the best applicable candidate, following the C# "better function member" rules.
         /// When a single best candidate is found, <paramref name="args"/> are promoted to its parameter types.
+        /// Operator binding enables <paramref name="preferOrdinaryConversions"/> to first keep candidates needing
+        /// the fewest protocol-specific literal re-parses, then compare conversions normally. This preserves
+        /// query round trips without type-family tiers; method and constructor binding leave it disabled.
         /// </summary>
         /// <returns>The number of best candidates: 0 for no match, 1 for success and more than 1 if ambiguous.</returns>
-        int FindBestMethod<TSignature>(TSignature[] candidates, Expression[] args, out TSignature best)
+        int FindBestMethod<TSignature>(TSignature[] candidates, Expression[] args, out TSignature best, bool preferOrdinaryConversions = false)
             where TSignature : Signature
         {
             // Determine applicability without building any expressions; only the winner is promoted.
             Span<int> applicable = candidates.Length <= 64 ? stackalloc int[candidates.Length] : new int[candidates.Length];
             int applicableCount = 0;
+            int minimumRecoveries = int.MaxValue;
             for (int i = 0; i < candidates.Length; i++)
             {
                 if (IsApplicable(candidates[i], args))
+                {
+                    if (preferOrdinaryConversions)
+                    {
+                        int recoveries = 0;
+                        for (int j = 0; j < args.Length; j++)
+                        {
+                            if (args[j] != NullLiteral && !IsCompatibleWith(args[j].Type, candidates[i].ParameterTypes[j]))
+                                recoveries++;
+                        }
+                        if (recoveries > minimumRecoveries)
+                            continue;
+                        if (recoveries < minimumRecoveries)
+                        {
+                            applicableCount = 0;
+                            minimumRecoveries = recoveries;
+                        }
+                    }
                     applicable[applicableCount++] = i;
+                }
             }
 
             int count = applicableCount;
@@ -1706,7 +1701,7 @@ namespace System.Linq.Dynamic
             if (count != 1)
             {
                 best = null;
-                return count;
+                return preferOrdinaryConversions ? applicableCount : count;
             }
 
             best = candidates[bestIndex];
@@ -1955,9 +1950,11 @@ namespace System.Linq.Dynamic
                             return true;
                     }
                     break;
+                case TypeCode.Char:
                 case TypeCode.UInt16:
                     switch (tc)
                     {
+                        case TypeCode.Char when sc == TypeCode.Char:
                         case TypeCode.UInt16:
                         case TypeCode.Int32:
                         case TypeCode.UInt32:
