@@ -141,6 +141,15 @@ namespace System.Linq.Dynamic
         }
     }
 
+    // Test placement (paths relative to src):
+    // OpenRiaServices.Client\Test\Client.Test\Data\QuerySerializationTests.cs covers both
+    // client/server round trips and server parsing through QueryDeserializer, including expression-tree assertions.
+    // Prefer that suite for client-query behavior and serialization regressions; check its existing coverage first.
+    // OpenRiaServices.Hosting.Wcf\Test\Linq\OperatorResolutionTests.cs is for parser-only binding details
+    // (exact operand types, selected overloads, conversions, and syntax the client serializer cannot emit).
+    // Use QueryDeserializerTest.cs in the same directory for deserialization/member-visibility rules,
+    // and ExpressionSecurityTests.cs for parser limits and rejected unsafe expressions.
+    // The Linq tests are also linked into OpenRiaServices.Hosting.AspNetCore.Test.
     internal partial class ExpressionParser
     {
         /// <summary>The default maximum parser recursion and expression-tree depth.</summary>
@@ -269,137 +278,290 @@ namespace System.Linq.Dynamic
             DoubleBar
         }
 
-        interface ILogicalSignatures
+#nullable enable
+        /// <summary>
+        /// A candidate overload for an operator, aggregate, or reflected member.
+        /// Parameter types are captured once, so overload resolution does not need reflection.
+        /// </summary>
+        internal class Signature
         {
-            void F(bool x, bool y);
-            void F(bool? x, bool? y);
+            protected Signature(Type[] parameterTypes, bool canBind)
+            {
+                ParameterTypes = parameterTypes;
+                CanBind = canBind;
+            }
+
+            public Signature(params Type[] parameterTypes)
+                : this(parameterTypes, canBind: true)
+            {
+            }
+
+            public Type[] ParameterTypes { get; }
+            /// <summary><see langword="false"/> when the method has out parameters, which can never be bound.</summary>
+            public bool CanBind { get; }
         }
 
-        interface IArithmeticSignatures
+        /// <summary>A reflected member signature, also used for separately validated indexer getters.</summary>
+        internal class MemberSignature : Signature
         {
-            void F(int x, int y);
-            void F(uint x, uint y);
-            void F(long x, long y);
-            void F(ulong x, ulong y);
-            void F(float x, float y);
-            void F(double x, double y);
-            void F(decimal x, decimal y);
-            void F(int? x, int? y);
-            void F(uint? x, uint? y);
-            void F(long? x, long? y);
-            void F(ulong? x, ulong? y);
-            void F(float? x, float? y);
-            void F(double? x, double? y);
-            void F(decimal? x, decimal? y);
+            public MemberSignature(MethodBase method)
+                : this(method, method.GetParameters())
+            {
+            }
+
+            MemberSignature(MethodBase method, ParameterInfo[] parameters)
+                : base(Array.ConvertAll(parameters, p => p.ParameterType), !parameters.Any(p => p.IsOut))
+            {
+                Method = method;
+            }
+
+            public MethodBase Method { get; }
+        }
+
+        /// <summary>An invocable method or constructor with its argument-independent permission rule.</summary>
+        internal sealed class MethodSignature : MemberSignature
+        {
+            public MethodSignature(MethodBase method)
+                : base(method)
+            {
+                Rule = ResolveMemberRule(method, ParameterTypes);
+            }
+
+            public MemberRule Rule { get; }
         }
 
         /// <summary>
-        /// Determine which types are allowed to have relational operations in querys.
+        /// Tiers originate from interface hierarchies modeling operand types supported by operators.
+        /// Searching each level in turn introduced first-matching-tier priority, not C# best-candidate selection.
+        /// Prefer a flat candidate set per operation over reordering tiers, but first align conversions and signatures:
+        /// char needs implicit numeric conversions rather than synthetic (char, char) comparison signatures.
+        /// Literal re-parsing can make additional signatures applicable; nullable overloads can also become ambiguous. (DateTime - null) (null can be TimeSpan? or DateTime?)
+        /// QuerySerializer omits conversions and null types, so flattening alone cannot guarantee semantic round-tripping.
+        /// Keep ambiguous applicable candidates distinct from no applicable candidates; do not fall through to another tier.
+        /// </summary>
+        sealed class OperatorSignatures(params Signature[][] tiers)
+        {
+            public Signature[][] Tiers { get; } = tiers;
+        }
+
+        /// <summary>The supported <see cref="Enumerable"/> aggregate methods and their selector/predicate types.</summary>
+        sealed class AggregateSignatures(string name, Signature[] signatures)
+        {
+            public string Name { get; } = name;
+            public Signature[] Signatures { get; } = signatures;
+        }
+
+        static readonly Signature[] s_arithmeticTier = BinarySignatures(
+            typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal));
+
+        /// <summary>
+        /// Types that are allowed to have relational operations in queries (in addition to the arithmetic types).
         /// This includes types that have custom implementations of the operators as well as types that are handled by special rules in the parser (e.g. string and char).
         /// </summary>
-        interface IRelationalSignatures : IArithmeticSignatures
-        {
-            void F(string x, string y);
-            void F(char x, char y);
-            void F(DateTime x, DateTime y);
-            void F(TimeSpan x, TimeSpan y);
+        static readonly Signature[] s_relationalTier = BinarySignatures(
+            typeof(string), typeof(char), typeof(DateTime), typeof(TimeSpan), typeof(DateTimeOffset)
 #if NET
-            void F(DateOnly x, DateOnly y);
-            void F(TimeOnly x, TimeOnly y);
-            void F(DateOnly? x, DateOnly? y);
-            void F(TimeOnly? x, TimeOnly? y);
+            , typeof(DateOnly), typeof(TimeOnly)
 #endif
-            void F(char? x, char? y);
-            void F(DateTime? x, DateTime? y);
-            void F(TimeSpan? x, TimeSpan? y);
-            void F(DateTimeOffset x, DateTimeOffset y);
-            void F(DateTimeOffset? x, DateTimeOffset? y);
+            );
+
+        /// <summary>Types that support == and != operators but not relational operators.</summary>
+        static readonly Signature[] s_equalityTier = BinarySignatures(typeof(bool), typeof(Guid));
+
+        static readonly Signature[] s_addTier = PairSignatures(
+            (typeof(DateTime), typeof(TimeSpan)),
+            (typeof(TimeSpan), typeof(TimeSpan)),
+            (typeof(DateTimeOffset), typeof(TimeSpan)));
+
+        static readonly Signature[] s_subtractTier = PairSignatures(
+            (typeof(DateTime), typeof(DateTime)),
+            (typeof(DateTimeOffset), typeof(DateTimeOffset))
+#if NET
+            , (typeof(TimeOnly), typeof(TimeOnly))
+#endif
+            );
+
+        static readonly OperatorSignatures s_logicalSignatures = new(BinarySignatures(typeof(bool)));
+        // *,/,%,"mod" and "has" (enum flag check)
+        static readonly OperatorSignatures s_arithmeticSignatures = new(s_arithmeticTier);
+        // <,<=,>,>= Arithmetic is searched first so that integer literals are compared as int (as in C#) rather than as char.
+        static readonly OperatorSignatures s_relationalSignatures = new(s_arithmeticTier, s_relationalTier);
+        // a == b and a != b 
+        static readonly OperatorSignatures s_equalitySignatures = new(s_arithmeticTier, s_equalityTier, s_relationalTier);
+        // "a + b" , add and subtract are searched before arithmetic so that DateTime + TimeSpan resolves to DateTime rather than int.
+        static readonly OperatorSignatures s_addSignatures = new(s_addTier, s_arithmeticTier);
+        // "a - b"
+        static readonly OperatorSignatures s_subtractSignatures = new(s_subtractTier, s_addTier, s_arithmeticTier);
+        // 
+        static readonly OperatorSignatures s_negationSignatures = new(UnarySignatures(
+            typeof(int), typeof(long), typeof(float), typeof(double), typeof(decimal)));
+        static readonly OperatorSignatures s_notSignatures = new(UnarySignatures(typeof(bool)));
+
+        static readonly FrozenDictionary<string, AggregateSignatures> s_aggregates = CreateAggregates();
+
+        /// <summary>Creates (T) and (T?) signatures for each type.</summary>
+        static Signature[] UnarySignatures(params Type[] types)
+        {
+            var signatures = new List<Signature>(types.Length * 2);
+            foreach (Type type in types)
+            {
+                signatures.Add(new Signature(type));
+                if (type.IsValueType)
+                    signatures.Add(new Signature(MakeNullable(type)));
+            }
+            return signatures.ToArray();
+        }
+
+        /// <summary>Creates (T, T) and, for value types, (T?, T?) signatures for each type.</summary>
+        static Signature[] BinarySignatures(params Type[] types)
+        {
+            var signatures = new List<Signature>(types.Length * 2);
+            foreach (Type type in types)
+            {
+                signatures.Add(new Signature(type, type));
+                if (type.IsValueType)
+                    signatures.Add(new Signature(MakeNullable(type), MakeNullable(type)));
+            }
+            return signatures.ToArray();
+        }
+
+        /// <summary>Creates (L, R) and (L?, R?) signatures for each pair of value types.</summary>
+        static Signature[] PairSignatures(params (Type Left, Type Right)[] pairs)
+        {
+            var signatures = new List<Signature>(pairs.Length * 2);
+            foreach ((Type left, Type right) in pairs)
+            {
+                signatures.Add(new Signature(left, right));
+                signatures.Add(new Signature(MakeNullable(left), MakeNullable(right)));
+            }
+            return signatures.ToArray();
+        }
+
+        static Type MakeNullable(Type type) => typeof(Nullable<>).MakeGenericType(type);
+
+        static FrozenDictionary<string, AggregateSignatures> CreateAggregates()
+        {
+            Type[][] numericSelectors =
+            [
+                [typeof(int)], [typeof(int?)], [typeof(long)], [typeof(long?)], [typeof(float)], [typeof(float?)],
+                [typeof(double)], [typeof(double?)], [typeof(decimal)], [typeof(decimal?)]
+            ];
+            Type[] noArguments = Type.EmptyTypes;
+            Type[] predicate = [typeof(bool)];
+            Type[] selector = [typeof(object)];
+
+            AggregateSignatures[] aggregates =
+            [
+                Aggregate("Where", predicate),
+                Aggregate("Any", noArguments, predicate),
+                Aggregate("All", predicate),
+                Aggregate("Count", noArguments, predicate),
+                Aggregate("Min", selector),
+                Aggregate("Max", selector),
+                Aggregate("Sum", numericSelectors),
+                Aggregate("Average", numericSelectors),
+            ];
+            return aggregates.ToFrozenDictionary(a => a.Name, StringComparer.OrdinalIgnoreCase);
+
+            static AggregateSignatures Aggregate(string name, params Type[][] parameterLists)
+                => new(name, Array.ConvertAll(parameterLists, parameters => new Signature(parameters)));
         }
 
         /// <summary>
-        /// Types that support == and != operators but not relational operators.
+        /// Property, field and indexer metadata, independent of method invocation policies.
+        /// Property and field lookups only include members declared on the type itself.
+        /// The cache is keyed only by type, never by (untrusted) member names, so its size is bounded by the types in use.
         /// </summary>
-        interface IEqualitySignatures : IRelationalSignatures
+        sealed class DataMembers
         {
-            void F(bool x, bool y);
-            void F(bool? x, bool? y);
-            void F(Guid x, Guid y);
-            void F(Guid? x, Guid? y);
+            const BindingFlags InstanceFlags = BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance;
+            const BindingFlags StaticFlags = BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Static;
+
+            public DataMembers(Type type)
+            {
+                Hierarchy = SelfAndBaseTypes(type).ToArray();
+                InstanceFieldsAndProperties = GroupFieldsAndProperties(type, InstanceFlags);
+                StaticFieldsAndProperties = GroupFieldsAndProperties(type, StaticFlags);
+                Indexers = GetIndexers(type);
+            }
+
+            /// <summary>The type itself followed by its base classes, or all inherited interfaces for interface types.</summary>
+            public Type[] Hierarchy { get; }
+            public FrozenDictionary<string, (MemberInfo Member, bool IsIndexer)> InstanceFieldsAndProperties { get; }
+            public FrozenDictionary<string, (MemberInfo Member, bool IsIndexer)> StaticFieldsAndProperties { get; }
+            /// <summary>Getters of the default members (indexers), including inherited ones.</summary>
+            public MemberSignature[] Indexers { get; }
+
+            static FrozenDictionary<string, (MemberInfo Member, bool IsIndexer)> GroupFieldsAndProperties(Type type, BindingFlags flags)
+            {
+                // The first member wins when names only differ by case, matching the order returned by FindMembers.
+                var members = new Dictionary<string, (MemberInfo Member, bool IsIndexer)>(StringComparer.OrdinalIgnoreCase);
+                foreach (MemberInfo member in type.FindMembers(MemberTypes.Property | MemberTypes.Field, flags, null, null))
+                {
+                    if (!members.ContainsKey(member.Name))
+                        members.Add(member.Name, (member, member is PropertyInfo property && property.GetIndexParameters().Length != 0));
+                }
+                return members.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);
+            }
+
+            static MemberSignature[] GetIndexers(Type type)
+            {
+                var indexers = new List<MemberSignature>();
+                foreach (MemberInfo member in type.GetDefaultMembers())
+                {
+                    if (member is PropertyInfo property && property.GetGetMethod() is MethodInfo getter)
+                        indexers.Add(new MemberSignature(getter));
+                }
+                return indexers.ToArray();
+            }
         }
 
-        interface IAddSignatures : IArithmeticSignatures
+        /// <summary>Method and constructor signatures, independent of entity data-member lookup.</summary>
+        internal sealed class InvocationMembers
         {
-            void F(DateTime x, TimeSpan y);
-            void F(TimeSpan x, TimeSpan y);
-            void F(DateTime? x, TimeSpan? y);
-            void F(TimeSpan? x, TimeSpan? y);
-            void F(DateTimeOffset x, TimeSpan y);
-            void F(DateTimeOffset? x, TimeSpan? y);
+            public static readonly InvocationMembers Empty = new();
+
+            InvocationMembers()
+            {
+                InstanceMethods = FrozenDictionary<string, MethodSignature[]>.Empty;
+                StaticMethods = FrozenDictionary<string, MethodSignature[]>.Empty;
+                Constructors = Array.Empty<MethodSignature>();
+            }
+
+            public InvocationMembers(Type type)
+            {
+                const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy;
+                MethodSignature[] methods = RetainSignatures(Array.ConvertAll(type.GetMethods(flags), m => new MethodSignature(m)));
+                InstanceMethods = GroupMethods(methods.Where(s => !s.Method.IsStatic));
+                StaticMethods = GroupMethods(methods.Where(s => s.Method.IsStatic));
+                Constructors = RetainSignatures(Array.ConvertAll(type.GetConstructors(), c => new MethodSignature(c)));
+            }
+
+            public FrozenDictionary<string, MethodSignature[]> InstanceMethods { get; }
+            public FrozenDictionary<string, MethodSignature[]> StaticMethods { get; }
+            public MethodSignature[] Constructors { get; }
+
+            static FrozenDictionary<string, MethodSignature[]> GroupMethods(IEnumerable<MethodSignature> methods)
+                => methods.GroupBy(s => s.Method.Name, StringComparer.OrdinalIgnoreCase)
+                    .ToFrozenDictionary(g => g.Key, g => g.ToArray(), StringComparer.OrdinalIgnoreCase);
+
+            static MethodSignature[] RetainSignatures(MethodSignature[] signatures)
+            {
+                var allowedNames = new HashSet<string>(signatures.Where(s => s.Rule != MemberRule.Denied)
+                    .Select(s => s.Method.Name), StringComparer.Ordinal);
+                // Remove the same-name alternative to bind exclusively against permitted overloads.
+                return Array.FindAll(signatures, s => s.Rule != MemberRule.Denied || allowedNames.Contains(s.Method.Name));
+            }
         }
 
-        interface ISubtractSignatures : IAddSignatures
-        {
-            void F(DateTime x, DateTime y);
-            void F(DateTime? x, DateTime? y);
-            void F(DateTimeOffset x, DateTimeOffset y);
-            void F(DateTimeOffset? x, DateTimeOffset? y);
-#if NET
-            void F(TimeOnly x, TimeOnly y); 
-            void F(TimeOnly? x, TimeOnly? y);
-#endif
-        }
+        static readonly ConditionalWeakTable<Type, DataMembers> s_dataMembers = new();
 
-        interface INegationSignatures
-        {
-            void F(int x);
-            void F(long x);
-            void F(float x);
-            void F(double x);
-            void F(decimal x);
-            void F(int? x);
-            void F(long? x);
-            void F(float? x);
-            void F(double? x);
-            void F(decimal? x);
-        }
+        static DataMembers GetDataMembers(Type type)
+            => s_dataMembers.GetValue(type, static t => new DataMembers(t));
 
-        interface INotSignatures
-        {
-            void F(bool x);
-            void F(bool? x);
-        }
-
-        interface IEnumerableSignatures
-        {
-            void Where(bool predicate);
-            void Any();
-            void Any(bool predicate);
-            void All(bool predicate);
-            void Count();
-            void Count(bool predicate);
-            void Min(object selector);
-            void Max(object selector);
-            void Sum(int selector);
-            void Sum(int? selector);
-            void Sum(long selector);
-            void Sum(long? selector);
-            void Sum(float selector);
-            void Sum(float? selector);
-            void Sum(double selector);
-            void Sum(double? selector);
-            void Sum(decimal selector);
-            void Sum(decimal? selector);
-            void Average(int selector);
-            void Average(int? selector);
-            void Average(long selector);
-            void Average(long? selector);
-            void Average(float selector);
-            void Average(float? selector);
-            void Average(double selector);
-            void Average(double? selector);
-            void Average(decimal selector);
-            void Average(decimal? selector);
-        }
+        internal static InvocationMembers GetInvocationMembers(Type type)
+            => s_invocationMembers.TryGetValue(type, out var members) ? members.Value : InvocationMembers.Empty;
+#nullable disable
 
         static readonly Type[] s_predefinedTypes = {
             typeof(Object),
@@ -430,6 +592,11 @@ namespace System.Linq.Dynamic
             typeof(StringComparison),
             typeof(Uri)
         };
+
+        static readonly FrozenSet<Type> s_predefinedTypeSet = s_predefinedTypes.ToFrozenSet();
+
+        static readonly MethodInfo s_stringCompare = typeof(string).GetMethod(nameof(string.Compare), new[] { typeof(string), typeof(string) });
+        static readonly MethodInfo s_concatObjects = typeof(string).GetMethod(nameof(string.Concat), new[] { typeof(object), typeof(object) });
 
         static readonly ConstantExpression TrueLiteral = Expression.Constant(true);
         static readonly ConstantExpression FalseLiteral = Expression.Constant(false);
@@ -571,7 +738,7 @@ namespace System.Linq.Dynamic
                 Token op = CurrentToken;
                 NextToken();
                 Expression right = ParseLogicalAnd();
-                CheckAndPromoteOperands(typeof(ILogicalSignatures), op, ref left, ref right);
+                CheckAndPromoteOperands(s_logicalSignatures, op, ref left, ref right);
                 left = Expression.OrElse(left, right);
             }
             return left;
@@ -586,7 +753,7 @@ namespace System.Linq.Dynamic
                 Token op = CurrentToken;
                 NextToken();
                 Expression right = ParseHasOperator();
-                CheckAndPromoteOperands(typeof(ILogicalSignatures), op, ref left, ref right);
+                CheckAndPromoteOperands(s_logicalSignatures, op, ref left, ref right);
                 left = Expression.AndAlso(left, right);
             }
             return left;
@@ -634,7 +801,7 @@ namespace System.Linq.Dynamic
                 left = ConvertEnumExpression(left, right);
                 right = ConvertEnumExpression(right, left);
 
-                CheckAndPromoteOperands(typeof(IArithmeticSignatures), op, ref left, ref right);
+                CheckAndPromoteOperands(s_arithmeticSignatures, op, ref left, ref right);
 
                 // Treat as (left & right) == right which is the same behaviour as calling Enum.HasFlag
                 // but it will work with entity framework and probably most other query providers
@@ -676,43 +843,28 @@ namespace System.Linq.Dynamic
                         }
                     }
                 }
-                else if (IsEnumType(left.Type) || IsEnumType(right.Type))
-                {
-                    // convert enum expressions to their underlying values for comparison
-                    left = ConvertEnumExpression(left, right);
-                    right = ConvertEnumExpression(right, left);
-
-                    CheckAndPromoteOperands(isEquality ? typeof(IEqualitySignatures) : typeof(IRelationalSignatures),
-                        op, ref left, ref right);
-                }
                 else
                 {
-                    CheckAndPromoteOperands(isEquality ? typeof(IEqualitySignatures) : typeof(IRelationalSignatures),
+                    if (IsEnumType(left.Type) || IsEnumType(right.Type))
+                    {
+                        // convert enum expressions to their underlying values for comparison
+                        left = ConvertEnumExpression(left, right);
+                        right = ConvertEnumExpression(right, left);
+                    }
+
+                    CheckAndPromoteOperands(isEquality ? s_equalitySignatures : s_relationalSignatures,
                         op, ref left, ref right);
                 }
-                switch (op.id)
+                left = op.id switch
                 {
-                    case TokenId.Equal:
-                    case TokenId.DoubleEqual:
-                        left = GenerateEqual(left, right);
-                        break;
-                    case TokenId.ExclamationEqual:
-                    case TokenId.LessGreater:
-                        left = GenerateNotEqual(left, right);
-                        break;
-                    case TokenId.GreaterThan:
-                        left = GenerateGreaterThan(left, right);
-                        break;
-                    case TokenId.GreaterThanEqual:
-                        left = GenerateGreaterThanEqual(left, right);
-                        break;
-                    case TokenId.LessThan:
-                        left = GenerateLessThan(left, right);
-                        break;
-                    case TokenId.LessThanEqual:
-                        left = GenerateLessThanEqual(left, right);
-                        break;
-                }
+                    TokenId.Equal or TokenId.DoubleEqual => Expression.Equal(left, right),
+                    TokenId.ExclamationEqual or TokenId.LessGreater => Expression.NotEqual(left, right),
+                    TokenId.GreaterThan => GenerateComparison(ExpressionType.GreaterThan, left, right),
+                    TokenId.GreaterThanEqual => GenerateComparison(ExpressionType.GreaterThanOrEqual, left, right),
+                    TokenId.LessThan => GenerateComparison(ExpressionType.LessThan, left, right),
+                    TokenId.LessThanEqual => GenerateComparison(ExpressionType.LessThanOrEqual, left, right),
+                    _ => throw new InvalidOperationException()
+                };
             }
             return left;
         }
@@ -759,12 +911,12 @@ namespace System.Linq.Dynamic
                     case TokenId.Plus:
                         if (left.Type == typeof(string) || right.Type == typeof(string))
                             goto case TokenId.Amphersand;
-                        CheckAndPromoteOperands(typeof(IAddSignatures), op, ref left, ref right);
-                        left = GenerateAdd(left, right);
+                        CheckAndPromoteOperands(s_addSignatures, op, ref left, ref right);
+                        left = Expression.Add(left, right);
                         break;
                     case TokenId.Minus:
-                        CheckAndPromoteOperands(typeof(ISubtractSignatures), op, ref left, ref right);
-                        left = GenerateSubtract(left, right);
+                        CheckAndPromoteOperands(s_subtractSignatures, op, ref left, ref right);
+                        left = Expression.Subtract(left, right);
                         break;
                     case TokenId.Amphersand:
                         left = GenerateStringConcat(left, right);
@@ -784,7 +936,7 @@ namespace System.Linq.Dynamic
                 Token op = CurrentToken;
                 NextToken();
                 Expression right = ParseUnary();
-                CheckAndPromoteOperands(typeof(IArithmeticSignatures), op, ref left, ref right);
+                CheckAndPromoteOperands(s_arithmeticSignatures, op, ref left, ref right);
                 switch (op.id)
                 {
                     case TokenId.Asterisk:
@@ -829,12 +981,12 @@ namespace System.Linq.Dynamic
                 }
                 if (op.id == TokenId.Minus)
                 {
-                    CheckAndPromoteOperand(typeof(INegationSignatures), op, ref expr);
+                    CheckAndPromoteOperand(s_negationSignatures, op, ref expr);
                     expr = Expression.Negate(expr);
                 }
                 else
                 {
-                    CheckAndPromoteOperand(typeof(INotSignatures), op, ref expr);
+                    CheckAndPromoteOperand(s_notSignatures, op, ref expr);
                     expr = Expression.Not(expr);
                 }
                 return expr;
@@ -1100,15 +1252,15 @@ namespace System.Linq.Dynamic
             if (CurrentToken.id == TokenId.OpenParen)
             {
                 Expression[] args = ParseArgumentList();
-                MethodBase method;
-                switch (FindBestMethod(type.GetConstructors(), args, out method))
+                switch (FindBestMethod(GetInvocationMembers(type).Constructors, args, out MethodSignature constructor))
                 {
                     case 0:
                         if (args.Length == 1)
                             return GenerateConversion(args[0], type, errorPos);
                         throw ParseError(errorPos, Resource.NoMatchingConstructor, GetTypeName(type));
                     case 1:
-                        if (!IsMemberAccessAllowed(method, args, _limits))
+                        MethodBase method = constructor.Method;
+                        if (!ApplyMemberRule(constructor.Rule, args, _limits))
                             throw ParseError(errorPos, Resource.MethodsAreInaccessible, GetTypeName(method.DeclaringType));
 
                         return Expression.New((ConstructorInfo)method, args);
@@ -1160,20 +1312,18 @@ namespace System.Linq.Dynamic
                     }
                 }
                 Expression[] args = ParseArgumentList();
-                MethodBase mb;
-                switch (FindMethod(type, id, instance == null, args, out mb))
+                switch (FindMethod(type, id, instance == null, args, out MethodSignature signature))
                 {
                     case 0:
                         throw ParseError(errorPos, Resource.NoApplicableMethod,
                             id, GetTypeName(type));
                     case 1:
-                        MethodInfo method = (MethodInfo)mb;
+                        MethodInfo method = (MethodInfo)signature.Method;
                         if (!IsPredefinedType(method.DeclaringType))
                             throw ParseError(errorPos, Resource.MethodsAreInaccessible, GetTypeName(method.DeclaringType));
                         if (method.ReturnType == typeof(void))
-                            throw ParseError(errorPos, Resource.MethodIsVoid,
-                                id, GetTypeName(method.DeclaringType));
-                        if (!IsMemberAccessAllowed(method, args, _limits))
+                            throw ParseError(errorPos, Resource.MethodIsVoid, id, GetTypeName(method.DeclaringType));
+                        if (!ApplyMemberRule(signature.Rule, args, _limits))
                             throw ParseError(errorPos, Resource.MethodsAreInaccessible, GetTypeName(method.DeclaringType));
                         CheckStringExpansion(method, args);
                         return Expression.Call(instance, (MethodInfo)method, args);
@@ -1184,9 +1334,9 @@ namespace System.Linq.Dynamic
             }
             else
             {
-                MemberInfo member = FindPropertyOrField(type, id, instance == null);
+                MemberInfo member = FindPropertyOrField(type, id, instance == null, out bool isIndexer);
                 // Prevent "getting" an indexer, such as it.Item == ''
-                if (member is PropertyInfo property && property.GetIndexParameters().Length != 0)
+                if (isIndexer)
                     throw ParseError(errorPos, Resource.UnknownPropertyOrField, id, GetTypeName(type));
                 if (member == null)
                 {
@@ -1247,11 +1397,11 @@ namespace System.Linq.Dynamic
             _it = innerIt;
             Expression[] args = ParseArgumentList();
             _it = outerIt;
-            MethodBase signature;
-            if (FindMethod(typeof(IEnumerableSignatures), methodName, false, args, out signature) != 1)
+            if (!s_aggregates.TryGetValue(methodName, out AggregateSignatures aggregate)
+                || FindBestMethod(aggregate.Signatures, args, out _) != 1)
                 throw ParseError(errorPos, Resource.NoApplicableAggregate, methodName);
             Type[] typeArgs;
-            if (signature.Name is "Min" or "Max")
+            if (aggregate.Name is "Min" or "Max")
             {
                 typeArgs = new Type[] { elementType, args[0].Type };
             }
@@ -1267,7 +1417,7 @@ namespace System.Linq.Dynamic
             {
                 args = new Expression[] { instance, DynamicExpression.Lambda(args[0], innerIt) };
             }
-            return Expression.Call(typeof(Enumerable), signature.Name, typeArgs, args);
+            return Expression.Call(typeof(Enumerable), aggregate.Name, typeArgs, args);
         }
 
         Expression[] ParseArgumentList()
@@ -1329,11 +1479,7 @@ namespace System.Linq.Dynamic
 
         static bool IsPredefinedType(Type type)
         {
-            type = GetNonNullableType(type);
-            foreach (Type t in s_predefinedTypes)
-                if (t == type)
-                    return true;
-            return false;
+            return s_predefinedTypeSet.Contains(GetNonNullableType(type));
         }
 
         static bool IsNullableType(Type type)
@@ -1343,7 +1489,7 @@ namespace System.Linq.Dynamic
 
         static Type GetNonNullableType(Type type)
         {
-            return IsNullableType(type) ? type.GetGenericArguments()[0] : type;
+            return Nullable.GetUnderlyingType(type) ?? type;
         }
 
         internal static string GetTypeName(Type type)
@@ -1402,24 +1548,37 @@ namespace System.Linq.Dynamic
             return GetNonNullableType(type).IsEnum;
         }
 
-        void CheckAndPromoteOperand(Type signatures, Token op, ref Expression expr)
+        void CheckAndPromoteOperand(OperatorSignatures signatures, Token op, ref Expression expr)
         {
             Expression[] args = new Expression[] { expr };
-            MethodBase method;
-            if (FindMethod(signatures, "F", false, args, out method) != 1)
+            if (FindOperator(signatures, args) != 1)
                 throw ParseError(op.pos, Resource.IncompatibleOperand,
                     GetString(op), GetTypeName(args[0].Type));
             expr = args[0];
         }
 
-        void CheckAndPromoteOperands(Type signatures, Token op, ref Expression left, ref Expression right)
+        void CheckAndPromoteOperands(OperatorSignatures signatures, Token op, ref Expression left, ref Expression right)
         {
             Expression[] args = new Expression[] { left, right };
-            MethodBase method;
-            if (FindMethod(signatures, "F", false, args, out method) != 1)
+            if (FindOperator(signatures, args) != 1)
                 throw IncompatibleOperandsError(GetString(op), left, right, op.pos);
             left = args[0];
             right = args[1];
+        }
+
+        /// <summary>
+        /// Resolves an operator against <paramref name="signatures"/>, promoting <paramref name="args"/> when a single best match is found.
+        /// </summary>
+        /// <returns>The number of best matches in the first tier with any match (1 on success).</returns>
+        int FindOperator(OperatorSignatures signatures, Expression[] args)
+        {
+            foreach (Signature[] tier in signatures.Tiers)
+            {
+                int count = FindBestMethod(tier, args, out _);
+                if (count != 0)
+                    return count;
+            }
+            return 0;
         }
 
         static Exception IncompatibleOperandsError(string opName, Expression left, Expression right, int pos)
@@ -1428,50 +1587,47 @@ namespace System.Linq.Dynamic
                 opName, GetTypeName(left.Type), GetTypeName(right.Type));
         }
 
-        static MemberInfo FindPropertyOrField(Type type, string memberName, bool staticAccess)
+        static MemberInfo FindPropertyOrField(Type type, string memberName, bool staticAccess, out bool isIndexer)
         {
-            BindingFlags flags = BindingFlags.Public | BindingFlags.DeclaredOnly |
-                (staticAccess ? BindingFlags.Static : BindingFlags.Instance);
-            foreach (Type t in SelfAndBaseTypes(type))
+            foreach (Type t in GetDataMembers(type).Hierarchy)
             {
-                MemberInfo[] members = t.FindMembers(MemberTypes.Property | MemberTypes.Field,
-                    flags, Type.FilterNameIgnoreCase, memberName);
-                if (members.Length != 0)
-                    return members[0];
+                DataMembers members = GetDataMembers(t);
+                var fieldsAndProperties = staticAccess ? members.StaticFieldsAndProperties : members.InstanceFieldsAndProperties;
+                if (fieldsAndProperties.TryGetValue(memberName, out var member))
+                {
+                    isIndexer = member.IsIndexer;
+                    return member.Member;
+                }
             }
+            isIndexer = false;
             return null;
         }
 
-        int FindMethod(Type type, string methodName, bool staticAccess, Expression[] args, out MethodBase method)
+        int FindMethod(Type type, string methodName, bool staticAccess, Expression[] args, out MethodSignature method)
         {
-            BindingFlags flags = BindingFlags.Public | BindingFlags.DeclaredOnly |
-                (staticAccess ? BindingFlags.Static : BindingFlags.Instance);
-            foreach (Type t in SelfAndBaseTypes(type))
+            if (!staticAccess && args.Length == 0 && IsNullableType(type)
+                && string.Equals(methodName, nameof(ToString), StringComparison.OrdinalIgnoreCase))
             {
-                MemberInfo[] members = t.FindMembers(MemberTypes.Method,
-                    flags, Type.FilterNameIgnoreCase, methodName);
-                int count = FindBestMethod(members.Cast<MethodBase>(), args, out method);
-                if (count != 0)
-                    return count;
+                method = new MethodSignature(type.GetMethod(nameof(ToString), Type.EmptyTypes));
+                return 1;
             }
+            InvocationMembers members = GetInvocationMembers(type);
+            var methods = staticAccess ? members.StaticMethods : members.InstanceMethods;
+            if (methods.TryGetValue(methodName, out MethodSignature[] candidates))
+                return FindBestMethod(candidates, args, out method);
             method = null;
             return 0;
         }
 
         int FindIndexer(Type type, Expression[] args, out MethodBase method)
         {
-            foreach (Type t in SelfAndBaseTypes(type))
+            foreach (Type t in GetDataMembers(type).Hierarchy)
             {
-                MemberInfo[] members = t.GetDefaultMembers();
-                if (members.Length != 0)
+                int count = FindBestMethod(GetDataMembers(t).Indexers, args, out MemberSignature best);
+                if (count != 0)
                 {
-                    IEnumerable<MethodBase> methods = members.
-                        OfType<PropertyInfo>().
-                        Select(p => (MethodBase)p.GetGetMethod()).
-                        Where(m => m != null);
-                    int count = FindBestMethod(methods, args, out method);
-                    if (count != 0)
-                        return count;
+                    method = best?.Method;
+                    return count;
                 }
             }
             method = null;
@@ -1508,60 +1664,82 @@ namespace System.Linq.Dynamic
             }
         }
 
-        class MethodData
+        /// <summary>
+        /// Selects the best applicable candidate, following the C# "better function member" rules.
+        /// When a single best candidate is found, <paramref name="args"/> are promoted to its parameter types.
+        /// </summary>
+        /// <returns>The number of best candidates: 0 for no match, 1 for success and more than 1 if ambiguous.</returns>
+        int FindBestMethod<TSignature>(TSignature[] candidates, Expression[] args, out TSignature best)
+            where TSignature : Signature
         {
-            public MethodBase MethodBase;
-            public ParameterInfo[] Parameters;
-            public Expression[] Args;
-        }
+            // Determine applicability without building any expressions; only the winner is promoted.
+            Span<int> applicable = candidates.Length <= 64 ? stackalloc int[candidates.Length] : new int[candidates.Length];
+            int applicableCount = 0;
+            for (int i = 0; i < candidates.Length; i++)
+            {
+                if (IsApplicable(candidates[i], args))
+                    applicable[applicableCount++] = i;
+            }
 
-        int FindBestMethod(IEnumerable<MethodBase> methods, Expression[] args, out MethodBase method)
-        {
-            MethodData[] applicable = methods.
-                Select(m => new MethodData
+            int count = applicableCount;
+            int bestIndex = applicableCount == 1 ? applicable[0] : -1;
+            if (applicableCount > 1)
+            {
+                count = 0;
+                for (int i = 0; i < applicableCount; i++)
                 {
-                    MethodBase = m,
-                    Parameters = m.GetParameters()
-                }).
-                Where(m => IsApplicable(m, args)).
-                ToArray();
-            if (applicable.Length > 1)
-            {
-                applicable = applicable.
-                    Where(m => applicable.All(n => m == n || IsBetterThan(args, m, n))).
-                    ToArray();
+                    Type[] candidate = candidates[applicable[i]].ParameterTypes;
+                    bool isBest = true;
+                    for (int j = 0; j < applicableCount && isBest; j++)
+                    {
+                        if (i != j && !IsBetterThan(args, candidate, candidates[applicable[j]].ParameterTypes))
+                            isBest = false;
+                    }
+                    if (isBest)
+                    {
+                        count++;
+                        bestIndex = applicable[i];
+                    }
+                }
             }
-            if (applicable.Length == 1)
+
+            if (count != 1)
             {
-                MethodData md = applicable[0];
-                for (int i = 0; i < args.Length; i++)
-                    args[i] = md.Args[i];
-                method = md.MethodBase;
+                best = null;
+                return count;
             }
-            else
-            {
-                method = null;
-            }
-            return applicable.Length;
+
+            best = candidates[bestIndex];
+            for (int i = 0; i < args.Length; i++)
+                args[i] = PromoteExpression(args[i], best.ParameterTypes[i], false);
+            return 1;
         }
 
-        bool IsApplicable(MethodData method, Expression[] args)
+        bool IsApplicable(Signature candidate, Expression[] args)
         {
-            if (method.Parameters.Length != args.Length)
+            Type[] parameterTypes = candidate.ParameterTypes;
+            if (!candidate.CanBind || parameterTypes.Length != args.Length)
                 return false;
-            Expression[] promotedArgs = new Expression[args.Length];
             for (int i = 0; i < args.Length; i++)
             {
-                ParameterInfo pi = method.Parameters[i];
-                if (pi.IsOut)
+                if (!CanPromote(args[i], parameterTypes[i]))
                     return false;
-                Expression promoted = PromoteExpression(args[i], pi.ParameterType, false);
-                if (promoted == null)
-                    return false;
-                promotedArgs[i] = promoted;
             }
-            method.Args = promotedArgs;
             return true;
+        }
+
+        /// <summary>
+        /// Returns <see langword="true"/> if <see cref="PromoteExpression"/> would succeed (with exact = <see langword="false"/>),
+        /// without creating any expression for the common non-literal case.
+        /// </summary>
+        bool CanPromote(Expression expr, Type type)
+        {
+            if (expr.Type == type)
+                return true;
+            // Literals can be re-parsed as other types (e.g. number to enum or decimal), so reuse the full logic.
+            if (expr is ConstantExpression ce && (ce == NullLiteral || _literals.ContainsKey(ce)))
+                return PromoteExpression(expr, type, false) != null;
+            return IsCompatibleWith(expr.Type, type);
         }
 
         Expression PromoteExpression(Expression expr, Type type, bool exact)
@@ -1850,14 +2028,14 @@ namespace System.Linq.Dynamic
             return false;
         }
 
-        static bool IsBetterThan(Expression[] args, MethodData m1, MethodData m2)
+        static bool IsBetterThan(Expression[] args, Type[] parameters1, Type[] parameters2)
         {
             bool better = false;
             for (int i = 0; i < args.Length; i++)
             {
                 int c = CompareConversions(args[i].Type,
-                    m1.Parameters[i].ParameterType,
-                    m2.Parameters[i].ParameterType);
+                    parameters1[i],
+                    parameters2[i]);
                 if (c < 0)
                     return false;
                 if (c > 0)
@@ -1890,76 +2068,18 @@ namespace System.Linq.Dynamic
             return 0;
         }
 
-        static Expression GenerateEqual(Expression left, Expression right)
-        {
-            return Expression.Equal(left, right);
-        }
-
-        static Expression GenerateNotEqual(Expression left, Expression right)
-        {
-            return Expression.NotEqual(left, right);
-        }
-
-        static Expression GenerateGreaterThan(Expression left, Expression right)
+        /// <summary>
+        /// Creates a relational comparison. Strings are compared using <see cref="string.Compare(string, string)"/>
+        /// since they do not define relational operators.
+        /// </summary>
+        static Expression GenerateComparison(ExpressionType comparison, Expression left, Expression right)
         {
             if (left.Type == typeof(string))
             {
-                return Expression.GreaterThan(
-                    GenerateStaticMethodCall("Compare", left, right),
-                    Expression.Constant(0)
-                );
+                left = Expression.Call(s_stringCompare, left, right);
+                right = Expression.Constant(0);
             }
-            return Expression.GreaterThan(left, right);
-        }
-
-        static Expression GenerateGreaterThanEqual(Expression left, Expression right)
-        {
-            if (left.Type == typeof(string))
-            {
-                return Expression.GreaterThanOrEqual(
-                    GenerateStaticMethodCall("Compare", left, right),
-                    Expression.Constant(0)
-                );
-            }
-            return Expression.GreaterThanOrEqual(left, right);
-        }
-
-        static Expression GenerateLessThan(Expression left, Expression right)
-        {
-            if (left.Type == typeof(string))
-            {
-                return Expression.LessThan(
-                    GenerateStaticMethodCall("Compare", left, right),
-                    Expression.Constant(0)
-                );
-            }
-            return Expression.LessThan(left, right);
-        }
-
-        static Expression GenerateLessThanEqual(Expression left, Expression right)
-        {
-            if (left.Type == typeof(string))
-            {
-                return Expression.LessThanOrEqual(
-                    GenerateStaticMethodCall("Compare", left, right),
-                    Expression.Constant(0)
-                );
-            }
-            return Expression.LessThanOrEqual(left, right);
-        }
-
-        static Expression GenerateAdd(Expression left, Expression right)
-        {
-            if (left.Type == typeof(string) && right.Type == typeof(string))
-            {
-                return GenerateStaticMethodCall("Concat", left, right);
-            }
-            return Expression.Add(left, right);
-        }
-
-        static Expression GenerateSubtract(Expression left, Expression right)
-        {
-            return Expression.Subtract(left, right);
+            return Expression.MakeBinary(comparison, left, right);
         }
 
         static Expression GenerateStringConcat(Expression left, Expression right)
@@ -1968,20 +2088,7 @@ namespace System.Linq.Dynamic
                 left = Expression.Convert(left, typeof(object));
             if (right.Type.IsValueType)
                 right = Expression.Convert(right, typeof(object));
-            return Expression.Call(
-                null,
-                typeof(string).GetMethod("Concat", new[] { typeof(object), typeof(object) }),
-                new[] { left, right });
-        }
-
-        static MethodInfo GetStaticMethod(string methodName, Expression left, Expression right)
-        {
-            return left.Type.GetMethod(methodName, new[] { left.Type, right.Type });
-        }
-
-        static Expression GenerateStaticMethodCall(string methodName, Expression left, Expression right)
-        {
-            return Expression.Call(null, GetStaticMethod(methodName, left, right), new[] { left, right });
+            return Expression.Call(s_concatObjects, left, right);
         }
 
         void SetTextPos(int pos)

@@ -11,7 +11,7 @@ namespace System.Linq.Dynamic
 {
     internal partial class ExpressionParser
     {
-        private enum MemberRule
+        internal enum MemberRule
         {
             Denied,
             Allowed,
@@ -20,60 +20,42 @@ namespace System.Linq.Dynamic
             ReplaceString
         }
 
-        private delegate bool MemberPolicy(MethodBase method, ParameterInfo[] parameters);
+        private delegate bool MemberPolicy(MethodBase method, Type[] parameters);
 
-        private static readonly FrozenDictionary<Type, Func<MethodBase, MemberRule>> s_memberPolicies = CreateMemberPolicies();
+        private static readonly FrozenDictionary<Type, (MemberPolicy Policy, bool NumericFormat)> s_memberPolicies = CreateMemberPolicies();
 
-        private static FrozenDictionary<Type, Func<MethodBase, MemberRule>> CreateMemberPolicies()
+        private static readonly FrozenDictionary<Type, Lazy<InvocationMembers>> s_invocationMembers = s_memberPolicies.Keys
+            .ToFrozenDictionary(static type => type, static type => new Lazy<InvocationMembers>(() => new InvocationMembers(type)));
+
+        private static FrozenDictionary<Type, (MemberPolicy Policy, bool NumericFormat)> CreateMemberPolicies()
         {
-            var policies = new Dictionary<Type, Func<MethodBase, MemberRule>>();
-            policies.Add(typeof(Char), static method => ResolveRule(method, CharMemberPolicy, false));
-            policies.Add(typeof(String), static method => ResolveRule(method, StringMemberPolicy, false));
-            policies.Add(typeof(DateTime), static method => ResolveRule(method, DateTimeMemberPolicy, false));
-            policies.Add(typeof(DateTimeOffset), static method => ResolveRule(method, DateTimeOffsetMemberPolicy, false));
-            policies.Add(typeof(TimeSpan), static method => ResolveRule(method, TimeSpanMemberPolicy, false));
-            policies.Add(typeof(Guid), static method => ResolveRule(method, GuidMemberPolicy, false));
-            policies.Add(typeof(Uri), static method => ResolveRule(method, UriMemberPolicy, false));
-            policies.Add(typeof(SByte), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(Byte), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(Int16), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(UInt16), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(Int32), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(UInt32), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(Int64), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(Boolean), static method => ResolveRule(method, BooleanMemberPolicy, false));
-            policies.Add(typeof(UInt64), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(Single), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(Double), static method => ResolveRule(method, NumericMemberPolicy, true));
-            policies.Add(typeof(Decimal), static method => ResolveRule(method, DecimalMemberPolicy, true));
-            policies.Add(typeof(Math), static method => ResolveRule(method, MathMemberPolicy, false));
-            policies.Add(typeof(Convert), static method => ResolveRule(method, ConvertMemberPolicy, false));
+            var policies = new Dictionary<Type, (MemberPolicy Policy, bool NumericFormat)>();
+            policies.Add(typeof(Char), (CharMemberPolicy, false));
+            policies.Add(typeof(String), (StringMemberPolicy, false));
+            policies.Add(typeof(DateTime), (DateTimeMemberPolicy, false));
+            policies.Add(typeof(DateTimeOffset), (DateTimeOffsetMemberPolicy, false));
+            policies.Add(typeof(TimeSpan), (TimeSpanMemberPolicy, false));
+            policies.Add(typeof(Guid), (GuidMemberPolicy, false));
+            policies.Add(typeof(Uri), (UriMemberPolicy, false));
+            policies.Add(typeof(SByte), (NumericMemberPolicy, true));
+            policies.Add(typeof(Byte), (NumericMemberPolicy, true));
+            policies.Add(typeof(Int16), (NumericMemberPolicy, true));
+            policies.Add(typeof(UInt16), (NumericMemberPolicy, true));
+            policies.Add(typeof(Int32), (NumericMemberPolicy, true));
+            policies.Add(typeof(UInt32), (NumericMemberPolicy, true));
+            policies.Add(typeof(Int64), (NumericMemberPolicy, true));
+            policies.Add(typeof(Boolean), (BooleanMemberPolicy, false));
+            policies.Add(typeof(UInt64), (NumericMemberPolicy, true));
+            policies.Add(typeof(Single), (NumericMemberPolicy, true));
+            policies.Add(typeof(Double), (NumericMemberPolicy, true));
+            policies.Add(typeof(Decimal), (DecimalMemberPolicy, true));
+            policies.Add(typeof(Math), (MathMemberPolicy, false));
+            policies.Add(typeof(Convert), (ConvertMemberPolicy, false));
 #if NET
-            policies.Add(typeof(DateOnly), static method => ResolveRule(method, DateOnlyMemberPolicy, false));
-            policies.Add(typeof(TimeOnly), static method => ResolveRule(method, TimeOnlyMemberPolicy, false));
+            policies.Add(typeof(DateOnly), (DateOnlyMemberPolicy, false));
+            policies.Add(typeof(TimeOnly), (TimeOnlyMemberPolicy, false));
 #endif
             return policies.ToFrozenDictionary();
-        }
-
-        private static class MemberRules
-        {
-            internal static readonly FrozenDictionary<MethodBase, MemberRule> Values = Create();
-
-            private static FrozenDictionary<MethodBase, MemberRule> Create()
-            {
-                var rules = new Dictionary<MethodBase, MemberRule>();
-                const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.DeclaredOnly;
-                foreach (var policy in s_memberPolicies)
-                {
-                    foreach (MethodBase member in policy.Key.GetMethods(flags).Cast<MethodBase>().Concat(policy.Key.GetConstructors(flags)))
-                    {
-                        MemberRule rule = policy.Value(member);
-                        if (rule != MemberRule.Denied)
-                            rules.Add(member, rule);
-                    }
-                }
-                return rules.ToFrozenDictionary();
-            }
         }
 
         /// <summary>Determines whether a bound member and its current arguments are allowed.</summary>
@@ -84,39 +66,45 @@ namespace System.Linq.Dynamic
         internal static bool IsMemberAccessAllowed(MethodBase method, Expression[] args, QueryLimits limits)
         {
             ArgumentNullException.ThrowIfNull(limits);
-            MemberRule rule;
-            if (!MemberRules.Values.TryGetValue(method, out rule))
+            if (method.DeclaringType != null && s_memberPolicies.ContainsKey(method.DeclaringType))
             {
-                // Reflected inherited members retain their declaring-type policy without growing the table.
-                rule = method.ReflectedType != method.DeclaringType ? ResolveByType(method) : NullableMemberRule(method);
+                InvocationMembers members = GetInvocationMembers(method.DeclaringType);
+                MethodSignature[] candidates;
+                if (method.IsConstructor)
+                    candidates = members.Constructors;
+                else if (!(method.IsStatic ? members.StaticMethods : members.InstanceMethods).TryGetValue(method.Name, out candidates))
+                    candidates = Array.Empty<MethodSignature>();
+                foreach (MethodSignature signature in candidates)
+                {
+                    if (signature.Method.Equals(method))
+                        return ApplyMemberRule(signature.Rule, args, limits);
+                }
+                // Inherited reflection views may not equal the declaring type's cached MethodInfo.
+                if (method.ReflectedType != method.DeclaringType)
+                    return ApplyMemberRule(ResolveMemberRule(method, Array.ConvertAll(method.GetParameters(), p => p.ParameterType)), args, limits);
+                return false;
             }
-            return ApplyMemberRule(rule, args, limits);
+            return ApplyMemberRule(NullableMemberRule(method), args, limits);
         }
 
-        private static MemberRule ResolveByType(MethodBase method)
+        private static MemberRule ResolveMemberRule(MethodBase method, Type[] parameters)
         {
-            return method.DeclaringType != null && s_memberPolicies.TryGetValue(method.DeclaringType, out var resolver)
-                ? resolver(method) : NullableMemberRule(method);
+            if (method.DeclaringType == null || !s_memberPolicies.TryGetValue(method.DeclaringType, out var policy)
+                || !policy.Policy(method, parameters))
+                return NullableMemberRule(method, parameters.Length);
+            if (policy.NumericFormat && !method.IsStatic && method.Name == "ToString" && ParametersMatch(parameters, typeof(string)))
+                return MemberRule.NumericFormat;
+            if (method.DeclaringType == typeof(string) && method.Name == "Replace")
+                return parameters[1] == typeof(char) ? MemberRule.ReplaceCharacter : MemberRule.ReplaceString;
+            return MemberRule.Allowed;
         }
 
-        private static MemberRule NullableMemberRule(MethodBase method)
+        private static MemberRule NullableMemberRule(MethodBase method, int? parameterCount = null)
         {
             return !method.IsConstructor && method.DeclaringType != null
                 && OpenRiaServices.TypeUtility.IsNullableType(method.DeclaringType)
-                && method.Name == "ToString" && method.GetParameters().Length == 0
+                && method.Name == "ToString" && (parameterCount ?? method.GetParameters().Length) == 0
                 ? MemberRule.Allowed : MemberRule.Denied;
-        }
-
-        private static MemberRule ResolveRule(MethodBase method, MemberPolicy policy, bool numericFormat)
-        {
-            ParameterInfo[] parameters = method.GetParameters();
-            if (!policy(method, parameters))
-                return MemberRule.Denied;
-            if (numericFormat && !method.IsStatic && method.Name == "ToString" && ParametersMatch(parameters, typeof(string)))
-                return MemberRule.NumericFormat;
-            if (method.DeclaringType == typeof(string) && method.Name == "Replace")
-                return parameters[1].ParameterType == typeof(char) ? MemberRule.ReplaceCharacter : MemberRule.ReplaceString;
-            return MemberRule.Allowed;
         }
 
         private static bool ApplyMemberRule(MemberRule rule, Expression[] args, QueryLimits limits)
@@ -132,19 +120,19 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool ParametersMatch(ParameterInfo[] actual, params ReadOnlySpan<Type> expected)
+        private static bool ParametersMatch(Type[] actual, params ReadOnlySpan<Type> expected)
         {
             if (actual.Length != expected.Length)
                 return false;
             for (int i = 0; i < actual.Length; i++)
             {
-                if (actual[i].ParameterType != expected[i])
+                if (actual[i] != expected[i])
                     return false;
             }
             return true;
         }
 
-        private static bool NumericMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool NumericMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return false;
@@ -162,7 +150,7 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool CharMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool CharMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return false;
@@ -217,7 +205,7 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool StringMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool StringMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(Char[]), typeof(Int32), typeof(Int32))
@@ -292,7 +280,7 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool DateTimeMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool DateTimeMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(Int64))
@@ -345,11 +333,10 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool DateTimeOffsetMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool DateTimeOffsetMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(Int64), typeof(TimeSpan))
-
                     || ParametersMatch(parameters, typeof(DateTime))
                     || ParametersMatch(parameters, typeof(DateTime), typeof(TimeSpan))
                     || ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(Int32), typeof(TimeSpan))
@@ -387,7 +374,7 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool TimeSpanMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool TimeSpanMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(Int64))
@@ -418,7 +405,7 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool GuidMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool GuidMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(Byte[]))
@@ -440,7 +427,7 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool UriMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool UriMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(String))
@@ -473,7 +460,7 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool BooleanMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool BooleanMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return false;
@@ -488,7 +475,7 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool DecimalMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool DecimalMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(Int32))
@@ -534,9 +521,9 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool MathMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool MathMemberPolicy(MethodBase method, Type[] parameters)
         {
-            if (method.IsConstructor || !method.IsStatic)
+            if (method.IsConstructor)
                 return false;
             return method.Name switch
             {
@@ -614,11 +601,11 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool ConvertMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool ConvertMemberPolicy(MethodBase method, Type[] parameters)
         {
-            if (method.IsConstructor || !method.IsStatic)
+            if (method.IsConstructor)
                 return false;
-            bool singleArgument = parameters.Length == 1 && IsConversionInput(parameters[0].ParameterType);
+            bool singleArgument = parameters.Length == 1 && IsConversionInput(parameters[0]);
             return method.Name switch
             {
                 "ToBoolean" or "ToChar" or "ToSingle" or "ToDouble" or "ToDecimal" or "ToDateTime" => singleArgument,
@@ -643,7 +630,7 @@ namespace System.Linq.Dynamic
         }
 
 #if NET
-        private static bool DateOnlyMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool DateOnlyMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(Int32), typeof(Int32), typeof(Int32))
@@ -672,7 +659,7 @@ namespace System.Linq.Dynamic
             };
         }
 
-        private static bool TimeOnlyMemberPolicy(MethodBase method, ParameterInfo[] parameters)
+        private static bool TimeOnlyMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
                 return ParametersMatch(parameters, typeof(Int64))

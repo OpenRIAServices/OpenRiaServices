@@ -22,9 +22,14 @@ namespace OpenRiaServices.Client.Test
 {
     /// <summary>
     /// Tests of both the client and server query serialization pieces via internal direct access to those
-    /// components. These tests run desktop only. Note : the server components being tested are cross compiled
-    /// into the IsolatedServerCode library which is referenced by this test assembly.
+    /// components. Covers round trips and server parsing through QueryDeserializer, including expression-tree
+    /// assertions. The WebRia alias selects WCF on .NET Framework and ASP.NET Core on modern .NET.
     /// </summary>
+    /// <remarks>
+    /// Add client-query behavior and serialization regressions here. Parser-only binding details belong in
+    /// OpenRiaServices.Hosting.Wcf\Test\Linq\OperatorResolutionTests.cs, which is also linked into the
+    /// ASP.NET Core tests. Check both suites before adding overlapping cases.
+    /// </remarks>
     [TestClass]
     public class QuerySerializationTests
     {

@@ -145,27 +145,67 @@ namespace System.Linq.Dynamic.UnitTests
         }
 
         [TestMethod]
-        public void UnknownAndNullableMembersDoNotGrowTheRuleTable()
+        [DataRow(typeof(int?))]
+        [DataRow(typeof(DateTime?))]
+        public void NullableToStringBindsWithoutInvocationCacheEntries(Type type)
         {
-            Assert.IsTrue(Allows(typeof(int).GetMethod("ToString", Type.EmptyTypes)));
-            Type holder = typeof(ExpressionParser).GetNestedType("MemberRules", BindingFlags.NonPublic);
-            FieldInfo field = holder.GetField("Values", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-            object rules = field.GetValue(null);
-            PropertyInfo count = rules.GetType().GetProperty("Count");
-            int originalCount = (int)count.GetValue(rules);
-            Type[] types = [typeof(int), typeof(long), typeof(decimal), typeof(double), typeof(bool), typeof(Guid), typeof(DateTime)];
-            Parallel.For(0, 256, i =>
-            {
-                Type argument = types[i % types.Length];
-                Type unknown = typeof(UnknownMember<>).MakeGenericType(argument);
-                Assert.IsFalse(Allows(unknown.GetMethod("ToString", [typeof(string)])));
-                Assert.IsFalse(Allows(unknown.GetMethod("Parse", [typeof(string)])));
-                Type nullable = typeof(Nullable<>).MakeGenericType(argument);
-                Assert.IsTrue(Allows(nullable.GetMethod("ToString", Type.EmptyTypes)));
-                Assert.IsFalse(Allows(nullable.GetMethod("GetValueOrDefault", Type.EmptyTypes)));
-            });
-            Assert.AreSame(rules, field.GetValue(null));
-            Assert.AreEqual(originalCount, (int)count.GetValue(rules));
+            LambdaExpression lambda = DynamicExpression.ParseLambda(type, typeof(string), "it.tOsTrInG()", null, QueryLimits.Defaults);
+            var call = (MethodCallExpression)lambda.Body;
+            Assert.AreEqual(type, call.Method.DeclaringType);
+            Assert.AreEqual("ToString", call.Method.Name);
+            Delegate compiled = lambda.Compile();
+            Assert.AreEqual(string.Empty, compiled.DynamicInvoke(new object[] { null }));
+            object value = Activator.CreateInstance(Nullable.GetUnderlyingType(type));
+            Assert.AreEqual(value.ToString(), compiled.DynamicInvoke(value));
+        }
+
+        [TestMethod]
+        public void InvocationCacheDropsDeniedOnlyNamesButKeepsDeniedOverloads()
+        {
+            ExpressionParser.InvocationMembers members = ExpressionParser.GetInvocationMembers(typeof(string));
+            ExpressionParser.MethodSignature[] signatures = members.InstanceMethods.Values
+                .Concat(members.StaticMethods.Values)
+                .SelectMany(s => s)
+                .ToArray();
+            MethodBase[] methods = signatures.Select(s => s.Method).ToArray();
+            CollectionAssert.Contains(methods, typeof(string).GetMethod("Equals", [typeof(object)]));
+            CollectionAssert.Contains(methods, typeof(string).GetMethod("Equals", [typeof(string)]));
+            Assert.IsFalse(methods.Any(m => m.Name == "Split"));
+            foreach (ExpressionParser.MethodSignature denied in signatures.Where(s => s.Rule == ExpressionParser.MemberRule.Denied))
+                Assert.IsTrue(signatures.Any(s => s.Rule != ExpressionParser.MemberRule.Denied && s.Method.Name == denied.Method.Name));
+
+            CollectionAssert.Contains(members.Constructors.Select(s => s.Method).ToArray(), typeof(string).GetConstructor([typeof(char), typeof(int)]));
+            Assert.IsTrue(members.Constructors.Any(s => s.Rule != ExpressionParser.MemberRule.Denied));
+            ExpressionParser.InvocationMembers objectMembers = ExpressionParser.GetInvocationMembers(typeof(object));
+            Assert.AreEqual(0, objectMembers.InstanceMethods.Count);
+            Assert.AreEqual(0, objectMembers.Constructors.Length);
+        }
+
+        // NOTE: We might want to change this to make things less fragile to new overloads,
+        [TestMethod]
+        public void DeniedOverloadsStillParticipateInBinding()
+        {
+            ParameterExpression[] parameters = [Expression.Parameter(typeof(string), "text"), Expression.Parameter(typeof(object), "value")];
+            var denied = Assert.ThrowsExactly<ParseException>(() =>
+                DynamicExpression.ParseLambda(parameters, typeof(bool), "text.Equals(value)", null, QueryLimits.Defaults));
+            StringAssert.Contains(denied.Message, string.Format(CultureInfo.InvariantCulture, Resource.MethodsAreInaccessible, nameof(String)));
+
+            var ambiguous = Assert.ThrowsExactly<ParseException>(() =>
+                DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(null)", null, QueryLimits.Defaults));
+            StringAssert.Contains(ambiguous.Message, string.Format(CultureInfo.InvariantCulture, Resource.NoApplicableMethod, "ToString", nameof(Int32)));
+        }
+
+        [TestMethod]
+        public void ParserChecksCurrentLimitsAgainstCachedRules()
+        {
+            var limits = new QueryLimits { MaxNumericFormatPrecision = 2 };
+            Assert.ThrowsExactly<ParseException>(() =>
+                DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(\"D3\")", null, limits));
+            limits.MaxNumericFormatPrecision = 3;
+            DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(\"D3\")", null, limits);
+            limits.MaxNumericFormatPrecision = 2;
+            Assert.ThrowsExactly<ParseException>(() =>
+                DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(\"D3\")", null, limits));
         }
 
 #if NET
@@ -201,6 +241,8 @@ namespace System.Linq.Dynamic.UnitTests
         private sealed class UnknownMember<T>
         {
             public string ToString(string format) => format;
+
+            public string tostring(string format) => format;
 
             public static T Parse(string value) => default;
         }
