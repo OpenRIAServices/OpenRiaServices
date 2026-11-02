@@ -706,7 +706,7 @@ namespace OpenRiaServices.Client.Test
             }
             catch (Exception e)
             {
-                Assert.AreEqual("Methods on type 'Object' are not accessible (at index 1)", e.Message);
+                Assert.AreEqual("No applicable method 'GetType' exists in type 'PurchaseOrder' (at index 1)", e.Message);
             }
         }
 
