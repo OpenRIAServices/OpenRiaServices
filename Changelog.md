@@ -10,6 +10,16 @@
 * HTTP clients now honor `HttpClient.DefaultRequestVersion` and `DefaultVersionPolicy` for POST and QUERY requests, matching GET requests across binary XML, XML, and MessagePack transports on .NET.
 
 
+* Faster dynamic query parsing in WCF and ASP.NET Core. Operator signatures are now static tables,
+  and data-member and invocation metadata are cached separately per type.
+  Invocation metadata is bounded to built-in policy types and initialized lazily; nullable `ToString()` remains supported.
+  Method signatures include their permission rules. Only permitted methods and constructors participate
+  in overload resolution; unsupported by-reference parameters, including `out` parameters, are excluded.
+  Overload resolution only creates expressions for the selected overload.
+  Comparisons between integer literals, such as `1 < 2`, now use `int` instead of `char`, as in C#.
+* Character comparisons with numeric operands use numeric promotion instead of converting numbers to characters.
+  DateTime - null preserves right side type to distinguish date differences from duration subtraction.
+
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
 Major new features in this release are:

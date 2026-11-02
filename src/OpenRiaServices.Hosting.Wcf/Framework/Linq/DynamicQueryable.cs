@@ -86,14 +86,6 @@ namespace System.Linq.Dynamic
 
     internal static class DynamicExpression
     {
-        static readonly Type[] funcTypes = new Type[] {
-            typeof(Func<>),
-            typeof(Func<,>),
-            typeof(Func<,,>),
-            typeof(Func<,,,>),
-            typeof(Func<,,,,>)
-        };
-
         public static LambdaExpression ParseLambda(Type itType, Type resultType, string expression, QueryResolver queryResolver, QueryLimits limits)
         {
             return ParseLambda(new ParameterExpression[] { Expression.Parameter(itType, "") }, resultType, expression, queryResolver, limits);
@@ -112,15 +104,7 @@ namespace System.Linq.Dynamic
             for (int i = 0; i < paramCount; i++)
                 typeArgs[i] = parameters[i].Type;
             typeArgs[paramCount] = body.Type;
-            return Expression.Lambda(GetFuncType(typeArgs), body, parameters);
-        }
-
-        [SuppressMessage("Microsoft.Usage", "CA2208:InstantiateArgumentExceptionsCorrectly", Justification = "Arguments are provided internally by the parser's ParserLambda methods.")]
-        public static Type GetFuncType(params Type[] typeArgs)
-        {
-            if (typeArgs == null || typeArgs.Length < 1 || typeArgs.Length > 5)
-                throw new ArgumentException(nameof(typeArgs));
-            return funcTypes[typeArgs.Length - 1].MakeGenericType(typeArgs);
+            return Expression.Lambda(Expression.GetFuncType(typeArgs), body, parameters);
         }
     }
 
@@ -285,32 +269,19 @@ namespace System.Linq.Dynamic
         /// </summary>
         internal class Signature
         {
-            protected Signature(Type[] parameterTypes, bool canBind)
+            public Signature(params Type[] parameterTypes)
             {
                 ParameterTypes = parameterTypes;
-                CanBind = canBind;
-            }
-
-            public Signature(params Type[] parameterTypes)
-                : this(parameterTypes, canBind: true)
-            {
             }
 
             public Type[] ParameterTypes { get; }
-            /// <summary><see langword="false"/> when the method has out parameters, which can never be bound.</summary>
-            public bool CanBind { get; }
         }
 
         /// <summary>A reflected member signature, also used for separately validated indexer getters.</summary>
         internal class MemberSignature : Signature
         {
-            public MemberSignature(MethodBase method)
-                : this(method, method.GetParameters())
-            {
-            }
-
-            MemberSignature(MethodBase method, ParameterInfo[] parameters)
-                : base(Array.ConvertAll(parameters, p => p.ParameterType), !parameters.Any(p => p.IsOut))
+            public MemberSignature(MethodBase method, Type[] parameterTypes)
+                : base(parameterTypes)
             {
                 Method = method;
             }
@@ -321,10 +292,10 @@ namespace System.Linq.Dynamic
         /// <summary>An invocable method or constructor with its argument-independent permission rule.</summary>
         internal sealed class MethodSignature : MemberSignature
         {
-            public MethodSignature(MethodBase method)
-                : base(method)
+            public MethodSignature(MethodBase method, Type[] parameterTypes, MemberRule rule)
+                : base(method, parameterTypes)
             {
-                Rule = ResolveMemberRule(method, ParameterTypes);
+                Rule = rule;
             }
 
             public MemberRule Rule { get; }
@@ -483,13 +454,17 @@ namespace System.Linq.Dynamic
                 foreach (MemberInfo member in type.GetDefaultMembers())
                 {
                     if (member is PropertyInfo property && property.GetGetMethod() is MethodInfo getter)
-                        indexers.Add(new MemberSignature(getter));
+                    {
+                        Type[] parameters = Array.ConvertAll(getter.GetParameters(), p => p.ParameterType);
+                        if (!parameters.Any(p => p.IsByRef))
+                            indexers.Add(new MemberSignature(getter, parameters));
+                    }
                 }
                 return indexers.ToArray();
             }
         }
 
-        /// <summary>Method and constructor signatures, independent of entity data-member lookup.</summary>
+        /// <summary>Policy-permitted method and constructor signatures, independent of entity data-member lookup.</summary>
         internal sealed class InvocationMembers
         {
             public static readonly InvocationMembers Empty = new();
@@ -504,10 +479,10 @@ namespace System.Linq.Dynamic
             public InvocationMembers(Type type)
             {
                 const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy;
-                MethodSignature[] methods = RetainSignatures(Array.ConvertAll(type.GetMethods(flags), m => new MethodSignature(m)));
+                MethodSignature[] methods = GetSignatures(type.GetMethods(flags)).ToArray();
                 InstanceMethods = GroupMethods(methods.Where(s => !s.Method.IsStatic));
                 StaticMethods = GroupMethods(methods.Where(s => s.Method.IsStatic));
-                Constructors = RetainSignatures(Array.ConvertAll(type.GetConstructors(), c => new MethodSignature(c)));
+                Constructors = GetSignatures(type.GetConstructors()).ToArray();
             }
 
             public FrozenDictionary<string, MethodSignature[]> InstanceMethods { get; }
@@ -518,12 +493,15 @@ namespace System.Linq.Dynamic
                 => methods.GroupBy(s => s.Method.Name, StringComparer.OrdinalIgnoreCase)
                     .ToFrozenDictionary(g => g.Key, g => g.ToArray(), StringComparer.OrdinalIgnoreCase);
 
-            static MethodSignature[] RetainSignatures(MethodSignature[] signatures)
+            static IEnumerable<MethodSignature> GetSignatures(IEnumerable<MethodBase> methods)
             {
-                var allowedNames = new HashSet<string>(signatures.Where(s => s.Rule != MemberRule.Denied)
-                    .Select(s => s.Method.Name), StringComparer.Ordinal);
-                // Remove the same-name alternative to bind exclusively against permitted overloads.
-                return Array.FindAll(signatures, s => s.Rule != MemberRule.Denied || allowedNames.Contains(s.Method.Name));
+                foreach (MethodBase method in methods)
+                {
+                    Type[] parameters = Array.ConvertAll(method.GetParameters(), p => p.ParameterType);
+                    MemberRule rule = ResolveMemberRule(method, parameters);
+                    if (rule != MemberRule.Denied)
+                        yield return new MethodSignature(method, parameters, rule);
+                }
             }
         }
 
@@ -536,7 +514,7 @@ namespace System.Linq.Dynamic
             => s_invocationMembers.TryGetValue(type, out var members) ? members.Value : InvocationMembers.Empty;
 #nullable disable
 
-        static readonly Type[] s_predefinedTypes = {
+        static readonly FrozenSet<Type> s_predefinedTypeSet = new Type[] {
             typeof(Object),
             typeof(Boolean),
             typeof(Char),
@@ -564,9 +542,7 @@ namespace System.Linq.Dynamic
             typeof(Convert),
             typeof(StringComparison),
             typeof(Uri)
-        };
-
-        static readonly FrozenSet<Type> s_predefinedTypeSet = s_predefinedTypes.ToFrozenSet();
+        }.ToFrozenSet();
 
         static readonly MethodInfo s_stringCompare = typeof(string).GetMethod(nameof(string.Compare), new[] { typeof(string), typeof(string) });
         static readonly MethodInfo s_concatObjects = typeof(string).GetMethod(nameof(string.Concat), new[] { typeof(object), typeof(object) });
@@ -1292,8 +1268,6 @@ namespace System.Linq.Dynamic
                             id, GetTypeName(type));
                     case 1:
                         MethodInfo method = (MethodInfo)signature.Method;
-                        if (!IsPredefinedType(method.DeclaringType))
-                            throw ParseError(errorPos, Resource.MethodsAreInaccessible, GetTypeName(method.DeclaringType));
                         if (method.ReturnType == typeof(void))
                             throw ParseError(errorPos, Resource.MethodIsVoid, id, GetTypeName(method.DeclaringType));
                         if (!ApplyMemberRule(signature.Rule, args, _limits))
@@ -1339,22 +1313,19 @@ namespace System.Linq.Dynamic
         /// <returns>The matching constructed <see cref="IEnumerable{T}"/> type, or <see langword="null"/> if the type is not an <see cref="IEnumerable{T}"/> .</returns>
         private static Type? FindEnumerableType(Type type)
         {
-            return s_enumerableTypeLookup.GetOrAdd(type, static x => FindGenericType(typeof(IEnumerable<>), x));
+            return s_enumerableTypeLookup.GetOrAdd(type, static x => FindEnumerable(x));
 
-            static Type? FindGenericType(Type generic, Type? type)
+            static Type? FindEnumerable(Type? type)
             {
                 while (type != null && type != typeof(object))
                 {
-                    if (type.IsGenericType && type.GetGenericTypeDefinition() == generic)
+                    if (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(IEnumerable<>))
                         return type;
-                    if (generic.IsInterface)
+                    foreach (Type intfType in type.GetInterfaces())
                     {
-                        foreach (Type intfType in type.GetInterfaces())
-                        {
-                            Type? found = FindGenericType(generic, intfType);
-                            if (found != null)
-                                return found;
-                        }
+                        Type? found = FindEnumerable(intfType);
+                        if (found != null)
+                            return found;
                     }
                     type = type.BaseType;
                 }
@@ -1581,7 +1552,7 @@ namespace System.Linq.Dynamic
             if (!staticAccess && args.Length == 0 && IsNullableType(type)
                 && string.Equals(methodName, nameof(ToString), StringComparison.OrdinalIgnoreCase))
             {
-                method = new MethodSignature(type.GetMethod(nameof(ToString), Type.EmptyTypes));
+                method = new MethodSignature(type.GetMethod(nameof(ToString), Type.EmptyTypes), Type.EmptyTypes, MemberRule.Allowed);
                 return 1;
             }
             InvocationMembers members = GetInvocationMembers(type);
@@ -1701,7 +1672,7 @@ namespace System.Linq.Dynamic
             if (count != 1)
             {
                 best = null;
-                return preferOrdinaryConversions ? applicableCount : count;
+                return applicableCount;
             }
 
             best = candidates[bestIndex];
@@ -1713,7 +1684,7 @@ namespace System.Linq.Dynamic
         bool IsApplicable(Signature candidate, Expression[] args)
         {
             Type[] parameterTypes = candidate.ParameterTypes;
-            if (!candidate.CanBind || parameterTypes.Length != args.Length)
+            if (parameterTypes.Length != args.Length)
                 return false;
             for (int i = 0; i < args.Length; i++)
             {
@@ -2393,7 +2364,7 @@ namespace System.Linq.Dynamic
 
         static FrozenDictionary<string, object> CreateKeywords()
         {
-            Dictionary<string, object> d = new(capacity: 5 + s_predefinedTypes.Length, StringComparer.OrdinalIgnoreCase)
+            Dictionary<string, object> d = new(capacity: 5 + s_predefinedTypeSet.Count, StringComparer.OrdinalIgnoreCase)
             {
                 { "true", TrueLiteral },
                 { "false", FalseLiteral },
@@ -2401,7 +2372,7 @@ namespace System.Linq.Dynamic
                 { KeywordIt, KeywordIt },
                 { KeywordIif, KeywordIif }
             };
-            foreach (Type type in s_predefinedTypes)
+            foreach (Type type in s_predefinedTypeSet)
                 d.Add(type.Name, type);
 
             return d.ToFrozenDictionary(StringComparer.OrdinalIgnoreCase);

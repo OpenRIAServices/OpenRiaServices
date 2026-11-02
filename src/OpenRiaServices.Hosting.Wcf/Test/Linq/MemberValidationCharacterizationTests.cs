@@ -160,39 +160,41 @@ namespace System.Linq.Dynamic.UnitTests
         }
 
         [TestMethod]
-        public void InvocationCacheDropsDeniedOnlyNamesButKeepsDeniedOverloads()
+        [DataRow(typeof(string))]
+        [DataRow(typeof(int))]
+        [DataRow(typeof(DateTime))]
+        [DataRow(typeof(Uri))]
+#if NET
+        [DataRow(typeof(TimeOnly))]
+#endif
+        public void InvocationCacheContainsOnlyPermittedSignatures(Type type)
         {
-            ExpressionParser.InvocationMembers members = ExpressionParser.GetInvocationMembers(typeof(string));
+            ExpressionParser.InvocationMembers members = ExpressionParser.GetInvocationMembers(type);
             ExpressionParser.MethodSignature[] signatures = members.InstanceMethods.Values
                 .Concat(members.StaticMethods.Values)
                 .SelectMany(s => s)
+                .Concat(members.Constructors)
                 .ToArray();
-            MethodBase[] methods = signatures.Select(s => s.Method).ToArray();
-            CollectionAssert.Contains(methods, typeof(string).GetMethod("Equals", [typeof(object)]));
-            CollectionAssert.Contains(methods, typeof(string).GetMethod("Equals", [typeof(string)]));
-            Assert.IsFalse(methods.Any(m => m.Name == "Split"));
-            foreach (ExpressionParser.MethodSignature denied in signatures.Where(s => s.Rule == ExpressionParser.MemberRule.Denied))
-                Assert.IsTrue(signatures.Any(s => s.Rule != ExpressionParser.MemberRule.Denied && s.Method.Name == denied.Method.Name));
-
-            CollectionAssert.Contains(members.Constructors.Select(s => s.Method).ToArray(), typeof(string).GetConstructor([typeof(char), typeof(int)]));
-            Assert.IsTrue(members.Constructors.Any(s => s.Rule != ExpressionParser.MemberRule.Denied));
-            ExpressionParser.InvocationMembers objectMembers = ExpressionParser.GetInvocationMembers(typeof(object));
-            Assert.AreEqual(0, objectMembers.InstanceMethods.Count);
-            Assert.AreEqual(0, objectMembers.Constructors.Length);
+            Assert.IsNotEmpty(signatures);
+            foreach (ExpressionParser.MethodSignature signature in signatures)
+            {
+                Assert.AreNotEqual(ExpressionParser.MemberRule.Denied, signature.Rule, signature.Method.ToString());
+                Assert.IsFalse(signature.ParameterTypes.Any(p => p.IsByRef), signature.Method.ToString());
+            }
         }
 
-        // NOTE: We might want to change this to make things less fragile to new overloads,
         [TestMethod]
-        public void DeniedOverloadsStillParticipateInBinding()
+        public void DeniedOverloadsDoNotParticipateInBinding()
         {
             ParameterExpression[] parameters = [Expression.Parameter(typeof(string), "text"), Expression.Parameter(typeof(object), "value")];
             var denied = Assert.ThrowsExactly<ParseException>(() =>
                 DynamicExpression.ParseLambda(parameters, typeof(bool), "text.Equals(value)", null, QueryLimits.Defaults));
-            StringAssert.Contains(denied.Message, string.Format(CultureInfo.InvariantCulture, Resource.MethodsAreInaccessible, nameof(String)));
+            StringAssert.Contains(denied.Message, string.Format(CultureInfo.InvariantCulture, Resource.NoApplicableMethod, "Equals", nameof(String)));
 
-            var ambiguous = Assert.ThrowsExactly<ParseException>(() =>
-                DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(null)", null, QueryLimits.Defaults));
-            StringAssert.Contains(ambiguous.Message, string.Format(CultureInfo.InvariantCulture, Resource.NoApplicableMethod, "ToString", nameof(Int32)));
+            LambdaExpression lambda = DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(null)", null, QueryLimits.Defaults);
+            var call = (MethodCallExpression)lambda.Body;
+            Assert.AreEqual(typeof(int).GetMethod("ToString", [typeof(string)]), call.Method);
+            Assert.AreEqual("42", lambda.Compile().DynamicInvoke(42));
         }
 
         [TestMethod]
@@ -231,8 +233,8 @@ namespace System.Linq.Dynamic.UnitTests
                 Assert.IsTrue(Allows(method), method.ToString());
             foreach (MethodInfo method in typeof(TimeOnly).GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => m.Name is "Add" or "AddHours" or "AddMinutes"))
-                Assert.IsTrue(Allows(method), method.ToString());
-            Assert.IsTrue(Allows(typeof(TimeOnly).GetMethod("Add", [typeof(TimeSpan), typeof(int).MakeByRefType()])));
+                Assert.AreEqual(!method.GetParameters().Any(p => p.ParameterType.IsByRef), Allows(method), method.ToString());
+            Assert.IsFalse(Allows(typeof(TimeOnly).GetMethod("Add", [typeof(TimeSpan), typeof(int).MakeByRefType()])));
             Assert.IsFalse(Allows(typeof(DateOnly).GetMethod("Parse", [typeof(string), typeof(IFormatProvider)])));
             Assert.IsFalse(Allows(typeof(TimeOnly).GetMethod("Parse", [typeof(string), typeof(IFormatProvider)])));
         }

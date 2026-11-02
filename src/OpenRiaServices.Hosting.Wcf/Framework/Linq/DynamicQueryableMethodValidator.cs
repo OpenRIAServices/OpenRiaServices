@@ -89,6 +89,8 @@ namespace System.Linq.Dynamic
 
         private static MemberRule ResolveMemberRule(MethodBase method, Type[] parameters)
         {
+            if (parameters.Any(p => p.IsByRef))
+                return MemberRule.Denied;
             if (method.DeclaringType == null || !s_memberPolicies.TryGetValue(method.DeclaringType, out var policy)
                 || !policy.Policy(method, parameters))
                 return NullableMemberRule(method, parameters.Length);
