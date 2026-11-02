@@ -25,7 +25,9 @@ namespace OpenRiaServices.Client.Test
     public class EntityTests : UnitTestBase
     {
         [TestMethod]
-        public void MessagePackUnusedData_StateAndOriginalCopies()
+        [DataRow(false)]
+        [DataRow(true)]
+        public void MessagePackUnusedData_StateAndOriginalCopies(bool copySnapshot)
         {
             var entity = CreateVersionedEntity("original");
             var container = new ConfigurableEntityContainer();
@@ -58,7 +60,8 @@ namespace OpenRiaServices.Client.Test
 
             entity.Name = "modified";
             var empty = new VersionedEntity { Detail = new VersionedComplexObject() };
-            entity.UpdateOriginalValues(empty.ExtractState());
+            var emptyState = empty.ExtractState();
+            entity.UpdateOriginalValues(copySnapshot ? new Dictionary<string, object>(emptyState) : emptyState);
             ((IRevertibleChangeTracking)entity).RejectChanges();
             Assert.IsNull(entity.UnusedData);
             Assert.IsNull(entity.Detail.UnusedData);
@@ -90,22 +93,44 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public void MessagePackUnusedData_PartialStateAndEmptySnapshot()
+        [DataRow(false)]
+        [DataRow(true)]
+        public void MessagePackUnusedData_PartialStateAndEmptySnapshot(bool copySnapshot)
         {
             var entity = CreateVersionedEntity("original");
             entity.ApplyState(new Dictionary<string, object> { { nameof(VersionedEntity.Name), "partial" } });
             Assert.AreEqual("original", ConvertMessagePack<VersionedEntity, NewVersionEntity>(entity).Extra);
 
             var empty = new VersionedEntity { Detail = new VersionedComplexObject() };
-            entity.ApplyState(empty.ExtractState());
+            var emptyState = empty.ExtractState();
+            if (copySnapshot)
+            {
+                emptyState = new Dictionary<string, object>(emptyState);
+                emptyState[nameof(VersionedEntity.Detail)] =
+                    new Dictionary<string, object>((IDictionary<string, object>)emptyState[nameof(VersionedEntity.Detail)]);
+            }
+            entity.ApplyState(emptyState);
             Assert.IsNull(entity.UnusedData);
             Assert.IsNull(entity.Detail.UnusedData);
-            Assert.AreEqual(4, empty.ExtractState().Count);
+            Assert.AreEqual(5, empty.ExtractState().Count);
 
             var nonRoundtrip = new MockEntity_Indexer { UnusedData = CreateVersionedEntity("original").UnusedData };
             var state = ObjectStateUtility.ExtractRoundtripState(typeof(MockEntity_Indexer), nonRoundtrip.ExtractState());
             var copy = new MockEntity_Indexer();
             copy.ApplyState(state);
+            Assert.IsNull(copy.UnusedData);
+        }
+
+        [TestMethod]
+        public void MessagePackUnusedData_ComplexOriginalRequiresRoundtripAttribute()
+        {
+            var complexObject = ConvertMessagePack<NewVersionComplexObject, NonRoundtripVersionedComplexObject>(
+                new NewVersionComplexObject { Name = "original", Extra = "unknown" });
+            Assert.IsNotNull(complexObject.UnusedData);
+
+            var state = ObjectStateUtility.ExtractRoundtripState(typeof(NonRoundtripVersionedComplexObject), ObjectStateUtility.ExtractState(complexObject));
+            var copy = new NonRoundtripVersionedComplexObject();
+            ObjectStateUtility.ApplyState(copy, state);
             Assert.IsNull(copy.UnusedData);
         }
 
@@ -196,6 +221,13 @@ namespace OpenRiaServices.Client.Test
                     RaiseDataMemberChanged(nameof(Name));
                 }
             }
+        }
+
+        [DataContract]
+        public class NonRoundtripVersionedComplexObject : ComplexObject
+        {
+            [DataMember]
+            public string Name { get; set; }
         }
 
         [DataContract]
@@ -1007,8 +1039,8 @@ namespace OpenRiaServices.Client.Test
         {
             MockEntity_Indexer entity = new MockEntity_Indexer { Data = "Foo", Key = 10 };
             IDictionary<string, object> stateInfo = entity.ExtractState();
-            Assert.AreEqual(2, stateInfo.Count, "Expected only 2 properties to be returned");
-            Assert.IsTrue(stateInfo["Data"] != null && stateInfo["Key"] != null, "The state returned should only contain the Data and Key properties");
+            Assert.AreEqual(3, stateInfo.Count, "Expected 2 properties and the retained-data entry to be returned");
+            Assert.IsTrue(stateInfo["Data"] != null && stateInfo["Key"] != null, "The state returned should contain the Data and Key properties");
         }        
 
         private class TestCityContainer : EntityContainer

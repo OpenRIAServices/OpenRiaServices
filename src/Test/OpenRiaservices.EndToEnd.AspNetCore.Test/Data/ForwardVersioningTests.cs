@@ -7,11 +7,11 @@ using System.Net.Http;
 using System.Runtime.Serialization;
 using System.Threading.Tasks;
 using ForwardVersioning;
-using \u004fpenRiaServices;
-using \u004fpenRiaServices.Client.DomainClients;
-using RiaClient = \u004fpenRiaServices.Client;
+using OpenRiaServices;
+using OpenRiaServices.Client.DomainClients;
+using RiaClient = OpenRiaServices.Client;
 
-namespace \u004fpenRiaServices.Client.Test
+namespace OpenRiaServices.Client.Test
 {
     [TestClass]
     public class ForwardVersioningTests

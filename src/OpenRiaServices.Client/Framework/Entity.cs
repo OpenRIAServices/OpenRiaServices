@@ -923,7 +923,7 @@ namespace OpenRiaServices.Client
         internal void UpdateOriginalValues(IDictionary<string, object?> entityStateToApply)
         {
             Debug.Assert(this._originalValues != null, "Should only call UpdateOriginalValues if the entity has original values.");
-            this._originalValues = ObjectStateUtility.CopyState(entityStateToApply);
+            this._originalValues = new Dictionary<string, object?>(entityStateToApply);
         }
 
         /// <summary>

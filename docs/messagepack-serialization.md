@@ -40,7 +40,12 @@ Retained data follows entity state copies, edit cancellation, and load behavior:
 `RefreshCurrent` use the incoming data. Entity-level `[RoundtripOriginal]`
 also retains unrecognized members in the original entity submitted to the server.
 Unrecognized complex-object members are retained when their containing member
-is included in the original values.
+is included in the original values and the complex-object type has
+`[RoundtripOriginal]`.
+
+Extracted state includes a retained-data entry even when no unrecognized members
+exist. Copying the state into an ordinary dictionary preserves this clearing
+signal when applying state or updating original values.
 
 This applies only to the MessagePack transport. Keep serialized member names
 stable when evolving a contract.

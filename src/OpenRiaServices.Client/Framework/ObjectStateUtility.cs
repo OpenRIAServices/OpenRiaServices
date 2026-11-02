@@ -19,27 +19,6 @@ namespace OpenRiaServices.Client
         // This key cannot collide with a C# property name.
         private const string UnusedDataStateKey = "$MessagePackUnusedData";
 
-        // Identifies full snapshots, so applying one without unknown data clears an older packet.
-        private sealed class ObjectState : Dictionary<string, object?>
-        {
-            public ObjectState()
-            {
-            }
-
-            public ObjectState(IDictionary<string, object?> state)
-                : base(state)
-            {
-            }
-        }
-
-        /// <summary>
-        /// Copies a state dictionary while preserving full-snapshot semantics.
-        /// </summary>
-        /// <param name="state">The state to copy.</param>
-        /// <returns>An independent copy of the state dictionary.</returns>
-        internal static IDictionary<string, object?> CopyState(IDictionary<string, object?> state)
-            => state is ObjectState ? new ObjectState(state) : new Dictionary<string, object?>(state);
-
         /// <summary>
         /// Extracts the state of the specified object into a dictionary of name/value
         /// pairs.
@@ -54,7 +33,7 @@ namespace OpenRiaServices.Client
         private static Dictionary<string, object?> ExtractState(object o, HashSet<object> visited)
         {
             MetaType metaType = MetaType.GetMetaType(o.GetType());
-            Dictionary<string, object?> extractedState = new ObjectState();
+            Dictionary<string, object?> extractedState = new Dictionary<string, object?>();
 
             if (!visited.Add(o))
             {
@@ -73,9 +52,9 @@ namespace OpenRiaServices.Client
                 extractedState[metaMember.Name] = value;
             }
 
-            if (o is Entity entity && entity.UnusedData != null)
+            if (o is Entity entity)
                 extractedState[UnusedDataStateKey] = entity.UnusedData;
-            else if (o is ComplexObject complexObject && complexObject.UnusedData != null)
+            else if (o is ComplexObject complexObject)
                 extractedState[UnusedDataStateKey] = complexObject.UnusedData;
 
             return extractedState;
@@ -150,7 +129,7 @@ namespace OpenRiaServices.Client
                 }
             }  // end foreach 
 
-            if (stateToApply.TryGetValue(UnusedDataStateKey, out object? unusedData) || stateToApply is ObjectState)
+            if (stateToApply.TryGetValue(UnusedDataStateKey, out object? unusedData))
             {
                 if (o is Entity targetEntity)
                     targetEntity.UnusedData = (UnusedDataPacket?)unusedData;
@@ -241,8 +220,7 @@ namespace OpenRiaServices.Client
             MetaType metaType = MetaType.GetMetaType(type);
             Dictionary<string, object?> resultRoundtripState = new Dictionary<string, object?>();
 
-            if ((typeof(ComplexObject).IsAssignableFrom(type)
-                || TypeUtility.IsAttributeDefined(type, typeof(RoundtripOriginalAttribute), true))
+            if (TypeUtility.IsAttributeDefined(type, typeof(RoundtripOriginalAttribute), true)
                 && state.TryGetValue(UnusedDataStateKey, out object? unusedData))
             {
                 resultRoundtripState[UnusedDataStateKey] = unusedData;
