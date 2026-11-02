@@ -357,6 +357,23 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        [TestMethod]
+        public void TestNullableSubtractionByNullSerializesAsTypedNull()
+        {
+            IQueryable<PurchaseOrder> orders = Array.Empty<PurchaseOrder>().AsQueryable();
+            var dateDifference = orders.Where(order => order.OrderDate - (DateTime?)null == null);
+            var durationDifference = orders.Where(order => order.OrderDate - (TimeSpan?)null == null);
+            var nullDateDifference = orders.Where(order => (DateTime?)null - order.OrderDate == null);
+
+            Assert.AreEqual("(TimeSpan?(null)==null)", QuerySerializer.Serialize(dateDifference).Single().Expression);
+            Assert.AreEqual("(DateTime?(null)==null)", QuerySerializer.Serialize(durationDifference).Single().Expression);
+            Assert.AreEqual("(TimeSpan?(null)==null)", QuerySerializer.Serialize(nullDateDifference).Single().Expression);
+            Assert.AreEqual(0, ((IQueryable<PurchaseOrder>)RoundtripQuery(dateDifference, orders)).Count());
+            Assert.AreEqual(0, ((IQueryable<PurchaseOrder>)RoundtripQuery(durationDifference, orders)).Count());
+            Assert.AreEqual(0, ((IQueryable<PurchaseOrder>)RoundtripQuery(nullDateDifference, orders)).Count());
+        }
+
+        [TestMethod]
         public void TestCharQueries()
         {
             EmployeeWithCharProperty[] emps = new EmployeeWithCharProperty[] { new EmployeeWithCharProperty { GenderAsChar = 'M' }, new EmployeeWithCharProperty { GenderAsChar = 'F' }, new EmployeeWithCharProperty { GenderAsChar = 'F' } };

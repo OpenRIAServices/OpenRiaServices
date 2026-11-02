@@ -77,6 +77,15 @@ namespace OpenRiaServices.Client
 
             protected override Expression VisitBinary(BinaryExpression b)
             {
+                if ((b.NodeType is ExpressionType.Subtract or ExpressionType.SubtractChecked)
+                    && b.IsLiftedToNull
+                    && (b.Left is ConstantExpression { Value: null } || b.Right is ConstantExpression { Value: null })
+                    && Nullable.GetUnderlyingType(b.Type) is Type resultType)
+                {
+                    this._currPartBuilder.Append(resultType.Name).Append("?(null)");
+                    return b;
+                }
+
                 this._currPartBuilder.Append('(');
 
                 Expression left = this.Visit(b.Left);
