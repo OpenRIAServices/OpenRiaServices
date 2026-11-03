@@ -1554,9 +1554,11 @@ namespace System.Linq.Dynamic
         int FindMethod(Type type, string methodName, bool staticAccess, Expression[] args, out MethodSignature method)
         {
             if (!staticAccess && args.Length == 0 && IsNullableType(type)
-                && string.Equals(methodName, nameof(ToString), StringComparison.OrdinalIgnoreCase))
+                && string.Equals(methodName, nameof(ToString), StringComparison.Ordinal)
+                && FindMethod(Nullable.GetUnderlyingType(type), methodName, staticAccess, [], out _) == 1)
             {
-                return FindMethod(GetNonNullableType(type), methodName, staticAccess, [], out method);
+                method = new MethodSignature(type.GetMethod(nameof(ToString), Type.EmptyTypes), Type.EmptyTypes, MemberRule.Allowed);
+                return 1;
             }
 
             InvocationMembers members = GetInvocationMembers(type);

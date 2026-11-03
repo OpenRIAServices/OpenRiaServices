@@ -58,7 +58,7 @@ namespace System.Linq.Dynamic
             return policies.ToFrozenDictionary();
         }
 
-        /// <summary>Determines whether a bound member and its current arguments are allowed.</summary>
+        /// <summary>ONLY USED BY TESTS</summary>
         /// <param name="method">The bound member to check.</param>
         /// <param name="args">The current argument expressions.</param>
         /// <param name="limits">The current query limits.</param>
@@ -66,7 +66,7 @@ namespace System.Linq.Dynamic
         internal static bool IsMemberAccessAllowed(MethodBase method, Expression[] args, QueryLimits limits)
         {
             ArgumentNullException.ThrowIfNull(limits);
-            if (method.DeclaringType != null && s_memberPolicies.ContainsKey(method.DeclaringType))
+            if (method.DeclaringType != null && s_invocationMembers.ContainsKey(method.DeclaringType))
             {
                 InvocationMembers members = GetInvocationMembers(method.DeclaringType);
                 MethodSignature[] candidates;
@@ -74,11 +74,13 @@ namespace System.Linq.Dynamic
                     candidates = members.Constructors;
                 else if (!(method.IsStatic ? members.StaticMethods : members.InstanceMethods).TryGetValue(method.Name, out candidates))
                     candidates = Array.Empty<MethodSignature>();
+
                 foreach (MethodSignature signature in candidates)
                 {
                     if (signature.Method.Equals(method))
                         return ApplyMemberRule(signature.Rule, args, limits);
                 }
+
                 // Inherited reflection views may not equal the declaring type's cached MethodInfo.
                 if (method.ReflectedType != method.DeclaringType)
                     return ApplyMemberRule(ResolveMemberRule(method, Array.ConvertAll(method.GetParameters(), p => p.ParameterType)), args, limits);
