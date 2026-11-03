@@ -90,6 +90,22 @@ namespace System.Linq.Dynamic.UnitTests
         }
 
         [TestMethod]
+        [DataRow("a + 1", typeof(uint), typeof(uint))]
+        [DataRow("1 + a", typeof(uint), typeof(uint))]
+        [DataRow("a + 1", typeof(uint?), typeof(uint?))]
+        [DataRow("a + -1", typeof(uint), typeof(long))]
+        [DataRow("a + 1", typeof(ulong), typeof(ulong))]
+        [DataRow("a + 4294967296", typeof(ulong), typeof(ulong))]
+        public void IntegerLiteral_UnsignedArithmeticType(string expression, Type operand, Type expected)
+        {
+            var body = (BinaryExpression)Parse(expression, operand, typeof(int));
+
+            Assert.AreEqual(expected, body.Type);
+            Assert.AreEqual(expected, body.Left.Type);
+            Assert.AreEqual(expected, body.Right.Type);
+        }
+
+        [TestMethod]
         public void RealLiteral_IsParsedAsDecimal()
         {
             var body = (BinaryExpression)Parse("a > 1.5", typeof(decimal), typeof(int));

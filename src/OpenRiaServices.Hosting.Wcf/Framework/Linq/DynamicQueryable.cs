@@ -1632,7 +1632,7 @@ namespace System.Linq.Dynamic
                         int recoveries = 0;
                         for (int j = 0; j < args.Length; j++)
                         {
-                            if (args[j] != NullLiteral && !IsCompatibleWith(args[j].Type, candidates[i].ParameterTypes[j]))
+                            if (args[j] != NullLiteral && !IsOrdinaryOperatorConversion(args[j], candidates[i].ParameterTypes[j]))
                                 recoveries++;
                         }
                         if (recoveries > minimumRecoveries)
@@ -1679,6 +1679,27 @@ namespace System.Linq.Dynamic
             for (int i = 0; i < args.Length; i++)
                 args[i] = PromoteExpression(args[i], best.ParameterTypes[i], false);
             return 1;
+        }
+
+        bool IsOrdinaryOperatorConversion(Expression expression, Type targetType)
+        {
+            if (IsCompatibleWith(expression.Type, targetType))
+                return true;
+
+            // C# allows non-negative int constants to convert to uint or ulong, and non-negative
+            // long constants to ulong, even though the corresponding type conversions are not implicit.
+            // Treat these as ordinary conversions so uint arithmetic retains its overflow behavior and
+            // ulong comparisons remain unambiguous. Other literal re-parses (notably int to char)
+            // remain recoveries, so numeric character comparisons still use numeric promotion.
+            if (expression is ConstantExpression constant && _literals.ContainsKey(constant))
+            {
+                Type target = GetNonNullableType(targetType);
+                if (constant.Value is int intValue && intValue >= 0)
+                    return target == typeof(uint) || target == typeof(ulong);
+                if (constant.Value is long longValue && longValue >= 0)
+                    return target == typeof(ulong);
+            }
+            return false;
         }
 
         bool IsApplicable(Signature candidate, Expression[] args)

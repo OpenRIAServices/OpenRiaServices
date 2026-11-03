@@ -381,6 +381,56 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        public void TestUnsignedComparisonRoundtrips()
+        {
+            IQueryable<EntityWithUnsignedProperties> values = new[]
+            {
+                new EntityWithUnsignedProperties { ULongValue = 0 },
+                new EntityWithUnsignedProperties { ULongValue = 1, NullableULongValue = 1 },
+                new EntityWithUnsignedProperties { ULongValue = 2, NullableULongValue = 2 },
+                new EntityWithUnsignedProperties { ULongValue = ulong.MaxValue, NullableULongValue = ulong.MaxValue }
+            }.AsQueryable();
+            Expression<Func<EntityWithUnsignedProperties, bool>>[] predicates =
+            [
+                entity => entity.ULongValue > 1,
+                entity => 1 < entity.ULongValue,
+                entity => entity.ULongValue == 1,
+                entity => entity.ULongValue >= 2147483648,
+                entity => entity.ULongValue > 4294967296,
+                entity => entity.NullableULongValue > 1
+            ];
+            foreach (var predicate in predicates)
+            {
+                var query = values.Where(predicate);
+                Assert.AreSequenceEqual(query, RoundtripQuery(query, values), predicate.ToString());
+            }
+        }
+
+        [TestMethod]
+        public void TestUnsignedArithmeticRoundtrips()
+        {
+            IQueryable<EntityWithUnsignedProperties> values = new[]
+            {
+                new EntityWithUnsignedProperties { UIntValue = 0, NullableUIntValue = null },
+                new EntityWithUnsignedProperties { UIntValue = 1, NullableUIntValue = 0 },
+                new EntityWithUnsignedProperties { UIntValue = uint.MaxValue, NullableUIntValue = uint.MaxValue }
+            }.AsQueryable();
+            Expression<Func<EntityWithUnsignedProperties, bool>>[] predicates =
+            [
+                entity => entity.UIntValue + 1 == 0,
+                entity => 1 + entity.UIntValue == 0,
+                entity => entity.UIntValue - 1 == uint.MaxValue,
+                entity => entity.UIntValue + -1 < 0,
+                entity => entity.NullableUIntValue + 1 == 0
+            ];
+            foreach (var predicate in predicates)
+            {
+                var query = values.Where(predicate);
+                Assert.AreSequenceEqual(query, RoundtripQuery(query, values), predicate.ToString());
+            }
+        }
+
+        [TestMethod]
         public void TestNullableSubtractionByNullSerializesAsTypedNull()
         {
             IQueryable<PurchaseOrder> orders = Array.Empty<PurchaseOrder>().AsQueryable();
@@ -1282,6 +1332,16 @@ namespace OpenRiaServices.Client.Test
         {
             Thread.CurrentThread.CurrentUICulture = _defaultCulture;
         }
+    }
+
+    public class EntityWithUnsignedProperties
+    {
+        [Key]
+        public int Id { get; set; }
+        public uint UIntValue { get; set; }
+        public uint? NullableUIntValue { get; set; }
+        public ulong ULongValue { get; set; }
+        public ulong? NullableULongValue { get; set; }
     }
 
     public class EmployeeWithCharProperty
