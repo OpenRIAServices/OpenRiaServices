@@ -851,7 +851,8 @@ namespace OpenRiaServices.Hosting.Test.Data
 
             foreach (Type param in args)
             {
-                expressions.Add(Expression.Constant(null));
+                object constant = param.IsValueType ? Activator.CreateInstance(param) : null;
+                expressions.Add(Expression.Constant(constant, param));
             }
 
             return ExpressionParser.IsMemberAccessAllowed(type.GetMethod(methodName, args), expressions.ToArray(), QueryLimits.Defaults);
