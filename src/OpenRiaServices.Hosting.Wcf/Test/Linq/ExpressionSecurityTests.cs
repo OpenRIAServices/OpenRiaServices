@@ -65,14 +65,16 @@ namespace System.Linq.Dynamic.UnitTests
         [TestMethod]
         public void ClientGeneratedOrChainBelowLimitIsAccepted()
         {
+            var queryLimits = new QueryLimits() { MaxExpressionDepth = 140 };
+
             // The client QuerySerializer wraps every binary expression in parentheses,
             // so "x.Id == 1 || x.Id == 2 || ..." nests one level per term.
-            int terms = ExpressionParser.MaxExpressionDepth - 10;
+            int terms = queryLimits.MaxExpressionDepth - 10;
             string expression = "(it==0)";
             for (int i = 1; i < terms; i++)
                 expression = "(" + expression + "||(it==" + i + "))";
 
-            ParseBool(expression);
+            ParseBool(expression, queryLimits);
         }
 
         [TestMethod]
@@ -328,8 +330,8 @@ namespace System.Linq.Dynamic.UnitTests
             Assert.IsInstanceOfType<ParseException>(error);
         }
 
-        private static LambdaExpression ParseBool(string expression) =>
-            DynamicExpression.ParseLambda(typeof(int), typeof(bool), expression, null, QueryLimits.Defaults);
+        private static LambdaExpression ParseBool(string expression, QueryLimits queryLimits = null) =>
+            DynamicExpression.ParseLambda(typeof(int), typeof(bool), expression, null, queryLimits ?? QueryLimits.Defaults);
 
         private static string Nest(string expression, int depth) =>
             new string('(', depth) + expression + new string(')', depth);
