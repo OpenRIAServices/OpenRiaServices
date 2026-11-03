@@ -56,6 +56,7 @@ builder.Services.AddScoped<HttpContext>(s => s.GetRequiredService<IHttpContextAc
 // Add DomainServices
 builder.Services.AddDomainServices(typeof(TestDomainServices.NamedUpdates.NamedUpdate_CustomAndUpdate).Assembly);
 builder.Services.AddDomainService<AuthenticationService1>();
+builder.Services.AddDomainService<ForwardVersioning.ForwardVersioningDomainService>();
 
 var app = builder.Build();
 

@@ -33,6 +33,13 @@ namespace OpenRiaServices.Client
         private MetaType? _metaType;
 
         /// <summary>
+        /// Gets or sets unrecognized MessagePack members retained for round-tripping.
+        /// </summary>
+        [PolyType.PropertyShape]
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Nerdbank.MessagePack", "NBMsgPack062", Justification = "State management must copy unrecognized data.")]
+        internal UnusedDataPacket? UnusedData { get; set; }
+
+        /// <summary>
         /// Gets the map of child ComplexObject instances currently being
         /// tracked by this instance.
         /// </summary>
