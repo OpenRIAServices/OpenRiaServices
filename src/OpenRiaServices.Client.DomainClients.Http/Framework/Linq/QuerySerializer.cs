@@ -80,9 +80,27 @@ namespace OpenRiaServices.Client
                 if ((b.NodeType is ExpressionType.Subtract or ExpressionType.SubtractChecked)
                     && b.IsLiftedToNull
                     && (b.Left is ConstantExpression { Value: null } || b.Right is ConstantExpression { Value: null })
-                    && Nullable.GetUnderlyingType(b.Type) is Type resultType)
+                    && Nullable.GetUnderlyingType(b.Type) != null)
                 {
-                    this._currPartBuilder.Append(resultType.Name).Append("?(null)");
+                    this._currPartBuilder.Append('(');
+                    if (b.Left is ConstantExpression { Value: null } leftNull)
+                    {
+                        this._currPartBuilder.Append(Nullable.GetUnderlyingType(leftNull.Type).Name).Append("?(null)");
+                    }
+                    else
+                    {
+                        this.Visit(b.Left);
+                    }
+                    this._currPartBuilder.Append('-');
+                    if (b.Right is ConstantExpression { Value: null } rightNull)
+                    {
+                        this._currPartBuilder.Append(Nullable.GetUnderlyingType(rightNull.Type).Name).Append("?(null)");
+                    }
+                    else
+                    {
+                        this.Visit(b.Right);
+                    }
+                    this._currPartBuilder.Append(')');
                     return b;
                 }
 

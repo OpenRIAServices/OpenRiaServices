@@ -1502,7 +1502,7 @@ namespace System.Linq.Dynamic
         int FindMethod(Type type, string methodName, bool staticAccess, Expression[] args, out MethodSignature method)
         {
             if (!staticAccess && args.Length == 0 && IsNullableType(type)
-                && string.Equals(methodName, nameof(ToString), StringComparison.Ordinal)
+                && string.Equals(methodName, nameof(ToString), StringComparison.OrdinalIgnoreCase)
                 && FindMethod(Nullable.GetUnderlyingType(type), methodName, staticAccess, [], out _) == 1)
             {
                 method = new MethodSignature(type.GetMethod(nameof(ToString), Type.EmptyTypes), Type.EmptyTypes, MemberRule.Allowed);

@@ -440,9 +440,9 @@ namespace OpenRiaServices.Client.Test
             var nullDateDifference = orders.Where(order => (DateTime?)null - order.OrderDate == null);
 #pragma warning restore CS0458 // The result of the expression is always 'null'
 
-            Assert.AreEqual("(TimeSpan?(null)==null)", QuerySerializer.Serialize(dateDifference).Single().Expression);
-            Assert.AreEqual("(DateTime?(null)==null)", QuerySerializer.Serialize(durationDifference).Single().Expression);
-            Assert.AreEqual("(TimeSpan?(null)==null)", QuerySerializer.Serialize(nullDateDifference).Single().Expression);
+            Assert.AreEqual("((it.OrderDate-DateTime?(null))==null)", QuerySerializer.Serialize(dateDifference).Single().Expression);
+            Assert.AreEqual("((it.OrderDate-TimeSpan?(null))==null)", QuerySerializer.Serialize(durationDifference).Single().Expression);
+            Assert.AreEqual("((DateTime?(null)-it.OrderDate)==null)", QuerySerializer.Serialize(nullDateDifference).Single().Expression);
             Assert.AreEqual(0, RoundtripQuery(dateDifference, orders).Count());
             Assert.AreEqual(0, RoundtripQuery(durationDifference, orders).Count());
             Assert.AreEqual(0, RoundtripQuery(nullDateDifference, orders).Count());
