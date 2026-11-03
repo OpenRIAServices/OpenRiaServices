@@ -20,14 +20,85 @@ namespace System.Linq.Dynamic
             ReplaceString
         }
 
-        private delegate bool MemberPolicy(MethodBase method, Type[] parameters);
+        /// <summary>Determines whether a member signature is permitted for its registered declaring type.</summary>
+        /// <param name="method">The member to check.</param>
+        /// <param name="parameters">The member's parameter types.</param>
+        /// <returns>Whether the signature is permitted.</returns>
+        internal delegate bool MemberPolicy(MethodBase method, Type[] parameters);
 
-        private static readonly FrozenDictionary<Type, (MemberPolicy Policy, bool NumericFormat)> s_memberPolicies = CreateMemberPolicies();
+        /// <summary>Policy-permitted method and constructor signatures, independent of entity data-member lookup.</summary>
+        internal sealed class InvocationMembers
+        {
+            public static readonly InvocationMembers Empty = new();
 
-        private static readonly FrozenDictionary<Type, Lazy<InvocationMembers>> s_invocationMembers = s_memberPolicies.Keys
-            .ToFrozenDictionary(static type => type, static type => new Lazy<InvocationMembers>(() => new InvocationMembers(type)));
+            InvocationMembers()
+            {
+                InstanceMethods = FrozenDictionary<string, MethodSignature[]>.Empty;
+                StaticMethods = FrozenDictionary<string, MethodSignature[]>.Empty;
+                Constructors = Array.Empty<MethodSignature>();
+            }
 
-        private static FrozenDictionary<Type, (MemberPolicy Policy, bool NumericFormat)> CreateMemberPolicies()
+            /// <summary>Creates invocation metadata using the registered type's policy.</summary>
+            /// <param name="type">The supported declaring type.</param>
+            /// <param name="policy">The policy for member signatures declared by the type.</param>
+            /// <param name="numericFormat">Whether numeric formatting requires argument validation.</param>
+            internal InvocationMembers(Type type, MemberPolicy policy, bool numericFormat)
+            {
+                const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy;
+                MethodSignature[] methods = GetSignatures(type.GetMethods(flags), type, policy, numericFormat).ToArray();
+                InstanceMethods = GroupMethods(methods.Where(s => !s.Method.IsStatic));
+                StaticMethods = GroupMethods(methods.Where(s => s.Method.IsStatic));
+                Constructors = GetSignatures(type.GetConstructors(), type, policy, numericFormat).ToArray();
+            }
+
+            public FrozenDictionary<string, MethodSignature[]> InstanceMethods { get; }
+            public FrozenDictionary<string, MethodSignature[]> StaticMethods { get; }
+            public MethodSignature[] Constructors { get; }
+
+            static FrozenDictionary<string, MethodSignature[]> GroupMethods(IEnumerable<MethodSignature> methods)
+                => methods.GroupBy(s => s.Method.Name, StringComparer.OrdinalIgnoreCase)
+                    .ToFrozenDictionary(g => g.Key, g => g.ToArray(), StringComparer.OrdinalIgnoreCase);
+
+            static IEnumerable<MethodSignature> GetSignatures(IEnumerable<MethodBase> methods, Type type, MemberPolicy policy, bool numericFormat)
+            {
+                foreach (MethodBase method in methods)
+                {
+                    if (method.DeclaringType != type)
+                        continue;
+                    Type[] parameters = Array.ConvertAll(method.GetParameters(), p => p.ParameterType);
+                    MemberRule rule = ResolveMemberRule(method, parameters, policy, numericFormat);
+                    if (rule != MemberRule.Denied)
+                        yield return new MethodSignature(method, parameters, rule);
+                }
+            }
+
+            static MemberRule ResolveMemberRule(MethodBase method, Type[] parameters, MemberPolicy policy, bool numericFormat)
+            {
+                if (parameters.Any(p => p.IsByRef) || !policy(method, parameters))
+                    return MemberRule.Denied;
+                if (numericFormat && !method.IsStatic && method.Name == "ToString" && ParametersMatch(parameters, typeof(string)))
+                    return MemberRule.NumericFormat;
+                if (method.DeclaringType == typeof(string) && method.Name == "Replace")
+                    return parameters[1] == typeof(char) ? MemberRule.ReplaceCharacter : MemberRule.ReplaceString;
+                return MemberRule.Allowed;
+            }
+        }
+
+        private static readonly FrozenDictionary<Type, Lazy<InvocationMembers>> s_invocationMembers = CreateInvocationMembers();
+
+        /// <summary>
+        /// Gets the allowed members to call for a specified type
+        /// </summary>
+        /// <param name="type">The type whose invocation metadata to retrieve.</param>
+        /// <remarks>
+        /// Only members declared on registered types are permitted; base types and interfaces are not searched.
+        /// It is unlikely that someone will both subclass <see cref="Uri"/> and need to use one of the few allowed instance methods in a query.
+        /// </remarks>
+        /// <returns><see cref="InvocationMembers"/> listing all allowed members, <see cref="InvocationMembers.Empty"/> if type is not allowed.</returns>
+        internal static InvocationMembers GetInvocationMembers(Type type)
+            => s_invocationMembers.TryGetValue(type, out var members) ? members.Value : InvocationMembers.Empty;
+
+        private static FrozenDictionary<Type, Lazy<InvocationMembers>> CreateInvocationMembers()
         {
             var policies = new Dictionary<Type, (MemberPolicy Policy, bool NumericFormat)>();
             policies.Add(typeof(Char), (CharMemberPolicy, false));
@@ -55,7 +126,8 @@ namespace System.Linq.Dynamic
             policies.Add(typeof(DateOnly), (DateOnlyMemberPolicy, false));
             policies.Add(typeof(TimeOnly), (TimeOnlyMemberPolicy, false));
 #endif
-            return policies.ToFrozenDictionary();
+            return policies.ToFrozenDictionary(static pair => pair.Key,
+                static pair => new Lazy<InvocationMembers>(() => new InvocationMembers(pair.Key, pair.Value.Policy, pair.Value.NumericFormat)));
         }
 
         /// <summary>ONLY USED BY TESTS</summary>
@@ -65,50 +137,23 @@ namespace System.Linq.Dynamic
         /// <returns>Whether the member and its arguments are permitted.</returns>
         internal static bool IsMemberAccessAllowed(MethodBase method, Expression[] args, QueryLimits limits)
         {
-            ArgumentNullException.ThrowIfNull(limits);
-            if (method.DeclaringType != null && s_invocationMembers.ContainsKey(method.DeclaringType))
+            if (method.IsConstructor)
             {
                 InvocationMembers members = GetInvocationMembers(method.DeclaringType);
-                MethodSignature[] candidates;
-                if (method.IsConstructor)
-                    candidates = members.Constructors;
-                else if (!(method.IsStatic ? members.StaticMethods : members.InstanceMethods).TryGetValue(method.Name, out candidates))
-                    candidates = Array.Empty<MethodSignature>();
-
-                foreach (MethodSignature signature in candidates)
+                foreach (MethodSignature signature in members.Constructors)
                 {
                     if (signature.Method.Equals(method))
                         return ApplyMemberRule(signature.Rule, args, limits);
                 }
-
-                // Inherited reflection views may not equal the declaring type's cached MethodInfo.
-                if (method.ReflectedType != method.DeclaringType)
-                    return ApplyMemberRule(ResolveMemberRule(method, Array.ConvertAll(method.GetParameters(), p => p.ParameterType)), args, limits);
                 return false;
             }
-            return ApplyMemberRule(NullableMemberRule(method), args, limits);
-        }
 
-        private static MemberRule ResolveMemberRule(MethodBase method, Type[] parameters)
-        {
-            if (parameters.Any(p => p.IsByRef))
-                return MemberRule.Denied;
-            if (method.DeclaringType == null || !s_memberPolicies.TryGetValue(method.DeclaringType, out var policy)
-                || !policy.Policy(method, parameters))
-                return NullableMemberRule(method, parameters.Length);
-            if (policy.NumericFormat && !method.IsStatic && method.Name == "ToString" && ParametersMatch(parameters, typeof(string)))
-                return MemberRule.NumericFormat;
-            if (method.DeclaringType == typeof(string) && method.Name == "Replace")
-                return parameters[1] == typeof(char) ? MemberRule.ReplaceCharacter : MemberRule.ReplaceString;
-            return MemberRule.Allowed;
-        }
-
-        private static MemberRule NullableMemberRule(MethodBase method, int? parameterCount = null)
-        {
-            return !method.IsConstructor && method.DeclaringType != null
-                && OpenRiaServices.TypeUtility.IsNullableType(method.DeclaringType)
-                && method.Name == "ToString" && (parameterCount ?? method.GetParameters().Length) == 0
-                ? MemberRule.Allowed : MemberRule.Denied;
+            var parser = new ExpressionParser([Expression.Parameter(typeof(int), "")], "1", null, QueryLimits.Defaults);
+            if (parser.FindMethod(method.DeclaringType, method.Name, staticAccess: method.IsStatic, args, out var methodSignature) == 1)
+            {
+                return ApplyMemberRule(methodSignature.Rule, args, limits);
+            }
+            return false;
         }
 
         private static bool ApplyMemberRule(MemberRule rule, Expression[] args, QueryLimits limits)

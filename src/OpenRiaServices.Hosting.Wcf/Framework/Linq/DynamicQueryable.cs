@@ -464,63 +464,11 @@ namespace System.Linq.Dynamic
             }
         }
 
-        /// <summary>Policy-permitted method and constructor signatures, independent of entity data-member lookup.</summary>
-        internal sealed class InvocationMembers
-        {
-            public static readonly InvocationMembers Empty = new();
-
-            InvocationMembers()
-            {
-                InstanceMethods = FrozenDictionary<string, MethodSignature[]>.Empty;
-                StaticMethods = FrozenDictionary<string, MethodSignature[]>.Empty;
-                Constructors = Array.Empty<MethodSignature>();
-            }
-
-            public InvocationMembers(Type type)
-            {
-                const BindingFlags flags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static | BindingFlags.FlattenHierarchy;
-                MethodSignature[] methods = GetSignatures(type.GetMethods(flags)).ToArray();
-                InstanceMethods = GroupMethods(methods.Where(s => !s.Method.IsStatic));
-                StaticMethods = GroupMethods(methods.Where(s => s.Method.IsStatic));
-                Constructors = GetSignatures(type.GetConstructors()).ToArray();
-            }
-
-            public FrozenDictionary<string, MethodSignature[]> InstanceMethods { get; }
-            public FrozenDictionary<string, MethodSignature[]> StaticMethods { get; }
-            public MethodSignature[] Constructors { get; }
-
-            static FrozenDictionary<string, MethodSignature[]> GroupMethods(IEnumerable<MethodSignature> methods)
-                => methods.GroupBy(s => s.Method.Name, StringComparer.OrdinalIgnoreCase)
-                    .ToFrozenDictionary(g => g.Key, g => g.ToArray(), StringComparer.OrdinalIgnoreCase);
-
-            static IEnumerable<MethodSignature> GetSignatures(IEnumerable<MethodBase> methods)
-            {
-                foreach (MethodBase method in methods)
-                {
-                    Type[] parameters = Array.ConvertAll(method.GetParameters(), p => p.ParameterType);
-                    MemberRule rule = ResolveMemberRule(method, parameters);
-                    if (rule != MemberRule.Denied)
-                        yield return new MethodSignature(method, parameters, rule);
-                }
-            }
-        }
-
-        static readonly ConditionalWeakTable<Type, DataMembers> s_dataMembers = new();
+         static readonly ConditionalWeakTable<Type, DataMembers> s_dataMembers = new();
 
         static DataMembers GetDataMembers(Type type)
             => s_dataMembers.GetValue(type, static t => new DataMembers(t));
 
-        /// <summary>
-        /// Gets the allowed members to call for a specified type
-        /// </summary>
-        /// <param name="type">The type whose invocation metadata to retrieve.</param>
-        /// <remarks>
-        /// We do not search for methods on base types or interfaces, since we list inherited methods as well and <see cref="Uri"/> is the only non sealed type.
-        /// It is unlikely that someone will both subclass <see cref="Uri"/> and need to use one of the few allowed instance methods in a query.
-        /// </remarks>
-        /// <returns><see cref="InvocationMembers"/> listing all allowed members, <see cref="InvocationMembers.Empty"/> if type is not allowed.</returns>
-        internal static InvocationMembers GetInvocationMembers(Type type)
-            => s_invocationMembers.TryGetValue(type, out var members) ? members.Value : InvocationMembers.Empty;
 #nullable disable
 
         static readonly FrozenSet<Type> s_predefinedTypeSet = new Type[] {
