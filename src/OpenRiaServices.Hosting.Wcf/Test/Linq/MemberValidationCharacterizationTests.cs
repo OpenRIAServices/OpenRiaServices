@@ -149,7 +149,7 @@ namespace System.Linq.Dynamic.UnitTests
         [DataRow(typeof(DateTime?))]
         public void NullableToStringBindsWithoutInvocationCacheEntries(Type type)
         {
-            LambdaExpression lambda = DynamicExpression.ParseLambda(type, typeof(string), "it.tOsTrInG()", null, QueryLimits.Defaults);
+            LambdaExpression lambda = DynamicExpression.ParseLambda(type, typeof(string), "it.ToString()", null, QueryLimits.Defaults);
             var call = (MethodCallExpression)lambda.Body;
             Assert.AreEqual(type, call.Method.DeclaringType);
             Assert.AreEqual("ToString", call.Method.Name);
