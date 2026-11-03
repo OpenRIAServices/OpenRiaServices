@@ -175,7 +175,7 @@ namespace System.Linq.Dynamic.UnitTests
         {
             var call = (MethodCallExpression)Parse("Math.Max(a, b)", typeof(int), typeof(long));
 
-            CollectionAssert.AreEqual(new[] { typeof(long), typeof(long) }, ParameterTypes(call.Method));
+            Assert.AreSequenceEqual(new[] { typeof(long), typeof(long) }, ParameterTypes(call.Method));
             Assert.AreEqual(typeof(long), call.Arguments[0].Type);
         }
 
@@ -184,7 +184,7 @@ namespace System.Linq.Dynamic.UnitTests
         {
             var call = (MethodCallExpression)Parse("Math.Abs(a)", typeof(int), typeof(int));
 
-            CollectionAssert.AreEqual(new[] { typeof(int) }, ParameterTypes(call.Method));
+            Assert.AreSequenceEqual(new[] { typeof(int) }, ParameterTypes(call.Method));
         }
 
         [TestMethod]
@@ -193,7 +193,7 @@ namespace System.Linq.Dynamic.UnitTests
             var call = (MethodCallExpression)Parse("a.tostring(\"D2\")", typeof(int), typeof(int));
 
             Assert.AreEqual(nameof(int.ToString), call.Method.Name);
-            CollectionAssert.AreEqual(new[] { typeof(string) }, ParameterTypes(call.Method));
+            Assert.AreSequenceEqual(new[] { typeof(string) }, ParameterTypes(call.Method));
         }
 
         [TestMethod]
@@ -201,7 +201,7 @@ namespace System.Linq.Dynamic.UnitTests
         {
             var body = (NewExpression)Parse("DateTime(2020, 1, 2)", typeof(int), typeof(int));
 
-            CollectionAssert.AreEqual(new[] { typeof(int), typeof(int), typeof(int) }, ParameterTypes(body.Constructor));
+            Assert.AreSequenceEqual(new[] { typeof(int), typeof(int), typeof(int) }, ParameterTypes(body.Constructor));
         }
 
         [TestMethod]
@@ -251,7 +251,7 @@ namespace System.Linq.Dynamic.UnitTests
             for (int i = 0; i < 2; i++)
             {
                 var call = (MethodCallExpression)Parse("Math.Max(a, b)", typeof(int), typeof(long));
-                CollectionAssert.AreEqual(new[] { typeof(long), typeof(long) }, ParameterTypes(call.Method));
+                Assert.AreSequenceEqual(new[] { typeof(long), typeof(long) }, ParameterTypes(call.Method));
             }
         }
 

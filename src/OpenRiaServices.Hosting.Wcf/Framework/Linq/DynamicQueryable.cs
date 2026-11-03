@@ -1430,11 +1430,6 @@ namespace System.Linq.Dynamic
             }
         }
 
-        static bool IsPredefinedType(Type type)
-        {
-            return s_predefinedTypeSet.Contains(GetNonNullableType(type));
-        }
-
         static bool IsNullableType(Type type)
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
@@ -1561,9 +1556,9 @@ namespace System.Linq.Dynamic
             if (!staticAccess && args.Length == 0 && IsNullableType(type)
                 && string.Equals(methodName, nameof(ToString), StringComparison.OrdinalIgnoreCase))
             {
-                method = new MethodSignature(type.GetMethod(nameof(ToString), Type.EmptyTypes), Type.EmptyTypes, MemberRule.Allowed);
-                return 1;
+                return FindMethod(GetNonNullableType(type), methodName, staticAccess, [], out method);
             }
+
             InvocationMembers members = GetInvocationMembers(type);
             var methods = staticAccess ? members.StaticMethods : members.InstanceMethods;
             if (methods.TryGetValue(methodName, out MethodSignature[] candidates))

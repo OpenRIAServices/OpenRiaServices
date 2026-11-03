@@ -179,7 +179,7 @@ namespace System.Linq.Dynamic.UnitTests
             foreach (ExpressionParser.MethodSignature signature in signatures)
             {
                 Assert.AreNotEqual(ExpressionParser.MemberRule.Denied, signature.Rule, signature.Method.ToString());
-                Assert.IsFalse(signature.ParameterTypes.Any(p => p.IsByRef), signature.Method.ToString());
+                Assert.DoesNotContain(p => p.IsByRef, signature.ParameterTypes, signature.Method.ToString());
             }
         }
 
@@ -189,7 +189,7 @@ namespace System.Linq.Dynamic.UnitTests
             ParameterExpression[] parameters = [Expression.Parameter(typeof(string), "text"), Expression.Parameter(typeof(object), "value")];
             var denied = Assert.ThrowsExactly<ParseException>(() =>
                 DynamicExpression.ParseLambda(parameters, typeof(bool), "text.Equals(value)", null, QueryLimits.Defaults));
-            StringAssert.Contains(denied.Message, string.Format(CultureInfo.InvariantCulture, Resource.NoApplicableMethod, "Equals", nameof(String)));
+            Assert.Contains(string.Format(CultureInfo.InvariantCulture, Resource.NoApplicableMethod, "Equals", nameof(String)), denied.Message);
 
             LambdaExpression lambda = DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(null)", null, QueryLimits.Defaults);
             var call = (MethodCallExpression)lambda.Body;
