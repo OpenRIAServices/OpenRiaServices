@@ -17,7 +17,7 @@ namespace OpenRiaServices.Client
     internal static class ObjectStateUtility
     {
         // This key cannot collide with a C# property name.
-        private const string UnusedDataStateKey = "$MessagePackUnusedData";
+        internal const string UnusedDataStateKey = "$MessagePackUnusedData";
 
         /// <summary>
         /// Extracts the state of the specified object into a dictionary of name/value
@@ -220,8 +220,10 @@ namespace OpenRiaServices.Client
             MetaType metaType = MetaType.GetMetaType(type);
             Dictionary<string, object?> resultRoundtripState = new Dictionary<string, object?>();
 
-            if (TypeUtility.IsAttributeDefined(type, typeof(RoundtripOriginalAttribute), true)
-                && state.TryGetValue(UnusedDataStateKey, out object? unusedData))
+            // We always include UnusedData state in the roundtrip state even if we don't know if it should be roundtripped or not.
+            // If we wanted to be more strict: We can check for RoundtripOriginalAttribute on type,
+            // but would also need to include it if we are in a recursive call for a complex type that is a property of a roundtrip type.
+            if (state.TryGetValue(UnusedDataStateKey, out object? unusedData))
             {
                 resultRoundtripState[UnusedDataStateKey] = unusedData;
             }
