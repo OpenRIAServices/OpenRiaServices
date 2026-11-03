@@ -510,6 +510,15 @@ namespace System.Linq.Dynamic
         static DataMembers GetDataMembers(Type type)
             => s_dataMembers.GetValue(type, static t => new DataMembers(t));
 
+        /// <summary>
+        /// Gets the allowed members to call for a specified type
+        /// </summary>
+        /// <param name="type">The type whose invocation metadata to retrieve.</param>
+        /// <remarks>
+        /// We do not search for methods on base types or interfaces, since we list inherited methods as well and <see cref="Uri"/> is the only non sealed type.
+        /// It is unlikely that someone will both subclass <see cref="Uri"/> and need to use one of the few allowed instance methods in a query.
+        /// </remarks>
+        /// <returns><see cref="InvocationMembers"/> listing all allowed members, <see cref="InvocationMembers.Empty"/> if type is not allowed.</returns>
         internal static InvocationMembers GetInvocationMembers(Type type)
             => s_invocationMembers.TryGetValue(type, out var members) ? members.Value : InvocationMembers.Empty;
 #nullable disable
