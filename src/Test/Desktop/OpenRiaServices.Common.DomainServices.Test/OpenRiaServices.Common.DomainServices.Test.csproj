@@ -301,6 +301,9 @@
     <Content Include="Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="Baselines\Default\Scenarios\PolyTypeScenarios.g.cs">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="Baselines\Default\Mocks\ComplexTypeScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
