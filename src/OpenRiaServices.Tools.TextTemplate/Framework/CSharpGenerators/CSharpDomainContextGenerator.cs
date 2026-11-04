@@ -66,7 +66,7 @@ using OpenRiaServices.Client.Authentication;
 	protected virtual void GenerateClassDeclaration()
 	{	
 		string baseType = "OpenRiaServices.Client.DomainContext";
-		if(typeof(IAuthentication<>).DefinitionIsAssignableFrom(this.DomainServiceDescription.DomainServiceType))
+		if(DomainServiceDescription.IsAuthenticationService())
 		{
 			baseType = @"global::OpenRiaServices.Client.Authentication.AuthenticationDomainContextBase";
 		}
