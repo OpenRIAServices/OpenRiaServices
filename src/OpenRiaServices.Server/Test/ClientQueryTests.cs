@@ -27,7 +27,7 @@ namespace OpenRiaServices.Server.Test
             ServiceQueryResult<ClientQueryEntity> result =
                 await service.QueryAsync<ClientQueryEntity>(description, CancellationToken.None);
 
-            CollectionAssert.AreEqual(new[] { 4, 3 }, result.Result.Select(entity => entity.Id).ToArray());
+            Assert.AreSequenceEqual(new[] { 4, 3 }, result.Result.Select(entity => entity.Id));
             Assert.AreEqual(4, result.TotalCount);
             Assert.IsTrue(operation.HasClientQueryParameter);
             Assert.HasCount(1, operation.Parameters);
@@ -100,27 +100,19 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
-        public void ApplyTo_AllowsMultipleCallsWhenTotalCountIsNotRequested()
+        public void ApplyTo_RejectsMultipleCallsUnlessTotalCountIsSet()
         {
-            ClientQuery<ClientQueryEntity> query = new ClientQuery<ClientQueryEntity>(null, false, 0);
             IQueryable<ClientQueryEntity> source = Enumerable.Range(1, 2)
                 .Select(id => new ClientQueryEntity { Id = id })
                 .AsQueryable();
 
-            query.ApplyTo(source);
-            query.ApplyTo(source);
+            foreach (bool includeTotalCount in new[] { false, true })
+            {
+                ClientQuery<ClientQueryEntity> query = new ClientQuery<ClientQueryEntity>(null, includeTotalCount, 0);
+                query.ApplyTo(source);
 
-            Assert.AreEqual(2, query.ApplyCount);
-        }
-
-        [TestMethod]
-        public void ApplyTo_RejectsMultipleCallsWhenAutomaticTotalCountIsRequested()
-        {
-            ClientQuery<ClientQueryEntity> query = new ClientQuery<ClientQueryEntity>(null, true, 0);
-            IQueryable<ClientQueryEntity> source = Array.Empty<ClientQueryEntity>().AsQueryable();
-            query.ApplyTo(source);
-
-            Assert.ThrowsExactly<InvalidOperationException>(() => query.ApplyTo(source));
+                Assert.ThrowsExactly<InvalidOperationException>(() => query.ApplyTo(source));
+            }
         }
 
         [TestMethod]

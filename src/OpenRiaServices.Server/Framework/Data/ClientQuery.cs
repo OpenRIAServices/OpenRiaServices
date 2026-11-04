@@ -33,9 +33,8 @@ namespace OpenRiaServices.Server
         /// Applies the client filtering, ordering, and paging to <paramref name="source"/>.
         /// </summary>
         /// <remarks>
-        /// This method can be called multiple times when <see cref="IncludeTotalCount"/> is
-        /// <see langword="false"/> or after <see cref="SetTotalCount(int)"/> has supplied the
-        /// total count explicitly.
+        /// This method can be called multiple times after <see cref="SetTotalCount(int)"/> has
+        /// supplied the total count explicitly.
         /// </remarks>
         /// <param name="source">The query to which the client query should be applied.</param>
         /// <returns>The composed query.</returns>
@@ -43,9 +42,9 @@ namespace OpenRiaServices.Server
         {
             ArgumentNullException.ThrowIfNull(source);
 
-            if (IncludeTotalCount && !_totalCount.HasValue && _applyCount != 0)
+            if (!_totalCount.HasValue && _applyCount != 0)
             {
-                throw new InvalidOperationException("ClientQuery.ApplyTo can only be called once when an automatic total count is requested. Call SetTotalCount before applying multiple queries.");
+                throw new InvalidOperationException("ClientQuery.ApplyTo can only be called once unless SetTotalCount has supplied the total count.");
             }
 
             IQueryable<T> composedQuery = source;
@@ -99,10 +98,14 @@ namespace OpenRiaServices.Server
         /// <param name="totalCount">The non-negative total number of matching entities.</param>
         public void SetTotalCount(int totalCount)
         {
+#if NETFRAMEWORK
             if (totalCount < 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(totalCount));
             }
+#else
+            ArgumentOutOfRangeException.ThrowIfNegative(totalCount);
+#endif
 
             _totalCount = totalCount;
             _totalCountQuery = null;

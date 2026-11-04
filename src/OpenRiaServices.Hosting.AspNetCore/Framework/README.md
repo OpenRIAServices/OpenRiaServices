@@ -70,6 +70,23 @@ app.MapOpenRiaServices();
 app.Run();
 ```
 
+## Applying client queries inside query methods
+
+A composable query method can accept an injected `ClientQuery<TEntity>` parameter. This parameter is not exposed in the generated client API. Call `ApplyTo` before materializing an `IQueryable<TEntity>` to compose client filtering, ordering, and paging in the underlying data provider:
+
+```csharp
+[Query]
+public async Task<IEnumerable<Product>> GetProducts(
+    ClientQuery<Product> clientQuery,
+    CancellationToken cancellationToken)
+{
+    return await clientQuery.ApplyTo(DbContext.Products)
+        .ToListAsync(cancellationToken);
+}
+```
+
+When the client requests a total count, `ApplyTo` retains the unpaged query so the domain service can evaluate the count. Call `SetTotalCount` when the method calculates the count itself; this also permits multiple calls to `ApplyTo`. Otherwise, call `ApplyTo` once. A query method cannot combine `ClientQuery<TEntity>` with the legacy `out int totalCount` parameter.
+
 ## Advanced
 
 ### Configuring Hosting Options
