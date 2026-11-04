@@ -53,7 +53,6 @@ Collections and dictionaries of simple structs are supported in operation signat
 
 ### Out of scope
 
-- OData hosting support
 - Collections and dictionaries of simple structs as entity properties
 
 ## Serialization and conversion behavior

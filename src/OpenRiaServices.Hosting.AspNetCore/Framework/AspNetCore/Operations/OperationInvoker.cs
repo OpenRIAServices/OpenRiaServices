@@ -198,9 +198,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
             var fault = ServiceUtility.CreateFaultException(ex, Options, domainService.ServiceContext.User);
 
             // Set HttpStatus
-            context.Response.StatusCode = (ex is UnauthorizedAccessException)
-                ? (domainService.ServiceContext.User.Identity?.IsAuthenticated == true ? StatusCodes.Status403Forbidden : StatusCodes.Status401Unauthorized)
-                : StatusCodes.Status500InternalServerError;
+            context.Response.StatusCode = ex switch
+            {
+                System.Linq.Dynamic.ParseException => StatusCodes.Status400BadRequest,
+                UnauthorizedAccessException => domainService.ServiceContext.User.Identity?.IsAuthenticated == true
+                    ? StatusCodes.Status403Forbidden
+                    : StatusCodes.Status401Unauthorized,
+                _ => StatusCodes.Status500InternalServerError,
+            };
 
             if (Options.ExceptionHandler is { } exceptionHandler)
             {

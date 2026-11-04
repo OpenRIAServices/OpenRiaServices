@@ -14,9 +14,53 @@ using System.Globalization;
 using Microsoft.Build.Exceptions;
 using OpenRiaServices.Tools.Test.Utilities;
 using System.Diagnostics;
+using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace OpenRiaServices.Tools.Test
 {
+    [TestClass]
+    public class StringLiteralNormalizationTests
+    {
+        [TestMethod]
+        public void CodeDomStringWrappingIsEquivalent()
+        {
+            const string expected = "class C { string Value = \"left right\"; }";
+            const string wrapped = "class C { string Value = (\"left \" +\r\n    \"right\"); }";
+
+            Assert.AreEqual(expected, TestHelper.NormalizeStringLiterals(wrapped));
+        }
+
+        [TestMethod]
+        public void EmptyWrappedStringIsEquivalent()
+        {
+            const string expected = "class C { string Value = \"value\"; }";
+            const string wrapped = "class C { string Value = \"value\" +\r\n    \"\"; }";
+
+            Assert.AreEqual(expected, TestHelper.NormalizeStringLiterals(wrapped));
+        }
+
+        [TestMethod]
+        public void StringContentsAndNonLiteralExpressionsArePreserved()
+        {
+            const string code = "class C { string Value = (\"escaped\\\"quote\" + Other) + \"different\"; }";
+
+            Assert.AreEqual(code, TestHelper.NormalizeStringLiterals(code));
+            Assert.AreNotEqual(
+                TestHelper.NormalizeStringLiterals("class C { string Value = (\"one\" + \"two\"); }"),
+                TestHelper.NormalizeStringLiterals("class C { string Value = \"one three\"; }"));
+        }
+
+        [TestMethod]
+        public void CommentsInsideStringExpressionsArePreserved()
+        {
+            const string code = "class C { string Value = (\"left\" /* keep */ + \"right\"); }";
+
+            Assert.AreEqual(code, TestHelper.NormalizeStringLiterals(code));
+        }
+    }
+
     public class TestHelper
     {
         public static string ExtensionFromLanguage(string language)
@@ -85,6 +129,12 @@ namespace OpenRiaServices.Tools.Test
             s1 = StripAutoGenPrefix(s1, lineCommentStart);
             s2 = StripAutoGenPrefix(s2, lineCommentStart);
 
+            if (language == "C#" && !s1.Equals(s2))
+            {
+                s1 = NormalizeStringLiterals(s1);
+                s2 = NormalizeStringLiterals(s2);
+            }
+
             if (!s1.Equals(s2))
             {
                 string outDataDir = GetOutputTestDataDir(relativeDeployDir);
@@ -136,6 +186,44 @@ namespace OpenRiaServices.Tools.Test
                 index = s.IndexOf("\r\n", index, StringComparison.Ordinal) + 2;
             }
             return s.Substring(index);
+        }
+
+        /// <summary>
+        /// Normalizes CodeDOM's wrapping and parenthesization of C# string literals.
+        /// </summary>
+        /// <param name="code">The generated C# code.</param>
+        /// <returns>Code with equivalent string literal expressions in a consistent form.</returns>
+        internal static string NormalizeStringLiterals(string code)
+            => new StringLiteralNormalizer().Visit(CSharpSyntaxTree.ParseText(code).GetRoot()).ToFullString();
+
+        private sealed class StringLiteralNormalizer : CSharpSyntaxRewriter
+        {
+            public override SyntaxNode VisitBinaryExpression(BinaryExpressionSyntax node)
+            {
+                var visited = (BinaryExpressionSyntax)base.VisitBinaryExpression(node);
+                if (visited.IsKind(SyntaxKind.AddExpression)
+                    && visited.Left is LiteralExpressionSyntax left && left.IsKind(SyntaxKind.StringLiteralExpression)
+                    && visited.Right is LiteralExpressionSyntax right && right.IsKind(SyntaxKind.StringLiteralExpression)
+                    && node.DescendantTrivia().All(t => t.IsKind(SyntaxKind.WhitespaceTrivia) || t.IsKind(SyntaxKind.EndOfLineTrivia)))
+                {
+                    return SyntaxFactory.LiteralExpression(SyntaxKind.StringLiteralExpression,
+                        SyntaxFactory.Literal(left.Token.ValueText + right.Token.ValueText)).WithTriviaFrom(visited);
+                }
+
+                return visited;
+            }
+
+            public override SyntaxNode VisitParenthesizedExpression(ParenthesizedExpressionSyntax node)
+            {
+                var visited = (ParenthesizedExpressionSyntax)base.VisitParenthesizedExpression(node);
+                if (visited.Expression is LiteralExpressionSyntax literal && literal.IsKind(SyntaxKind.StringLiteralExpression)
+                    && node.DescendantTrivia().All(t => t.IsKind(SyntaxKind.WhitespaceTrivia) || t.IsKind(SyntaxKind.EndOfLineTrivia)))
+                {
+                    return literal.WithTriviaFrom(visited);
+                }
+
+                return visited;
+            }
         }
 
         // Returns the full path to a deployment item file

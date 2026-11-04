@@ -26,7 +26,6 @@ For 5.0+</Description>
   <Assets>
     <Asset Type="Microsoft.VisualStudio.Assembly" Path="|OpenRiaServices.VisualStudio.DomainServices.Tools|" Addressable="true" d:Source="Project" d:ProjectName="OpenRiaServices.VisualStudio.DomainServices.Tools" />
     <Asset Type="Microsoft.VisualStudio.Assembly" Path="|OpenRiaServices.Hosting.Wcf|" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.Wcf" />
-    <Asset Type="Microsoft.VisualStudio.Assembly" Path="|OpenRiaServices.Hosting.Wcf.OData|" d:Source="Project" d:ProjectName="OpenRiaServices.Hosting.Wcf.OData" />
     <Asset Type="Microsoft.VisualStudio.Assembly" Path="|OpenRiaServices.Server|" d:Source="Project" d:ProjectName="OpenRiaServices.Server" />
     <Asset Type="Microsoft.VisualStudio.Assembly" Path="EntityFramework.dll" d:Source="File" />
     <Asset Type="Microsoft.VisualStudio.Assembly" Path="EntityFramework.SqlServer.dll" d:Source="File" />

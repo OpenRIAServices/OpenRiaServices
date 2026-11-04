@@ -146,3 +146,5 @@ $RECYCLE.BIN/
 .DS_Store
 *.nupkg
 *.binlog
+/src/Test/WebsiteFullTrust/Web.BindingRedirects.config
+/src/OpenRiaServices.Tools/Test/TestWap/Properties/launchSettings.json

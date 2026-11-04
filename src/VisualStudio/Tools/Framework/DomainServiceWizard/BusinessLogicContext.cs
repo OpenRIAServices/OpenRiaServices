@@ -123,17 +123,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         }
 
         /// <summary>
-        /// Gets the value indicating whether an OData endpoint will be exposed
-        /// </summary>
-        public bool IsODataEndpointEnabled
-        {
-            get
-            {
-                return this.ContextData.IsODataEndpointEnabled;
-            }
-        }
-
-        /// <summary>
         /// Gets the collection of entities exposed by this context, sorted by name
         /// </summary>
         public IEnumerable<BusinessLogicEntity> Entities
@@ -196,18 +185,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         /// <param name="entity">The entity which will be affected by this method</param>
         public void GenerateEntityDomainOperationEntries(CodeGenContext codeGenContext, CodeTypeDeclaration businessLogicClass, BusinessLogicEntity entity)
         {
-            CodeMemberMethod selectMethod = this.GenerateSelectMethod(codeGenContext, businessLogicClass, entity);
-            if (selectMethod != null)
-            {
-                // If OData endpoint is requested, generate [Query(IsDefault=true)].
-                if (this.IsODataEndpointEnabled)
-                {
-                    CodeAttributeDeclaration attributeDeclaration = new CodeAttributeDeclaration(
-                                                                        new CodeTypeReference("Query"),
-                                                                        new CodeAttributeArgument[] { new CodeAttributeArgument("IsDefault", new CodePrimitiveExpression(true)) });
-                    selectMethod.CustomAttributes.Add(attributeDeclaration);
-                }
-            }
+            this.GenerateSelectMethod(codeGenContext, businessLogicClass, entity);
 
             if (entity.IsEditable)
             {
@@ -401,13 +379,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 businessLogicClass.Members.Add(helpers[key]);
             }
 
-            // If we exposed an OData endpoint, add a reference to the OData assembly
-            // so it appears in the server project, allowing the user to chose 
-            // CopyLocal=true for bin deploy scenarios
-            if (this.IsODataEndpointEnabled)
-            {
-                codeGenContext.AddReference(typeof(ODataEndpointFactory).Assembly.FullName);
-            }
         }
 
         /// <summary>

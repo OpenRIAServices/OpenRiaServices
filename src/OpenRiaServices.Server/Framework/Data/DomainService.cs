@@ -296,6 +296,9 @@ namespace OpenRiaServices.Server
                     return new ServiceQueryResult<T>(validationErrorList);
                 }
 
+                // Parse client expressions only after authorization and parameter validation.
+                queryDescription.ParseQuery();
+
                 object? result = null;
 
                 this.ServiceContext.Operation = queryDescription.Method;

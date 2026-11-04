@@ -187,6 +187,15 @@ namespace System.Linq.Dynamic {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to The query expression exceeds the supported complexity limits.
+        /// </summary>
+        internal static string ExpressionTooComplex {
+            get {
+                return ResourceManager.GetString("ExpressionTooComplex", resourceCulture);
+            }
+        }
+
+        /// <summary>
         ///   Looks up a localized string similar to Expression of type &apos;{0}&apos; expected.
         /// </summary>
         internal static string ExpressionTypeMismatch {

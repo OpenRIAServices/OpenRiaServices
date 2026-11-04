@@ -8,6 +8,16 @@ namespace OpenRiaServices.Hosting.AspNetCore
     public sealed class OpenRiaServicesOptions
     {
         /// <summary>
+        /// Gets or sets the limits for parsing client query expressions and numeric formats.
+        /// </summary>
+        /// <exception cref="ArgumentNullException">The value is null.</exception>
+        public QueryLimits QueryLimits
+        {
+            get;
+            set => field = value ?? throw new ArgumentNullException(nameof(value));
+        } = new();
+
+        /// <summary>
         /// Specifies a global exception handler for unhandled exceptions that occur during the processing of a request.
         /// <para>It is similar to <see cref="DomainService.OnError(DomainServiceErrorInfo)"/> but is shared for all DomainServices 
         /// and allows direct modification of the error message and status code sent to the client.</para>

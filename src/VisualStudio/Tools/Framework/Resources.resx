@@ -170,14 +170,7 @@
   <data name="BusinessLogicClass_EnableClientAccess_Tooltip" xml:space="preserve">
     <value>Checking this makes this Domain Service available to client applications</value>
   </data>
-  <data name="BusinessLogicClass_EnableODataEndpoint_Text" xml:space="preserve">
-    <value>Expose OData endpoint</value>
-  </data>
-  <data name="BusinessLogicClass_EnableODataEndpoint_Tooltip" xml:space="preserve">
-    <value>Checking this will expose an OData endpoint for this application
-and will mark the generated query methods as the defaults.</value>
-  </data>
-  <data name="BusinessLogicClass_EntityFramework" xml:space="preserve">
+      <data name="BusinessLogicClass_EntityFramework" xml:space="preserve">
     <value>Entity Framework</value>
   </data>
   <data name="BusinessLogicClass_Entity_Partial_Class_Remarks" xml:space="preserve">

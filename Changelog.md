@@ -1,10 +1,19 @@
 # Unreleased
 
-* MessagePack serializer setup rejects custom converters on exposed types or properties of exposed types, and custom type marshalers on exposed types, because serialization surrogates do not support them.
-* Server serialization surrogates now copy only supported PolyType and property-level Nerdbank.MessagePack attributes. `[DerivedTypeShape]` stays on the original models, where `ObjectConverter` handles discriminators; client generation is unchanged.
-* Added support for PolyType `[PropertyShape]` and `[DerivedTypeShape]` model attributes in server metadata and generated clients, using PolyType precedence when combined with data contract attributes. Fixes [#603](https://github.com/OpenRIAServices/OpenRiaServices/issues/603)
-* Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)
-`r`n# 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
+## Changed
+
+* MessagePack clients retain unrecognized entity and complex-object members through state copying, loading, and submitting, including entity-level `RoundtripOriginal`. (#628)
+* Normalize array-backed span `Contains` calls selected by C# 14 to `Enumerable.Contains`, preserving earlier query serialization and unsupported-operator errors on .NET 10. (#560)
+* HTTP clients now honor `HttpClient.DefaultRequestVersion` and `DefaultVersionPolicy` for POST and QUERY requests, matching GET requests across binary XML, XML, and MessagePack transports on .NET.
+* Refactor the client query parser to improve performance and reduce allocations. (#625, 630)
+  * It is now easier to support additional types and methods.
+  * Only permitted methods and constructors participate in overload resolution, making .NET updates less likely to break query parsing.
+* Support for MessagePack attributes on model
+   * Added support for PolyType `[PropertyShape]` and `[DerivedTypeShape]` model attributes in server metadata and generated clients, using PolyType precedence when combined with data contract attributes. Fixes [#603](https://github.com/OpenRIAServices/OpenRiaServices/issues/603)
+   * Server serialization surrogates now copy only supported PolyType and property-level Nerdbank.MessagePack attributes. `[DerivedTypeShape]` stays on the original models, where `ObjectConverter` handles discriminators; client generation is unchanged.
+   * MessagePack serializer setup rejects custom converters on exposed types or properties of exposed types, and custom type marshalers on exposed types, because serialization surrogates do not support them.
+
+# 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 
 Major new features in this release are:
 * [MessagePack](docs/messagepack-serialization.md) transport support for both server and client
@@ -19,9 +28,47 @@ Major new features in this release are:
         * Make sure they are serializable using the choosen serialization format (DataContract for binary, or using MessagePack)
         * Use TypeConverter to specify how to convert the struct to/from a string for query parameters
 
+## Security
+
+* ASP.NET Core hosting now ignores body query options for operations marked
+  `[Query(IsComposable = false)]`, matching GET and WCF hosting behavior.
+* Hardening of client side query parsing
+    * ASP.NET Core and WCF defer client expression parsing until operation
+      authorization and parameter validation succeed. Invalid expressions are
+      rejected before the query method executes and now pass through
+      `DomainService.OnError`.
+    * Shared query parsing limits growing `string.Replace(string, string)` calls to
+      three per expression, with a combined worst-case expansion factor of at most
+      100. Non-growing replacements and the character overload remain available.
+    * ASP.NET Core and WCF query parsing now bounds recursion, expression-tree depth
+      and node count, expression length, and the combined size and number of query
+      options. Excessively complex queries return an error instead of exhausting
+      the host stack. ASP.NET Core hosts can configure the default depth of 200 with
+      `OpenRiaServicesOptions.QueryLimits.MaxExpressionDepth`.
+    * WCF and ASP.NET Core client queries now reject fields and custom indexers on reference
+      types when they are not part of client serialization metadata.
+      Standard string and collection indexing and predefined static constants remain supported.
+    * Query validation now rejects navigation properties marked `[Exclude]` before
+        applying the exposed-entity association exception.
+    * Query visibility checks now honor metadata registered on the receiver type for inherited properties.
+      Members without a property descriptor are rejected as unknown members instead of causing a null-reference error.
+    * ASP.NET Core and WCF client queries now require constant numeric format strings.
+      Numeric precision and format length are limited, preventing short format strings from requesting excessive allocations.
+      Numeric format strings are limited to 64 characters by default.
+      Settings can be changed using `OpenRiaServicesOptions.QueryLimits`.
+
+* EF6 and EntityFrameworkCore `DbDomainService` expose a virtual
+  `CanDiscloseConflictAsync` hook for authorizing disclosure of database snapshots,
+  conflicting members, and delete status. The default permits disclosure for
+  backward compatibility; applications can opt into read authorization by
+  overriding the hook. Denial aborts the submit before conflict details are
+  populated or conflict resolution retries are attempted.
+
+
 ## AspNetCore 1.6.0
 
 * Added MessagePack wire-format support (`application/vnd.msgpack`) via [#591](https://github.com/OpenRIAServices/OpenRiaServices/pull/591)
+* Ignore client query options on POST/QUERY requests for non-composable query operations.
 
 ### Enable MessagePack on the server
 
@@ -53,6 +100,7 @@ builder.Services.AddOpenRiaServices()
 * Added `MessagePackHttpDomainClientFactory` — a `DomainClientFactory` that communicates with the server using MessagePack over HTTP
 * Added `MessagePackHttpDomainClientFactory.ResponsePipeReaderOptions` to control `PipeReader` creation for non-buffered MessagePack responses
 * Client-side entity association lookup now uses internal `EntitySet` indexes, including typed single-key accessors for common scalar key types, to reduce repeated full-set scans and lower allocation overhead during relationship resolution.
+* Fixed `EntityCollection.Remove` for composition associations so that attempting to remove a child from an entity set that does not support `Remove` throws without removing the child from the collection.
 
 ### Enable MessagePack on the client
 
@@ -94,6 +142,9 @@ For performance benchmark data see [PR #591](https://github.com/OpenRIAServices/
 ## Other
 
 * Updated Source Link configuration to rely on .NET SDK built-in Source Link support (removed explicit `Microsoft.SourceLink.GitHub` package reference)
+* Removed legacy WCF OData hosting, its Visual Studio tooling integration, and related tests.
+* Removed legacy WCF client, including `WebDomainClientFactory` and related tests.
+* Updated nuget dependencies.
 
 # AspNetCore 1.5.0
 

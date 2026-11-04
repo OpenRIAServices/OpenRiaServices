@@ -150,6 +150,9 @@
   <data name="DigitExpected" xml:space="preserve">
     <value>Digit expected</value>
   </data>
+  <data name="ExpressionTooComplex" xml:space="preserve">
+    <value>The query expression exceeds the supported complexity limits</value>
+  </data>
   <data name="DotOrOpenParenExpected" xml:space="preserve">
     <value>'.' or '(' expected</value>
   </data>

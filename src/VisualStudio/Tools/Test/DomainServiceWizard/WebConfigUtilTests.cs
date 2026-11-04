@@ -32,7 +32,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                 // Verify that none of the sections we wat to set are present
                 Assert.IsFalse(webConfigUtil.IsAspNetCompatibilityEnabled(), "Blank config should not have AspNetCompatibility");
                 Assert.IsFalse(webConfigUtil.IsMultipleSiteBindingsEnabled(), "Blank config should not have MultiSiteBinding");
-                Assert.IsFalse(webConfigUtil.IsEndpointDeclared(BusinessLogicClassConstants.ODataEndpointName), "Blank config should not have OData endpoint");
                 Assert.IsTrue(webConfigUtil.DoWeNeedToValidateIntegratedModeToWebServer(), "Blank config should not have validate integrated mode");
                 Assert.IsTrue(webConfigUtil.DoWeNeedToAddHttpModule(), "Blank config should not have http module");
                 Assert.IsTrue(webConfigUtil.DoWeNeedToAddModuleToWebServer(), "Blank config should not have http module to web server");
@@ -75,22 +74,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
                                             : httpModulesSection.Modules.OfType<HttpModuleAction>()
                                                  .FirstOrDefault(a => String.Equals(a.Name, BusinessLogicClassConstants.DomainServiceModuleName, StringComparison.OrdinalIgnoreCase));
                 Assert.IsNotNull(module, "Did not find httpModule");
- 
-                // ------------------------------------
-                // Set and verify OData endpoint
-                // ------------------------------------
-                webConfigUtil.AddEndpointDeclaration(BusinessLogicClassConstants.ODataEndpointName, WebConfigUtil.GetODataEndpointFactoryTypeName());
-                Assert.IsTrue(webConfigUtil.IsEndpointDeclared(BusinessLogicClassConstants.ODataEndpointName), "Failed to set OData endpoint");
-
-                DomainServicesSection domainServicesSection = cfg.GetSection("system.serviceModel/domainServices") as DomainServicesSection;
-                Assert.IsNotNull(domainServicesSection, "system.serviceModel/domainServices section not found");
-                Assert.AreEqual(ConfigurationAllowDefinition.MachineToApplication, domainServicesSection.SectionInformation.AllowDefinition, "AllowDefinition s/b MachineToApplication");
-                Assert.IsFalse(domainServicesSection.SectionInformation.RequirePermission, "RequirePermission s/b false");
-
-                ProviderSettings setting = (domainServicesSection == null)
-                                            ? null
-                                            : domainServicesSection.Endpoints.OfType<ProviderSettings>().FirstOrDefault(p => string.Equals(p.Name, BusinessLogicClassConstants.ODataEndpointName, StringComparison.OrdinalIgnoreCase));
-                Assert.IsNotNull(setting, "Did not find OData endpoint in config");
 
                 // ValidateIntegratedMode
                 this.CheckValidateIntegratedMode(cfg);

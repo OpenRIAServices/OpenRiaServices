@@ -8,6 +8,7 @@ using System.ServiceModel.Channels;
 using System.ServiceModel.Description;
 using System.ServiceModel.Dispatcher;
 using OpenRiaServices.Server;
+using OpenRiaServices.Hosting.AspNetCore;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Configuration;
@@ -92,7 +93,7 @@ namespace OpenRiaServices.Hosting.Wcf.Behaviors
                 try
                 {
                     SetOutputCachingPolicy(httpContext, this.operation);
-                    result = await QueryProcessor.ProcessAsync<TEntity>(instance, this.operation, inputs, serviceQuery);
+                    result = await QueryProcessor.ProcessAsync<TEntity>(instance, this.operation, inputs, serviceQuery, QueryLimits.Defaults);
                 }
                 catch (Exception ex)
                 {

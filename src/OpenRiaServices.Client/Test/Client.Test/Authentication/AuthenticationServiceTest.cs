@@ -185,7 +185,7 @@ namespace OpenRiaServices.Client.Authentication.Test
         {
             public int CreateDefaultUserCount { get; set; }
 
-            public AuthenticationOperation Operation => base.Operation;
+            public new AuthenticationOperation Operation => base.Operation;
 
             protected override IPrincipal CreateDefaultUser()
             {
@@ -404,12 +404,12 @@ namespace OpenRiaServices.Client.Authentication.Test
                 "The AuthenticationService should never return a null user.");
 
             // Check that subscription and unsubscription work
-            EventHandler<AuthenticationEventArgs> aeHandler = (sender, e) => Assert.IsTrue(true);
+            EventHandler<AuthenticationEventArgs> aeHandler = (sender, e) => Assert.Fail();
             mock.LoggedIn += aeHandler;
             mock.LoggedIn -= aeHandler;
             mock.LoggedOut += aeHandler;
             mock.LoggedOut -= aeHandler;
-            PropertyChangedEventHandler pceHandler = (sender, e) => Assert.IsTrue(true);
+            PropertyChangedEventHandler pceHandler = (sender, e) => Assert.Fail();
             ((INotifyPropertyChanged)mock).PropertyChanged += pceHandler;
             ((INotifyPropertyChanged)mock).PropertyChanged -= pceHandler;
         }

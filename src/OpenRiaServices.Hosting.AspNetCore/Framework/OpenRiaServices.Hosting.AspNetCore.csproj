@@ -26,9 +26,9 @@
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Nerdbank.MessagePack" Version="1.3.86" />
+    <PackageReference Include="Nerdbank.MessagePack" Version="1.4.82" />
     <PackageReference Include="PolyType" Version="1.4.1" />
-    <PackageReference Include="System.IO.Hashing" Version="10.0.9" />
+    <PackageReference Include="System.IO.Hashing" Version="10.0.13" />
   </ItemGroup>
 
   <ItemGroup>
@@ -57,6 +57,7 @@
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DynamicQueryable.cs" Link="Linq\DynamicQueryable.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\DynamicQueryableMethodValidator.cs" Link="Linq\DynamicQueryableMethodValidator.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryDeserializer.cs" Link="Linq\QueryDeserializer.cs" />
+    <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryLimits.cs" Link="Linq\QueryLimits.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\QueryResolver.cs" Link="Linq\QueryResolver.cs" />
     <Compile Include="..\..\OpenRiaServices.Hosting.Wcf\Framework\Linq\Resource.Designer.cs" Link="Linq\Resource.Designer.cs">
       <DesignTime>True</DesignTime>

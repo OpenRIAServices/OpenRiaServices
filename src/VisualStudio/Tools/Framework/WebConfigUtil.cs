@@ -27,8 +27,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
 
         private const string SystemWebServerSectionName = "system.webServer";
         private const string SystemServiceModelSectionName = "system.serviceModel";
-        private const string DomainServicesSectionName = "domainServices";
-        private const string DomainServicesFullSectionName = "system.serviceModel/domainServices";
         private const string ServiceHostingEnvironmentFullSectionName = "system.serviceModel/serviceHostingEnvironment";
 
         // Boolean.FalseString cannot be used for boolean attribute values.  It is the wrong case.
@@ -90,98 +88,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
                 this._configuration.SectionGroups.Add(SystemServiceModelSectionName, serviceModelSectionGroup);
             }
             return serviceModelSectionGroup;
-        }
-
-        /// <summary>
-        /// Returns the <see cref="DomainServicesSection"/> for the "system.serviceModel/domainServices"
-        /// section.  If it does not exist, a new default one will be created.
-        /// </summary>
-        /// <param name="created">Output parameter that is set to <c>true</c> if the section did not exist and was created here.</param>
-        /// <returns>A new or existing <see cref="DomainServicesSection"/>.</returns>
-        public DomainServicesSection GetOrCreateDomainServicesSection(out bool created)
-        {
-            created = false;
-            DomainServicesSection domainServicesSection = this._configuration.GetSection(DomainServicesFullSectionName) as DomainServicesSection;
-            if (domainServicesSection == null)
-            {
-                ServiceModelSectionGroup serviceModelSectionGroup = this.GetOrCreateServiceModelSectionGroup();
-
-                domainServicesSection = this._configuration.GetSection(DomainServicesFullSectionName) as DomainServicesSection;
-                if (domainServicesSection == null)
-                {
-                    domainServicesSection = new DomainServicesSection();
-                    domainServicesSection.SectionInformation.AllowDefinition = ConfigurationAllowDefinition.MachineToApplication;
-                    domainServicesSection.SectionInformation.RequirePermission = false;
-                    serviceModelSectionGroup.Sections.Add(DomainServicesSectionName, domainServicesSection);
-                    created = true;
-                }
-            }
-            return domainServicesSection;
-        }
-
-        /// <summary>
-        /// Determines whether system.serviceModel/domainServices has an endpoint
-        /// declared of the given name. 
-        /// </summary>
-        /// <param name="endpointName">The name of the endpoint to check.</param>
-        /// <returns><c>true</c> means there is an endpoint with that name declared.</returns>
-        public bool IsEndpointDeclared(string endpointName)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(endpointName), "endpointName cannot be empty");
-
-            DomainServicesSection domainServicesSection = this._configuration.GetSection(DomainServicesFullSectionName) as DomainServicesSection;
-            return ((domainServicesSection != null) &&
-                     domainServicesSection.Endpoints.OfType<ProviderSettings>().Any(p => string.Equals(p.Name, endpointName, StringComparison.OrdinalIgnoreCase)));
-        }
-
-        /// <summary>
-        /// Adds the specified endpoint to the "system.serviceModel/domainServices" endpoint collection.
-        /// </summary>
-        /// <param name="endpointName">The name of the new endpoint to add.</param>
-        /// <param name="endpointFactoryTypeName">The fully qualified type name of the endpoint factory type.</param>
-        public void AddEndpointDeclaration(string endpointName, string endpointFactoryTypeName)
-        {
-            Debug.Assert(!string.IsNullOrEmpty(endpointName), "endpointName cannot be empty");
-            Debug.Assert(!string.IsNullOrEmpty(endpointFactoryTypeName), "endpointFactoryTypeName cannot be empty");
-
-            if (!string.IsNullOrEmpty(endpointName) && !string.IsNullOrEmpty(endpointFactoryTypeName))
-            {
-                bool createdDomainServicesSection = false;
-                DomainServicesSection domainServicesSection = this.GetOrCreateDomainServicesSection(out createdDomainServicesSection);
-                if (domainServicesSection != null)
-                {
-                    // If the DomainServicesSection existed, just add the new endpoint
-                    if (!createdDomainServicesSection)
-                    {
-                        domainServicesSection.Endpoints.Add(new ProviderSettings(endpointName, endpointFactoryTypeName));
-                    }
-                    else
-                    {
-                        // However, if we created it manually, we need to insert the new endpoint manually,
-                        // otherwise the configuration logic believes we are overriding the defaults
-                        // and emits extra <remove> elements.
-                        string rawXml = domainServicesSection.SectionInformation.GetRawXml();
-                        if (string.IsNullOrEmpty(rawXml))
-                        {
-                            rawXml = "<domainServices><endpoints /></domainServices>";
-                        }
-                        XDocument xdoc = WebConfigUtil.CreateXDoc(rawXml);
-
-                        XElement xelem = xdoc.Element("domainServices");
-                        XElement endpointsElem = xelem == null ? null : xelem.Element("endpoints");
-                        if (endpointsElem != null)
-                        {
-                            // Add a new <add name="xxx" type="yyy" /> element to the endpoints collection
-                            XElement newEndpointElem = new XElement("add");
-                            newEndpointElem.Add(new XAttribute("name", endpointName));
-                            newEndpointElem.Add(new XAttribute("type", endpointFactoryTypeName));
-                            endpointsElem.Add(newEndpointElem);
-                            rawXml = WebConfigUtil.CreateRawXml(xdoc);
-                            domainServicesSection.SectionInformation.SetRawXml(rawXml);
-                        }
-                    }
-                }
-            }
         }
 
         /// <summary>
@@ -485,15 +391,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools
         public static string GetDomainServiceModuleTypeName()
         {
             return typeof(DomainServiceHttpModule).AssemblyQualifiedName;
-        }
-
-        /// <summary>
-        /// Obtains the full type name of the OData endpoint factory type.
-        /// </summary>
-        /// <returns>The type name of the OData endpoint factory, suitable for inclusion in web.config</returns>
-        public static string GetODataEndpointFactoryTypeName()
-        {
-            return typeof(ODataEndpointFactory).AssemblyQualifiedName;
         }
     }
 }

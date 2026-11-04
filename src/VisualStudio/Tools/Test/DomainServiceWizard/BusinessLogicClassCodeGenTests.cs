@@ -49,22 +49,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         }
 
         [TestMethod]
-        [Description("Verifies C# codegen baseline for BusinessLogicClass for an empty model with an OData endpoing")]
-        public void BusinessLogicClass_CodeGen_Empty_OData_CSharp()
-        {
-            string[] references = new string[] { "OpenRiaServices.Hosting.Wcf.OData" };
-            this.ValidateCodeGen("C#", null, "Empty_DomainService_OData", references, /*oDataEndpoint*/ true);
-        }
-
-        [TestMethod]
-        [Description("Verifies VB codegen baseline for BusinessLogicClass for an empty model with an OData endpoint")]
-        public void BusinessLogicClass_CodeGen_Empty_OData_VB()
-        {
-            string[] references = new string[] { "OpenRiaServices.Hosting.Wcf.OData" };
-            this.ValidateCodeGen("VB", null, "Empty_DomainService_OData", references, /*oDataEndpoint*/ true);
-        }
-
-        [TestMethod]
         [Description("Verifies C# codegen baseline for BusinessLogicClass for EF Northwind scenario model")]
         public void BusinessLogicClass_CodeGen_EF_Northwind_Scenarios_CSharp()
         {
@@ -101,7 +85,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         public void BusinessLogicClass_CodeGen_EF_Northwind_POCO_VB_RootNs()
         {
             string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
-            this.ValidateCodeGen("VB", typeof(NorthwindPOCOModel.NorthwindEntities), "EF_Northwind_POCO_RootNS", references, false, "BizLogic.Test", "BizLogic.Test");
+            this.ValidateCodeGen("VB", typeof(NorthwindPOCOModel.NorthwindEntities), "EF_Northwind_POCO_RootNS", references, "BizLogic.Test", "BizLogic.Test");
         }
 
         [TestMethod]
@@ -157,7 +141,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         public void BusinessLogicClass_CodeGen_LTS_Northwind_VB_RootNs()
         {
             string[] references = new string[] { "System.Data.Linq", "OpenRiaServices.LinqToSql" };
-            this.ValidateCodeGen("VB", typeof(DataTests.Northwind.LTS.NorthwindDataContext), "LTS_Northwind_RootNs", references, false, "BizLogic.Test", "BizLogic.Test");
+            this.ValidateCodeGen("VB", typeof(DataTests.Northwind.LTS.NorthwindDataContext), "LTS_Northwind_RootNs", references, "BizLogic.Test", "BizLogic.Test");
         }
 
         [TestMethod]
@@ -174,22 +158,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
         {
             string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework" };
             this.ValidateCodeGen("VB", typeof(AdventureWorksEntities), "EF_AdventureWorks", references);
-        }
-
-        [TestMethod]
-        [Description("Verifies C# codegen baseline for BusinessLogicClass for EF AdventureWorks model with OData endpoint")]
-        public void BusinessLogicClass_CodeGen_EF_AdventureWorks_OData_CSharp()
-        {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework", "OpenRiaServices.Hosting.Wcf.OData" };
-            this.ValidateCodeGen("C#", typeof(AdventureWorksEntities), "EF_AdventureWorks_OData", references, /*oDataEndpoint*/ true);
-        }
-
-        [TestMethod]
-        [Description("Verifies VB codegen baseline for BusinessLogicClass for EF AdventureWorks model with OData endpoint")]
-        public void BusinessLogicClass_CodeGen_EF_AdventureWorks_OData_VB()
-        {
-            string[] references = new string[] { "EntityFramework", "OpenRiaServices.EntityFramework", "OpenRiaServices.Hosting.Wcf.OData" };
-            this.ValidateCodeGen("VB", typeof(AdventureWorksEntities), "EF_AdventureWorks_OData", references, /*oDataEndpoint*/ true);
         }
 
         [TestMethod]
@@ -256,19 +224,15 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
             this.ValidateCodeGen("VB", typeof(CodeFirstModels.EFCFNorthwindEntities), "EF_CF_Context", references);
         }
 
+
         private void ValidateCodeGen(string language, Type contextType, string bizLogicFileBase, IEnumerable<string> references)
         {
-            this.ValidateCodeGen(language, contextType, bizLogicFileBase, references, /*oDataEndpoint*/ false);
-        }
-
-        private void ValidateCodeGen(string language, Type contextType, string bizLogicFileBase, IEnumerable<string> references, bool oDataEndpoint)
-        {
-            this.ValidateCodeGen(language, contextType, bizLogicFileBase, references, oDataEndpoint,
+            this.ValidateCodeGen(language, contextType, bizLogicFileBase, references,
                 /* rootNamespace */ language.Equals("C#") ? null : "BizLogic.Test.Root",
                 /* namespaceName */ "BizLogic.Test");
         }
 
-        private void ValidateCodeGen(string language, Type contextType, string bizLogicFileBase, IEnumerable<string> references, bool oDataEndpoint, string rootNamespace, string namespaceName)
+        private void ValidateCodeGen(string language, Type contextType, string bizLogicFileBase, IEnumerable<string> references, string rootNamespace, string namespaceName)
         {
 #if UPDATE_BASELINES
             bool updateBaselines = true;
@@ -300,8 +264,6 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools.Test
 
                 ContextViewModel expectedViewModel = contextType == null ? model.ContextViewModels[0] : model.ContextViewModels[1];
                 Assert.AreEqual(expectedViewModel, model.CurrentContextViewModel, "current not as expected");
-
-                model.CurrentContextViewModel.IsODataEndpointEnabled = oDataEndpoint;
 
                 // Select entities first to allow buddy class code-gen
                 foreach (EntityViewModel entity in model.CurrentContextViewModel.Entities)

@@ -44,7 +44,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
 
         private async Task<HttpResponseMessage> SendWithBodyAsync(HttpMethod method, string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
-            using var request = new HttpRequestMessage(method, operationName);
+            using var request = CreateRequestMessage(method, operationName);
             MethodParameters methodParameters = GetMethodParameters(operationName);
             var envelope = CreateRequestEnvelope(operationName, methodParameters, parameters, queryOptions);
 

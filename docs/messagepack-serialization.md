@@ -28,6 +28,28 @@ Top-level object map:
 - GET query behavior stays unchanged (URL-encoded query parameters).
 - Envelopes are map-based for schema/version tolerance.
 
+## Forward versioning
+
+MessagePack clients automatically retain unrecognized members on `Entity` and
+`ComplexObject`. An older client can load, edit, and submit data from a newer
+server without discarding properties that the client does not yet define.
+No changes to generated client types are required.
+
+Retained data follows entity state copies, edit cancellation, and load behavior:
+`KeepCurrent` keeps the existing data, while `MergeIntoCurrent` and
+`RefreshCurrent` use the incoming data. Entity-level `[RoundtripOriginal]`
+also retains unrecognized members in the original entity submitted to the server.
+Unrecognized complex-object members are retained when their containing member
+is included in the original values and the complex-object type has
+`[RoundtripOriginal]`.
+
+Extracted state includes a retained-data entry even when no unrecognized members
+exist. Copying the state into an ordinary dictionary preserves this clearing
+signal when applying state or updating original values.
+
+This applies only to the MessagePack transport. Keep serialized member names
+stable when evolving a contract.
+
 ## Model attributes
 
 OpenRiaServices supports PolyType model attributes in addition to data contract attributes. Generated client models preserve these attributes so the server and client use the same MessagePack shape.
