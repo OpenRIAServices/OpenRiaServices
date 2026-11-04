@@ -1,5 +1,4 @@
 ﻿extern alias SSmDsClient;
-extern alias SSmDsWeb;
 
 using System;
 using System.Security.Principal;
@@ -15,11 +14,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 {
     using System.Threading;
     using System.Threading.Tasks;
-#if SILVERLIGHT
-    using Resource = SSmDsWeb::OpenRiaServices.Client.Resource;
-#else
     using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
-#endif
 
 
     /// <summary>

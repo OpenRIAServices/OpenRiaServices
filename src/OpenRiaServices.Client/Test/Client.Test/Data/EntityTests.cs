@@ -7,7 +7,6 @@ using System.Linq;
 using System.Reflection;
 using Cities;
 using DataTests.AdventureWorks.LTS;
-using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 
@@ -804,8 +803,8 @@ namespace OpenRiaServices.Client.Test
         {
             MockEntity_Indexer entity = new MockEntity_Indexer { Data = "Foo", Key = 10 };
             IDictionary<string, object> stateInfo = entity.ExtractState();
-            Assert.AreEqual(2, stateInfo.Count, "Expected only 2 properties to be returned");
-            Assert.IsTrue(stateInfo["Data"] != null && stateInfo["Key"] != null, "The state returned should only contain the Data and Key properties");
+            Assert.AreEqual(3, stateInfo.Count, "Expected 2 properties and the retained-data entry to be returned");
+            Assert.IsTrue(stateInfo["Data"] != null && stateInfo["Key"] != null, "The state returned should contain the Data and Key properties");
         }        
 
         private class TestCityContainer : EntityContainer

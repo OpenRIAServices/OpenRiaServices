@@ -18,11 +18,11 @@
     <tags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRIAServices</tags>
     <dependencies>
       <group targetFramework="net8.0">
-        <dependency id="EntityFramework" version="6.5.1" />
+        <dependency id="EntityFramework" version="6.5.2" />
         <dependency id="OpenRiaServices.Server" version="$version$"/>
       </group>
       <group targetFramework="net472">
-        <dependency id="EntityFramework" version="6.5.1" />
+        <dependency id="EntityFramework" version="6.5.2" />
         <dependency id="OpenRiaServices.Server" version="$version$"/>
       </group>
     </dependencies>

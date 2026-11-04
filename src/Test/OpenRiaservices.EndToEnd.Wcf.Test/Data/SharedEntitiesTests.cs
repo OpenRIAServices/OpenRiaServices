@@ -23,7 +23,6 @@ namespace OpenRiaServices.Client.Test
         private SubmitOperation SubmittedParentEntity { get; set; }
 
         [TestInitialize]
-        [TestDescription("Initialize context before each test")]
         public void Initialize()
         {
             this.DomainChildContext = new ExposeChildEntityDomainContext(TestURIs.SharedEntitiesChild);

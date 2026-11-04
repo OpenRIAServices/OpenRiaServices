@@ -103,11 +103,6 @@
         /// </summary>
         public static readonly string ManagedHandler = "managedHandler";
 
-        /// <summary>
-        /// Name of the OData endpoint in system.serviceModel/domainServices
-        /// </summary>
-        public static readonly string ODataEndpointName = "OData";
-
         // DbContext related constants
 
         /// <summary>

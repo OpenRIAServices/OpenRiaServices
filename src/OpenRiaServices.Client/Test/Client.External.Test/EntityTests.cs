@@ -22,18 +22,18 @@ namespace OpenRiaServices.Client.Common.Test
             EntitySet<City> es = ec.Cities;
 
             City c1 = ec.Cities.First();
-            Assert.AreEqual(c1.GetEntitySet(), es);
+            Assert.AreSame(c1.GetEntitySet(), es);
 
             ec.Cities.Detach(c1);
             Assert.IsNull(c1.GetEntitySet());
 
             City c2 = new City() { Name = "NewCity", CountyName = "King", StateName = "WA" };
             ec.Cities.Add(c2);
-            Assert.AreEqual(c2.GetEntitySet(), es);
+            Assert.AreSame(c2.GetEntitySet(), es);
 
             City c3 = new City() { Name = "AnotherNewCity", CountyName = "King", StateName = "WA" };
             ec.Cities.Attach(c3);
-            Assert.AreEqual(c3.GetEntitySet(), es);
+            Assert.AreSame(c3.GetEntitySet(), es);
 
             City c4 = ec.Cities.Last();
             ec.Cities.Remove(c4);

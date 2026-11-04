@@ -13,6 +13,7 @@ using System.ServiceModel.Web;
 using System.Text;
 using System.Web;
 using System.Xml;
+using System.Linq.Dynamic;
 using OpenRiaServices.Hosting.Wcf.Behaviors;
 using OpenRiaServices.Server;
 
@@ -471,9 +472,9 @@ namespace OpenRiaServices.Hosting.Wcf
                 // are disabled, we'll also send the error message.
                 int errorCode = (int)HttpStatusCode.InternalServerError;
 
-                if (e is InvalidOperationException)
+                if (e is ParseException or InvalidOperationException)
                 {
-                    // invalid operation exception at root level generates BadRequest
+                    // Invalid client query expressions and invalid operations generate BadRequest.
                     errorCode = (int)HttpStatusCode.BadRequest;
                 }
                 else if (e is UnauthorizedAccessException)

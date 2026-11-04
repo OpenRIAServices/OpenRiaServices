@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Globalization;
 using System.Reflection;
+using Nerdbank.MessagePack;
 using OpenRiaServices.Client.Internal;
 
 #nullable enable
@@ -14,6 +16,9 @@ namespace OpenRiaServices.Client
     /// </summary>
     internal static class ObjectStateUtility
     {
+        // This key cannot collide with a C# property name.
+        internal const string UnusedDataStateKey = "$MessagePackUnusedData";
+
         /// <summary>
         /// Extracts the state of the specified object into a dictionary of name/value
         /// pairs.
@@ -46,6 +51,11 @@ namespace OpenRiaServices.Client
 
                 extractedState[metaMember.Name] = value;
             }
+
+            if (o is Entity entity)
+                extractedState[UnusedDataStateKey] = entity.UnusedData;
+            else if (o is ComplexObject complexObject)
+                extractedState[UnusedDataStateKey] = complexObject.UnusedData;
 
             return extractedState;
         }
@@ -118,6 +128,14 @@ namespace OpenRiaServices.Client
                     }
                 }
             }  // end foreach 
+
+            if (stateToApply.TryGetValue(UnusedDataStateKey, out object? unusedData))
+            {
+                if (o is Entity targetEntity)
+                    targetEntity.UnusedData = (UnusedDataPacket?)unusedData;
+                else if (o is ComplexObject targetComplexObject)
+                    targetComplexObject.UnusedData = (UnusedDataPacket?)unusedData;
+            }
         }
 
         /// <summary>
@@ -201,6 +219,14 @@ namespace OpenRiaServices.Client
         {
             MetaType metaType = MetaType.GetMetaType(type);
             Dictionary<string, object?> resultRoundtripState = new Dictionary<string, object?>();
+
+            // We always include UnusedData state in the roundtrip state even if we don't know if it should be roundtripped or not.
+            // If we wanted to be more strict: We can check for RoundtripOriginalAttribute on type,
+            // but would also need to include it if we are in a recursive call for a complex type that is a property of a roundtrip type.
+            if (state.TryGetValue(UnusedDataStateKey, out object? unusedData))
+            {
+                resultRoundtripState[UnusedDataStateKey] = unusedData;
+            }
 
             foreach (MetaMember metaMember in metaType.DataMembers)
             {

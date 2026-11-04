@@ -24,7 +24,9 @@ namespace OpenRiaServices.Client.Test.Reflection
             Assert.AreEqual(nameof(EntityWithIgnoreProperty.Id), metaType.DataMembers.First().Name);
 
             var state = ObjectStateUtility.ExtractState(entity);
-            Assert.HasCount(1, state, "Extract state should only include non ignored properties");
+            Assert.HasCount(2, state, "Extract state should only include non ignored properties");
+            Assert.Contains("Id", state.Keys);
+            Assert.Contains(ObjectStateUtility.UnusedDataStateKey, state.Keys);
 
             ObjectStateUtility.ApplyState(entity, new Dictionary<string, object>
             {

@@ -219,24 +219,7 @@ namespace OpenRiaServices.VisualStudio.DomainServices.Tools {
             }
         }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Expose OData endpoint.
-        /// </summary>
-        public static string BusinessLogicClass_EnableODataEndpoint_Text {
-            get {
-                return ResourceManager.GetString("BusinessLogicClass_EnableODataEndpoint_Text", resourceCulture);
-            }
-        }
         
-        /// <summary>
-        ///   Looks up a localized string similar to Checking this will expose an OData endpoint for this application
-        ///and will mark the generated query methods as the defaults..
-        /// </summary>
-        public static string BusinessLogicClass_EnableODataEndpoint_Tooltip {
-            get {
-                return ResourceManager.GetString("BusinessLogicClass_EnableODataEndpoint_Tooltip", resourceCulture);
-            }
-        }
         
         /// <summary>
         ///   Looks up a localized string similar to The MetadataTypeAttribute identifies {0} as the class

@@ -13,6 +13,7 @@ using System.Security.Principal;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.EntityFramework;
 using OpenRiaServices.Hosting;
+using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Hosting.Wcf.Behaviors;
 using System.Text;
@@ -152,7 +153,7 @@ namespace OpenRiaServices.Server.Test
                 new ServiceQueryPart("take", "1")
             };
 
-            QueryResult<AdventureWorksModel.PurchaseOrder> result = await QueryProcessor.ProcessAsync<AdventureWorksModel.PurchaseOrder>(service, queryOperation, Array.Empty<object>(), serviceQuery);
+            QueryResult<AdventureWorksModel.PurchaseOrder> result = await QueryProcessor.ProcessAsync<AdventureWorksModel.PurchaseOrder>(service, queryOperation, Array.Empty<object>(), serviceQuery, QueryLimits.Defaults);
 
             Assert.AreEqual(1, result.RootResults.Count());
         }

@@ -10,6 +10,7 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using OpenRiaServices.Server;
+using OpenRiaServices.Hosting.AspNetCore;
 
 #nullable disable
 
@@ -25,21 +26,18 @@ namespace OpenRiaServices.Hosting.Wcf
         // keyed by entity type, returns a bool that indicates whether a query result of that type requires flattening
         private static ConcurrentDictionary<Type, bool> requiresFlatteningByType = new ConcurrentDictionary<Type, bool>();
 
-        public static async ValueTask<QueryResult<TEntity>> ProcessAsync<TEntity>(DomainService domainService, DomainOperationEntry queryOperation, object[] parameters, ServiceQuery serviceQuery)
+        public static async ValueTask<QueryResult<TEntity>> ProcessAsync<TEntity>(DomainService domainService, DomainOperationEntry queryOperation, object[] parameters, ServiceQuery serviceQuery, QueryLimits limits)
         {
+            ArgumentNullException.ThrowIfNull(limits);
             DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(domainService.GetType());
 
-            // deserialize the query if specified
-            IQueryable query = null;
-            bool includeTotalCount = false;
-            if (serviceQuery != null)
-            {
-                query = GetQueryable<TEntity>(domainServiceDescription, serviceQuery);
-                includeTotalCount = serviceQuery.IncludeTotalCount;
-            }
-
             // invoke the query operation
-            QueryDescription queryDescription = new QueryDescription(queryOperation, parameters, includeTotalCount, query);
+            bool includeTotalCount = serviceQuery?.IncludeTotalCount ?? false;
+            QueryDescription queryDescription = serviceQuery?.QueryParts?.Any() == true
+                ? new QueryDescription(queryOperation, parameters,
+                    () => GetQueryable<TEntity>(domainServiceDescription, serviceQuery, limits),
+                    includeTotalCount)
+                : new QueryDescription(queryOperation, parameters, includeTotalCount, query: null);
             var res = await domainService.QueryAsync<TEntity>(queryDescription,  domainService.ServiceContext.CancellationToken);
 
             if (res.HasValidationErrors)
@@ -145,12 +143,12 @@ namespace OpenRiaServices.Hosting.Wcf
             }
         }
 
-        private static IQueryable GetQueryable<TEntity>(DomainServiceDescription domainServiceDescription, ServiceQuery query)
+        private static IQueryable GetQueryable<TEntity>(DomainServiceDescription domainServiceDescription, ServiceQuery query, QueryLimits limits)
         {
             if (query != null && query.QueryParts != null && query.QueryParts.Any())
             {
                 IQueryable<TEntity> queryable = Enumerable.Empty<TEntity>().AsQueryable();
-                return QueryDeserializer.Deserialize(domainServiceDescription, queryable, query.QueryParts);
+                return QueryDeserializer.Deserialize(domainServiceDescription, queryable, query.QueryParts, limits);
             }
 
             return null;
