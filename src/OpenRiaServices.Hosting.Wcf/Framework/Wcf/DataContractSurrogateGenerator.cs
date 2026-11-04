@@ -9,6 +9,10 @@ using System.Reflection.Emit;
 using System.Runtime.Serialization;
 using System.Security;
 using OpenRiaServices.Server;
+using PolyType;
+#if ASPNET_CORE
+using Nerdbank.MessagePack;
+#endif
 
 #nullable disable
 
@@ -90,7 +94,8 @@ namespace OpenRiaServices.Hosting.Wcf
             {
                 typeBuilder.SetCustomAttribute(dataContractAttBuilder);
             }
-            SetSerializationAttributes(typeBuilder.SetCustomAttribute, type.GetCustomAttributesData());
+            // ObjectConverter handles discriminators; derived type declarations must not refer to the original types here.
+            SetClassSerializationAttributes(typeBuilder.SetCustomAttribute, TypeDescriptor.GetAttributes(type));
 
             // Attach a [SecuritySafeCritical] to the surrogate type to permit its setters to deal with
             // types that may be SafeCritical or Critical
@@ -385,7 +390,7 @@ namespace OpenRiaServices.Hosting.Wcf
             CustomAttributeBuilder dataMemberAtt = DataContractSurrogateGenerator.GetDataMemberAttributeBuilder(
                 pd.Attributes[typeof(DataMemberAttribute)] as DataMemberAttribute);
             propertyBuilder.SetCustomAttribute(dataMemberAtt);
-            SetSerializationAttributes(propertyBuilder.SetCustomAttribute, pd.Attributes.Cast<Attribute>());
+            SetPropertySerializationAttributes(propertyBuilder.SetCustomAttribute, pd.Attributes.Cast<Attribute>());
 
             // get {
             //     return $property.GetValue(_$wrapper);
@@ -518,7 +523,7 @@ namespace OpenRiaServices.Hosting.Wcf
             CustomAttributeBuilder dataMemberAtt = DataContractSurrogateGenerator.GetDataMemberAttributeBuilder(
                 pd.Attributes.OfType<DataMemberAttribute>().FirstOrDefault());
             propertyBuilder.SetCustomAttribute(dataMemberAtt);
-            SetSerializationAttributes(propertyBuilder.SetCustomAttribute, pd.Attributes.Cast<Attribute>());
+            SetPropertySerializationAttributes(propertyBuilder.SetCustomAttribute, pd.Attributes.Cast<Attribute>());
 
             // get {
             //     return ((Entity)$wrapper).Property;
@@ -773,81 +778,71 @@ namespace OpenRiaServices.Hosting.Wcf
             return GetAttributeBuilder(dataMemberType, dataMemberProperties);
         }
 
-        private static void SetSerializationAttributes(Action<CustomAttributeBuilder> setAttribute, IEnumerable<CustomAttributeData> attributes)
+        [System.Diagnostics.Conditional("ASPNET_CORE")]
+        private static void SetClassSerializationAttributes(Action<CustomAttributeBuilder> setAttribute, AttributeCollection attributes)
         {
-            foreach (CustomAttributeData attribute in attributes.Where(attribute => IsSerializationAttribute(attribute.AttributeType)))
+            if (attributes[typeof(TypeShapeAttribute)] is TypeShapeAttribute typeShape)
             {
-                CustomAttributeNamedArgument[] properties = attribute.NamedArguments.Where(argument => !argument.IsField).ToArray();
-                CustomAttributeNamedArgument[] fields = attribute.NamedArguments.Where(argument => argument.IsField).ToArray();
-                setAttribute(new CustomAttributeBuilder(
-                    attribute.Constructor,
-                    attribute.ConstructorArguments.Select(GetAttributeValue).ToArray(),
-                    properties.Select(argument => (PropertyInfo)argument.MemberInfo).ToArray(),
-                    properties.Select(argument => GetAttributeValue(argument.TypedValue)).ToArray(),
-                    fields.Select(argument => (FieldInfo)argument.MemberInfo).ToArray(),
-                    fields.Select(argument => GetAttributeValue(argument.TypedValue)).ToArray()));
+                var properties = new Dictionary<string, object>();
+                // An unspecified Kind must stay unspecified: explicitly setting None hides all properties.
+                MethodInfo getRequestedKind = typeof(TypeShapeAttribute).GetMethod("GetRequestedKind", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (getRequestedKind.Invoke(typeShape, null) != null)
+                {
+                    properties[nameof(TypeShapeAttribute.Kind)] = typeShape.Kind;
+                }
+                setAttribute(GetAttributeBuilder(typeof(TypeShapeAttribute), properties));
             }
         }
 
-        private static void SetSerializationAttributes(Action<CustomAttributeBuilder> setAttribute, IEnumerable<Attribute> attributes)
+        [System.Diagnostics.Conditional("ASPNET_CORE")]
+        private static void SetPropertySerializationAttributes(Action<CustomAttributeBuilder> setAttribute, IEnumerable<Attribute> attributes)
         {
-            foreach (Attribute attribute in attributes.Where(attribute => IsSerializationAttribute(attribute.GetType())))
+            foreach (Attribute attribute in attributes)
             {
-                Type attributeType = attribute.GetType();
-                ConstructorInfo constructor = attributeType.GetConstructors()
-                    .OrderByDescending(candidate => candidate.GetParameters().Length)
-                    .First(candidate => candidate.GetParameters().All(parameter =>
-                        attributeType.GetProperty(parameter.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase)?.PropertyType == parameter.ParameterType));
-                HashSet<string> constructorProperties = constructor.GetParameters()
-                    .Select(parameter => parameter.Name)
-                    .ToHashSet(StringComparer.OrdinalIgnoreCase);
-                object[] constructorArguments = constructor.GetParameters()
-                    .Select(parameter => attributeType.GetProperty(parameter.Name, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase).GetValue(attribute))
-                    .ToArray();
-                PropertyInfo[] properties = attributeType.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                    .Where(property => property.CanWrite && !constructorProperties.Contains(property.Name) && ShouldCopyAttributeProperty(attribute, property))
-                    .ToArray();
-
-                setAttribute(new CustomAttributeBuilder(
-                    constructor,
-                    constructorArguments,
-                    properties,
-                    properties.Select(property => property.GetValue(attribute)).ToArray()));
+                if (attribute is PropertyShapeAttribute propertyShape)
+                {
+                    var properties = new Dictionary<string, object>
+                    {
+                        [nameof(PropertyShapeAttribute.Name)] = propertyShape.Name,
+                        [nameof(PropertyShapeAttribute.Order)] = propertyShape.Order,
+                        [nameof(PropertyShapeAttribute.Ignore)] = propertyShape.Ignore,
+                    };
+                    // Setting IsRequired, even to false, overrides PolyType's inferred requiredness.
+                    PropertyShapeAttribute a;
+                    if ((bool)typeof(PropertyShapeAttribute).GetProperty("IsRequiredSpecified", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(propertyShape))
+                    {
+                        properties[nameof(PropertyShapeAttribute.IsRequired)] = propertyShape.IsRequired;
+                    }
+                    setAttribute(GetAttributeBuilder(typeof(PropertyShapeAttribute), properties));
+                }
+                else
+                {
+#if ASPNET_CORE
+                    if (attribute is KeyAttribute key)
+                    {
+                        setAttribute(new CustomAttributeBuilder(
+                            typeof(KeyAttribute).GetConstructor(new[] { typeof(int) }),
+                            new object[] { key.Index }));
+                    }
+                    else if (attribute is MessagePackConverterAttribute converter)
+                    {
+                        setAttribute(new CustomAttributeBuilder(
+                            typeof(MessagePackConverterAttribute).GetConstructor(new[] { typeof(Type) }),
+                            new object[] { converter.ConverterType }));
+                    }
+                    else if (attribute is UseComparerAttribute comparer)
+                    {
+                        ConstructorInfo constructor = comparer.MemberName == null
+                            ? typeof(UseComparerAttribute).GetConstructor(new[] { typeof(Type) })
+                            : typeof(UseComparerAttribute).GetConstructor(new[] { typeof(Type), typeof(string) });
+                        object[] arguments = comparer.MemberName == null
+                            ? new object[] { comparer.ComparerType }
+                            : new object[] { comparer.ComparerType, comparer.MemberName };
+                        setAttribute(new CustomAttributeBuilder(constructor, arguments));
+                    }
+#endif
+                }
             }
-        }
-
-        private static bool IsSerializationAttribute(Type attributeType)
-        {
-            string assemblyName = attributeType.Assembly.GetName().Name;
-            return assemblyName == "PolyType" || assemblyName == "Nerdbank.MessagePack";
-        }
-
-        private static bool ShouldCopyAttributeProperty(Attribute attribute, PropertyInfo property)
-        {
-            PropertyInfo specifiedProperty = attribute.GetType().GetProperty(
-                property.Name + "Specified",
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-            return specifiedProperty?.PropertyType != typeof(bool) || (bool)specifiedProperty.GetValue(attribute);
-        }
-
-        private static object GetAttributeValue(CustomAttributeTypedArgument argument)
-        {
-            if (!argument.ArgumentType.IsArray)
-            {
-                return argument.ArgumentType.IsEnum && argument.Value != null
-                    ? Enum.ToObject(argument.ArgumentType, argument.Value)
-                    : argument.Value;
-            }
-
-            Type elementType = argument.ArgumentType.GetElementType();
-            IReadOnlyCollection<CustomAttributeTypedArgument> values = (IReadOnlyCollection<CustomAttributeTypedArgument>)argument.Value;
-            Array result = Array.CreateInstance(elementType, values.Count);
-            int index = 0;
-            foreach (CustomAttributeTypedArgument value in values)
-            {
-                result.SetValue(GetAttributeValue(value), index++);
-            }
-            return result;
         }
 
         private static CustomAttributeBuilder GetAttributeBuilder(Type type, Dictionary<string, object> attProperties)

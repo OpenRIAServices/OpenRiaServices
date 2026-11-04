@@ -122,6 +122,8 @@ builder.Services.AddOpenRiaServices()
     .AddMessagePackSerialization();
 ```
 
+On model properties, use PolyType `[PropertyShape]` and Nerdbank.MessagePack `[Key]`, `[MessagePackConverter]`, or `[UseComparer]` to customize serialization. Server surrogates preserve these attributes and the `Kind` setting from `[TypeShape]`, but not method inclusion or custom type marshaling. `ObjectConverter` handles `[DerivedTypeShape]` discriminators from the original models rather than surrogate attributes. Client generation is unchanged; discriminator keys must match on both sides. See [model attribute rules](../../../docs/messagepack-serialization.md#model-attributes).
+
 #### Text XML serialization
 
 XML serialization was added in version 1.4.0 as an alternative to binary serialization (#546).
