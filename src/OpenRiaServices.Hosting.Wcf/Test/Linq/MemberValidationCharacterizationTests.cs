@@ -145,27 +145,69 @@ namespace System.Linq.Dynamic.UnitTests
         }
 
         [TestMethod]
-        public void UnknownAndNullableMembersDoNotGrowTheRuleTable()
+        [DataRow(typeof(int?))]
+        [DataRow(typeof(DateTime?))]
+        public void NullableToStringBindsWithoutInvocationCacheEntries(Type type)
         {
-            Assert.IsTrue(Allows(typeof(int).GetMethod("ToString", Type.EmptyTypes)));
-            Type holder = typeof(ExpressionParser).GetNestedType("MemberRules", BindingFlags.NonPublic);
-            FieldInfo field = holder.GetField("Values", BindingFlags.Static | BindingFlags.NonPublic | BindingFlags.Public);
-            object rules = field.GetValue(null);
-            PropertyInfo count = rules.GetType().GetProperty("Count");
-            int originalCount = (int)count.GetValue(rules);
-            Type[] types = [typeof(int), typeof(long), typeof(decimal), typeof(double), typeof(bool), typeof(Guid), typeof(DateTime)];
-            Parallel.For(0, 256, i =>
+            LambdaExpression lambda = DynamicExpression.ParseLambda(type, typeof(string), "it.ToString()", null, QueryLimits.Defaults);
+            var call = (MethodCallExpression)lambda.Body;
+            Assert.AreEqual(type, call.Method.DeclaringType);
+            Assert.AreEqual("ToString", call.Method.Name);
+            Delegate compiled = lambda.Compile();
+            Assert.AreEqual(string.Empty, compiled.DynamicInvoke(new object[] { null }));
+            object value = Activator.CreateInstance(Nullable.GetUnderlyingType(type));
+            Assert.AreEqual(value.ToString(), compiled.DynamicInvoke(value));
+        }
+
+        [TestMethod]
+        [DataRow(typeof(string))]
+        [DataRow(typeof(int))]
+        [DataRow(typeof(DateTime))]
+        [DataRow(typeof(Uri))]
+#if NET
+        [DataRow(typeof(TimeOnly))]
+#endif
+        public void InvocationCacheContainsOnlyPermittedSignatures(Type type)
+        {
+            ExpressionParser.InvocationMembers members = ExpressionParser.GetInvocationMembers(type);
+            ExpressionParser.MethodSignature[] signatures = members.InstanceMethods.Values
+                .Concat(members.StaticMethods.Values)
+                .SelectMany(s => s)
+                .Concat(members.Constructors)
+                .ToArray();
+            Assert.IsNotEmpty(signatures);
+            foreach (ExpressionParser.MethodSignature signature in signatures)
             {
-                Type argument = types[i % types.Length];
-                Type unknown = typeof(UnknownMember<>).MakeGenericType(argument);
-                Assert.IsFalse(Allows(unknown.GetMethod("ToString", [typeof(string)])));
-                Assert.IsFalse(Allows(unknown.GetMethod("Parse", [typeof(string)])));
-                Type nullable = typeof(Nullable<>).MakeGenericType(argument);
-                Assert.IsTrue(Allows(nullable.GetMethod("ToString", Type.EmptyTypes)));
-                Assert.IsFalse(Allows(nullable.GetMethod("GetValueOrDefault", Type.EmptyTypes)));
-            });
-            Assert.AreSame(rules, field.GetValue(null));
-            Assert.AreEqual(originalCount, (int)count.GetValue(rules));
+                Assert.AreNotEqual(ExpressionParser.MemberRule.Denied, signature.Rule, signature.Method.ToString());
+                Assert.DoesNotContain(p => p.IsByRef, signature.ParameterTypes, signature.Method.ToString());
+            }
+        }
+
+        [TestMethod]
+        public void DeniedOverloadsDoNotParticipateInBinding()
+        {
+            ParameterExpression[] parameters = [Expression.Parameter(typeof(string), "text"), Expression.Parameter(typeof(object), "value")];
+            var denied = Assert.ThrowsExactly<ParseException>(() =>
+                DynamicExpression.ParseLambda(parameters, typeof(bool), "text.Equals(value)", null, QueryLimits.Defaults));
+            Assert.Contains(string.Format(CultureInfo.InvariantCulture, Resource.NoApplicableMethod, "Equals", nameof(String)), denied.Message);
+
+            LambdaExpression lambda = DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(null)", null, QueryLimits.Defaults);
+            var call = (MethodCallExpression)lambda.Body;
+            Assert.AreEqual(typeof(int).GetMethod("ToString", [typeof(string)]), call.Method);
+            Assert.AreEqual("42", lambda.Compile().DynamicInvoke(42));
+        }
+
+        [TestMethod]
+        public void ParserChecksCurrentLimitsAgainstCachedRules()
+        {
+            var limits = new QueryLimits { MaxNumericFormatPrecision = 2 };
+            Assert.ThrowsExactly<ParseException>(() =>
+                DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(\"D3\")", null, limits));
+            limits.MaxNumericFormatPrecision = 3;
+            DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(\"D3\")", null, limits);
+            limits.MaxNumericFormatPrecision = 2;
+            Assert.ThrowsExactly<ParseException>(() =>
+                DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(\"D3\")", null, limits));
         }
 
 #if NET
@@ -191,8 +233,8 @@ namespace System.Linq.Dynamic.UnitTests
                 Assert.IsTrue(Allows(method), method.ToString());
             foreach (MethodInfo method in typeof(TimeOnly).GetMethods(BindingFlags.Public | BindingFlags.Instance | BindingFlags.DeclaredOnly)
                 .Where(m => m.Name is "Add" or "AddHours" or "AddMinutes"))
-                Assert.IsTrue(Allows(method), method.ToString());
-            Assert.IsTrue(Allows(typeof(TimeOnly).GetMethod("Add", [typeof(TimeSpan), typeof(int).MakeByRefType()])));
+                Assert.AreEqual(!method.GetParameters().Any(p => p.ParameterType.IsByRef), Allows(method), method.ToString());
+            Assert.IsFalse(Allows(typeof(TimeOnly).GetMethod("Add", [typeof(TimeSpan), typeof(int).MakeByRefType()])));
             Assert.IsFalse(Allows(typeof(DateOnly).GetMethod("Parse", [typeof(string), typeof(IFormatProvider)])));
             Assert.IsFalse(Allows(typeof(TimeOnly).GetMethod("Parse", [typeof(string), typeof(IFormatProvider)])));
         }
@@ -201,6 +243,8 @@ namespace System.Linq.Dynamic.UnitTests
         private sealed class UnknownMember<T>
         {
             public string ToString(string format) => format;
+
+            public string tostring(string format) => format;
 
             public static T Parse(string value) => default;
         }

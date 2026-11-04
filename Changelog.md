@@ -3,13 +3,11 @@
 ## Changed
 
 * MessagePack clients retain unrecognized entity and complex-object members through state copying, loading, and submitting, including entity-level `RoundtripOriginal`. (#628)
-* Refactor the client query parser to improve performance when determining which method calls are allowed and which overloads are available. (#625)
 * Normalize array-backed span `Contains` calls selected by C# 14 to `Enumerable.Contains`, preserving earlier query serialization and unsupported-operator errors on .NET 10. (#560)
-
-## Fixed
-
 * HTTP clients now honor `HttpClient.DefaultRequestVersion` and `DefaultVersionPolicy` for POST and QUERY requests, matching GET requests across binary XML, XML, and MessagePack transports on .NET.
-
+* Refactor the client query parser to improve performance and reduce allocations. (#625, 630)
+  * It is now easier to support additional types and methods.
+  * Only permitted methods and constructors participate in overload resolution, making .NET updates less likely to break query parsing.
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 

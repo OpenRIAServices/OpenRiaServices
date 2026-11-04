@@ -130,6 +130,16 @@ namespace OpenRiaServices.Hosting.Test.Data
             Assert.IsTrue(IsMethodAllowed(typeof(Char), "Equals", typeof(Char)));
             Assert.IsTrue(IsMethodAllowed(typeof(Char), "CompareTo", typeof(Char)));
             Assert.IsTrue(IsMethodAllowed(typeof(Char), "ToString"));
+            foreach (string methodName in new[] { "tostring", "tOsTrInG" })
+            {
+                LambdaExpression lambda = System.Linq.Dynamic.DynamicExpression.ParseLambda(
+                    typeof(int?),
+                    typeof(string),
+                    $"it.{methodName}()",
+                    null,
+                    QueryLimits.Defaults);
+                Assert.AreEqual(nameof(int.ToString), ((MethodCallExpression)lambda.Body).Method.Name);
+            }
             Assert.IsTrue(IsMethodAllowed(typeof(String), "Equals", typeof(String)));
             Assert.IsTrue(IsMethodAllowed(typeof(String), "Equals", typeof(String), typeof(StringComparison)));
             Assert.IsTrue(IsMethodAllowed(typeof(String), "Insert", typeof(Int32), typeof(String)));
@@ -851,7 +861,8 @@ namespace OpenRiaServices.Hosting.Test.Data
 
             foreach (Type param in args)
             {
-                expressions.Add(Expression.Constant(null));
+                object constant = param.IsValueType ? Activator.CreateInstance(param) : null;
+                expressions.Add(Expression.Constant(constant, param));
             }
 
             return ExpressionParser.IsMemberAccessAllowed(type.GetMethod(methodName, args), expressions.ToArray(), QueryLimits.Defaults);

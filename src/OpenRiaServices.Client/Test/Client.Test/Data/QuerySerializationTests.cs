@@ -22,9 +22,14 @@ namespace OpenRiaServices.Client.Test
 {
     /// <summary>
     /// Tests of both the client and server query serialization pieces via internal direct access to those
-    /// components. These tests run desktop only. Note : the server components being tested are cross compiled
-    /// into the IsolatedServerCode library which is referenced by this test assembly.
+    /// components. Covers round trips and server parsing through QueryDeserializer, including expression-tree
+    /// assertions. The WebRia alias selects WCF on .NET Framework and ASP.NET Core on modern .NET.
     /// </summary>
+    /// <remarks>
+    /// Add client-query behavior and serialization regressions here. Parser-only binding details belong in
+    /// OpenRiaServices.Hosting.Wcf\Test\Linq\OperatorResolutionTests.cs, which is also linked into the
+    /// ASP.NET Core tests. Check both suites before adding overlapping cases.
+    /// </remarks>
     [TestClass]
     public class QuerySerializationTests
     {
@@ -47,7 +52,7 @@ namespace OpenRiaServices.Client.Test
             IQueryable<GenericEntity> q = (IQueryable<GenericEntity>)Expressions.NullComparison1(entities);
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(it.NullableInt>0)", queryParts.Single().Expression);
-            IQueryable<GenericEntity> q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            IQueryable<GenericEntity> q2 = RoundtripQuery(q, entities);
             
             // We don't execute the 'q' query because it'll fail when there are null ints. That's by-VB-design.
             Assert.AreEqual(1, q2.Count());
@@ -57,7 +62,7 @@ namespace OpenRiaServices.Client.Test
             IQueryable<GenericEntity> q = (IQueryable<GenericEntity>)Expressions.NullComparison2(entities);
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(it.NullableInt>0)", queryParts.Single().Expression);
-            IQueryable<GenericEntity> q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            IQueryable<GenericEntity> q2 = RoundtripQuery(q, entities);
             int c1 = q.Count();
             int c2 = q2.Count();
             Assert.AreEqual(1, c1);
@@ -68,7 +73,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)Expressions.NullComparison3(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(it.NullableInt>it.Key)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(1, c1);
@@ -172,7 +177,7 @@ namespace OpenRiaServices.Client.Test
             IQueryable<GenericEntity> q = (IQueryable<GenericEntity>)StringComparisons.CompareStringEqual(entities);
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(it.Title==\"Supreme Leader\")", queryParts.Single().Expression);
-            IQueryable<GenericEntity> q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            IQueryable<GenericEntity> q2 = RoundtripQuery(q, entities);
             int c1 = q.Count();
             int c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -181,7 +186,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)StringComparisonsCaseInsensitive.CompareStringEqualCaseInsensitive(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(String.Compare(it.Title, \"peon\", StringComparison.OrdinalIgnoreCase)==0)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -190,7 +195,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)StringComparisons.CompareStringNotEqual(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(it.Title!=\"Supreme Leader\")", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -199,7 +204,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)StringComparisons.CompareStringGreaterThan(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(String.Compare(it.Title, \"Supreme Leader\")>0)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -208,7 +213,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)StringComparisons.CompareStringGreaterThanOrEqual(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(String.Compare(it.Title, \"Supreme Leader\")>=0)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -217,7 +222,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)StringComparisons.CompareStringLessThan(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(String.Compare(it.Title, \"Supreme Leader\")<0)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -226,7 +231,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)StringComparisons.CompareStringLessThanOrEqual(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(String.Compare(it.Title, \"Supreme Leader\")<=0)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -248,7 +253,7 @@ namespace OpenRiaServices.Client.Test
             IQueryable<GenericEntity> q = (IQueryable<GenericEntity>)Expressions.IIfWithEqualComparison(entities);
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(iif((it.Title==\"Supreme Leader\"),1,0)==1)", queryParts.Single().Expression);
-            IQueryable<GenericEntity> q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            IQueryable<GenericEntity> q2 = RoundtripQuery(q, entities);
             int c1 = q.Count();
             int c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -257,7 +262,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)Expressions.IIfWithEqualComparisonWithBools(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("iif((it.Title==\"Supreme Leader\"),True,False)", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -266,7 +271,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)Expressions.IIfWithNotEqualComparison(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(1!=iif((it.Title==\"Supreme Leader\"),1,0))", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -275,7 +280,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)Expressions.IIfWithLessThanComparison(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(1<iif((it.Title==\"Supreme Leader\"),1,0))", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -284,7 +289,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)Expressions.IIfWithGreaterThanOrEqualComparison(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(1>=iif((it.Title==\"Supreme Leader\"),1,0))", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -293,7 +298,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)Expressions.IIfWithGreaterThanComparison(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(1>iif((it.Title==\"Supreme Leader\"),1,0))", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -302,7 +307,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)Expressions.IIfWithLessThanOrEqualComparison(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(1<=iif((it.Title==\"Supreme Leader\"),1,0))", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -318,7 +323,7 @@ namespace OpenRiaServices.Client.Test
             q = (IQueryable<GenericEntity>)Expressions.IIfWithEqualStringComparison(entities);
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(\"1\"==iif((it.Title==\"Supreme Leader\"),\"1\",\"0\"))", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(c1, c2);
@@ -336,7 +341,7 @@ namespace OpenRiaServices.Client.Test
             VerifySerialize<EmployeeWithReservedNames>("it.true", e => e.@true);
 
             IQueryable<EmployeeWithReservedNames> q = entities.Where(e => e.@true);
-            IQueryable<EmployeeWithReservedNames> q2 = (IQueryable<EmployeeWithReservedNames>)RoundtripQuery(q, entities);
+            IQueryable<EmployeeWithReservedNames> q2 = RoundtripQuery(q, entities);
             int c1 = q.Count();
             int c2 = q2.Count();
             Assert.AreEqual(1, c1);
@@ -344,7 +349,7 @@ namespace OpenRiaServices.Client.Test
 
             VerifySerialize<EmployeeWithReservedNames>("it.iif", e => e.iif);
             q = entities.Where(e => e.iif);
-            q2 = (IQueryable<EmployeeWithReservedNames>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(1, c1);
@@ -352,19 +357,111 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
+        public void TestCharNumericComparisonRoundtrips()
+        {
+            IQueryable<EmployeeWithCharProperty> employees = new[]
+            {
+                new EmployeeWithCharProperty { GenderAsChar = 'M' },
+                new EmployeeWithCharProperty { GenderAsChar = 'F' }
+            }.AsQueryable();
+            Expression<Func<EmployeeWithCharProperty, bool>>[] predicates =
+            [
+                employee => employee.GenderAsChar == 77,
+                employee => 77 == employee.GenderAsChar,
+                employee => employee.GenderAsChar < 65500,
+                employee => employee.GenderAsChar == 65500,
+                employee => (char?)employee.GenderAsChar == 77
+            ];
+            foreach (var predicate in predicates)
+            {
+                IQueryable<EmployeeWithCharProperty> query = employees.Where(predicate);
+                IQueryable<EmployeeWithCharProperty> roundtripped = RoundtripQuery(query, employees);
+                Assert.AreSequenceEqual(query, roundtripped, predicate.ToString());
+            }
+        }
+
+        [TestMethod]
+        public void TestUnsignedComparisonRoundtrips()
+        {
+            IQueryable<EntityWithUnsignedProperties> values = new[]
+            {
+                new EntityWithUnsignedProperties { ULongValue = 0 },
+                new EntityWithUnsignedProperties { ULongValue = 1, NullableULongValue = 1 },
+                new EntityWithUnsignedProperties { ULongValue = 2, NullableULongValue = 2 },
+                new EntityWithUnsignedProperties { ULongValue = ulong.MaxValue, NullableULongValue = ulong.MaxValue }
+            }.AsQueryable();
+            Expression<Func<EntityWithUnsignedProperties, bool>>[] predicates =
+            [
+                entity => entity.ULongValue > 1,
+                entity => 1 < entity.ULongValue,
+                entity => entity.ULongValue == 1,
+                entity => entity.ULongValue >= 2147483648,
+                entity => entity.ULongValue > 4294967296,
+                entity => entity.NullableULongValue > 1
+            ];
+            foreach (var predicate in predicates)
+            {
+                var query = values.Where(predicate);
+                Assert.AreSequenceEqual(query, RoundtripQuery(query, values), predicate.ToString());
+            }
+        }
+
+        [TestMethod]
+        public void TestUnsignedArithmeticRoundtrips()
+        {
+            IQueryable<EntityWithUnsignedProperties> values = new[]
+            {
+                new EntityWithUnsignedProperties { UIntValue = 0, NullableUIntValue = null },
+                new EntityWithUnsignedProperties { UIntValue = 1, NullableUIntValue = 0 },
+                new EntityWithUnsignedProperties { UIntValue = uint.MaxValue, NullableUIntValue = uint.MaxValue }
+            }.AsQueryable();
+            Expression<Func<EntityWithUnsignedProperties, bool>>[] predicates =
+            [
+                entity => entity.UIntValue + 1 == 0,
+                entity => 1 + entity.UIntValue == 0,
+                entity => entity.UIntValue - 1 == uint.MaxValue,
+                entity => entity.UIntValue + -1 < 0,
+                entity => entity.NullableUIntValue + 1 == 0
+            ];
+            foreach (var predicate in predicates)
+            {
+                var query = values.Where(predicate);
+                Assert.AreSequenceEqual(query, RoundtripQuery(query, values), predicate.ToString());
+            }
+        }
+
+        [TestMethod]
+        public void TestNullableSubtractionByNullSerializesAsTypedNull()
+        {
+            IQueryable<PurchaseOrder> orders = Array.Empty<PurchaseOrder>().AsQueryable();
+#pragma warning disable CS0458 // The result of the expression is always 'null'
+            var dateDifference = orders.Where(order => (order.OrderDate - (DateTime?)null) == null);
+            var durationDifference = orders.Where(order => order.OrderDate - (TimeSpan?)null == null);
+            var nullDateDifference = orders.Where(order => (DateTime?)null - order.OrderDate == null);
+#pragma warning restore CS0458 // The result of the expression is always 'null'
+
+            Assert.AreEqual("((it.OrderDate-DateTime?(null))==null)", QuerySerializer.Serialize(dateDifference).Single().Expression);
+            Assert.AreEqual("((it.OrderDate-TimeSpan?(null))==null)", QuerySerializer.Serialize(durationDifference).Single().Expression);
+            Assert.AreEqual("((DateTime?(null)-it.OrderDate)==null)", QuerySerializer.Serialize(nullDateDifference).Single().Expression);
+            Assert.AreEqual(0, RoundtripQuery(dateDifference, orders).Count());
+            Assert.AreEqual(0, RoundtripQuery(durationDifference, orders).Count());
+            Assert.AreEqual(0, RoundtripQuery(nullDateDifference, orders).Count());
+        }
+
+        [TestMethod]
         public void TestCharQueries()
         {
             EmployeeWithCharProperty[] emps = new EmployeeWithCharProperty[] { new EmployeeWithCharProperty { GenderAsChar = 'M' }, new EmployeeWithCharProperty { GenderAsChar = 'F' }, new EmployeeWithCharProperty { GenderAsChar = 'F' } };
             IQueryable<EmployeeWithCharProperty> query1 = emps.AsQueryable().Where(p => p.GenderAsChar == 'M');
-            IQueryable<EmployeeWithCharProperty> query2 = (IQueryable<EmployeeWithCharProperty>)RoundtripQuery(query1, emps.AsQueryable());
+            IQueryable<EmployeeWithCharProperty> query2 = RoundtripQuery(query1, emps.AsQueryable());
             Assert.AreEqual(1, query2.Count());
 
             query1 = emps.AsQueryable().Where(p => p.GenderAsChar < 'M');
-            query2 = (IQueryable<EmployeeWithCharProperty>)RoundtripQuery(query1, emps.AsQueryable());
+            query2 = RoundtripQuery(query1, emps.AsQueryable());
             Assert.AreEqual(2, query2.Count());
-
             query1 = emps.AsQueryable().Where(p => p.GenderAsChar == null);
-            query2 = (IQueryable<EmployeeWithCharProperty>)RoundtripQuery(query1, emps.AsQueryable());
+
+            query2 = RoundtripQuery(query1, emps.AsQueryable());
             Assert.AreEqual(0, query2.Count());
 
             // verify that manually created expression trees that use char rather than conversions
@@ -378,7 +475,7 @@ namespace OpenRiaServices.Client.Test
             query1 = Queryable.Where(query1, (Expression<Func<EmployeeWithCharProperty, bool>>)lex);
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(query1);
             Assert.AreEqual("(it.GenderAsChar=='m')", queryParts.Single().Expression);
-            query2 = (IQueryable<EmployeeWithCharProperty>)RoundtripQuery(query1, emps.AsQueryable());
+            query2 = RoundtripQuery(query1, emps.AsQueryable());
         }
 
 #if NET
@@ -460,7 +557,7 @@ namespace OpenRiaServices.Client.Test
             IQueryable<GenericEntity> q = entities.Where(e => e.Title == "Supreme \"Leader\"");
             List<ServiceQueryPart> queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(it.Title==\"Supreme \\\"Leader\\\"\")", queryParts.Single().Expression);
-            IQueryable<GenericEntity> q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            IQueryable<GenericEntity> q2 = RoundtripQuery(q, entities);
             int c1 = q.Count();
             int c2 = q2.Count();
             Assert.AreEqual(1, c1);
@@ -469,7 +566,7 @@ namespace OpenRiaServices.Client.Test
             q = entities.Where(e => e.Title == "Supreme \\\"Leader\\\"");
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(it.Title==\"Supreme \\\\\\\"Leader\\\\\\\"\")", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(1, c1);
@@ -478,7 +575,7 @@ namespace OpenRiaServices.Client.Test
             q = entities.Where(e => e.Title == "Supreme \'Leader\'");
             queryParts = QuerySerializer.Serialize(q);
             Assert.AreEqual("(it.Title==\"Supreme \'Leader\'\")", queryParts.Single().Expression);
-            q2 = (IQueryable<GenericEntity>)RoundtripQuery(q, entities);
+            q2 = RoundtripQuery(q, entities);
             c1 = q.Count();
             c2 = q2.Count();
             Assert.AreEqual(1, c1);
@@ -509,11 +606,11 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(typeof(Employee).GetProperty("ManagerID").PropertyType == typeof(Nullable<int>));
 
             IQueryable<Employee> query = Array.Empty<Employee>().AsQueryable().Where(p => p.ManagerID == 1);
-            IQueryable<Employee> query2 = (IQueryable<Employee>)RoundtripQuery(query, employees.AsQueryable());
+            IQueryable<Employee> query2 = RoundtripQuery(query, employees.AsQueryable());
             Assert.AreEqual(1, query2.Count());
 
             query = Array.Empty<Employee>().AsQueryable().Where(p => p.ManagerID == null);
-            query2 = (IQueryable<Employee>)RoundtripQuery(query, employees.AsQueryable());
+            query2 = RoundtripQuery(query, employees.AsQueryable());
             Assert.AreEqual(1, query2.Count());
         }
 
@@ -527,7 +624,7 @@ namespace OpenRiaServices.Client.Test
             NotSupportedException expectedException = null;
             try
             {
-                query2 = (IQueryable<Employee>)RoundtripQuery(query, employees.AsQueryable());
+                query2 = RoundtripQuery(query, employees.AsQueryable());
             }
             catch (NotSupportedException e)
             {
@@ -540,7 +637,7 @@ namespace OpenRiaServices.Client.Test
             query = Array.Empty<Employee>().AsQueryable().AsQueryable().Where(p => p.EmployeeID == LocalStaticMethod(p.EmployeeID));
             try
             {
-                query2 = (IQueryable<Employee>)RoundtripQuery(query, employees.AsQueryable());
+                query2 = RoundtripQuery(query, employees.AsQueryable());
             }
             catch (NotSupportedException e)
             {
@@ -598,7 +695,7 @@ namespace OpenRiaServices.Client.Test
 
             // now test with number containing a decimal point
             query = products.Where(p => p.ListPrice < 55.77M);
-            query2 = (IQueryable<Product>)RoundtripQuery(query, products.AsQueryable());
+            query2 = RoundtripQuery(query, products.AsQueryable());
             Assert.AreEqual(1, query2.Count());
         }
 
@@ -621,13 +718,13 @@ namespace OpenRiaServices.Client.Test
 
             // the repro case
             Guid g3 = Guid.NewGuid();
-            IQueryable<Employee> query = (IQueryable<Employee>)RoundtripQuery(employees.AsQueryable().Where(p => p.rowguid != g3), employees.AsQueryable());
+            IQueryable<Employee> query = RoundtripQuery(employees.AsQueryable().Where(p => p.rowguid != g3), employees.AsQueryable());
             Assert.HasCount(2, query.ToArray());
 
-            query = (IQueryable<Employee>)RoundtripQuery(employees.AsQueryable().Where(p => p.rowguid == g1), employees.AsQueryable());
+            query = RoundtripQuery(employees.AsQueryable().Where(p => p.rowguid == g1), employees.AsQueryable());
             Assert.HasCount(1, query.ToArray());
 
-            query = (IQueryable<Employee>)RoundtripQuery(employees.AsQueryable().Where(p => p.rowguid == g2), employees.AsQueryable());
+            query = RoundtripQuery(employees.AsQueryable().Where(p => p.rowguid == g2), employees.AsQueryable());
             Assert.HasCount(1, query.ToArray());
         }
 
@@ -659,7 +756,7 @@ namespace OpenRiaServices.Client.Test
             }
             catch (Exception e)
             {
-                Assert.AreEqual("Methods on type 'Object' are not accessible (at index 1)", e.Message);
+                Assert.AreEqual("No applicable method 'GetType' exists in type 'PurchaseOrder' (at index 1)", e.Message);
             }
         }
 
@@ -673,16 +770,16 @@ namespace OpenRiaServices.Client.Test
                 OrderDate = DateTime.Now
             });
             bool flag = true;
-            IQueryable<PurchaseOrder> result = (IQueryable<PurchaseOrder>)RoundtripQuery(pos.AsQueryable().Where(p => flag), pos.AsQueryable());
+            IQueryable<PurchaseOrder> result = RoundtripQuery(pos.AsQueryable().Where(p => flag), pos.AsQueryable());
             Assert.Contains("Where(Param_0 => True)", result.Expression.ToString());
             Assert.HasCount(1, result.ToArray());
 
-            result = (IQueryable<PurchaseOrder>)RoundtripQuery(pos.AsQueryable().Where(p => true), pos.AsQueryable());
+            result = RoundtripQuery(pos.AsQueryable().Where(p => true), pos.AsQueryable());
             Assert.Contains("Where(Param_0 => True)", result.Expression.ToString());
             Assert.HasCount(1, result.ToArray());
 
             Expression<Func<PurchaseOrder, bool>> expr = t => true;
-            result = (IQueryable<PurchaseOrder>)RoundtripQuery(pos.AsQueryable().Where(expr), pos.AsQueryable());
+            result = RoundtripQuery(pos.AsQueryable().Where(expr), pos.AsQueryable());
             Assert.Contains("Where(Param_0 => True)", result.Expression.ToString());
             Assert.HasCount(1, result.ToArray());
         }
@@ -961,14 +1058,14 @@ namespace OpenRiaServices.Client.Test
             query1 = from p in BaselineTestData.Products.AsQueryable()
                      where -p.ListPrice < -1000
                      select p;
-            IQueryable<Product> query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            IQueryable<Product> query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
 
             // Test logical negation
             query1 = from p in BaselineTestData.Products.AsQueryable()
                      where !(p.ListPrice < 1000)
                      select p;
-            query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
@@ -979,14 +1076,14 @@ namespace OpenRiaServices.Client.Test
             query1 = from p in BaselineTestData.Products.AsQueryable()
                      where p.Name == (p.Color == null ? "FooBar" : "Yellow")
                      select p;
-            IQueryable<Product> query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            IQueryable<Product> query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
 
             // test non-locals as true/false expressions
             query1 = from p in BaselineTestData.Products.AsQueryable()
                      where p.ProductID > (p.Color == "Yellow" ? p.Name.Length + 2 : p.Name.Length - 3)
                      select p;
-            query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
@@ -998,19 +1095,19 @@ namespace OpenRiaServices.Client.Test
                      where p.Color != null && p.Color.StartsWith("Yell") && p.Name.Length < 23
                      select p;
 
-            IQueryable<Product> query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            IQueryable<Product> query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
 
             // verify string concat works
             query1 = BaselineTestData.Products.AsQueryable().OrderBy(p => p.Class + "X");
-            query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
 
             // test case insensitive string comparisons
             query1 = BaselineTestData.Products.AsQueryable().Where(p => string.Equals(p.Color, "black", StringComparison.OrdinalIgnoreCase));
-            query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             List<Product> results = query2.ToList();
-            Assert.IsTrue(results.Any(p => p.Color == "Black"));  // verify the search was case insensitive
+            Assert.Contains(p => p.Color == "Black", results);  // verify the search was case insensitive
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
@@ -1024,7 +1121,7 @@ namespace OpenRiaServices.Client.Test
                      where (Math.Round(p.ListPrice) - 55.0M) > 40 && Convert.ToInt32(p.ListPrice) < 1000
                      select p;
 
-            IQueryable<Product> query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            IQueryable<Product> query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
@@ -1037,7 +1134,7 @@ namespace OpenRiaServices.Client.Test
                      where p.Color != null && p.Name.Contains(p.Color)
                      select p;
 
-            IQueryable<Product> query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            IQueryable<Product> query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
@@ -1048,14 +1145,14 @@ namespace OpenRiaServices.Client.Test
             query1 = from p in BaselineTestData.Products.AsQueryable()
                      where p.Color != null && p.Color.StartsWith("Yell") || p.Name.Length < 12
                      select p;
-            IQueryable<Product> query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            IQueryable<Product> query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
 
             // Same query as above with expressions associated differently
             query1 = from p in BaselineTestData.Products.AsQueryable()
                      where p.Color != null && (p.Color.StartsWith("Yell") || p.Name.Length < 12)
                      select p;
-            query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
@@ -1067,7 +1164,7 @@ namespace OpenRiaServices.Client.Test
                      where p.Name != string.Empty && p.ProductID < int.MaxValue
                      select p;
 
-            IQueryable<Product> query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            IQueryable<Product> query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
@@ -1079,7 +1176,7 @@ namespace OpenRiaServices.Client.Test
             query = from p in Array.Empty<Product>().AsQueryable()
                     select p;
 
-            query = (IQueryable<Product>)RoundtripQuery(query, BaselineTestData.Products.AsQueryable());
+            query = RoundtripQuery(query, BaselineTestData.Products.AsQueryable());
 
             Assert.AreEqual(BaselineTestData.Products.Count(), query.Cast<object>().Count());
 
@@ -1141,7 +1238,7 @@ namespace OpenRiaServices.Client.Test
                      orderby p.ListPrice ascending, p.Style descending, p.Weight
                      select p;
 
-            IQueryable<Product> query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            IQueryable<Product> query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
@@ -1170,7 +1267,7 @@ namespace OpenRiaServices.Client.Test
                      orderby p.ListPrice ascending, p.Style descending, p.Weight
                      select p;
 
-            IQueryable<Product> query2 = (IQueryable<Product>)RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
+            IQueryable<Product> query2 = RoundtripQuery(query1, BaselineTestData.Products.AsQueryable());
             Assert.IsTrue(query1.SequenceEqual(query2));
         }
 
@@ -1235,6 +1332,16 @@ namespace OpenRiaServices.Client.Test
         {
             Thread.CurrentThread.CurrentUICulture = _defaultCulture;
         }
+    }
+
+    public class EntityWithUnsignedProperties
+    {
+        [Key]
+        public int Id { get; set; }
+        public uint UIntValue { get; set; }
+        public uint? NullableUIntValue { get; set; }
+        public ulong ULongValue { get; set; }
+        public ulong? NullableULongValue { get; set; }
     }
 
     public class EmployeeWithCharProperty
