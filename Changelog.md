@@ -1,5 +1,6 @@
 # Unreleased
 
+* MessagePack serializer setup rejects custom converters on exposed types or properties of exposed types, and custom type marshalers on exposed types, because serialization surrogates do not support them.
 * Server serialization surrogates now copy only supported PolyType and property-level Nerdbank.MessagePack attributes. `[DerivedTypeShape]` stays on the original models, where `ObjectConverter` handles discriminators; client generation is unchanged.
 * Added support for PolyType `[PropertyShape]` and `[DerivedTypeShape]` model attributes in server metadata and generated clients, using PolyType precedence when combined with data contract attributes. Fixes [#603](https://github.com/OpenRIAServices/OpenRiaServices/issues/603)
 * Query methods (`[Query]`) can now accept complex types (in addition to entity/predefined types) as parameters, matching the behavior already supported for `[Invoke]` and `[EntityAction]` methods. Fixes [#548](https://github.com/OpenRIAServices/OpenRiaServices/issues/548)

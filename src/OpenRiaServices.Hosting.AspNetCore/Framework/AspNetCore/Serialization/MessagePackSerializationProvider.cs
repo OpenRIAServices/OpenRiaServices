@@ -6,6 +6,7 @@ using PolyType;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
@@ -33,6 +34,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private MessagePackSerializer CreateSerializerForDomainService(Type domainServiceType)
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(domainServiceType);
+            ValidateSurrogateAttributes(new HashSet<Type>(description.EntityTypes.Concat(description.ComplexTypes)));
             Wcf.DomainServiceSerializationSurrogate surrogateProvider = new Wcf.DomainServiceSerializationSurrogate(description);
 
             // Create converters to handle surrogates,
@@ -59,6 +61,34 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 Converters = [.. _serializer.Converters, .. converters],
                 DerivedTypeUnions = [.. derivedTypeUnions.Values],
             };
+        }
+
+        /// <summary>Validates attributes that cannot be used with MessagePack serialization surrogates.</summary>
+        internal static void ValidateSurrogateAttributes(HashSet<Type> exposedTypes)
+        {
+            foreach (Type type in exposedTypes)
+            {
+                AttributeCollection attributes = TypeDescriptor.GetAttributes(type);
+                if (attributes[typeof(MessagePackConverterAttribute)] != null)
+                {
+                    throw new InvalidOperationException($"MessagePackConverterAttribute on exposed type '{type.FullName}' is not supported with serialization surrogates.");
+                }
+
+                if (attributes[typeof(TypeShapeAttribute)] is TypeShapeAttribute { Marshaler: not null })
+                {
+                    throw new InvalidOperationException($"TypeShapeAttribute.Marshaler on exposed type '{type.FullName}' is not supported with serialization surrogates.");
+                }
+
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(type))
+                {
+                    if (SerializationUtility.IsSerializableDataMember(property)
+                        && exposedTypes.Contains(property.PropertyType)
+                        && property.Attributes[typeof(MessagePackConverterAttribute)] != null)
+                    {
+                        throw new InvalidOperationException($"MessagePackConverterAttribute on property '{type.FullName}.{property.Name}' is not supported because its type '{property.PropertyType.FullName}' uses a serialization surrogate.");
+                    }
+                }
+            }
         }
     }
 }

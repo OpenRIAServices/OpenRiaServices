@@ -32,7 +32,9 @@ Top-level object map:
 
 OpenRiaServices supports PolyType model attributes in addition to data contract attributes. Generated client models preserve these attributes so the server and client use the same MessagePack shape.
 
-Server serialization surrogates preserve `[PropertyShape]` and the property-level Nerdbank.MessagePack attributes `[Key]`, `[MessagePackConverter]`, and `[UseComparer]`. Only `Kind` is copied from `[TypeShape]`; method inclusion and custom type marshaling are not propagated. `[DerivedTypeShape]` is not copied to surrogates: `ObjectConverter` handles discriminators using the original model metadata. This does not change client model generation; client and server discriminator keys must still match.
+Server serialization surrogates preserve `[PropertyShape]` and the property-level Nerdbank.MessagePack attributes `[Key]`, `[MessagePackConverter]`, and `[UseComparer]`.
+
+A property-level `[MessagePackConverter]` is not supported when the property's type is an exposed entity or complex type. `[MessagePackConverter]` on exposed entity or complex types and `[TypeShape(Marshaler = ...)]` on those types are also unsupported; MessagePack serializer setup rejects them. Only `Kind` is copied from `[TypeShape]`; method inclusion is not propagated. `[DerivedTypeShape]` is not copied to surrogates: `ObjectConverter` handles discriminators using the original model metadata. This does not change client model generation; client and server discriminator keys must still match.
 
 These rules follow PolyType's [DataContract support](https://eiriktsarpalis.github.io/PolyType/docs/shape-providers.html#datacontract-support).
 

@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Nerdbank.MessagePack;
+using OpenRiaServices.Hosting.AspNetCore.Serialization;
 using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 using PolyType;
@@ -125,6 +127,146 @@ namespace OpenRiaServices.Hosting.UnitTests
             Assert.IsNotNull(surrogateType.GetCustomAttribute<TypeShapeAttribute>());
             Assert.IsNotNull(surrogateName.GetCustomAttribute<PropertyShapeAttribute>());
             Assert.AreEqual(0, surrogateName.GetCustomAttribute<Nerdbank.MessagePack.KeyAttribute>().Index);
+        }
+
+        [TestMethod]
+        public void MessagePackRejectsConvertersOnExposedProperties()
+        {
+            var types = new HashSet<Type> { typeof(ConverterEntity), typeof(ConverterComplex) };
+            var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateSurrogateAttributes(types));
+            StringAssert.Contains(error.Message, nameof(ConverterEntity.Converted));
+            StringAssert.Contains(error.Message, typeof(ConverterComplex).FullName);
+
+            // The same property is allowed when its type is not an exposed surrogate type.
+            MessagePackSerializationProvider.ValidateSurrogateAttributes(new HashSet<Type> { typeof(ConverterEntity) });
+        }
+
+        [TestMethod]
+        public void MessagePackRejectsConvertersOnComplexTypeProperties()
+        {
+            var types = new HashSet<Type> { typeof(ConverterContainer), typeof(ConverterComplex) };
+            var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateSurrogateAttributes(types));
+            StringAssert.Contains(error.Message, nameof(ConverterContainer.Converted));
+        }
+
+        [TestMethod]
+        public void MessagePackRejectsTypeConverterAndMarshaler()
+        {
+            var converterError = Assert.ThrowsExactly<InvalidOperationException>(() =>
+                MessagePackSerializationProvider.ValidateSurrogateAttributes(new HashSet<Type> { typeof(TypeWithConverter) }));
+            StringAssert.Contains(converterError.Message, nameof(MessagePackConverterAttribute));
+            StringAssert.Contains(converterError.Message, typeof(TypeWithConverter).FullName);
+
+            var marshalerError = Assert.ThrowsExactly<InvalidOperationException>(() =>
+                MessagePackSerializationProvider.ValidateSurrogateAttributes(new HashSet<Type> { typeof(TypeWithMarshaler) }));
+            StringAssert.Contains(marshalerError.Message, nameof(TypeShapeAttribute.Marshaler));
+            StringAssert.Contains(marshalerError.Message, typeof(TypeWithMarshaler).FullName);
+        }
+
+        [TestMethod]
+        public void MessagePackAllowsScalarConvertersAndExcludedProperties()
+        {
+            MessagePackSerializationProvider.ValidateSurrogateAttributes(new HashSet<Type>
+            {
+                typeof(AllowedConverterProperties), typeof(ConverterComplex), typeof(SurrogateTestEntity_NerdbankAttributes)
+            });
+        }
+
+        [TestMethod]
+        public void MessagePackChecksVirtualProperties()
+        {
+            Type type = typeof(VirtualConverterContainer);
+            var provider = new MockTypeDescriptionProvider(() => TypeDescriptor.CreateProperty(type, "VirtualProperty", typeof(ConverterComplex),
+                new MessagePackConverterAttribute(typeof(ConverterComplexConverter))));
+            TypeDescriptor.AddProvider(provider, type);
+            try
+            {
+                var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateSurrogateAttributes(
+                    new HashSet<Type> { type, typeof(ConverterComplex) }));
+                StringAssert.Contains(error.Message, "VirtualProperty");
+            }
+            finally
+            {
+                TypeDescriptor.RemoveProvider(provider, type);
+            }
+        }
+
+        [TestMethod]
+        public void MessagePackProviderValidatesDomainServiceExposedTypes()
+        {
+            var description = DomainServiceDescription.GetDescription(typeof(ConverterDomainService));
+            Assert.IsTrue(description.EntityTypes.Contains(typeof(ConverterEntity)));
+            Assert.IsTrue(description.ComplexTypes.Contains(typeof(ConverterComplex)));
+            var operation = description.GetQueryMethod(nameof(ConverterDomainService.GetEntities));
+
+            // XML can create and cache the surrogates without bypassing MessagePack validation.
+            var xmlProvider = new BinaryXmlSerializationProvider();
+            Assert.IsNotNull(xmlProvider.GetRequestSerializer(operation));
+
+            var provider = new MessagePackSerializationProvider(new MessagePackSerializationOptions());
+            var error = Assert.ThrowsExactly<InvalidOperationException>(() => provider.GetRequestSerializer(operation));
+            StringAssert.Contains(error.Message, nameof(ConverterEntity.Converted));
+        }
+
+        public class ConverterEntity
+        {
+            [System.ComponentModel.DataAnnotations.Key]
+            public int Id { get; set; }
+
+            [MessagePackConverter(typeof(ConverterComplexConverter))]
+            public ConverterComplex Converted { get; set; }
+        }
+
+        public class ConverterComplex
+        {
+            public string Value { get; set; }
+        }
+
+        public class ConverterContainer
+        {
+            [MessagePackConverter(typeof(ConverterComplexConverter))]
+            public ConverterComplex Converted { get; set; }
+        }
+
+        [MessagePackConverter(typeof(TypeWithConverterConverter))]
+        public class TypeWithConverter { }
+
+        [TypeShape(Marshaler = typeof(TypeWithMarshalerMarshaler))]
+        public class TypeWithMarshaler { }
+
+        public class AllowedConverterProperties
+        {
+            [MessagePackConverter(typeof(SurrogateTestStringConverter))]
+            public string Value { get; set; }
+
+            [Exclude]
+            [MessagePackConverter(typeof(ConverterComplexConverter))]
+            public ConverterComplex Excluded { get; set; }
+        }
+
+        public class VirtualConverterContainer { }
+
+        public sealed class ConverterComplexConverter : MessagePackConverter<ConverterComplex>
+        {
+            public override ConverterComplex Read(ref MessagePackReader reader, SerializationContext context) => new() { Value = reader.ReadString() };
+            public override void Write(ref MessagePackWriter writer, in ConverterComplex value, SerializationContext context) => writer.Write(value.Value);
+        }
+
+        public sealed class TypeWithConverterConverter : MessagePackConverter<TypeWithConverter>
+        {
+            public override TypeWithConverter Read(ref MessagePackReader reader, SerializationContext context) { reader.ReadNil(); return new(); }
+            public override void Write(ref MessagePackWriter writer, in TypeWithConverter value, SerializationContext context) => writer.WriteNil();
+        }
+
+        public sealed class TypeWithMarshalerMarshaler : IMarshaler<TypeWithMarshaler, string>
+        {
+            public string Marshal(TypeWithMarshaler value) => "";
+            public TypeWithMarshaler Unmarshal(string value) => new();
+        }
+
+        public class ConverterDomainService : DomainService
+        {
+            public IQueryable<ConverterEntity> GetEntities() => Array.Empty<ConverterEntity>().AsQueryable();
         }
     }
 }
