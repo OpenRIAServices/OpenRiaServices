@@ -1666,6 +1666,27 @@ namespace OpenRiaServices.Server
             ReadOnlyCollection<DomainOperationParameter> parameters = operationEntry.Parameters;
             Type returnType = operationEntry.ReturnType;
 
+            if (operationEntry.HasClientQueryParameter)
+            {
+                if (operation != DomainOperation.Query)
+                {
+                    error = new InvalidOperationException(Resource.DomainServiceDescription_ClientQueryOnlyForQueryOperation);
+                    return false;
+                }
+
+                if (operationEntry.HasMultipleClientQueryParameters)
+                {
+                    error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_MultipleClientQueryParameters, methodName));
+                    return false;
+                }
+
+                if (operationEntry.HasOutCountParameter)
+                {
+                    error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_ClientQueryWithOutCount, methodName));
+                    return false;
+                }
+            }
+
             switch (operation)
             {
                 case DomainOperation.Delete:
@@ -1737,6 +1758,21 @@ namespace OpenRiaServices.Server
                     if (isSingleton && ((QueryAttribute)operationEntry.OperationAttribute).IsComposable)
                     {
                         throw new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_SingletonQueryMethodCannotCompose, methodName, returnType));
+                    }
+
+                    if (operationEntry.HasClientQueryParameter)
+                    {
+                        if (isSingleton || !((QueryAttribute)operationEntry.OperationAttribute).IsComposable)
+                        {
+                            error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_ClientQueryRequiresComposableEnumerable, methodName));
+                            return false;
+                        }
+
+                        if (operationEntry.ClientQueryEntityType != entityType)
+                        {
+                            error = new InvalidOperationException(string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_ClientQueryEntityTypeMismatch, operationEntry.ClientQueryEntityType, methodName, entityType));
+                            return false;
+                        }
                     }
 
                     break;

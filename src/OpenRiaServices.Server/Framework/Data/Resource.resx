@@ -207,6 +207,21 @@
   <data name="DomainServiceDescription_SingletonQueryMethodCannotCompose" xml:space="preserve">
     <value>Query operation '{0}' cannot be marked composable since its return type '{1}' does not implement IEnumerable of T.</value>
   </data>
+  <data name="DomainServiceDescription_ClientQueryOnlyForQueryOperation" xml:space="preserve">
+    <value>ClientQuery&lt;T&gt; parameters can only be used by query operations.</value>
+  </data>
+  <data name="DomainServiceDescription_MultipleClientQueryParameters" xml:space="preserve">
+    <value>Query operation '{0}' must not declare more than one ClientQuery&lt;T&gt; parameter.</value>
+  </data>
+  <data name="DomainServiceDescription_ClientQueryWithOutCount" xml:space="preserve">
+    <value>Query operation '{0}' cannot combine a ClientQuery&lt;T&gt; parameter with an out total-count parameter.</value>
+  </data>
+  <data name="DomainServiceDescription_ClientQueryRequiresComposableEnumerable" xml:space="preserve">
+    <value>Query operation '{0}' must return an enumerable and be composable to use a ClientQuery&lt;T&gt; parameter.</value>
+  </data>
+  <data name="DomainServiceDescription_ClientQueryEntityTypeMismatch" xml:space="preserve">
+    <value>The ClientQuery entity type '{0}' on query operation '{1}' must match the returned entity type '{2}'.</value>
+  </data>
   <data name="DomainServiceDescription_Uninitialized" xml:space="preserve">
     <value>This DomainServiceDescription hasn't been initialized. Initialize must be called before the description can be used.</value>
   </data>
