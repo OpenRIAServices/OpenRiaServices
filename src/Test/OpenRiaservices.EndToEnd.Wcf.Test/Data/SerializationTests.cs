@@ -1,5 +1,6 @@
 ﻿extern alias SSmDsClient;
 using System;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using Microsoft.Silverlight.Testing;
@@ -37,7 +38,7 @@ namespace OpenRiaServices.Client.Test
                             {
                                 if (emit)
                                 {
-                                    sb.Append(string.Format("{0} is {1}", property, value));
+                                    sb.AppendFormat(CultureInfo.InvariantCulture, "{0} is {1}", property, value);
                                 }
                             };
 
@@ -58,7 +59,7 @@ namespace OpenRiaServices.Client.Test
 
                         // Ensure entity projection properties code gen correlates with surrogate layer DataMember(Name, ...)
                         appendIf(mockReport.State == null, "State", mockReport.State);
-                        appendIf(mockReport.Start == null, "Start", mockReport.Start);
+                        appendIf(mockReport.Start == default, "Start", mockReport.Start);
 
                         if (!string.IsNullOrEmpty(result))
                         {
@@ -68,7 +69,7 @@ namespace OpenRiaServices.Client.Test
                         return result + sb.ToString();
                     });
 
-                Assert.AreEqual("CustomerId is 1 CustomerId is 2 CustomerId is 3", reportsResult);
+                Assert.AreEqual("CustomerId is 1 CustomerId is 2Start is 01/01/0001 00:00:00 CustomerId is 3", reportsResult);
 
                 // Ensure DataContract(Name, Namespace) on complex types matches.
                 Assert.AreEqual(2, numReportBodies, "GetReportsQuery must return 2 report bodies");
