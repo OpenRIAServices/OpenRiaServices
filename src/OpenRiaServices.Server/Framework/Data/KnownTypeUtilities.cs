@@ -66,24 +66,36 @@ namespace OpenRiaServices.Server
         internal static HashSet<Type> ImportDerivedTypes(Type type, bool inherit)
         {
             HashSet<Type> derivedTypes = new HashSet<Type>();
-            for (Type currentType = type; currentType != null; currentType = inherit ? currentType.BaseType : null)
-            {
-                DerivedTypeShapeAttribute[] attributes = currentType
-                    .GetCustomAttributes(typeof(DerivedTypeShapeAttribute), inherit: false)
-                    .Cast<DerivedTypeShapeAttribute>()
-                    .ToArray();
+            Queue<Type> pendingTypes = new Queue<Type>();
+            pendingTypes.Enqueue(type);
 
-                if (attributes.Length > 0)
+            if (inherit && type != typeof(object))
+            {
+                for (Type currentType = type.BaseType; currentType != null && currentType != typeof(object); currentType = currentType.BaseType)
                 {
-                    derivedTypes.UnionWith(attributes.Select(attribute => attribute.Type));
-                }
-                else
-                {
-                    derivedTypes.UnionWith(ImportKnownTypes(currentType, inherit: false));
+                    pendingTypes.Enqueue(currentType);
                 }
             }
 
-            derivedTypes.RemoveWhere(derivedType => !type.IsAssignableFrom(derivedType));
+            while (pendingTypes.Count > 0)
+            {
+                Type currentType = pendingTypes.Dequeue();
+
+                DerivedTypeShapeAttribute[] derivedTypeShapeAttributes = (DerivedTypeShapeAttribute[])currentType.GetCustomAttributes(typeof(DerivedTypeShapeAttribute), inherit: false);
+
+                IEnumerable<Type> types = (derivedTypeShapeAttributes.Length > 0)
+                    ? derivedTypeShapeAttributes.Select(attribute => attribute.Type)
+                    : ImportKnownTypes(currentType, inherit: false);
+
+                foreach (var derivedType in types)
+                {
+                    if (type.IsAssignableFrom(derivedType) && derivedTypes.Add(derivedType))
+                    {
+                        pendingTypes.Enqueue(derivedType);
+                    }
+                }
+            }
+
             return derivedTypes;
         }
     }
