@@ -67,16 +67,15 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// <summary>Validates MessagePack model attributes and ensures exposed type discriminators are unique.</summary>
         internal static void ValidateMessagePackAttributes(IEnumerable<Type> entityTypes, IEnumerable<Type> complexTypes)
         {
-            Type[] entityTypeArray = entityTypes.ToArray();
-            Type[] complexTypeArray = complexTypes.ToArray();
-            HashSet<Type> allKnownTypes = new(entityTypeArray);
-            Queue<Type> pendingTypes = new(entityTypeArray);
+            HashSet<Type> allEntityTypes = new(entityTypes);
+            HashSet<Type> allComplexTypes = new(complexTypes);
+            Queue<Type> pendingTypes = new(allEntityTypes);
             while (pendingTypes.Count > 0)
             {
                 Type currentType = pendingTypes.Dequeue();
                 foreach (Type knownType in KnownTypeUtilities.ImportDerivedTypes(currentType, inherit: true))
                 {
-                    if (allKnownTypes.Add(knownType))
+                    if (allEntityTypes.Add(knownType))
                     {
                         pendingTypes.Enqueue(knownType);
                     }
@@ -84,7 +83,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             }
 
             Dictionary<string, Type> discriminators = new(StringComparer.Ordinal);
-            foreach (Type type in allKnownTypes.Where(type => !type.IsAbstract))
+            foreach (Type type in allEntityTypes.Where(type => !type.IsAbstract))
             {
                 string discriminator = Encoding.UTF8.GetString(MessagePackUtility.GetDiscriminator(type));
                 if (discriminators.TryGetValue(discriminator, out Type? existingType) && existingType is not null && existingType != type)
@@ -95,7 +94,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 discriminators[discriminator] = type;
             }
 
-            foreach (Type type in entityTypeArray.Concat(complexTypeArray))
+            foreach (Type type in allEntityTypes.Concat(complexTypes))
             {
                 AttributeCollection attributes = TypeDescriptor.GetAttributes(type);
                 if (attributes[typeof(MessagePackConverterAttribute)] != null)
@@ -111,7 +110,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(type))
                 {
                     if (SerializationUtility.IsSerializableDataMember(property)
-                        && (entityTypeArray.Contains(property.PropertyType) || complexTypeArray.Contains(property.PropertyType))
+                        && (allEntityTypes.Contains(property.PropertyType) || allComplexTypes.Contains(property.PropertyType))
                         && property.Attributes[typeof(MessagePackConverterAttribute)] != null)
                     {
                         throw new InvalidOperationException($"MessagePackConverterAttribute on property '{type.FullName}.{property.Name}' is not supported because its type '{property.PropertyType.FullName}' uses a serialization surrogate.");
