@@ -35,7 +35,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private MessagePackSerializer CreateSerializerForDomainService(Type domainServiceType)
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(domainServiceType);
-            ValidateMessagePackAttributes(new HashSet<Type>(description.EntityTypes.Concat(description.ComplexTypes)));
+            ValidateMessagePackAttributes(description.EntityTypes, description.ComplexTypes);
             Wcf.DomainServiceSerializationSurrogate surrogateProvider = new Wcf.DomainServiceSerializationSurrogate(description);
 
             // Create converters to handle surrogates,
@@ -65,8 +65,9 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         }
 
         /// <summary>Validates MessagePack model attributes and ensures exposed type discriminators are unique.</summary>
-        internal static void ValidateMessagePackAttributes(HashSet<Type> exposedTypes)
+        internal static void ValidateMessagePackAttributes(IEnumerable<Type> entityTypes, IEnumerable<Type> complexTypes)
         {
+            HashSet<Type> exposedTypes = new(entityTypes.Concat(complexTypes));
             HashSet<Type> allKnownTypes = new(exposedTypes);
             Queue<Type> pendingTypes = new(exposedTypes);
             while (pendingTypes.Count > 0)

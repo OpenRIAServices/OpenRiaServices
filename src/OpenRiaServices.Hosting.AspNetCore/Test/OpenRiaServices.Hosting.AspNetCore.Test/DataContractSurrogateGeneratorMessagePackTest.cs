@@ -136,20 +136,20 @@ namespace OpenRiaServices.Hosting.UnitTests
         [TestMethod]
         public void MessagePackRejectsConvertersOnExposedProperties()
         {
-            var types = new HashSet<Type> { typeof(ConverterEntity), typeof(ConverterComplex) };
-            var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateMessagePackAttributes(types));
+            var error = Assert.ThrowsExactly<InvalidOperationException>(() =>
+                MessagePackSerializationProvider.ValidateMessagePackAttributes(new[] { typeof(ConverterEntity) }, new[] { typeof(ConverterComplex) }));
             StringAssert.Contains(error.Message, nameof(ConverterEntity.Converted));
             StringAssert.Contains(error.Message, typeof(ConverterComplex).FullName);
 
             // The same property is allowed when its type is not an exposed surrogate type.
-            MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type> { typeof(ConverterEntity) });
+            MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type> { typeof(ConverterEntity) }, Array.Empty<Type>());
         }
 
         [TestMethod]
         public void MessagePackRejectsConvertersOnComplexTypeProperties()
         {
-            var types = new HashSet<Type> { typeof(ConverterContainer), typeof(ConverterComplex) };
-            var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateMessagePackAttributes(types));
+            var error = Assert.ThrowsExactly<InvalidOperationException>(() =>
+                MessagePackSerializationProvider.ValidateMessagePackAttributes(new[] { typeof(ConverterContainer) }, new[] { typeof(ConverterComplex) }));
             StringAssert.Contains(error.Message, nameof(ConverterContainer.Converted));
         }
 
@@ -157,12 +157,12 @@ namespace OpenRiaServices.Hosting.UnitTests
         public void MessagePackRejectsTypeConverterAndMarshaler()
         {
             var converterError = Assert.ThrowsExactly<InvalidOperationException>(() =>
-                MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type> { typeof(TypeWithConverter) }));
+                MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type> { typeof(TypeWithConverter) }, Array.Empty<Type>()));
             StringAssert.Contains(converterError.Message, nameof(MessagePackConverterAttribute));
             StringAssert.Contains(converterError.Message, typeof(TypeWithConverter).FullName);
 
             var marshalerError = Assert.ThrowsExactly<InvalidOperationException>(() =>
-                MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type> { typeof(TypeWithMarshaler) }));
+                MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type> { typeof(TypeWithMarshaler) }, Array.Empty<Type>()));
             StringAssert.Contains(marshalerError.Message, nameof(TypeShapeAttribute.Marshaler));
             StringAssert.Contains(marshalerError.Message, typeof(TypeWithMarshaler).FullName);
         }
@@ -170,10 +170,8 @@ namespace OpenRiaServices.Hosting.UnitTests
         [TestMethod]
         public void MessagePackAllowsScalarConvertersAndExcludedProperties()
         {
-            MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type>
-            {
-                typeof(AllowedConverterProperties), typeof(ConverterComplex), typeof(SurrogateTestEntity_NerdbankAttributes)
-            });
+            MessagePackSerializationProvider.ValidateMessagePackAttributes(
+                new[] { typeof(AllowedConverterProperties), typeof(SurrogateTestEntity_NerdbankAttributes) }, new[] { typeof(ConverterComplex) });
         }
 
         [TestMethod]
@@ -186,7 +184,7 @@ namespace OpenRiaServices.Hosting.UnitTests
             try
             {
                 var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateMessagePackAttributes(
-                    new HashSet<Type> { type, typeof(ConverterComplex) }));
+                    new[] { type }, new[] { typeof(ConverterComplex) }));
                 StringAssert.Contains(error.Message, "VirtualProperty");
             }
             finally
@@ -204,7 +202,7 @@ namespace OpenRiaServices.Hosting.UnitTests
                     typeof(DuplicateDiscriminatorBase),
                     typeof(DuplicateDiscriminatorDerived1),
                     typeof(DuplicateDiscriminatorDerived2),
-                }));
+                }, Array.Empty<Type>()));
 
             StringAssert.Contains(error.Message, "duplicate");
             StringAssert.Contains(error.Message, typeof(DuplicateDiscriminatorDerived1).FullName);
