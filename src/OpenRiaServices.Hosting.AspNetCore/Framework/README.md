@@ -166,7 +166,19 @@ builder.Services.AddOpenRiaServices()
     .AddMessagePackSerialization();
 ```
 
-On model properties, use PolyType `[PropertyShape]` and Nerdbank.MessagePack `[Key]`, `[MessagePackConverter]`, or `[UseComparer]` to customize serialization. Server surrogates preserve these attributes and the `Kind` setting from `[TypeShape]`, but not method inclusion. MessagePack rejects `[MessagePackConverter]` on exposed entity or complex types and on properties whose type is an exposed entity or complex type. It also rejects `[TypeShape]` with `Marshaler` on those types. `ObjectConverter` handles `[DerivedTypeShape]` discriminators from the original models rather than surrogate attributes. Client generation is unchanged; discriminator keys must match on both sides. See [model attribute rules](../../../docs/messagepack-serialization.md#model-attributes).
+The MessagePack serializer is based on [Nerdbank.MessagePack](https://github.com/AArnott/Nerdbank.MessagePack) , see its [Features documentation](https://aarnott.github.io/Nerdbank.MessagePack/docs/features.html).
+
+In addition to working with the existing `[DataContract]`/`[DataMember]` attributes and OpenRiaServices specific `[Exclude]` attributes,
+many of the library's customization attributes are supported to [control serialization](https://aarnott.github.io/Nerdbank.MessagePack/docs/customizing-serialization.html)
+
+Supported attributes include `Nerdbank.MessagePack`'s: `[Key]`,`[MessagePackConverter]` (only on non-entity properties) and `[UseComparer]`
+As well as `PolyType`'s `[PropertyShape]` and `[TypeShape]` (only the `Kind` property) attributes.
+
+**What does not work**:
+* `[MessagePackConverter]` on exposed entity or complex types and on properties whose type is an exposed entity or complex type.
+* It also rejects `[TypeShape]` with `Marshaler` on those types.
+
+Additional details can be found in [messagepack serialization](../../../docs/messagepack-serialization.md) specification.
 
 #### Text XML serialization
 
