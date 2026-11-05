@@ -864,6 +864,11 @@ namespace OpenRiaServices.Tools
 
         private static bool HasImportNameConflict(Assembly assembly, string importedNamespace, string containingNamespace)
         {
+            if (isVisualBasic)
+            {
+                containingNamespace = string.Empty;
+            }
+
             if (string.IsNullOrEmpty(importedNamespace)
                 || !namespaceTypeReferences.TryGetValue(containingNamespace ?? string.Empty, out Dictionary<string, string> referencedTypes))
             {
