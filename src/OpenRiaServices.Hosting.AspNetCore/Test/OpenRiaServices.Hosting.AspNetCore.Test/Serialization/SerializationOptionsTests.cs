@@ -145,6 +145,22 @@ public class SerializationOptionsTests
         Assert.AreEqual("hello-messagepack", ReadMessagePackInvokeResponse<string>(payload));
     }
 
+    [TestMethod]
+    [Description("MessagePack invoke preserves explicit derived-type discriminators")]
+    public async Task MessagePack_Invoke_UsesExplicitDerivedTypeDiscriminator()
+    {
+        using var host = await CreateHost(useMessagePack: true);
+        var client = host.GetTestClient();
+        using var content = BuildMessagePackInvokeRequest("GetDerivedEntity", "value", "derived-value");
+        var response = await client.PostAsync("SerializationTestDomainService/GetDerivedEntity", content);
+        response.EnsureSuccessStatusCode();
+
+        var payload = await response.Content.ReadAsByteArrayAsync();
+        SerializationBaseEntity result = ReadMessagePackInvokeResponse<SerializationBaseEntity>(payload);
+        Assert.IsInstanceOfType<SerializationDerivedEntity>(result);
+        Assert.AreEqual("derived-value", ((SerializationDerivedEntity)result).Value);
+    }
+
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
@@ -279,5 +295,23 @@ public class SerializationOptionsTests
     {
         [Invoke(HasSideEffects = true)]
         public string EchoString(string value) => value;
+
+        [Query]
+        public IQueryable<SerializationBaseEntity> GetEntities() => Array.Empty<SerializationBaseEntity>().AsQueryable();
+
+        [Invoke(HasSideEffects = true)]
+        public SerializationBaseEntity GetDerivedEntity(string value) => new SerializationDerivedEntity { Id = 1, Value = value };
+    }
+
+    [DerivedTypeShape(typeof(SerializationDerivedEntity), Name = "explicit-derived")]
+    public class SerializationBaseEntity
+    {
+        [System.ComponentModel.DataAnnotations.Key]
+        public int Id { get; set; }
+    }
+
+    public class SerializationDerivedEntity : SerializationBaseEntity
+    {
+        public string Value { get; set; }
     }
 }

@@ -34,6 +34,10 @@ namespace OpenRiaServices.Hosting.UnitTests
             Assert.AreEqual(
                 entityType.GetProperty(nameof(SurrogateTestEntity_PropertyShape.Renamed)).GetCustomAttribute<Nerdbank.MessagePack.KeyAttribute>().Index,
                 surrogateType.GetProperty(nameof(SurrogateTestEntity_PropertyShape.Renamed)).GetCustomAttribute<Nerdbank.MessagePack.KeyAttribute>().Index);
+            var comparer = surrogateType.GetProperty(nameof(SurrogateTestEntity_PropertyShape.Compared))
+                .GetCustomAttribute<Nerdbank.MessagePack.UseComparerAttribute>();
+            Assert.AreEqual(typeof(StringComparer), comparer.ComparerType);
+            Assert.AreEqual(nameof(StringComparer.OrdinalIgnoreCase), comparer.MemberName);
 
             foreach (string name in new[] { nameof(SurrogateTestEntity_PropertyShape.Renamed), nameof(SurrogateTestEntity_PropertyShape.ShapeOnly), nameof(SurrogateTestEntity_PropertyShape.Optional) })
             {
@@ -133,19 +137,19 @@ namespace OpenRiaServices.Hosting.UnitTests
         public void MessagePackRejectsConvertersOnExposedProperties()
         {
             var types = new HashSet<Type> { typeof(ConverterEntity), typeof(ConverterComplex) };
-            var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateSurrogateAttributes(types));
+            var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateMessagePackAttributes(types));
             StringAssert.Contains(error.Message, nameof(ConverterEntity.Converted));
             StringAssert.Contains(error.Message, typeof(ConverterComplex).FullName);
 
             // The same property is allowed when its type is not an exposed surrogate type.
-            MessagePackSerializationProvider.ValidateSurrogateAttributes(new HashSet<Type> { typeof(ConverterEntity) });
+            MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type> { typeof(ConverterEntity) });
         }
 
         [TestMethod]
         public void MessagePackRejectsConvertersOnComplexTypeProperties()
         {
             var types = new HashSet<Type> { typeof(ConverterContainer), typeof(ConverterComplex) };
-            var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateSurrogateAttributes(types));
+            var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateMessagePackAttributes(types));
             StringAssert.Contains(error.Message, nameof(ConverterContainer.Converted));
         }
 
@@ -153,12 +157,12 @@ namespace OpenRiaServices.Hosting.UnitTests
         public void MessagePackRejectsTypeConverterAndMarshaler()
         {
             var converterError = Assert.ThrowsExactly<InvalidOperationException>(() =>
-                MessagePackSerializationProvider.ValidateSurrogateAttributes(new HashSet<Type> { typeof(TypeWithConverter) }));
+                MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type> { typeof(TypeWithConverter) }));
             StringAssert.Contains(converterError.Message, nameof(MessagePackConverterAttribute));
             StringAssert.Contains(converterError.Message, typeof(TypeWithConverter).FullName);
 
             var marshalerError = Assert.ThrowsExactly<InvalidOperationException>(() =>
-                MessagePackSerializationProvider.ValidateSurrogateAttributes(new HashSet<Type> { typeof(TypeWithMarshaler) }));
+                MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type> { typeof(TypeWithMarshaler) }));
             StringAssert.Contains(marshalerError.Message, nameof(TypeShapeAttribute.Marshaler));
             StringAssert.Contains(marshalerError.Message, typeof(TypeWithMarshaler).FullName);
         }
@@ -166,7 +170,7 @@ namespace OpenRiaServices.Hosting.UnitTests
         [TestMethod]
         public void MessagePackAllowsScalarConvertersAndExcludedProperties()
         {
-            MessagePackSerializationProvider.ValidateSurrogateAttributes(new HashSet<Type>
+            MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type>
             {
                 typeof(AllowedConverterProperties), typeof(ConverterComplex), typeof(SurrogateTestEntity_NerdbankAttributes)
             });
@@ -181,7 +185,7 @@ namespace OpenRiaServices.Hosting.UnitTests
             TypeDescriptor.AddProvider(provider, type);
             try
             {
-                var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateSurrogateAttributes(
+                var error = Assert.ThrowsExactly<InvalidOperationException>(() => MessagePackSerializationProvider.ValidateMessagePackAttributes(
                     new HashSet<Type> { type, typeof(ConverterComplex) }));
                 StringAssert.Contains(error.Message, "VirtualProperty");
             }
@@ -189,6 +193,22 @@ namespace OpenRiaServices.Hosting.UnitTests
             {
                 TypeDescriptor.RemoveProvider(provider, type);
             }
+        }
+
+        [TestMethod]
+        public void MessagePackRejectsDuplicateDiscriminators()
+        {
+            var error = Assert.ThrowsExactly<InvalidOperationException>(() =>
+                MessagePackSerializationProvider.ValidateMessagePackAttributes(new HashSet<Type>
+                {
+                    typeof(DuplicateDiscriminatorBase),
+                    typeof(DuplicateDiscriminatorDerived1),
+                    typeof(DuplicateDiscriminatorDerived2),
+                }));
+
+            StringAssert.Contains(error.Message, "duplicate");
+            StringAssert.Contains(error.Message, typeof(DuplicateDiscriminatorDerived1).FullName);
+            StringAssert.Contains(error.Message, typeof(DuplicateDiscriminatorDerived2).FullName);
         }
 
         [TestMethod]
@@ -268,5 +288,12 @@ namespace OpenRiaServices.Hosting.UnitTests
         {
             public IQueryable<ConverterEntity> GetEntities() => Array.Empty<ConverterEntity>().AsQueryable();
         }
+
+        [DerivedTypeShape(typeof(DuplicateDiscriminatorDerived1), Name = "duplicate")]
+        [DerivedTypeShape(typeof(DuplicateDiscriminatorDerived2), Name = "duplicate")]
+        public class DuplicateDiscriminatorBase { }
+
+        public class DuplicateDiscriminatorDerived1 : DuplicateDiscriminatorBase { }
+        public class DuplicateDiscriminatorDerived2 : DuplicateDiscriminatorBase { }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Runtime.Serialization;
@@ -517,6 +518,7 @@ namespace OpenRiaServices.Tools.Test
             options.Language = "C#";
             options.AddSharedType(typeof(PropertyShapeAttribute));
             options.AddSharedType(typeof(DerivedTypeShapeAttribute));
+            options.AddSharedType(typeof(Nerdbank.MessagePack.UseComparerAttribute));
             TestHelper.ValidateCodeGen(options);
         }
 #if NET
@@ -1119,6 +1121,11 @@ namespace OpenRiaServices.Tools.Test
         [IgnoreDataMember]
         [PropertyShape]
         public string ShapeOverridesIgnore { get; set; }
+
+        [DataMember]
+        [PropertyShape]
+        [Nerdbank.MessagePack.UseComparer(typeof(StringComparer), nameof(StringComparer.OrdinalIgnoreCase))]
+        public Dictionary<string, string> Comparer { get; set; }
     }
 
     [DataContract]

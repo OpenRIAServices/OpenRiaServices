@@ -326,7 +326,11 @@ namespace OpenRiaServices.Tools
             // Don't have a builder instance yet
             // See if we have a registered builder type for this attribute
             Type cabType = null;
-            if (!KnownBuilderTypes.TryGetValue(attributeType, out cabType))
+            if (attributeType.FullName == "Nerdbank.MessagePack.UseComparerAttribute")
+            {
+                cabType = typeof(UseComparerAttributeBuilder);
+            }
+            else if (!KnownBuilderTypes.TryGetValue(attributeType, out cabType))
             {
                 // Don't have an explicit builder -- see if we this attribute derives from
                 // a known builder type and assume it is okay to use it.
@@ -604,10 +608,7 @@ namespace OpenRiaServices.Tools
         /// <returns>A <see cref="CodeAttributeDeclaration"/>.</returns>
         private static CodeAttributeDeclaration CreateCodeAttributeDeclaration(CodeDomClientCodeGenerator proxyGenerator, CodeTypeDeclaration referencingType, AttributeDeclaration attributeDeclaration)
         {
-            Type attributeType = attributeDeclaration.AttributeType;
-            bool useFullyQualifiedName = attributeType.Assembly.GetName().Name == "Nerdbank.MessagePack";
-            CodeTypeReference attributeReference = CodeGenUtilities.GetTypeReference(attributeType, proxyGenerator, referencingType, optimizeAttributeName: true, forceUseFullyQualifiedName: useFullyQualifiedName);
-            CodeAttributeDeclaration codeAttributeDeclaration = new CodeAttributeDeclaration(attributeReference);
+            CodeAttributeDeclaration codeAttributeDeclaration = CodeGenUtilities.CreateAttributeDeclaration(attributeDeclaration.AttributeType, proxyGenerator, referencingType);
 
             // Add ctor args
             foreach (object arg in attributeDeclaration.ConstructorArguments)

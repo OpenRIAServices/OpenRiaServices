@@ -208,7 +208,11 @@ namespace OpenRiaServices.Tools.TextTemplate
             // Don't have a builder instance yet
             // See if we have a registered builder type for this attribute
             Type cabType = null;
-            if (!KnownBuilderTypes.TryGetValue(attributeType, out cabType))
+            if (attributeType.FullName == "Nerdbank.MessagePack.UseComparerAttribute")
+            {
+                cabType = typeof(UseComparerAttributeBuilder);
+            }
+            else if (!KnownBuilderTypes.TryGetValue(attributeType, out cabType))
             {
                 // Don't have an explicit builder -- see if we this attribute derives from
                 // a known builder type and assume it is okay to use it.

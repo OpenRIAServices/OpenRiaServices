@@ -8,6 +8,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Text;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
@@ -34,7 +35,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private MessagePackSerializer CreateSerializerForDomainService(Type domainServiceType)
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(domainServiceType);
-            ValidateSurrogateAttributes(new HashSet<Type>(description.EntityTypes.Concat(description.ComplexTypes)));
+            ValidateMessagePackAttributes(new HashSet<Type>(description.EntityTypes.Concat(description.ComplexTypes)));
             Wcf.DomainServiceSerializationSurrogate surrogateProvider = new Wcf.DomainServiceSerializationSurrogate(description);
 
             // Create converters to handle surrogates,
@@ -63,9 +64,35 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
             };
         }
 
-        /// <summary>Validates attributes that cannot be used with MessagePack serialization surrogates.</summary>
-        internal static void ValidateSurrogateAttributes(HashSet<Type> exposedTypes)
+        /// <summary>Validates MessagePack model attributes and ensures exposed type discriminators are unique.</summary>
+        internal static void ValidateMessagePackAttributes(HashSet<Type> exposedTypes)
         {
+            HashSet<Type> allKnownTypes = new(exposedTypes);
+            Queue<Type> pendingTypes = new(exposedTypes);
+            while (pendingTypes.Count > 0)
+            {
+                Type currentType = pendingTypes.Dequeue();
+                foreach (Type knownType in KnownTypeUtilities.ImportDerivedTypes(currentType, inherit: true))
+                {
+                    if (allKnownTypes.Add(knownType))
+                    {
+                        pendingTypes.Enqueue(knownType);
+                    }
+                }
+            }
+
+            Dictionary<string, Type> discriminators = new(StringComparer.Ordinal);
+            foreach (Type type in allKnownTypes.Where(type => !type.IsAbstract))
+            {
+                string discriminator = Encoding.UTF8.GetString(MessagePackUtility.GetDiscriminator(type));
+                if (discriminators.TryGetValue(discriminator, out Type? existingType) && existingType is not null && existingType != type)
+                {
+                    throw new InvalidOperationException($"MessagePack discriminator '{discriminator}' is used by both '{existingType.FullName}' and '{type.FullName}'. Discriminators must be unique.");
+                }
+
+                discriminators[discriminator] = type;
+            }
+
             foreach (Type type in exposedTypes)
             {
                 AttributeCollection attributes = TypeDescriptor.GetAttributes(type);

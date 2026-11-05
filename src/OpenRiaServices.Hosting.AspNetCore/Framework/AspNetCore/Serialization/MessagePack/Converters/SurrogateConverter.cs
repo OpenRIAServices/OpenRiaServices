@@ -55,14 +55,14 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             }
 
 
-            IEnumerable<Type> surrogateTypes = knownTypes.Select(surrogateProvider.GetSurrogateType);
-            Func<Type, byte[]> discriminatorFunc = (Type t) => (t != _surrogateBase) ? MessagePackUtility.GetDiscriminator(t) : [];
-
             // Setup lookup dictionaries for mapping types to surrogate and discriminators, and from discriminator back to surrogate type
             _surrogateFactory = knownTypes
                 .Where(t => !t.IsAbstract)
                 .ToDictionary(t => t, surrogateProvider.GetSurrogateFactory).ToFrozenDictionary();
-            _typeLookup = surrogateTypes.ToFrozenDictionary(discriminatorFunc, new MessagePackUtility.ByteArrayComparer());
+            _typeLookup = knownTypes.ToFrozenDictionary(
+                type => surrogateProvider.GetSurrogateType(type) == _surrogateBase ? Array.Empty<byte>() : MessagePackUtility.GetDiscriminator(type),
+                surrogateProvider.GetSurrogateType,
+                new MessagePackUtility.ByteArrayComparer());
             _discriminators = FrozenDictionary.ToFrozenDictionary(
                 _typeLookup
                     .Select(k => new KeyValuePair<Type, byte[]?>(k.Value, k.Key is [] ? null : k.Key)));

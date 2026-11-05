@@ -623,6 +623,11 @@ namespace OpenRiaServices.Hosting.UnitTests
 
         [Nerdbank.MessagePack.Key(3)]
         public string Unannotated { get; set; }
+
+        [PropertyShape]
+        [Nerdbank.MessagePack.Key(4)]
+        [Nerdbank.MessagePack.UseComparer(typeof(StringComparer), nameof(StringComparer.OrdinalIgnoreCase))]
+        public Dictionary<string, string> Compared { get; set; }
     }
 
     [TypeShape(Kind = TypeShapeKind.None, IncludeMethods = MethodShapeFlags.AllPublic, Marshaler = typeof(SurrogateTestMarshaler))]
