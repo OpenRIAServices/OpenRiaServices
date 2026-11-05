@@ -59,8 +59,8 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             _surrogateFactory = knownTypes
                 .Where(t => !t.IsAbstract)
                 .ToDictionary(t => t, surrogateProvider.GetSurrogateFactory).ToFrozenDictionary();
-            _typeLookup = knownTypes.ToFrozenDictionary(
-                type => surrogateProvider.GetSurrogateType(type) == _surrogateBase ? Array.Empty<byte>() : MessagePackUtility.GetDiscriminator(type),
+            _typeLookup = _surrogateFactory.Keys.ToFrozenDictionary(
+                type => surrogateProvider.GetSurrogateType(type) == _surrogateBase ? [] : MessagePackUtility.GetDiscriminator(type),
                 surrogateProvider.GetSurrogateType,
                 new MessagePackUtility.ByteArrayComparer());
             _discriminators = FrozenDictionary.ToFrozenDictionary(

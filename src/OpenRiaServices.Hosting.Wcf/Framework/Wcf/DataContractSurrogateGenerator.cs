@@ -719,10 +719,10 @@ namespace OpenRiaServices.Hosting.Wcf
                 {
                     CustomAttributeBuilder contractNamespaceAttBuilder =
                         new CustomAttributeBuilder(
-                            cnaType.GetConstructor(new Type[] { typeof(string) }),
-                            new object[] { contractNamespaceAtt.ContractNamespace },
-                            new PropertyInfo[] { cnaType.GetProperty("ClrNamespace") },
-                            new object[] { contractNamespaceAtt.ClrNamespace });
+                            cnaType.GetConstructor([typeof(string)]),
+                            [contractNamespaceAtt.ContractNamespace],
+                            [cnaType.GetProperty("ClrNamespace")],
+                            [contractNamespaceAtt.ClrNamespace]);
                     DataContractSurrogateGenerator.s_moduleBuilder.SetCustomAttribute(contractNamespaceAttBuilder);
                 }
 
@@ -807,41 +807,41 @@ namespace OpenRiaServices.Hosting.Wcf
                         [nameof(PropertyShapeAttribute.Order)] = propertyShape.Order,
                         [nameof(PropertyShapeAttribute.Ignore)] = propertyShape.Ignore,
                     };
+
                     // Setting IsRequired, even to false, overrides PolyType's inferred requiredness.
-                    PropertyShapeAttribute a;
                     if ((bool)typeof(PropertyShapeAttribute).GetProperty("IsRequiredSpecified", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(propertyShape))
                     {
                         properties[nameof(PropertyShapeAttribute.IsRequired)] = propertyShape.IsRequired;
                     }
                     setAttribute(GetAttributeBuilder(typeof(PropertyShapeAttribute), properties));
                 }
+#if ASPNET_CORE
                 else
                 {
-#if ASPNET_CORE
                     if (attribute is KeyAttribute key)
                     {
                         setAttribute(new CustomAttributeBuilder(
-                            typeof(KeyAttribute).GetConstructor(new[] { typeof(int) }),
-                            new object[] { key.Index }));
+                            typeof(KeyAttribute).GetConstructor([typeof(int)]),
+                            [key.Index]));
                     }
                     else if (attribute is MessagePackConverterAttribute converter)
                     {
                         setAttribute(new CustomAttributeBuilder(
-                            typeof(MessagePackConverterAttribute).GetConstructor(new[] { typeof(Type) }),
-                            new object[] { converter.ConverterType }));
+                            typeof(MessagePackConverterAttribute).GetConstructor([typeof(Type)]),
+                            [converter.ConverterType]));
                     }
                     else if (attribute is UseComparerAttribute comparer)
                     {
                         ConstructorInfo constructor = comparer.MemberName == null
-                            ? typeof(UseComparerAttribute).GetConstructor(new[] { typeof(Type) })
-                            : typeof(UseComparerAttribute).GetConstructor(new[] { typeof(Type), typeof(string) });
+                            ? typeof(UseComparerAttribute).GetConstructor([typeof(Type)])
+                            : typeof(UseComparerAttribute).GetConstructor([typeof(Type), typeof(string)]);
                         object[] arguments = comparer.MemberName == null
-                            ? new object[] { comparer.ComparerType }
-                            : new object[] { comparer.ComparerType, comparer.MemberName };
+                            ? [comparer.ComparerType]
+                            : [comparer.ComparerType, comparer.MemberName];
                         setAttribute(new CustomAttributeBuilder(constructor, arguments));
                     }
-#endif
                 }
+#endif
             }
         }
 
