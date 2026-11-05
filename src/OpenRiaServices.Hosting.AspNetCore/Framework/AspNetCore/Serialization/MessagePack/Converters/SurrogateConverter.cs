@@ -67,7 +67,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 _typeLookup
                     .Select(k => new KeyValuePair<Type, byte[]?>(k.Value, k.Key is [] ? null : k.Key)));
 
-            _useDiscriminator = _typeLookup.Count > 1 || typeof(T) == typeof(object);
+            _useDiscriminator = knownTypes.Count() > 1 || typeof(T) == typeof(object);
         }
 
         public override T? Read(ref MessagePackReader reader, SerializationContext context)
