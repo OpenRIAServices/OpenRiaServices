@@ -210,6 +210,13 @@ namespace OpenRiaServices.Hosting.UnitTests
         }
 
         [TestMethod]
+        public void MessagePackAllowsDuplicateDiscriminatorsAcrossEntitiesAndComplexTypes()
+        {
+            MessagePackSerializationProvider.ValidateMessagePackAttributes(
+                new[] { typeof(EntityWithComplexDiscriminator) }, new[] { typeof(ComplexDiscriminatorCollision) });
+        }
+
+        [TestMethod]
         public void MessagePackProviderValidatesDomainServiceExposedTypes()
         {
             var description = DomainServiceDescription.GetDescription(typeof(ConverterDomainService));
@@ -293,5 +300,11 @@ namespace OpenRiaServices.Hosting.UnitTests
 
         public class DuplicateDiscriminatorDerived1 : DuplicateDiscriminatorBase { }
         public class DuplicateDiscriminatorDerived2 : DuplicateDiscriminatorBase { }
+
+        [DerivedTypeShape(typeof(EntityWithComplexDiscriminator), Name = nameof(ComplexDiscriminatorCollision))]
+        public class EntityDiscriminatorBase { }
+
+        public class EntityWithComplexDiscriminator : EntityDiscriminatorBase { }
+        public class ComplexDiscriminatorCollision { }
     }
 }

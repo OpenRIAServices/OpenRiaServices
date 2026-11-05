@@ -67,9 +67,10 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         /// <summary>Validates MessagePack model attributes and ensures exposed type discriminators are unique.</summary>
         internal static void ValidateMessagePackAttributes(IEnumerable<Type> entityTypes, IEnumerable<Type> complexTypes)
         {
-            HashSet<Type> exposedTypes = new(entityTypes.Concat(complexTypes));
-            HashSet<Type> allKnownTypes = new(exposedTypes);
-            Queue<Type> pendingTypes = new(exposedTypes);
+            Type[] entityTypeArray = entityTypes.ToArray();
+            Type[] complexTypeArray = complexTypes.ToArray();
+            HashSet<Type> allKnownTypes = new(entityTypeArray);
+            Queue<Type> pendingTypes = new(entityTypeArray);
             while (pendingTypes.Count > 0)
             {
                 Type currentType = pendingTypes.Dequeue();
@@ -94,7 +95,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 discriminators[discriminator] = type;
             }
 
-            foreach (Type type in exposedTypes)
+            foreach (Type type in entityTypeArray.Concat(complexTypeArray))
             {
                 AttributeCollection attributes = TypeDescriptor.GetAttributes(type);
                 if (attributes[typeof(MessagePackConverterAttribute)] != null)
@@ -110,7 +111,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(type))
                 {
                     if (SerializationUtility.IsSerializableDataMember(property)
-                        && exposedTypes.Contains(property.PropertyType)
+                        && (entityTypeArray.Contains(property.PropertyType) || complexTypeArray.Contains(property.PropertyType))
                         && property.Attributes[typeof(MessagePackConverterAttribute)] != null)
                     {
                         throw new InvalidOperationException($"MessagePackConverterAttribute on property '{type.FullName}.{property.Name}' is not supported because its type '{property.PropertyType.FullName}' uses a serialization surrogate.");
