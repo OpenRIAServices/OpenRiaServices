@@ -28,8 +28,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
 
                 if (derivedTypeShapes != null)
                 {
-                    string name = derivedTypeShapes.Name ?? PolyType.Utilities.ReflectionUtilities.GetDerivedTypeShapeName(type);
-                    return Encoding.UTF8.GetBytes(name);
+                    return Encoding.UTF8.GetBytes(derivedTypeShapes.Name);
                 }
                 baseType = baseType.BaseType;
             }

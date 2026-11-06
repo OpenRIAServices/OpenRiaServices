@@ -10,6 +10,14 @@ using OpenRiaServices.Server;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converters
 {
+    file static class Constants
+    {
+        /// <summary>
+        /// Gets a marker, which cannot collide with a UTF-8 discriminator.
+        /// </summary>
+        internal static readonly byte[] BaseTypeDiscriminator = [0xff];
+    }
+
     /// <summary>
     /// Serializes an instance of <typeparamref name="T"/> using a surrogate type <typeparamref name="TSurrogate"/>
     /// </summary>
@@ -50,7 +58,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                     knownTypes = [typeof(T)];
                 }
 
-                _surrogateBase = surrogateProvider.GetSurrogateType(typeof(T));
                 Debug.Assert(_surrogateBase == typeof(TSurrogate));
             }
 
@@ -60,12 +67,12 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
                 .Where(t => !t.IsAbstract)
                 .ToDictionary(t => t, surrogateProvider.GetSurrogateFactory).ToFrozenDictionary();
             _typeLookup = _surrogateFactory.Keys.ToFrozenDictionary(
-                type => surrogateProvider.GetSurrogateType(type) == _surrogateBase ? [] : MessagePackUtility.GetDiscriminator(type),
+                type => surrogateProvider.GetSurrogateType(type) == _surrogateBase ? Constants.BaseTypeDiscriminator : MessagePackUtility.GetDiscriminator(type),
                 surrogateProvider.GetSurrogateType,
                 new MessagePackUtility.ByteArrayComparer());
             _discriminators = FrozenDictionary.ToFrozenDictionary(
                 _typeLookup
-                    .Select(k => new KeyValuePair<Type, byte[]?>(k.Value, k.Key is [] ? null : k.Key)));
+                    .Select(k => new KeyValuePair<Type, byte[]?>(k.Value, k.Value == _surrogateBase ? null : k.Key)));
 
             _useDiscriminator = knownTypes.Count() > 1 || typeof(T) == typeof(object);
         }
@@ -92,7 +99,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
 
                 if (reader.TryReadNil())
                 {
-                    surrogateType = _typeLookup[[]];
+                    surrogateType = _surrogateBase;
                 }
                 else
                 {
@@ -122,7 +129,6 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack.Converter
             }
             else
             {
-                // same as surrogateType = _typeLookup[[]];
                 surrogateType = _surrogateBase;
             }
 
