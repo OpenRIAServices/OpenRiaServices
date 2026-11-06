@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
+using System.Runtime.Serialization;
 using OpenRiaServices.Server;
 using OpenRiaServices.Server.Test.Utilities;
 using Cities;
@@ -7,7 +10,9 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
 using TestDomainServices.TypeNameConflictResolution;
 using TestDomainServices.TypeNameConflictResolution.ExternalConflicts;
+using PolyType;
 
+using DataMember = System.Runtime.Serialization.DataMemberAttribute;
 using ServerResource = OpenRiaServices.Server.Resource;
 
 namespace OpenRiaServices.Tools.Test
@@ -498,6 +503,22 @@ namespace OpenRiaServices.Tools.Test
             // Default
             TestHelper.CodeGenValidationOptions options = new TestHelper.CodeGenValidationOptions(@"Default\Cities", "CG_Cities", "Cities.g", typeof(CityDomainService), sharedFiles, false);
             options.AddSharedType(typeof(Cities.TimeZone));
+            options.AddSharedType(typeof(PolyType.TypeShapeAttribute));
+            options.AddSharedType(typeof(PolyType.PropertyShapeAttribute));
+            options.AddSharedType(typeof(Nerdbank.MessagePack.KeyAttribute));
+            TestHelper.ValidateCodeGen(options);
+        }
+
+        [DeploymentItem(@"Baselines\Default\Scenarios", "CG_PolyType")]
+        [TestMethod]
+        public void TestPolyTypeClientProxies()
+        {
+            var options = new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_PolyType", "PolyTypeScenarios.g",
+                typeof(Mock_CG_PolyType_DomainService), Array.Empty<string>(), false);
+            options.Language = "C#";
+            options.AddSharedType(typeof(PropertyShapeAttribute));
+            options.AddSharedType(typeof(DerivedTypeShapeAttribute));
+            options.AddSharedType(typeof(Nerdbank.MessagePack.UseComparerAttribute));
             TestHelper.ValidateCodeGen(options);
         }
 #if NET
@@ -1076,6 +1097,39 @@ namespace OpenRiaServices.Tools.Test
                     @"[DataMember()] [RoundtripOriginal()] public string PropWithPropLevelRTO");
         }
     }
+
+    public class Mock_CG_PolyType_DomainService : GenericDomainService<Mock_CG_PolyType_Entity> { }
+
+    [DataContract]
+    [DerivedTypeShape(typeof(Mock_CG_PolyType_Derived), Name = "derived")]
+    public class Mock_CG_PolyType_Entity
+    {
+        [Key]
+        [DataMember]
+        public int Id { get; set; }
+
+        public string Unannotated { get; set; }
+
+        [DataMember(Name = "data-member-name")]
+        [PropertyShape(Name = "shape-name")]
+        public string Renamed { get; set; }
+
+        [DataMember]
+        [PropertyShape(Ignore = true)]
+        public string IgnoredShape { get; set; }
+
+        [IgnoreDataMember]
+        [PropertyShape]
+        public string ShapeOverridesIgnore { get; set; }
+
+        [DataMember]
+        [PropertyShape]
+        [Nerdbank.MessagePack.UseComparer(typeof(StringComparer), nameof(StringComparer.OrdinalIgnoreCase))]
+        public Dictionary<string, string> Comparer { get; set; }
+    }
+
+    [DataContract]
+    public class Mock_CG_PolyType_Derived : Mock_CG_PolyType_Entity { }
 
     [EnableClientAccess]
     public class EFComplexTypesService : OpenRiaServices.EntityFramework.LinqToEntitiesDomainService<DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios>

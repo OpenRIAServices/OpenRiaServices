@@ -15,9 +15,9 @@ namespace OpenRiaServices.Tools.Test
     {
         // The version of Silverlight we use in registry keys below
         private static readonly ConcurrentDictionary<string, PortableExecutableReference> s_referenceCache = new();
-        private static readonly ParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.CSharp5, preprocessorSymbols: new
+        private static readonly CSharpParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.Latest, preprocessorSymbols: new
                     [] { "SILVERLIGHT" });
-        private static readonly ParseOptions s_VbParseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
+        private static readonly VisualBasicParseOptions s_VbParseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
                     preprocessorSymbols: new
                     [] { new KeyValuePair<string, object>("SILVERLIGHT", 1) });
 

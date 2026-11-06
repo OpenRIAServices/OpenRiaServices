@@ -166,6 +166,20 @@ builder.Services.AddOpenRiaServices()
     .AddMessagePackSerialization();
 ```
 
+The MessagePack serializer is based on [Nerdbank.MessagePack](https://github.com/AArnott/Nerdbank.MessagePack) , see its [Features documentation](https://aarnott.github.io/Nerdbank.MessagePack/docs/features.html).
+
+In addition to working with the existing `[DataContract]`/`[DataMember]` attributes and OpenRiaServices specific `[Exclude]` attributes,
+many of the library's customization attributes are supported to [control serialization](https://aarnott.github.io/Nerdbank.MessagePack/docs/customizing-serialization.html)
+
+Supported attributes include `Nerdbank.MessagePack`'s: `[Key]`,`[MessagePackConverter]` (only on non-entity properties) and `[UseComparer]`
+As well as `PolyType`'s `[PropertyShape]` and `[TypeShape]` (only the `Kind` property) attributes.
+
+**What does not work**:
+* `[MessagePackConverter]` on exposed entity or complex types and on properties whose type is an exposed entity or complex type.
+* It also rejects `[TypeShape]` with `Marshaler` on those types.
+
+Additional details can be found in [messagepack serialization](../../../docs/messagepack-serialization.md) specification.
+
 #### Text XML serialization
 
 XML serialization was added in version 1.4.0 as an alternative to binary serialization (#546).

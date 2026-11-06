@@ -34,7 +34,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
         {
             HashSet<Type> allTypes = new HashSet<Type>(entityTypes);
             foreach (Type knownType in entityTypes)
-                allTypes.UnionWith(Server.KnownTypeUtilities.ImportKnownTypes(knownType, true));
+                allTypes.UnionWith(Server.KnownTypeUtilities.ImportDerivedTypes(knownType, true));
 
             Dictionary<Type, MessagePackConverter> converters = new(capacity: allTypes.Count);
             foreach (var item in ComputeKnownTypeSet(allTypes))
@@ -85,13 +85,10 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
         {
             Dictionary<Type, HashSet<Type>> closure = new Dictionary<Type, HashSet<Type>>();
 
-            // Gather all the explicit known types from attributes.
-            // Because we ask to inherit [KnownType], we will collect the full closure
+            // Gather all the explicit derived types from attributes.
             foreach (Type entityType in types)
             {
-                // Get all [KnownType]'s and subselect only those that actually derive from this entity
-                IEnumerable<Type> knownTypes = Server.KnownTypeUtilities.ImportKnownTypes(entityType, /* inherit */ true)
-                    .Where(t => entityType.IsAssignableFrom(t));
+                IEnumerable<Type> knownTypes = Server.KnownTypeUtilities.ImportDerivedTypes(entityType, /* inherit */ true);
                 closure[entityType] = new HashSet<Type>(knownTypes);
             }
 

@@ -24,6 +24,7 @@
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\RangeCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\RangeCustomAttributeBuilder.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\StandardCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\StandardCustomAttributeBuilder.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\UIHintCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\UIHintCustomAttributeBuilder.cs" />
+    <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\UseComparerAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\UseComparerAttributeBuilder.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\MetadataPipeline\ValidationCustomAttributeBuilder.cs" Link="CSharpGenerators\AttributeGenerationHelpers\ValidationCustomAttributeBuilder.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\Naming.cs" Link="Utilities\Naming.cs" />
     <Compile Include="..\..\OpenRiaServices.Tools\Framework\SharedTypes\VirtualType.cs" Link="Utilities\VirtualType.cs" />

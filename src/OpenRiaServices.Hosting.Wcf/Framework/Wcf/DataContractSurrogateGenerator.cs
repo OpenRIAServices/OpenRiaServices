@@ -9,6 +9,10 @@ using System.Reflection.Emit;
 using System.Runtime.Serialization;
 using System.Security;
 using OpenRiaServices.Server;
+using PolyType;
+#if ASPNET_CORE
+using Nerdbank.MessagePack;
+#endif
 
 #nullable disable
 
@@ -90,6 +94,8 @@ namespace OpenRiaServices.Hosting.Wcf
             {
                 typeBuilder.SetCustomAttribute(dataContractAttBuilder);
             }
+            // ObjectConverter handles discriminators; derived type declarations must not refer to the original types here.
+            SetClassSerializationAttributes(typeBuilder.SetCustomAttribute, TypeDescriptor.GetAttributes(type));
 
             // Attach a [SecuritySafeCritical] to the surrogate type to permit its setters to deal with
             // types that may be SafeCritical or Critical
@@ -384,6 +390,7 @@ namespace OpenRiaServices.Hosting.Wcf
             CustomAttributeBuilder dataMemberAtt = DataContractSurrogateGenerator.GetDataMemberAttributeBuilder(
                 pd.Attributes[typeof(DataMemberAttribute)] as DataMemberAttribute);
             propertyBuilder.SetCustomAttribute(dataMemberAtt);
+            SetPropertySerializationAttributes(propertyBuilder.SetCustomAttribute, pd.Attributes.Cast<Attribute>());
 
             // get {
             //     return $property.GetValue(_$wrapper);
@@ -516,6 +523,7 @@ namespace OpenRiaServices.Hosting.Wcf
             CustomAttributeBuilder dataMemberAtt = DataContractSurrogateGenerator.GetDataMemberAttributeBuilder(
                 pd.Attributes.OfType<DataMemberAttribute>().FirstOrDefault());
             propertyBuilder.SetCustomAttribute(dataMemberAtt);
+            SetPropertySerializationAttributes(propertyBuilder.SetCustomAttribute, pd.Attributes.Cast<Attribute>());
 
             // get {
             //     return ((Entity)$wrapper).Property;
@@ -711,10 +719,10 @@ namespace OpenRiaServices.Hosting.Wcf
                 {
                     CustomAttributeBuilder contractNamespaceAttBuilder =
                         new CustomAttributeBuilder(
-                            cnaType.GetConstructor(new Type[] { typeof(string) }),
-                            new object[] { contractNamespaceAtt.ContractNamespace },
-                            new PropertyInfo[] { cnaType.GetProperty("ClrNamespace") },
-                            new object[] { contractNamespaceAtt.ClrNamespace });
+                            cnaType.GetConstructor([typeof(string)]),
+                            [contractNamespaceAtt.ContractNamespace],
+                            [cnaType.GetProperty("ClrNamespace")],
+                            [contractNamespaceAtt.ClrNamespace]);
                     DataContractSurrogateGenerator.s_moduleBuilder.SetCustomAttribute(contractNamespaceAttBuilder);
                 }
 
@@ -768,6 +776,73 @@ namespace OpenRiaServices.Hosting.Wcf
             }
 
             return GetAttributeBuilder(dataMemberType, dataMemberProperties);
+        }
+
+        [System.Diagnostics.Conditional("ASPNET_CORE")]
+        private static void SetClassSerializationAttributes(Action<CustomAttributeBuilder> setAttribute, AttributeCollection attributes)
+        {
+            if (attributes[typeof(TypeShapeAttribute)] is TypeShapeAttribute typeShape)
+            {
+                var properties = new Dictionary<string, object>();
+                // An unspecified Kind must stay unspecified: explicitly setting None hides all properties.
+                MethodInfo getRequestedKind = typeof(TypeShapeAttribute).GetMethod("GetRequestedKind", BindingFlags.Instance | BindingFlags.NonPublic);
+                if (getRequestedKind.Invoke(typeShape, null) != null)
+                {
+                    properties[nameof(TypeShapeAttribute.Kind)] = typeShape.Kind;
+                }
+                setAttribute(GetAttributeBuilder(typeof(TypeShapeAttribute), properties));
+            }
+        }
+
+        [System.Diagnostics.Conditional("ASPNET_CORE")]
+        private static void SetPropertySerializationAttributes(Action<CustomAttributeBuilder> setAttribute, IEnumerable<Attribute> attributes)
+        {
+            foreach (Attribute attribute in attributes)
+            {
+                if (attribute is PropertyShapeAttribute propertyShape)
+                {
+                    var properties = new Dictionary<string, object>
+                    {
+                        [nameof(PropertyShapeAttribute.Name)] = propertyShape.Name,
+                        [nameof(PropertyShapeAttribute.Order)] = propertyShape.Order,
+                        [nameof(PropertyShapeAttribute.Ignore)] = propertyShape.Ignore,
+                    };
+
+                    // Setting IsRequired, even to false, overrides PolyType's inferred requiredness.
+                    if ((bool)typeof(PropertyShapeAttribute).GetProperty("IsRequiredSpecified", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(propertyShape))
+                    {
+                        properties[nameof(PropertyShapeAttribute.IsRequired)] = propertyShape.IsRequired;
+                    }
+                    setAttribute(GetAttributeBuilder(typeof(PropertyShapeAttribute), properties));
+                }
+#if ASPNET_CORE
+                else
+                {
+                    if (attribute is KeyAttribute key)
+                    {
+                        setAttribute(new CustomAttributeBuilder(
+                            typeof(KeyAttribute).GetConstructor([typeof(int)]),
+                            [key.Index]));
+                    }
+                    else if (attribute is MessagePackConverterAttribute converter)
+                    {
+                        setAttribute(new CustomAttributeBuilder(
+                            typeof(MessagePackConverterAttribute).GetConstructor([typeof(Type)]),
+                            [converter.ConverterType]));
+                    }
+                    else if (attribute is UseComparerAttribute comparer)
+                    {
+                        ConstructorInfo constructor = comparer.MemberName == null
+                            ? typeof(UseComparerAttribute).GetConstructor([typeof(Type)])
+                            : typeof(UseComparerAttribute).GetConstructor([typeof(Type), typeof(string)]);
+                        object[] arguments = comparer.MemberName == null
+                            ? [comparer.ComparerType]
+                            : [comparer.ComparerType, comparer.MemberName];
+                        setAttribute(new CustomAttributeBuilder(constructor, arguments));
+                    }
+                }
+#endif
+            }
         }
 
         private static CustomAttributeBuilder GetAttributeBuilder(Type type, Dictionary<string, object> attProperties)

@@ -28,8 +28,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
 
                 if (derivedTypeShapes != null)
                 {
-                    if (derivedTypeShapes.Name is null)
-                        throw new InvalidOperationException("DerivedTypeShapeAttribute must have a non-null Name property.");
                     return Encoding.UTF8.GetBytes(derivedTypeShapes.Name);
                 }
                 baseType = baseType.BaseType;

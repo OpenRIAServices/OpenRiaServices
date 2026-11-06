@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
+using PolyType;
 
 namespace OpenRiaServices.Server
 {
@@ -27,7 +28,7 @@ namespace OpenRiaServices.Server
         {
             HashSet<Type> knownTypes = new HashSet<Type>();
             IEnumerable<KnownTypeAttribute> knownTypeAttributes = type.GetCustomAttributes(typeof(KnownTypeAttribute), inherit).Cast<KnownTypeAttribute>();
-            
+
             foreach (KnownTypeAttribute knownTypeAttribute in knownTypeAttributes)
             {
                 Type knownType = knownTypeAttribute.Type;
@@ -52,6 +53,50 @@ namespace OpenRiaServices.Server
                 }
             }
             return knownTypes;
+        }
+
+        /// <summary>
+        /// Obtains the derived types registered with PolyType or data contract attributes.
+        /// </summary>
+        /// <remarks>
+        /// Direct <see cref="DerivedTypeShapeAttribute"/> declarations take precedence over
+        /// <see cref="KnownTypeAttribute"/> declarations on each type. Registrations that are
+        /// not assignable to <paramref name="type"/> are excluded.
+        /// </remarks>
+        internal static HashSet<Type> ImportDerivedTypes(Type type, bool inherit)
+        {
+            HashSet<Type> derivedTypes = new HashSet<Type>();
+            Queue<Type> pendingTypes = new Queue<Type>();
+            pendingTypes.Enqueue(type);
+
+            if (inherit && type != typeof(object))
+            {
+                for (Type currentType = type.BaseType; currentType != null && currentType != typeof(object); currentType = currentType.BaseType)
+                {
+                    pendingTypes.Enqueue(currentType);
+                }
+            }
+
+            while (pendingTypes.Count > 0)
+            {
+                Type currentType = pendingTypes.Dequeue();
+
+                DerivedTypeShapeAttribute[] derivedTypeShapeAttributes = (DerivedTypeShapeAttribute[])currentType.GetCustomAttributes(typeof(DerivedTypeShapeAttribute), inherit: false);
+
+                IEnumerable<Type> types = (derivedTypeShapeAttributes.Length > 0)
+                    ? derivedTypeShapeAttributes.Select(attribute => attribute.Type)
+                    : ImportKnownTypes(currentType, inherit: false);
+
+                foreach (var derivedType in types)
+                {
+                    if (type.IsAssignableFrom(derivedType) && derivedTypes.Add(derivedType))
+                    {
+                        pendingTypes.Enqueue(derivedType);
+                    }
+                }
+            }
+
+            return derivedTypes;
         }
     }
 }

@@ -6,7 +6,9 @@ using PolyType;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Text;
 
 namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 {
@@ -33,6 +35,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
         private MessagePackSerializer CreateSerializerForDomainService(Type domainServiceType)
         {
             DomainServiceDescription description = DomainServiceDescription.GetDescription(domainServiceType);
+            ValidateMessagePackAttributes(description.EntityTypes, description.ComplexTypes);
             Wcf.DomainServiceSerializationSurrogate surrogateProvider = new Wcf.DomainServiceSerializationSurrogate(description);
 
             // Create converters to handle surrogates,
@@ -59,6 +62,61 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
                 Converters = [.. _serializer.Converters, .. converters],
                 DerivedTypeUnions = [.. derivedTypeUnions.Values],
             };
+        }
+
+        /// <summary>Validates MessagePack model attributes and ensures exposed type discriminators are unique.</summary>
+        internal static void ValidateMessagePackAttributes(IEnumerable<Type> entityTypes, IEnumerable<Type> complexTypes)
+        {
+            HashSet<Type> allEntityTypes = new(entityTypes);
+            HashSet<Type> allComplexTypes = new(complexTypes);
+            Queue<Type> pendingTypes = new(allEntityTypes);
+            while (pendingTypes.Count > 0)
+            {
+                Type currentType = pendingTypes.Dequeue();
+                foreach (Type knownType in KnownTypeUtilities.ImportDerivedTypes(currentType, inherit: true))
+                {
+                    if (allEntityTypes.Add(knownType))
+                    {
+                        pendingTypes.Enqueue(knownType);
+                    }
+                }
+            }
+
+            Dictionary<string, Type> discriminators = new(StringComparer.Ordinal);
+            foreach (Type type in allEntityTypes.Where(type => !type.IsAbstract))
+            {
+                string discriminator = Encoding.UTF8.GetString(MessagePackUtility.GetDiscriminator(type));
+                if (discriminators.TryGetValue(discriminator, out Type? existingType) && existingType is not null && existingType != type)
+                {
+                    throw new InvalidOperationException($"MessagePack discriminator '{discriminator}' is used by both '{existingType.FullName}' and '{type.FullName}'. Discriminators must be unique.");
+                }
+
+                discriminators[discriminator] = type;
+            }
+
+            foreach (Type type in allEntityTypes.Concat(complexTypes))
+            {
+                AttributeCollection attributes = TypeDescriptor.GetAttributes(type);
+                if (attributes[typeof(MessagePackConverterAttribute)] != null)
+                {
+                    throw new InvalidOperationException($"MessagePackConverterAttribute on exposed type '{type.FullName}' is not supported with serialization surrogates.");
+                }
+
+                if (attributes[typeof(TypeShapeAttribute)] is TypeShapeAttribute { Marshaler: not null })
+                {
+                    throw new InvalidOperationException($"TypeShapeAttribute.Marshaler on exposed type '{type.FullName}' is not supported with serialization surrogates.");
+                }
+
+                foreach (PropertyDescriptor property in TypeDescriptor.GetProperties(type))
+                {
+                    if (SerializationUtility.IsSerializableDataMember(property)
+                        && (allEntityTypes.Contains(property.PropertyType) || allComplexTypes.Contains(property.PropertyType))
+                        && property.Attributes[typeof(MessagePackConverterAttribute)] != null)
+                    {
+                        throw new InvalidOperationException($"MessagePackConverterAttribute on property '{type.FullName}.{property.Name}' is not supported because its type '{property.PropertyType.FullName}' uses a serialization surrogate.");
+                    }
+                }
+            }
         }
     }
 }

@@ -16,6 +16,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Nerdbank.MessagePack;
 using OpenRiaServices.Hosting.AspNetCore.Serialization;
+using OpenRiaServices.Hosting.AspNetCore.Serialization.MessagePack;
 using PolyType;
 using PolyType.ReflectionProvider;
 using OpenRiaServices.Server;
@@ -144,6 +145,41 @@ public class SerializationOptionsTests
         Assert.AreEqual("hello-messagepack", ReadMessagePackInvokeResponse<string>(payload));
     }
 
+    [TestMethod]
+    [Description("MessagePack invoke preserves explicit derived-type discriminators")]
+    public async Task MessagePack_Invoke_UsesExplicitDerivedTypeDiscriminator()
+    {
+        using var host = await CreateHost(useMessagePack: true);
+        var client = host.GetTestClient();
+        using var content = BuildMessagePackInvokeRequest("GetDerivedEntity", "value", "derived-value");
+        var response = await client.PostAsync("SerializationTestDomainService/GetDerivedEntity", content);
+        response.EnsureSuccessStatusCode();
+
+        var payload = await response.Content.ReadAsByteArrayAsync();
+        SerializationBaseEntity result = ReadMessagePackInvokeResponse<SerializationBaseEntity>(payload);
+        Assert.IsInstanceOfType<SerializationDerivedEntity>(result);
+        Assert.AreEqual("derived-value", ((SerializationDerivedEntity)result).Value);
+    }
+
+    [TestMethod]
+    [Description("MessagePack invoke round trips an abstract entity root with one concrete subtype")]
+    public async Task MessagePack_Invoke_Roundtrips_AbstractEntityWithSingleDerivedType()
+    {
+        using var host = await CreateHost(useMessagePack: true);
+        var client = host.GetTestClient();
+        using var content = BuildMessagePackEntityInvokeRequest(
+            "RoundtripAbstractEntity",
+            "value",
+            new SingleDerivedEntity { Id = 1, Value = "derived-value" });
+        var response = await client.PostAsync("SerializationTestDomainService/RoundtripAbstractEntity", content);
+        response.EnsureSuccessStatusCode();
+
+        var payload = await response.Content.ReadAsByteArrayAsync();
+        AbstractEntity result = ReadMessagePackInvokeResponse<AbstractEntity>(payload);
+        Assert.IsInstanceOfType<SingleDerivedEntity>(result);
+        Assert.AreEqual("derived-value", ((SingleDerivedEntity)result).Value);
+    }
+
     // -------------------------------------------------------------------------
     // Helpers
     // -------------------------------------------------------------------------
@@ -259,6 +295,22 @@ public class SerializationOptionsTests
         return content;
     }
 
+    private static ByteArrayContent BuildMessagePackEntityInvokeRequest(string operationName, string paramName, AbstractEntity value)
+    {
+        var serializer = new MessagePackSerializer();
+        var provider = ReflectionTypeShapeProvider.Default;
+        var payload = new Dictionary<string, Dictionary<string, AbstractEntity>>()
+        {
+            { "Parameters", new Dictionary<string, AbstractEntity> { { paramName, value } } }
+        };
+
+        using var ms = new MemoryStream();
+        serializer.SerializeObject(ms, payload, provider.GetTypeShapeOrThrow(payload.GetType()));
+        var content = new ByteArrayContent(ms.ToArray());
+        content.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("application/vnd.msgpack");
+        return content;
+    }
+
     private static TResult ReadMessagePackInvokeResponse<TResult>(byte[] payload)
     {
         var serializer = new MessagePackSerializer()
@@ -278,5 +330,41 @@ public class SerializationOptionsTests
     {
         [Invoke(HasSideEffects = true)]
         public string EchoString(string value) => value;
+
+        [Query]
+        public IQueryable<SerializationBaseEntity> GetEntities() => Array.Empty<SerializationBaseEntity>().AsQueryable();
+
+        [Query]
+        public IQueryable<AbstractEntity> GetAbstractEntities() => Array.Empty<AbstractEntity>().AsQueryable();
+
+        [Invoke(HasSideEffects = true)]
+        public SerializationBaseEntity GetDerivedEntity(string value) => new SerializationDerivedEntity { Id = 1, Value = value };
+
+        [Invoke(HasSideEffects = true)]
+        public AbstractEntity RoundtripAbstractEntity(AbstractEntity value) => value;
+    }
+
+    [DerivedTypeShape(typeof(SerializationDerivedEntity), Name = "explicit-derived")]
+    public class SerializationBaseEntity
+    {
+        [System.ComponentModel.DataAnnotations.Key]
+        public int Id { get; set; }
+    }
+
+    public class SerializationDerivedEntity : SerializationBaseEntity
+    {
+        public string Value { get; set; }
+    }
+
+    [DerivedTypeShape(typeof(SingleDerivedEntity), Name = "single-derived")]
+    public abstract class AbstractEntity
+    {
+        [System.ComponentModel.DataAnnotations.Key]
+        public int Id { get; set; }
+    }
+
+    public class SingleDerivedEntity : AbstractEntity
+    {
+        public string Value { get; set; }
     }
 }

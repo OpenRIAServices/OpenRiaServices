@@ -8,6 +8,10 @@
 * Refactor the client query parser to improve performance and reduce allocations. (#625, 630)
   * It is now easier to support additional types and methods.
   * Only permitted methods and constructors participate in overload resolution, making .NET updates less likely to break query parsing.
+* Support for MessagePack attributes on model
+   * Added support for PolyType `[PropertyShape]` and `[DerivedTypeShape]` model attributes in server metadata and generated clients, using PolyType precedence when combined with data contract attributes. Fixes [#603](https://github.com/OpenRIAServices/OpenRiaServices/issues/603)
+   * Server serialization surrogates now copy only supported PolyType and property-level Nerdbank.MessagePack attributes. `[DerivedTypeShape]` stays on the original models, where `ObjectConverter` handles discriminators; client generation is unchanged.
+   * MessagePack serializer setup rejects custom converters on exposed types or properties of exposed types, and custom type marshalers on exposed types, because serialization surrogates do not support them.
 
 # 5.10.0 / AspNetCore 1.6.0 — MessagePack transport preview
 

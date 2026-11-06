@@ -8,6 +8,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using PolyType;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using KnownTypeUtil = OpenRiaServices.Server.KnownTypeUtilities;
 
@@ -90,6 +91,32 @@ namespace OpenRiaServices.Server.Test
             Assert.IsTrue(knownTypes.Contains(typeof(KTU_3)));
             Assert.IsTrue(knownTypes.Contains(typeof(KTU_4)));
         }
+
+        [TestMethod]
+        public void KnownType_Utilities_DerivedTypeShape_Takes_Precedence_Per_Type()
+        {
+            IEnumerable<Type> dataContractKnownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_PolyType), false);
+            IEnumerable<Type> knownTypes = KnownTypeUtil.ImportDerivedTypes(typeof(KTU_PolyType), false);
+
+            Assert.AreSequenceEqual([typeof(KTU_PolyTypeKnownDerived)], dataContractKnownTypes);
+
+            Assert.AreSequenceEqual([
+                    typeof(KTU_PolyTypeDerived1),
+                    typeof(KTU_PolyTypeDerived2),
+                    typeof(KTU_PolyTypeGrandchild),
+                    typeof(KTU_PolyTypeGreatGrandchild),
+                ], knownTypes, SequenceOrder.InAnyOrder);
+        }
+
+        [TestMethod]
+        public void KnownType_Utilities_DerivedTypeShape_Inherits_Base_Registrations()
+        {
+            IEnumerable<Type> knownTypes = KnownTypeUtil.ImportDerivedTypes(typeof(KTU_PolyTypeDerived1), false);
+            Assert.AreSequenceEqual([typeof(KTU_PolyTypeGrandchild), typeof(KTU_PolyTypeGreatGrandchild)], knownTypes, SequenceOrder.InAnyOrder);
+
+            knownTypes = KnownTypeUtil.ImportDerivedTypes(typeof(KTU_PolyTypeDerived1), true);
+            Assert.AreSequenceEqual([typeof(KTU_PolyTypeDerived1), typeof(KTU_PolyTypeGrandchild), typeof(KTU_PolyTypeGreatGrandchild)], knownTypes, SequenceOrder.InAnyOrder);
+        }
     }
 
     public class KTU_00 { }
@@ -98,6 +125,20 @@ namespace OpenRiaServices.Server.Test
     public class KTU_2 { }
     public class KTU_3 { }
     public class KTU_4 { }
+
+    [KnownType(typeof(KTU_PolyTypeKnownDerived))]
+    [DerivedTypeShape(typeof(KTU_PolyTypeDerived1))]
+    [DerivedTypeShape(typeof(KTU_PolyTypeDerived2))]
+    public class KTU_PolyType { }
+
+    [DerivedTypeShape(typeof(KTU_PolyTypeGrandchild))]
+    public class KTU_PolyTypeDerived1 : KTU_PolyType { }
+    public class KTU_PolyTypeDerived2 : KTU_PolyType { }
+    public class KTU_PolyTypeKnownDerived : KTU_PolyType { }
+
+    [DerivedTypeShape(typeof(KTU_PolyTypeGreatGrandchild))]
+    public class KTU_PolyTypeGrandchild : KTU_PolyTypeDerived1 { }
+    public class KTU_PolyTypeGreatGrandchild : KTU_PolyTypeGrandchild { }
 
     [KnownType(typeof(KTU_00))]     // exposed only on least derived type
     public class KTU_Base00 { }
@@ -112,7 +153,8 @@ namespace OpenRiaServices.Server.Test
 
     // This type has a static method that returns them via a Type[]
     [KnownType("ArrayMethod")]
-    public class KTU_Type_With_Array_Method {
+    public class KTU_Type_With_Array_Method
+    {
         public static Type[] ArrayMethod()
         {
             return new Type[] { typeof(KTU_2), typeof(KTU_2), typeof(KTU_3) };  // redundancy again
@@ -144,7 +186,7 @@ namespace OpenRiaServices.Server.Test
         {
             return new Type[] { typeof(KTU_2), typeof(KTU_2), typeof(KTU_3) };
         }
-        
+
         public static IEnumerable<Type> EnumerableMethod()
         {
             Type[] array = new Type[] { typeof(KTU_3), typeof(KTU_3), typeof(KTU_4) };

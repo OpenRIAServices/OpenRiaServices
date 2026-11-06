@@ -5,6 +5,7 @@
     <AssemblyName>WebsiteMediumTrust</AssemblyName>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <MvcBuildViews>false</MvcBuildViews>
+    <GeneratedBindingRedirectsAction>Overwrite</GeneratedBindingRedirectsAction>
   </PropertyGroup>
 
   <ItemGroup>

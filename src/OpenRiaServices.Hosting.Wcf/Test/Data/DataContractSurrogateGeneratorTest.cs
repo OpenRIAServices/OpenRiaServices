@@ -10,6 +10,9 @@ using OpenRiaServices.Server;
 using System.Text;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Hosting.Wcf;
+using PolyType;
+using PolyType.Abstractions;
+using PolyType.ReflectionProvider;
 using TestDomainServices;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
@@ -435,6 +438,27 @@ namespace OpenRiaServices.Hosting.UnitTests
             Assert.AreEqual(expected, surrogate, "Surrogate does not match expected results.");
         }
 
+        [TestMethod]
+        [DataRow(typeof(PropertyShapeAttribute), "Boolean Ignore (get,set); Boolean IsRequired (get,set); Int32 Order (get,set); String Name (get,set)", "()")]
+        [DataRow(typeof(TypeShapeAttribute), "MethodShapeFlags IncludeMethods (get,set); Type Marshaler (get,set); TypeShapeKind Kind (get,set)", "()")]
+        [DataRow(typeof(Nerdbank.MessagePack.KeyAttribute), "Int32 Index (get)", "(Int32 index)")]
+        [DataRow(typeof(Nerdbank.MessagePack.MessagePackConverterAttribute), "Type ConverterType (get)", "(Type converterType)")]
+        [DataRow(typeof(Nerdbank.MessagePack.UseComparerAttribute), "String MemberName (get); Type ComparerType (get)", "(Type comparerSource, String memberName); (Type comparerType)")]
+        public void SerializationAttributePublicApiMatchesKnownContract(Type attributeType, string expectedProperties, string expectedConstructors)
+        {
+            string[] properties = attributeType.GetProperties(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static)
+                .Where(property => property.DeclaringType != typeof(Attribute))
+                .Select(property => $"{property.PropertyType.Name} {property.Name} ({string.Join(",", new[] { property.GetMethod?.IsPublic == true ? "get" : null, property.SetMethod?.IsPublic == true ? "set" : null }.Where(accessor => accessor != null))})")
+                .OrderBy(signature => signature, StringComparer.Ordinal).ToArray();
+            string[] constructors = attributeType.GetConstructors()
+                .Select(constructor => $"({string.Join(", ", constructor.GetParameters().Select(parameter => $"{parameter.ParameterType.Name} {parameter.Name}"))})")
+                .OrderBy(signature => signature, StringComparer.Ordinal).ToArray();
+
+            Assert.AreEqual(expectedProperties, string.Join("; ", properties), $"Review surrogate attribute support for {attributeType.FullName}.");
+            Assert.AreEqual(expectedConstructors, string.Join("; ", constructors), $"Review surrogate attribute support for {attributeType.FullName}.");
+            Assert.IsEmpty(attributeType.GetFields(BindingFlags.Public | BindingFlags.Instance | BindingFlags.Static), "New public fields need review too.");
+        }
+
         private static string GetDataContract(Type type)
         {
             string result = string.Empty;
@@ -574,6 +598,83 @@ namespace OpenRiaServices.Hosting.UnitTests
     public class SurrogateTestEntity_ClrProperty_Nullable_Primitive_ReadOnly : GenericEntity<int>
     {
         public int? TestProperty { get; private set; }
+    }
+
+    [DataContract]
+    [TypeShape]
+    public class SurrogateTestEntity_PropertyShape
+    {
+        [DataMember(Name = "data-member-name")]
+        [PropertyShape(Name = "shape-name", Order = 5, IsRequired = false)]
+        [Nerdbank.MessagePack.Key(0)]
+        public string Renamed { get; set; }
+
+        [PropertyShape(IsRequired = true)]
+        [Nerdbank.MessagePack.Key(1)]
+        public string ShapeOnly { get; set; }
+
+        [PropertyShape]
+        [Nerdbank.MessagePack.Key(2)]
+        public string Optional { get; set; }
+
+        [DataMember]
+        [PropertyShape(Ignore = true)]
+        public string Ignored { get; set; }
+
+        [Nerdbank.MessagePack.Key(3)]
+        public string Unannotated { get; set; }
+
+        [PropertyShape]
+        [Nerdbank.MessagePack.Key(4)]
+        [Nerdbank.MessagePack.UseComparer(typeof(StringComparer), nameof(StringComparer.OrdinalIgnoreCase))]
+        public Dictionary<string, string> Compared { get; set; }
+    }
+
+    [TypeShape(Kind = TypeShapeKind.None, IncludeMethods = MethodShapeFlags.AllPublic, Marshaler = typeof(SurrogateTestMarshaler))]
+    [DerivedTypeShape(typeof(SurrogateTestEntity_DerivedTypeShape), Name = "derived", Tag = 42)]
+    [Nerdbank.MessagePack.MessagePackConverter(typeof(SurrogateTestTypeConverter))]
+    public class SurrogateTestEntity_TypeShape
+    {
+        public string Value { get; set; }
+    }
+
+    public class SurrogateTestEntity_DerivedTypeShape : SurrogateTestEntity_TypeShape { }
+    public class SurrogateTestEntity_VirtualSerializationAttributes { }
+
+    public class SurrogateTestEntity_NerdbankAttributes
+    {
+        [Nerdbank.MessagePack.MessagePackConverter(typeof(SurrogateTestStringConverter))]
+        public string Converted { get; set; }
+
+        [Nerdbank.MessagePack.UseComparer(typeof(SurrogateTestStringComparer))]
+        public Dictionary<string, string> Compared { get; set; }
+
+        [Nerdbank.MessagePack.UseComparer(typeof(StringComparer), nameof(StringComparer.OrdinalIgnoreCase))]
+        public Dictionary<string, string> ComparedWithMember { get; set; }
+    }
+
+    public sealed class SurrogateTestStringComparer : IEqualityComparer<string>
+    {
+        public bool Equals(string x, string y) => StringComparer.OrdinalIgnoreCase.Equals(x, y);
+        public int GetHashCode(string obj) => StringComparer.OrdinalIgnoreCase.GetHashCode(obj);
+    }
+
+    public sealed class SurrogateTestStringConverter : Nerdbank.MessagePack.MessagePackConverter<string>
+    {
+        public override string Read(ref Nerdbank.MessagePack.MessagePackReader reader, Nerdbank.MessagePack.SerializationContext context) => reader.ReadString();
+        public override void Write(ref Nerdbank.MessagePack.MessagePackWriter writer, in string value, Nerdbank.MessagePack.SerializationContext context) => writer.Write(value);
+    }
+
+    public sealed class SurrogateTestTypeConverter : Nerdbank.MessagePack.MessagePackConverter<SurrogateTestEntity_TypeShape>
+    {
+        public override SurrogateTestEntity_TypeShape Read(ref Nerdbank.MessagePack.MessagePackReader reader, Nerdbank.MessagePack.SerializationContext context) => new() { Value = reader.ReadString() };
+        public override void Write(ref Nerdbank.MessagePack.MessagePackWriter writer, in SurrogateTestEntity_TypeShape value, Nerdbank.MessagePack.SerializationContext context) => writer.Write(value.Value);
+    }
+
+    public sealed class SurrogateTestMarshaler : IMarshaler<SurrogateTestEntity_TypeShape, string>
+    {
+        public string Marshal(SurrogateTestEntity_TypeShape value) => value.Value;
+        public SurrogateTestEntity_TypeShape Unmarshal(string value) => new() { Value = value };
     }
 
     public class MockTypeDescriptionProvider : TypeDescriptionProvider

@@ -2,6 +2,7 @@
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Runtime.Serialization;
+using PolyType;
 using OpenRiaServices;
 
 namespace Cities
@@ -113,9 +114,11 @@ namespace Cities
 
 
     [MetadataType(typeof(StateMetadata))]
+    [TypeShape]
     public partial class State
     {
     }
+
     public partial class StateMetadata
     {
         [Key]
@@ -124,6 +127,7 @@ namespace Cities
         [RegularExpression("^[A-Z]*")]
         [CustomValidation(typeof(StateNameValidator), "IsStateNameValid")]
         [RoundtripOriginal]
+        [PropertyShape]
         public string Name { get; set; }
 
         [Key]

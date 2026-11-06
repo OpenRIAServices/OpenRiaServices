@@ -595,6 +595,7 @@ namespace OpenRiaServices.Tools.Test
         [System.ComponentModel.Bindable(true, System.ComponentModel.BindingDirection.TwoWay)]
         public int K { get; set; }
     }
+
 }
 
 // The code generator only emits errors for attributes in the System.ComponentModel.DataAnnotations namespace to

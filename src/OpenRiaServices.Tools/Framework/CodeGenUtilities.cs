@@ -372,6 +372,12 @@ namespace OpenRiaServices.Tools
 
             // Determine if we should generate this type with a full type name
             bool useFullyQualifiedName = forceUseFullyQualifiedName || CodeGenUtilities.useFullTypeNames || RegisterTypeName(typeNamespace, typeName, ns.Name);
+            if (!useFullyQualifiedName
+                && type.Assembly.GetName().Name == "Nerdbank.MessagePack"
+                && HasImportNameConflict(type.Assembly, type.Namespace, ns.Name))
+            {
+                useFullyQualifiedName = true;
+            }
 
             // Make sure we take into account root namespace in VB codegen.
             typeNamespace = TranslateNamespace(type, codeGenerator);
@@ -854,6 +860,32 @@ namespace OpenRiaServices.Tools
             }
 
             return isConflict;
+        }
+
+        private static bool HasImportNameConflict(Assembly assembly, string importedNamespace, string containingNamespace)
+        {
+            if (isVisualBasic)
+            {
+                containingNamespace = string.Empty;
+            }
+
+            if (string.IsNullOrEmpty(importedNamespace)
+                || !namespaceTypeReferences.TryGetValue(containingNamespace ?? string.Empty, out Dictionary<string, string> referencedTypes))
+            {
+                return false;
+            }
+
+            foreach (Type importedType in assembly.GetExportedTypes())
+            {
+                if (importedType.Namespace == importedNamespace
+                    && referencedTypes.TryGetValue(OptimizeAttributeName(importedType), out string existingTypeName)
+                    && existingTypeName != importedType.FullName)
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
