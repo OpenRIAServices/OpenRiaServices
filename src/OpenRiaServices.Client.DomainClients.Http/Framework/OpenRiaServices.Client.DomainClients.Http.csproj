@@ -22,7 +22,7 @@
     <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Nerdbank.MessagePack" Version="1.4.82" />
+    <PackageReference Include="Nerdbank.MessagePack" Version="1.4.104" />
     <PackageReference Include="PolyType" Version="1.4.1" />
     <PackageReference Include="System.IO.Hashing" Version="10.0.13" />
   </ItemGroup>

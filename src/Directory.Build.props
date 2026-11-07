@@ -11,8 +11,6 @@
     <!-- Use csharp 14.0 for all projects -->
     <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">14.0</LangVersion>
     <AnalysisMode Condition="'$(IsFrameworkProject)' == 'true'">Recommended</AnalysisMode>
-    <!-- Workaround for https://github.com/AArnott/Nerdbank.MessagePack/issues/1158 -->
-    <NoWarn>$(NoWarn);NBMsgPack001</NoWarn>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
 
     <SonarQubeTestProject Condition="'$(IsTestProject)' == 'true'">True</SonarQubeTestProject>
