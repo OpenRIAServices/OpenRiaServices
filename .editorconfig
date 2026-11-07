@@ -157,7 +157,6 @@ csharp_space_between_square_brackets = false
 
 # Analyzers
 # dotnet_code_quality.ca1802.api_surface = private, internal
-dotnet_diagnostic.NBMsgPack001.severity = none
 
 # Xml project files
 [*.{csproj,vbproj,vcxproj,vcxproj.filters,proj,nativeproj,locproj}]
