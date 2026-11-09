@@ -2321,39 +2321,6 @@ Namespace AdventureWorksModelBuddy
         End Class
     End Class
     
-    'The MetadataTypeAttribute identifies sysdiagramBuddyMetadata as the class
-    ' that carries additional metadata for the sysdiagramBuddy class.
-    <MetadataTypeAttribute(GetType(sysdiagramBuddy.sysdiagramBuddyMetadata))>  _
-    Partial Public Class sysdiagramBuddy
-        
-        'This class allows you to attach custom attributes to properties
-        ' of the sysdiagram class.
-        '
-        'For example, the following marks the Xyz property as a
-        ' required property and specifies the format for valid values:
-        '    <Required()>
-        '    <RegularExpression("[A-Z][A-Za-z0-9]*")>
-        '    <StringLength(32)>
-        '    Public Property Xyz As String
-        Friend NotInheritable Class sysdiagramBuddyMetadata
-            
-            'Metadata classes are not meant to be instantiated.
-            Private Sub New()
-                MyBase.New
-            End Sub
-            
-            Public Property definition() As Byte
-            
-            Public Property diagram_id As Integer
-            
-            Public Property name As String
-            
-            Public Property principal_id As Integer
-            
-            Public Property version As Nullable(Of Integer)
-        End Class
-    End Class
-    
     'The MetadataTypeAttribute identifies TransactionHistoryArchiveBuddyMetadata as the class
     ' that carries additional metadata for the TransactionHistoryArchiveBuddy class.
     <MetadataTypeAttribute(GetType(TransactionHistoryArchiveBuddy.TransactionHistoryArchiveBuddyMetadata))>  _
