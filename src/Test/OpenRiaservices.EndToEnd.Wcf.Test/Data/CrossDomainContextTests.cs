@@ -50,7 +50,6 @@ namespace OpenRiaServices.Client.Test
         /// Initialize our providers before each test.
         /// </summary>
         [TestInitialize]
-        [TestDescription("Initialize our providers before each test.")]
         public void Initialize()
         {
             // Reset loading flags
