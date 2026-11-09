@@ -53,4 +53,9 @@
     <PackageReference Include="System.Collections.Immutable" Version="10.0.14" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="4.1.0" />
+    <PackageReference Update="Microsoft.Net.Compilers.Toolset" Version="5.9.0" />
+  </ItemGroup>
 </Project>
