@@ -98,6 +98,7 @@ namespace OpenRiaServices.Server.Test
             user.IsAuthenticated = true;
             cities.Initialize(new WcfDomainServiceContext(dataService, user, DomainOperationType.Query));
             result = await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfInRole), CancellationToken.None);
+            Assert.IsNotNull(result);
         }
 
         [TestMethod]

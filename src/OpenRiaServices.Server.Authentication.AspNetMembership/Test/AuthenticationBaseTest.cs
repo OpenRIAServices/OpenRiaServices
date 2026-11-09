@@ -161,6 +161,7 @@ namespace OpenRiaServices.Server.Authentication.AspNetMembership.Test
         }
 
         // [TestMethod] The security demand prevents us from actually testing this
+        [Description("Tests that UpdateUser updates the user data.")]
         public void UpdateUser()
         {
             MockUser original = MockUser.CreateDefaultUser();
