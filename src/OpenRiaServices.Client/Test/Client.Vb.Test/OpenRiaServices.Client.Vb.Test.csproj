@@ -4,7 +4,8 @@
     <OutputType>Exe</OutputType>
     <EnableMSTestRunner>true</EnableMSTestRunner>
     <TargetFrameworks>net472</TargetFrameworks>
-    <DefineConstants>TRACE;DEBUG;VBTests</DefineConstants>
+    <DefineConstants>$(DefineConstants);VBTests;ASPNETCORE</DefineConstants>
+    <DefineConstants Condition="'$(Configuration)' == 'Debug'">$(DefineConstants);DEBUG</DefineConstants>
     <RootNamespace>OpenRiaServices.Client.Test</RootNamespace>
   </PropertyGroup>
 
@@ -23,27 +24,9 @@
   </ItemGroup>
   
   <ItemGroup>
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\DomainContextTestBase.cs">
-      <Link>Client.Test\Data\DomainContextTestBase.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\QueryTests.cs">
-      <Link>Client.Test\Data\QueryTests.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\TestDataContext.cs">
-      <Link>Client.Test\Data\TestDataContext.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\OperationErrorTest.cs">
-      <Link>OperationErrorTest.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\ServerSideAsyncTests.cs">
-      <Link>Client.Test\Data\ServerSideAsyncTests.cs</Link>
-    </Compile>
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Data\TestHelpers.cs" Link="TestHelpers.cs" />
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Main.cs" Link="Main.cs" />
-
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\Utilities\UnitTestBaseExtensions.cs" Link="Client.Test\Utilities\UnitTestBaseExtensions.cs" />
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\OperationAwaiter.cs" Link="Client.Test\OperationAwaiter.cs" />
-    <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.Wcf.Test\TestUris.cs" Link="TestUris.cs" />
+    <Compile Include="..\Client.Test\LegacyTestHelpers\UnitTestBaseExtensions.cs" Link="Client.Test\Utilities\UnitTestBaseExtensions.cs" />
+    <Compile Include="..\Client.Test\LegacyTestHelpers\OperationAwaiter.cs" Link="Client.Test\OperationAwaiter.cs" />
+    <Compile Include="..\Client.Test\LegacyTestHelpers\TestUris.cs" Link="TestUris.cs" />
   </ItemGroup>
   
   <ItemGroup>
@@ -57,13 +40,13 @@
       <Aliases>global,SSmDsClient</Aliases>
     </ProjectReference>
     <ProjectReference Include="..\VbDomainClients\VbDomainClients.vbproj" />
-    <!-- Ensure web server project is built, but do not reference the output assebmly -->
-    <ProjectReference Include="..\..\..\Test\WebsiteFullTrust\WebsiteFullTrust.csproj">
+    <ProjectReference Include="..\..\..\Test\AspNetCoreWebsite\AspNetCoreWebsite.csproj">
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
       <PrivateAssets>All</PrivateAssets>
       <Private>false</Private>
       <ExcludeAssets>All</ExcludeAssets>
       <CopyLocalSatelliteAssemblies>false</CopyLocalSatelliteAssemblies>
+      <SetTargetFramework>TargetFramework=net8.0</SetTargetFramework>
     </ProjectReference>
   </ItemGroup>
 

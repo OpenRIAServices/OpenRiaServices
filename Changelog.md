@@ -1,3 +1,9 @@
+# Unreleased
+
+## Removed
+
+* Removed WCF hosting and .NET Framework server support. Server libraries and tests now target modern .NET; .NET Framework remains supported for client libraries and tests.
+
 # 5.11.0 / AspNetCore 1.7.0
 
 * MessagePack is now the preferred communication protocol, with additional features and performance optimizations.

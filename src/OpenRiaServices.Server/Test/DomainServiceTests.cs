@@ -14,8 +14,6 @@ using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.EntityFramework;
-using OpenRiaServices.Hosting.Wcf;
-using OpenRiaServices.LinqToSql;
 using OpenRiaServices.Server.EntityFrameworkCore;
 using OpenRiaServices.Server.UnitTesting;
 using TestDomainServices;
@@ -110,8 +108,6 @@ namespace OpenRiaServices.Server.Test
         [WorkItem(827125)]
         public void DomainServiceConstructor_ContextAccess()
         {
-            LTSService_ConstructorInit lts = new LTSService_ConstructorInit();
-            Assert.IsNotNull(lts.DataContext.LoadOptions);
 
             EFService_ConstructorInit ef = new EFService_ConstructorInit();
         }
@@ -2112,18 +2108,6 @@ namespace OpenRiaServices.Server.Test
     }
 
     #endregion
-
-    [EnableClientAccess]
-    public class LTSService_ConstructorInit : LinqToSqlDomainService<DataTests.Northwind.LTS.NorthwindDataContext>
-    {
-        public LTSService_ConstructorInit()
-        {
-            DataLoadOptions loadOpts = new DataLoadOptions();
-            loadOpts.LoadWith<DataTests.Northwind.LTS.Order>(p => p.Order_Details);
-
-            this.DataContext.LoadOptions = loadOpts;
-        }
-    }
 
     [EnableClientAccess]
     public class EFService_ConstructorInit : LinqToEntitiesDomainService<NorthwindModel.NorthwindEntities>

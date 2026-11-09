@@ -35,12 +35,12 @@ namespace TestDomainServices.Testing
             // If path is not relative to working directory then check if it is a virtual path
 #if NET
             // Relative directoy when running in website project folder
-            string mappedPath = fileName.Replace("~/", "../WebsiteFullTrust/");
+            string mappedPath = fileName.Replace("~/", "App_Data/");
             if (File.Exists(mappedPath))
                 return mappedPath;
 
             // Allow running in bin folder
-            mappedPath = fileName.Replace("~/", "../../../../WebsiteFullTrust/");
+            mappedPath = fileName.Replace("~/", "../../../../AspNetCoreWebsite/");
             if (File.Exists(mappedPath))
                 return mappedPath;
 #else

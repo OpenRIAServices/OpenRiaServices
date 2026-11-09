@@ -53,7 +53,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                     var invokeDescription = new InvokeDescription(_operation, inputs);
                     invokeResult = await domainService.InvokeAsync(invokeDescription, domainService.ServiceContext.CancellationToken).ConfigureAwait(false);
                 }
-                catch (Exception ex) when (!ex.IsFatal())
+                catch (Exception ex) when (!OpenRiaServices.ExceptionHandlingUtility.IsFatal(ex))
                 {
                     await WriteError(writer, context, ex, domainService);
                     return;

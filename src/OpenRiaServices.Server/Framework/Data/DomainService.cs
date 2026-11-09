@@ -58,7 +58,7 @@ namespace OpenRiaServices.Server
 
                 return DomainService.s_domainServiceFactory;
             }
-            [Obsolete("Register all domain services and add them to OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.Current.ServiceProvider")]
+            [Obsolete("Register domain services with the hosting framework's service provider instead.")]
             set
             {
                 DomainService.s_domainServiceFactory = value;

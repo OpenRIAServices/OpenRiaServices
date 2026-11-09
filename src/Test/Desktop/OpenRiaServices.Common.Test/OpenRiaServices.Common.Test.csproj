@@ -4,16 +4,15 @@
     <TargetFrameworks>net472;net8.0</TargetFrameworks>
   </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net472'">
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Management" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' != 'net472' ">
+  <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
+    <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
+  </ItemGroup>
+  <ItemGroup>
     <PackageReference Include="System.Management" Version="10.0.14" />
   </ItemGroup>
 </Project>

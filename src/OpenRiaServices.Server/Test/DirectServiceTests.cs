@@ -18,7 +18,6 @@ using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Hosting.Wcf.Behaviors;
 using System.Text;
 using System.Threading;
-using System.Web;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
