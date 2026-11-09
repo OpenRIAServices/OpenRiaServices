@@ -6,7 +6,7 @@ namespace OpenRiaServices.Server.Authentication
     /// Interface for user entities that has properties for passing principal values to the client.
     /// </summary>
     /// <remarks>
-    /// This class is designed for use with the <see cref="IAuthentication{T}"/> interface.
+    /// This class is designed for use with the <see cref="IAuthentication{T}"/> or <see cref="IAuthenticationAsync{T}"/> interface.
     /// It provides properties to support serialization of principal values to an entity class
     /// generated from a type implementing this interface.
     /// </remarks>
