@@ -28,7 +28,6 @@ namespace DbContextModels.AdventureWorks
         public DbSet<AWBuildVersion> AWBuildVersions { get; set; }
         public DbSet<DatabaseLog> DatabaseLogs { get; set; }
         public DbSet<ErrorLog> ErrorLogs { get; set; }
-        public DbSet<sysdiagram> sysdiagrams { get; set; }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
         public DbSet<EmployeeAddress> EmployeeAddresses { get; set; }
