@@ -1,7 +1,8 @@
-# Unreleased
+# 5.11.0 / AspNetCore 1.7.0
 
 ## Changed
 
+* Updated NuGet dependencies, including MSTest and MSBuild.
 * MessagePack clients retain unrecognized entity and complex-object members through state copying, loading, and submitting, including entity-level `RoundtripOriginal`. (#628)
 * Normalize array-backed span `Contains` calls selected by C# 14 to `Enumerable.Contains`, preserving earlier query serialization and unsupported-operator errors on .NET 10. (#560)
 * HTTP clients now honor `HttpClient.DefaultRequestVersion` and `DefaultVersionPolicy` for POST and QUERY requests, matching GET requests across binary XML, XML, and MessagePack transports on .NET.
