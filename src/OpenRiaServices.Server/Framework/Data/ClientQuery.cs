@@ -10,16 +10,29 @@ namespace OpenRiaServices.Server
     /// <typeparam name="T">The entity type returned by the query method.</typeparam>
     public sealed class ClientQuery<T>
     {
-        private readonly IQueryable _query;
-        private readonly int _resultLimit;
+        private readonly Func<IQueryable<T>, IQueryable<T>> _applyQuery;
         private IQueryable<T> _totalCountQuery;
-        private int _applyCount;
+        private bool _hasCapturedTotalCountQuery;
         private int? _totalCount;
 
-        internal ClientQuery(IQueryable query, bool includeTotalCount, int resultLimit)
+        /// <summary>
+        /// Initializes a new instance with a function that applies a query to the source.
+        /// </summary>
+        /// <param name="applyQuery">A function that applies the client query to a source.</param>
+        public ClientQuery(Func<IQueryable<T>, IQueryable<T>> applyQuery)
+            : this(applyQuery, includeTotalCount: false)
         {
-            _query = query;
-            _resultLimit = resultLimit;
+        }
+
+        internal ClientQuery(IQueryable query, bool includeTotalCount)
+            : this(source => query == null ? source : (IQueryable<T>)QueryComposer.Compose(source, query), includeTotalCount)
+        {
+        }
+
+        private ClientQuery(Func<IQueryable<T>, IQueryable<T>> applyQuery, bool includeTotalCount)
+        {
+            ArgumentNullException.ThrowIfNull(applyQuery);
+            _applyQuery = applyQuery;
             IncludeTotalCount = includeTotalCount;
         }
 
@@ -33,8 +46,7 @@ namespace OpenRiaServices.Server
         /// Applies the client filtering, ordering, and paging to <paramref name="source"/>.
         /// </summary>
         /// <remarks>
-        /// This method can be called multiple times after <see cref="SetTotalCount(int)"/> has
-        /// supplied the total count explicitly.
+        /// This method can be called multiple times. It does not capture the total count.
         /// </remarks>
         /// <param name="source">The query to which the client query should be applied.</param>
         /// <returns>The composed query.</returns>
@@ -42,38 +54,24 @@ namespace OpenRiaServices.Server
         {
             ArgumentNullException.ThrowIfNull(source);
 
-            if (!_totalCount.HasValue && _applyCount != 0)
-            {
-                throw new InvalidOperationException("ClientQuery.ApplyTo can only be called once unless SetTotalCount has supplied the total count.");
-            }
+            return ApplyClientQuery(source);
+        }
 
-            IQueryable<T> composedQuery = source;
-            if (_query != null)
-            {
-                composedQuery = (IQueryable<T>)QueryComposer.Compose(source, _query);
-            }
+        /// <summary>
+        /// Applies the client query and captures its unpaged result count.
+        /// </summary>
+        /// <param name="source">The query to which the client query should be applied.</param>
+        /// <returns>The composed query.</returns>
+        /// <exception cref="InvalidOperationException">A query count has already been captured.</exception>
+        public IQueryable<T> ApplyToAndCaptureTotalCount(IQueryable<T> source)
+        {
+            ArgumentNullException.ThrowIfNull(source);
 
-            _applyCount++;
-
-            if (IncludeTotalCount && !_totalCount.HasValue)
-            {
-                bool hasPaging = QueryComposer.TryComposeWithoutPaging(composedQuery, out IQueryable countQuery);
-                if (!hasPaging)
-                {
-                    countQuery = composedQuery;
-                }
-
-                if (hasPaging || _resultLimit > 0)
-                {
-                    _totalCountQuery = (IQueryable<T>)countQuery;
-                }
-            }
-
-            if (_resultLimit > 0)
-            {
-                composedQuery = composedQuery.Take(_resultLimit);
-            }
-
+            IQueryable<T> composedQuery = ApplyClientQuery(source);
+            IQueryable countQuery = QueryComposer.TryComposeWithoutPaging(composedQuery, out IQueryable unpagedQuery)
+                ? unpagedQuery
+                : composedQuery;
+            SetTotalCountFromQuery((IQueryable<T>)countQuery);
             return composedQuery;
         }
 
@@ -89,11 +87,28 @@ namespace OpenRiaServices.Server
         }
 
         /// <summary>
+        /// Supplies a query that returns the matching entities before paging is applied.
+        /// </summary>
+        /// <param name="source">A query for all matching entities without client paging.</param>
+        /// <exception cref="InvalidOperationException">A query count has already been captured.</exception>
+        public void SetTotalCountFromQuery(IQueryable<T> source)
+        {
+            ArgumentNullException.ThrowIfNull(source);
+            if (_hasCapturedTotalCountQuery)
+            {
+                throw new InvalidOperationException("The total count can only be captured from a query once.");
+            }
+
+            _hasCapturedTotalCountQuery = true;
+            _totalCountQuery = source;
+            _totalCount = null;
+        }
+
+        /// <summary>
         /// Supplies the total number of matching entities before paging is applied.
         /// </summary>
         /// <remarks>
-        /// Supplying the total count disables automatic count-query tracking and permits
-        /// multiple calls to <see cref="ApplyTo(IQueryable{T})"/>.
+        /// Multiple calls replace the previously supplied count.
         /// </remarks>
         /// <param name="totalCount">The non-negative total number of matching entities.</param>
         public void SetTotalCount(int totalCount)
@@ -111,11 +126,17 @@ namespace OpenRiaServices.Server
             _totalCountQuery = null;
         }
 
-        internal int ApplyCount => _applyCount;
-
         internal int? TotalCount => _totalCount;
 
         internal IQueryable<T> TotalCountQuery => _totalCountQuery;
+
+        private IQueryable<T> ApplyClientQuery(IQueryable<T> source)
+        {
+            IQueryable<T> query = _applyQuery(source);
+            ArgumentNullException.ThrowIfNull(query);
+            return query;
+        }
+
     }
 
     internal static class ClientQuery

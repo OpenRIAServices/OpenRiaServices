@@ -23,42 +23,26 @@ namespace OpenRiaServices.Server
         }
 
         /// <summary>
-        /// Inspects the specified query and if the query has any paging operators
-        /// at the end of it (either a single Take or a Skip/Take) the underlying
-        /// query w/o the Skip/Take is returned.
+        /// Inspects the specified query and removes any trailing Skip and Take paging operators.
         /// </summary>
         /// <param name="query">The query to inspect.</param>
         /// <param name="countQuery">The resulting count query. Null if there is no paging.</param>
         /// <returns>True if a count query is returned, false otherwise.</returns>
         internal static bool TryComposeWithoutPaging(IQueryable query, out IQueryable countQuery)
         {
-            MethodCallExpression mce = query.Expression as MethodCallExpression;
-            Expression countExpr = null;
-
-            if (mce != null && mce.Method.DeclaringType == typeof(Queryable) && 
-                mce.Method.Name.Equals("take", StringComparison.OrdinalIgnoreCase))
+            Expression countExpr = query.Expression;
+            bool hasPaging = false;
+            while (countExpr is MethodCallExpression mce
+                && mce.Method.DeclaringType == typeof(Queryable)
+                && (mce.Method.Name.Equals("take", StringComparison.OrdinalIgnoreCase)
+                    || mce.Method.Name.Equals("skip", StringComparison.OrdinalIgnoreCase)))
             {
-                // strip off the Take operator
                 countExpr = mce.Arguments[0];
-
-                mce = countExpr as MethodCallExpression;
-                if (mce != null && mce.Method.DeclaringType == typeof(Queryable) && 
-                    mce.Method.Name.Equals("skip", StringComparison.OrdinalIgnoreCase))
-                {
-                    // If there's a skip then we need to exclude that too. No skip means we're 
-                    // on the first page.
-                    countExpr = mce.Arguments[0];
-                }
+                hasPaging = true;
             }
 
-            countQuery = null;
-            if (countExpr != null)
-            {
-                countQuery = query.Provider.CreateQuery(countExpr);
-                return true;
-            }
-
-            return false;
+            countQuery = hasPaging ? query.Provider.CreateQuery(countExpr) : null;
+            return hasPaging;
         }
 
         /// <summary>

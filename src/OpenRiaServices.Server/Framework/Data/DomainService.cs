@@ -286,8 +286,7 @@ namespace OpenRiaServices.Server
                 ClientQuery<T>? clientQuery = null;
                 if (queryDescription.Method.HasClientQueryParameter)
                 {
-                    int resultLimit = ((QueryAttribute)queryDescription.Method.OperationAttribute).ResultLimit;
-                    clientQuery = new ClientQuery<T>(queryDescription.Query, queryDescription.IncludeTotalCount, resultLimit);
+                    clientQuery = new ClientQuery<T>(queryDescription.Query, queryDescription.IncludeTotalCount);
                 }
 
                 // Authentication check - will throw if unauthorized
@@ -378,10 +377,6 @@ namespace OpenRiaServices.Server
                             else if (clientQuery.TotalCountQuery != null)
                             {
                                 totalCount = await CountAsync<T>(clientQuery.TotalCountQuery, cancellationToken).ConfigureAwait(false);
-                            }
-                            else
-                            {
-                                totalCount = DomainService.TotalCountEqualsResultSetCount;
                             }
                         }
                     }

@@ -49,7 +49,7 @@ namespace OpenRiaServices.Server.Test
                 await service.QueryAsync<ClientQueryEntity>(description, CancellationToken.None);
 
             Assert.HasCount(2, result.Result);
-            Assert.AreEqual(5, result.TotalCount);
+            Assert.AreEqual(DomainService.TotalCountUndefined, result.TotalCount);
         }
 
         [TestMethod]
@@ -84,35 +84,119 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
-        public async Task SetTotalCount_AllowsMultipleApplyCalls()
+        public async Task QueryMethod_ReturnsUnknownCountWhenCountIsNotCaptured()
+        {
+            ClientQueryDomainService service = CreateService();
+            DomainOperationEntry operation = DomainServiceDescription.GetDescription(typeof(ClientQueryDomainService))
+                .GetQueryMethod(nameof(ClientQueryDomainService.GetEntitiesWithoutApplying));
+            QueryDescription description = new QueryDescription(operation, Array.Empty<object>(), true, Array.Empty<ClientQueryEntity>().AsQueryable());
+
+            ServiceQueryResult<ClientQueryEntity> result =
+                await service.QueryAsync<ClientQueryEntity>(description, CancellationToken.None);
+
+            Assert.AreEqual(DomainService.TotalCountUndefined, result.TotalCount);
+        }
+
+        [TestMethod]
+        public async Task SetTotalCount_UsesLastSuppliedCount()
         {
             ClientQueryDomainService service = CreateService();
             DomainOperationEntry operation = DomainServiceDescription.GetDescription(typeof(ClientQueryDomainService))
                 .GetQueryMethod(nameof(ClientQueryDomainService.GetEntitiesWithExplicitCount));
-            IQueryable<ClientQueryEntity> query = Array.Empty<ClientQueryEntity>().AsQueryable().Take(1);
+            QueryDescription description = new QueryDescription(operation, Array.Empty<object>(), true, Array.Empty<ClientQueryEntity>().AsQueryable());
+
+            ServiceQueryResult<ClientQueryEntity> result =
+                await service.QueryAsync<ClientQueryEntity>(description, CancellationToken.None);
+
+            Assert.AreEqual(12, result.TotalCount);
+        }
+
+        [TestMethod]
+        public async Task ApplyToAndCaptureTotalCount_CapturesUnpagedCount()
+        {
+            ClientQueryDomainService service = CreateService();
+            DomainOperationEntry operation = DomainServiceDescription.GetDescription(typeof(ClientQueryDomainService))
+                .GetQueryMethod(nameof(ClientQueryDomainService.GetEntitiesWithCapturedCount));
+            IQueryable<ClientQueryEntity> query = Array.Empty<ClientQueryEntity>().AsQueryable().Skip(2);
             QueryDescription description = new QueryDescription(operation, Array.Empty<object>(), true, query);
 
             ServiceQueryResult<ClientQueryEntity> result =
                 await service.QueryAsync<ClientQueryEntity>(description, CancellationToken.None);
 
             Assert.HasCount(1, result.Result);
-            Assert.AreEqual(12, result.TotalCount);
+            Assert.AreEqual(5, result.TotalCount);
         }
 
         [TestMethod]
-        public void ApplyTo_RejectsMultipleCallsUnlessTotalCountIsSet()
+        public async Task QueryMethod_ResultLimitAppliesAcrossMultipleApplyCalls()
         {
+            ClientQueryDomainService service = CreateService();
+            DomainOperationEntry operation = DomainServiceDescription.GetDescription(typeof(ClientQueryDomainService))
+                .GetQueryMethod(nameof(ClientQueryDomainService.GetEntitiesWithMultipleApplyCalls));
+            QueryDescription description = new QueryDescription(operation, Array.Empty<object>());
+
+            ServiceQueryResult<ClientQueryEntity> result =
+                await service.QueryAsync<ClientQueryEntity>(description, CancellationToken.None);
+
+            Assert.AreSequenceEqual(new[] { 3, 4 }, result.Result.Select(entity => entity.Id));
+            Assert.AreEqual(DomainService.TotalCountUndefined, result.TotalCount);
+        }
+
+        [TestMethod]
+        public async Task SetTotalCountFromQuery_CapturesProvidedCount()
+        {
+            ClientQueryDomainService service = CreateService();
+            DomainOperationEntry operation = DomainServiceDescription.GetDescription(typeof(ClientQueryDomainService))
+                .GetQueryMethod(nameof(ClientQueryDomainService.GetEntitiesWithQueryCount));
+            QueryDescription description = new QueryDescription(operation, Array.Empty<object>(), true, Array.Empty<ClientQueryEntity>().AsQueryable());
+
+            ServiceQueryResult<ClientQueryEntity> result =
+                await service.QueryAsync<ClientQueryEntity>(description, CancellationToken.None);
+
+            Assert.AreEqual(4, result.TotalCount);
+        }
+
+        [TestMethod]
+        public void PublicConstructor_AppliesProvidedQueryFunction()
+        {
+            ClientQuery<ClientQueryEntity> query = new(source => source.Where(entity => entity.Id > 1));
+            IQueryable<ClientQueryEntity> source = Enumerable.Range(1, 3)
+                .Select(id => new ClientQueryEntity { Id = id })
+                .AsQueryable();
+
+            Assert.AreSequenceEqual(new[] { 2, 3 }, query.ApplyTo(source).Select(entity => entity.Id));
+        }
+
+        [TestMethod]
+        public void SetTotalCountFromQuery_RejectsMultipleCaptures()
+        {
+            ClientQuery<ClientQueryEntity> query = new(source => source);
+            IQueryable<ClientQueryEntity> source = Array.Empty<ClientQueryEntity>().AsQueryable();
+            query.SetTotalCountFromQuery(source);
+
+            Assert.ThrowsExactly<InvalidOperationException>(() => query.SetTotalCountFromQuery(source));
+        }
+
+        [TestMethod]
+        public void ApplyToAndCaptureTotalCount_RejectsMultipleCaptures()
+        {
+            ClientQuery<ClientQueryEntity> query = new(source => source);
+            IQueryable<ClientQueryEntity> source = Array.Empty<ClientQueryEntity>().AsQueryable();
+            query.ApplyToAndCaptureTotalCount(source);
+
+            Assert.ThrowsExactly<InvalidOperationException>(() => query.ApplyToAndCaptureTotalCount(source));
+        }
+
+        [TestMethod]
+        public void ApplyTo_AllowsMultipleCallsWithoutImplicitCountCapture()
+        {
+            ClientQuery<ClientQueryEntity> query = new(source => source);
             IQueryable<ClientQueryEntity> source = Enumerable.Range(1, 2)
                 .Select(id => new ClientQueryEntity { Id = id })
                 .AsQueryable();
 
-            foreach (bool includeTotalCount in new[] { false, true })
-            {
-                ClientQuery<ClientQueryEntity> query = new ClientQuery<ClientQueryEntity>(null, includeTotalCount, 0);
-                query.ApplyTo(source);
-
-                Assert.ThrowsExactly<InvalidOperationException>(() => query.ApplyTo(source));
-            }
+            Assert.HasCount(2, query.ApplyTo(source));
+            Assert.HasCount(2, query.ApplyTo(source));
         }
 
         [TestMethod]
@@ -163,7 +247,7 @@ namespace OpenRiaServices.Server.Test
             CancellationToken cancellationToken)
         {
             ReceivedCancellationToken = cancellationToken == ServiceContext.CancellationToken;
-            return Task.FromResult(query.ApplyTo(_entities.Where(entity => entity.Id >= minimumId)).ToList());
+            return Task.FromResult(query.ApplyToAndCaptureTotalCount(_entities.Where(entity => entity.Id >= minimumId)).ToList());
         }
 
         [Query(ResultLimit = 2)]
@@ -179,11 +263,33 @@ namespace OpenRiaServices.Server.Test
             return _entities.ToList();
         }
 
+        [Query(ResultLimit = 2)]
+        public List<ClientQueryEntity> GetEntitiesWithMultipleApplyCalls(ClientQuery<ClientQueryEntity> query)
+        {
+            return query.ApplyTo(_entities.Take(3))
+                .Concat(query.ApplyTo(_entities.Skip(3)))
+                .Where(entity => entity.Id >= 3)
+                .ToList();
+        }
+
+        [Query]
+        public List<ClientQueryEntity> GetEntitiesWithCapturedCount(ClientQuery<ClientQueryEntity> query)
+        {
+            return query.ApplyToAndCaptureTotalCount(_entities).Take(1).ToList();
+        }
+
         [Query]
         public List<ClientQueryEntity> GetEntitiesWithExplicitCount(ClientQuery<ClientQueryEntity> query)
         {
+            query.SetTotalCount(4);
             query.SetTotalCount(12);
-            query.ApplyTo(_entities);
+            return query.ApplyTo(_entities).ToList();
+        }
+
+        [Query]
+        public List<ClientQueryEntity> GetEntitiesWithQueryCount(ClientQuery<ClientQueryEntity> query)
+        {
+            query.SetTotalCountFromQuery(_entities.Where(entity => entity.Id > 1));
             return query.ApplyTo(_entities).ToList();
         }
 

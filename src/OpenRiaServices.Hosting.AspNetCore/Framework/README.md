@@ -85,7 +85,9 @@ public async Task<IEnumerable<Product>> GetProducts(
 }
 ```
 
-When the client requests a total count, `ApplyTo` retains the unpaged query so the domain service can evaluate the count. Call `SetTotalCount` when the method calculates the count itself; this also permits multiple calls to `ApplyTo`. Otherwise, call `ApplyTo` once. A query method cannot combine `ClientQuery<TEntity>` with the legacy `out int totalCount` parameter.
+`QueryAttribute.ResultLimit` applies to the final result returned by the query method, not to intermediate `ApplyTo` results. This lets a query method further filter or combine multiple applied queries without losing rows; when returning a materialized collection, compose selective filters and paging before materializing to avoid loading unnecessary rows.
+
+`ApplyTo` does not capture a total count. Use `ApplyToAndCaptureTotalCount` to apply the client query and have the domain service count the matching, unpaged query, or call `SetTotalCountFromQuery` with a query that already represents the matching unpaged rows. Use `SetTotalCount` when the method calculates the count itself; it may be called more than once, with the last value used. If no count is supplied or captured, the result count is unknown. A query method cannot combine `ClientQuery<TEntity>` with the legacy `out int totalCount` parameter.
 
 ## Advanced
 
