@@ -27,6 +27,7 @@ Top-level object map:
 
 - GET query behavior stays unchanged (URL-encoded query parameters).
 - Envelopes are map-based for schema/version tolerance.
+- Polymorphic values use `[discriminator, instance]`. The base-type discriminator is `nil`, distinct from every string discriminator, including the empty string. The internal base-type marker is never written to the wire.
 
 ## Forward versioning
 

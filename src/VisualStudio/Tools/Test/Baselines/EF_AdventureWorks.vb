@@ -1950,37 +1950,6 @@ Namespace BizLogic.Test
         'TODO:
         ' Consider constraining the results of your query method.  If you need additional input you can
         ' add parameters to this method or create additional query methods with different names.
-        'To support paging you will need to add ordering to the 'sysdiagrams' query.
-        Public Function GetSysdiagrams() As IQueryable(Of sysdiagram)
-            Return Me.ObjectContext.sysdiagrams
-        End Function
-        
-        Public Sub InsertSysdiagram(ByVal sysdiagram As sysdiagram)
-            If ((sysdiagram.EntityState = EntityState.Detached)  _
-                        = false) Then
-                Me.ObjectContext.ObjectStateManager.ChangeObjectState(sysdiagram, EntityState.Added)
-            Else
-                Me.ObjectContext.sysdiagrams.AddObject(sysdiagram)
-            End If
-        End Sub
-        
-        Public Sub UpdateSysdiagram(ByVal currentsysdiagram As sysdiagram)
-            Me.ObjectContext.sysdiagrams.AttachAsModified(currentsysdiagram, Me.ChangeSet.GetOriginal(currentsysdiagram))
-        End Sub
-        
-        Public Sub DeleteSysdiagram(ByVal sysdiagram As sysdiagram)
-            If ((sysdiagram.EntityState = EntityState.Detached)  _
-                        = false) Then
-                Me.ObjectContext.ObjectStateManager.ChangeObjectState(sysdiagram, EntityState.Deleted)
-            Else
-                Me.ObjectContext.sysdiagrams.Attach(sysdiagram)
-                Me.ObjectContext.sysdiagrams.DeleteObject(sysdiagram)
-            End If
-        End Sub
-        
-        'TODO:
-        ' Consider constraining the results of your query method.  If you need additional input you can
-        ' add parameters to this method or create additional query methods with different names.
         'To support paging you will need to add ordering to the 'TransactionHistories' query.
         Public Function GetTransactionHistories() As IQueryable(Of TransactionHistory)
             Return Me.ObjectContext.TransactionHistories

@@ -49,8 +49,13 @@
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.32" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.13" />
-    <PackageReference Include="System.Collections.Immutable" Version="10.0.13" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
+    <PackageReference Include="System.Collections.Immutable" Version="10.0.14" />
     <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="Microsoft.CodeDom.Providers.DotNetCompilerPlatform" Version="4.1.0" />
+    <PackageReference Update="Microsoft.Net.Compilers.Toolset" Version="5.9.0" />
   </ItemGroup>
 </Project>

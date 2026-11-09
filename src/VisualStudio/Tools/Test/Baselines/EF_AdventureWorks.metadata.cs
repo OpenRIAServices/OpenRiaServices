@@ -2433,41 +2433,6 @@ namespace AdventureWorksModelBuddy
         }
     }
     
-    // The MetadataTypeAttribute identifies sysdiagramBuddyMetadata as the class
-    // that carries additional metadata for the sysdiagramBuddy class.
-    [MetadataTypeAttribute(typeof(sysdiagramBuddy.sysdiagramBuddyMetadata))]
-    public partial class sysdiagramBuddy
-    {
-        
-        // This class allows you to attach custom attributes to properties
-        // of the sysdiagram class.
-        //
-        // For example, the following marks the Xyz property as a
-        // required property and specifies the format for valid values:
-        //    [Required]
-        //    [RegularExpression("[A-Z][A-Za-z0-9]*")]
-        //    [StringLength(32)]
-        //    public string Xyz { get; set; }
-        internal sealed class sysdiagramBuddyMetadata
-        {
-            
-            // Metadata classes are not meant to be instantiated.
-            private sysdiagramBuddyMetadata()
-            {
-            }
-            
-            public byte[] definition { get; set; }
-            
-            public int diagram_id { get; set; }
-            
-            public string name { get; set; }
-            
-            public int principal_id { get; set; }
-            
-            public Nullable<int> version { get; set; }
-        }
-    }
-    
     // The MetadataTypeAttribute identifies TransactionHistoryArchiveBuddyMetadata as the class
     // that carries additional metadata for the TransactionHistoryArchiveBuddy class.
     [MetadataTypeAttribute(typeof(TransactionHistoryArchiveBuddy.TransactionHistoryArchiveBuddyMetadata))]

@@ -425,7 +425,6 @@ namespace OpenRiaServices.Client.Test
             this.EnqueueCompletion(() => invoke);
             EnqueueCallback(delegate
             {
-                Assert.IsNotNull(invoke.Value);
                 Assert.AreEqual(inputA.BID1 + 1, invoke.Value);
             });
             EnqueueTestComplete();

@@ -2442,45 +2442,6 @@ namespace BizLogic.Test
         // TODO:
         // Consider constraining the results of your query method.  If you need additional input you can
         // add parameters to this method or create additional query methods with different names.
-        // To support paging you will need to add ordering to the 'sysdiagrams' query.
-        public IQueryable<sysdiagram> GetSysdiagrams()
-        {
-            return this.ObjectContext.sysdiagrams;
-        }
-        
-        public void InsertSysdiagram(sysdiagram sysdiagram)
-        {
-            if ((sysdiagram.EntityState != EntityState.Detached))
-            {
-                this.ObjectContext.ObjectStateManager.ChangeObjectState(sysdiagram, EntityState.Added);
-            }
-            else
-            {
-                this.ObjectContext.sysdiagrams.AddObject(sysdiagram);
-            }
-        }
-        
-        public void UpdateSysdiagram(sysdiagram currentsysdiagram)
-        {
-            this.ObjectContext.sysdiagrams.AttachAsModified(currentsysdiagram, this.ChangeSet.GetOriginal(currentsysdiagram));
-        }
-        
-        public void DeleteSysdiagram(sysdiagram sysdiagram)
-        {
-            if ((sysdiagram.EntityState != EntityState.Detached))
-            {
-                this.ObjectContext.ObjectStateManager.ChangeObjectState(sysdiagram, EntityState.Deleted);
-            }
-            else
-            {
-                this.ObjectContext.sysdiagrams.Attach(sysdiagram);
-                this.ObjectContext.sysdiagrams.DeleteObject(sysdiagram);
-            }
-        }
-        
-        // TODO:
-        // Consider constraining the results of your query method.  If you need additional input you can
-        // add parameters to this method or create additional query methods with different names.
         // To support paging you will need to add ordering to the 'TransactionHistories' query.
         public IQueryable<TransactionHistory> GetTransactionHistories()
         {

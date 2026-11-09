@@ -1,7 +1,11 @@
-# Unreleased
+# 5.11.0 / AspNetCore 1.7.0
+
+* MessagePack is now the preferred communication protocol, with additional features and performance optimizations.
+* This is the last release with .NET 8 and WCF Hosting Support. Future versions will target .NET 10+ and only support AspNetCore hosting.
 
 ## Changed
 
+* Updated NuGet dependencies, including MSTest and MSBuild.
 * MessagePack clients retain unrecognized entity and complex-object members through state copying, loading, and submitting, including entity-level `RoundtripOriginal`. (#628)
 * Normalize array-backed span `Contains` calls selected by C# 14 to `Enumerable.Contains`, preserving earlier query serialization and unsupported-operator errors on .NET 10. (#560)
 * HTTP clients now honor `HttpClient.DefaultRequestVersion` and `DefaultVersionPolicy` for POST and QUERY requests, matching GET requests across binary XML, XML, and MessagePack transports on .NET.
