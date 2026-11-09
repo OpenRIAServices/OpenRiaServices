@@ -9,7 +9,6 @@
           <EntitySet Name="AWBuildVersion" EntityType="AdventureWorksModel.Store.AWBuildVersion" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
           <EntitySet Name="DatabaseLog" EntityType="AdventureWorksModel.Store.DatabaseLog" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
           <EntitySet Name="ErrorLog" EntityType="AdventureWorksModel.Store.ErrorLog" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
-          <EntitySet Name="sysdiagrams" EntityType="AdventureWorksModel.Store.sysdiagrams" store:Type="Tables" Schema="dbo" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
           <EntitySet Name="Department" EntityType="AdventureWorksModel.Store.Department" store:Type="Tables" Schema="HumanResources" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
           <EntitySet Name="Employee" EntityType="AdventureWorksModel.Store.Employee" store:Type="Tables" Schema="HumanResources" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
           <EntitySet Name="EmployeeAddress" EntityType="AdventureWorksModel.Store.EmployeeAddress" store:Type="Tables" Schema="HumanResources" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" />
@@ -481,16 +480,6 @@
           <Property Name="ErrorProcedure" Type="nvarchar" MaxLength="126" />
           <Property Name="ErrorLine" Type="int" />
           <Property Name="ErrorMessage" Type="nvarchar" Nullable="false" />
-        </EntityType>
-        <EntityType Name="sysdiagrams">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="nvarchar" Nullable="false" MaxLength="128" />
-          <Property Name="principal_id" Type="int" Nullable="false" />
-          <Property Name="diagram_id" Type="int" Nullable="false" StoreGeneratedPattern="Identity" />
-          <Property Name="version" Type="int" />
-          <Property Name="definition" Type="varbinary(max)" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -2433,7 +2422,6 @@
           <EntitySet Name="AWBuildVersions" EntityType="AdventureWorksModel.AWBuildVersion" />
           <EntitySet Name="DatabaseLogs" EntityType="AdventureWorksModel.DatabaseLog" />
           <EntitySet Name="ErrorLogs" EntityType="AdventureWorksModel.ErrorLog" />
-          <EntitySet Name="sysdiagrams" EntityType="AdventureWorksModel.sysdiagram" />
           <EntitySet Name="Departments" EntityType="AdventureWorksModel.Department" />
           <EntitySet Name="Employees" EntityType="AdventureWorksModel.Employee" />
           <EntitySet Name="EmployeeAddresses" EntityType="AdventureWorksModel.EmployeeAddress" />
@@ -2905,16 +2893,6 @@
           <Property Name="ErrorProcedure" Type="String" MaxLength="126" Unicode="true" FixedLength="false" />
           <Property Name="ErrorLine" Type="Int32" />
           <Property Name="ErrorMessage" Type="String" Nullable="false" MaxLength="4000" Unicode="true" FixedLength="false" />
-        </EntityType>
-        <EntityType Name="sysdiagram">
-          <Key>
-            <PropertyRef Name="diagram_id" />
-          </Key>
-          <Property Name="name" Type="String" Nullable="false" MaxLength="128" Unicode="true" FixedLength="false" />
-          <Property Name="principal_id" Type="Int32" Nullable="false" />
-          <Property Name="diagram_id" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" />
-          <Property Name="version" Type="Int32" />
-          <Property Name="definition" Type="Binary" MaxLength="Max" FixedLength="false" />
         </EntityType>
         <EntityType Name="Department">
           <Key>
@@ -5065,13 +5043,6 @@
             <ScalarProperty Name="ErrorLine" ColumnName="ErrorLine" />
             <ScalarProperty Name="ErrorMessage" ColumnName="ErrorMessage" />
           </MappingFragment></EntityTypeMapping></EntitySetMapping>
-          <EntitySetMapping Name="sysdiagrams"><EntityTypeMapping TypeName="AdventureWorksModel.sysdiagram"><MappingFragment StoreEntitySet="sysdiagrams">
-            <ScalarProperty Name="name" ColumnName="name" />
-            <ScalarProperty Name="principal_id" ColumnName="principal_id" />
-            <ScalarProperty Name="diagram_id" ColumnName="diagram_id" />
-            <ScalarProperty Name="version" ColumnName="version" />
-            <ScalarProperty Name="definition" ColumnName="definition" />
-          </MappingFragment></EntityTypeMapping></EntitySetMapping>
           <EntitySetMapping Name="Departments"><EntityTypeMapping TypeName="AdventureWorksModel.Department"><MappingFragment StoreEntitySet="Department">
             <ScalarProperty Name="DepartmentID" ColumnName="DepartmentID" />
             <ScalarProperty Name="Name" ColumnName="Name" />
@@ -5689,7 +5660,6 @@
         <edmx:EntityTypeShape EntityType="AdventureWorksModel.AWBuildVersion" Width="1.5" PointX="0.75" PointY="0.75" Height="1.787985026041667" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="AdventureWorksModel.DatabaseLog" Width="1.5" PointX="2.75" PointY="0.75" Height="2.5571907552083335" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="AdventureWorksModel.ErrorLog" Width="1.5" PointX="4.75" PointY="0.75" Height="2.7494921874999996" IsExpanded="true" />
-        <edmx:EntityTypeShape EntityType="AdventureWorksModel.sysdiagram" Width="1.5" PointX="0.75" PointY="4.75" Height="1.9802864583333335" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="AdventureWorksModel.Department" Width="1.5" PointX="12.75" PointY="88.625" Height="1.9802864583333246" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="AdventureWorksModel.Employee" Width="1.5" PointX="9.75" PointY="69.125" Height="5.8263151041666674" IsExpanded="true" />
         <edmx:EntityTypeShape EntityType="AdventureWorksModel.EmployeeAddress" Width="1.5" PointX="17.25" PointY="72" Height="2.1725878906250102" IsExpanded="true" />
