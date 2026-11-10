@@ -61,16 +61,19 @@
     <ProjectReference Include="T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="TestWap\**" />
     <Compile Remove="ClientClassLib2\**" />
     <Compile Remove="ClientClassLib\**" />
     <Compile Remove="ServerClassLib2\**" />
     <Compile Remove="ServerClassLib\**" />
     <Compile Remove="T4DomainServiceCodeGenerator\**" />
+    <EmbeddedResource Remove="TestWap\**" />
     <EmbeddedResource Remove="ClientClassLib2\**" />
     <EmbeddedResource Remove="ClientClassLib\**" />
     <EmbeddedResource Remove="ServerClassLib2\**" />
     <EmbeddedResource Remove="ServerClassLib\**" />
     <EmbeddedResource Remove="T4DomainServiceCodeGenerator\**" />
+    <None Remove="TestWap\**" />
     <None Remove="ClientClassLib2\**" />
     <None Remove="ClientClassLib\**" />
     <None Remove="ServerClassLib2\**" />
