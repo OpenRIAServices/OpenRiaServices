@@ -3,11 +3,9 @@
     <TargetFramework>net10.0</TargetFramework>
     <RootNamespace>TestWap</RootNamespace>
     <AssemblyName>TestWap</AssemblyName>
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Global.asax.cs" />
     <ProjectReference Include="..\..\..\Open*.*Server\Framework\Open*.*Server.csproj" />
   </ItemGroup>
 </Project>
