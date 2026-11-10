@@ -25,7 +25,7 @@ Use this skill when preparing an OpenRiaServices release. Its package version po
 
 ## Validation
 
-- Restore and Release-build `src\RiaServices.sln`.
+- Restore and Release-build `src\RiaServices.slnx`.
 - Set up SQL LocalDB databases with `sqllocaldb start MSSQLLocalDB` and `.\Setup-TestDatabases.ps1 -UseSqlCmd` when the SQL Server PowerShell module is unavailable.
 - Run all tests from `src` with `dotnet test --solution RiaServices.Tests.slnf --configuration Release`.
 - Report commands, failures, and workarounds accurately. Do not claim full validation if a required tool, target framework, or database is unavailable.

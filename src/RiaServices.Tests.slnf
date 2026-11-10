@@ -1,6 +1,6 @@
 {
   "solution": {
-    "path": "RiaServices.sln",
+    "path": "RiaServices.slnx",
     "projects": [
       "OpenRiaServices.Client\\Test\\Client.External.Test\\OpenRiaServices.Client.External.Test.csproj",
       "OpenRiaServices.Client\\Test\\Client.Test\\OpenRiaServices.Client.Test.csproj",

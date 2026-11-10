@@ -73,7 +73,7 @@ cd src
 dotnet test --solution RiaServices.Tests.slnf --configuration Release
 ```
 
-`RiaServices.Tests.slnf` is a solution filter listing all test projects; `RiaServices.sln` cannot be used directly with `dotnet test`
+`RiaServices.Tests.slnf` is a solution filter listing all test projects; `RiaServices.slnx` cannot be used directly with `dotnet test`
 because it also contains website projects requiring Visual Studio specific MSBuild targets.
 **Remember to add new test projects to `RiaServices.Tests.slnf`**, otherwise they will not run in CI.
 

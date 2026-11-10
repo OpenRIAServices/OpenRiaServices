@@ -1,0 +1,31 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/VisualStudio/" />
+  <Folder Name="/VisualStudio/Installer/">
+    <Project Path="VisualStudio/Installer/OpenRiaServices.VisualStudio.Installer.csproj" />
+  </Folder>
+  <Folder Name="/VisualStudio/ItemTemplates/" />
+  <Folder Name="/VisualStudio/ItemTemplates/CSharp/">
+    <Project Path="VisualStudio/ItemTemplates/CSharp/AuthenticationDomainService/AuthenticationDomainService.csproj" />
+    <Project Path="VisualStudio/ItemTemplates/CSharp/DomainServiceClass/DomainServiceClass.csproj" />
+  </Folder>
+  <Folder Name="/VisualStudio/Templates/" />
+  <Folder Name="/VisualStudio/Templates/CSharp/" />
+  <Folder Name="/VisualStudio/Templates/CSharp/BusinessApplication/">
+    <Project Path="VisualStudio/Templates/CSharp/BusinessApplication/BusinessApplicationProjectTemplate.csproj" />
+  </Folder>
+  <Folder Name="/VisualStudio/Templates/CSharp/RIAServicesLibrary/">
+    <Project Path="VisualStudio/Templates/CSharp/RIAServicesLibrary/OpenRiaServicesLibrary.csproj" />
+  </Folder>
+  <Folder Name="/VisualStudio/Tools/" />
+  <Folder Name="/VisualStudio/Tools/Framework/">
+    <Project Path="VisualStudio/Tools/Framework/OpenRiaServices.VisualStudio.DomainServices.Tools.csproj" />
+  </Folder>
+  <Folder Name="/VisualStudio/Tools/Test/">
+    <Project Path="VisualStudio/Tools/Test/OpenRiaServices.VisualStudio.DomainServices.Tools.Test.csproj" />
+  </Folder>
+</Solution>

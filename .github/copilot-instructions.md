@@ -21,7 +21,7 @@ Run from the repository root on Windows with Visual Studio/MSBuild and .NET Fram
 
 ```powershell
 # Restore and Release-build (preferred)
-msbuild src\RiaServices.sln -restore /p:Configuration=Release /m /v:minimal
+msbuild src\RiaServices.slnx -restore /p:Configuration=Release /m /v:minimal
 ```
 
 Run tests after building:
@@ -43,7 +43,7 @@ dotnet test --project OpenRiaServices.Hosting.AspNetCore\Test\OpenRiaServices.Ho
 ```
 
 CI runs the whole suite with a single `dotnet test` command against `src\RiaServices.Tests.slnf`, which lists every test project. 
-`RiaServices.sln` itself cannot be used because it contains website projects which require Visual Studio targets, so new test projects must be added to the solution filter as well. 
+`RiaServices.slnx` itself cannot be used because it contains website projects which require Visual Studio targets, so new test projects must be added to the solution filter as well.
 MTP runs the test modules (project + target framework) in parallel; use `--max-parallel-test-modules 1` when debugging suspected concurrency issues.
 
 ## Generated files

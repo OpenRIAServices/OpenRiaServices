@@ -7,7 +7,7 @@
 #
 #####################################
 
-$sln = "RiaServices.sln" 
+$sln = "RiaServices.slnx"
 $buildCMD = "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
 $covBuild = [string](dir "C:\cov-analysis-*\bin\cov-build.exe" | select -first 1)
 
@@ -45,4 +45,3 @@ $buildArgs = @(
   "/p:Platform=$env:PLATFORM")
   
 & $covBuild --dir cov-int $buildCmd $buildArgs
-

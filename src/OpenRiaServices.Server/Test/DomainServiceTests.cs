@@ -1318,82 +1318,6 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
-        [Description("Verifies the behavior of the DomainService.Factory property.")]
-        public void DomainServiceFactory_FactoryPropertyBehavior()
-        {
-            // After setting the DP Factory to null, verify that the property getter does 
-            // not return null.  It should instead return a default factory implementation.
-            IDomainServiceFactory prevFactory = DomainService.Factory;
-            try
-            {
-                DomainService.Factory = null;
-                Assert.IsNotNull(DomainService.Factory);
-
-                // Set the DP Factory to a mock instance and verify the property getter return.
-                IDomainServiceFactory mockFactory = new MockDomainServiceFactory();
-                DomainService.Factory = mockFactory;
-                Assert.AreEqual<IDomainServiceFactory>(mockFactory, DomainService.Factory);
-            }
-            finally
-            {
-                // Be sure to restore the factory!
-                DomainService.Factory = prevFactory;
-            }
-        }
-
-        [TestMethod]
-        [Description("Verifies the default factory behavior of the DomainService.Factory property.")]
-        public void DomainServiceFactory_DefaultFactoryBehavior()
-        {
-            // After setting the DP Factory to null, verify that the property getter does 
-            // not return null.  It should instead return a default factory implementation.
-            IDomainServiceFactory prevFactory = DomainService.Factory;
-            try
-            {
-                DomainService.Factory = null;
-                Assert.IsNotNull(DomainService.Factory);
-
-                // Verify the default factory creates an instance as expected.
-                MockDomainService provider = DomainService.Factory.CreateDomainService(typeof(MockDomainService), null) as MockDomainService;
-                Assert.IsNotNull(provider);
-                Assert.IsTrue(provider.Initialized);
-
-                // Verify the default factory disposed the instance as expected.
-                DomainService.Factory.ReleaseDomainService(provider);
-                Assert.IsTrue(provider.Disposed);
-            }
-            finally
-            {
-                // Be sure to restore the factory!
-                DomainService.Factory = prevFactory;
-            }
-        }
-
-        [TestMethod]
-        [Description("Verifies the default factory throws on invalid DomainService types.")]
-        public void DomainServiceFactory_InvalidDomainServiceType()
-        {
-            // After setting the DP Factory to null, verify that the property getter does 
-            // not return null.  It should instead return a default factory implementation.
-            IDomainServiceFactory prevFactory = DomainService.Factory;
-            try
-            {
-                DomainService.Factory = null;
-                Assert.IsNotNull(DomainService.Factory);
-
-                // Verify the default factory throws as expected
-                ExceptionHelper.ExpectArgumentException(
-                    () => DomainService.Factory.CreateDomainService(typeof(string), null),
-                    string.Format(CultureInfo.CurrentCulture, Resource.DomainService_Factory_InvalidDomainServiceType, typeof(string)) + "\r\nParameter name: domainServiceType");
-            }
-            finally
-            {
-                // Be sure to restore the factory!
-                DomainService.Factory = prevFactory;
-            }
-        }
-
-        [TestMethod]
         [Description("Verifies the behavior of ChangeSet.Associate() in end-to-end DomainService scenarios.")]
         public async Task DomainService_AssociatedEntities_ChangePropagationAsync()
         {
@@ -2341,19 +2265,6 @@ namespace OpenRiaServices.Server.Test
         protected override void Dispose(bool disposing)
         {
             this.Disposed = true;
-        }
-    }
-
-    public class MockDomainServiceFactory : IDomainServiceFactory
-    {
-        public DomainService CreateDomainService(Type domainServiceType, DomainServiceContext domainServiceContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReleaseDomainService(DomainService domainService)
-        {
-            throw new NotImplementedException();
         }
     }
 

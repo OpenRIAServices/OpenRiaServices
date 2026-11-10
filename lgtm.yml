@@ -36,7 +36,7 @@ extraction:
       # Default: LGTM chooses the file closest to the root of the repository (this may
       # fail if there are multiple candidates).
       solution: 
-        - src/RiaServices.sln
+        - src/RiaServices.slnx
       # By default, LGTM analyzes the code by building it. You can override this,
       # and tell LGTM not to build the code. Beware that this can lead
       # to less accurate results.

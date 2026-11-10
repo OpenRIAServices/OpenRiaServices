@@ -27,8 +27,6 @@ namespace OpenRiaServices.Server
         internal const int TotalCountUndefined = -1;
         private const int TotalCountEqualsResultSetCount = -2;
 
-        private static IDomainServiceFactory? s_domainServiceFactory;
-
         private ChangeSet? _changeSet;
         private DomainServiceContext? _serviceContext;
         private DomainServiceDescription? _serviceDescription;
@@ -43,29 +41,6 @@ namespace OpenRiaServices.Server
         }
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the <see cref="IDomainServiceFactory"/> used to create new <see cref="DomainService"/> instances.
-        /// </summary>
-        public static IDomainServiceFactory Factory
-        {
-            get
-            {
-                if (DomainService.s_domainServiceFactory == null)
-                {
-                    DomainService.s_domainServiceFactory = new DefaultDomainServiceFactory();
-                }
-
-                return DomainService.s_domainServiceFactory;
-            }
-            [Obsolete("Register domain services with the hosting framework's service provider instead.")]
-            set
-            {
-                DomainService.s_domainServiceFactory = value;
-            }
-        }
-
-        internal static bool IsDefaultFactory => s_domainServiceFactory is null or DefaultDomainServiceFactory;
 
         /// <summary>
         /// Gets the <see cref="DomainServiceDescription"/> for this <see cref="DomainService"/>.
@@ -1278,58 +1253,5 @@ namespace OpenRiaServices.Server
             return new ValueTask<IReadOnlyCollection<T>>(list);
         }
 
-        #region Nested Types
-
-        /// <summary>
-        /// Default <see cref="IDomainServiceFactory"/> implementation.
-        /// </summary>
-        private class DefaultDomainServiceFactory : IDomainServiceFactory
-        {
-            /// <summary>
-            /// Creates a new <see cref="DomainService"/> instance.
-            /// </summary>
-            /// <param name="domainServiceType">The <see cref="Type"/> of <see cref="DomainService"/> to create.</param>
-            /// <param name="context">The current <see cref="DomainServiceContext"/>.</param>
-            /// <returns>A <see cref="DomainService"/> instance.</returns>
-            public DomainService CreateDomainService(Type domainServiceType, DomainServiceContext context)
-            {
-                if (!typeof(DomainService).IsAssignableFrom(domainServiceType))
-                {
-                    throw new ArgumentException(
-                        string.Format(CultureInfo.CurrentCulture, Resource.DomainService_Factory_InvalidDomainServiceType, domainServiceType),
-                        nameof(domainServiceType));
-                }
-
-                DomainService? domainService = null;
-                try
-                {
-                    domainService = (DomainService)Activator.CreateInstance(domainServiceType)!;
-                }
-                catch (TargetInvocationException ex)
-                {
-                    if (ex.InnerException != null)
-                    {
-                        throw ex.InnerException;
-                    }
-
-                    throw;
-                }
-
-                domainService.Initialize(context);
-                return domainService;
-            }
-
-            /// <summary>
-            /// Releases an existing <see cref="DomainService"/> instance.
-            /// </summary>
-            /// <param name="domainService">A <see cref="DomainService"/> instance to release.</param>
-            public void ReleaseDomainService(DomainService domainService)
-            {
-                ArgumentNullException.ThrowIfNull(domainService);
-                domainService.Dispose();
-            }
-        }
-
-        #endregion Nested Types
     }
 }
