@@ -4,9 +4,7 @@ using System.Linq;
 using DataTests.AdventureWorks.LTS;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-#if !ASPNETCORE
 using TestDomainServices.LTS;
-#endif
 using OpenRiaServices.Silverlight.Testing;
 using System.Threading.Tasks;
 

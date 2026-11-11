@@ -8,9 +8,7 @@ using System.Xml.Linq;
 using DataTests.Northwind.LTS;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-#if !ASPNETCORE
 using TestDomainServices.LTS;
-#endif
 using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.Client.Test

@@ -10,11 +10,11 @@ using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
+using DataTests.AdventureWorks.LTS; // TODO: Replace the generated Adventureworks based on LTS with one based ont EF Core
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using VbExpressions;
 using DomainServiceDescription = DomainServices::OpenRiaServices.Server.DomainServiceDescription;
 using LinqResource = httpDomainClient::OpenRiaServices.Client.Resources;
-using NorthwindCategory = EFCoreModels::EFCoreModels.Northwind.Category;
 using NorthwindDomainService = DomainServicesTests::TestDomainServices.EFCore.Northwind;
 using QueryLimits = WebRia::OpenRiaServices.Hosting.AspNetCore.QueryLimits;
 using SystemLinqDynamic = WebRia::System.Linq.Dynamic;
@@ -649,9 +649,9 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public void TestArrayMethods()
         {
-            List<NorthwindCategory> categories = new List<NorthwindCategory>
+            List<DataTests.Northwind.LTS.Category> categories = new List<DataTests.Northwind.LTS.Category>
             {
-                new NorthwindCategory
+                new DataTests.Northwind.LTS.Category
                 {
                     CategoryID = 1,
                     CategoryName = "Spatulas",
@@ -659,16 +659,16 @@ namespace OpenRiaServices.Client.Test
                 }
             };
 
-            IQueryable<NorthwindCategory> query = Array.Empty<NorthwindCategory>().AsQueryable().Where(p => p.Picture.Length > 0);
-            IQueryable<NorthwindCategory> query2 = (IQueryable<NorthwindCategory>)RoundtripQuery(query, categories.AsQueryable());
+            IQueryable<DataTests.Northwind.LTS.Category> query = Array.Empty<DataTests.Northwind.LTS.Category>().AsQueryable().Where(p => p.Picture.Length > 0);
+            IQueryable<DataTests.Northwind.LTS.Category> query2 = (IQueryable<DataTests.Northwind.LTS.Category>)RoundtripQuery(query, categories.AsQueryable());
             Assert.AreEqual(1, query2.Count());
 
-            query = Array.Empty<NorthwindCategory>().AsQueryable().Where(p => p.Picture[0] == 1 && p.Picture[1] == 2);
-            query2 = (IQueryable<NorthwindCategory>)RoundtripQuery(query, categories.AsQueryable());
+            query = Array.Empty<DataTests.Northwind.LTS.Category>().AsQueryable().Where(p => p.Picture[0] == 1 && p.Picture[1] == 2);
+            query2 = (IQueryable<DataTests.Northwind.LTS.Category>)RoundtripQuery(query, categories.AsQueryable());
             Assert.AreEqual(1, query2.Count());
 
-            query = Array.Empty<NorthwindCategory>().AsQueryable().Where(p => p.Picture[p.CategoryID] == 2);
-            query2 = (IQueryable<NorthwindCategory>)RoundtripQuery(query, categories.AsQueryable());
+            query = Array.Empty<DataTests.Northwind.LTS.Category>().AsQueryable().Where(p => p.Picture[p.CategoryID] == 2);
+            query2 = (IQueryable<DataTests.Northwind.LTS.Category>)RoundtripQuery(query, categories.AsQueryable());
             Assert.AreEqual(1, query2.Count());
         }
 

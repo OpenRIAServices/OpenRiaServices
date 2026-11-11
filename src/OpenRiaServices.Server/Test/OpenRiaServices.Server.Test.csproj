@@ -12,7 +12,6 @@
     <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Remove="DirectServiceTests.cs;DomainServiceDescriptionTest.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\Data\DomainIdentifierAttributeTests.cs" Link="DomainIdentifierAttributeTests.cs" />
   </ItemGroup>
   <ItemGroup>

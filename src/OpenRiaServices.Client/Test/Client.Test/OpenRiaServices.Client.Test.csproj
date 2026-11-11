@@ -88,6 +88,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
+    <None Include="Data\QuerySerializationTests.cs" />
     <Compile Remove="Data\QuerySerializationTests.cs" />
   </ItemGroup>
 

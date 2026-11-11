@@ -9,10 +9,8 @@
     <Reference Include="System.Management" />
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' != 'net472' ">
-    <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
-  </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
     <PackageReference Include="System.Management" Version="10.0.14" />
   </ItemGroup>
 </Project>

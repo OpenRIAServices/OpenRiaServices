@@ -30,7 +30,6 @@
     <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
     <!-- Prevent accidental updgrade since 9.0 seems to add redundant parantheses around long strings split across lines -->
     <PackageReference Include="System.CodeDom" Version="10.0.14" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
   </ItemGroup>
   
   <ItemGroup>

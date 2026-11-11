@@ -21,14 +21,6 @@
     <Project Path="OpenRiaServices.Server.UnitTesting/Framework/OpenRiaServices.Server.UnitTesting.csproj" />
     <Project Path="OpenRiaServices.Server/Framework/OpenRiaServices.Server.csproj" />
   </Folder>
-  <Folder Name="/OpenRiaServices.Server/" />
-  <Folder Name="/OpenRiaServices.Server/Test/">
-    <Project Path="OpenRiaServices.Server/Test/OpenRiaServices.Server.Test.csproj" />
-  </Folder>
-  <Folder Name="/OpenRiaServices.Tools/" />
-  <Folder Name="/OpenRiaServices.Tools/Test/">
-    <Project Path="OpenRiaServices.Tools/Test/TestWap/TestWap.csproj" />
-  </Folder>
   <Folder Name="/Solution Items/">
     <File Path="../.gitignore" />
     <File Path="../azure-pipelines.yml" />
@@ -66,6 +58,7 @@
     <Project Path="OpenRiaServices.Server.EntityFrameworkCore/Test/DbContextModel/EFCoreModels.csproj" />
     <Project Path="OpenRiaServices.Server.EntityFrameworkCore/Test/OpenRiaServices.Server.EntityFrameworkCore.Test/OpenRiaServices.Server.EntityFrameworkCore.Test.csproj" />
     <Project Path="OpenRiaServices.Server.UnitTesting/Test/OpenRiaServices.Server.UnitTesting.Test.csproj" />
+    <Project Path="OpenRiaServices.Server/Test/OpenRiaServices.Server.Test.csproj" />
     <Project Path="Test/Desktop/EFPOCOModels/EFPOCOModels.csproj" />
     <Project Path="Test/Desktop/OpenRiaServices.Common.DomainServices.Test/OpenRiaServices.Common.DomainServices.Test.csproj" />
     <Project Path="Test/Desktop/OpenRiaServices.Common.Test/OpenRiaServices.Common.Test.csproj" />
@@ -75,6 +68,7 @@
     <Project Path="OpenRiaServices.Tools/Test/ClientClassLib2/ClientClassLib2.csproj" />
     <Project Path="OpenRiaServices.Tools/Test/ServerClassLib/ServerClassLib.csproj" />
     <Project Path="OpenRiaServices.Tools/Test/ServerClassLib2/ServerClassLib2.csproj" />
+    <Project Path="OpenRiaServices.Tools/Test/TestWap/TestWap.csproj" />
   </Folder>
   <Properties Name="TestCaseManagementSettings" Scope="PostLoad">
     <Property Name="CategoryFile" Value="Desktop.vsmdi" />
