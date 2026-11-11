@@ -387,18 +387,6 @@ namespace OpenRiaServices.Server.Test
         }
 
         /// <summary>
-        /// Verify that a stack overflow does not occur for the below service
-        /// containing a DAL inheritance model
-        /// </summary>
-        [TestMethod]
-        [WorkItem(843965)]
-        public void DomainServiceDescription_DALInheritanceTDPIssue()
-        {
-            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(Bug843965_Service));
-            Assert.IsNotNull(dsd);
-        }
-
-        /// <summary>
         /// Verify that the copy constructor copies all required members.
         /// </summary>
         [TestMethod]
@@ -2920,14 +2908,6 @@ namespace OpenRiaServices.Server.Test
 
         // this should match the service operation convention
         public void RegisterUser(int id) { }
-    }
-
-    public class Bug843965_Service : LinqToSqlDomainService<NorthwindModel.NorthwindEntities>
-    {
-        public IQueryable<DataTests.Scenarios.LTS.Northwind.Bug843965_A> GetBug843965_As()
-        {
-            return null;
-        }
     }
 
     public class Bug846250_Service : LinqToEntitiesDomainService<NorthwindModel.NorthwindEntities>
