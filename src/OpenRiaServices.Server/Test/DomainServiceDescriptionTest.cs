@@ -2891,14 +2891,6 @@ namespace OpenRiaServices.Server.Test
         }
     }
 
-    public class LTSExternalMappingService : LinqToSqlDomainService<DataTests.Scenarios.LTS.Northwind_ExternalMapping.Northwind>
-    {
-        public IQueryable<DataTests.Scenarios.LTS.Northwind_ExternalMapping.Customer> GetCustomers()
-        {
-            return null;
-        }
-    }
-
     public class Bug858226_Service : LinqToEntitiesDomainService<NorthwindModel.NorthwindEntities>
     {
         public IQueryable<NorthwindModel.Customer> GetCustomers()
