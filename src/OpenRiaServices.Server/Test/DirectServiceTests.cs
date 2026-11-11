@@ -548,17 +548,6 @@ namespace OpenRiaServices.Server.Test
             Console.WriteLine("Average time for Perf_MeasureScenario1 : {0} seconds", avgTime);
         }
 
-        private QueryResult DeserializeResult(HttpResponse response, IEnumerable<Type> knownTypes)
-        {
-            string responseText = response.Output.ToString();
-
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(QueryResult), knownTypes);
-            MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(responseText));
-            QueryResult serviceResult = (QueryResult)ser.ReadObject(ms);
-
-            return serviceResult;
-        }
-
         private string RequestDirect(Type providerType, string dataMethodName, IDictionary<string, object> queryParameters)
         {
             return RequestDirect(providerType, dataMethodName, queryParameters, null);

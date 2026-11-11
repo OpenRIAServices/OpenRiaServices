@@ -19,7 +19,6 @@ using OpenRiaServices.Hosting.Wcf;
 using OpenRiaServices.Server;
 using System.Threading;
 using Cities;
-using OpenRiaServices.LinqToSql;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
@@ -317,22 +316,6 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
-        [DeploymentItem(@"DatModels\ScenarioModels\Northwind.map")]
-        public void LTS_ExternalMapping()
-        {
-            // verify that our external mapping file exists
-            // Test pass if this is commented out
-            //Assert.IsTrue(File.Exists("Northwind.map"));
-            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(LTSExternalMappingService));
-
-            // verify that our TDP has inferred DAL metadata
-            Type entityType = typeof(DataTests.Scenarios.LTS.Northwind_ExternalMapping.Customer);
-            Assert.IsTrue(dsd.EntityTypes.Contains(entityType));
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(entityType)["Orders"];
-            Assert.IsNotNull(pd.Attributes[typeof(EntityAssociationAttribute)]);
-        }
-
-        [TestMethod]
         [WorkItem(858226)]
         public void EFInvokeOperationConvention()
         {
@@ -492,18 +475,8 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNull(editable);
 
             // if an entity has a Timestamp member, it should be marked Editable(false)
-            LinqToSqlTypeDescriptionContext ltsContext = new LinqToSqlTypeDescriptionContext(typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios));
-            System.Data.Linq.Mapping.MetaType metaType = ltsContext.MetaModel.GetMetaType(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            TypeDescriptionProvider tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            LinqToSqlTypeDescriptor ltsTypeDescriptor = new LinqToSqlTypeDescriptor(ltsContext, metaType, tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity)));
-            pd = ltsTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
-            Assert.AreEqual("Timestamp", pd.Name);
-            editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
-            Assert.IsFalse(editable.AllowEdit);
-            Assert.IsFalse(editable.AllowInitialValue);
-
             LinqToEntitiesTypeDescriptionContext efContext = new LinqToEntitiesTypeDescriptionContext(typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios));
-            tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
+            tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity));
             LinqToEntitiesTypeDescriptor efTypeDescriptor = new LinqToEntitiesTypeDescriptor(efContext, efContext.GetEdmType(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)), tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)));
             pd = efTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
             Assert.AreEqual("Timestamp", pd.Name);
@@ -2949,7 +2922,7 @@ namespace OpenRiaServices.Server.Test
         public void RegisterUser(int id) { }
     }
 
-    public class Bug843965_Service : LinqToSqlDomainService<DataTests.Scenarios.LTS.Northwind.NorthwindScenarios>
+    public class Bug843965_Service : LinqToSqlDomainService<NorthwindModel.NorthwindEntities>
     {
         public IQueryable<DataTests.Scenarios.LTS.Northwind.Bug843965_A> GetBug843965_As()
         {
@@ -3365,14 +3338,14 @@ namespace OpenRiaServices.Server.Test
     // explicitly specifying a context Type.
     // Here we verify a repository scenario where multiple TDPs are registered for
     // mulitiple DALs
-    [LinqToSqlDomainServiceDescriptionProvider(typeof(DataTests.Northwind.LTS.NorthwindDataContext))]
+    [OpenRiaServices.Server.EntityFrameworkCore.DbDomainServiceDescriptionProvider(typeof(EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities))]
     [LinqToEntitiesDomainServiceDescriptionProvider(typeof(AdventureWorksModel.AdventureWorksEntities))]
     public class LTSRepositoryTest : DomainService
     {
-        private DataTests.Northwind.LTS.NorthwindDataContext nw = new DataTests.Northwind.LTS.NorthwindDataContext();
+        private EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities nw = new EFCoreModels.Northwind.EFCoreDbCtxNorthwindEntities();
         private AdventureWorksModel.AdventureWorksEntities aw = new AdventureWorksModel.AdventureWorksEntities();
 
-        public IEnumerable<DataTests.Northwind.LTS.Customer> GetCustomers()
+        public IEnumerable<EFCoreModels.Northwind.Customer> GetCustomers()
         {
             return nw.Customers;
         }
