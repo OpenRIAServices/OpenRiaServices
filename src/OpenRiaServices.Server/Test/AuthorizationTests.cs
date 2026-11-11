@@ -10,6 +10,7 @@ using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Server;
 using OpenRiaServices.Server.UnitTesting;
+using OpenRiaServices.Hosting.Wcf;
 
 namespace OpenRiaServices.Server.Test
 {

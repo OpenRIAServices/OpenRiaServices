@@ -621,7 +621,6 @@ namespace OpenRiaServices.Hosting.UnitTests
         [PropertyShape(Ignore = true)]
         public string Ignored { get; set; }
 
-        [Nerdbank.MessagePack.Key(3)]
         public string Unannotated { get; set; }
 
         [PropertyShape]

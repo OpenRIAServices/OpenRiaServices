@@ -16,12 +16,12 @@ using OpenRiaServices.Client.Test;
 using OpenRiaServices.EntityFramework;
 using OpenRiaServices.Server.EntityFrameworkCore;
 using OpenRiaServices.Server.UnitTesting;
+using OpenRiaServices.Hosting.Wcf;
 using TestDomainServices;
+using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.Server.Test
 {
-    using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-
     /// <summary>
     /// Summary description for DomainServiceTests
     /// </summary>
