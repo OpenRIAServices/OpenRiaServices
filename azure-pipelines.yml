@@ -28,10 +28,6 @@ steps:
     packageType: 'sdk'
     version: '10.0.x'
 
-- task: NuGetToolInstaller@1
-  inputs:
-    versionSpec: 7.0.0
-
 - task: gitversion/setup@3
   inputs:
     versionSpec: '5.9.0'
@@ -39,11 +35,9 @@ steps:
 - task: gitversion/execute@3
   displayName: 'Use GitVersion'
 
-- task: NuGetCommand@2
-  displayName: 'NuGet restore OpenRiaServices.slnx'
-  inputs:
-    restoreSolution: '$(Solution)'
-    configuration: '$(BuildConfiguration)'
+- powershell: |
+    dotnet restore $(Solution) --configuration $(BuildConfiguration)
+  displayName: 'dotnet restore OpenRiaServices.slnx'
 
 - task: SonarCloudPrepare@3
   displayName: 'Prepare analysis on SonarCloud'
@@ -61,13 +55,9 @@ steps:
       sonar.cs.vscoveragexml.reportsPaths=$(TestResultsDirectory)\coverage.xml
       sonar.cs.vstest.reportsPaths=$(TestResultsDirectory)\**\*.trx
 
-- task: VSBuild@1
+- powershell: |
+    dotnet build $(Solution) --no-restore  --configuration $(BuildConfiguration)
   displayName: 'Build solution OpenRiaServices.slnx'
-  inputs:
-    solution: '$(Solution)'
-    platform: '$(BuildPlatform)'
-    configuration: '$(BuildConfiguration)'
-    maximumCpuCount: true
 
 # Load test databases and setup msbuild debug path so it becomes part of artifacts 
 - powershell: |
@@ -90,7 +80,7 @@ steps:
 - powershell: |
     New-Item -ItemType Directory -Force -Path "$(TestResultsDirectory)" | Out-Null
 
-    $testCommand = 'dotnet test --solution RiaServices.Tests.slnf --no-build --configuration $(BuildConfiguration)' +
+    $testCommand = 'dotnet test --solution $(Solution) --no-build --configuration $(BuildConfiguration)' +
       ' --results-directory "$(TestResultsDirectory)" --report-trx --crashdump --hangdump --hangdump-timeout 20m'
 
     dotnet-coverage collect --settings codecoverage.config --output "$(TestResultsDirectory)\coverage.coverage" $testCommand
@@ -129,14 +119,12 @@ steps:
   continueOnError: true
   condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))))
 
-- task: NuGetCommand@2
-  displayName: 'NuGet pack'
-  inputs:
-    command: pack
-    packagesToPack: 'NuGet\**\*.nuspec'
-    versioningScheme: byEnvVar
-    versionEnvVar: Build.BuildNumber
-    packDestination: '$(Build.ArtifactStagingDirectory)'
+- powershell: |
+    Get-ChildItem -Path NuGet -Filter *.nuspec -Recurse | ForEach-Object {
+      dotnet pack $_.FullName --version "$(Build.BuildNumber)" --output "$(Build.ArtifactStagingDirectory)"
+      if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+    }
+  displayName: 'dotnet pack'
   continueOnError: true
 #  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
