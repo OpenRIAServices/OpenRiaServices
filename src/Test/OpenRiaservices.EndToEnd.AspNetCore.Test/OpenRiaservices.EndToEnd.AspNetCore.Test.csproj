@@ -34,13 +34,11 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Remove="SharedTestSources\**\*.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\Data\DomainClients\CitiesMockDomainClient.cs" Link="Data\CitiesMockDomainClient.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\Data\NorthwindEntityContainer.cs" Link="Included\Data\NorthwindEntityContainer.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\LegacyTestHelpers\OperationAwaiter.cs" Link="Included\OperationAwaiter.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\LegacyTestHelpers\TestUris.cs" Link="Included\TestUris.cs" />
     <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\LegacyTestHelpers\UnitTestBaseExtensions.cs" Link="Included\Utilities\UnitTestBaseExtensions.cs" />
-    <Compile Include="SharedTestSources\**\*.cs" Exclude="SharedTestSources\bin\**;SharedTestSources\obj\**" LinkBase="Included" />
     <Compile Remove="SharedTestSources\Data\MessageUtilityTests.cs" />
     <Compile Remove="SharedTestSources\Data\WebDomainClientTests.cs" />
     <Compile Remove="SharedTestSources\IntegrationTests\SoapXmlEndpointTests.cs" />
