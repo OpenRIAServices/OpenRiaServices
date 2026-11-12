@@ -137,7 +137,10 @@ namespace OpenRiaServices.Client.Test
             {
                 FileName = processPath,
                 UseShellExecute = false,
-                WorkingDirectory = Path.GetFullPath(Path.Join(projectPath, @"../AspNetCoreWebsite/"))
+                WorkingDirectory = Path.GetFullPath(Path.Join(projectPath, @"../AspNetCoreWebsite/")),
+#if NET11_0_OR_GREATER
+                KillOnParentExit = true,
+#endif
             };
             startInfo.ArgumentList.Add("--urls");
             startInfo.ArgumentList.Add(TestURIs.RootURI.ToString());
