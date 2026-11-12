@@ -80,7 +80,7 @@ steps:
 - powershell: |
     New-Item -ItemType Directory -Force -Path "$(TestResultsDirectory)" | Out-Null
 
-    $testCommand = 'dotnet test --solution $(Solution) --no-build --configuration $(BuildConfiguration)' +
+    $testCommand = 'dotnet test --solution OpenRiaServices.slnx --no-build --configuration $(BuildConfiguration)' +
       ' --results-directory "$(TestResultsDirectory)" --report-trx --crashdump --hangdump --hangdump-timeout 20m'
 
     dotnet-coverage collect --settings codecoverage.config --output "$(TestResultsDirectory)\coverage.coverage" $testCommand

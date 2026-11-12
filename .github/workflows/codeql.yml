@@ -42,12 +42,10 @@ jobs:
         queries: +security-and-quality
         config-file: ./.github/codeql/codeql-config.yml
 
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v2
-
     - name: build
       # The analyzers only add noise (and build time) here, CodeQL does the analysis in this workflow
-      run: dotnet build src\OpenRiaServices.slnx --configuration Release -p:RunAnalyzers=false
+      run: dotnet build OpenRiaServices.slnx --configuration Release -p:RunAnalyzers=false
+      working-directory: src
 
     - name: Perform CodeQL Analysis
       uses: github/codeql-action/analyze@v4
