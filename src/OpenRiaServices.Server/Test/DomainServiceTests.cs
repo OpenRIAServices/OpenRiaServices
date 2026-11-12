@@ -39,6 +39,14 @@ namespace OpenRiaServices.Server.Test
             _domainServiceDescription = DomainServiceDescription.GetDescription(_domainService.GetType());
         }
 
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Catalog));
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Catalog));
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.DbCtx.Catalog));
+        }
+
         [TestInitialize]
         public void TestInitialize()
         {
@@ -696,7 +704,6 @@ namespace OpenRiaServices.Server.Test
 
             var catalog = new TestDomainServices.DbCtx.Catalog();
             DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
-            OpenRiaServices.Server.DomainServiceDescription.GetDescription(typeof(TestDomainServices.DbCtx.Catalog));
             catalog.Initialize(ctxt);
 
             var current = new DbContextModels.AdventureWorks.Product()
@@ -723,6 +730,7 @@ namespace OpenRiaServices.Server.Test
             var expectedNotChangedProperties = new[]
             {
                 nameof(EFCoreModels.AdventureWorks.Product.ProductID), // Primary key
+                nameof(EFCoreModels.AdventureWorks.Product.ProductSubcategoryID), // Association
                 nameof(EFCoreModels.AdventureWorks.Product.SafetyStockLevel), // Exclude attribute
                 nameof(EFCoreModels.AdventureWorks.Product.Weight), // Roundtrip original
             };
@@ -744,7 +752,7 @@ namespace OpenRiaServices.Server.Test
 
             string[] actualNotChangedProperties = catalog.DbContext.Entry(current).Properties.Where(p => !p.IsModified).Select(p => p.Metadata.Name).ToArray();
 
-            CollectionAssert.AreEquivalent(expectedNotChangedProperties, actualNotChangedProperties);
+            Assert.AreSequenceEqual(expectedNotChangedProperties, actualNotChangedProperties);
         }
 
         [TestMethod]
