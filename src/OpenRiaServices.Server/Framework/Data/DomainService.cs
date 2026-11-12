@@ -596,14 +596,14 @@ namespace OpenRiaServices.Server
             bool success = true;
             IEnumerable<ChangeSetEntry> operationsToValidate = operations.Where(
                 op => (op.DomainOperationEntry != null && op.Operation != DomainOperation.None)
-                || (op.EntityActions != null && op.EntityActions.Any()));
+                || (op.EntityActions != null && op.EntityActions.Count != 0));
 
             foreach (ChangeSetEntry operation in operationsToValidate)
             {
                 object entity = operation.Entity;
                 DomainOperationEntry domainOperation = operation.DomainOperationEntry;
                 MetaType metaType = MetaType.GetMetaType(entity.GetType());
-                bool hasCustomMethod = operation.EntityActions != null && operation.EntityActions.Any();
+                bool hasCustomMethod = operation.EntityActions != null && operation.EntityActions.Count != 0;
 
                 if (!metaType.RequiresValidation && domainOperation != null && !domainOperation.RequiresValidation && !hasCustomMethod)
                 {
@@ -721,7 +721,7 @@ namespace OpenRiaServices.Server
 
                 // if there is a custom method invocation for this operation
                 // we need to authorize that as well
-                if (op.EntityActions != null && op.EntityActions.Any())
+                if (op.EntityActions != null && op.EntityActions.Count != 0)
                 {
                     foreach (var entityAction in op.EntityActions)
                     {
@@ -800,7 +800,7 @@ namespace OpenRiaServices.Server
                 // if a custom method invocation is specified, validate that the
                 // method exists
                 bool isNamedUpdate = false;
-                if (changeSetEntry.EntityActions != null && changeSetEntry.EntityActions.Any())
+                if (changeSetEntry.EntityActions != null && changeSetEntry.EntityActions.Count != 0)
                 {
                     foreach (var entityAction in changeSetEntry.EntityActions)
                     {
@@ -1064,7 +1064,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         private async Task InvokeCustomOperations()
         {
-            foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Any()))
+            foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Count != 0))
             {
                 foreach (var entityAction in operation.EntityActions)
                 {
