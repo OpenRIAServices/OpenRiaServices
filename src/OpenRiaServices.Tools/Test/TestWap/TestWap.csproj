@@ -4,8 +4,7 @@
     <RootNamespace>TestWap</RootNamespace>
     <AssemblyName>TestWap</AssemblyName>
   </PropertyGroup>
-
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Open*.*Server\Framework\Open*.*Server.csproj" />
+    <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
 </Project>

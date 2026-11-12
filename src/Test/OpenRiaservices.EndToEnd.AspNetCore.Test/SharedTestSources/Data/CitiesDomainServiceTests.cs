@@ -21,30 +21,6 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate() {a();});
         }
 
-#if !ASPNETCORE
-        [TestMethod]
-        [Asynchronous]
-        [Description("Verifies that a custom host is used to host CityDomainService")]
-        [TestCategory("WCF")]
-        public void Cities_VerifyCustomHost()
-        {
-            CityDomainContext dp = new CityDomainContext(TestURIs.Cities);    // Abs URI so runs on desktop too
-
-            InvokeOperation<bool> invokeOp = dp.UsesCustomHost(TestHelperMethods.DefaultOperationAction, null);
-
-            this.EnqueueCompletion(() => invokeOp);
-
-            EnqueueCallback(() =>
-            {
-                if (invokeOp.Error != null)
-                    Assert.Fail("InvokeOperation.Error: " + invokeOp.Error.Message);
-                Assert.IsTrue(invokeOp.Value, "CityDomainService isn't using a custom host.");
-            });
-
-            EnqueueTestComplete();
-        }
-#endif
-
         /// <summary>
         /// Verify that Enum Entity properties are handled properly by testing
         /// both query and update scenarios

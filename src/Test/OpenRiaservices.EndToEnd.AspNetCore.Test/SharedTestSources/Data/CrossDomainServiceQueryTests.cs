@@ -495,22 +495,6 @@ namespace OpenRiaServices.Client.Test
         }
     }
 
-#if !ASPNETCORE
-    [TestClass]
-    public class LTSQueryTests : CrossDomainServiceQueryTests
-    {
-        public LTSQueryTests()
-            : base(TestURIs.LTS_Catalog, ProviderType.LTS)
-        {
-        }
-
-        protected override Northwind CreateNorthwind()
-        {
-            return new Northwind(TestURIs.LTS_Northwind);
-        }
-    }
-#endif
-
     [TestClass]
     public class EFQueryTests : CrossDomainServiceQueryTests
     {

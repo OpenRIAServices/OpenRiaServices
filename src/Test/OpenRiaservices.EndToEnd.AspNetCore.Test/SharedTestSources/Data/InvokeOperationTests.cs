@@ -826,13 +826,12 @@ namespace OpenRiaServices.Client.Test
             {
                 InvokeResult<T> res = await func(value, CancellationToken.None);
                 Assert.AreEqual(value, res.Value, "Value did not round-trip");
-#if ASPNETCORE
+
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("value", value);
                 var getResult = await provider.DomainClient.InvokeAsync(new InvokeArgs("ReturnsString_Online", typeof(T), parameters, hasSideEffects: false), CancellationToken.None);
 
                 Assert.AreEqual(value, getResult.ReturnValue, "GET: value did not round-trip when passed in Uri");
-#endif
             }
         }
 
@@ -886,9 +885,7 @@ namespace OpenRiaServices.Client.Test
         private void VerifyOnlineMethodReturn<T>(TestProvider_Scenarios provider, ReturnTestDelegate<T> testMethod, T inputValue)
         {
             InvokeOperation invoke = null;
-#if ASPNETCORE
             Task<InvokeCompletedResult> getResult = null;
-#endif
 
             EnqueueCallback(delegate
             {
@@ -899,19 +896,15 @@ namespace OpenRiaServices.Client.Test
                 // call invoke operation with the input value
                 invoke = testMethod(inputValue, TestHelperMethods.DefaultOperationAction, null);
 
-#if ASPNETCORE
                 // do the same (try using GET) so parameters are in query string
                 Dictionary<string, object> parameters = new Dictionary<string, object>();
                 parameters.Add("value", inputValue);
                 getResult = provider.DomainClient.InvokeAsync(new InvokeArgs(invoke.OperationName, typeof(T), parameters, hasSideEffects: false), CancellationToken.None);
-#endif
             });
 
             // wait for invoke operation to return. 
             this.EnqueueCompletion(() => invoke);
-#if ASPNETCORE
             this.EnqueueConditional(() => getResult.IsCompleted);
-#endif
             EnqueueCallback(delegate
             {
                 // verify invocation completed succesfully
@@ -920,15 +913,10 @@ namespace OpenRiaServices.Client.Test
 
                 AssertValuesAreEqual(inputValue, invoke.Value);
 
-#if ASPNETCORE
-                Console.WriteLine("Invoke (POST) was successfull");
-
                 InvokeCompletedResult invokeCompleted = getResult.GetAwaiter().GetResult();
                 Assert.HasCount(0, invokeCompleted.ValidationErrors);
 
                 AssertValuesAreEqual(inputValue, invokeCompleted.ReturnValue);
-#endif
-                Console.WriteLine("...Completed");
             });
 
 
