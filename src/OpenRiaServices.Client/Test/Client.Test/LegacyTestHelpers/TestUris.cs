@@ -2,19 +2,14 @@
 
 public static class TestURIs
 {
-#if SILVERLIGHT
-    public static readonly Uri RootURI = System.Windows.Browser.HtmlPage.Document.DocumentUri;
-#elif VBTests
+#if VBTests
     public static readonly Uri RootURI = new Uri("http://localhost:60000/");
-#elif ASPNETCORE
-#if NET10_0
+#elif NET10_0
     public static readonly Uri RootURI = new Uri("http://localhost:5247/");
 #else
     public static readonly Uri RootURI = new Uri("http://localhost:5246/");
 #endif
-#else
-    public static readonly Uri RootURI = new Uri("http://localhost:60002/");
-#endif
+
 
     // Cities
     public static readonly Uri Cities = new Uri(RootURI, "Cities-CityDomainService.svc");

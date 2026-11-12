@@ -22,6 +22,7 @@
     <Project Path="OpenRiaServices.Server/Framework/OpenRiaServices.Server.csproj" />
   </Folder>
   <Folder Name="/Solution Items/">
+    <File Path="../.github/workflows/codeql.yml" />
     <File Path="../.gitignore" />
     <File Path="../azure-pipelines.yml" />
     <File Path="../Changelog.md" />
@@ -39,7 +40,6 @@
   <Folder Name="/Test/Client/">
     <Project Path="OpenRiaServices.Client/Test/Client.External.Test/OpenRiaServices.Client.External.Test.csproj" />
     <Project Path="OpenRiaServices.Client/Test/Client.Test/OpenRiaServices.Client.Test.csproj" />
-    <Project Path="OpenRiaServices.Client/Test/Client.Vb.Test/OpenRiaServices.Client.Vb.Test.csproj" />
     <Project Path="OpenRiaServices.Client/Test/VbDomainClients/VbDomainClients.vbproj" />
     <Project Path="OpenRiaServices.Client/Test/VbExpressions/VbExpressions.vbproj" />
   </Folder>
@@ -49,6 +49,7 @@
     <Project Path="OpenRiaServices.Tools/Test/T4DomainServiceCodeGenerator/T4ClientCodeGenerator.csproj" />
   </Folder>
   <Folder Name="/Test/EndToEnd/">
+    <Project Path="OpenRiaServices.Client/Test/Client.Vb.Test/OpenRiaServices.Client.Vb.Test.csproj" />
     <Project Path="Test/OpenRiaservices.EndToEnd.AspNetCore.Test/OpenRiaservices.EndToEnd.AspNetCore.Test.csproj" />
   </Folder>
   <Folder Name="/Test/Server/">

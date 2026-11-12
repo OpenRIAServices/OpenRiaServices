@@ -10,7 +10,7 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Nerdbank.MessagePack;
-using AspNetCoreWebsite.MessagePack;
+//using AspNetCoreWebsite.MessagePack;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -54,10 +54,11 @@ namespace OpenRiaServices.Client.Test
                 return httpClient;
             };
 
+#if !VBTests
             var msgPackSerializer = new MessagePackSerializer()
             {
                 Converters = [
-                        new XElementConverter()
+                        new AspNetCoreWebsite.MessagePack.XElementConverter()
                     ],
                 ComparerProvider = new CustomComparerProvider()
             };
@@ -67,13 +68,15 @@ namespace OpenRiaServices.Client.Test
                 UseQueryHttpMethod = true,
 
             };
+#endif
             var binary = new BinaryHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory)
             {
                 UseQueryHttpMethod = true,
             };
             var xml = new XmlHttpDomainClientFactory(TestURIs.RootURI, httpClientFactory);
 
-#if NET10_0
+
+#if NET10_0 && !VBTests
             DomainContext.DomainClientFactory = messagePack;
 #else
             DomainContext.DomainClientFactory = binary;
