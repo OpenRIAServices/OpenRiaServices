@@ -70,12 +70,8 @@ The MTP extensions used (trx report, crash dump and hang dump) are added central
 
 ```powershell
 cd src
-dotnet test --solution RiaServices.Tests.slnf --configuration Release
+dotnet test --solution OpenRiaServices.slnx --configuration Release
 ```
-
-`RiaServices.Tests.slnf` is a solution filter listing all test projects; `RiaServices.slnx` cannot be used directly with `dotnet test`
-because it also contains website projects requiring Visual Studio specific MSBuild targets.
-**Remember to add new test projects to `RiaServices.Tests.slnf`**, otherwise they will not run in CI.
 
 A single test project can be run with `dotnet test --project <path to csproj>`, or by simply starting the built `.exe`/`dll`.
 Useful options are `--filter`, `--list-tests`, `--report-trx` and `--max-parallel-test-modules 1` (to disable running test modules in parallel).

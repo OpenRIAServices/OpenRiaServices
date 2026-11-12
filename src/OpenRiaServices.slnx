@@ -32,7 +32,6 @@
     <File Path="Directory.Build.props" />
     <File Path="Directory.Build.targets" />
     <File Path="global.json" />
-    <File Path="RiaServices.Tests.slnf" />
   </Folder>
   <Folder Name="/Test/">
     <Project Path="Test/AspNetCoreWebsite/AspNetCoreWebsite.csproj" />

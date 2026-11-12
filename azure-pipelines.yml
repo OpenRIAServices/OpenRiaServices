@@ -4,7 +4,7 @@ pool:
 variables:
   BuildConfiguration: 'release'
   BuildPlatform: 'any cpu'
-  Solution: 'src\RiaServices.slnx'
+  Solution: 'src\OpenRiaServices.slnx'
   # Msbuild might create logs in the following directory in case some of the "tool" tests fail
   MSBUILDDEBUGPATH: $(Build.ArtifactStagingDirectory)
   RunProcMonDuringTest: false
@@ -40,7 +40,7 @@ steps:
   displayName: 'Use GitVersion'
 
 - task: NuGetCommand@2
-  displayName: 'NuGet restore RiaServices.slnx'
+  displayName: 'NuGet restore OpenRiaServices.slnx'
   inputs:
     restoreSolution: '$(Solution)'
     configuration: '$(BuildConfiguration)'
@@ -62,7 +62,7 @@ steps:
       sonar.cs.vstest.reportsPaths=$(TestResultsDirectory)\**\*.trx
 
 - task: VSBuild@1
-  displayName: 'Build solution RiaServices.slnx'
+  displayName: 'Build solution OpenRiaServices.slnx'
   inputs:
     solution: '$(Solution)'
     platform: '$(BuildPlatform)'

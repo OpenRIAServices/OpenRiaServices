@@ -7,7 +7,7 @@
 #
 #####################################
 
-$sln = "RiaServices.slnx"
+$sln = "OpenRiaServices.slnx"
 $buildCMD = "C:\Program Files (x86)\MSBuild\14.0\Bin\msbuild.exe"
 $covBuild = [string](dir "C:\cov-analysis-*\bin\cov-build.exe" | select -first 1)
 
