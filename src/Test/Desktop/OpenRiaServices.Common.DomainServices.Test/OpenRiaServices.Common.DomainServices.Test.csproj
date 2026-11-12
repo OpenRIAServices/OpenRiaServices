@@ -103,11 +103,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>AdventureWorks.tt</DependentUpon>
     </Compile>
-    <Compile Update="DataModels\AdventureWorks.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>AdventureWorks.dbml</DependentUpon>
-    </Compile>
     <Compile Update="DataModels\AdventureWorks1 - Copy.Designer.cs">
       <DependentUpon>AdventureWorks.edmx</DependentUpon>
       <DesignTime>True</DesignTime>
@@ -253,12 +248,6 @@
     <Content Include="Baselines\Default\Scenarios\EF_Inheritance.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Baselines\Default\Scenarios\LTS_Inheritance.g.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Baselines\Default\Scenarios\GlobalNamespace.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -298,12 +287,6 @@
     <Compile Update="Cities\CityDomainService.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="Cities\CityDomainServiceHost.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Cities\CityDomainServiceHostFactory.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
     <Compile Update="Cities\CityDomainService_AuthRequired.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
@@ -319,20 +302,10 @@
     <Compile Update="Cities\RequiresUserForStateAttribute.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
-    <Compile Update="DataModels\Northwind.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind.dbml</DependentUpon>
-    </Compile>
     <Compile Update="DataModels\Northwind1.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind.edmx</DependentUpon>
-    </Compile>
-    <Compile Update="DataModels\ScenarioModels\LTS_InheritanceScenarios.designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>LTS_InheritanceScenarios.dbml</DependentUpon>
     </Compile>
     <Compile Update="DataModels\ScenarioModels\EF_InheritanceScenarios.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -344,20 +317,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>EF_Northwind_Scenarios.edmx</DependentUpon>
     </Compile>
-    <Compile Update="DataModels\ScenarioModels\Northwind_Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Northwind_Resources.resx</DependentUpon>
-    </Compile>
     <Compile Update="DataModels\ScenarioModels\Northwind_NoFks.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Northwind_NoFks.edmx</DependentUpon>
     </Compile>
     <Compile Update="Mocks\AssociationInheritanceScenarios.cs">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Compile>
-    <Compile Update="Mocks\AuthenticationServices.cs">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Compile>
     <Compile Update="Mocks\ComplexTypeScenarios.cs">
@@ -507,11 +472,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DataModels\AdventureWorks.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <SubType>Designer</SubType>
-      <LastGenOutput>AdventureWorks.designer.cs</LastGenOutput>
-    </None>
     <EntityDeploy Include="DataModels\AdventureWorks.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>AdventureWorks1.Designer.cs</LastGenOutput>
@@ -521,11 +481,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>AdventureWorks.cs</LastGenOutput>
       <DependentUpon>AdventureWorks.edmx</DependentUpon>
-    </None>
-    <None Include="DataModels\Northwind.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>Northwind.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
     </None>
     <EntityDeploy Include="DataModels\Northwind.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -546,12 +501,6 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Northwind.cs</LastGenOutput>
       <DependentUpon>Northwind.edmx</DependentUpon>
-    </None>
-    <None Include="DataModels\ScenarioModels\LTS_InheritanceScenarios.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>LTS_InheritanceScenarios.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-      <CustomToolNamespace>DataTests.Inheritance.LTS</CustomToolNamespace>
     </None>
     <None Include="DataModels\ScenarioModels\Model1.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -574,31 +523,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="DataModels\Northwind.dbml.layout">
-      <DependentUpon>Northwind.dbml</DependentUpon>
-    </None>
     <EntityDeploy Include="DataModels\ScenarioModels\EF_Northwind_Scenarios.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>EF_Northwind_Scenarios.Designer.cs</LastGenOutput>
       <CustomToolNamespace>DataTests.Scenarios.EF.Northwind</CustomToolNamespace>
     </EntityDeploy>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DataModels\AdventureWorks.dbml.layout">
-      <DependentUpon>AdventureWorks.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="DataModels\ScenarioModels\LTS_InheritanceScenarios.dbml.layout">
-      <DependentUpon>LTS_InheritanceScenarios.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Update="DataModels\ScenarioModels\Northwind_Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Northwind_Resources.Designer.cs</LastGenOutput>
-      <CustomToolNamespace>DataTests.Scenarios.LTS.Northwind_ExternalMapping</CustomToolNamespace>
-    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <Compile Remove="Baselines\**\*.cs" />
@@ -617,20 +546,5 @@
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349b6-6b84-4df5-91f0-309beebad82d}" />
-  </ItemGroup>
-  <ItemGroup>
-    <!-- Remove Linq To Sql (LTS) and WCF-only test fixtures. -->
-    <Compile Remove="**\LTS_*.cs" />
-    <Compile Remove="DataModels\AdventureWorks.designer.cs" />
-    <Compile Remove="DataModels\Northwind.designer.cs" />
-    <Compile Remove="DataModels\ScenarioModels\Northwind_Resources.Designer.cs" />
-    <EmbeddedResource Remove="DataModels\ScenarioModels\Northwind_Resources.resx" />
-    <Compile Remove="DataModels\ScenarioModels\BuddyMetadataScenarios.cs" />
-    <!-- WCF related -->
-    <Compile Remove="Cities\CityDomainServiceHost.cs" />
-    <Compile Remove="Cities\CityDomainServiceHostFactory.cs" />
-
-    <!--  AuthenticationServices are added in AspNetCore website instead-->
-    <Compile Remove="Mocks\AuthenticationServices.cs" />
   </ItemGroup>
 </Project>
