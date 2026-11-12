@@ -36,7 +36,7 @@ steps:
   displayName: 'Use GitVersion'
 
 - powershell: |
-    dotnet restore $(Solution) --configuration $(BuildConfiguration)
+    dotnet restore $(Solution)
   displayName: 'dotnet restore OpenRiaServices.slnx'
 
 - task: SonarCloudPrepare@3
