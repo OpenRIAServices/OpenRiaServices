@@ -1,6 +1,5 @@
 ﻿extern alias DomainServices;
 extern alias DomainServicesTests;
-extern alias EFCoreModels;
 extern alias httpDomainClient;
 extern alias WebRia;
 using System;
@@ -659,14 +658,17 @@ namespace OpenRiaServices.Client.Test
                 }
             };
 
+            // verify ArrayLength expressions are translated properly
             IQueryable<DataTests.Northwind.LTS.Category> query = Array.Empty<DataTests.Northwind.LTS.Category>().AsQueryable().Where(p => p.Picture.Length > 0);
             IQueryable<DataTests.Northwind.LTS.Category> query2 = (IQueryable<DataTests.Northwind.LTS.Category>)RoundtripQuery(query, categories.AsQueryable());
             Assert.AreEqual(1, query2.Count());
 
+            // verify ArrayIndex expressions are translated properly
             query = Array.Empty<DataTests.Northwind.LTS.Category>().AsQueryable().Where(p => p.Picture[0] == 1 && p.Picture[1] == 2);
             query2 = (IQueryable<DataTests.Northwind.LTS.Category>)RoundtripQuery(query, categories.AsQueryable());
             Assert.AreEqual(1, query2.Count());
 
+            // verify an expression as the index
             query = Array.Empty<DataTests.Northwind.LTS.Category>().AsQueryable().Where(p => p.Picture[p.CategoryID] == 2);
             query2 = (IQueryable<DataTests.Northwind.LTS.Category>)RoundtripQuery(query, categories.AsQueryable());
             Assert.AreEqual(1, query2.Count());
