@@ -365,7 +365,6 @@ namespace OpenRiaServices.Client.Test
             Northwind ctxt = CreateDomainContext();
             Region region = null;
             Region savedRegion = null;
-            List<Territory> deleted = new List<Territory>();
             SubmitOperation submitOperation = null;
 
             EnqueueConditional(delegate
@@ -456,7 +455,6 @@ namespace OpenRiaServices.Client.Test
         public void CompositionInsert()
         {
             Northwind ctxt = CreateDomainContext();
-            List<Territory> inserted = new List<Territory>();
             int newRegionId = GetUniqueRegionID();
 
             EnqueueConditional(delegate

@@ -1679,7 +1679,6 @@ namespace OpenRiaServices.Client.Test
             Catalog catalog = new Catalog(this.ServiceUri);
             object syncObject = new object();
 
-            List<int> productIDs = new List<int>();
             LoadOperation[] loadOperations = new LoadOperation[numberOfActiveLoadCalls];
 
             // Load 10 products to get 10 product IDs.

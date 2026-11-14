@@ -432,9 +432,6 @@ namespace OpenRiaServices.Client.Test
             DomainClient client = DomainContext.DomainClientFactory.CreateDomainClient(typeof(CityDomainContext.ICityDomainServiceContract), TestURIs.Cities, false);
             client.EntityTypes = new Type[] { typeof(City) };
 
-            List<Entity> emptyList = new List<Entity>();
-            List<Entity> modifiedEntities = new List<Entity>();
-
             // verify exception is thrown when trying to invoke invalid action
             ExceptionHelper.ExpectArgumentException(delegate
             {

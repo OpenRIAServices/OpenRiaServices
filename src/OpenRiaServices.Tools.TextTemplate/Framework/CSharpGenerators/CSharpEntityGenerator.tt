@@ -20,12 +20,10 @@
 	{
 		string methodInvokingName = "On" + customMethod.Name + "Invoking";
         string methodInvokedName = "On" + customMethod.Name + "Invoked";		
-		List<KeyValuePair<string, string>> customMethodParameters = new List<KeyValuePair<string, string>>();
 		List<DomainOperationParameter> domainOperationparameterList = new List<DomainOperationParameter>();
 		for(int i = 1; i < customMethod.Parameters.Count(); i++)
 		{
 			DomainOperationParameter paramInfo = customMethod.Parameters[i];
-			customMethodParameters.Add(new KeyValuePair<string, string>(CodeGenUtilities.GetTypeName(CodeGenUtilities.TranslateType(paramInfo.ParameterType)), paramInfo.Name));
 			domainOperationparameterList.Add(paramInfo);
 		}
 
