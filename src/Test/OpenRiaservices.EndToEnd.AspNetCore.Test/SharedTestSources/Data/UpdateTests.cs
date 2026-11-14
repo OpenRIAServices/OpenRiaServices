@@ -4506,7 +4506,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public void VerifyKeyMembersCannotBeChanged()
         {
-            Northwind ctxt = new Northwind(TestURIs.LTS_Northwind);
+            Northwind ctxt = new Northwind(TestURIs.EFCore_Northwind);
 
             Order_Detail detail = new Order_Detail
             {

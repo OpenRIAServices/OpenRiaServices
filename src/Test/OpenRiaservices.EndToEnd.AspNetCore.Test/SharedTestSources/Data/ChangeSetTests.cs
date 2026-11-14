@@ -584,7 +584,7 @@ namespace OpenRiaServices.Client.Test
         [TestMethod]
         public void UncommitedEntityEdits()
         {
-            Northwind ctxt = new Northwind(TestURIs.LTS_Northwind);
+            Northwind ctxt = new Northwind(TestURIs.EFCore_Northwind);
             Product prod = new Product
             {
                 ProductID = 1,
