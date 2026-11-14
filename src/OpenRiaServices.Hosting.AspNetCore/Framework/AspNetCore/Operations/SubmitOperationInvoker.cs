@@ -49,7 +49,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 {
                     result = await ChangeSetProcessor.ProcessAsync(domainService, changeSetEntries);
                 }
-                catch (Exception ex) when (!ex.IsFatal())
+                catch (Exception ex) when (!OpenRiaServices.ExceptionHandlingUtility.IsFatal(ex))
                 {
                     await WriteError(writer, context, ex, domainService);
                     return;

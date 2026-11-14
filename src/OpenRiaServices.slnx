@@ -1,0 +1,76 @@
+<Solution>
+  <Configurations>
+    <Platform Name="Any CPU" />
+    <Platform Name="x64" />
+    <Platform Name="x86" />
+  </Configurations>
+  <Folder Name="/Framework/" />
+  <Folder Name="/Framework/Client/">
+    <Project Path="OpenRiaServices.Client.DomainClients.Http/Framework/OpenRiaServices.Client.DomainClients.Http.csproj" />
+    <Project Path="OpenRiaServices.Client/Framework/OpenRiaServices.Client.csproj" />
+  </Folder>
+  <Folder Name="/Framework/CodeGen/">
+    <Project Path="OpenRiaServices.Tools.CodeGenTask/OpenRiaServices.Tools.CodeGenTask.csproj" />
+    <Project Path="OpenRiaServices.Tools.TextTemplate/Framework/OpenRiaServices.Tools.TextTemplate.csproj" />
+    <Project Path="OpenRiaServices.Tools/Framework/OpenRiaServices.Tools.csproj" />
+  </Folder>
+  <Folder Name="/Framework/Server/">
+    <Project Path="OpenRiaServices.EntityFramework/Framework/OpenRiaServices.EntityFramework.csproj" />
+    <Project Path="OpenRiaServices.Hosting.AspNetCore/Framework/OpenRiaServices.Hosting.AspNetCore.csproj" />
+    <Project Path="OpenRiaServices.Server.EntityFrameworkCore/Framework/OpenRiaServices.Server.EntityFrameworkCore.csproj" />
+    <Project Path="OpenRiaServices.Server.UnitTesting/Framework/OpenRiaServices.Server.UnitTesting.csproj" />
+    <Project Path="OpenRiaServices.Server/Framework/OpenRiaServices.Server.csproj" />
+  </Folder>
+  <Folder Name="/Solution Items/">
+    <File Path="../.github/workflows/codeql.yml" />
+    <File Path="../.gitignore" />
+    <File Path="../azure-pipelines.yml" />
+    <File Path="../Changelog.md" />
+    <File Path="../README.md" />
+    <File Path=".editorconfig" />
+    <File Path="codecoverage.config" />
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Build.targets" />
+    <File Path="global.json" />
+  </Folder>
+  <Folder Name="/Test/">
+    <Project Path="Test/AspNetCoreWebsite/AspNetCoreWebsite.csproj" />
+  </Folder>
+  <Folder Name="/Test/Client/">
+    <Project Path="OpenRiaServices.Client/Test/Client.External.Test/OpenRiaServices.Client.External.Test.csproj" />
+    <Project Path="OpenRiaServices.Client/Test/Client.Test/OpenRiaServices.Client.Test.csproj" />
+    <Project Path="OpenRiaServices.Client/Test/VbDomainClients/VbDomainClients.vbproj" />
+    <Project Path="OpenRiaServices.Client/Test/VbExpressions/VbExpressions.vbproj" />
+  </Folder>
+  <Folder Name="/Test/CodeGen/">
+    <Project Path="OpenRiaServices.Tools.TextTemplate/Test/OpenRiaServices.Tools.TextTemplate.Test.csproj" />
+    <Project Path="OpenRiaServices.Tools/Test/OpenRiaServices.Tools.Test.csproj" />
+    <Project Path="OpenRiaServices.Tools/Test/T4DomainServiceCodeGenerator/T4ClientCodeGenerator.csproj" />
+  </Folder>
+  <Folder Name="/Test/EndToEnd/">
+    <Project Path="OpenRiaServices.Client/Test/Client.Vb.Test/OpenRiaServices.Client.Vb.Test.csproj" />
+    <Project Path="Test/OpenRiaservices.EndToEnd.AspNetCore.Test/OpenRiaservices.EndToEnd.AspNetCore.Test.csproj" />
+  </Folder>
+  <Folder Name="/Test/Server/">
+    <Project Path="OpenRiaServices.EntityFramework/Test/CodeFirstModel/EFCodeFirstModels.csproj" />
+    <Project Path="OpenRiaServices.EntityFramework/Test/DbContextModel/EFDbContextModels.csproj" />
+    <Project Path="OpenRiaServices.Hosting.AspNetCore/Test/OpenRiaServices.Hosting.AspNetCore.Test/OpenRiaServices.Hosting.AspNetCore.Test.csproj" />
+    <Project Path="OpenRiaServices.Server.EntityFrameworkCore/Test/DbContextModel/EFCoreModels.csproj" />
+    <Project Path="OpenRiaServices.Server.EntityFrameworkCore/Test/OpenRiaServices.Server.EntityFrameworkCore.Test/OpenRiaServices.Server.EntityFrameworkCore.Test.csproj" />
+    <Project Path="OpenRiaServices.Server.UnitTesting/Test/OpenRiaServices.Server.UnitTesting.Test.csproj" />
+    <Project Path="OpenRiaServices.Server/Test/OpenRiaServices.Server.Test.csproj" />
+    <Project Path="Test/Desktop/EFPOCOModels/EFPOCOModels.csproj" />
+    <Project Path="Test/Desktop/OpenRiaServices.Common.DomainServices.Test/OpenRiaServices.Common.DomainServices.Test.csproj" />
+    <Project Path="Test/Desktop/OpenRiaServices.Common.Test/OpenRiaServices.Common.Test.csproj" />
+  </Folder>
+  <Folder Name="/Test/Server/Test Input/">
+    <Project Path="OpenRiaServices.Tools/Test/ClientClassLib/ClientClassLib.csproj" />
+    <Project Path="OpenRiaServices.Tools/Test/ClientClassLib2/ClientClassLib2.csproj" />
+    <Project Path="OpenRiaServices.Tools/Test/ServerClassLib/ServerClassLib.csproj" />
+    <Project Path="OpenRiaServices.Tools/Test/ServerClassLib2/ServerClassLib2.csproj" />
+    <Project Path="OpenRiaServices.Tools/Test/TestWap/TestWap.csproj" />
+  </Folder>
+  <Properties Name="TestCaseManagementSettings" Scope="PostLoad">
+    <Property Name="CategoryFile" Value="Desktop.vsmdi" />
+  </Properties>
+</Solution>

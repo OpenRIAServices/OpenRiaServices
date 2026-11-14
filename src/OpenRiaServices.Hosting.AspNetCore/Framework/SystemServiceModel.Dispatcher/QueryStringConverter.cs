@@ -282,7 +282,7 @@ namespace System.ServiceModel.Dispatcher
                         }
                         catch (TargetInvocationException e)
                         {
-                            if (e.IsFatal())
+                            if (ExceptionHandlingUtility.IsFatal(e))
                                 throw;
                         }
                         catch (MemberAccessException)

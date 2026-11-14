@@ -2,19 +2,12 @@
   <PropertyGroup>
     <RootNamespace>CodeFirstModels</RootNamespace>
     <AssemblyName>CodeFirstModels</AssemblyName>
-    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <DefineConstants>$(DefineConstants);DBCONTEXT</DefineConstants>
     <Version>1.0.0.0</Version>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.2" />
-  </ItemGroup>
-  <ItemGroup Condition="'$(TargetFramework)'=='net472'">
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Security" />
-    <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />

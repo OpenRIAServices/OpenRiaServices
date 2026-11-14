@@ -27,8 +27,6 @@ namespace OpenRiaServices.Server
         internal const int TotalCountUndefined = -1;
         private const int TotalCountEqualsResultSetCount = -2;
 
-        private static IDomainServiceFactory? s_domainServiceFactory;
-
         private ChangeSet? _changeSet;
         private DomainServiceContext? _serviceContext;
         private DomainServiceDescription? _serviceDescription;
@@ -43,29 +41,6 @@ namespace OpenRiaServices.Server
         }
 
         #region Properties
-
-        /// <summary>
-        /// Gets or sets the <see cref="IDomainServiceFactory"/> used to create new <see cref="DomainService"/> instances.
-        /// </summary>
-        public static IDomainServiceFactory Factory
-        {
-            get
-            {
-                if (DomainService.s_domainServiceFactory == null)
-                {
-                    DomainService.s_domainServiceFactory = new DefaultDomainServiceFactory();
-                }
-
-                return DomainService.s_domainServiceFactory;
-            }
-            [Obsolete("Register all domain services and add them to OpenRiaServices.Hosting.Wcf.Configuration.Internal.DomainServiceHostingConfiguration.Current.ServiceProvider")]
-            set
-            {
-                DomainService.s_domainServiceFactory = value;
-            }
-        }
-
-        internal static bool IsDefaultFactory => s_domainServiceFactory is null or DefaultDomainServiceFactory;
 
         /// <summary>
         /// Gets the <see cref="DomainServiceDescription"/> for this <see cref="DomainService"/>.
@@ -621,14 +596,14 @@ namespace OpenRiaServices.Server
             bool success = true;
             IEnumerable<ChangeSetEntry> operationsToValidate = operations.Where(
                 op => (op.DomainOperationEntry != null && op.Operation != DomainOperation.None)
-                || (op.EntityActions != null && op.EntityActions.Any()));
+                || (op.EntityActions != null && op.EntityActions.Count != 0));
 
             foreach (ChangeSetEntry operation in operationsToValidate)
             {
                 object entity = operation.Entity;
                 DomainOperationEntry domainOperation = operation.DomainOperationEntry;
                 MetaType metaType = MetaType.GetMetaType(entity.GetType());
-                bool hasCustomMethod = operation.EntityActions != null && operation.EntityActions.Any();
+                bool hasCustomMethod = operation.EntityActions != null && operation.EntityActions.Count != 0;
 
                 if (!metaType.RequiresValidation && domainOperation != null && !domainOperation.RequiresValidation && !hasCustomMethod)
                 {
@@ -746,7 +721,7 @@ namespace OpenRiaServices.Server
 
                 // if there is a custom method invocation for this operation
                 // we need to authorize that as well
-                if (op.EntityActions != null && op.EntityActions.Any())
+                if (op.EntityActions != null && op.EntityActions.Count != 0)
                 {
                     foreach (var entityAction in op.EntityActions)
                     {
@@ -825,7 +800,7 @@ namespace OpenRiaServices.Server
                 // if a custom method invocation is specified, validate that the
                 // method exists
                 bool isNamedUpdate = false;
-                if (changeSetEntry.EntityActions != null && changeSetEntry.EntityActions.Any())
+                if (changeSetEntry.EntityActions != null && changeSetEntry.EntityActions.Count != 0)
                 {
                     foreach (var entityAction in changeSetEntry.EntityActions)
                     {
@@ -1089,7 +1064,7 @@ namespace OpenRiaServices.Server
         /// </summary>
         private async Task InvokeCustomOperations()
         {
-            foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Any()))
+            foreach (ChangeSetEntry operation in this.ChangeSet.ChangeSetEntries.Where(op => op.EntityActions != null && op.EntityActions.Count != 0))
             {
                 foreach (var entityAction in operation.EntityActions)
                 {
@@ -1278,58 +1253,5 @@ namespace OpenRiaServices.Server
             return new ValueTask<IReadOnlyCollection<T>>(list);
         }
 
-        #region Nested Types
-
-        /// <summary>
-        /// Default <see cref="IDomainServiceFactory"/> implementation.
-        /// </summary>
-        private class DefaultDomainServiceFactory : IDomainServiceFactory
-        {
-            /// <summary>
-            /// Creates a new <see cref="DomainService"/> instance.
-            /// </summary>
-            /// <param name="domainServiceType">The <see cref="Type"/> of <see cref="DomainService"/> to create.</param>
-            /// <param name="context">The current <see cref="DomainServiceContext"/>.</param>
-            /// <returns>A <see cref="DomainService"/> instance.</returns>
-            public DomainService CreateDomainService(Type domainServiceType, DomainServiceContext context)
-            {
-                if (!typeof(DomainService).IsAssignableFrom(domainServiceType))
-                {
-                    throw new ArgumentException(
-                        string.Format(CultureInfo.CurrentCulture, Resource.DomainService_Factory_InvalidDomainServiceType, domainServiceType),
-                        nameof(domainServiceType));
-                }
-
-                DomainService? domainService = null;
-                try
-                {
-                    domainService = (DomainService)Activator.CreateInstance(domainServiceType)!;
-                }
-                catch (TargetInvocationException ex)
-                {
-                    if (ex.InnerException != null)
-                    {
-                        throw ex.InnerException;
-                    }
-
-                    throw;
-                }
-
-                domainService.Initialize(context);
-                return domainService;
-            }
-
-            /// <summary>
-            /// Releases an existing <see cref="DomainService"/> instance.
-            /// </summary>
-            /// <param name="domainService">A <see cref="DomainService"/> instance to release.</param>
-            public void ReleaseDomainService(DomainService domainService)
-            {
-                ArgumentNullException.ThrowIfNull(domainService);
-                domainService.Dispose();
-            }
-        }
-
-        #endregion Nested Types
     }
 }

@@ -14,16 +14,14 @@ using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Client.Test;
 using OpenRiaServices.EntityFramework;
-using OpenRiaServices.Hosting.Wcf;
-using OpenRiaServices.LinqToSql;
 using OpenRiaServices.Server.EntityFrameworkCore;
 using OpenRiaServices.Server.UnitTesting;
+using OpenRiaServices.Hosting.Wcf;
 using TestDomainServices;
+using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.Server.Test
 {
-    using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
-
     /// <summary>
     /// Summary description for DomainServiceTests
     /// </summary>
@@ -39,6 +37,14 @@ namespace OpenRiaServices.Server.Test
             _cityData = new CityData();
             _domainService = new CityDomainService();
             _domainServiceDescription = DomainServiceDescription.GetDescription(_domainService.GetType());
+        }
+
+        [ClassInitialize]
+        public static void ClassInitialize(TestContext context)
+        {
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Catalog));
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Catalog));
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.DbCtx.Catalog));
         }
 
         [TestInitialize]
@@ -110,8 +116,6 @@ namespace OpenRiaServices.Server.Test
         [WorkItem(827125)]
         public void DomainServiceConstructor_ContextAccess()
         {
-            LTSService_ConstructorInit lts = new LTSService_ConstructorInit();
-            Assert.IsNotNull(lts.DataContext.LoadOptions);
 
             EFService_ConstructorInit ef = new EFService_ConstructorInit();
         }
@@ -700,7 +704,6 @@ namespace OpenRiaServices.Server.Test
 
             var catalog = new TestDomainServices.DbCtx.Catalog();
             DomainServiceContext ctxt = new DomainServiceContext(new MockDataService(), new MockUser("mathew"), DomainOperationType.Submit);
-            OpenRiaServices.Server.DomainServiceDescription.GetDescription(typeof(TestDomainServices.DbCtx.Catalog));
             catalog.Initialize(ctxt);
 
             var current = new DbContextModels.AdventureWorks.Product()
@@ -727,6 +730,7 @@ namespace OpenRiaServices.Server.Test
             var expectedNotChangedProperties = new[]
             {
                 nameof(EFCoreModels.AdventureWorks.Product.ProductID), // Primary key
+                nameof(EFCoreModels.AdventureWorks.Product.ProductSubcategoryID), // Association
                 nameof(EFCoreModels.AdventureWorks.Product.SafetyStockLevel), // Exclude attribute
                 nameof(EFCoreModels.AdventureWorks.Product.Weight), // Roundtrip original
             };
@@ -748,7 +752,7 @@ namespace OpenRiaServices.Server.Test
 
             string[] actualNotChangedProperties = catalog.DbContext.Entry(current).Properties.Where(p => !p.IsModified).Select(p => p.Metadata.Name).ToArray();
 
-            CollectionAssert.AreEquivalent(expectedNotChangedProperties, actualNotChangedProperties);
+            Assert.AreSequenceEqual(expectedNotChangedProperties, actualNotChangedProperties);
         }
 
         [TestMethod]
@@ -1319,82 +1323,6 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(1, cityInvokeOp.ValidationErrors.Count());
             UnitTestHelper.AssertListContains<ValidationResultInfo>(cityInvokeOp.ValidationErrors, (e => e.Message == "The field StateName must be a string with a maximum length of 2."));
             Assert.IsNull(city2DeleteOp.ValidationErrors);
-        }
-
-        [TestMethod]
-        [Description("Verifies the behavior of the DomainService.Factory property.")]
-        public void DomainServiceFactory_FactoryPropertyBehavior()
-        {
-            // After setting the DP Factory to null, verify that the property getter does 
-            // not return null.  It should instead return a default factory implementation.
-            IDomainServiceFactory prevFactory = DomainService.Factory;
-            try
-            {
-                DomainService.Factory = null;
-                Assert.IsNotNull(DomainService.Factory);
-
-                // Set the DP Factory to a mock instance and verify the property getter return.
-                IDomainServiceFactory mockFactory = new MockDomainServiceFactory();
-                DomainService.Factory = mockFactory;
-                Assert.AreEqual<IDomainServiceFactory>(mockFactory, DomainService.Factory);
-            }
-            finally
-            {
-                // Be sure to restore the factory!
-                DomainService.Factory = prevFactory;
-            }
-        }
-
-        [TestMethod]
-        [Description("Verifies the default factory behavior of the DomainService.Factory property.")]
-        public void DomainServiceFactory_DefaultFactoryBehavior()
-        {
-            // After setting the DP Factory to null, verify that the property getter does 
-            // not return null.  It should instead return a default factory implementation.
-            IDomainServiceFactory prevFactory = DomainService.Factory;
-            try
-            {
-                DomainService.Factory = null;
-                Assert.IsNotNull(DomainService.Factory);
-
-                // Verify the default factory creates an instance as expected.
-                MockDomainService provider = DomainService.Factory.CreateDomainService(typeof(MockDomainService), null) as MockDomainService;
-                Assert.IsNotNull(provider);
-                Assert.IsTrue(provider.Initialized);
-
-                // Verify the default factory disposed the instance as expected.
-                DomainService.Factory.ReleaseDomainService(provider);
-                Assert.IsTrue(provider.Disposed);
-            }
-            finally
-            {
-                // Be sure to restore the factory!
-                DomainService.Factory = prevFactory;
-            }
-        }
-
-        [TestMethod]
-        [Description("Verifies the default factory throws on invalid DomainService types.")]
-        public void DomainServiceFactory_InvalidDomainServiceType()
-        {
-            // After setting the DP Factory to null, verify that the property getter does 
-            // not return null.  It should instead return a default factory implementation.
-            IDomainServiceFactory prevFactory = DomainService.Factory;
-            try
-            {
-                DomainService.Factory = null;
-                Assert.IsNotNull(DomainService.Factory);
-
-                // Verify the default factory throws as expected
-                ExceptionHelper.ExpectArgumentException(
-                    () => DomainService.Factory.CreateDomainService(typeof(string), null),
-                    string.Format(CultureInfo.CurrentCulture, Resource.DomainService_Factory_InvalidDomainServiceType, typeof(string)) + "\r\nParameter name: domainServiceType");
-            }
-            finally
-            {
-                // Be sure to restore the factory!
-                DomainService.Factory = prevFactory;
-            }
         }
 
         [TestMethod]
@@ -2114,18 +2042,6 @@ namespace OpenRiaServices.Server.Test
     #endregion
 
     [EnableClientAccess]
-    public class LTSService_ConstructorInit : LinqToSqlDomainService<DataTests.Northwind.LTS.NorthwindDataContext>
-    {
-        public LTSService_ConstructorInit()
-        {
-            DataLoadOptions loadOpts = new DataLoadOptions();
-            loadOpts.LoadWith<DataTests.Northwind.LTS.Order>(p => p.Order_Details);
-
-            this.DataContext.LoadOptions = loadOpts;
-        }
-    }
-
-    [EnableClientAccess]
     public class EFService_ConstructorInit : LinqToEntitiesDomainService<NorthwindModel.NorthwindEntities>
     {
         public EFService_ConstructorInit()
@@ -2357,19 +2273,6 @@ namespace OpenRiaServices.Server.Test
         protected override void Dispose(bool disposing)
         {
             this.Disposed = true;
-        }
-    }
-
-    public class MockDomainServiceFactory : IDomainServiceFactory
-    {
-        public DomainService CreateDomainService(Type domainServiceType, DomainServiceContext domainServiceContext)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void ReleaseDomainService(DomainService domainService)
-        {
-            throw new NotImplementedException();
         }
     }
 

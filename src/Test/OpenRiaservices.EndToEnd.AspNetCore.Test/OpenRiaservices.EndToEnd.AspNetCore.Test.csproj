@@ -15,19 +15,6 @@
     <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <Reference Include="Microsoft.VisualBasic" />
-    <Reference Include="PresentationFramework" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Net.Http" />
-    <Reference Include="System.Management" />
-    <Reference Include="System.ServiceModel" />
-    <Reference Include="System.ServiceModel.Web" />
-    <Reference Include="System.Web.Services" />
-    <Reference Include="WindowsBase" />
-  </ItemGroup>
-
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
@@ -48,21 +35,20 @@
 
   <ItemGroup>
     <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\Data\DomainClients\CitiesMockDomainClient.cs" Link="Data\CitiesMockDomainClient.cs" />
-    <Compile Include="..\OpenRiaServices.EndToEnd.Wcf.Test\**\*.cs" Exclude="..\OpenRiaServices.EndToEnd.Wcf.Test\Main.cs;..\OpenRiaServices.EndToEnd.Wcf.Test\bin\**;..\OpenRiaServices.EndToEnd.Wcf.Test\obj\**" LinkBase="Included" />
-    <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\MessageUtilityTests.cs" />
-    <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\Data\WebDomainClientTests.cs" />
-    <Compile Remove="..\OpenRiaServices.EndToEnd.Wcf.Test\IntegrationTests\SoapXmlEndpointTests.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\Data\NorthwindEntityContainer.cs" Link="Included\Data\NorthwindEntityContainer.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\LegacyTestHelpers\OperationAwaiter.cs" Link="Included\OperationAwaiter.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\LegacyTestHelpers\TestUris.cs" Link="Included\TestUris.cs" />
+    <Compile Include="..\..\OpenRiaServices.Client\Test\Client.Test\LegacyTestHelpers\UnitTestBaseExtensions.cs" Link="Included\Utilities\UnitTestBaseExtensions.cs" />
+    <Compile Remove="SharedTestSources\Data\MessageUtilityTests.cs" />
+    <Compile Remove="SharedTestSources\Data\WebDomainClientTests.cs" />
+    <Compile Remove="SharedTestSources\IntegrationTests\SoapXmlEndpointTests.cs" />
     <Compile Include="..\AspNetCoreWebsite\MessagePack\*.cs" LinkBase="Included\MessagePack\" />
     <Compile Remove="..\AspNetCoreWebsite\MessagePack\BinaryConverter.cs" />
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="Data\DomainClients\Cities.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
-    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.cs" Link="Data\DomainClients\Catalog_LTS.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
-    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.cs" Link="Data\DomainClients\Northwind_LTS.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Compile>
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Catalog_EFCore.g.cs" Link="Data\Catalog_EFCore.g.cs" />
+    <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Northwind_EFCore.g.cs" Link="Data\Northwind_EFCore.g.cs" />
     <Compile Include="..\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ComplexTypeScenarios.g.cs" Link="Data\DomainClients\ComplexTypeScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>

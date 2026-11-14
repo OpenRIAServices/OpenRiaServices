@@ -4,10 +4,9 @@
     <EnableMSTestRunner>true</EnableMSTestRunner>
     <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <NoWarn>618</NoWarn>
-    <TargetFrameworks>net472;net10.0</TargetFrameworks>
+    <TargetFramework>net10.0</TargetFramework>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <GenerateBindingRedirectsOutputType>true</GenerateBindingRedirectsOutputType>
-    <DefineConstants Condition="'$(TargetFramework)' == 'net472'">$(DefineConstants);HAS_LINQ2SQL</DefineConstants>
   </PropertyGroup>
 
   <ItemGroup>
@@ -31,10 +30,9 @@
     <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
     <!-- Prevent accidental updgrade since 9.0 seems to add redundant parantheses around long strings split across lines -->
     <PackageReference Include="System.CodeDom" Version="10.0.14" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
   </ItemGroup>
   
-  <ItemGroup Condition="'$(TargetFramework)' != 'net472'">
+  <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Tools.CodeGenTask\OpenRiaServices.Tools.CodeGenTask.csproj" />
     <!-- 17.11.* is the last MSBuild version supporting .NET 8. -->
     <PackageReference Include="Microsoft.Build" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
@@ -43,22 +41,6 @@
     <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="Microsoft.NET.StringTools" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
     <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.*" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <!-- Reference latest build version to work with VS 2026, otherwise we get TypeLoad exceptions due to dependencies being to "old" -->
-    <PackageReference Include="Microsoft.Build" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.NET.StringTools" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <Reference Include="Microsoft.Build.Utilities.v4.0">
-      <Aliases>Unused</Aliases>
-    </Reference>
-    <Reference Include="System.ComponentModel.Composition" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <Reference Include="System.Data.Linq" />
-    <Reference Include="System.Web" />
   </ItemGroup>
   
   <ItemGroup>
@@ -78,24 +60,24 @@
     <ProjectReference Include="T4DomainServiceCodeGenerator\T4ClientCodeGenerator.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Remove="TestWap\**" />
     <Compile Remove="ClientClassLib2\**" />
     <Compile Remove="ClientClassLib\**" />
     <Compile Remove="ServerClassLib2\**" />
     <Compile Remove="ServerClassLib\**" />
     <Compile Remove="T4DomainServiceCodeGenerator\**" />
-    <Compile Remove="TestWap\**" />
+    <EmbeddedResource Remove="TestWap\**" />
     <EmbeddedResource Remove="ClientClassLib2\**" />
     <EmbeddedResource Remove="ClientClassLib\**" />
     <EmbeddedResource Remove="ServerClassLib2\**" />
     <EmbeddedResource Remove="ServerClassLib\**" />
     <EmbeddedResource Remove="T4DomainServiceCodeGenerator\**" />
-    <EmbeddedResource Remove="TestWap\**" />
+    <None Remove="TestWap\**" />
     <None Remove="ClientClassLib2\**" />
     <None Remove="ClientClassLib\**" />
     <None Remove="ServerClassLib2\**" />
     <None Remove="ServerClassLib\**" />
     <None Remove="T4DomainServiceCodeGenerator\**" />
-    <None Remove="TestWap\**" />
   </ItemGroup>
   
 </Project>

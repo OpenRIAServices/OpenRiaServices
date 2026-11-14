@@ -6,8 +6,6 @@ using Microsoft.AspNetCore.Http;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Server;
 
-// WARNING: Keep this file in sync with OpenRiaServices.Hosting
-
 namespace OpenRiaServices.Hosting.Wcf
 {
     internal static class ServiceUtility
@@ -23,7 +21,7 @@ namespace OpenRiaServices.Hosting.Wcf
         /// <returns>The exception to return.</returns>
         internal static DomainServiceFault CreateFaultException(Exception e, OpenRiaServicesOptions options, System.Security.Principal.IPrincipal user)
         {
-            Debug.Assert(!e.IsFatal(), "Fatal exception passed in");
+            Debug.Assert(!OpenRiaServices.ExceptionHandlingUtility.IsFatal(e), "Fatal exception passed in");
             DomainServiceFault fault = new DomainServiceFault();
 
             if (e is DomainException dpe)
