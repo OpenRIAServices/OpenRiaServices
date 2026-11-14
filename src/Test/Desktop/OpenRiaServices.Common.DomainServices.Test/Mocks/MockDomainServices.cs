@@ -204,7 +204,6 @@ namespace TestDomainServices
     /// <summary>
     /// This domain service attempts to declare EFCore description provider with EF6 context
     /// </summary>
-    [EnableClientAccess]
     [OpenRiaServices.Server.EntityFrameworkCore.DbDomainServiceDescriptionProvider(typeof(AdventureWorksModel.AdventureWorksEntities))]
     public class InvalidEfCoreDbDomainServiceDescriptionProviderDS : DomainService
     {
@@ -219,7 +218,6 @@ namespace TestDomainServices
     /// <summary>
     /// This domain service attempts to declare EFCore description provider with EF6 context
     /// </summary>
-    [EnableClientAccess]
     [LinqToEntitiesDomainServiceDescriptionProvider(typeof(EFCoreModels.AdventureWorks.AdventureworksContext))]
     public class InvalidLinqToEntitiesDomainServiceDescriptionProviderDS : DomainService
     {
@@ -234,7 +232,6 @@ namespace TestDomainServices
     /// <summary>
     /// This domain service attempts to declare L2S description provider with a throwing L2S context
     /// </summary>
-    [EnableClientAccess]
     [OpenRiaServices.Server.EntityFrameworkCore.DbDomainServiceDescriptionProvider(typeof(ThrowingDbContext))]
     public class ThrowingDbContexctDS : DomainService
     {

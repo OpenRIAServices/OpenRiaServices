@@ -10,7 +10,6 @@ using System.Runtime.CompilerServices;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Nerdbank.MessagePack;
-//using AspNetCoreWebsite.MessagePack;
 
 namespace OpenRiaServices.Client.Test
 {
