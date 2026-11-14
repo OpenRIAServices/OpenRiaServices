@@ -1,4 +1,4 @@
-﻿extern alias SSmDsClient;
+﻿using EFCoreModels.Northwind;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -6,15 +6,15 @@ namespace OpenRiaServices.Client.Test
     {
         public NorthwindEntityContainer()
         {
-            this.CreateEntitySet<DataTests.Northwind.LTS.Product>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<Product>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
-            this.CreateEntitySet<DataTests.Northwind.LTS.Order>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<Order>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
-            this.CreateEntitySet<DataTests.Northwind.LTS.Order_Detail>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<Order_Detail>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
-            this.CreateEntitySet<DataTests.Northwind.LTS.Customer>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<Customer>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
-            this.CreateEntitySet<DataTests.Northwind.LTS.Category>(((EntitySetOperations.Add | EntitySetOperations.Edit)
+            this.CreateEntitySet<Category>(((EntitySetOperations.Add | EntitySetOperations.Edit)
                             | EntitySetOperations.Remove));
         }
     }

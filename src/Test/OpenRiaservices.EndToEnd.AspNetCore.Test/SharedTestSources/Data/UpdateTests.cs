@@ -5,10 +5,10 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Linq;
 using System.Xml.Linq;
-using DataTests.Northwind.LTS;
+using EFCoreModels.Northwind;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using TestDomainServices.LTS;
+using TestDomainServices.EFCore;
 using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.Client.Test
@@ -4575,9 +4575,9 @@ namespace OpenRiaServices.Client.Test
         public void Bug502481_NullPreviousRef()
         {
             TestEntityContainer ec = new TestEntityContainer();
-            EntitySet employees = ec.GetEntitySet<DataTests.AdventureWorks.LTS.Employee>();
+            EntitySet employees = ec.GetEntitySet<EFCoreModels.AdventureWorks.Employee>();
 
-            DataTests.AdventureWorks.LTS.Employee emp = new DataTests.AdventureWorks.LTS.Employee()
+            EFCoreModels.AdventureWorks.Employee emp = new EFCoreModels.AdventureWorks.Employee()
             {
                 EmployeeID = 100
             };

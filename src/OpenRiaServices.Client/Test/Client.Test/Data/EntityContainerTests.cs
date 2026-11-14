@@ -9,12 +9,12 @@ using System.Globalization;
 using System.Linq;
 using System.Reflection;
 using Cities;
-using DataTests.AdventureWorks.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
+using EFCoreModels.AdventureWorks;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -64,10 +64,10 @@ namespace OpenRiaServices.Client.Test
         public void EntitySet_DetachedDeletedEntity()
         {
             NorthwindEntityContainer ec = new NorthwindEntityContainer();
-            var custs = ec.GetEntitySet<DataTests.Northwind.LTS.Customer>();
-            var orders = ec.GetEntitySet<DataTests.Northwind.LTS.Order>();
+            var custs = ec.GetEntitySet<EFCoreModels.Northwind.Customer>();
+            var orders = ec.GetEntitySet<EFCoreModels.Northwind.Order>();
 
-            DataTests.Northwind.LTS.Customer cust = new DataTests.Northwind.LTS.Customer { CustomerID = "ALFKI" };
+            EFCoreModels.Northwind.Customer cust = new EFCoreModels.Northwind.Customer { CustomerID = "ALFKI" };
             ec.LoadEntities(new Entity[] { cust });
 
             custs.Remove(cust);
@@ -106,14 +106,14 @@ namespace OpenRiaServices.Client.Test
         public void EntityAssociationUpdates_FKUpdatesOnNewEntities()
         {
             NorthwindEntityContainer ec = new NorthwindEntityContainer();
-            var orders = ec.GetEntitySet<DataTests.Northwind.LTS.Order>();
+            var orders = ec.GetEntitySet<EFCoreModels.Northwind.Order>();
 
             // start with an existing customer in cache
-            DataTests.Northwind.LTS.Customer cust = new DataTests.Northwind.LTS.Customer { CustomerID = "ALFKI" };
+            EFCoreModels.Northwind.Customer cust = new EFCoreModels.Northwind.Customer { CustomerID = "ALFKI" };
             ec.LoadEntities(new Entity[] { cust });
 
             // create a new order w/o specifying customer ID
-            DataTests.Northwind.LTS.Order order = new DataTests.Northwind.LTS.Order();
+            EFCoreModels.Northwind.Order order = new EFCoreModels.Northwind.Order();
             orders.Add(order);
 
             // force the reference to cache and verify it is null
@@ -129,7 +129,7 @@ namespace OpenRiaServices.Client.Test
             };
 
             // simulate an accept changes merging in server state
-            DataTests.Northwind.LTS.Order serverOrder = new DataTests.Northwind.LTS.Order() { OrderID = 1, CustomerID = "ALFKI" };
+            EFCoreModels.Northwind.Order serverOrder = new EFCoreModels.Northwind.Order() { OrderID = 1, CustomerID = "ALFKI" };
             order.Merge(serverOrder, LoadBehavior.RefreshCurrent);
 
             ((IChangeTracking)order).AcceptChanges();
@@ -141,7 +141,7 @@ namespace OpenRiaServices.Client.Test
             ec = new NorthwindEntityContainer();
 
             // create a new order
-            order = new DataTests.Northwind.LTS.Order();
+            order = new EFCoreModels.Northwind.Order();
             orders.Add(order);
 
             // force the entity collection to cache
@@ -157,7 +157,7 @@ namespace OpenRiaServices.Client.Test
             };
 
             // simulate an accept changes merging in server state
-            serverOrder = new DataTests.Northwind.LTS.Order() { OrderID = 1 };
+            serverOrder = new EFCoreModels.Northwind.Order() { OrderID = 1 };
             order.Merge(serverOrder, LoadBehavior.RefreshCurrent);
 
             Assert.AreEqual(0, order.Order_Details.Count);
@@ -174,13 +174,13 @@ namespace OpenRiaServices.Client.Test
         public void EntityCollection_DetachedEntity()
         {
             NorthwindEntityContainer ec = new NorthwindEntityContainer();
-            var custs = ec.GetEntitySet<DataTests.Northwind.LTS.Customer>();
-            var orders = ec.GetEntitySet<DataTests.Northwind.LTS.Order>();
+            var custs = ec.GetEntitySet<EFCoreModels.Northwind.Customer>();
+            var orders = ec.GetEntitySet<EFCoreModels.Northwind.Order>();
 
-            DataTests.Northwind.LTS.Customer cust = new DataTests.Northwind.LTS.Customer { CustomerID = "ALFKI" };
+            EFCoreModels.Northwind.Customer cust = new EFCoreModels.Northwind.Customer { CustomerID = "ALFKI" };
             ec.LoadEntities(new Entity[] { cust });
 
-            DataTests.Northwind.LTS.Order o = new DataTests.Northwind.LTS.Order();
+            EFCoreModels.Northwind.Order o = new EFCoreModels.Northwind.Order();
             o.CustomerID = "VINET";
             orders.Add(o);
             Assert.AreEqual(EntityState.New, o.EntityState);
@@ -202,13 +202,13 @@ namespace OpenRiaServices.Client.Test
         public void EntityCollection_DetachedEntity_AssociationUpdates()
         {
             NorthwindEntityContainer ec = new NorthwindEntityContainer();
-            var custs = ec.GetEntitySet<DataTests.Northwind.LTS.Customer>();
-            var orders = ec.GetEntitySet<DataTests.Northwind.LTS.Order>();
+            var custs = ec.GetEntitySet<EFCoreModels.Northwind.Customer>();
+            var orders = ec.GetEntitySet<EFCoreModels.Northwind.Order>();
 
-            DataTests.Northwind.LTS.Customer cust = new DataTests.Northwind.LTS.Customer { CustomerID = "ALFKI" };
+            EFCoreModels.Northwind.Customer cust = new EFCoreModels.Northwind.Customer { CustomerID = "ALFKI" };
             ec.LoadEntities(new Entity[] { cust });
 
-            DataTests.Northwind.LTS.Order o = new DataTests.Northwind.LTS.Order();
+            EFCoreModels.Northwind.Order o = new EFCoreModels.Northwind.Order();
             o.CustomerID = "VINET";
 
             orders.Add(o);
@@ -234,16 +234,16 @@ namespace OpenRiaServices.Client.Test
         public void EntityCollection_AssociationMaintenance_NewEntities()
         {
             NorthwindEntityContainer ec = new NorthwindEntityContainer();
-            var custs = ec.GetEntitySet<DataTests.Northwind.LTS.Customer>();
-            var orders = ec.GetEntitySet<DataTests.Northwind.LTS.Order>();
+            var custs = ec.GetEntitySet<EFCoreModels.Northwind.Customer>();
+            var orders = ec.GetEntitySet<EFCoreModels.Northwind.Order>();
 
-            DataTests.Northwind.LTS.Customer anton = new DataTests.Northwind.LTS.Customer { CustomerID = "ANTON" };
-            DataTests.Northwind.LTS.Customer alfki = new DataTests.Northwind.LTS.Customer { CustomerID = "ALFKI" };
+            EFCoreModels.Northwind.Customer anton = new EFCoreModels.Northwind.Customer { CustomerID = "ANTON" };
+            EFCoreModels.Northwind.Customer alfki = new EFCoreModels.Northwind.Customer { CustomerID = "ALFKI" };
             ec.LoadEntities(new Entity[] { anton, alfki });
             ((IChangeTracking)ec).AcceptChanges();
 
             // create a new order
-            DataTests.Northwind.LTS.Order order = new DataTests.Northwind.LTS.Order();
+            EFCoreModels.Northwind.Order order = new EFCoreModels.Northwind.Order();
             order.Customer = anton;
             orders.Add(order);
 
@@ -255,14 +255,14 @@ namespace OpenRiaServices.Client.Test
             // Do the same test for EntityCollection, verifying that modifying
             // the Parent key members results in the collection being reset
             ec = new NorthwindEntityContainer();
-            custs = ec.GetEntitySet<DataTests.Northwind.LTS.Customer>();
-            orders = ec.GetEntitySet<DataTests.Northwind.LTS.Order>();
+            custs = ec.GetEntitySet<EFCoreModels.Northwind.Customer>();
+            orders = ec.GetEntitySet<EFCoreModels.Northwind.Order>();
 
-            anton = new DataTests.Northwind.LTS.Customer { CustomerID = "ANTON" };
+            anton = new EFCoreModels.Northwind.Customer { CustomerID = "ANTON" };
             custs.Add(anton);
-            anton.Orders.Add(new DataTests.Northwind.LTS.Order());
-            anton.Orders.Add(new DataTests.Northwind.LTS.Order());
-            anton.Orders.Add(new DataTests.Northwind.LTS.Order());
+            anton.Orders.Add(new EFCoreModels.Northwind.Order());
+            anton.Orders.Add(new EFCoreModels.Northwind.Order());
+            anton.Orders.Add(new EFCoreModels.Northwind.Order());
             Assert.AreEqual(3, anton.Orders.Count);
 
             // Setting the PK explicitly on the parent causes all the added
@@ -1656,7 +1656,7 @@ namespace OpenRiaServices.Client.Test
             NorthwindEntityContainer entities = new NorthwindEntityContainer();
 
             // first load a category
-            DataTests.Northwind.LTS.Category category = new DataTests.Northwind.LTS.Category
+            EFCoreModels.Northwind.Category category = new EFCoreModels.Northwind.Category
             {
                 CategoryID = 1,
                 CategoryName = "Frozen Snacks"
@@ -1665,7 +1665,7 @@ namespace OpenRiaServices.Client.Test
 
             // Now attach a product. When attaching, we don't expect the category
             // reference to be loaded.
-            DataTests.Northwind.LTS.Product prod = new DataTests.Northwind.LTS.Product
+            EFCoreModels.Northwind.Product prod = new EFCoreModels.Northwind.Product
             {
                 ProductID = 1,
                 CategoryID = 1,
@@ -1674,12 +1674,12 @@ namespace OpenRiaServices.Client.Test
 
             IEntityRef er = prod.GetEntityRef("Category");
             Assert.IsNull(er);
-            var prodSet = entities.GetEntitySet<DataTests.Northwind.LTS.Product>();
+            var prodSet = entities.GetEntitySet<EFCoreModels.Northwind.Product>();
             prodSet.Attach(prod);
             Assert.IsNull(prod.GetEntityRef("Category"));
 
             // now do the same test for an initialized EntityRef
-            prod = new DataTests.Northwind.LTS.Product
+            prod = new EFCoreModels.Northwind.Product
             {
                 ProductID = 2,
                 CategoryID = 1,
@@ -1699,7 +1699,7 @@ namespace OpenRiaServices.Client.Test
             NorthwindEntityContainer entities = new NorthwindEntityContainer();
 
             // first load a product
-            DataTests.Northwind.LTS.Product prod = new DataTests.Northwind.LTS.Product
+            EFCoreModels.Northwind.Product prod = new EFCoreModels.Northwind.Product
             {
                 ProductID = 1,
                 CategoryID = 1,
@@ -1709,7 +1709,7 @@ namespace OpenRiaServices.Client.Test
 
             // Now attach a category. When attaching, we don't expect the category
             // reference to be loaded.
-            DataTests.Northwind.LTS.Category category = new DataTests.Northwind.LTS.Category
+            EFCoreModels.Northwind.Category category = new EFCoreModels.Northwind.Category
             {
                 CategoryID = 1,
                 CategoryName = "Frozen Snacks"
@@ -1717,7 +1717,7 @@ namespace OpenRiaServices.Client.Test
 
             IEntityCollection ec = category.Products;
             Assert.IsFalse(ec.HasValues);
-            var categorySet = entities.GetEntitySet<DataTests.Northwind.LTS.Category>();
+            var categorySet = entities.GetEntitySet<EFCoreModels.Northwind.Category>();
             categorySet.Attach(category);
             Assert.IsFalse(ec.HasValues);
         }
@@ -4598,7 +4598,7 @@ namespace OpenRiaServices.Client.Test
     public class ChangeTrackingTestContext : DomainContext
     {
         public ChangeTrackingTestContext()
-            : base(DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.LTS_Catalog, false))
+            : base(DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.EFCore.Catalog.ICatalogContract), TestURIs.EFCore_Catalog, false))
         {
 
         }
@@ -4630,7 +4630,7 @@ namespace OpenRiaServices.Client.Test
     public class EventingTestDataContext : DomainContext
     {
         public EventingTestDataContext()
-            : base(DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.RootURI, false))
+            : base(DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.EF.Catalog.ICatalogContract), TestURIs.RootURI, false))
         {
         }
 

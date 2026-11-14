@@ -22,9 +22,6 @@ namespace OpenRiaServices.Tools
         {
             typeof(MetadataTypeAttribute),
             typeof(ScaffoldColumnAttribute),
-#if HAS_LINQ2SQL
-            typeof(ScaffoldTableAttribute),
-#endif
             typeof(SerializableAttribute),
             typeof(System.Diagnostics.CodeAnalysis.SuppressMessageAttribute),
             typeof(System.Diagnostics.DebuggerStepThroughAttribute),

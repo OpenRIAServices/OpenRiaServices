@@ -161,9 +161,6 @@
     <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Baselines\Default\Scenarios\MultipleProviderScenarios.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
@@ -386,28 +383,16 @@
     <Content Include="Baselines\Default\EF\Northwind_EF.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Baselines\Default\EF\Catalog_EF.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\EF\Northwind_EF.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Content Include="Baselines\Default\LTS\Catalog_LTS.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
     <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\EF\Catalog_EFDbCtx.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Baselines\Default\LTS\Northwind_LTS.g.cs">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Mocks\MockCustomers.g.vb">
@@ -426,9 +411,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.vb">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Baselines\Default\Scenarios\LTSNorthwindScenarios.g.vb">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Baselines\Default\Scenarios\TestProvider_Scenarios.g.vb">

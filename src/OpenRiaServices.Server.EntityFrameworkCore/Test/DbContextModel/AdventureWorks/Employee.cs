@@ -40,6 +40,8 @@ namespace EFCoreModels.AdventureWorks
         [Column(TypeName = "smalldatetime")]
         public DateTime ModifiedDate { get; set; }
 
+        public virtual ICollection<Employee> Reports { get; set; } = new HashSet<Employee>();
+        public virtual ICollection<PurchaseOrder> PurchaseOrders { get; set; } = new HashSet<PurchaseOrder>();
         [Include]
         public virtual Employee Manager { get; set; }
         public virtual Contact Contact { get; set; }

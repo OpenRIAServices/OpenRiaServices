@@ -32,6 +32,8 @@
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.AspNetCore.Test\SharedTestSources\Data\TestDataContext.cs" Link="TestDataContext.cs" />
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.AspNetCore.Test\SharedTestSources\Data\TestHelpers.cs" Link="TestHelpers.cs" />
     <Compile Include="..\..\..\Test\OpenRiaservices.EndToEnd.AspNetCore.Test\Usings.cs" Link="Usings.cs" />
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Catalog_EFCore.g.cs" Link="Data\DomainClient\Catalog_EFCore.g.cs" />
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Northwind_EFCore.g.cs" Link="Data\DomainClient\Northwind_EFCore.g.cs" />
     <Compile Include="..\Client.Test\LegacyTestHelpers\UnitTestBaseExtensions.cs" Link="Client.Test\Utilities\UnitTestBaseExtensions.cs" />
     <Compile Include="..\Client.Test\LegacyTestHelpers\OperationAwaiter.cs" Link="Client.Test\OperationAwaiter.cs" />
     <Compile Include="..\Client.Test\LegacyTestHelpers\TestUris.cs" Link="TestUris.cs" />

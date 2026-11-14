@@ -3,6 +3,10 @@
     <OutputType>Exe</OutputType>
     <EnableMSTestRunner>true</EnableMSTestRunner>
     <TargetFrameworks>net472;net10.0-windows</TargetFrameworks>
+    <!-- Keep transitive project references from bypassing the explicit aliases below.
+    This is needed to ensure that model projects are not referenced by the client test project
+    -->
+    <DisableTransitiveProjectReferences>true</DisableTransitiveProjectReferences>
     <Version>1.0.0.0</Version>
     <UseWPF>true</UseWPF>
     <DefineConstants>$(DefineConstants);HAS_COLLECTIONVIEW</DefineConstants>
@@ -23,7 +27,7 @@
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Management" />
     <Reference Include="System.ServiceModel" />
-    <Reference Include="System.Web.Services" />    
+    <Reference Include="System.Web.Services" />
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' != 'net472'">
@@ -31,60 +35,59 @@
     <PackageReference Include="Avalonia.Controls.DataGrid" Version="12.*" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="Data\DomainClients\Cities.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Cities\Cities.g.cs" Link="Data\DomainClient\Cities.g.cs">
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Catalog_LTS.g.cs" Link="Data\DomainClient\Catalog_LTS.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Catalog_EF.g.cs" Link="Data\Catalog_EF.g.cs" />
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Catalog_EFCore.g.cs" Link="Data\DomainClient\Catalog_EFCore.g.cs">
     </Compile>
-    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\LTS\Northwind_LTS.g.cs" Link="Data\DomainClient\Northwind_LTS.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Northwind_EFCore.g.cs" Link="Data\DomainClient\Northwind_EFCore.g.cs">
+    </Compile>
+    <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\EF\Northwind_EF.g.cs" Link="Data\DomainClient\Northwind_EF.g.cs">
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ComplexTypeScenarios.g.cs" Link="Data\DomainClient\ComplexTypeScenarios.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\MockCustomers.g.cs" Link="Data\DomainClient\MockCustomers.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Mocks\ServerSideAsyncDomainService.g.cs" Link="Data\DomainClient\ServerSideAsyncDomainService.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionInheritanceScenarios.g.cs" Link="Data\DomainClient\CompositionInheritanceScenarios.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\CompositionScenarios.g.cs" Link="Data\DomainClient\CompositionScenarios.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\EFDbContextScenarios.g.cs" Link="Data\DomainClient\EFDbContextScenarios.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\IncludeScenariosTestProvider.g.cs" Link="Data\DomainClient\IncludeScenariosTestProvider.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\InheritanceScenarios1.g.cs" Link="Data\DomainClient\InheritanceScenarios1.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\RequiresSecureEndpointScenarios.g.cs" Link="Data\DomainClient\RequiresSecureEndpointScenarios.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\SharedEntities.g.cs" Link="Data\DomainClient\SharedEntities.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\Scenarios\TestProvider_Scenarios.g.cs" Link="Data\DomainClient\TestProvider_Scenarios.g.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Baselines\Default\WebContext\WebContext1.g.cs" Link="Data\DomainClient\WebContext1.g.cs" />
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs" Link="Data\DomainClient\Cities.shared.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\CityData.cs" Link="Data\DomainClient\CityData.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Mock.shared.cs" Link="Data\DomainClient\Mock.shared.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
     <Compile Include="..\..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Shared\Test.shared.cs" Link="Data\DomainClient\Test.shared.cs">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+
     </Compile>
   </ItemGroup>
   <ItemGroup Condition="'$(TargetFramework)' == 'net472'">

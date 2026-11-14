@@ -243,14 +243,6 @@ namespace TestDomainServices
         {
             return (Array.Empty<EFCoreModels.AdventureWorks.Product>()).AsQueryable();
         }
-
-        public sealed class ThrowingDbContext : Microsoft.EntityFrameworkCore.DbContext
-        {
-            public ThrowingDbContext()
-            {
-                throw new InvalidOperationException("error");
-            }
-        }
     }
 
     #endregion // Invalid DomainServices
@@ -1326,11 +1318,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
 
         [Query]
         public IQueryable<MixedType> GetMixedTypes_Predefined(string idToChange, string s, decimal d, DateTime dt, TimeSpan ts, DateTimeOffset dto, IEnumerable<string> strings, Uri uri, Guid g,
-#if HAS_LINQ2SQL
-          Binary b,
-#else
           byte[] b,
-#endif
           XElement x, byte[] bArray, TestEnum en, int[] ints, Dictionary<DateTime, DateTime> dictionaryDateTime, Dictionary<Guid, Guid> dictionaryGuid, Dictionary<String, String> dictionaryString, Dictionary<TestEnum, TestEnum> dictionaryTestEnum, Dictionary<XElement, XElement> dictionaryXElement, Dictionary<DateTimeOffset, DateTimeOffset> dictionaryDateTimeOffset)
         {
             MixedType entity = _data.Values.FirstOrDefault(e => e.ID == idToChange);
@@ -1753,11 +1741,7 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
 
         [Invoke]
         public bool TestPredefined_Online(MixedType entity, string s, decimal d, DateTime dt, TimeSpan ts, IEnumerable<string> strings, Uri uri, Guid g,
-#if HAS_LINQ2SQL
-            Binary b,
-#else
             byte[] b,
-#endif
             XElement x, byte[] bArray, TestEnum en, Guid[] guids, ulong[] ulongs, DateTimeOffset dto)
         {
             entity.StringProp = s;
@@ -5234,50 +5218,6 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
     }
 #endregion
 }
-
-#if HAS_LINQ2SQL
-#region LTS Northwind Scenarios
-
-namespace DataTests.Scenarios.LTS.Northwind
-{
-    [EnableClientAccess]
-    public class LTS_NorthwindScenarios : LinqToSqlDomainService<NorthwindScenarios>
-    {
-#region Bug479436 - Uni-Directional association
-        [Query]
-        public IQueryable<Customer_Bug479436> GetCustomer_Bug479436s()
-        {
-            return DataContext.Customer_Bug479436s;
-        }
-
-        [Query]
-        public IQueryable<Order_Bug479436> GetOrder_Bug479436s()
-        {
-            return DataContext.Order_Bug479436s;
-        }
-#endregion
-
-        [Query]
-        public IEnumerable<RequiredAttributeTestEntity> GetRequiredAttributeTestEntities()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    [MetadataType(typeof(OrderMetadata))]
-    public partial class Order_Bug479436
-    {
-    }
-
-    public class OrderMetadata
-    {
-        [Include]
-        public static object Customer;
-    }
-}
-
-#endregion LTS Northwind Scenarios
-#endif
 
 #region EF Northwind Scenarios
 

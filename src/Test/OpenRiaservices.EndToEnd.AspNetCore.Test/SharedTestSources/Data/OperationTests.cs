@@ -5,7 +5,7 @@ using System.Linq;
 using Cities;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using DataTests.Northwind.LTS;
+using EFCoreModels.Northwind;
 using System.ComponentModel.DataAnnotations;
 using OpenRiaServices.Silverlight.Testing;
 using System.Collections;

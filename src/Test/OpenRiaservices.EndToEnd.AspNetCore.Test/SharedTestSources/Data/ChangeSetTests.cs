@@ -4,11 +4,11 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using DataTests.Northwind.LTS;
+using EFCoreModels.Northwind;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
-using TestDomainServices.LTS;
+using TestDomainServices.EFCore;
 
 namespace OpenRiaServices.Client.Test
 {

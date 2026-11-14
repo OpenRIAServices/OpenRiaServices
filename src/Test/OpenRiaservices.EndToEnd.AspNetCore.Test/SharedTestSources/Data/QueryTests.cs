@@ -12,11 +12,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 using Cities;
-using DataTests.AdventureWorks.LTS;
+using EFCoreModels.AdventureWorks;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using TestDomainServices;
-using TestDomainServices.LTS;
+using TestDomainServices.EFCore;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 
 namespace OpenRiaServices.Client.Test
@@ -234,7 +234,7 @@ namespace OpenRiaServices.Client.Test
             await lo;
             Assert.IsFalse(lo.HasError);
 
-            DataTests.Northwind.LTS.Product prod = nw.Products.Single();
+            EFCoreModels.Northwind.Product prod = nw.Products.Single();
             Assert.AreEqual(5, prod.ProductID);
 
             // next test a query that returns nothing
@@ -842,7 +842,7 @@ namespace OpenRiaServices.Client.Test
             Northwind nw = new Northwind(TestURIs.EFCore_Northwind);
 
             var query = nw.GetOrderDetailsQuery().Take(5);
-            Action<LoadOperation<DataTests.Northwind.LTS.Order_Detail>> action = delegate (LoadOperation<DataTests.Northwind.LTS.Order_Detail> o)
+            Action<LoadOperation<EFCoreModels.Northwind.Order_Detail>> action = delegate (LoadOperation<EFCoreModels.Northwind.Order_Detail> o)
             {
                 if (o.HasError)
                 {
@@ -854,14 +854,14 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(result.Error);
             Assert.AreEqual(LoadBehavior.RefreshCurrent, result.LoadBehavior);
 
-            foreach (DataTests.Northwind.LTS.Order_Detail detail in nw.Order_Details)
+            foreach (EFCoreModels.Northwind.Order_Detail detail in nw.Order_Details)
             {
                 Assert.AreEqual(detail.ProductID, detail.Product.ProductID);
             }
 
             result = nw.Load(query, LoadBehavior.RefreshCurrent, action, "data");
             await result;
-            foreach (DataTests.Northwind.LTS.Order_Detail detail in nw.Order_Details)
+            foreach (EFCoreModels.Northwind.Order_Detail detail in nw.Order_Details)
             {
                 Assert.AreEqual(detail.ProductID, detail.Product.ProductID);
             }

@@ -6,8 +6,8 @@ using System.Linq;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel.DataAnnotations;
-using DataTests.AdventureWorks.LTS;
 using OpenRiaServices.Silverlight.Testing;
+using EFCoreModels.AdventureWorks;
 
 namespace OpenRiaServices.Client.Test
 {

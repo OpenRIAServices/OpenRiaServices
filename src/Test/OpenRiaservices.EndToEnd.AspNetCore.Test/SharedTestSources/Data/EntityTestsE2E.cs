@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using Cities;
-using DataTests.AdventureWorks.LTS;
+using EFCoreModels.AdventureWorks;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
@@ -28,7 +28,7 @@ namespace OpenRiaServices.Client.Test
             List<Employee> employeeList = new List<Employee>();
             ConfigurableEntityContainer container = new ConfigurableEntityContainer();
             container.CreateSet<Employee>(EntitySetOperations.All);
-            var domainClient = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.LTS.Catalog.ICatalogContract), TestURIs.EFCore_Catalog, false);
+            var domainClient = DomainContext.DomainClientFactory.CreateDomainClient(typeof(TestDomainServices.EFCore.Catalog.ICatalogContract), TestURIs.EFCore_Catalog, false);
             ConfigurableDomainContext catalog = new ConfigurableDomainContext(domainClient, container);
 
             var load = catalog.Load(catalog.GetEntityQuery<Employee>("GetEmployees"), throwOnError:false);
