@@ -7,7 +7,7 @@ using MSTest = Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace OpenRiaServices.Server.EntityFrameworkCore.Test
 {
     [TestClass]
-    public class DomainServiceDescriptionTests
+    public class EfCoreDomainServiceDescriptionTests
     {
         /// <summary>
         /// Verify that the EF metadata provider is registered for mapped CTs, and that attribute are inferred properly

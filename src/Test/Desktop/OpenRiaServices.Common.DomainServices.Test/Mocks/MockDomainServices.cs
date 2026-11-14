@@ -200,33 +200,33 @@ namespace TestDomainServices
         }
     }
 
-#if HAS_LINQ2SQL
+
     /// <summary>
-    /// This domain service attempts to declare L2S description provider with EF context
+    /// This domain service attempts to declare EFCore description provider with EF6 context
     /// </summary>
     [EnableClientAccess]
-    [LinqToSqlDomainServiceDescriptionProvider(typeof(AdventureWorksModel.AdventureWorksEntities))]
-    public class InvalidLinqToSqlDomainServiceDescriptionProviderDS : DomainService
+    [OpenRiaServices.Server.EntityFrameworkCore.DbDomainServiceDescriptionProvider(typeof(AdventureWorksModel.AdventureWorksEntities))]
+    public class InvalidEfCoreDbDomainServiceDescriptionProviderDS : DomainService
     {
         [Query]
-        public IQueryable<Product> GetProducts()
+        public IQueryable<AdventureWorksModel.Product> GetProducts()
         {
-            return (Array.Empty<Product>()).AsQueryable();
+            return (Array.Empty<AdventureWorksModel.Product>()).AsQueryable();
         }
     }
 
 
     /// <summary>
-    /// This domain service attempts to declare L2E description provider with L2S context
+    /// This domain service attempts to declare EFCore description provider with EF6 context
     /// </summary>
     [EnableClientAccess]
-    [LinqToEntitiesDomainServiceDescriptionProvider(typeof(AdventureWorks))]
+    [LinqToEntitiesDomainServiceDescriptionProvider(typeof(EFCoreModels.AdventureWorks.AdventureworksContext))]
     public class InvalidLinqToEntitiesDomainServiceDescriptionProviderDS : DomainService
     {
         [Query]
-        public IQueryable<Product> GetProducts()
+        public IQueryable<EFCoreModels.AdventureWorks.Product> GetProducts()
         {
-            return (Array.Empty<Product>()).AsQueryable();
+            return (Array.Empty<EFCoreModels.AdventureWorks.Product>()).AsQueryable();
         }
     }
 
@@ -235,16 +235,24 @@ namespace TestDomainServices
     /// This domain service attempts to declare L2S description provider with a throwing L2S context
     /// </summary>
     [EnableClientAccess]
-    [LinqToSqlDomainServiceDescriptionProvider(typeof(DataContextInstantiationScenarios))]
-    public class LinqToSqlThrowingDataContextDS : DomainService
+    [OpenRiaServices.Server.EntityFrameworkCore.DbDomainServiceDescriptionProvider(typeof(ThrowingDbContext))]
+    public class ThrowingDbContexctDS : DomainService
     {
         [Query]
-        public IQueryable<Product> GetProducts()
+        public IQueryable<EFCoreModels.AdventureWorks.Product> GetProducts()
         {
-            return (Array.Empty<Product>()).AsQueryable();
+            return (Array.Empty<EFCoreModels.AdventureWorks.Product>()).AsQueryable();
+        }
+
+        public sealed class ThrowingDbContext : Microsoft.EntityFrameworkCore.DbContext
+        {
+            public ThrowingDbContext()
+            {
+                throw new InvalidOperationException("error");
+            }
         }
     }
-#endif
+
     #endregion // Invalid DomainServices
 
     #region DomainServices that throw exceptions
@@ -267,39 +275,6 @@ namespace TestDomainServices
             return null;
         }
     }
-
-#if HAS_LINQ2SQL
-    /// <summary>
-    /// This mock LINQ to SQL DomainService throws an exception in its constructor
-    /// </summary>
-    [EnableClientAccess]
-    [ServiceContract(Name = "TestDomainService")]
-    public class ThrowingDomainServiceL2S : LinqToSqlDomainService<AdventureWorks>
-    {
-        public ThrowingDomainServiceL2S()
-        {
-            throw new InvalidOperationException("Couldn't construct this type.");
-        }
-
-        [Query]
-        public IQueryable<Product> GetProducts()
-        {
-            return (Array.Empty<Product>()).AsQueryable();
-        }
-
-        [Query]
-        public IQueryable<PurchaseOrder> GetPurchaseOrders()
-        {
-            return (Array.Empty<PurchaseOrder>()).AsQueryable();
-        }
-
-        [Query]
-        public IQueryable<PurchaseOrderDetail> GetPurchaseOrderDetails()
-        {
-            return (Array.Empty<PurchaseOrderDetail>()).AsQueryable();
-        }
-    }
-#endif
 
     /// <summary>
     /// This mock LINQ to Entities DomainService throws an exception in its constructor

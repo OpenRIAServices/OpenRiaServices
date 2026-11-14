@@ -43,7 +43,8 @@ namespace OpenRiaServices.Server.Test
         [WorkItem(193755)]
         public void DomainServiceDescription_MultipleVersionMembers()
         {
-            ExceptionHelper.ExpectInvalidOperationException(delegate {
+            ExceptionHelper.ExpectInvalidOperationException(delegate
+            {
                 DomainServiceDescription.GetDescription(typeof(DP_Entity_MultipleVersionMembers_DomainService));
             }, string.Format(CultureInfo.CurrentCulture, Resource.DomainServiceDescription_MultipleVersionMembers, typeof(DP_Entity_MultipleVersionMembers)));
         }
@@ -56,7 +57,7 @@ namespace OpenRiaServices.Server.Test
 
             Projections_ValueType p = new Projections_ValueType { ID = 1, P1 = "Mathew" };
             ValidationContext vc = ValidationUtilities.CreateValidationContext(p, null);
-            
+
             List<ValidationResult> results = new List<ValidationResult>();
             ValidationUtilities.TryValidateObject(p, vc, results);
             Assert.IsEmpty(results);
@@ -292,7 +293,7 @@ namespace OpenRiaServices.Server.Test
 
             foreach (Type entityType in dsd.EntityTypes)
             {
-                Assert.Contains(entityType, entityTypes, string.Format("", "DSD exposes EntityType {0}, but the DS does not expose it", entityType.Name));;
+                Assert.Contains(entityType, entityTypes, string.Format("", "DSD exposes EntityType {0}, but the DS does not expose it", entityType.Name)); ;
             }
 
             foreach (Type complexType in dsd.ComplexTypes)
@@ -312,7 +313,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(DomainService_Bug877984));
             PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(Bug877984_TestEntity))["BestFriendName"];
             DataMemberAttribute dma = (DataMemberAttribute)pd.Attributes[typeof(DataMemberAttribute)];
-            Assert.IsNull(dma.Name); 
+            Assert.IsNull(dma.Name);
         }
 
         [TestMethod]
@@ -335,13 +336,6 @@ namespace OpenRiaServices.Server.Test
 
             pd = TypeDescriptor.GetProperties(typeof(AdventureWorksModel.Customer))["SalesTerritoryReference"];
             Assert.IsTrue(LinqToEntitiesTypeDescriptor.ShouldExcludeEntityMember(pd));
-        }
-
-        [TestMethod]
-        public void EFCoreTypeDescriptor_ExcludedEntityMembers()
-        {
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCorePocoEntity_IEntityChangeTracker))["EntityState"];
-            Assert.IsTrue(EntityFrameworkCore.EFCoreTypeDescriptor.ShouldExcludeEntityMember(pd));
         }
 
         /// <summary>
@@ -380,7 +374,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(Bug846250_Service));
             PropertyDescriptorCollection properties = TypeDescriptor.GetProperties(typeof(SpecialOrder));
             Assert.IsNotNull(properties["SpecialData"], "Missing property");
-            
+
             PropertyDescriptor orderDetailsProperty = properties["Order_Details"];
             Assert.IsNotNull(orderDetailsProperty, "Missing inherited property");
             Assert.IsNotNull(orderDetailsProperty.Attributes[typeof(IncludeAttribute)], "Missing [Include] on inherited property");
@@ -409,9 +403,9 @@ namespace OpenRiaServices.Server.Test
         {
             // Scenario 1 -- a hidden intermediate entity uses new.  The visible derived
             // entity is rejected because of that.
-            string errorMessage = string.Format(CultureInfo.CurrentCulture, 
-                                                Resource.Entity_Property_Redefined, 
-                                                typeof(Inherit_Polymorphic_New1_Derived_Visible), 
+            string errorMessage = string.Format(CultureInfo.CurrentCulture,
+                                                Resource.Entity_Property_Redefined,
+                                                typeof(Inherit_Polymorphic_New1_Derived_Visible),
                                                 "BaseProperty",
                                                 typeof(Inherit_Polymorphic_New1_Entity));
             ExceptionHelper.ExpectInvalidOperationException(() => DomainServiceDescription.GetDescription(typeof(Inherit_Polymorphic_New1_DomainService)), errorMessage);
@@ -446,17 +440,17 @@ namespace OpenRiaServices.Server.Test
             editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
             Assert.IsNull(editable);
 
-            // Do the same tests for LTS
+            // Do the same tests for EF Core
             // Verify that key members get Editable(false, AllowInitialValue = true)
-            dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductID"];
+            dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Northwind));
+            pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Product))["ProductID"];
             editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
             Assert.IsNotNull(editable);
             Assert.IsFalse(editable.AllowEdit);
             Assert.IsTrue(editable.AllowInitialValue);
 
             // Verify that key members that are also FK members do NOT get EditableAttribute
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Order_Detail))["OrderID"];
+            pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Order_Detail))["OrderID"];
             assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<EntityAssociationAttribute>().Single();
             Assert.IsTrue(assoc.ThisKeyMembers.Contains("OrderID"));
             editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
@@ -464,7 +458,7 @@ namespace OpenRiaServices.Server.Test
 
             // if an entity has a Timestamp member, it should be marked Editable(false)
             LinqToEntitiesTypeDescriptionContext efContext = new LinqToEntitiesTypeDescriptionContext(typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios));
-            tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity));
+            var tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity));
             LinqToEntitiesTypeDescriptor efTypeDescriptor = new LinqToEntitiesTypeDescriptor(efContext, efContext.GetEdmType(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)), tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)));
             pd = efTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
             Assert.AreEqual("Timestamp", pd.Name);
@@ -493,28 +487,21 @@ namespace OpenRiaServices.Server.Test
             pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Product))["CategoryID"];
             Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
 
-            // For LTS, Verify that all writeable members have RTO applied
-            dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductName"];
+            // Sa,e for EFCore, Verify that all writeable members have RTO applied
+            dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Northwind));
+            pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Product))["ProductName"];
             Assert.IsNotNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
             Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryName"];
+            pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Category))["CategoryName"];
             Assert.IsNull(pd.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
+            Assert.IsNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
 
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["CategoryID"];
+            pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Product))["CategoryID"];
             Assert.IsNotNull(pd.Attributes[typeof(RoundtripOriginalAttribute)]);
 
             // if an entity has a Timestamp member, no other members should be marked RTO
-            LinqToSqlTypeDescriptionContext ltsContext = new LinqToSqlTypeDescriptionContext(typeof(DataTests.Scenarios.LTS.Northwind.NorthwindScenarios));
-            System.Data.Linq.Mapping.MetaType metaType = ltsContext.MetaModel.GetMetaType(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            TypeDescriptionProvider tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
-            LinqToSqlTypeDescriptor ltsTypeDescriptor = new LinqToSqlTypeDescriptor(ltsContext, metaType, tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity)));
-            pd = ltsTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
-            Assert.AreEqual("Timestamp", pd.Name);
-
             LinqToEntitiesTypeDescriptionContext efContext = new LinqToEntitiesTypeDescriptionContext(typeof(DataTests.Scenarios.EF.Northwind.NorthwindEntities_Scenarios));
-            tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.LTS.Northwind.TimestampEntity));
+            var tdp = TypeDescriptor.GetProvider(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity));
             LinqToEntitiesTypeDescriptor efTypeDescriptor = new LinqToEntitiesTypeDescriptor(efContext, efContext.GetEdmType(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)), tdp.GetTypeDescriptor(typeof(DataTests.Scenarios.EF.Northwind.TimestampEntity)));
             pd = efTypeDescriptor.GetProperties().Cast<PropertyDescriptor>().Single(p => p.Attributes[typeof(RoundtripOriginalAttribute)] != null);
             Assert.AreEqual("Timestamp", pd.Name);
@@ -526,10 +513,10 @@ namespace OpenRiaServices.Server.Test
             // Verify that members of EF model marked non Nullable have RequiredAttribute
             var dsd = DomainServiceDescription.GetDescription(typeof(DataTests.Scenarios.EF.Northwind.EF_NorthwindScenarios_RequiredAttribute));
             var properties = TypeDescriptor.GetProperties(typeof(DataTests.Scenarios.EF.Northwind.RequiredAttributeTestEntity));
-            
+
             var property = properties["RequiredString"];
             Assert.IsNotNull(property);
-            var requiredAttribute = (RequiredAttribute) property.Attributes[typeof(RequiredAttribute)];
+            var requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
             Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
 
@@ -550,48 +537,6 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNull(requiredAttribute);
 
             property = properties["OptionalInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            // Verify that members of LTS model marked non Nullable have RequiredAttribute
-            dsd = DomainServiceDescription.GetDescription(typeof(DataTests.Scenarios.LTS.Northwind.LTS_NorthwindScenarios));
-            properties = TypeDescriptor.GetProperties(typeof(DataTests.Scenarios.LTS.Northwind.RequiredAttributeTestEntity));
-            
-            property = properties["RequiredString"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
-
-            property = properties["RequiredStringOverride"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(true, requiredAttribute.AllowEmptyStrings);
-
-            property = properties["RequiredInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            property = properties["RequiredNullableInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
-
-            property = properties["OptionalString"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            property = properties["OptionalInt32"];
-            Assert.IsNotNull(property);
-            requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
-            Assert.IsNull(requiredAttribute);
-
-            property = properties["OptionalNullableInt32"];
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNull(requiredAttribute);
@@ -626,40 +571,22 @@ namespace OpenRiaServices.Server.Test
         public void DatabaseGeneratedAttributeAttribute_DALInference_LTSIdentity()
         {
             // Verify that members that are db generated have the attribute applied, and those that don't do not
-            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductID"];
+            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Northwind));
+            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Product))["ProductID"];
             Attribute dbAttr = GetDatabaseGeneratedAttribute(pd.Attributes);
             Assert.IsNotNull(dbAttr);
             Assert.IsTrue(CompareDatabaseGeneratedOption(dbAttr, "Identity"));
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductName"];
+            pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Product))["ProductName"];
             dbAttr = GetDatabaseGeneratedAttribute(pd.Attributes);
             Assert.IsNull(dbAttr);
 
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryID"];
+            pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Category))["CategoryID"];
             dbAttr = GetDatabaseGeneratedAttribute(pd.Attributes);
             Assert.IsNotNull(dbAttr);
             Assert.IsTrue(CompareDatabaseGeneratedOption(dbAttr, "Identity"));
-            pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryName"];
+            pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Category))["CategoryName"];
             dbAttr = GetDatabaseGeneratedAttribute(pd.Attributes);
             Assert.IsNull(dbAttr);
-        }
-
-        [TestMethod]
-        [Description("Verify that our DAL providers correctly infer and apply DatabaseGeneratedAttribute")]
-        public void DatabaseGeneratedAttributeAttribute_DALInference_LTSComputed()
-        {
-            // Verify that members that are db generated have the attribute applied, and those that don't do not
-            DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Catalog));
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(DataTests.AdventureWorks.LTS.PurchaseOrderDetail))["LineTotal"];
-            Attribute dbAttr = GetDatabaseGeneratedAttribute(pd.Attributes);
-            Assert.IsNotNull(dbAttr);
-            Assert.IsTrue(CompareDatabaseGeneratedOption(dbAttr, "Computed"));
-
-            dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EF.Catalog));
-            pd = TypeDescriptor.GetProperties(typeof(AdventureWorksModel.PurchaseOrderDetail))["LineTotal"];
-            dbAttr = GetDatabaseGeneratedAttribute(pd.Attributes);
-            Assert.IsNotNull(dbAttr);
-            Assert.IsTrue(CompareDatabaseGeneratedOption(dbAttr, "Computed"));
         }
 
         [TestMethod]
@@ -895,9 +822,9 @@ namespace OpenRiaServices.Server.Test
             Assert.AreSame(p1, p2, "TDP didn't cache the properties.");
 
             // First make sure the TDPs are registered for all the entities.
-            DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Northwind));
 
-            categoryType = typeof(DataTests.Northwind.LTS.Category);
+            categoryType = typeof(EFCoreModels.Northwind.Category);
 
             p1 = TypeDescriptor.GetProperties(categoryType);
             p2 = TypeDescriptor.GetProperties(categoryType);
@@ -1107,8 +1034,8 @@ namespace OpenRiaServices.Server.Test
             Assert.AreEqual(typeof(DescriptionProviderB), dsdp.ParentProvider.GetType());
             Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.ParentProvider.GetType());
 
-            dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(TestDomainServices.LTS.Northwind));
-            Assert.AreEqual(typeof(LinqToSqlDomainServiceDescriptionProvider), dsdp.GetType());
+            dsdp = DomainServiceDescription.CreateDescriptionProvider(typeof(TestDomainServices.EFCore.Northwind));
+            Assert.AreEqual(typeof(EntityFrameworkCore.EFCoreDescriptionProvider), dsdp.GetType());
             Assert.AreEqual(typeof(ReflectionDomainServiceDescriptionProvider), dsdp.ParentProvider.GetType());
         }
 
@@ -1222,7 +1149,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(LTSRepositoryTest));
 
             // verify that the correct DAL providers have been registered for the exposed types
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Customer))["CustomerID"];
+            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Customer))["CustomerID"];
             Assert.IsNotNull(pd.Attributes[typeof(KeyAttribute)]);
             pd = TypeDescriptor.GetProperties(typeof(AdventureWorksModel.Department))["DepartmentID"];
             Assert.IsNotNull(pd.Attributes[typeof(KeyAttribute)]);
@@ -1231,8 +1158,8 @@ namespace OpenRiaServices.Server.Test
             // used on a non DAL service
             string expectedMsg = string.Format(CultureInfo.CurrentCulture,
                     "'{0}' cannot be applied to DomainService Type '{1}' because '{1}' does not derive from '{2}'.",
-                    typeof(LinqToSqlDomainServiceDescriptionProviderAttribute).Name, "City", typeof(LinqToSqlDomainService<>).Name);
-            DomainServiceDescriptionProviderAttribute dsdpa = new LinqToSqlDomainServiceDescriptionProviderAttribute();
+                    typeof(EntityFrameworkCore.DbDomainServiceDescriptionProviderAttribute).Name, "City", typeof(EntityFrameworkCore.DbDomainService<>).Name);
+            DomainServiceDescriptionProviderAttribute dsdpa = new EntityFrameworkCore.DbDomainServiceDescriptionProviderAttribute();
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 dsdpa.CreateProvider(typeof(City), null);
@@ -1246,51 +1173,6 @@ namespace OpenRiaServices.Server.Test
             {
                 dsdpa.CreateProvider(typeof(City), null);
             }, expectedMsg);
-        }
-
-        /// <summary>
-        /// Direct tests for the parse method used by the LTS TDP
-        /// </summary>
-        [TestMethod]
-        public void TestLTSDataTypeParsing()
-        {
-            VerifyStringLengthAttribute("NChar(50)", new StringLengthAttribute(50));
-            VerifyStringLengthAttribute("vArchar(50)", new StringLengthAttribute(50));
-            VerifyStringLengthAttribute("char(50)", new StringLengthAttribute(50));
-            VerifyStringLengthAttribute("nVarchar(50)", new StringLengthAttribute(50));
-            VerifyStringLengthAttribute("sdf NChar(50) sdf", null);
-            VerifyStringLengthAttribute("TEXT NOT NULL", null);
-            VerifyStringLengthAttribute("char(50", null);
-            VerifyStringLengthAttribute("nVarchar50)", null);
-            VerifyStringLengthAttribute("", null);
-            VerifyStringLengthAttribute("int", null);
-            VerifyStringLengthAttribute("()(()", null);
-            VerifyStringLengthAttribute("char(ksdf)", null);
-            VerifyStringLengthAttribute("char(max)", null);
-            VerifyStringLengthAttribute("(foo) char(50)", null);
-            VerifyStringLengthAttribute("nvarchar(", null);
-            VerifyStringLengthAttribute(" char(50)", new StringLengthAttribute(50));
-            VerifyStringLengthAttribute("   char(50)", new StringLengthAttribute(50));
-            VerifyStringLengthAttribute(" char(50", null);
-            VerifyStringLengthAttribute("  char(50)  ", new StringLengthAttribute(50));
-            VerifyStringLengthAttribute(" c    ", null);
-            VerifyStringLengthAttribute("nvarchar()", null);
-        }
-
-        private void VerifyStringLengthAttribute(string dbType, StringLengthAttribute expectedAttribute)
-        {
-            List<Attribute> attributes = new List<Attribute>();
-            LinqToSqlTypeDescriptor.InferStringLengthAttribute(dbType, attributes);
-
-            if (expectedAttribute != null)
-            {
-                StringLengthAttribute sla = attributes.Cast<StringLengthAttribute>().Single();
-                Assert.AreEqual(expectedAttribute.MaximumLength, sla.MaximumLength);
-            }
-            else
-            {
-                Assert.IsEmpty(attributes);
-            }
         }
 
         /// <summary>
@@ -1360,7 +1242,7 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void DomainService_InterfaceType()
         {
-            Type t = typeof(IAppDomainSetup);
+            Type t = typeof(ICollection);
             ExceptionHelper.ExpectInvalidOperationException(delegate
             {
                 DomainServiceDescription.GetDescription(t);
@@ -1422,10 +1304,10 @@ namespace OpenRiaServices.Server.Test
         public void DomainServiceDescription_ConcurrencyCheckAttribute()
         {
             // verify that the LTS provider flows OCC metadata
-            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
-            PropertyDescriptor prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Product))["ProductName"];
+            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Northwind));
+            PropertyDescriptor prop = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Product))["ProductName"];
             Assert.IsNotNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
-            prop = TypeDescriptor.GetProperties(typeof(DataTests.Northwind.LTS.Category))["CategoryName"];
+            prop = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Category))["CategoryName"];
             Assert.IsNull(prop.Attributes[typeof(ConcurrencyCheckAttribute)]);
 
             // verify that the EF provider flows OCC metadata
@@ -1523,30 +1405,30 @@ namespace OpenRiaServices.Server.Test
                 switch (op.Name)
                 {
                     case "EntityWithXElement_Custom_AttributeAggregation":
-                        {
-                            Assert.AreEqual(DomainOperation.Custom, op.Operation);
+                    {
+                        Assert.AreEqual(DomainOperation.Custom, op.Operation);
 
-                            var attributes = op.Attributes.OfType<MockAttributeAllowMultiple>();
-                            Assert.AreEqual(6, attributes.Count());
-                            Assert.AreEqual(3, attributes.Count(a => a.Value == "Class"));
-                            Assert.AreEqual(3, attributes.Count(a => a.Value == "Interface"));
-                        }
-                        break;
+                        var attributes = op.Attributes.OfType<MockAttributeAllowMultiple>();
+                        Assert.AreEqual(6, attributes.Count());
+                        Assert.AreEqual(3, attributes.Count(a => a.Value == "Class"));
+                        Assert.AreEqual(3, attributes.Count(a => a.Value == "Interface"));
+                    }
+                    break;
                     case "EntityWithXElement_Custom_AttributeOverrides":
-                        {
-                            Assert.AreEqual(DomainOperation.Custom, op.Operation);
+                    {
+                        Assert.AreEqual(DomainOperation.Custom, op.Operation);
 
-                            var attributes = op.Attributes.OfType<MockAttributeAllowOnce>();
-                            Assert.AreEqual(1, attributes.Count());
-                            Assert.AreEqual(1, attributes.Count(a => a.Value == "Class"));
-                            Assert.AreEqual(0, attributes.Count(a => a.Value == "Interface"));
+                        var attributes = op.Attributes.OfType<MockAttributeAllowOnce>();
+                        Assert.AreEqual(1, attributes.Count());
+                        Assert.AreEqual(1, attributes.Count(a => a.Value == "Class"));
+                        Assert.AreEqual(0, attributes.Count(a => a.Value == "Interface"));
 
-                            var attributes_interfaceOnly = op.Attributes.OfType<MockAttributeAllowOnce_AppliedToInterfaceOnly>();
-                            Assert.AreEqual(1, attributes_interfaceOnly.Count());
-                            Assert.AreEqual(0, attributes_interfaceOnly.Count(a => a.Value == "Class"));
-                            Assert.AreEqual(1, attributes_interfaceOnly.Count(a => a.Value == "Interface"));
-                        }
-                        break;
+                        var attributes_interfaceOnly = op.Attributes.OfType<MockAttributeAllowOnce_AppliedToInterfaceOnly>();
+                        Assert.AreEqual(1, attributes_interfaceOnly.Count());
+                        Assert.AreEqual(0, attributes_interfaceOnly.Count(a => a.Value == "Class"));
+                        Assert.AreEqual(1, attributes_interfaceOnly.Count(a => a.Value == "Interface"));
+                    }
+                    break;
                     case "EntityWithXElement_Delete":
                         Assert.AreEqual(DomainOperation.Delete, op.Operation);
                         break;
@@ -1844,16 +1726,16 @@ namespace OpenRiaServices.Server.Test
         [TestMethod]
         public void ProjectionInclude_TestPropertyDescriptor()
         {
-            DataTests.Northwind.LTS.Product product = new DataTests.Northwind.LTS.Product
+            EFCoreModels.Northwind.Product product = new EFCoreModels.Northwind.Product
             {
                 ProductID = 1
             };
-            DataTests.Northwind.LTS.Category category = new DataTests.Northwind.LTS.Category
+            EFCoreModels.Northwind.Category category = new EFCoreModels.Northwind.Category
             {
                 CategoryID = 1,
                 CategoryName = "Frozen Treats"
             };
-            DataTests.Northwind.LTS.Supplier supplier = new DataTests.Northwind.LTS.Supplier
+            EFCoreModels.Northwind.Supplier supplier = new EFCoreModels.Northwind.Supplier
             {
                 SupplierID = 1,
                 CompanyName = "The Treat Factory"
@@ -1861,14 +1743,14 @@ namespace OpenRiaServices.Server.Test
             product.Category = category;
             product.Supplier = supplier;
 
-            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Northwind));
+            DomainServiceDescription desc = DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Northwind));
             desc.Initialize();
 
             PropertyDescriptor supplierName = TypeDescriptor.GetProperties(product)["SupplierName"];
             Assert.IsNotNull(supplierName);
             Assert.AreEqual(supplier.CompanyName, supplierName.GetValue(product));
             Assert.AreEqual(typeof(string), supplierName.PropertyType);
-            Assert.AreEqual(typeof(DataTests.Northwind.LTS.Product), supplierName.ComponentType);
+            Assert.AreEqual(typeof(EFCoreModels.Northwind.Product), supplierName.ComponentType);
             Assert.IsFalse(supplierName.CanResetValue(product));
             Assert.IsTrue(supplierName.IsReadOnly);
             Assert.IsTrue(supplierName.ShouldSerializeValue(product));
@@ -1994,9 +1876,9 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
-        public void TestLinqToSqlDomainServiceDescription()
+        public void TestEfCorelDomainServiceDescription()
         {
-            ValidateMetadata(typeof(TestDomainServices.LTS.Catalog), CatalogEntities);
+            ValidateMetadata(typeof(TestDomainServices.EFCore.Catalog), CatalogEntities);
         }
 
         [TestMethod]
@@ -2006,41 +1888,33 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
-        [Description("This test makes sure we can obtain an error message for invalid LinqToSqlDomainServiceDescriptionProviderAttribute")]
-        public void TestLinqToSqlInvalidDescriptionProvider()
+        [Description("This test makes sure we can obtain an error message for invalid type to EntityFrameworkCore.DbDomainServiceDescriptionProviderAttribute")]
+        public void InvalidTypeDescriptionProviderType_EfCore()
         {
             ExceptionHelper.ExpectInvalidOperationException(() =>
                 {
-                    ValidateMetadata(typeof(InvalidLinqToSqlDomainServiceDescriptionProviderDS), CatalogEntities);
+                    ValidateMetadata(typeof(InvalidEfCoreDbDomainServiceDescriptionProviderDS), CatalogEntities);
                 },
-                string.Format(OpenRiaServices.LinqToSql.Resource.InvalidLinqToSqlDomainServiceDescriptionProviderSpecification,
+                string.Format(EntityFrameworkCore.DbResource.InvalidDbDomainServiceDescriptionProviderSpecification,
                     typeof(AdventureWorksModel.AdventureWorksEntities))
                 );
 
             ExceptionHelper.ExpectInvalidOperationException(() =>
             {
-                ValidateMetadata(typeof(LinqToSqlThrowingDataContextDS), CatalogEntities);
+                ValidateMetadata(typeof(ThrowingDbContexctDS), CatalogEntities);
             }, "error");
         }
 
         [TestMethod]
-        [Description("This test makes sure we can obtain an error message for invalid LinqToEntitiesDomainServiceDescriptionProviderAttribute")]
-        public void TestLinqToEntitiesInvalidDescriptionProvider()
+        [Description("This test makes sure we can obtain an error message for invalid type to LinqToEntitiesDomainServiceDescriptionProviderAttribute")]
+        public void InvalidTypeDescriptionProviderType_EF6()
         {
             ExceptionHelper.ExpectInvalidOperationException(() =>
             {
                 ValidateMetadata(typeof(InvalidLinqToEntitiesDomainServiceDescriptionProviderDS), CatalogEntities);
             },
-                                                           string.Format(OpenRiaServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
-                                                               typeof(DataTests.AdventureWorks.LTS.AdventureWorks))
-                );
-        }
-
-        [TestMethod]
-        [Description("This test makes sure we can obtain a description without instantiating L2S DomainService")]
-        public void TestLinqToSqlDomainServiceNotInstantiated()
-        {
-            ValidateMetadata(typeof(ThrowingDomainServiceL2S), CatalogEntities);
+            string.Format(OpenRiaServices.EntityFramework.Resource.InvalidLinqToEntitiesDomainServiceDescriptionProviderSpecification,
+                    typeof(EFCoreModels.AdventureWorks.AdventureworksContext)));
         }
 
         [TestMethod]
@@ -2051,26 +1925,26 @@ namespace OpenRiaServices.Server.Test
         }
 
         [TestMethod]
-        public void TestAssociationExtensionAttributes_LTS()
+        public void TestAssociationExtensionAttributes_EFCore()
         {
-            VerifyAdventureWorksAssociations(typeof(TestDomainServices.LTS.Catalog));
+            VerifyAdventureWorksAssociations(typeof(TestDomainServices.EFCore.Catalog), true);
         }
 
         [TestMethod]
         public void TestAssociationExtensionAttributes_EF()
         {
-            VerifyAdventureWorksAssociations(typeof(TestDomainServices.EF.Catalog));
+            VerifyAdventureWorksAssociations(typeof(TestDomainServices.EF.Catalog), false);
         }
 
-        private void VerifyAdventureWorksAssociations(Type providerType)
+        private void VerifyAdventureWorksAssociations(Type domainServiceType, bool efCore)
         {
-            DomainServiceDescription d = DomainServiceDescription.GetDescription(providerType);
+            DomainServiceDescription d = DomainServiceDescription.GetDescription(domainServiceType);
 
             #region Verify bidirectional PurchaseOrder/PurchaseOrderDetail association
             // verify PurchaseOrder.PurchaseOrderDetails association
             Type entityType = d.EntityTypes.Single(p => p.Name == "PurchaseOrder");
             EntityAssociationAttribute expected = new EntityAssociationAttribute(
-                "PurchaseOrder_PurchaseOrderDetail",
+                efCore ? "FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID" : "PurchaseOrder_PurchaseOrderDetail",
                 "PurchaseOrderID",
                 "PurchaseOrderID"
             );
@@ -2080,7 +1954,7 @@ namespace OpenRiaServices.Server.Test
             // verify PurchaseOrderDetail.PurchaseOrder association
             entityType = d.EntityTypes.Single(p => p.Name == "PurchaseOrderDetail");
             expected = new EntityAssociationAttribute(
-                "PurchaseOrder_PurchaseOrderDetail",
+                efCore ? "FK_PurchaseOrderDetail_PurchaseOrderHeader_PurchaseOrderID" : "PurchaseOrder_PurchaseOrderDetail",
                 "PurchaseOrderID",
                 "PurchaseOrderID"
             );
@@ -2092,7 +1966,7 @@ namespace OpenRiaServices.Server.Test
             // verify Product.PurchaseOrderDetails association
             entityType = d.EntityTypes.Single(p => p.Name == "Product");
             expected = new EntityAssociationAttribute(
-                "Product_PurchaseOrderDetail",
+                efCore ? "FK_PurchaseOrderDetail_Product_ProductID" : "Product_PurchaseOrderDetail",
                 "ProductID",
                 "ProductID"
             );
@@ -2102,7 +1976,7 @@ namespace OpenRiaServices.Server.Test
             // verify PurchaseOrderDetail.Product association
             entityType = d.EntityTypes.Single(p => p.Name == "PurchaseOrderDetail");
             expected = new EntityAssociationAttribute(
-                "Product_PurchaseOrderDetail",
+                efCore ? "FK_PurchaseOrderDetail_Product_ProductID" : "Product_PurchaseOrderDetail", 
                 "ProductID",
                 "ProductID"
             );
@@ -2162,7 +2036,7 @@ namespace OpenRiaServices.Server.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            exceptionMsg = string.Format(Resource.CyclicMetadataTypeAttributesFound, typeof(TestDomainServices.EntityWithCyclicMetadataTypeAttributeA).FullName); 
+            exceptionMsg = string.Format(Resource.CyclicMetadataTypeAttributesFound, typeof(TestDomainServices.EntityWithCyclicMetadataTypeAttributeA).FullName);
             Assert.AreEqual(exceptionMsg, expectedException.Message);
 
             expectedException = null;
@@ -2175,7 +2049,7 @@ namespace OpenRiaServices.Server.Test
                 expectedException = e;
             }
             Assert.IsNotNull(expectedException);
-            exceptionMsg= string.Format(Resource.CyclicMetadataTypeAttributesFound, typeof(TestDomainServices.EntityWithSelfReferencingcMetadataTypeAttribute).FullName);
+            exceptionMsg = string.Format(Resource.CyclicMetadataTypeAttributesFound, typeof(TestDomainServices.EntityWithSelfReferencingcMetadataTypeAttribute).FullName);
             Assert.AreEqual(exceptionMsg, expectedException.Message);
         }
 
@@ -2521,7 +2395,7 @@ namespace OpenRiaServices.Server.Test
         private static EntityMetadata[] CityEntities = {
 
             new EntityMetadata() {
-                Name="City", 
+                Name="City",
                 Properties=new PropertyMetadata[] {
                   new PropertyMetadata() {Name="Name", Attributes= new AttributeMetadata[] {
                       new AttributeMetadata {Name="KeyAttribute"}}
@@ -2529,7 +2403,7 @@ namespace OpenRiaServices.Server.Test
                   new PropertyMetadata() {Name="CountyName", Attributes=new AttributeMetadata[] {
                           new AttributeMetadata {Name="KeyAttribute" }
                     }
-                  }, 
+                  },
                   new PropertyMetadata() {Name="StateName", Attributes=new AttributeMetadata[] {
                           new AttributeMetadata {Name="KeyAttribute" }
                     }
@@ -2538,7 +2412,7 @@ namespace OpenRiaServices.Server.Test
              },
 
             new EntityMetadata() {
-                Name="County", 
+                Name="County",
                 Properties=new PropertyMetadata[] {
                   new PropertyMetadata() {Name="Name", Attributes= new AttributeMetadata[] {
                           new AttributeMetadata {Name="KeyAttribute"}
@@ -2552,7 +2426,7 @@ namespace OpenRiaServices.Server.Test
             },
 
              new EntityMetadata() {
-                Name="State", 
+                Name="State",
                 Properties=new PropertyMetadata[] {
                   new PropertyMetadata() {Name="Name", Attributes= new AttributeMetadata[] {
                           new AttributeMetadata {Name="KeyAttribute"}
@@ -2564,10 +2438,10 @@ namespace OpenRiaServices.Server.Test
                   }
                 },
              },
-              
+
              new EntityMetadata() {
-                Name="Zip", 
-                Properties=new PropertyMetadata[] 
+                Name="Zip",
+                Properties=new PropertyMetadata[]
                 { new PropertyMetadata() {Name="Code", Attributes= new AttributeMetadata[] {
                           new AttributeMetadata {Name="KeyAttribute"}
                     }
@@ -2576,7 +2450,7 @@ namespace OpenRiaServices.Server.Test
                           new AttributeMetadata {Name="KeyAttribute" }
                     }
                   },
-                    
+
                   new PropertyMetadata() {Name="CityName", Attributes=Array.Empty<AttributeMetadata>() },
                   new PropertyMetadata() {Name="CountyName", Attributes=Array.Empty<AttributeMetadata>() },
                   new PropertyMetadata() {Name="StateName", Attributes=Array.Empty<AttributeMetadata>() }
@@ -2585,11 +2459,11 @@ namespace OpenRiaServices.Server.Test
           };
 
 
-        private static EntityMetadata[] CatalogEntities = 
+        private static EntityMetadata[] CatalogEntities =
         {
             new EntityMetadata() {
-                Name="Product", 
-                Properties=new PropertyMetadata[] 
+                Name="Product",
+                Properties=new PropertyMetadata[]
                 { new PropertyMetadata() {Name="ProductID", Attributes= new AttributeMetadata[]
                         { new AttributeMetadata {Name="KeyAttribute"} } },
                   new PropertyMetadata() {Name="Weight", Attributes= new AttributeMetadata[]          // Nullable field
@@ -2605,15 +2479,15 @@ namespace OpenRiaServices.Server.Test
                 }
             },
             new EntityMetadata() {
-                Name="PurchaseOrder", 
-                Properties=new PropertyMetadata[] 
+                Name="PurchaseOrder",
+                Properties=new PropertyMetadata[]
                 { new PropertyMetadata() {Name="PurchaseOrderID", Attributes= new AttributeMetadata[]
                         { new AttributeMetadata {Name="KeyAttribute"} } },
                 }
             },
             new EntityMetadata() {
-                Name="PurchaseOrderDetail", 
-                Properties=new PropertyMetadata[] 
+                Name="PurchaseOrderDetail",
+                Properties=new PropertyMetadata[]
                 { new PropertyMetadata() {Name="PurchaseOrderID", Attributes= new AttributeMetadata[]
                         { new AttributeMetadata {Name="KeyAttribute"},
                            } },
@@ -2949,154 +2823,6 @@ namespace OpenRiaServices.Server.Test
             get { throw new NotImplementedException(); }
         }
     }
-
-    public class EFCorePocoEntity_IEntityChangeTracker : IChangeDetector
-    {
-#if NETFRAMEWORK
-        void IChangeDetector.DetectChanges(IStateManager stateManager)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.DetectChanges(InternalEntityEntry entry)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.PropertyChanged(InternalEntityEntry entry, IPropertyBase propertyBase, bool setModified)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.PropertyChanging(InternalEntityEntry entry, IPropertyBase propertyBase)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.Resume()
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.Suspend()
-        {
-            throw new NotImplementedException();
-        }
-
-        public Microsoft.EntityFrameworkCore.EntityState EntityState
-        {
-            get { throw new NotImplementedException(); }
-        }
-#else
-        event EventHandler<DetectEntityChangesEventArgs> IChangeDetector.DetectingEntityChanges
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        event EventHandler<DetectChangesEventArgs> IChangeDetector.DetectingAllChanges
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        event EventHandler<DetectedEntityChangesEventArgs> IChangeDetector.DetectedEntityChanges
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        event EventHandler<DetectedChangesEventArgs> IChangeDetector.DetectedAllChanges
-        {
-            add
-            {
-                throw new NotImplementedException();
-            }
-
-            remove
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        (EventHandler<DetectChangesEventArgs> DetectingAllChanges, EventHandler<DetectedChangesEventArgs> DetectedAllChanges, EventHandler<DetectEntityChangesEventArgs> DetectingEntityChanges, EventHandler<DetectedEntityChangesEventArgs> DetectedEntityChanges) IChangeDetector.CaptureEvents()
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.DetectChanges(IStateManager stateManager)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.DetectChanges(InternalEntityEntry entry)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.OnDetectedAllChanges(IStateManager stateManager, bool changesFound)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.OnDetectedEntityChanges(InternalEntityEntry internalEntityEntry, bool changesFound)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.OnDetectingAllChanges(IStateManager stateManager)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.OnDetectingEntityChanges(InternalEntityEntry internalEntityEntry)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.PropertyChanged(InternalEntityEntry entry, IPropertyBase propertyBase, bool setModified)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.PropertyChanging(InternalEntityEntry entry, IPropertyBase propertyBase)
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.ResetState()
-        {
-            throw new NotImplementedException();
-        }
-
-        void IChangeDetector.SetEvents(EventHandler<DetectChangesEventArgs> detectingAllChanges, EventHandler<DetectedChangesEventArgs> detectedAllChanges, EventHandler<DetectEntityChangesEventArgs> detectingEntityChanges, EventHandler<DetectedEntityChangesEventArgs> detectedEntityChanges)
-        {
-            throw new NotImplementedException();
-        }
-#endif
-    }
-
 
     #region DomainServiceDescriptionProvider samples
     /// <summary>
@@ -3636,9 +3362,9 @@ namespace OpenRiaServices.Server.Test
     public class Bug877984_TestEntity
     {
         [Key]
-        public int ID { get;set; }
+        public int ID { get; set; }
 
-        public int BesetFriendID { get;set; }
+        public int BesetFriendID { get; set; }
 
         [DataMember(Name = "Name")]
         public string PersonName { get; set; }
@@ -4092,7 +3818,7 @@ namespace Derived_Composition_Types
         [Key]
         public int ID { get; set; }
 
-        [Association("P1_C1", "ID", "ID", IsForeignKey=true)]
+        [Association("P1_C1", "ID", "ID", IsForeignKey = true)]
         public P1 P1 { get { return null; } set { } }
     }
 
