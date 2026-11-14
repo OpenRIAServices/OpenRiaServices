@@ -1,5 +1,4 @@
-﻿extern alias SSmDsClient;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
@@ -12,7 +11,6 @@ using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
-using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
 using TestDescription = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using EFCoreModels.AdventureWorks;
 
