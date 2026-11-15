@@ -76,12 +76,12 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNotNull(invoke.Error);
             Assert.AreSame(myState, invoke.UserState);
 
-            CollectionAssert.AreEqual(validationErrors, (ICollection)invoke.ValidationErrors);
+            Assert.AreSequenceEqual(validationErrors, (ICollection)invoke.ValidationErrors);
 
             // verify the exception properties
             var ex = (DomainOperationException)invoke.Error;
             Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
-            CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
+            Assert.AreSequenceEqual(validationErrors, (ICollection)ex.ValidationErrors);
             Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"), ex.Message);
         }
 
@@ -167,7 +167,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the exception properties
             Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
-            CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
+            Assert.AreSequenceEqual(validationErrors, (ICollection)ex.ValidationErrors);
         }
 
         /// <summary>
@@ -237,7 +237,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.AreSame(myState, loadOperation.UserState);
 
-            CollectionAssert.AreEqual(validationErrors, (ICollection)loadOperation.ValidationErrors);
+            Assert.AreSequenceEqual(validationErrors, (ICollection)loadOperation.ValidationErrors);
 
             // verify the exception properties
             var ex = loadOperation.Error as DomainOperationException;
@@ -310,7 +310,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the exception properties
             Assert.AreEqual(OperationErrorStatus.ValidationFailed, ex.Status);
-            CollectionAssert.AreEqual(validationErrors, (ICollection)ex.ValidationErrors);
+            Assert.AreSequenceEqual(validationErrors, (ICollection)ex.ValidationErrors);
         }
 
         [TestMethod]

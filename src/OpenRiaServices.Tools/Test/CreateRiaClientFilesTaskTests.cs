@@ -382,7 +382,7 @@ namespace OpenRiaServices.Tools.Test
                 }
                 else
                 {
-                    CollectionAssert.AreEqual(Array.Empty<string>(), copiedFilesFromTask, "No files should have been copied");
+                    Assert.AreSequenceEqual(Array.Empty<string>(), copiedFilesFromTask, "No files should have been copied");
                 }
 
                 // ---------------------------------------------

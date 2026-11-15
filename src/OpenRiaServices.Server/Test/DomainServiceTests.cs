@@ -650,7 +650,7 @@ namespace OpenRiaServices.Server.Test
             var currentEntry = ctx.ObjectStateManager.GetObjectStateEntry(current);
             string[] actualChangedProperties = currentEntry.GetModifiedProperties().ToArray();
 
-            CollectionAssert.AreEquivalent(expectedChangedProperties, actualChangedProperties);
+            Assert.AreSequenceEqual(expectedChangedProperties, actualChangedProperties, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
         }
 
         // Verify that AttachAsModified works correctly when no original values are provided for non-concurrency properties.
@@ -685,7 +685,7 @@ namespace OpenRiaServices.Server.Test
 
             string[] actualChangedProperties = dbContexct.Entry(current).Properties.Where(p => p.IsModified).Select(p => p.Metadata.Name).ToArray();
 
-            CollectionAssert.AreEquivalent(expectedChangedProperties, actualChangedProperties);
+            Assert.AreSequenceEqual(expectedChangedProperties, actualChangedProperties, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
         }
 
         [TestMethod]
@@ -721,7 +721,7 @@ namespace OpenRiaServices.Server.Test
 
             string[] actualNotChangedProperties = currentEntry.CurrentValues.PropertyNames.Where(p => !currentEntry.Property(p).IsModified).ToArray();
 
-            CollectionAssert.AreEquivalent(expectedNotChangedProperties, actualNotChangedProperties);
+            Assert.AreSequenceEqual(expectedNotChangedProperties, actualNotChangedProperties, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
         }
 
         [TestMethod]

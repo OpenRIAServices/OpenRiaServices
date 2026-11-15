@@ -1651,7 +1651,7 @@ namespace OpenRiaServices.Server.Test
             DomainOperationEntry getCitiesByAddress = description.GetQueryMethod("GetCitiesByAddress");
             Assert.IsNotNull(getCitiesByAddress);
             Assert.AreEqual(typeof(TestDomainServices.Address), getCitiesByAddress.Parameters.Single().ParameterType);
-            CollectionAssert.Contains(description.ComplexTypes.ToList(), typeof(TestDomainServices.Address));
+            Assert.Contains(typeof(TestDomainServices.Address), description.ComplexTypes);
         }
 
         [TestMethod]

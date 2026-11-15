@@ -1168,7 +1168,7 @@ namespace OpenRiaServices.Client.Test
 
             var changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
             var returnedTimeSpans = changedObj.NullableTimeSpanListProp.ToArray();
-            CollectionAssert.AreEqual(nullableTimeSpans.ToArray(), returnedTimeSpans);
+            Assert.AreSequenceEqual(nullableTimeSpans.ToArray(), returnedTimeSpans);
         }
 
         [TestMethod]

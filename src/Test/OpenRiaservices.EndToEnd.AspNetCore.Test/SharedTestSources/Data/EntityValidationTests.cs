@@ -505,7 +505,7 @@ namespace OpenRiaServices.Client.Test
 
             var actualError = entity.ValidationErrors.First();
             Assert.AreEqual("Required", actualError.ErrorMessage);
-            CollectionAssert.AreEqual(new[] { nameof(MockEntity_ObjectValidation.OnlyObjectValidation) }, actualError.MemberNames.ToList(), "membernames");
+            Assert.AreSequenceEqual(new[] { nameof(MockEntity_ObjectValidation.OnlyObjectValidation) }, actualError.MemberNames.ToList(), "membernames");
 
             Assert.HasCount(1, actualChanges, "1 errors should be detected");
 

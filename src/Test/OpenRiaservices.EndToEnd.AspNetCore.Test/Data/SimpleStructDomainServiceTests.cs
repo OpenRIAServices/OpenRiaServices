@@ -38,8 +38,8 @@ namespace OpenRiaServices.Client.Test
             InvokeResult<System.Collections.Generic.IEnumerable<CompositeSimpleStruct>> compositeResult =
                 await domainContext.RoundtripCompositeSimpleStructCollectionAsync(composite, CancellationToken.None);
 
-            CollectionAssert.AreEqual(simple, simpleResult.Value.ToArray());
-            CollectionAssert.AreEqual(composite, compositeResult.Value.ToArray());
+            Assert.AreSequenceEqual(simple, simpleResult.Value.ToArray());
+            Assert.AreSequenceEqual(composite, compositeResult.Value.ToArray());
         }
 
         [TestMethod]

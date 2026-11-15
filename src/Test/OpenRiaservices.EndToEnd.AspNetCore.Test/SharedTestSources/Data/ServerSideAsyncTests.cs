@@ -129,7 +129,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.IsNull(normalLoad.Error, "Normal load failed");
                 Assert.IsNull(asyncLoad.Exception, "Async load failed");
-                CollectionAssert.AreEquivalent(normalLoad.Entities.ToArray(), asyncLoad.Result);
+                Assert.AreSequenceEqual(normalLoad.Entities.ToArray(), asyncLoad.Result, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
                 Assert.IsNotEmpty(normalLoad.Entities, "No entities loaded");
                 Assert.AreEqual(normalLoad.TotalEntityCount, asyncLoad.Result.TotalEntityCount, "TotalEntityCount different");
@@ -183,7 +183,7 @@ namespace OpenRiaServices.Client.Test
                 var normalLoad = normalLoadTask.Result;
                 var asyncLoad = asyncLoadTask.Result;
 
-                CollectionAssert.AreEquivalent(normalLoad, asyncLoad);
+                Assert.AreSequenceEqual(normalLoad, asyncLoad, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
                 Assert.AreEqual(1, normalLoad.Count, "Only 1 entity should have been loaded");
                 Assert.AreEqual(expectedId, asyncLoad.Entities.First().Id);
@@ -346,7 +346,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify
             Assert.AreEqual(42, rangeItem.Id);
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.AddedEntities);
+            Assert.AreSequenceEqual(new[] { rangeItem }, result.ChangeSet.AddedEntities);
         }
 
         [TestMethod]
@@ -382,7 +382,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify
             Assert.AreEqual("updated", rangeItem.Text);
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
+            Assert.AreSequenceEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
         }
 
         [TestMethod]
@@ -421,7 +421,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify
             Assert.AreEqual("custom updated", rangeItem.Text);
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
+            Assert.AreSequenceEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
         }
 
         [TestMethod]
@@ -457,7 +457,7 @@ namespace OpenRiaServices.Client.Test
             var result = await ctx.SubmitChangesAsync();
 
             // Verify
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities);
+            Assert.AreSequenceEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities);
         }
 
         [TestMethod]

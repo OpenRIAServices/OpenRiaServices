@@ -1294,7 +1294,7 @@ namespace OpenRiaServices.Client
             DomainServiceDescription domainServiceDescription = DomainServiceDescription.GetDescription(typeof(NorthwindDomainService));
             var roundTrippedResult = (IQueryable<T>)SystemLinqDynamic.QueryDeserializer.Deserialize(domainServiceDescription, sampleData.AsQueryable(), TranslateQueryParts(queryParts), QueryLimits.Defaults);
 
-            CollectionAssert.AreEqual(query.ToList(), roundTrippedResult.ToList(), message: $"Roundtrip result was different for {serialized ?? string.Join("&", queryParts)}");
+            Assert.AreSequenceEqual(query.ToList(), roundTrippedResult.ToList(), $"Roundtrip result was different for {serialized ?? string.Join("&", queryParts)}");
         }
 
         private void VerifyRoundtrip<T>(Func<IQueryable<T>, IQueryable<T>> queryFunc, IEnumerable<T> sampleData)

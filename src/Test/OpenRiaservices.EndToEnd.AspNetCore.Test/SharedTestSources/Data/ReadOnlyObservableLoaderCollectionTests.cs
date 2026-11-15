@@ -28,7 +28,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.AreEqual(NotifyCollectionChangedAction.Reset, collectionChanges[0].Action);
             Assert.AreEqual(nameof(collection.Count), propertyChanges[0].PropertyName);
-            CollectionAssert.AreEqual(new[] { "A", "B", "C" }, collection);
+            Assert.AreSequenceEqual(new[] { "A", "B", "C" }, collection);
 
             collection.Reset(new[] { "D", "E" });
 
@@ -37,7 +37,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.AreEqual(NotifyCollectionChangedAction.Reset, collectionChanges[0].Action);
             Assert.AreEqual(nameof(collection.Count), propertyChanges[0].PropertyName);
-            CollectionAssert.AreEqual(new[] { "D", "E" }, collection);
+            Assert.AreSequenceEqual(new[] { "D", "E" }, collection);
 
         }
     }

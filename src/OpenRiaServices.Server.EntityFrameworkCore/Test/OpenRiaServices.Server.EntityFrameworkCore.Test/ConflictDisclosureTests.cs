@@ -41,7 +41,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
             var snapshot = (ConflictEntity)operation.StoreEntity;
             Assert.AreEqual("Stored", snapshot.Name);
             Assert.AreEqual("owner", snapshot.OwnerId);
-            CollectionAssert.Contains(operation.ConflictMembers.ToArray(), nameof(ConflictEntity.Name));
+            Assert.Contains(nameof(ConflictEntity.Name), operation.ConflictMembers);
             Assert.IsFalse(operation.IsDeleteConflict);
             Assert.AreEqual(1, service.ResolveCalls);
         }
