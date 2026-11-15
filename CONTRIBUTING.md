@@ -34,6 +34,18 @@ We generally try to follow [Microsoft .NET Framework Design Guidelines](https://
 
 Server libraries and tooling target .NET 10 or later. Keep `NET` and `NETFRAMEWORK` guards only in files also compiled by .NET Framework projects, including linked client sources and shared test helpers. Check project `Compile` items rather than relying on a file's directory.
 
+## Tooling dependencies
+
+Keep code-generation MSBuild package references on `18.0.*`, the first .NET 10 SDK band, so the tasks work with all supported .NET 10 SDKs. Tests use the same references and load runtime MSBuild assemblies through `Microsoft.Build.Locator`. TestHost must match the target framework (`10.0.*` for `net10.0`). Other test-only packages can use the latest stable version compatible with their target frameworks, including .NET Framework where needed.
+
+Keep EF Core dependencies in sync with target so .net10 target ef core 10.0.*.
+
+## Packaging
+
+Run `NuGet\Pack-All.ps1 -Configuration Release` to pack the solution and the remaining Full Client and CodeGen nuspecs. Use `-NoBuild` after a Release build, and `-Version <version>` to set all package and internal dependency versions. Azure Pipelines supplies `GitVersion.NuGetVersionV2`.
+Client.Core bundles both client assemblies from the OpenRiaServices.Client.DomainClients.Http project
+T4 bundles the tools assembly.
+
 ## Comments
 
 All new public, protected and internal methods should be documented, using standard "{{///}}" comments.
