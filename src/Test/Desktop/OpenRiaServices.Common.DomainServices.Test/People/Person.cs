@@ -1,5 +1,4 @@
-﻿#if NET
-
+﻿
 using System;
 using System.ComponentModel.DataAnnotations;
 
@@ -27,4 +26,3 @@ namespace People
         public DateOnly? Dead { get; set; }
     }
 }
-#endif

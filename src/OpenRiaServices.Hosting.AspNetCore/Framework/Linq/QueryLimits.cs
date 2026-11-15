@@ -46,12 +46,7 @@ sealed class QueryLimits
         get => _maxNumericFormatPrecision;
         set
         {
-#if NETFRAMEWORK
-            if (value < 0)
-                throw new ArgumentOutOfRangeException(nameof(value));
-#else
             ArgumentOutOfRangeException.ThrowIfNegative(value);
-#endif
             _maxNumericFormatPrecision = value;
         }
     }

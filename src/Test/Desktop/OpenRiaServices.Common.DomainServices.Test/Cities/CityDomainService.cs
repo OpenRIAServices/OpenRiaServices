@@ -99,17 +99,8 @@ namespace Cities
         }
 
         [Query]
-#if NETFRAMEWORK
-        public IQueryable<State> GetStatesInShippingZone(ShippingZone shippingZone, [InjectParameter] System.Web.HttpContext httpContext, [InjectParameter] System.Security.Principal.IPrincipal principal)
-        {
-            if (!object.ReferenceEquals(httpContext, System.Web.HttpContext.Current))
-                throw new DomainException("DomainService parameter injection does not work");
-            if (!object.ReferenceEquals(principal, ServiceContext.User))
-                throw new DomainException("DomainService parameter injection does not work");
-#else
         public IQueryable<State> GetStatesInShippingZone(ShippingZone shippingZone)
         {
-#endif
             return this._cityData.States.Where(s => s.ShippingZone == shippingZone).AsQueryable<State>();
         }
 
@@ -340,13 +331,9 @@ namespace Cities
         }
 
         [Invoke]
-        public bool UsesCustomHost()
+        public bool UsesCustomHost() // TODO: Remove this method
         {
-#if NETFRAMEWORK
-            return (OperationContext.Current.Host.GetType() == typeof(CityDomainServiceHost));
-#else
             throw new NotImplementedException();
-#endif
         }
 
 

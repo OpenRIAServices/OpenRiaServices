@@ -7,9 +7,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
-#if !SILVERLIGHT
 using System.Runtime.Serialization;
-#endif
 
 #if SERVERFX
 #else

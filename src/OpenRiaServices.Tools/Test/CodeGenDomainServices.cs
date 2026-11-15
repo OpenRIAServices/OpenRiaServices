@@ -242,7 +242,6 @@ namespace OpenRiaServices.Tools.Test
                 typeof(EFComplexTypesService), sharedFiles, false));
         }
 
-#if NET 
         // in NET472 the navigation properties to "Owned" types are Required, just as for EF6
         // - We should probably try to update the model so it matches for net6-8
         [TestMethod]
@@ -255,7 +254,6 @@ namespace OpenRiaServices.Tools.Test
             TestHelper.ValidateCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", @"Baselines\Default\Scenarios", "EFCore_ComplexObject.g",
                 typeof(EFCoreComplexTypesService), sharedFiles, false));
         }
-#endif
 
         [DeploymentItem(@"Baselines\Default\Scenarios", "CG_Scenarios_Inherit")]
         [TestMethod]
@@ -492,7 +490,6 @@ namespace OpenRiaServices.Tools.Test
             options.AddSharedType(typeof(Nerdbank.MessagePack.UseComparerAttribute));
             TestHelper.ValidateCodeGen(options);
         }
-#if NET
         [DeploymentItem(@"Baselines\Default\People", "CG_People")]
         [TestMethod]
         [Description("Create client proxies for People domain service and compare to known good copy")]
@@ -520,7 +517,6 @@ namespace OpenRiaServices.Tools.Test
 
             TestHelper.ValidateCodeGen(options);
         }
-#endif
         [DeploymentItem(@"Baselines\Default\Mocks", "CG_Mocks")]
         [DeploymentItem(@"Mocks\MockDomainServices.cs")]
         [DeploymentItem(@"Baselines\Default\Cities")]

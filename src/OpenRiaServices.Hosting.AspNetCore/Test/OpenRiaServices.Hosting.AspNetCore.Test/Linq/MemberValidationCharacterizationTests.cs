@@ -164,9 +164,7 @@ namespace System.Linq.Dynamic.UnitTests
         [DataRow(typeof(int))]
         [DataRow(typeof(DateTime))]
         [DataRow(typeof(Uri))]
-#if NET
         [DataRow(typeof(TimeOnly))]
-#endif
         public void InvocationCacheContainsOnlyPermittedSignatures(Type type)
         {
             ExpressionParser.InvocationMembers members = ExpressionParser.GetInvocationMembers(type);
@@ -210,7 +208,6 @@ namespace System.Linq.Dynamic.UnitTests
                 DynamicExpression.ParseLambda(typeof(int), typeof(string), "it.ToString(\"D3\")", null, limits));
         }
 
-#if NET
         [TestMethod]
         [DataRow(typeof(Half))]
         [DataRow(typeof(Int128))]
@@ -238,7 +235,6 @@ namespace System.Linq.Dynamic.UnitTests
             Assert.IsFalse(Allows(typeof(DateOnly).GetMethod("Parse", [typeof(string), typeof(IFormatProvider)])));
             Assert.IsFalse(Allows(typeof(TimeOnly).GetMethod("Parse", [typeof(string), typeof(IFormatProvider)])));
         }
-#endif
 
         private sealed class UnknownMember<T>
         {

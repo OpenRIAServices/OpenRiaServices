@@ -17,7 +17,7 @@ namespace OpenRiaServices
     /// of a <see cref="CodeProcessor"/> which will be used during generation of client types.
     /// </remarks>
     /// <seealso cref="CodeProcessor"/>
-#endif //SILVERLIGHT
+#endif //SERVERFX
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false, Inherited = true)]
     public class DomainIdentifierAttribute : Attribute
     {
@@ -72,7 +72,6 @@ namespace OpenRiaServices
         }
 #endif
 
-#if !SILVERLIGHT
         /// <summary>
         /// Gets a unique identifier for this DomainIdentifierAttribute.
         /// </summary>
@@ -83,6 +82,5 @@ namespace OpenRiaServices
                 return this;
             }
         }
-#endif //!SILVERLIGHT
     }
 }

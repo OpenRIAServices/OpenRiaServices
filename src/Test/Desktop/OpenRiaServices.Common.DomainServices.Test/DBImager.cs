@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Data.SqlClient;
 using System.IO;
-#if !NET
-using System.Web.Hosting;
-#endif
 
 namespace TestDomainServices.Testing
 {
@@ -33,7 +30,6 @@ namespace TestDomainServices.Testing
                 return Path.Combine(Directory.GetCurrentDirectory(), fileName);
 
             // If path is not relative to working directory then check if it is a virtual path
-#if NET
             // Relative directoy when running in website project folder
             string mappedPath = fileName.Replace("~/", "");
             if (File.Exists(mappedPath))
@@ -43,9 +39,6 @@ namespace TestDomainServices.Testing
             mappedPath = fileName.Replace("~/", "../../../");
             if (File.Exists(mappedPath))
                 return mappedPath;
-#else
-            var mappedPath = HostingEnvironment.MapPath(fileName);
-#endif
             if (File.Exists(mappedPath))
                 return mappedPath;
 
@@ -139,11 +132,7 @@ namespace TestDomainServices.Testing
         /// between runs (so the database files can be reused) while still being unique per website.
         /// </summary>
         private static string DbNameSuffix =>
-#if NET
             "_net" + Environment.Version.Major;
-#else
-            "_netfx";
-#endif
 
         // TODO: Allow reading from env and app settings
         internal static string LocalSqlServer => "(localdb)\\MSSQLLocalDB";

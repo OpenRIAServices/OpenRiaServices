@@ -1,5 +1,4 @@
-﻿#if NET
-
+﻿
 using System;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.EntityFrameworkCore;
@@ -29,4 +28,3 @@ namespace People
         public TimeOnly? EndTime { get; set; }
     }
 }
-#endif

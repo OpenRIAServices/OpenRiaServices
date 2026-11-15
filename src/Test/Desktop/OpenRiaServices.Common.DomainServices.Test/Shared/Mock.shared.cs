@@ -25,9 +25,7 @@ namespace TestDomainServices
     {
         public MockAttributeAllowOnce(string value) { this.Value = value; }
         public string Value { get; private set; }
-#if !SILVERLIGHT
         public override object TypeId { get { return Guid.NewGuid(); } }
-#endif
     }
 
     [AttributeUsage(AttributeTargets.All, AllowMultiple = false)]
@@ -35,9 +33,7 @@ namespace TestDomainServices
     {
         public MockAttributeAllowOnce_AppliedToInterfaceOnly(string value) { this.Value = value; }
         public string Value { get; private set; }
-#if !SILVERLIGHT
         public override object TypeId { get { return Guid.NewGuid(); } }
-#endif
     }
 
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = false)]
@@ -45,9 +41,7 @@ namespace TestDomainServices
     {
         public MockAttributeAllowOnce_InterfaceOnly(string value) { this.Value = value; }
         public string Value { get; private set; }
-#if !SILVERLIGHT
         public override object TypeId { get { return Guid.NewGuid(); } }
-#endif
     }
 
     [AttributeUsage(AttributeTargets.All, AllowMultiple = true)]
@@ -55,9 +49,7 @@ namespace TestDomainServices
     {
         public MockAttributeAllowMultiple(string value) { this.Value = value; }
         public string Value { get; private set; }
-#if !SILVERLIGHT
         public override object TypeId { get { return Guid.NewGuid(); } }
-#endif
     }
 
     [AttributeUsage(AttributeTargets.Interface, AllowMultiple = true)]
@@ -65,9 +57,7 @@ namespace TestDomainServices
     {
         public MockAttributeAllowMultiple_InterfaceOnly(string value) { this.Value = value; }
         public string Value { get; private set; }
-#if !SILVERLIGHT
         public override object TypeId { get { return Guid.NewGuid(); } }
-#endif
     }
 }
 

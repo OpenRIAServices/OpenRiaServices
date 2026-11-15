@@ -3,6 +3,7 @@
 ## Removed
 
 * Removed WCF hosting and .NET Framework server support. Server libraries and tests now target modern .NET; .NET Framework remains supported for client libraries and tests.
+* Removed obsolete Silverlight conditional code and simplified framework guards outside files shared with .NET Framework projects.
 
 # 5.11.0 / AspNetCore 1.7.0
 

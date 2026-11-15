@@ -7,11 +7,6 @@ using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore;
 using System.Diagnostics;
 
-#if NETFRAMEWORK
-using IReadOnlyNavigation = Microsoft.EntityFrameworkCore.Metadata.INavigation;
-using IReadOnlyEntityType = Microsoft.EntityFrameworkCore.Metadata.IEntityType;
-using IReadOnlyProperty = Microsoft.EntityFrameworkCore.Metadata.IProperty;
-#endif
 
 namespace OpenRiaServices.Server.EntityFrameworkCore
 {
@@ -63,11 +58,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             string[] otherKey;
             string name = fk.GetConstraintName();
 
-#if NETFRAMEWORK
-            if (navigationProperty.IsDependentToPrincipal())
-#else
             if (navigationProperty.IsOnDependent)
-#endif
             {
                 thisKey = FormatMemberList(fk.Properties);
                 otherKey = FormatMemberList(fk.PrincipalKey.Properties);
@@ -95,11 +86,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             };
         }
 
-#if NETFRAMEWORK
-        private static bool IsForeignKey(IReadOnlyNavigation navigationProperty) => navigationProperty.IsDependentToPrincipal();
-#else
         private static bool IsForeignKey(IReadOnlyNavigation navigationProperty) => navigationProperty.IsOnDependent;
-#endif
 
         /// <summary>
         ///  Formats the list of members into an array of strings

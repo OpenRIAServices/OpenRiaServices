@@ -12,7 +12,7 @@ namespace ServerClassLib
     // whether this type is shared.
     // This type does not compile on the client, meaning
     // only the PDB can tell us whether it is shared
-#if !SILVERLIGHT
+#if SERVERFX
     public class CodelessTypeNoClientCompile
     {
         public string AutoProp { get; set; }

@@ -11,9 +11,6 @@ namespace OpenRiaServices.Tools.Validation
     /// AppDomain boundaries.
     /// </remarks>
     internal sealed class DomainServiceValidator : MarshalByRefObject, IDisposable
-#if NETFRAMEWORK
-        , System.Web.Hosting.IRegisteredObject
-#endif
     {
         public void Validate(string[] assemblies, ILoggingService logger)
         {
@@ -26,12 +23,6 @@ namespace OpenRiaServices.Tools.Validation
             _ = new DomainServiceCatalog(assemblies, logger);
         }
 
-#if NETFRAMEWORK
-        void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
-        {
-            // Do nothing	
-        }
-#endif
 
         void IDisposable.Dispose()
         {

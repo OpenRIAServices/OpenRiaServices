@@ -133,10 +133,8 @@ namespace OpenRiaServices.Tools.Test
                     {
                         var frameworks = targetFrameworks.Split(';');
 
-#if NETFRAMEWORK
-                        string framework = frameworks.First(f => f.StartsWith("net4", StringComparison.Ordinal));
-#elif NET10_0
-                        string framework = frameworks.First(f => f.StartsWith("net10", StringComparison.Ordinal));
+#if NET10_0
+                        string framework = frameworks.FirstOrD(f => f.StartsWith("net10", StringComparison.Ordinal));
 #else
                         string framework = frameworks.First(f => !f.StartsWith("net4", StringComparison.Ordinal));
 #endif

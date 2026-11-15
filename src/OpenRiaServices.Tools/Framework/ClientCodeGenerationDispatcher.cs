@@ -17,14 +17,7 @@ namespace OpenRiaServices.Tools
     /// Stateless dispatcher class that discovers and invokes the appropriate
     /// code generator for a specified <see cref="ClientCodeGenerationOptions"/>.
     /// </summary>
-    /// <remarks>
-    /// This class is <see cref="MarshalByRefObject"/> so that it can be invoked across
-    /// AppDomain boundaries.</remarks>
-    internal sealed class ClientCodeGenerationDispatcher :
-#if NETFRAMEWORK
-        MarshalByRefObject, System.Web.Hosting.IRegisteredObject,
-#endif
-        IDisposable
+    internal sealed class ClientCodeGenerationDispatcher : IDisposable
     {
         // MEF composition container and part catalog, computed lazily and only once
         private CompositionContainer _compositionContainer;
@@ -68,15 +61,7 @@ namespace OpenRiaServices.Tools
                 AssemblyUtilities.LoadAssembly(cecilPath, loggingService);
                 AssemblyUtilities.LoadAssembly(cecilPath.Replace("Mono.Cecil", "Mono.Cecil.Pdb"), loggingService);
 
-#if NETFRAMEWORK
-                // For Netframework build we have just started executing in a new AppDomain for the server project
-                // We only have the current executing assembly loaded
-
-                // We load the ".Server" assembly actually from the server projects output folder since it was previously required to mix stongly named and not stronly named
-                LoadOpenRiaServicesServerAssembly(parameters, loggingService);
-#else
                 // The current AssemblyLoadContext has been previously setup to load the server projects dependencies, no additional action is needed
-#endif
 
                 using (SharedCodeService sharedCodeService = new SharedCodeService(parameters, loggingService))
                 {
@@ -487,12 +472,6 @@ namespace OpenRiaServices.Tools
             return assemblies;
         }
 
-#if NETFRAMEWORK
-        void System.Web.Hosting.IRegisteredObject.Stop(bool immediate)
-        {
-            // Intentionally left empty, there is nothing to do
-        }
-#endif
 
         #region IDisposable members
 

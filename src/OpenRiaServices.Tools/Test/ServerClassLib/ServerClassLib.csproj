@@ -6,7 +6,7 @@
          though we pretend it is the Debug build just to simplify
          a debug build of the solution
     -->
-    <DefineConstants>TRACE</DefineConstants>
+    <DefineConstants>TRACE;SERVERFX</DefineConstants>
     <DebugType>portable</DebugType>
     <Optimize>true</Optimize>
   </PropertyGroup>

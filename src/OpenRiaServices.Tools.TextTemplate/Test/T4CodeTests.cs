@@ -71,9 +71,7 @@ namespace OpenRiaServices.Tools.TextTemplate.Test
         {
             Type[] domainServiceTypes = new Type[] {
                 typeof(TestDomainServices.EF.Northwind),
-#if NETFRAMEWORK
-                typeof(TestDomainServices.LTS.Northwind)
-#endif
+                typeof(TestDomainServices.EFCore.Northwind),
             };
             Type[] sharedTypes = Array.Empty<Type>();
             string[] refAssemblies = new string[] {

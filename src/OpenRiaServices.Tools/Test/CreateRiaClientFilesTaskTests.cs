@@ -285,9 +285,8 @@ namespace OpenRiaServices.Tools.Test
             }
         }
 
-#if !NETFRAMEWORK
         [TestMethod]
-        public void CreateRiaClientFiles_For_Net_60()
+        public void CreateRiaClientFiles_For_Net()
         {
             TestHelper.GetProjectPaths("", out string projectPath, out _);
 
@@ -301,7 +300,6 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsTrue(task);
             Assert.IsTrue(Directory.Exists(code.GeneratedCodePath));
         }
-#endif
 
         [Description("CreateOpenRiaClientFilesTask creates ancillary files in OutputPath and code in GeneratedOutputPath")]
         [TestMethod]

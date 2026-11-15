@@ -69,7 +69,6 @@ namespace OpenRiaServices.Server
             }
         }
 
-#if !SILVERLIGHT
         /// <summary>
         /// Gets a unique identifier for this attribute.
         /// </summary>
@@ -80,7 +79,6 @@ namespace OpenRiaServices.Server
                 return this;
             }
         }
-#endif
 
         /// <summary>
         /// Determines whether the given <paramref name="principal"/> is authorized to perform the operation

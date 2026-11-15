@@ -30,6 +30,10 @@ Make sure that you can compile the project with your changes using release build
 
 We generally try to follow [Microsoft .NET Framework Design Guidelines](https://docs.microsoft.com/en-us/dotnet/standard/design-guidelines/)
 
+## Conditional compilation
+
+Server libraries and tooling target .NET 10 or later. Keep `NET` and `NETFRAMEWORK` guards only in files also compiled by .NET Framework projects, including linked client sources and shared test helpers. Check project `Compile` items rather than relying on a file's directory.
+
 ## Comments
 
 All new public, protected and internal methods should be documented, using standard "{{///}}" comments.

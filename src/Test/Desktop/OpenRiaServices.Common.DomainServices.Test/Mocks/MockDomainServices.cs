@@ -15,13 +15,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using DataModels.ScenarioModels;
 
-#if NETFRAMEWORK
-using DataTests.AdventureWorks.LTS;
-using OpenRiaServices.LinqToSql;
-using System.Web;
-#else
 using Microsoft.AspNetCore.Http;
-#endif
 
 [assembly: ContractNamespace("http://TestNamespace/ForNoClrNamespace")]
 
@@ -1060,13 +1054,8 @@ namespace TestDomainServices
         public IQueryable<TestSideEffects> CreateAndGetSideEffectsObjects(string name, [InjectParameter] HttpContext httpContext)
         {
             HttpRequest request = httpContext.Request;
-#if NET
             string verb = request.Method;
             var url = new Uri ("http://" + request.Host.ToString() + request.Path.ToString() + request.QueryString.ToString());
-#else
-            string verb = request.HttpMethod;
-            var url = request.Url;
-#endif
 
             return new TestSideEffects[] {
                 new TestSideEffects()
@@ -1119,24 +1108,7 @@ namespace TestDomainServices
 
         private IQueryable<CityWithCacheData> GetCitiesWithCacheLocation()
         {
-#if NETFRAMEWORK
-HttpCachePolicy policy = HttpContext.Current.Response.Cache;
-
-            HttpCacheability cacheability = (HttpCacheability)policy
-                .GetType()
-                .GetField("_cacheability", System.Reflection.BindingFlags.Instance | System.Reflection.BindingFlags.NonPublic)
-                .GetValue(policy);
-
-            return new CityWithCacheData[] {
-                new CityWithCacheData() {
-                    Name = "Redmond",
-                    StateName = "WA",
-                    CacheData = cacheability.ToString()
-                }
-            }.AsQueryable();
-#else
             throw new NotImplementedException();
-#endif
         }
 
         [Query]
@@ -2070,21 +2042,13 @@ HttpCachePolicy policy = HttpContext.Current.Response.Cache;
         [Invoke(HasSideEffects = true)]
         public string ReturnHttpMethodWithSideEffects_Online([InjectParameter] HttpContext httpContext)
         {
-#if NET
             return httpContext.Request.Method;
-#else
-            return httpContext.Request.HttpMethod;
-#endif
         }
 
         [Invoke(HasSideEffects = false)]
         public string ReturnHttpMethodWithoutSideEffects_Online([InjectParameter] HttpContext httpContext)
         {
-#if NET
             return httpContext.Request.Method;
-#else
-            return httpContext.Request.HttpMethod;
-#endif
         }
 
 #endregion

@@ -687,23 +687,12 @@ namespace OpenRiaServices.Hosting.Wcf
             string name = string.Format(CultureInfo.InvariantCulture, "DataContractSurrogates_{0}", Guid.NewGuid().ToString());
             assemName.Name = name;
 
-#if NET
             // Dev note: the SecurityContextSource.CurrentAppDomain is new in CLR 4.0
             // and permits the assembly builder to inherit the security permissions of the
             // app domain. - CDB Removed, Medium trust support removed
             AssemblyBuilder assemblyBuilder = AssemblyBuilder.DefineDynamicAssembly(
                 assemName,
                 AssemblyBuilderAccess.Run);
-#else
-            AppDomain myDomain = AppDomain.CurrentDomain;
-
-            // Dev note: the SecurityContextSource.CurrentAppDomain is new in CLR 4.0
-            // and permits the assembly builder to inherit the security permissions of the
-            // app domain. - CDB Removed, Medium trust support removed
-            AssemblyBuilder assemblyBuilder = myDomain.DefineDynamicAssembly(
-                assemName,
-                AssemblyBuilderAccess.Run);
-#endif
 
             return assemblyBuilder.DefineDynamicModule(name);
         }

@@ -10,9 +10,7 @@ namespace OpenRiaServices.Client
     /// This exception indicates that at least one error has occurred
     /// during the processing of submit operations on the server.
     /// </summary>
-#if !SILVERLIGHT
     [Serializable]
-#endif
 #pragma warning disable CA1032 // Implement standard exception constructors
     public class SubmitOperationException : DomainOperationException
 #pragma warning restore CA1032 // Implement standard exception constructors

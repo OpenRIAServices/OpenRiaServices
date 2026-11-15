@@ -693,13 +693,8 @@ namespace OpenRiaServices.Tools
 
                 if (IsServerProjectNetFramework())
                 {
-#if NETFRAMEWORK
-                    string sourceDir = ServerProjectDirectory;
-                    FilesWereWritten = GenerateClientProxiesForNetFramework(generatedFileName, sourceDir, options, sharedCodeServiceParameters);
-#else
                     FilesWereWritten = false;
                     LogError(Resource.ClientCodeGen_NetFrameworkNotSupported);
-#endif
                 }
                 else
                 {
@@ -821,53 +816,6 @@ namespace OpenRiaServices.Tools
             }
         }
 
-#if NETFRAMEWORK
-        /// <summary>
-        /// Use <see cref="System.Web.Compilation"/> to build and load the server project assemblies
-        /// </summary>
-        /// <remarks>
-        /// Prevent inlining so that we only reference and load System.Web when needed for compilation
-        /// </remarks>
-        [MethodImpl(MethodImplOptions.NoInlining)]
-        private bool GenerateClientProxiesForNetFramework(string generatedFileName, string sourceDir, ClientCodeGenerationOptions options, SharedCodeServiceParameters sharedCodeServiceParameters)
-        {
-            string generatedFileContent;
-            // The other AppDomain gets a logger that will log back to this AppDomain
-            CrossAppDomainLogger logger = new CrossAppDomainLogger(this);
-
-            // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
-            // This can occur when the build environment is configured incorrectly
-            if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-            {
-                throw new InvalidOperationException(
-                    Resource.HttpRuntimeInitializationError,
-                    System.Web.Hosting.HostingEnvironment.InitializationException);
-            }
-
-            // We override the default parameter to ask for ForceDebug, otherwise the PDB is not copied.
-            System.Web.Compilation.ClientBuildManagerParameter cbmParameter = new System.Web.Compilation.ClientBuildManagerParameter()
-            {
-                PrecompilationFlags = System.Web.Compilation.PrecompilationFlags.ForceDebug,
-            };
-            using (System.Web.Compilation.ClientBuildManager cbm = new System.Web.Compilation.ClientBuildManager(/* appVDir */ "/", sourceDir, null, cbmParameter))
-            using (ClientCodeGenerationDispatcher dispatcher = (ClientCodeGenerationDispatcher)cbm.CreateObject(typeof(ClientCodeGenerationDispatcher), false))
-            {
-                // Transfer control to the dispatcher in the 2nd AppDomain to locate and invoke
-                // the appropriate code generator.
-                generatedFileContent = dispatcher.GenerateCode(options, sharedCodeServiceParameters, logger, this.CodeGeneratorName);
-            }
-
-            // Tell the user where we are writing the generated code
-            if (!string.IsNullOrEmpty(generatedFileContent))
-            {
-                logger.LogMessage(string.Format(CultureInfo.CurrentCulture, Resource.Writing_Generated_Code, generatedFileName));
-            }
-
-            // If VS is hosting us, write to its TextBuffer, else simply write to disk
-            // If the file is empty, delete it.
-            return RiaClientFilesTaskHelpers.WriteOrDeleteFileToVS(generatedFileName, generatedFileContent, /*forceWriteToFile*/ false, logger);
-        }
-#endif
 
         private bool IsServerProjectNetFramework()
         {
@@ -908,11 +856,7 @@ namespace OpenRiaServices.Tools
                 return isFramework;
             }
 
-#if NETFRAMEWORK
-            return true;
-#else
             return false;
-#endif
         }
 
         /// <summary>

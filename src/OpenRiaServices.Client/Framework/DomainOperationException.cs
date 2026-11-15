@@ -11,32 +11,23 @@ namespace OpenRiaServices.Client
     /// This exception indicates that at least one error has occurred
     /// during the processing of domain operations on the server.
     /// </summary>
-#if !SILVERLIGHT
     [Serializable]
-#endif
     public class DomainOperationException : Exception
     {
-#if !SILVERLIGHT
         // The internal safe serialization state object must not be implicitly serialized.
         // [NonSerialized] -- TODO: uncomment when CLR fixes 851783
-#endif
         private DomainOperationExceptionData _data = new DomainOperationExceptionData();
 
-#if !SILVERLIGHT
         // The new safe serialization model in CLR 4.0 requires an object of this type.
         // We keep our state information here for simplicity.
         // [Serializable] -- TODO: uncomment when CLR fixes 851783
-#endif
         private struct DomainOperationExceptionData
-#if !SILVERLIGHT
             // : ISafeSerializationData -- TODO: uncomment when CLR fixes 851783
-#endif
         {
             public OperationErrorStatus Status;
             public string StackTrace;
             public int ErrorCode;
             public IReadOnlyCollection<ValidationResult> ValidationResults;
-#if !SILVERLIGHT
 
             // TODO: uncomment when CLR fixes 851783
             ///// <summary>
@@ -49,7 +40,6 @@ namespace OpenRiaServices.Client
             //    DomainOperationException exception = obj as DomainOperationException;
             //    exception._data = this;
             //}
-#endif
         }
 
         /// <summary>
@@ -168,7 +158,6 @@ namespace OpenRiaServices.Client
             if (validationErrors != null)
                 this._data.ValidationResults = new ReadOnlyCollection<ValidationResult>(validationErrors.ToList());
             
-#if !SILVERLIGHT
             // TODO: uncomment when CLR fixes 851783
             //// The new CLR 4.0 safe serialization model accepts custom data through
             //// this pattern.  We are called back during serialization to provide
@@ -177,7 +166,6 @@ namespace OpenRiaServices.Client
             //{
             //    eventArgs.AddSerializedState(this._data);
             //};
-#endif
         }
 
         /// <summary>

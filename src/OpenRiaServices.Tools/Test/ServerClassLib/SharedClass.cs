@@ -1,4 +1,4 @@
-﻿#if !SILVERLIGHT
+﻿#if SERVERFX
 
 using System;
 using System.Collections.Generic;

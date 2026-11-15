@@ -3,11 +3,7 @@ using System.IO;
 using System.Runtime.Serialization.Json;
 using System.ServiceModel.Dispatcher;
 using System.Text;
-#if SILVERLIGHT
-using System.Windows.Browser;
-#else
 using System.Web;
-#endif
 
 #nullable disable
 

@@ -9,9 +9,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
 
-#if! SILVERLIGHT
 using System.Web;
-#endif
 
 namespace OpenRiaServices.Client.Test
 {

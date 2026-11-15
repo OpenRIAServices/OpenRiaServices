@@ -256,7 +256,6 @@ namespace OpenRiaServices.Client
                 hasValidationErrors |= !ValidationUtilities.ValidateValue(instance, context, validationResults, metaType.ValidationAttributes, memberPath);
             }
 
-#if !SILVERLIGHT
             // Only proceed to IValidatableObject validation if there are no errors
             if (hasValidationErrors)
             {
@@ -281,7 +280,6 @@ namespace OpenRiaServices.Client
                     hasValidationErrors = true;
                 }
             }
-#endif
 
             return !hasValidationErrors;
         }

@@ -7,17 +7,6 @@ using OpenRiaServices.Server;
 
 #nullable enable
 
-#if !NET
-namespace System.Runtime.CompilerServices
-{
-    internal class RequiredMemberAttribute { };
-    internal class CompilerFeatureRequiredAttribute {
-        public CompilerFeatureRequiredAttribute() { }
-        public CompilerFeatureRequiredAttribute(string _) :this() { } 
-    };
-}
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-#endif
 
 namespace EFCoreModels.Scenarios.OwnedTypes
 {
