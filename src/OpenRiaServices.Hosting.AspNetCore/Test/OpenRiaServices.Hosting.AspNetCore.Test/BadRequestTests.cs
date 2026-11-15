@@ -102,19 +102,19 @@ namespace OpenRiaServices.Hosting.AspNetCore
                         });
                     });
             })
-            .StartAsync();
+            .StartAsync(TestContext.CancellationToken);
 
             var client = host.GetTestClient();
             client.BaseAddress = new Uri(client.BaseAddress, "BadRequestDomainService/");
 
-            var response = await client.GetAsync("QueryWithDoubleParam?value=1.0");
+            var response = await client.GetAsync("QueryWithDoubleParam?value=1.0", TestContext.CancellationToken);
             response.EnsureSuccessStatusCode();
 
-            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam"));
-            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=null"));
-            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value="));
-            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=one"));
-            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=1..2"));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam", TestContext.CancellationToken));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=null", TestContext.CancellationToken));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=", TestContext.CancellationToken));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=one", TestContext.CancellationToken));
+            await AssertBadRequestAsync(client.GetAsync($"QueryWithDoubleParam?value=1..2", TestContext.CancellationToken));
         }
 
         [TestMethod]
@@ -295,7 +295,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
                         };
                         var body = new MemoryStream();
                         new MessagePackSerializer().SerializeObject(body, envelope,
-                            ReflectionTypeShapeProvider.Default.GetTypeShapeOrThrow(envelope.GetType()));
+                            ReflectionTypeShapeProvider.Default.GetTypeShapeOrThrow(envelope.GetType()), TestContext.CancellationToken);
                         body.Position = 0;
                         context.Request.Body = body;
                     }
@@ -429,5 +429,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
             [Query(HasSideEffects = false, IsComposable = false)]
             public People.Person QueryWithDoubleParam(double value) => new People.Person() { Name = value.ToString() };
         }
+
+        public TestContext TestContext { get; set; }
     }
 }

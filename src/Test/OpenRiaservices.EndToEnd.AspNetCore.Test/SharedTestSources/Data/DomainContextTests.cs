@@ -187,21 +187,21 @@ namespace OpenRiaServices.Client.Test
 
             this.EnqueueCallback(() =>
             {
-                this.CityDomainContext.SubmitChangesAsync();
+                this.CityDomainContext.SubmitChangesAsync(TestContext.CancellationToken);
                 Assert.IsTrue(this.CityDomainContext.SubmitChangesAsyncCalled);
                 Assert.IsFalse(this.CityDomainContext.SubmitChangesCalled);
             });
 
             this.EnqueueCallback(() =>
             {
-                this.CityDomainContext.EchoAsync("hi");
+                this.CityDomainContext.EchoAsync("hi", TestContext.CancellationToken);
                 Assert.IsFalse(this.CityDomainContext.InvokeOperationGenericCalled);
                 Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
             });
 
             this.EnqueueCallback(() =>
             {
-                this.CityDomainContext.ResetDataAsync();
+                this.CityDomainContext.ResetDataAsync(TestContext.CancellationToken);
                 Assert.IsFalse(this.CityDomainContext.InvokeOperationGenericCalled);
                 Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
             });
@@ -342,7 +342,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify that IValidatableObject validation error clearing is treated the same way as other errors.
             newCity.MakeIValidatableObjectFail = false;
-            await domainContext.SubmitChangesAsync();
+            await domainContext.SubmitChangesAsync(TestContext.CancellationToken);
 
             Assert.IsFalse(newCity.HasValidationErrors, "Entity should not have any validation errors");
             Assert.IsEmpty(newCity.ValidationErrors);
@@ -355,6 +355,8 @@ namespace OpenRiaServices.Client.Test
 
             this.SubmitOperation = this.CityDomainContext.SubmitChanges(callback, this.CityDomainContext);
         }
+
+        public TestContext TestContext { get; set; }
 
         #endregion // Test Methods
     }

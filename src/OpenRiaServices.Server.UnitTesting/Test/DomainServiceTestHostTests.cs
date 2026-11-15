@@ -98,7 +98,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
             var domainService = new DummyDomainService();
             var testHost = new DomainServiceTestHost<DummyDomainService>(() => domainService);
 
-            await testHost.InvokeAsync(s => s.DummyInvoke());
+            await testHost.InvokeAsync(s => s.DummyInvoke(), TestContext.CancellationToken);
 
             Assert.IsTrue(domainService.IsInvoked, "The method should be invoked");
         }
@@ -109,7 +109,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
             var domainService = new ServerSideAsyncDomainService();
             var testHost = new DomainServiceTestHost<ServerSideAsyncDomainService>(() => domainService);
 
-            await testHost.InvokeAsync(s => s.SleepAndSetLastDelayAsync(TimeSpan.Zero));
+            await testHost.InvokeAsync(s => s.SleepAndSetLastDelayAsync(TimeSpan.Zero), TestContext.CancellationToken);
         }
 
         [TestMethod]
@@ -227,7 +227,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 
             var rangeItem = new RangeItem();
 
-            await testHost.UpdateAsync(rangeItem);
+            await testHost.UpdateAsync(rangeItem, ct: TestContext.CancellationToken);
 
             Assert.AreEqual("updated", rangeItem.Text);
         }
@@ -239,7 +239,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 
             var rangeItem = new RangeItem();
 
-            await testHost.DeleteAsync(rangeItem);
+            await testHost.DeleteAsync(rangeItem, ct: TestContext.CancellationToken);
 
             Assert.AreEqual("deleted", rangeItem.Text);
         }
@@ -264,5 +264,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
             [Invoke]
             public bool IsAuthenticated() => ServiceContext.User.Identity.IsAuthenticated;
         }
+
+        public TestContext TestContext { get; set; }
     }
 }

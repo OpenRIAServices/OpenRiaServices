@@ -504,7 +504,7 @@ namespace OpenRiaServices.Client.Test
             var args = Enumerable.Range(1, 3)
                 .Select(i => new TestEntityForInvokeOperations() { Key = i, StrProp = "Str" + i, CTProp = new TestCT() { CTProp1 = i, CTProp2 = "CtStr1" } });
 
-            var result = (await ctxt.InvokeOpWithIEnumerableParamAsync(args)).Value;
+            var result = (await ctxt.InvokeOpWithIEnumerableParamAsync(args, TestContext.CancellationToken)).Value;
             Assert.IsNotNull(result);
             Assert.HasCount(3, result);
 
@@ -976,6 +976,8 @@ namespace OpenRiaServices.Client.Test
                 }
             }
         }
-#endregion
+
+        public TestContext TestContext { get; set; }
+        #endregion
     }
 }

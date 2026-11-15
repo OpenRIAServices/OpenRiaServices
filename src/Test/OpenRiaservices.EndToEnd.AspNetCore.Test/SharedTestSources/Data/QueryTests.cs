@@ -1389,7 +1389,7 @@ namespace OpenRiaServices.Client.Test
 
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery(), false);
 
-            bool waitSuccess = await propertyChangeCalled.WaitAsync(TimeSpan.FromSeconds(30));
+            bool waitSuccess = await propertyChangeCalled.WaitAsync(TimeSpan.FromSeconds(30), TestContext.CancellationToken);
 
             Assert.IsTrue(waitSuccess, "Waited to long for callback to be executed, semaphore note signalled");
 
@@ -2149,6 +2149,8 @@ namespace OpenRiaServices.Client.Test
             var ex = await ExceptionHelper.ExpectExceptionAsync<Exception>(() => ctxt.LoadAsync(query), allowDerivedExceptions: true);
             validateException(ex);
         }
+
+        public TestContext TestContext { get; set; }
     }
 
     internal class ScenariosEntityContainer : EntityContainer

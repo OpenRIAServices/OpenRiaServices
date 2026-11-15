@@ -140,7 +140,7 @@ namespace OpenRiaServices.Client.Test
             Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
-                () => ctx.EchoAsync("TestInvoke"),
+                () => ctx.EchoAsync("TestInvoke", TestContext.CancellationToken),
                 string.Format(Resource.DomainContext_InvokeOperationFailed, "Echo", exception.Message));
 
             // verify the exception properties
@@ -162,7 +162,7 @@ namespace OpenRiaServices.Client.Test
             Cities.CityDomainContext ctx = new Cities.CityDomainContext(mockDomainClient);
 
             var ex = await ExceptionHelper.ExpectExceptionAsync<DomainOperationException>(
-                () => ctx.EchoAsync("TestInvoke"),
+                () => ctx.EchoAsync("TestInvoke", TestContext.CancellationToken),
                 string.Format(Resource.DomainContext_InvokeOperationFailed_Validation, "Echo"));
 
             // verify the exception properties
@@ -450,7 +450,7 @@ namespace OpenRiaServices.Client.Test
             ctx.Cities.Add(new City() { Name = "NewCity", StateName = "NN", CountyName = "NewCounty" });
 
             Assert.IsTrue(ctx.EntityContainer.HasChanges);
-            var submitEx = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(() => ctx.SubmitChangesAsync());
+            var submitEx = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(() => ctx.SubmitChangesAsync(TestContext.CancellationToken));
 
             // verify the exception properties
             Assert.AreEqual(string.Format(Resource.DomainContext_SubmitOperationFailed, ex.Message), submitEx.Message);
@@ -466,7 +466,7 @@ namespace OpenRiaServices.Client.Test
             entry.ValidationErrors = new ValidationResultInfo[] { new ValidationResultInfo("Foo", new string[] { "Bar" }) };
 
             mockDomainClient.SubmitCompletedResult = Task.FromResult(new SubmitCompletedResult(changeSet, entries));
-            submitEx = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(() => ctx.SubmitChangesAsync());
+            submitEx = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(() => ctx.SubmitChangesAsync(TestContext.CancellationToken));
 
             // verify the exception properties
             Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Validation, submitEx.Message);
@@ -481,7 +481,7 @@ namespace OpenRiaServices.Client.Test
             entry.StoreEntity = new City() { CountyName = "OtherCounty" };
 
             mockDomainClient.SubmitCompletedResult = Task.FromResult(new SubmitCompletedResult(changeSet, entries));
-            submitEx = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(() => ctx.SubmitChangesAsync());
+            submitEx = await ExceptionHelper.ExpectExceptionAsync<SubmitOperationException>(() => ctx.SubmitChangesAsync(TestContext.CancellationToken));
 
             // verify the exception properties
             Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, submitEx.Message);
@@ -489,5 +489,7 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(1, submitEx.EntitiesInError);
             Assert.AreEqual(entry.ClientEntity, submitEx.EntitiesInError.First());
         }
+
+        public TestContext TestContext { get; set; }
     }
 }

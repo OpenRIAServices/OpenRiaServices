@@ -296,7 +296,7 @@ namespace OpenRiaServices.Client.Test
             const int expectedErrorCode = 23;
             const string expectedMessage = "InvokeWithExceptionFirst";
 
-            var invoke = ctx.InvokeWithExceptionFirstAsync();
+            var invoke = ctx.InvokeWithExceptionFirstAsync(TestContext.CancellationToken);
             this.EnqueueConditional(() => invoke.IsCompleted);
             this.EnqueueCallback(() =>
             {
@@ -318,7 +318,7 @@ namespace OpenRiaServices.Client.Test
             const int expectedErrorCode = 24;
             const string expectedMessage = "InvokeWithExceptionTask";
 
-            var invoke = ctx.InvokeWithExceptionTaskAsync(delay:3);
+            var invoke = ctx.InvokeWithExceptionTaskAsync(delay:3, TestContext.CancellationToken);
             this.EnqueueConditional(() => invoke.IsCompleted);
             this.EnqueueCallback(() =>
             {
@@ -342,7 +342,7 @@ namespace OpenRiaServices.Client.Test
             ctx.RangeItems.Add(rangeItem);
 
             // Act
-            var result = await ctx.SubmitChangesAsync();
+            var result = await ctx.SubmitChangesAsync(TestContext.CancellationToken);
 
             // Verify
             Assert.AreEqual(42, rangeItem.Id);
@@ -378,7 +378,7 @@ namespace OpenRiaServices.Client.Test
             rangeItem.Text = "updating";
 
             // Act
-            var result = await ctx.SubmitChangesAsync();
+            var result = await ctx.SubmitChangesAsync(TestContext.CancellationToken);
 
             // Verify
             Assert.AreEqual("updated", rangeItem.Text);
@@ -417,7 +417,7 @@ namespace OpenRiaServices.Client.Test
             rangeItem.CustomUpdateRange();
 
             // Act
-            var result = await ctx.SubmitChangesAsync();
+            var result = await ctx.SubmitChangesAsync(TestContext.CancellationToken);
 
             // Verify
             Assert.AreEqual("custom updated", rangeItem.Text);
@@ -454,7 +454,7 @@ namespace OpenRiaServices.Client.Test
             ctx.RangeItems.Remove(rangeItem);
 
             // Act
-            var result = await ctx.SubmitChangesAsync();
+            var result = await ctx.SubmitChangesAsync(TestContext.CancellationToken);
 
             // Verify
             Assert.AreSequenceEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities);
@@ -502,5 +502,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(rangeItemUpdated.HasValidationErrors);
             Assert.IsTrue(rangeItemDeleted.HasValidationErrors);
         }
+
+        public TestContext TestContext { get; set; }
     }
 }
