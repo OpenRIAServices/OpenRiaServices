@@ -1,6 +1,4 @@
-﻿extern alias SSmDsClient;
-
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Cities

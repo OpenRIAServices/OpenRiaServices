@@ -1,18 +1,13 @@
-﻿extern alias SSmDsClient;
-
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.ComponentModel.DataAnnotations;
-using DataTests.AdventureWorks.LTS;
 using OpenRiaServices.Silverlight.Testing;
+using EFCoreModels.AdventureWorks;
 
 namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
-
     [TestClass]
     public class EntityConflictTests : UnitTestBase
     {

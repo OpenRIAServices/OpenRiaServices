@@ -143,7 +143,7 @@ Client query filters and ordering can only access entity and complex-type member
 
 The existing property visibility rules, including `[Exclude]`, `[DataContract]`/`[DataMember]`, and `[IgnoreDataMember]`, also apply when a property is inherited and its metadata is registered on the derived entity. Rejected members produce the same query error as unknown members, without executing custom indexer getters.
 
-Standard string, array, list, and dictionary indexing and predefined static constants remain supported. These checks are shared with WCF hosting.
+Standard string, array, list, and dictionary indexing and predefined static constants remain supported. The same checks are applied during server-side query parsing.
 
 ### Supporting different serialization formats (Text Xml)
 

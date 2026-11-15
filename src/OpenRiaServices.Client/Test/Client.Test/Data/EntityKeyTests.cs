@@ -1,4 +1,3 @@
-extern alias SSmDsClient;
 using System;
 using Microsoft.Silverlight.Testing;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -6,8 +5,6 @@ using OpenRiaServices.Silverlight.Testing;
 
 namespace OpenRiaServices.Client.Test
 {
-    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
-
     [TestClass]
     public class EntityKeyTests : UnitTestBase
     {

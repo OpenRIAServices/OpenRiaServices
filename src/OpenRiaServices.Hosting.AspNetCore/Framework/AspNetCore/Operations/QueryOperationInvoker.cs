@@ -66,7 +66,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Operations
                 {
                     result = await QueryProcessor.ProcessAsync<TEntity>(domainService, _operation, inputs, serviceQuery, Options.QueryLimits);
                 }
-                catch (Exception ex) when (!ex.IsFatal())
+                catch (Exception ex) when (!OpenRiaServices.ExceptionHandlingUtility.IsFatal(ex))
                 {
                     await WriteError(writer, context, ex, domainService);
                     return;

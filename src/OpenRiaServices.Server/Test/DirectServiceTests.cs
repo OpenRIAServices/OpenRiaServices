@@ -15,10 +15,7 @@ using OpenRiaServices.EntityFramework;
 using OpenRiaServices.Hosting;
 using OpenRiaServices.Hosting.AspNetCore;
 using OpenRiaServices.Hosting.Wcf;
-using OpenRiaServices.Hosting.Wcf.Behaviors;
-using System.Text;
 using System.Threading;
-using System.Web;
 using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
@@ -329,20 +326,20 @@ namespace OpenRiaServices.Server.Test
         [TestCategory("DatabaseTest")]
         public async Task TestDomainService_QueryDirect()
         {
-            TestDomainServices.LTS.Catalog provider = ServerTestHelper.CreateInitializedDomainService<TestDomainServices.LTS.Catalog>(DomainOperationType.Query);
+            TestDomainServices.EFCore.Catalog provider = ServerTestHelper.CreateInitializedDomainService<TestDomainServices.EFCore.Catalog>(DomainOperationType.Query);
 
             DomainServiceDescription serviceDescription = DomainServiceDescription.GetDescription(provider.GetType());
             DomainOperationEntry method = serviceDescription.DomainOperationEntries.Where(p => p.Operation == DomainOperation.Query).First(p => p.Name == "GetProductsByCategory");
             QueryDescription qd = new QueryDescription(method, new object[] { 1 });
 
-            var queryResult = await provider.QueryAsync<DataTests.AdventureWorks.LTS.Product>(qd, CancellationToken.None);
-            int count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
+            var queryResult = await provider.QueryAsync<EFCoreModels.AdventureWorks.Product>(qd, CancellationToken.None);
+            int count = queryResult.Result.Cast<EFCoreModels.AdventureWorks.Product>().Count();
             Assert.AreEqual(32, count);
 
             // verify that we can use the same provider to execute another query
             qd = new QueryDescription(method, new object[] { 2 });
-            queryResult = await provider.QueryAsync<DataTests.AdventureWorks.LTS.Product>(qd, CancellationToken.None);
-            count = queryResult.Result.Cast<DataTests.AdventureWorks.LTS.Product>().Count();
+            queryResult = await provider.QueryAsync<EFCoreModels.AdventureWorks.Product>(qd, CancellationToken.None);
+            count = queryResult.Result.Cast<EFCoreModels.AdventureWorks.Product>().Count();
             Assert.AreEqual(43, count);
         }
 
@@ -378,12 +375,12 @@ namespace OpenRiaServices.Server.Test
         [Ignore]
         public void TestDomainOperationEntry_VerifyDataMemberExclusion()
         {
-            string soap = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
+            string soap = RequestDirect(typeof(TestDomainServices.EFCore.Catalog), "GetProducts", null);
 
             // verify that the server entity type has the SafetyStockLevel property and that
             // it is marked [Exclude]
-            DomainServiceDescription.GetDescription(typeof(TestDomainServices.LTS.Catalog));
-            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(DataTests.AdventureWorks.LTS.Product)).Cast<PropertyDescriptor>().Single(p => p.Name == "SafetyStockLevel");
+            DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Catalog));
+            PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.AdventureWorks.Product)).Cast<PropertyDescriptor>().Single(p => p.Name == "SafetyStockLevel");
             Assert.AreEqual(1, pd.Attributes.OfType<ExcludeAttribute>().Count());
 
             // verify that the serialized response doesn't contain excluded data
@@ -399,7 +396,7 @@ namespace OpenRiaServices.Server.Test
             Semaphore s = new Semaphore(0, numberOfThreads);
             Exception lastError = null;
 
-            string soap = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
+            string soap = RequestDirect(typeof(TestDomainServices.EFCore.Catalog), "GetProducts", null);
             Assert.Contains("ProductID", soap);  // make sure we got at least one product
 
             for (int i = 0; i < numberOfThreads; i++)
@@ -408,7 +405,7 @@ namespace OpenRiaServices.Server.Test
                 {
                     try
                     {
-                        string soap2 = RequestDirect(typeof(TestDomainServices.LTS.Catalog), "GetProducts", null);
+                        string soap2 = RequestDirect(typeof(TestDomainServices.EFCore.Catalog), "GetProducts", null);
                         Assert.Contains("ProductID", soap2);  // make sure we got at least one product
                     }
                     catch (Exception ex)
@@ -482,39 +479,6 @@ namespace OpenRiaServices.Server.Test
             }
         }
 
-        [TestMethod]
-        public void TestQuery_QueryOperatorOrderPreservation()
-        {
-            // test no encoding
-            StringBuilder sb = new StringBuilder();
-            sb.Append("$skip=1");
-            sb.Append("&$where=").Append("Color==\"Yel$l&ow\"");
-            sb.Append("&$orderby=ListPrice");
-            sb.Append("&$where=").Append("Weight>10");
-            sb.Append("&$orderby=Style");
-            sb.Append("&$skip=2");
-            sb.Append("&$take=3");
-            sb.Append("&$where=").Append("Color!=\"Purple\"");
-            string queryString = sb.ToString();
-            List<ServiceQueryPart> queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
-            Assert.AreEqual("skip", queryParts[0].QueryOperator);
-            Assert.AreEqual("where", queryParts[1].QueryOperator);
-            Assert.AreEqual("orderby", queryParts[2].QueryOperator);
-            Assert.AreEqual("where", queryParts[3].QueryOperator);
-            Assert.AreEqual("orderby", queryParts[4].QueryOperator);
-            Assert.AreEqual("skip", queryParts[5].QueryOperator);
-            Assert.AreEqual("take", queryParts[6].QueryOperator);
-            Assert.AreEqual("where", queryParts[7].QueryOperator);
-
-            // test a single where clause with a comma
-            sb = new StringBuilder();
-            sb.Append("$where=1,2");
-            queryString = sb.ToString();
-            queryParts = (List<ServiceQueryPart>)DomainServiceWebHttpBehavior.GetServiceQuery(queryString, queryString).QueryParts;
-            Assert.AreEqual("where", queryParts[0].QueryOperator);
-            Assert.AreEqual("1,2", queryParts[0].Expression);
-        }
-
         /// <summary>
         /// Scenario test that can be used for perf tuning. The test loads 500 orders with OrderDetails
         /// and Products included.
@@ -547,17 +511,6 @@ namespace OpenRiaServices.Server.Test
 
             double avgTime = times.Average();
             Console.WriteLine("Average time for Perf_MeasureScenario1 : {0} seconds", avgTime);
-        }
-
-        private QueryResult DeserializeResult(HttpResponse response, IEnumerable<Type> knownTypes)
-        {
-            string responseText = response.Output.ToString();
-
-            DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(QueryResult), knownTypes);
-            MemoryStream ms = new MemoryStream(Encoding.Unicode.GetBytes(responseText));
-            QueryResult serviceResult = (QueryResult)ser.ReadObject(ms);
-
-            return serviceResult;
         }
 
         private string RequestDirect(Type providerType, string dataMethodName, IDictionary<string, object> queryParameters)

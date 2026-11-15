@@ -306,7 +306,7 @@ namespace OpenRiaServices.Server.Test
             changeSet = new ChangeSet(ops);
             Assert.AreEqual(ops.Count(), ops.Intersect(changeSet.ChangeSetEntries).Count(), "Expected ChangeSetEntries count to match what was provided to the constructor");
 
-            ChangeSetEntry changeSetEntry = new ChangeSetEntry(0, new E(), new E() { E_ID2 = 5 }, DomainOperation.Update);
+            ChangeSetEntry changeSetEntry = new ChangeSetEntry(0, new MockEntity1 (), new MockEntity1() { FullName = "name" }, DomainOperation.Update);
             Assert.IsTrue(changeSetEntry.HasMemberChanges);
         }
 

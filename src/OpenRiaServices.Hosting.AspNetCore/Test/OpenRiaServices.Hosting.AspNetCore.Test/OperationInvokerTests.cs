@@ -76,6 +76,33 @@ public class OperationInvokerTests
     }
 
     [TestMethod]
+    [DataRow("Color==\"Yel$l&ow\"")]
+    [DataRow("Color==%22Yel$l%26ow%22")]
+    public void TestQuery_QueryOperatorOrderPreservation(string firstWhere)
+    {
+        var context = new DefaultHttpContext();
+        context.Request.QueryString = new QueryString("?$skip=1&$where=" + firstWhere +
+            "&$orderby=ListPrice&$where=Weight>10&$orderby=Style&$skip=2&$take=3&$where=Color!=\"Purple\"");
+
+        var queryParts = QueryOperationInvoker<City>.GetServiceQuery(context.Request).QueryParts.ToArray();
+        Assert.AreSequenceEqual(["skip", "where", "orderby", "where", "orderby", "skip", "take", "where"], queryParts.Select(part => part.QueryOperator));
+        if (firstWhere.Contains("%26"))
+            Assert.AreEqual("Color==\"Yel$l&ow\"", queryParts[1].Expression);
+    }
+
+    [TestMethod]
+    public void TestQuery_WhereExpressionWithComma()
+    {
+        var context = new DefaultHttpContext();
+        context.Request.QueryString = new QueryString("?$where=1,2");
+
+        var queryParts = QueryOperationInvoker<City>.GetServiceQuery(context.Request).QueryParts.ToArray();
+        Assert.HasCount(1, queryParts);
+        Assert.AreEqual("where", queryParts[0].QueryOperator);
+        Assert.AreEqual("1,2", queryParts[0].Expression);
+    }
+
+    [TestMethod]
     [Description("Submit operation: Cancellation is requested but method returned succesfully")]
     public async Task TestSubmit_CancelAndReturn()
     {

@@ -185,11 +185,6 @@ namespace OpenRiaServices.Tools.Test
             return Path.Combine(Path.GetDirectoryName(currentProjectPath), @"ServerClassLib\ServerClassLib.csproj");
         }
 
-        /// <summary>
-        /// Returns the full path of the server WAP project based on our current project
-        /// </summary>
-        /// <param name="currentProjectPath"></param>
-        /// <returns></returns>
         public static string ServerWapProjectPath(string currentProjectPath)
         {
             return Path.Combine(Path.GetDirectoryName(currentProjectPath), @"TestWAP\TestWAP.csproj");
@@ -390,6 +385,19 @@ namespace OpenRiaServices.Tools.Test
             return task;
         }
 
+        public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstanceForWAP(string relativeTestDir)
+        {
+            string projectPath = null;
+            string outputPath = null;
+            TestHelper.GetProjectPaths(relativeTestDir, out projectPath, out outputPath);
+
+            Assert.IsTrue(File.Exists(projectPath), "Could not locate " + projectPath + " necessary for test.");
+            string serverProjectPath = CodeGenHelper.ServerWapProjectPath(projectPath);
+            string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
+
+            return CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false);
+        }
+
         /// <summary>
         /// Creates a new CreateOpenRiaClientFilesTask instance to use to generate code
         /// </summary>
@@ -443,26 +451,6 @@ namespace OpenRiaServices.Tools.Test
             task.ClientSourceFiles = MsBuildHelper.AsTaskItems(CodeGenHelper.ClientClassLibSourceFiles(clientProjectPath)).ToArray();
 
             return task;
-        }
-
-        /// <summary>
-        /// Creates a new CreateOpenRiaClientFilesTask instance to use to generate code
-        /// using the TestWap project.
-        /// </summary>
-        /// <param name="relativeTestDir"></param>
-        /// <returns>A new task instance that can be invoked to do code gen</returns>
-        public static CreateOpenRiaClientFilesTask CreateOpenRiaClientFilesTaskInstanceForWAP(string relativeTestDir)
-        {
-            string deploymentDir = Path.GetDirectoryName(typeof(CodeGenHelper).Assembly.Location);
-            string projectPath = null;
-            string outputPath = null;
-            TestHelper.GetProjectPaths(relativeTestDir, out projectPath, out outputPath);
-
-            Assert.IsTrue(File.Exists(projectPath), "Could not locate " + projectPath + " necessary for test.");
-            string serverProjectPath = CodeGenHelper.ServerWapProjectPath(projectPath);
-            string clientProjectPath = CodeGenHelper.ClientClassLibProjectPath(projectPath);
-
-            return CodeGenHelper.CreateOpenRiaClientFilesTaskInstance(serverProjectPath, clientProjectPath, false);
         }
 
         /// <summary>

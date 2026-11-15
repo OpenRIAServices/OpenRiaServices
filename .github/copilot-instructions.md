@@ -21,7 +21,7 @@ Run from the repository root on Windows with Visual Studio/MSBuild and .NET Fram
 
 ```powershell
 # Restore and Release-build (preferred)
-msbuild src\RiaServices.sln -restore /p:Configuration=Release /m /v:minimal
+dotnet restore src\OpenRiaServices.slnx --configuration Release
 ```
 
 Run tests after building:
@@ -33,7 +33,7 @@ sqllocaldb start MSSQLLocalDB
 
 # Run all tests in the solution
 cd src
-dotnet test --solution RiaServices.Tests.slnf --configuration Release
+dotnet test --solution OpenRiaServices.slnx --configuration Release
 ```
 
 For focused changes, prefer running the relevant test project directly:
@@ -42,8 +42,7 @@ cd src
 dotnet test --project OpenRiaServices.Hosting.AspNetCore\Test\OpenRiaServices.Hosting.AspNetCore.Test\OpenRiaServices.Hosting.AspNetCore.Test.csproj --configuration Release
 ```
 
-CI runs the whole suite with a single `dotnet test` command against `src\RiaServices.Tests.slnf`, which lists every test project. 
-`RiaServices.sln` itself cannot be used because it contains website projects which require Visual Studio targets, so new test projects must be added to the solution filter as well. 
+CI runs the whole suite with a single `dotnet test` command against `src\OpenRiaServices.slnx`, only projects with `EnableMSTestRunner=true` are marked as test projects;
 MTP runs the test modules (project + target framework) in parallel; use `--max-parallel-test-modules 1` when debugging suspected concurrency issues.
 
 ## Generated files

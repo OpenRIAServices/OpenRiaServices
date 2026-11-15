@@ -24,7 +24,12 @@
     Mono.Cecil version used by OpenRiaServices.Tools. Instead the "dotnet-coverage" tool is
     used to collect coverage for the whole test run, see azure-pipelines.yml.
   -->
+  <PropertyGroup>
+    <IsTestProject Condition="'$(EnableMSTestRunner)' != 'true'">false</IsTestProject>
+  </PropertyGroup>
+
   <PropertyGroup Condition="'$(EnableMSTestRunner)' == 'true'">
+    <IsTestProject>true</IsTestProject>
     <MicrosoftTestingExtensionsVersion>2.5.2</MicrosoftTestingExtensionsVersion>
     <IsPackable>false</IsPackable>
     <!-- Show the full failure information (message + stack trace) for failing tests in the log -->

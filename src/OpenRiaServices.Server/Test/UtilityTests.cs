@@ -181,10 +181,8 @@ namespace OpenRiaServices.Server.Test
                 "Client Binary values should be equal.");
             Assert.IsTrue(bytes.SequenceEqual((IEnumerable<byte>)SerializationUtility.GetClientValue(typeof(byte[]), bytes)),
                 "Client byte[] values should be equal.");
-            Assert.AreEqual(binary, SerializationUtility.GetServerValue(typeof(Binary), binary),
-                "Server Binary values should be equal.");
-            Assert.AreEqual(binary, SerializationUtility.GetServerValue(typeof(Binary), bytes),
-                "Server byte[] values should be equal.");
+            Assert.AreEquivalent(binary, SerializationUtility.GetServerValue(typeof(Binary), binary), "Server Binary values should be equal.");
+            Assert.AreEquivalent(binary, SerializationUtility.GetServerValue(typeof(Binary), bytes), "Server byte[] values should be equal.");
         }
 
         [TestMethod]

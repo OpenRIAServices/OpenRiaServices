@@ -17,22 +17,13 @@ namespace DataModels.ScenarioModels
         }
     }
 
-#if HAS_LINQ2SQL
-    /// <summary>
-    /// This class is used to test instantiation errors at code gen
-    /// </summary>
-    public class DataContextInstantiationScenarios : DataTests.AdventureWorks.LTS.AdventureWorks
+    public sealed class ThrowingDbContext : Microsoft.EntityFrameworkCore.DbContext
     {
-        public DataContextInstantiationScenarios()
+        public ThrowingDbContext()
         {
             throw new InvalidOperationException("error");
         }
-
-        public DataContextInstantiationScenarios(string s) : this()
-        {
-        }
     }
-#endif
 
     /// <summary>
     /// This class is used to make sure one can inherit from ObjectContext and BO wizard still works.
@@ -43,21 +34,4 @@ namespace DataModels.ScenarioModels
         {
         }
     }
-
-#if HAS_LINQ2SQL
-    /// <summary>
-    /// This class is used to make sure one can inherit from DataContext and BO wizard still works.
-    /// </summary>
-    public class DataContextInheritanceScenarios : DataTests.AdventureWorks.LTS.AdventureWorks
-    {
-        public DataContextInheritanceScenarios()
-        {
-        }
-
-        public DataContextInheritanceScenarios(string s)
-            : this()
-        {
-        }
-    }
-#endif
 }

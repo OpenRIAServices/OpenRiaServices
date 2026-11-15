@@ -1,17 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net472;net8.0</TargetFrameworks>
+    <TargetFramework>net8.0</TargetFramework>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
   </PropertyGroup>
 
-  <ItemGroup Condition="'$(TargetFramework)' == 'net472'">
-    <Reference Include="mscorlib" />
-    <Reference Include="system" />
-    <Reference Include="System.ComponentModel.DataAnnotations" />
-    <PackageReference Include="System.Threading.Tasks.Extensions" Version="4.6.3" />
-  </ItemGroup>
-
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0'">
+  <ItemGroup>
     <PackageReference Include="System.CodeDom" Version="10.0.14" />
   </ItemGroup>
 

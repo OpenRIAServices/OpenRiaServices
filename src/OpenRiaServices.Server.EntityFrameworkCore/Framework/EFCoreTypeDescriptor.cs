@@ -264,20 +264,6 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             return attributes.ToArray();
         }
 
-        /// <summary>
-        /// Determines whether the specified property is an Entity member that
-        /// should be excluded.
-        /// </summary>
-        /// <param name="pd">The property to check.</param>
-        /// <returns>True if the property should be excluded, false otherwise.</returns>
-        internal static bool ShouldExcludeEntityMember(PropertyDescriptor pd)
-        {
-            // exclude IChangeDetector.EntityState members
-#pragma warning disable EF1001 // Internal EF Core API usage.
-            return pd.PropertyType == typeof(EntityState) && typeof(IChangeDetector).IsAssignableFrom(pd.ComponentType);
-#pragma warning restore EF1001 // Internal EF Core API usage.
-        }
-
         private bool IsForeignKeyMember(string name) => _foreignKeyMembers != null && _foreignKeyMembers.Contains(name);
     }
 }

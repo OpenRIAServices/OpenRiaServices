@@ -51,7 +51,7 @@ namespace EFCoreModels.AdventureWorks
                     .HasForeignKey(e => e.ContactID);
 
                 entity.HasOne(e => e.Manager)
-                    .WithMany()
+                    .WithMany(e => e.Reports)
                     .HasForeignKey(e => e.ManagerID);
             });
 
@@ -88,6 +88,10 @@ namespace EFCoreModels.AdventureWorks
             modelBuilder.Entity<PurchaseOrder>(entity =>
             {
                 entity.HasKey(e => e.PurchaseOrderID);
+
+                entity.HasOne(e => e.Employee)
+                    .WithMany(e => e.PurchaseOrders)
+                    .HasForeignKey(e => e.EmployeeID);
             });
 
             modelBuilder.Entity<SalesPerson>(entity =>

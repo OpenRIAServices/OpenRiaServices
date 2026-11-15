@@ -1,6 +1,4 @@
-﻿extern alias SSmDsClient;
-
-using System;
+﻿using System;
 using System.Security.Principal;
 using OpenRiaServices.Client.Test;
 using Microsoft.Silverlight.Testing;
@@ -9,14 +7,11 @@ using OpenRiaServices.Silverlight.Testing;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using MockUser = OpenRiaServices.Client.Authentication.Test.AuthenticationDomainClient.MockUser;
 using UserType = OpenRiaServices.Client.Authentication.Test.AuthenticationDomainClient.UserType;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client.Authentication.Test
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Resource = SSmDsClient::OpenRiaServices.Client.Resource;
-
-
     /// <summary>
     /// Tests <see cref="WebAuthenticationService"/> members.
     /// </summary>

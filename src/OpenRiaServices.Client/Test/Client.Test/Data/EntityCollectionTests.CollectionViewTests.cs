@@ -7,7 +7,6 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows.Data;
 using Cities;
-using DataTests.Northwind.LTS;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Description = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 

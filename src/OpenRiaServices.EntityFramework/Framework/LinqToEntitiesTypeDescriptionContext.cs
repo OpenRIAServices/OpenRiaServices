@@ -74,7 +74,7 @@ namespace OpenRiaServices.EntityFramework
                 {
                     AssociationType associationType = (AssociationType)navigationProperty.RelationshipType;
 
-                    if (!associationType.ReferentialConstraints.Any())
+                    if (associationType.ReferentialConstraints.Count == 0)
                     {
                         // We only support EF models where FK info is part of the model.
                         throw new NotSupportedException(
