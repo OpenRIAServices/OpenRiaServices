@@ -68,15 +68,15 @@ namespace OpenRiaServices.Client.Test
             TestEntityContainer container = new TestEntityContainer();
             container.LoadEntities(_citiesWithInfo);
             Assert.AreEqual(EntityState.Unmodified, _citiesWithInfo[0].EntityState);
-            Assert.AreEqual(0, _citiesWithInfo[0].EntityActions.Count());
+            Assert.IsEmpty(_citiesWithInfo[0].EntityActions);
             Assert.IsTrue(_citiesWithInfo[0].CanInvokeAction(_setCityInfo.Name));
 
             // verify invoke on a new entity succeeds and subsequent CanInvoke returns false
             _citiesWithInfo[0].InvokeAction(_setCityInfo.Name, _setCityInfo.Parameters.ToArray<object>());
-            Assert.AreEqual(1, _citiesWithInfo[0].EntityActions.Count());
+            Assert.HasCount(1, _citiesWithInfo[0].EntityActions);
             Assert.AreEqual(EntityState.Modified, _citiesWithInfo[0].EntityState);
             Assert.AreEqual<string>(_setCityInfo.Name, _citiesWithInfo[0].EntityActions.Single().Name);
-            Assert.AreEqual<int>(_setCityInfo.Parameters.Count(), _citiesWithInfo[0].EntityActions.Single().Parameters.Count());
+            Assert.HasCount(_setCityInfo.Parameters.Count(), _citiesWithInfo[0].EntityActions.Single().Parameters);
             Assert.IsFalse(_citiesWithInfo[0].CanInvokeAction(_setCityInfo.Name));
         }
 
@@ -181,11 +181,11 @@ namespace OpenRiaServices.Client.Test
                 Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
                 // verify we got the property change notification for the city entity as a result of autosync
                 Assert.HasCount(14, propChanged, "Received different property notifications than expected:\r\n" + string.Join(",", propChanged.ToArray()));
-                Assert.AreEqual(1, propChanged.Count(prop => prop == "EditHistory"));
-                Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneName"));
-                Assert.AreEqual(1, propChanged.Count(prop => prop == "ZoneID"));
+                Assert.ContainsSingle(prop => prop == "EditHistory", propChanged);
+                Assert.ContainsSingle(prop => prop == "ZoneName", propChanged);
+                Assert.ContainsSingle(prop => prop == "ZoneID", propChanged);
                 Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAssignCityZone"));
-                Assert.AreEqual(1, propChanged.Count(prop => prop == "IsAssignCityZoneInvoked"));
+                Assert.ContainsSingle(prop => prop == "IsAssignCityZoneInvoked", propChanged);
                 Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAutoAssignCityZone"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop == "CanAssignCityZoneIfAuthorized"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop == "CanSetCityInfo"));
@@ -276,14 +276,14 @@ namespace OpenRiaServices.Client.Test
 
                 // verify we got the property change notification for the city entity as a result of autosync
                 Assert.HasCount(14, propChanged, "Received different property notifications than expected:\r\n" + string.Join(",", propChanged.ToArray()));
-                Assert.AreEqual(1, propChanged.Count(prop => prop =="EditHistory"));
-                Assert.AreEqual(1, propChanged.Count(prop => prop =="Info"));
-                Assert.AreEqual(1, propChanged.Count(prop => prop =="LastUpdated"));
+                Assert.ContainsSingle(prop => prop =="EditHistory", propChanged);
+                Assert.ContainsSingle(prop => prop =="Info", propChanged);
+                Assert.ContainsSingle(prop => prop =="LastUpdated", propChanged);
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanAssignCityZone"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanAssignCityZoneIfAuthorized"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanAutoAssignCityZone"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanTouchHistory"));
-                Assert.AreEqual(1, propChanged.Count(prop => prop =="IsSetCityInfoInvoked"));
+                Assert.ContainsSingle(prop => prop =="IsSetCityInfoInvoked", propChanged);
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanSetCityInfo"));
 
                 // verify entities are auto-synced back to the client as a result of the domain method execution on server
@@ -373,13 +373,13 @@ namespace OpenRiaServices.Client.Test
 
                 // verify we got the property change notification for the city entity as a result of autosync
                 Assert.HasCount(13, propChanged, "Received different property notifications than expected:\r\n" + string.Join(",", propChanged.ToArray()));
-                Assert.AreEqual(1, propChanged.Count(prop => prop =="EditHistory"));
-                Assert.AreEqual(1, propChanged.Count(prop => prop =="LastUpdated"));
+                Assert.ContainsSingle(prop => prop =="EditHistory", propChanged);
+                Assert.ContainsSingle(prop => prop =="LastUpdated", propChanged);
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanAssignCityZone"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanAssignCityZoneIfAuthorized"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanAutoAssignCityZone"));
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanTouchHistory"));
-                Assert.AreEqual(1, propChanged.Count(prop => prop =="IsTouchHistoryInvoked"));
+                Assert.ContainsSingle(prop => prop =="IsTouchHistoryInvoked", propChanged);
                 Assert.AreEqual(2, propChanged.Count(prop => prop =="CanSetCityInfo"));
 
                 // verify entities are auto-synced back to the client as a result of the domain method execution on server

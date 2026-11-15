@@ -50,13 +50,13 @@ namespace OpenRiaServices.Tools.Test
             DomainServiceCatalog dsc = new DomainServiceCatalog(typeof(DSC_DomainServiceType), logger);
             IEnumerable<DomainServiceDescription> descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions, "Did not expect null descriptions");
-            Assert.AreEqual(1, descriptions.Count(), "Expected exactly one domain service description");
+            Assert.HasCount(1, descriptions, "Expected exactly one domain service description");
 
             // Ctor taking multiple type -- legit
             dsc = new DomainServiceCatalog(new Type[] { typeof(DSC_DomainServiceType) }, logger);
             descriptions = dsc.DomainServiceDescriptions;
             Assert.IsNotNull(descriptions, "Did not expect null descriptions");
-            Assert.AreEqual(1, descriptions.Count(), "Expected exactly one domain service description");
+            Assert.HasCount(1, descriptions, "Expected exactly one domain service description");
         }
 
         [TestMethod]
@@ -111,7 +111,7 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsEmpty(logger.WarningMessages);
 
             string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, string.Empty).TrimEnd();
-            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage, StringComparison.Ordinal)));
+            Assert.Contains(message => message.StartsWith(expectedMessage, StringComparison.Ordinal), logger.InfoMessages);
         }
 
         [TestMethod]
@@ -127,7 +127,7 @@ namespace OpenRiaServices.Tools.Test
             Assert.IsNotNull(descriptions);
 
             string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, String.Empty).TrimEnd();
-            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage, StringComparison.Ordinal)));
+            Assert.Contains(message => message.StartsWith(expectedMessage, StringComparison.Ordinal), logger.InfoMessages);
 
             Assert.IsNotEmpty(descriptions);
         }
@@ -163,7 +163,7 @@ namespace OpenRiaServices.Tools.Test
                 File.Delete(assemblyFileName);
             }
             string expectedMessage = string.Format(CultureInfo.CurrentCulture, Resource.ClientCodeGen_Assembly_Load_Error, assemblyFileName, string.Empty).TrimEnd();
-            Assert.IsTrue(logger.InfoMessages.Any(message => message.StartsWith(expectedMessage)));
+            Assert.Contains(message => message.StartsWith(expectedMessage), logger.InfoMessages);
         }
 
         /// <summary>

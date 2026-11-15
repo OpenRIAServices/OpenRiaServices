@@ -42,13 +42,15 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("client-nested", entity.Details.Child.Name);
 
             // The newer server checks properties absent from this client, including the original entity.
-            await context.SubmitChangesAsync();
+            await context.SubmitChangesAsync(TestContext.CancellationToken);
 
             Assert.AreEqual("verified", entity.Name);
             Assert.AreEqual("client-nested", entity.Details.Child.Name);
             Assert.AreEqual(EntityState.Unmodified, entity.EntityState);
             Assert.IsFalse(context.HasChanges);
         }
+
+        public TestContext TestContext { get; set; }
     }
 }
 

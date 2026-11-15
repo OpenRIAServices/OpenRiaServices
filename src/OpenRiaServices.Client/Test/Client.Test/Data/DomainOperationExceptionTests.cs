@@ -86,7 +86,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsNull(doe.StackTrace, "Default stack trace s/b null");
             Assert.AreEqual(0, doe.ErrorCode, "Error code s/b 0");
             Assert.AreEqual(OperationErrorStatus.ValidationFailed, doe.Status, "ctor(message, validationerrors) status s/b ValidationFailed");
-            CollectionAssert.AreEqual(validationErrors, doe.ValidationErrors.ToList());
+            Assert.AreSequenceEqual(validationErrors, doe.ValidationErrors.ToList());
         }
 
         [TestMethod]

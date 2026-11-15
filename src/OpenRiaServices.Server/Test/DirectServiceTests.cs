@@ -82,7 +82,7 @@ namespace OpenRiaServices.Server.Test
 
                 await ChangeSetProcessor.ProcessAsync(ds, entries);
 
-                Assert.IsFalse(entries.Any(p => p.HasError));
+                Assert.DoesNotContain(p => p.HasError, entries);
             }
         }
 
@@ -112,7 +112,7 @@ namespace OpenRiaServices.Server.Test
 
                 await ChangeSetProcessor.ProcessAsync(ds, entries);
 
-                Assert.IsFalse(entries.Any(p => p.HasError));
+                Assert.DoesNotContain(p => p.HasError, entries);
             }
         }
 
@@ -124,8 +124,8 @@ namespace OpenRiaServices.Server.Test
         public void VerifyDomainServiceTestAssemblyUsesDefaultSecurityMode()
         {
             var a = typeof(TestDomainServices.EF.Northwind).Assembly;
-            Assert.IsFalse(a.GetCustomAttributes(typeof(SecurityTransparentAttribute), true).Any(), "SecurityTransparentAttribute not expected.");
-            Assert.IsFalse(a.GetCustomAttributes(typeof(AllowPartiallyTrustedCallersAttribute), true).Any(), "AllowPartiallyTrustedCallersAttribute not expected.");
+            Assert.IsEmpty(a.GetCustomAttributes(typeof(SecurityTransparentAttribute), true), "SecurityTransparentAttribute not expected.");
+            Assert.IsEmpty(a.GetCustomAttributes(typeof(AllowPartiallyTrustedCallersAttribute), true), "AllowPartiallyTrustedCallersAttribute not expected.");
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace OpenRiaServices.Server.Test
 
             QueryResult<AdventureWorksModel.PurchaseOrder> result = await QueryProcessor.ProcessAsync<AdventureWorksModel.PurchaseOrder>(service, queryOperation, Array.Empty<object>(), serviceQuery, QueryLimits.Defaults);
 
-            Assert.AreEqual(1, result.RootResults.Count());
+            Assert.HasCount(1, result.RootResults);
         }
 
         /// <summary>
@@ -287,7 +287,7 @@ namespace OpenRiaServices.Server.Test
             var queryResult = await service.QueryAsync<TestDomainServices.A>(qd, CancellationToken.None);
 
             Assert.IsNotNull(queryResult.ValidationErrors);
-            Assert.AreEqual(2, queryResult.ValidationErrors.Count());
+            Assert.HasCount(2, queryResult.ValidationErrors);
 
             ValidationResult error = queryResult.ValidationErrors.ElementAt(0);
             Assert.AreEqual("The field a must be between 0 and 10.", error.ErrorMessage);
@@ -311,7 +311,7 @@ namespace OpenRiaServices.Server.Test
             var invokeResult = await service.InvokeAsync(invokeDescription, CancellationToken.None);
 
             Assert.IsNotNull(invokeResult.ValidationErrors);
-            Assert.AreEqual(2, invokeResult.ValidationErrors.Count());
+            Assert.HasCount(2, invokeResult.ValidationErrors);
 
             ValidationResult error = invokeResult.ValidationErrors.ElementAt(0);
             Assert.AreEqual("The field a must be between 0 and 10.", error.ErrorMessage);
@@ -381,7 +381,7 @@ namespace OpenRiaServices.Server.Test
             // it is marked [Exclude]
             DomainServiceDescription.GetDescription(typeof(TestDomainServices.EFCore.Catalog));
             PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.AdventureWorks.Product)).Cast<PropertyDescriptor>().Single(p => p.Name == "SafetyStockLevel");
-            Assert.AreEqual(1, pd.Attributes.OfType<ExcludeAttribute>().Count());
+            Assert.HasCount(1, pd.Attributes.OfType<ExcludeAttribute>());
 
             // verify that the serialized response doesn't contain excluded data
             Assert.Contains("ProductID", soap);  // make sure we got at least one product

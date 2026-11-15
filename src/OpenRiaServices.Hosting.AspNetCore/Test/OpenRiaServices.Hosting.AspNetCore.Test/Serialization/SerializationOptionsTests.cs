@@ -101,10 +101,10 @@ public class SerializationOptionsTests
         // A request with a string param longer than 10 chars should fail
         var longString = new string('a', 100);
         using var tooLongContent = BuildBinaryInvokeRequest("EchoString", "value", longString);
-        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", tooLongContent), "The maximum string content length quota (10) has been exceeded");
+        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", tooLongContent, TestContext.CancellationToken), "The maximum string content length quota (10) has been exceeded");
 
         using var shortContent = BuildBinaryInvokeRequest("EchoString", "value", "hello");
-        var response = await client.PostAsync("SerializationTestDomainService/EchoString", shortContent);
+        var response = await client.PostAsync("SerializationTestDomainService/EchoString", shortContent, TestContext.CancellationToken);
         Assert.AreEqual(System.Net.HttpStatusCode.OK, response.StatusCode,
             "Request within quota should succeed");
     }
@@ -126,7 +126,7 @@ public class SerializationOptionsTests
         var longString = new string('a', 100);
         using var content = BuildXmlInvokeRequest("EchoString", "value", longString);
 
-        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", content), "The maximum string content length quota (10) has been exceeded");
+        await AssertBadRequestAsync(client.PostAsync("SerializationTestDomainService/EchoString", content, TestContext.CancellationToken), "The maximum string content length quota (10) has been exceeded");
     }
 
     [TestMethod]
@@ -137,11 +137,11 @@ public class SerializationOptionsTests
         using var host = await CreateHost(useMessagePack: true);
         var client = host.GetTestClient();
         using var content = BuildMessagePackInvokeRequest("EchoString", "value", "hello-messagepack");
-        var response = await client.PostAsync("SerializationTestDomainService/EchoString", content);
+        var response = await client.PostAsync("SerializationTestDomainService/EchoString", content, TestContext.CancellationToken);
         response.EnsureSuccessStatusCode();
 
         Assert.AreEqual("application/vnd.msgpack", response.Content.Headers.ContentType?.MediaType);
-        var payload = await response.Content.ReadAsByteArrayAsync();
+        var payload = await response.Content.ReadAsByteArrayAsync(TestContext.CancellationToken);
         Assert.AreEqual("hello-messagepack", ReadMessagePackInvokeResponse<string>(payload));
     }
 
@@ -152,10 +152,10 @@ public class SerializationOptionsTests
         using var host = await CreateHost(useMessagePack: true);
         var client = host.GetTestClient();
         using var content = BuildMessagePackInvokeRequest("GetDerivedEntity", "value", "derived-value");
-        var response = await client.PostAsync("SerializationTestDomainService/GetDerivedEntity", content);
+        var response = await client.PostAsync("SerializationTestDomainService/GetDerivedEntity", content, TestContext.CancellationToken);
         response.EnsureSuccessStatusCode();
 
-        var payload = await response.Content.ReadAsByteArrayAsync();
+        var payload = await response.Content.ReadAsByteArrayAsync(TestContext.CancellationToken);
         SerializationBaseEntity result = ReadMessagePackInvokeResponse<SerializationBaseEntity>(payload);
         Assert.IsInstanceOfType<SerializationDerivedEntity>(result);
         Assert.AreEqual("derived-value", ((SerializationDerivedEntity)result).Value);
@@ -171,10 +171,10 @@ public class SerializationOptionsTests
             "RoundtripAbstractEntity",
             "value",
             new SingleDerivedEntity { Id = 1, Value = "derived-value" });
-        var response = await client.PostAsync("SerializationTestDomainService/RoundtripAbstractEntity", content);
+        var response = await client.PostAsync("SerializationTestDomainService/RoundtripAbstractEntity", content, TestContext.CancellationToken);
         response.EnsureSuccessStatusCode();
 
-        var payload = await response.Content.ReadAsByteArrayAsync();
+        var payload = await response.Content.ReadAsByteArrayAsync(TestContext.CancellationToken);
         AbstractEntity result = ReadMessagePackInvokeResponse<AbstractEntity>(payload);
         Assert.IsInstanceOfType<SingleDerivedEntity>(result);
         Assert.AreEqual("derived-value", ((SingleDerivedEntity)result).Value);
@@ -367,4 +367,6 @@ public class SerializationOptionsTests
     {
         public string Value { get; set; }
     }
+
+    public TestContext TestContext { get; set; }
 }

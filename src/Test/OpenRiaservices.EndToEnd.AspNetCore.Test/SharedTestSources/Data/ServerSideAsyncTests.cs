@@ -97,7 +97,7 @@ namespace OpenRiaServices.Client.Test
                 var actualDelay = (DateTime.Now - start);
 
                 Assert.IsNull(invokeOp.Error);
-                Assert.IsTrue(actualDelay >= minExpectedDelay, "Delay was less than expected");
+                Assert.IsGreaterThanOrEqualTo(minExpectedDelay, actualDelay, "Delay was less than expected");
 
                 // Server store the last delay the last thing it does so we shold only get
                 // it if we actually waited for the Task to complete
@@ -129,7 +129,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.IsNull(normalLoad.Error, "Normal load failed");
                 Assert.IsNull(asyncLoad.Exception, "Async load failed");
-                CollectionAssert.AreEquivalent(normalLoad.Entities.ToArray(), asyncLoad.Result);
+                Assert.AreSequenceEqual(normalLoad.Entities.ToArray(), asyncLoad.Result, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
                 Assert.IsNotEmpty(normalLoad.Entities, "No entities loaded");
                 Assert.AreEqual(normalLoad.TotalEntityCount, asyncLoad.Result.TotalEntityCount, "TotalEntityCount different");
@@ -183,7 +183,7 @@ namespace OpenRiaServices.Client.Test
                 var normalLoad = normalLoadTask.Result;
                 var asyncLoad = asyncLoadTask.Result;
 
-                CollectionAssert.AreEquivalent(normalLoad, asyncLoad);
+                Assert.AreSequenceEqual(normalLoad, asyncLoad, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
                 Assert.AreEqual(1, normalLoad.Count, "Only 1 entity should have been loaded");
                 Assert.AreEqual(expectedId, asyncLoad.Entities.First().Id);
@@ -296,7 +296,7 @@ namespace OpenRiaServices.Client.Test
             const int expectedErrorCode = 23;
             const string expectedMessage = "InvokeWithExceptionFirst";
 
-            var invoke = ctx.InvokeWithExceptionFirstAsync();
+            var invoke = ctx.InvokeWithExceptionFirstAsync(TestContext.CancellationToken);
             this.EnqueueConditional(() => invoke.IsCompleted);
             this.EnqueueCallback(() =>
             {
@@ -318,7 +318,7 @@ namespace OpenRiaServices.Client.Test
             const int expectedErrorCode = 24;
             const string expectedMessage = "InvokeWithExceptionTask";
 
-            var invoke = ctx.InvokeWithExceptionTaskAsync(delay:3);
+            var invoke = ctx.InvokeWithExceptionTaskAsync(delay:3, TestContext.CancellationToken);
             this.EnqueueConditional(() => invoke.IsCompleted);
             this.EnqueueCallback(() =>
             {
@@ -342,11 +342,11 @@ namespace OpenRiaServices.Client.Test
             ctx.RangeItems.Add(rangeItem);
 
             // Act
-            var result = await ctx.SubmitChangesAsync();
+            var result = await ctx.SubmitChangesAsync(TestContext.CancellationToken);
 
             // Verify
             Assert.AreEqual(42, rangeItem.Id);
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.AddedEntities);
+            Assert.AreSequenceEqual(new[] { rangeItem }, result.ChangeSet.AddedEntities);
         }
 
         [TestMethod]
@@ -378,11 +378,11 @@ namespace OpenRiaServices.Client.Test
             rangeItem.Text = "updating";
 
             // Act
-            var result = await ctx.SubmitChangesAsync();
+            var result = await ctx.SubmitChangesAsync(TestContext.CancellationToken);
 
             // Verify
             Assert.AreEqual("updated", rangeItem.Text);
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
+            Assert.AreSequenceEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
         }
 
         [TestMethod]
@@ -417,11 +417,11 @@ namespace OpenRiaServices.Client.Test
             rangeItem.CustomUpdateRange();
 
             // Act
-            var result = await ctx.SubmitChangesAsync();
+            var result = await ctx.SubmitChangesAsync(TestContext.CancellationToken);
 
             // Verify
             Assert.AreEqual("custom updated", rangeItem.Text);
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
+            Assert.AreSequenceEqual(new[] { rangeItem }, result.ChangeSet.ModifiedEntities);
         }
 
         [TestMethod]
@@ -454,10 +454,10 @@ namespace OpenRiaServices.Client.Test
             ctx.RangeItems.Remove(rangeItem);
 
             // Act
-            var result = await ctx.SubmitChangesAsync();
+            var result = await ctx.SubmitChangesAsync(TestContext.CancellationToken);
 
             // Verify
-            CollectionAssert.AreEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities);
+            Assert.AreSequenceEqual(new[] { rangeItem }, result.ChangeSet.RemovedEntities);
         }
 
         [TestMethod]
@@ -502,5 +502,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(rangeItemUpdated.HasValidationErrors);
             Assert.IsTrue(rangeItemDeleted.HasValidationErrors);
         }
+
+        public TestContext TestContext { get; set; }
     }
 }

@@ -173,7 +173,7 @@ namespace OpenRiaServices.Client.Test
             // verify the exception properties
             Assert.AreSame(ex, syncCtx.LastException, "Exception should have been thrown on SynchronizationContext");
             Assert.IsFalse(lo.IsErrorHandled);
-            CollectionAssert.AreEqual(validationErrors, (ICollection)lo.ValidationErrors);
+            Assert.AreSequenceEqual(validationErrors, (ICollection)lo.ValidationErrors);
         }
 
         /// <summary>
@@ -211,7 +211,7 @@ namespace OpenRiaServices.Client.Test
 
             // verify the exception properties
             Assert.AreSame(validationException, syncCtx.LastException);
-            CollectionAssert.AreEqual(validationErrors, (ICollection)invoke.ValidationErrors);
+            Assert.AreSequenceEqual(validationErrors, (ICollection)invoke.ValidationErrors);
         }
 
         /// <summary>

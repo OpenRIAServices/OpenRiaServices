@@ -38,8 +38,8 @@ namespace OpenRiaServices.Tools.Test
             using (SourceFileLocationService service = new SourceFileLocationService(new[] { new MockSourceFileProviderFactory(func) }, filenameMap))
             {
                 IEnumerable<string> files = service.GetFilesForType(this.GetType());
-                Assert.AreEqual(1, files.Count(), "Expected only one file name");
-                Assert.IsTrue(files.Contains(methodBase.Name), "Expected the name of the current method to be returned for the declaring type");
+                Assert.HasCount(1, files, "Expected only one file name");
+                Assert.Contains(methodBase.Name, files, "Expected the name of the current method to be returned for the declaring type");
             }
         }
 
@@ -65,10 +65,10 @@ namespace OpenRiaServices.Tools.Test
             using (SourceFileLocationService locationService = new SourceFileLocationService(new[] { factory1, factory2 }, filenameMap))
             {
                 IEnumerable<string> files = locationService.GetFilesForType(typeof(SourceFileLocationServiceTest));
-                Assert.AreEqual(2, files.Count(), "Expected both service to contribute to files");
-                Assert.IsTrue(files.Contains("StringValue"), "The first service should have gotten called");
-                Assert.IsTrue(files.Contains("IntValue"), "The second service should have gotten called");
-                Assert.IsFalse(files.Contains("XXX"), "The 2nd response to StringValue should be discarded");
+                Assert.HasCount(2, files, "Expected both service to contribute to files");
+                Assert.Contains("StringValue", files, "The first service should have gotten called");
+                Assert.Contains("IntValue", files, "The second service should have gotten called");
+                Assert.DoesNotContain("XXX", files, "The 2nd response to StringValue should be discarded");
             }
 
             long createCountAfter = Interlocked.Read(ref MockSourceFileProviderFactory.createCount);

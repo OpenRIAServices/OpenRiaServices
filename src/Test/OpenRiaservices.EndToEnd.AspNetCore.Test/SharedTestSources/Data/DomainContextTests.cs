@@ -116,7 +116,7 @@ namespace OpenRiaServices.Client.Test
             await loadOperation;
             var elapsed = DateTime.UtcNow - timestamp;
 
-            Assert.IsTrue(elapsed < TimeSpan.FromSeconds(3));
+            Assert.IsLessThan(TimeSpan.FromSeconds(3), elapsed);
             Assert.IsTrue(loadOperation.IsComplete);
             Assert.IsTrue(loadOperation.IsCanceled);
         }
@@ -187,21 +187,21 @@ namespace OpenRiaServices.Client.Test
 
             this.EnqueueCallback(() =>
             {
-                this.CityDomainContext.SubmitChangesAsync();
+                this.CityDomainContext.SubmitChangesAsync(TestContext.CancellationToken);
                 Assert.IsTrue(this.CityDomainContext.SubmitChangesAsyncCalled);
                 Assert.IsFalse(this.CityDomainContext.SubmitChangesCalled);
             });
 
             this.EnqueueCallback(() =>
             {
-                this.CityDomainContext.EchoAsync("hi");
+                this.CityDomainContext.EchoAsync("hi", TestContext.CancellationToken);
                 Assert.IsFalse(this.CityDomainContext.InvokeOperationGenericCalled);
                 Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
             });
 
             this.EnqueueCallback(() =>
             {
-                this.CityDomainContext.ResetDataAsync();
+                this.CityDomainContext.ResetDataAsync(TestContext.CancellationToken);
                 Assert.IsFalse(this.CityDomainContext.InvokeOperationGenericCalled);
                 Assert.IsTrue(this.CityDomainContext.InvokeOperationAsyncGenericCalled);
             });
@@ -230,7 +230,7 @@ namespace OpenRiaServices.Client.Test
                 // The submission will fail because of the validation error.  Mark it as handled.
                 this.SubmitOperation = domainContext.SubmitChanges(s => s.MarkErrorAsHandled(), null);
 
-                Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames.Contains("Name")), "Name is required");
+                Assert.Contains(r => r.MemberNames.Contains("Name"), newCity.ValidationErrors, "Name is required");
                 Assert.IsTrue(actualErrors.OrderBy(s => s).SequenceEqual(new string[] { "Name" }), "We should have received errors for Name");
                 actualErrors.Clear();
             });
@@ -254,7 +254,7 @@ namespace OpenRiaServices.Client.Test
                 // The submission will fail because of the validation error.  Mark it as handled.
                 this.SubmitOperation = domainContext.SubmitChanges(s => s.MarkErrorAsHandled(), null);
 
-                Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames.Contains("ZoneID")), "ZoneID is out of range");
+                Assert.Contains(r => r.MemberNames.Contains("ZoneID"), newCity.ValidationErrors, "ZoneID is out of range");
                 Assert.IsTrue(actualErrors.SequenceEqual(new string[] { "ZoneID" }), "We should have received an error for ZoneID only - errors were cleared and replaced");
                 actualErrors.Clear();
             });
@@ -270,8 +270,8 @@ namespace OpenRiaServices.Client.Test
                 // Property errors will be reported
                 this.SubmitOperation = domainContext.SubmitChanges(s => s.MarkErrorAsHandled(), null);
 
-                Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames.Contains("ZoneID")), "ZoneID is invalid");
-                Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames.Contains("StateName")), "StateName is too long");
+                Assert.Contains(r => r.MemberNames.Contains("ZoneID"), newCity.ValidationErrors, "ZoneID is invalid");
+                Assert.Contains(r => r.MemberNames.Contains("StateName"), newCity.ValidationErrors, "StateName is too long");
                 Assert.IsTrue(actualErrors.OrderBy(s => s).SequenceEqual(new string[] { "StateName", "ZoneID" }), "We should have received errors for StateName and ZoneID");
                 actualErrors.Clear();
             });
@@ -291,7 +291,7 @@ namespace OpenRiaServices.Client.Test
                 // The entity-level error will be reported
                 this.SubmitOperation = domainContext.SubmitChanges(s => s.MarkErrorAsHandled(), null);
 
-                Assert.IsTrue(newCity.ValidationErrors.Any(r => r.MemberNames == null || !r.MemberNames.Any(m => !string.IsNullOrEmpty(m))), "We should only have entity-level errors (no members or null or empty members only)");
+                Assert.Contains(r => r.MemberNames == null || !r.MemberNames.Any(m => !string.IsNullOrEmpty(m)), newCity.ValidationErrors, "We should only have entity-level errors (no members or null or empty members only)");
                 Assert.IsTrue(actualErrors.SequenceEqual(new string[] { null }), "We should have received an error for the entity-level error");
                 actualErrors.Clear();
             });
@@ -342,7 +342,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify that IValidatableObject validation error clearing is treated the same way as other errors.
             newCity.MakeIValidatableObjectFail = false;
-            await domainContext.SubmitChangesAsync();
+            await domainContext.SubmitChangesAsync(TestContext.CancellationToken);
 
             Assert.IsFalse(newCity.HasValidationErrors, "Entity should not have any validation errors");
             Assert.IsEmpty(newCity.ValidationErrors);
@@ -355,6 +355,8 @@ namespace OpenRiaServices.Client.Test
 
             this.SubmitOperation = this.CityDomainContext.SubmitChanges(callback, this.CityDomainContext);
         }
+
+        public TestContext TestContext { get; set; }
 
         #endregion // Test Methods
     }

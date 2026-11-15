@@ -45,9 +45,9 @@ namespace OpenRiaServices.Client.Test
                 {
                     VerifyHierarchy(p);
                     IEnumerable<CI_Child> baseChildren = p.Children.Where(c => c.GetType() == typeof(CI_Child));
-                    Assert.AreEqual(2, baseChildren.Count(), "Wrong number of child entities");
+                    Assert.HasCount(2, baseChildren, "Wrong number of child entities");
                     IEnumerable<CI_AdoptedChild> adoptedChildren = p.Children.OfType<CI_AdoptedChild>();
-                    Assert.AreEqual(2, adoptedChildren.Count(), "Wrong number of adopted child entities");
+                    Assert.HasCount(2, adoptedChildren, "Wrong number of adopted child entities");
                 }
             });
 
@@ -79,7 +79,7 @@ namespace OpenRiaServices.Client.Test
                 existingChild.Age++; ;
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(2, cs.ModifiedEntities.Count, "wrong modified count");
+                Assert.HasCount(2, cs.ModifiedEntities, "wrong modified count");
                 Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
                 Assert.Contains(parent, cs.ModifiedEntities);
                 Assert.Contains(existingChild, cs.ModifiedEntities);
@@ -127,7 +127,7 @@ namespace OpenRiaServices.Client.Test
                 existingChild.Age++; ;
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(2, cs.ModifiedEntities.Count, "wrong modified count");
+                Assert.HasCount(2, cs.ModifiedEntities, "wrong modified count");
                 Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
                 Assert.Contains(parent, cs.ModifiedEntities);
                 Assert.Contains(existingChild, cs.ModifiedEntities);
@@ -173,7 +173,7 @@ namespace OpenRiaServices.Client.Test
                 existingChild.Age++; ;
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(2, cs.ModifiedEntities.Count, "wrong modified count");
+                Assert.HasCount(2, cs.ModifiedEntities, "wrong modified count");
                 Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
                 Assert.Contains(parent, cs.ModifiedEntities);
                 Assert.Contains(existingChild, cs.ModifiedEntities);
@@ -219,7 +219,7 @@ namespace OpenRiaServices.Client.Test
                 existingChild.Age++; ;
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(2, cs.ModifiedEntities.Count, "wrong modified count");
+                Assert.HasCount(2, cs.ModifiedEntities, "wrong modified count");
                 Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
                 Assert.Contains(parent, cs.ModifiedEntities);
                 Assert.Contains(existingChild, cs.ModifiedEntities);
@@ -266,8 +266,8 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreSame(parent, ((Entity)newChild).Parent);
 
                 EntityChangeSet cs = ctxt.EntityContainer.GetChanges();
-                Assert.AreEqual(1, cs.ModifiedEntities.Count, "wrong modified count");
-                Assert.AreEqual(1, cs.AddedEntities.Count, "wrong added count");
+                Assert.HasCount(1, cs.ModifiedEntities, "wrong modified count");
+                Assert.HasCount(1, cs.AddedEntities, "wrong added count");
                 Assert.IsEmpty(cs.RemovedEntities, "wrong removed count");
                 Assert.Contains(parent, cs.ModifiedEntities);
                 Assert.Contains(newChild, cs.AddedEntities);

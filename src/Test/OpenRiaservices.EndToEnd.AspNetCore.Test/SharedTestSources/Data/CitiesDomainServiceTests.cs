@@ -45,7 +45,7 @@ namespace OpenRiaServices.Client.Test
                 State state = dp.States.Single(p => p.Name == "WA");
                 Assert.AreEqual(Cities.TimeZone.Pacific, state.TimeZone);
 
-                Assert.IsFalse(dp.States.Any(p => p.Name == "OH"));
+                Assert.DoesNotContain(p => p.Name == "OH", dp.States);
 
                 // Now test update
                 state.TimeZone = state.TimeZone = Cities.TimeZone.Central;
@@ -275,7 +275,7 @@ namespace OpenRiaServices.Client.Test
 
         private void AssertSame(IEnumerable<City> expected, IEnumerable<City> actual)
         {
-            Assert.AreEqual(expected.Count(), actual.Count(), "Local CityData has different number of results than query result");
+            Assert.HasCount(expected.Count(), actual, "Local CityData has different number of results than query result");
             foreach (City c1 in expected)
             {
                 City bestActual = null;
@@ -296,8 +296,8 @@ namespace OpenRiaServices.Client.Test
         private static void EnsureContainsAll(IEnumerable<string> actual, IEnumerable<string> expected)
         {
             foreach (string s in expected)
-                Assert.IsTrue(actual.Contains(s), "Expected to find " + s);
-            Assert.AreEqual(expected.Count(), actual.Count());
+                Assert.Contains(s, actual, "Expected to find " + s);
+            Assert.HasCount(expected.Count(), actual);
         }
     }
 }

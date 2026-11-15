@@ -17,17 +17,17 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(EFCoreOwnedTypesService));
 
-            CollectionAssert.AreEquivalent(new[] {
+            Assert.AreSequenceEqual(new[] {
                 typeof(OwnedTypes.Address),
                 typeof(OwnedTypes.ContactInfo),
                 typeof(OwnedTypes.OwnedEntityWithBackNavigation),
-                }, dsd.ComplexTypes.ToList());
+                }, dsd.ComplexTypes.ToList(), Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
-            CollectionAssert.AreEquivalent(new[] {
+            Assert.AreSequenceEqual(new[] {
                 typeof(OwnedTypes.Employee),
                 typeof(OwnedTypes.OwnedEntityWithExplicitId),
                 typeof(OwnedTypes.OwnedEntityWithExplicitIdAndBackNavigation)
-            }, dsd.EntityTypes.ToList());
+            }, dsd.EntityTypes.ToList(), Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
             var employee = TypeDescriptor.GetProperties(typeof(OwnedTypes.Employee));
             Assert.IsNotNull(employee[nameof(OwnedTypes.Employee.EmployeeId)]!.Attributes[typeof(KeyAttribute)]);
@@ -67,8 +67,8 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(EFCoreComplexTypesService));
 
-            CollectionAssert.AreEquivalent(dsd.EntityTypes.ToList(), new[] { typeof(ComplexTypes.Employee) });
-            CollectionAssert.AreEquivalent(dsd.ComplexTypes.ToList(), new[] { typeof(ComplexTypes.Address), typeof(ComplexTypes.ContactInfo) });
+            Assert.AreSequenceEqual(dsd.EntityTypes.ToList(), new[] { typeof(ComplexTypes.Employee) }, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
+            Assert.AreSequenceEqual(dsd.ComplexTypes.ToList(), new[] { typeof(ComplexTypes.Address), typeof(ComplexTypes.ContactInfo) }, Microsoft.VisualStudio.TestTools.UnitTesting.SequenceOrder.InAnyOrder);
 
             var employee = TypeDescriptor.GetProperties(typeof(ComplexTypes.Employee));
             Assert.IsNotNull(employee[nameof(ComplexTypes.Employee.EmployeeId)]!.Attributes[typeof(KeyAttribute)]);

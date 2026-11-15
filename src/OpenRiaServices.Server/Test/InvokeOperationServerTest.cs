@@ -39,10 +39,10 @@ namespace OpenRiaServices.Server.Test
             // verify GetOnlineMethods return all the invoke operations on this provider
             IEnumerable<DomainOperationEntry> returnedMethods = description.DomainOperationEntries.Where(p => p.Operation == DomainOperation.Invoke);
             Assert.IsNotNull(returnedMethods);
-            Assert.AreEqual(10, returnedMethods.Count());
-            Assert.IsTrue(returnedMethods.Any(p => p.Name == "Process_EntitiesAndSimpleParams"));
+            Assert.HasCount(10, returnedMethods);
+            Assert.Contains(p => p.Name == "Process_EntitiesAndSimpleParams", returnedMethods);
 
-            Assert.IsTrue(returnedMethods.Any(p => p.Name == "Process_Return_EntityListParam"));
+            Assert.Contains(p => p.Name == "Process_Return_EntityListParam", returnedMethods);
         }
 
         [TestMethod]

@@ -15,18 +15,18 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
         {
             ConflictContext.ConnectionString = $"Server=(localdb)\\MSSQLLocalDB;Database=OpenRiaServices_ConflictDisclosure_{Guid.NewGuid():N};Integrated Security=true;TrustServerCertificate=true";
             using var context = new ConflictContext();
-            await context.Database.EnsureCreatedAsync();
+            await context.Database.EnsureCreatedAsync(testContext.CancellationToken);
             context.AddRange(
                 new ConflictEntity { Id = 1, Name = "Stored", OwnerId = "owner" },
                 new ConflictEntity { Id = 2, Name = "Secret", OwnerId = "other" });
-            await context.SaveChangesAsync();
+            await context.SaveChangesAsync(testContext.CancellationToken);
         }
 
         [ClassCleanup]
-        public static async Task DeleteDatabase()
+        public static async Task DeleteDatabase(TestContext testContext)
         {
             using var context = new ConflictContext();
-            await context.Database.EnsureDeletedAsync();
+            await context.Database.EnsureDeletedAsync(testContext.CancellationToken);
         }
 
         [TestMethod]
@@ -41,7 +41,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore.Test
             var snapshot = (ConflictEntity)operation.StoreEntity;
             Assert.AreEqual("Stored", snapshot.Name);
             Assert.AreEqual("owner", snapshot.OwnerId);
-            CollectionAssert.Contains(operation.ConflictMembers.ToArray(), nameof(ConflictEntity.Name));
+            Assert.Contains(nameof(ConflictEntity.Name), operation.ConflictMembers);
             Assert.IsFalse(operation.IsDeleteConflict);
             Assert.AreEqual(1, service.ResolveCalls);
         }

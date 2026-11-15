@@ -156,7 +156,7 @@ namespace OpenRiaServices.Server.Test
             var queryResult = await cities.QueryAsync<Zip>(new QueryDescription(getZipsIfUser), CancellationToken.None);
             Assert.IsNotNull(queryResult.Result);
             Assert.IsNull(queryResult.ValidationErrors);
-            Assert.IsTrue(queryResult.Result.OfType<Zip>().Any(), "Expected non-zero number of zip codes returned");
+            Assert.IsNotEmpty(queryResult.Result.OfType<Zip>(), "Expected non-zero number of zip codes returned");
         }
 
         [TestMethod]

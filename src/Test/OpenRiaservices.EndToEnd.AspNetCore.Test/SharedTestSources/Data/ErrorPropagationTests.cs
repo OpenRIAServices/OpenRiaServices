@@ -99,21 +99,21 @@ namespace OpenRiaServices.Client.Test
                 Zip[] zips = citiesProvider.Zips.ToArray();
                 IEnumerable<ValidationResult> errors = zips[0].ValidationErrors;
                 LogErrorListContents("citiesProvider.Zips[0].ValidationErrors", errors);
-                Assert.AreEqual(1, errors.Count());
+                Assert.HasCount(1, errors);
                 ValidationResult vr = errors.First();
                 Assert.AreEqual("Invalid Zip properties!", vr.ErrorMessage);
-                Assert.AreEqual(2, vr.MemberNames.Count());
-                Assert.IsTrue(vr.MemberNames.Contains("CityName"));
-                Assert.IsTrue(vr.MemberNames.Contains("CountyName"));
+                Assert.HasCount(2, vr.MemberNames);
+                Assert.Contains("CityName", vr.MemberNames);
+                Assert.Contains("CountyName", vr.MemberNames);
 
                 errors = zips[1].ValidationErrors;
                 LogErrorListContents("citiesProvider.Zips[0].ValidationErrors", errors);
-                Assert.AreEqual(1, errors.Count());
+                Assert.HasCount(1, errors);
                 vr = errors.First();
                 Assert.AreEqual("Invalid Zip properties!", vr.ErrorMessage);
-                Assert.AreEqual(2, vr.MemberNames.Count());
-                Assert.IsTrue(vr.MemberNames.Contains("CityName"));
-                Assert.IsTrue(vr.MemberNames.Contains("CountyName"));
+                Assert.HasCount(2, vr.MemberNames);
+                Assert.Contains("CityName", vr.MemberNames);
+                Assert.Contains("CountyName", vr.MemberNames);
 
                 // verify the Entity.ValidationErrors collection is populated as expected
                 Assert.Contains("HasValidationErrors", propChanged[0]);
@@ -184,17 +184,17 @@ namespace OpenRiaServices.Client.Test
                 Zip[] zips = citiesProvider.Zips.ToArray();
                 IEnumerable<ValidationResult> errors = zips[0].ValidationErrors;
                 LogErrorListContents("citiesProvider.Zips[0].ValidationErrors", errors);
-                Assert.AreEqual(1, errors.Count());
+                Assert.HasCount(1, errors);
                 ValidationResult vr = errors.First();
                 Assert.AreEqual("testing", vr.ErrorMessage);
-                Assert.AreEqual(0, vr.MemberNames.Count());
+                Assert.IsEmpty(vr.MemberNames);
 
                 errors = zips[1].ValidationErrors;
                 LogErrorListContents("citiesProvider.Zips[0].ValidationErrors", errors);
-                Assert.AreEqual(1, errors.Count());
+                Assert.HasCount(1, errors);
                 vr = errors.First();
                 Assert.AreEqual("testing", vr.ErrorMessage);
-                Assert.AreEqual(0, vr.MemberNames.Count());
+                Assert.IsEmpty(vr.MemberNames);
 
                 // verify the Entity.ValidationErrors collection is populated as expected
                 Assert.Contains("HasValidationErrors", propChanged[0]);
@@ -242,11 +242,11 @@ namespace OpenRiaServices.Client.Test
                 Zip zip = citiesProvider.Zips.First();
                 IEnumerable<ValidationResult> errors = zip.ValidationErrors;
                 LogErrorListContents("zips[0].ValidationErrors", errors);
-                Assert.AreEqual(1, errors.Count());
+                Assert.HasCount(1, errors);
 
                 // Verify that failed submission does not clear out the last invocation
                 Assert.IsFalse(zip.CanThrowException);
-                Assert.IsTrue(zip.EntityActions.Any(a => a.Name == "ThrowException"));
+                Assert.Contains(a => a.Name == "ThrowException", zip.EntityActions);
 
                 // Add a custom validation error to ensure it gets cleared
                 zip.ValidationErrors.Add(new ValidationResult("Temporary Error"));
@@ -316,7 +316,7 @@ namespace OpenRiaServices.Client.Test
 
                 IEnumerable<ValidationResult> errors = newZip.ValidationErrors;
                 LogErrorListContents("newZip.ValidationErrors", errors);
-                Assert.AreEqual(1, errors.Count());
+                Assert.HasCount(1, errors);
                 UnitTestHelper.AssertListContains<ValidationResult>(errors, (e => e.ErrorMessage == "Server fails validation"));
             });
 
@@ -445,7 +445,7 @@ namespace OpenRiaServices.Client.Test
                 Zip[] zips = citiesProvider.Zips.ToArray();
                 IEnumerable<ValidationResult> errors = zips[0].ValidationErrors;
                 LogErrorListContents("citiesProvider.Zips[0].ValidationErrors", errors);
-                Assert.AreEqual(2, errors.Count());
+                Assert.HasCount(2, errors);
                 UnitTestHelper.AssertListContains<ValidationResult>(errors, (e => e.ErrorMessage == "The field offset must be between -9999 and 9999."));
                 UnitTestHelper.AssertListContains<ValidationResult>(errors, (e => e.ErrorMessage == "Zip codes cannot have matching city and state names" && e.MemberNames.Contains("StateName") && e.MemberNames.Contains("CityName")));
 
@@ -453,7 +453,7 @@ namespace OpenRiaServices.Client.Test
                 errors = newZip.ValidationErrors;
 
                 // Expect only 2 errors for the properties.  The entity level error is not checked if property level checks fail
-                Assert.AreEqual(2, errors.Count());
+                Assert.HasCount(2, errors);
                 UnitTestHelper.AssertListContains<ValidationResult>(errors, (e => e.ErrorMessage == "The CityName field is required."));
                 UnitTestHelper.AssertListContains<ValidationResult>(errors, (e => e.ErrorMessage == "The StateName field is required."));
 

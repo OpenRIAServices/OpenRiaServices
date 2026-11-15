@@ -85,9 +85,9 @@ namespace OpenRiaServices.Server.Test
                                                 .Where(doe =>
                                                         (doe.Operation == DomainOperation.Query) &&
                                                         (doe.Attributes.OfType<QueryAttribute>().Any(qa => qa.IsDefault)));
-            Assert.AreEqual(2, defaultQueries.Count(), "Expected 2 default queries");
-            Assert.IsTrue(defaultQueries.Any(doe => doe.Name.Equals("GetEntity1")), "Expected to find GetEntity1 in list of default queries");
-            Assert.IsTrue(defaultQueries.Any(doe => doe.Name.Equals("GetEntity2")), "Expected to find GetEntity2 in list of default queries");
+            Assert.HasCount(2, defaultQueries, "Expected 2 default queries");
+            Assert.Contains(doe => doe.Name.Equals("GetEntity1"), defaultQueries, "Expected to find GetEntity1 in list of default queries");
+            Assert.Contains(doe => doe.Name.Equals("GetEntity2"), defaultQueries, "Expected to find GetEntity2 in list of default queries");
 
         }
 

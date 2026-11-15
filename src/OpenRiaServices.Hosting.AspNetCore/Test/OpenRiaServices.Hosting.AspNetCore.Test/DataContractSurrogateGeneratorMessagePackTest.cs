@@ -27,9 +27,8 @@ namespace OpenRiaServices.Hosting.UnitTests
             IObjectTypeShape entityShape = (IObjectTypeShape)provider.GetTypeShape(entityType);
             IObjectTypeShape surrogateShape = (IObjectTypeShape)provider.GetTypeShape(surrogateType);
 
-            CollectionAssert.AreEqual(
-                entityShape.Properties.Select(property => property.Name).ToArray(),
-                surrogateShape.Properties.Select(property => property.Name).ToArray());
+            Assert.AreSequenceEqual(
+                entityShape.Properties.Select(property => property.Name).ToArray(), surrogateShape.Properties.Select(property => property.Name).ToArray());
             Assert.IsNotNull(surrogateType.GetCustomAttribute<TypeShapeAttribute>());
             Assert.AreEqual(
                 entityType.GetProperty(nameof(SurrogateTestEntity_PropertyShape.Renamed)).GetCustomAttribute<Nerdbank.MessagePack.KeyAttribute>().Index,
@@ -70,9 +69,8 @@ namespace OpenRiaServices.Hosting.UnitTests
             Assert.AreEqual(TypeShapeKind.None, shape.Kind);
             Assert.AreEqual(default(MethodShapeFlags), shape.IncludeMethods);
             Assert.IsNull(shape.Marshaler);
-            CollectionAssert.AreEqual(
-                new[] { nameof(TypeShapeAttribute.Kind) },
-                surrogateType.GetCustomAttributesData().Single(attribute => attribute.AttributeType == typeof(TypeShapeAttribute))
+            Assert.AreSequenceEqual(
+                new[] { nameof(TypeShapeAttribute.Kind) }, surrogateType.GetCustomAttributesData().Single(attribute => attribute.AttributeType == typeof(TypeShapeAttribute))
                     .NamedArguments.Select(argument => argument.MemberName).ToArray());
             Assert.AreEqual(surrogateType, derivedSurrogateType.BaseType);
         }
@@ -220,8 +218,8 @@ namespace OpenRiaServices.Hosting.UnitTests
         public void MessagePackProviderValidatesDomainServiceExposedTypes()
         {
             var description = DomainServiceDescription.GetDescription(typeof(ConverterDomainService));
-            Assert.IsTrue(description.EntityTypes.Contains(typeof(ConverterEntity)));
-            Assert.IsTrue(description.ComplexTypes.Contains(typeof(ConverterComplex)));
+            Assert.Contains(typeof(ConverterEntity), description.EntityTypes);
+            Assert.Contains(typeof(ConverterComplex), description.ComplexTypes);
             var operation = description.GetQueryMethod(nameof(ConverterDomainService.GetEntities));
 
             // XML can create and cache the surrogates without bypassing MessagePack validation.

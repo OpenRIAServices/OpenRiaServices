@@ -929,7 +929,7 @@ namespace OpenRiaServices.Client.Test
             LoadOperation result = catalog.Load(query, false);
 
             await result;
-            Assert.AreEqual(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter).Count());
+            Assert.HasCount(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter));
             Assert.AreEqual(22, listChangeNotifications);
 
             listChangeNotifications = 0;
@@ -937,7 +937,7 @@ namespace OpenRiaServices.Client.Test
             result = catalog.Load(query, false);
 
             await result;
-            Assert.AreEqual(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter).Count());
+            Assert.HasCount(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter));
             Assert.AreEqual(22, listChangeNotifications);
         }
 
@@ -1168,7 +1168,7 @@ namespace OpenRiaServices.Client.Test
 
             var changedObj = provider.MixedTypes.Single(t => t.ID == "MixedType_Max");
             var returnedTimeSpans = changedObj.NullableTimeSpanListProp.ToArray();
-            CollectionAssert.AreEqual(nullableTimeSpans.ToArray(), returnedTimeSpans);
+            Assert.AreSequenceEqual(nullableTimeSpans.ToArray(), returnedTimeSpans);
         }
 
         [TestMethod]
@@ -1389,7 +1389,7 @@ namespace OpenRiaServices.Client.Test
 
             LoadOperation lo = catalog.Load(catalog.GetProductsQuery(), false);
 
-            bool waitSuccess = await propertyChangeCalled.WaitAsync(TimeSpan.FromSeconds(30));
+            bool waitSuccess = await propertyChangeCalled.WaitAsync(TimeSpan.FromSeconds(30), TestContext.CancellationToken);
 
             Assert.IsTrue(waitSuccess, "Waited to long for callback to be executed, semaphore note signalled");
 
@@ -1743,7 +1743,7 @@ namespace OpenRiaServices.Client.Test
                 }
             }
             Assert.AreEqual((numberOfActiveLoadCalls - 1), catalog.Products.Count);
-            Assert.AreEqual(1, loadOperations.Where(a => a.IsCanceled).Count());
+            Assert.ContainsSingle(a => a.IsCanceled, loadOperations);
         }
 
         [TestMethod]
@@ -1896,7 +1896,7 @@ namespace OpenRiaServices.Client.Test
 
             await lo;
             Assert.AreEqual(36, ctxt.Products.Count);
-            Assert.IsFalse(ctxt.Products.Any(p => p.Color != "Yellow"));
+            Assert.DoesNotContain(p => p.Color != "Yellow", ctxt.Products);
         }
 
         [TestMethod]
@@ -2149,6 +2149,8 @@ namespace OpenRiaServices.Client.Test
             var ex = await ExceptionHelper.ExpectExceptionAsync<Exception>(() => ctxt.LoadAsync(query), allowDerivedExceptions: true);
             validateException(ex);
         }
+
+        public TestContext TestContext { get; set; }
     }
 
     internal class ScenariosEntityContainer : EntityContainer

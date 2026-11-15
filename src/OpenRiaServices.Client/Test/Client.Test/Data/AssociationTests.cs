@@ -164,8 +164,8 @@ namespace OpenRiaServices.Client.Test
             // not involving PK, but the test is still valid this way.
             order.ApplyState(new Dictionary<string, object> { { "PurchaseOrderID", 2 } });
             Assert.AreEqual(2, order.PurchaseOrderDetails.Count);
-            Assert.IsTrue(order.PurchaseOrderDetails.Contains(detail3));
-            Assert.IsTrue(order.PurchaseOrderDetails.Contains(detail4));
+            Assert.Contains(detail3, order.PurchaseOrderDetails);
+            Assert.Contains(detail4, order.PurchaseOrderDetails);
         }
 
         [TestMethod]

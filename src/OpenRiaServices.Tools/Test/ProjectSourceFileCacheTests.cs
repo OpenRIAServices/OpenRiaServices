@@ -70,10 +70,10 @@ namespace OpenRiaServices.Tools.Test
                 // And indexer getter returns the inputs
                 IEnumerable<string> files = cache["proj"];
                 Assert.IsNotNull(files);
-                Assert.AreEqual(3, files.Count());
-                Assert.IsTrue(files.Contains("a"));
-                Assert.IsTrue(files.Contains("b"));
-                Assert.IsTrue(files.Contains("c"));
+                Assert.HasCount(3, files);
+                Assert.Contains("a", files);
+                Assert.Contains("b", files);
+                Assert.Contains("c", files);
 
                 // Cache is case insensitive.  Should overwrite entry differing only in case
                 cache["PrOj"] = new string[] { "d", "e" };
@@ -114,9 +114,9 @@ namespace OpenRiaServices.Tools.Test
 
                 IEnumerable<string> projects = cache.GetAllKnownProjects();
                 Assert.IsNotNull(projects);
-                Assert.AreEqual(2, projects.Count());
-                Assert.IsTrue(projects.Contains("p1"));
-                Assert.IsTrue(projects.Contains("p2"));
+                Assert.HasCount(2, projects);
+                Assert.Contains("p1", projects);
+                Assert.Contains("p2", projects);
             }
         }
 
@@ -375,8 +375,8 @@ namespace OpenRiaServices.Tools.Test
 
             // We expect to find ServerClassLib and ServerClassLib2 in the set of known projects.
             // There may be others due to normal project references, but we don't care about them
-            Assert.IsTrue(projects.Contains(serverProjectPath), "Expected to find " + serverProjectPath + " in list of known projects");
-            Assert.IsTrue(projects.Contains(server2ProjectPath), "Expected to find " + server2ProjectPath + " in list of known projects");
+            Assert.Contains(serverProjectPath, projects, "Expected to find " + serverProjectPath + " in list of known projects");
+            Assert.Contains(server2ProjectPath, projects, "Expected to find " + server2ProjectPath + " in list of known projects");
 
             IEnumerable<string> serverFiles = cache.GetSourceFilesInProject(serverProjectPath);
             Assert.IsNotNull(serverFiles);
@@ -384,7 +384,7 @@ namespace OpenRiaServices.Tools.Test
             foreach (string file in expectedServerFiles)
             {
                 string expectedFile = Path.Combine(Path.GetDirectoryName(serverProjectPath), file);
-                Assert.IsTrue(serverFiles.Contains(expectedFile), "Expected to see " + expectedFile + " in list of server files");
+                Assert.Contains(expectedFile, serverFiles, "Expected to see " + expectedFile + " in list of server files");
             }
 
             IEnumerable<string> server2Files = cache.GetSourceFilesInProject(server2ProjectPath);
@@ -393,7 +393,7 @@ namespace OpenRiaServices.Tools.Test
             foreach (string file in expectedServer2Files)
             {
                 string expectedFile = Path.Combine(Path.GetDirectoryName(server2ProjectPath), file);
-                Assert.IsTrue(server2Files.Contains(expectedFile), "Expected to see " + expectedFile + " in list of server files");
+                Assert.Contains(expectedFile, server2Files, "Expected to see " + expectedFile + " in list of server files");
             }
 
         }

@@ -39,7 +39,7 @@ namespace OpenRiaServices.Client.Test
                 IEditableCollectionView view = this.GetIECV(entityCollection);
 
                 City city = (City)view.AddNew();
-                Assert.IsTrue(entityCollection.Contains(city),
+                Assert.Contains(city, entityCollection,
                     "EntityCollection should contain the first entity after AddNew.");
                 Assert.IsTrue(entitySet.Contains(city),
                     "EntitySet should contain the first entity after AddNew.");
@@ -47,7 +47,7 @@ namespace OpenRiaServices.Client.Test
                 city.CountyName = "King";
                 city.StateName = "WA";
                 view.CommitNew();
-                Assert.IsTrue(entityCollection.Contains(city),
+                Assert.Contains(city, entityCollection,
                     "EntityCollection should contain the first entity after CommitNew.");
                 Assert.IsTrue(entitySet.Contains(city),
                     "EntitySet should contain the first entity after CommitNew.");
@@ -63,13 +63,13 @@ namespace OpenRiaServices.Client.Test
                 IEditableCollectionView view = this.GetIECV(entityCollection);
 
                 City city = (City)view.AddNew();
-                Assert.IsTrue(entityCollection.Contains(city),
+                Assert.Contains(city, entityCollection,
                     "EntityCollection should contain the second entity after AddNew.");
                 Assert.IsTrue(entitySet.Contains(city),
                     "EntitySet should contain the second entity after AddNew.");
 
                 view.CancelNew();
-                Assert.IsFalse(entityCollection.Contains(city),
+                Assert.DoesNotContain(city, entityCollection,
                     "EntityCollection should no longer contain the second entity after CancelNew.");
                 Assert.IsFalse(entitySet.Contains(city),
                     "EntitySet should no longer contain the second entity after CancelNew.");
@@ -107,7 +107,7 @@ namespace OpenRiaServices.Client.Test
 
                 // This one was added through the view and will be removed from both
                 view.Remove(city);
-                Assert.IsFalse(entityCollection.Contains(city),
+                Assert.DoesNotContain(city, entityCollection,
                     "EntityCollection should no longer contain the first entity.");
                 Assert.IsFalse(entitySet.Contains(city),
                     "EntitySet should no longer contain the first entity.");
@@ -115,7 +115,7 @@ namespace OpenRiaServices.Client.Test
                 // This one was added directly and will only be removed for the collection
                 city = entityCollection.ElementAt(1);
                 view.Remove(city);
-                Assert.IsFalse(entityCollection.Contains(city),
+                Assert.DoesNotContain(city, entityCollection,
                     "EntityCollection should no longer contain the entity at index 1.");
                 Assert.IsTrue(entitySet.Contains(city),
                     "EntitySet should still contain the entity at index 1.");
@@ -140,7 +140,7 @@ namespace OpenRiaServices.Client.Test
                 // This one was added through the view and will be removed from both
                 city = entityCollection.ElementAt(0);
                 view.RemoveAt(0);
-                Assert.IsFalse(entityCollection.Contains(city),
+                Assert.DoesNotContain(city, entityCollection,
                     "EntityCollection should no longer contain the entity at index 0.");
                 Assert.IsFalse(entitySet.Contains(city),
                     "EntitySet should no longer contain the entity at index 0.");
@@ -148,7 +148,7 @@ namespace OpenRiaServices.Client.Test
                 // This one was added directly and will only be removed for the collection
                 city = entityCollection.ElementAt(1);
                 view.RemoveAt(1);
-                Assert.IsFalse(entityCollection.Contains(city),
+                Assert.DoesNotContain(city, entityCollection,
                     "EntityCollection should no longer contain the entity at index 1.");
                 Assert.IsTrue(entitySet.Contains(city),
                     "EntitySet should still contain the entity at index 1.");

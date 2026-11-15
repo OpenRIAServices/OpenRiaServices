@@ -29,10 +29,10 @@ namespace OpenRiaServices.Tools.Test
             var destination = new ConsoleLogger();
             server.WriteLogsTo(destination, CancellationToken.None);
 
-            CollectionAssert.AreEqual(new[] { "Message" }, destination.InfoMessages);
-            CollectionAssert.AreEqual(new[] { "Warning", "LongWarning" }, destination.WarningMessages);
-            CollectionAssert.AreEqual(new[] { "Error", "LongError" }, destination.ErrorMessages);
-            CollectionAssert.AreEqual(new[] { new ConsoleLogger.LogPacket()
+            Assert.AreSequenceEqual(new[] { "Message" }, destination.InfoMessages);
+            Assert.AreSequenceEqual(new[] { "Warning", "LongWarning" }, destination.WarningMessages);
+            Assert.AreSequenceEqual(new[] { "Error", "LongError" }, destination.ErrorMessages);
+            Assert.AreSequenceEqual(new[] { new ConsoleLogger.LogPacket()
                 {
                     Message = "LongError",
                     Subcategory = "SubCat1",
@@ -45,7 +45,7 @@ namespace OpenRiaServices.Tools.Test
                     EndColumnNumber = 4,
                 }
             }, destination.ErrorPackets);
-            CollectionAssert.AreEqual(new[] { new ConsoleLogger.LogPacket()
+            Assert.AreSequenceEqual(new[] { new ConsoleLogger.LogPacket()
             {
                     Message = "LongWarning",
                     Subcategory = "SubCat2",

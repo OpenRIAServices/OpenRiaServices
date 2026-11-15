@@ -1210,7 +1210,7 @@ namespace OpenRiaServices.Client.Test
             Assert.IsTrue(p.ContactInfo.HasValidationErrors);
             Assert.HasCount(1, p.ValidationErrors);
             result = p.ContactInfo.ValidationErrors.Single(q => q.ErrorMessage == "Invalid-TypeLevel");
-            Assert.AreEqual(0, result.MemberNames.Count());
+            Assert.IsEmpty(result.MemberNames);
         }
 
         /// <summary>
@@ -1400,21 +1400,21 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("Invalid", p.ContactInfo.HomeAddress.State);
             Assert.IsTrue(entityErrors.SequenceEqual(new string[] { "ContactInfo.HomeAddress.State" }));
             IEnumerable<ValidationResult> results = p.ValidationErrors.Where(e => e.MemberNames.Contains("ContactInfo.HomeAddress.State"));
-            Assert.AreEqual(1, results.Count());
+            Assert.HasCount(1, results);
             Assert.AreEqual("The field State must be a string with a maximum length of 2.", results.Single().ErrorMessage);
 
             // verify the errors are reported at the Contact level
             Assert.IsTrue(p.ContactInfo.HasValidationErrors);
             Assert.IsTrue(contactErrors.SequenceEqual(new string[] { "HomeAddress.State" }));
             results = p.ContactInfo.ValidationErrors.Where(e => e.MemberNames.Contains("HomeAddress.State"));
-            Assert.AreEqual(1, results.Count());
+            Assert.HasCount(1, results);
             Assert.AreEqual("The field State must be a string with a maximum length of 2.", results.Single().ErrorMessage);
 
             // verify the errors are reported at the Address level
             Assert.IsTrue(p.ContactInfo.HomeAddress.HasValidationErrors);
             Assert.IsTrue(addressErrors.SequenceEqual(new string[] { "State" }));
             results = p.ContactInfo.HomeAddress.ValidationErrors.Where(e => e.MemberNames.Contains("State"));
-            Assert.AreEqual(1, results.Count());
+            Assert.HasCount(1, results);
             Assert.AreEqual("The field State must be a string with a maximum length of 2.", results.Single().ErrorMessage);
 
             // clear the error
@@ -1465,11 +1465,11 @@ namespace OpenRiaServices.Client.Test
 
             Assert.IsTrue(p.HasValidationErrors);
             Assert.HasCount(4, p.ValidationErrors);
-            Assert.IsFalse(p.ValidationErrors.SelectMany(q => q.MemberNames).Any(q => q.Contains("Phone")));
+            Assert.DoesNotContain(q => q.Contains("Phone"), p.ValidationErrors.SelectMany(q => q.MemberNames));
 
             Assert.IsTrue(p.ContactInfo.HasValidationErrors);
             Assert.HasCount(3, p.ContactInfo.ValidationErrors);
-            Assert.IsFalse(p.ContactInfo.ValidationErrors.SelectMany(q => q.MemberNames).Any(q => q.Contains("Phone")));
+            Assert.DoesNotContain(q => q.Contains("Phone"), p.ContactInfo.ValidationErrors.SelectMany(q => q.MemberNames));
 
             Assert.IsTrue(p.ContactInfo.HomeAddress.HasValidationErrors);
             Assert.HasCount(2, p.ContactInfo.HomeAddress.ValidationErrors);
@@ -1512,8 +1512,8 @@ namespace OpenRiaServices.Client.Test
             results = p.ValidationErrors.ToArray();
             Assert.HasCount(2, results);
             IEnumerable<string> invalidMembers = results.SelectMany(q => q.MemberNames);
-            Assert.IsTrue(invalidMembers.Contains("ContactInfo.PrimaryPhone.AreaCode"));
-            Assert.IsTrue(invalidMembers.Contains("ContactInfo.PrimaryPhone.Number"));
+            Assert.Contains("ContactInfo.PrimaryPhone.AreaCode", invalidMembers);
+            Assert.Contains("ContactInfo.PrimaryPhone.Number", invalidMembers);
         }
 
         /// <summary>
@@ -2018,7 +2018,7 @@ namespace OpenRiaServices.Client.Test
         private static void EnsureNoInheritance(Type complexType)
         {
             Type baseType = complexType.BaseType;
-            Assert.IsTrue(baseType == typeof(ComplexObject), string.Format("Complex type '{0}' should inherit from ComplexObject, but inherits from '{1}'.", complexType, baseType));
+            Assert.AreEqual(typeof(ComplexObject), baseType, string.Format("Complex type '{0}' should inherit from ComplexObject, but inherits from '{1}'.", complexType, baseType));
         }
 
         private static void EnsureOperationNoError(OperationBase operation)

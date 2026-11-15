@@ -604,7 +604,7 @@ namespace OpenRiaServices.Tools.Test
         /// <param name="shortNames">collection of file short names that must be in list</param>
         public static void AssertContainsOnlyTheseFiles(IEnumerable<string> files, string projectPath, string[] shortNames)
         {
-            Assert.AreEqual(shortNames.Length, files.Count());
+            Assert.HasCount(shortNames.Length, files);
             AssertContainsAtLeastTheseFiles(files, projectPath, shortNames);
         }
 
