@@ -1,7 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <OutputType>Library</OutputType>
-    <TargetFrameworks>net472;net10.0</TargetFrameworks>
+    <TargetFrameworks>net472;net10.0;net10.0-windows</TargetFrameworks>
+    <UseWPF Condition="'$(TargetFramework)' == 'net10.0-windows'">true</UseWPF>
+    <IsPackable>true</IsPackable>
+    <PackageId>OpenRiaServices.Client.Core</PackageId>
+    <Title>Open RIA Services Client</Title>
+    <Description>OpenRiaServices.Client.Core provides the OpenRiaServices.Client and DomainClient assemblies for your client projects.</Description>
+    <PackageTags>WCF RIA Services RIAServices OpenRiaServices</PackageTags>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeClientAssemblyInPackage</TargetsForTfmSpecificBuildOutput>
     <GeneratePackageOnBuild>False</GeneratePackageOnBuild>
     <RootNamespace>OpenRiaServices.Client.DomainClients</RootNamespace>
     <NeutralLanguage>en</NeutralLanguage>
@@ -19,7 +26,7 @@
     <Compile Include="..\..\OpenRiaServices.Server\Framework\Data\KnownTypeUtilities.cs" Link="OpenRiaServices.Server\KnownTypeUtilities.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" PrivateAssets="all" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Nerdbank.MessagePack" Version="1.4.104" />
@@ -41,4 +48,9 @@
       <CustomToolNamespace>OpenRiaServices.Client</CustomToolNamespace>
     </EmbeddedResource>
   </ItemGroup>
+  <Target Name="IncludeClientAssemblyInPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(TargetDir)OpenRiaServices.Client.dll;$(TargetDir)OpenRiaServices.Client.pdb;$(TargetDir)OpenRiaServices.Client.xml" />
+    </ItemGroup>
+  </Target>
 </Project>

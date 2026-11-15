@@ -3,6 +3,7 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFrameworks>net10.0</TargetFrameworks>
+    <IsPackable>false</IsPackable>
     
     <!-- Enable roll forward to newer versions so that we run with latest stable dotnet release
     https://learn.microsoft.com/en-us/dotnet/core/versions/selection#control-roll-forward-behavior 

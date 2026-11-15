@@ -1,6 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <PackageId>OpenRiaServices.Server</PackageId>
+    <Description>OpenRiaServices.Server provides the core server assembly. Use OpenRiaServices.Hosting.AspNetCore to host Domain Services.</Description>
+    <PackageTags>WCF RIA Services RIAServices Server aspnet OpenRiaServices</PackageTags>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
   </PropertyGroup>
 

@@ -21,4 +21,8 @@
             </group>
         </dependencies>
     </metadata>
+    <!-- This dependency-only package must not include files from the NuGet directory. -->
+    <files>
+        <file src="OpenRiaServices.Client.nuspec" exclude="OpenRiaServices.Client.nuspec" />
+    </files>
 </package>

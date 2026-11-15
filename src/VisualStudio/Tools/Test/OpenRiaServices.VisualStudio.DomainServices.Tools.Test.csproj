@@ -13,14 +13,14 @@
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.2" />
-    <!-- Reference latest build version to work with VS 2026, otherwise we get TypeLoad exceptions due to dependencies being to "old" -->
-    <PackageReference Include="Microsoft.Build" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.NET.StringTools" Version="18.4.0" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="MSTest.TestAdapter" Version="4.5.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
+    <!-- Match the framework's MSBuild baseline; Locator supplies runtime assemblies from Visual Studio. -->
+    <PackageReference Include="Microsoft.Build" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.NET.StringTools" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.5.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.5.3" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.ComponentModel.DataAnnotations" />

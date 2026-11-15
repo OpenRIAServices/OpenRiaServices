@@ -120,12 +120,8 @@ steps:
   condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))))
 
 - powershell: |
-    Get-ChildItem -Path NuGet -Filter *.nuspec -Recurse | ForEach-Object {
-      dotnet pack $_.FullName --version "$(Build.BuildNumber)" --output "$(Build.ArtifactStagingDirectory)"
-      if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    }
+    .\NuGet\Pack-All.ps1 -Configuration "$(BuildConfiguration)" -NoBuild -Version "$(GitVersion.NuGetVersionV2)" -OutputDirectory "$(Build.ArtifactStagingDirectory)"
   displayName: 'dotnet pack'
-  continueOnError: true
 #  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
 - task: CopyFiles@2

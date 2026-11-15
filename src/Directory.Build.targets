@@ -26,11 +26,13 @@
   -->
   <PropertyGroup>
     <IsTestProject Condition="'$(EnableMSTestRunner)' != 'true'">false</IsTestProject>
+    <!-- Project-local NoWarn values can override Directory.Build.props. -->
+    <NoWarn Condition="'$(IsTestProjectOrDependency)' == 'true'">$(NoWarn);CA1826</NoWarn>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(EnableMSTestRunner)' == 'true'">
     <IsTestProject>true</IsTestProject>
-    <MicrosoftTestingExtensionsVersion>2.5.2</MicrosoftTestingExtensionsVersion>
+    <MicrosoftTestingExtensionsVersion>2.5.3</MicrosoftTestingExtensionsVersion>
     <IsPackable>false</IsPackable>
     <!-- Show the full failure information (message + stack trace) for failing tests in the log -->
     <TestingPlatformShowTestsFailure>true</TestingPlatformShowTestsFailure>

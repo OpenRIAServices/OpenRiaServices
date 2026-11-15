@@ -1,6 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <PackageId>OpenRiaServices.UnitTesting</PackageId>
+    <Title>Open RIA Services Unit Testing</Title>
+    <Description>OpenRiaServices.UnitTesting provides a DomainServiceTestHost that can be used to unit test your Domain Services.</Description>
+    <PackageTags>WCF RIA Services RIAServices Testing OpenRiaServices</PackageTags>
   </PropertyGroup>
 
   <ItemGroup>

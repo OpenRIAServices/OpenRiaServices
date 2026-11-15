@@ -1,6 +1,11 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <PackageId>OpenRiaServices.EntityFramework</PackageId>
+    <Title>Open RIA Services support for Entity Framework 6+</Title>
+    <Description>OpenRiaServices.EntityFramework provides DbDomainService and LinqToEntitiesDomainService for Entity Framework 6 DbContext and ObjectContext models.</Description>
+    <PackageTags>WCF RIA Services RIAServices EntityFramework CodeFirst OpenRiaServices</PackageTags>
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>

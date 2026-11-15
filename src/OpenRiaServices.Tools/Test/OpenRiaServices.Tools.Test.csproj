@@ -21,26 +21,25 @@
 
   <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.5.2" />
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.11.0" />
-    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="4.11.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="5.12.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.VisualBasic" Version="5.12.0" />
     <PackageReference Include="Microsoft.Build.Locator" Version="1.11.2" />
     <PackageReference Include="Mono.Cecil" Version="0.11.6" />
-    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="10.0.14" />
-    <PackageReference Include="MSTest.TestAdapter" Version="4.5.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
-    <!-- Prevent accidental updgrade since 9.0 seems to add redundant parantheses around long strings split across lines -->
-    <PackageReference Include="System.CodeDom" Version="10.0.14" />
+    <PackageReference Include="System.Reflection.MetadataLoadContext" Version="11.0.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.5.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.5.3" />
+    <PackageReference Include="System.CodeDom" Version="11.0.0" />
   </ItemGroup>
   
   <ItemGroup>
     <ProjectReference Include="..\..\OpenRiaServices.Tools.CodeGenTask\OpenRiaServices.Tools.CodeGenTask.csproj" />
-    <!-- 17.11.* is the last MSBuild version supporting .NET 8. -->
-    <PackageReference Include="Microsoft.Build" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.NET.StringTools" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="System.Security.Cryptography.Xml" Version="10.0.*" />
+    <!-- Match the framework's MSBuild baseline; Locator supplies runtime assemblies from the installed SDK. -->
+    <PackageReference Include="Microsoft.Build" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Tasks.Core" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.NET.StringTools" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="System.Security.Cryptography.Xml" Version="11.0.0" />
   </ItemGroup>
   
   <ItemGroup>
