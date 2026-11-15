@@ -27,16 +27,16 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("my error message", error.Message);
             Assert.AreEqual<int>(0, error.ErrorCode);
             Assert.IsNull(error.StackTrace);
-            Assert.AreEqual(1, error.SourceMemberNames.Count());
-            Assert.IsTrue(error.SourceMemberNames.Contains("foo"));
+            Assert.HasCount(1, error.SourceMemberNames);
+            Assert.Contains("foo", error.SourceMemberNames);
 
             // test ctor with all arguments
             error = new ValidationResultInfo("message", 10, "stacktrace", new string[] { "foo" });
             Assert.AreEqual("message", error.Message);
             Assert.AreEqual(10, error.ErrorCode);
             Assert.AreEqual("stacktrace", error.StackTrace);
-            Assert.AreEqual(1, error.SourceMemberNames.Count());
-            Assert.IsTrue(error.SourceMemberNames.Contains("foo"));
+            Assert.HasCount(1, error.SourceMemberNames);
+            Assert.Contains("foo", error.SourceMemberNames);
         }
 
         [TestMethod]

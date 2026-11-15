@@ -65,7 +65,7 @@ namespace OpenRiaServices.Client.Test
                 {
                     Assert.AreSame(parent, employee, "Expected parent relationship to be restored.");
                     parent = employee.Manager;
-                    Assert.IsTrue(parent.Reports.Contains(employee), "Expected child relationship to be restored.");
+                    Assert.Contains(employee, parent.Reports, "Expected child relationship to be restored.");
                 }
             });
             this.EnqueueTestComplete();

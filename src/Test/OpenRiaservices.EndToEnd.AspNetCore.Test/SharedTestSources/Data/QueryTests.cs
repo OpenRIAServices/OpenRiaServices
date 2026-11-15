@@ -929,7 +929,7 @@ namespace OpenRiaServices.Client.Test
             LoadOperation result = catalog.Load(query, false);
 
             await result;
-            Assert.AreEqual(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter).Count());
+            Assert.HasCount(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter));
             Assert.AreEqual(22, listChangeNotifications);
 
             listChangeNotifications = 0;
@@ -937,7 +937,7 @@ namespace OpenRiaServices.Client.Test
             result = catalog.Load(query, false);
 
             await result;
-            Assert.AreEqual(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter).Count());
+            Assert.HasCount(22, catalog.Products.Where(p => p.Class == classFilter && p.Style == styleFilter));
             Assert.AreEqual(22, listChangeNotifications);
         }
 
@@ -1743,7 +1743,7 @@ namespace OpenRiaServices.Client.Test
                 }
             }
             Assert.AreEqual((numberOfActiveLoadCalls - 1), catalog.Products.Count);
-            Assert.AreEqual(1, loadOperations.Where(a => a.IsCanceled).Count());
+            Assert.ContainsSingle(a => a.IsCanceled, loadOperations);
         }
 
         [TestMethod]
@@ -1896,7 +1896,7 @@ namespace OpenRiaServices.Client.Test
 
             await lo;
             Assert.AreEqual(36, ctxt.Products.Count);
-            Assert.IsFalse(ctxt.Products.Any(p => p.Color != "Yellow"));
+            Assert.DoesNotContain(p => p.Color != "Yellow", ctxt.Products);
         }
 
         [TestMethod]

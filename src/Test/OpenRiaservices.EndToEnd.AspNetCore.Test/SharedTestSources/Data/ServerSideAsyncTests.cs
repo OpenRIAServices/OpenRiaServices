@@ -97,7 +97,7 @@ namespace OpenRiaServices.Client.Test
                 var actualDelay = (DateTime.Now - start);
 
                 Assert.IsNull(invokeOp.Error);
-                Assert.IsTrue(actualDelay >= minExpectedDelay, "Delay was less than expected");
+                Assert.IsGreaterThanOrEqualTo(minExpectedDelay, actualDelay, "Delay was less than expected");
 
                 // Server store the last delay the last thing it does so we shold only get
                 // it if we actually waited for the Task to complete

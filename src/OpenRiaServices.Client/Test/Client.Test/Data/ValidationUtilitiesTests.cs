@@ -258,7 +258,7 @@ namespace OpenRiaServices.Hosting.Test
 
             Assert.AreEqual("Value contains an invalid string", validationResults[0].ErrorMessage,
                 "The validation error should concern invalid string");
-            Assert.AreEqual(1, validationResults[0].MemberNames.Count(),
+            Assert.HasCount(1, validationResults[0].MemberNames,
                 "The validation error should be for a single member");
             Assert.AreEqual("Strings", validationResults[0].MemberNames.First(),
                 "The validation error should be for Strings");
@@ -280,7 +280,7 @@ namespace OpenRiaServices.Hosting.Test
                 "There should be 1 validation error");
             Assert.AreEqual("IValidatableObject Invalid Value", validationResults[0].ErrorMessage,
                 "The validation error message is wrong");
-            Assert.AreEqual(2, validationResults[0].MemberNames.Count(),
+            Assert.HasCount(2, validationResults[0].MemberNames,
                 "The validation error message should be for 2 members");
             Assert.AreEqual("Member1", validationResults[0].MemberNames.ElementAt(0),
                 "The validation error does not report Member1 as faulty or wrong order");

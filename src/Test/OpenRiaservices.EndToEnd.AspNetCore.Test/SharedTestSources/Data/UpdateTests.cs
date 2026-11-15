@@ -167,7 +167,7 @@ namespace OpenRiaServices.Client.Test
             {
                 AssertSuccess();
 
-                Assert.IsFalse(ctxt.Customers.Any(p => p.CustomerID == newCust.CustomerID));
+                Assert.DoesNotContain(p => p.CustomerID == newCust.CustomerID, ctxt.Customers);
             });
 
             EnqueueTestComplete();
@@ -656,7 +656,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 // make sure the products table does not contain the id we're planning to use
-                Assert.IsFalse(ctxt.Products.Any(p => p.ProductID == 99999));
+                Assert.DoesNotContain(p => p.ProductID == 99999, ctxt.Products);
 
                 // Now attach this entity which does not exist in the table Northwind.Products
                 Product newProduct = new Product() { ProductID = 99999, ProductName = "new product", ResolveMethod = "ReturnFalse" };
@@ -682,7 +682,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(OperationErrorStatus.Conflicts, ex.Status);
 
                 // verify conflict info is returned to the client
-                Assert.AreEqual(1, so.EntitiesInError.Count());
+                Assert.HasCount(1, so.EntitiesInError);
                 EntityConflict conflict = so.EntitiesInError.First().EntityConflict;
                 Assert.IsTrue(conflict.IsDeleted);
             });
@@ -765,7 +765,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNotNull(so2.Error);
                 Order order = (Order)so2.EntitiesInError.Single();
                 EntityConflict conflict = order.EntityConflict;
-                Assert.AreEqual(1, conflict.PropertyNames.Count());
+                Assert.HasCount(1, conflict.PropertyNames);
 
                 string conflictMember = conflict.PropertyNames.Single();
                 Assert.AreEqual("CustomerID", conflictMember);
@@ -1711,7 +1711,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsTrue(changeSet.IsEmpty);
                 Assert.AreEqual(EntityState.Detached, detailToDelete.EntityState);
 
-                Assert.IsFalse(ctxt.Order_Details.Any(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID));
+                Assert.DoesNotContain(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID, ctxt.Order_Details);
 
                 var query = ctxt.GetOrderDetailsQuery().Where(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID);
                 Load(query);
@@ -1723,7 +1723,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 AssertSuccess();
-                Assert.IsFalse(ctxt.Order_Details.Any(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID));
+                Assert.DoesNotContain(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID, ctxt.Order_Details);
             });
 
             EnqueueTestComplete();
@@ -1773,7 +1773,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsTrue(changeSet.IsEmpty);
                 Assert.AreEqual(EntityState.Detached, detailToDelete.EntityState);
 
-                Assert.IsFalse(ctxt.Order_Details.Any(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID));
+                Assert.DoesNotContain(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID, ctxt.Order_Details);
 
                 var query = ctxt.GetOrderDetailsQuery().Where(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID);
                 Load(query);
@@ -1786,7 +1786,7 @@ namespace OpenRiaServices.Client.Test
             {
                 AssertSuccess();
 
-                Assert.IsFalse(ctxt.Order_Details.Any(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID));
+                Assert.DoesNotContain(od => od.OrderID == detailToDelete.OrderID && od.ProductID == detailToDelete.ProductID, ctxt.Order_Details);
             });
 
             EnqueueTestComplete();
@@ -1860,7 +1860,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(nw2address, customerInConflict.Address);
                 Assert.AreEqual(nw2address2, ((Customer)so2.ChangeSet.ModifiedEntities[1]).Address);
                 Assert.HasCount(1, entitiesInConflict);
-                Assert.AreEqual(1, conflict.PropertyNames.Count());
+                Assert.HasCount(1, conflict.PropertyNames);
 
                 // resolve all the conflicts and resubmit
                 foreach(Entity entityInConflict in entitiesInConflict)
@@ -1943,7 +1943,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.HasCount(1, so2.ChangeSet.RemovedEntities, "Unexpected amount of removed entities.");
                 Assert.HasCount(1, entitiesInConflict, "Unexpected amount of entities in conflict.");
                 EntityConflict conflict = entitiesInConflict[0].EntityConflict;
-                Assert.AreEqual(1, conflict.PropertyNames.Count(), "Unexpected amount of property names in conflict.");
+                Assert.HasCount(1, conflict.PropertyNames, "Unexpected amount of property names in conflict.");
                 string conflictMember = conflict.PropertyNames.Single();
                 Assert.AreEqual("Quantity", conflictMember, "Unexpected member in conflict.");
                 Assert.AreEqual(oldQuantity, conflict.CurrentEntity.ExtractState()[conflictMember], "Unexpected original quantity.");
@@ -2126,7 +2126,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify that resolve method implementation successfully got rid of the conflicts
                 Product[] products = nw2.Products.ToArray();
-                Assert.AreEqual(0, so2.EntitiesInError.Count());
+                Assert.IsEmpty(so2.EntitiesInError);
                 Assert.IsNull(products[0].EntityConflict);
                 Assert.AreEqual(newReorderLevel, products[1].ReorderLevel);
                 Assert.AreEqual(nw2NewUnitPrice, products[0].UnitPrice);
@@ -2178,7 +2178,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(SubmitOperation.Error);
-                Assert.AreEqual(1, SubmitOperation.EntitiesInError.Count());
+                Assert.HasCount(1, SubmitOperation.EntitiesInError);
                 Assert.AreEqual(prod, SubmitOperation.EntitiesInError.First());
 
                 dc.EntityContainer.Clear();
@@ -2286,7 +2286,7 @@ namespace OpenRiaServices.Client.Test
                 // verify that resolve method implementation does not get rid of the conflicts
                 Assert.IsNotNull(so2.Error);
                 Product[] products = nw2.Products.ToArray();
-                Assert.AreEqual(1, so2.EntitiesInError.Count());
+                Assert.HasCount(1, so2.EntitiesInError);
                 Assert.IsNotNull(products[0].EntityConflict);
 
                 // Verify return true without actually resolving anything does not sync client values since ResolveConflicts will return false
@@ -2353,7 +2353,7 @@ namespace OpenRiaServices.Client.Test
                 // verify that resolve method implementation does not get rid of the conflicts
                 Assert.IsNotNull(so2.Error);
                 Product[] products = nw2.Products.ToArray();
-                Assert.AreEqual(1, so2.EntitiesInError.Count());
+                Assert.HasCount(1, so2.EntitiesInError);
                 Assert.IsNotNull(products[0].EntityConflict);
 
                 // Verify return true without actually resolving anything does not sync client values
@@ -2419,7 +2419,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // verify that resolve method implementation does not get rid of the conflicts
                 Assert.IsNotNull(so2.Error);
-                Assert.AreEqual(1, so2.EntitiesInError.Count());
+                Assert.HasCount(1, so2.EntitiesInError);
                 Product[] products = nw2.Products.ToArray();
                 Assert.IsNotNull(products[0].EntityConflict);
 
@@ -3080,7 +3080,7 @@ namespace OpenRiaServices.Client.Test
                 DomainOperationException ex = so.Error as DomainOperationException;
 
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error?.Message);
-                Assert.AreEqual(1, so.EntitiesInError.Count());
+                Assert.HasCount(1, so.EntitiesInError);
                 EntityConflict conflict = so.EntitiesInError.Single().EntityConflict;
                 Assert.IsTrue(conflict.IsDeleted);
             });
@@ -3166,7 +3166,7 @@ namespace OpenRiaServices.Client.Test
 
                     Assert.IsNotNull(products[1].EntityConflict);
                     EntityConflict conflict = products[1].EntityConflict;
-                    Assert.AreEqual(2, conflict.PropertyNames.Count());
+                    Assert.HasCount(2, conflict.PropertyNames);
                     Assert.AreEqual(nw1NewUnitPrice[1], conflict.StoreEntity.ExtractState()["UnitPrice"]);
                     Assert.AreEqual(nw2NewUnitPrice[1], conflict.CurrentEntity.ExtractState()["UnitPrice"]);
                     Assert.AreEqual(origUnitPrice[1], conflict.OriginalEntity.ExtractState()["UnitPrice"]);
@@ -3301,7 +3301,7 @@ namespace OpenRiaServices.Client.Test
                     // updated since one resolve method returns false
                     conflict = products[0].EntityConflict;
                     Assert.IsNotNull(conflict);
-                    Assert.IsTrue(conflict.PropertyNames.Contains("UnitPrice"));
+                    Assert.Contains("UnitPrice", conflict.PropertyNames);
                     Assert.AreEqual(nw1NewUnitPrice[0], ((Product)conflict.StoreEntity).UnitPrice);
                     Assert.AreEqual(nw2NewUnitPrice[0], ((Product)conflict.CurrentEntity).UnitPrice);
                     Assert.AreEqual(origUnitPrice[0], ((Product)conflict.OriginalEntity).UnitPrice);
@@ -3310,8 +3310,8 @@ namespace OpenRiaServices.Client.Test
                 // in either case, conflict on product1 reflects one from the resubmit
                 conflict = products[1].EntityConflict;
                 Assert.IsNotNull(conflict);
-                Assert.AreEqual(2, products[1].EntityConflict.PropertyNames.Count());
-                Assert.IsTrue(conflict.PropertyNames.Contains("UnitPrice"));
+                Assert.HasCount(2, products[1].EntityConflict.PropertyNames);
+                Assert.Contains("UnitPrice", conflict.PropertyNames);
                 Assert.AreEqual(nw1NewUnitPrice[1], ((Product)conflict.StoreEntity).UnitPrice);
                 Assert.AreEqual(nw2NewUnitPrice[1], ((Product)conflict.CurrentEntity).UnitPrice);
                 Assert.AreEqual(origUnitPrice[1], ((Product)conflict.OriginalEntity).UnitPrice);
@@ -3404,9 +3404,9 @@ namespace OpenRiaServices.Client.Test
 
                     Assert.IsNull(products[0].EntityConflict);
                     Assert.IsNotNull(products[1].EntityConflict);
-                    Assert.AreEqual(2, products[1].EntityConflict.PropertyNames.Count());
+                    Assert.HasCount(2, products[1].EntityConflict.PropertyNames);
                     EntityConflict conflict = products[1].EntityConflict;
-                    Assert.IsTrue(conflict.PropertyNames.Contains("UnitPrice"));
+                    Assert.Contains("UnitPrice", conflict.PropertyNames);
                     Assert.AreEqual(nw1NewUnitPrice[1], ((Product)conflict.StoreEntity).UnitPrice);
                     Assert.AreEqual(nw2NewUnitPrice[1], ((Product)conflict.CurrentEntity).UnitPrice);
                     Assert.AreEqual(origUnitPrice[1], ((Product)conflict.OriginalEntity).UnitPrice);
@@ -3606,7 +3606,7 @@ namespace OpenRiaServices.Client.Test
                     Assert.IsNull(products[0].EntityConflict);
                     EntityConflict conflict = products[1].EntityConflict;
                     Assert.IsNotNull(conflict);
-                    Assert.AreEqual(2, conflict.PropertyNames.Count());
+                    Assert.HasCount(2, conflict.PropertyNames);
 
                 }
                 else
@@ -4811,7 +4811,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNull(so.Error);
                 Assert.IsFalse(so.IsCanceled);
 
-                Assert.AreEqual(0, so.EntitiesInError.Count());
+                Assert.IsEmpty(so.EntitiesInError);
                 Assert.IsEmpty(so.ChangeSet.AddedEntities);
                 Assert.IsEmpty(so.ChangeSet.RemovedEntities);
                 Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
@@ -4857,7 +4857,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Validation, so.Error.Message);
                 Assert.IsFalse(so.IsCanceled);
 
-                Assert.AreEqual(1, so.EntitiesInError.Count());
+                Assert.HasCount(1, so.EntitiesInError);
                 Assert.IsEmpty(so.ChangeSet.AddedEntities);
                 Assert.IsEmpty(so.ChangeSet.RemovedEntities);
                 Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
@@ -4905,7 +4905,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNotNull(so.Error);
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Validation, so.Error.Message);
                 Assert.IsFalse(so.IsCanceled);
-                Assert.AreEqual(1, so.EntitiesInError.Count());
+                Assert.HasCount(1, so.EntitiesInError);
                 Assert.IsEmpty(so.ChangeSet.AddedEntities);
                 Assert.IsEmpty(so.ChangeSet.RemovedEntities);
                 Assert.HasCount(1, so.ChangeSet.ModifiedEntities);
@@ -4953,7 +4953,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.IsNotNull(so.Error);
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Validation, so.Error.Message);
                 Assert.IsFalse(so.IsCanceled);
-                Assert.AreEqual(1, so.EntitiesInError.Count());
+                Assert.HasCount(1, so.EntitiesInError);
                 Assert.IsEmpty(so.ChangeSet.AddedEntities);
                 Assert.IsEmpty(so.ChangeSet.RemovedEntities);
                 Assert.HasCount(1, so.ChangeSet.ModifiedEntities);

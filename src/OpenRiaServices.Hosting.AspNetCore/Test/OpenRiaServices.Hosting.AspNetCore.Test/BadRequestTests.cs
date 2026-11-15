@@ -237,7 +237,7 @@ namespace OpenRiaServices.Hosting.AspNetCore
 
                 await invoker.Invoke(context);
                 Assert.AreEqual(StatusCodes.Status400BadRequest, context.Response.StatusCode);
-                Assert.IsTrue(context.Response.Body.Length > 0, "A fault must be returned.");
+                Assert.IsGreaterThan(0, context.Response.Body.Length, "A fault must be returned.");
             }
 
             var subsequent = new DefaultHttpContext();

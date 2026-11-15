@@ -283,7 +283,7 @@ namespace OpenRiaServices.Client.Test
                 TestHelperMethods.AssertOperationSuccess(invoke);
 
                 IEnumerable<MixedType> mts = invoke.Value as IEnumerable<MixedType>;
-                Assert.AreEqual(3, mts.Count());
+                Assert.HasCount(3, mts);
             });
             EnqueueTestComplete();
         }
@@ -480,7 +480,7 @@ namespace OpenRiaServices.Client.Test
             {
                 IEnumerable<TestEntityForInvokeOperations> result = invoke.Value;
                 Assert.IsNotNull(result);
-                Assert.AreEqual(3, result.Count());
+                Assert.HasCount(3, result);
 
                 TestEntityForInvokeOperations[] resultArray = result.ToArray();
                 for (int i = 0; i < 3; i++)
@@ -506,7 +506,7 @@ namespace OpenRiaServices.Client.Test
 
             var result = (await ctxt.InvokeOpWithIEnumerableParamAsync(args)).Value;
             Assert.IsNotNull(result);
-            Assert.AreEqual(3, result.Count());
+            Assert.HasCount(3, result);
 
             TestEntityForInvokeOperations[] resultArray = result.ToArray();
             var list = args.ToList();
@@ -540,7 +540,7 @@ namespace OpenRiaServices.Client.Test
             {
                 IEnumerable<TestEntityForInvokeOperations> result = invoke.Value;
                 Assert.IsNotNull(result);
-                Assert.AreEqual(3, result.Count());
+                Assert.HasCount(3, result);
 
                 TestEntityForInvokeOperations[] resultArray = result.ToArray();
                 for (int i = 0; i < 3; i++)
@@ -914,7 +914,7 @@ namespace OpenRiaServices.Client.Test
                 AssertValuesAreEqual(inputValue, invoke.Value);
 
                 InvokeCompletedResult invokeCompleted = getResult.GetAwaiter().GetResult();
-                Assert.HasCount(0, invokeCompleted.ValidationErrors);
+                Assert.IsEmpty(invokeCompleted.ValidationErrors);
 
                 AssertValuesAreEqual(inputValue, invokeCompleted.ReturnValue);
             });

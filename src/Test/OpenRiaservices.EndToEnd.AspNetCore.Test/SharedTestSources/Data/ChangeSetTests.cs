@@ -461,7 +461,7 @@ namespace OpenRiaServices.Client.Test
             IEnumerable<Entity> entities = cs.AddedEntities.Concat(cs.ModifiedEntities).Concat(cs.RemovedEntities);
             Assert.AreEqual(3, entities.Count(p => p.IsInferred));
             ((IChangeTracking)ec).AcceptChanges();
-            Assert.IsFalse(entities.Any(p => p.IsInferred));
+            Assert.DoesNotContain(p => p.IsInferred, entities);
         }
 
         /// <summary>

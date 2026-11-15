@@ -289,23 +289,23 @@ namespace OpenRiaServices.Server.Test
 
             // Verify that ResultLimit=0 is the same as not having a ResultLimit at all.
             var results = await executeQueryAsync("GetCities0", -1);
-            Assert.AreEqual(totalCities, results.Results.Count(), "Expected to get back all cities.");
+            Assert.HasCount(totalCities, results.Results, "Expected to get back all cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
 
             // Verify that ResultLimit=-1 is the same as not having a ResultLimit at all.
             results = await executeQueryAsync("GetCitiesM1", -1);
-            Assert.AreEqual(totalCities, results.Results.Count(), "Expected to get back all cities.");
+            Assert.HasCount(totalCities, results.Results, "Expected to get back all cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
 
             // Verify that ResultLimit=10 gives us back only the first 10 cities.
             results = await executeQueryAsync("GetCities10", -1);
-            Assert.AreEqual(10, results.Results.Count());
+            Assert.HasCount(10, results.Results);
             Assert.IsTrue(results.Results.SequenceEqual(allResults.Results.Take(10)), "Expected the first 10 cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
 
             // Verify that ResultLimit=10 with a page size of 2 gives us back only the first 2 cities, and it gives us back the proper total count.
             results = await executeQueryAsync("GetCities10", 2);
-            Assert.AreEqual(2, results.Results.Count());
+            Assert.HasCount(2, results.Results);
             Assert.IsTrue(results.Results.SequenceEqual(allResults.Results.Take(2)), "Expected the first 2 cities.");
             Assert.AreEqual(allResults.Results.Count(), results.TotalCount, "Unexpected total count.");
         }
@@ -410,7 +410,7 @@ namespace OpenRiaServices.Server.Test
             var queryResult = await ds.QueryAsync<City>(query, CancellationToken.None);
 
             Assert.IsTrue(queryResult.HasValidationErrors, "Should have validation errors");
-            Assert.AreEqual(1, queryResult.ValidationErrors.Count());
+            Assert.HasCount(1, queryResult.ValidationErrors);
             Assert.IsNull(ds.LastError);
         }
 
@@ -611,7 +611,7 @@ namespace OpenRiaServices.Server.Test
             ((City)updateOperation.Entity).StateName = "ASDF"; // Too long
             await ds.SubmitAsync(cs, CancellationToken.None);
             Assert.IsTrue(cs.HasError);
-            Assert.AreEqual(1, cs.ChangeSetEntries.Count(p => p.HasError));
+            Assert.ContainsSingle(p => p.HasError, cs.ChangeSetEntries);
             Assert.IsNull(ds.LastError);
         }
 
@@ -998,7 +998,7 @@ namespace OpenRiaServices.Server.Test
 
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { operation }, _domainServiceDescription, null);
             Assert.IsFalse(success);
-            Assert.AreEqual(5, operation.ValidationErrors.Count(), "There should be 5 property-level validation errors");
+            Assert.HasCount(5, operation.ValidationErrors, "There should be 5 property-level validation errors");
 
             IEnumerable<string> errorMessages = operation.ValidationErrors.Select(e => e.Message);
             UnitTestHelper.AssertListContains(errorMessages, (new RangeAttribute(0, 99999)).FormatErrorMessage("Code"));
@@ -1082,7 +1082,7 @@ namespace OpenRiaServices.Server.Test
             {
                 string customUpdateName = entry.EntityActions.First().Key;
                 Assert.IsNotNull(entry.ValidationErrors, string.Format("{0} validation is null", customUpdateName));
-                Assert.AreEqual(1, entry.ValidationErrors.Count(), string.Format("{0} has more than 1 validation", customUpdateName));
+                Assert.HasCount(1, entry.ValidationErrors, string.Format("{0} has more than 1 validation", customUpdateName));
                 Assert.AreEqual(error, entry.ValidationErrors.First().Message, string.Format("{0} has unexpected  validation", customUpdateName));
             };
 
@@ -1104,10 +1104,10 @@ namespace OpenRiaServices.Server.Test
 
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { operation }, _domainServiceDescription, null);
             Assert.IsFalse(success);
-            Assert.AreEqual(1, operation.ValidationErrors.Count(), "There should be 1 entity-level validation error");
+            Assert.HasCount(1, operation.ValidationErrors, "There should be 1 entity-level validation error");
 
             IEnumerable<string> errorMessages = operation.ValidationErrors.Select(e => e.Message);
-            Assert.IsTrue(operation.ValidationErrors.Any(err => err.Message == "Zip codes cannot have matching city and state names" && err.SourceMemberNames.Contains("StateName") && err.SourceMemberNames.Contains("CityName")));
+            Assert.Contains(err => err.Message == "Zip codes cannot have matching city and state names" && err.SourceMemberNames.Contains("StateName") && err.SourceMemberNames.Contains("CityName"), operation.ValidationErrors);
             UnitTestHelper.AssertListContains(errorMessages, "Zip codes cannot have matching city and state names");
         }
 
@@ -1126,13 +1126,13 @@ namespace OpenRiaServices.Server.Test
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { operation }, _domainServiceDescription, null);
             Assert.IsFalse(success,
                 "The operation should fail.");
-            Assert.AreEqual(1, operation.ValidationErrors.Count(),
+            Assert.HasCount(1, operation.ValidationErrors,
                 "There should be 1 validation error");
 
             ValidationResultInfo validationResult = operation.ValidationErrors.First();
             Assert.AreEqual("The value must not contain invalid counties", validationResult.Message,
                 "The validation error should concern invalid counties");
-            Assert.AreEqual(1, validationResult.SourceMemberNames.Count(),
+            Assert.HasCount(1, validationResult.SourceMemberNames,
                 "The validation error should be for a single member");
             Assert.AreEqual("Counties", validationResult.SourceMemberNames.First(),
                 "The validation error should be for Counties");
@@ -1151,7 +1151,7 @@ namespace OpenRiaServices.Server.Test
 
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { operation }, _domainServiceDescription, null);
             Assert.IsFalse(success);
-            Assert.AreEqual(5, operation.ValidationErrors.Count(), "There should be 5 property-level validation errors");
+            Assert.HasCount(5, operation.ValidationErrors, "There should be 5 property-level validation errors");
 
             IEnumerable<string> errorMessages = operation.ValidationErrors.Select(e => e.Message);
             UnitTestHelper.AssertListContains(errorMessages, "The field Code must be between 0 and 99999.");
@@ -1174,10 +1174,10 @@ namespace OpenRiaServices.Server.Test
 
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { operation }, _domainServiceDescription, null);
             Assert.IsFalse(success);
-            Assert.AreEqual(1, operation.ValidationErrors.Count(), "There should be 1 entity-level validation error");
+            Assert.HasCount(1, operation.ValidationErrors, "There should be 1 entity-level validation error");
 
             IEnumerable<string> errorMessages = operation.ValidationErrors.Select(e => e.Message);
-            Assert.IsTrue(operation.ValidationErrors.Any(err => err.Message == "Zip codes cannot have matching city and state names" && err.SourceMemberNames.Contains("StateName") && err.SourceMemberNames.Contains("CityName")));
+            Assert.Contains(err => err.Message == "Zip codes cannot have matching city and state names" && err.SourceMemberNames.Contains("StateName") && err.SourceMemberNames.Contains("CityName"), operation.ValidationErrors);
             UnitTestHelper.AssertListContains(errorMessages, "Zip codes cannot have matching city and state names");
         }
 
@@ -1242,7 +1242,7 @@ namespace OpenRiaServices.Server.Test
 
             bool success = DomainService.ValidateOperations(new ChangeSetEntry[] { operation }, _domainServiceDescription, null);
             Assert.IsFalse(success);
-            Assert.AreEqual(1, operation.ValidationErrors.Count());
+            Assert.HasCount(1, operation.ValidationErrors);
             UnitTestHelper.AssertListContains<ValidationResultInfo>(operation.ValidationErrors, (e => e.Message == "Zip codes cannot have matching city and state names" && e.SourceMemberNames.Contains("StateName") && e.SourceMemberNames.Contains("CityName")));
         }
 
@@ -1310,17 +1310,17 @@ namespace OpenRiaServices.Server.Test
             DomainServiceTests.LogErrorListContents("zipUpdateOp.Errors", zipUpdateOp.ValidationErrors);
             DomainServiceTests.LogErrorListContents("zip2InsertOp.Errors", zip2InsertOp.ValidationErrors);
             DomainServiceTests.LogErrorListContents("cityInvokeOp.Errors", cityInvokeOp.ValidationErrors);
-            Assert.AreEqual(2, zipInvokeOp.ValidationErrors.Count());
+            Assert.HasCount(2, zipInvokeOp.ValidationErrors);
             UnitTestHelper.AssertListContains<ValidationResultInfo>(zipInvokeOp.ValidationErrors, (e => e.Message == "Zip codes cannot have matching city and state names" && e.SourceMemberNames.Contains("StateName") && e.SourceMemberNames.Contains("CityName")));
             UnitTestHelper.AssertListContains<ValidationResultInfo>(zipInvokeOp.ValidationErrors, (e => e.Message == "The field offset must be between -9999 and 9999."));
-            Assert.AreEqual(1, zipUpdateOp.ValidationErrors.Count());
+            Assert.HasCount(1, zipUpdateOp.ValidationErrors);
             UnitTestHelper.AssertListContains<ValidationResultInfo>(zipUpdateOp.ValidationErrors, (e => e.Message == "Zip codes cannot have matching city and state names"));
-            Assert.AreEqual(2, zip2InsertOp.ValidationErrors.Count());
+            Assert.HasCount(2, zip2InsertOp.ValidationErrors);
             UnitTestHelper.AssertListContains<ValidationResultInfo>(zip2InsertOp.ValidationErrors, (e => e.Message == "Code must start with the prefix 9"));
             UnitTestHelper.AssertListContains<ValidationResultInfo>(zip2InsertOp.ValidationErrors, (e => e.Message == "The field FourDigit must be between 0 and 9999."));
-            Assert.AreEqual(1, zip3InsertOp.ValidationErrors.Count());
+            Assert.HasCount(1, zip3InsertOp.ValidationErrors);
             UnitTestHelper.AssertListContains<ValidationResultInfo>(zip3InsertOp.ValidationErrors, (e => e.Message == "Zip codes cannot have matching city and state names"));
-            Assert.AreEqual(1, cityInvokeOp.ValidationErrors.Count());
+            Assert.HasCount(1, cityInvokeOp.ValidationErrors);
             UnitTestHelper.AssertListContains<ValidationResultInfo>(cityInvokeOp.ValidationErrors, (e => e.Message == "The field StateName must be a string with a maximum length of 2."));
             Assert.IsNull(city2DeleteOp.ValidationErrors);
         }

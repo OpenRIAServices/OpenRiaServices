@@ -71,7 +71,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.AreEqual(50, lo.Entities.Count);
+                Assert.HasCount(50, lo.Entities);
             });
             EnqueueTestComplete();
         }
@@ -109,7 +109,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.AreEqual(50, lo.Entities.Count);
+                Assert.HasCount(50, lo.Entities);
             });
             EnqueueTestComplete();
         }
@@ -128,7 +128,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 TestHelperMethods.AssertOperationSuccess(lo);
-                Assert.AreEqual(500, lo.Entities.Count);
+                Assert.HasCount(500, lo.Entities);
             });
             EnqueueTestComplete();
         }

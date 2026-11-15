@@ -423,7 +423,7 @@ namespace OpenRiaServices.Client.Test
             // That invalid update will result in an exception on submit.
             parentSet.Remove(parent1);
             Assert.AreEqual(1, newParent.Children.Count);
-            Assert.IsTrue(newParent.Children.Contains(newChild));
+            Assert.Contains(newChild, newParent.Children);
 
             // if we allow the transitory phase, on accept changes we have to be
             // sure things are fixed up
@@ -567,7 +567,7 @@ namespace OpenRiaServices.Client.Test
 
             parentSet.Remove(parent1);
             EntityChangeSet changeSet = container.GetChanges();
-            Assert.AreEqual(2, changeSet.Count());
+            Assert.HasCount(2, changeSet);
         }
 
         [TestMethod]
@@ -1392,7 +1392,7 @@ namespace OpenRiaServices.Client.Test
 
             // undo the add to the Child's Children collection (1 add and remaining 2 edits undone)
             ((IRevertibleChangeTracking)child).RejectChanges();
-            Assert.IsFalse(child.Children.Contains(addedGrandChild));
+            Assert.DoesNotContain(addedGrandChild, child.Children);
             Assert.AreEqual(EntityState.Detached, addedGrandChild.EntityState);
             cs = ctxt.EntityContainer.GetChanges();
             Assert.IsTrue(cs.IsEmpty);

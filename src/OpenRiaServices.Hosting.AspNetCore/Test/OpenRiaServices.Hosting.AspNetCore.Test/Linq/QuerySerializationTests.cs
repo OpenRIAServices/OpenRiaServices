@@ -603,7 +603,7 @@ namespace OpenRiaServices.Client
         {
             Employee[] employees = new Employee[] { new Employee { EmployeeID = 1, ManagerID = 1 }, new Employee { EmployeeID = 1, ManagerID = null } };
 
-            Assert.IsTrue(typeof(Employee).GetProperty("ManagerID").PropertyType == typeof(Nullable<int>));
+            Assert.AreEqual(typeof(Nullable<int>), typeof(Employee).GetProperty("ManagerID").PropertyType);
 
             IQueryable<Employee> query = Array.Empty<Employee>().AsQueryable().Where(p => p.ManagerID == 1);
             IQueryable<Employee> query2 = RoundtripQuery(query, employees.AsQueryable());

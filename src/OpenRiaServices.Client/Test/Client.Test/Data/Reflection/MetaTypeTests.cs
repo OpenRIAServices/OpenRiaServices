@@ -20,7 +20,7 @@ namespace OpenRiaServices.Client.Test.Reflection
                 IgnoredProperty = "ignored",
             };
 
-            Assert.AreEqual(1, metaType.DataMembers.Count(), "DataMembers should not include ignored members");
+            Assert.HasCount(1, metaType.DataMembers, "DataMembers should not include ignored members");
             Assert.AreEqual(nameof(EntityWithIgnoreProperty.Id), metaType.DataMembers.First().Name);
 
             var state = ObjectStateUtility.ExtractState(entity);

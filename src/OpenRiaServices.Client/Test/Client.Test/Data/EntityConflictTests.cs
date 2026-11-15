@@ -102,7 +102,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.IsFalse(entityConflict.IsDeleted, "Expected 'IsDeleted' to be false.");
             Assert.IsNotNull(entityConflict.PropertyNames, "Expected 'PropertyNames' to not be null.");
-            Assert.AreEqual(2, entityConflict.PropertyNames.Count(), "Expected 2 properties in 'PropertyNames'.");
+            Assert.HasCount(2, entityConflict.PropertyNames, "Expected 2 properties in 'PropertyNames'.");
 
             string[] confictMembers = entityConflict.PropertyNames.ToArray();
             for(int i=0;i<confictMembers.Length;i++)

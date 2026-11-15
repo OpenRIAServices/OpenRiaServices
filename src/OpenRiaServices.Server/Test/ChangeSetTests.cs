@@ -148,7 +148,7 @@ namespace OpenRiaServices.Server.Test
             // verify unmodified children
             ChangeSet cs = new ChangeSet(changeSetEntries);
             IEnumerable<Child> childChanges = cs.GetAssociatedChanges(currParent, p => p.Children, ChangeOperation.None).Cast<Child>();
-            Assert.AreEqual(3, childChanges.Count());
+            Assert.HasCount(3, childChanges);
             foreach (Child c in childChanges)
             {
                 Assert.Contains(c, unmodifiedChildren);
@@ -156,7 +156,7 @@ namespace OpenRiaServices.Server.Test
 
             // verify inserted children
             childChanges = cs.GetAssociatedChanges(currParent, p => p.Children, ChangeOperation.Insert).Cast<Child>();
-            Assert.AreEqual(2, childChanges.Count());
+            Assert.HasCount(2, childChanges);
             foreach (Child c in childChanges)
             {
                 Assert.Contains(c, newChildren);
@@ -164,7 +164,7 @@ namespace OpenRiaServices.Server.Test
 
             // verify deleted children
             childChanges = cs.GetAssociatedChanges(currParent, p => p.Children, ChangeOperation.Delete).Cast<Child>();
-            Assert.AreEqual(2, childChanges.Count());
+            Assert.HasCount(2, childChanges);
             foreach (Child c in childChanges)
             {
                 Assert.Contains(c, removedChildren);
@@ -172,7 +172,7 @@ namespace OpenRiaServices.Server.Test
 
             // verify modified children
             childChanges = cs.GetAssociatedChanges(currParent, p => p.Children, ChangeOperation.Update).Cast<Child>();
-            Assert.AreEqual(2, childChanges.Count());
+            Assert.HasCount(2, childChanges);
             foreach (Child c in childChanges)
             {
                 Assert.Contains(c, currentEditedChildren);
@@ -181,7 +181,7 @@ namespace OpenRiaServices.Server.Test
             // verify overload that returns all - should return all unmodified
             // in addition to all changed
             IEnumerable<Child> allChildren = cs.GetAssociatedChanges(currParent, p => p.Children).Cast<Child>();
-            Assert.AreEqual(9, allChildren.Count());
+            Assert.HasCount(9, allChildren);
             foreach (Child c in allChildren)
             {
                 ChangeOperation operationType = cs.GetChangeOperation(c);
@@ -205,15 +205,15 @@ namespace OpenRiaServices.Server.Test
             // verify calls that return empty
             cs = new ChangeSet(new ChangeSetEntry[] { new ChangeSetEntry(1, currParent, null, DomainOperation.None) });
             IEnumerable<Child> children = cs.GetAssociatedChanges(currParent, p => p.Children).Cast<Child>();
-            Assert.AreEqual(0, children.Count());
+            Assert.IsEmpty(children);
             children = cs.GetAssociatedChanges(currParent, p => p.Children).Cast<Child>();
-            Assert.AreEqual(0, children.Count());
+            Assert.IsEmpty(children);
 
             // test null collection properties
             currParent = new Parent { Children = null };
             cs = new ChangeSet(new ChangeSetEntry[] { new ChangeSetEntry(1, currParent, new Parent { Children = null }, DomainOperation.None) });
-            Assert.AreEqual(0, cs.GetAssociatedChanges(currParent, p => p.Children).Cast<Child>().Count());
-            Assert.AreEqual(0, cs.GetAssociatedChanges(currParent, p => p.Children, ChangeOperation.None).Cast<Child>().Count());
+            Assert.IsEmpty(cs.GetAssociatedChanges(currParent, p => p.Children).Cast<Child>());
+            Assert.IsEmpty(cs.GetAssociatedChanges(currParent, p => p.Children, ChangeOperation.None).Cast<Child>());
         }
 
         [TestMethod]
@@ -304,7 +304,7 @@ namespace OpenRiaServices.Server.Test
             IEnumerable<ChangeSetEntry> ops = this.GenerateEntityOperations(false);
 
             changeSet = new ChangeSet(ops);
-            Assert.AreEqual(ops.Count(), ops.Intersect(changeSet.ChangeSetEntries).Count(), "Expected ChangeSetEntries count to match what was provided to the constructor");
+            Assert.HasCount(ops.Count(), ops.Intersect(changeSet.ChangeSetEntries), "Expected ChangeSetEntries count to match what was provided to the constructor");
 
             ChangeSetEntry changeSetEntry = new ChangeSetEntry(0, new MockEntity1 (), new MockEntity1() { FullName = "name" }, DomainOperation.Update);
             Assert.IsTrue(changeSetEntry.HasMemberChanges);
@@ -619,19 +619,19 @@ namespace OpenRiaServices.Server.Test
 
             IEnumerable<MockEntity1> clientEntities1 = changeSet.GetAssociatedEntities<MockEntity1, MockStoreEntity>(storeEntity);
             Assert.IsNotNull(clientEntities1, "Expected to clientEntities1 to not be null.");
-            Assert.AreEqual(1, clientEntities1.Count(), "Expected to find 1 clientEntity entry.");
+            Assert.HasCount(1, clientEntities1, "Expected to find 1 clientEntity entry.");
             Assert.AreSame(clientEntity1, clientEntities1.Single(), "Expected to find clientEntity1.");
 
             IEnumerable<MockEntity2> clientEntities2 = changeSet.GetAssociatedEntities<MockEntity2, MockStoreEntity>(storeEntity);
             Assert.IsNotNull(clientEntities2, "Expected to clientEntities to not be null.");
-            Assert.AreEqual(1, clientEntities2.Count(), "Expected to find 1 clientEntity entry.");
+            Assert.HasCount(1, clientEntities2, "Expected to find 1 clientEntity entry.");
             Assert.AreSame(clientEntity2, clientEntities2.Single(), "Expected to find clientEntity2.");
 
             IEnumerable<object> clientEntities3 = changeSet.GetAssociatedEntities<object, MockStoreEntity>(storeEntity);
             Assert.IsNotNull(clientEntities3, "Expected to clientEntities to not be null.");
-            Assert.AreEqual(2, clientEntities3.Count(), "Expected to find 2 clientEntity entries.");
-            Assert.IsTrue(clientEntities3.Contains(clientEntity1), "Expected to find clientEntity1.");
-            Assert.IsTrue(clientEntities3.Contains(clientEntity2), "Expected to find clientEntity2.");
+            Assert.HasCount(2, clientEntities3, "Expected to find 2 clientEntity entries.");
+            Assert.Contains(clientEntity1, clientEntities3, "Expected to find clientEntity1.");
+            Assert.Contains(clientEntity2, clientEntities3, "Expected to find clientEntity2.");
         }
 
         [TestMethod]
@@ -648,7 +648,7 @@ namespace OpenRiaServices.Server.Test
             IEnumerable<MockEntity1> clientEntities = changeSet.GetAssociatedEntities<MockEntity1, MockStoreEntity>(new MockStoreEntity());
 
             Assert.IsNotNull(clientEntities, "Expected to clientEntities to not be null.");
-            Assert.AreEqual(0, clientEntities.Count(), "Expected to find 0 clientEntity entries.");
+            Assert.IsEmpty(clientEntities, "Expected to find 0 clientEntity entries.");
         }
 
         [TestMethod]
@@ -669,10 +669,10 @@ namespace OpenRiaServices.Server.Test
             IEnumerable<MockEntity1> clientEntities = changeSet.GetAssociatedEntities<MockEntity1, MockStoreEntity>(storeEntity);
 
             Assert.IsNotNull(clientEntities, "Expected to find a non-null return value.");
-            Assert.AreEqual(3, clientEntities.Count(), "Expected to find 3 clientEntities entries.");
-            Assert.IsTrue(clientEntities.Contains(clientEntity1), "Expected to find clientEntities1 in the associated entities collection.");
-            Assert.IsTrue(clientEntities.Contains(clientEntity2), "Expected to find clientEntities2 in the associated entities collection.");
-            Assert.IsTrue(clientEntities.Contains(clientEntity3), "Expected to find clientEntities3 in the associated entities collection.");
+            Assert.HasCount(3, clientEntities, "Expected to find 3 clientEntities entries.");
+            Assert.Contains(clientEntity1, clientEntities, "Expected to find clientEntities1 in the associated entities collection.");
+            Assert.Contains(clientEntity2, clientEntities, "Expected to find clientEntities2 in the associated entities collection.");
+            Assert.Contains(clientEntity3, clientEntities, "Expected to find clientEntities3 in the associated entities collection.");
         }
 
         private ChangeSet GenerateChangeSet()

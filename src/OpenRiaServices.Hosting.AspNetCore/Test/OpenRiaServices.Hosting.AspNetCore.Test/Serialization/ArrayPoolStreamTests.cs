@@ -223,7 +223,7 @@ namespace OpenRiaServices.Hosting.AspNetCore.Serialization
 
         private void VerifyBufferContents(ReadOnlySpan<byte> buffer, ReadOnlySpan<byte> expectedContents)
         {
-            Assert.AreEqual(buffer.Length, expectedContents.Length, "Wrong count");
+            Assert.HasCount(buffer.Length, expectedContents, "Wrong count");
             if (buffer.SequenceEqual(expectedContents))
                 return;
 

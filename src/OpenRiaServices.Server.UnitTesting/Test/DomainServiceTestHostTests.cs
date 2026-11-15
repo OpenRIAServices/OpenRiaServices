@@ -131,7 +131,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 
             var result = await testHost.QueryAsync(s => s.GetZips(), CancellationToken.None);
 
-            Assert.AreEqual(3, result.Count());
+            Assert.HasCount(3, result);
         }
 
         [TestMethod]
@@ -141,7 +141,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 
             var result = await testHost.QueryAsync(s => s.GetZipsWithDelay(TimeSpan.FromMilliseconds(1)), CancellationToken.None);
 
-            Assert.AreEqual(3, result.Count());
+            Assert.HasCount(3, result);
         }
 
         [TestMethod]
@@ -151,7 +151,7 @@ namespace OpenRiaServices.Server.UnitTesting.Test
 
             var result = await testHost.QueryAsync(s => s.GetZipsAsEnumerable(), CancellationToken.None);
 
-            Assert.AreEqual(3, result.Count());
+            Assert.HasCount(3, result);
         }
 
         [TestMethod]

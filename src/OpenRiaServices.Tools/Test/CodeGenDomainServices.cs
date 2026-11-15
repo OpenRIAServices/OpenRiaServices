@@ -265,8 +265,8 @@ namespace OpenRiaServices.Tools.Test
             // Don't modify any of these existing checks, since validity of the
             // baseline check being performed relies on the exact service configuration
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(TestProvider_Inheritance1));
-            Assert.IsFalse(description.EntityTypes.Contains(typeof(InheritanceBase)));
-            Assert.IsTrue(description.EntityTypes.Contains(typeof(InheritanceT1)));
+            Assert.DoesNotContain(typeof(InheritanceBase), description.EntityTypes);
+            Assert.Contains(typeof(InheritanceT1), description.EntityTypes);
 
             // Default
             TestHelper.ValidateLanguageCodeGen(new TestHelper.CodeGenValidationOptions(@"Default\Scenarios", "CG_Scenarios_Inherit", "InheritanceScenarios1.g",
@@ -281,8 +281,8 @@ namespace OpenRiaServices.Tools.Test
             // Don't modify any of these existing checks, since validity of the
             // baseline check being performed relies on the exact service configuration
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(TestProvider_Inheritance1));
-            Assert.IsFalse(description.EntityTypes.Contains(typeof(InheritanceBase)));
-            Assert.IsTrue(description.EntityTypes.Contains(typeof(InheritanceT1)));
+            Assert.DoesNotContain(typeof(InheritanceBase), description.EntityTypes);
+            Assert.Contains(typeof(InheritanceT1), description.EntityTypes);
 
             // Full type names
             TestHelper.ValidateLanguageCodeGen(new TestHelper.CodeGenValidationOptions(@"FullTypeNames\Scenarios", "CG_Scenarios_Inherit_FullTypes", "InheritanceScenarios1.g",

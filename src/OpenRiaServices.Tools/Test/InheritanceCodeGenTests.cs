@@ -34,7 +34,7 @@ namespace OpenRiaServices.Tools.Test
                 // ---------------------------------------------------
                 IEnumerable<DomainServiceDescription> dsds = asmGen.DomainServiceCatalog.DomainServiceDescriptions;
                 Assert.IsNotNull(dsds, "DomainServiceDescriptions expected");
-                Assert.AreEqual(1, dsds.Count(), "Should have seen just 1 domain service description");
+                Assert.HasCount(1, dsds, "Should have seen just 1 domain service description");
                 DomainServiceDescription dsd = dsds.First();
 
                 // ----------------------
@@ -42,17 +42,17 @@ namespace OpenRiaServices.Tools.Test
                 // ----------------------
                 IEnumerable<Type> rootEntities = dsd.RootEntityTypes;
                 Assert.IsNotNull(rootEntities, "Expected root entities");
-                Assert.AreEqual(1, rootEntities.Count(), "Expected 1 root entity");
-                Assert.IsTrue(rootEntities.Contains(typeof(Inherit_Basic_Root)), "Expected our visible root to be in roots");
+                Assert.HasCount(1, rootEntities, "Expected 1 root entity");
+                Assert.Contains(typeof(Inherit_Basic_Root), rootEntities, "Expected our visible root to be in roots");
 
                 // ----------------------
                 // EntityTypes
                 // ----------------------
                 IEnumerable<Type> allEntities = dsd.EntityTypes;
                 Assert.IsNotNull(allEntities, "Expected all entities");
-                Assert.AreEqual(2, allEntities.Count(), "Expected 2 entities");
-                Assert.IsTrue(allEntities.Contains(typeof(Inherit_Basic_Root)), "Expected our visible root to be in all entities");
-                Assert.IsTrue(allEntities.Contains(typeof(Inherit_Basic_Derived)), "Expected our derived entity");
+                Assert.HasCount(2, allEntities, "Expected 2 entities");
+                Assert.Contains(typeof(Inherit_Basic_Root), allEntities, "Expected our visible root to be in all entities");
+                Assert.Contains(typeof(Inherit_Basic_Derived), allEntities, "Expected our derived entity");
 
                 // ----------------------
                 // GetVisibleEntityRootType/GetVisibleEntityBaseType

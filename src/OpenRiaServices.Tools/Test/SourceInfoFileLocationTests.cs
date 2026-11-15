@@ -96,7 +96,7 @@ namespace OpenRiaServices.Tools.Test
 
                 foreach (string file in expectedFiles)
                 {
-                    Assert.IsTrue(files.Contains(file), "Did not find expected file '" + file + "' using SourceInfoSourceFileLocator");
+                    Assert.Contains(file, files, "Did not find expected file '" + file + "' using SourceInfoSourceFileLocator");
                 }
             }
         }

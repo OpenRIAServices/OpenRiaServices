@@ -99,8 +99,8 @@ namespace OpenRiaServices.Server.Test
         public void ComplexType_Description_InvokeOperationsOnly()
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(ComplexTypes_InvokeOperationsOnly));
-            Assert.AreEqual(0, dsd.EntityTypes.Count());
-            Assert.AreEqual(3, dsd.ComplexTypes.Count());
+            Assert.IsEmpty(dsd.EntityTypes);
+            Assert.HasCount(3, dsd.ComplexTypes);
         }
 
         /// <summary>
@@ -160,7 +160,7 @@ namespace OpenRiaServices.Server.Test
             {
                 DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(ComplexType_InvalidEntity_ComplexProperty));
                 dsd.Initialize();
-                Assert.AreEqual(0, dsd.ComplexTypes.Count(), "entity associates to complex type, dsd should not recognize this complex type");
+                Assert.IsEmpty(dsd.ComplexTypes, "entity associates to complex type, dsd should not recognize this complex type");
             }
 
             // entity inheritance from complex type
@@ -227,38 +227,38 @@ namespace OpenRiaServices.Server.Test
         public void ComplexTypes_ServiceDescription_Nested_ComplexTypes()
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(ComplexTypes_TestService));
-            Assert.AreEqual(1, dsd.EntityTypes.Count());
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(ComplexType_Parent)));
-            Assert.AreEqual(3, dsd.ComplexTypes.Count());
-            Assert.IsTrue(dsd.ComplexTypes.Contains(typeof(ContactInfo)));
-            Assert.IsTrue(dsd.ComplexTypes.Contains(typeof(Address)));
-            Assert.IsTrue(dsd.ComplexTypes.Contains(typeof(Phone)));
+            Assert.HasCount(1, dsd.EntityTypes);
+            Assert.Contains(typeof(ComplexType_Parent), dsd.EntityTypes);
+            Assert.HasCount(3, dsd.ComplexTypes);
+            Assert.Contains(typeof(ContactInfo), dsd.ComplexTypes);
+            Assert.Contains(typeof(Address), dsd.ComplexTypes);
+            Assert.Contains(typeof(Phone), dsd.ComplexTypes);
         }
 
         [TestMethod]
         public void ComplexTypes_ServiceDescription_RecursiveComplexType()
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(ComplexTypes_TestService_Scenarios));
-            Assert.AreEqual(2, dsd.EntityTypes.Count());
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(ComplexType_Scenarios_Parent)));
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(NorthwindModel.Employee)));
-            Assert.AreEqual(1, dsd.ComplexTypes.Count());
-            Assert.IsTrue(dsd.ComplexTypes.Contains(typeof(ComplexType_Recursive)));
+            Assert.HasCount(2, dsd.EntityTypes);
+            Assert.Contains(typeof(ComplexType_Scenarios_Parent), dsd.EntityTypes);
+            Assert.Contains(typeof(NorthwindModel.Employee), dsd.EntityTypes);
+            Assert.HasCount(1, dsd.ComplexTypes);
+            Assert.Contains(typeof(ComplexType_Recursive), dsd.ComplexTypes);
         }
 
         [TestMethod]
         public void ComplexTypes_ServiceDescription_ComplexMethodSignatures()
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(ComplexTypes_TestService_ComplexMethodSignatures));
-            Assert.AreEqual(1, dsd.EntityTypes.Count());
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(ComplexType_Parent)));
-            Assert.AreEqual(3, dsd.ComplexTypes.Count());
-            Assert.IsTrue(dsd.ComplexTypes.Contains(typeof(ContactInfo)));
-            Assert.IsTrue(dsd.ComplexTypes.Contains(typeof(Address)));
-            Assert.IsTrue(dsd.ComplexTypes.Contains(typeof(Phone)));
+            Assert.HasCount(1, dsd.EntityTypes);
+            Assert.Contains(typeof(ComplexType_Parent), dsd.EntityTypes);
+            Assert.HasCount(3, dsd.ComplexTypes);
+            Assert.Contains(typeof(ContactInfo), dsd.ComplexTypes);
+            Assert.Contains(typeof(Address), dsd.ComplexTypes);
+            Assert.Contains(typeof(Phone), dsd.ComplexTypes);
 
             int numOps = 7;
-            Assert.AreEqual(numOps, dsd.DomainOperationEntries.Count(), string.Format("DSD should retrieve {0} operations from ComplexTypes_TestService_ComplexMethodSignatures.", numOps));
+            Assert.HasCount(numOps, dsd.DomainOperationEntries, string.Format("DSD should retrieve {0} operations from ComplexTypes_TestService_ComplexMethodSignatures.", numOps));
             DomainOperationEntry doe = null;
 
             doe = dsd.DomainOperationEntries.Single(p => p.Name == "CustomUpdateHomeAddress");
@@ -288,8 +288,8 @@ namespace OpenRiaServices.Server.Test
             List<Type> entityTypes = TestDomainServices.ComplexInvokeAndCustom.GetExposedEntityTypes();
             List<Type> complexTypes = TestDomainServices.ComplexInvokeAndCustom.GetExposedComplexTypes();
 
-            Assert.AreEqual(entityTypes.Count, dsd.EntityTypes.Count());
-            Assert.AreEqual(complexTypes.Count, dsd.ComplexTypes.Count());
+            Assert.HasCount(entityTypes.Count, dsd.EntityTypes);
+            Assert.HasCount(complexTypes.Count, dsd.ComplexTypes);
 
             foreach (Type entityType in dsd.EntityTypes)
             {
@@ -436,7 +436,7 @@ namespace OpenRiaServices.Server.Test
             // Verify that key members that are also FK members do NOT get EditableAttribute
             pd = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["OrderID"];
             EntityAssociationAttribute assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<EntityAssociationAttribute>().Single();
-            Assert.IsTrue(assoc.ThisKeyMembers.Contains("OrderID"));
+            Assert.Contains("OrderID", assoc.ThisKeyMembers);
             editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
             Assert.IsNull(editable);
 
@@ -452,7 +452,7 @@ namespace OpenRiaServices.Server.Test
             // Verify that key members that are also FK members do NOT get EditableAttribute
             pd = TypeDescriptor.GetProperties(typeof(EFCoreModels.Northwind.Order_Detail))["OrderID"];
             assoc = TypeDescriptor.GetProperties(typeof(NorthwindModel.Order_Detail))["Order"].Attributes.OfType<EntityAssociationAttribute>().Single();
-            Assert.IsTrue(assoc.ThisKeyMembers.Contains("OrderID"));
+            Assert.Contains("OrderID", assoc.ThisKeyMembers);
             editable = pd.Attributes.OfType<EditableAttribute>().SingleOrDefault();
             Assert.IsNull(editable);
 
@@ -518,13 +518,13 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(property);
             var requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(false, requiredAttribute.AllowEmptyStrings);
+            Assert.IsFalse(requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredStringOverride"];
             Assert.IsNotNull(property);
             requiredAttribute = (RequiredAttribute)property.Attributes[typeof(RequiredAttribute)];
             Assert.IsNotNull(requiredAttribute);
-            Assert.AreEqual<bool>(true, requiredAttribute.AllowEmptyStrings);
+            Assert.IsTrue(requiredAttribute.AllowEmptyStrings);
 
             property = properties["RequiredInt32"];
             Assert.IsNotNull(property);
@@ -669,10 +669,10 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.CompositionScenarios_Explicit));
 
             // expect all Types (even child Types) to be listed
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(Parent)));
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(Child)));
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(GrandChild)));
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(GreatGrandChild)));
+            Assert.Contains(typeof(Parent), dsd.EntityTypes);
+            Assert.Contains(typeof(Child), dsd.EntityTypes);
+            Assert.Contains(typeof(GrandChild), dsd.EntityTypes);
+            Assert.Contains(typeof(GreatGrandChild), dsd.EntityTypes);
         }
 
         [TestMethod]
@@ -683,10 +683,10 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(TestDomainServices.CompositionInheritanceScenarios));
 
             // expect all Types (even child Types) to be listed
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(CI_Parent)));
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(CI_SpecialParent)));
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(CI_Child)));
-            Assert.IsTrue(dsd.EntityTypes.Contains(typeof(CI_AdoptedChild)));
+            Assert.Contains(typeof(CI_Parent), dsd.EntityTypes);
+            Assert.Contains(typeof(CI_SpecialParent), dsd.EntityTypes);
+            Assert.Contains(typeof(CI_Child), dsd.EntityTypes);
+            Assert.Contains(typeof(CI_AdoptedChild), dsd.EntityTypes);
 
             // Test lazily computed composition hashset
             Assert.IsTrue(dsd.IsComposedEntityType(typeof(CI_Child)), "Child should have been IsComposed");
@@ -704,15 +704,15 @@ namespace OpenRiaServices.Server.Test
             IEnumerable<PropertyDescriptor> parentAssociations = dsd.GetParentAssociations(typeof(Derived_Composition_Types.C1));
             Assert.IsNotNull(parentAssociations, "C1 did not have parent associations");
             PropertyDescriptor[] pds = parentAssociations.ToArray();
-            Assert.IsTrue(parentAssociations.Any(p => p.Name == "C1s"), "C1 did not show P1's associations");
+            Assert.Contains(p => p.Name == "C1s", parentAssociations, "C1 did not show P1's associations");
 
             parentAssociations = dsd.GetParentAssociations(typeof(Derived_Composition_Types.C2));
             Assert.IsNotNull(parentAssociations, "C2 did not have parent associations");
-            Assert.IsTrue(parentAssociations.Any(p => p.Name == "C1s"), "C2 did not show P1's associations");
+            Assert.Contains(p => p.Name == "C1s", parentAssociations, "C2 did not show P1's associations");
 
             parentAssociations = dsd.GetParentAssociations(typeof(Derived_Composition_Types.C3));
             Assert.IsNotNull(parentAssociations, "C3 did not have parent associations");
-            Assert.IsTrue(parentAssociations.Any(p => p.Name == "C1s"), "C3 did not show P1's associations");
+            Assert.Contains(p => p.Name == "C1s", parentAssociations, "C3 did not show P1's associations");
         }
 
         /// <summary>
@@ -804,7 +804,7 @@ namespace OpenRiaServices.Server.Test
             Assert.IsNotNull(parentAssociations.SingleOrDefault(p => p.Name == "Child" && p.ComponentType == typeof(TestDomainServices.GrandChild)));
 
             parentAssociations = dsd.GetParentAssociations(typeof(TestDomainServices.Parent));
-            Assert.AreEqual(0, parentAssociations.Count());
+            Assert.IsEmpty(parentAssociations);
         }
 
         [TestMethod]
@@ -837,7 +837,7 @@ namespace OpenRiaServices.Server.Test
         public void DomainService_BaseMethodOverrides()
         {
             DomainServiceDescription dsd = DomainServiceDescription.GetDescription(typeof(DomainService_BaseMethodOverrides));
-            Assert.AreEqual(0, dsd.DomainOperationEntries.Count());
+            Assert.IsEmpty(dsd.DomainOperationEntries);
         }
 
         [TestMethod]
@@ -986,13 +986,13 @@ namespace OpenRiaServices.Server.Test
             // Valid question about root should return 2 derived types
             Type[] derivedTypes = description.GetEntityDerivedTypes(typeof(Mock_CG_BaseEntity)).ToArray();
             Assert.HasCount(2, derivedTypes, "Should be 2 derived types");
-            Assert.IsTrue(derivedTypes.Contains(typeof(Mock_CG_DerivedEntity)), "derived types did not include Mock_CG_DerivedEntity");
-            Assert.IsTrue(derivedTypes.Contains(typeof(Mock_CG_DerivedDerivedEntity)), "derived types did not include Mock_CG_DerivedEntity");
+            Assert.Contains(typeof(Mock_CG_DerivedEntity), derivedTypes, "derived types did not include Mock_CG_DerivedEntity");
+            Assert.Contains(typeof(Mock_CG_DerivedDerivedEntity), derivedTypes, "derived types did not include Mock_CG_DerivedEntity");
 
             // Valid question about middle entity should return 1 derived
             derivedTypes = description.GetEntityDerivedTypes(typeof(Mock_CG_DerivedEntity)).ToArray();
             Assert.HasCount(1, derivedTypes, "Should be 1 derived type");
-            Assert.IsTrue(derivedTypes.Contains(typeof(Mock_CG_DerivedDerivedEntity)), "derived types did not include Mock_CG_DerivedEntity");
+            Assert.Contains(typeof(Mock_CG_DerivedDerivedEntity), derivedTypes, "derived types did not include Mock_CG_DerivedEntity");
 
             derivedTypes = description.GetEntityDerivedTypes(typeof(Mock_CG_DerivedDerivedEntity)).ToArray();
             Assert.IsEmpty(derivedTypes, "Should be no derived type");
@@ -1009,7 +1009,7 @@ namespace OpenRiaServices.Server.Test
             DomainOperationEntry[] operations = description.DomainOperationEntries.ToArray();
 
             Assert.HasCount(6, operations);
-            Assert.AreEqual(6, description.EntityTypes.Count());
+            Assert.HasCount(6, description.EntityTypes);
 
             // verify that the operations added at each level are present,
             // including the base reflection operations
@@ -1046,7 +1046,7 @@ namespace OpenRiaServices.Server.Test
             DomainOperationEntry[] operations = description.DomainOperationEntries.ToArray();
 
             Assert.HasCount(8, operations);
-            Assert.AreEqual(4, description.EntityTypes.Count());
+            Assert.HasCount(4, description.EntityTypes);
 
             // verify State virtual CRUD methods
             Assert.IsNotNull(description.GetQueryMethod("GetStates"));
@@ -1085,7 +1085,7 @@ namespace OpenRiaServices.Server.Test
             DomainOperationEntry[] operations = description.DomainOperationEntries.ToArray();
 
             Assert.HasCount(10, operations);
-            Assert.AreEqual(4, description.EntityTypes.Count());
+            Assert.HasCount(4, description.EntityTypes);
 
             // verify custom method
             Assert.IsNotNull(description.GetCustomMethod(typeof(City), "IncreaseTaxes"));
@@ -1133,7 +1133,7 @@ namespace OpenRiaServices.Server.Test
 
             DomainOperationEntry operation = description.GetQueryMethod("B1");
             Assert.IsNotNull(operation);
-            Assert.AreEqual(2, description.DomainOperationEntries.Count());
+            Assert.HasCount(2, description.DomainOperationEntries);
 
             // verify that once a description has been initialized, it can no longer be modified
             ExceptionHelper.ExpectException<InvalidOperationException>(delegate
@@ -1183,8 +1183,8 @@ namespace OpenRiaServices.Server.Test
         {
             PropertyDescriptor pd = TypeDescriptor.GetProperties(typeof(AttributeTest))["A"];
             Attribute[] attribs = attribs = TheTypeDescriptorExtensions.ExplicitAttributes(pd).OfType<Attribute>().ToArray();
-            Assert.AreEqual(0, attribs.OfType<MetadataTypeAttribute>().Count());
-            Assert.AreEqual(0, attribs.OfType<ReadOnlyAttribute>().Count());
+            Assert.IsEmpty(attribs.OfType<MetadataTypeAttribute>());
+            Assert.IsEmpty(attribs.OfType<ReadOnlyAttribute>());
 
             // expect TD to return cached instances
             Attribute a1 = TypeDescriptor.GetAttributes(typeof(AttributeTest))[0];
@@ -1204,29 +1204,29 @@ namespace OpenRiaServices.Server.Test
             // property
             pd = TypeDescriptor.GetProperties(typeof(AttributeTest))["A"];
             attribs = TheTypeDescriptorExtensions.ExplicitAttributes(pd).OfType<Attribute>().ToArray();
-            Assert.AreEqual(0, attribs.OfType<MetadataTypeAttribute>().Count());
-            Assert.AreEqual(0, attribs.OfType<DisplayColumnAttribute>().Count());
-            Assert.AreEqual(1, attribs.OfType<EditableAttribute>().Count());
+            Assert.IsEmpty(attribs.OfType<MetadataTypeAttribute>());
+            Assert.IsEmpty(attribs.OfType<DisplayColumnAttribute>());
+            Assert.HasCount(1, attribs.OfType<EditableAttribute>());
 
             // Verify that the Type level attributes applied to both the Type
             // itself as well as the buddy class are still returned
             attribs = TypeDescriptor.GetAttributes(typeof(AttributeTest)).OfType<Attribute>().ToArray();
             Assert.HasCount(2, attribs);
-            Assert.AreEqual(1, attribs.OfType<MetadataTypeAttribute>().Count());
-            Assert.AreEqual(1, attribs.OfType<DisplayColumnAttribute>().Count());
+            Assert.HasCount(1, attribs.OfType<MetadataTypeAttribute>());
+            Assert.HasCount(1, attribs.OfType<DisplayColumnAttribute>());
 
             // Verify that we don't inherit attributes with Inherit=false as their attribute usage.
             attribs = TheTypeDescriptorExtensions.Attributes(typeof(AttributeTestTypeDerived)).OfType<Attribute>().ToArray();
             Assert.HasCount(1, attribs);
-            Assert.AreEqual(1, attribs.OfType<AttributeTestInheritAttribute>().Count());
-            Assert.AreEqual(0, attribs.OfType<AttributeTestNonInheritAttribute>().Count());
+            Assert.HasCount(1, attribs.OfType<AttributeTestInheritAttribute>());
+            Assert.IsEmpty(attribs.OfType<AttributeTestNonInheritAttribute>());
 
             // Verify that we get back attributes with Inherit=false when the attribute was 
             // put on the type we're reflecting on.
             attribs = TheTypeDescriptorExtensions.Attributes(typeof(AttributeTestTypeBase)).OfType<Attribute>().ToArray();
             Assert.HasCount(2, attribs);
-            Assert.AreEqual(1, attribs.OfType<AttributeTestInheritAttribute>().Count());
-            Assert.AreEqual(1, attribs.OfType<AttributeTestNonInheritAttribute>().Count());
+            Assert.HasCount(1, attribs.OfType<AttributeTestInheritAttribute>());
+            Assert.HasCount(1, attribs.OfType<AttributeTestNonInheritAttribute>());
         }
 
         [TestMethod]
@@ -1368,29 +1368,29 @@ namespace OpenRiaServices.Server.Test
 
             // We should have 6 'MockAttributeAllowMultiple' types with 3 originating from the interface, 3 from the class
             var typeLevelAttributes_AllowMultiple = d.Attributes.OfType<MockAttributeAllowMultiple>();
-            Assert.AreEqual(6, typeLevelAttributes_AllowMultiple.Count());
+            Assert.HasCount(6, typeLevelAttributes_AllowMultiple);
             Assert.AreEqual(3, typeLevelAttributes_AllowMultiple.Count(a => a.Value == "Class"));
             Assert.AreEqual(3, typeLevelAttributes_AllowMultiple.Count(a => a.Value == "Interface"));
 
             // We should have 1 'MockAttributeAllowOnce' originating from the class (overriding the interface).
             var typeLevelAttributes_AllowOnce = d.Attributes.OfType<MockAttributeAllowOnce>();
-            Assert.AreEqual(1, typeLevelAttributes_AllowOnce.Count());
-            Assert.AreEqual(1, typeLevelAttributes_AllowOnce.Count(a => a.Value == "Class"));
+            Assert.HasCount(1, typeLevelAttributes_AllowOnce);
+            Assert.ContainsSingle(a => a.Value == "Class", typeLevelAttributes_AllowOnce);
             Assert.AreEqual(0, typeLevelAttributes_AllowOnce.Count(a => a.Value == "Interface"));
 
             // We should have 1 'MockAttributeAllowOnce_AppliedToInterfaceOnly' originating from the interface.
             var typeLevelAttributes_AppliedToInterfaceOnly = d.Attributes.OfType<MockAttributeAllowOnce_AppliedToInterfaceOnly>();
-            Assert.AreEqual(1, typeLevelAttributes_AppliedToInterfaceOnly.Count());
+            Assert.HasCount(1, typeLevelAttributes_AppliedToInterfaceOnly);
             Assert.AreEqual(0, typeLevelAttributes_AppliedToInterfaceOnly.Count(a => a.Value == "Class"));
-            Assert.AreEqual(1, typeLevelAttributes_AppliedToInterfaceOnly.Count(a => a.Value == "Interface"));
+            Assert.ContainsSingle(a => a.Value == "Interface", typeLevelAttributes_AppliedToInterfaceOnly);
 
             // We should not have any interface-only attributes on our DomainService!
             var typeLevelAttributes_AllowOnceInterfaceOnly = d.Attributes.OfType<MockAttributeAllowOnce_InterfaceOnly>();
-            Assert.AreEqual(0, typeLevelAttributes_AllowOnceInterfaceOnly.Count());
+            Assert.IsEmpty(typeLevelAttributes_AllowOnceInterfaceOnly);
 
             // We should not have any interface-only attributes on our DomainService!
             var typeLevelAttributes_AllowMultipleInterfaceOnly = d.Attributes.OfType<MockAttributeAllowMultiple_InterfaceOnly>();
-            Assert.AreEqual(0, typeLevelAttributes_AllowMultipleInterfaceOnly.Count());
+            Assert.IsEmpty(typeLevelAttributes_AllowMultipleInterfaceOnly);
 
             // Step 2: Verify attributes on methods
             //
@@ -1409,7 +1409,7 @@ namespace OpenRiaServices.Server.Test
                         Assert.AreEqual(DomainOperation.Custom, op.Operation);
 
                         var attributes = op.Attributes.OfType<MockAttributeAllowMultiple>();
-                        Assert.AreEqual(6, attributes.Count());
+                        Assert.HasCount(6, attributes);
                         Assert.AreEqual(3, attributes.Count(a => a.Value == "Class"));
                         Assert.AreEqual(3, attributes.Count(a => a.Value == "Interface"));
                     }
@@ -1419,14 +1419,14 @@ namespace OpenRiaServices.Server.Test
                         Assert.AreEqual(DomainOperation.Custom, op.Operation);
 
                         var attributes = op.Attributes.OfType<MockAttributeAllowOnce>();
-                        Assert.AreEqual(1, attributes.Count());
-                        Assert.AreEqual(1, attributes.Count(a => a.Value == "Class"));
+                        Assert.HasCount(1, attributes);
+                        Assert.ContainsSingle(a => a.Value == "Class", attributes);
                         Assert.AreEqual(0, attributes.Count(a => a.Value == "Interface"));
 
                         var attributes_interfaceOnly = op.Attributes.OfType<MockAttributeAllowOnce_AppliedToInterfaceOnly>();
-                        Assert.AreEqual(1, attributes_interfaceOnly.Count());
+                        Assert.HasCount(1, attributes_interfaceOnly);
                         Assert.AreEqual(0, attributes_interfaceOnly.Count(a => a.Value == "Class"));
-                        Assert.AreEqual(1, attributes_interfaceOnly.Count(a => a.Value == "Interface"));
+                        Assert.ContainsSingle(a => a.Value == "Interface", attributes_interfaceOnly);
                     }
                     break;
                     case "EntityWithXElement_Delete":
@@ -2004,7 +2004,7 @@ namespace OpenRiaServices.Server.Test
         public void TestEntityTypeDiscovery()
         {
             DomainServiceDescription d = DomainServiceDescription.GetDescription(typeof(TestGraphProvider));
-            Assert.AreEqual(5, d.EntityTypes.Count());
+            Assert.HasCount(5, d.EntityTypes);
             Type[] expectedTypes = new Type[] { typeof(A), typeof(B), typeof(C), typeof(D), typeof(E) };
             Assert.IsTrue(d.EntityTypes.OrderBy(p => p.Name).SequenceEqual(expectedTypes));
         }
@@ -2314,22 +2314,22 @@ namespace OpenRiaServices.Server.Test
         public void ValidAssociationTest_InvalidIsFK_OtherTypeNotExposed()
         {
             DomainServiceDescription d = DomainServiceDescription.GetDescription(typeof(ValidAssociation_InvalidIsFK_OtherTypeNotExposed.ValidAssociationDomainService));
-            Assert.IsTrue(d.EntityTypes.Contains(typeof(ValidAssociation_InvalidIsFK_OtherTypeNotExposed.A)));
-            Assert.IsFalse(d.EntityTypes.Contains(typeof(ValidAssociation_InvalidIsFK_OtherTypeNotExposed.B)));
+            Assert.Contains(typeof(ValidAssociation_InvalidIsFK_OtherTypeNotExposed.A), d.EntityTypes);
+            Assert.DoesNotContain(typeof(ValidAssociation_InvalidIsFK_OtherTypeNotExposed.B), d.EntityTypes);
 
             Type A = d.EntityTypes.Single(t => t.Name == "A");
-            Assert.IsTrue(TypeDescriptor.GetProperties(A)["B"].Attributes.OfType<EntityAssociationAttribute>().Any());
+            Assert.IsNotEmpty(TypeDescriptor.GetProperties(A)["B"].Attributes.OfType<EntityAssociationAttribute>());
         }
 
         [TestMethod]
         public void ValidAssociationTest_OtherKeyNotFound_OtherTypeNotExposed()
         {
             DomainServiceDescription d = DomainServiceDescription.GetDescription(typeof(ValidAssociation_OtherKeyNotFound_OtherTypeNotExposed.ValidAssociationDomainService));
-            Assert.IsTrue(d.EntityTypes.Contains(typeof(ValidAssociation_OtherKeyNotFound_OtherTypeNotExposed.A)));
-            Assert.IsFalse(d.EntityTypes.Contains(typeof(ValidAssociation_OtherKeyNotFound_OtherTypeNotExposed.B)));
+            Assert.Contains(typeof(ValidAssociation_OtherKeyNotFound_OtherTypeNotExposed.A), d.EntityTypes);
+            Assert.DoesNotContain(typeof(ValidAssociation_OtherKeyNotFound_OtherTypeNotExposed.B), d.EntityTypes);
 
             Type A = d.EntityTypes.Single(t => t.Name == "A");
-            Assert.IsTrue(TypeDescriptor.GetProperties(A)["B"].Attributes.OfType<EntityAssociationAttribute>().Any());
+            Assert.IsNotEmpty(TypeDescriptor.GetProperties(A)["B"].Attributes.OfType<EntityAssociationAttribute>());
         }
         #endregion
 
@@ -2337,8 +2337,8 @@ namespace OpenRiaServices.Server.Test
         public void ValidAssociationTest_InheritanceSelfRef()
         {
             DomainServiceDescription d = DomainServiceDescription.GetDescription(typeof(ValidAssociation_InheritanceSelfRef.ValidAssociationDomainService));
-            Assert.IsTrue(d.EntityTypes.Contains(typeof(ValidAssociation_InheritanceSelfRef.A)));
-            Assert.IsTrue(d.EntityTypes.Contains(typeof(ValidAssociation_InheritanceSelfRef.B)));
+            Assert.Contains(typeof(ValidAssociation_InheritanceSelfRef.A), d.EntityTypes);
+            Assert.Contains(typeof(ValidAssociation_InheritanceSelfRef.B), d.EntityTypes);
 
             PropertyDescriptorCollection a_properties = TypeDescriptor.GetProperties(d.EntityTypes.Single(t => t.Name == "A"));
             Assert.IsNotNull(a_properties["A1"].Attributes.OfType<EntityAssociationAttribute>().Single());

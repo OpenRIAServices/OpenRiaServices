@@ -112,7 +112,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify that we have the expected validation error for the property
             IEnumerable<ValidationResult> results = entity.ValidationErrors.Where(e => e.MemberNames.Contains("ReadWriteProperty"));
-            Assert.AreEqual<int>(1, results.Count(), "Expected a single error for the property");
+            Assert.HasCount(1, results, "Expected a single error for the property");
             Assert.AreEqual<string>("The ReadWriteProperty field is required.", results.Single().ErrorMessage, "ErrorMessage from the result");
         }
 
@@ -139,7 +139,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify that we have the expected validation error for the property
             IEnumerable<ValidationResult> results = entity.ValidationErrors.Where(e => e.MemberNames.Contains("ReadWriteProperty"));
-            Assert.AreEqual<int>(1, results.Count(), "Expected a single error for the property");
+            Assert.HasCount(1, results, "Expected a single error for the property");
             Assert.AreEqual<string>("The field ReadWriteProperty must be a string with a maximum length of 10.", results.Single().ErrorMessage, "ErrorMessage from the result");
         }
 
@@ -460,13 +460,13 @@ namespace OpenRiaServices.Client.Test
             errors = notifier.GetErrors(affectedMemberNames.Single()).Cast<ValidationResult>();
 
             Assert.IsTrue(actualChanges.SequenceEqual(affectedMemberNames), "Events when setting to an invalid value");
-            Assert.AreEqual<int>(1, errors.Count(), "Expect a single error after setting to an invalid value");
+            Assert.HasCount(1, errors, "Expect a single error after setting to an invalid value");
 
             errors = notifier.GetErrors("Foo").Cast<ValidationResult>();
-            Assert.AreEqual<int>(1, errors.Count(), "Expect a single Foo error after setting to an invalid value");
+            Assert.HasCount(1, errors, "Expect a single Foo error after setting to an invalid value");
 
             errors = notifier.GetErrors("Bar").Cast<ValidationResult>();
-            Assert.AreEqual<int>(1, errors.Count(), "Expect a single Bar error after setting to an invalid value");
+            Assert.HasCount(1, errors, "Expect a single Bar error after setting to an invalid value");
             actualChanges.Clear();
 
             // Set the property to a valid value
@@ -474,7 +474,7 @@ namespace OpenRiaServices.Client.Test
             errors = notifier.GetErrors(affectedMemberNames.Single()).Cast<ValidationResult>();
 
             Assert.IsTrue(actualChanges.SequenceEqual(affectedMemberNames), "Events when setting to a valid value");
-            Assert.AreEqual<int>(0, errors.Count(), "Expect no errors after setting to a valid value");
+            Assert.IsEmpty(errors, "Expect no errors after setting to a valid value");
             actualChanges.Clear();
         }
 
@@ -637,8 +637,8 @@ namespace OpenRiaServices.Client.Test
             city.ValidationErrors.Add(new ValidationResult("Error", new string[] { "Name" }));
             System.Collections.IEnumerable withError = notifier.GetErrors("Name");
 
-            Assert.AreEqual<int>(0, noErrors.Cast<ValidationResult>().Count(), "Count from first enumerable");
-            Assert.AreEqual<int>(1, withError.Cast<ValidationResult>().Count(), "Count from second enumerable");
+            Assert.IsEmpty(noErrors.Cast<ValidationResult>(), "Count from first enumerable");
+            Assert.HasCount(1, withError.Cast<ValidationResult>(), "Count from second enumerable");
         }
 
         [TestMethod]
@@ -709,20 +709,20 @@ namespace OpenRiaServices.Client.Test
 
                 // Two notifications for Name and null (clearing, and adding), and one for StateName (cleared) and CountyName (added)
                 Assert.AreEqual<int>(2, errorNotifications.Count(e => e.Item1 == "ZoneID"), "Count of ZoneID notifications");
-                Assert.AreEqual<int>(1, errorNotifications.Count(e => e.Item1 == "ZoneName"), "Count of ZoneName notifications");
-                Assert.AreEqual<int>(1, errorNotifications.Count(e => e.Item1 == "CountyName"), "Count of CountyName notifications");
+                Assert.ContainsSingle(e => e.Item1 == "ZoneName", errorNotifications, "Count of ZoneName notifications");
+                Assert.ContainsSingle(e => e.Item1 == "CountyName", errorNotifications, "Count of CountyName notifications");
                 Assert.AreEqual<int>(2, errorNotifications.Count(e => string.IsNullOrEmpty(e.Item1)), "Count of entity-level notifications");
 
                 // When the first Name and null notifications occurred, there were no errors for either
                 // When the StateName notification occurred, there was no error for that property
                 // When the second Name and null notification occurred, an error had been added for each
                 // When the CountyName notification occurred, there was an error added for that property
-                Assert.AreEqual<int>(0, errorNotifications.First(e => e.Item1 == "ZoneID").Item2.Count(), "Error count for ZoneID at time of first notification");
-                Assert.AreEqual<int>(0, errorNotifications.First(e => string.IsNullOrEmpty(e.Item1)).Item2.Count(), "Error count for entity errors at time of first notification");
-                Assert.AreEqual<int>(0, errorNotifications.Single(e => e.Item1 == "ZoneName").Item2.Count(), "Error count for ZoneName at time of notification");
-                Assert.AreEqual<int>(1, errorNotifications.Where(e => e.Item1 == "ZoneID").Skip(1).First().Item2.Count(), "Error count for ZoneID at time of second notification");
-                Assert.AreEqual<int>(1, errorNotifications.Where(e => string.IsNullOrEmpty(e.Item1)).Skip(1).First().Item2.Count(), "Error count for entity errors at time of second notification");
-                Assert.AreEqual<int>(1, errorNotifications.Single(e => e.Item1 == "CountyName").Item2.Count(), "Error count for CountyName at time of notification");
+                Assert.IsEmpty(errorNotifications.First(e => e.Item1 == "ZoneID").Item2, "Error count for ZoneID at time of first notification");
+                Assert.IsEmpty(errorNotifications.First(e => string.IsNullOrEmpty(e.Item1)).Item2, "Error count for entity errors at time of first notification");
+                Assert.IsEmpty(errorNotifications.Single(e => e.Item1 == "ZoneName").Item2, "Error count for ZoneName at time of notification");
+                Assert.HasCount(1, errorNotifications.Where(e => e.Item1 == "ZoneID").Skip(1).First().Item2, "Error count for ZoneID at time of second notification");
+                Assert.HasCount(1, errorNotifications.Where(e => string.IsNullOrEmpty(e.Item1)).Skip(1).First().Item2, "Error count for entity errors at time of second notification");
+                Assert.HasCount(1, errorNotifications.Single(e => e.Item1 == "CountyName").Item2, "Error count for CountyName at time of notification");
 
                 // Verify the manually-added errors were in place at the time of the notifications
                 Assert.AreEqual<string>(customPropertyError, errorNotifications.Where(e => e.Item1 == "ZoneID").Skip(1).First().Item2.Single().ErrorMessage, "ErrorMessage of the ZoneID error when its notification was raised");
@@ -786,16 +786,16 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(4, errorNotifications, "Error notification count");
 
             // One of which should have been for Name, one for StateName, one for CountyName, and one for the entity-level error
-            Assert.AreEqual<int>(1, errorNotifications.Count(e => e.Item1 == "ZoneID"), "Count of Name notifications");
-            Assert.AreEqual<int>(1, errorNotifications.Count(e => e.Item1 == "ZoneName"), "Count of ZoneName notifications");
-            Assert.AreEqual<int>(1, errorNotifications.Count(e => e.Item1 == "CountyName"), "Count of CountyName notifications");
-            Assert.AreEqual<int>(1, errorNotifications.Count(e => string.IsNullOrEmpty(e.Item1)), "Count of entity-level notifications");
+            Assert.ContainsSingle(e => e.Item1 == "ZoneID", errorNotifications, "Count of Name notifications");
+            Assert.ContainsSingle(e => e.Item1 == "ZoneName", errorNotifications, "Count of ZoneName notifications");
+            Assert.ContainsSingle(e => e.Item1 == "CountyName", errorNotifications, "Count of CountyName notifications");
+            Assert.ContainsSingle(e => string.IsNullOrEmpty(e.Item1), errorNotifications, "Count of entity-level notifications");
 
             // Verify that when the notification occurred for Name, CountyName, and the entity, we had a single error for each, and there was no error for StateName
-            Assert.AreEqual<int>(1, errorNotifications.Single(e => e.Item1 == "ZoneID").Item2.Count(), "Error count for ZoneID at time of notification");
-            Assert.AreEqual<int>(1, errorNotifications.Single(e => e.Item1 == "CountyName").Item2.Count(), "Error count for CountyName at time of notification");
-            Assert.AreEqual<int>(1, errorNotifications.Single(e => string.IsNullOrEmpty(e.Item1)).Item2.Count(), "Error count for entity errors at time of notification");
-            Assert.AreEqual<int>(0, errorNotifications.Single(e => e.Item1 == "ZoneName").Item2.Count(), "Error count for ZoneName at time of notification");
+            Assert.HasCount(1, errorNotifications.Single(e => e.Item1 == "ZoneID").Item2, "Error count for ZoneID at time of notification");
+            Assert.HasCount(1, errorNotifications.Single(e => e.Item1 == "CountyName").Item2, "Error count for CountyName at time of notification");
+            Assert.HasCount(1, errorNotifications.Single(e => string.IsNullOrEmpty(e.Item1)).Item2, "Error count for entity errors at time of notification");
+            Assert.IsEmpty(errorNotifications.Single(e => e.Item1 == "ZoneName").Item2, "Error count for ZoneName at time of notification");
 
             // Verify the manually-added errors were in place at the time of the notifications
             Assert.AreEqual<string>(customPropertyError, errorNotifications.Single(e => e.Item1 == "ZoneID").Item2.Single().ErrorMessage, "ErrorMessage of the ZoneID error when its notification was raised");

@@ -143,7 +143,7 @@ namespace OpenRiaServices.Client.Test
                         {
                             // Verify the cities exist in our referenced data
                             Assert.IsNotNull(city);
-                            Assert.IsTrue(this.CityDomainContext.Cities.Contains<City>(city));
+                            Assert.Contains(city, this.CityDomainContext.Cities);
                         }
                     }
                 });

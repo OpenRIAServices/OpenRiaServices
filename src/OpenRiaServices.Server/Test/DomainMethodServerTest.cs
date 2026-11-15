@@ -112,7 +112,7 @@ namespace OpenRiaServices.Server.Test
             // verify that GetDomainMethods with City type only returns methods that are associated with City
             IEnumerable<DomainOperationEntry> domainMethods = description.GetCustomMethods(typeof(City));
             Assert.IsNotNull(domainMethods);
-            Assert.AreEqual(4, domainMethods.Count());
+            Assert.HasCount(4, domainMethods);
             Assert.IsNotNull(domainMethods.Single(m => m.Name == "ProcessCity"));
             Assert.IsNotNull(domainMethods.Single(m => m.Name == "AssignCityZone"));
             Assert.IsNotNull(domainMethods.Single(m => m.Name == "AssignCityZoneIfAuthorized"));
@@ -121,18 +121,18 @@ namespace OpenRiaServices.Server.Test
 
             // verify that GetDomainMethods with Zip type returns one method
             domainMethods = description.GetCustomMethods(typeof(Zip));
-            Assert.AreEqual(2, domainMethods.Count());
+            Assert.HasCount(2, domainMethods);
             Assert.IsNotNull(domainMethods.Single(m => m.Name == "ReassignZipCode"));
 
             // verify that GetDomainMethods with County type returns one method
             domainMethods = description.GetCustomMethods(typeof(County));
-            Assert.AreEqual(1, domainMethods.Count());
+            Assert.HasCount(1, domainMethods);
             Assert.IsNotNull(domainMethods.Single(m => m.Name == "ProcessCounty"));
 
             // verify that GetDomainMethods return empty collection when passing in type that is not associated with any methods on the provider
             domainMethods = description.GetCustomMethods(typeof(State));
             Assert.IsNotNull(domainMethods);
-            Assert.AreEqual(0, domainMethods.Count());
+            Assert.IsEmpty(domainMethods);
         }
 
         [TestMethod]
@@ -142,7 +142,7 @@ namespace OpenRiaServices.Server.Test
             DomainServiceDescription description = DomainServiceDescription.GetDescription(typeof(DomainMethod_ValidProvider_NoDomainMethods));
             IEnumerable<DomainOperationEntry> domainMethods = description.GetCustomMethods(typeof(City));
             Assert.IsNotNull(domainMethods);
-            Assert.AreEqual(0, domainMethods.Count());
+            Assert.IsEmpty(domainMethods);
         }
 
         #region Negative domain method signature tests

@@ -29,22 +29,22 @@ namespace OpenRiaServices.Server.Test
             // ----------------
             IEnumerable<Type> knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_Simple), false /* inherit */);
             Assert.IsNotNull(knownTypes);
-            Assert.AreEqual(2, knownTypes.Count());
-            Assert.IsFalse(knownTypes.Contains(typeof(KTU_00)));    // declared on base-most type -- should not be seen
-            Assert.IsFalse(knownTypes.Contains(typeof(KTU_0)));     // declared on base type -- should not be seen
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_1)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_2)));
+            Assert.HasCount(2, knownTypes);
+            Assert.DoesNotContain(typeof(KTU_00), knownTypes);    // declared on base-most type -- should not be seen
+            Assert.DoesNotContain(typeof(KTU_0), knownTypes);     // declared on base type -- should not be seen
+            Assert.Contains(typeof(KTU_1), knownTypes);
+            Assert.Contains(typeof(KTU_2), knownTypes);
 
             // ----------------
             // Inherit = true
             // ----------------
             knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_Simple), true /* inherit */);
             Assert.IsNotNull(knownTypes);
-            Assert.AreEqual(4, knownTypes.Count());
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_00)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_0)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_1)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_2)));
+            Assert.HasCount(4, knownTypes);
+            Assert.Contains(typeof(KTU_00), knownTypes);
+            Assert.Contains(typeof(KTU_0), knownTypes);
+            Assert.Contains(typeof(KTU_1), knownTypes);
+            Assert.Contains(typeof(KTU_2), knownTypes);
         }
 
         [TestMethod]
@@ -54,14 +54,14 @@ namespace OpenRiaServices.Server.Test
             // Absence of [KnownTypes] returns empty list
             IEnumerable<Type> knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_1), false /* inherit */);
             Assert.IsNotNull(knownTypes);
-            Assert.AreEqual(0, knownTypes.Count());
+            Assert.IsEmpty(knownTypes);
 
             // Presence of [KnownType] using Type member works
             knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_Simple), false);
             Assert.IsNotNull(knownTypes);
-            Assert.AreEqual(2, knownTypes.Count());
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_1)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_2)));
+            Assert.HasCount(2, knownTypes);
+            Assert.Contains(typeof(KTU_1), knownTypes);
+            Assert.Contains(typeof(KTU_2), knownTypes);
         }
 
         [TestMethod]
@@ -71,25 +71,25 @@ namespace OpenRiaServices.Server.Test
             // Presence of [KnownType] using Type[] returning method works
             IEnumerable<Type> knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_Type_With_Array_Method), false /* inherit */);
             Assert.IsNotNull(knownTypes);
-            Assert.AreEqual(2, knownTypes.Count());
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_2)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_3)));
+            Assert.HasCount(2, knownTypes);
+            Assert.Contains(typeof(KTU_2), knownTypes);
+            Assert.Contains(typeof(KTU_3), knownTypes);
 
             // Presence of [KnownType] using IEnumerable<Type> returning method works
             knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_Type_With_Enumerable_Method), false /* inherit */);
             Assert.IsNotNull(knownTypes);
-            Assert.AreEqual(2, knownTypes.Count());
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_3)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_4)));
+            Assert.HasCount(2, knownTypes);
+            Assert.Contains(typeof(KTU_3), knownTypes);
+            Assert.Contains(typeof(KTU_4), knownTypes);
 
             // Presence of [KnownType] using all known forms works
             knownTypes = KnownTypeUtil.ImportKnownTypes(typeof(KTU_Type_With_Enumerable_All_Forms), false /* inherit */);
             Assert.IsNotNull(knownTypes);
-            Assert.AreEqual(4, knownTypes.Count());
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_1)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_2)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_3)));
-            Assert.IsTrue(knownTypes.Contains(typeof(KTU_4)));
+            Assert.HasCount(4, knownTypes);
+            Assert.Contains(typeof(KTU_1), knownTypes);
+            Assert.Contains(typeof(KTU_2), knownTypes);
+            Assert.Contains(typeof(KTU_3), knownTypes);
+            Assert.Contains(typeof(KTU_4), knownTypes);
         }
 
         [TestMethod]

@@ -218,8 +218,8 @@ namespace OpenRiaServices.Hosting.UnitTests
         public void MessagePackProviderValidatesDomainServiceExposedTypes()
         {
             var description = DomainServiceDescription.GetDescription(typeof(ConverterDomainService));
-            Assert.IsTrue(description.EntityTypes.Contains(typeof(ConverterEntity)));
-            Assert.IsTrue(description.ComplexTypes.Contains(typeof(ConverterComplex)));
+            Assert.Contains(typeof(ConverterEntity), description.EntityTypes);
+            Assert.Contains(typeof(ConverterComplex), description.ComplexTypes);
             var operation = description.GetQueryMethod(nameof(ConverterDomainService.GetEntities));
 
             // XML can create and cache the surrogates without bypassing MessagePack validation.

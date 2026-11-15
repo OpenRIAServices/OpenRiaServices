@@ -250,7 +250,7 @@ namespace OpenRiaServices.Client.Test
 
             // Verify that we have the expected validation error for the property
             IEnumerable<ValidationResult> results = zip.ValidationErrors.Where(e => e.MemberNames.Contains("City"));
-            Assert.AreEqual<int>(1, results.Count(), "Expected a single error for the property");
+            Assert.HasCount(1, results, "Expected a single error for the property");
 
             // set to a valid City - expect success
             City validCity = new City
@@ -374,7 +374,7 @@ namespace OpenRiaServices.Client.Test
             // End the edit transaction, which performs property and entity-level validation
             editableCity.EndEdit();
             Assert.HasCount(1, city.ValidationErrors, "After EndEdit");
-            Assert.AreEqual<int>(1, city.ValidationErrors.Single().MemberNames.Count(), "MemberNames count after EndEdit");
+            Assert.HasCount(1, city.ValidationErrors.Single().MemberNames, "MemberNames count after EndEdit");
             Assert.AreEqual<string>(expectedMember, city.ValidationErrors.Single().MemberNames.Single(), "Member name after EndEdit");
             Assert.AreEqual<string>(expectedError, city.ValidationErrors.Single().ErrorMessage, "ErrorMessage after EndEdit");
         }
@@ -399,7 +399,7 @@ namespace OpenRiaServices.Client.Test
             // End the edit transaction, which performs property and entity-level validation
             editableCity.EndEdit();
             Assert.HasCount(1, city.ValidationErrors, "After EndEdit");
-            Assert.AreEqual<int>(1, city.ValidationErrors.Single().MemberNames.Count(), "MemberNames count after EndEdit");
+            Assert.HasCount(1, city.ValidationErrors.Single().MemberNames, "MemberNames count after EndEdit");
             Assert.AreEqual<string>(expectedMember, city.ValidationErrors.Single().MemberNames.Single(), "Member name after EndEdit");
             Assert.AreEqual<string>(expectedError, city.ValidationErrors.Single().ErrorMessage, "ErrorMessage after EndEdit");
         }
@@ -431,7 +431,7 @@ namespace OpenRiaServices.Client.Test
             Tuple<string, IEnumerable<ValidationResult>> error = actualErrors[0];
             Assert.IsNull(error.Item1, "The error should have been an entity-level error (null PropertyName)");
 
-            Assert.AreEqual<int>(1, error.Item2.Count(), "There should have been a single error at the time of the event");
+            Assert.HasCount(1, error.Item2, "There should have been a single error at the time of the event");
             Assert.AreEqual<string>(expectedError, error.Item2.First().ErrorMessage, "The error message of the single error didn't match the expectation");
 
             // Clear out the errors for the next stage of the test
@@ -721,7 +721,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // Verify property has a display attribute
                 var displayAttributes = property.GetCustomAttributes(typeof(DisplayAttribute), true).Cast<DisplayAttribute>();
-                Assert.AreEqual(1, displayAttributes.Count(), string.Format("Expected 1 DisplayAttribute on property '{0}'.", property.Name));
+                Assert.HasCount(1, displayAttributes, string.Format("Expected 1 DisplayAttribute on property '{0}'.", property.Name));
 
                 // Verify display attribute has AutoGenerateField==false
                 var displayAttribute = displayAttributes.Single();
@@ -800,7 +800,7 @@ namespace OpenRiaServices.Client.Test
         {
             MockEntity_Indexer entity = new MockEntity_Indexer { Data = "Foo", Key = 10 };
             IDictionary<string, object> stateInfo = entity.ExtractState();
-            Assert.AreEqual(3, stateInfo.Count, "Expected 2 properties and the retained-data entry to be returned");
+            Assert.HasCount(3, stateInfo, "Expected 2 properties and the retained-data entry to be returned");
             Assert.IsTrue(stateInfo["Data"] != null && stateInfo["Key"] != null, "The state returned should contain the Data and Key properties");
         }        
 

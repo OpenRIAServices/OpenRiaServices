@@ -34,7 +34,7 @@ namespace OpenRiaServices.Client.Web.Test
 
             var results = await dc.QueryAsync(query, CancellationToken.None);
 
-            Assert.AreEqual(2, results.Entities.Concat(results.IncludedEntities).Count());
+            Assert.HasCount(2, results.Entities.Concat(results.IncludedEntities));
             Assert.AreEqual(504, results.TotalCount);
         }
 
@@ -55,7 +55,7 @@ namespace OpenRiaServices.Client.Web.Test
 
             var result = await dc.QueryAsync(entityQuery, CancellationToken.None);
 
-            Assert.AreEqual(79, result.Entities.Concat(result.IncludedEntities).Count());
+            Assert.HasCount(79, result.Entities.Concat(result.IncludedEntities));
             Assert.AreEqual(result.Entities.Count(), result.TotalCount);
         }
 
@@ -66,7 +66,7 @@ namespace OpenRiaServices.Client.Web.Test
             dc.EntityTypes = new Type[] { typeof(Product) };
 
             var result = await dc.QueryAsync(new EntityQuery<Product>(dc, "GetProducts", null, true, false), CancellationToken.None);
-            Assert.AreEqual(504, result.Entities.Concat(result.IncludedEntities).Count());
+            Assert.HasCount(504, result.Entities.Concat(result.IncludedEntities));
             Assert.AreEqual(result.Entities.Count(), result.TotalCount);
         }
     }

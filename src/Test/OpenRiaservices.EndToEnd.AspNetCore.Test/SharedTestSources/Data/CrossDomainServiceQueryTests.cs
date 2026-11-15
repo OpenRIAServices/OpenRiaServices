@@ -185,7 +185,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 List<Product> products = catalog.Products.ToList();
-                Assert.AreEqual(504, products.Count);
+                Assert.HasCount(504, products);
             });
             EnqueueTestComplete();
         }

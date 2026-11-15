@@ -49,7 +49,7 @@ namespace OpenRiaServices.Client.Test
                 order.PurchaseOrderDetails.Add(detail);
             }, string.Format(CultureInfo.CurrentCulture, Resource.EntitySet_UnsupportedOperation, typeof(PurchaseOrderDetail), EntitySetOperations.Add));
 
-            Assert.IsFalse(order.PurchaseOrderDetails.Contains(detail));
+            Assert.DoesNotContain(detail, order.PurchaseOrderDetails);
             Assert.AreEqual(EntityState.Detached, detail.EntityState);
         }
 
@@ -217,14 +217,14 @@ namespace OpenRiaServices.Client.Test
             o.CustomerID = "ALFKI";
 
             Assert.AreEqual(EntityState.Detached, o.EntityState);
-            Assert.IsFalse(cust.Orders.Contains(o));
+            Assert.DoesNotContain(o, cust.Orders);
             Assert.IsFalse(orders.Contains(o));
 
             // add the entity after making the FK modification - we expect
             // it to show up in the collection
             orders.Attach(o);
             Assert.AreEqual(EntityState.Unmodified, o.EntityState);
-            Assert.IsTrue(cust.Orders.Contains(o));
+            Assert.Contains(o, cust.Orders);
         }
 
         [TestMethod]
@@ -473,7 +473,7 @@ namespace OpenRiaServices.Client.Test
             PurchaseOrder o3 = new PurchaseOrder { PurchaseOrderID = 1 };
             PurchaseOrderDetail d3 = new PurchaseOrderDetail { PurchaseOrderID = 1, PurchaseOrderDetailID = 1 };
             ec.LoadEntities(new Entity[] { o3, d3 });
-            Assert.IsTrue(o3.PurchaseOrderDetails.Contains(d3));
+            Assert.Contains(d3, o3.PurchaseOrderDetails);
 
             // Add two parents
             PurchaseOrder o1 = new PurchaseOrder();
@@ -521,15 +521,15 @@ namespace OpenRiaServices.Client.Test
             // but won't be removed until the edit session is completed or it is explicitly
             // removed below
             detail.PurchaseOrderID = 5;
-            Assert.IsTrue(order.PurchaseOrderDetails.Contains(detail));
+            Assert.Contains(detail, order.PurchaseOrderDetails);
 
             // We should be able to explicitly remove. This was failing before
             // the fix.
             order.PurchaseOrderDetails.Remove(detail);
-            Assert.IsFalse(order.PurchaseOrderDetails.Contains(detail));
+            Assert.DoesNotContain(detail, order.PurchaseOrderDetails);
 
             ((IEditableObject)detail).EndEdit();
-            Assert.IsFalse(order.PurchaseOrderDetails.Contains(detail));
+            Assert.DoesNotContain(detail, order.PurchaseOrderDetails);
         }
 
         [TestMethod]
@@ -632,18 +632,18 @@ namespace OpenRiaServices.Client.Test
 
             // transfer the detail to the other order
             o1.PurchaseOrderDetails.Add(detail);
-            Assert.IsTrue(o1.PurchaseOrderDetails.Contains(detail));
+            Assert.Contains(detail, o1.PurchaseOrderDetails);
 
             // change FK to point back to the original order
             detail.PurchaseOrderID = o2.PurchaseOrderID;
-            Assert.IsTrue(o1.PurchaseOrderDetails.Contains(detail));
+            Assert.Contains(detail, o1.PurchaseOrderDetails);
 
             ((IEditableObject)detail).EndEdit();
 
             // we expect the order NOT to have moved
             Assert.AreEqual(o2.PurchaseOrderID, detail.PurchaseOrderID);
-            Assert.IsTrue(o2.PurchaseOrderDetails.Contains(detail));
-            Assert.IsFalse(o1.PurchaseOrderDetails.Contains(detail));
+            Assert.Contains(detail, o2.PurchaseOrderDetails);
+            Assert.DoesNotContain(detail, o1.PurchaseOrderDetails);
         }
 
         [TestMethod]
@@ -671,8 +671,8 @@ namespace OpenRiaServices.Client.Test
             o2.PurchaseOrderDetails.Add(detail);
             ((IEditableObject)detail).EndEdit();
             Assert.AreEqual(o2.PurchaseOrderID, detail.PurchaseOrderID);
-            Assert.IsTrue(o2.PurchaseOrderDetails.Contains(detail));
-            Assert.IsFalse(o1.PurchaseOrderDetails.Contains(detail));
+            Assert.Contains(detail, o2.PurchaseOrderDetails);
+            Assert.DoesNotContain(detail, o1.PurchaseOrderDetails);
         }
 
         [TestMethod]
@@ -714,7 +714,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("Order1_Remove", notifications[1]);
             Assert.AreEqual("Order2_Add", notifications[2]);
             ec.PurchaseOrderDetails.Remove(newDetail);
-            Assert.IsFalse(o2.PurchaseOrderDetails.Contains(newDetail));
+            Assert.DoesNotContain(newDetail, o2.PurchaseOrderDetails);
 
             // do scenario 1 again this time w/o the edit session. Should be the same
             // result
@@ -727,8 +727,8 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("Order1_Remove", notifications[1]);
             Assert.AreEqual("Order2_Add", notifications[2]);
             ec.PurchaseOrderDetails.Remove(newDetail);
-            Assert.IsFalse(o1.PurchaseOrderDetails.Contains(newDetail));
-            Assert.IsFalse(o2.PurchaseOrderDetails.Contains(newDetail));
+            Assert.DoesNotContain(newDetail, o1.PurchaseOrderDetails);
+            Assert.DoesNotContain(newDetail, o2.PurchaseOrderDetails);
 
             // scenario 3 - no edit session, with an intervening FK update. Again
             // we expect the same results.
@@ -742,8 +742,8 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("Order1_Remove", notifications[1]);
             Assert.AreEqual("Order2_Add", notifications[2]);
             ec.PurchaseOrderDetails.Remove(newDetail);
-            Assert.IsFalse(o1.PurchaseOrderDetails.Contains(newDetail));
-            Assert.IsFalse(o2.PurchaseOrderDetails.Contains(newDetail));
+            Assert.DoesNotContain(newDetail, o1.PurchaseOrderDetails);
+            Assert.DoesNotContain(newDetail, o2.PurchaseOrderDetails);
 
             // repro scenario - what happens is since the FK is modified before the second add to point
             // to the second order, the PurchaseOrderDetail.PurchaseOrder setter code noops, since
@@ -762,8 +762,8 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("Order2_Add", notifications[1]);
             Assert.AreEqual("Order1_Remove", notifications[2]);
             ec.PurchaseOrderDetails.Remove(newDetail);
-            Assert.IsFalse(o1.PurchaseOrderDetails.Contains(newDetail));
-            Assert.IsFalse(o2.PurchaseOrderDetails.Contains(newDetail));
+            Assert.DoesNotContain(newDetail, o1.PurchaseOrderDetails);
+            Assert.DoesNotContain(newDetail, o2.PurchaseOrderDetails);
 
             // verify that if the edit session is cancelled, that everything is
             // undone properly and events are raised properly
@@ -779,8 +779,8 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual("Order2_Add", notifications[1]);
             Assert.AreEqual("Order1_Remove", notifications[2]);
             Assert.AreEqual("Order2_Remove", notifications[3]);
-            Assert.IsFalse(o1.PurchaseOrderDetails.Contains(newDetail));
-            Assert.IsFalse(o2.PurchaseOrderDetails.Contains(newDetail));
+            Assert.DoesNotContain(newDetail, o1.PurchaseOrderDetails);
+            Assert.DoesNotContain(newDetail, o2.PurchaseOrderDetails);
 
             // verify that if the edit session is cancelled, that everything is
             // undone properly and events are raised properly
@@ -792,7 +792,7 @@ namespace OpenRiaServices.Client.Test
             Assert.HasCount(2, notifications);
             Assert.AreEqual("Order1_Remove", notifications[0]);
             Assert.AreEqual("Order1_Add", notifications[1]);
-            Assert.IsTrue(o1.PurchaseOrderDetails.Contains(removeDetail));
+            Assert.Contains(removeDetail, o1.PurchaseOrderDetails);
             Assert.AreEqual(o1.PurchaseOrderID, removeDetail.PurchaseOrderID);
         }
 
@@ -904,8 +904,8 @@ namespace OpenRiaServices.Client.Test
 
             Assert.AreEqual(1, e1.PurchaseOrders.Count);
             Assert.AreEqual(0, e2.PurchaseOrders.Count);
-            Assert.AreEqual(1, cvs1.View.SourceCollection.Cast<PurchaseOrder>().Count());
-            Assert.AreEqual(0, cvs2.View.SourceCollection.Cast<PurchaseOrder>().Count());
+            Assert.HasCount(1, cvs1.View.SourceCollection.Cast<PurchaseOrder>());
+            Assert.IsEmpty(cvs2.View.SourceCollection.Cast<PurchaseOrder>());
 
             // update the order employee ID to cause the order to 
             // move to the other collection
@@ -916,15 +916,15 @@ namespace OpenRiaServices.Client.Test
 
             Assert.AreEqual(1, e1.PurchaseOrders.Count);
             Assert.AreEqual(0, e2.PurchaseOrders.Count);
-            Assert.AreEqual(1, cvs1.View.SourceCollection.Cast<PurchaseOrder>().Count());
-            Assert.AreEqual(0, cvs2.View.SourceCollection.Cast<PurchaseOrder>().Count());
+            Assert.HasCount(1, cvs1.View.SourceCollection.Cast<PurchaseOrder>());
+            Assert.IsEmpty(cvs2.View.SourceCollection.Cast<PurchaseOrder>());
 
             ((IEditableObject)o1).EndEdit();
 
             Assert.AreEqual(0, e1.PurchaseOrders.Count);
             Assert.AreEqual(1, e2.PurchaseOrders.Count);
-            Assert.AreEqual(0, cvs1.View.SourceCollection.Cast<PurchaseOrder>().Count());
-            Assert.AreEqual(1, cvs2.View.SourceCollection.Cast<PurchaseOrder>().Count());
+            Assert.IsEmpty(cvs1.View.SourceCollection.Cast<PurchaseOrder>());
+            Assert.HasCount(1, cvs2.View.SourceCollection.Cast<PurchaseOrder>());
 
             // move the entity back by modifying again
             ((IEditableObject)o1).BeginEdit();
@@ -935,8 +935,8 @@ namespace OpenRiaServices.Client.Test
 
             Assert.AreEqual(1, e1.PurchaseOrders.Count);
             Assert.AreEqual(0, e2.PurchaseOrders.Count);
-            Assert.AreEqual(1, cvs1.View.SourceCollection.Cast<PurchaseOrder>().Count());
-            Assert.AreEqual(0, cvs2.View.SourceCollection.Cast<PurchaseOrder>().Count());
+            Assert.HasCount(1, cvs1.View.SourceCollection.Cast<PurchaseOrder>());
+            Assert.IsEmpty(cvs2.View.SourceCollection.Cast<PurchaseOrder>());
         }
 
 #if !SILVERLIGHT
@@ -1321,7 +1321,7 @@ namespace OpenRiaServices.Client.Test
             EntityContainer citiesContainer = cities.EntityContainer;
             ec.AddReference(citiesContainer.GetEntitySet(typeof(Cities.City)));
             Assert.HasCount(5, ec.EntitySets);
-            Assert.IsFalse(ec.EntitySets.Any(p => p.EntityType == typeof(Cities.City)));
+            Assert.DoesNotContain(p => p.EntityType == typeof(Cities.City), ec.EntitySets);
         }
 
         /// <summary>
@@ -1954,7 +1954,7 @@ namespace OpenRiaServices.Client.Test
             args1 = null;
             p1.ApplyState(new Dictionary<string, object> { { "ProductID", 3 } });
             Assert.AreEqual(1, p1.PurchaseOrderDetails.Count);
-            Assert.IsTrue(p1.PurchaseOrderDetails.Contains(d4));
+            Assert.Contains(d4, p1.PurchaseOrderDetails);
             Assert.AreEqual(NotifyCollectionChangedAction.Reset, args1.Action);
         }
 
@@ -2162,7 +2162,7 @@ namespace OpenRiaServices.Client.Test
 
             Assert.IsNull(zip.City);
 
-            Assert.AreEqual(1, propChangedArgs.Count(p => p.PropertyName == "City"));
+            Assert.ContainsSingle(p => p.PropertyName == "City", propChangedArgs);
 
             // test the multipart key scenario where all key members
             // are set in sequence CityName/CountyName/StateName is the multipart key
@@ -3022,7 +3022,7 @@ namespace OpenRiaServices.Client.Test
                 if (e.Action == NotifyCollectionChangedAction.Remove)
                 {
                     PurchaseOrderDetail[] currDetails = order.PurchaseOrderDetails.ToArray();
-                    Assert.IsFalse(currDetails.Contains(removedDetail));
+                    Assert.DoesNotContain(removedDetail, currDetails);
                 }
             };
 
@@ -3069,7 +3069,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(1, order.PurchaseOrderDetails.Count);  // expect count to remain same
             ((IRevertibleChangeTracking)detailsSet).AcceptChanges();  // cause New -> Unmodified state transition
             Assert.AreEqual(2, order.PurchaseOrderDetails.Count);  // expect to see the new detail
-            Assert.IsTrue(order.PurchaseOrderDetails.Contains(newDetail1));
+            Assert.Contains(newDetail1, order.PurchaseOrderDetails);
 
             // verify that the same behavior occurs if we are in an edit session
             PurchaseOrderDetail newDetail2 = new PurchaseOrderDetail
@@ -3082,7 +3082,7 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(2, order.PurchaseOrderDetails.Count);  // expect count to remain same
             ((IRevertibleChangeTracking)detailsSet).AcceptChanges();  // cause New -> Unmodified state transition
             Assert.AreEqual(3, order.PurchaseOrderDetails.Count);  // expect to see the new detail
-            Assert.IsTrue(order.PurchaseOrderDetails.Contains(newDetail2));
+            Assert.Contains(newDetail2, order.PurchaseOrderDetails);
         }
 
         [TestMethod]
@@ -4466,10 +4466,10 @@ namespace OpenRiaServices.Client.Test
             cities.EntityContainer.LoadEntities(new Entity[] { city });
             city.StateName = "XX";
             city.AssignCityZone("Zone42");
-            Assert.AreEqual(1, city.EntityActions.Count());
+            Assert.HasCount(1, city.EntityActions);
             Assert.AreEqual(EntityState.Modified, city.EntityState);
             cities.EntityContainer.LoadEntities(new Entity[] { new City() { Name = "Toledo", CountyName = "Lucas", StateName = "OH" } }, LoadBehavior.RefreshCurrent);
-            Assert.AreEqual(1, city.EntityActions.Count());
+            Assert.HasCount(1, city.EntityActions);
             Assert.AreEqual(EntityState.Modified, city.EntityState);
         }
 

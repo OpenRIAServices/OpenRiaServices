@@ -35,7 +35,7 @@ namespace OpenRiaServices.Client.Test
             City city = CreateLocalCity("Newcastle");
             entityCollection.Add(city);
 
-            Assert.IsTrue(entityCollection.Contains(city),
+            Assert.Contains(city, entityCollection,
                 "EntityCollection should contain entity after add.");
             Assert.IsNotNull(eventArgs,
                 "Event should not be null after adding an entity.");
@@ -47,13 +47,13 @@ namespace OpenRiaServices.Client.Test
             city = CreateLocalCity("Medina");
             entityCollection.Add(city);
 
-            Assert.IsTrue(entityCollection.Contains(city),
+            Assert.Contains(city, entityCollection,
                 "EntityCollection should contain entity after second add.");
 
             eventArgs = null;
             entityCollection.Remove(city);
 
-            Assert.IsFalse(entityCollection.Contains(city),
+            Assert.DoesNotContain(city, entityCollection,
                 "EntityCollection should not contain entity after remove.");
             Assert.IsNotNull(eventArgs,
                 "Event should not be null after removing an entity.");
@@ -84,7 +84,7 @@ namespace OpenRiaServices.Client.Test
             City city = CreateLocalCity("Enumclaw");
             entitySet.Attach(city);
 
-            Assert.IsTrue(entityCollection.Contains(city),
+            Assert.Contains(city, entityCollection,
                 "EntityCollection should contain entity after add.");
             Assert.IsNotNull(eventArgs,
                 "Event should not be null after adding an entity.");
@@ -96,13 +96,13 @@ namespace OpenRiaServices.Client.Test
             city = CreateLocalCity("Duvall");
             entitySet.Attach(city);
 
-            Assert.IsTrue(entityCollection.Contains(city),
+            Assert.Contains(city, entityCollection,
                 "EntityCollection should contain entity after second add.");
 
             eventArgs = null;
             entitySet.Detach(city);
 
-            Assert.IsFalse(entityCollection.Contains(city),
+            Assert.DoesNotContain(city, entityCollection,
                 "EntityCollection should not contain entity after remove.");
             Assert.IsNotNull(eventArgs,
                 "Event should not be null after removing an entity.");
@@ -130,7 +130,7 @@ namespace OpenRiaServices.Client.Test
                 Assert.AreSame(city, list[idx]);
                 Assert.AreSame(city, entityCollection[idx]);
                 Assert.Contains(city, list);
-                Assert.IsTrue(entityCollection.Contains(city));
+                Assert.Contains(city, entityCollection);
             }
         }
 
