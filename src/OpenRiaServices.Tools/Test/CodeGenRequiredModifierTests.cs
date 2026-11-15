@@ -1,5 +1,4 @@
-﻿#if NET7_0_OR_GREATER //required modifier does not work before net7
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
 
@@ -28,4 +27,3 @@ public class Mock_CG_Required_Entity
     [Key]
     public required string RequiredProperty { get; set; }
 }
-#endif

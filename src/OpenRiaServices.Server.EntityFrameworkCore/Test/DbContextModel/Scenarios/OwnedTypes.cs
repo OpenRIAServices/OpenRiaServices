@@ -62,7 +62,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         public required ContactInfo ContactInfo { get; set; }
         [Include]
         public required OwnedEntityWithExplicitId OwnedEntityWithExplicitId { get; set; }
-        [Include] 
+        [Include]
         public required OwnedEntityWithExplicitIdAndBackNavigation OwnedEntityWithExplicitIdAndBackNavigation { get; set; }
         public required OwnedEntityWithBackNavigation OwnedEntityWithBackNavigation { get; set; }
     }
@@ -109,11 +109,10 @@ namespace EFCoreModels.Scenarios.OwnedTypes
                 })
                 .HasKey(nameof(Employee.EmployeeId));
 
-#if NET8_0
             modelBuilder.Entity<Employee>()
                 .Navigation(x => x.ContactInfo)
                 .IsRequired();
-#endif
+
 
             base.OnModelCreating(modelBuilder);
         }

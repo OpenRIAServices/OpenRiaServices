@@ -662,7 +662,7 @@ namespace OpenRiaServices.Client
 
             protected override Expression VisitMethodCall(MethodCallExpression m)
             {
-#if NET8_0_OR_GREATER
+#if NET
                 if (m.Method.DeclaringType == typeof(MemoryExtensions)
                     && m.Method.Name == nameof(MemoryExtensions.Contains)
                     && m.Method.IsGenericMethod

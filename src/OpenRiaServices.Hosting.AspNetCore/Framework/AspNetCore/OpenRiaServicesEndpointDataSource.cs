@@ -142,12 +142,10 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 _conventions.Add(convention);
             }
 
-#if NET7_0_OR_GREATER
             void IEndpointConventionBuilder.Finally(System.Action<Microsoft.AspNetCore.Builder.EndpointBuilder> finallyConvention)
             {
                 _finallyConventions.Add(finallyConvention);
             }
-#endif
 
             public void ApplyConventions(EndpointBuilder endpointBuilder)
             {
@@ -247,11 +245,9 @@ namespace OpenRiaServices.Hosting.AspNetCore
             _conventions.Add(convention);
         }
 
-#if NET7_0_OR_GREATER
         void IEndpointConventionBuilder.Finally(System.Action<Microsoft.AspNetCore.Builder.EndpointBuilder> finallyConvention)
         {
             _finallyConventions.Add(finallyConvention);
         }
-#endif
     }
 }
