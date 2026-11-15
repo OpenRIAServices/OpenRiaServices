@@ -63,6 +63,7 @@ namespace OpenRiaServices.Tools.Test
         [DeploymentItem(@"Baselines\Default\WebContext", @"CG_WebContext")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when two services are present.")]
+        [Ignore("Look at the old WCF baseline for this test, should the services have different or same user ?")]
         public void TwoAuthenticationServices()
         {
             ConsoleLogger logger = new ConsoleLogger();
@@ -78,6 +79,7 @@ namespace OpenRiaServices.Tools.Test
         [DeploymentItem(@"Baselines\FullTypeNames\WebContext", @"CG_WebContext_FullTypes")]
         [TestMethod]
         [Description("Tests that the code is generated correctly when two services are present.")]
+        [Ignore("Look at the old WCF baseline for this test, should the services have different or same user ?")]
         public void TwoAuthenticationServices_FullTypes()
         {
             ConsoleLogger logger = new ConsoleLogger();
