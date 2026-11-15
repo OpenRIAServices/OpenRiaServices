@@ -11,6 +11,8 @@ using OpenRiaServices.Server.Authentication;
 
 namespace RootNamespace.TestNamespace
 {
+    public class AuthenticationService2 : AuthenticationBase<User1> { }
+
     [EnableClientAccess]
     public class AuthenticationService1 : AuthenticationBase<User1> { }
     public class User1 : UserBase { };

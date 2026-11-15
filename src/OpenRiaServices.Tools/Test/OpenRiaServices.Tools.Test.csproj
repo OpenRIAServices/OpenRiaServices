@@ -53,6 +53,7 @@
     <ProjectReference Include="..\..\OpenRiaServices.Tools.TextTemplate\Framework\OpenRiaServices.Tools.TextTemplate.csproj">
       <Aliases>TextTemplate</Aliases>
     </ProjectReference>
+    <ProjectReference Include="..\..\Test\AspNetCoreWebsite\AspNetCoreWebsite.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.Test\OpenRiaServices.Common.Test.csproj" />
     <ProjectReference Include="..\Framework\OpenRiaServices.Tools.csproj" />
