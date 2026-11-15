@@ -102,14 +102,12 @@ namespace OpenRiaServices.Tools
 
             if (propertyName.Equals("TypeId", StringComparison.Ordinal))
                 return null;
-#if !NETFRAMEWORK
             // We strip "RequiresValidationContext" from ValidationAttribute since there is usually no setter, it is calculated indirectly
             // Since the default is often true we will (if type as no default cto) look for a constructor taking it as a parameter
             else if (propertyInfo.Name == nameof(ValidationAttribute.RequiresValidationContext)
                 && attribute is ValidationAttribute 
                 && propertyInfo.SetMethod is null)
                 return null;
-#endif
             return propertyName;
         }
 

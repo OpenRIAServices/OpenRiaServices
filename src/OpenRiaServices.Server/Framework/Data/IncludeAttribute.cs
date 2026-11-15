@@ -78,7 +78,6 @@ namespace OpenRiaServices.Server
             }
         }
 
-#if !SILVERLIGHT
         /// <summary>
         /// Gets a unique identifier for this attribute.
         /// </summary>
@@ -89,7 +88,6 @@ namespace OpenRiaServices.Server
                 return this;
             }
         }
-#endif
 
         /// <summary>
         /// Determines whether the current attribute instance is properly formed

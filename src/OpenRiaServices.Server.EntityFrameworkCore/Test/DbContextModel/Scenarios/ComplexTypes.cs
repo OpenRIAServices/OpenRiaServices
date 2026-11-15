@@ -6,8 +6,6 @@ using Microsoft.EntityFrameworkCore;
 
 #nullable enable
 
-#if NET8_0_OR_GREATER
-
 namespace EFCoreModels.Scenarios.ComplexTypes
 {
 
@@ -72,4 +70,3 @@ namespace EFCoreModels.Scenarios.ComplexTypes
         }
     }
 }
-#endif

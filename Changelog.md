@@ -1,8 +1,15 @@
 # Unreleased
 
+## Changed
+
+* Updated TestHost for .NET 10 and test-only dependencies, including Roslyn and MSTest. Code generation compiles against MSBuild 18.0 to support all .NET 10 SDKs. EF Core dependencies remain on 10.0.
+* Moved Client.Core, Server, EntityFramework, UnitTesting, and T4 packaging into their projects. CI uses GitVersion package versions. Suppressed CA1826 in test projects.
+* ASP.NET Core hosting opts in to runtime-native async on .NET 11. The .NET 10 build is unchanged.
+
 ## Removed
 
 * Removed WCF hosting and .NET Framework server support. Server libraries and tests now target modern .NET; .NET Framework remains supported for client libraries and tests.
+* Removed obsolete Silverlight conditional code and simplified framework guards outside files shared with .NET Framework projects.
 
 # 5.11.0 / AspNetCore 1.7.0
 

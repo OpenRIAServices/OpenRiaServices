@@ -4,12 +4,12 @@
     <EnableMSTestRunner>true</EnableMSTestRunner>
     <NoWarn>618</NoWarn>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="10.0.14" />
-    <PackageReference Include="MSTest.TestAdapter" Version="4.5.2" />
-    <PackageReference Include="MSTest.TestFramework" Version="4.5.2" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="11.0.0" />
+    <PackageReference Include="MSTest.TestAdapter" Version="4.5.3" />
+    <PackageReference Include="MSTest.TestFramework" Version="4.5.3" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\OpenRiaServices.Common.DomainServices.Test.csproj" />

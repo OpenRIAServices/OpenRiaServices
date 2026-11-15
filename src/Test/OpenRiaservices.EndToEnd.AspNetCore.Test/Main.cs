@@ -108,7 +108,7 @@ namespace OpenRiaServices.Client.Test
 #if NET10_0
             string targetFramework = "net10.0";
 #else
-            string targetFramework = "net8.0";
+            string targetFramework = "net11.0";
 #endif
 
             string webSitePath = Path.GetFullPath(Path.Join(projectPath, @$"../AspNetCoreWebsite/bin/{configuration}/{targetFramework}/"));

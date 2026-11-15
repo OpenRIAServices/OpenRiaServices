@@ -49,11 +49,7 @@ namespace OpenRiaServices.Hosting.Wcf
             }
         }
 
-#if NET
         public IReadOnlySet<Type> SurrogateTypes => this.surrogateTypes;
-#else
-        public IReadOnlyCollection<Type> SurrogateTypes => this.surrogateTypes;
-#endif
 
 #if ASPNET_CORE
         public Type GetSurrogateType(Type type)

@@ -9,16 +9,6 @@ using System.Threading;
 using Microsoft.Build.Locator;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-#if NETFRAMEWORK
-namespace System.Runtime.CompilerServices
-{
-    [AttributeUsage(AttributeTargets.Method, Inherited = false)]
-    internal sealed class ModuleInitializerAttribute : Attribute
-    {
-    }
-}
-#endif
-
 namespace OpenRiaServices.Tools.Test.Utilities
 {
     [TestClass]
@@ -37,7 +27,6 @@ namespace OpenRiaServices.Tools.Test.Utilities
             // IMPORTANT: MSBuildLocator only discover SDK versions that are as old or older thant the
             // current target framework.
             // This means we can get errors in case, we compile for .NET 8 but only have .NET 9 or 10 SDK
-#if NET
             string currentRuntime = typeof(TestInitializer).Assembly.GetCustomAttribute<System.Runtime.Versioning.TargetFrameworkAttribute>().FrameworkDisplayName;
 
             if (instance == null)
@@ -51,7 +40,6 @@ namespace OpenRiaServices.Tools.Test.Utilities
 
             if (runtimeVersion >= instance.Version)
                 throw new InvalidOperationException($"Expected dotnet sdk to be at least {runtimeVersion}, but found {instance.Version}");
-#endif
 
             if (instance == null)
                 throw new InvalidOperationException("MSBuildLocator failed to find msbuild");

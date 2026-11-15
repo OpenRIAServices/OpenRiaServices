@@ -58,11 +58,7 @@ namespace OpenRiaServices
         private static bool IsFatalExceptionType(Exception exception)
         {
             if ((exception is ThreadAbortException) ||
-#if SILVERLIGHT
-                (exception is OutOfMemoryException)
-#else
                 ((exception is OutOfMemoryException) && !(exception is InsufficientMemoryException))
-#endif
                )
             {
                 return true;

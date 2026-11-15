@@ -12,7 +12,7 @@ WARNING:  DO NOT MODIFY this file unless you are knowledgeable about MSBuild and
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
 
   <PropertyGroup>
-    <_OpenRiaTaskFramework>net8.0</_OpenRiaTaskFramework>
+    <_OpenRiaTaskFramework>net10.0</_OpenRiaTaskFramework>
     
     <!-- Use SilverlightApplication if present, otherwise check if we are building an exe -->
     <OpenRiaGenerateApplicationContext Condition="'$(OpenRiaGenerateApplicationContext)' == '' and '$(SilverlightApplication)' != '' ">$(SilverlightApplication)</OpenRiaGenerateApplicationContext>

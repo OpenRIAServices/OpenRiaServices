@@ -1,7 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX;DBCONTEXT</DefineConstants>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>false</IsPackable>
     <PackageId>OpenRiaServices.Client.CodeGen</PackageId>
     <Title>OpenRiaServices Client Code Generator</Title>
     <Description>OpenRiaServices CodeGen provides the MsBuild Tasks to generate the client proxy. </Description>
@@ -31,11 +32,11 @@
     <NoWarn>$(NoWarn);CS0618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <!-- Use Microsoft.Build 17.0.0 to be sure it works with all versions Net6 -->
-    <PackageReference Include="Microsoft.Build" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Framework" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
-    <PackageReference Include="Microsoft.NET.StringTools" Version="17.11.48" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <!-- MSBuild 18.0 is the baseline for the .NET 10 SDK; keep compatibility with all supported SDKs. -->
+    <PackageReference Include="Microsoft.Build" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Framework" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
+    <PackageReference Include="Microsoft.NET.StringTools" Version="18.0.*" PrivateAssets="All" ExcludeAssets="Runtime" />
     <!-- Required for validation attributes -->
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
     <!-- MEF Attribute: TODO consider removing MEF support for .NET (non framework) -->

@@ -57,11 +57,7 @@ namespace OpenRiaServices.Client.Test
             ExceptionHelper.ExpectArgumentException(delegate ()
             {
                 entity.NonPublicProperty = "x";
-#if NET
             }, "Type 'MockEntity' does not contain a public property named 'NonPublicProperty'. (Parameter 'propertyName')");
-#else
-            }, "Type 'MockEntity' does not contain a public property named 'NonPublicProperty'.\r\nParameter name: propertyName");
-#endif
 
         }
 
@@ -73,11 +69,7 @@ namespace OpenRiaServices.Client.Test
             ExceptionHelper.ExpectArgumentException(delegate ()
             {
                 entity.BogusProperty = "x";
-#if NET
             }, "Type 'MockEntity' does not contain a public property named 'XXX'. (Parameter 'propertyName')");
-#else
-            }, "Type 'MockEntity' does not contain a public property named 'XXX'.\r\nParameter name: propertyName");
-#endif
         }
 
         [TestMethod]

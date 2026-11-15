@@ -22,9 +22,7 @@ namespace OpenRiaServices.Client.Test
     /// Note: we're using the same generated client for both EF and LTS tests, varying only the
     /// provider string that the tests use.
     /// </summary>
-#if !SILVERLIGHT
     [TestClass]
-#endif
     [DoNotParallelize]
     public abstract class UpdateTests : DomainContextTestBase<Northwind>
     {
@@ -3807,9 +3805,7 @@ namespace OpenRiaServices.Client.Test
         /// </summary>
         [ClassInitialize]
         public static void ClassSetup(
-#if !SILVERLIGHT
             TestContext testContext
-#endif
 )
         {
             // ensure that our isolation DB has been created once and only once
@@ -4210,9 +4206,7 @@ namespace OpenRiaServices.Client.Test
         /// </summary>
         [ClassInitialize]
         public static void ClassSetup(
-#if !SILVERLIGHT
             TestContext testContext
-#endif
 )
         {
             // ensure that our isolation DB has been created once and only once
@@ -4235,9 +4229,7 @@ namespace OpenRiaServices.Client.Test
         /// </summary>
         [ClassInitialize]
         public static void ClassSetup(
-#if !SILVERLIGHT
             TestContext testContext
-#endif
 )
         {
             // ensure that our isolation DB has been created once and only once
@@ -4260,9 +4252,7 @@ namespace OpenRiaServices.Client.Test
         /// </summary>
         [ClassInitialize]
         public static void ClassSetup(
-#if !SILVERLIGHT
             TestContext testContext
-#endif
 )
         {
             // ensure that our isolation DB has been created once and only once

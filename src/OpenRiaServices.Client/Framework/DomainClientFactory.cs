@@ -18,12 +18,6 @@ namespace OpenRiaServices.Client
         /// </summary>
         public DomainClientFactory()
         {
-            // For silverlight we set the service base based on the application source
-#if SILVERLIGHT
-            var application = System.Windows.Application.Current;
-            if ((application != null) && (application.Host != null) && (application.Host.Source != null))
-                ServerBaseUri = application.Host.Source;
-#endif
         }
 
         /// <summary>
@@ -98,14 +92,6 @@ namespace OpenRiaServices.Client
         {
             if (ServerBaseUri == null)
             {
-#if SILVERLIGHT
-                // WPF: if ((bool)(DesignerProperties.IsInDesignModeProperty.GetMetadata(typeof(DependencyObject)).DefaultValue))
-                if (System.ComponentModel.DesignerProperties.IsInDesignTool)
-                {
-                    return serviceUri;
-                }
-#endif
-
                 throw new InvalidOperationException(Resource.DomainClientFactory_UnableToCreateAbsoluteUri);
             }
                 

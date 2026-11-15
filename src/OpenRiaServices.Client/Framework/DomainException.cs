@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-#if !SILVERLIGHT
 using System.Runtime.Serialization;
-#endif
 
 #if SERVERFX
 namespace OpenRiaServices.Server
@@ -14,9 +12,7 @@ namespace OpenRiaServices.Client
     /// This exception indicates that an unrecoverable error has occurred 
     /// during the execution of a domain operation.
     /// </summary>
-#if !SILVERLIGHT
     [Serializable]
-#endif
     public sealed class DomainException : Exception
     {
 #if !SERVERFX
@@ -92,7 +88,7 @@ namespace OpenRiaServices.Client
         /// </summary>
         /// <param name="info">The serialization info</param>
         /// <param name="context">The streaming context used for serialization</param>
-#if NET8_0_OR_GREATER
+#if NET
         [Obsolete(DiagnosticId = "SYSLIB0051")] // https://learn.microsoft.com/sv-se/dotnet/fundamentals/syslib-diagnostics/syslib0051
 #endif
         private DomainException(SerializationInfo info, StreamingContext context)

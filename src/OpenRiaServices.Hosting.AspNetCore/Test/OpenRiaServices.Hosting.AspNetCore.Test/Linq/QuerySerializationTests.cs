@@ -478,7 +478,6 @@ namespace OpenRiaServices.Client
             query2 = RoundtripQuery(query1, emps.AsQueryable());
         }
 
-#if NET
         [TestMethod]
         public void TestDateOnlyQuery()
         {
@@ -541,7 +540,6 @@ namespace OpenRiaServices.Client
             VerifySerialize<EmployeeWithTimeOnlyProperty>("(it.ClockInTime<TimeOnly(279000000000))", p => p.ClockInTime < new TimeOnly(7, 45));
         }
 
-#endif
 
         [TestMethod]
         public void TestEscapingInStrings()
@@ -1362,7 +1360,6 @@ namespace OpenRiaServices.Client
         }
     }
 
-#if NET
 
     public class EmployeeWithDateOnlyProperty
     {
@@ -1396,7 +1393,6 @@ namespace OpenRiaServices.Client
         }
     }
 
-#endif
 
     public class EmployeeWithReservedNames
     {
@@ -1473,11 +1469,7 @@ namespace OpenRiaServices.Client
         {
             Type dataType = null;
             // the different fx serializers are deserializing into different types
-#if SILVERLIGHT
-            dataType = typeof(Dictionary<string, List<object>>);
-#else
             dataType = typeof(Dictionary<string, object[]>);
-#endif
             var ser =
                 new System.Runtime.Serialization.Json.DataContractJsonSerializer(dataType, new Type[] { typeof(T) });
             var encoding = new System.Text.UnicodeEncoding();

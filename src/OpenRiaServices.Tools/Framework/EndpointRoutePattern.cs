@@ -1,7 +1,4 @@
-﻿#if NETFRAMEWORK
-#pragma warning disable 1574 // Server.EndpointRoutePattern is not available
-#endif
-
+﻿
 namespace OpenRiaServices.Tools
 {
     /// <summary>

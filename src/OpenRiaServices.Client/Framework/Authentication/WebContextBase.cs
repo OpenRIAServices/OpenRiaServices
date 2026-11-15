@@ -16,9 +16,6 @@ namespace OpenRiaServices.Client.Authentication
     /// This context makes services and other values available from code and xaml.
     /// </remarks>
     public abstract class WebContextBase : INotifyPropertyChanged
-#if SILVERLIGHT
-        , IApplicationService, IApplicationLifetimeAware
-#endif
     {
         private static WebContextBase s_current;
 
@@ -153,47 +150,6 @@ namespace OpenRiaServices.Client.Authentication
             remove { this._propertyChangedEventHandler -= value; }
         }
 
-#if SILVERLIGHT
-
-        /// <summary>
-        /// Starts the context as an application service
-        /// </summary>
-        /// <param name="context">The service context</param>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "There isn't a scenario where this behavior would need to be customized in a derived class.")]
-        void IApplicationService.StartService(ApplicationServiceContext context)
-        {
-        }
-
-        /// <summary>
-        /// Stops the context as an application service
-        /// </summary>
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "There isn't a scenario where this behavior would need to be customized in a derived class.")]
-        void IApplicationService.StopService()
-        {
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "There isn't a scenario where this behavior would need to be customized in a derived class.")]
-        void IApplicationLifetimeAware.Starting()
-        {
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "There isn't a scenario where this behavior would need to be customized in a derived class.")]
-        void IApplicationLifetimeAware.Started()
-        {
-            this._started = true;
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "There isn't a scenario where this behavior would need to be customized in a derived class.")]
-        void IApplicationLifetimeAware.Exiting()
-        {
-        }
-
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Design", "CA1033:InterfaceMethodsShouldBeCallableByChildTypes", Justification = "There isn't a scenario where this behavior would need to be customized in a derived class.")]
-        void IApplicationLifetimeAware.Exited()
-        {
-        }
-
-#endif
 
         private class DefaultIdentity : IIdentity
         {

@@ -20,13 +20,13 @@ steps:
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '8.0.x'
+    version: '10.0.x'
 
 ## install dotnet 10 sdk
 - task: UseDotNet@2
   inputs:
     packageType: 'sdk'
-    version: '10.0.x'
+    version: '11.0.x'
 
 - task: gitversion/setup@3
   inputs:
@@ -114,18 +114,14 @@ steps:
 
 - task: SonarCloudAnalyze@3
   inputs:
-    jdkversion: 'JAVA_HOME_21_X64'
+    jdkversion: 'JAVA_HOME_25_X64'
   displayName: 'Run Code Analysis'
   continueOnError: true
   condition: and(variables['sonarcloud-endpoint'], or(succeeded(), and(succeededOrFailed(), eq(variables['Build.SourceBranch'], 'refs/heads/main'))))
 
 - powershell: |
-    Get-ChildItem -Path NuGet -Filter *.nuspec -Recurse | ForEach-Object {
-      dotnet pack $_.FullName --version "$(Build.BuildNumber)" --output "$(Build.ArtifactStagingDirectory)"
-      if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
-    }
+    .\NuGet\Pack-All.ps1 -Configuration "$(BuildConfiguration)" -NoBuild -Version "$(GitVersion.NuGetVersionV2)" -OutputDirectory "$(Build.ArtifactStagingDirectory)"
   displayName: 'dotnet pack'
-  continueOnError: true
 #  condition: and(succeeded(), ne(variables['Build.Reason'], 'PullRequest'))
 
 - task: CopyFiles@2

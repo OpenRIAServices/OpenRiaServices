@@ -14,13 +14,6 @@ using OpenRiaServices.Hosting.AspNetCore;
 
 namespace System.Linq.Dynamic
 {
-#if NETFRAMEWORK
-    static class StringExtensions
-    {
-        static public string Slice(this string str, int startIndex, int length)
-            => str.Substring(startIndex, length);
-    }
-#endif
 
 #nullable enable
     internal static class DynamicQueryable
@@ -320,9 +313,7 @@ namespace System.Linq.Dynamic
                 typeof(int), typeof(uint), typeof(long), typeof(ulong), typeof(float), typeof(double), typeof(decimal));
             Signature[] comparable = BinarySignatures(
                 typeof(string), typeof(char), typeof(DateTime), typeof(TimeSpan), typeof(DateTimeOffset)
-#if NET
                 , typeof(DateOnly), typeof(TimeOnly)
-#endif
                 );
             s_relationalSignatures = [.. s_arithmeticSignatures, .. comparable];
             s_equalitySignatures = [.. s_relationalSignatures, .. BinarySignatures(typeof(bool), typeof(Guid))];
@@ -331,9 +322,7 @@ namespace System.Linq.Dynamic
                 (typeof(DateTimeOffset), typeof(TimeSpan)));
             Signature[] differences = PairSignatures(
                 (typeof(DateTime), typeof(DateTime)), (typeof(DateTimeOffset), typeof(DateTimeOffset))
-#if NET
                 , (typeof(TimeOnly), typeof(TimeOnly))
-#endif
                 );
             s_addSignatures = [.. s_arithmeticSignatures, .. durations];
             s_subtractSignatures = [.. s_addSignatures, .. differences];
@@ -489,10 +478,8 @@ namespace System.Linq.Dynamic
             typeof(Decimal),
             typeof(DateTime),
             typeof(DateTimeOffset),
-#if NET
             typeof(DateOnly),
             typeof(TimeOnly),
-#endif
             typeof(TimeSpan),
             typeof(Guid),
             typeof(Math),
@@ -971,11 +958,7 @@ namespace System.Linq.Dynamic
         {
             Token token = CurrentToken;
             ValidateToken(TokenId.IntegerLiteral);
-#if NET
             ReadOnlySpan<char> text = GetText(token);
-#else
-            string text = GetString(token);
-#endif
             if (text[0] != '-')
             {
                 ulong value;
@@ -1006,11 +989,7 @@ namespace System.Linq.Dynamic
         {
             ValidateToken(TokenId.RealLiteral);
             Token token = CurrentToken;
-#if NET
             ReadOnlySpan<char> text = GetText(token);
-#else
-            string text = GetString(token);
-#endif
             object value = null;
             char last = text[text.Length - 1];
             if (last is 'F' or 'f')
@@ -1754,14 +1733,8 @@ namespace System.Linq.Dynamic
             return null;
         }
 
-#if NETFRAMEWORK
-        static object ParseNumber(ReadOnlySpan<char> span, Type type)
-        {
-            string text = span.ToString();
-#else
         static object ParseNumber(ReadOnlySpan<char> text, Type type)
         {
-#endif
             switch (Type.GetTypeCode(GetNonNullableType(type)))
             {
                 case TypeCode.SByte:
@@ -1827,16 +1800,8 @@ namespace System.Linq.Dynamic
         {
             if (type.IsEnum)
             {
-#if NET
                 if (Enum.TryParse(type, name, ignoreCase: true, out var result))
                     return result;
-#else
-                MemberInfo[] memberInfos = type.FindMembers(MemberTypes.Field,
-                    BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Static,
-                    Type.FilterNameIgnoreCase, name.ToString());
-                if (memberInfos.Length != 0)
-                    return ((FieldInfo)memberInfos[0]).GetValue(null);
-#endif
             }
             return null;
         }

@@ -13,13 +13,9 @@ namespace OpenRiaServices.Tools.Test
 {
     public class CompilerHelper
     {
-        // The version of Silverlight we use in registry keys below
         private static readonly ConcurrentDictionary<string, PortableExecutableReference> s_referenceCache = new();
-        private static readonly CSharpParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.Latest, preprocessorSymbols: new
-                    [] { "SILVERLIGHT" });
-        private static readonly VisualBasicParseOptions s_VbParseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14,
-                    preprocessorSymbols: new
-                    [] { new KeyValuePair<string, object>("SILVERLIGHT", 1) });
+        private static readonly CSharpParseOptions s_cSharpParseOptions = new CSharpParseOptions(Microsoft.CodeAnalysis.CSharp.LanguageVersion.Latest);
+        private static readonly VisualBasicParseOptions s_VbParseOptions = new VisualBasicParseOptions(Microsoft.CodeAnalysis.VisualBasic.LanguageVersion.VisualBasic14);
 
         /// <summary>
         /// Invokes CSharp compilation of the given files against the given set of references
@@ -112,10 +108,6 @@ namespace OpenRiaServices.Tools.Test
             string documentationFile = null)
         {
             List<MetadataReference> references = LoadReferences(referenceAssemblies);
-#if NETFRAMEWORK
-            // Not needed in net6 since VB types lives in core assembly
-            references.Add(GetVisualBasicReference());
-#endif
 
             try
             {
@@ -129,13 +121,11 @@ namespace OpenRiaServices.Tools.Test
                     rootNamespace: rootNamespace,
                     assemblyIdentityComparer: DesktopAssemblyIdentityComparer.Default);
 
-#if !NETFRAMEWORK
                 compileOptions = compileOptions.WithSpecificDiagnosticOptions(new[]
                 {
                     // 'AssociationAttribute' is obsolete: 'This attribute is no longer in use and will be ignored if applied.
                     new KeyValuePair<string, ReportDiagnostic>("BC40000", ReportDiagnostic.Suppress)
                 });
-#endif
 
                 Compilation compilation = VisualBasicCompilation.Create(assemblyName, syntaxTrees, references, compileOptions);
 

@@ -5,9 +5,7 @@ using System.Net;
 using System.Reflection;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Threading.Tasks;
-#if !SILVERLIGHT
 using System.Web;
-#endif
 
 
 namespace OpenRiaServices.Client.Test
@@ -89,7 +87,6 @@ namespace OpenRiaServices.Client.Test
         }
 
 
-#if !SILVERLIGHT
         private static Task ExecuteDelegateAsync(AsyncDelegate asyncDelegate)
         {
             try
@@ -130,7 +127,6 @@ namespace OpenRiaServices.Client.Test
             }
             return task;
         }
-#endif
 
         public static TException ExpectException<TException>(GenericDelegate del, bool allowDerivedExceptions)
             where TException : Exception
@@ -188,9 +184,7 @@ namespace OpenRiaServices.Client.Test
             ArgumentNullException e = ExpectExceptionHelper<ArgumentNullException>(del);
             var expectedException = new ArgumentNullException(paramName);
             Assert.AreEqual(expectedException.Message, e.Message);
-#if !SILVERLIGHT
             Assert.AreEqual(paramName, e.ParamName, "Incorrect exception parameter name.");
-#endif
             return e;
         }
 
@@ -210,9 +204,7 @@ namespace OpenRiaServices.Client.Test
         public static ArgumentOutOfRangeException ExpectArgumentOutOfRangeException(GenericDelegate del, string paramName, string exceptionMessage)
         {
             ArgumentOutOfRangeException e = ExpectExceptionHelper<ArgumentOutOfRangeException>(del);
-#if !SILVERLIGHT
             Assert.AreEqual(paramName, e.ParamName, "Incorrect exception parameter name.");
-#endif
             // Only check exception message on English build and OS, since some exception messages come from the OS
             // and will be in the native language.
             if (exceptionMessage != null && UnitTestHelper.EnglishBuildAndOS)

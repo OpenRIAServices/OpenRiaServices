@@ -129,28 +129,8 @@ namespace OpenRiaServices.Tools
                 this.ReferenceAssemblies.Select(i => this.GetFileName(i)));
 
             this.WarnIfAssembliesDontExist(assemblies);
-#if NETFRAMEWORK
-            using (System.Web.Compilation.ClientBuildManager cbm = new(/* appVirtualDir */ "/", this.ProjectDirectory))
-            {
-                // Surface a HttpRuntime initialization error that would otherwise manifest as a NullReferenceException
-                // This can occur when the build environment is configured incorrectly
-                if (System.Web.Hosting.HostingEnvironment.InitializationException != null)
-                {
-                    throw new InvalidOperationException(
-                        Resource.HttpRuntimeInitializationError,
-                        System.Web.Hosting.HostingEnvironment.InitializationException);
-                }
-
-                using (DomainServiceValidator validator = (DomainServiceValidator)cbm.CreateObject(typeof(DomainServiceValidator), false))
-                {
-                    // Transfer control to Web Application AppDomain to invoke the validator
-                    validator.Validate(assemblies.ToArray(), this.LoggingService);
-                }
-            }
-#else
             // Make sure to re enable ValidateDomainServicesTaskRunsSuccessfully test when fixing
             throw new NotImplementedException("Validation task is only implemented for .NetFramework");
-#endif
         }
 
         /// <summary>

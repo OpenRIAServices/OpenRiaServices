@@ -121,11 +121,7 @@ namespace OpenRiaServices.Client.Test
         {
             Type dataType = null;
             // the different fx serializers are deserializing into different types
-#if SILVERLIGHT
-            dataType = typeof(Dictionary<string, List<object>>);
-#else
             dataType = typeof(Dictionary<string, object[]>);
-#endif
             System.Runtime.Serialization.Json.DataContractJsonSerializer ser =
                 new System.Runtime.Serialization.Json.DataContractJsonSerializer(dataType, new Type[] { typeof(T) });
             System.Text.UnicodeEncoding encoding = new System.Text.UnicodeEncoding();

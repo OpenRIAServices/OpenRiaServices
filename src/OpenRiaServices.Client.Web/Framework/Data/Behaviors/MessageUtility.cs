@@ -5,11 +5,7 @@ using System.IO;
 using System.ServiceModel.Channels;
 using System.Text;
 using System.Xml;
-#if SILVERLIGHT
-using System.Windows.Browser;
-#else
 using System.Web;
-#endif
 
 #if SERVERFX
 namespace OpenRiaServices.Hosting.Wcf

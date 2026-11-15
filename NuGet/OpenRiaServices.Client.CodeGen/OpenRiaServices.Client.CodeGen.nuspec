@@ -20,17 +20,14 @@
          <group targetFramework="net472">
            <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
          </group>
-         <group targetFramework="net8.0">
+         <group targetFramework="net10.0">
            <dependency id="OpenRiaServices.Client.Core" version="$version$"/>
          </group>
         </dependencies>
     </metadata>
     <files>
         <file src="..\..\src\OpenRiaServices.Tools\Framework\build\OpenRiaServices.Client.CodeGen.targets" target="build\OpenRiaServices.Client.CodeGen.targets"/>
-        <file src="..\..\src\bin\Release\net472\OpenRiaServices.Tools.dll" target="tasks\net472\OpenRiaServices.Tools.dll"/>
-        <file src="..\..\src\bin\Release\net472\Mono.Cecil.dll" target="tasks\net472\Mono.Cecil.dll"/>
-        <file src="..\..\src\bin\Release\net472\Mono.Cecil.Pdb.dll" target="tasks\net472\Mono.Cecil.Pdb.dll"/>
         <!-- TODO: Make a publish of project and take assemblies from there instead -->
-        <file src="..\..\src\OpenRiaServices.Tools.CodeGenTask\bin\Release\net8.0\**\*.*" target="tasks\net8.0\"/>
+        <file src="..\..\src\OpenRiaServices.Tools.CodeGenTask\bin\Release\net10.0\**\*.*" target="tasks\net10.0\"/>
     </files>
 </package>

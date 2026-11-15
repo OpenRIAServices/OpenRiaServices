@@ -42,13 +42,6 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 parent = base.GetTypeDescriptor(objectType, parent);
 
                 var model = _typeDescriptionContext.Model;
-#if NETFRAMEWORK
-                
-                if (model != null && model.FindEntityType(objectType.FullName) is IEntityType entityType)
-                {
-                    td = new EFCoreTypeDescriptor(_typeDescriptionContext, entityType, parent);
-                }
-#else
                 // TODO: Determine if we can handle Complex Types
                 // - it must "look the same" for all usages (be configured the same in all places to make sense)
                 // - Should they instead be treated as different types per usage (on the client)
@@ -56,7 +49,6 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 {
                     td = new EFCoreTypeDescriptor(_typeDescriptionContext, entityType, parent);
                 }
-#endif
                 else
                 {
                     td = parent;
@@ -69,15 +61,9 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         }
 
         public override bool LookupIsEntityType(Type type) =>
-#if NETFRAMEWORK
-            // EF6 excludes "complex objects" here so we exclude owned entities
-            _typeDescriptionContext.GetEntityType(type) is IEntityType entityType
-                && !entityType.IsOwned();
-#else
             // EF6 excludes "complex objects" here so we exclude owned entities
             _typeDescriptionContext.GetEntityType(type) is IReadOnlyEntityType entityType
                 && !entityType.IsOwned();
-#endif
 
     }
 }

@@ -1,7 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <DefineConstants>$(DefineConstants);SERVERFX</DefineConstants>
-    <TargetFramework>net8.0</TargetFramework>
+    <TargetFramework>net10.0</TargetFramework>
+    <IsPackable>true</IsPackable>
+    <PackageId>OpenRiaServices.T4</PackageId>
+    <Title>Open RIA Services T4 Code Generation</Title>
+    <Description>OpenRiaServices.T4 provides CSharpClientCodeGenerator and supporting classes for customizing client code generation.</Description>
+    <PackageTags>WCF RIA Services RIAServices T4 OpenRiaServices</PackageTags>
+    <TargetsForTfmSpecificBuildOutput>$(TargetsForTfmSpecificBuildOutput);IncludeToolsAssemblyInPackage</TargetsForTfmSpecificBuildOutput>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
   <PropertyGroup>
@@ -129,7 +135,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" />
+    <ProjectReference Include="..\..\OpenRiaServices.Tools\Framework\OpenRiaServices.Tools.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\..\OpenRiaServices.Server\Framework\OpenRiaServices.Server.csproj" />
   </ItemGroup>
   <ItemGroup>
@@ -138,5 +144,13 @@
   <ItemGroup>
     <!-- Required for validation attributes -->
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
+    <PackageReference Include="System.CodeDom" Version="10.0.14" />
+    <PackageReference Include="System.ComponentModel.Composition" Version="10.0.14" />
+    <PackageReference Include="Mono.Cecil" Version="0.11.6" />
   </ItemGroup>
+  <Target Name="IncludeToolsAssemblyInPackage" DependsOnTargets="ResolveReferences">
+    <ItemGroup>
+      <BuildOutputInPackage Include="$(TargetDir)OpenRiaServices.Tools.dll;$(TargetDir)OpenRiaServices.Tools.pdb;$(TargetDir)OpenRiaServices.Tools.xml" />
+    </ItemGroup>
+  </Target>
 </Project>

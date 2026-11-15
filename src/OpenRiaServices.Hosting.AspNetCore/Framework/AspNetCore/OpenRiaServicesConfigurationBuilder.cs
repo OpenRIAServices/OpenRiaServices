@@ -56,9 +56,8 @@ namespace OpenRiaServices.Hosting.AspNetCore
         public IEndpointConventionBuilder AddDomainService([DynamicallyAccessedMembers(DynamicallyAccessedMemberTypes.PublicMethods)] Type type, string path)
         {
             ArgumentNullException.ThrowIfNull(type);
-#if NET7_0_OR_GREATER
             ArgumentException.ThrowIfNullOrEmpty(path);
-#endif
+
             if (path.EndsWith('/'))
                 throw new ArgumentException("Path should not end with /", nameof(path));
 
@@ -157,7 +156,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
                     builder.Add(convention);
             }
 
-#if NET7_0_OR_GREATER
             /// <summary>
             /// Registers the specified convention for execution after conventions registered
             /// via <see cref="Add(Action{EndpointBuilder})"/>
@@ -168,7 +166,6 @@ namespace OpenRiaServices.Hosting.AspNetCore
                 foreach (var builder in _builders)
                     builder.Finally(finallyConvention);
             }
-#endif
         }
     }
 

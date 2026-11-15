@@ -7,17 +7,6 @@ using OpenRiaServices.Server;
 
 #nullable enable
 
-#if !NET
-namespace System.Runtime.CompilerServices
-{
-    internal class RequiredMemberAttribute { };
-    internal class CompilerFeatureRequiredAttribute {
-        public CompilerFeatureRequiredAttribute() { }
-        public CompilerFeatureRequiredAttribute(string _) :this() { } 
-    };
-}
-#pragma warning disable CS8618 // Non-nullable field must contain a non-null value when exiting constructor. Consider declaring as nullable.
-#endif
 
 namespace EFCoreModels.Scenarios.OwnedTypes
 {
@@ -62,7 +51,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
         public required ContactInfo ContactInfo { get; set; }
         [Include]
         public required OwnedEntityWithExplicitId OwnedEntityWithExplicitId { get; set; }
-        [Include] 
+        [Include]
         public required OwnedEntityWithExplicitIdAndBackNavigation OwnedEntityWithExplicitIdAndBackNavigation { get; set; }
         public required OwnedEntityWithBackNavigation OwnedEntityWithBackNavigation { get; set; }
     }
@@ -109,11 +98,10 @@ namespace EFCoreModels.Scenarios.OwnedTypes
                 })
                 .HasKey(nameof(Employee.EmployeeId));
 
-#if NET8_0
             modelBuilder.Entity<Employee>()
                 .Navigation(x => x.ContactInfo)
                 .IsRequired();
-#endif
+
 
             base.OnModelCreating(modelBuilder);
         }

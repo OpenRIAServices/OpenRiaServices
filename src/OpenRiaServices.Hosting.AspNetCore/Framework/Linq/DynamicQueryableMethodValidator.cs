@@ -122,10 +122,8 @@ namespace System.Linq.Dynamic
             policies.Add(typeof(Decimal), (DecimalMemberPolicy, true));
             policies.Add(typeof(Math), (MathMemberPolicy, false));
             policies.Add(typeof(Convert), (ConvertMemberPolicy, false));
-#if NET
             policies.Add(typeof(DateOnly), (DateOnlyMemberPolicy, false));
             policies.Add(typeof(TimeOnly), (TimeOnlyMemberPolicy, false));
-#endif
             return policies.ToFrozenDictionary(static pair => pair.Key,
                 static pair => new Lazy<InvocationMembers>(() => new InvocationMembers(pair.Key, pair.Value.Policy, pair.Value.NumericFormat)));
         }
@@ -678,7 +676,6 @@ namespace System.Linq.Dynamic
                 || type == typeof(decimal) || type == typeof(string) || type == typeof(DateTime);
         }
 
-#if NET
         private static bool DateOnlyMemberPolicy(MethodBase method, Type[] parameters)
         {
             if (method.IsConstructor)
@@ -740,7 +737,6 @@ namespace System.Linq.Dynamic
             };
         }
 
-#endif
         private static bool IsNumericFormatAllowed(Expression argument, QueryLimits limits)
         {
             if (argument is not ConstantExpression constant)

@@ -544,13 +544,9 @@ namespace NorthwindModel
 
         // Additional data member to enable resolve logic to differ based on the test scenario string being passed in
         [DataMember]
-#if NET
 #nullable enable
         public string? ResolveMethod
 #nullable restore
-#else
-        public string ResolveMethod
-#endif
         {
             get
             {

@@ -404,11 +404,7 @@ namespace OpenRiaServices.Client.Authentication
             {
                 // Get application assembly so we can start searching for web context type there
                 Assembly applicationAssembly =
-#if SILVERLIGHT
-                    Application.Current.GetType().Assembly;
-#else
                     Assembly.GetEntryAssembly();
-#endif
 
                 Type type = FindDomainContextType(applicationAssembly);
                 if ((type != null) && typeof(AuthenticationDomainContextBase).IsAssignableFrom(type))

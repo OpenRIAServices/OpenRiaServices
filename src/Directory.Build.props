@@ -12,6 +12,7 @@
     <!-- Use csharp 14.0 for all projects -->
     <LangVersion Condition="'$(MSBuildProjectExtension)' == '.csproj'">14.0</LangVersion>
     <AnalysisMode Condition="'$(IsFrameworkProject)' == 'true'">Recommended</AnalysisMode>
+    <NoWarn Condition="'$(IsTestProjectOrDependency)' == 'true'">$(NoWarn);CA1826</NoWarn>
     <SuppressNETCoreSdkPreviewMessage>true</SuppressNETCoreSdkPreviewMessage>
 
     <SonarQubeTestProject Condition="'$(IsTestProjectOrDependency)' == 'true'">True</SonarQubeTestProject>
@@ -21,7 +22,7 @@
     <GenerateDocumentationFile  Condition="'$(IsFrameworkProject)' == 'true'">true</GenerateDocumentationFile>
     <CopyLocalLockFileAssemblies Condition="'$(IsFrameworkProject)' == 'true'">false</CopyLocalLockFileAssemblies>
 
-    <VersionPrefix>5.11.0</VersionPrefix>
+    <VersionPrefix>6.0.0</VersionPrefix>
     <!-- Set correct version suffix below if manually building 
         <VersionSuffix>preview.5</VersionSuffix>
         -->

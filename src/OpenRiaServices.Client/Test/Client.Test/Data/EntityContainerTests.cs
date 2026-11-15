@@ -939,7 +939,6 @@ namespace OpenRiaServices.Client.Test
             Assert.IsEmpty(cvs2.View.SourceCollection.Cast<PurchaseOrder>());
         }
 
-#if !SILVERLIGHT
         /// <summary>
         /// Verifies that the EntitySet.CollectionChanged event doesn't have any subscribers after 
         /// adding/removing a graph of entities.
@@ -992,7 +991,6 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(0, getCollectionChangedSubscriberCount(poSet), "Did not expect any instances to have subscribed to poSet.CollectionChanged.");
             Assert.AreEqual(0, getCollectionChangedSubscriberCount(podSet), "Expected only a single EntityCollection instance to have subscribed to podSet.CollectionChanged.");
         }
-#endif
 
         [TestMethod]
         [WorkItem(618711)]
@@ -2946,44 +2944,34 @@ namespace OpenRiaServices.Client.Test
             ((IRevertibleChangeTracking)ec).AcceptChanges();
 
             // verify that the cached set is empty before it is forced to load
-#if !SILVERLIGHT // can't do private reflection in SL
             IList cachedEntities = (IList)order.PurchaseOrderDetails.GetType().GetProperty("Entities", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(order.PurchaseOrderDetails, null);
             Assert.IsEmpty(cachedEntities);
-#endif
 
             // this first call to Count will force the collection to load
             Assert.AreEqual(20, order.PurchaseOrderDetails.Count);
 
-#if !SILVERLIGHT
             // verify that the cached set is now loaded
             cachedEntities = (IList)order.PurchaseOrderDetails.GetType().GetProperty("Entities", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(order.PurchaseOrderDetails, null);
             Assert.HasCount(20, cachedEntities);
-#endif
 
             // verify that whenever new entities are added to the source EntitySet
             // (simulating client queries via LoadEntity below), they are also added to the cached set.
             PurchaseOrderDetail detail = new PurchaseOrderDetail { PurchaseOrderID = order.PurchaseOrderID, PurchaseOrderDetailID = 21 };
             ec.PurchaseOrderDetails.LoadEntity(detail);
             Assert.AreEqual(21, order.PurchaseOrderDetails.Count);
-#if !SILVERLIGHT
             Assert.HasCount(21, cachedEntities);
-#endif
 
             // verify that whenever entities are removed to the source EntitySet,
             // they are also removed to the cached set
             ec.PurchaseOrderDetails.Remove(detail);
             Assert.AreEqual(20, order.PurchaseOrderDetails.Count);
-#if !SILVERLIGHT
             Assert.HasCount(20, cachedEntities);
-#endif
 
             // verify that when the source EntitySet is cleared,
             // the cached set is also cleared
             ec.PurchaseOrderDetails.Clear();
-#if !SILVERLIGHT
             cachedEntities = (IList)order.PurchaseOrderDetails.GetType().GetProperty("Entities", BindingFlags.Instance | BindingFlags.NonPublic).GetValue(order.PurchaseOrderDetails, null);
             Assert.IsEmpty(cachedEntities);
-#endif
             Assert.AreEqual(0, order.PurchaseOrderDetails.Count);
         }
 

@@ -1227,7 +1227,6 @@ namespace OpenRiaServices.Server
                 }
             }
 
-#if NET
             if (enumerable is IAsyncEnumerable<T> asyncEnumerable)
             {
                 return EnumerateAsyncEnumerable(asyncEnumerable, estimatedResultCount, cancellationToken);
@@ -1243,7 +1242,6 @@ namespace OpenRiaServices.Server
 
                 return result;
             }
-#endif
 
             var list = new List<T>(estimatedResultCount);
             foreach (T item in enumerable)

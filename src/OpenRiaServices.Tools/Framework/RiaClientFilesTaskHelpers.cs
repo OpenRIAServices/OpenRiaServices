@@ -3,16 +3,13 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.Linq;
-#if !NETFRAMEWORK
 using System.Reflection;
 using System.Runtime.Loader;
-#endif
 
 namespace OpenRiaServices.Tools;
 
 internal static class RiaClientFilesTaskHelpers
 {
-#if !NETFRAMEWORK
     public static bool CodeGenForNet6(string generatedFileName, ClientCodeGenerationOptions options, ILoggingService logger, SharedCodeServiceParameters sharedCodeServiceParameters, string codeGeneratorName)
     {
         // We might want to create and use a separate AssemblyLoadContext to allow unloading of server assemblies 
@@ -74,7 +71,6 @@ internal static class RiaClientFilesTaskHelpers
             return null;
         };
     }
-#endif
 
     /// <summary>
     /// Create and write arguments to a new file

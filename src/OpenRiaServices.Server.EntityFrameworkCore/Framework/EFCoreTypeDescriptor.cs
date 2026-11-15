@@ -19,15 +19,9 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         private readonly bool _keyIsEditable;
         private HashSet<string> _foreignKeyMembers;
 
-#if NETFRAMEWORK
-        private readonly IProperty _timestampProperty;
-        private readonly IEntityType _entityType;
-        public EFCoreTypeDescriptor(EFCoreTypeDescriptionContext typeDescriptionContext, IEntityType entityType, ICustomTypeDescriptor parent)
-#else
         private readonly IReadOnlyProperty _timestampProperty;
         private readonly IReadOnlyEntityType _entityType;
         public EFCoreTypeDescriptor(EFCoreTypeDescriptionContext typeDescriptionContext, IReadOnlyEntityType entityType, ICustomTypeDescriptor parent)
-#endif
         : base(parent)
         {
             _typeDescriptionContext = typeDescriptionContext;
@@ -47,11 +41,7 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                 // Editable(false)
                 _foreignKeyMembers = new HashSet<string>(entityType.GetNavigations()
                      .Where(n =>
-#if NETFRAMEWORK
-                     n.IsDependentToPrincipal()
-#else
                      n.IsOnDependent
-#endif
                      )
                      .SelectMany(n => n.ForeignKey.Properties)
                      .Select(x => x.Name));
@@ -76,19 +66,11 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
         ///  /// <remarks>Since EF doesn't expose "timestamp" as a first class
         /// concept, we use the below criteria to infer this for ourselves.
         /// </remarks>
-#if NETFRAMEWORK
-        private static bool IsConcurrencyTimestamp(IProperty p)
-        {
-            return p.IsConcurrencyToken
-                && p.ValueGenerated == ValueGenerated.OnAddOrUpdate;
-        }
-#else
         private static bool IsConcurrencyTimestamp(IReadOnlyProperty p)
         {
             return p.IsConcurrencyToken
                 && p.ValueGenerated == ValueGenerated.OnAddOrUpdate;
         }
-#endif
 
 
         /// <summary>
@@ -146,10 +128,8 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
                     {
                         case ValueGenerated.Never:
                             break;
-#if !!NET
                         case ValueGenerated.OnUpdateSometimes:
                             break;
-#endif
                         case ValueGenerated.OnUpdate:
                             attributes.Add(new DatabaseGeneratedAttribute(DatabaseGeneratedOption.Computed));
                             databaseGenerated = true;
@@ -237,27 +217,20 @@ namespace OpenRiaServices.Server.EntityFrameworkCore
             // Add AssociationAttribute if required for the specified property
             if (_entityType.FindNavigation(pd.Name) is { } navigation)
             {
-#if NETFRAMEWORK
-                bool isManyToMany = navigation.IsCollection() && navigation.FindInverse()?.IsCollection() == true;
-                bool addAssociationAttribute = !isManyToMany;
-#else
                 bool isManyToMany = navigation.IsCollection && navigation.Inverse?.IsCollection == true;
                 bool addAssociationAttribute = !isManyToMany
                     // Don't generate association attributes for Owned types (onless they have all FK fields explictly defined, in which case they can be treated as Entities)
                     //  if we generate association attributes then it cannot be treated as a ComplexObject
                     && !(navigation.ForeignKey.Properties.Any(static p => p.IsShadowProperty()));
-#endif
 
                 if (addAssociationAttribute)
                 {
                     if (pd.Attributes[typeof(EntityAssociationAttribute)] is null)
                         attributes.Add(EFCoreTypeDescriptionContext.CreateAssociationAttribute(navigation));
-#if NET
                     if (navigation.TargetEntityType.IsOwned() && pd.Attributes[typeof(CompositionAttribute)] is null)
                     {
                         attributes.Add(new CompositionAttribute());
                     }
-#endif
                 }
             }
 
