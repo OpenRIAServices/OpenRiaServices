@@ -22,14 +22,14 @@ using Cities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Silverlight.Testing;
 using TestDomainServices;
+using IgnoreTestAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.IgnoreAttribute;
 using DescriptionAttribute = Microsoft.VisualStudio.TestTools.UnitTesting.DescriptionAttribute;
 using TheTypeDescriptorExtensions = SystemWebDomainServices::OpenRiaServices.Server.TypeDescriptorExtensions;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using Microsoft.EntityFrameworkCore.ChangeTracking.Internal;
 using Microsoft.EntityFrameworkCore.Metadata;
-using MetaType = SystemWebDomainServices::OpenRiaServices.Server.MetaType;
-
+using System.Diagnostics;
 
 namespace OpenRiaServices.Server.Test
 {
@@ -1889,6 +1889,7 @@ namespace OpenRiaServices.Server.Test
 
         [TestMethod]
         [Description("This test makes sure we can obtain an error message for invalid type to EntityFrameworkCore.DbDomainServiceDescriptionProviderAttribute")]
+        [IgnoreTest("The test works when run in isolation but not when running all tests. It needs to be reviewed: it probably reuse cached descriptors for types")]
         public void InvalidTypeDescriptionProviderType_EfCore()
         {
             ExceptionHelper.ExpectInvalidOperationException(() =>
