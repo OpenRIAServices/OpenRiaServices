@@ -2,7 +2,7 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2011/10/nuspec.xsd">
   <metadata>
     <id>OpenRiaServices.Client.Core</id>
-    <version>5.0.0</version>
+    <version>6.0.0</version>
     <title>Open RIA Services Client</title>
     <authors>OpenRIAServices</authors>
     <license type="expression">Apache-2.0</license>
@@ -22,19 +22,19 @@
         <dependency id="PolyType" version="1.4.1" exclude="Build,Analyzers" />
         <dependency id="System.IO.Hashing" version="10.0.14" exclude="Build,Analyzers" />
       </group>
-      <group targetFramework="net8.0">
+      <group targetFramework="net10.0">
         <dependency id="Nerdbank.MessagePack" version="1.4.104" exclude="Build,Analyzers" />
         <dependency id="PolyType" version="1.4.1" exclude="Build,Analyzers" />
         <dependency id="System.IO.Hashing" version="10.0.14" exclude="Build,Analyzers" />
       </group>
-      <group targetFramework="net8.0-windows7.0">
+      <group targetFramework="net10.0-windows7.0">
         <dependency id="Nerdbank.MessagePack" version="1.4.104" exclude="Build,Analyzers" />
         <dependency id="PolyType" version="1.4.1" exclude="Build,Analyzers" />
         <dependency id="System.IO.Hashing" version="10.0.14" exclude="Build,Analyzers" />
       </group>
     </dependencies>
     <frameworkReferences>
-      <group targetFramework="net8.0-windows7.0">
+      <group targetFramework="net10.0-windows7.0">
         <frameworkReference name="Microsoft.WindowsDesktop.App.WPF" />
       </group>
     </frameworkReferences>
@@ -55,23 +55,23 @@
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\net472\OpenRiaServices.Client.DomainClients.Http.pdb" />
     <file src="..\src\bin\Release\net472\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\net472\OpenRiaServices.Client.DomainClients.Http.xml" />
 
-    <!-- net8 binaries -->
-    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.dll" target="lib\net8.0\OpenRiaServices.Client.dll" />
-    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.pdb" target="lib\net8.0\OpenRiaServices.Client.pdb" />
-    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.xml" target="lib\net8.0\OpenRiaServices.Client.xml" />
+    <!-- net10 binaries -->
+    <file src="..\src\bin\Release\net10.0\OpenRiaServices.Client.dll" target="lib\net10.0\OpenRiaServices.Client.dll" />
+    <file src="..\src\bin\Release\net10.0\OpenRiaServices.Client.pdb" target="lib\net10.0\OpenRiaServices.Client.pdb" />
+    <file src="..\src\bin\Release\net10.0\OpenRiaServices.Client.xml" target="lib\net10.0\OpenRiaServices.Client.xml" />
 
-    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.dll" target="lib\net8.0\OpenRiaServices.Client.DomainClients.Http.dll" />
-    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\net8.0\OpenRiaServices.Client.DomainClients.Http.pdb" />
-    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\net8.0\OpenRiaServices.Client.DomainClients.Http.xml" />
+    <file src="..\src\bin\Release\net10.0\OpenRiaServices.Client.DomainClients.Http.dll" target="lib\net10.0\OpenRiaServices.Client.DomainClients.Http.dll" />
+    <file src="..\src\bin\Release\net10.0\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\net10.0\OpenRiaServices.Client.DomainClients.Http.pdb" />
+    <file src="..\src\bin\Release\net10.0\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\net10.0\OpenRiaServices.Client.DomainClients.Http.xml" />
 	
-    <!-- net8-windows7 binaries -->
-    <file src="..\src\bin\Release\net8.0-windows\OpenRiaServices.Client.dll" target="lib\net8.0-windows7.0\OpenRiaServices.Client.dll" />
-    <file src="..\src\bin\Release\net8.0-windows\OpenRiaServices.Client.pdb" target="lib\net8.0-windows7.0\OpenRiaServices.Client.pdb" />
-    <file src="..\src\bin\Release\net8.0-windows\OpenRiaServices.Client.xml" target="lib\net8.0-windows7.0\OpenRiaServices.Client.xml" />
+    <!-- net10-windows7 binaries -->
+    <file src="..\src\bin\Release\net10.0-windows\OpenRiaServices.Client.dll" target="lib\net10.0-windows7.0\OpenRiaServices.Client.dll" />
+    <file src="..\src\bin\Release\net10.0-windows\OpenRiaServices.Client.pdb" target="lib\net10.0-windows7.0\OpenRiaServices.Client.pdb" />
+    <file src="..\src\bin\Release\net10.0-windows\OpenRiaServices.Client.xml" target="lib\net10.0-windows7.0\OpenRiaServices.Client.xml" />
 
-    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.dll" target="lib\net8.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.dll" />
-    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\net8.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.pdb" />
-    <file src="..\src\bin\Release\net8.0\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\net8.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.xml" />
+    <file src="..\src\bin\Release\net10.0\OpenRiaServices.Client.DomainClients.Http.dll" target="lib\net10.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.dll" />
+    <file src="..\src\bin\Release\net10.0\OpenRiaServices.Client.DomainClients.Http.pdb" target="lib\net10.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.pdb" />
+    <file src="..\src\bin\Release\net10.0\OpenRiaServices.Client.DomainClients.Http.xml" target="lib\net10.0-windows7.0\OpenRiaServices.Client.DomainClients.Http.xml" />
 
   </files>
 </package>

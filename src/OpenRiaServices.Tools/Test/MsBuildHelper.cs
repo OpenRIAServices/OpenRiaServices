@@ -51,7 +51,7 @@ namespace OpenRiaServices.Tools.Test
 
                 // Execute ResolveAssemblyReferences target to get compile time dependencies
                 // This will match something similar to the following 
-                // /t:ResolveAssemblyReferences /p:TargetFramework=net8.0 /p:BuildProjectReferences=false /p:Configuration=Debug 
+                // /t:ResolveAssemblyReferences /p:TargetFramework=net10.0 /p:BuildProjectReferences=false /p:Configuration=Debug 
                 var results = project.Build(new string[] { "ResolveAssemblyReferences" }, new Microsoft.Build.Framework.ILogger[] { log });
 
                 // Do early assert on log in case there was a task failure
@@ -135,8 +135,8 @@ namespace OpenRiaServices.Tools.Test
 
 #if NETFRAMEWORK
                         string framework = frameworks.First(f => f.StartsWith("net4", StringComparison.Ordinal));
-#elif NET8_0
-                        string framework = frameworks.First(f => f.StartsWith("net8", StringComparison.Ordinal));
+#elif NET10_0
+                        string framework = frameworks.First(f => f.StartsWith("net10", StringComparison.Ordinal));
 #else
                         string framework = frameworks.First(f => !f.StartsWith("net4", StringComparison.Ordinal));
 #endif

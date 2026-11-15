@@ -747,9 +747,9 @@ namespace OpenRiaServices.Tools
         /// </remarks>
         private bool GenerateClientProxiesOutOfProcess(string generatedFileName, ClientCodeGenerationOptions options, SharedCodeServiceParameters sharedCodeServiceParameters)
         {
-            // Call the console app from here if Net 6.0 or greater
+            // Call the console app from here if .NET or greater
             string path = Path.GetFullPath(Path.Combine(Path.GetDirectoryName(typeof(CreateOpenRiaClientFilesTask).Assembly.Location),
-                "../net8.0/OpenRiaServices.Tools.CodeGenTask.dll"));
+                "../net10.0/OpenRiaServices.Tools.CodeGenTask.dll"));
 
             if (!File.Exists(path))
             {
