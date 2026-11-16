@@ -88,8 +88,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             WebAuthenticationServiceTest.InitializeService(service);
 
-            Assert.IsInstanceOfType(service.DomainContext, typeof(AuthenticationDomainContext),
-                "DomainContext should be a MockDomainContext.");
+            Assert.IsInstanceOfType<AuthenticationDomainContext>(service.DomainContext, "DomainContext should be a MockDomainContext.");
         }
 
         [TestMethod]
@@ -103,8 +102,7 @@ namespace OpenRiaServices.Client.Authentication.Test
 
             IPrincipal defaultUser = service.CreateDefaultUserMock();
 
-            Assert.IsInstanceOfType(defaultUser, typeof(MockUser),
-                "DefaultUser should be of type MockUser after service has started.");
+            Assert.IsInstanceOfType<MockUser>(defaultUser, "DefaultUser should be of type MockUser after service has started.");
         }
 
         [TestMethod]
@@ -204,8 +202,7 @@ namespace OpenRiaServices.Client.Authentication.Test
                 AuthenticationResult result = task.GetAwaiter().GetResult();
                 Assert.IsNotNull(result,
                     "LogoutResults should not be null.");
-                Assert.IsInstanceOfType(result.User, typeof(MockUser),
-                    "User should be a MockUser");
+                Assert.IsInstanceOfType<MockUser>(result.User, "User should be a MockUser");
                 Assert.AreEqual(UserType.LoggedOut, ((MockUser)result.User).Type,
                     "User should be of type LoggedOut.");
             });
@@ -226,8 +223,7 @@ namespace OpenRiaServices.Client.Authentication.Test
                 AuthenticationResult result = task.GetAwaiter().GetResult();
                 Assert.IsNotNull(result,
                     "LoadUserResults should not be null.");
-                Assert.IsInstanceOfType(result.User, typeof(MockUser),
-                    "User should be a MockUser");
+                Assert.IsInstanceOfType<MockUser>(result.User, "User should be a MockUser");
                 Assert.AreEqual(UserType.Loaded, ((MockUser)result.User).Type,
                     "User should be of type Loaded.");
             });
@@ -250,8 +246,7 @@ namespace OpenRiaServices.Client.Authentication.Test
                 AuthenticationResult result = task.GetAwaiter().GetResult();
                 Assert.IsNotNull(result,
                     "SaveUserResults should not be null.");
-                Assert.IsInstanceOfType(result.User, typeof(MockUser),
-                    "User should be a MockUser");
+                Assert.IsInstanceOfType<MockUser>(result.User, "User should be a MockUser");
                 Assert.AreEqual(UserType.Saved, ((MockUser)result.User).Type,
                     "User should be of type Saved.");
                 Assert.IsTrue(mock.DomainClient.Submitted,

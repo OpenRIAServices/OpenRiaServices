@@ -1058,22 +1058,22 @@ namespace OpenRiaServices.Server.Test
             var getCities = description.GetQueryMethod("GetCities");
             Assert.IsNotNull(getCities);
             Assert.IsNotNull(getCities.OperationAttribute);
-            Assert.IsInstanceOfType(getCities.OperationAttribute, typeof(QueryAttribute));
+            Assert.IsInstanceOfType<QueryAttribute>(getCities.OperationAttribute);
 
             var insertCity = description.GetSubmitMethod(typeof(City), DomainOperation.Insert);
             Assert.IsNotNull(insertCity);
             Assert.IsNotNull(insertCity.OperationAttribute);
-            Assert.IsInstanceOfType(insertCity.OperationAttribute, typeof(InsertAttribute));
+            Assert.IsInstanceOfType<InsertAttribute>(insertCity.OperationAttribute);
 
             var updateCity = description.GetSubmitMethod(typeof(City), DomainOperation.Update);
             Assert.IsNotNull(updateCity);
             Assert.IsNotNull(updateCity.OperationAttribute);
-            Assert.IsInstanceOfType(updateCity.OperationAttribute, typeof(UpdateAttribute));
+            Assert.IsInstanceOfType<UpdateAttribute>(updateCity.OperationAttribute);
 
             var deleteCity = description.GetSubmitMethod(typeof(City), DomainOperation.Delete);
             Assert.IsNotNull(deleteCity);
             Assert.IsNotNull(deleteCity.OperationAttribute);
-            Assert.IsInstanceOfType(deleteCity.OperationAttribute, typeof(DeleteAttribute));
+            Assert.IsInstanceOfType<DeleteAttribute>(deleteCity.OperationAttribute);
         }
 
 

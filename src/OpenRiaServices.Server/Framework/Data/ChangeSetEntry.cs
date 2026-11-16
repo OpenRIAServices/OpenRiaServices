@@ -143,7 +143,7 @@ namespace OpenRiaServices.Server
                       value == DomainOperation.None))
                 {
                     throw new ArgumentException(string.Format(CultureInfo.CurrentCulture,
-                        Resource.InvalidDomainOperationType, Enum.GetName(typeof(DomainOperation), value), "value"));
+                        Resource.InvalidDomainOperationType, Enum.GetName(value), "value"));
                 }
 
                 this._operation = value;

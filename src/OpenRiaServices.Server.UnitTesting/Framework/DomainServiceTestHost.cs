@@ -32,7 +32,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// Initializes a new instance of the <see cref="DomainServiceTestHost{TDomainService}"/>
         /// </summary>
         public DomainServiceTestHost()
-            : this(() => (TDomainService)Activator.CreateInstance(typeof(TDomainService))!)
+            : this(() => Activator.CreateInstance<TDomainService>()!)
         {
         }
 
@@ -41,7 +41,7 @@ namespace OpenRiaServices.Server.UnitTesting
         /// </summary>
         /// <exception cref="ArgumentNullException">is thrown when <paramref name="user"/> is <c>null</c></exception>
         public DomainServiceTestHost(IPrincipal user)
-            : this(() => (TDomainService)Activator.CreateInstance(typeof(TDomainService))!, user)
+            : this(() => Activator.CreateInstance<TDomainService>()!, user)
         {
         }
 

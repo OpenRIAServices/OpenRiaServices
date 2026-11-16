@@ -417,7 +417,7 @@ namespace OpenRiaServices.Client.Test
                 tcs.SetResult(result: result);
                 await operation;
 
-                Assert.IsInstanceOfType(syncCtx.LastException, typeof(InvalidOperationException));
+                Assert.IsInstanceOfType<InvalidOperationException>(syncCtx.LastException);
                 Assert.AreEqual(Message, syncCtx.LastException.Message);
                 Assert.StartsWith("   at OpenRiaServices.Client.Test.OperationTests", syncCtx.LastException.StackTrace, "Stacktrace not preserved.");
                 Assert.IsNull(operation.Error, "Submit should not have error because of callback");

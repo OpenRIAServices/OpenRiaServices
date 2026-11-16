@@ -46,10 +46,10 @@ namespace EFCoreModels.Scenarios.ComplexTypes
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Employee>()
-                .ComplexProperty(typeof(ContactInfo), nameof(Employee.ContactInfo), x =>
+                .ComplexProperty<ContactInfo>(nameof(Employee.ContactInfo), x =>
                 {
                     x.Property(nameof(ContactInfo.HomePhone)).HasMaxLength(24);
-                    x.ComplexProperty(typeof(Address), nameof(ContactInfo.Address), address =>
+                    x.ComplexProperty<Address>(nameof(ContactInfo.Address), address =>
                     {
                         address.Property(nameof(Address.AddressLine)).HasMaxLength(100);
                         address.Property(nameof(Address.City)).HasMaxLength(50);

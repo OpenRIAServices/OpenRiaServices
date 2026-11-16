@@ -117,7 +117,7 @@ namespace OpenRiaServices.Client.Test
         {
             string[] propertyNames = new[] { "Property1", "Property2", };
             EntityConflict entityConflict = new EntityConflict(new MockEntity(), new MockEntity(), propertyNames, false);
-            Assert.IsInstanceOfType(entityConflict.PropertyNames, typeof(ReadOnlyCollection<string>));
+            Assert.IsInstanceOfType<ReadOnlyCollection<string>>(entityConflict.PropertyNames);
         }
 
         public class MockEntityContainer : EntityContainer

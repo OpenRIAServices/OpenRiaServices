@@ -220,7 +220,7 @@ namespace OpenRiaServices.Server
                         generator.EmitCall(OpCodes.Call, s_serviceContextGetter, null);
                         generator.EmitCall(OpCodes.Call, s_cancellationTokenGetter, null);
                     }
-                    else if (parameter.GetCustomAttribute(typeof(InjectParameterAttribute)) != null)
+                    else if (parameter.GetCustomAttribute<InjectParameterAttribute>() != null)
                     {
                         // generate ((IServiceProvider)ServiceContext).GetService( typeof(parameterType) )
                         generator.Emit(OpCodes.Ldarg_0);
