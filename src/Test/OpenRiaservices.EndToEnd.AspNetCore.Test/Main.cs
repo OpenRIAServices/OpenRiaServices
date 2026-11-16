@@ -94,6 +94,7 @@ namespace OpenRiaServices.Client.Test
             s_aspNetCoreSite?.Kill();
         }
 
+        [SuppressMessage("Interoperability", "CA1416:Validate platform compatibility", Justification = "CI build running on windows (or linux)")]
         private static void StartWebServer([CallerFilePath] string filePath = null)
         {
             const string ProcessName = "AspNetCoreWebsite";
