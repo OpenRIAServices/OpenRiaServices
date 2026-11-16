@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFrameworks>net10.0;net11.0</TargetFrameworks>
+    <Features Condition="'$(TargetFramework)' == 'net11.0'">$(Features);runtime-async=on</Features>
     <DefineConstants>$(DefineConstants);SERVERFX;ASPNET_CORE</DefineConstants>
     <RootNamespace>OpenRiaServices.Hosting</RootNamespace>
     <!-- Ignore documentation varnings while experimental-->
@@ -22,10 +23,6 @@
     <PackageLicenseExpression></PackageLicenseExpression>
     <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
     <NeutralLanguage>en</NeutralLanguage>
-  </PropertyGroup>
-
-  <PropertyGroup Condition="'$(TargetFramework)' == 'net11.0'">
-    <Features>$(Features);runtime-async=on</Features>
   </PropertyGroup>
 
   <ItemGroup>

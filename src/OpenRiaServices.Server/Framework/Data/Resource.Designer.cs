@@ -788,7 +788,7 @@ namespace OpenRiaServices.Server {
                 return ResourceManager.GetString("InvalidComplexType_PropertyAttribute", resourceCulture);
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized string similar to Custom methods must contain at least one parameter..
         /// </summary>
@@ -835,7 +835,7 @@ namespace OpenRiaServices.Server {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of domain operation entry &apos;{0}&apos; must be one of the predefined serializable types..
+        ///   Looks up a localized string similar to Parameter &apos;{1}&apos; of domain operation entry &apos;{0}&apos; must be one of the predefined serializable types or a supported simple struct type..
         /// </summary>
         internal static string InvalidDomainOperationEntry_ParamMustBeSimple {
             get {
@@ -889,7 +889,7 @@ namespace OpenRiaServices.Server {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Operation named &apos;{0}&apos; does not conform to the required signature. Parameter types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types..
+        ///   Looks up a localized string similar to Operation named &apos;{0}&apos; does not conform to the required signature. Parameter types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types or supported simple struct types..
         /// </summary>
         internal static string InvalidInvokeOperation_ParameterType {
             get {
@@ -898,7 +898,7 @@ namespace OpenRiaServices.Server {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Operation named &apos;{0}&apos; does not conform to the required signature. Return types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types..
+        ///   Looks up a localized string similar to Operation named &apos;{0}&apos; does not conform to the required signature. Return types must be an entity or complex type, a collection of entities or complex types, or one of the predefined serializable types or supported simple struct types..
         /// </summary>
         internal static string InvalidInvokeOperation_ReturnType {
             get {

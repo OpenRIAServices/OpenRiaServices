@@ -46,7 +46,7 @@ namespace OpenRiaServices.Server
 
             if (operation == DomainOperation.None)
             {
-                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntryType, Enum.GetName(typeof(DomainOperation), operation)));
+                throw new ArgumentException(string.Format(CultureInfo.CurrentCulture, Resource.InvalidDomainOperationEntryType, Enum.GetName(operation)));
             }
 
             bool isTaskType = TypeUtility.IsTaskType(returnType);

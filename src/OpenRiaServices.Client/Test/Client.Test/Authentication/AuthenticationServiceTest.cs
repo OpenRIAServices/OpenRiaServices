@@ -815,8 +815,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LoginOperation),
-                    "Call should return a LoginOperation.");
+                Assert.IsInstanceOfType<LoginOperation>(operation, "Call should return a LoginOperation.");
                 LoginOperation loginOperation = operation as LoginOperation;
 
                 Assert.AreEqual(parameters, loginOperation.LoginParameters,
@@ -845,8 +844,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LoginOperation),
-                    "Call should return a LoginOperation.");
+                Assert.IsInstanceOfType<LoginOperation>(operation, "Call should return a LoginOperation.");
                 LoginOperation loginOperation = operation as LoginOperation;
 
                 Assert.AreEqual(parameters, loginOperation.LoginParameters,
@@ -876,8 +874,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LogoutOperation),
-                    "Call should return a LogoutOperation.");
+                Assert.IsInstanceOfType<LogoutOperation>(operation, "Call should return a LogoutOperation.");
                 LogoutOperation logoutOperation = operation as LogoutOperation;
 
                 Assert.AreEqual(UserType.LoggedOut, ((MockPrincipal)logoutOperation.User).Type,
@@ -899,8 +896,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LoadUserOperation),
-                    "Call should return a LoadUserOperation.");
+                Assert.IsInstanceOfType<LoadUserOperation>(operation, "Call should return a LoadUserOperation.");
                 LoadUserOperation loadUserOperation = operation as LoadUserOperation;
 
                 Assert.AreEqual(UserType.Loaded, ((MockPrincipal)loadUserOperation.User).Type,
@@ -922,8 +918,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(SaveUserOperation),
-                    "Call should return a SaveUserOperation.");
+                Assert.IsInstanceOfType<SaveUserOperation>(operation, "Call should return a SaveUserOperation.");
                 SaveUserOperation saveUserOperation = operation as SaveUserOperation;
 
                 Assert.AreEqual(UserType.Saved, ((MockPrincipal)saveUserOperation.User).Type,
@@ -952,8 +947,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LoginOperation),
-                    "Call should return a LoginOperation.");
+                Assert.IsInstanceOfType<LoginOperation>(operation, "Call should return a LoginOperation.");
                 LoginOperation loginOperation = operation as LoginOperation;
 
                 // TODO: DC_API - determine the expected value for these two
@@ -983,8 +977,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LogoutOperation),
-                    "Call should return a LogoutOperation.");
+                Assert.IsInstanceOfType<LogoutOperation>(operation, "Call should return a LogoutOperation.");
                 LogoutOperation logoutOperation = operation as LogoutOperation;
 
                 Assert.IsNull(logoutOperation.User,
@@ -1009,8 +1002,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LoadUserOperation),
-                    "Call should return a LoadUserOperation.");
+                Assert.IsInstanceOfType<LoadUserOperation>(operation, "Call should return a LoadUserOperation.");
                 LoadUserOperation loadUserOperation = operation as LoadUserOperation;
 
                 Assert.IsNull(loadUserOperation.User,
@@ -1035,8 +1027,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(SaveUserOperation),
-                    "Call should return a SaveUserOperation.");
+                Assert.IsInstanceOfType<SaveUserOperation>(operation, "Call should return a SaveUserOperation.");
                 SaveUserOperation saveUserOperation = operation as SaveUserOperation;
 
                 Assert.IsNull(saveUserOperation.User,
@@ -1068,8 +1059,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LoginOperation),
-                    "Call should return a LoginOperation.");
+                Assert.IsInstanceOfType<LoginOperation>(operation, "Call should return a LoginOperation.");
                 LoginOperation loginOperation = operation as LoginOperation;
 
                 // TODO: DC_API - determine the expected value for these two
@@ -1099,8 +1089,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LogoutOperation),
-                    "Call should return a LogoutOperation.");
+                Assert.IsInstanceOfType<LogoutOperation>(operation, "Call should return a LogoutOperation.");
                 LogoutOperation logoutOperation = operation as LogoutOperation;
 
                 Assert.IsNull(logoutOperation.User,
@@ -1125,8 +1114,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(LoadUserOperation),
-                    "Call should return a LoadUserOperation.");
+                Assert.IsInstanceOfType<LoadUserOperation>(operation, "Call should return a LoadUserOperation.");
                 LoadUserOperation loadUserOperation = operation as LoadUserOperation;
 
                 Assert.IsNull(loadUserOperation.User,
@@ -1151,8 +1139,7 @@ namespace OpenRiaServices.Client.Authentication.Test
             },
             (mock, operation) =>
             {
-                Assert.IsInstanceOfType(operation, typeof(SaveUserOperation),
-                    "Call should return a SaveUserOperation.");
+                Assert.IsInstanceOfType<SaveUserOperation>(operation, "Call should return a SaveUserOperation.");
                 SaveUserOperation saveUserOperation = operation as SaveUserOperation;
 
                 Assert.IsNull(saveUserOperation.User,

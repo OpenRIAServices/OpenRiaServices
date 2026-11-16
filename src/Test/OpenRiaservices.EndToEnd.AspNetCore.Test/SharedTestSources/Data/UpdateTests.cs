@@ -672,7 +672,7 @@ namespace OpenRiaServices.Client.Test
             EnqueueCallback(delegate
             {
                 Assert.IsNotNull(so.Error);
-                Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
+                Assert.IsInstanceOfType<DomainOperationException>(so.Error);
                 DomainOperationException ex = so.Error as DomainOperationException;
 
                 // verify errorCode is 0 for Conflicts but correct status is set
@@ -3074,7 +3074,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.IsNotNull(so.Error);
                 
-                Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
+                Assert.IsInstanceOfType<DomainOperationException>(so.Error);
                 DomainOperationException ex = so.Error as DomainOperationException;
 
                 Assert.AreEqual(Resource.DomainContext_SubmitOperationFailed_Conflicts, so.Error?.Message);
@@ -3157,7 +3157,7 @@ namespace OpenRiaServices.Client.Test
                     Assert.AreEqual(origReorderLevel[0], products[0].ReorderLevel);
 
                     // Verify Product1's conflict is non empty and client values did not get updated
-                    Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
+                    Assert.IsInstanceOfType<DomainOperationException>(so.Error);
                     DomainOperationException ex = so.Error as DomainOperationException;
                     Assert.AreEqual(OperationErrorStatus.Conflicts, ex.Status);
                     Assert.AreEqual(products[1], so.EntitiesInError.Single());
@@ -3279,7 +3279,7 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueCallback(delegate
             {
-                Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
+                Assert.IsInstanceOfType<DomainOperationException>(so.Error);
                 DomainOperationException ex = so.Error as DomainOperationException;
                 Assert.AreEqual(OperationErrorStatus.Conflicts, ex.Status);
 
@@ -3396,7 +3396,7 @@ namespace OpenRiaServices.Client.Test
                     // its resolve method is called. Hence the conflict is resolved successfully the first round. When resubmit
                     // is called, the Product1's conflicts are generated. Since ResolveConflicts is not called again on resubmit,
                     // the Submit processing failed with conflicts.
-                    Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
+                    Assert.IsInstanceOfType<DomainOperationException>(so.Error);
                     DomainOperationException ex = so.Error as DomainOperationException;
                     Assert.AreEqual(OperationErrorStatus.Conflicts, ex.Status);
 
@@ -3512,7 +3512,7 @@ namespace OpenRiaServices.Client.Test
             {
                 // Since an exception was thrown during resolution, conflicts are not
                 // returned
-                Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
+                Assert.IsInstanceOfType<DomainOperationException>(so.Error);
                 DomainOperationException ex = so.Error as DomainOperationException;
                 Assert.Contains("testing", ex.Message);
             });
@@ -3585,7 +3585,7 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueCallback(delegate
             {
-                Assert.IsInstanceOfType(so.Error, typeof(DomainOperationException));
+                Assert.IsInstanceOfType<DomainOperationException>(so.Error);
                 DomainOperationException ex = so.Error as DomainOperationException;
 
                 Product[] products = nw2.Products.ToArray();
@@ -3689,7 +3689,7 @@ namespace OpenRiaServices.Client.Test
 
             EnqueueCallback(delegate
             {
-                Assert.IsInstanceOfType(so.Error, typeof(DomainException));
+                Assert.IsInstanceOfType<DomainException>(so.Error);
                 DomainException ex = so.Error as DomainException;
                 Assert.AreEqual("testing", ex.Message);
 

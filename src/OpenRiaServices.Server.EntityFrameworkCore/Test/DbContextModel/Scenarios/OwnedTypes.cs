@@ -76,7 +76,7 @@ namespace EFCoreModels.Scenarios.OwnedTypes
                 .OwnsOne<ContactInfo>(nameof(Employee.ContactInfo), x =>
                 {
                     x.Property(nameof(ContactInfo.HomePhone)).HasMaxLength(24);
-                    x.OwnsOne(typeof(Address), nameof(ContactInfo.Address), address =>
+                    x.OwnsOne<Address>(nameof(ContactInfo.Address), address =>
                     {
                         address.Property(nameof(Address.AddressLine)).HasMaxLength(100);
                         address.Property(nameof(Address.City)).HasMaxLength(50);

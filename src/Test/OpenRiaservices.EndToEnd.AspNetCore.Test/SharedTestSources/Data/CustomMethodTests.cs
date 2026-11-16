@@ -512,8 +512,7 @@ namespace OpenRiaServices.Client.Test
                 {
                     // MessagePack gives MessagePackSerializationException on client
                     // User friendly message is buried deep in the exception hierarchy
-                    Assert.IsInstanceOfType(submitTask.Exception.InnerException,
-                        typeof(Nerdbank.MessagePack.MessagePackSerializationException));
+                    Assert.IsInstanceOfType<Nerdbank.MessagePack.MessagePackSerializationException>(submitTask.Exception.InnerException);
                 }
                 else
                 {

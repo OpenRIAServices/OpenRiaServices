@@ -377,7 +377,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.IsNull(invoke.Value);
                 Assert.IsNotNull(invoke.Error);
-                Assert.IsInstanceOfType(invoke.Error, typeof(DomainOperationException));
+                Assert.IsInstanceOfType<DomainOperationException>(invoke.Error);
                 DomainOperationException dpe = invoke.Error as DomainOperationException;
                 Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed, "ThrowOnlineException", "Invalid operation."), dpe.Message);
                 Assert.AreEqual(OperationErrorStatus.NotSupported, dpe.Status);
@@ -399,7 +399,7 @@ namespace OpenRiaServices.Client.Test
             {
                 Assert.IsNull(invoke.Value);
                 Assert.IsNotNull(invoke.Error);
-                Assert.IsInstanceOfType(invoke.Error, typeof(DomainOperationException));
+                Assert.IsInstanceOfType<DomainOperationException>(invoke.Error);
                 DomainOperationException dpe = invoke.Error as DomainOperationException;
                 Assert.AreEqual(string.Format(Resource.DomainContext_InvokeOperationFailed, "MethodRequiresAuthentication", "Access to operation 'MethodRequiresAuthentication' was denied."), dpe.Message);
                 Assert.AreEqual(OperationErrorStatus.Unauthorized, dpe.Status);
