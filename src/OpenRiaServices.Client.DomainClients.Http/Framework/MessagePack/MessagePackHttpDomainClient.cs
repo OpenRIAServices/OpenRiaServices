@@ -114,7 +114,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
 
 
                 Type envelopeType = GetResponseEnvelopeType(operationName, returnType);
-                var typeShape = _typeShapeProvider.GetTypeShapeOrThrow(envelopeType);
+                var typeShape = _factory.EnvelopeTypeShapeProvider.GetTypeShapeOrThrow(envelopeType);
 
                 MessagePackResponseEnvelopeBase envelope;
 #if NET

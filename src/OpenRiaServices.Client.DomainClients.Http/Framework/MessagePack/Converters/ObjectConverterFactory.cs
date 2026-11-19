@@ -21,16 +21,12 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
     sealed class ObjectConverterFactory : IMessagePackConverterFactory
     {
         private readonly FrozenDictionary<Type, MessagePackConverter> _converters;
+        /// <summary>
+        /// The provider to use when doing the actual serialization of types
+        /// </summary>
+        private readonly ITypeShapeProvider _entityShapeProvider;
 
-        // We need to use a seprate type shape provider for looking up converters
-        // otherwise we will get union converters instead of the object converter for the underlying type 
-        internal static readonly ReflectionTypeShapeProvider ObjectConverterTypeShapeProvider = ReflectionTypeShapeProvider.Create(new()
-        {
-            // Note: We need to specify a new unique set of assemblies to avoid conflicts with the main type shape provider
-            TypeShapeExtensionAssemblies = new[] { typeof(DomainClient).Assembly }
-        });
-
-        public ObjectConverterFactory(IEnumerable<Type> entityTypes)
+        public ObjectConverterFactory(IEnumerable<Type> entityTypes, ITypeShapeProvider entityShapeProvider)
         {
             HashSet<Type> allTypes = new HashSet<Type>(entityTypes);
             foreach (Type knownType in entityTypes)
@@ -49,11 +45,12 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 if (knownTypes.Count <= 1)
                     continue;
 
-                converters.Add(item.Key, (MessagePackConverter)Activator.CreateInstance(typeof(ObjectConverter<>).MakeGenericType(item.Key), [knownTypes])!);
+                converters.Add(item.Key, (MessagePackConverter)Activator.CreateInstance(typeof(ObjectConverter<>).MakeGenericType(item.Key), [knownTypes, entityShapeProvider])!);
             }
-            converters.Add(typeof(object), new ObjectConverter<object>(allTypes));
+            converters.Add(typeof(object), new ObjectConverter<object>(allTypes, entityShapeProvider));
 
             _converters = converters.ToFrozenDictionary();
+            _entityShapeProvider = entityShapeProvider;
         }
 
         /// <summary>
@@ -68,7 +65,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
         MessagePackConverter? IMessagePackConverterFactory.CreateConverter(Type type, ITypeShape? shape, in ConverterContext context)
         {
             // Only return type shapes for specified converter, this allows nerdbank default converters to be generated for other providers
-            if (!object.ReferenceEquals(shape?.Provider, ObjectConverterTypeShapeProvider)
+            if (!object.ReferenceEquals(shape?.Provider, _entityShapeProvider)
                 && _converters.TryGetValue(type, out var converter))
                 return converter;
             else

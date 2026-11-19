@@ -41,6 +41,11 @@ namespace OpenRiaServices.Client.DomainClients
                 [new MessagePackMethodParametersConverter(), new ChangeSetEntryConverter()]);
 
             TypeShapeProvider = typeShapeProvider ?? PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Default;
+            EnvelopeTypeShapeProvider = PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Create(new()
+                {
+                    // Note: We need to specify a new unique set of assemblies to avoid conflicts with the main type shape provider
+                    TypeShapeExtensionAssemblies = new[] { typeof(DomainClient).Assembly }
+                });
         }
 
         /// <inheritdoc />
@@ -52,12 +57,13 @@ namespace OpenRiaServices.Client.DomainClients
 
         internal MessagePackSerializer BaseSerializerSerializer { get; }
         internal ITypeShapeProvider TypeShapeProvider { get; }
+        internal ITypeShapeProvider EnvelopeTypeShapeProvider { get; }
 
         internal MessagePackSerializer GetSerializer(Type service, IEnumerable<Type> knownTypes)
         {
             return _serializerCache.GetOrAdd(service, static (_, args) =>
             {
-                var converterFactory = new ObjectConverterFactory(args.knownTypes);
+                var converterFactory = new ObjectConverterFactory(args.knownTypes, args.Item1.TypeShapeProvider);
                 return args.Item1.BaseSerializerSerializer with
                 {
                     ConverterFactories = [converterFactory, .. args.Item1.BaseSerializerSerializer.ConverterFactories],

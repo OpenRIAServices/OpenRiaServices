@@ -30,9 +30,11 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
         private readonly FrozenDictionary<byte[], Type> _typeLookup;
         // The base type of the hierarchy, used to determine if we need to write a discriminator when the declared type is not the base type
         private readonly Type? _baseType;
+        private readonly ITypeShapeProvider _typeShapeProvider;
 
-        public ObjectConverter(IEnumerable<Type> knownTypes)
+        public ObjectConverter(IEnumerable<Type> knownTypes, ITypeShapeProvider typeShapeProvider)
         {
+            _typeShapeProvider = typeShapeProvider;
             var comparer = new MessagePackUtility.ByteArrayComparer();
 
             // This avoids double dictionary lookups in surrogateProvider
@@ -124,10 +126,10 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             converter.WriteObject(ref writer, value, context);
         }
 
-        private static MessagePackConverter GetConverter(Type type, ref SerializationContext context)
+        private MessagePackConverter GetConverter(Type type, ref SerializationContext context)
         {
             // Need to get the base shape in order to avoid gettting the same discriminator repeted again by converter
-            ITypeShape shape = ObjectConverterFactory.ObjectConverterTypeShapeProvider.GetTypeShapeOrThrow(type);
+            ITypeShape shape = _typeShapeProvider.GetTypeShapeOrThrow(type);
             if (shape is PolyType.Abstractions.IUnionTypeShape unionShape)
                 shape = unionShape.BaseType;
 
