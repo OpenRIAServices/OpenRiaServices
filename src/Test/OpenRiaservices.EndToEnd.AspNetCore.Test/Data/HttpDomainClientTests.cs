@@ -1,16 +1,20 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Nerdbank.MessagePack;
 using OpenRiaServices.Client.DomainClients;
+using PolyType;
 
 namespace OpenRiaServices.Client.Test
 {
     [TestClass]
-    public class HttpDomainClientTests
+    public partial class HttpDomainClientTests
     {
         [TestMethod]
         [DataRow(DomainClientType.Binary, false)]
@@ -48,6 +52,95 @@ namespace OpenRiaServices.Client.Test
             Assert.AreEqual(1, handler.RequestCount);
         }
 
+        [TestMethod]
+        public async Task MessagePackReadsFragmentedResultAfterUnknownMember()
+        {
+            var bytes = new ArrayBufferWriter<byte>();
+            var writer = new MessagePackWriter(bytes);
+            writer.WriteMapHeader(2);
+            writer.Write("Metadata");
+            writer.WriteArrayHeader(2);
+            writer.Write(42);
+            writer.Write("ignored");
+            writer.Write("Result");
+            writer.Write("echoed");
+            writer.Flush();
+
+            var result = await InvokeWithMessagePackResponseAsync(bytes.WrittenMemory, typeof(string), HttpStatusCode.OK);
+
+            Assert.AreEqual("echoed", result.ReturnValue);
+        }
+
+        [TestMethod]
+        [DataRow(false)]
+        [DataRow(true)]
+        public async Task MessagePackReadsVoidResult(bool omitResult)
+        {
+            var bytes = new ArrayBufferWriter<byte>();
+            var writer = new MessagePackWriter(bytes);
+            writer.WriteMapHeader(omitResult ? 0 : 1);
+            if (!omitResult)
+            {
+                writer.Write("Result");
+                writer.WriteNil();
+            }
+            writer.Flush();
+
+            var result = await InvokeWithMessagePackResponseAsync(bytes.WrittenMemory, typeof(void), HttpStatusCode.OK);
+
+            Assert.IsNull(result.ReturnValue);
+        }
+
+        [TestMethod]
+        public async Task MessagePackReadsFragmentedFaultOnHttpError()
+        {
+            var bytes = new ArrayBufferWriter<byte>();
+            var writer = new MessagePackWriter(bytes);
+            writer.WriteMapHeader(1);
+            writer.Write("Fault");
+            writer.WriteMapHeader(2);
+            writer.Write("ErrorCode");
+            writer.Write(403);
+            writer.Write("ErrorMessage");
+            writer.Write("Access denied by the service.");
+            writer.Flush();
+
+            var error = await Assert.ThrowsAsync<DomainOperationException>(
+                () => InvokeWithMessagePackResponseAsync(bytes.WrittenMemory, typeof(string), HttpStatusCode.Forbidden));
+
+            Assert.AreEqual(OperationErrorStatus.Unauthorized, error.Status);
+            Assert.AreEqual(403, error.ErrorCode);
+            Assert.AreEqual("Access denied by the service.", error.Message);
+        }
+
+        private static async Task<InvokeCompletedResult> InvokeWithMessagePackResponseAsync(ReadOnlyMemory<byte> body, Type returnType, HttpStatusCode status)
+        {
+            using var handler = new MessagePackResponseHandler(body, status);
+            using var httpClient = new HttpClient(handler);
+            var serviceUri = new Uri("https://localhost/TestService/");
+            var factory = new MessagePackHttpDomainClientFactory(serviceUri, _ => httpClient,
+                typeShapeProvider: MessagePackResponseTestShapes.GeneratedTypeShapeProvider);
+            var client = factory.CreateDomainClient(typeof(ITestServiceContract), serviceUri, false);
+            client.EntityTypes = Array.Empty<Type>();
+            return await client.InvokeAsync(new InvokeArgs("Echo", returnType, new Dictionary<string, object>(), hasSideEffects: false), CancellationToken.None);
+        }
+
+        private sealed class MessagePackResponseHandler(ReadOnlyMemory<byte> body, HttpStatusCode status) : HttpMessageHandler
+        {
+            protected override Task<HttpResponseMessage> SendAsync(HttpRequestMessage request, CancellationToken cancellationToken)
+            {
+                var content = new StreamContent(new FragmentedStream(body.ToArray()));
+                content.Headers.ContentType = new("application/vnd.msgpack");
+                return Task.FromResult(new HttpResponseMessage(status) { Content = content });
+            }
+        }
+
+        private sealed class FragmentedStream(byte[] bytes) : MemoryStream(bytes)
+        {
+            public override ValueTask<int> ReadAsync(Memory<byte> buffer, CancellationToken cancellationToken = default)
+                => base.ReadAsync(buffer[..Math.Min(buffer.Length, 1)], cancellationToken);
+        }
+
         public enum DomainClientType
         {
             Binary,
@@ -79,5 +172,8 @@ namespace OpenRiaServices.Client.Test
                 });
             }
         }
+
+    [GenerateShapeFor<string>]
+    partial class MessagePackResponseTestShapes;
     }
 }

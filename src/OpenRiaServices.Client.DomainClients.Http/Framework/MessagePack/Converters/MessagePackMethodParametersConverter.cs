@@ -1,11 +1,12 @@
 using Nerdbank.MessagePack;
 using OpenRiaServices.Client.DomainClients.Http;
+using PolyType;
 using System;
 using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters;
 
-sealed class MessagePackMethodParametersConverter : MessagePackConverter<MessagePackMethodParameters>
+sealed class MessagePackMethodParametersConverter(ITypeShapeProvider typeShapeProvider) : MessagePackConverter<MessagePackMethodParameters>
 {
     public override bool PreferAsyncSerialization => true;
 
@@ -60,18 +61,18 @@ sealed class MessagePackMethodParametersConverter : MessagePackConverter<Message
         }
     }
 
-    private static void WriteValue(ref MessagePackWriter writer, object value, Type parameterType, SerializationContext context)
+    private void WriteValue(ref MessagePackWriter writer, object value, Type parameterType, SerializationContext context)
     {
         if (value is null)
             writer.WriteNil();
         else
-            context.GetConverter(parameterType, context.TypeShapeProvider).WriteObject(ref writer, value, context);
+            context.GetConverter(parameterType, typeShapeProvider).WriteObject(ref writer, value, context);
     }
 
-    private static ValueTask WriteValueAsync(MessagePackAsyncWriter writer, object value, Type parameterType, SerializationContext context)
+    private ValueTask WriteValueAsync(MessagePackAsyncWriter writer, object value, Type parameterType, SerializationContext context)
         => value is null
             ? WriteNilAsync(writer)
-            : context.GetConverter(parameterType, context.TypeShapeProvider).WriteObjectAsync(writer, value, context);
+            : context.GetConverter(parameterType, typeShapeProvider).WriteObjectAsync(writer, value, context);
 
     private static ValueTask WriteNilAsync(MessagePackAsyncWriter writer)
     {
