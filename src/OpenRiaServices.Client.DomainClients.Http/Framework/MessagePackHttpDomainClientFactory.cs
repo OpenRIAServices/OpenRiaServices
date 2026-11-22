@@ -39,13 +39,7 @@ namespace OpenRiaServices.Client.DomainClients
         {
             BaseSerializerSerializer = MessagePackUtility.ConfigureSerializer(serializer ?? new MessagePackSerializer(),
                 [new MessagePackMethodParametersConverter(), new ChangeSetEntryConverter()]);
-
             TypeShapeProvider = typeShapeProvider ?? PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Default;
-            EnvelopeTypeShapeProvider = PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Create(new()
-                {
-                    // Note: We need to specify a new unique set of assemblies to avoid conflicts with the main type shape provider
-                    TypeShapeExtensionAssemblies = new[] { typeof(DomainClient).Assembly }
-                });
         }
 
         /// <inheritdoc />
@@ -57,19 +51,34 @@ namespace OpenRiaServices.Client.DomainClients
 
         internal MessagePackSerializer BaseSerializerSerializer { get; }
         internal ITypeShapeProvider TypeShapeProvider { get; }
-        internal ITypeShapeProvider EnvelopeTypeShapeProvider { get; }
 
         internal MessagePackSerializer GetSerializer(Type service, IEnumerable<Type> knownTypes)
         {
             return _serializerCache.GetOrAdd(service, static (_, args) =>
             {
-                var converterFactory = new ObjectConverterFactory(args.knownTypes, args.Item1.TypeShapeProvider);
-                return args.Item1.BaseSerializerSerializer with
+                MessagePackHttpDomainClientFactory This = args.Item1;
+
+                // Supress inheritance 
+                HashSet<Type> allTypes = new HashSet<Type>(args.knownTypes);
+                foreach (Type knownType in args.knownTypes)
+                    allTypes.UnionWith(Server.KnownTypeUtilities.ImportDerivedTypes(knownType, true));
+
+                var dsableTypes = allTypes
+            //        .Where(type => This.TypeShapeProvider.GetTypeShapeOrThrow(type).Kind == TypeShapeKind.Union)
+                    .Select(DerivedTypeUnion.CreateDisabled);
+
+                var objectSerialiser = args.Item1.BaseSerializerSerializer with
                 {
-                    ConverterFactories = [converterFactory, .. args.Item1.BaseSerializerSerializer.ConverterFactories],
-                    DerivedTypeUnions = [.. converterFactory.GetDerivedTypeUnions(), .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
+                    DerivedTypeUnions = [.. dsableTypes, .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
                 };
 
+                // Create a final serializer which use ObjectConverterFactory to do custom union converter
+                // while delegating actual serialization to objectSerialiser
+                var converterFactory = new ObjectConverterFactory(allTypes, args.Item1.TypeShapeProvider, objectSerialiser);
+                return objectSerialiser with
+                {
+                    ConverterFactories = [converterFactory, .. args.Item1.BaseSerializerSerializer.ConverterFactories],
+                };
             }, (this, knownTypes));
         }
 

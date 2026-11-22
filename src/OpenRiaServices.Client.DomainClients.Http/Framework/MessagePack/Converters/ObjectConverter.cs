@@ -3,13 +3,13 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Frozen;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Buffers;
 using System.Linq;
 using Nerdbank.MessagePack;
 using PolyType;
 using PolyType.ReflectionProvider;
 
+#pragma warning disable NBMsgPack030 // Converters should not call top-level `MessagePackSerializer` methods
 #nullable enable
 
 namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
@@ -31,10 +31,12 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
         // The base type of the hierarchy, used to determine if we need to write a discriminator when the declared type is not the base type
         private readonly Type? _baseType;
         private readonly ITypeShapeProvider _typeShapeProvider;
+        private readonly MessagePackSerializer _objectSerializer;
 
-        public ObjectConverter(IEnumerable<Type> knownTypes, ITypeShapeProvider typeShapeProvider)
+        public ObjectConverter(IEnumerable<Type> knownTypes, ITypeShapeProvider typeShapeProvider, MessagePackSerializer objectSerializer)
         {
             _typeShapeProvider = typeShapeProvider;
+            _objectSerializer = objectSerializer;
             var comparer = new MessagePackUtility.ByteArrayComparer();
 
             // This avoids double dictionary lookups in surrogateProvider
@@ -98,9 +100,15 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                     throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
             }
 
-            MessagePackConverter converter = GetConverter(type, ref context);
-            return (T?)converter.ReadObject(ref reader, context);
+            // TODO: do a quick perf test.
+            // Should old code be used as fallback when typeShapeProvider is not set?
+            // So we continue using same context and serializer unlees there is a need to switch?
 
+            ITypeShape shape = _typeShapeProvider.GetTypeShapeOrThrow(type);
+            if (shape is PolyType.Abstractions.IUnionTypeShape unionShape)
+                shape = unionShape.BaseType;
+
+            return (T?)_objectSerializer.DeserializeObject(ref reader, shape, context.CancellationToken);
         }
 
         public override void Write(ref MessagePackWriter writer, in T? value, SerializationContext context)
@@ -122,22 +130,14 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 writer.WriteString(_discriminators[type]);
             }
 
-            MessagePackConverter converter = GetConverter(type, ref context);
-            converter.WriteObject(ref writer, value, context);
-        }
-
-        private MessagePackConverter GetConverter(Type type, ref SerializationContext context)
-        {
+            // TODO: use context.TtypeShapeProvider instead ?
+            // TODO: Can we serilize base type instead of supressing inheritance
             // Need to get the base shape in order to avoid gettting the same discriminator repeted again by converter
             ITypeShape shape = _typeShapeProvider.GetTypeShapeOrThrow(type);
             if (shape is PolyType.Abstractions.IUnionTypeShape unionShape)
                 shape = unionShape.BaseType;
 
-            MessagePackConverter converter = context.GetConverter(shape);
-
-            Debug.Assert(converter.GetType().FullName!.StartsWith("Nerdbank.MessagePack.Converters.Object", StringComparison.Ordinal), "Must not get union converter");
-
-            return converter;
+            _objectSerializer.SerializeObject(ref writer, value, shape, context.CancellationToken);
         }
         // TODO: Handle async serialization if the surrogate converter supports it
     }
