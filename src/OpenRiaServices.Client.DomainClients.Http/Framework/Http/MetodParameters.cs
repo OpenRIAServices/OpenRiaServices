@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Threading.Tasks;
 
 namespace OpenRiaServices.Client.DomainClients.Http
 {
@@ -20,7 +21,10 @@ namespace OpenRiaServices.Client.DomainClients.Http
         internal MethodParameters(Type serviceInterface, string operationName)
         {
             _operationName = operationName;
-            var method = serviceInterface.GetMethod($"Begin{operationName}");
+            var method = serviceInterface.GetMethod(operationName);
+            var legacyMethod = method is null || !typeof(Task).IsAssignableFrom(method.ReturnType);
+            if (legacyMethod)
+                method = serviceInterface.GetMethod($"Begin{operationName}");
 
             if (method is null)
                 throw new MissingMethodException(string.Format(CultureInfo.InvariantCulture, Resources.DomainClient_Operation0DoesNotExist, operationName));
@@ -28,8 +32,9 @@ namespace OpenRiaServices.Client.DomainClients.Http
             var methodParameters = method.GetParameters();
             _parameterNameAndTypeDictionary = new Dictionary<string, Type>(methodParameters.Length);
 
-            // For loop (take minus 2 to skip the two last default arguments cref="AsyncCallback" callback and cref="object" asyncState)
-            for (var i = 0; i < methodParameters.Length - 2; i++)
+            // Legacy APM contracts end with callback and asyncState parameters.
+            var parameterCount = legacyMethod ? methodParameters.Length - 2 : methodParameters.Length;
+            for (var i = 0; i < parameterCount; i++)
                 _parameterNameAndTypeDictionary.Add(methodParameters[i].Name, methodParameters[i].ParameterType);
         }
 

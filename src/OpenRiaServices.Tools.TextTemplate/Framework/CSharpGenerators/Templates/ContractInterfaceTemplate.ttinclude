@@ -43,29 +43,29 @@ public interface <#= this.ContractInterfaceName #>
 	{
 #>
 [OpenRiaServices.Client.HasSideEffects(<#= DomainContextGenerator.OperationHasSideEffects(operation).ToString().ToLower() #>)]
-System.IAsyncResult Begin<#= operation.Name #>(
 <#+
+        string returnTypeName = operation.Operation != DomainOperation.Query && operation.ReturnType == typeof(void)
+            ? "System.Threading.Tasks.Task"
+            : "System.Threading.Tasks.Task<" + CSharpDomainContextGenerator.GetEndOperationReturnType(operation) + ">";
+#>
+<#= returnTypeName #> <#= operation.Name #>(
+<#+
+        bool firstParameter = true;
 		foreach (DomainOperationParameter parameter in operation.Parameters)
         {
             Type parameterType = CodeGenUtilities.TranslateType(parameter.ParameterType);
 #>
-<#= CodeGenUtilities.GetTypeName(parameterType) #> <#= parameter.Name #>,
+<#= firstParameter ? "" : ", " #><#= CodeGenUtilities.GetTypeName(parameterType) #> <#= parameter.Name #>
 <#+
+            firstParameter = false;
         }
-#>
-System.AsyncCallback callback, object asyncState);
-<#+ 
-		string returnTypeName = CSharpDomainContextGenerator.GetEndOperationReturnType(operation);
-#>		
-<#= returnTypeName #> End<#= operation.Name #>(System.IAsyncResult result);
-<#+
+#>);
 	}
 	
 	private void GenerateContractSubmitChangesMethod()
 	{
 #>
-IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
-IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result);			
+System.Threading.Tasks.Task<IEnumerable<ChangeSetEntry>> SubmitChanges(IEnumerable<ChangeSetEntry> changeSet);
 <#+
 	}
 	
