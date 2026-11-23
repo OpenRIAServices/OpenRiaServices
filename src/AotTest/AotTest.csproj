@@ -10,11 +10,17 @@
     <TrimmerSingleWarn>false</TrimmerSingleWarn>
     <InvariantGlobalization>true</InvariantGlobalization>
     <DefaultItemExcludes>$(DefaultItemExcludes);publish\**</DefaultItemExcludes>
-    <StripSymbols>false</StripSymbols>
+    <!--<OptimizationPreference>Speed</OptimizationPreference>-->
     <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
-    <DebugSymbols>true</DebugSymbols>
     <RestoreSources>https://api.nuget.org/v3/index.json</RestoreSources>
-    <DebugType>embedded</DebugType>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)'=='Debug'">
+    <StripSymbols>false</StripSymbols>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <DebuggerSupport>true</DebuggerSupport>
+    <IlcGenerateStackTraceData>true</IlcGenerateStackTraceData>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,19 +28,21 @@
     <Compile Include="..\Test\Desktop\OpenRiaServices.Common.DomainServices.Test\Cities\Cities.shared.cs" Link="Cities.shared.cs" />
   </ItemGroup>
 
-  <ItemGroup>
+  <!--<ItemGroup>
     <PackageReference Include="Nerdbank.MessagePack" Version="1.5.70-alpha" />
-  </ItemGroup>
+    <PackageReference Include="PolyType" Version="2.0.0-rc.4" />
+  </ItemGroup>-->
 
   <ItemGroup>
     <ProjectReference Include="..\OpenRiaServices.Client.DomainClients.Http\Framework\OpenRiaServices.Client.DomainClients.Http.csproj" />
     <ProjectReference Include="..\OpenRiaServices.Client\Framework\OpenRiaServices.Client.csproj" />
   </ItemGroup>
 
-  <!--<Target Name="CopyNuGetSymbols" AfterTargets="Restore">
+  <!--<Target Name="CopyNuGetSymbols" AfterTargets="Publish">
     <ItemGroup>
-      <NuGetSymbols Include="$(NuGetPackageRoot)**\*.pdb" />
+      <NuGetSymbols Include="$(NuGetPackageRoot)nerdbank.messagepack\1.5.70-alpha\**\*.pdb" />
+      <NuGetSymbols Include="$(NuGetPackageRoot)polytype\2.0.0-rc.4\**\*.pdb" />
     </ItemGroup>
-    <Copy SourceFiles="@(NuGetSymbols)" DestinationFolder="$(IntermediateOutputPath)" />
+    <Copy SourceFiles="@(NuGetSymbols)" DestinationFolder="$(PublishDir)" SkipUnchangedFiles="true" />
   </Target>-->
 </Project>
