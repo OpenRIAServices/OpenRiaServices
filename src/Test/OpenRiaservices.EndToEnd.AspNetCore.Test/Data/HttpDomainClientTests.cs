@@ -53,15 +53,41 @@ namespace OpenRiaServices.Client.Test
         }
 
         [TestMethod]
-        public async Task MessagePackReadsFragmentedResultAfterUnknownMember()
+        [DataRow("echoed")]
+        [DataRow(null)]
+        public async Task MessagePackReadsV1Result(string expected)
+        {
+            var bytes = new ArrayBufferWriter<byte>();
+            var writer = new MessagePackWriter(bytes);
+            writer.WriteMapHeader(1);
+            writer.Write("Result");
+            writer.Write(expected);
+            writer.Flush();
+
+            var result = await InvokeWithMessagePackResponseAsync(bytes.WrittenMemory, typeof(string), HttpStatusCode.OK);
+
+            Assert.AreEqual(expected, result.ReturnValue);
+        }
+
+        [TestMethod]
+        [DataRow("Metadata")]
+        [DataRow("v")]
+        public async Task MessagePackReadsResultWithUnknownMember(string member)
         {
             var bytes = new ArrayBufferWriter<byte>();
             var writer = new MessagePackWriter(bytes);
             writer.WriteMapHeader(2);
-            writer.Write("Metadata");
-            writer.WriteArrayHeader(2);
-            writer.Write(42);
-            writer.Write("ignored");
+            writer.Write(member);
+            if (member == "Metadata")
+            {
+                writer.WriteArrayHeader(2);
+                writer.Write(42);
+                writer.Write("ignored");
+            }
+            else
+            {
+                writer.Write(2);
+            }
             writer.Write("Result");
             writer.Write("echoed");
             writer.Flush();

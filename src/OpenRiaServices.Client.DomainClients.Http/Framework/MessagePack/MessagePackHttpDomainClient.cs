@@ -124,10 +124,13 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 DomainServiceFault fault = null;
                 try
                 {
-                    uint count = await ReadResponseMapHeaderAsync(pipeReader, cancellationToken).ConfigureAwait(false);
+                    ResponseMember v1Member = await TryReadV1ResponseMemberAsync(pipeReader, cancellationToken).ConfigureAwait(false);
+                    uint count = v1Member != ResponseMember.Unknown ? 1u
+                        : await ReadResponseMapHeaderAsync(pipeReader, cancellationToken).ConfigureAwait(false);
                     for (uint i = 0; i < count; i++)
                     {
-                        switch (await ReadResponseMemberAsync(pipeReader, cancellationToken).ConfigureAwait(false))
+                        switch (v1Member != ResponseMember.Unknown ? v1Member
+                            : await ReadResponseMemberAsync(pipeReader, cancellationToken).ConfigureAwait(false))
                         {
                             case ResponseMember.Fault:
                                 fault = await Serializer.DeserializeAsync<DomainServiceFault, ProtocolTypeShapes>(pipeReader, cancellationToken)
@@ -160,6 +163,44 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
 
                 return result;
             }
+        }
+
+        // fixmap(1), followed by the fixstr header and key.
+        private static ReadOnlySpan<byte> ResultResponse => [0x81, 0xa6, (byte)'R', (byte)'e', (byte)'s', (byte)'u', (byte)'l', (byte)'t'];
+        private static ReadOnlySpan<byte> FaultResponse => [0x81, 0xa5, (byte)'F', (byte)'a', (byte)'u', (byte)'l', (byte)'t'];
+
+        /// <summary>
+        /// Read response envelope (v1) which is a map with only a Result or a Fault
+        /// </summary>
+        /// <param name="pipe"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="OperationCanceledException"></exception>
+        private static async ValueTask<ResponseMember> TryReadV1ResponseMemberAsync(PipeReader pipe, CancellationToken cancellationToken)
+        {
+            int minimumResponseSize = ResultResponse.Length + 1; // A nil result adds one byte.
+            ReadResult read = await pipe.ReadAtLeastAsync(minimumResponseSize, cancellationToken).ConfigureAwait(false);
+            ReadOnlySequence<byte> buffer = read.Buffer;
+            if (read.IsCanceled)
+                throw new OperationCanceledException(cancellationToken);
+
+            if (buffer.Length < minimumResponseSize)
+                return ResponseMember.Unknown;
+
+            ReadOnlySpan<byte> firstSpan = buffer.First.Span;
+            if (firstSpan.StartsWith(ResultResponse))
+            {
+                pipe.AdvanceTo(buffer.GetPosition(ResultResponse.Length));
+                return ResponseMember.Result;
+            }
+
+            if (firstSpan.StartsWith(FaultResponse))
+            {
+                pipe.AdvanceTo(buffer.GetPosition(FaultResponse.Length));
+                return ResponseMember.Fault;
+            }
+
+            return ResponseMember.Unknown;
         }
 
         // The caller completes the pipe on failure. On success, return the streaming reader

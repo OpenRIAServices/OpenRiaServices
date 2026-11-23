@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
 #nullable enable
 
@@ -25,30 +21,5 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
 
     sealed class MessagePackSubmitRequestEnvelope : MessagePackRequestEnvelopeBase
     {
-    }
-
-    abstract class MessagePackResponseEnvelopeBase
-    {
-        public DomainServiceFault? Fault { get; set; }
-        public abstract object? GetResult();
-    }
-
-
-    sealed class MessagePackQueryResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
-    {
-        public TResult? Result { get; set; }
-        public override object? GetResult() => Result;
-    }
-
-    sealed class MessagePackInvokeResponseEnvelope<TResult> : MessagePackResponseEnvelopeBase
-    {
-        public TResult? Result { get; set; }
-        public override object? GetResult() => Result;
-    }
-
-    sealed class MessagePackSubmitResponseEnvelope : MessagePackResponseEnvelopeBase
-    {
-        public IEnumerable<ChangeSetEntry?>? Result { get; set; }
-        public override object? GetResult() => Result;
     }
 }
