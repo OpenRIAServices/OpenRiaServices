@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Frozen;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -12,22 +13,22 @@ namespace OpenRiaServices.Tools.TextTemplate
         private static Dictionary<string, Dictionary<string, string>> namespaceTypeReferences = new Dictionary<string, Dictionary<string, string>>();
 
         // List of C# keywords (from the msdn page - http://msdn.microsoft.com/en-us/library/x53a06bb.aspx)
-        private static readonly HashSet<string> keywords = new HashSet<string> 
-            {
+        private static readonly FrozenSet<string> keywords = 
+            [
                 "abstract", "as", "async", "await", "base", "bool", "break", "byte", "case", "catch", "char", "checked", 
                 "class", "const", "continue", "decimal", "default", "delegate", "do", "double", "else", "enum", "event", "explicit", "extern", "false", "finally", "fixed", "float", "for", 
                 "foreach", "goto", "if", "implicit", "in", "int", "interface", "internal", "is", "lock", "long", "namespace", "new", "null", "object", "operator", "out", "override", "params", 
                 "private", "protected", "public", "readonly", "ref", "return", "sbyte", "sealed", "short", "sizeof", "stackalloc", "static", "string", "struct", "switch", "this", "throw", 
                 "true", "try", "typeof", "uint", "ulong", "unchecked", "unsafe", "ushort", "using", "virtual", "void", "volatile", "while"
-            };
+            ];
 
         // List of C# built-in types (from the msdn page - http://msdn.microsoft.com/en-us/library/ya5y69ds.aspx).
-        private static readonly HashSet<string> typeKeywords = new HashSet<string> 
-            { 
+        private static readonly FrozenSet<string> typeKeywords =
+            [ 
                 "bool", "byte", "sbyte", "char", "decimal", "double", "float", "int", "uint", "long", "ulong", "object", "short", "ushort", "string", "void"
-            };
+            ];
 
-        private static readonly HashSet<string> nonTypeKeywords = new HashSet<string>(keywords.Except(typeKeywords));
+        private static readonly FrozenSet<string> nonTypeKeywords = keywords.Except(typeKeywords).ToFrozenSet();
 
         private static readonly Dictionary<Type, string> keywordTypeNames = new Dictionary<Type, string>()
         {

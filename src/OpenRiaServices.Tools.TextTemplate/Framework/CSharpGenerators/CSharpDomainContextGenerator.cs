@@ -723,7 +723,7 @@ this.Write(" ");
 
 this.Write(this.ToStringHelper.ToStringWithCulture(operation.Name));
 
-this.Write("(\r\n");
+this.Write("(");
 
 
         bool firstParameter = true;
@@ -737,13 +737,15 @@ this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetTypeName(
 
 this.Write(" ");
 
-this.Write(this.ToStringHelper.ToStringWithCulture(parameter.Name));
-
-this.Write("\r\n");
+this.Write(this.ToStringHelper.ToStringWithCulture(CodeGenUtilities.GetSafeName(parameter.Name)));
 
 
             firstParameter = false;
         }
+
+this.Write(");\r\n");
+
+
 	}
 	
 	private void GenerateContractSubmitChangesMethod()

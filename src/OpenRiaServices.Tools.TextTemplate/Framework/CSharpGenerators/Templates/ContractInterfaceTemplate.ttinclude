@@ -48,17 +48,17 @@ public interface <#= this.ContractInterfaceName #>
             ? "System.Threading.Tasks.Task"
             : "System.Threading.Tasks.Task<" + CSharpDomainContextGenerator.GetEndOperationReturnType(operation) + ">";
 #>
-<#= returnTypeName #> <#= operation.Name #>(
-<#+
+<#= returnTypeName #> <#= operation.Name #>(<#+
         bool firstParameter = true;
 		foreach (DomainOperationParameter parameter in operation.Parameters)
         {
             Type parameterType = CodeGenUtilities.TranslateType(parameter.ParameterType);
 #>
-<#= firstParameter ? "" : ", " #><#= CodeGenUtilities.GetTypeName(parameterType) #> <#= parameter.Name #>
-<#+
+<#= firstParameter ? "" : ", " #><#= CodeGenUtilities.GetTypeName(parameterType) #> <#= CodeGenUtilities.GetSafeName(parameter.Name) #><#+
             firstParameter = false;
         }
+#>);
+<#+
 	}
 	
 	private void GenerateContractSubmitChangesMethod()
