@@ -4,9 +4,6 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
-  <Folder Name="/Experiments/">
-    <Project Path="AotTest/AotTest.csproj" Id="8f88cccd-364a-4854-aad8-6f8eb17ecb52" />
-  </Folder>
   <Folder Name="/Framework/" />
   <Folder Name="/Framework/Client/">
     <Project Path="OpenRiaServices.Client.DomainClients.Http/Framework/OpenRiaServices.Client.DomainClients.Http.csproj" />

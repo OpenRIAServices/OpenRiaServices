@@ -2,14 +2,12 @@ using Nerdbank.MessagePack;
 using OpenRiaServices.Client.DomainClients.MessagePack;
 using OpenRiaServices.Client.DomainClients.MessagePack.Converters;
 using PolyType;
-using PolyType.Abstractions;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.IO.Pipelines;
 using System.Linq;
 using System.Net.Http;
-using System.Reflection;
 
 #nullable enable
 
@@ -64,23 +62,62 @@ namespace OpenRiaServices.Client.DomainClients
                 foreach (Type knownType in args.knownTypes)
                     allTypes.UnionWith(Server.KnownTypeUtilities.ImportDerivedTypes(knownType, true));
 
-                var dsableTypes = allTypes
-            //        .Where(type => This.TypeShapeProvider.GetTypeShapeOrThrow(type).Kind == TypeShapeKind.Union)
-                    .Select(DerivedTypeUnion.CreateDisabled);
+                Dictionary<Type, HashSet<Type>> allTypeHierarchies = ComputeKnownTypeSet(allTypes);
+
+                var derivedTypeUnions = allTypeHierarchies
+                    .Where(it => it.Value.Count > 1) // Only consider types with derived types
+                    .Select(it => DerivedTypeUnion.CreateDisabled(it.Key));
 
                 var objectSerialiser = args.Item1.BaseSerializerSerializer with
                 {
-                    DerivedTypeUnions = [.. dsableTypes, .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
+                    DerivedTypeUnions = [.. derivedTypeUnions, .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
                 };
 
                 // Create a final serializer which use ObjectConverterFactory to do custom union converter
                 // while delegating actual serialization to objectSerialiser
-                var converterFactory = new ObjectConverterFactory(allTypes, args.Item1.TypeShapeProvider, objectSerialiser);
+                var converterFactory = new ObjectConverterFactory(allTypeHierarchies, args.Item1.TypeShapeProvider, objectSerialiser);
                 return objectSerialiser with
                 {
                     ConverterFactories = [converterFactory, .. args.Item1.BaseSerializerSerializer.ConverterFactories],
                 };
             }, (this, knownTypes));
+        }
+
+        /// <summary>
+        /// Computes the closure of known types for all the <paramref name="types" />.
+        /// </summary>
+        /// <returns>A dictionary, keyed by type and containing all the
+        /// declared known types for it (including itself), including the transitive closure.
+        /// </returns>
+        private static Dictionary<Type, HashSet<Type>> ComputeKnownTypeSet(IEnumerable<Type> types)
+        {
+            Dictionary<Type, HashSet<Type>> closure = new Dictionary<Type, HashSet<Type>>();
+
+            // Gather all the explicit derived types from attributes.
+            foreach (Type entityType in types)
+            {
+                HashSet<Type> knownTypes = Server.KnownTypeUtilities.ImportDerivedTypes(entityType, /* inherit */ true);
+                knownTypes.Add(entityType);
+                closure[entityType] = knownTypes;
+            }
+
+            // 2nd pass -- add all the derived types' known types back to their base so we have the closure
+            foreach (Type entityType in types)
+            {
+                HashSet<Type> knownTypes = closure[entityType];
+                for (Type? baseType = entityType.BaseType;
+                     baseType != null && baseType != typeof(Entity);
+                     baseType = baseType.BaseType)
+                {
+                    if (closure.TryGetValue(baseType, out HashSet<Type>? hash))
+                    {
+                        hash.UnionWith(knownTypes);
+                    }
+                }
+
+                System.Diagnostics.Debug.Assert(knownTypes.IsSubsetOf(types), "Known types should always contain at least the type itself.");
+            }
+            return closure;
         }
 
     }

@@ -13,12 +13,35 @@ CityDomainContext context = new CityDomainContext();
 
 try
 {
+    Console.WriteLine("TEST: LoadAsync");
     var loadedCitites = await context.LoadAsync(context.GetCitiesQuery());
 
     foreach (var city in loadedCitites.Entities)
     {
         Console.WriteLine($"City: {city.Name}, State: {city.StateName}");
     }
+    var city0 = context.Cities.FirstOrDefault();
+
+    Console.WriteLine("TEST: InvokeAsync");
+    Console.WriteLine(await context.EchoAsync("Hello, World!"));
+
+    //Console.WriteLine(city0.StateName == await context.GetStateIfUserAsync(city0) ? "State name matches" : "State name does not match");
+
+    Console.WriteLine("TEST: SubmitChanges");
+
+    // Submit changes
+    city0.ZoneID = 999;
+    await context.SubmitChangesAsync();
+    Console.WriteLine("Changes submitted successfully.");
+
+    // Entity action
+    Console.WriteLine("TEST: EntityAction");
+    city0.AssignCityZone("New Zone");
+    await context.SubmitChangesAsync();
+    Console.WriteLine("Changes submitted successfully.");
+
+    // TODO: Validation, EntityValidate
+    //city.Validate();
 
 }
 catch (MessagePackSerializationException ex)
@@ -67,7 +90,9 @@ static void Setup()
     };
 
     DomainContext.DomainClientFactory = new MessagePackHttpDomainClientFactory(new Uri("http://localhost:5247/"), httpClientFactory, msgPackSerializer,
-        Witness.GeneratedTypeShapeProvider)
+        //Witness.GeneratedTypeShapeProvider
+        RPC.GeneratedTypeShapeProvider
+        )
     {
         UseQueryHttpMethod = true,
 
@@ -88,14 +113,6 @@ static void Setup()
 [PolyType.GenerateShapeFor<ZipWithInfo>]
 [PolyType.GenerateShapeFor<QueryResult<City>>]
 public partial class Witness;
-
-[GenerateShape]
-public partial class Shaped
-{
-    public int Id;
-    
-}
-
 
 [PolyType.GenerateShapeFor<CityDomainContext.ICityDomainServiceContract>(IncludeMethods = PolyType.MethodShapeFlags.AllPublic)]
 public partial class RPC;
