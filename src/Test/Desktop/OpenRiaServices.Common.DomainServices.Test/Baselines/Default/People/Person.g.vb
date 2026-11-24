@@ -565,203 +565,95 @@ Namespace People
             ''' Asynchronously invokes the 'GetEndTimeById' operation.
             ''' </summary>
             ''' <param name="id">The value for the 'id' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginGetEndTimeById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetEndTimeById'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetEndTimeById'.</param>
             ''' <returns>The 'Nullable`1' returned from the 'GetEndTimeById' operation.</returns>
-            Function EndGetEndTimeById(ByVal result As IAsyncResult) As Nullable(Of TimeOnly)
+            <HasSideEffects(true)>  _
+            Function GetEndTimeById(ByVal id As Integer) As System.Threading.Tasks.Task(Of Nullable(Of TimeOnly))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetFavouriteDayByName' operation.
             ''' </summary>
             ''' <param name="name">The value for the 'name' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginGetFavouriteDayByName(ByVal name As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetFavouriteDayByName'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetFavouriteDayByName'.</param>
             ''' <returns>The 'DateOnly' returned from the 'GetFavouriteDayByName' operation.</returns>
-            Function EndGetFavouriteDayByName(ByVal result As IAsyncResult) As DateOnly
+            <HasSideEffects(true)>  _
+            Function GetFavouriteDayByName(ByVal name As String) As System.Threading.Tasks.Task(Of DateOnly)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetLunchBreakById' operation.
             ''' </summary>
             ''' <param name="id">The value for the 'id' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginGetLunchBreakById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetLunchBreakById'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetLunchBreakById'.</param>
             ''' <returns>The 'LunchBreak' returned from the 'GetLunchBreakById' operation.</returns>
-            Function EndGetLunchBreakById(ByVal result As IAsyncResult) As LunchBreak
+            <HasSideEffects(true)>  _
+            Function GetLunchBreakById(ByVal id As Integer) As System.Threading.Tasks.Task(Of LunchBreak)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetPersonLifespanByName' operation.
             ''' </summary>
             ''' <param name="name">The value for the 'name' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginGetPersonLifespanByName(ByVal name As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetPersonLifespanByName'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetPersonLifespanByName'.</param>
             ''' <returns>The 'Lifespan' returned from the 'GetPersonLifespanByName' operation.</returns>
-            Function EndGetPersonLifespanByName(ByVal result As IAsyncResult) As Lifespan
+            <HasSideEffects(true)>  _
+            Function GetPersonLifespanByName(ByVal name As String) As System.Threading.Tasks.Task(Of Lifespan)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetPersons' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetPersons(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetPersons'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetPersons'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetPersons' operation.</returns>
-            Function EndGetPersons(ByVal result As IAsyncResult) As QueryResult(Of Person)
+            <HasSideEffects(false)>  _
+            Function GetPersons() As System.Threading.Tasks.Task(Of QueryResult(Of Person))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetPersonsByFavouriteDay' operation.
             ''' </summary>
             ''' <param name="favouriteDay">The value for the 'favouriteDay' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetPersonsByFavouriteDay(ByVal favouriteDay As DateOnly, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetPersonsByFavouriteDay'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetPersonsByFavouriteDay'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetPersonsByFavouriteDay' operation.</returns>
-            Function EndGetPersonsByFavouriteDay(ByVal result As IAsyncResult) As QueryResult(Of Person)
+            <HasSideEffects(false)>  _
+            Function GetPersonsByFavouriteDay(ByVal favouriteDay As DateOnly) As System.Threading.Tasks.Task(Of QueryResult(Of Person))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetPersonsByWeddingDay' operation.
             ''' </summary>
             ''' <param name="weddingDay">The value for the 'weddingDay' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetPersonsByWeddingDay(ByVal weddingDay As Nullable(Of DateOnly), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetPersonsByWeddingDay'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetPersonsByWeddingDay'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetPersonsByWeddingDay' operation.</returns>
-            Function EndGetPersonsByWeddingDay(ByVal result As IAsyncResult) As QueryResult(Of Person)
+            <HasSideEffects(false)>  _
+            Function GetPersonsByWeddingDay(ByVal weddingDay As Nullable(Of DateOnly)) As System.Threading.Tasks.Task(Of QueryResult(Of Person))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetStartTimeById' operation.
             ''' </summary>
             ''' <param name="id">The value for the 'id' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginGetStartTimeById(ByVal id As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetStartTimeById'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetStartTimeById'.</param>
             ''' <returns>The 'TimeOnly' returned from the 'GetStartTimeById' operation.</returns>
-            Function EndGetStartTimeById(ByVal result As IAsyncResult) As TimeOnly
+            <HasSideEffects(true)>  _
+            Function GetStartTimeById(ByVal id As Integer) As System.Threading.Tasks.Task(Of TimeOnly)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetWeddingDayByName' operation.
             ''' </summary>
             ''' <param name="name">The value for the 'name' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginGetWeddingDayByName(ByVal name As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetWeddingDayByName'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetWeddingDayByName'.</param>
             ''' <returns>The 'Nullable`1' returned from the 'GetWeddingDayByName' operation.</returns>
-            Function EndGetWeddingDayByName(ByVal result As IAsyncResult) As Nullable(Of DateOnly)
+            <HasSideEffects(true)>  _
+            Function GetWeddingDayByName(ByVal name As String) As System.Threading.Tasks.Task(Of Nullable(Of DateOnly))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetWorkdayScheduleByEndTime' operation.
             ''' </summary>
             ''' <param name="endTime">The value for the 'endTime' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetWorkdayScheduleByEndTime(ByVal endTime As Nullable(Of TimeOnly), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetWorkdayScheduleByEndTime'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetWorkdayScheduleByEndTime'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetWorkdayScheduleByEndTime' operation.</returns>
-            Function EndGetWorkdayScheduleByEndTime(ByVal result As IAsyncResult) As QueryResult(Of WorkdaySchedule)
+            <HasSideEffects(false)>  _
+            Function GetWorkdayScheduleByEndTime(ByVal endTime As Nullable(Of TimeOnly)) As System.Threading.Tasks.Task(Of QueryResult(Of WorkdaySchedule))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetWorkdayScheduleByStartTime' operation.
             ''' </summary>
             ''' <param name="startTime">The value for the 'startTime' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetWorkdayScheduleByStartTime(ByVal startTime As TimeOnly, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetWorkdayScheduleByStartTime'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetWorkdayScheduleByStartTime'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetWorkdayScheduleByStartTime' operation.</returns>
-            Function EndGetWorkdayScheduleByStartTime(ByVal result As IAsyncResult) As QueryResult(Of WorkdaySchedule)
+            <HasSideEffects(false)>  _
+            Function GetWorkdayScheduleByStartTime(ByVal startTime As TimeOnly) As System.Threading.Tasks.Task(Of QueryResult(Of WorkdaySchedule))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetWorkdaySchedules' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetWorkdaySchedules(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetWorkdaySchedules'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetWorkdaySchedules'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetWorkdaySchedules' operation.</returns>
-            Function EndGetWorkdaySchedules(ByVal result As IAsyncResult) As QueryResult(Of WorkdaySchedule)
+            <HasSideEffects(false)>  _
+            Function GetWorkdaySchedules() As System.Threading.Tasks.Task(Of QueryResult(Of WorkdaySchedule))
         End Interface
         
         Friend NotInheritable Class PeopleDomainContextEntityContainer

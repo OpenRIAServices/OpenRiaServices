@@ -2669,131 +2669,59 @@ namespace TestDomainServices.EFCore
             /// <summary>
             /// Asynchronously invokes the 'GetEmployeeInfos' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetEmployeeInfos(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetEmployeeInfos'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetEmployeeInfos'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEmployeeInfos' operation.</returns>
-            QueryResult<EmployeeInfo> EndGetEmployeeInfos(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<EmployeeInfo>> GetEmployeeInfos();
             
             /// <summary>
             /// Asynchronously invokes the 'GetEmployees' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetEmployees(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetEmployees'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetEmployees'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetEmployees' operation.</returns>
-            QueryResult<Employee> EndGetEmployees(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<Employee>> GetEmployees();
             
             /// <summary>
             /// Asynchronously invokes the 'GetProducts' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetProducts(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProducts'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProducts'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProducts' operation.</returns>
-            QueryResult<Product> EndGetProducts(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<Product>> GetProducts();
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductsByCategory' operation.
             /// </summary>
             /// <param name="subCategoryID">The value for the 'subCategoryID' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetProductsByCategory(int subCategoryID, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProductsByCategory'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProductsByCategory'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductsByCategory' operation.</returns>
-            QueryResult<Product> EndGetProductsByCategory(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<Product>> GetProductsByCategory(int subCategoryID);
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductsWithCaching' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetProductsWithCaching(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProductsWithCaching'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProductsWithCaching'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductsWithCaching' operation.</returns>
-            QueryResult<Product> EndGetProductsWithCaching(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<Product>> GetProductsWithCaching();
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductsWithCustomTotalCount' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetProductsWithCustomTotalCount(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProductsWithCustomTotalCount'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProductsWithCustomTotalCount'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductsWithCustomTotalCount' operation.</returns>
-            QueryResult<Product> EndGetProductsWithCustomTotalCount(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<Product>> GetProductsWithCustomTotalCount();
             
             /// <summary>
             /// Asynchronously invokes the 'GetPurchaseOrders' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetPurchaseOrders(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetPurchaseOrders'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetPurchaseOrders'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetPurchaseOrders' operation.</returns>
-            QueryResult<PurchaseOrder> EndGetPurchaseOrders(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<PurchaseOrder>> GetPurchaseOrders();
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
             /// </summary>
             /// <param name="changeSet">The change-set to submit.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result);
+            System.Threading.Tasks.Task<IEnumerable<ChangeSetEntry>> SubmitChanges(IEnumerable<ChangeSetEntry> changeSet);
         }
         
         internal sealed class CatalogEntityContainer : EntityContainer

@@ -203,18 +203,9 @@ namespace RootNamespace.TestNamespace
             /// <summary>
             /// Asynchronously invokes the 'GetUser' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetUser(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetUser'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetUser'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetUser' operation.</returns>
-            QueryResult<User1> EndGetUser(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<User1>> GetUser();
             
             /// <summary>
             /// Asynchronously invokes the 'Login' operation.
@@ -223,50 +214,23 @@ namespace RootNamespace.TestNamespace
             /// <param name="password">The value for the 'password' parameter of this action.</param>
             /// <param name="isPersistent">The value for the 'isPersistent' parameter of this action.</param>
             /// <param name="customData">The value for the 'customData' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginLogin(string userName, string password, bool isPersistent, string customData, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginLogin'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginLogin'.</param>
             /// <returns>The 'QueryResult' returned from the 'Login' operation.</returns>
-            QueryResult<User1> EndLogin(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<QueryResult<User1>> Login(string userName, string password, bool isPersistent, string customData);
             
             /// <summary>
             /// Asynchronously invokes the 'Logout' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginLogout(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginLogout'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginLogout'.</param>
             /// <returns>The 'QueryResult' returned from the 'Logout' operation.</returns>
-            QueryResult<User1> EndLogout(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<QueryResult<User1>> Logout();
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
             /// </summary>
             /// <param name="changeSet">The change-set to submit.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result);
+            System.Threading.Tasks.Task<IEnumerable<ChangeSetEntry>> SubmitChanges(IEnumerable<ChangeSetEntry> changeSet);
         }
         
         internal sealed class AuthenticationService1EntityContainer : EntityContainer
