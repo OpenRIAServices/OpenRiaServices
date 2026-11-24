@@ -597,203 +597,95 @@ namespace People
             /// Asynchronously invokes the 'GetEndTimeById' operation.
             /// </summary>
             /// <param name="id">The value for the 'id' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginGetEndTimeById(int id, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetEndTimeById'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetEndTimeById'.</param>
             /// <returns>The 'Nullable`1' returned from the 'GetEndTimeById' operation.</returns>
-            Nullable<TimeOnly> EndGetEndTimeById(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<Nullable<TimeOnly>> GetEndTimeById(int id);
             
             /// <summary>
             /// Asynchronously invokes the 'GetFavouriteDayByName' operation.
             /// </summary>
             /// <param name="name">The value for the 'name' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginGetFavouriteDayByName(string name, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetFavouriteDayByName'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetFavouriteDayByName'.</param>
             /// <returns>The 'DateOnly' returned from the 'GetFavouriteDayByName' operation.</returns>
-            DateOnly EndGetFavouriteDayByName(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<DateOnly> GetFavouriteDayByName(string name);
             
             /// <summary>
             /// Asynchronously invokes the 'GetLunchBreakById' operation.
             /// </summary>
             /// <param name="id">The value for the 'id' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginGetLunchBreakById(int id, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetLunchBreakById'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetLunchBreakById'.</param>
             /// <returns>The 'LunchBreak' returned from the 'GetLunchBreakById' operation.</returns>
-            LunchBreak EndGetLunchBreakById(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<LunchBreak> GetLunchBreakById(int id);
             
             /// <summary>
             /// Asynchronously invokes the 'GetPersonLifespanByName' operation.
             /// </summary>
             /// <param name="name">The value for the 'name' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginGetPersonLifespanByName(string name, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetPersonLifespanByName'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetPersonLifespanByName'.</param>
             /// <returns>The 'Lifespan' returned from the 'GetPersonLifespanByName' operation.</returns>
-            Lifespan EndGetPersonLifespanByName(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<Lifespan> GetPersonLifespanByName(string name);
             
             /// <summary>
             /// Asynchronously invokes the 'GetPersons' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetPersons(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetPersons'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetPersons'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetPersons' operation.</returns>
-            QueryResult<Person> EndGetPersons(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<Person>> GetPersons();
             
             /// <summary>
             /// Asynchronously invokes the 'GetPersonsByFavouriteDay' operation.
             /// </summary>
             /// <param name="favouriteDay">The value for the 'favouriteDay' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetPersonsByFavouriteDay(DateOnly favouriteDay, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetPersonsByFavouriteDay'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetPersonsByFavouriteDay'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetPersonsByFavouriteDay' operation.</returns>
-            QueryResult<Person> EndGetPersonsByFavouriteDay(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<Person>> GetPersonsByFavouriteDay(DateOnly favouriteDay);
             
             /// <summary>
             /// Asynchronously invokes the 'GetPersonsByWeddingDay' operation.
             /// </summary>
             /// <param name="weddingDay">The value for the 'weddingDay' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetPersonsByWeddingDay(Nullable<DateOnly> weddingDay, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetPersonsByWeddingDay'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetPersonsByWeddingDay'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetPersonsByWeddingDay' operation.</returns>
-            QueryResult<Person> EndGetPersonsByWeddingDay(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<Person>> GetPersonsByWeddingDay(Nullable<DateOnly> weddingDay);
             
             /// <summary>
             /// Asynchronously invokes the 'GetStartTimeById' operation.
             /// </summary>
             /// <param name="id">The value for the 'id' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginGetStartTimeById(int id, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetStartTimeById'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetStartTimeById'.</param>
             /// <returns>The 'TimeOnly' returned from the 'GetStartTimeById' operation.</returns>
-            TimeOnly EndGetStartTimeById(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<TimeOnly> GetStartTimeById(int id);
             
             /// <summary>
             /// Asynchronously invokes the 'GetWeddingDayByName' operation.
             /// </summary>
             /// <param name="name">The value for the 'name' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginGetWeddingDayByName(string name, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetWeddingDayByName'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetWeddingDayByName'.</param>
             /// <returns>The 'Nullable`1' returned from the 'GetWeddingDayByName' operation.</returns>
-            Nullable<DateOnly> EndGetWeddingDayByName(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<Nullable<DateOnly>> GetWeddingDayByName(string name);
             
             /// <summary>
             /// Asynchronously invokes the 'GetWorkdayScheduleByEndTime' operation.
             /// </summary>
             /// <param name="endTime">The value for the 'endTime' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetWorkdayScheduleByEndTime(Nullable<TimeOnly> endTime, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetWorkdayScheduleByEndTime'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetWorkdayScheduleByEndTime'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetWorkdayScheduleByEndTime' operation.</returns>
-            QueryResult<WorkdaySchedule> EndGetWorkdayScheduleByEndTime(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<WorkdaySchedule>> GetWorkdayScheduleByEndTime(Nullable<TimeOnly> endTime);
             
             /// <summary>
             /// Asynchronously invokes the 'GetWorkdayScheduleByStartTime' operation.
             /// </summary>
             /// <param name="startTime">The value for the 'startTime' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetWorkdayScheduleByStartTime(TimeOnly startTime, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetWorkdayScheduleByStartTime'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetWorkdayScheduleByStartTime'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetWorkdayScheduleByStartTime' operation.</returns>
-            QueryResult<WorkdaySchedule> EndGetWorkdayScheduleByStartTime(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<WorkdaySchedule>> GetWorkdayScheduleByStartTime(TimeOnly startTime);
             
             /// <summary>
             /// Asynchronously invokes the 'GetWorkdaySchedules' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetWorkdaySchedules(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetWorkdaySchedules'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetWorkdaySchedules'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetWorkdaySchedules' operation.</returns>
-            QueryResult<WorkdaySchedule> EndGetWorkdaySchedules(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<WorkdaySchedule>> GetWorkdaySchedules();
         }
         
         internal sealed class PeopleDomainContextEntityContainer : EntityContainer

@@ -374,18 +374,9 @@ Namespace OpenRiaServices.Tools.Test
             ''' <summary>
             ''' Asynchronously invokes the 'GetCustomers' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetCustomers(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetCustomers'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetCustomers'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCustomers' operation.</returns>
-            Function EndGetCustomers(ByVal result As IAsyncResult) As QueryResult(Of EmployeeWithCT)
+            <HasSideEffects(false)>  _
+            Function GetCustomers() As System.Threading.Tasks.Task(Of QueryResult(Of EmployeeWithCT))
         End Interface
         
         Friend NotInheritable Class EFComplexTypesContextEntityContainer

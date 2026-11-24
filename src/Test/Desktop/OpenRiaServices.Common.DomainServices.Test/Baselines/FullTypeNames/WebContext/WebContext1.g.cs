@@ -183,18 +183,9 @@ namespace RootNamespace.TestNamespace
             /// <summary>
             /// Asynchronously invokes the 'GetUser' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetUser(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetUser'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetUser'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetUser' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1> EndGetUser(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1>> GetUser();
             
             /// <summary>
             /// Asynchronously invokes the 'Login' operation.
@@ -203,50 +194,23 @@ namespace RootNamespace.TestNamespace
             /// <param name="password">The value for the 'password' parameter of this action.</param>
             /// <param name="isPersistent">The value for the 'isPersistent' parameter of this action.</param>
             /// <param name="customData">The value for the 'customData' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(true)]
-            global::System.IAsyncResult BeginLogin(string userName, string password, bool isPersistent, string customData, global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginLogin'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginLogin'.</param>
             /// <returns>The 'QueryResult' returned from the 'Login' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1> EndLogin(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(true)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1>> Login(string userName, string password, bool isPersistent, string customData);
             
             /// <summary>
             /// Asynchronously invokes the 'Logout' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(true)]
-            global::System.IAsyncResult BeginLogout(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginLogout'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginLogout'.</param>
             /// <returns>The 'QueryResult' returned from the 'Logout' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1> EndLogout(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(true)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::RootNamespace.TestNamespace.User1>> Logout();
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
             /// </summary>
             /// <param name="changeSet">The change-set to submit.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Threading.Tasks.Task<global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry>> SubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet);
         }
         
         internal sealed class AuthenticationService1EntityContainer : global::OpenRiaServices.Client.EntityContainer

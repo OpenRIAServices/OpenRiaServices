@@ -5191,164 +5191,74 @@ namespace TestDomainServices.EF
             /// <summary>
             /// Asynchronously invokes the 'GetCategories' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetCategories(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetCategories'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetCategories'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCategories' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Category> EndGetCategories(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Category>> GetCategories();
             
             /// <summary>
             /// Asynchronously invokes the 'GetCustomers' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetCustomers(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetCustomers'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetCustomers'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCustomers' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Customer> EndGetCustomers(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Customer>> GetCustomers();
             
             /// <summary>
             /// Asynchronously invokes the 'GetOrderDetails' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetOrderDetails(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetOrderDetails'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetOrderDetails'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetOrderDetails' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Order_Detail> EndGetOrderDetails(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Order_Detail>> GetOrderDetails();
             
             /// <summary>
             /// Asynchronously invokes the 'GetOrders' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetOrders(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetOrders'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetOrders'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetOrders' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Order> EndGetOrders(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Order>> GetOrders();
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductById' operation.
             /// </summary>
             /// <param name="id">The value for the 'id' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetProductById(int id, global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProductById'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProductById'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductById' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Product> EndGetProductById(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Product>> GetProductById(int id);
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductInfos' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetProductInfos(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProductInfos'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProductInfos'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductInfos' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.ProductInfo> EndGetProductInfos(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.ProductInfo>> GetProductInfos();
             
             /// <summary>
             /// Asynchronously invokes the 'GetProducts' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetProducts(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProducts'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProducts'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProducts' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Product> EndGetProducts(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Product>> GetProducts();
             
             /// <summary>
             /// Asynchronously invokes the 'GetRegionById' operation.
             /// </summary>
             /// <param name="id">The value for the 'id' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetRegionById(int id, global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetRegionById'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetRegionById'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRegionById' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Region> EndGetRegionById(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Region>> GetRegionById(int id);
             
             /// <summary>
             /// Asynchronously invokes the 'GetRegions' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetRegions(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetRegions'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetRegions'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRegions' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Region> EndGetRegions(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::NorthwindModel.Region>> GetRegions();
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
             /// </summary>
             /// <param name="changeSet">The change-set to submit.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Threading.Tasks.Task<global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry>> SubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet);
         }
         
         internal sealed class NorthwindEntityContainer : global::OpenRiaServices.Client.EntityContainer
@@ -5616,164 +5526,74 @@ namespace TestDomainServices.EFCore
             /// <summary>
             /// Asynchronously invokes the 'GetCategories' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetCategories(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetCategories'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetCategories'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCategories' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Category> EndGetCategories(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Category>> GetCategories();
             
             /// <summary>
             /// Asynchronously invokes the 'GetCustomers' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetCustomers(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetCustomers'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetCustomers'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCustomers' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Customer> EndGetCustomers(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Customer>> GetCustomers();
             
             /// <summary>
             /// Asynchronously invokes the 'GetOrderDetails' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetOrderDetails(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetOrderDetails'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetOrderDetails'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetOrderDetails' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Order_Detail> EndGetOrderDetails(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Order_Detail>> GetOrderDetails();
             
             /// <summary>
             /// Asynchronously invokes the 'GetOrders' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetOrders(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetOrders'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetOrders'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetOrders' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Order> EndGetOrders(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Order>> GetOrders();
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductById' operation.
             /// </summary>
             /// <param name="id">The value for the 'id' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetProductById(int id, global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProductById'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProductById'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductById' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Product> EndGetProductById(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Product>> GetProductById(int id);
             
             /// <summary>
             /// Asynchronously invokes the 'GetProductInfos' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetProductInfos(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProductInfos'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProductInfos'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProductInfos' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.ProductInfo> EndGetProductInfos(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.ProductInfo>> GetProductInfos();
             
             /// <summary>
             /// Asynchronously invokes the 'GetProducts' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetProducts(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetProducts'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetProducts'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetProducts' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Product> EndGetProducts(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Product>> GetProducts();
             
             /// <summary>
             /// Asynchronously invokes the 'GetRegionById' operation.
             /// </summary>
             /// <param name="id">The value for the 'id' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetRegionById(int id, global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetRegionById'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetRegionById'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRegionById' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Region> EndGetRegionById(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Region>> GetRegionById(int id);
             
             /// <summary>
             /// Asynchronously invokes the 'GetRegions' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [global::OpenRiaServices.Client.HasSideEffects(false)]
-            global::System.IAsyncResult BeginGetRegions(global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetRegions'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetRegions'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetRegions' operation.</returns>
-            global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Region> EndGetRegions(global::System.IAsyncResult result);
+            [global::OpenRiaServices.Client.HasSideEffects(false)]
+            global::System.Threading.Tasks.Task<global::OpenRiaServices.Client.QueryResult<global::EFCoreModels.Northwind.Region>> GetRegions();
             
             /// <summary>
             /// Asynchronously invokes the 'SubmitChanges' operation.
             /// </summary>
             /// <param name="changeSet">The change-set to submit.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            global::System.IAsyncResult BeginSubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet, global::System.AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginSubmitChanges'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             /// <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> EndSubmitChanges(global::System.IAsyncResult result);
+            global::System.Threading.Tasks.Task<global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry>> SubmitChanges(global::System.Collections.Generic.IEnumerable<global::OpenRiaServices.Client.ChangeSetEntry> changeSet);
         }
         
         internal sealed class NorthwindEntityContainer : global::OpenRiaServices.Client.EntityContainer

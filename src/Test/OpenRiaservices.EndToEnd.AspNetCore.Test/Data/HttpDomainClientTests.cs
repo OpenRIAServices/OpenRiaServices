@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using OpenRiaServices.Client.DomainClients;
+using OpenRiaServices.Client.DomainClients.Http;
 
 namespace OpenRiaServices.Client.Test
 {
@@ -57,8 +58,30 @@ namespace OpenRiaServices.Client.Test
 
         public interface ITestServiceContract
         {
+            Task<string> Echo(string value);
+            Task WithParameters(string callback, int asyncState);
+            Task NoParameters();
+        }
+
+        public interface ILegacyServiceContract
+        {
             IAsyncResult BeginEcho(string value, AsyncCallback callback, object asyncState);
             string EndEcho(IAsyncResult result);
+        }
+
+        [TestMethod]
+        public void MethodParametersSupportsTaskAndLegacyContracts()
+        {
+            var taskParameters = new MethodParameters(typeof(ITestServiceContract), "WithParameters");
+            Assert.AreEqual(typeof(string), taskParameters.GetTypeForMethodParameter("callback"));
+            Assert.AreEqual(typeof(int), taskParameters.GetTypeForMethodParameter("asyncState"));
+            var emptyParameters = new MethodParameters(typeof(ITestServiceContract), "NoParameters");
+            Assert.Throws<MissingMethodException>(() => emptyParameters.GetTypeForMethodParameter("callback"));
+
+            var legacyParameters = new MethodParameters(typeof(ILegacyServiceContract), "Echo");
+            Assert.AreEqual(typeof(string), legacyParameters.GetTypeForMethodParameter("value"));
+            Assert.Throws<MissingMethodException>(() => legacyParameters.GetTypeForMethodParameter("callback"));
+            Assert.Throws<MissingMethodException>(() => new MethodParameters(typeof(ITestServiceContract), "Missing"));
         }
 
         private sealed class RequestCheckingHandler(HttpMethod method) : HttpMessageHandler
