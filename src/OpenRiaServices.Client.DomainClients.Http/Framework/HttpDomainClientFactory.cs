@@ -23,7 +23,8 @@ namespace OpenRiaServices.Client.DomainClients
 
         /// <summary>
         /// Gets or sets a value indicating whether the QUERY HTTP method should be used instead of POST
-        /// when the request query string becomes too long (exceeds <see cref="MaxQueryStringLength"/>).
+        /// when a parameter cannot be converted to a query string or the query string becomes too long
+        /// (exceeds <see cref="MaxQueryStringLength"/>).
         /// </summary>
         /// <remarks>
         /// The QUERY HTTP method is a safe, idempotent method that allows sending a request body,
