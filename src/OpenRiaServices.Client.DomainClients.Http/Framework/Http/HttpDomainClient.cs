@@ -64,12 +64,6 @@ namespace OpenRiaServices.Client.DomainClients.Http
             return s_methodParametersCache.GetOrAdd((ServiceInterface, operationName), static key => new MethodParameters(key.serviceInterface, key.operationName));
         }
 
-        private protected string GetParameterValueAsString(string operationName, string parameterName, object parameterValue)
-        {
-            var parameterType = GetMethodParameters(operationName).GetTypeForMethodParameter(parameterName);
-            return WebQueryStringConverter.ConvertValueToString(parameterValue, parameterType);
-        }
-
         #region Invoke/Query/Submit Methods
 
         protected override async Task<InvokeCompletedResult> InvokeAsyncCore(InvokeArgs invokeArgs, CancellationToken cancellationToken)
@@ -198,7 +192,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 return PostAsync(operationName, parameters, queryOptions, cancellationToken);
 
             var response = GetAsync(operationName, parameters, queryOptions, cancellationToken);
-            // GET returned the sentinel value, meaning the query string is too long - fall back to POST or QUERY
+            // GET requires a body because a parameter has no string conversion or the query string is too long.
             if (ReferenceEquals(response, s_mustSendQueryInBody))
             {
                 response = _factory.UseQueryHttpMethod
@@ -216,7 +210,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
         /// <param name="parameters">The parameters to the server method, or <c>null</c> if no parameters.</param>
         /// <param name="queryOptions">The query options if any.</param>
         /// <param name="cancellationToken"></param>
-        /// <returns>A task for the pending operation, or <c>null</c> if operation was not attempted</returns>
+        /// <returns>A task for the pending operation, or the sentinel task if the query must be sent in the body.</returns>
         private Task<HttpResponseMessage> GetAsync(string operationName, IDictionary<string, object> parameters, List<ServiceQueryPart> queryOptions, CancellationToken cancellationToken)
         {
             int i = 0;
@@ -226,14 +220,19 @@ namespace OpenRiaServices.Client.DomainClients.Http
             // Parameters
             if (parameters != null && parameters.Count > 0)
             {
+                var methodParameters = GetMethodParameters(operationName);
                 foreach (var param in parameters)
                 {
+                    var parameterType = methodParameters.GetTypeForMethodParameter(param.Key);
+                    if (!WebQueryStringConverter.CanConvert(parameterType))
+                        return s_mustSendQueryInBody;
+
                     if (param.Value != null)
                     {
                         uriBuilder.Append(i++ == 0 ? '?' : '&');
                         uriBuilder.Append(Uri.EscapeDataString(param.Key));
                         uriBuilder.Append('=');
-                        var value = GetParameterValueAsString(operationName, param.Key, param.Value);
+                        var value = WebQueryStringConverter.ConvertValueToString(param.Value, parameterType);
                         uriBuilder.Append(Uri.EscapeDataString(value));
                     }
                 }

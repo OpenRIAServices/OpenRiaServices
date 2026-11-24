@@ -1,7 +1,4 @@
 ﻿using System;
-using System.IO;
-using System.Text;
-using System.Runtime.Serialization.Json;
 using System.ServiceModel.Dispatcher;
 
 namespace OpenRiaServices.Client.DomainClients.Http
@@ -12,15 +9,25 @@ namespace OpenRiaServices.Client.DomainClients.Http
     static class WebQueryStringConverter
     {
         static readonly QueryStringConverter s_systemConverter = new QueryStringConverter();
-        // Specify datetime format so that the DateTimeKind can roundtrip, otherwise unspecified values are treated incorrect by server
-        // https://github.com/OpenRIAServices/OpenRiaServices/issues/75
-        const string DateTimeFormat = @"yyyy\-MM\-ddTHH\:mm\:ss.FFFFFFFK";
-        private static readonly DataContractJsonSerializerSettings s_jsonSettings
-            = new DataContractJsonSerializerSettings()
-            {
-                DateTimeFormat = new System.Runtime.Serialization.DateTimeFormat(DateTimeFormat, System.Globalization.CultureInfo.InvariantCulture)
-            };
 
+        /// <summary>
+        /// Determines whether a parameter type can be represented in the query string.
+        /// </summary>
+        /// <param name="parameterType">The declared parameter type.</param>
+        /// <returns>Whether the type or its nullable underlying type has a string conversion.</returns>
+        public static bool CanConvert(Type parameterType)
+        {
+            return s_systemConverter.CanConvert(parameterType)
+                || (TypeUtility.IsNullableType(parameterType)
+                    && s_systemConverter.CanConvert(TypeUtility.GetNonNullableType(parameterType)));
+        }
+
+        /// <summary>
+        /// Converts a supported, non-null parameter to its query string representation.
+        /// </summary>
+        /// <param name="parameter">The parameter value.</param>
+        /// <param name="parameterType">The declared parameter type.</param>
+        /// <returns>The string representation of the parameter.</returns>
         public static string ConvertValueToString(object parameter, Type parameterType)
         {
             System.Diagnostics.Debug.Assert(parameter != null, "parameter is checked before calling this method");
@@ -30,34 +37,7 @@ namespace OpenRiaServices.Client.DomainClients.Http
                 return s_systemConverter.ConvertValueToString(parameter, parameterType);
             }
 
-            // Strings are handled above, so it should be safe to return null here
-            // without giving wrong result for string
-            if (parameter == null)
-                return "null";
-
-            // For nullable types (which are not null), try to just serialize it as the underlying type
-            if (TypeUtility.IsNullableType(parameterType))
-            {
-                parameterType = TypeUtility.GetNonNullableType(parameterType);
-                if (s_systemConverter.CanConvert(parameterType))
-                {
-                    return s_systemConverter.ConvertValueToString(parameter, parameterType);
-                }
-            }
-
-            using (var ms = new MemoryStream())
-            {
-                new DataContractJsonSerializer(parameterType, s_jsonSettings)
-                    .WriteObject(ms, parameter);
-
-                if (ms.TryGetBuffer(out var buffer))
-                {
-                    string value = Encoding.UTF8.GetString(buffer.Array, index: buffer.Offset, count: buffer.Count);
-                    return Uri.EscapeDataString(value);
-                }
-                else
-                    return string.Empty;
-            }
+            return s_systemConverter.ConvertValueToString(parameter, TypeUtility.GetNonNullableType(parameterType));
         }
     }
 }
