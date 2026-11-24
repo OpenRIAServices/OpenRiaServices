@@ -100,10 +100,8 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                     throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
             }
 
-            // TODO: do a quick perf test.
             // Should old code be used as fallback when typeShapeProvider is not set?
             // So we continue using same context and serializer unlees there is a need to switch?
-
             ITypeShape shape = _typeShapeProvider.GetTypeShapeOrThrow(type);
             if (shape is PolyType.Abstractions.IUnionTypeShape unionShape)
                 shape = unionShape.BaseType;
@@ -130,8 +128,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 writer.WriteString(_discriminators[type]);
             }
 
-            // TODO: use context.TtypeShapeProvider instead ?
-            // TODO: Can we serilize base type instead of supressing inheritance
             // Need to get the base shape in order to avoid gettting the same discriminator repeted again by converter
             ITypeShape shape = _typeShapeProvider.GetTypeShapeOrThrow(type);
             if (shape is PolyType.Abstractions.IUnionTypeShape unionShape)
