@@ -25,7 +25,8 @@ Top-level object map:
 - `Fault`: `DomainServiceFault`
 ## Notes
 
-- GET query behavior stays unchanged (URL-encoded query parameters).
+- GET uses URL-encoded parameters for types with a string conversion, including nullable versions of those types. Parameters without a string conversion (such as complex objects and collections) are sent in the body using the selected transport serializer, not JSON.
+- HTTP clients also switch to a body when the query string exceeds `HttpDomainClientFactory.MaxQueryStringLength`. The default body method is POST; set `UseQueryHttpMethod = true` to use QUERY with a server that supports it. Operations with side effects always use POST.
 - Envelopes are map-based for schema/version tolerance.
 - Polymorphic values use `[discriminator, instance]`. The base-type discriminator is `nil`, distinct from every string discriminator, including the empty string. The internal base-type marker is never written to the wire.
 
