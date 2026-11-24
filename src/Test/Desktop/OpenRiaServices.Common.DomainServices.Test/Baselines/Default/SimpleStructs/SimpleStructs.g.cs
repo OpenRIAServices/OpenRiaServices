@@ -273,86 +273,41 @@ namespace SimpleStructs
             /// <summary>
             /// Asynchronously invokes the 'GetSimpleStructEntities' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetSimpleStructEntities(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetSimpleStructEntities'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetSimpleStructEntities'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetSimpleStructEntities' operation.</returns>
-            QueryResult<SimpleStructEntity> EndGetSimpleStructEntities(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<SimpleStructEntity>> GetSimpleStructEntities();
             
             /// <summary>
             /// Asynchronously invokes the 'RoundtripCompositeSimpleStruct' operation.
             /// </summary>
             /// <param name="value">The value for the 'value' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginRoundtripCompositeSimpleStruct(CompositeSimpleStruct value, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginRoundtripCompositeSimpleStruct'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginRoundtripCompositeSimpleStruct'.</param>
             /// <returns>The 'CompositeSimpleStruct' returned from the 'RoundtripCompositeSimpleStruct' operation.</returns>
-            CompositeSimpleStruct EndRoundtripCompositeSimpleStruct(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<CompositeSimpleStruct> RoundtripCompositeSimpleStruct(CompositeSimpleStruct value);
             
             /// <summary>
             /// Asynchronously invokes the 'RoundtripCompositeSimpleStructCollection' operation.
             /// </summary>
             /// <param name="values">The value for the 'values' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginRoundtripCompositeSimpleStructCollection(IEnumerable<CompositeSimpleStruct> values, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginRoundtripCompositeSimpleStructCollection'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginRoundtripCompositeSimpleStructCollection'.</param>
             /// <returns>The 'IEnumerable`1' returned from the 'RoundtripCompositeSimpleStructCollection' operation.</returns>
-            IEnumerable<CompositeSimpleStruct> EndRoundtripCompositeSimpleStructCollection(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<IEnumerable<CompositeSimpleStruct>> RoundtripCompositeSimpleStructCollection(IEnumerable<CompositeSimpleStruct> values);
             
             /// <summary>
             /// Asynchronously invokes the 'RoundtripSimpleStruct' operation.
             /// </summary>
             /// <param name="value">The value for the 'value' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginRoundtripSimpleStruct(SimpleStruct value, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginRoundtripSimpleStruct'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginRoundtripSimpleStruct'.</param>
             /// <returns>The 'SimpleStruct' returned from the 'RoundtripSimpleStruct' operation.</returns>
-            SimpleStruct EndRoundtripSimpleStruct(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<SimpleStruct> RoundtripSimpleStruct(SimpleStruct value);
             
             /// <summary>
             /// Asynchronously invokes the 'RoundtripSimpleStructCollection' operation.
             /// </summary>
             /// <param name="values">The value for the 'values' parameter of this action.</param>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(true)]
-            IAsyncResult BeginRoundtripSimpleStructCollection(IEnumerable<SimpleStruct> values, AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginRoundtripSimpleStructCollection'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginRoundtripSimpleStructCollection'.</param>
             /// <returns>The 'IEnumerable`1' returned from the 'RoundtripSimpleStructCollection' operation.</returns>
-            IEnumerable<SimpleStruct> EndRoundtripSimpleStructCollection(IAsyncResult result);
+            [HasSideEffects(true)]
+            System.Threading.Tasks.Task<IEnumerable<SimpleStruct>> RoundtripSimpleStructCollection(IEnumerable<SimpleStruct> values);
         }
         
         internal sealed class SimpleStructDomainContextEntityContainer : EntityContainer

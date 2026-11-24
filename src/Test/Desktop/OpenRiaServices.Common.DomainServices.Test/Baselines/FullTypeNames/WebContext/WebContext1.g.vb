@@ -172,18 +172,9 @@ Namespace TestNamespace
             ''' <summary>
             ''' Asynchronously invokes the 'GetUser' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.Client.HasSideEffects(false)>  _
-            Function BeginGetUser(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetUser'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetUser'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetUser' operation.</returns>
-            Function EndGetUser(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1)
+            <Global.OpenRiaServices.Client.HasSideEffects(false)>  _
+            Function GetUser() As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1))
             
             ''' <summary>
             ''' Asynchronously invokes the 'Login' operation.
@@ -192,50 +183,23 @@ Namespace TestNamespace
             ''' <param name="password">The value for the 'password' parameter of this action.</param>
             ''' <param name="isPersistent">The value for the 'isPersistent' parameter of this action.</param>
             ''' <param name="customData">The value for the 'customData' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.Client.HasSideEffects(true)>  _
-            Function BeginLogin(ByVal userName As String, ByVal password As String, ByVal isPersistent As Boolean, ByVal customData As String, ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginLogin'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginLogin'.</param>
             ''' <returns>The 'QueryResult' returned from the 'Login' operation.</returns>
-            Function EndLogin(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1)
+            <Global.OpenRiaServices.Client.HasSideEffects(true)>  _
+            Function Login(ByVal userName As String, ByVal password As String, ByVal isPersistent As Boolean, ByVal customData As String) As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1))
             
             ''' <summary>
             ''' Asynchronously invokes the 'Logout' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <Global.OpenRiaServices.Client.HasSideEffects(true)>  _
-            Function BeginLogout(ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginLogout'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginLogout'.</param>
             ''' <returns>The 'QueryResult' returned from the 'Logout' operation.</returns>
-            Function EndLogout(ByVal result As Global.System.IAsyncResult) As Global.OpenRiaServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1)
+            <Global.OpenRiaServices.Client.HasSideEffects(true)>  _
+            Function Logout() As Global.System.Threading.Tasks.Task(Of Global.OpenRiaServices.Client.QueryResult(Of Global.RootNamespace.TestNamespace.User1))
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
             ''' </summary>
             ''' <param name="changeSet">The change-set to submit.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            Function BeginSubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry), ByVal callback As Global.System.AsyncCallback, ByVal asyncState As Object) As Global.System.IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As Global.System.IAsyncResult) As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry)
+            Function SubmitChanges(ByVal changeSet As Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry)) As Global.System.Threading.Tasks.Task(Of Global.System.Collections.Generic.IEnumerable(Of Global.OpenRiaServices.Client.ChangeSetEntry))
         End Interface
         
         Friend NotInheritable Class AuthenticationService1EntityContainer

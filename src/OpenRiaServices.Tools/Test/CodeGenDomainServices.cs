@@ -943,39 +943,34 @@ namespace OpenRiaServices.Tools.Test
         }
 
         [TestMethod]
-        [Description("Verifies that SybmitChanges methods are not generated if there are no CUD operations")]
+        [Description("Verifies that SubmitChanges is generated only when there are CUD operations")]
         [WorkItem(170442)]
         public void TestClientCodeGen_NoSubmitChangesWithoutCUDOp()
         {
             string generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", typeof(DomainServiceWithoutCUD));
             TestHelper.AssertGeneratedCodeDoesNotContain(
                 generatedCode,
-                "IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState)",
-                "IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result)");
+                "SubmitChanges(");
 
             generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", typeof(DomainServiceWithCreate));
             TestHelper.AssertGeneratedCodeContains(
                 generatedCode,
-                "IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState)",
-                "IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result)");
+                "SubmitChanges(IEnumerable<ChangeSetEntry> changeSet)");
 
             generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", typeof(DomainServiceWithUpdate));
             TestHelper.AssertGeneratedCodeContains(
                 generatedCode,
-                "IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState)",
-                "IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result)");
+                "SubmitChanges(IEnumerable<ChangeSetEntry> changeSet)");
 
             generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", typeof(DomainServiceWithDelete));
             TestHelper.AssertGeneratedCodeContains(
                 generatedCode,
-                "IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState)",
-                "IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result)");
+                "SubmitChanges(IEnumerable<ChangeSetEntry> changeSet)");
 
             generatedCode = TestHelper.GenerateCodeAssertSuccess("C#", typeof(DomainServiceWithNamedUpdate));
             TestHelper.AssertGeneratedCodeContains(
                 generatedCode,
-                "IAsyncResult BeginSubmitChanges(IEnumerable<ChangeSetEntry> changeSet, AsyncCallback callback, object asyncState)",
-                "IEnumerable<ChangeSetEntry> EndSubmitChanges(IAsyncResult result)");
+                "SubmitChanges(IEnumerable<ChangeSetEntry> changeSet)");
         }
 
         [TestMethod]

@@ -132,18 +132,9 @@ namespace OpenRiaServices.Tools.Test
             /// <summary>
             /// Asynchronously invokes the 'Get' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGet(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGet'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGet'.</param>
             /// <returns>The 'QueryResult' returned from the 'Get' operation.</returns>
-            QueryResult<Mock_CG_PolyType_Entity> EndGet(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<Mock_CG_PolyType_Entity>> Get();
         }
         
         internal sealed class Mock_CG_PolyType_DomainContextEntityContainer : EntityContainer

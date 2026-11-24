@@ -924,361 +924,163 @@ Namespace Cities
             ''' Asynchronously invokes the 'Echo' operation.
             ''' </summary>
             ''' <param name="msg">The value for the 'msg' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginEcho(ByVal msg As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginEcho'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginEcho'.</param>
             ''' <returns>The 'String' returned from the 'Echo' operation.</returns>
-            Function EndEcho(ByVal result As IAsyncResult) As String
+            <HasSideEffects(true)>  _
+            Function Echo(ByVal msg As String) As System.Threading.Tasks.Task(Of String)
             
             ''' <summary>
             ''' Asynchronously invokes the 'EchoWithDelay' operation.
             ''' </summary>
             ''' <param name="msg">The value for the 'msg' parameter of this action.</param>
             ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginEchoWithDelay(ByVal msg As String, ByVal delay As TimeSpan, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginEchoWithDelay'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginEchoWithDelay'.</param>
             ''' <returns>The 'String' returned from the 'EchoWithDelay' operation.</returns>
-            Function EndEchoWithDelay(ByVal result As IAsyncResult) As String
+            <HasSideEffects(true)>  _
+            Function EchoWithDelay(ByVal msg As String, ByVal delay As TimeSpan) As System.Threading.Tasks.Task(Of String)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCities' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetCities(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetCities'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetCities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCities' operation.</returns>
-            Function EndGetCities(ByVal result As IAsyncResult) As QueryResult(Of City)
+            <HasSideEffects(false)>  _
+            Function GetCities() As System.Threading.Tasks.Task(Of QueryResult(Of City))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesInState' operation.
             ''' </summary>
             ''' <param name="state">The value for the 'state' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetCitiesInState(ByVal state As String, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetCitiesInState'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesInState'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesInState' operation.</returns>
-            Function EndGetCitiesInState(ByVal result As IAsyncResult) As QueryResult(Of City)
+            <HasSideEffects(false)>  _
+            Function GetCitiesInState(ByVal state As String) As System.Threading.Tasks.Task(Of QueryResult(Of City))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithEditHistory' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetCitiesWithEditHistory(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetCitiesWithEditHistory'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithEditHistory'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithEditHistory' operation.</returns>
-            Function EndGetCitiesWithEditHistory(ByVal result As IAsyncResult) As QueryResult(Of CityWithEditHistory)
+            <HasSideEffects(false)>  _
+            Function GetCitiesWithEditHistory() As System.Threading.Tasks.Task(Of QueryResult(Of CityWithEditHistory))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCitiesWithInfo' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetCitiesWithInfo(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetCitiesWithInfo'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetCitiesWithInfo'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCitiesWithInfo' operation.</returns>
-            Function EndGetCitiesWithInfo(ByVal result As IAsyncResult) As QueryResult(Of CityWithInfo)
+            <HasSideEffects(false)>  _
+            Function GetCitiesWithInfo() As System.Threading.Tasks.Task(Of QueryResult(Of CityWithInfo))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetCounties' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetCounties(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetCounties'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetCounties'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetCounties' operation.</returns>
-            Function EndGetCounties(ByVal result As IAsyncResult) As QueryResult(Of County)
+            <HasSideEffects(false)>  _
+            Function GetCounties() As System.Threading.Tasks.Task(Of QueryResult(Of County))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetDeletedCities' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetDeletedCities(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetDeletedCities'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetDeletedCities'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetDeletedCities' operation.</returns>
-            Function EndGetDeletedCities(ByVal result As IAsyncResult) As QueryResult(Of CityWithEditHistory)
+            <HasSideEffects(false)>  _
+            Function GetDeletedCities() As System.Threading.Tasks.Task(Of QueryResult(Of CityWithEditHistory))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetStateIfUser' operation.
             ''' </summary>
             ''' <param name="city">The value for the 'city' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginGetStateIfUser(ByVal city As City, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetStateIfUser'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetStateIfUser'.</param>
             ''' <returns>The 'String' returned from the 'GetStateIfUser' operation.</returns>
-            Function EndGetStateIfUser(ByVal result As IAsyncResult) As String
+            <HasSideEffects(true)>  _
+            Function GetStateIfUser(ByVal city As City) As System.Threading.Tasks.Task(Of String)
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetStates' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetStates(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetStates'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetStates'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetStates' operation.</returns>
-            Function EndGetStates(ByVal result As IAsyncResult) As QueryResult(Of State)
+            <HasSideEffects(false)>  _
+            Function GetStates() As System.Threading.Tasks.Task(Of QueryResult(Of State))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetStatesInShippingZone' operation.
             ''' </summary>
             ''' <param name="shippingZone">The value for the 'shippingZone' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetStatesInShippingZone(ByVal shippingZone As ShippingZone, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetStatesInShippingZone'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetStatesInShippingZone'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetStatesInShippingZone' operation.</returns>
-            Function EndGetStatesInShippingZone(ByVal result As IAsyncResult) As QueryResult(Of State)
+            <HasSideEffects(false)>  _
+            Function GetStatesInShippingZone(ByVal shippingZone As ShippingZone) As System.Threading.Tasks.Task(Of QueryResult(Of State))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetZipByFourDigitCode' operation.
             ''' </summary>
             ''' <param name="fourDigitCode">The value for the 'fourDigitCode' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetZipByFourDigitCode(ByVal fourDigitCode As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetZipByFourDigitCode'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetZipByFourDigitCode'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZipByFourDigitCode' operation.</returns>
-            Function EndGetZipByFourDigitCode(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            <HasSideEffects(false)>  _
+            Function GetZipByFourDigitCode(ByVal fourDigitCode As Integer) As System.Threading.Tasks.Task(Of QueryResult(Of Zip))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetZipByFourDigitCode2' operation.
             ''' </summary>
             ''' <param name="fourDigitCode">The value for the 'fourDigitCode' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetZipByFourDigitCode2(ByVal fourDigitCode As Integer, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetZipByFourDigitCode2'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetZipByFourDigitCode2'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZipByFourDigitCode2' operation.</returns>
-            Function EndGetZipByFourDigitCode2(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            <HasSideEffects(false)>  _
+            Function GetZipByFourDigitCode2(ByVal fourDigitCode As Integer) As System.Threading.Tasks.Task(Of QueryResult(Of Zip))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetZips' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetZips(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetZips'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetZips'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZips' operation.</returns>
-            Function EndGetZips(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            <HasSideEffects(false)>  _
+            Function GetZips() As System.Threading.Tasks.Task(Of QueryResult(Of Zip))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetZipsAsEnumerable' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetZipsAsEnumerable(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetZipsAsEnumerable'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetZipsAsEnumerable'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZipsAsEnumerable' operation.</returns>
-            Function EndGetZipsAsEnumerable(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            <HasSideEffects(false)>  _
+            Function GetZipsAsEnumerable() As System.Threading.Tasks.Task(Of QueryResult(Of Zip))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetZipsIfAuthenticated' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetZipsIfAuthenticated(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetZipsIfAuthenticated'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetZipsIfAuthenticated'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZipsIfAuthenticated' operation.</returns>
-            Function EndGetZipsIfAuthenticated(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            <HasSideEffects(false)>  _
+            Function GetZipsIfAuthenticated() As System.Threading.Tasks.Task(Of QueryResult(Of Zip))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetZipsIfInRole' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetZipsIfInRole(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetZipsIfInRole'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetZipsIfInRole'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZipsIfInRole' operation.</returns>
-            Function EndGetZipsIfInRole(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            <HasSideEffects(false)>  _
+            Function GetZipsIfInRole() As System.Threading.Tasks.Task(Of QueryResult(Of Zip))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetZipsIfUser' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetZipsIfUser(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetZipsIfUser'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetZipsIfUser'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZipsIfUser' operation.</returns>
-            Function EndGetZipsIfUser(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            <HasSideEffects(false)>  _
+            Function GetZipsIfUser() As System.Threading.Tasks.Task(Of QueryResult(Of Zip))
             
             ''' <summary>
             ''' Asynchronously invokes the 'GetZipsWithDelay' operation.
             ''' </summary>
             ''' <param name="delay">The value for the 'delay' parameter of this action.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(false)>  _
-            Function BeginGetZipsWithDelay(ByVal delay As TimeSpan, ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginGetZipsWithDelay'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginGetZipsWithDelay'.</param>
             ''' <returns>The 'QueryResult' returned from the 'GetZipsWithDelay' operation.</returns>
-            Function EndGetZipsWithDelay(ByVal result As IAsyncResult) As QueryResult(Of Zip)
+            <HasSideEffects(false)>  _
+            Function GetZipsWithDelay(ByVal delay As TimeSpan) As System.Threading.Tasks.Task(Of QueryResult(Of Zip))
             
             ''' <summary>
             ''' Asynchronously invokes the 'ResetData' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
             <HasSideEffects(true)>  _
-            Function BeginResetData(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginResetData'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginResetData'.</param>
-            Sub EndResetData(ByVal result As IAsyncResult)
+            Function ResetData() As Task
             
             ''' <summary>
             ''' Asynchronously invokes the 'UsesCustomHost' operation.
             ''' </summary>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            <HasSideEffects(true)>  _
-            Function BeginUsesCustomHost(ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginUsesCustomHost'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginUsesCustomHost'.</param>
             ''' <returns>The 'Boolean' returned from the 'UsesCustomHost' operation.</returns>
-            Function EndUsesCustomHost(ByVal result As IAsyncResult) As Boolean
+            <HasSideEffects(true)>  _
+            Function UsesCustomHost() As System.Threading.Tasks.Task(Of Boolean)
             
             ''' <summary>
             ''' Asynchronously invokes the 'SubmitChanges' operation.
             ''' </summary>
             ''' <param name="changeSet">The change-set to submit.</param>
-            ''' <param name="callback">Callback to invoke on completion.</param>
-            ''' <param name="asyncState">Optional state object.</param>
-            ''' <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            Function BeginSubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry), ByVal callback As AsyncCallback, ByVal asyncState As Object) As IAsyncResult
-            
-            ''' <summary>
-            ''' Completes the asynchronous operation begun by 'BeginSubmitChanges'.
-            ''' </summary>
-            ''' <param name="result">The IAsyncResult returned from 'BeginSubmitChanges'.</param>
             ''' <returns>The collection of change-set entry elements returned from 'SubmitChanges'.</returns>
-            Function EndSubmitChanges(ByVal result As IAsyncResult) As IEnumerable(Of ChangeSetEntry)
+            Function SubmitChanges(ByVal changeSet As IEnumerable(Of ChangeSetEntry)) As System.Threading.Tasks.Task(Of IEnumerable(Of ChangeSetEntry))
         End Interface
         
         Friend NotInheritable Class CityDomainContextEntityContainer

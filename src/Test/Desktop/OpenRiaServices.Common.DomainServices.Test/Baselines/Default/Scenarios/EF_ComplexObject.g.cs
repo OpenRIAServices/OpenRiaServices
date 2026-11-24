@@ -396,18 +396,9 @@ namespace OpenRiaServices.Tools.Test
             /// <summary>
             /// Asynchronously invokes the 'GetCustomers' operation.
             /// </summary>
-            /// <param name="callback">Callback to invoke on completion.</param>
-            /// <param name="asyncState">Optional state object.</param>
-            /// <returns>An IAsyncResult that can be used to monitor the request.</returns>
-            [HasSideEffects(false)]
-            IAsyncResult BeginGetCustomers(AsyncCallback callback, object asyncState);
-            
-            /// <summary>
-            /// Completes the asynchronous operation begun by 'BeginGetCustomers'.
-            /// </summary>
-            /// <param name="result">The IAsyncResult returned from 'BeginGetCustomers'.</param>
             /// <returns>The 'QueryResult' returned from the 'GetCustomers' operation.</returns>
-            QueryResult<EmployeeWithCT> EndGetCustomers(IAsyncResult result);
+            [HasSideEffects(false)]
+            System.Threading.Tasks.Task<QueryResult<EmployeeWithCT>> GetCustomers();
         }
         
         internal sealed class EFComplexTypesContextEntityContainer : EntityContainer
