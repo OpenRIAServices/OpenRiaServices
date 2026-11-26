@@ -8,6 +8,8 @@ using System.Collections.Generic;
 using System.IO.Pipelines;
 using System.Linq;
 using System.Net.Http;
+using System.Reflection;
+using System.Text;
 
 #nullable enable
 
@@ -57,6 +59,8 @@ namespace OpenRiaServices.Client.DomainClients
             {
                 MessagePackHttpDomainClientFactory This = args.Item1;
 
+                MethodInfo createMapping = typeof(MessagePackHttpDomainClientFactory).GetMethod(nameof(CreateDerivedTypeMapping), BindingFlags.NonPublic | BindingFlags.Instance)!;
+
                 // Supress inheritance 
                 HashSet<Type> allTypes = new HashSet<Type>(args.knownTypes);
                 foreach (Type knownType in args.knownTypes)
@@ -64,23 +68,59 @@ namespace OpenRiaServices.Client.DomainClients
 
                 Dictionary<Type, HashSet<Type>> allTypeHierarchies = ComputeKnownTypeSet(allTypes);
 
-                var derivedTypeUnions = allTypeHierarchies
-                    .Where(it => it.Value.Count > 1) // Only consider types with derived types
-                    .Select(it => DerivedTypeUnion.CreateDisabled(it.Key));
-
-                var objectSerialiser = args.Item1.BaseSerializerSerializer with
+                List<DerivedTypeUnion> derivedTypeUnions = new List<DerivedTypeUnion>();
+                foreach (var kvp in allTypeHierarchies)
                 {
+                    Type baseType = kvp.Key;
+                    HashSet<Type> derivedTypes = kvp.Value;
+
+                    // Skip base types since they have all KnownTypeAttributes
+                    if (baseType.BaseType == typeof(Entity))
+                        continue;
+
+                    if (derivedTypes.Count > 1 || (derivedTypes.Count == 1 && !derivedTypes.Contains(baseType)))
+                    {
+                        derivedTypeUnions.Add((DerivedTypeUnion)createMapping.MakeGenericMethod(baseType).Invoke(This, [derivedTypes])!);
+                    }
+                }
+
+                var objectConverter = new ObjectConverter<object>(allTypes, This.TypeShapeProvider, This.BaseSerializerSerializer);
+
+                // Create the serializer
+                return args.Item1.BaseSerializerSerializer with
+                {
+                    Converters = [objectConverter, .. args.Item1.BaseSerializerSerializer.Converters],
                     DerivedTypeUnions = [.. derivedTypeUnions, .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
                 };
-
-                // Create a final serializer which use ObjectConverterFactory to do custom union converter
-                // while delegating actual serialization to objectSerialiser
-                var converterFactory = new ObjectConverterFactory(allTypeHierarchies, args.Item1.TypeShapeProvider, objectSerialiser);
-                return objectSerialiser with
-                {
-                    ConverterFactories = [converterFactory, .. args.Item1.BaseSerializerSerializer.ConverterFactories],
-                };
             }, (this, knownTypes));
+        }
+
+
+        CustomDerivedShapeMapping<TBase> CreateDerivedTypeMapping<TBase>(HashSet<Type> derviedTypes)
+        {
+            var mapping = new CustomDerivedShapeMapping<TBase>();
+            foreach (var derivedType in derviedTypes)
+            {
+                if (derivedType == typeof(TBase))
+                    continue;
+
+                var typeShape = TypeShapeProvider.GetTypeShapeOrThrow(derivedType);
+                DerivedTypeIdentifier alias = new DerivedTypeIdentifier(Encoding.UTF8.GetString(MessagePackUtility.GetDiscriminator(typeShape.Type)));
+                mapping.AddDerived(alias, typeShape);
+            }
+
+            return mapping;
+        }
+
+        /// <summary>
+        /// Need to subclass in order to allow calling non-generic method to add mapping
+        /// </summary>
+        class CustomDerivedShapeMapping<TBase> : DerivedShapeMapping<TBase>
+        {
+            public void AddDerived(DerivedTypeIdentifier alias, ITypeShape typeShape)
+            {
+                base.Add(alias, typeShape);
+            }
         }
 
         /// <summary>
@@ -119,6 +159,5 @@ namespace OpenRiaServices.Client.DomainClients
             }
             return closure;
         }
-
     }
 }
