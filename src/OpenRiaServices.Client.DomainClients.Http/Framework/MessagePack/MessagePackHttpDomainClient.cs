@@ -1,9 +1,9 @@
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
 using System.IO.Pipelines;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.ServiceModel;
@@ -23,7 +23,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
         internal const string MediaType = "application/vnd.msgpack";
         private static readonly HttpMethod s_queryMethod = new("QUERY");
         private MessagePackSerializer _serializerCache;
-        private readonly ITypeShapeProvider _typeShapeProvider;
         private readonly MessagePackHttpDomainClientFactory _factory;
 
         private MessagePackSerializer Serializer => (_serializerCache ??= _factory.GetSerializer(ServiceInterface, base.EntityTypes));
@@ -31,7 +30,6 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
         public MessagePackHttpDomainClient(HttpClient httpClient, Type serviceInterface, MessagePackHttpDomainClientFactory factory)
             : base(httpClient, serviceInterface, factory)
         {
-            _typeShapeProvider = factory.TypeShapeProvider;
             _factory = factory;
             base.DefaultHttpCompletionOption = HttpCompletionOption.ResponseHeadersRead;
         }
@@ -51,7 +49,9 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
             using var stream = new MemoryStream();
             // TODO: If possible, replace this buffering with a custom HttpContent override of SerializeToStream
             // so the request payload can be serialized asynchronously directly to the outgoing request stream.
-            Serializer.SerializeObject(stream, envelope, _typeShapeProvider.GetTypeShapeOrThrow(envelope.GetType()), cancellationToken);
+            var envelopeType = envelope.GetType();
+            var envelopeShape = _factory.TypeShapeProvider.GetTypeShape(envelopeType) ?? ProtocolTypeShapes.GeneratedTypeShapeProvider.GetTypeShape(envelopeType);
+            Serializer.SerializeObject(stream, envelope, envelopeShape, cancellationToken);
 
             if (!stream.TryGetBuffer(out ArraySegment<byte> buffer))
                 buffer = new ArraySegment<byte>(stream.ToArray());
@@ -113,55 +113,182 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack
                 }
 
 
-                Type envelopeType = GetResponseEnvelopeType(operationName, returnType);
-                var typeShape = _typeShapeProvider.GetTypeShapeOrThrow(envelopeType);
-
-                MessagePackResponseEnvelopeBase envelope;
 #if NET
                 using var stream = await response.Content.ReadAsStreamAsync(cancellationToken).ConfigureAwait(false);
 #else
                 using var stream = await response.Content.ReadAsStreamAsync().ConfigureAwait(false);
 #endif
                 PipeReader pipeReader = PipeReader.Create(stream, _factory.ResponsePipeReaderOptions);
+
+                object result = null;
+                DomainServiceFault fault = null;
                 try
                 {
-                    envelope = ((MessagePackResponseEnvelopeBase)await Serializer.DeserializeObjectAsync(pipeReader, typeShape, cancellationToken).ConfigureAwait(false))
-                        ?? (MessagePackResponseEnvelopeBase)Activator.CreateInstance(envelopeType);
+                    ResponseMember v1Member = await TryReadV1ResponseMemberAsync(pipeReader, cancellationToken).ConfigureAwait(false);
+                    uint count = v1Member != ResponseMember.Unknown ? 1u
+                        : await ReadResponseMapHeaderAsync(pipeReader, cancellationToken).ConfigureAwait(false);
+                    for (uint i = 0; i < count; i++)
+                    {
+                        switch (v1Member != ResponseMember.Unknown ? v1Member
+                            : await ReadResponseMemberAsync(pipeReader, cancellationToken).ConfigureAwait(false))
+                        {
+                            case ResponseMember.Fault:
+                                fault = await Serializer.DeserializeAsync<DomainServiceFault, ProtocolTypeShapes>(pipeReader, cancellationToken)
+                                    .ConfigureAwait(false);
+                                break;
+                            case ResponseMember.Result when returnType != typeof(void):
+                                var resultShape = _factory.TypeShapeProvider.GetTypeShape(returnType)
+                                    ?? ProtocolTypeShapes.GeneratedTypeShapeProvider.GetTypeShapeOrThrow(returnType);
+                                result = await Serializer.DeserializeObjectAsync(pipeReader, resultShape, cancellationToken).ConfigureAwait(false);
+                                break;
+                            default:
+                                await SkipResponseValueAsync(pipeReader, Serializer.StartingContext, cancellationToken).ConfigureAwait(false);
+                                break;
+                        }
+                    }
                 }
                 finally
                 {
                     await pipeReader.CompleteAsync().ConfigureAwait(false);
                 }
 
-                if (envelope.Fault is not null)
+                if (fault is not null)
                 {
                     throw new FaultException<DomainServiceFault>(
-                        envelope.Fault,
-                        new FaultReason(new[] { new FaultReasonText(envelope.Fault.ErrorMessage, CultureInfo.CurrentCulture.Name) }),
+                        fault,
+                        new FaultReason(new[] { new FaultReasonText(fault.ErrorMessage, CultureInfo.CurrentCulture.Name) }),
                         new FaultCode("Sender"),
                         operationName);
                 }
-
-                object result = envelope.GetResult();
-                if (returnType == typeof(void) || result is null)
-                    return null;
 
                 return result;
             }
         }
 
-        private static Type GetResponseEnvelopeType(string operationName, Type returnType)
-        {
-            if (returnType.IsGenericType && returnType.GetGenericTypeDefinition() == typeof(QueryResult<>))
-            {
-                return typeof(MessagePackQueryResponseEnvelope<>).MakeGenericType(returnType);
-            }
-            if (string.Equals(operationName, "SubmitChanges", StringComparison.Ordinal))
-                return typeof(MessagePackSubmitResponseEnvelope);
+        // fixmap(1), followed by the fixstr header and key.
+        private static ReadOnlySpan<byte> ResultResponse => [0x81, 0xa6, (byte)'R', (byte)'e', (byte)'s', (byte)'u', (byte)'l', (byte)'t'];
+        private static ReadOnlySpan<byte> FaultResponse => [0x81, 0xa5, (byte)'F', (byte)'a', (byte)'u', (byte)'l', (byte)'t'];
 
-            return (returnType == typeof(void)) ? typeof(MessagePackInvokeResponseEnvelope<object>)
-                : typeof(MessagePackInvokeResponseEnvelope<>).MakeGenericType(returnType);
+        /// <summary>
+        /// Read response envelope (v1) which is a map with only a Result or a Fault
+        /// </summary>
+        /// <param name="pipe"></param>
+        /// <param name="cancellationToken"></param>
+        /// <returns></returns>
+        /// <exception cref="OperationCanceledException"></exception>
+        private static async ValueTask<ResponseMember> TryReadV1ResponseMemberAsync(PipeReader pipe, CancellationToken cancellationToken)
+        {
+            int minimumResponseSize = ResultResponse.Length + 1; // A nil result adds one byte.
+            ReadResult read = await pipe.ReadAtLeastAsync(minimumResponseSize, cancellationToken).ConfigureAwait(false);
+            ReadOnlySequence<byte> buffer = read.Buffer;
+            if (read.IsCanceled)
+                throw new OperationCanceledException(cancellationToken);
+
+            if (buffer.Length < minimumResponseSize)
+                return ResponseMember.Unknown;
+
+            ReadOnlySpan<byte> firstSpan = buffer.First.Span;
+            if (firstSpan.StartsWith(ResultResponse))
+            {
+                pipe.AdvanceTo(buffer.GetPosition(ResultResponse.Length));
+                return ResponseMember.Result;
+            }
+
+            if (firstSpan.StartsWith(FaultResponse))
+            {
+                pipe.AdvanceTo(buffer.GetPosition(FaultResponse.Length));
+                return ResponseMember.Fault;
+            }
+
+            return ResponseMember.Unknown;
         }
 
+        // The caller completes the pipe on failure. On success, return the streaming reader
+        // and dispose its owner to hand the pipe off at the next token, not the end of the buffer.
+        private static async ValueTask<uint> ReadResponseMapHeaderAsync(PipeReader pipe, CancellationToken cancellationToken)
+        {
+            var reader = new MessagePackAsyncReader(pipe) { CancellationToken = cancellationToken };
+            await reader.ReadAsync().ConfigureAwait(false);
+            var streaming = reader.CreateStreamingReader() with { CancellationToken = cancellationToken };
+            bool isNil;
+            while (NeedsMoreResponseBytes(streaming.TryReadNil(out isNil)))
+                streaming = new(await streaming.FetchMoreBytesAsync().ConfigureAwait(false));
+
+            uint count = 0;
+            if (!isNil)
+            {
+                while (NeedsMoreResponseBytes(streaming.TryReadMapHeader(out count)))
+                    streaming = new(await streaming.FetchMoreBytesAsync().ConfigureAwait(false));
+            }
+
+            reader.ReturnReader(ref streaming);
+            reader.Dispose();
+            return count;
+        }
+
+        private static async ValueTask<ResponseMember> ReadResponseMemberAsync(PipeReader pipe, CancellationToken cancellationToken)
+        {
+            var reader = new MessagePackAsyncReader(pipe) { CancellationToken = cancellationToken };
+            await reader.ReadAsync().ConfigureAwait(false);
+            var streaming = reader.CreateStreamingReader() with { CancellationToken = cancellationToken };
+            ReadOnlySequence<byte> name;
+            while (NeedsMoreResponseBytes(streaming.TryReadStringSequence(out name)))
+                streaming = new(await streaming.FetchMoreBytesAsync().ConfigureAwait(false));
+
+            var result = Matches(name, "Result"u8) ? ResponseMember.Result
+                : Matches(name, "Fault"u8) ? ResponseMember.Fault : ResponseMember.Unknown;
+            reader.ReturnReader(ref streaming);
+            reader.Dispose();
+            return result;
+
+            static bool Matches(ReadOnlySequence<byte> name, ReadOnlySpan<byte> expected)
+            {
+                if (name.Length != expected.Length)
+                    return false;
+
+                foreach (var segment in name)
+                {
+                    if (!expected.StartsWith(segment.Span))
+                        return false;
+
+                    expected = expected.Slice(segment.Length);
+                }
+
+                return true;
+            }
+        }
+
+        private static async ValueTask SkipResponseValueAsync(PipeReader pipe, SerializationContext context, CancellationToken cancellationToken)
+        {
+            var reader = new MessagePackAsyncReader(pipe) { CancellationToken = cancellationToken };
+            await reader.ReadAsync().ConfigureAwait(false);
+            var streaming = reader.CreateStreamingReader() with { CancellationToken = cancellationToken };
+            while (NeedsMoreResponseBytes(streaming.TrySkip(ref context)))
+                streaming = new(await streaming.FetchMoreBytesAsync().ConfigureAwait(false));
+
+            reader.ReturnReader(ref streaming);
+            reader.Dispose();
+        }
+
+        private static bool NeedsMoreResponseBytes(MessagePackPrimitives.DecodeResult result) => result switch
+        {
+            MessagePackPrimitives.DecodeResult.Success => false,
+            MessagePackPrimitives.DecodeResult.EmptyBuffer or MessagePackPrimitives.DecodeResult.InsufficientBuffer => true,
+            _ => throw new MessagePackSerializationException("Invalid MessagePack response envelope."),
+        };
+
+        private enum ResponseMember
+        {
+            Unknown,
+            Result,
+            Fault,
+        }
     }
+
+    [GenerateShapeFor<DomainServiceFault>]
+    [GenerateShapeFor<MessagePackQueryRequestEnvelope>]
+    [GenerateShapeFor<MessagePackInvokeRequestEnvelope>]
+    [GenerateShapeFor<MessagePackSubmitRequestEnvelope>]
+    [GenerateShapeFor<IEnumerable<ChangeSetEntry>>]
+    partial class ProtocolTypeShapes;
 }

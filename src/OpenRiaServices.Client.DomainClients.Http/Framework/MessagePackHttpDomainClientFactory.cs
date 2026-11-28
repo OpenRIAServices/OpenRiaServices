@@ -37,10 +37,10 @@ namespace OpenRiaServices.Client.DomainClients
         public MessagePackHttpDomainClientFactory(Uri serverBaseUri, Func<Uri, HttpClient> httpClientFactory, MessagePackSerializer? serializer = null, ITypeShapeProvider? typeShapeProvider = null)
             : base(serverBaseUri, httpClientFactory)
         {
-            BaseSerializerSerializer = MessagePackUtility.ConfigureSerializer(serializer ?? new MessagePackSerializer(),
-                [new MessagePackMethodParametersConverter(), new ChangeSetEntryConverter()]);
-
             TypeShapeProvider = typeShapeProvider ?? PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Default;
+
+            BaseSerializerSerializer = MessagePackUtility.ConfigureSerializer(serializer ?? new MessagePackSerializer(),
+                [new MessagePackMethodParametersConverter(TypeShapeProvider), new ChangeSetEntryConverter(TypeShapeProvider)]);
         }
 
         /// <inheritdoc />
@@ -57,13 +57,15 @@ namespace OpenRiaServices.Client.DomainClients
         {
             return _serializerCache.GetOrAdd(service, static (_, args) =>
             {
-                var converterFactory = new ObjectConverterFactory(args.knownTypes);
+                MessagePackHttpDomainClientFactory This = args.Item1;
+                // Create a final serializer which use ObjectConverterFactory to do custom union converter
+                // while delegating actual serialization to objectSerialiser
+                var converterFactory = new ObjectConverterFactory(args.knownTypes, args.Item1.TypeShapeProvider, args.Item1.BaseSerializerSerializer);
                 return args.Item1.BaseSerializerSerializer with
                 {
+                    DerivedTypeUnions = [.. converterFactory.GetDerivedTypeUnions(), .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions],
                     ConverterFactories = [converterFactory, .. args.Item1.BaseSerializerSerializer.ConverterFactories],
-                    DerivedTypeUnions = [.. converterFactory.GetDerivedTypeUnions(), .. args.Item1.BaseSerializerSerializer.DerivedTypeUnions]
                 };
-
             }, (this, knownTypes));
         }
 

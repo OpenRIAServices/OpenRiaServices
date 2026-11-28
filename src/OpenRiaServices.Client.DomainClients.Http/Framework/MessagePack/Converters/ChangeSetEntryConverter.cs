@@ -9,7 +9,7 @@ using System.Reflection;
 
 namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
 {
-    internal sealed class ChangeSetEntryConverter : MessagePackConverter<ChangeSetEntry?>
+    internal sealed class ChangeSetEntryConverter(PolyType.ITypeShapeProvider typeShapeProvider) : MessagePackConverter<ChangeSetEntry?>
     {
         public override bool PreferAsyncSerialization => false;
 
@@ -37,7 +37,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                         result.HasMemberChanges = reader.ReadBoolean();
                         break;
                     case nameof(ChangeSetEntry.Operation):
-                        result.Operation = (EntityOperationType)ReadValue(ref reader, typeof(EntityOperationType), context)!;
+                        result.Operation = ReadValue<EntityOperationType>(ref reader, context)!;
                         break;
                     case nameof(ChangeSetEntry.EntityActions):
                         reader.Skip(context);
@@ -49,19 +49,19 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                         result.StoreEntity = ReadEntity(ref reader, context);
                         break;
                     case nameof(ChangeSetEntry.ValidationErrors):
-                        result.ValidationErrors = (IEnumerable<ValidationResultInfo>?)ReadValue(ref reader, typeof(IEnumerable<ValidationResultInfo>), context);
+                        result.ValidationErrors = ReadValue<IEnumerable<ValidationResultInfo>?>(ref reader, context);
                         break;
                     case nameof(ChangeSetEntry.ConflictMembers):
-                        result.ConflictMembers = (IEnumerable<string>?)ReadValue(ref reader, typeof(IEnumerable<string>), context);
+                        result.ConflictMembers = ReadValue<IEnumerable<string>>(ref reader, context);
                         break;
                     case nameof(ChangeSetEntry.IsDeleteConflict):
-                        result.IsDeleteConflict = (bool)ReadValue(ref reader, typeof(bool), context)!;
+                        result.IsDeleteConflict = ReadValue<bool>(ref reader, context)!;
                         break;
                     case nameof(ChangeSetEntry.Associations):
-                        result.Associations = (IDictionary<string, int[]>?)ReadValue(ref reader, typeof(IDictionary<string, int[]>), context);
+                        result.Associations = ReadValue<IDictionary<string, int[]>?>(ref reader, context);
                         break;
                     case nameof(ChangeSetEntry.OriginalAssociations):
-                        result.OriginalAssociations = (IDictionary<string, int[]>?)ReadValue(ref reader, typeof(IDictionary<string, int[]>), context);
+                        result.OriginalAssociations = ReadValue<IDictionary<string, int[]>?>(ref reader, context);
                         break;
                     default:
                         reader.Skip(context);
@@ -72,13 +72,12 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             return result;
         }
 
-
-        private static object? ReadValue(ref MessagePackReader reader, Type type, SerializationContext context)
+        private static T? ReadValue<T>(ref MessagePackReader reader, SerializationContext context)
         {
             if (reader.TryReadNil())
-                return null;
+                return default(T);
 
-            return context.GetConverter(type).ReadObject(ref reader, context);
+            return context.GetConverter<T>(context.TypeShapeProvider).Read(ref reader, context);
         }
 
         public override void Write(ref MessagePackWriter writer, in ChangeSetEntry? value, SerializationContext context)
@@ -111,11 +110,11 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             writer.Write(nameof(ChangeSetEntry.Entity));
             WriteEntity(ref writer, value.Entity, context);
             writer.Write(nameof(ChangeSetEntry.Id));
-            WriteValue(ref writer, value.Id, typeof(int), context);
+            WriteValue(ref writer, value.Id, context);
             writer.Write(nameof(ChangeSetEntry.HasMemberChanges));
-            WriteValue(ref writer, value.HasMemberChanges, typeof(bool), context);
+            WriteValue(ref writer, value.HasMemberChanges, context);
             writer.Write(nameof(ChangeSetEntry.Operation));
-            WriteValue(ref writer, value.Operation, typeof(EntityOperationType), context);
+            WriteValue(ref writer, value.Operation, context);
             writer.Write(nameof(ChangeSetEntry.EntityActions));
             WriteEntityActions(ref writer, value.EntityActions, value.Entity?.GetType(), context);
 
@@ -134,35 +133,35 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             if (value.ValidationErrors is not null)
             {
                 writer.Write(nameof(ChangeSetEntry.ValidationErrors));
-                WriteValue(ref writer, value.ValidationErrors, typeof(IEnumerable<ValidationResultInfo>), context);
+                WriteValue(ref writer, value.ValidationErrors, context);
             }
 
             if (value.ConflictMembers is not null)
             {
                 writer.Write(nameof(ChangeSetEntry.ConflictMembers));
-                WriteValue(ref writer, value.ConflictMembers, typeof(IEnumerable<string>), context);
+                WriteValue(ref writer, value.ConflictMembers, context);
             }
 
             if (value.IsDeleteConflict)
             {
                 writer.Write(nameof(ChangeSetEntry.IsDeleteConflict));
-                WriteValue(ref writer, value.IsDeleteConflict, typeof(bool), context);
+                WriteValue(ref writer, value.IsDeleteConflict, context);
             }
 
             if (value.Associations is not null)
             {
                 writer.Write(nameof(ChangeSetEntry.Associations));
-                WriteValue(ref writer, value.Associations, typeof(IDictionary<string, int[]>), context);
+                WriteValue(ref writer, value.Associations, context);
             }
 
             if (value.OriginalAssociations is not null)
             {
                 writer.Write(nameof(ChangeSetEntry.OriginalAssociations));
-                WriteValue(ref writer, value.OriginalAssociations, typeof(IDictionary<string, int[]>), context);
+                WriteValue(ref writer, value.OriginalAssociations, context);
             }
         }
 
-        private static void WriteEntityActions(ref MessagePackWriter writer, IList<OpenRiaServices.Serialization.KeyValue<string, object[]>>? value, Type? entityType, SerializationContext context)
+        private void WriteEntityActions(ref MessagePackWriter writer, IList<OpenRiaServices.Serialization.KeyValue<string, object[]>>? value, Type? entityType, SerializationContext context)
         {
             if (value is null)
             {
@@ -191,7 +190,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             }
         }
 
-        private static void WriteParameters(ref MessagePackWriter writer, object?[]? values, Type entityType, string methodName, SerializationContext context)
+        private void WriteParameters(ref MessagePackWriter writer, object?[]? values, Type entityType, string methodName, SerializationContext context)
         {
             if (values is null)
             {
@@ -207,8 +206,10 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             writer.WriteArrayHeader(values.Length);
             for (int i = 0; i < values.Length; i++)
             {
-                Type parameterType = parameters[i].ParameterType;
-                WriteValue(ref writer, values[i], parameterType, context);
+                if (values[i] is null)
+                    writer.WriteNil();
+                else
+                    context.GetConverter(parameters[i].ParameterType, typeShapeProvider).WriteObject(ref writer, values[i], context);
             }
         }
 
@@ -218,27 +219,31 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             throw new InvalidOperationException($"This DomainService does not support operation '{methodName}' for entity '{entityType.Name}'.");
         }
 
-        private static void WriteValue(ref MessagePackWriter writer, object? value, Type type, SerializationContext context)
+        private static void WriteValue<T>(ref MessagePackWriter writer, T value, SerializationContext context)
         {
             if (value is null)
                 writer.WriteNil();
             else
-                context.GetConverter(type).WriteObject(ref writer, value, context);
+                context.GetConverter<T>(context.TypeShapeProvider).Write(ref writer, value, context);
         }
 
-        private static Entity? ReadEntity(ref MessagePackReader reader, SerializationContext context)
+        private Entity? ReadEntity(ref MessagePackReader reader, SerializationContext context)
         {
-            return (Entity?)ReadValue(ref reader, typeof(object), context);
+            if (reader.TryReadNil())
+                return null;
+
+            return (Entity?)context.GetConverter<object>(typeShapeProvider).ReadObject(ref reader, context);
         }
 
-        private static void WriteEntity(ref MessagePackWriter writer, Entity? value, SerializationContext context)
+        private void WriteEntity(ref MessagePackWriter writer, Entity? value, SerializationContext context)
         {
             if (value is null)
             {
                 writer.WriteNil();
                 return;
             }
-            context.GetConverter(typeof(object)).WriteObject(ref writer, value, context);
+
+            context.GetConverter<object>(typeShapeProvider).WriteObject(ref writer, value, context);
         }
     }
 }

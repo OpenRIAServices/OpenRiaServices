@@ -7,6 +7,7 @@
 * Updated TestHost for .NET 10 and test-only dependencies, including Roslyn and MSTest. Code generation compiles against MSBuild 18.0 to support all .NET 10 SDKs. EF Core dependencies remain on 10.0.
 * Moved Client.Core, Server, EntityFramework, UnitTesting, and T4 packaging into their projects. CI uses GitVersion package versions. Suppressed CA1826 in test projects.
 * ASP.NET Core hosting opts in to runtime-native async on .NET 11. The .NET 10 build is unchanged.
+* The MessagePack HTTP client reads standard single-member response envelopes directly from the pipe and falls back to a map reader for other envelopes. Native AOT clients only need generated shapes for operation payloads.
 
 ## Removed
 

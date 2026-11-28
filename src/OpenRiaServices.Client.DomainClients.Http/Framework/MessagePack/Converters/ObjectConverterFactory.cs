@@ -5,6 +5,8 @@ using System.Collections.Generic;
 using Nerdbank.MessagePack;
 using PolyType;
 using PolyType.ReflectionProvider;
+using System.Text;
+using System.Reflection;
 
 #nullable enable
 
@@ -20,56 +22,41 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
     /// </summary>
     sealed class ObjectConverterFactory : IMessagePackConverterFactory
     {
-        private readonly FrozenDictionary<Type, MessagePackConverter> _converters;
+        private FrozenDictionary<Type, MessagePackConverter> _converters;
 
-        // We need to use a seprate type shape provider for looking up converters
-        // otherwise we will get union converters instead of the object converter for the underlying type 
-        internal static readonly ReflectionTypeShapeProvider ObjectConverterTypeShapeProvider = ReflectionTypeShapeProvider.Create(new()
+        public ObjectConverterFactory(IEnumerable<Type> types, ITypeShapeProvider entityShapeProvider, MessagePackSerializer objectSerializer)
         {
-            // Note: We need to specify a new unique set of assemblies to avoid conflicts with the main type shape provider
-            TypeShapeExtensionAssemblies = new[] { typeof(DomainClient).Assembly }
-        });
-
-        public ObjectConverterFactory(IEnumerable<Type> entityTypes)
-        {
-            HashSet<Type> allTypes = new HashSet<Type>(entityTypes);
-            foreach (Type knownType in entityTypes)
+            // Supress inheritance 
+            HashSet<Type> allTypes = new HashSet<Type>(types);
+            foreach (Type knownType in types)
                 allTypes.UnionWith(Server.KnownTypeUtilities.ImportDerivedTypes(knownType, true));
 
+            ConverterProvider converterProvider = new(objectSerializer, entityShapeProvider);
             Dictionary<Type, MessagePackConverter> converters = new(capacity: allTypes.Count);
             foreach (var item in ComputeKnownTypeSet(allTypes))
             {
                 var knownTypes = item.Value;
 
-                // Add all discovered trypes
-                allTypes.UnionWith(knownTypes);
-                knownTypes.Add(item.Key);
+                System.Diagnostics.Debug.Assert(knownTypes.IsSubsetOf(allTypes), "Known types should always contain at least the type itself.");
 
-                //// Skip mapping with no derived types
+                // Skip mapping with no derived types
+                knownTypes.Add(item.Key);
                 if (knownTypes.Count <= 1)
                     continue;
 
-                converters.Add(item.Key, (MessagePackConverter)Activator.CreateInstance(typeof(ObjectConverter<>).MakeGenericType(item.Key), [knownTypes])!);
+                converters.Add(item.Key, (MessagePackConverter)Activator.CreateInstance(typeof(ObjectConverter<>).MakeGenericType(item.Key), [knownTypes, converterProvider])!);
             }
-            converters.Add(typeof(object), new ObjectConverter<object>(allTypes));
+            converters.Add(typeof(object), new ObjectConverter<object>(allTypes, converterProvider));
 
             _converters = converters.ToFrozenDictionary();
         }
 
-        /// <summary>
-        /// Generate DerivedTypeUnion required for the ObjectConverterFactory to work.
-        /// </summary>
-        /// <remarks>
-        /// In order to prevent Nerdabank.MessagePack from creating additional discriminators we must disable the built in inheritance support for the types.
-        /// </remarks>
         public IEnumerable<DerivedTypeUnion> GetDerivedTypeUnions()
             => _converters.Keys.Select(DerivedTypeUnion.CreateDisabled);
 
         MessagePackConverter? IMessagePackConverterFactory.CreateConverter(Type type, ITypeShape? shape, in ConverterContext context)
         {
-            // Only return type shapes for specified converter, this allows nerdbank default converters to be generated for other providers
-            if (!object.ReferenceEquals(shape?.Provider, ObjectConverterTypeShapeProvider)
-                && _converters.TryGetValue(type, out var converter))
+            if (_converters.TryGetValue(type, out var converter))
                 return converter;
             else
                 return null;
