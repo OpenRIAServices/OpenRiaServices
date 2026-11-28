@@ -31,7 +31,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             foreach (Type knownType in types)
                 allTypes.UnionWith(Server.KnownTypeUtilities.ImportDerivedTypes(knownType, true));
 
-            CustomMessagePackSerializer converterProvider = new(objectSerializer, entityShapeProvider);
+            ConverterProvider converterProvider = new(objectSerializer, entityShapeProvider);
             Dictionary<Type, MessagePackConverter> converters = new(capacity: allTypes.Count);
             foreach (var item in ComputeKnownTypeSet(allTypes))
             {

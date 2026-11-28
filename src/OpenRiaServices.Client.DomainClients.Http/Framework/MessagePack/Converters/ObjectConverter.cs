@@ -16,7 +16,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
 {
     /// <summary>
     /// Serializes a class hierarchy by writing an array of 2 items [string? "typename", Instance]
-    /// <para>The serialization mimics DataContractSerializer in that it will work efen if T is not the base type</para>
+    /// <para>The serialization mimics DataContractSerializer in that it will work even if T is not the base type</para>
     /// </summary>
     /// <remarks>
     /// PolyType and therefore NerdBank.MessagePack has limitations when it comes to polymorphic serialization, when any other class than the base class is serialized.
@@ -26,24 +26,25 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
     sealed class ObjectConverter<T> : MessagePackConverter<T>
         where T : class
     {
-        private readonly FrozenDictionary<Type, (byte[] discriminator, MessagePackConverter converter)> _discriminators;
-        private readonly FrozenDictionary<byte[], MessagePackConverter> _typeLookup;
+        private readonly FrozenDictionary<Type, (byte[] discriminator, MessagePackConverter converter)> _convertersByType;
+        private readonly FrozenDictionary<byte[], MessagePackConverter> _convertersByDiscriminator;
+
         // The base type of the hierarchy, used to determine if we need to write a discriminator when the declared type is not the base type
         private readonly Type? _baseType;
         private readonly MessagePackConverter? _baseConverter;
 
-        public ObjectConverter(IEnumerable<Type> knownTypes, CustomMessagePackSerializer converterProvider)
+        public ObjectConverter(IEnumerable<Type> knownTypes, ConverterProvider converterProvider)
         {
             var comparer = new MessagePackUtility.ByteArrayComparer();
 
             // This avoids double dictionary lookups in surrogateProvider
             var concreteTypes = knownTypes.Where(t => !t.IsAbstract);
-            var converters = converterProvider.CopyConverters(concreteTypes);
+            var converters = converterProvider.GetConverters(concreteTypes);
 
-            _discriminators = converters
+            _convertersByType = converters
                 .ToFrozenDictionary(k => k.Key, v => (MessagePackUtility.GetDiscriminator(v.Key), v.Value));
 
-            _typeLookup = _discriminators.ToFrozenDictionary(x => x.Value.discriminator, x => x.Value.converter, comparer);
+            _convertersByDiscriminator = _convertersByType.ToFrozenDictionary(x => x.Value.discriminator, x => x.Value.converter, comparer);
           
             if (typeof(Entity).IsAssignableFrom(typeof(T)) && typeof(T) != typeof(Entity))
             {
@@ -53,7 +54,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                     computedBaseType = computedBaseType.BaseType!;
 
                 this._baseType = computedBaseType;
-                _baseConverter = _discriminators.TryGetValue(computedBaseType, out var value) ? value.converter : null;
+                _baseConverter = _convertersByType.TryGetValue(computedBaseType, out var value) ? value.converter : null;
             }
             else
                 this._baseType = null;
@@ -90,14 +91,14 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
                 if (reader.TryReadStringSpan(out var discriminator))
                 {
 #if NET10_0_OR_GREATER
-                    converter = _typeLookup.GetAlternateLookup<ReadOnlySpan<byte>>()[discriminator];
+                    converter = _convertersByDiscriminator.GetAlternateLookup<ReadOnlySpan<byte>>()[discriminator];
 #else
-                    converter = _typeLookup[discriminator.ToArray()];
+                    converter = _convertersByDiscriminator[discriminator.ToArray()];
 #endif
                 }
                 else if (reader.ReadStringSequence() is { } sequence)
                 {
-                    converter = _typeLookup[BuffersExtensions.ToArray(sequence)];
+                    converter = _convertersByDiscriminator[BuffersExtensions.ToArray(sequence)];
                 }
                 else
                     throw new MessagePackSerializationException("SurrogateConverter failed to parse discriminator");
@@ -125,7 +126,7 @@ namespace OpenRiaServices.Client.DomainClients.MessagePack.Converters
             else
             {
                 (byte[] discriminator, MessagePackConverter converter) result;
-                while (!_discriminators.TryGetValue(type, out result))
+                while (!_convertersByType.TryGetValue(type, out result))
                 {
                     if (type.BaseType == null)
                         throw new MessagePackSerializationException($"SurrogateConverter failed to find converter for type {value.GetType()}");
