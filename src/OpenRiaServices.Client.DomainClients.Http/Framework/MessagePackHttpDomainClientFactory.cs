@@ -40,7 +40,7 @@ namespace OpenRiaServices.Client.DomainClients
             TypeShapeProvider = typeShapeProvider ?? PolyType.ReflectionProvider.ReflectionTypeShapeProvider.Default;
 
             BaseSerializerSerializer = MessagePackUtility.ConfigureSerializer(serializer ?? new MessagePackSerializer(),
-                [new MessagePackMethodParametersConverter(TypeShapeProvider), new ChangeSetEntryConverter()]);
+                [new MessagePackMethodParametersConverter(TypeShapeProvider), new ChangeSetEntryConverter(TypeShapeProvider)]);
         }
 
         /// <inheritdoc />
